@@ -693,6 +693,51 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.ok(commons.getTrackerStub().repairTooltip.calledOnce, 'repairTooltip called after data updating');
     });
 
+    QUnit.test('Chart with two series. Default series names', function(assert) {
+        // arrange
+        seriesMockData.series.push(new MockSeries({}));
+        seriesMockData.series.push(new MockSeries({}));
+
+        // act
+        const chart = this.createChart({
+            series: [{ }, { }]
+        });
+
+        const series = chart.getAllSeries();
+
+        // assert
+        assert.strictEqual(series.length, 2);
+        assert.strictEqual(series[0].name, 'Series 1');
+        assert.strictEqual(series[1].name, 'Series 2');
+    });
+
+    // T944121
+    QUnit.test('Chart with one series. Sries name is number and equal zero', function(assert) {
+        // arrange
+        seriesMockData.series.push(new MockSeries({}));
+
+        // act
+        const chart = this.createChart({
+            series: [{ name: 0 }]
+        });
+
+        const series = chart.getAllSeries();
+        assert.strictEqual(series[0].name, 0);
+    });
+
+    QUnit.test('Chart with one series. Series name is empty string', function(assert) {
+        // arrange
+        seriesMockData.series.push(new MockSeries({}));
+
+        // act
+        const chart = this.createChart({
+            series: [{ name: '' }]
+        });
+
+        const series = chart.getAllSeries();
+        assert.strictEqual(series[0].name, 'Series 1');
+    });
+
     QUnit.module('dxChart seriesTemplates creation', $.extend({}, commons.environment, {
         beforeEach: function() {
             executeAsyncMock.setup();

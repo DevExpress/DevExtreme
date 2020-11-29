@@ -4,9 +4,11 @@ import registerComponent from 'core/component_registrator';
 import Widget from 'ui/widget/ui.widget';
 import ResponsiveBox from 'ui/responsive_box';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
-
+import dxButton from 'ui/button';
 import 'common.css!';
 import 'ui/box';
+import eventsEngine from 'events/core/events_engine';
+import domAdapter from 'core/dom_adapter';
 
 QUnit.testStart(function() {
     const markup =
@@ -593,5 +595,65 @@ QUnit.module('option', moduleConfig, () => {
         assert.equal($('#responsiveBox').find('.dx-item').eq(0).get(0).style.display, 'flex', 'Layout is correct');
         assert.equal($('#responsiveBox').find('.dx-item').eq(0).get(0).style.flex, '1 1 auto', 'Layout is correct');
     });
+
+    [
+        box => {
+            box.option('items[0].visible', false);
+            box.option('items[0].visible', true);
+        }, box => {
+            box.option('items[0].disabled', true);
+            box.option('items[0].disabled', false);
+        }
+    ].forEach(optionRefreshAction => {
+        QUnit.test(`nested component is recreated after item option ${optionRefreshAction.toString()} changed  (T940715)`, function(assert) {
+            registerComponent('dxWidget', Widget.inherit({}));
+
+            let isDisposed = false;
+            const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+                items: [ { ratio: 1 } ],
+                itemTemplate: function(data, index, element) {
+                    const $button = domAdapter.getDocument().createElement('div');
+                    new dxButton($button, {
+                        onDisposing: function() {
+                            isDisposed = true;
+                        }
+                    });
+                    $(element).append($button);
+                },
+            });
+
+            const getButton = () => $responsiveBox.find('.dx-button').dxButton('instance');
+            const initialWidget = getButton();
+
+            const responsiveBox = $responsiveBox.dxResponsiveBox('instance');
+            optionRefreshAction(responsiveBox);
+
+            assert.equal(isDisposed, true, 'disposed is called for old instance');
+            assert.notEqual(initialWidget, getButton(), 'widget is new instance');
+            assert.equal(responsiveBox._assistantRoots, undefined, 'there is no roots cache');
+        });
+
+        QUnit.test(`nested component in template should work after item option  ${optionRefreshAction.toString()} changed (T940715)`, function(assert) {
+            let expected = false;
+            const responsiveBox = $('#responsiveBox').dxResponsiveBox({
+                items: [ { ratio: 1 } ],
+                itemTemplate: function(data, index, element) {
+                    const $button = domAdapter.getDocument().createElement('div');
+                    new dxButton($button, {
+                        onClick: function() {
+                            expected = true;
+                        }
+                    });
+                    $(element).append($button);
+                },
+            }).dxResponsiveBox('instance');
+
+            optionRefreshAction(responsiveBox);
+            eventsEngine.trigger(responsiveBox.$element().find('.dx-button'), 'dxclick');
+
+            assert.equal(expected, true, 'onClick event is processed');
+        });
+    });
+
 });
 

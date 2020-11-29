@@ -75,21 +75,22 @@
 }
 
 @mixin flexible-scrollable() {
-  & > .dx-scrollable,
-  & > .dx-treeview,
-  & > .dx-treeview > .dx-scrollable {
+  > .dx-scrollable,
+  > .dx-treeview,
+  > .dx-treeview > .dx-scrollable {
     display: flex;
     flex-grow: 1;
     flex-direction: column;
     height: 0;
 
-    & > .dx-scrollable-wrapper {
+    > .dx-scrollable-wrapper,
+    > div > .dx-scrollable-wrapper {
       display: flex;
       flex-grow: 1;
       flex-direction: column;
       height: 0;
 
-      & > .dx-scrollable-container {
+      > .dx-scrollable-container {
         height: auto;
       }
     }

@@ -224,7 +224,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, 'date');
     }
 
-    needRenderDateTimeIndication() {
+    isIndicationAvailable() {
         return false;
     }
 

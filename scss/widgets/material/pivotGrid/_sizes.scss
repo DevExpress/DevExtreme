@@ -4,18 +4,24 @@
 
 $material-pivotgrid-cell-padding: null !default;
 $pivotgrid-common-left-right-padding: null !default;
+$material-pivotgrid-expanded-cell-padding: null !default;
+$material-pivotgrid-total-text-left-padding: null !default;
 
-$pivotgrid-empty-column-width: 19px;
-$pivotgrid-common-top-bottom-padding: 7px;
-$pivotgrid-field-indicators-offset: 6px;
-$pivotgrid-indicators-line-height: 12px;
+$pivotgrid-empty-column-width: 19px !default;
+$pivotgrid-common-top-bottom-padding: 7px !default;
+$pivotgrid-field-indicators-offset: 6px !default;
+$pivotgrid-indicators-line-height: 12px !default;
 
 @if $size == "default" {
-  $material-pivotgrid-cell-padding: 10px 14px;
-  $pivotgrid-common-left-right-padding: 10px;
+  $material-pivotgrid-cell-padding: 10px 14px !default;
+  $pivotgrid-common-left-right-padding: 10px !default;
+  $material-pivotgrid-expanded-cell-padding: 10px 14px 10px 19px !default;
+  $material-pivotgrid-total-text-left-padding: 22px !default;
 }
 
 @else if $size == "compact" {
-  $material-pivotgrid-cell-padding: 7px 8px;
-  $pivotgrid-common-left-right-padding: 8px;
+  $material-pivotgrid-cell-padding: 7px 8px !default;
+  $pivotgrid-common-left-right-padding: 8px !default;
+  $material-pivotgrid-expanded-cell-padding: 7px 8px 7px 13px !default;
+  $material-pivotgrid-total-text-left-padding: 16px !default;
 }

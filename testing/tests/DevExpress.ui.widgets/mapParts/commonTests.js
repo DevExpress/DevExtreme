@@ -3,6 +3,7 @@ import testing from './utils.js';
 import Map from 'ui/map';
 import GoogleStaticProvider from 'ui/map/provider.google_static';
 import ajaxMock from '../../../helpers/ajaxMock.js';
+import errors from 'core/errors';
 
 const MARKERS = testing.MARKERS;
 const ROUTES = testing.ROUTES;
@@ -35,6 +36,28 @@ QUnit.test('widget should be rendered', function(assert) {
     });
 
     assert.ok($map.hasClass(MAP_CLASS), 'widget class added');
+});
+
+QUnit.test('show warning when using outdated "key" option', function(assert) {
+    try {
+        sinon.stub(errors, 'log');
+
+        $('#map').dxMap({
+            provider: 'googleStatic',
+            key: 'testKey'
+        });
+
+        assert.ok(errors.log.calledOnce, 'the log method is called once');
+        assert.deepEqual(errors.log.getCall(0).args, [
+            'W0001',
+            'dxMap',
+            'key',
+            '20.2',
+            'Use the \'apiKey\' option instead'
+        ], 'correct warning is shown');
+    } finally {
+        errors.log.restore();
+    }
 });
 
 QUnit.test('clicks inside map should be native (T349301)', function(assert) {

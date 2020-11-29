@@ -322,6 +322,7 @@ const DropDownEditor = TextBox.inherit({
         const $container = this._$container;
 
         this._detachKeyboardEvents();
+        this._refreshButtonsContainer();
 
         // NOTE: to prevent buttons disposition
         const beforeButtonsContainerParent = this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode;
@@ -351,6 +352,10 @@ const DropDownEditor = TextBox.inherit({
 
         $container.prepend(this._$beforeButtonsContainer);
         $container.append(this._$afterButtonsContainer);
+    },
+
+    _refreshButtonsContainer() {
+        this._$buttonsContainer = this.$element().children().eq(0);
     },
 
     _integrateInput: function() {
@@ -532,6 +537,7 @@ const DropDownEditor = TextBox.inherit({
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
+            dragEnabled: false,
             toolbarItems: this._getPopupToolbarItems(),
             onPositioned: this._popupPositionedHandler.bind(this),
             fullScreen: false,

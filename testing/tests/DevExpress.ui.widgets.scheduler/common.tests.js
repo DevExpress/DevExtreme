@@ -1294,7 +1294,8 @@ QUnit.module('Scrolling to time', () => {
                 'descriptionExpr': '_description',
                 'allDayExpr': '_allDay',
                 'recurrenceRuleExpr': '_recurrenceRule',
-                'recurrenceExceptionExpr': '_recurrenceException'
+                'recurrenceExceptionExpr': '_recurrenceException',
+                'disabledExpr': '_disabled'
             });
 
             const data = {
@@ -1306,7 +1307,8 @@ QUnit.module('Scrolling to time', () => {
                 description: 'b',
                 allDay: true,
                 recurrenceRule: 'abc',
-                recurrenceException: 'def'
+                recurrenceException: 'def',
+                disabled: false
             };
             const appointment = {
                 _startDate: data.startDate,
@@ -1317,7 +1319,8 @@ QUnit.module('Scrolling to time', () => {
                 _description: data.description,
                 _allDay: data.allDay,
                 _recurrenceRule: data.recurrenceRule,
-                _recurrenceException: data.recurrenceException
+                _recurrenceException: data.recurrenceException,
+                _disabled: data.disabled
             };
 
             const dataAccessors = this.instance._dataAccessors;
@@ -4663,6 +4666,44 @@ QUnit.module('Scrolling to time', () => {
         });
     });
 
+    QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is greater than default', function(assert) {
+        const scheduler = createWrapper({
+            height: 1500,
+            views: ['month'],
+            currentView: 'month',
+        });
+
+        const scrollable = scheduler.workSpace.getScrollable();
+        scrollable.option('useNative', true);
+
+        const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+        const scrollHeight = scrollable.scrollHeight();
+        const scrollableHeight = scrollable.$element().height();
+
+        assert.equal(scrollableHeight, dateTableHeight, 'Correct dateTable height');
+        assert.equal(scrollableHeight, scrollHeight, 'Correct scroll content height');
+    });
+
+    QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is equal to default', function(assert) {
+        const scheduler = createWrapper({
+            height: 500,
+            views: [{
+                type: 'month',
+                intervalCount: 5,
+            }],
+            currentView: 'month',
+        });
+
+        const scrollable = scheduler.workSpace.getScrollable();
+        scrollable.option('useNative', true);
+
+        const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+        const scrollHeight = scrollable.scrollHeight();
+        const scrollableHeight = scrollable.$element().height();
+
+        assert.equal(scrollHeight, dateTableHeight, 'Correct dateTable height');
+        assert.notEqual(scrollableHeight, scrollHeight, 'Correct scroll content height');
+    });
 })('View with configuration');
 
 QUnit.module('Options for Material theme in components', {
@@ -4778,6 +4819,10 @@ QUnit.module('ScrollTo', () => {
             const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
             const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
 
+            const rtlInitialPosition = scrollableInstance.option('rtlEnabled')
+                ? scrollableInstance.scrollLeft()
+                : 0;
+
             scheduler.instance.scrollTo(date, groups, allDay);
 
             const scrollableHeight = $scrollable.height();
@@ -4793,7 +4838,7 @@ QUnit.module('ScrollTo', () => {
                 'Correct top parameter',
             );
             assert.equal(
-                scrollBy.getCall(0).args[0].left,
+                rtlInitialPosition + scrollBy.getCall(0).args[0].left,
                 leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
                 'Correct left parameter',
             );

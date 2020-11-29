@@ -339,13 +339,13 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .pressKey('tab')
     .expect(pager.hasFocusedState)
     .ok()
-    .expect(pager.getNavPage(0).element.focused)
+    .expect(pager.getNavPage('1').element.focused)
     .ok()
 
     .pressKey('tab')
     .expect(pager.hasFocusedState)
     .ok()
-    .expect(pager.getNavPage(1).element.focused)
+    .expect(pager.getNavPage('2').element.focused)
     .ok()
 
     .pressKey('tab')
@@ -370,13 +370,13 @@ test('Navigation through views using Tab, Shift+Tab', async (t) => {
     .pressKey('shift+tab')
     .expect(pager.hasFocusedState)
     .ok()
-    .expect(pager.getNavPage(1).element.focused)
+    .expect(pager.getNavPage('2').element.focused)
     .ok()
 
     .pressKey('shift+tab')
     .expect(pager.hasFocusedState)
     .ok()
-    .expect(pager.getNavPage(0).element.focused)
+    .expect(pager.getNavPage('1').element.focused)
     .ok()
 
     .pressKey('shift+tab')
@@ -1013,7 +1013,7 @@ test('DataGrid - Scroll bars should not appear when updating edge cell focus ove
 test('Tab key on the focused group row should be handled by default behavior (T833621)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const groupRow = dataGrid.getGroupRow(1);
-  const pagerPage0 = dataGrid.getPager().getNavPage(0);
+  const pagerPage0 = dataGrid.getPager().getNavPage('1');
 
   await t
     .click(groupRow.element)
@@ -1069,8 +1069,8 @@ test('Row should not be focused by "focusedRowIndex" after change "pageIndex" by
 
   await t
     .expect(dataGrid.getDataRow(1).isFocusedRow).ok()
-    .click(pager.getNavPage(1).element)
-    .expect(pager.getNavPage(1).isSelected)
+    .click(pager.getNavPage('2').element)
+    .expect(pager.getNavPage('2').selected)
     .ok()
     .expect(dataGrid.getFocusedRow().exists)
     .notOk();
@@ -1508,7 +1508,7 @@ test('Horizontal moving by keydown if scrolling.columnRenderingMode: virtual', a
   }
 }).before(() => {
   const generateData = function (rowCount, columnCount) {
-    const items = [];
+    const items: {}[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
       const item = {};
@@ -1560,7 +1560,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
   }
 }).before(() => {
   const generateData = function (rowCount, columnCount) {
-    const items = [];
+    const items: {}[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
       const item = {};
@@ -1621,7 +1621,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
     }
   }).before(() => {
     const generateData = function (rowCount, columnCount) {
-      const items = [];
+      const items: {}[] = [];
 
       for (let i = 0; i < rowCount; i += 1) {
         const item = {};
@@ -1712,7 +1712,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
   }
 }).before(() => {
   const generateData = function (rowCount, columnCount) {
-    const items = [];
+    const items: {}[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
       const item = {};
@@ -1807,7 +1807,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
   }
 }).before(() => {
   const generateData = function (rowCount, columnCount) {
-    const items = [];
+    const items: {}[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
       const item = {};

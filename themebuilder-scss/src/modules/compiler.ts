@@ -62,11 +62,19 @@ export default class Compiler {
       file: options.file,
       data: options.data,
     }).then((reply) => {
-      if (reply.error) reject();
-      else {
+      if (reply.error) {
+        reject({
+          message: reply.error,
+          line: null,
+          file: null,
+          name: null,
+          column: null,
+          status: null,
+        });
+      } else {
         resolve({
           result: {
-            css: reply.css,
+            css: Buffer.from(reply.css),
             map: null,
             stats: null,
           },

@@ -16,7 +16,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { fitIntoRange } from '../../core/utils/math';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isString, isDefined, isFunction, isPlainObject, isWindow } from '../../core/utils/type';
+import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent } from '../../core/utils/type';
 import { compare as compareVersions } from '../../core/utils/version';
 import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
 import { getNavigator, getWindow, hasWindow } from '../../core/utils/window';
@@ -102,7 +102,11 @@ const forceRepaint = $element => {
 
 
 const getElement = value => {
-    return value && $(value.target || value);
+    if(isEvent(value)) {
+        value = value.target;
+    }
+
+    return $(value);
 };
 
 ready(() => {
@@ -231,7 +235,8 @@ const Overlay = Widget.inherit({
             boundaryOffset: { h: 0, v: 0 },
             propagateOutsideClick: false,
             ignoreChildEvents: true,
-            _checkParentVisibility: true
+            _checkParentVisibility: true,
+            _fixedPosition: false
         });
     },
 
@@ -1151,12 +1156,18 @@ const Overlay = Widget.inherit({
     },
 
     _useFixedPosition: function() {
+        return this._shouldFixBodyPosition()
+            || this.option('_fixedPosition');
+    },
+
+    _shouldFixBodyPosition: function() {
         const $container = this._getContainer();
-        return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined);
+        return this._isWindow($container)
+            && (!iOS || this._bodyScrollTop !== undefined);
     },
 
     _toggleSafariScrolling: function(scrollingEnabled) {
-        if(iOS && this._useFixedPosition()) {
+        if(iOS && this._shouldFixBodyPosition()) {
             const body = domAdapter.getBody();
             if(scrollingEnabled) {
                 $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
@@ -1212,8 +1223,7 @@ const Overlay = Widget.inherit({
         let positionOf = null;
 
         if(!container && position) {
-            const isEvent = !!(position.of && position.of.preventDefault);
-            positionOf = isEvent ? window : (position.of || window);
+            positionOf = isEvent(position.of) ? window : (position.of || window);
         }
 
         return getElement(container || positionOf);
@@ -1432,6 +1442,9 @@ const Overlay = Widget.inherit({
             case 'rtlEnabled':
                 this._contentAlreadyRendered = false;
                 this.callBase(args);
+                break;
+            case '_fixedPosition':
+                this._fixWrapperPosition();
                 break;
             default:
                 this.callBase(args);

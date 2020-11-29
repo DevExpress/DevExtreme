@@ -9,6 +9,7 @@ import browser from 'core/utils/browser';
 import devices from 'core/devices';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/validator';
 
 const realDevice = devices.real();
@@ -356,12 +357,12 @@ QUnit.module('popup options', moduleConfig, () => {
 
         const dropDownButtonElementRect = this.$element.get(0).getBoundingClientRect();
 
-        let popupContentElementRect = $(instance.content()).get(0).getBoundingClientRect();
-        assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, 'popup position is correct, rtlEnabled = false');
+        let overlayContentElementRect = $(instance.content()).parent().get(0).getBoundingClientRect();
+        assert.strictEqual(overlayContentElementRect.left, dropDownButtonElementRect.left, 'popup position is correct, rtlEnabled = false');
 
         instance.option('rtlEnabled', true);
-        popupContentElementRect = $(instance.content()).get(0).getBoundingClientRect();
-        assert.strictEqual(popupContentElementRect.right, dropDownButtonElementRect.right, 'popup position is correct, rtlEnabled = true');
+        overlayContentElementRect = $(instance.content()).parent().get(0).getBoundingClientRect();
+        assert.strictEqual(overlayContentElementRect.right, dropDownButtonElementRect.right, 'popup position is correct, rtlEnabled = true');
     });
 
     QUnit.test('two way binding should work with dropDownOptions', function(assert) {
@@ -409,8 +410,12 @@ QUnit.module('popup options', moduleConfig, () => {
             value: 2
         });
 
-        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(700);
+        const scrollTopValue = 100;
+        const windowHeightValue = 700;
+        const editorHeight = this.$element.outerHeight();
+
+        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(scrollTopValue);
+        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(windowHeightValue);
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
         const instance = this.$element.dxDropDownBox('instance');
 
@@ -420,7 +425,7 @@ QUnit.module('popup options', moduleConfig, () => {
             const popup = $('.dx-popup').dxPopup('instance');
             const maxHeight = popup.option('maxHeight');
 
-            assert.roughEqual(Math.floor(maxHeight()), 523, 3, 'maxHeight is correct');
+            assert.roughEqual(Math.floor(maxHeight()), (windowHeightValue - scrollTopValue - editorHeight) * 0.9, 3, 'maxHeight is correct');
         } finally {
             scrollTop.restore();
             windowHeight.restore();
@@ -430,6 +435,7 @@ QUnit.module('popup options', moduleConfig, () => {
 
     QUnit.test('maxHeight should be 90% of bottom offset if popup has been rendered at the bottom already (T874949)', function(assert) {
         this.$element.dxDropDownBox({
+            width: 300,
             contentTemplate: () => {
                 const content = $('<div id=\'dd-content\'></div>');
 
@@ -442,8 +448,10 @@ QUnit.module('popup options', moduleConfig, () => {
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(0);
+        const bottomPosition = 200;
         const windowHeight = $(window).height();
-        const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: windowHeight - 200 });
+        const topValue = windowHeight - bottomPosition;
+        const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: topValue });
         const instance = this.$element.dxDropDownBox('instance');
 
         try {
@@ -460,20 +468,10 @@ QUnit.module('popup options', moduleConfig, () => {
         }
     });
 
-    QUnit.test('maxHeight should be 90% to bottom bound if popup has been rendered at the top already (T874949)', function(assert) {
-
-        let startPopupHeight;
+    QUnit.test('maxHeight should be distance between the popup top bound and the element top bound if the popup has been rendered at the top already (T874949, T942217)', function(assert) {
         this.$element.dxDropDownBox({
-            contentTemplate: (e) => {
-                const content = $('<div id=\'dd-content\'></div>');
-
-                setTimeout(() => {
-                    startPopupHeight = $(e.component.content()).parent('.dx-overlay-content').height();
-                    $('#dd-content').height(300);
-                });
-
-                return content;
-            }
+            width: 300,
+            contentTemplate: (e) => $('<div id=\'dd-content\'></div>')
         });
 
         const elementHeight = this.$element.height();
@@ -484,33 +482,50 @@ QUnit.module('popup options', moduleConfig, () => {
 
         try {
             instance.open();
+            const startPopupHeight = $(instance.content()).parent('.dx-overlay-content').outerHeight();
+            $('#dd-content').height(300);
 
-            this.clock.tick();
-            const popup = $('.dx-popup').dxPopup('instance');
+            const popup = this.$element.find('.dx-popup').dxPopup('instance');
             const maxHeight = popup.option('maxHeight');
-
-            assert.roughEqual(Math.floor(maxHeight()), (1 + startPopupHeight + elementHeight) * 0.9, 3, 'maxHeight is correct');
+            assert.roughEqual(maxHeight(), startPopupHeight, 1.01, 'maxHeight is correct');
         } finally {
             scrollTop.restore();
-            this.$element.css('margin-top', 0);
         }
     });
 
-    QUnit.test('maxHeight should be recalculated if popup has been reopened after content change (T874949)', function(assert) {
-        const contentHeight = 90;
+    QUnit.test('maxHeight should be distance between the popup top bound and the element top bound if the popup has been rendered at the top already and the window was scrolled (T874949, T942217)', function(assert) {
+        const scrollTopValue = 50;
+        this.$element.dxDropDownBox({
+            width: 300,
+            contentTemplate: (e) => $('<div id=\'dd-content\'></div>')
+        });
 
+        const elementHeight = this.$element.height();
+        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(scrollTopValue);
+        const windowHeight = $(window).height();
+        this.$element.css('margin-top', windowHeight - elementHeight - 1 - scrollTopValue);
+        const instance = this.$element.dxDropDownBox('instance');
+
+        try {
+            instance.open();
+            const startPopupHeight = $(instance.content()).parent('.dx-overlay-content').height();
+            $('#dd-content').height(300);
+
+            const popup = this.$element.find('.dx-popup').dxPopup('instance');
+            const maxHeight = popup.option('maxHeight');
+            assert.roughEqual(maxHeight(), startPopupHeight + scrollTopValue, 1.01, 'maxHeight is correct');
+        } finally {
+            scrollTop.restore();
+        }
+    });
+
+    QUnit.test('maxHeight should be recalculated if popup has been reopened after content change (T874949, T942217)', function(assert) {
+        const contentHeight = 90;
         const windowHeight = $(window).height();
         const marginTop = Math.max(windowHeight - 50, 200);
         this.$element.dxDropDownBox({
-            contentTemplate: (e) => {
-                const content = $('<div id=\'dd-content\'></div>');
-
-                setTimeout(() => {
-                    $('#dd-content').height(contentHeight);
-                });
-
-                return content;
-            }
+            width: 300,
+            contentTemplate: (e) => $('<div id=\'dd-content\'></div>')
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(0);
@@ -520,20 +535,20 @@ QUnit.module('popup options', moduleConfig, () => {
 
         try {
             instance.open();
-
-            this.clock.tick();
-            const popup = $('.dx-popup').dxPopup('instance');
-            const maxHeight = popup.option('maxHeight');
-
+            $('#dd-content').height(contentHeight);
             instance.close();
             instance.open();
             this.clock.tick();
-            const overlayContentHeight = $(popup.content()).outerHeight();
-            assert.roughEqual(Math.floor(maxHeight()), (windowHeight - (marginTop - overlayContentHeight)) * 0.9, 3, 'maxHeight is correct');
 
+            const popup = this.$element.find('.dx-popup').dxPopup('instance');
+            const maxHeight = popup.option('maxHeight');
+            const $popupContent = $(popup.content());
+            const overlayContentHeight = $popupContent.outerHeight();
+            const overlayOffset = $popupContent.offset().top;
+            const elementOffset = this.$element.offset().top;
+            assert.ok(overlayContentHeight >= contentHeight, 'height is recalculated');
+            assert.roughEqual(maxHeight(), elementOffset - overlayOffset, 1.01, 'maxHeight is correct');
         } finally {
-            this.$element.css('margin-top', 0);
-            $('#container').css('min-height', 0);
             scrollTop.restore();
         }
     });
@@ -605,7 +620,7 @@ QUnit.module('popup options', moduleConfig, () => {
         });
 
         const { bottom: elementBottom } = this.$element.get(0).getBoundingClientRect();
-        const { top: popupTop } = $(instance.content()).get(0).getBoundingClientRect();
+        const { top: popupTop } = $(instance.content()).parent().get(0).getBoundingClientRect();
 
         const actualOffset = Math.round(popupTop) - Math.round(elementBottom);
         assert.strictEqual(actualOffset, vOffset, 'popup offset is correct');

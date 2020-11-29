@@ -1,0 +1,92 @@
+@use "./mixins" as *;
+@use "./textEditor/mixins" as *;
+
+// adduse
+
+
+.dx-dropdowneditor {
+  position: relative;
+
+  &.dx-dropdowneditor-field-clickable {
+    cursor: pointer;
+  }
+}
+
+.dx-dropdowneditor-input-wrapper {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+
+  .dx-texteditor {
+    border: none;
+    margin: 0;
+    display: flex;
+    flex-grow: 1;
+  }
+
+  .dx-texteditor-input {
+    text-overflow: ellipsis;
+
+    &::-ms-clear {
+      width: 0;
+      height: 0;
+    }
+  }
+}
+
+.dx-dropdowneditor-field-template-wrapper {
+  @include dx-editor-content-wrapper();
+
+  > * {
+    flex-grow: 1;
+  }
+}
+
+.dx-dropdowneditor-active {
+  .dx-dropdowneditor-icon {
+    opacity: 0.35;
+  }
+}
+
+.dx-dropdowneditor-button {
+  position: relative;
+  float: right;
+  height: 100%;
+  cursor: pointer;
+
+  .dx-button-content {
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    float: left;
+  }
+}
+
+.dx-dropdowneditor-button.dx-dropdowneditor-readonly {
+  cursor: default;
+}
+
+.dx-dropdowneditor-icon {
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.dx-state-disabled {
+  .dx-dropdowneditor,
+  &.dx-dropdowneditor {
+    cursor: default;
+  }
+
+  .dx-dropdowneditor-button {
+    cursor: inherit;
+  }
+
+  .dx-dropdowneditor-icon {
+    opacity: 0.2;
+  }
+}

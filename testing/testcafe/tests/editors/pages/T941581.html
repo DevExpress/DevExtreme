@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tag Box</title>
+
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.common.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.light.css"/>
+
+        <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
+    </head>
+    <body>
+        <form id="form">
+            <div id="checkBox"></div>
+        </form>
+        <script>
+            $(function() {
+                const checkBox = $('#checkBox')
+                    .dxCheckBox({
+                        name: 'style'
+                    })
+                    .dxValidator({
+                        validationRules: [{
+                            type: 'required',
+                            message: 'it is required'
+                        }]
+                    });
+            });
+        </script>
+    </body>
+</html>

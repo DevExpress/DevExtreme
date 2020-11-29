@@ -168,6 +168,36 @@ QUnit.module('options changed callbacks', {
         assert.equal(indicator.length, 0, 'indicator is hidden');
     });
 
+    QUnit.test('showIndicator option change to true after change to false should render loadIndicator (T943765)', function(assert) {
+        const instance = this.element
+            .dxLoadPanel({
+                showIndicator: true,
+                visible: true
+            })
+            .dxLoadPanel('instance');
+
+
+        instance.option('showIndicator', false);
+        instance.option('showIndicator', true);
+
+        const indicator = instance.$content().find('.dx-loadindicator');
+        assert.equal(indicator.length, 1, 'indicator is shown');
+    });
+
+    QUnit.test('message option change should not hide loadIndicator (T943765)', function(assert) {
+        const instance = this.element
+            .dxLoadPanel({
+                showIndicator: true,
+                visible: true
+            })
+            .dxLoadPanel('instance');
+
+        instance.option('message', 'new message');
+
+        const indicator = instance.$content().find('.dx-loadindicator');
+        assert.equal(indicator.length, 1, 'indicator is shown');
+    });
+
     QUnit.test('showPane option', function(assert) {
         const instance = this.element
             .dxLoadPanel({ showPane: true })

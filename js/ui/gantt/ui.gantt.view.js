@@ -1,3 +1,4 @@
+import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import { getGanttViewCore } from './gantt_importer';
 import { TaskAreaContainer } from './ui.gantt.task.area.container';
@@ -124,7 +125,8 @@ export class GanttView extends Widget {
             allowTaskUpdate: value.allowTaskUpdating,
             allowResourceDelete: value.allowResourceDeleting,
             allowResourceInsert: value.allowResourceAdding,
-            allowResourceUpdate: value.allowResourceUpdating
+            allowResourceUpdate: value.allowResourceUpdating,
+            allowTaskResourceUpdate: value.allowTaskResourceUpdating
         };
     }
 
@@ -133,6 +135,9 @@ export class GanttView extends Widget {
             case 'width':
                 super._optionChanged(args);
                 this._ganttViewCore.setWidth(args.value);
+                break;
+            case 'height':
+                this._ganttViewCore.setHeight(args.value);
                 break;
             case 'tasks':
             case 'dependencies':
@@ -261,5 +266,8 @@ export class GanttView extends Widget {
             result = datePart + ' ' + timePart;
         }
         return result;
+    }
+    destroyTemplate(container) {
+        $(container).empty();
     }
 }

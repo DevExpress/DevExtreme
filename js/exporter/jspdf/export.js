@@ -56,10 +56,12 @@ export const Export = {
             jsPDFDocument,
             autoTableOptions,
             component,
+            customizeCell,
             keepColumnWidths,
             selectedRowsOnly
         } = options;
         const dataProvider = component.getDataProvider(selectedRowsOnly);
+        const wrapText = !!component.option('wordWrapEnabled');
 
         return new Promise((resolve) => {
             dataProvider.ready().done(() => {
@@ -87,7 +89,7 @@ export const Export = {
 
                         const pdfCell = {
                             content: this._getFormattedValue(value, cellStyle.format),
-                            styles: this._getPDFCellStyles(gridCell.rowType, columns[cellIndex].alignment, cellStyle)
+                            styles: this._getPDFCellStyles(gridCell.rowType, columns[cellIndex].alignment, cellStyle, wrapText)
                         };
 
                         if(gridCell.rowType === 'header') {
@@ -100,6 +102,9 @@ export const Export = {
                             }
                             const isMergedCell = mergedCells[rowIndex] && mergedCells[rowIndex][cellIndex];
                             if(!isMergedCell || pdfCell.rowSpan > 1 || pdfCell.colSpan > 1) {
+                                if(isFunction(customizeCell)) {
+                                    customizeCell({ gridCell, pdfCell });
+                                }
                                 row.push(pdfCell);
                             }
                         } else if(gridCell.rowType === 'group' && !isDefined(pdfCell.content) && row.length === 1) {
@@ -107,6 +112,9 @@ export const Export = {
                             row[0].colSpan++;
                         } else {
                             pdfCell.content = pdfCell.content ?? '';
+                            if(isFunction(customizeCell)) {
+                                customizeCell({ gridCell, pdfCell });
+                            }
                             row.push(pdfCell);
                         }
                     }
@@ -140,21 +148,19 @@ export const Export = {
         return value;
     },
 
-    _getPDFCellStyles: function(rowType, columnAlignment, cellStyle) {
-        const { alignment: cellAlignment, bold, wrapText } = cellStyle;
+    _getPDFCellStyles: function(rowType, columnAlignment, cellStyle, wrapText) {
+        const { alignment: cellAlignment, bold } = cellStyle;
         const align = (rowType === 'header') ? columnAlignment : cellAlignment;
         const pdfCellStyle = {};
 
         if(align) {
             pdfCellStyle['halign'] = align;
         }
-        if(rowType !== 'header') {
-            if(bold) {
-                pdfCellStyle.fontStyle = 'bold';
-            }
-            if(wrapText) {
-                pdfCellStyle.cellWidth = 'wrap';
-            }
+        if(bold && rowType !== 'header') {
+            pdfCellStyle.fontStyle = 'bold';
+        }
+        if(wrapText) {
+            pdfCellStyle.cellWidth = 'wrap';
         }
 
         return pdfCellStyle;

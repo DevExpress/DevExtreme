@@ -11,7 +11,7 @@ import {
     getAddFunction,
     convertVisualRangeObject
 } from '../core/utils';
-import { isDefined, isFunction, isPlainObject, isNumeric, type } from '../../core/utils/type';
+import { isDefined, isFunction, isPlainObject, type } from '../../core/utils/type';
 import constants from './axes_constants';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
@@ -1074,6 +1074,18 @@ Axis.prototype = {
         }
     },
 
+    _resolveLogarithmicOptionsForRange(range) {
+        const options = this._options;
+        if(options.type === constants.logarithmic) {
+            range.addRange({
+                allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
+            });
+            if(!isNaN(options.linearThreshold)) {
+                range.linearThreshold = options.linearThreshold;
+            }
+        }
+    },
+
     adjustViewport(businessRange) {
         const that = this;
         const options = that._options;
@@ -1130,7 +1142,7 @@ Axis.prototype = {
         !isDefined(result.min) && (result.min = result.minVisible);
         !isDefined(result.max) && (result.max = result.maxVisible);
         result.addRange({}); // controlValuesByVisibleBounds
-
+        that._resolveLogarithmicOptionsForRange(result);
 
         return result;
     },
@@ -1292,14 +1304,7 @@ Axis.prototype = {
             invert: options.inverted
         });
 
-        if(options.type === constants.logarithmic) {
-            that._seriesData.addRange({
-                allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
-            });
-            if(!isNaN(options.linearThreshold)) {
-                that._seriesData.linearThreshold = options.linearThreshold;
-            }
-        }
+        that._resolveLogarithmicOptionsForRange(that._seriesData);
 
         if(!isDiscrete) {
             if(!isDefined(that._seriesData.min) && !isDefined(that._seriesData.max)) {
@@ -1855,7 +1860,7 @@ Axis.prototype = {
         let end;
         let correctedMin;
         let correctedMax;
-        function correctZeroLevel(minPoint, maxPoint) {
+        const correctZeroLevel = (minPoint, maxPoint) => {
             const minExpectedPadding = _abs(canvasStartEnd.start - minPoint);
             const maxExpectedPadding = _abs(canvasStartEnd.end - maxPoint);
 
@@ -1863,7 +1868,7 @@ Axis.prototype = {
 
             start = minExpectedPadding / coeff;
             end = maxExpectedPadding / coeff;
-        }
+        };
         if(!that.isArgumentAxis && options.dataType !== 'datetime') {
             if(minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
                 correctZeroLevel(translator.translate(0), translator.translate(maxValue));
@@ -1876,8 +1881,8 @@ Axis.prototype = {
             }
         }
         return {
-            start,
-            end,
+            start: isFinite(start) ? start : null,
+            end: isFinite(end) ? end : null,
             correctedMin,
             correctedMax
         };
@@ -2235,7 +2240,7 @@ Axis.prototype = {
         };
     },
 
-    getZoomEndEventArg(previousRange, event, actionType, zoomFactor, shift) {
+    _getZoomEndEventArg(previousRange, event, actionType, zoomFactor, shift) {
         const newRange = this.visualRange();
         return {
             axis: this,
@@ -2377,34 +2382,39 @@ Axis.prototype = {
             };
             const typeIsNotChanged = that.getOptions().type === that._storedZoomEndParams.type;
             const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange)) : NaN;
-            const zoomFactor = typeIsNotChanged ? +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + 'e+2') + 'e-2') : NaN;
-            const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
+            const zoomFactor = typeIsNotChanged ?
+                +(Math.round(that.getVisualRangeLength(previousBusinessRange) / (that.getVisualRangeLength() || 1) + 'e+2') + 'e-2') : NaN;
+            const zoomEndEvent = that._getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
-            zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor === 1 ? 'pan' : 'zoom', zoomFactor);
+            zoomEndEvent.cancel = that.checkZoomingLowerLimitOvercome(zoomFactor === 1 ? 'pan' : 'zoom', zoomFactor).stopInteraction;
             that._eventTrigger('zoomEnd', zoomEndEvent);
 
             if(zoomEndEvent.cancel) {
-                that.restorePreviousVisualRange(previousRange);
+                that._restorePreviousVisualRange(previousRange);
             }
             that._storedZoomEndParams = null;
         }
     },
 
-    restorePreviousVisualRange(previousRange) {
+    _restorePreviousVisualRange(previousRange) {
         const that = this;
         that._storedZoomEndParams = null;
         that._applyZooming(previousRange);
         that._visualRange(that, previousRange);
     },
 
-    isZoomingLowerLimitOvercome(actionType, zoomFactor, range) {
+    checkZoomingLowerLimitOvercome(actionType, zoomFactor, range) {
         const that = this;
         const options = that._options;
+        const translator = that._translator;
         let minZoom = options.minVisualRangeLength;
-        let isOvercoming = actionType === 'zoom' && zoomFactor >= 1;
-        const businessRange = that._translator.getBusinessRange();
+        let correctedRange = range;
         let visualRange;
-        if(isDefined(range)) {
+
+        let isOvercoming = actionType === 'zoom' && zoomFactor >= 1;
+        const businessRange = translator.getBusinessRange();
+
+        if(range) {
             visualRange = that.adjustRange(getVizRangeObject(range));
             visualRange = {
                 minVisible: visualRange.startValue,
@@ -2412,29 +2422,29 @@ Axis.prototype = {
                 categories: businessRange.categories
             };
         }
-        const visualRangeLength = that.getVisualRangeLength(visualRange);
 
-        if(options.type !== 'discrete') {
-            if(isDefined(minZoom)) {
-                if(options.dataType === 'datetime' && !isNumeric(minZoom)) {
-                    minZoom = dateUtils.dateToMilliseconds(minZoom);
-                }
-                isOvercoming &= minZoom >= visualRangeLength;
+        const beforeVisualRangeLength = that.getVisualRangeLength(businessRange);
+        const afterVisualRangeLength = that.getVisualRangeLength(visualRange);
+
+        if(isDefined(minZoom) || options.type === 'discrete') {
+            minZoom = translator.convert(minZoom);
+            if(visualRange && (minZoom < beforeVisualRangeLength) && (minZoom >= afterVisualRangeLength)) {
+                correctedRange = getVizRangeObject(translator.getRangeByMinZoomValue(minZoom, visualRange));
+                isOvercoming = false;
             } else {
-                const canvasLength = that._translator.canvasLength;
-                const fullRange = {
-                    minVisible: businessRange.min,
-                    maxVisible: businessRange.max,
-                    categories: businessRange.categories
-                };
-                isOvercoming &= that.getVisualRangeLength(fullRange) / canvasLength >= visualRangeLength;
+                isOvercoming &= minZoom > afterVisualRangeLength;
             }
         } else {
-            !isDefined(minZoom) && (minZoom = 1);
-            isOvercoming &= isDefined(range) && that.getVisualRangeLength() === minZoom && visualRangeLength <= minZoom;
+            const canvasLength = that._translator.canvasLength;
+            const fullRange = {
+                minVisible: businessRange.min,
+                maxVisible: businessRange.max,
+                categories: businessRange.categories
+            };
+            isOvercoming &= that.getVisualRangeLength(fullRange) / canvasLength >= afterVisualRangeLength;
         }
 
-        return !!isOvercoming;
+        return { stopInteraction: !!isOvercoming, correctedRange: correctedRange };
     },
 
     dataVisualRangeIsReduced() {

@@ -3,23 +3,21 @@
 const { spawn } = require('child_process');
 const { join } = require('path');
 
-const runCommand = (command, args, detached = false) => {
+const runCommand = (command, args) => {
     console.log(`Run: ${command}\n`);
 
     const process = spawn(command, args, {
         cwd: __dirname,
-        shell: true,
-        detached
+        shell: true
     });
 
     return new Promise((resolve, reject) => {
-        let errorData = '';
-        process.stderr.on('data', (data) => {
-            errorData += data;
-        });
+        const log = (data) => console.log(data.toString());
+        process.stderr.on('data', log);
+        process.stdout.on('data', log);
 
         process.on('close', (code) => {
-            if(code) reject(errorData);
+            if(code) reject();
             else resolve();
         });
     });
@@ -40,7 +38,7 @@ const run = async() => {
     try {
         await runCommand('pub', ['get']);
         await runCommand('dart2native', ['main.dart', '-o', 'compiler.exe']);
-        runCommand(join(__dirname, 'compiler.exe'), [], true);
+        runCommand(join(__dirname, 'compiler.exe'), []);
         console.log('Dart compile server has been run');
     } catch(e) {
         console.log('Dart compile server has not been run.', e);

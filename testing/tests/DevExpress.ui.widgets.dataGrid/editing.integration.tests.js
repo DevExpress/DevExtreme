@@ -194,6 +194,35 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
+    QUnit.test('The width of the text command button should not equal the width of the icon command button (T945472)', function(assert) {
+        // arrange
+        const columnsWrapper = dataGridWrapper.columns;
+        createDataGrid({
+            dataSource: [{ id: 0, c0: 'c0' }],
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+                useIcons: true
+            },
+            columns: [
+                {
+                    type: 'buttons',
+                    buttons: ['edit', {
+                        text: 'Custom'
+                    }]
+                }
+            ]
+        });
+
+        this.clock.tick();
+
+        const $buttons = columnsWrapper.getCommandButtons();
+
+        // assert
+        assert.equal($buttons.length, 2, 'command buttons are rendered');
+        assert.notEqual($buttons.eq(0).css('width'), $buttons.eq(1).css('width'), 'button widths are not equal');
+    });
+
     QUnit.test('Undelete command buttons should contains aria-label accessibility attribute if rendered as icon and batch edit mode (T755185)', function(assert) {
         // arrange
         const columnsWrapper = dataGridWrapper.columns;
@@ -2111,46 +2140,105 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.roughEqual(errorMessageTopOffset, -0.5, 0.6, 'error message offset');
     });
 
-    QUnit.testInActiveWindow('data parameter in validationCallback function should be correct if showEditorAlways and repaintChangesOnly', function(assert) {
-        // arrange
-        const validationCallback = sinon.spy(e => {
-            assert.deepEqual(e.data, { field: 1, field2: 123, id: 1 }, 'row data');
+    ['close edit cell', 'cancel editing'].forEach(action => {
+        QUnit.testInActiveWindow(`data parameter in validationCallback function should be correct if showEditorAlways and repaintChangesOnly after ${action}`, function(assert) {
+            // arrange
+            const validationCallback = sinon.spy(e => {
+                assert.deepEqual(e.data, { field: 1, field2: 123, id: 1 }, 'row data');
 
-            return true;
+                return true;
+            });
+
+            const grid = createDataGrid({
+                dataSource: [{ field: 1, field2: 2, id: 1 }],
+                keyExpr: 'id',
+                repaintChangesOnly: true,
+                editing: {
+                    mode: 'cell',
+                    allowUpdating: true
+                },
+                columns: [{
+                    dataField: 'field'
+                }, {
+                    dataField: 'field2',
+                    showEditorAlways: true,
+                    validationRules: [{
+                        type: 'custom',
+                        reevaluate: true,
+                        validationCallback
+                    }]
+                }],
+                loadingTimeout: undefined
+            });
+
+            // act
+            $(grid.$element()).find('input').val(123).trigger('change');
+            action === 'close edit cell' ? grid.closeEditCell() : grid.cancelEditData();
+            this.clock.tick();
+
+            $(grid.getCellElement(0, 1)).trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.equal(validationCallback.callCount, 3, 'validation callback call count');
         });
+    });
 
-        const grid = createDataGrid({
-            dataSource: [{ field: 1, field2: 2, id: 1 }],
-            keyExpr: 'id',
-            repaintChangesOnly: true,
-            editing: {
-                mode: 'cell',
-                allowUpdating: true
-            },
-            columns: [{
-                dataField: 'field'
-            }, {
-                dataField: 'field2',
-                showEditorAlways: true,
-                validationRules: [{
-                    type: 'custom',
-                    reevaluate: true,
-                    validationCallback
-                }]
-            }],
-            loadingTimeout: undefined
+    ['Row', 'Cell', 'Batch'].forEach(editMode => {
+        [false, true].forEach(repaintChangesOnly => {
+            QUnit.testInActiveWindow(`${editMode} - the data parameter of the validationCallback should not be empty on cell focus (repaintChangesOnly = ${repaintChangesOnly}) (T950070)`, function(assert) {
+                // arrange
+                const validationCallback = sinon.spy(e => {
+                    assert.deepEqual(e.data, { id: 1, name: 'test' }, 'row data');
+
+                    return true;
+                });
+                const dataGrid = createDataGrid({
+                    dataSource: [{ id: 1, name: 'test' }],
+                    keyExpr: 'id',
+                    repaintChangesOnly,
+                    columns: [
+                        {
+                            dataField: 'id',
+                            validationRules: [
+                                { type: 'custom', validationCallback }
+                            ]
+                        },
+                        {
+                            dataField: 'name',
+                            validationRules: [
+                                { type: 'custom', validationCallback }
+                            ]
+                        }
+                    ],
+                    editing: {
+                        mode: editMode.toLowerCase(),
+                        allowUpdating: true
+                    },
+                    loadingTimeout: undefined
+                });
+
+                // act
+                if(editMode === 'Row') {
+                    dataGrid.editRow(0);
+                } else {
+                    dataGrid.editCell(0, 0);
+                }
+                this.clock.tick();
+                $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').focus();
+                this.clock.tick();
+                if(editMode !== 'Row') {
+                    dataGrid.editCell(0, 1);
+                    this.clock.tick();
+                }
+                $(dataGrid.getCellElement(0, 1)).find('.dx-texteditor-input').focus();
+                this.clock.tick();
+
+
+                // assert
+                assert.equal(validationCallback.callCount, 2, 'validation callback call count');
+            });
         });
-
-        // act
-        $(grid.$element()).find('input').val(123).trigger('change');
-        grid.closeEditCell();
-        this.clock.tick();
-
-        $(grid.getCellElement(0, 1)).trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        assert.equal(validationCallback.callCount, 3, 'validation callback call count');
     });
 });
 
@@ -4425,6 +4513,52 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
             // assert
             assert.deepEqual(dataGrid.option('editing.changes'), [], 'changes are reset');
+        });
+    });
+
+    ['Row', 'Form', 'Popup', 'Cell', 'Batch'].forEach(editMode => {
+        ['changes', 'editRowKey', 'editColumnName'].forEach(editingOption => {
+            QUnit.test(`${editMode} - Changing the editing.${editingOption} option should not raise the onToolbarPreparing event (T949025)`, function(assert) {
+                // arrange
+                const onToolbarPreparingSpy = sinon.spy();
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource: [{ id: 1, field: 'field' }],
+                    keyExpr: 'id',
+                    editing: {
+                        allowUpdating: true,
+                        allowAdding: true,
+                        mode: editMode.toLowerCase()
+                    },
+                    loadingTimeout: undefined,
+                    onToolbarPreparing: onToolbarPreparingSpy
+                }).dxDataGrid('instance');
+
+                // assert
+                assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing should be called initially');
+
+                // act
+                let optionValue;
+                switch(editingOption) {
+                    case 'changes': {
+                        optionValue = [{ type: 'update', key: 1, data: { field: 'new value' } }];
+                        break;
+                    }
+                    case 'editRowKey': {
+                        optionValue = 1;
+                        break;
+                    }
+                    case 'editColumnName': {
+                        optionValue = 'field';
+                        break;
+                    }
+
+                }
+                dataGrid.option(`editing.${editingOption}`, optionValue);
+                this.clock.tick();
+
+                // assert
+                assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing should not be called on option change');
+            });
         });
     });
 });

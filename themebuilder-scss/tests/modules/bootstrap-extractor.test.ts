@@ -127,4 +127,27 @@ describe('BootstrapExtractor', () => {
       { key: '$dx-var2', value: 'test2' },
     ]);
   });
+
+  test('extract varuable with rem (bootstrap 4) (T951945)', async () => {
+    const input = `
+    $var1: -.25rem;
+    $var2: 0.34rem !default;
+    $custom-var: 12rem;
+    $var3: 2rem 1rem;
+    $var4: 0 .5rem 1rem red !default;`;
+    const extractor = new BootstrapExtractor(input, 4);
+    extractor.meta = {
+      'dx-var1': '$var1',
+      'dx-var2': '$var2',
+      'dx-var3': '$var3',
+      'dx-var4': '$var4',
+    };
+
+    expect(await extractor.extract()).toEqual([
+      { key: '$dx-var1', value: '-4px' },
+      { key: '$dx-var2', value: '5px' },
+      { key: '$dx-var3', value: '32px 16px' },
+      { key: '$dx-var4', value: '0 8px 16px red' },
+    ]);
+  });
 });

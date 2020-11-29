@@ -1,0 +1,14 @@
+@use "sass:string";
+@use "../string" as *;
+
+@mixin list-icon-colored($data-uri, $current-color) {
+  $uri: replace("#{$data-uri}", "currentColor", escape("#{$current-color}"));
+
+  background-image: string.unquote($uri);
+}
+
+@mixin toggle-delete-icon($color) {
+  .dx-icon-toggle-delete {
+    @include list-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/list/toggle-delete.svg'), $color);
+  }
+}

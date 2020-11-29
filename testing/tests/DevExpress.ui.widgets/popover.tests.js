@@ -292,20 +292,22 @@ QUnit.module('options change', () => {
     QUnit.test('arrow rendering after changing position', function(assert) {
         fixtures.simple.create();
 
-        const popover = new Popover($('#what'), { visible: true, position: { at: 'right center', my: 'left center' } });
-        const position = $.extend({}, popover.option('position'), {
-            at: 'bottom center',
-            my: 'top center'
-        });
+        try {
+            const popover = new Popover($('#what'), { visible: true, position: { at: 'right center', my: 'left center' } });
+            const position = $.extend({}, popover.option('position'), {
+                at: 'bottom center',
+                my: 'top center'
+            });
 
-        popover.option('position', position);
-        popover.hide();
-        popover.show();
+            popover.option('position', position);
+            popover.hide();
+            popover.show();
 
-        assert.ok(wrapper().hasClass('dx-position-bottom'), 'absence of right position class');
-        assert.ok(!wrapper().hasClass('dx-position-right'), 'presence of bottom position class');
-
-        fixtures.simple.drop();
+            assert.ok(wrapper().hasClass('dx-position-bottom'), 'absence of right position class');
+            assert.ok(!wrapper().hasClass('dx-position-right'), 'presence of bottom position class');
+        } finally {
+            fixtures.simple.drop();
+        }
     });
 
     QUnit.test('arrowPosition option changed', function(assert) {
@@ -1035,17 +1037,17 @@ QUnit.module('positioning', () => {
         }
     });
 
-    QUnit.test('popover shading should cover the parent element with absolute position, not target element', function(assert) {
+    QUnit.test('popover shading should cover all window including scrolled space (T945429)', function(assert) {
         fixtures.simple.create();
+        let $scrollElement;
 
         try {
             const $popover = $('#what');
             const $target = $('#where');
 
-            $popover.css({
-                width: '111px',
-                height: '333px'
-            });
+            $scrollElement = $('<div>')
+                .css('height', '2000px')
+                .appendTo('body');
 
             new Popover($popover, {
                 target: $target,
@@ -1055,9 +1057,10 @@ QUnit.module('positioning', () => {
 
             const $shader = $('.dx-overlay-shader');
 
-            assert.equal($shader.height(), $popover.height(), 'shading height is equal to height of parent with absolute position');
-            assert.equal($shader.width(), $popover.width(), 'shading width is equal to width of parent with absolute position');
+            assert.roughEqual($shader.height(), $(window).height(), 1.01, 'shader height is equal to window height');
+            assert.roughEqual($shader.width(), $(window).width(), 1.01, 'shader width is equal to window width');
         } finally {
+            $scrollElement.remove();
             fixtures.simple.drop();
         }
     });
@@ -1895,20 +1898,24 @@ QUnit.module('Show/Hide', {
     });
 
     QUnit.test('second popover should be hidden by click on the first\'s target', function(assert) {
-        const markup = '<div id=\'popover1\'></div>' +
+        const $markup = $('<div id=\'popover1\'></div>' +
             '<div id=\'popover2\'></div>' +
             '<div id=\'target1\'></div>' +
-            '<div id=\'target2\'><div id=\'clicktarget2\'></div></div>';
+            '<div id=\'target2\'><div id=\'clicktarget2\'></div></div>');
 
-        $(markup).appendTo('body');
+        $markup.appendTo('body');
 
-        const popover1 = new Popover($('#popover1'), { visible: true, animation: false, target: '#target1' });
-        const popover2 = new Popover($('#popover2'), { visible: true, animation: false, target: '#target2' });
+        try {
+            const popover1 = new Popover($('#popover1'), { visible: true, animation: false, target: '#target1' });
+            const popover2 = new Popover($('#popover2'), { visible: true, animation: false, target: '#target2' });
 
-        $('#clicktarget2').trigger('dxpointerdown');
+            $('#clicktarget2').trigger('dxpointerdown');
 
-        assert.ok(popover2.option('visible'), 'popover2 is still visible');
-        assert.notOk(popover1.option('visible'), 'popover1 is hidden');
+            assert.ok(popover2.option('visible'), 'popover2 is still visible');
+            assert.notOk(popover1.option('visible'), 'popover1 is hidden');
+        } finally {
+            $markup.remove();
+        }
     });
 
     QUnit.test('popover should clear show timeout when hide event fired', function(assert) {

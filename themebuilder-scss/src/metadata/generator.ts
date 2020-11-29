@@ -44,11 +44,16 @@ export default class MetadataGenerator {
   static getMetaItems(scss: string): MetaItem[] {
     const metaItems: MetaItem[] = [];
 
-    MetadataGenerator.executor(scss, /\/\*\*[\n\r]([\s\S]*?)\*\/\s*[\n\r]*([-$a-z_0-9]+):/gim, (matches: RegExpMatchArray) => {
+    MetadataGenerator.executor(scss, /\/\*\*[\n\r]([\s\S]*?)\*\/\s*[\n\r]*([-$a-z_0-9]+):(.*?);/gim, (matches: RegExpMatchArray) => {
       const key = matches[2];
+      const value = matches[3];
 
       if (metaItems.some((item) => item.Key === key)) {
         throw new Error(`${key} has duplicated comment`);
+      }
+
+      if (!value.endsWith('!default')) {
+        throw new Error(`${key} value has no '!default' flag`);
       }
 
       const metaItem = {

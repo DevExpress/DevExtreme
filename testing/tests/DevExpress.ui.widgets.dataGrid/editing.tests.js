@@ -6650,6 +6650,38 @@ QUnit.module('Editing with real dataController', {
         assert.ok(items[1].isNewRow, 'second row is inserted');
     });
 
+    // T950444
+    QUnit.test('deleteRow should work after addRow in cell edit mode', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        $.extend(that.options.editing, {
+            allowAdding: true,
+            allowUpdating: true,
+            mode: 'cell'
+        });
+
+        rowsView.render(testElement);
+
+        // act
+        this.addRow();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.dataController.items().length, 8, 'item was added');
+
+        // act
+        this.saveEditData();
+        this.deleteRow(0);
+
+        // assert
+        assert.equal(this.dataController.items().length, 7, 'item was deleted');
+        assert.equal(this.option('editing.editRowKey'), null, 'editRowKey was reset');
+        assert.equal(this.option('editing.editColumnName'), null, 'editColumnName was reset');
+    });
+
     QUnit.test('Restore a height of rowsView when editing is canceled with empty data', function(assert) {
     // arrange
         const testElement = $('#container');
@@ -15139,6 +15171,40 @@ QUnit.module('Editing with validation', {
         assert.notOk($(rowsView.getCellElement(0, 0)).hasClass('dx-cell-modified'), 'cell is not marked as modified');
         assert.notOk($(rowsView.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'cell is not marked as modified');
         assert.deepEqual(this.getDataSource().items()[0], { field1: true, field2: true }, 'data is saved');
+    });
+
+    // T946816
+    QUnit.test('Validation should work with composite keys', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+        const validationCallback = sinon.spy();
+
+        rowsView.render($testElement);
+
+        this.applyOptions({
+            dataSource: [{ field: 'aaa', field2: 'bbb' }],
+            keyExpr: ['field', 'field2'],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: 'field',
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback
+                }]
+            }]
+        });
+
+        this.editCell(0, 0);
+        $testElement.find('input').val('new value').trigger('change');
+
+        this.clock.tick();
+
+        // assert
+        assert.equal(validationCallback.callCount, 1, 'validation callback was called');
     });
 });
 

@@ -560,16 +560,16 @@ QUnit.test('controls', function(assert) {
     });
 });
 
-QUnit.test('key', function(assert) {
+QUnit.test('apiKey', function(assert) {
     const done = assert.async();
 
     $('#map').dxMap({
         provider: 'bing',
-        key: {
+        apiKey: {
             bing: '12345'
         },
         onReady: function() {
-            assert.equal(window.Microsoft.options.credentials, '12345', 'map key specified correctly');
+            assert.equal(window.Microsoft.options.credentials, '12345', 'map apiKey specified correctly');
 
             done();
         }

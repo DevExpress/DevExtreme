@@ -118,6 +118,30 @@ const moduleConfig = {
 };
 
 QUnit.module('Appointment popup form', moduleConfig, () => {
+    test('Original appointment\'s fields shouldn\'t fill if used fieldExpr', function(assert) {
+        const data = [];
+        const textExpValue = 'Subject';
+
+        const scheduler = createScheduler({
+            dataSource: data,
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2021, 4, 27),
+            textExpr: textExpValue,
+            onAppointmentAdded: ({ appointmentData }) => {
+                assert.strictEqual(appointmentData[textExpValue], 'qwerty', 'Mapped text property should be fill on onAppointmentAdded event');
+                assert.strictEqual(appointmentData.text, undefined, 'Original text property should be undefined on onAppointmentAdded event');
+            },
+            height: 600
+        });
+        scheduler.instance.showAppointmentPopup();
+        scheduler.appointmentForm.setSubject('qwerty', textExpValue);
+        scheduler.appointmentPopup.clickDoneButton();
+
+        assert.strictEqual(data[0].Subject, 'qwerty', 'Mapped text property should be fill');
+        assert.strictEqual(data[0].text, undefined, 'Original text property should be undefined');
+    });
+
     QUnit.test('Recurrence form should work properly if recurrenceRule property mapped recurrenceRuleExpr', function(assert) {
         const scheduler = createScheduler({
             dataSource: [{
@@ -1427,6 +1451,52 @@ QUnit.test('Popup should be readOnly if appointment is disabled', function(asser
     this.instance._createComponent.getCall(0).args[2].contentTemplate();
 
     assert.equal(this.instance._createComponent.getCall(1).args[2].readOnly, true);
+});
+
+[{
+    disabled: true,
+    result: true,
+    text: 'disabled is true'
+}, {
+    disabled: false,
+    result: false,
+    text: 'disabled is false'
+}, {
+    result: false,
+    text: 'disabled is undefined'
+}, {
+    disabled: () => false,
+    result: false,
+    text: 'disabled is function, return false'
+}, {
+    disabled: () => true,
+    result: true,
+    text: 'disabled is function, return true'
+}].forEach(testCase => {
+    QUnit.test(`Appointment form should be consider disabled property of appointment (${testCase.text})`, function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2021, 4, 27)
+        });
+
+        const isReadOnly = sinon.spy(scheduler.instance._appointmentPopup, '_isReadOnly');
+
+        scheduler.instance.showAppointmentPopup({
+            text: 'Appointment',
+            startDate: new Date(2021, 4, 27, 9, 30),
+            endDate: new Date(2021, 4, 27, 11),
+            disabled: testCase.disabled
+        });
+
+        const returnValues = isReadOnly.returnValues;
+        const callCount = isReadOnly.callCount;
+
+        assert.equal(returnValues[0], testCase.result, `_isReadOnly should be return '${testCase.result}' in _createForm call`);
+        assert.equal(returnValues[1], testCase.result, `_isReadOnly should be return '${testCase.result}' in _updateForm call`);
+        assert.equal(callCount, 2, 'isReadOnly method should be call twice');
+    });
 });
 
 QUnit.test('Multiple showing appointment popup for recurrence appointments should work correctly', function(assert) {

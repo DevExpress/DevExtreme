@@ -166,19 +166,6 @@ function run_test {
     exit $runner_result
 }
 
-function run_test_testcafe {
-    export DEVEXTREME_TEST_CI=true
-
-    npm i
-    npm run build
-
-    local args="--browsers=chrome:headless";
-    [ -n "$COMPONENT" ] && args="$args --componentFolder=$COMPONENT";
-    [ -n "$QUARANTINE_MODE" ] && args="$args --quarantineMode=true";
-
-    npm run test-testcafe -- $args
-}
-
 function run_test_jest {
     npm i
     npx gulp localization
@@ -196,6 +183,12 @@ function run_test_scss {
     npm run build-themes
     cd themebuilder-scss
     npm i && npm run build && npm run test
+}
+
+function run_font_icons_test {
+    npm i jest
+    npm i font-carrier
+    npm run test-jest -- content.test.ts --coverage false --testPathPattern ./testing/FontIcons/content.test.ts
 }
 
 function start_runner_watchdog {

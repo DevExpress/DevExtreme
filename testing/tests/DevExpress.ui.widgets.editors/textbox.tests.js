@@ -5,6 +5,7 @@ import browser from 'core/utils/browser';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -89,6 +90,26 @@ QUnit.module('common', {}, () => {
             event = $.Event('keydown', { key: '2' });
             $input.trigger(event);
             assert.ok(event.isDefaultPrevented());
+        } finally {
+            browser.msie = originalIE;
+        }
+    });
+
+    QUnit.test('"maxLength" option on IE should works correctly with the hotkeys (T944726, T944493)', function(assert) {
+        const originalIE = browser.msie;
+
+        try {
+            browser.msie = true;
+            const $element = $('#textbox').dxTextBox({ maxLength: 1, value: 'b' });
+            const $input = $element.find(`.${INPUT_CLASS}`);
+            let event = $.Event('keydown', { key: 'a', ctrlKey: true });
+
+            $input.trigger(event);
+            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+
+            event = $.Event('keydown', { key: 'z', ctrlKey: true });
+            $input.trigger(event);
+            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
         } finally {
             browser.msie = originalIE;
         }
@@ -338,8 +359,8 @@ QUnit.module('options changing', {
             value: 'qwertyQWERTY'
         });
 
-        assert.equal(this.element.height(), h, 'widget\'s height set');
-        assert.equal(this.element.width(), w, 'widget\'s width set');
+        assert.equal(this.element.outerHeight(), h, 'widget\'s height set');
+        assert.equal(this.element.outerWidth(), w, 'widget\'s width set');
         assert.equal(this.input.outerHeight(), this.element.height(), 'input outer height should be equal widget height');
         assert.equal(this.input.outerWidth(), this.element.width(), 'input outer width should be equal widget width');
 
@@ -350,8 +371,8 @@ QUnit.module('options changing', {
             width: w
         });
 
-        assert.equal(this.element.height(), h, 'widget\'s height set');
-        assert.equal(this.element.width(), w, 'widget\'s width set');
+        assert.equal(this.element.outerHeight(), h, 'widget\'s height set');
+        assert.equal(this.element.outerWidth(), w, 'widget\'s width set');
         assert.equal(this.input.outerHeight(), this.element.height(), 'input outer height should be equal widget height');
         assert.equal(this.input.outerWidth(), this.element.width(), 'input outer width should be equal widget width');
     });

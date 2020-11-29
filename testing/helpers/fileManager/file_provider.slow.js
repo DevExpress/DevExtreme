@@ -9,6 +9,15 @@ export default class SlowFileProvider extends CustomFileSystemProvider {
             getItems: function(item) {
                 return this._realProviderInstance.getItems(item);
             },
+            createDirectory: function(parentDir, name) {
+                return this._doDelay(() => this._realProviderInstance.createDirectory(parentDir, name));
+            },
+            moveItem: function(item, destinationDir) {
+                return this._doDelay(() => this._realProviderInstance.moveItems([item.dataItem], destinationDir.dataItem));
+            },
+            copyItem: function(item, destinationDir) {
+                return this._doDelay(() => this._realProviderInstance.copyItems([item.dataItem], destinationDir.dataItem));
+            },
             uploadFileChunk: function(fileData, chunksInfo, destinationDir) {
                 return this._doDelay(() => this._realProviderInstance.uploadFileChunk(fileData, chunksInfo, destinationDir));
             }

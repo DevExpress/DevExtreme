@@ -41,13 +41,10 @@ env:
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=ui.scheduler
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=viz
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=renovation
-    - TARGET=test_testcafe COMPONENT=dataGrid QUARANTINE_MODE=true
-    - TARGET=test_testcafe COMPONENT=scheduler QUARANTINE_MODE=true
-    - TARGET=test_testcafe COMPONENT=editors
-    - TARGET=test_testcafe COMPONENT=navigation
     - TARGET=test_jest
     - TARGET=native_components
     - TARGET=test_scss
+    - TARGET=font_icons_test
 
 build:
 

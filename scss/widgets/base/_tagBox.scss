@@ -1,0 +1,113 @@
+@use "./mixins" as *;
+
+// adduse
+
+.dx-tagbox {
+  .dx-texteditor-input {
+    width: auto;
+  }
+
+  &.dx-tagbox-default-template {
+    &.dx-tagbox-only-select {
+      .dx-texteditor-input {
+        @include hide-input-cursor(); // T278002
+
+        min-width: 0;
+        width: 0.1px; // T393423, T437866
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+  }
+
+  &.dx-state-disabled {
+    .dx-texteditor-input {
+      background: none;
+    }
+
+    .dx-tag-content {
+      cursor: default;
+    }
+  }
+
+  &:not(.dx-tagbox-single-line) {
+    .dx-texteditor-input-container {
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+  }
+}
+
+
+.dx-tag {
+  max-width: calc(100% - 1px);
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.dx-tag-container {
+  &.dx-texteditor-input-container {
+    padding: 0;
+    padding-right: 4px;
+    outline: none;
+
+    .dx-tagbox-single-line & {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+
+  @at-root #{selector-append(".dx-texteditor-container", &)} {
+    white-space: normal;
+  }
+}
+
+.dx-tag-content {
+  position: relative;
+  display: inline-block;
+  margin: 4px 0 0 4px;
+  min-width: 30px;
+  text-align: center;
+  cursor: pointer;
+
+  &::before {
+    content: ".";
+    color: transparent;
+    display: inline-block;
+    width: 0;
+  }
+}
+
+.dx-tag-remove-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  &::before,
+  &::after {
+    position: absolute;
+    top: 50%;
+    content: "";
+    transform: rotate(45deg);
+  }
+}
+
+.dx-rtl .dx-tagbox,
+.dx-tagbox.dx-rtl {
+  .dx-tag-content {
+    margin-left: 0;
+    margin-right: 4px;
+  }
+
+  .dx-tag-remove-button {
+    right: auto;
+    left: 0;
+  }
+
+  .dx-tag-container {
+    padding-left: 4px;
+    padding-right: 0;
+  }
+}

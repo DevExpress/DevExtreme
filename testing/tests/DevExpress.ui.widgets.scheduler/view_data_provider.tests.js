@@ -202,42 +202,53 @@ module('View Data Provider', () => {
             assert.deepEqual(group3EndDate, new Date(2020, 7, 25, 1, 30), 'Group 3 end date is correct');
         });
 
-        test('findGroupCellStartDate', function(assert) {
-            assert.deepEqual(
-                this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
-                new Date(2020, 7, 24),
-                'Group 2 cell 0 start date is correct'
-            );
+        module('findGroupCellStartDate', function() {
 
-            assert.deepEqual(
-                this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
-                new Date(2020, 7, 25),
-                'Group 2 cell 1 start date is correct'
-            );
+            test('Simple appointments', function(assert) {
+                assert.deepEqual(
+                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
+                    new Date(2020, 7, 24),
+                    'Group 2 cell 0 start date is correct'
+                );
 
-            assert.deepEqual(
-                this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22)),
-                new Date(2020, 7, 24, 1),
-                'Group 3 cell 0 start date is correct'
-            );
+                assert.deepEqual(
+                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
+                    new Date(2020, 7, 25),
+                    'Group 2 cell 1 start date is correct'
+                );
 
-            assert.deepEqual(
-                this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
-                new Date(2020, 7, 25, 1),
-                'Group 3 cell 1 start date is correct'
-            );
+                assert.deepEqual(
+                    this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22)),
+                    new Date(2020, 7, 24, 1),
+                    'Group 3 cell 0 start date is correct'
+                );
 
-            assert.deepEqual(
-                this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
-                new Date(2020, 7, 25),
-                'Group 2 cell 1 allDay start date is correct'
-            );
+                assert.deepEqual(
+                    this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
+                    new Date(2020, 7, 25, 1),
+                    'Group 3 cell 1 start date is correct'
+                );
+            });
 
-            assert.deepEqual(
-                this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
-                new Date(2020, 7, 25, 1),
-                'Group 2 cell 1 allDay start date is correct '
-            );
+            test('AllDay appointments', function(assert) {
+                assert.deepEqual(
+                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                    new Date(2020, 7, 25, 0, 11),
+                    'Group 2 cell 1 allDay start date is correct'
+                );
+
+                assert.deepEqual(
+                    this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                    new Date(2020, 7, 25, 0, 11),
+                    'Group 2 cell 1 allDay start date is correct'
+                );
+
+                assert.deepEqual(
+                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 23, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                    new Date(2020, 7, 24),
+                    'Group 2 cell 1 allDay start date is correct when startDate is out of view'
+                );
+            });
         });
 
         test('getCellsGroup', function(assert) {

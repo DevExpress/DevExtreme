@@ -134,6 +134,25 @@ QUnit.module('Markup', moduleConfig, () => {
         const ganttViewRowElement = this.$element.find(GANTT_VIEW_ROW_SELECTOR).get(0);
         assert.roughEqual(treeListRowElement.getBoundingClientRect().height, ganttViewRowElement.getBoundingClientRect().height, 0.001, 'row heights are equal');
     });
+    test('auto height', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        const initHeight = this.$element.height();
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).first();
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.ok(initHeight > this.$element.height(), 'collapsed height');
+    });
+    test('fixed height', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('height', 800);
+        this.clock.tick();
+        const initHeight = this.$element.height();
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).first();
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.roughEqual(initHeight, this.$element.height(), 1, 'collapsed height');
+    });
 });
 
 QUnit.module('Options', moduleConfig, () => {
@@ -318,6 +337,7 @@ QUnit.module('Options', moduleConfig, () => {
             allowResourceAdding: false,
             allowResourceDeleting: false,
             allowResourceUpdating: false,
+            allowTaskResourceUpdating: false
         });
         coreEditingSettings = getGanttViewCore(this.instance).settings.editing;
         assert.equal(coreEditingSettings.enabled, true, 'editing allowed');
@@ -329,6 +349,7 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal(coreEditingSettings.allowResourceInsert, false, 'resource adding is prohibited');
         assert.equal(coreEditingSettings.allowResourceDelete, false, 'resource deleting is prohibited');
         assert.equal(coreEditingSettings.allowResourceUpdate, false, 'resource updating is prohibited');
+        assert.equal(coreEditingSettings.allowTaskResourceUpdate, false, 'task resource updating is prohibited');
         this.instance.option('editing.enabled', false);
         coreEditingSettings = getGanttViewCore(this.instance).settings.editing;
         assert.equal(coreEditingSettings.enabled, false, 'editing is prohibited');
@@ -359,6 +380,17 @@ QUnit.module('Options', moduleConfig, () => {
         assert.ok(isHeaderContainsText('2008'), 'is still years scale type');
         this.instance.option('scaleType', 'auto');
         assert.ok(isHeaderContainsText('Sun, 10 Feb'), 'is days scale type (auto)');
+    });
+    test('calculateCellValue for key', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.instance.option('columns', [{ dataField: 'id' }]);
+        this.clock.tick();
+
+        const columns = this.instance._treeList.getVisibleColumns();
+
+        assert.strictEqual(columns.length, 1);
+        assert.strictEqual(columns[0].calculateCellValue({ id: '54' }), '54', 'number');
+        assert.strictEqual(columns[0].calculateCellValue({ id: '54a' }), '54a', 'pseudo guid');
     });
 });
 
@@ -722,6 +754,33 @@ QUnit.module('Dialogs', moduleConfig, () => {
         popupTitleText = $dialog.find('.dx-popup-title').text();
         assert.equal(expectedTaskEditTitleText, popupTitleText, 'taskEditPopup title shown again');
     });
+    test('assign resource dxTagBox is disabled when allowTaskResourceUpdating is false', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('editing.allowTaskResourceUpdating', false);
+
+        this.instance.option('selectedRowKey', 1);
+        this.clock.tick();
+
+        showTaskEditDialog(this.instance);
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        const tagBox = $dialog.find('.dx-tag-container > .dx-texteditor-input');
+        assert.ok(tagBox.attr('aria-readOnly'), 'resource tagBox is readOnly');
+    });
+    test('show edit resource dialog button is disabled when allowResourceAdding and allowResourceDeleting are false ', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('editing.allowResourceAdding', false);
+        this.instance.option('editing.allowResourceDeleting', false);
+
+        this.instance.option('selectedRowKey', 1);
+        this.clock.tick();
+
+        showTaskEditDialog(this.instance);
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        const button = $dialog.find('.dx-texteditor-buttons-container > .dx-button');
+        assert.ok(button.attr('aria-disabled'), 'button is disabled');
+    });
 });
 
 QUnit.module('Toolbar', moduleConfig, () => {
@@ -996,7 +1055,49 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal(taskToUpdate.start, newStart, 'new task start is updated');
         assert.equal(taskToUpdate.end, newEnd, 'new task end is updated');
     });
+    test('updating with custom field', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
 
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+
+        this.instance.option('onTaskUpdating', (e) => {
+            e.newValues['ItemName'] = 'new item text';
+            e.newValues['CustomText'] = 'new custom text';
+        });
+        this.clock.tick();
+
+        const data = {
+            CustomText: 'new',
+            ItemName: 'new'
+        };
+
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick();
+        assert.equal(task.CustomText, 'new custom text', 'task cust field  is updated');
+        assert.equal(task.ItemName, 'new item text', 'task cust field  is updated');
+    });
 
     test('task dialog showing - cancel', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1262,6 +1363,82 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(taskToUpdate.start, data.start, 'new task start is updated');
         assert.equal(taskToUpdate.end, data.end, 'new task end is updated');
         assert.equal(taskToUpdate.progress, data.progress, 'new task progress is updated');
+    });
+    test('taskUpdate with custom and core fields', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+        this.clock.tick();
+
+        const data = {
+            ItemName: 'New',
+            CustomText: 'new text'
+        };
+
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick();
+
+        assert.equal(task.ItemName, data.ItemName, 'task title is updated');
+        assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
+    });
+    test('taskUpdate with only custom field', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+        this.clock.tick();
+
+        const data = {
+            CustomText: 'new text'
+        };
+
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick(300);
+
+        assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
     });
     test('insertDependency', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -2310,8 +2487,13 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
-        this.instance.option('taskTooltipContentTemplate', customTooltipText);
-
+        const customTooltipFunction = (task, container) => {
+            $(container).empty();
+            return customTooltipText;
+        };
+        this.clock.tick();
+        this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
+        this.clock.tick();
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
         ganttCore.taskEditController.showTaskInfo(0, 0);
@@ -2325,8 +2507,13 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestCustomTooltipJQuery';
         const customTooltipJQuery = $('<div>TestCustomTooltipJQuery</div>');
-        this.instance.option('taskTooltipContentTemplate', customTooltipJQuery);
-
+        const customTooltipFunction = (task, container) => {
+            $(container).empty();
+            return customTooltipJQuery;
+        };
+        this.clock.tick();
+        this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
+        this.clock.tick();
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
         ganttCore.taskEditController.showTaskInfo(0, 0);
@@ -2334,6 +2521,50 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
         assert.equal(tooltipText, customTooltipText, 'Custom template with jQuery works correctly');
+    });
+    test('different tooltips for tasks', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        const customTooltipText = 'TestTooltipText';
+        const customTooltipFunction = (task, container) => {
+            if(task.id === 1) {
+                return;
+            }
+            const template = container.innerHTML;
+            $(container).empty();
+            if(task.id === 2) {
+                return;
+            }
+            if(task.id === 3 || task.id === 4) {
+                return customTooltipText;
+            }
+            return template;
+        };
+        this.clock.tick();
+        this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
+        this.clock.tick();
+        const ganttCore = getGanttViewCore(this.instance);
+        this.clock.tick();
+        ganttCore.taskEditController.show(0);
+        ganttCore.taskEditController.showTaskInfo(0, 0);
+        this.clock.tick();
+        const tooltipTitleText = this.$element.find(TOOLTIP_SELECTOR).text();
+        const taskTitle = tasks[0].title;
+        assert.equal(tooltipTitleText.indexOf(taskTitle), 0, 'Default template works correctly');
+        ganttCore.taskEditController.tooltip.hide();
+        this.clock.tick();
+        ganttCore.taskEditController.show(1);
+        ganttCore.taskEditController.showTaskInfo(0, 0);
+        this.clock.tick();
+        const tooltipDisplayStyle = this.$element.find(TOOLTIP_SELECTOR)[0].style.display;
+        assert.equal(tooltipDisplayStyle, 'none', 'Empty content template doesnt show tooltip');
+        ganttCore.taskEditController.tooltip.hide();
+        this.clock.tick();
+        ganttCore.taskEditController.show(2);
+        ganttCore.taskEditController.showTaskInfo(0, 0);
+        this.clock.tick();
+        const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
+        assert.equal(tooltipText, customTooltipText, 'Custom template text works correctly');
     });
 });
 

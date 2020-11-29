@@ -44,7 +44,8 @@ import {
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_EMPTY_ITEM_CLASS,
     FIELD_BUTTON_ITEM_CLASS,
-    SINGLE_COLUMN_ITEM_CONTENT } from './constants';
+    SINGLE_COLUMN_ITEM_CONTENT,
+    ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
 import '../text_box';
 import '../number_box';
@@ -434,6 +435,10 @@ const LayoutManager = Widget.inherit({
                 }
                 if(e.location.col === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_COL_CLASS);
+                }
+
+                if(item.itemType === SIMPLE_ITEM_TYPE && that.option('isRoot')) {
+                    $itemElement.addClass(ROOT_SIMPLE_ITEM_CLASS);
                 }
                 const isLastColumn = (e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount);
                 const rowsCount = that._getRowsCount();

@@ -71,3 +71,28 @@ test('Resize in the "month" view', async (t) => {
   currentView: 'month',
   dataSource,
 }));
+
+test('Resize should work correctly with startDateExpr (T944693)', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const resizableAppointment = scheduler.getAppointment('Brochure Design Review');
+
+  await t
+    .drag(resizableAppointment.resizableHandle.bottom, 0, 100)
+    .expect(resizableAppointment.size.height).eql('200px')
+    .expect(resizableAppointment.date.time)
+    .eql('10:00 AM - 12:00 PM')
+
+    .drag(resizableAppointment.resizableHandle.top, 0, 100)
+    .expect(resizableAppointment.size.height)
+    .eql('100px')
+    .expect(resizableAppointment.date.time)
+    .eql('11:00 AM - 12:00 PM');
+}).before(() => createScheduler({
+  views: ['week'],
+  currentView: 'week',
+  startDateExpr: 'start',
+  dataSource: dataSource.map(({ startDate, ...restProps }) => ({
+    ...restProps,
+    start: startDate,
+  })),
+}));

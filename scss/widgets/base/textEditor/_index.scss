@@ -1,0 +1,134 @@
+@use "../mixins" as *;
+@use "./mixins" as *;
+@use "sass:string" as string;
+
+// adduse
+
+
+.dx-texteditor {
+  display: block;
+
+  input::-ms-clear {
+    display: none;
+  }
+}
+
+/* B231111 */
+.dx-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  width: auto;
+  height: 100%;
+  text-align: left;
+  cursor: text;
+  pointer-events: none;
+
+  &::before {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    content: string.unquote("attr(DATA-DX_PLACEHOLDER)");
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  &::after {
+    content: ' ';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+}
+
+.dx-texteditor-container {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.dx-texteditor-buttons-container {
+  display: flex;
+  width: auto;
+  flex-grow: 0;
+  flex-basis: content;
+  align-items: center;
+}
+
+.dx-texteditor-input-container {
+  @include dx-editor-content-wrapper();
+}
+
+.dx-texteditor-input {
+  -webkit-appearance: none; // stylelint-disable-line property-no-vendor-prefix
+  width: 100%;
+  height: 100%;
+  outline: 0;
+  border: 0;
+
+  @include user-select(text);
+
+  &:-webkit-autofill + .dx-placeholder {
+    display: none;
+  }
+
+  &:-moz-ui-invalid {
+    box-shadow: none;
+  }
+}
+
+.dx-show-clear-button {
+  position: relative;
+}
+
+.dx-clear-button-area {
+  height: 100%;
+  width: 34px;
+  position: relative;
+  cursor: pointer;
+  text-align: justify;
+
+  .dx-icon-clear {
+    position: absolute;
+    display: inline-block;
+    background-size: contain;
+  }
+}
+
+.dx-texteditor-empty .dx-clear-button-area {
+  display: none;
+}
+
+.dx-state-disabled {
+  .dx-placeholder {
+    cursor: auto;
+  }
+
+  .dx-clear-button-area {
+    display: none;
+  }
+
+  .dx-texteditor-input {
+    opacity: 1;
+  }
+}
+
+.dx-rtl .dx-texteditor,
+.dx-rtl.dx-texteditor {
+  .dx-placeholder {
+    text-align: right;
+    left: auto;
+    right: 0;
+  }
+}
+
+.dx-device-android {
+  .dx-texteditor-input {
+    -webkit-user-modify: read-write-plaintext-only;
+  }
+}

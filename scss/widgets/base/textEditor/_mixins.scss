@@ -1,0 +1,6 @@
+@mixin dx-editor-content-wrapper() {
+  display: flex;
+  flex-grow: 1;
+  position: relative;
+  align-items: baseline;
+}

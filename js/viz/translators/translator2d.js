@@ -655,6 +655,18 @@ _Translator2d.prototype = {
 
     ratioOfCanvasRange() {
         return this._canvasOptions.ratioOfCanvasRange;
+    },
+
+    convert(value) {
+        return value;
+    },
+
+    getRangeByMinZoomValue(minZoom, visualRange) {
+        if(visualRange.minVisible + minZoom <= this._businessRange.max) {
+            return [visualRange.minVisible, visualRange.minVisible + minZoom];
+        } else {
+            return [visualRange.maxVisible - minZoom, visualRange.maxVisible];
+        }
     }
 };
 

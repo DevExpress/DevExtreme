@@ -1,0 +1,144 @@
+@use "./mixins" as *;
+
+// adduse
+
+
+$nav-button-width: 25px;
+$icon-size: 16px;
+
+@mixin dx-tabs-ie-hack() {
+  a { /* END TODO */ /* TODO: IE hack */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    color: white;
+    text-decoration: none;
+    opacity: 0.001;
+  }
+}
+
+.dx-tabs-ie-hack {
+  @include dx-tabs-ie-hack();
+}
+
+.dx-tabs {
+  /* TODO: remove position, table-layout, display from root element */
+  @include user-select(none);
+
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  table-layout: fixed;
+  position: relative;
+
+  &.dx-tabs-stretched {
+    table-layout: auto;
+  }
+
+  &.dx-overflow-hidden {
+    overflow: hidden;
+  }
+}
+
+.dx-tabs-wrapper {
+  display: table-row;
+}
+
+
+.dx-tabs-scrollable {
+  .dx-tabs-wrapper {
+    display: block;
+    white-space: nowrap;
+    height: 100%;
+  }
+
+  .dx-tab {
+    height: 100%;
+    display: inline-block;
+
+    &::before {
+      content: "";
+      height: 100%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+
+  .dx-scrollable-content {
+    height: 100%;
+  }
+}
+
+.dx-tabs-nav-buttons {
+  .dx-tabs-scrollable {
+    margin-right: $nav-button-width;
+    margin-left: $nav-button-width;
+  }
+}
+
+.dx-tabs-nav-button {
+  width: $nav-button-width;
+  padding: 0;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.dx-tabs-nav-button-left {
+  left: 0;
+}
+
+.dx-tabs-nav-button-right {
+  right: 0;
+}
+
+.dx-tabs-expanded {
+  display: table;
+}
+
+.dx-tab {
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+  cursor: pointer;
+  white-space: nowrap;
+
+  @include dx-tabs-ie-hack();
+
+  .dx-icon {
+    width: $icon-size;
+    height: $icon-size;
+    display: block;
+    margin: 0 auto;
+    -webkit-user-drag: none;
+  }
+}
+
+.dx-tab-content {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.dx-tab-text {
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+  max-width: 100%;
+  -webkit-user-drag: none;
+
+  @include dx-overflow();
+}
+
+.dx-tabs-item-badge {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.dx-state-disabled {
+  .dx-tab {
+    cursor: default;
+  }
+}

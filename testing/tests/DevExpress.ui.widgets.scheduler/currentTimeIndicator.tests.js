@@ -670,6 +670,56 @@ const stubInvokeMethod = function(instance, options) {
         assert.roughEqual($bottomShader.outerWidth(), 3 * cellWidth, 1.5, 'Bottom indicator has correct width');
     });
 
+    [{
+        startDayHour: 9,
+        endDayHour: 20,
+        indicatorTime: new Date(2017, 8, 5, 12, 30),
+        testDescription: 'indicatorTime is between startDayHour and endDayHour',
+        bottomShaderWidth: 2,
+        topShaderWidth: 3,
+        indicatorCount: 1
+    },
+    {
+        startDayHour: 9,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 5, 7, 30),
+        testDescription: 'indicatorTime is less than startDateHour',
+        bottomShaderWidth: 2,
+        topShaderWidth: 2,
+        indicatorCount: 0
+    },
+    {
+        startDayHour: 0,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 5, 15, 30),
+        testDescription: 'indicatorTime is greater than endDayHour',
+        bottomShaderWidth: 0,
+        topShaderWidth: 3,
+        indicatorCount: 0
+    }].forEach(testCase => {
+        QUnit.test(`Shader should have correct width on week view, ${testCase.testDescription}, (T923329)`, function(assert) {
+            const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
+                currentDate: new Date(2017, 8, 5),
+                height: 600,
+                indicatorTime: testCase.indicatorTime,
+                startDayHour: testCase.startDayHour,
+                endDayHour: testCase.endDayHour,
+                hoursInterval: 1
+            }).dxSchedulerWorkSpaceWeek('instance');
+
+            const $element = instance.$element();
+            const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+            const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+            const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+
+            testCase.bottomShaderWidth !== 0 && assert.roughEqual($bottomShader.outerWidth(), testCase.bottomShaderWidth * cellWidth, 1.5, 'Bottom shader has correct width');
+            assert.roughEqual($topShader.outerWidth(), testCase.topShaderWidth * cellWidth, 1.5, 'Top shader has correct width');
+
+            const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+            assert.equal($indicators.length, testCase.indicatorCount, 'Indicator count is correct');
+        });
+    });
+
     QUnit.test('Shader should have limited height, Week view', function(assert) {
         this.instance.option({
             endDayHour: 18,
@@ -1072,23 +1122,89 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
 (function() {
     QUnit.module('DateTime indicator on other timelines');
 
-    QUnit.test('Shader should have correct height & width, TimelineWeek view', function(assert) {
-        const instance = $('#scheduler-work-space').dxSchedulerTimelineWeek({
-            showCurrentTimeIndicator: true,
-            currentDate: new Date(2017, 8, 5),
-            startDayHour: 8,
-            height: 307,
-            indicatorTime: new Date(2017, 8, 5, 12, 30),
-            hoursInterval: 1
-        }).dxSchedulerTimelineWeek('instance');
+    [{
+        startDayHour: 9,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 5, 12, 30),
+        testDescription: 'indicatorTime is between startDayHour and endDayHour',
+        expectedCellCount: 13.5,
+        indicatorCount: 1
+    },
+    {
+        startDayHour: 9,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 5, 7, 30),
+        testDescription: 'indicatorTime is less than startDateHour',
+        expectedCellCount: 10,
+        indicatorCount: 0
+    },
+    {
+        startDayHour: 9,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 5, 15, 30),
+        testDescription: 'indicatorTime is greater than endDayHour',
+        expectedCellCount: 15,
+        indicatorCount: 0
+    }].forEach(testCase => {
+        QUnit.test(`Shader should have correct height & width on timelineWeek, ${testCase.testDescription}, (T923329)`, function(assert) {
+            const instance = $('#scheduler-work-space').dxSchedulerTimelineWeek({
+                currentDate: new Date(2017, 8, 5),
+                height: 307,
+                indicatorTime: testCase.indicatorTime,
+                startDayHour: testCase.startDayHour,
+                endDayHour: testCase.endDayHour,
+                hoursInterval: 1
+            }).dxSchedulerTimelineWeek('instance');
 
-        const $element = instance.$element();
-        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
-        const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+            const $element = instance.$element();
+            const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+            const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
 
-        assert.roughEqual($shader.outerHeight(), 160, 1, 'Shader has correct height');
+            assert.roughEqual($shader.outerHeight(), 160, 1, 'Shader has correct height');
+            assert.roughEqual($shader.outerWidth(), testCase.expectedCellCount * cellWidth, 1, 'Shader has correct width');
 
-        assert.roughEqual($shader.outerWidth(), 36.5 * cellWidth, 1, 'Shader has correct width');
+            const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+            assert.equal($indicators.length, testCase.indicatorCount, 'Indicator count is correct');
+        });
+    });
+
+    [{
+        startDayHour: 9,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 5, 12, 30),
+        testDescription: 'indicatorTime is between startDayHour and endDayHour'
+    },
+    {
+        startDayHour: 13,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 5, 12, 30),
+        testDescription: 'indicatorTime is less than startDateHour'
+    },
+    {
+        startDayHour: 0,
+        endDayHour: 11,
+        indicatorTime: new Date(2017, 8, 5, 12, 30),
+        testDescription: 'indicatorTime is greater than endDayHour'
+    }].forEach(testCase => {
+        QUnit.test(`Shader should have correct height & width on timelineMonth, ${testCase.testDescription}, (T923329)`, function(assert) {
+            const instance = $('#scheduler-work-space').dxSchedulerTimelineMonth({
+                currentDate: new Date(2017, 8, 5),
+                height: 307,
+                indicatorTime: testCase.indicatorTime,
+                startDayHour: testCase.startDayHour,
+                endDayHour: testCase.endDayHour,
+                hoursInterval: 1
+            }).dxSchedulerTimelineMonth('instance');
+            const $element = instance.$element();
+            const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+            const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+
+            assert.roughEqual($shader.outerHeight(), 200, 1, 'Shader has correct height');
+            assert.roughEqual($shader.outerWidth(), 4.5 * cellWidth, 6, 'Shader has correct width');
+
+            const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+            assert.equal($indicators.length, 1, 'Indicator count is correct');
+        });
     });
 
     QUnit.test('DateHeader currentTime cell should have specific class, TimelineWeek view', function(assert) {

@@ -30,14 +30,16 @@
   }
 
   &.dx-scrollable-vertical,
-  &.dx-scrollable-vertical > .dx-scrollable-wrapper > .dx-scrollable-container {
+  &.dx-scrollable-vertical > .dx-scrollable-wrapper > .dx-scrollable-container,
+  &.dx-scrollable-vertical > div > .dx-scrollable-wrapper > .dx-scrollable-container {
     touch-action: pan-y;
     overflow-x: hidden;
     overflow-y: auto;
   }
 
   &.dx-scrollable-horizontal,
-  &.dx-scrollable-horizontal > .dx-scrollable-wrapper > .dx-scrollable-container {
+  &.dx-scrollable-horizontal > .dx-scrollable-wrapper > .dx-scrollable-container,
+  &.dx-scrollable-horizontal > div > .dx-scrollable-wrapper > .dx-scrollable-container {
     touch-action: pan-x;
     float: none;
     overflow-x: auto;
@@ -45,7 +47,8 @@
   }
 
   &.dx-scrollable-both,
-  &.dx-scrollable-both > .dx-scrollable-wrapper > .dx-scrollable-container {
+  &.dx-scrollable-both > .dx-scrollable-wrapper > .dx-scrollable-container,
+  &.dx-scrollable-both > div > .dx-scrollable-wrapper > .dx-scrollable-container {
     touch-action: pan-y pan-x;
     float: none;
     overflow-x: auto;

@@ -778,9 +778,16 @@ export const BaseChart = BaseWidget.inherit({
 
         that._renderExtraElements();
         that._clearCanvas();
+        that._seriesElementsDrawn = true;
+    },
 
-        that._drawn();
-        that._renderCompleteHandler();
+    _changesApplied() {
+        const that = this;
+        if(that._seriesElementsDrawn) {
+            that._seriesElementsDrawn = false;
+            that._drawn();
+            that._renderCompleteHandler();
+        }
     },
 
     _locateLabels(resolveLabelOverlapping) {
@@ -1259,7 +1266,7 @@ export const BaseChart = BaseWidget.inherit({
         for(let i = 0; i < allSeriesOptions.length; i++) {
             particularSeriesOptions = extend(true, {}, allSeriesOptions[i], extraOptions);
 
-            if(!particularSeriesOptions.name) {
+            if(!_isDefined(particularSeriesOptions.name) || particularSeriesOptions.name === '') {
                 particularSeriesOptions.name = 'Series ' + (i + 1).toString();
             }
 

@@ -4434,7 +4434,7 @@ QUnit.module('Field Panel', {
         }));
         const container = pivotGrid.$element().find('.dx-pivotgrid-container').first();
         // assert
-        assert.roughEqual(container.height(), 300, 1, 'height');
+        assert.roughEqual(container.height(), 300, 1.01, 'height');
     });
 
     QUnit.test('PivotGrid should have correct height if filter fields take several lines and pivot has not vertical scroll', function(assert) {
@@ -6211,6 +6211,123 @@ QUnit.module('Vertical headers', {
 
                     assert.deepEqual(newState.rowExpandedPaths, []);
                     assert.deepEqual(newState.columnExpandedPaths, []);
+                });
+            });
+        });
+
+        function createGridAndTestFieldChooser(testAction) {
+            fx.off = true;
+            const clock = sinon.useFakeTimers();
+            const grid = $('#pivotGrid').dxPivotGrid({
+                fieldChooser: {
+                    applyChangesMode: applyChangesMode
+                },
+                dataSource: {
+                    fields: [
+                        { area: 'row', dataField: 'row1', dataType: 'string' },
+                        { area: 'row', dataField: 'subRow', dataType: 'string' },
+                        { area: 'column', dataField: 'col1', dataType: 'string' },
+                        { area: 'column', dataField: 'subColumn', dataType: 'string' },
+                        { area: 'data', summaryType: 'count', dataType: 'number' }
+                    ],
+                    store: [{
+                        row1: 'row1', row2: 'row2', subRow: 'subRow',
+                        col1: 'column1', col2: 'column2', subColumn: 'subColumn'
+                    }]
+                }
+            }).dxPivotGrid('instance');
+            clock.tick();
+
+            grid.getFieldChooserPopup().show().done(() => {
+                const fieldChooser = grid.getFieldChooserPopup().$content().dxPivotGridFieldChooser('instance');
+                testAction(grid, fieldChooser, clock);
+            });
+            clock.restore();
+            fx.off = false;
+        }
+
+        QUnit.test(`applyChangesMode=${applyChangesMode}. fieldChooser.option(state, newState)`, function(assert) {
+            createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
+                const fields = grid.getDataSource().state().fields;
+                fieldChooser.option('state', { rowExpandedPaths: [['row1']], columnExpandedPaths: [['column1']], fields: fields });
+                clock.tick();
+
+                const dataSourceState = grid.getDataSource().state();
+                assert.deepEqual(dataSourceState.rowExpandedPaths, applyChangesMode === 'instantly' ? [['row1']] : []);
+                assert.deepEqual(dataSourceState.columnExpandedPaths, applyChangesMode === 'instantly' ? [['column1']] : []);
+            });
+        });
+
+        QUnit.test(`applyChangesMode=${applyChangesMode}. pivotGrid.dataSource.reload()`, function(assert) {
+            createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
+                let isEventTriggered = false;
+                fieldChooser.option('onOptionChanged', (e) => {
+                    if(e.name === 'state') {
+                        isEventTriggered = true;
+                    }
+                });
+
+                grid.getDataSource().reload();
+                clock.tick();
+
+                assert.equal(isEventTriggered, false, 'option changed is not triggered');
+            });
+        });
+    });
+
+    ['allowExpandAll', 'allowSortingBySummary', 'allowFiltering'].forEach(option => {
+        function getSourceData() {
+            return {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
+                ],
+                store: [{ row1: 'row1', col1: 'column1' }]
+            };
+        }
+
+        [false, true].forEach(isEnabledInGrid => {
+            ['simpleObject', 'pivotGridDataSource'].forEach(dataSourceType => {
+                QUnit.test(`grid.${option}=${isEnabledInGrid} -> grid.${option}=${!isEnabledInGrid}. Changing option of pivotGrid affects the field option (T950953). dataSourceType: ${dataSourceType}`, function(assert) {
+                    const getFields = (grid) => grid.getDataSource().fields();
+
+                    const dataSource = getSourceData();
+                    const gridOptions = {};
+                    gridOptions[option] = isEnabledInGrid;
+                    gridOptions.dataSource = dataSourceType === 'simpleObject'
+                        ? dataSource
+                        : new PivotGridDataSource(dataSource);
+
+                    const grid = $('#pivotGrid').dxPivotGrid(gridOptions).dxPivotGrid('instance');
+                    this.clock.tick();
+                    getFields(grid).forEach(field => assert.strictEqual(field[option], isEnabledInGrid, 'option is initialized correctly'));
+
+                    grid.option(option, !isEnabledInGrid);
+                    this.clock.tick();
+                    getFields(grid).forEach(field => assert.strictEqual(field[option], !isEnabledInGrid, 'option is changed'));
+                });
+
+                [false, true].forEach(isEnabledInField => {
+                    QUnit.test(`grid.${option}=${isEnabledInGrid}, grid.allFields.${option}=${isEnabledInField} -> grid.${option}=${!isEnabledInGrid}. Changing option of pivotGrid doesn't affects the field option if it has value (T950953). dataSourceType: ${dataSourceType}`, function(assert) {
+                        const getFields = (grid) => grid.getDataSource().fields();
+
+                        const dataSource = getSourceData();
+                        const gridOptions = {};
+                        gridOptions[option] = isEnabledInGrid;
+                        dataSource.fields.forEach(f => f[option] = isEnabledInField);
+                        gridOptions.dataSource = dataSourceType === 'simpleObject'
+                            ? dataSource
+                            : new PivotGridDataSource(dataSource);
+
+                        const grid = $('#pivotGrid').dxPivotGrid(gridOptions).dxPivotGrid('instance');
+                        this.clock.tick();
+                        getFields(grid).forEach(field => assert.strictEqual(field[option], isEnabledInField, 'option is initialized correctly'));
+
+                        grid.option(option, !isEnabledInGrid);
+                        this.clock.tick();
+                        getFields(grid).forEach(field => assert.strictEqual(field[option], isEnabledInField, 'option is not changed'));
+                    });
                 });
             });
         });

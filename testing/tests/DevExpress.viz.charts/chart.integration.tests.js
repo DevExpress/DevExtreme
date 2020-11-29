@@ -1118,6 +1118,116 @@ QUnit.test('Move visual frame by visualRangeLength', function(assert) {
     });
 });
 
+QUnit.test('Reject the visualRange less then minVisualRangeLength, categories', function(assert) {
+    this.$container.css({ width: '500px', height: '500px' });
+    const dataSource = [{
+        arg: 'a1',
+        val: 4
+    }, {
+        arg: 'a2',
+        val: 5
+    }, {
+        arg: 'a3',
+        val: 7
+    }, {
+        arg: 'a4',
+        val: 3
+    }, {
+        arg: 'a5',
+        val: 8
+    }];
+    const visualRangeChanged = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+
+    const chart = this.createChart({
+        dataSource: dataSource,
+        series: { type: 'line', point: { visible: false } },
+        onOptionChanged: visualRangeChanged,
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd,
+        argumentAxis: { minVisualRangeLength: 3 }
+    });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const visualRange = argumentAxis.visualRange();
+
+    visualRangeChanged.reset();
+    argumentAxis.visualRange({ startValue: 'a4' });
+
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, visualRange);
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), visualRange);
+    assert.notOk(chart.option().valueAxis._customVisualRange);
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, visualRange);
+
+    assert.equal(onZoomEnd.callCount, 1);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, visualRange);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, {
+        categories: [
+            'a4',
+            'a5'
+        ],
+        endValue: 'a5',
+        startValue: 'a4'
+    });
+    assert.ok(onZoomEnd.getCall(0).args[0].cancel);
+});
+
+QUnit.test('Reject the visualRange less then minVisualRangeLength, numeric, startValue = endValue', function(assert) {
+    this.$container.css({ width: '500px', height: '500px' });
+    const dataSource = [{
+        arg: 1,
+        val: 4
+    }, {
+        arg: 2,
+        val: 5
+    }, {
+        arg: 3,
+        val: 7
+    }, {
+        arg: 4,
+        val: 3
+    }, {
+        arg: 5,
+        val: 8
+    }];
+    const visualRangeChanged = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+
+    const chart = this.createChart({
+        dataSource: dataSource,
+        series: { type: 'line', point: { visible: false } },
+        onOptionChanged: visualRangeChanged,
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd,
+        argumentAxis: { minVisualRangeLength: 3 }
+    });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const visualRange = argumentAxis.visualRange();
+
+    visualRangeChanged.reset();
+    argumentAxis.visualRange({ startValue: 3, endValue: 3 });
+
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, visualRange);
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), visualRange);
+    assert.notOk(chart.option().valueAxis._customVisualRange);
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, visualRange);
+
+    assert.equal(onZoomEnd.callCount, 1);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, visualRange);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, {
+        endValue: 3,
+        startValue: 3
+    });
+    assert.ok(onZoomEnd.getCall(0).args[0].cancel);
+});
+
 QUnit.test('Reset axis viewport', function(assert) {
     this.$container.css({ width: '1000px', height: '600px' });
 
@@ -1765,6 +1875,21 @@ QUnit.test('Validate Axis on update', function(assert) {
     assert.strictEqual(chart.getValueAxis().getOptions().type, 'continuous');
     assert.strictEqual(chart.getArgumentAxis().getOptions().type, 'continuous');
 
+});
+
+// T951843
+QUnit.test('Chart can hide series on done event', function(assert) {
+    const drawn = sinon.spy();
+    createChartInstance({
+        series: {},
+        dataSource: [{ arg: 1, val: 1 }],
+        onDrawn: drawn,
+        onDone(e) {
+            e.component.getAllSeries()[0].hide();
+        }
+    }, $('#chartContainer'));
+
+    assert.strictEqual(drawn.callCount, 2);
 });
 
 QUnit.module('Legend title', $.extend({}, moduleSetup, {
@@ -3315,6 +3440,12 @@ QUnit.module('Multiple axes chart', $.extend({}, moduleSetup, {
         coords1.forEach((coord, index) => {
             assert.roughEqual(coord, coords2[index], 1.1);
         });
+    },
+
+    checkTickCoordsAreFinite(assert, coords) {
+        coords.forEach((coord) => {
+            assert.ok(isFinite(coord));
+        });
     }
 }));
 
@@ -3363,6 +3494,42 @@ QUnit.test('Two axes syncronization with margins', function(assert) {
     assert.deepEqual(axis1.getTicksValues().majorTicksValues, [0, 25, 50, 75, 100, 125, 150]);
 
     this.compareTickCoords(assert, axis2._majorTicks.map(t => t.coords.y), axis1._majorTicks.map(t => t.coords.y));
+});
+
+QUnit.test('Rendered coordinates are finite (T946603)', function(assert) {
+    this.options = {
+        dataSource: [{
+            arg: 'A',
+            val: 106000000,
+            val2: 0
+        }, {
+            arg: 'B',
+            val: 811101000,
+            val2: 0
+        }, {
+            arg: 'C',
+            val: 2191599000,
+            val2: 0
+        }],
+        series: [{}, {
+            axis: 'axis2',
+            type: 'spline',
+            valueField: 'val2'
+        }],
+        valueAxis: [{
+            name: 'axis1',
+        }, {
+            name: 'axis2',
+            position: 'right'
+        }]
+    };
+    const chart = this.createChart(this.options);
+
+    const axis1 = chart.getValueAxis('axis1');
+    const axis2 = chart.getValueAxis('axis2');
+
+    this.checkTickCoordsAreFinite(assert, axis1._majorTicks.map(t => t.coords.y));
+    this.checkTickCoordsAreFinite(assert, axis2._majorTicks.map(t => t.coords.y));
 });
 
 QUnit.module('Axis templates', moduleSetup);

@@ -199,6 +199,7 @@ const LoadPanel = Overlay.inherit({
     _cleanPreviousContent: function() {
         this.$content().find('.' + LOADPANEL_MESSAGE_CLASS).remove();
         this.$content().find('.' + LOADPANEL_INDICATOR_CLASS).remove();
+        delete this._$indicator;
     },
 
     _togglePaneVisible: function() {

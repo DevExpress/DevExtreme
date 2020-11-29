@@ -1,0 +1,46 @@
+name: TestCafe tests
+
+on: [push, pull_request]
+
+jobs:
+  testcafe:
+    strategy:
+      matrix:
+        ARGS: [ --componentFolder=dataGrid --quarantineMode=true, --componentFolder=scheduler --quarantineMode=true, --componentFolder=editors, --componentFolder=navigation ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node
+
+    - name: Run npm install
+      run: npm install --no-package-lock --no-audit --no-fund
+
+    - name: Build
+      env:
+        DEVEXTREME_TEST_CI: "true"
+      run: npm run build
+
+    - name: Run TestCafe tests
+      env:
+        ARGS: ${{ matrix.ARGS }}
+      run: |
+        all_args="--browsers=chrome:headless ${ARGS}"
+        echo "$all_args"
+        npm run test-testcafe -- $all_args
+    - name: Copy screenshots artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshots
+        path: ${{ github.workspace }}/testing/testcafe/artifacts/**/*
+        if-no-files-found: ignore

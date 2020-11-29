@@ -85,6 +85,12 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
           }
         }
       }
+
+      .dx-texteditor {
+        .dx-texteditor-input {
+          padding-left: $material-grid-base-texteditor-input-padding;
+        }
+      }
     }
 
     &.dx-context-menu {
@@ -277,6 +283,10 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
               margin: 0 $material-command-edit-icon-margin;
               vertical-align: middle;
             }
+
+            .dx-link:not(.dx-link-icon) {
+              width: auto;
+            }
           }
         }
 
@@ -284,6 +294,11 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         .dx-#{$widget-name}-group-space {
           padding: 0 4px 0 8px;
           line-height: 0;
+        }
+
+        &.dx-editor-cell:not(.dx-command-select) {
+          padding-right: 0;
+          padding-left: 0;
         }
       }
     }
@@ -395,8 +410,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         font-size: $material-grid-base-cell-font-size;
         height: $material-grid-base-cell-height;
         line-height: $material-grid-base-cell-height;
-        padding-right: 0;
-        padding-left: 0;
+        padding-right: $material-grid-base-cell-horizontal-padding;
+        padding-left: $material-grid-base-cell-horizontal-padding;
         padding-top: 0;
         padding-bottom: 0;
         margin-top: 0;
@@ -452,6 +467,22 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       &::before {
         padding-top: $material-grid-base-cell-vertical-padding;
         padding-bottom: $material-grid-base-cell-vertical-padding;
+      }
+    }
+
+    &:first-of-type {
+      > .dx-texteditor {
+        .dx-texteditor-input {
+          padding-left: $material-grid-base-cell-first-column-padding;
+        }
+      }
+    }
+
+    &:last-of-type {
+      > .dx-texteditor {
+        .dx-texteditor-input {
+          padding-right: $material-grid-base-cell-last-column-padding;
+        }
       }
     }
   }
@@ -659,7 +690,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     background-color: $datagrid-filter-row-background-color;
 
     .dx-menu {
-      left: -($material-grid-base-cell-horizontal-padding - 2);
+      margin-left: 0;
 
       .dx-menu-horizontal {
         .dx-menu-items-container {
@@ -683,7 +714,11 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     td .dx-editor-container .dx-filter-range-content {
-      padding: $material-grid-base-cell-vertical-padding 0 $material-grid-base-cell-vertical-padding $material-grid-base-texteditor-input-padding;
+      padding:
+        $material-grid-base-cell-vertical-padding
+        $material-grid-base-cell-horizontal-padding
+        $material-grid-base-cell-vertical-padding
+        $material-grid-base-texteditor-input-padding;
     }
 
     .dx-#{$widget-name} .dx-#{$widget-name}-table & {
@@ -905,8 +940,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       }
 
       .dx-texteditor-input {
-        padding-left: $material-grid-base-cell-horizontal-padding;
-        padding-right: $material-grid-base-cell-horizontal-padding;
         font-size: $material-grid-base-cell-font-size;
         height: $material-grid-base-adaptive-column-height;
         line-height: $material-grid-base-adaptive-column-height;
