@@ -302,6 +302,8 @@
 
         "dxFileManager-newDirectoryName": "TODO",
         "dxFileManager-rootDirectoryName": "TODO",
+        "dxFileManager-commandDelete": "Cancellare",
+        "dxFileManager-commandDownload": "Scaricare",
         "dxFileManager-errorNoAccess": "TODO",
         "dxFileManager-errorDirectoryExistsFormat": "TODO",
         "dxFileManager-errorFileExistsFormat": "TODO",
@@ -312,6 +314,10 @@
         "dxFileManager-errorInvalidSymbols": "TODO",
         "dxFileManager-errorDefault": "TODO",
         "dxFileManager-errorDirectoryOpenFailed": "TODO",
+        "dxFileManager-dialogButtonCancel": "Annulla",
+        "dxFileManager-dialogDeleteItemTitle": "Cancellare",
+        "dxFileManager-dialogDeleteItemButtonText": "Cancellare",
+        "dxFileManager-dialogDeleteItemSingleItemConfirmation": "È sicuro di voler cancellare {0}?",
 
         "dxDiagram-categoryGeneral": "TODO",
         "dxDiagram-categoryFlowchart": "TODO",
