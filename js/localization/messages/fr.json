@@ -326,8 +326,8 @@
         "dxFileManager-commandClearSelection": "Vider sélection",
         "dxFileManager-commandShowNavPane": "Basculer le volet de navigation",
 
-        "dxFileManager-dialogDirectoryChooserMoveTitle": "Sélectionner répertoire de destination",
-        "dxFileManager-dialogDirectoryChooserButtonText": "Déplacer",
+        "dxFileManager-dialogDirectoryChooserMoveTitle": "Déplacer",
+        "dxFileManager-dialogDirectoryChooserMoveButtonText": "Déplacer",
         "dxFileManager-dialogDirectoryChooserCopyTitle": "Copier",
         "dxFileManager-dialogDirectoryChooserCopyButtonText": "Copier",
         "dxFileManager-dialogRenameItemTitle": "Renommer",
