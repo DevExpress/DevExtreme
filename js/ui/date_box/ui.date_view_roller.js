@@ -274,7 +274,7 @@ const DateViewRoller = Scrollable.inherit({
     _itemHeight: function() {
         const $item = this._$items.first();
 
-        return $item.height() || 0;
+        return $item.height();
     },
 
     _toggleActive: function(state) {
