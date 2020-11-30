@@ -249,7 +249,7 @@ class ContextMenu extends MenuBase {
                 return super._moveFocus(location);
         }
 
-        if($newTarget.length !== 0) {
+        if($newTarget && $newTarget.length !== 0) {
             this.option('focusedElement', getPublicElement($newTarget));
         }
     }
@@ -311,7 +311,7 @@ class ContextMenu extends MenuBase {
         }
 
         this._actions.onExpandLastSubmenu($curItem);
-        return $curItem;
+        return undefined;
     }
 
     _clean() {
