@@ -199,6 +199,19 @@ describe('AppointmentList', () => {
           expect(showAppointmentPopup)
             .toHaveBeenCalledWith(itemData.data, false, { text: 'currentAppointment' });
         });
+
+        it('should create onItemClick when showAppointmentPopup is undefined', () => {
+          const appointmentList = new AppointmentList({});
+
+          const { onItemClick } = appointmentList;
+          expect(onItemClick)
+            .toEqual(expect.any(Function));
+
+          const itemData = { data: { text: 'appointment' } };
+
+          expect(() => onItemClick({ itemData }))
+            .not.toThrow();
+        });
       });
     });
   });
