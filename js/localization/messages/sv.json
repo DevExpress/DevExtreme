@@ -11,7 +11,7 @@
         "Back": "Tillbaka",
         "OK": "OK",
 
-        "dxCollectionWidget-noDataText": "Inget data att visa",
+        "dxCollectionWidget-noDataText": "Ingen data att visa",
 
         "dxDropDownEditor-selectLabel": "Välj",
 
@@ -22,7 +22,7 @@
         "validation-range": "Värdet utanför tillåtet intervall",
         "validation-range-formatted": "{0} utanför tillåtet intervall",
         "validation-stringLength": "Längden på värdet är inte korrekt",
-        "validation-stringLength-formatted": "Längden på  {0} är inte korrekt",
+        "validation-stringLength-formatted": "Längden på {0} är inte korrekt",
         "validation-custom": "Ogiltigt värde",
         "validation-custom-formatted": "{0} är ogiltigt",
         "validation-async": "Ogiltigt värde",
@@ -80,7 +80,7 @@
         "dxForm-requiredMessage": "{0} är nödvändigt",
 
         "dxNumberBox-invalidValueMessage": "Värdet måste vara ett nummer",
-        "dxNumberBox-noDataText": "Inget data",
+        "dxNumberBox-noDataText": "Ingen data",
 
         "dxDataGrid-columnChooserTitle": "Kolumnväljare",
         "dxDataGrid-columnChooserEmptyText": "Dra en kolumn hit för att dölja den",
@@ -95,9 +95,9 @@
         "dxDataGrid-editingDeleteRow": "Radera",
         "dxDataGrid-editingUndeleteRow": "Ångra radering",
         "dxDataGrid-editingConfirmDeleteMessage": "Är du säker på att du vill radera denna post?",
-        "dxDataGrid-validationCancelChanges": "Avbryt ändringarna",
+        "dxDataGrid-validationCancelChanges": "Avbryt ändringar",
         "dxDataGrid-groupPanelEmptyText": "Dra en kolumnrubrik hit för att gruppera enligt den kolumnen",
-        "dxDataGrid-noDataText": "Inget data",
+        "dxDataGrid-noDataText": "Ingen data",
         "dxDataGrid-searchPanelPlaceholder": "Sök...",
         "dxDataGrid-filterRowShowAllText": "(Allt)",
         "dxDataGrid-filterRowResetOperationText": "Återställ",
@@ -137,9 +137,9 @@
         "dxDataGrid-columnFixingLeftPosition": "Till vänster",
         "dxDataGrid-columnFixingRightPosition": "Till höger",
         "dxDataGrid-exportTo": "Exportera",
-        "dxDataGrid-exportToExcel": "Exportera till Excel fil",
+        "dxDataGrid-exportToExcel": "Exportera till Excelfil",
         "dxDataGrid-exporting": "Exportera...",
-        "dxDataGrid-excelFormat": "Excel fil",
+        "dxDataGrid-excelFormat": "Excelfil",
         "dxDataGrid-selectedRows": "Valda rader",
         "dxDataGrid-exportSelectedRows": "Exportera valda rader",
         "dxDataGrid-exportAll": "Exportera allt",
@@ -195,21 +195,21 @@
         "dxScheduler-openAppointment": "Öppna avtalad tid",
 
         "dxScheduler-recurrenceNever": "Aldrig",
-        "dxScheduler-recurrenceMinutely": "Minutely",
-        "dxScheduler-recurrenceHourly": "Hourly",
+        "dxScheduler-recurrenceMinutely": "Varje minut",
+        "dxScheduler-recurrenceHourly": "Varje timme",
         "dxScheduler-recurrenceDaily": "Varje dag",
         "dxScheduler-recurrenceWeekly": "Varje vecka",
         "dxScheduler-recurrenceMonthly": "Varje månad",
         "dxScheduler-recurrenceYearly": "Varje år",
 
         "dxScheduler-recurrenceRepeatEvery": "Varje",
-        "dxScheduler-recurrenceRepeatOn": "Repeat On",
+        "dxScheduler-recurrenceRepeatOn": "Upprepa på",
         "dxScheduler-recurrenceEnd": "Upprepning slutar",
         "dxScheduler-recurrenceAfter": "Efter",
         "dxScheduler-recurrenceOn": "På",
 
-        "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
-        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
+        "dxScheduler-recurrenceRepeatMinutely": "minuter",
+        "dxScheduler-recurrenceRepeatHourly": "timmar",
         "dxScheduler-recurrenceRepeatDaily": "dagar",
         "dxScheduler-recurrenceRepeatWeekly": "veckor",
         "dxScheduler-recurrenceRepeatMonthly": "månader",
@@ -231,8 +231,8 @@
         "dxScheduler-recurrenceRepeatCount": "upprepning(ar)",
         "dxScheduler-allDay": "Hela dagen",
 
-        "dxScheduler-confirmRecurrenceEditMessage": "Vill du redigera bara denna avtalade tid eller hela serien?",
-        "dxScheduler-confirmRecurrenceDeleteMessage": "Vill du radera bara denna avtalade tid eller hela serien?",
+        "dxScheduler-confirmRecurrenceEditMessage": "Vill du endast redigera denna avtalade tid eller hela serien?",
+        "dxScheduler-confirmRecurrenceDeleteMessage": "Vill du endast radera denna avtalade tid eller hela serien?",
 
         "dxScheduler-confirmRecurrenceEditSeries": "Redigera serien",
         "dxScheduler-confirmRecurrenceDeleteSeries": "Radera serien",
@@ -240,9 +240,9 @@
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Radera avtalad tid",
 
         "dxScheduler-noTimezoneTitle": "Ingen tidszon",
-        "dxScheduler-moreAppointments": "{0} mer",
+        "dxScheduler-moreAppointments": "{0} fler",
 
-        "dxCalendar-todayButtonText": "I dag",
+        "dxCalendar-todayButtonText": "Idag",
         "dxCalendar-ariaWidgetName": "Kalender",
 
         "dxColorView-ariaRed": "Röd",

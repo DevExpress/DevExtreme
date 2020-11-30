@@ -211,7 +211,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
 
     _isCurrentDate(cellDate) {
-        return dateUtils.sameDate(cellDate, this._getToday());
+        const today = new Date();
+
+        return dateUtils.sameDate(cellDate, today);
     }
 
     _isFirstDayOfMonth(cellDate) {
