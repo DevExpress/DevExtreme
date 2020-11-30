@@ -2029,20 +2029,18 @@ QUnit.module('API', {
         assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Show adaptive columns', 'command cell aria-label'); // T947070
 
         // act
-        $firstAdaptiveCommand.find('.dx-command-adaptive').trigger('dxclick');
+        $firstAdaptiveCommand.find('.dx-datagrid-adaptive-more').trigger('dxclick');
         this.clock.tick();
 
         // assert
-        assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
         assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Hide adaptive columns', 'command cell aria-label'); // T947070
         assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Show adaptive columns', 'command cell aria-label'); // T947070
 
         // act
-        $secondAdaptiveCommand.find('.dx-command-adaptive').trigger('dxclick');
+        $secondAdaptiveCommand.find('.dx-datagrid-adaptive-more').trigger('dxclick');
         this.clock.tick();
 
         // assert
-        assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
         assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Show adaptive columns', 'command cell aria-label'); // T947070
         assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Hide adaptive columns', 'command cell aria-label'); // T947070
     });
