@@ -352,8 +352,12 @@ const SchedulerNavigator = Widget.inherit({
 
     _updateCurrentDate: function(direction) {
         // debugger;
+        const mock = {
+            createDate: date => date
+        };
+
         const date = this._getNextDate(direction);
-        const scheduler = this.option('observer');
+        const scheduler = this.option('observer') || mock;
 
         dateUtils.normalizeDate(date, this.option('min'), this.option('max'));
 
