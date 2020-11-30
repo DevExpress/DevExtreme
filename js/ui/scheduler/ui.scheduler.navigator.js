@@ -336,6 +336,7 @@ const SchedulerNavigator = Widget.inherit({
     },
 
     _updateButtonsState: function() {
+        // debugger;
         let min = this.option('min');
         let max = this.option('max');
         const caption = this._getConfig().getCaption.call(this, this.option('displayedDate') || this.option('date'));
@@ -350,10 +351,14 @@ const SchedulerNavigator = Widget.inherit({
     },
 
     _updateCurrentDate: function(direction) {
+        // debugger;
         const date = this._getNextDate(direction);
+        const scheduler = this.option('observer');
 
         dateUtils.normalizeDate(date, this.option('min'), this.option('max'));
-        this.notifyObserver('currentDateUpdated', date);
+
+        const currentDate = scheduler.timeZoneCalculator.createDate(date, { path: 'fromGrid' });
+        this.notifyObserver('currentDateUpdated', currentDate);
     },
 
     _getNextDate: function(direction, initialDate = null) {
@@ -453,6 +458,7 @@ const SchedulerNavigator = Widget.inherit({
     },
 
     _renderCaption: function() {
+        // debugger;
         const date = this.option('displayedDate') || this.option('date');
         const captionConfig = this._getConfig().getCaption.call(this, date);
         const customizationFunction = this.option('customizeDateNavigatorText');

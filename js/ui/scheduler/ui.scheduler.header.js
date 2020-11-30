@@ -14,6 +14,7 @@ import Tabs from '../tabs';
 import { TABS_EXPANDED_CLASS } from '../tabs/constants';
 import errors from '../../core/errors';
 import messageLocalization from '../../localization/message';
+import dateUtils from '../../core/utils/date';
 
 const COMPONENT_CLASS = 'dx-scheduler-header';
 const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
@@ -79,13 +80,18 @@ const SchedulerHeader = Widget.inherit({
                 this._changeViewSwitcherLabelText();
                 break;
             case 'currentDate':
-                this._navigator.option('date', value);
+                // debugger;
+                this._navigator.option('date', this._convertDateToGrid(value));
+                // this._navigator.option('date', value);
                 break;
             case 'displayedDate':
-                this._navigator.option('displayedDate', value);
+                // debugger;
+                this._navigator.option('displayedDate', this._convertDateToGrid(value));
                 break;
             case 'min':
             case 'max':
+                this._navigator.option(args.name, this._convertDateToGrid(value));
+                break;
             case 'firstDayOfWeek':
             case 'intervalCount':
                 this._navigator.option(args.name, value);
@@ -116,18 +122,28 @@ const SchedulerHeader = Widget.inherit({
         this._renderViewSwitcher();
     },
 
+    _convertDateToGrid(date) {
+        const scheduler = this.option('observer');
+        return scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+    },
+
     _renderNavigator: function() {
+        const _todayDate = this._convertDateToGrid(new Date());
+        const date = dateUtils.trimTime(this._convertDateToGrid(this.option('currentDate')));
+        const min = this._convertDateToGrid(this.option('min'));
+        const max = this._convertDateToGrid(this.option('max'));
+
         this._navigator = this._createComponent('<div>', SchedulerNavigator, {
-            min: this.option('min'),
-            max: this.option('max'),
+            date,
+            _todayDate,
+            min,
+            max,
             intervalCount: this.option('intervalCount'),
-            date: this.option('currentDate'),
             step: STEP_MAP[this._getCurrentViewType()],
             firstDayOfWeek: this.option('firstDayOfWeek'),
             tabIndex: this.option('tabIndex'),
             focusStateEnabled: this.option('focusStateEnabled'),
             observer: this.option('observer'),
-            todayDate: this.option('todayDate'),
             customizeDateNavigatorText: this.option('customizeDateNavigatorText')
         });
 

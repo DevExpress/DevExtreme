@@ -799,12 +799,14 @@ class Scheduler extends Widget {
                 this._updateOption('header', name, value);
                 break;
             case 'currentDate':
-                value = this._dateOption('currentDate');
-                value = dateUtils.trimTime(new Date(value));
+                // debugger;
+                value = this._dateOption(name);
+                value = dateUtils.trimTime(new Date(value)); // TODO
                 this.option('selectedCellData', []);
-                this._workSpace.option('currentDate', new Date(value));
-                this._header.option('currentDate', this._getHeaderCurrentDay(value));
-                this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
+                this._workSpace.option(name, new Date(value));
+                // this._header.option(name, new Date(value));
+                // this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
+                this._updateHeader();
                 this._appointments.option('items', []);
                 this._filterAppointmentsByDate();
 
@@ -1042,12 +1044,11 @@ class Scheduler extends Widget {
 
     _updateHeader() {
         const viewCountConfig = this._getViewCountConfig();
-
-        this._header.option('currentDate', this._getHeaderCurrentDay());
         this._header.option('intervalCount', viewCountConfig.intervalCount);
-        this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
+        // this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
         this._header.option('min', this._dateOption('min'));
         this._header.option('max', this._dateOption('max'));
+        this._header.option('currentDate', this._dateOption('currentDate'));
         this._header.option('firstDayOfWeek', this._getCurrentViewOption('firstDayOfWeek'));
         this._header.option('currentView', this._currentView);
     }
@@ -1630,16 +1631,10 @@ class Scheduler extends Widget {
         result.views = this.option('views');
         result.min = new Date(this._dateOption('min'));
         result.max = new Date(this._dateOption('max'));
-        result.currentDate = this._getHeaderCurrentDay();
-        result.todayDate = () => this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
+        // result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate'))); //TODO
+        result.currentDate = new Date(this._dateOption('currentDate'));
 
         return result;
-    }
-
-    _getHeaderCurrentDay(currentDate) {
-        const date = new Date(currentDate || this._dateOption('currentDate'));
-        const result = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
-        return dateUtils.trimTime(result);
     }
 
     _appointmentsConfig() {
