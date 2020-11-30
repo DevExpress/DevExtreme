@@ -2268,10 +2268,19 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @docid dxDataGridOptions.rowTemplate
      * @type_function_param1 rowElement:dxElement
      * @type_function_param2 rowInfo:object
+     * @type_function_param2_field1 data:any
+     * @type_function_param2_field2 component:dxDataGrid
+     * @type_function_param2_field3 values:Array<any>
+     * @type_function_param2_field4 rowIndex:number
+     * @type_function_param2_field5 columns:Array<dxDataGridColumn>
+     * @type_function_param2_field6 isSelected:boolean
+     * @type_function_param2_field7 rowType:string
+     * @type_function_param2_field8 groupIndex:number
+     * @type_function_param2_field9 isExpanded:boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rowTemplate?: template | ((rowElement: dxElement, rowInfo: any) => any);
+    rowTemplate?: template | ((rowElement: dxElement, rowInfo: { data?: any, component?: dxDataGrid, values?: Array<any>, rowIndex?: number, columns?: Array<dxDataGridColumn>, isSelected?: boolean, rowType?: string, groupIndex?: number, isExpanded?: boolean }) => any);
     /**
      * @docid dxDataGridOptions.scrolling
      * @type object
