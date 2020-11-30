@@ -4,37 +4,36 @@ import {
 import { addHeightToStyle } from '../utils';
 import { VirtualRow } from './virtual-row';
 
-export const viewFunction = (viewModel: Table): JSX.Element => {
-  const {
-    isVirtual,
-    topVirtualRowHeight,
-    bottomVirtualRowHeight,
+export const viewFunction = ({
+  hasBottomVirtualRow,
+  hasTopVirtualRow,
+  style,
+  restAttributes,
+  props: {
     virtualCellsCount,
     className,
     children,
-  } = viewModel.props;
-  const hasTopVirtualRow = isVirtual && !!topVirtualRowHeight;
-  const hasBottomVirtualRow = isVirtual && !!bottomVirtualRowHeight;
-
-  return (
-    <table
+    topVirtualRowHeight,
+    bottomVirtualRowHeight,
+  },
+}: Table): JSX.Element => (
+  <table
         // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
-      className={className}
-      style={viewModel.style}
-    >
-      <tbody>
-        {hasTopVirtualRow && (
-          <VirtualRow height={topVirtualRowHeight} cellsCount={virtualCellsCount} />
-        )}
-        {children}
-        {hasBottomVirtualRow && (
-          <VirtualRow height={bottomVirtualRowHeight} cellsCount={virtualCellsCount} />
-        )}
-      </tbody>
-    </table>
-  );
-};
+    {...restAttributes}
+    className={className}
+    style={style}
+  >
+    <tbody>
+      {hasTopVirtualRow && (
+        <VirtualRow height={topVirtualRowHeight} cellsCount={virtualCellsCount} />
+      )}
+      {children}
+      {hasBottomVirtualRow && (
+        <VirtualRow height={bottomVirtualRowHeight} cellsCount={virtualCellsCount} />
+      )}
+    </tbody>
+  </table>
+);
 
 @ComponentBindings()
 export class TableProps {
@@ -50,7 +49,7 @@ export class TableProps {
 
   @OneWay() height?: number;
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | JSX.Element[];
 }
 
 @Component({
@@ -63,5 +62,17 @@ export class Table extends JSXComponent(TableProps) {
     const { style } = this.restAttributes;
 
     return addHeightToStyle(height, style);
+  }
+
+  get hasTopVirtualRow(): boolean {
+    const { isVirtual, topVirtualRowHeight } = this.props;
+
+    return !!isVirtual && !!topVirtualRowHeight;
+  }
+
+  get hasBottomVirtualRow(): boolean {
+    const { isVirtual, bottomVirtualRowHeight } = this.props;
+
+    return !!isVirtual && !!bottomVirtualRowHeight;
   }
 }
