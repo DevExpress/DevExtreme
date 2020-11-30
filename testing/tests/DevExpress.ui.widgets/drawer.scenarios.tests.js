@@ -11,9 +11,9 @@ import 'ui/select_box';
 import 'ui/tab_panel';
 import 'ui/text_box';
 import 'ui/tree_view';
-import 'generic_light.css!';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import dxDrawer from 'ui/drawer';
 
