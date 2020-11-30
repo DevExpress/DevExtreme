@@ -1,4 +1,4 @@
-import { RecalculateCoordinatesFn, Coordinates, Size } from './types.d';
+import { RecalculateCoordinates, Coordinates, Size } from './types.d';
 
 const {
   max, min, PI, cos, sin, asin, round, ceil, floor,
@@ -189,7 +189,7 @@ export function getCloudPoints(
 
 export function recalculateCoordinates({
   canvas, anchorX, anchorY, size, offset, arrowLength,
-}: RecalculateCoordinatesFn): Coordinates {
+}: RecalculateCoordinates): Coordinates {
   const bounds = {
     xl: canvas.left,
     xr: canvas.width - canvas.right,

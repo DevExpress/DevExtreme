@@ -17,46 +17,27 @@ const tooltipProps = {
   text: 'Tooltip test text',
   border: { color: 'test_color1', width: 3 },
   color: 'test_color2',
-  paddingLeftRight: 4,
-  paddingTopBottom: 5,
   canvas: {
     left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 400,
   },
   arrowWidth: 20,
   arrowLength: 25,
+  cornerRadius: 0,
   offset: 5,
   x: 2,
   y: 3,
 };
 
 describe('Render', () => {
-  it('should render path and text', () => {
+  it('should render groups', () => {
     const props = {
       size: {
         width: 40, height: 30, x: 1, y: 2,
       },
       textRef: {},
-      props: {
-        canvas: {
-          left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 400,
-        },
-      },
+      props: tooltipProps,
     } as Partial<Tooltip>;
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
-
-    expect(tooltip.find('path').props()).toMatchObject({
-      d: 'test_cloud_points',
-      strokeWidth: undefined,
-      stroke: undefined,
-      fill: undefined,
-      transform: 'rotate(180 4 5)',
-    });
-
-    expect(tooltip.find('text').props()).toMatchObject({
-      x: 0,
-      y: 0,
-      children: undefined,
-    });
 
     expect(tooltip.find('g').at(0).props()).toMatchObject({
       pointerEvents: 'none',
@@ -74,6 +55,7 @@ describe('Render', () => {
       size: {
         width: 40, height: 30, x: 1, y: 2,
       },
+      fullSize: { width: 48, height: 40 },
       textRef: {},
       props: tooltipProps,
     } as Partial<Tooltip>;
@@ -135,5 +117,12 @@ describe('Effect', () => {
     tooltip.calculateSize();
 
     expect(tooltip.size).toBe(box);
+  });
+});
+
+describe('Getters', () => {
+  it('should return full size of tooltip', () => {
+    const tooltip = new Tooltip({ text: 'Tooltip test text', paddingLeftRight: 4, paddingTopBottom: 3 });
+    expect(tooltip.fullSize).toEqual({ width: 8, height: 6 });
   });
 });

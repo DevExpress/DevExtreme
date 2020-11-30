@@ -1,5 +1,5 @@
 export type Canvas = { left: number; top: number; right: number; bottom: number; width: number; height: number };
-export type RecalculateCoordinatesFn = { 
+export type RecalculateCoordinates = { 
     canvas: Canvas; anchorX: number; anchorY: number;
     size: { width: number; height: number };
     offset: number; arrowLength: number; 

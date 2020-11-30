@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState,
 } from 'devextreme-generator/component_declaration/common';
 
-import { Canvas, RecalculateCoordinatesFn } from './common/types.d';
+import { Size } from './common/types.d';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle,
@@ -11,18 +11,15 @@ import {
 export const viewFunction = ({
   textRef,
   size,
+  fullSize,
   props: {
-    color, border, text, paddingLeftRight, paddingTopBottom, x, y,
-    cornerRadius = 0, arrowWidth = 0, offset, canvas, arrowLength,
+    color, border, text, x, y,
+    cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
-  const fullSize = {
-    width: size.width + (paddingLeftRight || 0) * 2,
-    height: size.height + (paddingTopBottom || 0) * 2,
-  };
   const correctedCoordinates = recalculateCoordinates({
     canvas, anchorX: x, anchorY: y, size: fullSize, offset, arrowLength,
-  } as RecalculateCoordinatesFn);
+  });
   const angle = getCloudAngle(fullSize, correctedCoordinates);
   return (
     <g pointerEvents="none">
@@ -30,8 +27,8 @@ export const viewFunction = ({
         d={getCloudPoints(fullSize, correctedCoordinates, angle,
           { cornerRadius, arrowWidth }, true)}
         fill={color}
-        stroke={border?.color}
-        strokeWidth={border?.width}
+        stroke={border.color}
+        strokeWidth={border.width}
         transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
       />
       <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
@@ -45,29 +42,29 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class TooltipProps {
-  @OneWay() color?: string = '#fff';
+  @OneWay() color = '#fff';
 
-  @OneWay() border?: { color: string; width: number } = { color: '#000', width: 1 };
+  @OneWay() border = { color: '#000', width: 1 };
 
-  @OneWay() text?: string = '';
+  @OneWay() text = '';
 
-  @OneWay() paddingLeftRight?: number = 18;
+  @OneWay() paddingLeftRight = 18;
 
-  @OneWay() paddingTopBottom?: number = 15;
+  @OneWay() paddingTopBottom = 15;
 
-  @OneWay() x?: number = 0;
+  @OneWay() x = 0;
 
-  @OneWay() y?: number = 0;
+  @OneWay() y = 0;
 
-  @OneWay() cornerRadius?: number = 0;
+  @OneWay() cornerRadius = 0;
 
-  @OneWay() arrowWidth?: number = 20;
+  @OneWay() arrowWidth = 20;
 
-  @OneWay() arrowLength?: number = 10;
+  @OneWay() arrowLength = 10;
 
-  @OneWay() offset?: number = 0;
+  @OneWay() offset = 0;
 
-  @OneWay() canvas?: Canvas = {
+  @OneWay() canvas = {
     left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
   };
 }
@@ -87,5 +84,13 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Effect()
   calculateSize(): void {
     this.size = this.textRef.getBBox();
+  }
+
+  get fullSize(): Size {
+    const { paddingLeftRight, paddingTopBottom } = this.props;
+    return {
+      width: this.size.width + paddingLeftRight * 2,
+      height: this.size.height + paddingTopBottom * 2,
+    };
   }
 }
