@@ -124,7 +124,9 @@ const SchedulerHeader = Widget.inherit({
 
     _convertDateToGrid(date) {
         const mock = {
-            createDate: date => date
+            timeZoneCalculator: {
+                createDate: date => date
+            }
         };
 
         const scheduler = this.option('observer') || mock;

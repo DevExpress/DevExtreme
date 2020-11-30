@@ -353,7 +353,9 @@ const SchedulerNavigator = Widget.inherit({
     _updateCurrentDate: function(direction) {
         // debugger;
         const mock = {
-            createDate: date => date
+            timeZoneCalculator: {
+                createDate: date => date
+            }
         };
 
         const date = this._getNextDate(direction);
