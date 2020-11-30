@@ -170,6 +170,8 @@ class Gantt extends Widget {
 
     _onApplyPanelSize(e) {
         this._setInnerElementsWidth(e);
+        const rowHeight = this._getTreeListRowHeight();
+        this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
     }
 
     _onTreeListContentReady(e) {
