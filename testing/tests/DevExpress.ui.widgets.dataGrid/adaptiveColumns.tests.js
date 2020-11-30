@@ -2012,6 +2012,41 @@ QUnit.module('API', {
         assert.equal($adaptiveCommand.attr('aria-label'), 'Show adaptive columns', 'command cell aria-label'); // T947070
     });
 
+    QUnit.test('Collapse adaptive row when expanding another one', function(assert) {
+        // arrange
+        $('.dx-datagrid').width(200);
+
+        setupDataGrid(this);
+        this.rowsView.render($('#container'));
+        this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        // assert
+        const $firstAdaptiveCommand = $(this.getRowElement(0)).find('.dx-command-adaptive');
+        const $secondAdaptiveCommand = $(this.getRowElement(1)).find('.dx-command-adaptive');
+        assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Show adaptive columns', 'command cell aria-label'); // T947070
+        assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Show adaptive columns', 'command cell aria-label'); // T947070
+
+        // act
+        $firstAdaptiveCommand.find('.dx-command-adaptive').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
+        assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Hide adaptive columns', 'command cell aria-label'); // T947070
+        assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Show adaptive columns', 'command cell aria-label'); // T947070
+
+        // act
+        $secondAdaptiveCommand.find('.dx-command-adaptive').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
+        assert.equal($firstAdaptiveCommand.attr('aria-label'), 'Show adaptive columns', 'command cell aria-label'); // T947070
+        assert.equal($secondAdaptiveCommand.attr('aria-label'), 'Hide adaptive columns', 'command cell aria-label'); // T947070
+    });
+
     QUnit.test('Is adaptive row expanded', function(assert) {
         // arrange
         $('.dx-datagrid').width(200);

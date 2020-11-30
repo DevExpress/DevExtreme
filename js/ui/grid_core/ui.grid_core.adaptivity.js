@@ -714,13 +714,14 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    toggleCommandAdaptiveAriaLabel: function(key, oldKey) {
-        const isExpanded = isDefined(key);
-        const rowKey = isExpanded ? key : oldKey;
-        const rowIndex = this._dataController.getRowIndexByKey(rowKey);
-        const component = this.component;
-        const $row = $(component.getRowElement(rowIndex));
-        const label = isExpanded ? COLLAPSE_ARIA_NAME : EXPAND_ARIA_NAME;
+    updateCommandAdaptiveAriaLabel: function(key, label) {
+        const rowIndex = this._dataController.getRowIndexByKey(key);
+
+        if(rowIndex === -1) {
+            return;
+        }
+
+        const $row = $(this.component.getRowElement(rowIndex));
 
         this.setCommandAdaptiveAriaLabel($row, label);
     },
@@ -1134,7 +1135,10 @@ export default {
                         rowIndices: [oldExpandLoadedRowIndex - rowIndexDelta, newExpandLoadedRowIndex - rowIndexDelta]
                     });
 
-                    this.getController('adaptiveColumns').toggleCommandAdaptiveAriaLabel(key, oldKey);
+                    const adaptiveColumnsController = this.getController('adaptiveColumns');
+
+                    adaptiveColumnsController.updateCommandAdaptiveAriaLabel(key, COLLAPSE_ARIA_NAME);
+                    adaptiveColumnsController.updateCommandAdaptiveAriaLabel(oldKey, EXPAND_ARIA_NAME);
                 },
 
                 init: function() {
