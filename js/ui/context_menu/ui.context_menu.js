@@ -769,6 +769,10 @@ class ContextMenu extends MenuBase {
         each(shownSubmenus, (_, $submenu) => {
             this._hideSubmenu($submenu);
         });
+
+        if($expandedItems.length) {
+            this.option('focusedElement', getPublicElement($expandedItems));
+        }
     }
 
     _visibilityChanged(visible) {
