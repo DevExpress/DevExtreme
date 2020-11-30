@@ -5860,6 +5860,7 @@ QUnit.module('templates', baseModuleConfig, () => {
     // T952701
     QUnit.test('Add row when DataGrid is empty and rowTemplate is used', function(assert) {
         const dataGrid = createDataGrid({
+            width: 1000,
             dataSource: [],
             loadingTimeout: undefined,
             columns: ['field1', {
