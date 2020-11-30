@@ -1,15 +1,14 @@
 <template>
   <div>
     <DxMap
-      :apiKey="keys"
+      :api-key="keys"
       :zoom="14"
       :height="400"
       v-model:type="mapTypeValue"
       center="Brooklyn Bridge,New York,NY"
       width="100%"
       provider="bing"
-    >
-    </DxMap>
+    />
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">

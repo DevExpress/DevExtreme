@@ -19,15 +19,24 @@
       x="0"
       y="60"
     >
-      <tspan class="caption">Capital:</tspan><tspan class="capital" dx="5">{{ data.capital }}</tspan><tspan
+      <tspan class="caption">Capital:</tspan><tspan
+        class="capital"
+        dx="5"
+      >{{ data.capital }}</tspan><tspan
         dy="14"
         x="0"
         class="caption"
-      >Population:</tspan><tspan class="population" dx="5">{{ formatNumber(data.population) }}</tspan><tspan
+      >Population:</tspan><tspan
+        class="population"
+        dx="5"
+      >{{ formatNumber(data.population) }}</tspan><tspan
         dy="14"
         x="0"
         class="caption"
-      >Area:</tspan><tspan class="area" dx="5">{{ formatNumber(data.area) }}</tspan><tspan dx="5">km</tspan><tspan
+      >Area:</tspan><tspan
+        class="area"
+        dx="5"
+      >{{ formatNumber(data.area) }}</tspan><tspan dx="5">km</tspan><tspan
         class="sup"
         dy="-2"
       >2</tspan>

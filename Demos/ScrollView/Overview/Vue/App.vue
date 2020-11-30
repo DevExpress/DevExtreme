@@ -12,7 +12,10 @@
         @pull-down="updateTopContent"
         @reach-bottom="updateBottomContent"
       >
-        <div class="text-content" v-html="content"/>
+        <div
+          class="text-content"
+          v-html="content"
+        />
       </DxScrollView>
       <div class="options">
         <div class="caption">Options</div>

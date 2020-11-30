@@ -20,8 +20,7 @@
           :width="250"
           :height="380"
           display-expr="name"
-        >
-        </DxTreeView>
+        />
       </DxSortable>
     </div>
     <div class="drive-panel">
@@ -44,8 +43,7 @@
           :width="250"
           :height="380"
           display-expr="name"
-        >
-        </DxTreeView>
+        />
       </DxSortable>
     </div>
   </div>
