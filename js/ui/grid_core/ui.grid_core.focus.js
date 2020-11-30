@@ -749,14 +749,14 @@ module.exports = {
                     }
                 },
 
-                updateFocusElementTabIndex: function($cellElements) {
+                updateFocusElementTabIndex: function($cellElements, preventScroll) {
                     if(this.option('focusedRowEnabled')) {
-                        this._setFocusedRowElementTabIndex();
+                        this._setFocusedRowElementTabIndex(preventScroll);
                     } else {
                         this.callBase($cellElements);
                     }
                 },
-                _setFocusedRowElementTabIndex: function() {
+                _setFocusedRowElementTabIndex: function(preventScroll) {
                     const that = this;
                     const focusedRowKey = that.option('focusedRowKey');
                     const tabIndex = that.option('tabIndex') || 0;
@@ -780,7 +780,7 @@ module.exports = {
                         rowIndex += dataController.getRowIndexOffset();
                         that.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
 
-                        if(this.getController('focus').isAutoNavigateToFocusedRow()) {
+                        if(this.getController('focus').isAutoNavigateToFocusedRow() && !preventScroll) {
                             const dataSource = dataController.dataSource();
                             const operationTypes = dataSource && dataSource.operationTypes();
                             if(operationTypes && !operationTypes.paging && !dataController.isPagingByRendering()) {

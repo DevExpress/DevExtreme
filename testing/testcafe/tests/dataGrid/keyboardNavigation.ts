@@ -1613,3 +1613,84 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     $('#myinput1').remove();
     $('#myinput2').remove();
   })());
+
+  test('The first cell should be focused on the tab key press after clicking on the document when command column is on left', async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const headers = dataGrid.getHeaders();
+ 
+    await t
+      .click(dataGrid.getDataCell(1, 1).element)
+      .expect(dataGrid.getDataCell(1, 1).element.focused).ok()
+      .pressKey('tab')
+      .expect(dataGrid.getDataCell(1, 2).element.focused).ok()
+      .pressKey('tab')
+      .click(Selector('body'))
+      .click(headers.getHeaderRow(0).getHeaderCell(2).element)
+      .pressKey('tab')
+      .expect(dataGrid.getDataCell(0, 0).element.focused).ok()
+      .pressKey('tab')
+      .expect(dataGrid.getDataRow(0).getCommandCell(0).getButton(0).focused).ok()
+      .pressKey('tab')
+      .expect(dataGrid.getDataCell(0, 1).element.focused).ok()
+      .pressKey('tab')
+      .expect(dataGrid.getDataCell(0, 2).element.focused).ok()
+      .pressKey('tab')
+      .expect(dataGrid.getDataRow(1).getCommandCell(0).getButton(0).focused).ok();
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { name: 'Alex', c0: 'c0_0' },
+        { name: 'Ben', c0: 'c0_1' }
+      ],
+      keyExpr: 'name',
+      columns: [{ type: 'buttons' }, 'name', 'c0'],
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        useIcons: true
+      },
+      sorting: {
+        mode: 'none'
+      }
+    });
+  });
+
+  test('The first cell should be focused on the tab key press after clicking on the document when command column is on right', async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const headers = dataGrid.getHeaders();
+ 
+    await t
+      .click(dataGrid.getDataCell(1, 1).element)
+      .expect(dataGrid.getDataCell(1, 1).element.focused).ok()
+      .pressKey('tab')
+      .expect(dataGrid.getDataRow(1).getCommandCell(2).getButton(0).focused).ok()
+      .pressKey('tab')
+      .expect(dataGrid.getDataRow(1).getCommandCell(2).getButton(0).focused).notOk()
+      .click(Selector('body'))
+      .click(headers.getHeaderRow(0).getHeaderCell(1).element)
+      .pressKey('tab')
+      .expect(dataGrid.getDataCell(0, 0).element.focused).ok()
+      .pressKey('tab')
+      .expect(dataGrid.getDataCell(0, 1).element.focused).ok()
+      .pressKey('tab')
+      .expect(dataGrid.getDataRow(0).getCommandCell(2).getButton(0).focused).ok()
+      .pressKey('tab')
+      .expect(dataGrid.getDataCell(1, 0).element.focused).ok();
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { name: 'Alex', c0: 'c0_0' },
+        { name: 'Ben', c0: 'c0_1' }
+      ],
+      keyExpr: 'name',
+      columns: ['name', 'c0', { type: 'buttons' }],
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        useIcons: true
+      },
+      sorting: {
+        mode: 'none'
+      }
+    });
+  });

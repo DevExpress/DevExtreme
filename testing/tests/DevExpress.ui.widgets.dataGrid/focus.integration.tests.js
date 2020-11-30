@@ -1410,12 +1410,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(onOptionChanged.callCount, 4, 'onOptionChanged call count');
+        assert.equal(onOptionChanged.callCount, 6, 'onOptionChanged call count');
 
-        assert.equal(onOptionChanged.getCall(0).args[0].fullName, 'columns[0].filterValue', 'option fullName');
-        assert.equal(onOptionChanged.getCall(1).args[0].fullName, 'filterValue', 'option fullName');
-        assert.equal(onOptionChanged.getCall(2).args[0].fullName, 'columns[0].filterType', 'option fullName');
-        assert.equal(onOptionChanged.getCall(3).args[0].fullName, 'columns[0].filterValues', 'option fullName');
+        assert.equal(onOptionChanged.getCall(0).args[0].fullName, 'focusedRowIndex', 'option fullName');
+        assert.equal(onOptionChanged.getCall(1).args[0].fullName, 'focusedColumnIndex', 'option fullName');
+        assert.equal(onOptionChanged.getCall(2).args[0].fullName, 'columns[0].filterValue', 'option fullName');
+        assert.equal(onOptionChanged.getCall(3).args[0].fullName, 'filterValue', 'option fullName');
+        assert.equal(onOptionChanged.getCall(4).args[0].fullName, 'columns[0].filterType', 'option fullName');
+        assert.equal(onOptionChanged.getCall(5).args[0].fullName, 'columns[0].filterValues', 'option fullName');
 
         assert.ok($filterRowEditor.hasClass('dx-focused'), 'dx-focused');
         assert.ok($filterRowEditor.find('.dx-editor-outlined').hasClass('dx-state-focused'), 'dx-state-focused');

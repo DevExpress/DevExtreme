@@ -156,8 +156,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _resetFocusedView: function() {
+        this.resetFocusedCellPosition();
+        this._resetFocusedCell(true);
         this._focusedView = null;
-        this._resetFocusedCell();
     },
 
     _initDocumentHandlers: function() {
@@ -1058,17 +1059,16 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
-    _resetFocusedCell: function() {
-        const that = this;
-        const $cell = that._getFocusedCell();
+    _resetFocusedCell: function(preventScroll) {
+        const $cell = this._getFocusedCell();
 
         $cell && $cell.removeAttr('tabIndex');
 
-        that._focusedView && that._focusedView.renderFocusState && that._focusedView.renderFocusState();
+        this._focusedView?.renderFocusState(preventScroll);
 
-        that._isNeedFocus = false;
-        that._isNeedScroll = false;
-        that._focusedCellPosition = {};
+        this._isNeedFocus = false;
+        this._isNeedScroll = false;
+        this._focusedCellPosition = {};
     },
 
     restoreFocusableElement: function(rowIndex, $event) {
@@ -1149,6 +1149,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
     setFocusedCellPosition: function(rowIndex, columnIndex) {
         this.setFocusedRowIndex(rowIndex);
         this.setFocusedColumnIndex(columnIndex);
+    },
+
+    resetFocusedCellPosition: function() {
+        this.setFocusedCellPosition(undefined, undefined);
     },
 
     setFocusedRowIndex: function(rowIndex) {
@@ -1836,7 +1840,7 @@ module.exports = {
                     }
                 },
 
-                renderFocusState: function() {
+                renderFocusState: function(preventScroll) {
                     const dataController = this._dataController;
                     let rowIndex = this.option('focusedRowIndex') || 0;
                     const $rowsView = this.element();
@@ -1851,7 +1855,7 @@ module.exports = {
 
                     const cellElements = this.getCellElements(rowIndex);
                     if(this.getController('keyboardNavigation').isKeyboardEnabled() && cellElements) {
-                        this.updateFocusElementTabIndex(cellElements);
+                        this.updateFocusElementTabIndex(cellElements, preventScroll);
                     }
                 },
                 updateFocusElementTabIndex: function(cellElements) {
