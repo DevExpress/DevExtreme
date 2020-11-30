@@ -13,22 +13,20 @@ import { Table } from '../table';
 import { LayoutProps } from '../layout_props';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 
-export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => {
-  const viewData = viewModel.props.viewData!;
-
-  return (
-    <Table
+export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
+  <Table
     // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
-      isVirtual={viewModel.isVirtual}
-      topVirtualRowHeight={viewModel.topVirtualRowHeight}
-      bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
-      virtualCellsCount={1}
-      className="dx-scheduler-time-panel"
-    >
-      {viewData.groupedData.map(({ dateTable, groupIndex }, index) => (
+    {...viewModel.restAttributes}
+    isVirtual={viewModel.isVirtual}
+    topVirtualRowHeight={viewModel.topVirtualRowHeight}
+    bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
+    virtualCellsCount={1}
+    className="dx-scheduler-time-panel"
+  >
+    {viewModel.props.viewData!
+      .groupedData.map(({ dateTable, groupIndex }, index) => (
         <Fragment key={getKeyByGroup(groupIndex)}>
-          {getIsGroupedAllDayPanel(viewData, index) && (
+          {getIsGroupedAllDayPanel(viewModel.props.viewData!, index) && (
             <Row>
               <CellBase className="dx-scheduler-time-panel-title-cell">
                 <AllDayPanelTitle />
@@ -36,7 +34,7 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => {
             </Row>
           )}
           {dateTable.map((cellsRow) => {
-            const { cellCountInGroupRow } = viewData;
+            const { cellCountInGroupRow } = viewModel.props.viewData!;
             const {
               groups,
               startDate,
@@ -67,9 +65,8 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => {
           })}
         </Fragment>
       ))}
-    </Table>
-  );
-};
+  </Table>
+);
 
 @ComponentBindings()
 export class TimePanelTableLayoutProps extends LayoutProps {
