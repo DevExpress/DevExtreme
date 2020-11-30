@@ -27,7 +27,6 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     onReachBottom?: ((e: { component?: dxScrollView, element?: dxElement, model?: any }) => any);
     /**
      * @docid dxScrollViewOptions.pulledDownText
-     * @type string
      * @default "Release to refresh..."
      * @default "" [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -36,7 +35,6 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     pulledDownText?: string;
     /**
      * @docid dxScrollViewOptions.pullingDownText
-     * @type string
      * @default "Pull down to refresh..."
      * @default "" [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -45,7 +43,6 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     pullingDownText?: string;
     /**
      * @docid dxScrollViewOptions.reachBottomText
-     * @type string
      * @default "Loading..."
      * @default "" [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -54,7 +51,6 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     reachBottomText?: string;
     /**
      * @docid dxScrollViewOptions.refreshingText
-     * @type string
      * @default "Refreshing..."
      * @default "" [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -75,14 +71,14 @@ export default class dxScrollView extends dxScrollable {
     constructor(element: Element, options?: dxScrollViewOptions)
     constructor(element: JQuery, options?: dxScrollViewOptions)
     /**
-     * @docid dxScrollViewMethods.refresh
+     * @docid dxScrollView.refresh
      * @publicName refresh()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     refresh(): void;
     /**
-     * @docid dxScrollViewMethods.release
+     * @docid dxScrollView.release
      * @publicName release(preventScrollBottom)
      * @param1 preventScrollBottom:boolean
      * @return Promise<void>

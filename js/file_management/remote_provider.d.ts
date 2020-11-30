@@ -5,7 +5,6 @@ import FileSystemProviderBase, {
 export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
     /**
      * @docid RemoteFileSystemProviderOptions.endpointUrl
-     * @type string
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -21,7 +20,6 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
 /**
  * @docid RemoteFileSystemProvider
  * @inherits FileSystemProviderBase
- * @type object
  * @module file_management/remote_provider
  * @namespace DevExpress.fileManagement
  * @export default

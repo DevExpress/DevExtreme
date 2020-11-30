@@ -9,7 +9,6 @@ import {
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**
      * @docid dxSliderOptions.value
-     * @type number
      * @default 50
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -39,7 +38,6 @@ export default class dxSlider extends dxTrackBar {
 export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     /**
      * @docid dxSliderBaseOptions.activeStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -54,7 +52,6 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxSliderBaseOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -62,7 +59,6 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     hoverStateEnabled?: boolean;
     /**
      * @docid dxSliderBaseOptions.keyStep
-     * @type number
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -70,14 +66,12 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     keyStep?: number;
     /**
      * @docid dxSliderBaseOptions.label
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     label?: { format?: format, position?: 'bottom' | 'top', visible?: boolean };
     /**
      * @docid dxSliderBaseOptions.name
-     * @type string
      * @hidden false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -85,7 +79,6 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     name?: string;
     /**
      * @docid dxSliderBaseOptions.showRange
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -93,7 +86,6 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     showRange?: boolean;
     /**
      * @docid dxSliderBaseOptions.step
-     * @type number
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -101,7 +93,6 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     step?: number;
     /**
      * @docid dxSliderBaseOptions.tooltip
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */

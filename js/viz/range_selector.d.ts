@@ -38,28 +38,24 @@ import BaseWidget, {
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * @docid dxRangeSelectorOptions.background
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     background?: { color?: string, image?: { location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop', url?: string }, visible?: boolean };
     /**
      * @docid dxRangeSelectorOptions.behavior
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     behavior?: { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: 'onMoving' | 'onMovingComplete', manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean };
     /**
      * @docid dxRangeSelectorOptions.chart
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     chart?: { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | PaletteType, paletteExtensionMode?: PaletteExtensionModeType, series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { customizeSeries?: ((seriesName: any) => ChartSeries), nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: 'continuous' | 'logarithmic', valueType?: 'datetime' | 'numeric' | 'string' } };
     /**
      * @docid dxRangeSelectorOptions.containerBackgroundColor
-     * @type string
      * @default '#FFFFFF'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -74,7 +70,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     dataSource?: Array<any> | DataSource | DataSourceOptions | string;
     /**
      * @docid dxRangeSelectorOptions.dataSourceField
-     * @type string
      * @default 'arg'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -82,7 +77,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     dataSourceField?: string;
     /**
      * @docid dxRangeSelectorOptions.indent
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -90,7 +84,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     /**
      * @docid dxRangeSelectorOptions.onValueChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:Array<number,string,Date>
      * @type_function_param1_field5 previousValue:Array<number,string,Date>
@@ -104,14 +97,12 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     onValueChanged?: ((e: { component?: dxRangeSelector, element?: dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: event }) => any);
     /**
      * @docid dxRangeSelectorOptions.scale
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     scale?: { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | any | TimeIntervalType, allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string), font?: Font, format?: format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | TimeIntervalType, minRange?: number | any | TimeIntervalType, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | TimeIntervalType, placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | TimeIntervalType, type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
     /**
      * @docid dxRangeSelectorOptions.selectedRangeColor
-     * @type string
      * @default "#606060"
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -127,28 +118,24 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     selectedRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
     /**
      * @docid dxRangeSelectorOptions.shutter
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     shutter?: { color?: string, opacity?: number };
     /**
      * @docid dxRangeSelectorOptions.sliderHandle
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     sliderHandle?: { color?: string, opacity?: number, width?: number };
     /**
      * @docid dxRangeSelectorOptions.sliderMarker
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     sliderMarker?: { color?: string, customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string), font?: Font, format?: format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean };
     /**
      * @docid dxRangeSelectorOptions.value
-     * @type Array<number,string,Date> | VizRange
      * @fires dxRangeSelectorOptions.onValueChanged
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -169,7 +156,7 @@ export default class dxRangeSelector extends BaseWidget {
     constructor(element: JQuery, options?: dxRangeSelectorOptions)
     getDataSource(): DataSource;
     /**
-     * @docid dxRangeSelectorMethods.getValue
+     * @docid dxRangeSelector.getValue
      * @publicName getValue()
      * @return Array<number,string,Date>
      * @prevFileNamespace DevExpress.viz
@@ -178,7 +165,7 @@ export default class dxRangeSelector extends BaseWidget {
     getValue(): Array<number | string | Date>;
     render(): void;
     /**
-     * @docid dxRangeSelectorMethods.render
+     * @docid dxRangeSelector.render
      * @publicName render(skipChartAnimation)
      * @param1 skipChartAnimation:boolean
      * @prevFileNamespace DevExpress.viz
@@ -186,7 +173,7 @@ export default class dxRangeSelector extends BaseWidget {
      */
     render(skipChartAnimation: boolean): void;
     /**
-     * @docid dxRangeSelectorMethods.setValue
+     * @docid dxRangeSelector.setValue
      * @publicName setValue(value)
      * @param1 value:Array<number,string,Date> | VizRange
      * @prevFileNamespace DevExpress.viz

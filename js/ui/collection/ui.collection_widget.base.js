@@ -1054,7 +1054,7 @@ const CollectionWidget = Widget.inherit({
     },
 
     /**
-    * @name CollectionWidgetmethods.getFocusedItemId
+    * @name CollectionWidget.getFocusedItemId
     * @publicName getFocusedItemId()
     * @return string
     * @hidden
@@ -1068,7 +1068,7 @@ const CollectionWidget = Widget.inherit({
     },
 
     /**
-    * @name CollectionWidgetmethods.itemElements
+    * @name CollectionWidget.itemElements
     * @publicName itemElements()
     * @return Array<Element>
     * @hidden
@@ -1078,7 +1078,7 @@ const CollectionWidget = Widget.inherit({
     },
 
     /**
-    * @name CollectionWidgetmethods.itemsContainer
+    * @name CollectionWidget.itemsContainer
     * @publicName itemsContainer()
     * @return Element
     * @hidden

@@ -25,7 +25,6 @@ import dxDropDownEditor, {
 export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
     /**
      * @docid dxDropDownListOptions.displayValue
-     * @type string
      * @readonly
      * @default undefined
      * @ref
@@ -35,7 +34,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     displayValue?: string;
     /**
      * @docid dxDropDownListOptions.groupTemplate
-     * @type template|function
      * @default "group"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -47,7 +45,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxDropDownListOptions.grouped
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -55,7 +52,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     grouped?: boolean;
     /**
      * @docid dxDropDownListOptions.minSearchLength
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -63,7 +59,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     minSearchLength?: number;
     /**
      * @docid dxDropDownListOptions.noDataText
-     * @type string
      * @default "No data to display"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -72,7 +67,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     /**
      * @docid dxDropDownListOptions.onItemClick
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:object
@@ -86,7 +80,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     /**
      * @docid dxDropDownListOptions.onSelectionChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 selectedItem:object
      * @action
@@ -97,7 +90,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     /**
      * @docid dxDropDownListOptions.onValueChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
@@ -109,7 +101,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
     /**
      * @docid dxDropDownListOptions.searchEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -133,7 +124,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     searchMode?: 'contains' | 'startswith';
     /**
      * @docid dxDropDownListOptions.searchTimeout
-     * @type number
      * @default 500
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -141,7 +131,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     searchTimeout?: number;
     /**
      * @docid dxDropDownListOptions.selectedItem
-     * @type any
      * @readonly
      * @default null
      * @ref
@@ -151,7 +140,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     selectedItem?: any;
     /**
      * @docid dxDropDownListOptions.showDataBeforeSearch
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -166,7 +154,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     value?: any;
     /**
      * @docid dxDropDownListOptions.valueChangeEvent
-     * @type string
      * @default "input change keyup"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -174,7 +161,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     valueChangeEvent?: string;
     /**
      * @docid dxDropDownListOptions.wrapItemText
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

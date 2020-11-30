@@ -8,80 +8,70 @@ import '../jquery_augmentation';
  */
 export class dxEvent {
     /**
-     * @docid dxEventFields.currentTarget
-     * @type Element
+     * @docid dxEvent.currentTarget
      * @prevFileNamespace DevExpress.events
      * @public
      */
     currentTarget: Element;
     /**
-     * @docid dxEventFields.data
-     * @type object
+     * @docid dxEvent.data
      * @prevFileNamespace DevExpress.events
      * @public
      */
     data: any;
     /**
-     * @docid dxEventFields.delegateTarget
-     * @type Element
+     * @docid dxEvent.delegateTarget
      * @prevFileNamespace DevExpress.events
      * @public
      */
     delegateTarget: Element;
     /**
-     * @docid dxEventFields.target
-     * @type Element
+     * @docid dxEvent.target
      * @prevFileNamespace DevExpress.events
      * @public
      */
     target: Element;
     /**
-     * @docid dxEventMethods.isDefaultPrevented
+     * @docid dxEvent.isDefaultPrevented
      * @publicName isDefaultPrevented()
-     * @type function
      * @return boolean
      * @prevFileNamespace DevExpress.events
      * @public
      */
     isDefaultPrevented(): boolean;
     /**
-     * @docid dxEventMethods.isImmediatePropagationStopped
+     * @docid dxEvent.isImmediatePropagationStopped
      * @publicName isImmediatePropagationStopped()
-     * @type function
      * @return boolean
      * @prevFileNamespace DevExpress.events
      * @public
      */
     isImmediatePropagationStopped(): boolean;
     /**
-     * @docid dxEventMethods.isPropagationStopped
+     * @docid dxEvent.isPropagationStopped
      * @publicName isPropagationStopped()
-     * @type function
      * @return boolean
      * @prevFileNamespace DevExpress.events
      * @public
      */
     isPropagationStopped(): boolean;
     /**
-     * @docid dxEventMethods.preventDefault
+     * @docid dxEvent.preventDefault
      * @publicName preventDefault()
-     * @type function
      * @prevFileNamespace DevExpress.events
      * @public
      */
     preventDefault(): void;
     /**
-     * @docid dxEventMethods.stopImmediatePropagation
+     * @docid dxEvent.stopImmediatePropagation
      * @publicName stopImmediatePropagation()
-     * @type function
      * @prevFileNamespace DevExpress.events
      * @public
      */
     stopImmediatePropagation(): void;
     /**
-     * @docid dxEventMethods.stopPropagation
+     * @docid dxEvent.stopPropagation
      * @publicName stopPropagation()
-     * @type function
      * @prevFileNamespace DevExpress.events
      * @public
      */
@@ -99,7 +89,6 @@ export type event = dxEvent | JQueryEventObject;
 /**
  * @docid eventsHandler
  * @publicName handler(event, extraParameters)
- * @type function
  * @param1 event:dxEvent
  * @param2 extraParameters:object
  * @return boolean

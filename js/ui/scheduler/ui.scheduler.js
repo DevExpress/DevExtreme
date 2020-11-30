@@ -1330,7 +1330,7 @@ class Scheduler extends Widget {
                 if(this._isAgenda()) {
                     this._workSpace._renderView();
                     // TODO: remove rows calculation from this callback
-                    this._dataSourceLoadedCallback.fireWith(this, [result]);
+                    this._dataSourceLoadedCallback.fireWith(this, [this.getFilteredItems()]);
                 }
             }).bind(this));
         }
@@ -2513,7 +2513,7 @@ class Scheduler extends Widget {
     }
 
     /**
-        * @name dxSchedulerMethods.registerKeyHandler
+        * @name dxScheduler.registerKeyHandler
         * @publicName registerKeyHandler(key, handler)
         * @hidden
         */

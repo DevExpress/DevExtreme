@@ -88,6 +88,15 @@ const ListEdit = ListBase.inherit({
         }
     },
 
+    _isItemStrictEquals: function(item1, item2) {
+        const privateKey = item1 && item1.__dx_key__;
+        if(privateKey && !this.key() && this._selection.isItemSelected(privateKey)) {
+            return false;
+        }
+
+        return this.callBase(item1, item2);
+    },
+
     _getDefaultOptions() {
         return extend(this.callBase(), {
             showSelectionControls: false,
@@ -313,7 +322,7 @@ const ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods.getFlatIndexByItemElement
+    * @name dxList.getFlatIndexByItemElement
     * @publicName getFlatIndexByItemElement(itemElement)
     * @param1 itemElement:Element
     * @return object
@@ -324,7 +333,7 @@ const ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods.getItemElementByFlatIndex
+    * @name dxList.getItemElementByFlatIndex
     * @publicName getItemElementByFlatIndex(flatIndex)
     * @param1 flatIndex:Number
     * @return Element
@@ -341,7 +350,7 @@ const ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods.getItemByIndex
+    * @name dxList.getItemByIndex
     * @publicName getItemByIndex(index)
     * @param1 index:Number
     * @return object

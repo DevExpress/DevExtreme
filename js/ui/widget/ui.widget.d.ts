@@ -9,7 +9,6 @@ import {
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     /**
      * @docid WidgetOptions.accessKey
-     * @type string
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -17,7 +16,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     accessKey?: string;
     /**
      * @docid WidgetOptions.activeStateEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -25,7 +23,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     activeStateEnabled?: boolean;
     /**
      * @docid WidgetOptions.disabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -33,7 +30,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     disabled?: boolean;
     /**
      * @docid WidgetOptions.focusStateEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -41,7 +37,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     focusStateEnabled?: boolean;
     /**
      * @docid WidgetOptions.hint
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -49,7 +44,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     hint?: string;
     /**
      * @docid WidgetOptions.hoverStateEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -65,7 +59,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     onContentReady?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
      * @docid WidgetOptions.tabIndex
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -73,7 +66,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     tabIndex?: number;
     /**
      * @docid WidgetOptions.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -82,7 +74,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
 }
 /**
  * @docid Widget
- * @type object
  * @inherits DOMComponent
  * @module ui/widget/ui.widget
  * @export default
@@ -93,14 +84,14 @@ export default class Widget extends DOMComponent {
     constructor(element: Element, options?: WidgetOptions)
     constructor(element: JQuery, options?: WidgetOptions)
     /**
-     * @docid WidgetMethods.focus
+     * @docid Widget.focus
      * @publicName focus()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focus(): void;
     /**
-     * @docid WidgetMethods.registerKeyHandler
+     * @docid Widget.registerKeyHandler
      * @publicName registerKeyHandler(key, handler)
      * @param1 key:string
      * @param2 handler:function
@@ -109,7 +100,7 @@ export default class Widget extends DOMComponent {
      */
     registerKeyHandler(key: string, handler: Function): void;
     /**
-     * @docid WidgetMethods.repaint
+     * @docid Widget.repaint
      * @publicName repaint()
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -119,7 +110,6 @@ export default class Widget extends DOMComponent {
 
 /**
  * @const dxItem
- * @type object
  * @section uiWidgetMarkupComponents
  * @prevFileNamespace DevExpress.ui
  * @public

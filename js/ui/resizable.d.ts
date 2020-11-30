@@ -23,6 +23,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
     /**
      * @docid dxResizableOptions.height
+     * @type_function_return number|string
      * @fires dxResizableOptions.onResize
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -30,7 +31,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     height?: number | string | (() => number | string);
     /**
      * @docid dxResizableOptions.maxHeight
-     * @type number
      * @default Infinity
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -38,7 +38,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     maxHeight?: number;
     /**
      * @docid dxResizableOptions.maxWidth
-     * @type number
      * @default Infinity
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -46,7 +45,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     maxWidth?: number;
     /**
      * @docid dxResizableOptions.minHeight
-     * @type number
      * @default 30
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -54,7 +52,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     minHeight?: number;
     /**
      * @docid dxResizableOptions.minWidth
-     * @type number
      * @default 30
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -63,7 +60,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid dxResizableOptions.onResize
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
@@ -76,7 +72,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid dxResizableOptions.onResizeEnd
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
@@ -89,7 +84,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid dxResizableOptions.onResizeStart
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
@@ -101,6 +95,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     onResizeStart?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
     /**
      * @docid dxResizableOptions.width
+     * @type_function_return number|string
      * @fires dxResizableOptions.onResize
      * @prevFileNamespace DevExpress.ui
      * @public

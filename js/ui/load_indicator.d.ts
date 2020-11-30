@@ -5,7 +5,6 @@ import Widget, {
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
      * @docid dxLoadIndicatorOptions.indicatorSrc
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public

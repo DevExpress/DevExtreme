@@ -17,7 +17,6 @@ import {
 export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * @docid DataExpressionMixinOptions.dataSource
-     * @type string|Array<CollectionWidgetItem, object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -25,7 +24,6 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     dataSource?: string | Array<CollectionWidgetItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid DataExpressionMixinOptions.displayExpr
-     * @type string|function(item)
      * @default undefined
      * @type_function_param1 item:object
      * @type_function_return string
@@ -35,7 +33,6 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid DataExpressionMixinOptions.itemTemplate
-     * @type template|function
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -47,14 +44,12 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid DataExpressionMixinOptions.items
-     * @type Array<CollectionWidgetItem, object>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<CollectionWidgetItem | any>;
     /**
      * @docid DataExpressionMixinOptions.value
-     * @type any
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -62,7 +57,6 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     value?: any;
     /**
      * @docid DataExpressionMixinOptions.valueExpr
-     * @type string|function(item)
      * @default "this"
      * @type_function_param1 item:object
      * @type_function_return string|number|boolean

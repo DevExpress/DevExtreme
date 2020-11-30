@@ -38,6 +38,12 @@ const subscribes = {
         return this.isVirtualScrolling();
     },
 
+    getVirtualScrollingState: function() {
+        return this.fire('isVirtualScrolling')
+            ? this.getWorkSpace().virtualScrollingDispatcher.getState()
+            : null;
+    },
+
     setCellDataCacheAlias: function(appointment, geometry) {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
@@ -169,24 +175,20 @@ const subscribes = {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
 
-    getTextAndFormatDate(appointment, targetedAppointment, format) { // TODO: rename to createFormattedDateText
-        const appointmentAdapter = this.createAppointmentAdapter(appointment);
-        const adapter = this.createAppointmentAdapter(targetedAppointment || appointment)
-            .clone({ pathTimeZone: 'toGrid' });
+    getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
+        const appointmentAdapter = this.createAppointmentAdapter(appointmentRaw);
+        const targetedAdapter = this.createAppointmentAdapter(targetedAppointmentRaw || appointmentRaw);
 
-        const formatType = format || this.fire('_getTypeFormat', adapter.startDate, adapter.endDate, adapter.allDay);
+        // TODO pull out time zone converting from appointment adapter for knockout(T947938)
+        const startDate = this.timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
+        const endDate = this.timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
+
+        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, targetedAdapter.allDay);
 
         return {
-            text: adapter.text || appointmentAdapter.text,
-            formatDate: this.fire('_formatDates', adapter.startDate, adapter.endDate, formatType)
+            text: targetedAdapter.text || appointmentAdapter.text,
+            formatDate: this.fire('_formatDates', startDate, endDate, formatType)
         };
-    },
-
-    _getAppointmentFields(data, arrayOfFields) {
-        return arrayOfFields.reduce((accumulator, field) => {
-            accumulator[field] = this.fire('getField', field, data);
-            return accumulator;
-        }, {});
     },
 
     _getTypeFormat(startDate, endDate, isAllDay) {

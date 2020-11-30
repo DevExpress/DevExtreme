@@ -31,14 +31,14 @@ export default class dxValidationGroup extends DOMComponent {
     constructor(element: Element, options?: dxValidationGroupOptions)
     constructor(element: JQuery, options?: dxValidationGroupOptions)
     /**
-     * @docid dxValidationGroupMethods.reset
+     * @docid dxValidationGroup.reset
      * @publicName reset()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
     /**
-     * @docid dxValidationGroupMethods.validate
+     * @docid dxValidationGroup.validate
      * @publicName validate()
      * @return dxValidationGroupResult
      * @prevFileNamespace DevExpress.ui
@@ -50,7 +50,6 @@ export default class dxValidationGroup extends DOMComponent {
 export interface dxValidationGroupResult {
     /**
      * @docid dxValidationGroupResult.brokenRules
-     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -64,7 +63,6 @@ export interface dxValidationGroupResult {
     complete?: Promise<dxValidationGroupResult> | JQueryPromise<dxValidationGroupResult>;
     /**
      * @docid dxValidationGroupResult.isValid
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -78,7 +76,6 @@ export interface dxValidationGroupResult {
     status?: 'valid' | 'invalid' | 'pending';
     /**
      * @docid dxValidationGroupResult.validators
-     * @type Array<Object>
      * @prevFileNamespace DevExpress.ui
      * @public
      */

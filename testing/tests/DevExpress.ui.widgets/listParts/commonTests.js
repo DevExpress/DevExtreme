@@ -2541,6 +2541,54 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
 
         assert.deepEqual($element.dxList('option', 'items'), [1, 2, 3, 4], 'all data loaded');
     });
+
+    QUnit.test('widget has pageIndex == 1 if the pageSize is equal to dataSource length', function(assert) {
+        const dataSource = new DataSource({
+            store: new ArrayStore([1, 2, 3, 4]),
+            pageSize: 4
+        });
+        const $element = this.element.hide().dxList({
+            pageLoadMode: 'scrollBottom',
+            scrollingEnabled: true,
+            dataSource: dataSource,
+            onInitialized(e) {
+                $(e.element).dxScrollView('instance').isFull = () => {
+                    return false;
+                };
+            }
+        });
+
+        $element.show().triggerHandler('dxshown');
+        this.clock.tick();
+
+        assert.strictEqual(dataSource.pageIndex(), 1, 'page index is correct');
+    });
+
+    QUnit.test('widget has a correct pageIndex if the pageSize is equal to dataSource length if it has _revertPageOnEmptyLoad is true (T942881)', function(assert) {
+        const onContentReadySpy = sinon.spy();
+        const dataSource = new DataSource({
+            store: new ArrayStore([1, 2, 3, 4]),
+            pageSize: 4
+        });
+        const $element = this.element.hide().dxList({
+            pageLoadMode: 'scrollBottom',
+            scrollingEnabled: true,
+            dataSource: dataSource,
+            _revertPageOnEmptyLoad: true,
+            onContentReady: onContentReadySpy,
+            onInitialized(e) {
+                $(e.element).dxScrollView('instance').isFull = () => {
+                    return false;
+                };
+            }
+        });
+
+        $element.show().triggerHandler('dxshown');
+        this.clock.tick();
+
+        assert.strictEqual(dataSource.pageIndex(), 0, 'page index is correct');
+        assert.strictEqual(onContentReadySpy.callCount, 3, 'list fires contentReady after empty page load');
+    });
 });
 
 QUnit.module('scrollView interaction', moduleSetup, () => {

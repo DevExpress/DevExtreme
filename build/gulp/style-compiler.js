@@ -80,5 +80,7 @@ gulp.task('style-compiler-themes-dev', () => {
             return null;
         });
 
-    gulp.watch('scss/**/*', gulp.parallel(() => compileBundles(bundles), 'copy-fonts-and-icons'));
+    gulp
+        .watch('scss/**/*', gulp.parallel(() => compileBundles(bundles), 'copy-fonts-and-icons'))
+        .on('ready', () => console.log('style-compiler-themes task is watching for changes...'));
 });

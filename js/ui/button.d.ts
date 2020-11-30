@@ -19,7 +19,6 @@ import Widget, {
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
      * @docid dxButtonOptions.activeStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -27,7 +26,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     activeStateEnabled?: boolean;
     /**
      * @docid dxButtonOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -35,7 +33,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxButtonOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -43,7 +40,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     hoverStateEnabled?: boolean;
     /**
      * @docid dxButtonOptions.icon
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -51,7 +47,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     icon?: string;
     /**
      * @docid dxButtonOptions.onClick
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -71,7 +66,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     stylingMode?: 'text' | 'outlined' | 'contained';
     /**
      * @docid dxButtonOptions.template
-     * @type template|function
      * @default "content"
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string
@@ -84,7 +78,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxButtonOptions.text
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -100,7 +93,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
     /**
      * @docid dxButtonOptions.useSubmitBehavior
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -108,7 +100,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     useSubmitBehavior?: boolean;
     /**
      * @docid dxButtonOptions.validationGroup
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

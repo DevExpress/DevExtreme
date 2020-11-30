@@ -992,39 +992,39 @@ declare module DevExpress {
     /**
      * [descr:localization]
      */
-    export class localization {
+    module localization {
         /**
          * [descr:localization.formatDate(value, format)]
          */
-        static formatDate(value: Date, format: DevExpress.ui.format): string;
+        export function formatDate(value: Date, format: DevExpress.ui.format): string;
         /**
          * [descr:localization.formatMessage(key, value)]
          */
-        static formatMessage(key: string, value: string | Array<string>): string;
+        export function formatMessage(key: string, value: string | Array<string>): string;
         /**
          * [descr:localization.formatNumber(value, format)]
          */
-        static formatNumber(value: number, format: DevExpress.ui.format): string;
+        export function formatNumber(value: number, format: DevExpress.ui.format): string;
         /**
          * [descr:localization.loadMessages(messages)]
          */
-        static loadMessages(messages: any): void;
+        export function loadMessages(messages: any): void;
         /**
          * [descr:localization.locale()]
          */
-        static locale(): string;
+        export function locale(): string;
         /**
          * [descr:localization.locale(locale)]
          */
-        static locale(locale: string): void;
+        export function locale(locale: string): void;
         /**
          * [descr:localization.parseDate(text, format)]
          */
-        static parseDate(text: string, format: DevExpress.ui.format): Date;
+        export function parseDate(text: string, format: DevExpress.ui.format): Date;
         /**
          * [descr:localization.parseNumber(text, format)]
          */
-        static parseNumber(text: string, format: DevExpress.ui.format): number;
+        export function parseNumber(text: string, format: DevExpress.ui.format): number;
     }
     /**
      * [descr:positionConfig]
@@ -1078,137 +1078,137 @@ declare module DevExpress {
     /**
      * [descr:ui]
      */
-    export class ui {
+    module ui {
         /**
          * [descr:ui.notify(message,type,displayTime)]
          */
-        static notify(message: string, type?: string, displayTime?: number): void;
+        export function notify(message: string, type?: string, displayTime?: number): void;
         /**
          * [descr:ui.notify(options,type,displayTime)]
          */
-        static notify(options: any, type?: string, displayTime?: number): void;
+        export function notify(options: any, type?: string, displayTime?: number): void;
         /**
          * [descr:ui.repaintFloatingActionButton()]
          */
-        static repaintFloatingActionButton(): void;
+        export function repaintFloatingActionButton(): void;
         /**
          * [descr:ui.setTemplateEngine(name)]
          */
-        static setTemplateEngine(templateEngineName: string): void;
+        export function setTemplateEngine(templateEngineName: string): void;
         /**
          * [descr:ui.setTemplateEngine(options)]
          */
-        static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
+        export function setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
     }
     /**
      * [descr:validationEngine]
      */
-    export class validationEngine {
+    module validationEngine {
         /**
          * [descr:validationEngine.getGroupConfig()]
          */
-        static getGroupConfig(): any;
+        export function getGroupConfig(): any;
         /**
          * [descr:validationEngine.getGroupConfig(group)]
          */
-        static getGroupConfig(group: string | any): any;
+        export function getGroupConfig(group: string | any): any;
         /**
          * [descr:validationEngine.registerModelForValidation(model)]
          */
-        static registerModelForValidation(model: any): void;
+        export function registerModelForValidation(model: any): void;
         /**
          * [descr:validationEngine.resetGroup()]
          */
-        static resetGroup(): void;
+        export function resetGroup(): void;
         /**
          * [descr:validationEngine.resetGroup(group)]
          */
-        static resetGroup(group: string | any): void;
+        export function resetGroup(group: string | any): void;
         /**
          * [descr:validationEngine.unregisterModelForValidation(model)]
          */
-        static unregisterModelForValidation(model: any): void;
+        export function unregisterModelForValidation(model: any): void;
         /**
          * [descr:validationEngine.validateGroup()]
          */
-        static validateGroup(): DevExpress.ui.dxValidationGroupResult;
+        export function validateGroup(): DevExpress.ui.dxValidationGroupResult;
         /**
          * [descr:validationEngine.validateGroup(group)]
          */
-        static validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
+        export function validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
         /**
          * [descr:validationEngine.validateModel(model)]
          */
-        static validateModel(model: any): any;
+        export function validateModel(model: any): any;
     }
     /**
      * [descr:viz]
      */
-    export class viz {
+    module viz {
         /**
          * [descr:viz.currentPalette()]
          */
-        static currentPalette(): string;
+        export function currentPalette(): string;
         /**
          * [descr:viz.currentPalette(paletteName)]
          */
-        static currentPalette(paletteName: string): void;
+        export function currentPalette(paletteName: string): void;
         /**
          * [descr:viz.currentTheme()]
          */
-        static currentTheme(): string;
+        export function currentTheme(): string;
         /**
          * [descr:viz.currentTheme(platform, colorScheme)]
          */
-        static currentTheme(platform: string, colorScheme: string): void;
+        export function currentTheme(platform: string, colorScheme: string): void;
         /**
          * [descr:viz.currentTheme(theme)]
          */
-        static currentTheme(theme: string): void;
+        export function currentTheme(theme: string): void;
         /**
          * [descr:viz.exportFromMarkup(markup, options)]
          */
-        static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number, svgToCanvas?: Function }): void;
+        export function exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number, svgToCanvas?: Function }): void;
         /**
          * [descr:viz.exportWidgets(widgetInstances)]
          */
-        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
+        export function exportWidgets(widgetInstances: Array<Array<DevExpress.DOMComponent>>): void;
         /**
          * [descr:viz.exportWidgets(widgetInstances, options)]
          */
-        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
+        export function exportWidgets(widgetInstances: Array<Array<DevExpress.DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
         /**
          * [descr:viz.generateColors(palette, count, options)]
          */
-        static generateColors(palette: 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
+        export function generateColors(palette: 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
         /**
          * [descr:viz.getMarkup(widgetInstances)]
          */
-        static getMarkup(widgetInstances: Array<DOMComponent>): string;
+        export function getMarkup(widgetInstances: Array<DevExpress.DOMComponent>): string;
         /**
          * [descr:viz.getPalette(paletteName)]
          */
-        static getPalette(paletteName: string): any;
+        export function getPalette(paletteName: string): any;
         /**
          * [descr:viz.getTheme(theme)]
          */
-        static getTheme(theme: string): any;
+        export function getTheme(theme: string): any;
         /**
          * [descr:viz.refreshPaths()]
          */
-        static refreshPaths(): void;
+        export function refreshPaths(): void;
         /**
          * [descr:viz.refreshTheme()]
          */
-        static refreshTheme(): void;
+        export function refreshTheme(): void;
         /**
          * [descr:viz.registerPalette(paletteName, palette)]
          */
-        static registerPalette(paletteName: string, palette: any): void;
+        export function registerPalette(paletteName: string, palette: any): void;
         /**
          * [descr:viz.registerTheme(customTheme, baseTheme)]
          */
-        static registerTheme(customTheme: any, baseTheme: string): void;
+        export function registerTheme(customTheme: any, baseTheme: string): void;
     }
 }
 declare module DevExpress.core {
@@ -8696,7 +8696,7 @@ declare module DevExpress.ui {
          * [descr:dxLookup.Options.closeOnOutsideClick]
          * @deprecated [depNote:dxLookup.Options.closeOnOutsideClick]
          */
-        closeOnOutsideClick?: boolean | (() => boolean);
+        closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
         /**
          * [descr:dxLookup.Options.dropDownCentered]
          */
@@ -12554,23 +12554,23 @@ declare module DevExpress.ui {
     /**
      * [descr:ui.themes]
      */
-    export class themes {
+    module themes {
         /**
          * [descr:ui.themes.current()]
          */
-        static current(): string;
+        export function current(): string;
         /**
          * [descr:ui.themes.current(themeName)]
          */
-        static current(themeName: string): void;
+        export function current(themeName: string): void;
         /**
          * [descr:ui.themes.initialized(callback)]
          */
-        static initialized(callback: Function): void;
+        export function initialized(callback: Function): void;
         /**
          * [descr:ui.themes.ready(callback)]
          */
-        static ready(callback: Function): void;
+        export function ready(callback: Function): void;
     }
 }
 declare module DevExpress.ui.dialog {
@@ -19757,7 +19757,7 @@ declare module DevExpress.viz {
     /**
      * [descr:polarChartSeriesObject]
      */
-    export class polarChartSeriesObject extends baseSeriesObject {
+    export interface polarChartSeriesObject extends baseSeriesObject {
     }
     /**
      * [descr:polarPointObject]

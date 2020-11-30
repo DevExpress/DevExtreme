@@ -356,13 +356,13 @@ const SlideOut = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxSlideOutMethods.registerKeyHandler
+    * @name dxSlideOut.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxSlideOutMethods.focus
+    * @name dxSlideOut.focus
     * @publicName focus()
     * @hidden
     */
