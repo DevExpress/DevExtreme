@@ -12,7 +12,7 @@ jest.mock('../row', () => ({
   Row: (props) => <tr {...props} />,
 }));
 
-describe('RowBase', () => {
+describe('VirtualRow', () => {
   describe('Render', () => {
     const render = (viewModel) => shallow(RowView({
       virtualCells: [{}, {}],
