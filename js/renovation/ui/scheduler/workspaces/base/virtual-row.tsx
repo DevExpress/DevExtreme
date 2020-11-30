@@ -9,11 +9,11 @@ export const viewFunction = (viewModel: VirtualRow): JSX.Element => (
   <Row
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    className={viewModel.classes}
     style={viewModel.style}
+    className={viewModel.classes}
   >
-    {viewModel.virtualCells.map(() => (
-      <VirtualCell />
+    {viewModel.virtualCells.map((_, index) => (
+      <VirtualCell key={index.toString()} />
     ))}
   </Row>
 );

@@ -16,7 +16,7 @@ export const viewFunction = (viewModel: Row): JSX.Element => (
 export class RowProps {
   @OneWay() className?: string = '';
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | JSX.Element[];
 }
 
 @Component({
