@@ -682,7 +682,7 @@ QUnit.module('Validation - UI', {
             width: 20,
             validationMessageMode: 'always',
             validationError: {
-                message: 'ErrorErrorErrorErrorErrorErrorError'
+                message: 'This_message_width_more_than_max_set_width'
             },
             isValid: false
         });
