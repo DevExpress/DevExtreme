@@ -43,9 +43,12 @@ export class VirtualRow extends JSXComponent(VirtualRowProps) {
     return `dx-scheduler-virtual-row ${className}`;
   }
 
-  get virtualCells(): unknown[] {
+  get virtualCells(): number[] {
     const { cellsCount } = this.props;
-    const virtualCells = Array.from({ length: cellsCount });
+    const virtualCells = [] as number[];
+    for (let cellIndex = 0; cellIndex < cellsCount; cellIndex += 1) {
+      virtualCells.push(cellIndex);
+    }
 
     return virtualCells;
   }
