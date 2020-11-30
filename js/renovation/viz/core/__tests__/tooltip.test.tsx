@@ -10,7 +10,7 @@ jest.mock('../common/tooltip_computeds', () => ({
   recalculateCoordinates: jest.fn().mockReturnValue({
     x: 4, y: 5, anchorX: 11, anchorY: 12,
   }),
-  getCloudAngle: jest.fn().mockReturnValue({ rotationAngle: 180, radRotationAngle: 1.11 }),
+  getCloudAngle: jest.fn().mockReturnValue(180),
 }));
 
 const tooltipProps = {
@@ -102,7 +102,7 @@ describe('Render', () => {
 
     expect(getCloudPoints).toBeCalledWith({ width: 48, height: 40 }, {
       x: 4, y: 5, anchorX: 11, anchorY: 12,
-    }, { rotationAngle: 180, radRotationAngle: 1.11 }, { cornerRadius: 0, arrowWidth: 20 }, true);
+    }, 180, { cornerRadius: 0, arrowWidth: 20 }, true);
   });
 
   it('should render text with props', () => {

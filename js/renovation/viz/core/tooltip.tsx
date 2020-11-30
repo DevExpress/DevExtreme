@@ -23,16 +23,16 @@ export const viewFunction = ({
   const correctedCoordinates = recalculateCoordinates({
     canvas, anchorX: x, anchorY: y, size: fullSize, offset, arrowLength,
   } as RecalculateCoordinatesFn);
-  const angles = getCloudAngle(fullSize, correctedCoordinates);
+  const angle = getCloudAngle(fullSize, correctedCoordinates);
   return (
     <g pointerEvents="none">
       <path
-        d={getCloudPoints(fullSize, correctedCoordinates, angles,
+        d={getCloudPoints(fullSize, correctedCoordinates, angle,
           { cornerRadius, arrowWidth }, true)}
         fill={color}
         stroke={border?.color}
         strokeWidth={border?.width}
-        transform={`rotate(${angles.rotationAngle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
+        transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
       />
       <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
         <text x={0} y={0}>

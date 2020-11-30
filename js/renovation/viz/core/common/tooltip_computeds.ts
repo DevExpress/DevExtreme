@@ -1,5 +1,4 @@
 import { RecalculateCoordinatesFn, Coordinates, Size } from './types.d';
-import { isDefined } from '../../../../core/utils/type';
 
 const {
   max, min, PI, cos, sin, asin, round, ceil, floor,
@@ -37,11 +36,12 @@ function rotateY({
 export function getCloudPoints(
   size: Size,
   coordinates: Coordinates,
-  { rotationAngle, radRotationAngle }: { rotationAngle: number; radRotationAngle: number },
+  rotationAngle: number,
   options: { arrowWidth: number; cornerRadius: number },
   bounded: boolean,
 ): string {
   const { x, y } = coordinates;
+  const radRotationAngle = (rotationAngle * PI) / 180;
   const { width, height } = rotateSize(size, rotationAngle);
   const anchorX = rotateX(coordinates, radRotationAngle);
   const anchorY = rotateY(coordinates, radRotationAngle);
@@ -78,6 +78,7 @@ export function getCloudPoints(
   const cornerRadius = Math.min(width / 2, height / 2, options.cornerRadius);
 
   let points;
+  let arrowArc;
 
   leftTopCorner[1] += cornerRadius;
   rightTopCorner[0] -= cornerRadius;
@@ -96,18 +97,15 @@ export function getCloudPoints(
     const arrowEndPointX = rightTopCorner[0] + cos(endAngle) * cornerRadius;
     const arrowEndPointY = rightTopCorner[1] + (1 - sin(endAngle)) * cornerRadius;
 
-    let arrowArc = buildPath('L', rightTopCorner, getArc(cornerRadius, cos(angle), 1 - sin(angle)), 'L', [anchorX, anchorY, arrowEndPointX, arrowEndPointY],
-      getAbsoluteArc(cornerRadius, rightTopCorner[0] + cornerRadius,
-        rightTopCorner[1] + cornerRadius));
-
     if (Math.abs(angle) > PI / 2) {
       arrowArc = buildPath('L', [arrowBaseLeft, yt, anchorX, anchorY, xr, arrowBaseBottom]);
+    } else {
+      arrowArc = buildPath('L', rightTopCorner, getArc(cornerRadius, cos(angle), 1 - sin(angle)), 'L', [anchorX, anchorY, arrowEndPointX, arrowEndPointY],
+        getAbsoluteArc(cornerRadius, rightTopCorner[0] + cornerRadius,
+          rightTopCorner[1] + cornerRadius));
     }
-
     points = buildPath(leftTopCorner, getArc(cornerRadius, 1, -1), arrowArc, 'L', rightBottomCorner, getArc(cornerRadius, -1, 1), 'L', leftBottomCorner, getArc(cornerRadius, -1, -1));
   } else if (anchorX > xr && anchorY >= yt && anchorY <= yb) { // 4
-    let arrowArc;
-
     if (arrowBaseTop >= rightTopCorner[1] + cornerRadius
         && arrowBaseBottom <= rightBottomCorner[1]) {
       arrowArc = buildPath(getArc(cornerRadius, 1, 1), 'L', [xr, arrowBaseTop, anchorX, anchorY, xr, arrowBaseBottom], 'L', rightBottomCorner, getArc(cornerRadius, -1, 1));
@@ -190,7 +188,7 @@ export function getCloudPoints(
 }
 
 export function recalculateCoordinates({
-  canvas, anchorX, anchorY, x, y, size, offsetX = 0, offsetY = 0, offset, arrowLength,
+  canvas, anchorX, anchorY, size, offset, arrowLength,
 }: RecalculateCoordinatesFn): Coordinates {
   const bounds = {
     xl: canvas.left,
@@ -201,60 +199,41 @@ export function recalculateCoordinates({
     height: canvas.height - canvas.bottom - canvas.top,
   };
 
-  let correctedX = x;
-  let correctedY = y;
-  let correctedAnchorX = anchorX;
+  let x;
+  let y;
   let correctedAnchorY = anchorY;
 
-  if (!isDefined(x)) {
-    if (isDefined(offsetX)) {
-      correctedX = anchorX + offsetX;
-    } else if (bounds.width < size.width) {
-      correctedX = round(bounds.xl + bounds.width / 2);
-    } else {
-      correctedX = min(
-        max(anchorX, ceil(bounds.xl + size.width / 2)),
-        floor(bounds.xr - size.width / 2),
-      );
-    }
+  if (bounds.width < size.width) {
+    x = round(bounds.xl + bounds.width / 2);
   } else {
-    correctedX = (correctedX || 0) + offsetX;
-    if (!isDefined(anchorX)) {
-      correctedAnchorX = x || 0;
-    }
+    x = min(
+      max(anchorX, ceil(bounds.xl + size.width / 2)),
+      floor(bounds.xr - size.width / 2),
+    );
   }
-  if (!isDefined(y)) {
-    if (isDefined(offsetY)) {
-      correctedY = anchorY + offsetY;
-    } else {
-      const yTop = anchorY - arrowLength - size.height / 2 - offset;
-      const yBottom = anchorY + arrowLength + size.height / 2 + offset;
 
-      if (bounds.height < size.height + arrowLength) {
-        correctedY = round(bounds.yt + size.height / 2);
-      } else if (yTop - size.height / 2 < bounds.yt) {
-        if (yBottom + size.height / 2 < bounds.yb) {
-          correctedY = yBottom;
-          correctedAnchorY += offset;
-        } else {
-          correctedY = round(bounds.yt + size.height / 2);
-        }
-      } else {
-        correctedY = yTop;
-        correctedAnchorY -= offset;
-      }
+  const halfHeightWithArrow = arrowLength + size.height / 2 + offset;
+  const yTop = anchorY - halfHeightWithArrow;
+  const yBottom = anchorY + halfHeightWithArrow;
+
+  if (bounds.height < size.height + arrowLength) {
+    y = round(bounds.yt + size.height / 2);
+  } else if (yTop - size.height / 2 < bounds.yt) {
+    if (yBottom + size.height / 2 < bounds.yb) {
+      y = yBottom;
+      correctedAnchorY += offset;
+    } else {
+      y = round(bounds.yt + size.height / 2);
     }
   } else {
-    correctedY = (correctedY || 0) + offsetY;
-    if (!isDefined(anchorY)) {
-      correctedAnchorY = (y || 0) + size.height / 2;
-    }
+    y = yTop;
+    correctedAnchorY -= offset;
   }
 
   return {
-    x: correctedX,
-    y: correctedY,
-    anchorX: correctedAnchorX,
+    x,
+    y,
+    anchorX,
     anchorY: correctedAnchorY,
   };
 }
@@ -264,8 +243,7 @@ export function getCloudAngle(
   {
     x, y, anchorX, anchorY,
   }: Coordinates,
-):
-  { rotationAngle: number; radRotationAngle: number } {
+): number {
   const halfWidth = width / 2;
   const halfHeight = height / 2;
 
@@ -295,8 +273,5 @@ export function getCloudAngle(
     angle = 180;
   }
 
-  return {
-    rotationAngle: angle,
-    radRotationAngle: (angle * PI) / 180,
-  };
+  return angle;
 }
