@@ -1045,7 +1045,7 @@ class Scheduler extends Widget {
     _updateHeader() {
         const viewCountConfig = this._getViewCountConfig();
         this._header.option('intervalCount', viewCountConfig.intervalCount);
-        // this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
+        // this._header.option('displayedDate', this._workSpace._getViewStartByOptions()); // TODO
         this._header.option('min', this._dateOption('min'));
         this._header.option('max', this._dateOption('max'));
         this._header.option('currentDate', this._dateOption('currentDate'));
@@ -1802,9 +1802,12 @@ class Scheduler extends Widget {
         result.groups = groups;
         result.onCellClick = this._createActionByOption('onCellClick');
         result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
-        result.min = new Date(this._dateOption('min'));
-        result.max = new Date(this._dateOption('max'));
-        result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
+
+        const createDate = date => this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        result.min = createDate(new Date(this._dateOption('min')));
+        result.max = createDate(new Date(this._dateOption('max')));
+        result.currentDate = dateUtils.trimTime(createDate(this._dateOption('currentDate')));
+
         result.hoursInterval = result.cellDuration / 60;
         result.allDayExpanded = this._isAllDayExpanded(this.getFilteredItems());
         result.dataCellTemplate = result.dataCellTemplate ? this._getTemplate(result.dataCellTemplate) : null;
