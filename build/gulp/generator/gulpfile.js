@@ -81,7 +81,7 @@ const processErrors = (knownErrors, errors = []) => (e) => {
 };
 
 function generatePreactComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = false) {
-    return function(done) {
+    return function generatePreactComponents(done) {
         const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
 
         generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
@@ -101,6 +101,8 @@ function generatePreactComponents(distPath = './', babelConfig = transpileConfig
             .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PATH)))
             .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PROD_PATH)))
             .pipe(gulpIf(renovation, gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH)))
+            // dev is true only for 'generate-components-watch'. 'generate-components-watch' used in launch for qunit
+            .pipe(gulpIf(dev, gulp.dest(context.TRANSPILED_RENOVATION_PATH)))
             .pipe(gulpIf(esmPackage, gulp.dest(path.join(context.TRANSPILED_PROD_ESM_PATH, distPath))))
             .on('end', function() {
                 done(!dev && errors.length || undefined);

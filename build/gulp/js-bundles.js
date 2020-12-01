@@ -104,7 +104,7 @@ function createRenovationTemp(isWatch) {
     )) : gulp.src(src);
 
     return pipe
-        .pipe(renovationPipes.replaceWidgets())
+        .pipe(renovationPipes.replaceWidgets(false))
         .pipe(gulp.dest(renovationPipes.TEMP_PATH));
 }
 

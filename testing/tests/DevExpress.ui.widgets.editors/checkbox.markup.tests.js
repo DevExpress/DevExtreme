@@ -1,9 +1,5 @@
 import $ from 'jquery';
 
-import dxCheckBox from 'ui/check_box';
-import dxrCheckBox from 'renovation/ui/check_box.j.js';
-import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js';
-
 import 'common.css!';
 
 QUnit.testStart(function() {
@@ -22,7 +18,7 @@ const ICON_SELECTOR = '.dx-checkbox-icon';
 const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
 const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 
-QUnit.module('Checkbox markup', createRenovationModuleConfig(dxCheckBox, dxrCheckBox), () => {
+QUnit.module('Checkbox markup', () => {
     QUnit.test('markup init', function(assert) {
         const element = $('#checkbox').dxCheckBox();
 
