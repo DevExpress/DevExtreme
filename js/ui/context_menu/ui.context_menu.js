@@ -224,6 +224,7 @@ class ContextMenu extends MenuBase {
 
                 if($oldTarget.is($items.first())) {
                     this._actions.onLeftFirstItem($oldTarget);
+                    $newTarget = undefined;
                 }
                 break;
             case FOCUS_DOWN:
@@ -231,6 +232,7 @@ class ContextMenu extends MenuBase {
 
                 if($oldTarget.is($items.last())) {
                     this._actions.onLeftLastItem($oldTarget);
+                    $newTarget = undefined;
                 }
                 break;
             case FOCUS_RIGHT:
