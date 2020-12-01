@@ -1325,7 +1325,7 @@ class Scheduler extends Widget {
         if(this._readyToRenderAppointments) {
             this._workSpaceRecalculation.done((function() {
 
-                this._processAppointments();
+                this._renderAppointments();
 
                 const filteredItems = this.getFilteredItems();
 
@@ -1347,7 +1347,7 @@ class Scheduler extends Widget {
         return this.fire(prerenderFilterName);
     }
 
-    _processAppointments() {
+    _renderAppointments() {
         const workspace = this.getWorkSpace();
 
         this._filteredItems = this._filterAppointments();

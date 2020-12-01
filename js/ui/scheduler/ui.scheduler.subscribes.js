@@ -465,8 +465,8 @@ const subscribes = {
         return obj;
     },
 
-    processAppointments: function() {
-        this._processAppointments();
+    renderAppointments: function() {
+        this._renderAppointments();
     },
 
     prerenderFilter: function() {
