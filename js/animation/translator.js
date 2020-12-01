@@ -1,3 +1,4 @@
+import $ from '../core/renderer';
 import { data as elementData, removeData } from '../core/element_data';
 import { type } from '../core/utils/type';
 
@@ -40,6 +41,7 @@ export const getTranslateCss = function(translate) {
 };
 
 export const getTranslate = function($element) {
+    $element = $($element);
     let result = $element.length ? elementData($element.get(0), TRANSLATOR_DATA_KEY) : null;
 
     if(!result) {
@@ -72,6 +74,7 @@ export const getTranslate = function($element) {
 };
 
 export const move = function($element, position) {
+    $element = $($element);
     const left = position.left;
     const top = position.top;
     let translate;
