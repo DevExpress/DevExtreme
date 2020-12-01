@@ -6,7 +6,7 @@ import { Size } from './common/types.d';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle,
-} from './common/tooltip_computeds';
+} from './common/tooltip_utils';
 
 export const viewFunction = ({
   textRef,
@@ -32,7 +32,7 @@ export const viewFunction = ({
         transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
       />
       <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
-        <text x={0} y={0}>
+        <text>
           {text}
         </text>
       </g>
@@ -79,7 +79,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     x: 0, y: 0, width: 0, height: 0,
   };
 
-  @Ref() textRef!: SVGTextElement;
+  @Ref() textRef!: SVGSVGElement;
 
   @Effect()
   calculateSize(): void {

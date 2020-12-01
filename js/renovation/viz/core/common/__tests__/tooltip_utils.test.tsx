@@ -1,4 +1,4 @@
-import { getCloudPoints, recalculateCoordinates, getCloudAngle } from '../tooltip_computeds';
+import { getCloudPoints, recalculateCoordinates, getCloudAngle } from '../tooltip_utils';
 
 describe('#getCloudAngle', () => {
   it('should return angle=0', () => {
