@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'ui/check_box';
 
 import 'common.css!';
 
