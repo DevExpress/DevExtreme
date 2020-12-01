@@ -224,11 +224,11 @@ QUnit.test('onItemClick passed to createComponent should work correct', function
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
     stubCreateComponent.getCall(1).args[2].onItemClick(event);
 
-    assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', false], 'tooltip is hide');
+    assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', false], 'tooltip is hidden');
     assert.deepEqual(stubShowAppointmentPopup.getCall(0).args, [event.itemData.appointment, false, event.itemData.targetedAppointment]);
 });
 
-QUnit.test('onItemClick passed to createComponent should work correct, with clickEvent', function(assert) {
+QUnit.test('onItemClick passed to createComponent should work correctly when clickEvent is defined', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
     const event = { itemData: { appointment: 'appointment', targetedAppointment: 'targetedAppointment' } };
@@ -239,8 +239,7 @@ QUnit.test('onItemClick passed to createComponent should work correct, with clic
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
     stubCreateComponent.getCall(1).args[2].onItemClick(event);
 
-    assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', false], 'tooltip is hide');
-    assert.deepEqual(stubShowAppointmentPopup.getCall(0).args, [event.itemData.appointment, false, event.itemData.targetedAppointment]);
+    assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', false], 'tooltip is hidden');
     assert.ok(clickEvent.called);
 });
 

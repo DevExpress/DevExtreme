@@ -79,8 +79,9 @@ export class CompactAppointmentsHelper {
         };
     }
 
-    _clickEvent(onAppointmentClick) {
+    _clickEvent() {
         return (e) => {
+            const { appointment, targetedAppointment } = e.itemData;
             const config = {
                 itemData: e.itemData.appointment,
                 itemElement: e.itemElement
@@ -90,15 +91,13 @@ export class CompactAppointmentsHelper {
             delete createClickEvent.itemData;
             delete createClickEvent.itemIndex;
             delete createClickEvent.itemElement;
-            // onAppointmentClick(createClickEvent);
             const { instance: scheduler } = this;
 
             const action = scheduler._createActionByOption('onAppointmentClick', {
                 afterExecute: e => {
                     const config = e.args[0];
                     config.event.stopPropagation();
-                    // debugger;
-                    scheduler.fire('showEditAppointmentPopup', { data: config.appointmentData });
+                    scheduler.showAppointmentPopup(appointment, false, targetedAppointment);
                 }
             });
             action(createClickEvent);
