@@ -1,5 +1,6 @@
 import fx from '../../animation/fx';
 import positionUtils from '../../animation/position';
+import { getAvailableBoundsContainer } from '../../core/utils/position';
 import { locate, move, resetPosition } from '../../animation/translator';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
@@ -488,6 +489,10 @@ const Overlay = Widget.inherit({
     _normalizePosition: function() {
         const position = this.option('position');
         this._position = typeof position === 'function' ? position() : position;
+        const container = this.option('container');
+        if(container && !isWindow(container)) {
+            this._position.container = getAvailableBoundsContainer(container);
+        }
     },
 
     _getAnimationConfig: function() {
