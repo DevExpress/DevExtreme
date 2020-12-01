@@ -16,12 +16,14 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
         super.show();
     }
 
-    switchToCopyDialog() {
+    switchToCopyDialog(targetItemInfos) {
+        this._targetItemInfos = targetItemInfos;
         this._setTitle(messageLocalization.format('dxFileManager-dialogDirectoryChooserCopyTitle'));
         this._setButtonText(messageLocalization.format('dxFileManager-dialogDirectoryChooserCopyButtonText'));
     }
 
-    switchToMoveDialog() {
+    switchToMoveDialog(targetItemInfos) {
+        this._targetItemInfos = targetItemInfos;
         this._setTitle(messageLocalization.format('dxFileManager-dialogDirectoryChooserMoveTitle'));
         this._setButtonText(messageLocalization.format('dxFileManager-dialogDirectoryChooserMoveButtonText'));
     }
@@ -56,12 +58,58 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     }
 
     _getDialogSelectedDirectory() {
-        return this._selectedDirectoryInfo || this.option('getCurrentDirectory')();
+        return this._selectedDirectoryInfo || this._getCurrentDirectory();
+    }
+
+    _getCurrentDirectory() {
+        return this.option('getCurrentDirectory')();
     }
 
     _onFilesTreeViewDirectoryClick({ itemData }) {
         this._selectedDirectoryInfo = itemData;
         this._filesTreeView.updateCurrentDirectory();
+    }
+
+    _onPopupShown() {
+        this._toggleUnavailableLocationsDisabled(true);
+        super._onPopupShown();
+    }
+
+    _onPopupHidden() {
+        this._toggleUnavailableLocationsDisabled(false);
+        super._onPopupHidden();
+    }
+
+    _toggleUnavailableLocationsDisabled(isDisabled) {
+        /* const unavailableLocationKeys = */this._getUnavailableLocationKeys(isDisabled);
+        // unavailableLocationKeys.forEach(key => this._filesTreeView.toggleNodeDisabledState(key, isDisabled));
+    }
+
+    _getUnavailableLocationKeys(isDisabled) {
+        const result = [];
+        const disableCallback = itemInfo => {
+            this._filesTreeView.toggleNodeDisabledState(itemInfo.getInternalKey(), isDisabled);
+        };
+        this._targetItemInfos.forEach(itemInfo => {
+            if(itemInfo.fileItem.isDirectory) {
+                result.push(itemInfo.getInternalKey());
+            }
+            if(itemInfo.parentDirectory) {
+                result.push(itemInfo.parentDirectory.getInternalKey());
+                // this._filesTreeView.expandDirectoryLineRecursive([itemInfo.parentDirectory, itemInfo])
+                // .then(() => this._filesTreeView.toggleNodeDisabledState(itemInfo.getInternalKey(), isDisabled))
+                // TODO: need to collapse on hide, instead of expand, to return in the initial state
+                this._filesTreeView.expandDirectory(itemInfo.parentDirectory)
+                    .then(() => {
+                        this._filesTreeView.toggleNodeDisabledState(itemInfo.parentDirectory.getInternalKey(), isDisabled);
+                        // debugger;
+                        this._filesTreeView.expandDirectory(itemInfo)
+                            .then(() => disableCallback(itemInfo), () => disableCallback(itemInfo));
+                    });
+            }
+        });
+        // TODO: disable all descending nodes on 'move' // need to collapse selected folders
+        return result;
     }
 
 }

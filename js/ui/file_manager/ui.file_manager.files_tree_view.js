@@ -132,6 +132,15 @@ class FileManagerFilesTreeView extends Widget {
         }
     }
 
+    toggleNodeDisabledState(key, state) {
+        const node = this._getNodeByKey(key);
+        this._filesTreeView._toggleNodeDisabledState(node, state);
+        // console.log(this._getNodeByKey(this._getCurrentDirectory().getInternalKey())?.getDisplayName());
+        // if(node) {
+        //     node.disabled = true;
+        // }
+    }
+
     _updateFocusedElement() {
         const directoryInfo = this._getCurrentDirectory();
         const $element = this._getItemElementByKey(directoryInfo.getInternalKey());
@@ -142,8 +151,13 @@ class FileManagerFilesTreeView extends Widget {
         this._$focusedElement.toggleClass(FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS, true);
     }
 
+    _getNodeByKey(key) {
+        return this._filesTreeView?._dataAdapter.getNodeByKey(key);
+        // return this._filesTreeView._getNode(key);
+    }
+
     _getItemElementByKey(key) {
-        const node = this._filesTreeView && this._filesTreeView._dataAdapter.getNodeByKey(key);
+        const node = this._getNodeByKey(key);
         if(node) {
             const $node = this._filesTreeView._getNodeElement(node);
             if($node) {
@@ -201,7 +215,8 @@ class FileManagerFilesTreeView extends Widget {
         if(!directoryInfo || directoryInfo.items.length === 0) {
             return deferred.reject().promise();
         }
-        const treeViewNode = this._filesTreeView._dataAdapter.getNodeByKey(directoryInfo.getInternalKey());
+        // const treeViewNode = this._filesTreeView._dataAdapter.getNodeByKey(directoryInfo.getInternalKey());
+        const treeViewNode = this._getNodeByKey(directoryInfo.getInternalKey());
         if(!treeViewNode) {
             return deferred.reject().promise();
         }
@@ -209,9 +224,9 @@ class FileManagerFilesTreeView extends Widget {
             return deferred.resolve().promise();
         }
 
-        treeViewNode.expandedDeferred = deferred;
-        this._filesTreeView.expandItem(directoryInfo.getInternalKey());
-        return deferred.promise();
+        // treeViewNode.expandedDeferred = deferred;
+        return this._filesTreeView.expandItem(directoryInfo.getInternalKey());
+        // return deferred.promise();
     }
 
     refresh() {
@@ -227,20 +242,25 @@ class FileManagerFilesTreeView extends Widget {
         this._storeExpandedState && this._updateExpandedStateToCurrentDirectory();
     }
     _updateExpandedStateToCurrentDirectory() {
+        this._updateExpandedStateToDirectory(this._getCurrentDirectory());
+    }
+
+    _updateExpandedStateToDirectory(directoryInfo) {
         const dirLine = [ ];
-        for(let dirInfo = this._getCurrentDirectory(); dirInfo; dirInfo = dirInfo.parentDirectory) {
+        for(let dirInfo = directoryInfo; dirInfo; dirInfo = dirInfo.parentDirectory) {
             dirLine.unshift(dirInfo);
         }
 
-        this.expandDirectoryLineRecursive(dirLine);
+        return this.expandDirectoryLineRecursive(dirLine);
     }
 
     expandDirectoryLineRecursive(dirLine) {
+        const expandCallback = () => this.expandDirectoryLineRecursive(dirLine);
         if(!dirLine.length) {
             return new Deferred().resolve().promise();
         }
         return this.expandDirectory(dirLine.shift())
-            .then(() => this.expandDirectoryLineRecursive(dirLine));
+            .then(expandCallback, expandCallback);
     }
 
 }
