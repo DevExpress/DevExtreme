@@ -184,22 +184,36 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         const $headerRow = super._renderDateHeader();
         if(this._needRenderWeekHeader()) {
             const firstViewDate = new Date(this._firstViewDate);
+            let currentDate = new Date(firstViewDate);
+
             const $cells = [];
-            const colspan = this._getCellCountInDay();
+            const groupCount = this._getGroupCount();
+            const cellCountInDay = this._getCellCountInDay();
+            const colSpan = this.isGroupedByDate()
+                ? cellCountInDay * groupCount
+                : cellCountInDay;
             const cellTemplate = this.option('dateCellTemplate');
 
-            for(let i = 0; i < this._getWeekDuration() * this.option('intervalCount'); i++) {
+            const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+                ? groupCount
+                : 1;
+            const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
+
+            const cellsCount = cellsInGroup * horizontalGroupCount;
+
+            for(let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
                 const $th = $('<th>');
-                const text = this._formatWeekdayAndDay(firstViewDate);
+                const text = this._formatWeekdayAndDay(currentDate);
 
                 if(cellTemplate) {
                     const templateOptions = {
                         model: {
-                            text: text,
-                            date: new Date(firstViewDate)
+                            text,
+                            date: new Date(currentDate),
+                            ...this._getGroupsForDateHeaderTemplate(templateIndex, colSpan),
                         },
                         container: $th,
-                        index: i
+                        index: templateIndex,
                     };
 
                     cellTemplate.render(templateOptions);
@@ -207,10 +221,18 @@ class SchedulerTimeline extends SchedulerWorkSpace {
                     $th.text(text);
                 }
 
-                $th.addClass(HEADER_PANEL_CELL_CLASS).addClass(HEADER_PANEL_WEEK_CELL_CLASS).attr('colSpan', colspan);
+                $th
+                    .addClass(HEADER_PANEL_CELL_CLASS)
+                    .addClass(HEADER_PANEL_WEEK_CELL_CLASS)
+                    .attr('colSpan', colSpan);
+
                 $cells.push($th);
 
-                this._incrementDate(firstViewDate);
+                if((templateIndex % cellsInGroup) === (cellsInGroup - 1)) {
+                    currentDate = new Date(firstViewDate);
+                } else {
+                    this._incrementDate(currentDate);
+                }
             }
 
             const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells);
