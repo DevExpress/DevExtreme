@@ -220,6 +220,7 @@ const calculatePosition = function(what, options) {
     const offset = normalizeOffset(options.offset);
     const collision = normalizeCollision(options.collision);
     const boundary = options.boundary;
+    const container = options.container;
     const boundaryOffset = normalizeOffset(options.boundaryOffset);
 
     const h = {
@@ -281,8 +282,10 @@ const calculatePosition = function(what, options) {
         const win = $(window);
         const windowWidth = win.width();
         const windowHeight = win.height();
-        let left = win.scrollLeft();
-        let top = win.scrollTop();
+        let boundaryLeft = win.scrollLeft();
+        let boundaryTop = win.scrollTop();
+        let containerLeft = win.scrollLeft();
+        let containerTop = win.scrollTop();
         const documentElement = domAdapter.getDocumentElement();
         const hZoomLevel = touch ? documentElement.clientWidth / windowWidth : 1;
         const vZoomLevel = touch ? documentElement.clientHeight / windowHeight : 1;
@@ -293,26 +296,39 @@ const calculatePosition = function(what, options) {
 
         let boundaryWidth = windowWidth;
         let boundaryHeight = windowHeight;
+        let containerWidth = windowWidth;
+        let containerHeight = windowHeight;
 
         if(boundary) {
             const $boundary = $(boundary);
             const boundaryPosition = $boundary.offset();
 
-            left = boundaryPosition.left;
-            top = boundaryPosition.top;
+            boundaryLeft = boundaryPosition.left;
+            boundaryTop = boundaryPosition.top;
 
             boundaryWidth = $boundary.width();
             boundaryHeight = $boundary.height();
         }
 
+        if(container) {
+            const $container = $(container);
+            const containerPosition = $container.offset();
+
+            containerLeft = containerPosition.left;
+            containerTop = containerPosition.top;
+
+            containerWidth = $container.width();
+            containerHeight = $container.height();
+        }
+
         return {
             h: {
-                min: left + h.boundaryOffset,
-                max: left + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset
+                min: Math.max(boundaryLeft + h.boundaryOffset, containerLeft),
+                max: Math.min(boundaryLeft + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset, containerLeft + containerWidth / hZoomLevel - h.mySize)
             },
             v: {
-                min: top + v.boundaryOffset,
-                max: top + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset
+                min: Math.max(boundaryTop + v.boundaryOffset, containerTop),
+                max: Math.min(boundaryTop + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset, containerTop + containerHeight / vZoomLevel - v.mySize)
             }
         };
     })();

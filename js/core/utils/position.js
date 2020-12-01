@@ -1,5 +1,10 @@
 import config from '../config';
+import $ from '../renderer';
+import { each } from '../utils/iterator';
 import { isWindow } from '../utils/type';
+import { getWindow } from '../utils/window';
+
+const window = getWindow();
 
 const getDefaultAlignment = function(isRtlEnabled) {
     const rtlEnabled = isRtlEnabled ?? config().rtlEnabled;
@@ -34,7 +39,29 @@ const getBoundingRect = (element) => {
     return rect;
 };
 
+const getAvailableBoundsContainer = (container) => {
+    const $container = container && $(container);
+    let result = $(window);
+
+    if($container && $container.length && !isWindow($container.get(0))) {
+        const $containerWithParents = [].slice.call($container.parents());
+        $containerWithParents.unshift($container.get(0));
+
+        each($containerWithParents, function(i, parent) {
+            if(parent === $('body').get(0)) {
+                return false;
+            } else if(window.getComputedStyle(parent).overflowY === 'hidden') {
+                result = $(parent);
+                return false;
+            }
+        }.bind(this));
+    }
+
+    return result;
+};
+
 export {
     getBoundingRect,
-    getDefaultAlignment
+    getDefaultAlignment,
+    getAvailableBoundsContainer
 };
