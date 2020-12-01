@@ -1353,7 +1353,7 @@ class Scheduler extends Widget {
         this._filteredItems = this._filterAppointments();
 
         workspace.preRenderAppointments({
-            allDayExpanded: workspace.option('allDayExpanded', this._isAllDayExpanded(this._filteredItems)),
+            allDayExpanded: this._isAllDayExpanded(this._filteredItems),
             appointments: this._filteredItems
         });
 
