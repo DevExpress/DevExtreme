@@ -130,7 +130,8 @@ class ContextMenu extends MenuBase {
             onLeftFirstItem: null,
             onLeftLastItem: null,
             onCloseRootSubmenu: null,
-            onExpandLastSubmenu: null
+            onExpandLastSubmenu: null,
+            needClearFocusOnVerticalLoopBack: false
         });
     }
 
@@ -224,7 +225,9 @@ class ContextMenu extends MenuBase {
 
                 if($oldTarget.is($items.first())) {
                     this._actions.onLeftFirstItem($oldTarget);
-                    $newTarget = undefined;
+                    if(this.option('needClearFocusOnVerticalLoopBack') === true) {
+                        $newTarget = undefined;
+                    }
                 }
                 break;
             case FOCUS_DOWN:
@@ -232,7 +235,9 @@ class ContextMenu extends MenuBase {
 
                 if($oldTarget.is($items.last())) {
                     this._actions.onLeftLastItem($oldTarget);
-                    $newTarget = undefined;
+                    if(this.option('needClearFocusOnVerticalLoopBack') === true) {
+                        $newTarget = undefined;
+                    }
                 }
                 break;
             case FOCUS_RIGHT:
