@@ -465,8 +465,8 @@ const subscribes = {
         return obj;
     },
 
-    renderAppointments: function() {
-        this._renderAppointments();
+    processAppointments: function() {
+        this._processAppointments();
     },
 
     prerenderFilter: function() {
@@ -587,21 +587,8 @@ const subscribes = {
         return result;
     },
 
-    getAgendaRows: function(options) {
-        const renderingStrategy = this._layoutManager.getRenderingStrategyInstance();
-        const calculateRows = renderingStrategy.calculateRows.bind(renderingStrategy);
-        const d = new Deferred();
-
-        function rowsCalculated(appointments) {
-            const result = calculateRows(appointments, options.agendaDuration, options.currentDate);
-            this._dataSourceLoadedCallback.remove(rowsCalculated);
-
-            d.resolve(result);
-        }
-
-        this._dataSourceLoadedCallback.add(rowsCalculated);
-
-        return d.promise();
+    getLayoutManager: function() {
+        return this._layoutManager;
     },
 
     getAgendaVerticalStepHeight: function() {

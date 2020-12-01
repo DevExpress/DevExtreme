@@ -1199,6 +1199,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._shader = new VerticalShader(this);
     }
 
+    onDataSourceChanged() {
+    }
+
+    preRenderAppointments(options) {
+        this.option('allDayExpanded', options.allDayExpanded);
+    }
+
     isGroupedAllDayPanel() {
         return this._isShowAllDayPanel() && this._isVerticalGroupedWorkSpace();
     }

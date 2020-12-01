@@ -28,10 +28,19 @@ QUnit.module('Agenda', {
 
             this.$element = $('#scheduler-agenda')
                 .dxSchedulerAgenda($.extend(options, {
+                    onContentReady: e => {
+                        e.component.onDataSourceChanged(rows);
+                    },
                     observer: {
                         fire: $.proxy(function(functionName, args) {
-                            if(functionName === 'getAgendaRows') {
-                                return $.Deferred().resolve(rows).promise();
+                            if(functionName === 'getLayoutManager') {
+                                return {
+                                    getRenderingStrategyInstance: () => {
+                                        return {
+                                            calculateRows: () => rows
+                                        };
+                                    }
+                                };
                             }
                             if(functionName === 'createReducedResourcesTree') {
                                 return new ResourceManager().createResourcesTree(options.groups);
