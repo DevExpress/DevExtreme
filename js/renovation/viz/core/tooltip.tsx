@@ -2,6 +2,9 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState,
 } from 'devextreme-generator/component_declaration/common';
 
+import { PathSvgElement } from './renderers/svg_path';
+import { TextSvgElement } from './renderers/svg_text';
+
 import { Size } from './common/types.d';
 
 import {
@@ -23,7 +26,7 @@ export const viewFunction = ({
   const angle = getCloudAngle(fullSize, correctedCoordinates);
   return (
     <g pointerEvents="none">
-      <path
+      <PathSvgElement
         d={getCloudPoints(fullSize, correctedCoordinates, angle,
           { cornerRadius, arrowWidth }, true)}
         fill={color}
@@ -32,9 +35,7 @@ export const viewFunction = ({
         transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
       />
       <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
-        <text>
-          {text}
-        </text>
+        <TextSvgElement text={text} />
       </g>
     </g>
   );

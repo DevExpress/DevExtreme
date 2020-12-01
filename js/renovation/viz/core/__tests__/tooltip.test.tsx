@@ -61,7 +61,7 @@ describe('Render', () => {
     } as Partial<Tooltip>;
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
 
-    expect(tooltip.find('path').props()).toMatchObject({
+    expect(tooltip.find('PathSvgElement').props()).toMatchObject({
       d: 'test_cloud_points',
       strokeWidth: 3,
       stroke: 'test_color1',
@@ -97,8 +97,8 @@ describe('Render', () => {
     } as Partial<Tooltip>;
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
 
-    expect(tooltip.find('text').props()).toMatchObject({
-      children: 'Tooltip test text',
+    expect(tooltip.find('TextSvgElement').props()).toMatchObject({
+      text: 'Tooltip test text',
     });
   });
 });
