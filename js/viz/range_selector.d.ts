@@ -825,6 +825,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     };
     /**
      * @docid
+     * @type object
      * @prevFileNamespace DevExpress.viz
      * @hidden
      */
