@@ -31,6 +31,54 @@ describe('PathSvgElement', () => {
     });
   });
 
+  describe('Behavior', () => {
+    describe('effectUpdateShape', () => {
+      const rectProps = {
+        height: 50,
+        width: 100,
+        stroke: 'red',
+        strokeWidth: 4,
+      };
+
+      it('dashStyle=dash', () => {
+        const rect = new PathSvgElement({
+          ...rectProps,
+          dashStyle: 'dash',
+        });
+        rect.pathRef = { setAttribute: jest.fn() } as any;
+        rect.effectUpdateShape();
+        expect(rect.pathRef.setAttribute).toHaveBeenCalledTimes(1);
+        expect(rect.pathRef.setAttribute).toHaveBeenCalledWith('stroke-dasharray', '16,12');
+      });
+
+      it('dashStyle=longdash dot', () => {
+        const rect = new PathSvgElement({
+          ...rectProps,
+          dashStyle: 'longdash dot',
+        });
+        rect.pathRef = { setAttribute: jest.fn() } as any;
+        rect.effectUpdateShape();
+        expect(rect.pathRef.setAttribute).toHaveBeenCalledTimes(1);
+        expect(rect.pathRef.setAttribute).toHaveBeenCalledWith('stroke-dasharray', '32,12,4,12');
+      });
+
+      it('transformation', () => {
+        const rect = new PathSvgElement({
+          ...rectProps,
+          rotate: 25,
+          translateX: 15,
+          translateY: -25,
+          scaleX: 1.1,
+          scaleY: 0.8,
+        });
+        rect.pathRef = { setAttribute: jest.fn() } as any;
+        rect.effectUpdateShape();
+        expect(rect.pathRef.setAttribute).toHaveBeenCalledTimes(1);
+        expect(rect.pathRef.setAttribute).toHaveBeenCalledWith('transform', 'translate(15,-25) rotate(25,0,0) scale(1.1,0.8)');
+      });
+    });
+  });
+
   describe('Logic', () => {
     describe('d', () => {
       const pathPoints: Point[] = [

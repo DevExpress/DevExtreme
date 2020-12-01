@@ -23,7 +23,7 @@ describe('SvgPattern', () => {
         width: 8,
         height: 8,
       });
-      expect(pattern.find(RectSvgElement).at(0).props()).toEqual({
+      expect(pattern.find(RectSvgElement).at(0).props()).toMatchObject({
         x: 0,
         y: 0,
         width: 8,
@@ -31,7 +31,7 @@ describe('SvgPattern', () => {
         fill: '#ffaa66',
         opacity: 0.5,
       });
-      expect(pattern.find(PathSvgElement).at(0).props()).toEqual({
+      expect(pattern.find(PathSvgElement).at(0).props()).toMatchObject({
         type: 'line',
         d: 'Somepath 1 2 3 4',
         strokeWidth: 2,
@@ -56,7 +56,7 @@ describe('SvgPattern', () => {
         width: 8,
         height: 8,
       });
-      expect(pattern.find(RectSvgElement).at(0).props()).toEqual({
+      expect(pattern.find(RectSvgElement).at(0).props()).toMatchObject({
         x: 0,
         y: 0,
         width: 8,
@@ -64,7 +64,7 @@ describe('SvgPattern', () => {
         fill: '#ffaa66',
       });
       expect(pattern.find(RectSvgElement).at(0).props().opacity).toBe(undefined);
-      expect(pattern.find(PathSvgElement).at(0).props()).toEqual({
+      expect(pattern.find(PathSvgElement).at(0).props()).toMatchObject({
         type: 'line',
         d: 'Somepath 1 2 3 4',
         strokeWidth: 1,

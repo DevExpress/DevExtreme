@@ -371,8 +371,11 @@ describe('TextSvgElement', () => {
 
       it('rtl is on', () => {
         const text0 = new TextSvgElement({ align: 'center' });
-        const text1 = new TextSvgElement({ align: 'left', rtl: true });
-        const text2 = new TextSvgElement({ align: 'right', rtl: true });
+        text0.config = { rtlEnabled: true };
+        const text1 = new TextSvgElement({ align: 'left' });
+        text1.config = { rtlEnabled: true };
+        const text2 = new TextSvgElement({ align: 'right' });
+        text2.config = { rtlEnabled: true };
 
         expect(text0.textAnchor).toBe('middle');
         expect(text1.textAnchor).toBe('end');
@@ -394,7 +397,7 @@ describe('TextSvgElement', () => {
       it('Simple text with stroke', () => {
         const text = new TextSvgElement({ text: 'Text with stroke', stroke: '#cccccc', strokeWidth: 1 });
         expect(text.textItems).toHaveLength(1);
-        expect(text.textItems[0]).toStrictEqual({
+        expect(text.textItems?.[0]).toStrictEqual({
           value: 'Text with stroke',
           height: 0,
         });
@@ -404,12 +407,12 @@ describe('TextSvgElement', () => {
         const text = new TextSvgElement({ text: 'Multi\nline\ntext' });
 
         expect(text.textItems).toHaveLength(3);
-        expect(text.textItems[0]).toStrictEqual({
+        expect(text.textItems?.[0]).toStrictEqual({
           value: 'Multi',
           line: 0,
           height: 0,
         });
-        expect(text.textItems[2]).toStrictEqual({
+        expect(text.textItems?.[2]).toStrictEqual({
           value: 'text',
           line: 2,
           height: 0,
@@ -420,14 +423,14 @@ describe('TextSvgElement', () => {
         const text = new TextSvgElement({ text: '<div style="font-size: 20px"><p style="font-size: 16px"><b>Text1</b></p><br /><p class="second-line"><i>TextText2</i></p></div>' });
 
         expect(text.textItems).toHaveLength(2);
-        expect(text.textItems[0]).toStrictEqual({
+        expect(text.textItems?.[0]).toStrictEqual({
           value: 'Text1',
           style: { fontSize: '16px', fontWeight: 'bold' },
           className: '',
           line: 0,
           height: 16,
         });
-        expect(text.textItems[1]).toStrictEqual({
+        expect(text.textItems?.[1]).toStrictEqual({
           value: 'TextText2',
           style: { fontSize: '20px', fontStyle: 'italic' },
           className: 'second-line',

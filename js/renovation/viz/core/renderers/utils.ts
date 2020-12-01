@@ -38,7 +38,7 @@ export const getNextDefsSvgId = ((): (() => string) => {
   return value && (typeof value !== 'string');
 } */
 
-export const getFuncIri = (id: string, pathModified: boolean): string => (
+export const getFuncIri = (id: string, pathModified?: boolean): string => (
   id !== null ? `url(${pathModified ? window.location.href.split('#')[0] : ''}#${id})` : id
 );
 
