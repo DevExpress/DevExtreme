@@ -347,11 +347,18 @@ const DateBox = DropDownEditor.inherit({
 
     _renderPopup: function() {
         this.callBase();
-        this._popup.on('shown', () => {
-            this._strategy.renderOpenedState();
-        });
+        this._renderVisibilityChangeEvent();
         this._popup._wrapper().addClass(DATEBOX_WRAPPER_CLASS);
         this._renderPopupWrapper();
+    },
+
+    _renderVisibilityChangeEvent: function() {
+        const renderOpenedStateHandler = () => {
+            this._strategy.renderOpenedState();
+        };
+
+        this._popup.on('shown', renderOpenedStateHandler);
+        this._popup.on('hidden', renderOpenedStateHandler);
     },
 
     _popupConfig: function() {
@@ -622,8 +629,8 @@ const DateBox = DropDownEditor.inherit({
     },
 
     _dispose: function() {
-        this._strategy && this._strategy.dispose();
         this.callBase();
+        this._strategy?.dispose();
     },
 
     _isNativeType: function() {
