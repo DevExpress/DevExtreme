@@ -143,8 +143,12 @@ export class TooltipStrategyBase {
 
     _onListItemClick(e) {
         this.hide();
-        this._extraOptions.clickEvent && this._extraOptions.clickEvent(e);
-        this._options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
+        const isClickEventDefined = !!this._extraOptions.clickEvent;
+
+        isClickEventDefined && this._extraOptions.clickEvent(e);
+        !isClickEventDefined && this._options.showAppointmentPopup(
+            e.itemData.appointment, false, e.itemData.targetedAppointment,
+        );
     }
 
     _createItemListContent(appointment, targetedAppointment, color) {

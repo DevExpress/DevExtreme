@@ -90,7 +90,18 @@ export class CompactAppointmentsHelper {
             delete createClickEvent.itemData;
             delete createClickEvent.itemIndex;
             delete createClickEvent.itemElement;
-            onAppointmentClick(createClickEvent);
+            // onAppointmentClick(createClickEvent);
+            const { instance: scheduler } = this;
+
+            const action = scheduler._createActionByOption('onAppointmentClick', {
+                afterExecute: e => {
+                    const config = e.args[0];
+                    config.event.stopPropagation();
+                    // debugger;
+                    scheduler.fire('showEditAppointmentPopup', { data: config.appointmentData });
+                }
+            });
+            action(createClickEvent);
         };
     }
 
