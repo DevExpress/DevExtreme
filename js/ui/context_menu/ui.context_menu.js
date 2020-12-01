@@ -806,6 +806,7 @@ class ContextMenu extends MenuBase {
                 this._invalidate();
                 break;
             case 'closeOnOutsideClick':
+            case 'needClearFocusOnVerticalLoopBack':
                 break;
             default:
                 super._optionChanged(args);
