@@ -1809,6 +1809,16 @@ QUnit.module('keyboard navigation', {
     });
 
     [false, true].forEach(rtlEnabled => {
+        QUnit.test(`rtlEnabled: ${rtlEnabled}, orientation: horizontal. focusedElement is null after closing submenu (T952882)`, function(assert) {
+            this.instance.option({ rtlEnabled, orientation: 'horizontal', items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }, { text: 'Item 2' }] });
+            this.instance._moveFocus('down');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+
+            this.instance._visibleSubmenu._moveFocus('down');
+            this.instance._visibleSubmenu._hideAllShownSubmenus();
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+        });
+
         QUnit.test(`rtlEnabled: ${rtlEnabled}, orientation: horizontal. focusedElement is null after expanding and closing submenu with 1 nesting level (T952882)`, function(assert) {
             this.instance.option({ rtlEnabled, orientation: 'horizontal', items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }, { text: 'Item 2' }] });
             this.instance._moveFocus('down');
@@ -1835,6 +1845,16 @@ QUnit.module('keyboard navigation', {
 
             this.instance._moveFocus(rtlEnabled ? 'right' : 'left');
             this.instance._moveFocus('down');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+        });
+
+        QUnit.test(`rtlEnabled: ${rtlEnabled}, orientation: vertical. focusedElement is null after closing submenu (T952882)`, function(assert) {
+            this.instance.option({ rtlEnabled, orientation: 'vertical', items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }, { text: 'Item 2' }] });
+            this.instance._moveFocus(rtlEnabled ? 'left' : 'right');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+
+            this.instance._moveFocus(rtlEnabled ? 'left' : 'right');
+            this.instance._visibleSubmenu._hideAllShownSubmenus();
             assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
         });
 
