@@ -1607,4 +1607,244 @@ module('Integration: Agenda', {
             assert.equal(itemPosition[0].groupIndex, 0, 'Item groupIndex is correct');
         });
     });
+
+    module('Rows calculation', function() {
+        test('Agenda row count calculation', function(assert) {
+            const data = [
+                { startDate: new Date(2016, 1, 2), endDate: new Date(2016, 1, 2, 0, 30) },
+                { startDate: new Date(2016, 1, 20), endDate: new Date(2016, 1, 20, 0, 30) },
+                { startDate: new Date(2016, 1, 18), endDate: new Date(2016, 1, 18, 0, 30) },
+                { startDate: new Date(2016, 1, 18), endDate: new Date(2016, 1, 18, 0, 30) },
+                { startDate: new Date(2016, 1, 22), endDate: new Date(2016, 1, 22, 0, 30) },
+                { startDate: new Date(2016, 2, 2), endDate: new Date(2016, 2, 22, 0, 30) },
+
+                { startDate: new Date(2016, 0, 30), endDate: new Date(2016, 1, 1, 5, 30) },
+
+                { startDate: new Date(2016, 2, 23), endDate: new Date(2016, 2, 24, 5, 30) }
+            ];
+
+            this.createInstance({
+                views: [{
+                    type: 'agenda',
+                    agendaDuration: 65,
+                    currentDate: new Date(2016, 1, 1)
+                }],
+                currentView: 'agenda',
+                dataSource: []
+            });
+
+            const instance = this.instance;
+            const expectedRows = [0, 1, 17, 19, 21, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52];
+            const agendaWorkspace = instance.getWorkSpace();
+
+            // act
+            instance.option('dataSource', data);
+
+            const calculatedRows = agendaWorkspace._rows[0];
+            assert.equal(calculatedRows.length, 65, 'Rows are OK');
+
+            $.each(calculatedRows, function(index, item) {
+                if($.inArray(index, expectedRows) > -1) {
+                    if(index === 17) {
+                        assert.equal(item, 2, 'Row is OK');
+                    } else {
+                        assert.equal(item, 1, 'Row is OK');
+                    }
+                } else {
+                    assert.equal(item, 0, 'Row is OK');
+                }
+            });
+        });
+
+        test('Agenda row count calculation with recurrence appointments', function(assert) {
+            this.createInstance({
+                views: [{
+                    type: 'agenda',
+                    agendaDuration: 5,
+                    currentDate: new Date(2016, 1, 1)
+                }],
+                currentView: 'agenda'
+            });
+
+            const instance = this.instance;
+            const endViewDateStub = sinon.stub(instance, 'getEndViewDate').returns(new Date(2016, 1, 5, 23, 59));
+            const startViewDateStub = sinon.stub(instance, 'getStartViewDate').returns(new Date(2016, 1, 1));
+            const data = [
+                { startDate: new Date(2016, 1, 2), endDate: new Date(2016, 1, 2, 0, 30) },
+                { startDate: new Date(2016, 1, 3), endDate: new Date(2016, 1, 3, 0, 30), recurrenceRule: 'FREQ=DAILY' },
+                { startDate: new Date(2016, 0, 31), endDate: new Date(2016, 0, 31, 0, 30), recurrenceRule: 'FREQ=DAILY' }
+            ];
+
+            const agendaWorkspace = instance.getWorkSpace();
+
+            try {
+                // act
+                instance.option('dataSource', data);
+
+                const calculatedRows = agendaWorkspace._rows;
+                assert.deepEqual(calculatedRows, [[1, 2, 2, 2, 2]], 'Rows are OK');
+            } finally {
+                endViewDateStub.restore();
+                startViewDateStub.restore();
+            }
+        });
+
+        test('Agenda row count calculation with wrong endDate appointments', function(assert) {
+
+            this.createInstance({
+                views: [{
+                    type: 'agenda',
+                    agendaDuration: 5,
+                    currentDate: new Date(2016, 1, 1)
+                }],
+                currentView: 'agenda'
+            });
+
+            const data = [
+                { startDate: new Date(2016, 1, 2), endDate: new Date(2016, 1, 2, 0, 30) },
+                { startDate: new Date(2016, 1, 3, 3, 30), endDate: new Date(2016, 1, 3) },
+                { startDate: new Date(2016, 1, 4), endDate: new Date(2016, 1, 4, 0, 30) }
+            ];
+
+            const instance = this.instance;
+            const endViewDateStub = sinon.stub(instance, 'getEndViewDate').returns(new Date(2016, 1, 5, 23, 59));
+            const startViewDateStub = sinon.stub(instance, 'getStartViewDate').returns(new Date(2016, 1, 1));
+            const agendaWorkspace = instance.getWorkSpace();
+
+            try {
+                // act
+                instance.option('dataSource', data);
+
+                const calculatedRows = agendaWorkspace._rows;
+                assert.deepEqual(calculatedRows, [[0, 1, 1, 1, 0]], 'Rows are OK');
+            } finally {
+                endViewDateStub.restore();
+                startViewDateStub.restore();
+            }
+        });
+
+        test('Agenda row count calculation with long appointments', function(assert) {
+            this.createInstance({
+                views: [{
+                    type: 'agenda',
+                    agendaDuration: 5,
+                    currentDate: new Date(2016, 1, 1)
+                }],
+                currentView: 'agenda'
+            });
+
+            const data = [
+                { startDate: new Date(2016, 1, 1, 1), endDate: new Date(2016, 1, 4, 10, 30) }
+            ];
+
+            const instance = this.instance;
+            const endViewDateStub = sinon.stub(instance, 'getEndViewDate').returns(new Date(2016, 1, 5, 23, 59));
+            const startViewDateStub = sinon.stub(instance, 'getStartViewDate').returns(new Date(2016, 1, 1));
+            const agendaWorkspace = instance.getWorkSpace();
+
+            try {
+                // act
+                instance.option('dataSource', data);
+
+                const calculatedRows = agendaWorkspace._rows;
+                assert.deepEqual(calculatedRows, [[1, 1, 1, 1, 0]], 'Rows are OK');
+            } finally {
+                endViewDateStub.restore();
+                startViewDateStub.restore();
+            }
+        });
+
+        test('Agenda row count calculation with long recurrence appointments', function(assert) {
+            this.createInstance({
+                startDateExpr: 'Start',
+                endDateExpr: 'End',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                views: [{
+                    type: 'agenda',
+                    agendaDuration: 7,
+                    currentDate: new Date(2016, 1, 24)
+                }],
+                currentView: 'agenda'
+            });
+
+            const data = [
+                {
+                    Start: new Date(2016, 1, 22, 1).toString(),
+                    End: new Date(2016, 1, 23, 1, 30).toString(),
+                    RecurrenceRule: 'FREQ=DAILY;INTERVAL=3'
+                }
+            ];
+
+            const instance = this.instance;
+            const endViewDateStub = sinon.stub(instance, 'getEndViewDate').returns(new Date(2016, 2, 1, 23, 59));
+            const startViewDateStub = sinon.stub(instance, 'getStartViewDate').returns(new Date(2016, 1, 24));
+            const agendaWorkspace = instance.getWorkSpace();
+
+            try {
+                // act
+                instance.option('dataSource', data);
+
+                const calculatedRows = agendaWorkspace._rows;
+                assert.deepEqual(calculatedRows, [[0, 1, 1, 0, 1, 1, 0]], 'Rows are OK');
+            } finally {
+                endViewDateStub.restore();
+                startViewDateStub.restore();
+            }
+        });
+
+        test('Agenda row count calculation with groups', function(assert) {
+            this.createInstance({
+                groups: ['ownerId'],
+                resources: [{
+                    field: 'ownerId',
+                    dataSource: [
+                        { id: 1 },
+                        { id: 2 },
+                        { id: 3 }
+                    ],
+                    allowMultiple: true
+                }],
+                views: [{
+                    type: 'agenda',
+                    agendaDuration: 7,
+                    currentDate: new Date(2016, 1, 1)
+                }],
+                currentView: 'agenda'
+            });
+            const instance = this.instance;
+
+            const data = [
+                { startDate: new Date(2016, 1, 2), endDate: new Date(2016, 1, 2, 1), ownerId: 1 },
+                { startDate: new Date(2016, 1, 3), endDate: new Date(2016, 1, 3, 1), ownerId: 2 },
+                { startDate: new Date(2016, 1, 3), endDate: new Date(2016, 1, 3, 1), ownerId: 1 },
+                { startDate: new Date(2016, 1, 3, 2), endDate: new Date(2016, 1, 3, 3), ownerId: 1 },
+                { startDate: new Date(2016, 1, 5), endDate: new Date(2016, 1, 5, 1), ownerId: [1, 2] },
+                { startDate: new Date(2016, 1, 4), endDate: new Date(2016, 1, 4, 1), ownerId: 2 }
+            ];
+
+            const agendaWorkspace = instance.getWorkSpace();
+
+            // act
+            instance.option('dataSource', data);
+
+            const calculatedRows = agendaWorkspace._rows;
+            assert.equal(calculatedRows.length, 3, 'Rows are OK');
+            assert.deepEqual(calculatedRows[0], [0, 1, 2, 0, 1, 0, 0], 'Row is OK');
+            assert.deepEqual(calculatedRows[1], [0, 0, 1, 1, 1, 0, 0], 'Row is OK');
+            assert.strictEqual(calculatedRows[2].length, 0, 'Row is OK');
+        });
+
+        test('Agenda should work when current view is changed', function(assert) {
+            this.createInstance({
+                views: ['agenda', 'week'],
+                currentView: 'week',
+                currentDate: new Date(2016, 2, 1),
+                dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
+            });
+
+            this.instance.option('currentView', 'agenda');
+
+            assert.ok(true, 'Agenda works');
+        });
+    });
 });
