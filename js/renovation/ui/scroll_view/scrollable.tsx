@@ -21,6 +21,7 @@ const DIRECTION_HORIZONTAL = 'horizontal';
 const DIRECTION_BOTH = 'both';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
+const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 
 const getCssClasses = (model: ScrollablePropsType): string => {
   const { direction, showScrollbar, useNative } = model;
@@ -30,7 +31,9 @@ const getCssClasses = (model: ScrollablePropsType): string => {
     // 'dx-scrollable-renovated': true,
     [`dx-scrollable-${direction}`]: true,
     [`dx-scrollable-${useNative ? 'native' : 'simulated'}`]: true,
+    // in Native strategy we use non string value - !showScrollbar
     [SCROLLABLE_SCROLLBARS_HIDDEN]: !showScrollbar,
+    [SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE]: showScrollbar === 'always',
     [`${model.classes}`]: !!model.classes,
   };
 
@@ -69,9 +72,10 @@ export const getRelativeLocation = (element: HTMLElement): ScrollableLocation =>
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
-    cssClasses, contentRef, containerRef, isVerticalDirection, isHorizontalDirection,
+    cssClasses, contentRef, containerRef, isVerticalDirection,
+    isHorizontalDirection, onVisibilityChange, scrollableRef,
     props: {
-      disabled, height, width, rtlEnabled, children,
+      disabled, height, width, rtlEnabled, children, showScrollbar, scrollByThumb,
     },
     restAttributes,
   } = viewModel;
@@ -83,11 +87,12 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       rtlEnabled={rtlEnabled}
       height={height}
       width={width}
-      // useNative={useNative}
+     // visible={visible}
+      onVisibilityChange={onVisibilityChange}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
-      <ScrollableSimulated>
+      <ScrollableSimulated ref={scrollableRef as any}>
         <div className="dx-scrollable-container" ref={containerRef as any}>
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef as any}>
             {children}
@@ -96,6 +101,9 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
           && (
           <ScrollBar
             direction="horizontal"
+            hoverStateEnabled
+            showScrollbar={showScrollbar}
+            scrollByThumb={scrollByThumb}
             // eslint-disable-next-line react/jsx-props-no-spreading
           />
           )}
@@ -103,6 +111,9 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
           && (
           <ScrollBar
             direction="vertical"
+            hoverStateEnabled
+            showScrollbar={showScrollbar}
+            scrollByThumb={scrollByThumb}
             // eslint-disable-next-line react/jsx-props-no-spreading
           />
           )}
@@ -118,6 +129,8 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   view: viewFunction,
 })
 export class Scrollable extends JSXComponent<ScrollablePropsType>() {
+  @Ref() scrollableRef!: HTMLDivElement;
+
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() containerRef!: HTMLDivElement;
@@ -216,6 +229,12 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
         scrollOffset: this.scrollOffset(),
         ...this.getBoundaryProps(),
       }));
+  }
+
+  onVisibilityChange(args: boolean): void {
+    // TODO: implement logic
+
+    console.log('onVisibilityChange', args, this);
   }
 
   private getBoundaryProps(): Partial<ScrollableBoundaryProps> {

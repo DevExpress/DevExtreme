@@ -164,6 +164,33 @@ export const dxPointerDown = {
     }
 };
 
+export const dxPointerUp = {
+    on: ($el, onPointerUp, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace(pointerEvents.up, namespace), onPointerUp);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace(pointerEvents.up, namespace));
+    }
+};
+
+export const mouseEnter = {
+    on: ($el, onMouseEnter, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('mouseenter', namespace), onMouseEnter);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('mouseenter', namespace));
+    }
+};
+
+export const mouseLeave = {
+    on: ($el, onMouseLeave, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('mouseleave', namespace), onMouseLeave);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('mouseleave', namespace));
+    }
+};
+
 let index = 0;
 const keyboardProcessors = {};
 const generateListenerId = () => `keyboardProcessorId${index++}`;

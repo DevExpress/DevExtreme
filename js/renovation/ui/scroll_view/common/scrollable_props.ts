@@ -5,6 +5,7 @@ import { EventCallback } from '../../common/event_callback.d';
 import BaseWidgetProps from '../../../utils/base_props';
 
 export type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
+export type ScrollableShowScrollbar = 'onScroll' | 'onHover' | 'always' | 'never';
 
 export interface ScrollOffset {
   top: number;
@@ -35,9 +36,11 @@ export class ScrollableProps {
 
   @OneWay() direction?: ScrollableDirection = 'vertical';
 
-  @OneWay() showScrollbar?: boolean = true;
+  @OneWay() showScrollbar: ScrollableShowScrollbar = 'onHover';
 
-  @OneWay() useNative?: boolean = false;
+  @OneWay() useNative = false;
+
+  @OneWay() scrollByThumb = true;
 
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
 

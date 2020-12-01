@@ -11,6 +11,8 @@ export class ScrollbarProps {
 
   @OneWay() direction?: ScrollbarDirection;
 
+  @OneWay() showScrollbar?: ScrollbarVisibilityMode;
+
   @OneWay() visible = false;
 
   @OneWay() activeStateEnabled = false;
@@ -31,7 +33,7 @@ export class ScrollbarProps {
 
   @OneWay() thumbRatio?: number;
 
-  @OneWay() expandable = false;
+  @OneWay() scrollByThumb = true;
 
   @OneWay() scaleRatio = 1;
 }

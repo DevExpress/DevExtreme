@@ -13,6 +13,8 @@ import {
   dxScrollEnd,
   dxScrollStop,
   dxScrollCancel,
+  mouseEnter,
+  mouseLeave,
 } from '../../../events/short';
 
 export const viewFunction = ({
@@ -91,6 +93,38 @@ export class ScrollableSimulated extends JSXComponent<ScrollablePropsType>() {
       }, { namespace });
 
     return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  mouseEnterEffect(): EffectReturn {
+    const namespace = 'dxSimulatedScrollableCursor';
+
+    mouseEnter.on(this.wrapperRef,
+      (e: Event) => {
+        this.handleMouseEnter(e);
+      }, { namespace });
+
+    return (): void => mouseEnter.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  mouseLeaveEffect(): EffectReturn {
+    const namespace = 'dxSimulatedScrollableCursor';
+
+    mouseLeave.on(this.wrapperRef,
+      (e: Event) => {
+        this.handleMouseLeave(e);
+      }, { namespace });
+
+    return (): void => mouseLeave.off(this.wrapperRef, { namespace });
+  }
+
+  private handleMouseEnter(e: Event): void {
+    console.log('handleMouseEnter', e, this);
+  }
+
+  private handleMouseLeave(e: Event): void {
+    console.log('handleMouseLeave', e, this);
   }
 
   private handleStart(e: Event): void { // param - e: Event
