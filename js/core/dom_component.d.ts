@@ -15,21 +15,21 @@ import { FunctionTemplate } from './templates/function_template';
 
 export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
     /**
-     * @docid DOMComponentOptions.bindingOptions
+     * @docid
      * @default {}
      * @prevFileNamespace DevExpress.integration
      * @public
      */
     bindingOptions?: any;
     /**
-     * @docid DOMComponentOptions.elementAttr
+     * @docid
      * @default {}
      * @prevFileNamespace DevExpress.core
      * @public
      */
     elementAttr?: any;
     /**
-     * @docid DOMComponentOptions.height
+     * @docid
      * @default undefined
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.core
@@ -37,7 +37,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid DOMComponentOptions.onDisposing
+     * @docid
      * @action
      * @extends Action
      * @prevFileNamespace DevExpress.core
@@ -45,7 +45,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      */
     onDisposing?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
-     * @docid DOMComponentOptions.onOptionChanged
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 name:string
      * @type_function_param1_field5 fullName:string
@@ -57,14 +57,14 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      */
     onOptionChanged?: ((e: { component?: T, element?: dxElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
     /**
-     * @docid DOMComponentOptions.rtlEnabled
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.core
      * @public
      */
     rtlEnabled?: boolean;
     /**
-     * @docid DOMComponentOptions.width
+     * @docid
      * @default undefined
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.core
@@ -73,7 +73,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
     width?: number | string | (() => number | string);
 }
 /**
- * @docid DOMComponent
+ * @docid
  * @section uiWidgets
  * @inherits Component
  * @namespace DevExpress
@@ -85,7 +85,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
 export default class DOMComponent extends Component {
     constructor(element: Element | JQuery, options?: DOMComponentOptions);
     /**
-     * @docid DOMComponent.defaultOptions
+     * @docid
      * @static
      * @section uiWidgets
      * @publicName defaultOptions(rule)
@@ -97,14 +97,14 @@ export default class DOMComponent extends Component {
      */
     static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
     /**
-     * @docid DOMComponent.dispose
+     * @docid
      * @publicName dispose()
      * @prevFileNamespace DevExpress.core
      * @public
      */
     dispose(): void;
     /**
-     * @docid DOMComponent.element
+     * @docid
      * @publicName element()
      * @return dxElement
      * @prevFileNamespace DevExpress.core
@@ -112,7 +112,7 @@ export default class DOMComponent extends Component {
      */
     element(): dxElement;
     /**
-     * @docid DOMComponent.getInstance
+     * @docid
      * @static
      * @section uiWidgets
      * @publicName getInstance(element)

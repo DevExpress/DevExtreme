@@ -9,42 +9,42 @@ import CollectionWidget, {
 
 export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**
-     * @docid dxTabsOptions.dataSource
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxTabsItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxTabsOptions.focusStateEnabled
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxTabsOptions.hoverStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxTabsOptions.items
+     * @docid
      * @fires dxTabsOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxTabsItem | any>;
     /**
-     * @docid dxTabsOptions.repaintChangesOnly
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid dxTabsOptions.scrollByContent
+     * @docid
      * @default true
      * @default false [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -52,20 +52,20 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
      */
     scrollByContent?: boolean;
     /**
-     * @docid dxTabsOptions.scrollingEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollingEnabled?: boolean;
     /**
-     * @docid dxTabsOptions.selectedItems
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<string | number | any>;
     /**
-     * @docid dxTabsOptions.selectionMode
+     * @docid
      * @type Enums.NavSelectionMode
      * @default 'single'
      * @prevFileNamespace DevExpress.ui
@@ -73,7 +73,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
      */
     selectionMode?: 'multiple' | 'single';
     /**
-     * @docid dxTabsOptions.showNavButtons
+     * @docid
      * @default true
      * @default false [for](mobile_devices)
      * @prevFileNamespace DevExpress.ui
@@ -82,7 +82,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     showNavButtons?: boolean;
 }
 /**
- * @docid dxTabs
+ * @docid
  * @inherits CollectionWidget
  * @module ui/tabs
  * @export default
@@ -94,15 +94,20 @@ export default class dxTabs extends CollectionWidget {
     constructor(element: JQuery, options?: dxTabsOptions)
 }
 
+/**
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxTabsItem extends CollectionWidgetItem {
     /**
-     * @docid dxTabsItem.badge
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     badge?: string;
     /**
-     * @docid dxTabsItem.icon
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */

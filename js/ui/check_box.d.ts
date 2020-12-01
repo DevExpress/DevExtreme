@@ -4,42 +4,42 @@ import Editor, {
 
 export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     /**
-     * @docid dxCheckBoxOptions.activeStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxCheckBoxOptions.focusStateEnabled
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxCheckBoxOptions.hoverStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxCheckBoxOptions.name
+     * @docid
      * @hidden false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid dxCheckBoxOptions.text
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
-     * @docid dxCheckBoxOptions.value
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -47,7 +47,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     value?: boolean;
 }
 /**
- * @docid dxCheckBox
+ * @docid
  * @isEditor
  * @inherits Editor
  * @module ui/check_box

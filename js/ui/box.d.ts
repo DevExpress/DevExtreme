@@ -9,7 +9,7 @@ import CollectionWidget, {
 
 export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     /**
-     * @docid dxBoxOptions.align
+     * @docid
      * @type Enums.BoxAlign
      * @default 'start'
      * @prevFileNamespace DevExpress.ui
@@ -17,7 +17,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      */
     align?: 'center' | 'end' | 'space-around' | 'space-between' | 'start';
     /**
-     * @docid dxBoxOptions.crossAlign
+     * @docid
      * @type Enums.BoxCrossAlign
      * @default 'start'
      * @prevFileNamespace DevExpress.ui
@@ -25,14 +25,14 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      */
     crossAlign?: 'center' | 'end' | 'start' | 'stretch';
     /**
-     * @docid dxBoxOptions.dataSource
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxBoxItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxBoxOptions.direction
+     * @docid
      * @type Enums.BoxDirection
      * @default 'row'
      * @prevFileNamespace DevExpress.ui
@@ -40,7 +40,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      */
     direction?: 'col' | 'row';
     /**
-     * @docid dxBoxOptions.items
+     * @docid
      * @fires dxBoxOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -48,7 +48,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     items?: Array<string | dxBoxItem | any>;
 }
 /**
- * @docid dxBox
+ * @docid
  * @inherits CollectionWidget
  * @module ui/box
  * @export default
@@ -60,9 +60,14 @@ export default class dxBox extends CollectionWidget {
     constructor(element: JQuery, options?: dxBoxOptions)
 }
 
+/**
+* @docid
+* @inherits CollectionWidgetItem
+* @type object
+*/
 export interface dxBoxItem extends CollectionWidgetItem {
     /**
-     * @docid dxBoxItem.baseSize
+     * @docid
      * @type number | Enums.Mode
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -70,21 +75,21 @@ export interface dxBoxItem extends CollectionWidgetItem {
      */
     baseSize?: number | 'auto';
     /**
-     * @docid dxBoxItem.box
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     box?: dxBoxOptions;
     /**
-     * @docid dxBoxItem.ratio
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     ratio?: number;
     /**
-     * @docid dxBoxItem.shrink
+     * @docid
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -1,36 +1,41 @@
+/**
+* @docid
+* @deprecated
+* @type object
+*/
 export interface ExcelFont {
     /**
-     * @docid ExcelFont.bold
+     * @docid
      * @prevFileNamespace DevExpress.exporter
      * @public
      */
     bold?: boolean;
     /**
-     * @docid ExcelFont.color
+     * @docid
      * @prevFileNamespace DevExpress.exporter
      * @public
      */
     color?: string;
     /**
-     * @docid ExcelFont.italic
+     * @docid
      * @prevFileNamespace DevExpress.exporter
      * @public
      */
     italic?: boolean;
     /**
-     * @docid ExcelFont.name
+     * @docid
      * @prevFileNamespace DevExpress.exporter
      * @public
      */
     name?: string;
     /**
-     * @docid ExcelFont.size
+     * @docid
      * @prevFileNamespace DevExpress.exporter
      * @public
      */
     size?: number;
     /**
-     * @docid ExcelFont.underline
+     * @docid
      * @type Enums.ExcelFontUnderlineType
      * @prevFileNamespace DevExpress.exporter
      * @public

@@ -9,56 +9,56 @@ import CollectionWidget, {
 
 export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
     /**
-     * @docid dxMultiViewOptions.animationEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationEnabled?: boolean;
     /**
-     * @docid dxMultiViewOptions.dataSource
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxMultiViewItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxMultiViewOptions.deferRendering
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
-     * @docid dxMultiViewOptions.focusStateEnabled
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxMultiViewOptions.items
+     * @docid
      * @fires dxMultiViewOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxMultiViewItem | any>;
     /**
-     * @docid dxMultiViewOptions.loop
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     loop?: boolean;
     /**
-     * @docid dxMultiViewOptions.selectedIndex
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
     /**
-     * @docid dxMultiViewOptions.swipeEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -66,7 +66,7 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     swipeEnabled?: boolean;
 }
 /**
- * @docid dxMultiView
+ * @docid
  * @inherits CollectionWidget
  * @module ui/multi_view
  * @export default
@@ -78,6 +78,11 @@ export default class dxMultiView extends CollectionWidget {
     constructor(element: JQuery, options?: dxMultiViewOptions)
 }
 
+/**
+* @docid
+* @inherits CollectionWidgetItem
+* @type object
+*/
 export interface dxMultiViewItem extends CollectionWidgetItem {
 }
 

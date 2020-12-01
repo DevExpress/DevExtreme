@@ -97,11 +97,6 @@ const Form = Widget.inherit({
             * @pseudo ColCountResponsibleType
             * @type object
             */
-            /**
-            * @name ColCountResponsible
-            * @hidden
-            */
-
             colCountByScreen: undefined,
 
             labelLocation: 'left',
@@ -124,118 +119,6 @@ const Form = Widget.inherit({
             scrollingEnabled: false,
             validationGroup: undefined,
             stylingMode: undefined
-            /**
-            * @name dxFormSimpleItem
-			* @publicName SimpleItem
-            * @section FormItems
-            * @type object
-            */
-            /**
-             * @name dxFormSimpleItem.label.text
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.label.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormSimpleItem.label.showColon
-             * @type boolean
-             * @default from showColonAfterLabel
-             */
-            /**
-             * @name dxFormSimpleItem.label.location
-             * @type Enums.FormLabelLocation
-             * @default "left"
-             */
-            /**
-             * @name dxFormSimpleItem.label.alignment
-             * @type Enums.HorizontalAlignment
-             * @default "left"
-             */
-            /**
-            * @name dxFormGroupItem
-			* @publicName GroupItem
-            * @section FormItems
-            * @type object
-            */
-            /**
-            * @name dxFormTabbedItem
-			* @publicName TabbedItem
-            * @section FormItems
-            * @type object
-            */
-            /**
-             * @name dxFormTabbedItem.tabs.alignItemLabels
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.title
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.colCount
-             * @type number
-             * @default 1
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.colCountByScreen
-             * @extends ColCountResponsibleType
-             * @inherits ColCountResponsible
-             * @default undefined
-            */
-            /**
-             * @name dxFormTabbedItem.tabs.items
-             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.badge
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.disabled
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.icon
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.tabTemplate
-             * @type template|function
-             * @type_function_param1 tabData:object
-             * @type_function_param2 tabIndex:number
-             * @type_function_param3 tabElement:dxElement
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.template
-             * @type template|function
-             * @type_function_param1 tabData:object
-             * @type_function_param2 tabIndex:number
-             * @type_function_param3 tabElement:dxElement
-             * @default undefined
-             */
-            /**
-            * @name dxFormEmptyItem
-			* @publicName EmptyItem
-            * @section FormItems
-            * @type object
-            */
-            /**
-            * @name dxFormButtonItem
-			* @publicName ButtonItem
-            * @section FormItems
-            * @type object
-            */
         });
     },
 

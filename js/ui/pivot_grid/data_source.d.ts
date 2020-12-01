@@ -20,7 +20,7 @@ import XmlaStore, {
 
 export interface PivotGridDataSourceOptions {
     /**
-     * @docid PivotGridDataSourceOptions.fields
+     * @docid
      * @type Array<Object>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -28,21 +28,21 @@ export interface PivotGridDataSourceOptions {
      */
     fields?: Array<PivotGridDataSourceField>;
     /**
-     * @docid PivotGridDataSourceOptions.filter
+     * @docid
      * @type Filter expression
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     filter?: string | Array<any> | Function;
     /**
-     * @docid PivotGridDataSourceOptions.onChanged
+     * @docid
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     onChanged?: Function;
     /**
-     * @docid PivotGridDataSourceOptions.onFieldsPrepared
+     * @docid
      * @type_function_param1 fields:Array<PivotGridDataSourceOptions.fields>
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -50,7 +50,7 @@ export interface PivotGridDataSourceOptions {
      */
     onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => any);
     /**
-     * @docid PivotGridDataSourceOptions.onLoadError
+     * @docid
      * @type_function_param1 error:Object
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -58,7 +58,7 @@ export interface PivotGridDataSourceOptions {
      */
     onLoadError?: ((error: any) => any);
     /**
-     * @docid PivotGridDataSourceOptions.onLoadingChanged
+     * @docid
      * @type_function_param1 isLoading:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -66,32 +66,46 @@ export interface PivotGridDataSourceOptions {
      */
     onLoadingChanged?: ((isLoading: boolean) => any);
     /**
-     * @docid PivotGridDataSourceOptions.paginate
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     paginate?: boolean;
     /**
-     * @docid PivotGridDataSourceOptions.remoteOperations
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     remoteOperations?: boolean;
     /**
-     * @docid PivotGridDataSourceOptions.retrieveFields
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     retrieveFields?: boolean;
     /**
-     * @docid PivotGridDataSourceOptions.store
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    store?: Store | StoreOptions | XmlaStore | XmlaStoreOptions | Array<{ type?: 'array' | 'local' | 'odata' | 'xmla' }> | { type?: 'array' | 'local' | 'odata' | 'xmla' };
+    store?: Store | StoreOptions | XmlaStore | XmlaStoreOptions | Array<{
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.PivotGridStoreType
+       */
+      type?: 'array' | 'local' | 'odata' | 'xmla'
+    }> | {
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type Enums.PivotGridStoreType
+       */
+      type?: 'array' | 'local' | 'odata' | 'xmla'
+    };
 }
 export interface PivotGridDataSourceField {
     /**
@@ -394,7 +408,7 @@ export interface PivotGridDataSourceField {
     wordWrapEnabled?: boolean;
 }
 /**
- * @docid PivotGridDataSource
+ * @docid
  * @namespace DevExpress.data
  * @module ui/pivot_grid/data_source
  * @export default
@@ -404,7 +418,7 @@ export interface PivotGridDataSourceField {
 export default class PivotGridDataSource {
     constructor(options?: PivotGridDataSourceOptions)
     /**
-     * @docid PivotGridDataSource.collapseAll
+     * @docid
      * @publicName collapseAll(id)
      * @param1 id:number|string
      * @prevFileNamespace DevExpress.ui
@@ -412,7 +426,7 @@ export default class PivotGridDataSource {
      */
     collapseAll(id: number | string): void;
     /**
-     * @docid PivotGridDataSource.collapseHeaderItem
+     * @docid
      * @publicName collapseHeaderItem(area, path)
      * @param1 area:string
      * @param2 path:Array<string, number, Date>
@@ -421,7 +435,7 @@ export default class PivotGridDataSource {
      */
     collapseHeaderItem(area: string, path: Array<string | number | Date>): void;
     /**
-     * @docid PivotGridDataSource.createDrillDownDataSource
+     * @docid
      * @publicName createDrillDownDataSource(options)
      * @param1 options:object
      * @param1_field1 columnPath:Array<string, number, Date>
@@ -435,14 +449,14 @@ export default class PivotGridDataSource {
      */
     createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>, rowPath?: Array<string | number | Date>, dataIndex?: number, maxRowCount?: number, customColumns?: Array<string> }): DataSource;
     /**
-     * @docid PivotGridDataSource.dispose
+     * @docid
      * @publicName dispose()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dispose(): void;
     /**
-     * @docid PivotGridDataSource.expandAll
+     * @docid
      * @publicName expandAll(id)
      * @param1 id:number|string
      * @prevFileNamespace DevExpress.ui
@@ -450,7 +464,7 @@ export default class PivotGridDataSource {
      */
     expandAll(id: number | string): void;
     /**
-     * @docid PivotGridDataSource.expandHeaderItem
+     * @docid
      * @publicName expandHeaderItem(area, path)
      * @param1 area:string
      * @param2 path:Array<Object>
@@ -459,7 +473,7 @@ export default class PivotGridDataSource {
      */
     expandHeaderItem(area: string, path: Array<any>): void;
     /**
-     * @docid PivotGridDataSource.field
+     * @docid
      * @publicName field(id)
      * @param1 id:number|string
      * @return object
@@ -468,7 +482,7 @@ export default class PivotGridDataSource {
      */
     field(id: number | string): any;
     /**
-     * @docid PivotGridDataSource.field
+     * @docid
      * @publicName field(id, options)
      * @param1 id:number|string
      * @param2 options:object
@@ -477,7 +491,7 @@ export default class PivotGridDataSource {
      */
     field(id: number | string, options: any): void;
     /**
-     * @docid PivotGridDataSource.fields
+     * @docid
      * @publicName fields()
      * @return Array<PivotGridDataSourceOptions.fields>
      * @prevFileNamespace DevExpress.ui
@@ -485,7 +499,7 @@ export default class PivotGridDataSource {
      */
     fields(): Array<PivotGridDataSourceField>;
     /**
-     * @docid PivotGridDataSource.fields
+     * @docid
      * @publicName fields(fields)
      * @param1 fields:Array<PivotGridDataSourceOptions.fields>
      * @prevFileNamespace DevExpress.ui
@@ -493,7 +507,7 @@ export default class PivotGridDataSource {
      */
     fields(fields: Array<PivotGridDataSourceField>): void;
     /**
-     * @docid PivotGridDataSource.filter
+     * @docid
      * @publicName filter()
      * @return object
      * @prevFileNamespace DevExpress.ui
@@ -501,7 +515,7 @@ export default class PivotGridDataSource {
      */
     filter(): any;
     /**
-     * @docid PivotGridDataSource.filter
+     * @docid
      * @publicName filter(filterExpr)
      * @param1 filterExpr:object
      * @prevFileNamespace DevExpress.ui
@@ -509,7 +523,7 @@ export default class PivotGridDataSource {
      */
     filter(filterExpr: any): void;
     /**
-     * @docid PivotGridDataSource.getAreaFields
+     * @docid
      * @publicName getAreaFields(area, collectGroups)
      * @param1 area:string
      * @param2 collectGroups:boolean
@@ -519,7 +533,7 @@ export default class PivotGridDataSource {
      */
     getAreaFields(area: string, collectGroups: boolean): Array<PivotGridDataSourceField>;
     /**
-     * @docid PivotGridDataSource.getData
+     * @docid
      * @publicName getData()
      * @return object
      * @prevFileNamespace DevExpress.ui
@@ -527,7 +541,7 @@ export default class PivotGridDataSource {
      */
     getData(): any;
     /**
-     * @docid PivotGridDataSource.isLoading
+     * @docid
      * @publicName isLoading()
      * @return boolean
      * @prevFileNamespace DevExpress.ui
@@ -535,7 +549,7 @@ export default class PivotGridDataSource {
      */
     isLoading(): boolean;
     /**
-     * @docid PivotGridDataSource.load
+     * @docid
      * @publicName load()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.ui
@@ -543,7 +557,7 @@ export default class PivotGridDataSource {
      */
     load(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid PivotGridDataSource.off
+     * @docid
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
@@ -552,7 +566,7 @@ export default class PivotGridDataSource {
      */
     off(eventName: string): this;
     /**
-     * @docid PivotGridDataSource.off
+     * @docid
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -562,7 +576,7 @@ export default class PivotGridDataSource {
      */
     off(eventName: string, eventHandler: Function): this;
     /**
-     * @docid PivotGridDataSource.on
+     * @docid
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -572,7 +586,7 @@ export default class PivotGridDataSource {
      */
     on(eventName: string, eventHandler: Function): this;
     /**
-     * @docid PivotGridDataSource.on
+     * @docid
      * @publicName on(events)
      * @param1 events:object
      * @return this
@@ -581,7 +595,7 @@ export default class PivotGridDataSource {
      */
     on(events: any): this;
     /**
-     * @docid PivotGridDataSource.reload
+     * @docid
      * @publicName reload()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.ui
@@ -589,7 +603,7 @@ export default class PivotGridDataSource {
      */
     reload(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid PivotGridDataSource.state
+     * @docid
      * @publicName state()
      * @return object
      * @prevFileNamespace DevExpress.ui
@@ -597,7 +611,7 @@ export default class PivotGridDataSource {
      */
     state(): any;
     /**
-     * @docid PivotGridDataSource.state
+     * @docid
      * @publicName state(state)
      * @param1 state:object
      * @prevFileNamespace DevExpress.ui

@@ -20,21 +20,21 @@ import {
 
 export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
     /**
-     * @docid dxDropDownEditorOptions.acceptCustomValue
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     acceptCustomValue?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.activeStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.applyValueMode
+     * @docid
      * @type Enums.EditorApplyValueMode
      * @default "instantly"
      * @prevFileNamespace DevExpress.ui
@@ -42,14 +42,14 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      */
     applyValueMode?: 'instantly' | 'useButtons';
     /**
-     * @docid dxDropDownEditorOptions.dropDownOptions
+     * @docid
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dropDownOptions?: dxPopupOptions;
     /**
-     * @docid dxDropDownEditorOptions.buttons
+     * @docid
      * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -57,14 +57,14 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      */
     buttons?: Array<'clear' | 'dropDown' | dxTextEditorButton>;
     /**
-     * @docid dxDropDownEditorOptions.deferRendering
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.dropDownButtonTemplate
+     * @docid
      * @default "dropDownButton"
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string
@@ -76,7 +76,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      */
     dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxDropDownEditorOptions.onClosed
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -84,7 +84,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      */
     onClosed?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxDropDownEditorOptions.onOpened
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -92,14 +92,14 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      */
     onOpened?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxDropDownEditorOptions.openOnFieldClick
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     openOnFieldClick?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.opened
+     * @docid
      * @default false
      * @fires dxDropDownEditorOptions.onOpened
      * @fires dxDropDownEditorOptions.onClosed
@@ -108,14 +108,14 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      */
     opened?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.showDropDownButton
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.value
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -123,7 +123,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     value?: any;
 }
 /**
- * @docid dxDropDownEditor
+ * @docid
  * @inherits dxTextBox
  * @module ui/drop_down_editor/ui.drop_down_editor
  * @export default
@@ -134,14 +134,14 @@ export default class dxDropDownEditor extends dxTextBox {
     constructor(element: Element, options?: dxDropDownEditorOptions)
     constructor(element: JQuery, options?: dxDropDownEditorOptions)
     /**
-     * @docid dxDropDownEditor.close
+     * @docid
      * @publicName close()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     close(): void;
     /**
-     * @docid dxDropDownEditor.content
+     * @docid
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -149,7 +149,7 @@ export default class dxDropDownEditor extends dxTextBox {
      */
     content(): dxElement;
     /**
-     * @docid dxDropDownEditor.field
+     * @docid
      * @publicName field()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -157,7 +157,7 @@ export default class dxDropDownEditor extends dxTextBox {
      */
     field(): dxElement;
     /**
-     * @docid dxDropDownEditor.open
+     * @docid
      * @publicName open()
      * @prevFileNamespace DevExpress.ui
      * @public
