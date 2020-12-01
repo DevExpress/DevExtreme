@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import config from 'core/config';
-import { getDefaultAlignment, getBoundingRect } from 'core/utils/position.js';
+import { isWindow } from 'core/utils/type';
+import { getDefaultAlignment, getBoundingRect, getAvailableBoundsContainer } from 'core/utils/position.js';
 
 const { module: testModule, test } = QUnit;
 
@@ -64,5 +65,39 @@ testModule('getBoundingRect', {
         ['width', 'height', 'top', 'bottom', 'left', 'right'].forEach(prop => {
             assert.strictEqual(rect[prop], 0, `${prop} is correct`);
         });
+    });
+});
+
+
+testModule('getAvailableBoundsContainer', {
+    beforeEach() {
+        this.$container = $('<div>').attr('id', 'container').css({
+            width: 200,
+            height: 200,
+            overflow: 'visible'
+        });
+
+        this.$innerContainer = $('<div>').css({
+            width: 200,
+            height: 200,
+            overflow: 'visible'
+        });
+
+        this.$innerContainer.appendTo(this.$container);
+        this.$container.appendTo($('#qunit-fixture'));
+    }
+}, function() {
+    test('getAvailableBoundsContainer should return window if container and its parents has no overflow: hidden styles', function(assert) {
+        assert.ok(isWindow(getAvailableBoundsContainer(this.$container).get(0)));
+    });
+
+    test('getAvailableBoundsContainer should return container if container has overflow: hidden styles', function(assert) {
+        this.$container.css('overflow', 'hidden');
+        assert.deepEqual(getAvailableBoundsContainer(this.$container).attr('id'), 'container');
+    });
+
+    test('getAvailableBoundsContainer should return container parent if it has overflow: hidden styles', function(assert) {
+        this.$container.css('overflow', 'hidden');
+        assert.deepEqual(getAvailableBoundsContainer(this.$container).attr('id'), 'container');
     });
 });
