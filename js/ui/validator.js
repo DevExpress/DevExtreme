@@ -24,33 +24,6 @@ const Validator = DOMComponent.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
             validationRules: []
-
-            /**
-            * @name dxValidatorOptions.adapter.getValue
-            * @type function
-            */
-            /**
-            * @name dxValidatorOptions.adapter.validationRequestsCallbacks
-            * @type Array<function>
-            */
-            /**
-            * @name dxValidatorOptions.adapter.applyValidationResults
-            * @type function
-            */
-            /**
-            * @name dxValidatorOptions.adapter.reset
-            * @type function
-            */
-            /**
-            * @name dxValidatorOptions.adapter.focus
-            * @type function
-            */
-            /**
-            * @name dxValidatorOptions.adapter.bypass
-            * @type function
-            */
-
-
             /**
             * @name dxValidatorOptions.rtlEnabled
             * @hidden

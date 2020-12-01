@@ -26,14 +26,14 @@ import {
 
 export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
     /**
-     * @docid dxTreeViewOptions.animationEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationEnabled?: boolean;
     /**
-     * @docid dxTreeViewOptions.createChildren
+     * @docid
      * @type_function_param1 parentNode:dxTreeViewNode
      * @type_function_return Promise<any>|Array<Object>
      * @prevFileNamespace DevExpress.ui
@@ -41,14 +41,14 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     createChildren?: ((parentNode: dxTreeViewNode) => Promise<any> | JQueryPromise<any> | Array<any>);
     /**
-     * @docid  dxTreeViewOptions.dataSource
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<dxTreeViewItem> | DataSource | DataSourceOptions;
     /**
-     * @docid dxTreeViewOptions.dataStructure
+     * @docid
      * @type Enums.TreeViewDataStructure
      * @default 'tree'
      * @prevFileNamespace DevExpress.ui
@@ -56,14 +56,14 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     dataStructure?: 'plain' | 'tree';
     /**
-     * @docid dxTreeViewOptions.expandAllEnabled
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandAllEnabled?: boolean;
     /**
-     * @docid dxTreeViewOptions.expandEvent
+     * @docid
      * @type Enums.TreeViewExpandEvent
      * @default "dblclick"
      * @prevFileNamespace DevExpress.ui
@@ -71,15 +71,14 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     expandEvent?: 'dblclick' | 'click';
     /**
-     * @docid dxTreeViewOptions.expandNodesRecursive
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandNodesRecursive?: boolean;
     /**
-     * @docid dxTreeViewOptions.expandedExpr
-     * @type string|function
+     * @docid
      * @default 'expanded'
      * @hidden false
      * @prevFileNamespace DevExpress.ui
@@ -87,21 +86,20 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     expandedExpr?: string | Function;
     /**
-     * @docid dxTreeViewOptions.hasItemsExpr
-     * @type string|function
+     * @docid
      * @default 'hasItems'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hasItemsExpr?: string | Function;
     /**
-     * @docid dxTreeViewOptions.items
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxTreeViewItem>;
     /**
-     * @docid dxTreeViewOptions.onItemClick
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
@@ -115,7 +113,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     onItemClick?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event, node?: dxTreeViewNode }) => any);
     /**
-     * @docid dxTreeViewOptions.onItemCollapsed
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
@@ -129,7 +127,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     onItemCollapsed?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, node?: dxTreeViewNode }) => any);
     /**
-     * @docid dxTreeViewOptions.onItemContextMenu
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
@@ -143,7 +141,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     onItemContextMenu?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event, node?: dxTreeViewNode }) => any);
     /**
-     * @docid dxTreeViewOptions.onItemExpanded
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
@@ -157,7 +155,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     onItemExpanded?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, node?: dxTreeViewNode }) => any);
     /**
-     * @docid dxTreeViewOptions.onItemHold
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
@@ -171,7 +169,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     onItemHold?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, node?: dxTreeViewNode }) => any);
     /**
-     * @docid dxTreeViewOptions.onItemRendered
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
@@ -184,7 +182,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     onItemRendered?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, node?: dxTreeViewNode }) => any);
     /**
-     * @docid dxTreeViewOptions.onItemSelectionChanged
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeViewNode
@@ -195,7 +193,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, node?: dxTreeViewNode, itemElement?: dxElement }) => any);
     /**
-     * @docid dxTreeViewOptions.onSelectAllValueChanged
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
@@ -205,7 +203,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, value?: boolean }) => any);
     /**
-     * @docid dxTreeViewOptions.onSelectionChanged
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -214,8 +212,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     onSelectionChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxTreeViewOptions.parentIdExpr
-     * @type string|function
+     * @docid
      * @default 'parentId'
      * @hidden false
      * @prevFileNamespace DevExpress.ui
@@ -223,14 +220,14 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     parentIdExpr?: string | Function;
     /**
-     * @docid dxTreeViewOptions.rootValue
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     rootValue?: any;
     /**
-     * @docid dxTreeViewOptions.scrollDirection
+     * @docid
      * @type Enums.ScrollDirection
      * @default "vertical"
      * @prevFileNamespace DevExpress.ui
@@ -238,28 +235,28 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     scrollDirection?: 'both' | 'horizontal' | 'vertical';
     /**
-     * @docid dxTreeViewOptions.selectAllText
+     * @docid
      * @default "Select All"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectAllText?: string;
     /**
-     * @docid dxTreeViewOptions.selectByClick
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectByClick?: boolean;
     /**
-     * @docid dxTreeViewOptions.selectNodesRecursive
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectNodesRecursive?: boolean;
     /**
-     * @docid dxTreeViewOptions.selectionMode
+     * @docid
      * @type Enums.NavSelectionMode
      * @default "multiple"
      * @prevFileNamespace DevExpress.ui
@@ -267,7 +264,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     selectionMode?: 'multiple' | 'single';
     /**
-     * @docid dxTreeViewOptions.showCheckBoxesMode
+     * @docid
      * @type Enums.TreeViewCheckBoxMode
      * @default 'none'
      * @prevFileNamespace DevExpress.ui
@@ -275,7 +272,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      */
     showCheckBoxesMode?: 'none' | 'normal' | 'selectAll';
     /**
-     * @docid dxTreeViewOptions.virtualModeEnabled
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -283,7 +280,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     virtualModeEnabled?: boolean;
 }
 /**
- * @docid dxTreeView
+ * @docid
  * @inherits HierarchicalCollectionWidget, SearchBoxMixin
  * @module ui/tree_view
  * @export default
@@ -294,14 +291,14 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
     constructor(element: Element, options?: dxTreeViewOptions)
     constructor(element: JQuery, options?: dxTreeViewOptions)
     /**
-     * @docid dxTreeView.collapseAll
+     * @docid
      * @publicName collapseAll()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     collapseAll(): void;
     /**
-     * @docid dxTreeView.collapseItem
+     * @docid
      * @publicName collapseItem(itemData)
      * @param1 itemData:Object
      * @return Promise<void>
@@ -310,7 +307,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     collapseItem(itemData: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeView.collapseItem
+     * @docid
      * @publicName collapseItem(itemElement)
      * @param1 itemElement:Element
      * @return Promise<void>
@@ -319,7 +316,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     collapseItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeView.collapseItem
+     * @docid
      * @publicName collapseItem(key)
      * @param1 key:any
      * @return Promise<void>
@@ -328,14 +325,14 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     collapseItem(key: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeView.expandAll
+     * @docid
      * @publicName expandAll()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandAll(): void;
     /**
-     * @docid dxTreeView.expandItem
+     * @docid
      * @publicName expandItem(itemData)
      * @param1 itemData:Object
      * @return Promise<void>
@@ -344,7 +341,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     expandItem(itemData: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeView.expandItem
+     * @docid
      * @publicName expandItem(itemElement)
      * @param1 itemElement:Element
      * @return Promise<void>
@@ -353,7 +350,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     expandItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeView.expandItem
+     * @docid
      * @publicName expandItem(key)
      * @param1 key:any
      * @return Promise<void>
@@ -362,7 +359,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     expandItem(key: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeView.getNodes
+     * @docid
      * @publicName getNodes()
      * @return Array<dxTreeViewNode>
      * @prevFileNamespace DevExpress.ui
@@ -370,7 +367,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     getNodes(): Array<dxTreeViewNode>;
     /**
-     * @docid dxTreeView.getSelectedNodes
+     * @docid
      * @publicName getSelectedNodes()
      * @return Array<dxTreeViewNode>
      * @prevFileNamespace DevExpress.ui
@@ -378,7 +375,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     getSelectedNodes(): Array<dxTreeViewNode>;
     /**
-     * @docid dxTreeView.getSelectedNodeKeys
+     * @docid
      * @publicName getSelectedNodeKeys()
      * @return Array<any>
      * @prevFileNamespace DevExpress.ui
@@ -386,14 +383,14 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     getSelectedNodeKeys(): Array<any>;
     /**
-     * @docid dxTreeView.selectAll
+     * @docid
      * @publicName selectAll()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectAll(): void;
     /**
-     * @docid dxTreeView.selectItem
+     * @docid
      * @publicName selectItem(itemData)
      * @param1 itemData:Object
      * @return boolean
@@ -402,7 +399,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     selectItem(itemData: any): boolean;
     /**
-     * @docid dxTreeView.selectItem
+     * @docid
      * @publicName selectItem(itemElement)
      * @param1 itemElement:Element
      * @return boolean
@@ -411,7 +408,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     selectItem(itemElement: Element): boolean;
     /**
-     * @docid dxTreeView.selectItem
+     * @docid
      * @publicName selectItem(key)
      * @param1 key:any
      * @return boolean
@@ -420,14 +417,14 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     selectItem(key: any): boolean;
     /**
-     * @docid dxTreeView.unselectAll
+     * @docid
      * @publicName unselectAll()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     unselectAll(): void;
     /**
-     * @docid dxTreeView.unselectItem
+     * @docid
      * @publicName unselectItem(itemData)
      * @param1 itemData:Object
      * @return boolean
@@ -436,7 +433,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     unselectItem(itemData: any): boolean;
     /**
-     * @docid dxTreeView.unselectItem
+     * @docid
      * @publicName unselectItem(itemElement)
      * @param1 itemElement:Element
      * @return boolean
@@ -445,7 +442,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     unselectItem(itemElement: Element): boolean;
     /**
-     * @docid dxTreeView.unselectItem
+     * @docid
      * @publicName unselectItem(key)
      * @param1 key:any
      * @return boolean
@@ -454,7 +451,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     unselectItem(key: any): boolean;
     /**
-     * @docid dxTreeView.updateDimensions
+     * @docid
      * @publicName updateDimensions()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -462,7 +459,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     updateDimensions(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeView.scrollToItem
+     * @docid
      * @publicName scrollToItem(itemData)
      * @param1 itemData:Object
      * @return Promise<void>
@@ -471,7 +468,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     scrollToItem(itemData: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeView.scrollToItem
+     * @docid
      * @publicName scrollToItem(itemElement)
      * @param1 itemElement:Element
      * @return Promise<void>
@@ -480,7 +477,7 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     scrollToItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeView.scrollToItem
+     * @docid
      * @publicName scrollToItem(key)
      * @param1 key:any
      * @return Promise<void>
@@ -490,42 +487,47 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
     scrollToItem(key: any): Promise<void> & JQueryPromise<void>;
 }
 
+/**
+* @docid
+* @inherits CollectionWidgetItem
+* @type object
+*/
 export interface dxTreeViewItem extends CollectionWidgetItem {
     /**
-     * @docid dxTreeViewItem.expanded
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     expanded?: boolean;
     /**
-     * @docid dxTreeViewItem.hasItems
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hasItems?: boolean;
     /**
-     * @docid dxTreeViewItem.icon
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid dxTreeViewItem.items
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxTreeViewItem>;
     /**
-     * @docid dxTreeViewItem.parentId
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     parentId?: number | string;
     /**
-     * @docid dxTreeViewItem.selected
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -533,51 +535,55 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
     selected?: boolean;
 }
 
+/**
+ * @docid
+ * @type object
+ */
 export interface dxTreeViewNode {
     /**
-     * @docid dxTreeViewNode.children
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     children?: Array<dxTreeViewNode>;
     /**
-     * @docid dxTreeViewNode.disabled
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
     /**
-     * @docid dxTreeViewNode.expanded
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     expanded?: boolean;
     /**
-     * @docid dxTreeViewNode.itemData
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemData?: any;
     /**
-     * @docid dxTreeViewNode.key
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     key?: any;
     /**
-     * @docid dxTreeViewNode.parent
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     parent?: dxTreeViewNode;
     /**
-     * @docid dxTreeViewNode.selected
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selected?: boolean;
     /**
-     * @docid dxTreeViewNode.text
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */

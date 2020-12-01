@@ -101,81 +101,12 @@ const FieldChooser = BaseFieldChooser.inherit({
             allowSearch: false,
             searchTimeout: 500,
             texts: {
-                /**
-                 * @name dxPivotGridFieldChooserOptions.texts.columnFields
-                 * @type string
-                 * @default 'Column Fields'
-                 */
                 columnFields: localizationMessage.format('dxPivotGrid-columnFields'),
-                /**
-                 * @name dxPivotGridFieldChooserOptions.texts.rowFields
-                 * @type string
-                 * @default 'Row Fields'
-                 */
                 rowFields: localizationMessage.format('dxPivotGrid-rowFields'),
-                /**
-                 * @name dxPivotGridFieldChooserOptions.texts.dataFields
-                 * @type string
-                 * @default 'Data Fields'
-                 */
                 dataFields: localizationMessage.format('dxPivotGrid-dataFields'),
-                /**
-                 * @name dxPivotGridFieldChooserOptions.texts.filterFields
-                 * @type string
-                 * @default 'Filter Fields'
-                 */
                 filterFields: localizationMessage.format('dxPivotGrid-filterFields'),
-                /**
-                 * @name dxPivotGridFieldChooserOptions.texts.allFields
-                 * @type string
-                 * @default 'All Fields'
-                 */
                 allFields: localizationMessage.format('dxPivotGrid-allFields')
             },
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter.width
-             * @type number
-             * @default 252
-             */
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter.height
-             * @type number
-             * @default 325
-             */
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter.allowSearch
-             * @type boolean
-             * @default undefined
-             */
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter.showRelevantValues
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter.searchTimeout
-             * @type number
-             * @default 500
-             */
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter.texts
-             * @type object
-             */
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter.texts.emptyValue
-             * @type string
-             * @default "(Blanks)"
-             */
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter.texts.ok
-             * @type string
-             * @default "Ok"
-             */
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter.texts.cancel
-             * @type string
-             * @default "Cancel"
-             */
         });
     },
 

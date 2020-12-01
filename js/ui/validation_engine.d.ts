@@ -5,7 +5,7 @@ import {
 } from './validation_group';
 
 /**
- * @docid validationEngine
+ * @docid
  * @section Core
  * @namespace DevExpress
  * @module ui/validation_engine
@@ -15,7 +15,7 @@ import {
  */
 export default class validationEngine {
     /**
-     * @docid validationEngine.getGroupConfig
+     * @docid
      * @section Core
      * @publicName getGroupConfig()
      * @return object
@@ -25,7 +25,7 @@ export default class validationEngine {
      */
     static getGroupConfig(): any;
     /**
-     * @docid validationEngine.getGroupConfig
+     * @docid
      * @section Core
      * @publicName getGroupConfig(group)
      * @param1 group:string|object
@@ -36,7 +36,7 @@ export default class validationEngine {
      */
     static getGroupConfig(group: string | any): any;
     /**
-     * @docid validationEngine.registerModelForValidation
+     * @docid
      * @publicName registerModelForValidation(model)
      * @param1 model:object
      * @static
@@ -45,7 +45,7 @@ export default class validationEngine {
      */
     static registerModelForValidation(model: any): void;
     /**
-     * @docid validationEngine.resetGroup
+     * @docid
      * @section Core
      * @publicName resetGroup()
      * @static
@@ -54,7 +54,7 @@ export default class validationEngine {
      */
     static resetGroup(): void;
     /**
-     * @docid validationEngine.resetGroup
+     * @docid
      * @section Core
      * @publicName resetGroup(group)
      * @param1 group:string|object
@@ -64,7 +64,7 @@ export default class validationEngine {
      */
     static resetGroup(group: string | any): void;
     /**
-     * @docid validationEngine.unregisterModelForValidation
+     * @docid
      * @publicName unregisterModelForValidation(model)
      * @param1 model:object
      * @static
@@ -73,7 +73,7 @@ export default class validationEngine {
      */
     static unregisterModelForValidation(model: any): void;
     /**
-     * @docid validationEngine.validateGroup
+     * @docid
      * @section Core
      * @publicName validateGroup()
      * @return dxValidationGroupResult
@@ -83,7 +83,7 @@ export default class validationEngine {
      */
     static validateGroup(): dxValidationGroupResult;
     /**
-     * @docid validationEngine.validateGroup
+     * @docid
      * @section Core
      * @publicName validateGroup(group)
      * @param1 group:string|object
@@ -94,7 +94,7 @@ export default class validationEngine {
      */
     static validateGroup(group: string | any): dxValidationGroupResult;
     /**
-     * @docid validationEngine.validateModel
+     * @docid
      * @publicName validateModel(model)
      * @param1 model:object
      * @return object

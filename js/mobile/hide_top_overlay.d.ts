@@ -1,5 +1,5 @@
 /**
- * @docid hideTopOverlay
+ * @docid
  * @publicName hideTopOverlay()
  * @return Boolean
  * @module mobile/hide_top_overlay

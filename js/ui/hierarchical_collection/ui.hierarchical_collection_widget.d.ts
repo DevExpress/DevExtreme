@@ -4,15 +4,14 @@ import CollectionWidget, {
 
 export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {
     /**
-     * @docid HierarchicalCollectionWidgetOptions.disabledExpr
-     * @type string|function
+     * @docid
      * @default 'disabled'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabledExpr?: string | Function;
     /**
-     * @docid HierarchicalCollectionWidgetOptions.displayExpr
+     * @docid
      * @default 'text'
      * @type_function_param1 item:object
      * @type_function_return string
@@ -21,38 +20,35 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
      */
     displayExpr?: string | ((item: any) => string);
     /**
-     * @docid HierarchicalCollectionWidgetOptions.focusStateEnabled
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid HierarchicalCollectionWidgetOptions.hoverStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid HierarchicalCollectionWidgetOptions.itemsExpr
-     * @type string|function
+     * @docid
      * @default 'items'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemsExpr?: string | Function;
     /**
-     * @docid HierarchicalCollectionWidgetOptions.keyExpr
-     * @type string|function
+     * @docid
      * @default 'id'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyExpr?: string | Function;
     /**
-     * @docid HierarchicalCollectionWidgetOptions.selectedExpr
-     * @type string|function
+     * @docid
      * @default 'selected'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -60,7 +56,7 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
     selectedExpr?: string | Function;
 }
 /**
- * @docid HierarchicalCollectionWidget
+ * @docid
  * @inherits CollectionWidget
  * @module ui/hierarchical_collection/ui.hierarchical_collection_widget
  * @export default

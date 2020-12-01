@@ -628,80 +628,21 @@ gridCore.registerModule('grouping', {
     defaultOptions: function() {
         return {
             grouping: {
-                /**
-                 * @name dxDataGridOptions.grouping.autoExpandAll
-                 * @type boolean
-                 * @default true
-                 */
                 autoExpandAll: true,
-                /**
-                 * @name dxDataGridOptions.grouping.allowCollapsing
-                 * @type boolean
-                 * @default true
-                 */
                 allowCollapsing: true,
-                /**
-                 * @name dxDataGridOptions.grouping.contextMenuEnabled
-                 * @type boolean
-                 * @default false
-                 */
                 contextMenuEnabled: false,
                 expandMode: 'buttonClick',
-                /**
-                 * @name dxDataGridOptions.grouping.texts
-                 * @type object
-                 */
                 texts: {
-                    /**
-                    * @name dxDataGridOptions.grouping.texts.groupContinuesMessage
-                    * @type string
-                    * @default "Continues on the next page"
-                    */
                     groupContinuesMessage: messageLocalization.format('dxDataGrid-groupContinuesMessage'),
-                    /**
-                     * @name dxDataGridOptions.grouping.texts.groupContinuedMessage
-                     * @type string
-                     * @default "Continued from the previous page"
-                     */
                     groupContinuedMessage: messageLocalization.format('dxDataGrid-groupContinuedMessage'),
-                    /**
-                    * @name dxDataGridOptions.grouping.texts.groupByThisColumn
-                    * @type string
-                    * @default "Group by This Column"
-                    */
                     groupByThisColumn: messageLocalization.format('dxDataGrid-groupHeaderText'),
-                    /**
-                    * @name dxDataGridOptions.grouping.texts.ungroup
-                    * @type string
-                    * @default "Ungroup"
-                    */
                     ungroup: messageLocalization.format('dxDataGrid-ungroupHeaderText'),
-                    /**
-                    * @name dxDataGridOptions.grouping.texts.ungroupAll
-                    * @type string
-                    * @default "Ungroup All"
-                    */
                     ungroupAll: messageLocalization.format('dxDataGrid-ungroupAllText')
                 }
             },
             groupPanel: {
-                /**
-                 * @name dxDataGridOptions.groupPanel.visible
-                 * @type boolean|Enums.Mode
-                 * @default false
-                 */
                 visible: false,
-                /**
-                 * @name dxDataGridOptions.groupPanel.emptyPanelText
-                 * @type string
-                 * @default "Drag a column header here to group by that column"
-                 */
                 emptyPanelText: messageLocalization.format('dxDataGrid-groupPanelEmptyText'),
-                /**
-                 * @name dxDataGridOptions.groupPanel.allowColumnDragging
-                 * @type boolean
-                 * @default true
-                 */
                 allowColumnDragging: true
             }
         };

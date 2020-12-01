@@ -1,34 +1,39 @@
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface AsyncRule {
     /**
-     * @docid AsyncRule.ignoreEmptyValue
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid AsyncRule.message
+     * @docid
      * @default 'Value is invalid'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid AsyncRule.reevaluate
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     reevaluate?: boolean;
     /**
-     * @docid AsyncRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     type: 'async';
     /**
-     * @docid AsyncRule.validationCallback
+     * @docid
      * @type_function_return Promise<any>
      * @type_function_param1 options:object
      * @type_function_param1_field1 value:string|number
@@ -43,16 +48,21 @@ export interface AsyncRule {
     validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => Promise<any> | JQueryPromise<any>);
 }
 
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface CompareRule {
     /**
-     * @docid CompareRule.comparisonTarget
+     * @docid
      * @type_function_return object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     comparisonTarget?: (() => any);
     /**
-     * @docid CompareRule.comparisonType
+     * @docid
      * @type Enums.ComparisonOperator
      * @default '=='
      * @prevFileNamespace DevExpress.ui
@@ -60,28 +70,28 @@ export interface CompareRule {
      */
     comparisonType?: '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
     /**
-     * @docid CompareRule.ignoreEmptyValue
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid CompareRule.message
+     * @docid
      * @default 'Values do not match'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid CompareRule.reevaluate
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     reevaluate?: boolean;
     /**
-     * @docid CompareRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -89,37 +99,42 @@ export interface CompareRule {
     type: 'compare';
 }
 
+/**
+ * @docid
+ * @type object
+ * @section dxValidator
+ */
 export interface CustomRule {
     /**
-     * @docid CustomRule.ignoreEmptyValue
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid CustomRule.message
+     * @docid
      * @default 'Value is invalid'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid CustomRule.reevaluate
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     reevaluate?: boolean;
     /**
-     * @docid CustomRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     type: 'custom';
     /**
-     * @docid CustomRule.validationCallback
+     * @docid
      * @type_function_return boolean
      * @type_function_param1 options:object
      * @type_function_param1_field1 value:string|number
@@ -134,23 +149,28 @@ export interface CustomRule {
     validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => boolean);
 }
 
+/**
+ * @docid
+ * @type object
+ * @section dxValidator
+ */
 export interface EmailRule {
     /**
-     * @docid EmailRule.ignoreEmptyValue
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid EmailRule.message
+     * @docid
      * @default 'Email is invalid'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid EmailRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -158,23 +178,28 @@ export interface EmailRule {
     type: 'email';
 }
 
+/**
+ * @docid
+ * @type object
+ * @section dxValidator
+ */
 export interface NumericRule {
     /**
-     * @docid NumericRule.ignoreEmptyValue
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid NumericRule.message
+     * @docid
      * @default 'Value should be a number'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid NumericRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -182,30 +207,35 @@ export interface NumericRule {
     type: 'numeric';
 }
 
+/**
+ * @docid
+ * @type object
+ * @section dxValidator
+ */
 export interface PatternRule {
     /**
-     * @docid PatternRule.ignoreEmptyValue
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid PatternRule.message
+     * @docid
      * @default 'Value does not match pattern'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid PatternRule.pattern
+     * @docid
      * @type regexp|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     pattern?: RegExp | string;
     /**
-     * @docid PatternRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -213,44 +243,47 @@ export interface PatternRule {
     type: 'pattern';
 }
 
+/**
+ * @docid
+ * @type object
+ * @section dxValidator
+ */
 export interface RangeRule {
     /**
-     * @docid RangeRule.ignoreEmptyValue
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid RangeRule.max
-     * @type datetime|number
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: Date | number;
     /**
-     * @docid RangeRule.message
+     * @docid
      * @default 'Value is out of range'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid RangeRule.min
-     * @type datetime|number
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: Date | number;
     /**
-     * @docid RangeRule.reevaluate
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     reevaluate?: boolean;
     /**
-     * @docid RangeRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -258,23 +291,28 @@ export interface RangeRule {
     type: 'range';
 }
 
+/**
+ * @docid
+ * @type object
+ * @section dxValidator
+ */
 export interface RequiredRule {
     /**
-     * @docid RequiredRule.message
+     * @docid
      * @default 'Required'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid RequiredRule.trim
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     trim?: boolean;
     /**
-     * @docid RequiredRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -282,42 +320,47 @@ export interface RequiredRule {
     type: 'required';
 }
 
+/**
+ * @docid
+ * @type object
+ * @section dxValidator
+ */
 export interface StringLengthRule {
     /**
-     * @docid StringLengthRule.ignoreEmptyValue
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid StringLengthRule.max
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: number;
     /**
-     * @docid StringLengthRule.message
+     * @docid
      * @default 'The length of the value is not correct'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid StringLengthRule.min
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: number;
     /**
-     * @docid StringLengthRule.trim
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     trim?: boolean;
     /**
-     * @docid StringLengthRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public

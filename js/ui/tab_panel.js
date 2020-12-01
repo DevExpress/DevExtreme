@@ -46,12 +46,6 @@ const TabPanel = MultiView.inherit({
             badgeExpr: function(data) { return data ? data.badge : undefined; }
 
             /**
-            * @name dxTabPanelItem
-            * @inherits dxMultiViewItem
-            * @type object
-            */
-
-            /**
             * @name dxTabPanelItem.visible
             * @hidden
             */
