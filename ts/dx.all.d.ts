@@ -5368,7 +5368,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGrid.Options.rowTemplate]
          */
-        rowTemplate?: DevExpress.core.template | ((rowElement: DevExpress.core.dxElement, rowInfo: { data?: any, component?: dxDataGrid, values?: Array<any>, rowIndex?: number, columns?: Array<dxDataGridColumn>, isSelected?: boolean, rowType?: string, groupIndex?: number, isExpanded?: boolean }) => any);
+        rowTemplate?: DevExpress.core.template | ((rowElement: DevExpress.core.dxElement, rowInfo: { key?: any, data?: any, component?: dxDataGrid, values?: Array<any>, rowIndex?: number, columns?: Array<dxDataGridColumn>, isSelected?: boolean, rowType?: string, groupIndex?: number, isExpanded?: boolean }) => any);
         /**
          * [descr:dxDataGrid.Options.scrolling]
          */
