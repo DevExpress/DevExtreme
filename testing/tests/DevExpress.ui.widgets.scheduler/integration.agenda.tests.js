@@ -15,18 +15,18 @@ import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
+const {
+    module,
+    testStart,
+    test
+} = QUnit;
+
 testStart(function() {
     $('#qunit-fixture').html(
         '<div id="scheduler">\
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-const {
-    module,
-    testStart,
-    test
-} = QUnit;
 
 function getDeltaTz(schedulerTz) {
     const defaultTz = -10800000;
