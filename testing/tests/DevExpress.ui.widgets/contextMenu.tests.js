@@ -2245,6 +2245,25 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
         assert.strictEqual(getFocusedItemText(instance), 'Item 1', 'focusedItem text');
         assert.strictEqual(getVisibleSubmenuCount(instance), 1, 'submenu.count');
     });
+
+    [
+        (menu, keyboard) => menu.hide(),
+        (menu, keyboard) => keyboard.keyDown('esc')
+    ].forEach(hideFunction => {
+        QUnit.test(`FocusedElement should be cleaned when context menu was hidden by ${hideFunction} function`, function(assert) {
+            const menu = new ContextMenu(this.$element, {
+                items: [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ],
+                focusStateEnabled: true
+            });
+            menu.show();
+
+            const keyboard = keyboardMock(menu.itemsContainer());
+            keyboard.keyDown('down');
+
+            hideFunction(menu, keyboard);
+            assert.strictEqual(menu.option('focusedElement'), null);
+        });
+    });
 });
 
 
