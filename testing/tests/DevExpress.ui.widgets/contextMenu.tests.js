@@ -2250,7 +2250,7 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
         (menu, keyboard) => menu.hide(),
         (menu, keyboard) => keyboard.keyDown('esc')
     ].forEach(hideFunction => {
-        QUnit.test(`FocusedElement should be cleaned when context menu was hidden by ${hideFunction} function`, function(assert) {
+        QUnit.test(`FocusedElement should be cleaned when context menu was hidden by ${hideFunction} function (T952882)`, function(assert) {
             const menu = new ContextMenu(this.$element, {
                 items: [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ],
                 focusStateEnabled: true
@@ -2263,6 +2263,31 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
             hideFunction(menu, keyboard);
             assert.strictEqual(menu.option('focusedElement'), null);
         });
+    });
+
+    QUnit.test('vertical keyboard navigation works cyclically (T952882)', function(assert) {
+        const instance = new ContextMenu(this.$element, {
+            items: [
+                { text: 'item 1' },
+                { text: 'item 2', items: [{ text: 'item 21' }, { text: 'item 22' }, { text: 'item 23' }] },
+                { text: 'item 3' }
+            ],
+            focusStateEnabled: true
+        });
+
+        instance.show();
+
+        keyboardMock(instance.itemsContainer())
+            .keyDown('down')
+            .keyDown('down')
+            .keyDown('right')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up');
+
+        assert.equal($(instance.option('focusedElement')).text(), 'item 22');
     });
 });
 

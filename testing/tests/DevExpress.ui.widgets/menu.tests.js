@@ -1887,6 +1887,19 @@ QUnit.module('keyboard navigation', {
             assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
         });
     });
+
+    QUnit.test('orientation: horizontal. vertical keyboard navigation works cyclically (T952882)', function(assert) {
+        this.instance.option({ orientation: 'horizontal', items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [ { text: 'Item 111' }, { text: 'Item 112' }, { text: 'Item 113' } ] } ] }] });
+        this.keyboard.press('down')
+            .press('down')
+            .press('right')
+            .press('up')
+            .press('up')
+            .press('up')
+            .press('up');
+
+        assert.equal($(this.instance._visibleSubmenu.option('focusedElement')).text(), 'Item 113');
+    });
 });
 
 QUnit.module('Menu with templates', {
