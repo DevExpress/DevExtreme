@@ -53,6 +53,10 @@ const DEFAULT_DEVICE = {
 
 const uaParsers = {
     generic(userAgent) {
+        if(isIOS13DesktopMode()) {
+            return;
+        }
+
         const isPhone = /windows phone/i.test(userAgent) || userAgent.match(/WPDesktop/);
         const isTablet = !isPhone && /Windows(.*)arm(.*)Tablet PC/i.test(userAgent);
         const isDesktop = !isPhone && !isTablet && /msapphost/i.test(userAgent);
@@ -72,7 +76,7 @@ const uaParsers = {
     },
 
     ios(userAgent) {
-        if(!/ip(hone|od|ad)/i.test(userAgent)) {
+        if(!/ip(hone|od|ad)/i.test(userAgent) && !isIOS13DesktopMode()) {
             return;
         }
 
@@ -109,6 +113,11 @@ const uaParsers = {
         };
     }
 };
+
+function isIOS13DesktopMode() {
+    // https://stackoverflow.com/a/58064481
+    return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+}
 
 class Devices {
     /**
