@@ -3010,3 +3010,29 @@ QUnit.test('Drag and drop item to the top of the list should not work when allow
         assert.equal($item.text(), index, 'item text');
     });
 });
+
+QUnit.test('sortable should be updated after rendering on scroll bottom', function(assert) {
+    const onItemRenderedSpy = sinon.spy();
+    const $list = $('#list').dxList({
+        pageLoadMode: 'scrollBottom',
+        dataSource: {
+            store: [1, 2, 3, 4],
+            pageSize: 2
+        },
+        itemDragging: {
+            allowReordering: true
+        },
+        onItemRendered: onItemRenderedSpy
+    });
+
+    assert.deepEqual(onItemRenderedSpy.callCount, 2, 'rendered item count');
+
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const updateSpy = sinon.spy(sortable, 'update');
+
+    $list.dxScrollView('option', 'onReachBottom')();
+
+    assert.strictEqual(updateSpy.callCount, 1, 'sortable.update is called once');
+    assert.ok(updateSpy.lastCall.calledAfter(onItemRenderedSpy.lastCall), 'update is called after items change');
+    assert.deepEqual(onItemRenderedSpy.callCount, 4, 'rendered item count');
+});

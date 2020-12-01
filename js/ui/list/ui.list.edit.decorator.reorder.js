@@ -42,6 +42,10 @@ registerDecorator(
             }, list.option('itemDragging')));
         },
 
+        afterRender: function() {
+            this._sortable.update();
+        },
+
         _dragTemplate: function(e) {
             return $(e.itemElement)
                 .clone()
