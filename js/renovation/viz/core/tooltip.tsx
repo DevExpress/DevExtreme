@@ -80,7 +80,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     x: 0, y: 0, width: 0, height: 0,
   };
 
-  @Ref() textRef!: SVGSVGElement;
+  @Ref() textRef!: SVGGElement;
 
   @Effect()
   calculateSize(): void {

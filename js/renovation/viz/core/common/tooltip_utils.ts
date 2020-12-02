@@ -1,4 +1,4 @@
-import { RecalculateCoordinates, Coordinates, Size } from './types.d';
+import { RecalculateCoordinates, TooltipCoordinates, Size } from './types.d';
 
 const {
   max, min, PI, cos, sin, asin, round, ceil, floor,
@@ -23,19 +23,19 @@ function rotateSize({ width, height }: Size, angle: number): Size {
 
 function rotateX({
   x, y, anchorX, anchorY,
-}: Coordinates, angle: number): number {
+}: TooltipCoordinates, angle: number): number {
   return (anchorX - x) * round(cos(angle)) + (anchorY - y) * round(sin(angle)) + x;
 }
 
 function rotateY({
   x, y, anchorX, anchorY,
-}: Coordinates, angle: number): number {
+}: TooltipCoordinates, angle: number): number {
   return -(anchorX - x) * round(sin(angle)) + (anchorY - y) * round(cos(angle)) + y;
 }
 
 export function getCloudPoints(
   size: Size,
-  coordinates: Coordinates,
+  coordinates: TooltipCoordinates,
   rotationAngle: number,
   options: { arrowWidth: number; cornerRadius: number },
   bounded: boolean,
@@ -189,7 +189,7 @@ export function getCloudPoints(
 
 export function recalculateCoordinates({
   canvas, anchorX, anchorY, size, offset, arrowLength,
-}: RecalculateCoordinates): Coordinates {
+}: RecalculateCoordinates): TooltipCoordinates {
   const bounds = {
     xl: canvas.left,
     xr: canvas.width - canvas.right,
@@ -242,7 +242,7 @@ export function getCloudAngle(
   { width, height }: Size,
   {
     x, y, anchorX, anchorY,
-  }: Coordinates,
+  }: TooltipCoordinates,
 ): number {
   const halfWidth = width / 2;
   const halfHeight = height / 2;

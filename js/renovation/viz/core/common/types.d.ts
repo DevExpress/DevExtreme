@@ -4,5 +4,5 @@ export type RecalculateCoordinates = {
     size: { width: number; height: number };
     offset: number; arrowLength: number; 
 };
-export type Coordinates = { x: number; y: number; anchorX: number; anchorY: number };
+export type TooltipCoordinates = { x: number; y: number; anchorX: number; anchorY: number };
 export type Size = {width: number; height: number}
