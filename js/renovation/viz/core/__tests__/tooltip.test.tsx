@@ -15,7 +15,6 @@ jest.mock('../common/tooltip_utils', () => ({
 
 const tooltipProps = {
   text: 'Tooltip test text',
-  border: { color: 'test_color1', width: 3 },
   color: 'test_color2',
   font: {
     color: 'test_font_color',
@@ -35,15 +34,23 @@ const tooltipProps = {
   y: 3,
 };
 
+const props = {
+  size: {
+    width: 40, height: 30, x: 1, y: 2,
+  },
+  border: {
+    stroke: 'test_color1',
+    strokeWidth: 3,
+    strokeOpacity: 0.5,
+    dashStyle: 'dash_style_test',
+  },
+  textRef: {},
+  fullSize: { width: 48, height: 40 },
+  props: tooltipProps,
+} as Partial<Tooltip>;
+
 describe('Render', () => {
   it('should render groups', () => {
-    const props = {
-      size: {
-        width: 40, height: 30, x: 1, y: 2,
-      },
-      textRef: {},
-      props: tooltipProps,
-    } as Partial<Tooltip>;
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
 
     expect(tooltip.find('g').at(0).props()).toMatchObject({
@@ -58,14 +65,6 @@ describe('Render', () => {
   });
 
   it('should render path with props', () => {
-    const props = {
-      size: {
-        width: 40, height: 30, x: 1, y: 2,
-      },
-      fullSize: { width: 48, height: 40 },
-      textRef: {},
-      props: tooltipProps,
-    } as Partial<Tooltip>;
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
 
     expect(tooltip.find('PathSvgElement').props()).toMatchObject({
@@ -97,13 +96,6 @@ describe('Render', () => {
   });
 
   it('should render text with props', () => {
-    const props = {
-      size: {
-        width: 40, height: 30, x: 1, y: 2,
-      },
-      textRef: {},
-      props: tooltipProps,
-    } as Partial<Tooltip>;
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
 
     expect(tooltip.find('TextSvgElement').props()).toMatchObject({
@@ -138,5 +130,38 @@ describe('Getters', () => {
   it('should return full size of tooltip', () => {
     const tooltip = new Tooltip({ text: 'Tooltip test text', paddingLeftRight: 4, paddingTopBottom: 3 });
     expect(tooltip.fullSize).toEqual({ width: 8, height: 6 });
+  });
+
+  it('should return border options', () => {
+    const tooltip = new Tooltip({
+      text: 'Tooltip test text',
+      border: {
+        color: 'test_color',
+        width: 4,
+        opacity: 0.4,
+        dashStyle: 'test_dash_style',
+        visible: true,
+      },
+    });
+    expect(tooltip.border).toEqual({
+      dashStyle: 'test_dash_style',
+      stroke: 'test_color',
+      strokeWidth: 4,
+      strokeOpacity: 0.4,
+    });
+  });
+
+  it('should return border options, border visibility is false', () => {
+    const tooltip = new Tooltip({
+      text: 'Tooltip test text',
+      border: {
+        color: 'test_color',
+        width: 4,
+        opacity: 0.4,
+        dashStyle: 'test_dash_style',
+        visible: false,
+      },
+    });
+    expect(tooltip.border).toEqual({});
   });
 });

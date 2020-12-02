@@ -5,7 +5,7 @@ import {
 import { PathSvgElement } from './renderers/svg_path';
 import { TextSvgElement } from './renderers/svg_text';
 
-import { Size } from './common/types.d';
+import { Size, Border } from './common/types.d';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle,
@@ -15,8 +15,9 @@ export const viewFunction = ({
   textRef,
   size,
   fullSize,
+  border,
   props: {
-    color, border, text, x, y, font,
+    color, text, x, y, font,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
@@ -30,11 +31,11 @@ export const viewFunction = ({
         d={getCloudPoints(fullSize, correctedCoordinates, angle,
           { cornerRadius, arrowWidth }, true)}
         fill={color}
-        stroke={border.color}
-        strokeWidth={border.width}
-        rotate={angle}
-        rotateX={correctedCoordinates.x}
-        rotateY={correctedCoordinates.y}
+        stroke={border.stroke}
+        strokeWidth={border.strokeWidth}
+        strokeOpacity={border.strokeOpacity}
+        dashStyle={border.dashStyle}
+        transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
       />
       <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
         <TextSvgElement
@@ -56,7 +57,10 @@ export const viewFunction = ({
 export class TooltipProps {
   @OneWay() color = '#fff';
 
-  @OneWay() border = { color: '#000', width: 1 };
+  @OneWay() border: { color: string; width: number; dashStyle: string;
+    opacity?: number; visible: boolean; } = {
+    color: '#d3d3d3', width: 1, dashStyle: 'solid', opacity: undefined, visible: true,
+  };
 
   @OneWay() text = '';
 
@@ -112,5 +116,18 @@ export class Tooltip extends JSXComponent(TooltipProps) {
       width: this.size.width + paddingLeftRight * 2,
       height: this.size.height + paddingTopBottom * 2,
     };
+  }
+
+  get border(): Border {
+    const { border } = this.props;
+    if (border.visible) {
+      return {
+        stroke: border.color,
+        strokeWidth: border.width,
+        strokeOpacity: border.opacity,
+        dashStyle: border.dashStyle,
+      };
+    }
+    return {};
   }
 }
