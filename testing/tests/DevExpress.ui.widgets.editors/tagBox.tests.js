@@ -169,7 +169,7 @@ QUnit.module('list selection', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        const $listItems = $tagBox.find('.' + LIST_ITEM_CLASS);
+        const $listItems = $tagBox.find(`.${LIST_ITEM_CLASS}`);
 
         assert.equal($listItems.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'first item has selected class');
         assert.equal($listItems.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'second item does not have selected class');
@@ -203,27 +203,27 @@ QUnit.module('list selection', moduleSetup, () => {
         const tagBox = $tagBox.dxTagBox('instance');
         const $list = tagBox._$list;
 
-        assert.equal($list.find('.' + LIST_ITEM_CLASS).length, dataSource.length, 'items count is correct');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length, 'items count is correct');
 
         tagBox.open();
         $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
-        assert.equal($list.find('.' + LIST_ITEM_CLASS).length, dataSource.length - 1, 'items count is correct after the first item selection');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length - 1, 'items count is correct after the first item selection');
 
         tagBox.open();
         $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
-        assert.equal($list.find('.' + LIST_ITEM_CLASS).length, dataSource.length - 2, 'items count is correct after the second item selection');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length - 2, 'items count is correct after the second item selection');
 
         tagBox.open();
         $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
-        assert.equal($list.find('.' + LIST_ITEM_CLASS).length, dataSource.length - 3, 'items count is correct after the third item selection');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length - 3, 'items count is correct after the third item selection');
 
         tagBox.open();
         $($tagBox.find('.' + TAGBOX_TAG_REMOVE_BUTTON_CLASS).eq(0)).trigger('dxclick');
-        assert.equal($list.find('.' + LIST_ITEM_CLASS).length, dataSource.length - 2, 'items count is correct after the first tag is removed');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length - 2, 'items count is correct after the first tag is removed');
 
         tagBox.open();
         $($tagBox.find('.' + TAGBOX_TAG_REMOVE_BUTTON_CLASS).eq(0)).trigger('dxclick');
-        assert.equal($list.find('.' + LIST_ITEM_CLASS).length, dataSource.length - 1, 'items count is correct after the second tag is removed');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length - 1, 'items count is correct after the second tag is removed');
     });
 
     QUnit.test('Selected item should be removed from list if "hideSelectedItems" option is true and minSearchLength > 0 (T951777)', function(assert) {
@@ -245,10 +245,10 @@ QUnit.module('list selection', moduleSetup, () => {
 
         keyboard.type('1');
         this.clock.tick(TIME_TO_WAIT);
-        assert.strictEqual($list.find('.' + LIST_ITEM_CLASS).length, 1, 'items count is correct after the first item selection');
+        assert.strictEqual($list.find(`.${LIST_ITEM_CLASS}`).length, 1, 'items count is correct after the first item selection');
 
         $($tagBox.find('.' + TAGBOX_TAG_REMOVE_BUTTON_CLASS).eq(0)).trigger('dxclick');
-        assert.equal($list.find('.' + LIST_ITEM_CLASS).length, 2, 'items count is correct after the first tag is removed');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, 2, 'items count is correct after the first tag is removed');
     });
 
     QUnit.test('Selected item tag should be correct if hideSelectedItems is set (T580639)', function(assert) {
@@ -323,13 +323,13 @@ QUnit.module('list selection', moduleSetup, () => {
         }).dxTagBox('instance');
 
         const content = tagBox.content();
-        let $item = $(content).find('.' + LIST_ITEM_CLASS).eq(0);
+        let $item = $(content).find(`.${LIST_ITEM_CLASS}`).eq(0);
 
         $item.trigger('dxclick');
         assert.deepEqual(spy.args[1][0].addedItems, [1], 'added items is correct');
         assert.deepEqual(spy.args[1][0].removedItems, [], 'removed items is empty');
 
-        $item = $(content).find('.' + LIST_ITEM_CLASS).eq(1);
+        $item = $(content).find(`.${LIST_ITEM_CLASS}`).eq(1);
         $item.trigger('dxclick');
         assert.deepEqual(spy.args[2][0].addedItems, [3], 'added items is correct');
         assert.deepEqual(spy.args[2][0].removedItems, [], 'removed items is empty');
@@ -344,7 +344,7 @@ QUnit.module('list selection', moduleSetup, () => {
         }).dxTagBox('instance');
 
         const content = tagBox.content();
-        const $item = $(content).find('.' + LIST_ITEM_CLASS).eq(0);
+        const $item = $(content).find(`.${LIST_ITEM_CLASS}`).eq(0);
 
         $item.trigger('dxclick');
 
@@ -361,15 +361,15 @@ QUnit.module('tags', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.strictEqual($element.find('.' + LIST_ITEM_CLASS).length, 3, 'found 3 items');
+        assert.strictEqual($element.find(`.${LIST_ITEM_CLASS}`).length, 3, 'found 3 items');
 
-        $($element.find('.' + LIST_ITEM_CLASS).first()).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).first()).trigger('dxclick');
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'tag is added');
 
-        $($element.find('.' + LIST_ITEM_CLASS).first()).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).first()).trigger('dxclick');
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 0, 'tag is removed');
 
-        $($element.find('.' + LIST_ITEM_CLASS).last()).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).last()).trigger('dxclick');
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'another tag is added');
 
         const $close = $element.find('.' + TAGBOX_TAG_REMOVE_BUTTON_CLASS).last();
@@ -428,7 +428,7 @@ QUnit.module('tags', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $listItems = $('.' + LIST_ITEM_CLASS);
+        const $listItems = $(`.${LIST_ITEM_CLASS}`);
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
 
@@ -452,7 +452,7 @@ QUnit.module('tags', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $listItems = $('.' + LIST_ITEM_CLASS);
+        const $listItems = $(`.${LIST_ITEM_CLASS}`);
         $($listItems.eq(0)).trigger('dxclick');
 
         assert.equal($tagBox.find('.' + TAGBOX_TAG_CLASS).length, 1, 'empty string value was successfully selected');
@@ -513,7 +513,7 @@ QUnit.module('tags', moduleSetup, () => {
             opened: true
         });
 
-        const $listItems = $('.' + LIST_ITEM_CLASS);
+        const $listItems = $(`.${LIST_ITEM_CLASS}`);
 
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
@@ -991,10 +991,10 @@ QUnit.module('the \'onValueChanged\' option', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        $($element.find('.' + LIST_ITEM_CLASS).eq(0)).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
         assert.deepEqual(value, [1], 'only first item is selected');
 
-        $($element.find('.' + LIST_ITEM_CLASS).eq(2)).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).eq(2)).trigger('dxclick');
         assert.deepEqual(value, [1, 3], 'two items are selected');
     });
 
@@ -1098,8 +1098,8 @@ QUnit.module('the \'onValueChanged\' option', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        $($element.find('.' + LIST_ITEM_CLASS).eq(0)).trigger('dxclick');
-        $($element.find('.' + LIST_ITEM_CLASS).eq(2)).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).eq(2)).trigger('dxclick');
         $($element.find('.' + TAGBOX_TAG_REMOVE_BUTTON_CLASS).eq(0)).trigger('dxclick');
 
         assert.deepEqual(value, [3], 'item is deleted');
@@ -3632,7 +3632,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         keyboardMock(instance._input()).type('te');
         this.clock.tick(TIME_TO_WAIT);
 
-        const $listItems = $('.' + LIST_ITEM_CLASS);
+        const $listItems = $(`.${LIST_ITEM_CLASS}`);
 
         $listItems.first().trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
@@ -3987,7 +3987,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             .type('custom')
             .press('enter');
 
-        $($tagBox.find('.' + LIST_ITEM_CLASS).first()).trigger('dxclick');
+        $($tagBox.find(`.${LIST_ITEM_CLASS}`).first()).trigger('dxclick');
         const $tags = $tagBox.find('.dx-tag');
 
         assert.strictEqual($tags.length, 2, 'only two tags are added');
@@ -4367,7 +4367,7 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
             }
         });
 
-        const $items = $('.' + LIST_ITEM_CLASS);
+        const $items = $(`.${LIST_ITEM_CLASS}`);
 
         assert.equal($field.text(), '1', 'text was added on init');
 
@@ -6239,13 +6239,13 @@ QUnit.module('regression', {
 
         kb.type('111');
         this.clock.tick();
-        assert.equal($(instance.content()).find('.' + LIST_ITEM_CLASS).length, 1, 'filter was applied');
+        assert.equal($(instance.content()).find(`.${LIST_ITEM_CLASS}`).length, 1, 'filter was applied');
 
         $tagContainer.trigger('dxclick');
         $tagContainer.trigger('dxclick');
 
         assert.equal($input.val(), '111', 'input is not cleared');
-        assert.equal($(instance.content()).find('.' + LIST_ITEM_CLASS).length, 1, 'filter is not cleared');
+        assert.equal($(instance.content()).find(`.${LIST_ITEM_CLASS}`).length, 1, 'filter is not cleared');
     });
 
     QUnit.test('search filter should be cleared on focusout', function(assert) {
@@ -6268,7 +6268,7 @@ QUnit.module('regression', {
         this.clock.tick();
 
         assert.equal($input.val(), '', 'input was cleared');
-        assert.equal($(instance.content()).find('.' + LIST_ITEM_CLASS).length, 3, 'filter was cleared');
+        assert.equal($(instance.content()).find(`.${LIST_ITEM_CLASS}`).length, 3, 'filter was cleared');
     });
 
     QUnit.test('Items is not selected when values is set on the onSelectAllValueChanged event', function(assert) {
