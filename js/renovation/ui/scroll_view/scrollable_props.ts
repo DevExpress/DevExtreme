@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { EventCallback } from '../common/event_callback.d';
 import BaseWidgetProps from '../../utils/base_props';
-import { ScrollableDirection, ScrollEventArgs } from './types';
+import { ScrollableDirection, ScrollEventArgs } from './types.d';
 
 @ComponentBindings()
 export class ScrollableInternalProps {
@@ -14,7 +14,7 @@ export class ScrollableInternalProps {
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
 }
 
-export type ScrollablePropsInternalPropsType = ScrollableInternalProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+export type ScrollableInternalPropsType = ScrollableInternalProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
 @ComponentBindings()
 export class ScrollableProps extends ScrollableInternalProps {

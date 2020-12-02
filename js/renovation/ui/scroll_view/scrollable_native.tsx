@@ -14,12 +14,12 @@ import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 
 import {
-  ScrollablePropsInternalPropsType,
+  ScrollableInternalPropsType,
 } from './scrollable_props';
 
 import {
   ScrollableLocation, ScrollOffset, ScrollableBoundary, ScrollableDirection,
-} from './types';
+} from './types.d';
 
 const DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = 'horizontal';
@@ -77,7 +77,7 @@ export const viewFunction = ({
 @Component({
   view: viewFunction,
 })
-export class ScrollableNative extends JSXComponent<ScrollablePropsInternalPropsType>() {
+export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>() {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() containerRef!: HTMLDivElement;
