@@ -310,7 +310,7 @@ const calculatePosition = function(what, options) {
             boundaryHeight = $boundary.height();
         }
 
-        if(container) {
+        if(container && !isWindow(container)) {
             const $container = $(container);
             const containerPosition = $container.offset();
 
