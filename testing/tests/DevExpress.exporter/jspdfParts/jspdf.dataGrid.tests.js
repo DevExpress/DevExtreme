@@ -4496,59 +4496,14 @@ QUnit.module('customizeCell', moduleConfig, () => {
 });
 
 QUnit.module('onCellRendered', moduleConfig, () => {
-    [{
-        didDrawCell: true,
-        expectedCallbacksOrder: [
-            'onCellRendered: F1',
-            'autoTablePlugin: F1',
-            'onCellRendered: F2',
-            'autoTablePlugin: F2',
-            'onCellRendered: 1_1',
-            'autoTablePlugin: 1_1',
-            'onCellRendered: 1_2',
-            'autoTablePlugin: 1_2',
-            'onCellRendered: 2_1',
-            'autoTablePlugin: 2_1',
-            'onCellRendered: 2_2',
-            'autoTablePlugin: 2_2'
-        ]
-    }, {
-        didDrawCell: false,
-        expectedCallbacksOrder: [
-            'onCellRendered: F1',
-            'onCellRendered: F2',
-            'onCellRendered: 1_1',
-            'onCellRendered: 1_2',
-            'onCellRendered: 2_1',
-            'onCellRendered: 2_2'
-        ]
-    }].forEach((config) => {
-        QUnit.test(`Custom render in cells, didDrawCell is defined: ${config.didDrawCell}`, function(assert) {
+    [true, false].forEach((didDrawCellHookDefined) => {
+        QUnit.test(`Custom render of the content, autoTable.didDrawCell: ${didDrawCellHookDefined}`, function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1_1', f2: '1_2' }, { f1: '2_1', f2: '2_2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 loadingTimeout: undefined
             }).dxDataGrid('instance');
-
-            let onCellRenderedCallCount = 0;
-            const options = {
-                onCellRendered: (options) => {
-                    const cellContent = 'onCellRendered: ' + (options.gridCell.rowType === 'header' ? options.gridCell.column.caption : options.gridCell.value);
-                    assert.strictEqual(config.expectedCallbacksOrder[onCellRenderedCallCount], cellContent, `onCellRendered: onCellRendered, ${onCellRenderedCallCount}`);
-                    onCellRenderedCallCount++;
-                }
-            };
-
-            if(config.didDrawCell) {
-                options.autoTableOptions = {
-                    didDrawCell: (hookData) => {
-                        const cellContent = 'autoTablePlugin: ' + hookData.cell.text[0];
-                        assert.strictEqual(config.expectedCallbacksOrder[onCellRenderedCallCount], cellContent, `onCellRendered: onCellRendered, ${onCellRenderedCallCount}`);
-                        onCellRenderedCallCount++;
-                    }
-                };
-            }
 
             const expectedCells = {
                 head: [[
@@ -4563,6 +4518,51 @@ QUnit.module('onCellRendered', moduleConfig, () => {
                     { pdfCell: { content: ds[1].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1) } }
                 ]]
             };
+
+            let onCellRenderingCallCount = 0;
+            const expectedOnCellRenderingOrder = didDrawCellHookDefined
+                ? [
+                    { content: 'F1' },
+                    { content: 'F1', isDidDrawHook: true },
+                    { content: 'F2' },
+                    { content: 'F2', isDidDrawHook: true },
+                    { content: '1_1' },
+                    { content: '1_1', isDidDrawHook: true },
+                    { content: '1_2' },
+                    { content: '1_2', isDidDrawHook: true },
+                    { content: '2_1' },
+                    { content: '2_1', isDidDrawHook: true },
+                    { content: '2_2' },
+                    { content: '2_2', isDidDrawHook: true }
+                ] : [
+                    { content: 'F1' },
+                    { content: 'F2' },
+                    { content: '1_1' },
+                    { content: '1_2' },
+                    { content: '2_1' },
+                    { content: '2_2' }
+                ];
+
+            const checkExpectedHooks = (content, isDidDrawHook) => {
+                assert.strictEqual(expectedOnCellRenderingOrder[onCellRenderingCallCount].isDidDrawHook || false, isDidDrawHook, `onCellRendered: ${onCellRenderingCallCount}`);
+                assert.strictEqual(expectedOnCellRenderingOrder[onCellRenderingCallCount].content, content, `onCellRendered: ${onCellRenderingCallCount}`);
+                onCellRenderingCallCount++;
+            };
+
+            const options = {
+                onCellRendered: (options) => {
+                    const content = options.gridCell.rowType === 'header' ? options.gridCell.column.caption : options.gridCell.value;
+                    checkExpectedHooks(content, false);
+                }
+            };
+
+            if(didDrawCellHookDefined) {
+                options.autoTableOptions = {
+                    didDrawCell: (hookData) => {
+                        checkExpectedHooks(hookData.cell.text[0], true);
+                    }
+                };
+            }
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
