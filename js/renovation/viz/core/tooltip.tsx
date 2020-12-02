@@ -16,7 +16,7 @@ export const viewFunction = ({
   size,
   fullSize,
   props: {
-    color, border, text, x, y,
+    color, border, text, x, y, font,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
@@ -36,8 +36,17 @@ export const viewFunction = ({
         rotateX={correctedCoordinates.x}
         rotateY={correctedCoordinates.y}
       />
-      <g textAnchor="middle" ref={textRef} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
-        <TextSvgElement text={text} />
+      <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
+        <TextSvgElement
+          text={text}
+          styles={{
+            fill: font.color,
+            fontFamily: font.family,
+            fontSize: font.size,
+            fontWeight: font.weight,
+            opacity: font.opacity,
+          }}
+        />
       </g>
     </g>
   );
@@ -69,6 +78,14 @@ export class TooltipProps {
 
   @OneWay() canvas = {
     left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
+  };
+
+  @OneWay() font = {
+    color: '#232323',
+    family: 'Segoe UI',
+    opacity: 1,
+    size: 12,
+    weight: 400,
   };
 }
 

@@ -17,6 +17,13 @@ const tooltipProps = {
   text: 'Tooltip test text',
   border: { color: 'test_color1', width: 3 },
   color: 'test_color2',
+  font: {
+    color: 'test_font_color',
+    family: 'test_family_color',
+    opacity: 0.4,
+    size: 15,
+    weight: 600,
+  },
   canvas: {
     left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 400,
   },
@@ -101,6 +108,13 @@ describe('Render', () => {
 
     expect(tooltip.find('TextSvgElement').props()).toMatchObject({
       text: 'Tooltip test text',
+      styles: {
+        fill: 'test_font_color',
+        fontFamily: 'test_family_color',
+        opacity: 0.4,
+        fontSize: 15,
+        fontWeight: 600,
+      },
     });
   });
 });
