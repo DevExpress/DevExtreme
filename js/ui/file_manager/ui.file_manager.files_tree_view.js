@@ -135,10 +135,6 @@ class FileManagerFilesTreeView extends Widget {
     toggleNodeDisabledState(key, state) {
         const node = this._getNodeByKey(key);
         this._filesTreeView._toggleNodeDisabledState(node, state);
-        // console.log(this._getNodeByKey(this._getCurrentDirectory().getInternalKey())?.getDisplayName());
-        // if(node) {
-        //     node.disabled = true;
-        // }
     }
 
     _updateFocusedElement() {
@@ -152,8 +148,7 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     _getNodeByKey(key) {
-        return this._filesTreeView?._dataAdapter.getNodeByKey(key);
-        // return this._filesTreeView._getNode(key);
+        return this._filesTreeView?._getNode(key);
     }
 
     _getItemElementByKey(key) {
@@ -210,23 +205,22 @@ class FileManagerFilesTreeView extends Widget {
         return this.option('contextMenu');
     }
 
-    expandDirectory(directoryInfo) {
+    toggleDirectoryExpandedState(directoryInfo, state) {
         const deferred = new Deferred();
-        if(!directoryInfo || directoryInfo.items.length === 0) {
-            return deferred.reject().promise();
-        }
-        // const treeViewNode = this._filesTreeView._dataAdapter.getNodeByKey(directoryInfo.getInternalKey());
-        const treeViewNode = this._getNodeByKey(directoryInfo.getInternalKey());
+        const treeViewNode = this._getNodeByKey(directoryInfo?.getInternalKey());
         if(!treeViewNode) {
             return deferred.reject().promise();
         }
-        if(treeViewNode.expanded) {
+        if(treeViewNode.expanded === state) {
             return deferred.resolve().promise();
         }
 
-        // treeViewNode.expandedDeferred = deferred;
-        return this._filesTreeView.expandItem(directoryInfo.getInternalKey());
-        // return deferred.promise();
+        if(directoryInfo?.items.length === 0) {
+            return deferred.reject().promise();
+        }
+
+        const action = state ? 'expandItem' : 'collapseItem';
+        return this._filesTreeView[action](directoryInfo.getInternalKey());
     }
 
     refresh() {
@@ -241,26 +235,26 @@ class FileManagerFilesTreeView extends Widget {
         this._updateFocusedElement();
         this._storeExpandedState && this._updateExpandedStateToCurrentDirectory();
     }
+
     _updateExpandedStateToCurrentDirectory() {
-        this._updateExpandedStateToDirectory(this._getCurrentDirectory());
+        this.toggleDirectoryExpandedStateRecursive(this._getCurrentDirectory(), true);
     }
 
-    _updateExpandedStateToDirectory(directoryInfo) {
+    toggleDirectoryExpandedStateRecursive(directoryInfo, state) {
         const dirLine = [ ];
         for(let dirInfo = directoryInfo; dirInfo; dirInfo = dirInfo.parentDirectory) {
             dirLine.unshift(dirInfo);
         }
 
-        return this.expandDirectoryLineRecursive(dirLine);
+        return this.toggleDirectoryLineExpandedState(dirLine, state);
     }
 
-    expandDirectoryLineRecursive(dirLine) {
-        const expandCallback = () => this.expandDirectoryLineRecursive(dirLine);
+    toggleDirectoryLineExpandedState(dirLine, state) {
         if(!dirLine.length) {
             return new Deferred().resolve().promise();
         }
-        return this.expandDirectory(dirLine.shift())
-            .then(expandCallback, expandCallback);
+        return this.toggleDirectoryExpandedState(dirLine.shift(), state)
+            .then(() => this.toggleDirectoryLineExpandedState(dirLine, state));
     }
 
 }

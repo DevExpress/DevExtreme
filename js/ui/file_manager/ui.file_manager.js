@@ -35,6 +35,11 @@ const FILE_MANAGER_ITEM_CUSTOM_THUMBNAIL_CLASS = FILE_MANAGER_CLASS + '-item-cus
 
 const PARENT_DIRECTORY_KEY_PREFIX = '[*DXPDK*]$40F96F03-FBD8-43DF-91BE-F55F4B8BA871$';
 
+const viewAreas = {
+    folders: 'navPane',
+    items: 'itemView'
+};
+
 class FileManager extends Widget {
 
     _initTemplates() {
@@ -148,7 +153,7 @@ class FileManager extends Widget {
     }
 
     _createFilesTreeView(container) {
-        this._filesTreeViewContextMenu = this._createContextMenu(false, 'navPane');
+        this._filesTreeViewContextMenu = this._createContextMenu(false, viewAreas.folders);
 
         const $filesTreeView = $('<div>')
             .addClass(FILE_MANAGER_DIRS_PANEL_CLASS)
@@ -165,7 +170,7 @@ class FileManager extends Widget {
     }
 
     _createItemView($container, viewMode) {
-        this._itemViewContextMenu = this._createContextMenu(true, 'itemView');
+        this._itemViewContextMenu = this._createContextMenu(true, viewAreas.items);
 
         const itemViewOptions = this.option('itemView');
 
@@ -179,6 +184,7 @@ class FileManager extends Widget {
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onFocusedItemChanged: this._onItemViewFocusedItemChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
+            onContextMenuShowing: () => this._onContextMenuShowing(viewAreas.items),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option('customizeDetailColumns'),
             detailColumns: this.option('itemView.details.columns')
@@ -208,6 +214,7 @@ class FileManager extends Widget {
             commandManager: this._commandManager,
             items: this.option('contextMenu.items'),
             onItemClick: (args) => this._actions.onContextMenuItemClick(args),
+            onContextMenuShowing: () => this._onContextMenuShowing(viewArea),
             isolateCreationItemCommands,
             viewArea
         });
@@ -389,6 +396,10 @@ class FileManager extends Widget {
 
     _onItemViewClick() {
         this._setItemsViewAreaActive(true);
+    }
+
+    _onContextMenuShowing(viewArea) {
+        this._setItemsViewAreaActive(viewArea === viewAreas.items);
     }
 
     _getItemThumbnailInfo(fileInfo) {
@@ -775,7 +786,7 @@ class FileManager extends Widget {
         this._setCurrentDirectory(newCurrentDirectory);
 
         if(newCurrentDirectory) {
-            this._filesTreeView.expandDirectory(newCurrentDirectory.parentDirectory);
+            this._filesTreeView.toggleDirectoryExpandedState(newCurrentDirectory.parentDirectory, true);
         }
     }
 
