@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 
 import messageLocalization from '../../localization/message';
+import { getMapFromObject } from './ui.file_manager.common';
 
 import FileManagerDialogBase from './ui.file_manager.dialog.js';
 import FileManagerFilesTreeView from './ui.file_manager.files_tree_view';
@@ -84,20 +85,25 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     }
 
     _getUnavailableLocations(isDisabled) {
-        const expandLocations = new Map();
-        const collapseLocations = new Map();
+        const expandLocations = {};
+        const collapseLocations = {};
         this._targetItemInfos.forEach(itemInfo => {
             if(itemInfo.parentDirectory) {
-                expandLocations.set(itemInfo.parentDirectory.getInternalKey(), itemInfo.parentDirectory);
+                expandLocations[itemInfo.parentDirectory.getInternalKey()] = itemInfo.parentDirectory;
             }
             if(itemInfo.fileItem.isDirectory) {
-                collapseLocations.set(itemInfo.getInternalKey(), itemInfo);
+                collapseLocations[itemInfo.getInternalKey()] = itemInfo;
             }
         });
+
+        const expandMap = getMapFromObject(expandLocations);
+        const collapseMap = getMapFromObject(collapseLocations);
+
         return {
-            locationsToExpand: isDisabled ? Array.from(expandLocations.values()) : [],
-            locationsToCollapse: isDisabled ? Array.from(collapseLocations.values()) : [],
-            unavailableLocationKeys: Array.from(expandLocations.keys()).concat(...Array.from(collapseLocations.keys())) };
+            locationsToExpand: isDisabled ? expandMap.values : [],
+            locationsToCollapse: isDisabled ? collapseMap.values : [],
+            unavailableLocationKeys: expandMap.keys.concat(...collapseMap.keys)
+        };
     }
 
 }
