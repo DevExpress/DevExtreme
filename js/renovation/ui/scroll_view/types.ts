@@ -1,18 +1,18 @@
-export interface ScrollViewBoundary {
+export interface ScrollableBoundary {
   reachedBottom: boolean;
   reachedLeft: boolean;
   reachedRight: boolean;
   reachedTop: boolean;
 }
 
-export interface ScrollEventArgs extends Partial<ScrollViewBoundary> {
+export interface ScrollEventArgs extends Partial<ScrollableBoundary> {
   event: Event;
   scrollOffset: Partial<ScrollOffset>;
 }
 
-export type ScrollViewDirection = 'both' | 'horizontal' | 'vertical';
+export type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
 
-export interface ScrollViewLocation {
+export interface ScrollableLocation {
   top: number;
   left: number;
 }
