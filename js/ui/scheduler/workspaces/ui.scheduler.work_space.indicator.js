@@ -5,7 +5,6 @@ import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
 import { hasWindow } from '../../../core/utils/window';
 import { each } from '../../../core/utils/iterator';
-import browser from '../../../core/utils/browser';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -88,10 +87,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             if(startDate < date && endDate < date) {
                 const $shader = $('<div>').addClass(SCHEDULER_DATE_TIME_SHADER_CLASS).appendTo($cell);
                 additionalClass && $shader.addClass(additionalClass);
-                // NOTE: percentage height doesn't work in ie
-                if(browser.msie) {
-                    isAllDay ? $shader.height(this.getAllDayHeight()) : $shader.height(this.getCellHeight());
-                }
             }
             // NOTE: the cell is not completely expired
             if(!isAllDay && startDate <= date && endDate > date) {
@@ -104,11 +99,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _setLastShaderSize($shader, size) {
         $shader.height(size + '%');
-
-        // NOTE: percentage height doesn't work in ie
-        if(browser.msie) {
-            $shader.height(size * this.getCellHeight() / 100);
-        }
     }
 
     _isIndicatorSimple(index) {
