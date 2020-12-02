@@ -3079,7 +3079,7 @@ declare module DevExpress.ui {
         /**
          * [descr:AsyncRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /**
          * [descr:AsyncRule.validationCallback]
          */
@@ -3234,7 +3234,7 @@ declare module DevExpress.ui {
         /**
          * [descr:CompareRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:CustomRule]
@@ -3255,7 +3255,7 @@ declare module DevExpress.ui {
         /**
          * [descr:CustomRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /**
          * [descr:CustomRule.validationCallback]
          */
@@ -3415,7 +3415,7 @@ declare module DevExpress.ui {
         /**
          * [descr:EmailRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:GridBase.Options]
@@ -4436,7 +4436,7 @@ declare module DevExpress.ui {
         /**
          * [descr:NumericRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:PatternRule]
@@ -4457,7 +4457,7 @@ declare module DevExpress.ui {
         /**
          * [descr:PatternRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:RangeRule]
@@ -4486,7 +4486,7 @@ declare module DevExpress.ui {
         /**
          * [descr:RangeRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:RequiredRule]
@@ -4503,7 +4503,7 @@ declare module DevExpress.ui {
         /**
          * [descr:RequiredRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:SearchBoxMixin.Options]
@@ -4567,7 +4567,7 @@ declare module DevExpress.ui {
         /**
          * [descr:StringLengthRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:Widget.Options]
