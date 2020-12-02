@@ -1,13 +1,17 @@
+/**
+* @docid
+* @type object
+*/
 export interface VectorMapProjectionConfig {
     /**
-     * @docid VectorMapProjectionConfig.aspectRatio
+     * @docid
      * @default 1
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     aspectRatio?: number;
     /**
-     * @docid VectorMapProjectionConfig.from
+     * @docid
      * @type_function_param1 coordinates:Array<number>
      * @type_function_return Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -15,7 +19,7 @@ export interface VectorMapProjectionConfig {
      */
     from?: ((coordinates: Array<number>) => Array<number>);
     /**
-     * @docid VectorMapProjectionConfig.to
+     * @docid
      * @type_function_param1 coordinates:Array<number>
      * @type_function_return Array<number>
      * @prevFileNamespace DevExpress.viz

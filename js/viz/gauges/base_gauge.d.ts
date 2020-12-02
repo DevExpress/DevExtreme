@@ -24,28 +24,28 @@ import BaseWidget, {
 
 export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
     /**
-     * @docid BaseGaugeOptions.animation
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     animation?: BaseGaugeAnimation;
     /**
-     * @docid BaseGaugeOptions.containerBackgroundColor
+     * @docid
      * @default 'none'
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     containerBackgroundColor?: string;
     /**
-     * @docid BaseGaugeOptions.loadingIndicator
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     loadingIndicator?: BaseGaugeLoadingIndicator;
     /**
-     * @docid BaseGaugeOptions.onTooltipHidden
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
@@ -56,7 +56,7 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      */
     onTooltipHidden?: ((e: { component?: T, element?: dxElement, model?: any, target?: any }) => any);
     /**
-     * @docid BaseGaugeOptions.onTooltipShown
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
@@ -67,21 +67,21 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      */
     onTooltipShown?: ((e: { component?: T, element?: dxElement, model?: any, target?: any }) => any);
     /**
-     * @docid BaseGaugeOptions.rangeContainer
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     rangeContainer?: BaseGaugeRangeContainer;
     /**
-     * @docid BaseGaugeOptions.scale
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     scale?: BaseGaugeScale;
     /**
-     * @docid BaseGaugeOptions.subvalues
+     * @docid
      * @default undefined
      * @notUsedInTheme
      * @fires BaseWidgetOptions.onOptionChanged
@@ -90,14 +90,14 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      */
     subvalues?: Array<number>;
     /**
-     * @docid BaseGaugeOptions.tooltip
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     tooltip?: BaseGaugeTooltip;
     /**
-     * @docid BaseGaugeOptions.value
+     * @docid
      * @default undefined
      * @notUsedInTheme
      * @fires BaseWidgetOptions.onOptionChanged
@@ -131,6 +131,12 @@ export interface BaseGaugeAnimation {
     enabled?: boolean;
 }
 export interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
+    /**
+    * @docid BaseGaugeOptions.loadingIndicator.enabled
+    * @prevFileNamespace DevExpress.viz
+    * @hidden
+    */
+    enabled?: boolean;
 }
 export interface BaseGaugeRangeContainer {
     /**
@@ -170,7 +176,24 @@ export interface BaseGaugeRangeContainer {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    ranges?: Array<{ color?: string, endValue?: number, startValue?: number }>;
+    ranges?: Array<{
+      /**
+       * @docid BaseGaugeOptions.rangeContainer.ranges.color
+       * @prevFileNamespace DevExpress.viz
+       * 
+       */
+      color?: string,
+      /**
+       * @docid BaseGaugeOptions.rangeContainer.ranges.endValue
+       * @prevFileNamespace DevExpress.viz
+       */
+      endValue?: number,
+      /**
+       * @docid BaseGaugeOptions.rangeContainer.ranges.startValue
+       * @prevFileNamespace DevExpress.viz
+       */
+      startValue?: number
+    }>;
 }
 export interface BaseGaugeScale {
     /**
@@ -216,7 +239,38 @@ export interface BaseGaugeScale {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number };
+    minorTick?: {
+      /**
+       * @docid BaseGaugeOptions.scale.minorTick.color
+       * @prevFileNamespace DevExpress.viz
+       * @default '#FFFFFF'
+       */
+      color?: string,
+    /**
+       * @docid BaseGaugeOptions.scale.minorTick.length
+       * @prevFileNamespace DevExpress.viz
+       * @default 3
+       */
+      length?: number,
+      /**
+       * @docid BaseGaugeOptions.scale.minorTick.opacity
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
+      opacity?: number,
+      /**
+       * @docid BaseGaugeOptions.scale.minorTick.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
+      visible?: boolean,
+      /**
+       * @docid BaseGaugeOptions.scale.minorTick.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
+      width?: number
+    };
     /**
      * @docid BaseGaugeOptions.scale.minorTickInterval
      * @default undefined
@@ -244,7 +298,38 @@ export interface BaseGaugeScale {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number };
+    tick?: {
+    /**
+       * @docid BaseGaugeOptions.scale.tick.color
+       * @prevFileNamespace DevExpress.viz
+       * @default '#FFFFFF'
+       */
+      color?: string,
+      /**
+       * @docid BaseGaugeOptions.scale.tick.length
+       * @prevFileNamespace DevExpress.viz
+       * @default 5
+       */
+      length?: number,
+      /**
+       * @docid BaseGaugeOptions.scale.tick.opacity
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
+      opacity?: number,
+      /**
+       * @docid BaseGaugeOptions.scale.tick.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
+      visible?: boolean,
+      /**
+       * @docid BaseGaugeOptions.scale.tick.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 2
+       */
+      width?: number
+    };
     /**
      * @docid BaseGaugeOptions.scale.tickInterval
      * @default undefined
@@ -335,18 +420,17 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
     interactive?: boolean;
 }
 /**
- * @docid BaseGauge
+ * @docid
  * @type object
  * @hidden
  * @inherits BaseWidget
  * @prevFileNamespace DevExpress.viz
  */
-export type BaseGauge = dxBaseGauge;
-export class dxBaseGauge extends BaseWidget {
+export class BaseGauge extends BaseWidget {
     constructor(element: Element, options?: BaseGaugeOptions)
     constructor(element: JQuery, options?: BaseGaugeOptions)
     /**
-     * @docid BaseGauge.subvalues
+     * @docid
      * @publicName subvalues()
      * @return Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -354,7 +438,7 @@ export class dxBaseGauge extends BaseWidget {
      */
     subvalues(): Array<number>;
     /**
-     * @docid BaseGauge.subvalues
+     * @docid
      * @publicName subvalues(subvalues)
      * @param1 subvalues:Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -362,7 +446,7 @@ export class dxBaseGauge extends BaseWidget {
      */
     subvalues(subvalues: Array<number>): void;
     /**
-     * @docid BaseGauge.value
+     * @docid
      * @publicName value()
      * @return number
      * @prevFileNamespace DevExpress.viz
@@ -370,7 +454,7 @@ export class dxBaseGauge extends BaseWidget {
      */
     value(): number;
     /**
-     * @docid BaseGauge.value
+     * @docid
      * @publicName value(value)
      * @param1 value:number
      * @prevFileNamespace DevExpress.viz
@@ -379,9 +463,15 @@ export class dxBaseGauge extends BaseWidget {
     value(value: number): void;
 }
 
+/**
+* @docid
+* @section CommonIndicators
+* @type object
+* @hidden
+*/
 export interface CommonIndicator {
     /**
-     * @docid CommonIndicator.arrowLength
+     * @docid
      * @default 5
      * @propertyOf circularTextCloud,linearTextCloud
      * @prevFileNamespace DevExpress.viz
@@ -389,7 +479,7 @@ export interface CommonIndicator {
      */
     arrowLength?: number;
     /**
-     * @docid CommonIndicator.backgroundColor
+     * @docid
      * @default 'none'
      * @propertyOf circularRangeBar,linearRangeBar
      * @prevFileNamespace DevExpress.viz
@@ -397,7 +487,7 @@ export interface CommonIndicator {
      */
     backgroundColor?: string;
     /**
-     * @docid CommonIndicator.baseValue
+     * @docid
      * @default undefined
      * @notUsedInTheme
      * @propertyOf circularRangeBar,linearRangeBar
@@ -406,7 +496,7 @@ export interface CommonIndicator {
      */
     baseValue?: number;
     /**
-     * @docid CommonIndicator.beginAdaptingAtRadius
+     * @docid
      * @default 50
      * @propertyOf circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle
      * @prevFileNamespace DevExpress.viz
@@ -414,13 +504,13 @@ export interface CommonIndicator {
      */
     beginAdaptingAtRadius?: number;
     /**
-     * @docid CommonIndicator.color
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     color?: string;
     /**
-     * @docid CommonIndicator.horizontalOrientation
+     * @docid
      * @type Enums.HorizontalEdge
      * @default 'right' [for](value_indicators)
      * @default 'left' [for](subvalue_indicators)
@@ -430,7 +520,7 @@ export interface CommonIndicator {
      */
     horizontalOrientation?: 'left' | 'right';
     /**
-     * @docid CommonIndicator.indentFromCenter
+     * @docid
      * @default 0
      * @propertyOf circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle
      * @prevFileNamespace DevExpress.viz
@@ -438,7 +528,7 @@ export interface CommonIndicator {
      */
     indentFromCenter?: number;
     /**
-     * @docid CommonIndicator.length
+     * @docid
      * @default 15
      * @propertyOf circularTriangleMarker,linearRectangle,linearCircle,linearRhombus,linearTriangleMarker
      * @prevFileNamespace DevExpress.viz
@@ -446,13 +536,13 @@ export interface CommonIndicator {
      */
     length?: number;
     /**
-     * @docid CommonIndicator.offset
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     offset?: number;
     /**
-     * @docid CommonIndicator.palette
+     * @docid
      * @extends CommonVizPalette
      * @type Array<string>|Enums.VizPalette
      * @prevFileNamespace DevExpress.viz
@@ -460,7 +550,7 @@ export interface CommonIndicator {
      */
     palette?: Array<string> | PaletteType;
     /**
-     * @docid CommonIndicator.secondColor
+     * @docid
      * @default '#E18E92'
      * @propertyOf circularTwoColorNeedle
      * @prevFileNamespace DevExpress.viz
@@ -468,7 +558,7 @@ export interface CommonIndicator {
      */
     secondColor?: string;
     /**
-     * @docid CommonIndicator.secondFraction
+     * @docid
      * @default 0.4
      * @propertyOf circularTwoColorNeedle
      * @prevFileNamespace DevExpress.viz
@@ -476,7 +566,7 @@ export interface CommonIndicator {
      */
     secondFraction?: number;
     /**
-     * @docid CommonIndicator.size
+     * @docid
      * @default 10
      * @propertyOf circularRangeBar,linearRangeBar
      * @prevFileNamespace DevExpress.viz
@@ -484,7 +574,7 @@ export interface CommonIndicator {
      */
     size?: number;
     /**
-     * @docid CommonIndicator.spindleGapSize
+     * @docid
      * @default 10
      * @propertyOf circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle
      * @prevFileNamespace DevExpress.viz
@@ -492,7 +582,7 @@ export interface CommonIndicator {
      */
     spindleGapSize?: number;
     /**
-     * @docid CommonIndicator.spindleSize
+     * @docid
      * @default 14
      * @propertyOf circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle
      * @prevFileNamespace DevExpress.viz
@@ -500,14 +590,48 @@ export interface CommonIndicator {
      */
     spindleSize?: number;
     /**
-     * @docid CommonIndicator.text
+     * @docid
      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    text?: { customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string), font?: Font, format?: format, indent?: number };
+    text?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @type_function_param1 indicatedValue:object
+      * @type_function_param1_field1 value:Number
+      * @type_function_param1_field2 valueText:string
+      * @type_function_return string
+      * @notUsedInTheme
+      * @default undefined
+      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
+      */
+      customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string),
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
+      * @default 14 [prop](size)
+      */
+      font?: Font,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @extends CommonVizFormat
+      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
+      */
+      format?: format,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 0
+      * @propertyOf circularRangeBar,linearRangeBar
+      */
+      indent?: number
+    };
     /**
-     * @docid CommonIndicator.verticalOrientation
+     * @docid
      * @type Enums.VerticalEdge
      * @default 'bottom' [for](value_indicators)
      * @default 'top' [for](subvalue_indicators)
@@ -517,7 +641,7 @@ export interface CommonIndicator {
      */
     verticalOrientation?: 'bottom' | 'top';
     /**
-     * @docid CommonIndicator.width
+     * @docid
      * @default 2
      * @propertyOf circularTriangleMarker,circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle,linearRectangle,linearTriangleMarker,linearRhombus
      * @prevFileNamespace DevExpress.viz
@@ -526,9 +650,15 @@ export interface CommonIndicator {
     width?: number;
 }
 export type GaugeIndicatorType = 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
+
+/**
+ * @docid
+ * @inherits CommonIndicator
+ * @hidden
+ */
 export interface GaugeIndicator extends CommonIndicator {
     /**
-     * @docid GaugeIndicator.type
+     * @docid
      * @type string
      * @acceptValues 'circle'|'rangeBar'|'rectangle'|'rectangleNeedle'|'rhombus'|'textCloud'|'triangleMarker'|'triangleNeedle'|'twoColorNeedle'
      * @prevFileNamespace DevExpress.viz

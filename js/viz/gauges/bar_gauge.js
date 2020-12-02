@@ -10,7 +10,7 @@ import { clone } from '../../core/utils/object';
 import { noop } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { normalizeEnum as _normalizeEnum, convertAngleToRendererSpace, getCosAndSin, patchFontOptions } from '../core/utils';
-import { dxBaseGauge, getSampleText, formatValue, compareArrays } from './base_gauge';
+import { BaseGauge, getSampleText, formatValue, compareArrays } from './base_gauge';
 const _getSampleText = getSampleText;
 const _formatValue = formatValue;
 const _compareArrays = compareArrays;
@@ -28,7 +28,7 @@ import { plugin as pluginLegend } from '../components/legend';
 const OPTION_VALUES = 'values';
 let BarWrapper;
 
-export const dxBarGauge = dxBaseGauge.inherit({
+export const dxBarGauge = BaseGauge.inherit({
     _rootClass: 'dxbg-bar-gauge',
 
     _themeSection: 'barGauge',
@@ -369,7 +369,7 @@ export const dxBarGauge = dxBaseGauge.inherit({
         this._updateValues(this.option(OPTION_VALUES));
     },
 
-    _factory: clone(dxBaseGauge.prototype._factory),
+    _factory: clone(BaseGauge.prototype._factory),
 
     _optionChangesOrder: ['VALUES', 'NODES'],
 
