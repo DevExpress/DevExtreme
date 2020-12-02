@@ -59,7 +59,7 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     }
 
     _getDialogSelectedDirectory() {
-        return this._selectedDirectoryInfo || this.option('getCurrentDirectory')();
+        return this._selectedDirectoryInfo;
     }
 
     _onFilesTreeViewDirectoryClick({ itemData }) {
