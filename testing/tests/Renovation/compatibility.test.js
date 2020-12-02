@@ -1,8 +1,10 @@
 import $ from 'jquery';
 import widgetsMeta from './widgets.json!';
-import 'bundles/modules/parts/widgets-renovation';
 import publicWidgets from 'bundles/modules/parts/renovation';
 import { act } from 'preact/test-utils';
+import Button from 'ui/button';
+import 'ui/check_box';
+import 'ui/pager';
 
 /**
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
@@ -13,21 +15,22 @@ const PRIVATE_JQUERY_WIDGETS = [
     'AllDayPanelLayout', 'AllDayPanelTitle',
     'GridPager'
 ];
-const WRAPPER_WIDGETS = ['DataGrid'];
+const INPROGRESS_WIDGETS = ['Widget', 'ScrollView', 'DataGrid'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
 
 const widgetsInBundle = publicWidgets.map(widget => widget.name);
+const isRenovation = !!Button.IS_RENOVATED_WIDGET;
 
-const widgets = widgetsMeta
+const widgets = isRenovation ? widgetsMeta
     .filter((meta) => {
         return PRIVATE_JQUERY_WIDGETS.indexOf(meta.name) === -1
             && widgetsInBundle.indexOf(meta.name) !== -1;
-    });
+    }) : [];
 
 QUnit.module('Check components registration', () => {
     widgetsMeta
         .filter(meta => PRIVATE_JQUERY_WIDGETS.indexOf(meta.name) === -1)
-        .filter(meta => WRAPPER_WIDGETS.indexOf(meta.name) === -1)
+        .filter(meta => INPROGRESS_WIDGETS.indexOf(meta.name) === -1)
         .forEach((meta) => {
             QUnit.test(`${`dx${meta.name}`} is in bundle`, function(assert) {
                 const message = 'You should add your widget to the bundle.'
@@ -144,7 +147,7 @@ QUnit.module('Mandatory component setup', {
         });
 
     widgets
-        .filter((m) => m.props.template.length && WRAPPER_WIDGETS.indexOf(m.name) === -1)
+        .filter((m) => m.props.template.length && INPROGRESS_WIDGETS.indexOf(m.name) === -1)
         .forEach((meta) => {
             QUnit.test(`${`dx${meta.name}`} - pass right props to template`, function(assert) {
                 const message = 'For templates that jQuery users set.\n'

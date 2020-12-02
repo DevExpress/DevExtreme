@@ -7,6 +7,6 @@ module.exports = ({ name, pathToWrapper, pathInRenovationFolder }) => {
 import registerComponent from '../core/component_registrator';
 import { wrapRenovatedWidget } from '../../../testing/helpers/wrapRenovatedWidget.js';
 const wrappedComponent = wrapRenovatedWidget(Widget);
-registerComponent('${name}', wrappedComponent);
+registerComponent('dx${name}', wrappedComponent);
 export default wrappedComponent;`;
 };
