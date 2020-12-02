@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/mixins" as *;
+@use "../../base/overlay";
 
 // adduse
 .dx-overlay-shader {

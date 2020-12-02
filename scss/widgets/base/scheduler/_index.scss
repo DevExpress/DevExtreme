@@ -938,7 +938,7 @@ $scheduler-appointment-form-label-padding: 20px;
       font-size: $scheduler-month-date-text-size;
       color: $scheduler-workspace-month-text-color;
 
-      > div {
+      .dx-scheduler-date-table-cell-text {
         padding-right: $scheduler-month-date-text-padding;
       }
     }

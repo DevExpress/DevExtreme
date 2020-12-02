@@ -19,19 +19,19 @@ const piePointObject = {
 */
 const pieChartSeriesObject = {
     /**
-    * @name pieChartSeriesObjectMethods.hover
+    * @name pieChartSeriesObject.hover
     * @publicName hover()
     * @hidden
     */
     hover: function () { },
     /**
-    * @name pieChartSeriesObjectMethods.clearHover
+    * @name pieChartSeriesObject.clearHover
     * @publicName clearHover()
     * @hidden
     */
     clearHover: function () { },
     /**
-    * @name pieChartSeriesObjectMethods.isHovered
+    * @name pieChartSeriesObject.isHovered
     * @publicName isHovered()
     * @hidden
     */

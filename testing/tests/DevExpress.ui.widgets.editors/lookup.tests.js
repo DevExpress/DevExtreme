@@ -5,6 +5,7 @@ import dataUtils from 'core/element_data';
 import config from 'core/config';
 import browser from 'core/utils/browser';
 import { isRenderer } from 'core/utils/type';
+import { normalizeKeyName } from 'events/utils/index';
 
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
@@ -2753,6 +2754,35 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('space');
 
         assert.equal(instance.option('value'), 2, 'value is correct');
+    });
+
+    ['enter', 'space'].forEach((keyName) => {
+        QUnit.testInActiveWindow(`valueChange event field should be defined after selection an item by ${keyName} key`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
+            assert.expect(2);
+
+            const $element = $('#widget').dxLookup({
+                opened: true,
+                items: [1, 2, 3],
+                focusStateEnabled: true,
+                searchEnabled: true,
+                onValueChanged: function({ event }) {
+                    assert.ok(event, 'value change event is defined');
+                    assert.strictEqual(normalizeKeyName(event), keyName, `value is changed after pressing the ${keyName} key`);
+                }
+            });
+            const instance = $element.dxLookup('instance');
+            const $searchInput = $(instance.content()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($searchInput);
+
+            keyboard.keyDown('down');
+            keyboard.keyDown('down');
+            keyboard.keyDown(keyName);
+        });
     });
 
     QUnit.testInActiveWindow('keyboard for lookup-list should work correctly after \'searchEnabled\' option changed', function(assert) {

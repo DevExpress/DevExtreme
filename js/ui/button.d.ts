@@ -18,40 +18,35 @@ import Widget, {
 
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
-     * @docid dxButtonOptions.activeStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxButtonOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxButtonOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxButtonOptions.icon
-     * @type string
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid dxButtonOptions.onClick
-     * @type function(e)
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -62,7 +57,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     onClick?: ((e: { component?: dxButton, element?: dxElement, model?: any, event?: event, validationGroup?: any }) => any);
     /**
-     * @docid dxButtonOptions.stylingMode
+     * @docid
      * @type Enums.ButtonStylingMode
      * @default 'contained'
      * @prevFileNamespace DevExpress.ui
@@ -70,8 +65,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     stylingMode?: 'text' | 'outlined' | 'contained';
     /**
-     * @docid dxButtonOptions.template
-     * @type template|function
+     * @docid
      * @default "content"
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string
@@ -83,15 +77,14 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxButtonOptions.text
-     * @type string
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
-     * @docid dxButtonOptions.type
+     * @docid
      * @type Enums.ButtonType
      * @default 'normal'
      * @prevFileNamespace DevExpress.ui
@@ -99,16 +92,14 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
     /**
-     * @docid dxButtonOptions.useSubmitBehavior
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     useSubmitBehavior?: boolean;
     /**
-     * @docid dxButtonOptions.validationGroup
-     * @type string
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -116,7 +107,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     validationGroup?: string;
 }
 /**
- * @docid dxButton
+ * @docid
  * @inherits Widget
  * @hasTranscludedContent
  * @module ui/button

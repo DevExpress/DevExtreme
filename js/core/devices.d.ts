@@ -1,13 +1,20 @@
+/**
+* @docid
+* @section commonObjectStructures
+* @type object
+* @namespace DevExpress
+* @module core/devices
+* @export default
+*/
 export interface Device {
     /**
-     * @docid Device.android
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.core
      * @public
      */
     android?: boolean;
     /**
-     * @docid Device.deviceType
+     * @docid
      * @type string
      * @acceptValues 'phone'|'tablet'|'desktop'
      * @prevFileNamespace DevExpress.core
@@ -15,14 +22,13 @@ export interface Device {
      */
     deviceType?: 'phone' | 'tablet' | 'desktop';
     /**
-     * @docid Device.generic
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.core
      * @public
      */
     generic?: boolean;
     /**
-     * @docid Device.grade
+     * @docid
      * @type string
      * @acceptValues 'A'|'B'|'C'
      * @prevFileNamespace DevExpress.core
@@ -30,21 +36,19 @@ export interface Device {
      */
     grade?: 'A' | 'B' | 'C';
     /**
-     * @docid Device.ios
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.core
      * @public
      */
     ios?: boolean;
     /**
-     * @docid Device.phone
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.core
      * @public
      */
     phone?: boolean;
     /**
-     * @docid Device.platform
+     * @docid
      * @type string
      * @acceptValues 'android'|'ios'|'generic'
      * @prevFileNamespace DevExpress.core
@@ -52,15 +56,13 @@ export interface Device {
      */
     platform?: 'android' | 'ios' | 'generic';
     /**
-     * @docid Device.tablet
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.core
      * @public
      */
     tablet?: boolean;
     /**
-     * @docid Device.version
-     * @type Array<number>
+     * @docid
      * @prevFileNamespace DevExpress.core
      * @public
      */
@@ -68,7 +70,7 @@ export interface Device {
 }
 
 /**
- * @docid DevicesObject
+ * @docid
  * @publicName devices
  * @section Utils
  * @namespace DevExpress
@@ -80,7 +82,7 @@ export interface Device {
 declare class DevicesObject {
     constructor(options: { window?: Window });
     /**
-     * @docid DevicesObjectmethods.current
+     * @docid
      * @publicName current()
      * @return Device
      * @prevFileNamespace DevExpress.core
@@ -88,7 +90,7 @@ declare class DevicesObject {
      */
     current(): Device;
     /**
-     * @docid DevicesObjectmethods.current
+     * @docid
      * @publicName current(deviceName)
      * @param1 deviceName:string|Device
      * @prevFileNamespace DevExpress.core
@@ -96,7 +98,7 @@ declare class DevicesObject {
      */
     current(deviceName: string | Device): void;
     /**
-     * @docid DevicesObjectMethods.off
+     * @docid
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
@@ -105,7 +107,7 @@ declare class DevicesObject {
      */
     off(eventName: string): this;
     /**
-     * @docid DevicesObjectMethods.off
+     * @docid
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -115,7 +117,7 @@ declare class DevicesObject {
      */
     off(eventName: string, eventHandler: Function): this;
     /**
-     * @docid DevicesObjectMethods.on
+     * @docid
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -125,7 +127,7 @@ declare class DevicesObject {
      */
     on(eventName: string, eventHandler: Function): this;
     /**
-     * @docid DevicesObjectMethods.on
+     * @docid
      * @publicName on(events)
      * @param1 events:object
      * @return this
@@ -134,7 +136,7 @@ declare class DevicesObject {
      */
     on(events: any): this;
     /**
-     * @docid DevicesObjectMethods.orientation
+     * @docid
      * @publicName orientation()
      * @return String
      * @prevFileNamespace DevExpress.core
@@ -142,7 +144,7 @@ declare class DevicesObject {
      */
     orientation(): string;
     /**
-     * @docid DevicesObjectMethods.real
+     * @docid
      * @publicName real()
      * @return Device
      * @prevFileNamespace DevExpress.core
@@ -154,7 +156,6 @@ declare class DevicesObject {
 
 /**
  * @const devices
- * @type DevicesObject
  * @namespace DevExpress
  * @hidden
  * @prevFileNamespace DevExpress.core

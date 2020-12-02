@@ -9,6 +9,7 @@ import dateLocalization from '../../../localization/date';
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
 const DATE_TABLE_CURRENT_DATE_CLASS = 'dx-scheduler-date-table-current-date';
+const DATE_TABLE_CELL_TEXT_CLASS = 'dx-scheduler-date-table-cell-text';
 const DATE_TABLE_FIRST_OF_MONTH_CLASS = 'dx-scheduler-date-table-first-of-month';
 const DATE_TABLE_OTHER_MONTH_DATE_CLASS = 'dx-scheduler-date-table-other-month';
 const DATE_TABLE_SCROLLABLE_FIXED_CLASS = 'dx-scheduler-scrollable-fixed-content';
@@ -163,6 +164,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _renderTableBody(options) {
         options.getCellText = this._getCellText.bind(this);
+        options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
         super._renderTableBody(options);
     }
 

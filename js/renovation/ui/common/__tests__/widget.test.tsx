@@ -714,10 +714,17 @@ describe('Widget', () => {
         });
 
         it('should add active class', () => {
-          const widget = new Widget({ visible: true });
+          const widget = new Widget({ visible: true, activeStateEnabled: true });
           widget.active = true;
 
           expect(widget.cssClasses).toEqual('dx-widget dx-state-active');
+        });
+
+        it('should not add active class if widget is disabled', () => {
+          const widget = new Widget({ visible: true, activeStateEnabled: true, disabled: true });
+          widget.active = true;
+
+          expect(widget.cssClasses).toEqual('dx-widget dx-state-disabled');
         });
 
         it('should add hovered class', () => {

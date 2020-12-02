@@ -18,15 +18,14 @@ import Widget, {
 
 export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**
-     * @docid dxPivotGridFieldChooserOptions.allowSearch
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowSearch?: boolean;
     /**
-     * @docid dxPivotGridFieldChooserOptions.applyChangesMode
+     * @docid
      * @type Enums.ApplyChangesMode
      * @default "instantly"
      * @prevFileNamespace DevExpress.ui
@@ -34,8 +33,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     applyChangesMode?: 'instantly' | 'onDemand';
     /**
-     * @docid dxPivotGridFieldChooserOptions.dataSource
-     * @type PivotGridDataSource
+     * @docid
      * @default null
      * @ref
      * @prevFileNamespace DevExpress.ui
@@ -43,15 +41,68 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     dataSource?: PivotGridDataSource;
     /**
-     * @docid dxPivotGridFieldChooserOptions.headerFilter
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
+    headerFilter?: {
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default undefined
+       */
+      allowSearch?: boolean,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 325
+       */
+      height?: number,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 500
+       */
+      searchTimeout?: number,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
+      showRelevantValues?: boolean,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       */
+      texts?: {
+        /**
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "Cancel"
+         */
+        cancel?: string,
+        /**
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "(Blanks)"
+         */
+        emptyValue?: string,
+        /**
+         * @docid
+         * @prevFileNamespace DevExpress.ui
+         * @default "Ok"
+         */
+        ok?: string
+      },
+      /**
+       * @prevFileNamespace DevExpress.ui
+       * @docid
+       * @default 252
+       */
+      width?: number
+    };
     /**
-     * @docid dxPivotGridFieldChooserOptions.height
-     * @type number|string|function
+     * @docid
      * @default 400
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -59,7 +110,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxPivotGridFieldChooserOptions.layout
+     * @docid
      * @type Enums.PivotGridFieldChooserLayout
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -67,8 +118,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     layout?: 0 | 1 | 2;
     /**
-     * @docid dxPivotGridFieldChooserOptions.onContextMenuPreparing
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 items:Array<Object>
      * @type_function_param1_field5 area:string
@@ -81,31 +131,59 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: dxElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: event }) => any);
     /**
-     * @docid dxPivotGridFieldChooserOptions.searchTimeout
-     * @type number
+     * @docid
      * @default 500
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchTimeout?: number;
     /**
-     * @docid dxPivotGridFieldChooserOptions.state
-     * @type object
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     state?: any;
     /**
-     * @docid dxPivotGridFieldChooserOptions.texts
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string };
+    texts?: {
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 'All Fields'
+       */
+      allFields?: string,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 'Column Fields'
+       */
+      columnFields?: string,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 'Data Fields'
+       */
+      dataFields?: string,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 'Filter Fields'
+       */
+      filterFields?: string,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default 'Row Fields'
+       */
+      rowFields?: string
+    };
 }
 /**
- * @docid dxPivotGridFieldChooser
+ * @docid
  * @inherits Widget
  * @module ui/pivot_grid_field_chooser
  * @export default
@@ -116,21 +194,21 @@ export default class dxPivotGridFieldChooser extends Widget {
     constructor(element: Element, options?: dxPivotGridFieldChooserOptions)
     constructor(element: JQuery, options?: dxPivotGridFieldChooserOptions)
     /**
-     * @docid dxPivotGridFieldChooserMethods.applyChanges
+     * @docid
      * @publicName applyChanges()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyChanges(): void;
     /**
-     * @docid dxPivotGridFieldChooserMethods.cancelChanges
+     * @docid
      * @publicName cancelChanges()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cancelChanges(): void;
     /**
-     * @docid dxPivotGridFieldChooserMethods.getDataSource
+     * @docid
      * @publicName getDataSource()
      * @return PivotGridDataSource
      * @prevFileNamespace DevExpress.ui
@@ -138,7 +216,7 @@ export default class dxPivotGridFieldChooser extends Widget {
      */
     getDataSource(): PivotGridDataSource;
     /**
-     * @docid dxPivotGridFieldChooserMethods.updateDimensions
+     * @docid
      * @publicName updateDimensions()
      * @prevFileNamespace DevExpress.ui
      * @public

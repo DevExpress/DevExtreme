@@ -67,10 +67,6 @@ export const DataController = Class.inherit((function() {
         };
 
         const createInfoItem = function(headerItem, breadth, isHorizontal, isTree) {
-            /**
-            * @name dxPivotGridPivotGridCell
-            * @type object
-            */
             const infoItem = {
                 type: headerItem.type,
                 text: headerItem.text

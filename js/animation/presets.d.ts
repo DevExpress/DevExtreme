@@ -7,7 +7,7 @@ import {
 } from './fx';
 
 /**
- * @docid animationPresets
+ * @docid
  * @namespace DevExpress
  * @module animation/presets
  * @export default
@@ -16,21 +16,21 @@ import {
  */
 export default class animationPresets {
     /**
-     * @docid animationPresetsMethods.applyChanges
+     * @docid
      * @publicName applyChanges()
      * @prevFileNamespace DevExpress.animation
      * @public
      */
     applyChanges(): void;
     /**
-     * @docid animationPresetsMethods.clear
+     * @docid
      * @publicName clear()
      * @prevFileNamespace DevExpress.animation
      * @public
      */
     clear(): void;
     /**
-     * @docid animationPresetsMethods.clear
+     * @docid
      * @publicName clear(name)
      * @param1 name:string
      * @prevFileNamespace DevExpress.animation
@@ -38,7 +38,7 @@ export default class animationPresets {
      */
     clear(name: string): void;
     /**
-     * @docid animationPresetsMethods.getPreset
+     * @docid
      * @publicName getPreset(name)
      * @param1 name:string
      * @return any
@@ -47,14 +47,14 @@ export default class animationPresets {
      */
     getPreset(name: string): any;
     /**
-     * @docid animationPresetsMethods.registerDefaultPresets
+     * @docid
      * @publicName registerDefaultPresets()
      * @prevFileNamespace DevExpress.animation
      * @public
      */
     registerDefaultPresets(): void;
     /**
-     * @docid animationPresetsMethods.registerPreset
+     * @docid
      * @publicName registerPreset(name, config)
      * @param1 name:string
      * @param2 config:object
@@ -65,7 +65,7 @@ export default class animationPresets {
      */
     registerPreset(name: string, config: { animation?: animationConfig, device?: Device }): void;
     /**
-     * @docid animationPresetsMethods.resetToDefaults
+     * @docid
      * @publicName resetToDefaults()
      * @prevFileNamespace DevExpress.animation
      * @public

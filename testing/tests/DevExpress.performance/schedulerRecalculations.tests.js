@@ -227,7 +227,7 @@ QUnit.performanceTest('dxScheduler agenda view should force minimum relayout cou
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 10);
+    assert.measureStyleRecalculation(measureFunction, 9);
 });
 
 QUnit.performanceTest('dxScheduler should not force relayout on dxshown event', function(assert) {

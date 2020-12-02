@@ -10,31 +10,28 @@ import {
 
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**
-     * @docid dxRadioGroupOptions.activeStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxRadioGroupOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxRadioGroupOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxRadioGroupOptions.layout
+     * @docid
      * @default 'horizontal' [for](tablets)
      * @type Enums.Orientation
      * @default "vertical"
@@ -43,15 +40,14 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
      */
     layout?: 'horizontal' | 'vertical';
     /**
-     * @docid dxRadioGroupOptions.name
-     * @type string
+     * @docid
      * @hidden false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid dxRadioGroupOptions.value
+     * @docid
      * @ref
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -59,7 +55,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
     value?: any;
 }
 /**
- * @docid dxRadioGroup
+ * @docid
  * @isEditor
  * @inherits Editor, DataExpressionMixin
  * @module ui/radio_group

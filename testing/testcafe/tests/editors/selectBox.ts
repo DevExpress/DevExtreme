@@ -54,3 +54,15 @@ test('Click on action button after typing should correctly work with SelectBox c
     .expect(selectBox.value)
     .eql('item2');
 });
+
+fixture`SelectBox as Toolbar item`
+  .page(url(__dirname, './pages/t949859.html'));
+
+test('SelectBox should correctly render his buttons when editor rendered as Toolbar item with fieldTemplate(T949859)', async (t) => {
+  const selectBox = new SelectBox('#editor');
+  const actionButton = await selectBox.getButton(0);
+
+  await t
+    .expect(actionButton.getText().innerText)
+    .eql('test');
+});

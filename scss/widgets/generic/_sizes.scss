@@ -12,58 +12,58 @@ $generic-base-more-adaptive-icon-size: null !default;
 $generic-base-inline-horizontal-padding: null !default;
 
 @if $size == "default" {
-  $generic-size-postfix: "";
+  $generic-size-postfix: "" !default;
 
   // Font sizes
-  $generic-base-font-size: 14px;
-  $generic-base-line-height: 1.35715; // 19px/14px
+  $generic-base-font-size: 14px !default;
+  $generic-base-line-height: 1.35715 !default; // 19px/14px
 
   // Base sizes
-  $generic-base-inline-widget-height: 36px;
-  $generic-base-inline-block-height: 19px;
-  $generic-base-icon-size: 18px;
-  $generic-base-more-adaptive-icon-size: 21px;
-  $generic-base-inline-horizontal-padding: 10px;
+  $generic-base-inline-widget-height: 36px !default;
+  $generic-base-inline-block-height: 19px !default;
+  $generic-base-icon-size: 18px !default;
+  $generic-base-more-adaptive-icon-size: 21px !default;
+  $generic-base-inline-horizontal-padding: 10px !default;
 }
 
 @if $size == "compact" {
-  $generic-size-postfix: ".compact";
+  $generic-size-postfix: ".compact" !default;
 
   // Font sizes
-  $generic-base-font-size: 12px;
-  $generic-base-line-height: 1.33334; // 16px/12px
+  $generic-base-font-size: 12px !default;
+  $generic-base-line-height: 1.33334 !default; // 16px/12px
 
   // Base sizes
-  $generic-base-inline-widget-height: 26px;
-  $generic-base-inline-block-height: 16px;
-  $generic-base-icon-size: 14px;
-  $generic-base-more-adaptive-icon-size: 17px;
-  $generic-base-inline-horizontal-padding: 6px;
+  $generic-base-inline-widget-height: 26px !default;
+  $generic-base-inline-block-height: 16px !default;
+  $generic-base-icon-size: 14px !default;
+  $generic-base-more-adaptive-icon-size: 17px !default;
+  $generic-base-inline-horizontal-padding: 6px !default;
 }
 
 // Base inline widgets paddings
 $generic-base-inline-widget-vertical-padding:
   $generic-base-inline-widget-height -
-  $generic-base-inline-block-height;
-$generic-base-inline-widget-top-padding: floor($generic-base-inline-widget-vertical-padding / 2);
+  $generic-base-inline-block-height !default;
+$generic-base-inline-widget-top-padding: floor($generic-base-inline-widget-vertical-padding / 2) !default;
 $generic-base-inline-widget-bottom-padding:
   $generic-base-inline-widget-vertical-padding -
-  $generic-base-inline-widget-top-padding;
+  $generic-base-inline-widget-top-padding !default;
 
 // Base bordered inline widgets sizes
-$generic-base-border-width: 1px;
+$generic-base-border-width: 1px !default;
 $generic-base-inline-borderedwidget-inner-size:
   $generic-base-inline-widget-height -
-  $generic-base-border-width * 2;
+  $generic-base-border-width * 2 !default;
 
 $generic-base-inline-borderedwidget-top-padding:
   $generic-base-inline-widget-top-padding -
-  $generic-base-border-width;
+  $generic-base-border-width !default;
 
 $generic-base-inline-borderedwidget-horizontal-padding:
   $generic-base-inline-horizontal-padding -
-  $generic-base-border-width;
+  $generic-base-border-width !default;
 
 $generic-base-inline-borderedwidget-bottom-padding:
   $generic-base-inline-widget-bottom-padding -
-  $generic-base-border-width;
+  $generic-base-border-width !default;

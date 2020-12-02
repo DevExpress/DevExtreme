@@ -20,8 +20,7 @@ import Widget, {
 
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
-     * @docid dxButtonGroupOptions.buttonTemplate
-     * @type template|function
+     * @docid
      * @default "content"
      * @type_function_param1 buttonData:object
      * @type_function_param2 buttonContent:dxElement
@@ -31,40 +30,35 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      */
     buttonTemplate?: template | ((buttonData: any, buttonContent: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxButtonGroupOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxButtonGroupOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxButtonGroupOptions.items
-     * @type Array<dxButtonGroupItem>
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxButtonGroupItem>;
     /**
-     * @docid dxButtonGroupOptions.keyExpr
-     * @type string|function
+     * @docid
      * @default 'text'
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyExpr?: string | Function;
     /**
-     * @docid dxButtonGroupOptions.onItemClick
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -76,9 +70,8 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      */
     onItemClick?: ((e: { component?: dxButtonGroup, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
     /**
-     * @docid dxButtonGroupOptions.onSelectionChanged
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
@@ -88,23 +81,21 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      */
     onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
     /**
-     * @docid dxButtonGroupOptions.selectedItemKeys
-     * @type Array<any>
+     * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItemKeys?: Array<any>;
     /**
-     * @docid dxButtonGroupOptions.selectedItems
-     * @type Array<any>
+     * @docid
      * @fires dxButtonGroupOptions.onSelectionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<any>;
     /**
-     * @docid dxButtonGroupOptions.selectionMode
+     * @docid
      * @type Enums.ButtonGroupSelectionMode
      * @default 'single'
      * @prevFileNamespace DevExpress.ui
@@ -112,7 +103,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      */
     selectionMode?: 'multiple' | 'single';
     /**
-     * @docid dxButtonGroupOptions.stylingMode
+     * @docid
      * @type Enums.ButtonStylingMode
      * @default 'contained'
      * @prevFileNamespace DevExpress.ui
@@ -121,7 +112,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     stylingMode?: 'text' | 'outlined' | 'contained';
 }
 /**
- * @docid dxButtonGroup
+ * @docid
  * @inherits Widget
  * @module ui/button_group
  * @export default
@@ -133,23 +124,26 @@ export default class dxButtonGroup extends Widget {
     constructor(element: JQuery, options?: dxButtonGroupOptions)
 }
 
+/**
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxButtonGroupItem extends CollectionWidgetItem {
     /**
-     * @docid dxButtonGroupItem.hint
-     * @type String
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hint?: string;
     /**
-     * @docid dxButtonGroupItem.icon
-     * @type String
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid dxButtonGroupItem.type
+     * @docid
      * @type Enums.ButtonType
      * @default 'normal'
      * @prevFileNamespace DevExpress.ui

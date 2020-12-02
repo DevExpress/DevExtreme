@@ -14,17 +14,15 @@ import Widget, {
 
 export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     /**
-     * @docid EditorOptions.isValid
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     isValid?: boolean;
     /**
-     * @docid EditorOptions.onValueChanged
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
@@ -35,16 +33,14 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      */
     onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
     /**
-     * @docid EditorOptions.readOnly
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     readOnly?: boolean;
     /**
-     * @docid EditorOptions.validationError
-     * @type object
+     * @docid
      * @ref
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -52,15 +48,14 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      */
     validationError?: any;
     /**
-     * @docid EditorOptions.validationErrors
-     * @type Array<object>
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationErrors?: Array<any>;
     /**
-     * @docid EditorOptions.validationMessageMode
+     * @docid
      * @type Enums.ValidationMessageMode
      * @default "auto"
      * @prevFileNamespace DevExpress.ui
@@ -68,7 +63,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      */
     validationMessageMode?: 'always' | 'auto';
     /**
-     * @docid EditorOptions.validationStatus
+     * @docid
      * @type Enums.ValidationStatus
      * @default "valid"
      * @prevFileNamespace DevExpress.ui
@@ -76,8 +71,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      */
     validationStatus?: 'valid' | 'invalid' | 'pending';
     /**
-     * @docid EditorOptions.value
-     * @type any
+     * @docid
      * @default null
      * @fires EditorOptions.onValueChanged
      * @prevFileNamespace DevExpress.ui
@@ -86,8 +80,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     value?: any;
 }
 /**
- * @docid Editor
- * @type object
+ * @docid
  * @inherits Widget
  * @module ui/editor/editor
  * @export default
@@ -98,7 +91,7 @@ export default class Editor extends Widget {
     constructor(element: Element, options?: EditorOptions)
     constructor(element: JQuery, options?: EditorOptions)
     /**
-     * @docid EditorMethods.reset
+     * @docid
      * @publicName reset()
      * @prevFileNamespace DevExpress.ui
      * @public

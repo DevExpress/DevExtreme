@@ -55,11 +55,6 @@ const NavBar = Tabs.inherit({
         }
     }
 });
-/**
-* @name dxNavBarItem
-* @inherits dxTabsItem
-* @type object
-*/
 NavBar.ItemClass = NavBarItem;
 
 registerComponent('dxNavBar', NavBar);

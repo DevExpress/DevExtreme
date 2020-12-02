@@ -268,7 +268,7 @@ const TextArea = TextBox.inherit({
     }
 
     /**
-    * @name dxTextAreaMethods.getButton
+    * @name dxTextArea.getButton
     * @publicName getButton(name)
     * @hidden
     */

@@ -11,6 +11,5 @@ renovation.dxScrollView = require('../../../renovation/ui/scroll_view.j').defaul
 renovation.dxWidget = require('../../../renovation/ui/common/widget.j').default;
 renovation.dxGridPager = require('../../../renovation/ui/pager/pager.j').default;
 renovation.dxDataGrid = require('../../../renovation/ui/data_grid/data_grid.j').default;
-renovation.dxTooltipItemLayout = require('../../../renovation/ui/scheduler/appointment_tooltip/item_layout.j').default;
 /// BUNDLER_PARTS_END
 module.exports = renovation;

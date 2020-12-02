@@ -47,7 +47,7 @@ const BaseWidget = {
     print: function() { },
     onDrawn: function() { },
     /**
-     * @name BaseWidgetMethods.defaultOptions
+     * @name BaseWidget.defaultOptions
      * @publicName defaultOptions(rule)
      * @hidden
      */

@@ -41,7 +41,6 @@ export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptio
 export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseSparklineOptions.tooltip.contentTemplate
-     * @type template|function(pointsInfo, element)
      * @type_function_param1 pointsInfo:object
      * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
@@ -52,7 +51,6 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     contentTemplate?: template | ((pointsInfo: any, element: dxElement) => string | Element | JQuery);
     /**
      * @docid BaseSparklineOptions.tooltip.customizeTooltip
-     * @type function(pointsInfo)
      * @type_function_param1 pointsInfo:object
      * @type_function_return object
      * @default undefined
@@ -63,7 +61,6 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     customizeTooltip?: ((pointsInfo: any) => any);
     /**
      * @docid BaseSparklineOptions.tooltip.enabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -71,7 +68,6 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     enabled?: boolean;
     /**
      * @docid BaseSparklineOptions.tooltip.interactive
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -80,7 +76,6 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
 }
 /**
  * @docid BaseSparkline
- * @type object
  * @hidden
  * @inherits BaseWidget
  * @prevFileNamespace DevExpress.viz

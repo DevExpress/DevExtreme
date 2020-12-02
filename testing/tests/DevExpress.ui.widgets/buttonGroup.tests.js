@@ -6,7 +6,9 @@ import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+
 import 'common.css!';
+import 'generic_light.css!';
 
 const BUTTON_CLASS = 'dx-button';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
@@ -89,11 +91,11 @@ QUnit.module('option changed', {
         const buttons = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.equal($buttonGroup.height(), 500, 'button group height is right');
-        assert.equal(buttons.eq(0).height(), 500, 'button group item height is right');
+        assert.equal(buttons.eq(0).outerHeight(), 500, 'button group item height is right');
 
         this.buttonGroup.option('height', 700);
         assert.equal($buttonGroup.height(), 700, 'button group height is right');
-        assert.equal(buttons.eq(0).height(), 700, 'button group item height is right');
+        assert.equal(buttons.eq(0).outerHeight(), 700, 'button group item height is right');
 
         this.buttonGroup.option('height', '');
         assert.notEqual($buttonGroup.height(), 700, 'button group height changed to default');

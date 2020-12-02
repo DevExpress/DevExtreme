@@ -10,7 +10,6 @@ import {
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
      * @docid dxCircularGaugeOptions.geometry
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -31,7 +30,6 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
     scale?: dxCircularGaugeScale;
     /**
      * @docid dxCircularGaugeOptions.subvalueIndicator
-     * @type GaugeIndicator
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -39,7 +37,6 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
     subvalueIndicator?: GaugeIndicator;
     /**
      * @docid dxCircularGaugeOptions.valueIndicator
-     * @type GaugeIndicator
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -57,7 +54,6 @@ export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
     orientation?: 'center' | 'inside' | 'outside';
     /**
      * @docid dxCircularGaugeOptions.rangeContainer.width
-     * @type number
      * @default 5
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -92,7 +88,6 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     hideFirstOrLast?: 'first' | 'last';
     /**
      * @docid dxCircularGaugeOptions.scale.label.indentFromTick
-     * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
