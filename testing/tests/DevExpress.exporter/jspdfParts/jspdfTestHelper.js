@@ -27,18 +27,18 @@ class JSPdfDataGridTestHelper {
         const { gridCell: actualGridCell } = eventArgs;
         const { gridCell: expectedGridCell } = expectedCells[callIndex];
 
-        assert.strictEqual(actualGridCell.column.dataField, expectedGridCell.column.dataField, `checkCustomizeCell: column.dataField, ${callIndex}`);
-        assert.strictEqual(actualGridCell.column.dataType, expectedGridCell.column.dataType, `checkCustomizeCell: column.dataType, ${callIndex}`);
-        assert.strictEqual(actualGridCell.column.caption, expectedGridCell.column.caption, `checkCustomizeCell: column.caption, ${callIndex}`);
-        assert.strictEqual(actualGridCell.column.index, expectedGridCell.column.index, `checkCustomizeCell: column.index, ${callIndex}`);
+        assert.strictEqual(actualGridCell.column.dataField, expectedGridCell.column.dataField, `checkGridCell: column.dataField, ${callIndex}`);
+        assert.strictEqual(actualGridCell.column.dataType, expectedGridCell.column.dataType, `checkGridCell: column.dataType, ${callIndex}`);
+        assert.strictEqual(actualGridCell.column.caption, expectedGridCell.column.caption, `checkGridCell: column.caption, ${callIndex}`);
+        assert.strictEqual(actualGridCell.column.index, expectedGridCell.column.index, `checkGridCell: column.index, ${callIndex}`);
 
         const gridCellSkipProperties = ['column'];
         for(const propertyName in actualGridCell) {
             if(gridCellSkipProperties.indexOf(propertyName) === -1) {
                 if(propertyName === 'groupSummaryItems' || propertyName === 'value') {
-                    assert.deepEqual(actualGridCell[propertyName], expectedGridCell[propertyName], `checkCustomizeCell: gridCell[${propertyName}], ${callIndex}`);
+                    assert.deepEqual(actualGridCell[propertyName], expectedGridCell[propertyName], `checkGridCell: gridCell[${propertyName}], ${callIndex}`);
                 } else {
-                    assert.strictEqual(actualGridCell[propertyName], expectedGridCell[propertyName], `checkCustomizeCell: gridCell[${propertyName}], ${callIndex}`);
+                    assert.strictEqual(actualGridCell[propertyName], expectedGridCell[propertyName], `checkGridCell: gridCell[${propertyName}], ${callIndex}`);
                 }
             }
         }
