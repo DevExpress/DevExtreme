@@ -84,7 +84,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             $cell.find(`.${SCHEDULER_DATE_TIME_SHADER_CLASS}`).remove();
 
             // NOTE: the cell is expired
-            if(startDate < date && endDate < date) {
+            if(endDate < date) {
                 const $shader = $('<div>').addClass(SCHEDULER_DATE_TIME_SHADER_CLASS).appendTo($cell);
                 additionalClass && $shader.addClass(additionalClass);
             }
