@@ -678,7 +678,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 this._editingController.cancelEditData();
                 if(this._dataController.items().length === 0) {
                     this._resetFocusedCell();
-                    this._editorFactory.loseFocus();
+                    this.getController('editorFactory').loseFocus();
                 }
             }
             eventArgs.originalEvent.preventDefault();
