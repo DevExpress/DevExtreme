@@ -41,7 +41,7 @@ test('Horizontal selection between two workspace cells should focus cells betwee
     .resizeWindow(1200, 800)
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 3))
     .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
-    .eql(3);
+    .eql(4);
 }).before(() => createScheduler({
   views: ['timelineWeek'],
   currentDate: new Date(2015, 1, 9),
