@@ -56,6 +56,10 @@ const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 
 const TIME_TO_WAIT = 500;
 
+const getList = (tagBox) => {
+    return tagBox._$list;
+};
+
 const moduleSetup = {
     beforeEach: function() {
         TagBox.defaultOptions({ options: { deferRendering: false } });
@@ -185,7 +189,7 @@ QUnit.module('list selection', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $list = tagBox._$list;
+        const $list = getList(tagBox);
 
         $($list.find('.' + LIST_ITEM_SELECTED_CLASS).eq(0)).trigger('dxclick');
         assert.deepEqual(tagBox.option('value'), [2], 'value is correct');
@@ -201,7 +205,7 @@ QUnit.module('list selection', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $list = tagBox._$list;
+        const $list = getList(tagBox);
 
         assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length, 'items count is correct');
 
@@ -239,7 +243,7 @@ QUnit.module('list selection', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $list = tagBox._$list;
+        const $list = getList(tagBox);
         const $input = $tagBox.find('.dx-texteditor-input');
         const keyboard = keyboardMock($input);
 
@@ -269,7 +273,7 @@ QUnit.module('list selection', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $list = tagBox._$list;
+        const $list = getList(tagBox);
 
         $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
 
@@ -5594,7 +5598,7 @@ QUnit.module('performance', () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $item = $(tagBox._$list.find('.dx-list-item').eq(0));
+        const $item = $(getList(tagBox).find('.dx-list-item').eq(0));
 
         $item.trigger('dxclick');
 
@@ -5619,7 +5623,7 @@ QUnit.module('performance', () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $item = $(tagBox._$list.find('.dx-list-item').eq(0));
+        const $item = $(getList(tagBox).find('.dx-list-item').eq(0));
 
         $item.trigger('dxclick');
 
@@ -5642,7 +5646,7 @@ QUnit.module('performance', () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        let $item = $(tagBox._$list.find('.dx-list-item').eq(0));
+        let $item = $(getList(tagBox).find('.dx-list-item').eq(0));
 
         $item.trigger('dxclick');
 
@@ -5650,7 +5654,7 @@ QUnit.module('performance', () => {
         assert.deepEqual(filter, [['!', ['id', 1]], ['id', '>', 0]], 'filter is correct');
 
         tagBox.option('opened', true);
-        $item = $(tagBox._$list.find('.dx-list-item').eq(1));
+        $item = $(getList(tagBox).find('.dx-list-item').eq(1));
 
         $item.trigger('dxclick');
         filter = load.lastCall.args[0].filter;
@@ -5673,7 +5677,7 @@ QUnit.module('performance', () => {
 
         const tagBox = $tagBox.dxTagBox('instance');
 
-        $(tagBox._$list.find('.dx-list-item').eq(0)).trigger('dxclick');
+        $(getList(tagBox).find('.dx-list-item').eq(0)).trigger('dxclick');
 
         let filter = load.lastCall.args[0].filter;
         assert.deepEqual(filter, [['!', ['id', 1]]], 'filter is correct');
@@ -5814,7 +5818,7 @@ QUnit.module('performance', () => {
 
         assert.equal($tagBox.find('.' + TAGBOX_TAG_CLASS).text(), 'item 2');
 
-        const list = $tagBox.dxTagBox('instance')._$list.dxList('instance');
+        const list = getList($tagBox.dxTagBox('instance')).dxList('instance');
         assert.deepEqual(list.option('selectedItems'), [{ id: 2, text: 'item 2' }]);
     });
 
@@ -5951,7 +5955,7 @@ QUnit.module('regression', {
         }).dxTagBox('instance');
         const checkItemsRender = () => {
             const texts = ['item1', 'item2'];
-            const listItems = tagBox._$list.find('.dx-list-item');
+            const listItems = getList(tagBox).find('.dx-list-item');
 
             texts.forEach((text, index) => assert.strictEqual(listItems.eq(index).text(), text));
         };
@@ -6062,7 +6066,7 @@ QUnit.module('regression', {
             searchEnabled: true
         }).dxTagBox('instance');
 
-        $(tagBox._$list.find('.dx-list-item').eq(0)).trigger('dxclick');
+        $(getList(tagBox).find('.dx-list-item').eq(0)).trigger('dxclick');
 
         const $input = tagBox.$element().find(`.${TEXTBOX_CLASS}`);
         const kb = keyboardMock($input);
@@ -6070,7 +6074,7 @@ QUnit.module('regression', {
         kb.type('4');
         this.clock.tick(TIME_TO_WAIT);
 
-        $(tagBox._$list.find('.dx-list-item').eq(1)).trigger('dxclick');
+        $(getList(tagBox).find('.dx-list-item').eq(1)).trigger('dxclick');
 
         const $tagContainer = tagBox.$element().find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
