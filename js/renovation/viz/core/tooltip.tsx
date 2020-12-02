@@ -20,7 +20,7 @@ export const viewFunction = ({
   fullSize,
   border,
   props: {
-    color, text, x, y, font, shadow,
+    color, text, x, y, font, shadow, opacity,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
@@ -54,6 +54,7 @@ export const viewFunction = ({
           strokeWidth={border.strokeWidth}
           strokeOpacity={border.strokeOpacity}
           dashStyle={border.dashStyle}
+          opacity={opacity}
           transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
         />
         <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
@@ -99,6 +100,8 @@ export class TooltipProps {
   @OneWay() arrowLength = 10;
 
   @OneWay() offset = 0;
+
+  @OneWay() opacity?: number;
 
   @OneWay() canvas = {
     left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,

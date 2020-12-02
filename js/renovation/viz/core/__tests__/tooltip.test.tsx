@@ -37,6 +37,7 @@ const tooltipProps = {
   arrowLength: 25,
   cornerRadius: 0,
   offset: 5,
+  opacity: 0.4,
   x: 2,
   y: 3,
 };
