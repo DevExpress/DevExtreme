@@ -5,7 +5,7 @@ import asyncForEach from '../../helpers/asyncForEach';
 fixture`DateBox`
   .page(url(__dirname, './pages/T948310.html'));
 
-const TIME_TO_WAIT = 501;
+const TIME_TO_WAIT = 1500;
 const ITEM_HEIGHT = 40;
 
 [[11, 12, 1925], [10, 23, 2001]].forEach(([month, day, year]) => {
