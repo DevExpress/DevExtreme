@@ -8,6 +8,7 @@ import 'ui/range_slider';
 import 'ui/number_box/number_box';
 import 'ui/validator';
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -31,6 +32,68 @@ const TOOLTIP_CLASS = 'dx-popover';
 
 const FEEDBACK_SHOW_TIMEOUT = 30;
 const FEEDBACK_HIDE_TIMEOUT = 400;
+const CONTAINER_MARGIN = 7;
+
+const getRight = (el) => $(el).get(0).getBoundingClientRect().right;
+const getLeft = (el) => $(el).get(0).getBoundingClientRect().left;
+const getWidth = (el) => $(el).get(0).getBoundingClientRect().width;
+
+const isRangeSliderDimensionsMatchOptions = (id, assert) => {
+    const element = $(id);
+    const instance = element.dxRangeSlider('instance');
+    const width = element.width();
+    const min = instance.option('min');
+    const max = instance.option('max');
+    const start = instance.option('start');
+    const end = instance.option('end');
+    const rtl = instance.option('rtlEnabled');
+
+    let handleStart = element.find('.' + SLIDER_HANDLE_CLASS).eq(0);
+    let handleEnd = element.find('.' + SLIDER_HANDLE_CLASS).eq(1);
+    const range = element.find('.' + SLIDER_RANGE_CLASS);
+    const trackBarContainer = range.parent();
+
+    let expectedRangeWidth = (end - start) / (max - min) * (width - 2 * CONTAINER_MARGIN);
+    let expectedRangeLeftOffset = (start - min) / (max - min) * (width - 2 * CONTAINER_MARGIN);
+    let expectedRangeRightOffset = (max - end) / (max - min) * (width - 2 * CONTAINER_MARGIN);
+
+    if(rtl) {
+        const tmpRangeOffset = expectedRangeLeftOffset;
+        expectedRangeLeftOffset = expectedRangeRightOffset;
+        expectedRangeRightOffset = tmpRangeOffset;
+
+        const tmpHandleStart = handleStart;
+        handleStart = handleEnd;
+        handleEnd = tmpHandleStart;
+    }
+
+    const calculatedRangeWidth = getWidth(range);
+    const calculatedRangeLeftOffset = getLeft(range) - getLeft(trackBarContainer);
+    const calculatedRangeRightOffset = getRight(trackBarContainer) - getRight(range);
+
+    const startHandleAndRangeDifference = Math.abs(parseInt(handleStart.css('marginLeft')) + parseInt(range.css('borderLeftWidth')));
+    const endHandleAndRangeDifference = Math.abs(parseInt(handleEnd.css('marginRight')) + parseInt(range.css('borderRightWidth')));
+
+    const calculatedStartHandleOffset = getLeft(handleStart) - getLeft(trackBarContainer) + startHandleAndRangeDifference;
+    const calculatedEndHandleOffset = getRight(trackBarContainer) - getRight(handleEnd) + endHandleAndRangeDifference;
+
+    if(expectedRangeWidth === 0) {
+        // range has 1px border and if width === 0, real width === 2
+        // so if start === end, handles has some offset
+        expectedRangeWidth = 2;
+        if(rtl) {
+            expectedRangeLeftOffset -= 2;
+        } else {
+            expectedRangeRightOffset -= 2;
+        }
+    }
+
+    assert.roughEqual(calculatedRangeWidth, expectedRangeWidth, 0.5, `${SLIDER_RANGE_CLASS} width`);
+    assert.roughEqual(calculatedRangeLeftOffset, expectedRangeLeftOffset, 0.5, `${SLIDER_RANGE_CLASS} left offset`);
+    assert.roughEqual(calculatedRangeRightOffset, expectedRangeRightOffset, 0.5, `${SLIDER_RANGE_CLASS} right offset`);
+    assert.roughEqual(calculatedStartHandleOffset, expectedRangeLeftOffset, 1, `start ${SLIDER_HANDLE_CLASS} offset`);
+    assert.roughEqual(calculatedEndHandleOffset, expectedRangeRightOffset, 1, `end ${SLIDER_HANDLE_CLASS} offset`);
+};
 
 const moduleOptions = {
     beforeEach: function() {
@@ -59,33 +122,23 @@ QUnit.module('render', moduleOptions, () => {
     QUnit.test('render value', function(assert) {
         const el = $('#slider').css('width', 960);
 
-        el.dxRangeSlider({
+        const slider = el.dxRangeSlider({
             max: 100,
             min: 0,
             start: 0,
             end: 100,
             useInkRipple: false
-        });
+        }).dxRangeSlider('instance');
 
-        const slider = el.dxRangeSlider('instance');
-
-        const handleStart = el.find('.' + SLIDER_HANDLE_CLASS).eq(0);
-        const handleEnd = el.find('.' + SLIDER_HANDLE_CLASS).eq(1);
-        const range = el.find('.' + SLIDER_RANGE_CLASS);
-
-        assert.equal(handleStart.position().left, 0);
-        assert.equal(handleEnd.position().left, 960);
-        assert.equal(range.width(), 960);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         slider.option('start', 50);
 
-        assert.equal(range.position().left, 960 / 2);
-        assert.equal(range.width(), 960 / 2);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         slider.option('end', 50);
 
-        assert.equal(range.position().left + range.width(), 960 / 2);
-        assert.equal(range.width(), 0);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
     });
 
     QUnit.test('mousedown/touchstart on slider set new value', function(assert) {
@@ -97,22 +150,25 @@ QUnit.module('render', moduleOptions, () => {
             useInkRipple: false
         }).css('width', 500);
 
-        const range = el.find('.' + SLIDER_RANGE_CLASS);
+        const instance = el.dxRangeSlider('instance');
 
         pointerMock(el).start().move(240 + el.offset().left).down();
-        assert.equal(range.position().left, 240);
-        assert.equal(range.position().left + range.width(), 500);
-        assert.equal(range.width(), 260);
+
+        assert.equal(instance.option('start'), 240);
+        assert.equal(instance.option('end'), 500);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         pointerMock(el).start().move(450 + el.offset().left).down();
-        assert.equal(range.position().left, 240);
-        assert.equal(range.position().left + range.width(), 450);
-        assert.equal(range.width(), 210);
+
+        assert.equal(instance.option('start'), 240);
+        assert.equal(instance.option('end'), 456);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         pointerMock(el).start().move(500 + el.offset().left).down();
-        assert.equal(range.position().left, 240);
-        assert.equal(range.position().left + range.width(), 500);
-        assert.equal(range.width(), 260);
+
+        assert.equal(instance.option('start'), 240);
+        assert.equal(instance.option('end'), 500);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
     });
 
     QUnit.test('value change should have jQuery event', function(assert) {
@@ -178,20 +234,25 @@ QUnit.module('user interaction', () => {
             min: 0,
             start: 40,
             end: 60,
-            width: 100,
+            width: 100 + CONTAINER_MARGIN * 2,
             useInkRipple: false
         });
 
-        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS); const $range = $element.find('.' + SLIDER_RANGE_CLASS); const pointer = pointerMock($wrapper);
+        const instance = $element.dxRangeSlider('instance');
 
-        pointer.start().down($wrapper.offset().left + 40, $wrapper.offset().top).move(40);
-        assert.equal($range.position().left, 60);
-        assert.equal($range.position().left + $range.width(), 80);
+        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS);
+        const pointer = pointerMock($wrapper);
+
+        pointer.start().down($wrapper.offset().left + CONTAINER_MARGIN + 40, $wrapper.offset().top).move(46);
+        assert.equal(instance.option('start'), 60);
+        assert.equal(instance.option('end'), 80);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
         pointer.up();
 
-        pointer.start().down($wrapper.offset().left + 80, $wrapper.offset().top).move(-50);
-        assert.equal($range.position().left, 30);
-        assert.equal($range.position().left + $range.width(), 60);
+        pointer.start().down($wrapper.offset().left + CONTAINER_MARGIN + 80, $wrapper.offset().top).move(-57);
+        assert.equal(instance.option('start'), 30);
+        assert.equal(instance.option('end'), 60);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
         pointer.up();
     });
 
@@ -202,15 +263,19 @@ QUnit.module('user interaction', () => {
             min: 60,
             start: 120,
             end: 140,
-            width: 100,
+            width: 100 + CONTAINER_MARGIN * 2,
             useInkRipple: false
         });
 
-        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS); const $range = $element.find('.' + SLIDER_RANGE_CLASS); const pointer = pointerMock($wrapper);
+        const instance = $element.dxRangeSlider('instance');
 
-        pointer.start().down($wrapper.offset().left + 80, $wrapper.offset().top).move(-40);
-        assert.equal($range.position().left, 40);
-        assert.equal($range.position().left + $range.width(), 60);
+        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS);
+        const pointer = pointerMock($wrapper);
+
+        pointer.start().down($wrapper.offset().left + CONTAINER_MARGIN + 80, $wrapper.offset().top).move(-46);
+        assert.equal(instance.option('start'), 100);
+        assert.equal(instance.option('end'), 120);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
         pointer.up();
     });
 
@@ -220,21 +285,26 @@ QUnit.module('user interaction', () => {
             min: 0,
             start: 40,
             end: 60,
-            width: 100,
+            width: 100 + CONTAINER_MARGIN * 2,
             rtlEnabled: true,
             useInkRipple: false
         });
 
-        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS); const $range = $element.find('.' + SLIDER_RANGE_CLASS); const pointer = pointerMock($wrapper);
+        const instance = $element.dxRangeSlider('instance');
 
-        pointer.start().down($wrapper.offset().left + 40, $wrapper.offset().top).move(40);
-        assert.equal($range.position().left, 60);
-        assert.equal($range.position().left + $range.width(), 80);
+        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS);
+        const pointer = pointerMock($wrapper);
+
+        pointer.start().down($wrapper.offset().left + CONTAINER_MARGIN + 40, $wrapper.offset().top).move(46);
+        assert.equal(instance.option('start'), 20);
+        assert.equal(instance.option('end'), 40);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
         pointer.up();
 
-        pointer.start().down($wrapper.offset().left + 80, $wrapper.offset().top).move(-50);
-        assert.equal($range.position().left, 30);
-        assert.equal($range.position().left + $range.width(), 60);
+        pointer.start().down($wrapper.offset().left + CONTAINER_MARGIN + 80, $wrapper.offset().top).move(-57);
+        assert.equal(instance.option('start'), 40);
+        assert.equal(instance.option('end'), 70);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
         pointer.up();
     });
 });
@@ -675,7 +745,7 @@ QUnit.module('regressions', {
         fx.off = true;
 
         this.element = $('#slider')
-            .css('width', 100)
+            .css('width', 100 + 2 * CONTAINER_MARGIN)
             .dxRangeSlider({
                 max: 100,
                 min: 0,
@@ -709,10 +779,10 @@ QUnit.module('regressions', {
     });
 
     QUnit.test('min value behaviour', function(assert) {
-        pointerMock(this.element).start().move(25 + this.element.offset().left).click();
+        pointerMock(this.element).start().move(25 + CONTAINER_MARGIN + this.element.offset().left).click();
         assert.equal(this.instance.option('start'), 25);
 
-        pointerMock(this.element).start().move(45 + this.element.offset().left).click();
+        pointerMock(this.element).start().move(45 + CONTAINER_MARGIN + this.element.offset().left).click();
         assert.equal(this.instance.option('end'), 45);
     });
 
@@ -720,29 +790,27 @@ QUnit.module('regressions', {
         this.instance.option('start', 80);
         assert.equal(this.instance.option('start'), 80);
         assert.equal(this.instance.option('end'), 80);
-        assert.equal(this.range.position().left, 80);
-        assert.equal(this.range.position().left + this.range.width(), 80);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         this.instance.option('start', 60);
         assert.equal(this.instance.option('start'), 60);
         assert.equal(this.instance.option('end'), 80);
-        assert.equal(this.range.position().left, 60);
-        assert.equal(this.range.position().left + this.range.width(), 80);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         this.instance.option('start', -100);
         assert.equal(this.instance.option('start'), 0);
-        assert.equal(this.leftHandle.position().left, 0);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         this.instance.option('end', 150);
         assert.equal(this.instance.option('end'), 100);
-        assert.equal(this.rightHandle.position().left, 100);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
     });
 
     QUnit.test('B230371 - click on handler does not change value', function(assert) {
-        pointerMock(this.leftHandle).start().move(this.leftHandle.offset().left).click();
+        pointerMock(this.leftHandle).start().move(this.range.offset().left).click();
         assert.equal(this.instance.option('start'), 20);
 
-        pointerMock(this.rightHandle).start().move(this.rightHandle.offset().left).click();
+        pointerMock(this.rightHandle).start().move(this.range.offset().left + 40).click();
         assert.equal(this.instance.option('end'), 60);
     });
 
@@ -775,12 +843,15 @@ QUnit.module('regressions', {
     });
 
     QUnit.test('B231116', function(assert) {
-        pointerMock(this.leftHandle).start().move(this.leftHandle.offset().left).down().move(100).up();
+        this.instance.option({
+            width: 10014
+        });
+        pointerMock(this.leftHandle).start().move(this.range.offset().left).down().move(10000).up();
         assert.equal(this.instance.option('start'), 60);
         assert.equal(this.instance.option('end'), 100);
 
         this.instance.option('start', 20);
-        pointerMock(this.rightHandle).start().move(this.rightHandle.offset().left).down().move(-100).up();
+        pointerMock(this.rightHandle).start().move(this.range.offset().left + 8000).down().move(-10000).up();
         assert.equal(this.instance.option('start'), 0);
         assert.equal(this.instance.option('end'), 20);
 
@@ -839,7 +910,7 @@ QUnit.module('regressions', {
             start: 0,
             end: 80,
             step: 1,
-            width: 100
+            width: 1014
         });
 
         const mouse = pointerMock(this.rightHandle);
@@ -850,7 +921,7 @@ QUnit.module('regressions', {
             .start()
             .move(hX, hY)
             .down()
-            .move(-10)
+            .move(-100)
             .up();
 
         hX = this.rightHandle.offset().left + this.rightHandle.outerWidth() / 2,
@@ -860,7 +931,7 @@ QUnit.module('regressions', {
             .start()
             .move(hX, hY)
             .down()
-            .move(10)
+            .move(100)
             .up();
 
         assert.equal(this.instance.option('end'), 80, 'we should back to initial position');
@@ -901,22 +972,21 @@ QUnit.module('regressions', {
         assert.equal(rightHandle.hasClass('dx-state-active'), false);
     });
 
-    QUnit.test('B236168 -  when we set startValue greater than endValue we lost handle', function(assert) {
+    QUnit.test('B236168 - when we set startValue greater than endValue we lost handle', function(assert) {
         this.instance.option({
             min: 0,
             max: 100,
             start: 20,
             end: 80,
             step: 1,
-            width: 100
+            width: 10014
         });
         this.instance.option('start', -20);
         this.instance.option('end', -30);
 
         assert.equal(this.instance.option('start'), 0, 'start value is equal to min value');
         assert.equal(this.instance.option('end'), 0, 'end value is equal to min');
-        assert.equal(this.leftHandle.position().left, 0, 'start handler should be in min position');
-        assert.equal(this.rightHandle.position().left, 0, 'end handler should be in min position');
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         const mouse = pointerMock(this.element.find('.' + SLIDER_WRAPPER_CLASS));
         let hX = this.leftHandle.offset().left + this.leftHandle.outerWidth() / 2;
@@ -929,16 +999,14 @@ QUnit.module('regressions', {
 
         assert.equal(this.instance.option('start'), 0, 'start value is equal min value');
         assert.equal(this.instance.option('end'), 0, 'end value is equal min value');
-        assert.equal(this.leftHandle.position().left, 0, 'start handler should be in min position');
-        assert.equal(this.rightHandle.position().left, 0, 'end handler should be in min position');
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         this.instance.option('start', 130);
         this.instance.option('end', 110);
 
         assert.equal(this.instance.option('start'), 100, 'start value is equal to max value');
         assert.equal(this.instance.option('end'), 100, 'end value is equal to max values');
-        assert.equal(this.range.position().left, 100, 'start handler should be in max position');
-        assert.equal(this.range.position().left + this.range.width(), 100, 'end handler should be in max position');
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         hX = this.rightHandle.offset().left;
         hY = this.rightHandle.offset().top;
@@ -950,8 +1018,7 @@ QUnit.module('regressions', {
 
         assert.equal(this.instance.option('start'), 100, 'start value is equal max');
         assert.equal(this.instance.option('end'), 100, 'end value is equal max');
-        assert.equal(this.range.position().left, 100, 'start handler should be in max position');
-        assert.equal(this.range.position().left + this.range.width(), 100, 'end handler should be in max position');
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         this.instance.option('start', 50);
         this.instance.option('end', 150);
@@ -965,7 +1032,7 @@ QUnit.module('regressions', {
             .click();
 
         assert.equal(this.instance.option('end'), 100, 'end value is equal max');
-        assert.equal(this.range.position().left + this.range.width(), 100, 'end handler should be in max position');
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         this.instance.option('start', -50);
         this.instance.option('end', 50);
@@ -979,7 +1046,7 @@ QUnit.module('regressions', {
             .click();
 
         assert.equal(this.instance.option('start'), 0, 'start value is equal min');
-        assert.equal(this.leftHandle.position().left, 0, 'start handler should be in min position');
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
     });
 
     QUnit.test('B235978 - value may be bigger max option', function(assert) {
@@ -1028,7 +1095,7 @@ QUnit.module('regressions', {
 
 QUnit.module('RTL', moduleOptions, () => {
     QUnit.test('render value', function(assert) {
-        const $element = $('#slider').css('width', 960);
+        const $element = $('#slider').css('width', 960 + 2 * CONTAINER_MARGIN);
 
         $element.dxRangeSlider({
             max: 100,
@@ -1041,22 +1108,16 @@ QUnit.module('RTL', moduleOptions, () => {
 
         const slider = $element.dxRangeSlider('instance');
 
-        const $handleStart = $element.find('.' + SLIDER_HANDLE_CLASS).eq(0); const $handleEnd = $element.find('.' + SLIDER_HANDLE_CLASS).eq(1); const $range = $element.find('.' + SLIDER_RANGE_CLASS);
-
         assert.ok($element.hasClass('dx-rtl'));
-        assert.equal($handleStart.position().left, 960 - $handleStart.outerWidth() / 2);
-        assert.equal($handleEnd.position().left, -$handleStart.outerWidth() / 2);
-        assert.equal($range.width(), 960);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         slider.option('start', 50);
 
-        assert.equal($handleStart.position().left, 960 / 2 - $handleStart.outerWidth() / 2);
-        assert.equal($range.width(), 960 / 2);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         slider.option('end', 50);
 
-        assert.equal($range.position().left + $range.width(), 960 / 2);
-        assert.equal($range.width(), 0);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
         slider.option('rtlEnabled', false);
         assert.ok(!$element.hasClass('dx-rtl'));
@@ -1070,28 +1131,24 @@ QUnit.module('RTL', moduleOptions, () => {
             end: 500,
             rtlEnabled: true,
             useInkRipple: false
-        }).css('width', 500);
+        }).css('width', 500 + 2 * CONTAINER_MARGIN);
 
-        const $range = $element.find('.' + SLIDER_RANGE_CLASS);
-        let rangeOffset;
+        const instance = $element.dxRangeSlider('instance');
 
-        pointerMock($element).start().move(240 + $element.offset().left).down();
-        rangeOffset = Math.round($range.position().left);
-        assert.equal($range.width() + rangeOffset, 500);
-        assert.equal(rangeOffset, 240);
-        assert.equal($range.width(), 260);
+        pointerMock($element).start().move(240 + $element.offset().left + CONTAINER_MARGIN).down();
+        assert.equal(instance.option('start'), 0);
+        assert.equal(instance.option('end'), 260);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
-        pointerMock($element).start().move(450 + $element.offset().left).down();
-        rangeOffset = Math.round($range.position().left);
-        assert.equal($range.width() + rangeOffset, 450);
-        assert.equal(rangeOffset, 240);
-        assert.equal($range.width(), 210);
+        pointerMock($element).start().move(450 + $element.offset().left + CONTAINER_MARGIN).down();
+        assert.equal(instance.option('start'), 50);
+        assert.equal(instance.option('end'), 260);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
 
-        pointerMock($element).start().move(500 + $element.offset().left).down();
-        rangeOffset = Math.round($range.position().left);
-        assert.equal($range.width() + rangeOffset, 500);
-        assert.equal(rangeOffset, 240);
-        assert.equal($range.width(), 260);
+        pointerMock($element).start().move(500 + $element.offset().left + CONTAINER_MARGIN).down();
+        assert.equal(instance.option('start'), 0);
+        assert.equal(instance.option('end'), 260);
+        isRangeSliderDimensionsMatchOptions('#slider', assert);
     });
 
     QUnit.test('correct handle is moved by click in RTL mode (T106708)', function(assert) {
@@ -1102,10 +1159,10 @@ QUnit.module('RTL', moduleOptions, () => {
             end: 75,
             rtlEnabled: true,
             useInkRipple: false
-        }).css('width', 100);
+        }).css('width', 100 + 2 * CONTAINER_MARGIN);
         const pointer = pointerMock($element).start();
 
-        pointer.move(10 + $element.offset().left).down().up();
+        pointer.move(10 + $element.offset().left + CONTAINER_MARGIN).down().up();
 
         assert.equal($element.dxRangeSlider('option', 'start'), 25);
         assert.equal($element.dxRangeSlider('option', 'end'), 90);
