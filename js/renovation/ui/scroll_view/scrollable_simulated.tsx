@@ -75,7 +75,6 @@ export const viewFunction = ({
 );
 
 @Component({
-  jQuery: { register: true },
   view: viewFunction,
 })
 export class ScrollableSimulated extends JSXComponent<ScrollablePropsInternalPropsType>() {
