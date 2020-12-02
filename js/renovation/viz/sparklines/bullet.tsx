@@ -76,6 +76,15 @@ const getCssClasses = ({ classes }): string => {
   return combineClasses(rootClassesMap);
 };
 
+const getContainerCssClasses = ({ className }): string => {
+  const rootClassesMap = {
+    'dx-bullet': true,
+    [String(className)]: !!className,
+  };
+
+  return combineClasses(rootClassesMap);
+};
+
 export const viewFunction = (viewModel: Bullet): JSX.Element => {
   const scaleProps = viewModel.prepareInternalComponents();
   const isValidBullet = isValidBulletScale(scaleProps);
@@ -83,7 +92,7 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
     <BaseWidget
       ref={viewModel.widgetRef as any}
       classes={viewModel.cssClasses}
-      className={viewModel.props.className}
+      className={viewModel.cssClassName}
       size={viewModel.props.size}
       margin={viewModel.props.margin}
       defaultCanvas={viewModel.defaultCanvas}
@@ -182,6 +191,11 @@ export class Bullet extends JSXComponent(BulletProps) {
   get cssClasses(): string {
     const { classes } = this.props;
     return getCssClasses({ classes });
+  }
+
+  get cssClassName(): string {
+    const { className } = this.props;
+    return getContainerCssClasses({ className });
   }
 
   get rtlEnabled(): boolean | undefined {

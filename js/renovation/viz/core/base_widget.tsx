@@ -22,6 +22,7 @@ import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 
 const getCssClasses = (model: Partial<BaseWidgetProps>): string => {
   const containerClassesMap = {
+    'dx-widget': true,
     'dx-visibility-change-handler': true,
     [String(model.className)]: !!model.className,
   };

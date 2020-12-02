@@ -125,12 +125,12 @@ describe('BaseWidget', () => {
     describe('cssClasses', () => {
       it('default classes', () => {
         const widget = new BaseWidget({ });
-        expect(widget.cssClasses).toBe('dx-visibility-change-handler');
+        expect(widget.cssClasses).toBe('dx-widget dx-visibility-change-handler');
       });
 
       it('should add className property', () => {
         const widget = new BaseWidget({ className: 'custom-class' });
-        expect(widget.cssClasses).toBe('dx-visibility-change-handler custom-class');
+        expect(widget.cssClasses).toBe('dx-widget dx-visibility-change-handler custom-class');
       });
     });
 

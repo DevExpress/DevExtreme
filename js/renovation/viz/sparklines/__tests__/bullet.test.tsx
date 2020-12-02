@@ -37,14 +37,14 @@ describe('Bullet', () => {
     it('should pass all necessary properties to the BaseWidget (by default)', () => {
       const onCanvasChange = jest.fn();
       const cssClasses = 'bullet-classes';
+      const cssClassName = 'some-class';
       const viewModel = {
         prepareInternalComponents: getDefaultScaleProps,
         onCanvasChange,
         cssClasses,
         rtlEnabled: false,
-        props: {
-          className: 'some-class',
-        },
+        cssClassName,
+        props: { },
       };
       const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element);
 
@@ -54,7 +54,7 @@ describe('Bullet', () => {
         disabled: false,
         rtlEnabled: false,
         pointerEvents: 'visible',
-        className: 'some-class',
+        className: cssClassName,
         classes: cssClasses,
       });
     });
@@ -180,6 +180,18 @@ describe('Bullet', () => {
         it('should add className property', () => {
           const bullet = new Bullet({ classes: 'custom-class' });
           expect(bullet.cssClasses).toBe('dxb dxb-bullet custom-class');
+        });
+      });
+
+      describe('cssClassName', () => {
+        it('default className', () => {
+          const bullet = new Bullet({ });
+          expect(bullet.cssClassName).toBe('dx-bullet');
+        });
+
+        it('should add className property', () => {
+          const bullet = new Bullet({ className: 'custom-class' });
+          expect(bullet.cssClassName).toBe('dx-bullet custom-class');
         });
       });
 
