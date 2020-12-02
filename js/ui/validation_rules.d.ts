@@ -29,7 +29,7 @@ export interface AsyncRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type: 'async';
+    type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     /**
      * @docid AsyncRule.validationCallback
      * @type function
@@ -94,7 +94,7 @@ export interface CompareRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type: 'compare';
+    type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
 export interface CustomRule {
@@ -128,7 +128,7 @@ export interface CustomRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type: 'custom';
+    type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     /**
      * @docid CustomRule.validationCallback
      * @type function
@@ -169,7 +169,7 @@ export interface EmailRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type: 'email';
+    type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
 export interface NumericRule {
@@ -195,7 +195,7 @@ export interface NumericRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type: 'numeric';
+    type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
 export interface PatternRule {
@@ -228,7 +228,7 @@ export interface PatternRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type: 'pattern';
+    type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
 export interface RangeRule {
@@ -276,7 +276,7 @@ export interface RangeRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type: 'range';
+    type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
 export interface RequiredRule {
@@ -302,7 +302,7 @@ export interface RequiredRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type: 'required';
+    type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
 export interface StringLengthRule {
@@ -350,5 +350,5 @@ export interface StringLengthRule {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type: 'stringLength';
+    type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
