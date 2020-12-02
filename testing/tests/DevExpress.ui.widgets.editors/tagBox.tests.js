@@ -226,6 +226,31 @@ QUnit.module('list selection', moduleSetup, () => {
         assert.equal($list.find('.' + LIST_ITEM_CLASS).length, dataSource.length - 1, 'items count is correct after the second tag is removed');
     });
 
+    QUnit.test('Selected item should be removed from list if "hideSelectedItems" option is true and minSearchLength > 0 (T951777)', function(assert) {
+        const dataSource = [1, 11];
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource,
+            opened: true,
+            value: [1],
+            hideSelectedItems: true,
+            searchEnabled: true,
+            minSearchLength: 1
+        });
+
+        const tagBox = $tagBox.dxTagBox('instance');
+        const $list = tagBox._$list;
+        const $input = $tagBox.find('.dx-texteditor-input');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('1');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.strictEqual($list.find('.' + LIST_ITEM_CLASS).length, 1, 'items count is correct after the first item selection');
+
+        $($tagBox.find('.' + TAGBOX_TAG_REMOVE_BUTTON_CLASS).eq(0)).trigger('dxclick');
+        assert.equal($list.find('.' + LIST_ITEM_CLASS).length, 2, 'items count is correct after the first tag is removed');
+    });
+
     QUnit.test('Selected item tag should be correct if hideSelectedItems is set (T580639)', function(assert) {
         const dataSource = [{
             'ID': 1,
