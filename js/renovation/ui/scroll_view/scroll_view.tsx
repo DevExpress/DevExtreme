@@ -1,54 +1,30 @@
 import {
   Component,
-  ComponentBindings,
   JSXComponent,
-  Slot,
-  OneWay,
   Method,
   Ref,
-  Event,
   Effect,
 } from 'devextreme-generator/component_declaration/common';
-import { subscribeToScrollEvent } from '../utils/subscribe_to_event';
-import { isNumeric } from '../../core/utils/type';
-import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
-import { camelize } from '../../core/utils/inflector';
-import { Widget } from './common/widget';
-import BaseWidgetProps from '../utils/base_props';
-import { combineClasses } from '../utils/combine_classes';
-import { DisposeEffectReturn } from '../utils/effect_return.d';
-import { EventCallback } from './common/event_callback.d';
+import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
+import { isNumeric } from '../../../core/utils/type';
+import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
+import { camelize } from '../../../core/utils/inflector';
+import { Widget } from '../common/widget';
+import { combineClasses } from '../../utils/combine_classes';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
+
+import {
+  ScrollViewPropsType,
+} from './scrollview_props';
+
+import {
+  ScrollViewLocation, ScrollOffset, ScrollViewBoundary, ScrollViewDirection,
+} from './types';
 
 const DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = 'horizontal';
 const DIRECTION_BOTH = 'both';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
-
-export interface ScrollViewLocation {
-  top: number;
-  left: number;
-}
-
-export interface ScrollOffset {
-  top: number;
-  left: number;
-  bottom: number;
-  right: number;
-}
-
-export interface ScrollViewBoundaryProps {
-  reachedBottom: boolean;
-  reachedLeft: boolean;
-  reachedRight: boolean;
-  reachedTop: boolean;
-}
-
-interface ScrollEventArgs extends Partial<ScrollViewBoundaryProps> {
-  event: Event;
-  scrollOffset: Partial<ScrollOffset>;
-}
-
-export type ScrollViewDirection = 'both' | 'horizontal' | 'vertical';
 
 export const ensureLocation = (
   location: number | Partial<ScrollViewLocation>,
@@ -97,17 +73,6 @@ export const viewFunction = ({
     </div>
   </Widget>
 );
-
-/* istanbul ignore next: class has only props default */
-@ComponentBindings()
-export class ScrollViewProps {
-  @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
-
-  @OneWay() direction: ScrollViewDirection = DIRECTION_VERTICAL;
-
-  @Event() onScroll?: EventCallback<ScrollEventArgs>;
-}
-type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
 @Component({
   jQuery: { register: true },
@@ -212,10 +177,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       }));
   }
 
-  private getBoundaryProps(): Partial<ScrollViewBoundaryProps> {
+  private getBoundaryProps(): Partial<ScrollViewBoundary> {
     const { left, top } = this.scrollOffset();
 
-    const boundaryProps: Partial<ScrollViewBoundaryProps> = {};
+    const boundaryProps: Partial<ScrollViewBoundary> = {};
 
     if (this.isDirection(DIRECTION_HORIZONTAL) || this.isDirection(DIRECTION_BOTH)) {
       boundaryProps.reachedLeft = left <= 0;

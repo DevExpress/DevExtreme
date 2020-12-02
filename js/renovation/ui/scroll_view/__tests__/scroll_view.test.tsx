@@ -3,22 +3,29 @@ import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import {
   clear as clearEventHandlers, emit,
-} from '../../test_utils/events_mock';
+} from '../../../test_utils/events_mock';
 
 import {
   ScrollView,
   viewFunction,
+
+  ensureLocation,
+} from '../scroll_view';
+import { Widget } from '../../common/widget';
+
+import {
+  ScrollViewProps,
+} from '../scrollview_props';
+
+import {
   ScrollViewLocation,
   ScrollOffset,
   ScrollViewDirection,
-  ScrollViewProps,
-  ensureLocation,
-} from '../scroll_view';
-import { Widget } from '../common/widget';
+} from '../types';
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
-jest.mock('../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
+jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
 
 describe('ScrollView', () => {
   describe('Render', () => {
