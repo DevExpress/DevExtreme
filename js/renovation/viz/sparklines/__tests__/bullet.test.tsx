@@ -1,21 +1,44 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Bullet, viewFunction as BulletComponent } from '../bullet';
-import { PathSvgElement } from '../../renderers/svg_path';
-import config from '../../../../../core/config';
+import { PathSvgElement } from '../../core/renderers/svg_path';
+import config from '../../../../core/config';
 
 describe('Bullet', () => {
+  const prepareInternalComponents = jest.fn(() => ({
+    value: 50,
+    startScaleValue: 0,
+    endScaleValue: 100,
+    target: 100,
+  }));
+
+  const getDefaultScaleProps = jest.fn(() => ({
+    value: 0,
+    startScaleValue: 0,
+    endScaleValue: 0,
+    target: 0,
+  }));
+
+  const shapeMethods = (
+    valuePoints: number[],
+    isValidTarget: boolean,
+    targetPoints: number[],
+    isValidZeroLevel: boolean,
+    zeroLevelPoints: number[],
+  ) => ({
+    getBarValueShape: () => valuePoints,
+    isValidTarget: () => isValidTarget,
+    getTargetShape: () => targetPoints,
+    isValidZeroLevel: () => isValidZeroLevel,
+    getZeroLevelShape: () => zeroLevelPoints,
+  });
+
   describe('View', () => {
     it('should pass all necessary properties to the BaseWidget (by default)', () => {
       const onCanvasChange = jest.fn();
       const cssClasses = 'bullet-classes';
       const viewModel = {
-        prepareInternalComponents: jest.fn(() => ({
-          value: 0,
-          startScaleValue: 0,
-          endScaleValue: 0,
-          target: 0,
-        })),
+        prepareInternalComponents: getDefaultScaleProps,
         onCanvasChange,
         cssClasses,
         rtlEnabled: false,
@@ -56,12 +79,7 @@ describe('Bullet', () => {
         bottom: 3,
       };
       const viewModel = {
-        prepareInternalComponents: jest.fn(() => ({
-          value: 0,
-          startScaleValue: 0,
-          endScaleValue: 0,
-          target: 0,
-        })),
+        prepareInternalComponents: getDefaultScaleProps,
         props: {
           size,
           margin,
@@ -80,16 +98,10 @@ describe('Bullet', () => {
 
     it('should render value bar', () => {
       const points = [1, 2, 3, 4, 5, 6, 7, 8];
+      const methods = shapeMethods(points, false, [], false, []);
       const viewModel = {
-        prepareInternalComponents: jest.fn(() => ({
-          value: 50,
-          startScaleValue: 0,
-          endScaleValue: 100,
-          target: 100,
-        })),
-        getBarValueShape: () => points,
-        isValidTarget: () => false,
-        isValidZeroLevel: () => false,
+        prepareInternalComponents,
+        ...methods,
         props: { color: '#e8c267' },
       };
       const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element);
@@ -107,17 +119,10 @@ describe('Bullet', () => {
 
     it('should render target mark', () => {
       const points = [1, 2, 3, 4];
+      const methods = shapeMethods([], true, points, false, []);
       const viewModel = {
-        prepareInternalComponents: jest.fn(() => ({
-          value: 50,
-          startScaleValue: 0,
-          endScaleValue: 100,
-          target: 100,
-        })),
-        getBarValueShape: () => [],
-        isValidTarget: () => true,
-        getTargetShape: () => points,
-        isValidZeroLevel: () => false,
+        prepareInternalComponents,
+        ...methods,
         props: {
           targetColor: '#666666',
           targetWidth: 4,
@@ -141,17 +146,10 @@ describe('Bullet', () => {
 
     it('should render zero level mark', () => {
       const points = [1, 2, 3, 4];
+      const methods = shapeMethods([], false, [], true, points);
       const viewModel = {
-        prepareInternalComponents: jest.fn(() => ({
-          value: 50,
-          startScaleValue: 0,
-          endScaleValue: 100,
-          target: 100,
-        })),
-        getBarValueShape: () => [],
-        isValidTarget: () => false,
-        isValidZeroLevel: () => true,
-        getZeroLevelShape: () => points,
+        prepareInternalComponents,
+        ...methods,
         props: { targetColor: '#666666' },
       };
       const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element);

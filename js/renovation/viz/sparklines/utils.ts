@@ -1,6 +1,6 @@
-import { Translator2D } from '../../../../viz/translators/translator2d';
-import { noop } from '../../../../core/utils/common';
-import { Canvas } from '../common/types.d';
+import { Translator2D } from '../../../viz/translators/translator2d';
+import { noop } from '../../../core/utils/common';
+import { Canvas } from '../core/common/types.d';
 
 export interface Axis {
   getTranslator: () => any;

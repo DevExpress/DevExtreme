@@ -7,14 +7,14 @@ import {
   InternalState,
   Consumer,
 } from 'devextreme-generator/component_declaration/common';
-import { combineClasses } from '../../../utils/combine_classes';
-import { rtlEnabled } from '../utils';
-import { BaseWidgetProps } from '../base_props';
-import { BaseWidget } from '../base_widget';
+import { combineClasses } from '../../utils/combine_classes';
+import { rtlEnabled } from '../core/utils';
+import { BaseWidgetProps } from '../core/base_props';
+import { BaseWidget } from '../core/base_widget';
 import { createAxis } from './utils';
-import { ConfigContextValue, ConfigContext } from '../../../ui/common/config_context';
-import { PathSvgElement } from '../renderers/svg_path';
-import { Canvas } from '../common/types.d';
+import { ConfigContextValue, ConfigContext } from '../../ui/common/config_context';
+import { PathSvgElement } from '../core/renderers/svg_path';
+import { Canvas } from '../core/common/types.d';
 
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;

@@ -6,5 +6,5 @@ module.exports = [
     { name: 'ScrollView', pathInRenovationFolder: 'ui/scroll_view.j' },
     // { name: 'DataGrid', pathInRenovationFolder: 'ui/data_grid/data_grid.j' },
     { name: 'Pager', pathInRenovationFolder: 'ui/pager/pager.j' },
-    { name: 'Bullet', pathInRenovationFolder: 'viz/core/sparklines/bullet.j' },
+    { name: 'Bullet', pathInRenovationFolder: 'viz/sparklines/bullet.j' },
 ];
