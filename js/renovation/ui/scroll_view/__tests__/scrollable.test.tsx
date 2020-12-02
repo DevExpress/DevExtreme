@@ -19,14 +19,14 @@ import {
 import { Widget } from '../../common/widget';
 
 import {
-  ScrollableProps,
+  ScrollablePropsType,
 } from '../scrollable_props';
 
 import {
   ScrollableLocation,
   ScrollOffset,
   ScrollableDirection,
-} from '../types';
+} from '../types.d';
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
@@ -573,7 +573,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   const containerRef = createContainerRef({ top: 200, left: 0 },
                     orientation, scrollBarSize);
 
-                  const scrollView = new Scrollable({ direction: 'vertical' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -586,7 +586,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   const containerRef = createContainerRef({ top: 100, left: 0 },
                     orientation, scrollBarSize);
 
-                  const scrollView = new Scrollable({ direction: 'vertical' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
 
                   scrollView.scrollToElement(element, offset);
@@ -604,7 +604,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   const containerRef = createContainerRef({ left: 200, top: 0 },
                     orientation, scrollBarSize);
 
-                  const scrollView = new Scrollable({ direction: 'horizontal' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
 
                   scrollView.scrollToElement(element, offset);
@@ -619,7 +619,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   const containerRef = createContainerRef({ left: 100, top: 0 },
                     orientation, scrollBarSize);
 
-                  const scrollView = new Scrollable({ direction: 'horizontal' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -633,7 +633,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 it('should scroll to element from left side and top side by both orientation', () => {
                   const element = createTargetElement({ location: { left: 20, top: 20 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -644,7 +644,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 it('should scroll to element from right side and top side by both orientation', () => {
                   const element = createTargetElement({ location: { left: 500, top: 20 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -655,7 +655,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 it('should scroll to element from left side and bottom side by both orientation', () => {
                   const element = createTargetElement({ location: { left: 20, top: 500 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -666,7 +666,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 it('should scroll to element from right side and bottom side by both orientation', () => {
                   const element = createTargetElement({ location: { left: 500, top: 500 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -677,7 +677,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 it('should do not scroll to an element when it in the visible area', () => {
                   const element = createTargetElement({ location: { top: 200, left: 200 } });
                   const containerRef = createContainerRef({ top: 100, left: 100 }, 'both', scrollBarSize);
-                  const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -697,7 +697,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   const containerRef = createContainerRef({ top: 200, left: 0 },
                     orientation, scrollBarSize);
 
-                  const scrollView = new Scrollable({ direction: 'vertical' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -717,7 +717,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   const containerRef = createContainerRef({ top: 100, left: 0 },
                     orientation, scrollBarSize);
 
-                  const scrollView = new Scrollable({ direction: 'vertical' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -734,7 +734,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   const containerRef = createContainerRef({ left: 200, top: 0 },
                     orientation, scrollBarSize);
 
-                  const scrollView = new Scrollable({ direction: 'horizontal' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -754,7 +754,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   const containerRef = createContainerRef({ left: 100, top: 0 },
                     orientation, scrollBarSize);
 
-                  const scrollView = new Scrollable({ direction: 'horizontal' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -769,7 +769,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                     height: 400,
                   });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -784,7 +784,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                     height: 400,
                   });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -799,7 +799,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                     height: 400,
                   });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -814,7 +814,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                     height: 400,
                   });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -829,7 +829,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                     height: 400,
                   });
                   const containerRef = createContainerRef({ top: 100, left: 100 }, 'both', scrollBarSize);
-                  const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                  const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                   scrollView.containerRef = containerRef;
                   scrollView.scrollToElement(element, offset);
 
@@ -856,7 +856,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   isInScrollableContent: true,
                 });
                 const containerRef = createContainerRef({ top: 100, left: 100 }, 'both');
-                const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                 scrollView.containerRef = containerRef;
                 scrollView.scrollToElement(element);
 
@@ -867,7 +867,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
               it('it should not scroll to element when it is not located inside the scrollable content', () => {
                 const element = createElement({ location: { top: 200, left: 200 } });
                 const containerRef = createContainerRef({ top: 100, left: 100 }, 'both', undefined);
-                const scrollView = new Scrollable({ direction: 'both' } as ScrollableProps);
+                const scrollView = new Scrollable({ direction: 'both' } as ScrollablePropsType);
                 scrollView.containerRef = containerRef;
                 scrollView.scrollToElement(element);
 
@@ -883,7 +883,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 const element = createTargetElement({ location: { top: 0, left: -320 } });
                 const containerRef = createContainerRef({ top: 0, left: 0 }, 'both', undefined, true);
 
-                const scrollView = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollableProps);
+                const scrollView = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
                 scrollView.containerRef = containerRef;
                 scrollView.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
@@ -893,7 +893,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 const element = createTargetElement({ location: { top: 0, left: 0 } });
                 const containerRef = createContainerRef({ top: 0, left: -320 }, 'both', undefined, true);
 
-                const scrollView = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollableProps);
+                const scrollView = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
                 scrollView.containerRef = containerRef;
                 scrollView.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
@@ -904,7 +904,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 const element = createTargetElement({ location: { top: 0, left: -320 } });
                 const containerRef = createContainerRef({ top: 0, left: 0 }, 'both', undefined, true);
 
-                const scrollView = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollableProps);
+                const scrollView = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
                 scrollView.containerRef = containerRef;
                 scrollView.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft * -1);
@@ -921,7 +921,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 });
                 const containerRef = createContainerRef({ top: 0, left: 0 }, 'both', undefined, true);
 
-                const scrollView = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollableProps);
+                const scrollView = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
                 scrollView.containerRef = containerRef;
                 scrollView.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
@@ -935,7 +935,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 });
                 const containerRef = createContainerRef({ top: 0, left: -320 }, 'both', undefined, true);
 
-                const scrollView = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollableProps);
+                const scrollView = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
                 scrollView.containerRef = containerRef;
                 scrollView.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
