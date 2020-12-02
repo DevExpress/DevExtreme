@@ -1,9 +1,12 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState, RefObject,
+  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState, Fragment,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import { PathSvgElement } from './renderers/svg_path';
 import { TextSvgElement } from './renderers/svg_text';
+import { ShadowFilter } from './renderers/shadow_filter';
+import { getNextDefsSvgId } from './renderers/utils';
 
 import { Size, Border } from './common/types.d';
 
@@ -17,39 +20,56 @@ export const viewFunction = ({
   fullSize,
   border,
   props: {
-    color, text, x, y, font,
+    color, text, x, y, font, shadow,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
+  const filterId = getNextDefsSvgId();
   const correctedCoordinates = recalculateCoordinates({
     canvas, anchorX: x, anchorY: y, size: fullSize, offset, arrowLength,
   });
   const angle = getCloudAngle(fullSize, correctedCoordinates);
   return (
-    <g pointerEvents="none">
-      <PathSvgElement
-        d={getCloudPoints(fullSize, correctedCoordinates, angle,
-          { cornerRadius, arrowWidth }, true)}
-        fill={color}
-        stroke={border.stroke}
-        strokeWidth={border.strokeWidth}
-        strokeOpacity={border.strokeOpacity}
-        dashStyle={border.dashStyle}
-        transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
-      />
-      <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
-        <TextSvgElement
-          text={text}
-          styles={{
-            fill: font.color,
-            fontFamily: font.family,
-            fontSize: font.size,
-            fontWeight: font.weight,
-            opacity: font.opacity,
-          }}
+    <Fragment>
+      <defs>
+        <ShadowFilter
+          id={filterId}
+          x="-50%"
+          y="-50%"
+          width="200%"
+          height="200%"
+          blur={shadow.blur}
+          color={shadow.color}
+          offsetX={shadow.offsetX}
+          offsetY={shadow.offsetY}
+          opacity={shadow.opacity}
         />
+      </defs>
+      <g pointerEvents="none" filter={`url(#${filterId})`}>
+        <PathSvgElement
+          d={getCloudPoints(fullSize, correctedCoordinates, angle,
+            { cornerRadius, arrowWidth }, true)}
+          fill={color}
+          stroke={border.stroke}
+          strokeWidth={border.strokeWidth}
+          strokeOpacity={border.strokeOpacity}
+          dashStyle={border.dashStyle}
+          transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
+        />
+        <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
+          <TextSvgElement
+            text={text}
+            styles={{
+              fill: font.color,
+              fontFamily: font.family,
+              fontSize: font.size,
+              fontWeight: font.weight,
+              opacity: font.opacity,
+            }}
+          />
+        </g>
       </g>
-    </g>
+    </Fragment>
   );
 };
 
@@ -90,6 +110,14 @@ export class TooltipProps {
     opacity: 1,
     size: 12,
     weight: 400,
+  };
+
+  @OneWay() shadow = {
+    blur: 2,
+    color: '#000',
+    offsetX: 0,
+    offsetY: 4,
+    opacity: 0.4,
   };
 }
 

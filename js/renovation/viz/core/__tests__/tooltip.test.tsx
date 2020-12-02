@@ -23,6 +23,13 @@ const tooltipProps = {
     size: 15,
     weight: 600,
   },
+  shadow: {
+    blur: 2,
+    color: '#000',
+    offsetX: 0,
+    offsetY: 4,
+    opacity: 0.4,
+  },
   canvas: {
     left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 400,
   },
@@ -107,6 +114,28 @@ describe('Render', () => {
         fontSize: 15,
         fontWeight: 600,
       },
+    });
+  });
+
+  it('should render shadow', () => {
+    const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
+
+    expect(tooltip.find('defs')).toHaveLength(1);
+    expect(tooltip.find('ShadowFilter').props()).toMatchObject({
+      id: 'DevExpress_4',
+      x: '-50%',
+      y: '-50%',
+      width: '200%',
+      height: '200%',
+      blur: 2,
+      color: '#000',
+      offsetX: 0,
+      offsetY: 4,
+      opacity: 0.4,
+    });
+    expect(tooltip.find('g').at(0).props()).toMatchObject({
+      pointerEvents: 'none',
+      filter: 'url(#DevExpress_4)',
     });
   });
 });
