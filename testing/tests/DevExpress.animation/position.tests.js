@@ -1122,3 +1122,33 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 })();
+
+(function containerModule() {
+    QUnit.module('container', {
+        beforeEach() {
+            fixtures.customContainerWithCollision.create();
+        },
+        afterEach() {
+            fixtures.customContainerWithCollision.drop();
+        }
+    });
+
+    QUnit.test('coordinates should not be rounded if option precise is true in position method', function(assert) {
+        // const $container = $('#container');
+        const $what = $('#what');
+        const $where = $('#where');
+        // translator.move($where, { top: 0.5, left: 0.5 });
+        // const location = translator.locate($where);
+
+        setupPosition($what, {
+            of: $where,
+            at: 'top left',
+            my: 'top left'
+        });
+        const pos = translator.locate($what);
+
+        assert.equal(pos.top, location.top - $where.offset().top);
+        assert.equal(pos.left, location.left - $where.offset().left);
+    });
+
+})();
