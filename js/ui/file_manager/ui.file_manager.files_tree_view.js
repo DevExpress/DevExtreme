@@ -134,7 +134,9 @@ class FileManagerFilesTreeView extends Widget {
 
     toggleNodeDisabledState(key, state) {
         const node = this._getNodeByKey(key);
-        this._filesTreeView._toggleNodeDisabledState(node, state);
+        const items = this._filesTreeView.option('items');
+        const itemIndex = items.findIndex(item => item.getInternalKey() === node.getInternalKey());
+        this._filesTreeView.option(`items[${itemIndex}].disabled`, state);
     }
 
     _updateFocusedElement() {
