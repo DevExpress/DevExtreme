@@ -69,7 +69,7 @@ QUnit.module('keyboardProcessor', {
     });
     test('keyboardProcessor should not process event for child element (renovation scenario without jQuery)', function(assert) {
         const stubHandler = sinon.stub();
-        const element = [...this.element][0];
+        const element = this.element[0];
         this.processor = new KeyboardProcessor({
             element: element,
             handler: stubHandler,
