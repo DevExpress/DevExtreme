@@ -793,7 +793,6 @@ const SchedulerAppointments = CollectionWidget.inherit({
                     buttonColor: virtualGroup.buttonColor,
                     width: buttonWidth - this.option('_collectorOffset'),
                     height: buttonHeight,
-                    onAppointmentClick: this.option('onItemClick'),
                     allowDrag: this.option('allowDrag'),
                     cellWidth: this.invoke('getCellWidth'),
                     isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),

@@ -72,7 +72,7 @@ export class CompactAppointmentsHelper {
 
     _getExtraOptionsForTooltip(options) {
         return {
-            clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
+            clickEvent: this._clickEvent().bind(this),
             dragBehavior: options.allowDrag && this._createTooltipDragBehavior(options).bind(this),
             dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // deprecated option
             isButtonClick: true
@@ -87,20 +87,18 @@ export class CompactAppointmentsHelper {
                 itemElement: e.itemElement
             };
 
-            const createClickEvent = extendFromObject(this.instance.fire('mapAppointmentFields', config), e, false);
-            delete createClickEvent.itemData;
-            delete createClickEvent.itemIndex;
-            delete createClickEvent.itemElement;
+            const clickEvent = extendFromObject(this.instance.fire('mapAppointmentFields', config), e, false);
+            delete clickEvent.itemData;
+            delete clickEvent.itemIndex;
+            delete clickEvent.itemElement;
             const { instance: scheduler } = this;
 
             const action = scheduler._createActionByOption('onAppointmentClick', {
-                afterExecute: e => {
-                    const config = e.args[0];
-                    config.event.stopPropagation();
+                afterExecute: () => {
                     scheduler.showAppointmentPopup(appointment, false, targetedAppointment);
                 }
             });
-            action(createClickEvent);
+            action(clickEvent);
         };
     }
 
