@@ -141,7 +141,7 @@ class FileManagerFilesTreeView extends Widget {
 
     _updateFocusedElement() {
         const directoryInfo = this._getCurrentDirectory();
-        const $element = this._getItemElementByKey(directoryInfo.getInternalKey());
+        const $element = this._getItemElementByKey(directoryInfo?.getInternalKey());
         if(this._$focusedElement) {
             this._$focusedElement.toggleClass(FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS, false);
         }

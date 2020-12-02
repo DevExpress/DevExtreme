@@ -13,6 +13,7 @@ const FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP = 'dx-filemanager-dialog-folder-c
 class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
     show() {
+        this._resetDialogSelectedDirectory();
         this._filesTreeView && this._filesTreeView.refresh();
         super.show();
     }
@@ -49,7 +50,8 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     }
 
     _getDialogResult() {
-        return { folder: this._getDialogSelectedDirectory() };
+        const result = this._getDialogSelectedDirectory();
+        return result ? { folder: result } : result;
     }
 
     _getDefaultOptions() {
@@ -60,6 +62,10 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
     _getDialogSelectedDirectory() {
         return this._selectedDirectoryInfo;
+    }
+
+    _resetDialogSelectedDirectory() {
+        this._selectedDirectoryInfo = null;
     }
 
     _onFilesTreeViewDirectoryClick({ itemData }) {
