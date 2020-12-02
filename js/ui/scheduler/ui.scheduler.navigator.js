@@ -438,6 +438,7 @@ const SchedulerNavigator = Widget.inherit({
             max: this.option('max'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             value: this.option('date'),
+            _todayDate: this.option('_todayDate'),
             focusStateEnabled: this.option('focusStateEnabled'),
             onValueChanged: (function(e) {
                 if(!this.option('visible')) return;
