@@ -26,13 +26,14 @@ const moduleConfig = {
         const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
         this.jsPDFDocument = _jsPDF();
         this.customizeCellCallCount = 0;
+        this.onCellRenderedCallCount = 0;
 
         helper = new JSPdfDataGridTestHelper(this.jsPDFDocument);
     }
 };
 
 const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
-    const { keepColumnWidths = true, selectedRowsOnly = false, autoTableOptions = {}, customizeCell = () => {} } = options || {};
+    const { keepColumnWidths = true, selectedRowsOnly = false, autoTableOptions = {}, customizeCell = () => {}, onCellRendered = () => {} } = options || {};
 
     let flatArrayExpectedCells;
     if(isDefined(expectedCustomizeCellArgs)) {
@@ -51,6 +52,12 @@ const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
         customizeCell(eventArgs);
         if(isDefined(flatArrayExpectedCells)) {
             helper.checkCustomizeCell(eventArgs, flatArrayExpectedCells, context.customizeCellCallCount++);
+        }
+    };
+    result.onCellRendered = (eventArgs) => {
+        onCellRendered(eventArgs);
+        if(isDefined(flatArrayExpectedCells)) {
+            helper.checkOnCellRendered(eventArgs, flatArrayExpectedCells, context.onCellRenderedCallCount++);
         }
     };
     return result;
@@ -4484,6 +4491,86 @@ QUnit.module('customizeCell', moduleConfig, () => {
             helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
             helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
             done();
+        });
+    });
+});
+
+QUnit.module('onCellRendered', moduleConfig, () => {
+    [{
+        didDrawCell: true,
+        expectedCallbacksOrder: [
+            'onCellRendered: F1',
+            'autoTablePlugin: F1',
+            'onCellRendered: F2',
+            'autoTablePlugin: F2',
+            'onCellRendered: 1_1',
+            'autoTablePlugin: 1_1',
+            'onCellRendered: 1_2',
+            'autoTablePlugin: 1_2',
+            'onCellRendered: 2_1',
+            'autoTablePlugin: 2_1',
+            'onCellRendered: 2_2',
+            'autoTablePlugin: 2_2'
+        ]
+    }, {
+        didDrawCell: false,
+        expectedCallbacksOrder: [
+            'onCellRendered: F1',
+            'onCellRendered: F2',
+            'onCellRendered: 1_1',
+            'onCellRendered: 1_2',
+            'onCellRendered: 2_1',
+            'onCellRendered: 2_2'
+        ]
+    }].forEach((config) => {
+        QUnit.test(`Custom render in cells, didDrawCell is defined: ${config.didDrawCell}`, function(assert) {
+            const done = assert.async();
+            const ds = [{ f1: '1_1', f2: '1_2' }, { f1: '2_1', f2: '2_2' }];
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: ds,
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            let onCellRenderedCallCount = 0;
+            const options = {
+                onCellRendered: (options) => {
+                    const cellContent = 'onCellRendered: ' + (options.gridCell.rowType === 'header' ? options.gridCell.column.caption : options.gridCell.value);
+                    assert.strictEqual(config.expectedCallbacksOrder[onCellRenderedCallCount], cellContent, `onCellRendered: onCellRendered, ${onCellRenderedCallCount}`);
+                    onCellRenderedCallCount++;
+                }
+            };
+
+            if(config.didDrawCell) {
+                options.autoTableOptions = {
+                    didDrawCell: (hookData) => {
+                        const cellContent = 'autoTablePlugin: ' + hookData.cell.text[0];
+                        assert.strictEqual(config.expectedCallbacksOrder[onCellRenderedCallCount], cellContent, `onCellRendered: onCellRendered, ${onCellRenderedCallCount}`);
+                        onCellRenderedCallCount++;
+                    }
+                };
+            }
+
+            const expectedCells = {
+                head: [[
+                    { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                    { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } }
+                ]],
+                body: [[
+                    { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                    { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } }
+                ], [
+                    { pdfCell: { content: ds[1].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } },
+                    { pdfCell: { content: ds[1].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1) } }
+                ]]
+            };
+
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
+                const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+                helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+                helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+                done();
+            });
         });
     });
 });

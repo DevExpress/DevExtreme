@@ -7,16 +7,30 @@ class JSPdfDataGridTestHelper {
     }
 
     checkCustomizeCell(eventArgs, expectedCells, callIndex) {
-        const { gridCell: actualGridCell, pdfCell: actualPdfCell } = eventArgs;
-        const { gridCell: expectedGridCell, pdfCell: expectedPdfCell } = expectedCells[callIndex];
+        const { pdfCell: actualPdfCell } = eventArgs;
+        const { pdfCell: expectedPdfCell } = expectedCells[callIndex];
 
         assert.strictEqual(actualPdfCell.content, expectedPdfCell.content, `checkCustomizeCell: pdfCell.content ${callIndex}`);
         assert.deepEqual(actualPdfCell.styles, expectedPdfCell.styles || {}, `checkCustomizeCell: pdfCell.styles ${callIndex}`);
 
-        assert.strictEqual(actualGridCell.column.dataField, actualGridCell.column.dataField, `checkCustomizeCell: column.dataField, ${callIndex}`);
-        assert.strictEqual(actualGridCell.column.dataType, actualGridCell.column.dataType, `checkCustomizeCell: column.dataType, ${callIndex}`);
-        assert.strictEqual(actualGridCell.column.caption, actualGridCell.column.caption, `checkCustomizeCell: column.caption, ${callIndex}`);
-        assert.strictEqual(actualGridCell.column.index, actualGridCell.column.index, `checkCustomizeCell: column.index, ${callIndex}`);
+        this.checkGridCell(eventArgs, expectedCells, callIndex);
+    }
+
+    checkOnCellRendered(eventArgs, expectedCells, callIndex) {
+        assert.strictEqual(eventArgs.jsPDFDocument, this.jsPDFDocument, `checkOnCellRendered: jsPDFDocument, ${callIndex}`);
+        assert.ok(eventArgs.cellRect, `checkOnCellRendered: cellRect, ${callIndex}`);
+
+        this.checkGridCell(eventArgs, expectedCells, callIndex);
+    }
+
+    checkGridCell(eventArgs, expectedCells, callIndex) {
+        const { gridCell: actualGridCell } = eventArgs;
+        const { gridCell: expectedGridCell } = expectedCells[callIndex];
+
+        assert.strictEqual(actualGridCell.column.dataField, expectedGridCell.column.dataField, `checkCustomizeCell: column.dataField, ${callIndex}`);
+        assert.strictEqual(actualGridCell.column.dataType, expectedGridCell.column.dataType, `checkCustomizeCell: column.dataType, ${callIndex}`);
+        assert.strictEqual(actualGridCell.column.caption, expectedGridCell.column.caption, `checkCustomizeCell: column.caption, ${callIndex}`);
+        assert.strictEqual(actualGridCell.column.index, expectedGridCell.column.index, `checkCustomizeCell: column.index, ${callIndex}`);
 
         const gridCellSkipProperties = ['column'];
         for(const propertyName in actualGridCell) {

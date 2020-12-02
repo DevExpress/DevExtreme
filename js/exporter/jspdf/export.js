@@ -57,6 +57,7 @@ export const Export = {
             autoTableOptions,
             component,
             customizeCell,
+            onCellRendered,
             keepColumnWidths,
             selectedRowsOnly
         } = options;
@@ -126,7 +127,35 @@ export const Export = {
                     }
                 }
 
+                if(isFunction(onCellRendered)) {
+                    const _didDrawCell = autoTableOptions.didDrawCell;
+                    autoTableOptions.didDrawCell = function(data) {
+                        const cellIndex = data.column.index;
+                        let rowIndex = data.row.index;
+                        if(data.cell.section === 'body') {
+                            rowIndex += dataProvider.getHeaderRowCount();
+                        }
+                        const { cellSourceData: gridCell } = dataProvider.getCellData(rowIndex, cellIndex, true);
+
+                        onCellRendered({
+                            jsPDFDocument: data.doc,
+                            gridCell: gridCell,
+                            cellRect: {
+                                x: data.cell.x,
+                                y: data.cell.y,
+                                width: data.cell.width,
+                                height: data.cell.height
+                            }
+                        });
+
+                        if(_didDrawCell) {
+                            _didDrawCell(data);
+                        }
+                    };
+                }
+
                 jsPDFDocument.autoTable(autoTableOptions);
+
                 ///#DEBUG
                 jsPDFDocument.autoTable.__autoTableOptions = autoTableOptions;
                 ///#ENDDEBUG
