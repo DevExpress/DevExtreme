@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "20.2.3",
+  "version": "20.2.4",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -28,10 +28,10 @@
   "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "devexpress-diagram": "2.0.5",
+    "devexpress-diagram": "2.0.6",
     "devexpress-gantt": "2.0.8",
     "jszip": "^2.0.0 || ^3.0.0",
-    "devextreme-quill": "^0.9.5",
+    "devextreme-quill": "~0.9.6",
     "rrule": "2.6.6",
     "showdown": "^1.8.6",
     "turndown": "^6.0.0",

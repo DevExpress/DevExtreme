@@ -6,9 +6,9 @@
 @use "../../base/icons" as *;
 @use "../button/sizes" as *;
 @use "../common/mixins" as *;
+@use "../../base/dropDownButton";
 
 // adduse
-
 
 .dx-dropdownbutton {
   .dx-button {

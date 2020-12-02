@@ -3,6 +3,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/load_panel';
 
 QUnit.testStart(function() {

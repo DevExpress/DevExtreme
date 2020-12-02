@@ -118,6 +118,30 @@ const moduleConfig = {
 };
 
 QUnit.module('Appointment popup form', moduleConfig, () => {
+    test('Original appointment\'s fields shouldn\'t fill if used fieldExpr', function(assert) {
+        const data = [];
+        const textExpValue = 'Subject';
+
+        const scheduler = createScheduler({
+            dataSource: data,
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2021, 4, 27),
+            textExpr: textExpValue,
+            onAppointmentAdded: ({ appointmentData }) => {
+                assert.strictEqual(appointmentData[textExpValue], 'qwerty', 'Mapped text property should be fill on onAppointmentAdded event');
+                assert.strictEqual(appointmentData.text, undefined, 'Original text property should be undefined on onAppointmentAdded event');
+            },
+            height: 600
+        });
+        scheduler.instance.showAppointmentPopup();
+        scheduler.appointmentForm.setSubject('qwerty', textExpValue);
+        scheduler.appointmentPopup.clickDoneButton();
+
+        assert.strictEqual(data[0].Subject, 'qwerty', 'Mapped text property should be fill');
+        assert.strictEqual(data[0].text, undefined, 'Original text property should be undefined');
+    });
+
     QUnit.test('Recurrence form should work properly if recurrenceRule property mapped recurrenceRuleExpr', function(assert) {
         const scheduler = createScheduler({
             dataSource: [{

@@ -101,6 +101,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @docid dxFileUploaderOptions.labelText
      * @type string
      * @default "or Drop file here"
+     * @default "" [for](InternetExplorer|desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */

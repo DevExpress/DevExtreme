@@ -451,10 +451,6 @@
       }
 
       .dx-editor-cell {
-        &:not(.dx-command-select) {
-          overflow: visible;
-        }
-
         max-width: 0;
         padding: 0;
         vertical-align: middle;
