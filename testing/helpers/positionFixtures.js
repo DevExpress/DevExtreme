@@ -225,6 +225,37 @@
             }
         },
 
+        customContainerWithCollision: {
+            create: function() {
+                $('<div>')
+                    .attr('id', 'container')
+                    .css({
+                        position: 'absolute',
+                        top: 100,
+                        left: 100,
+                        height: 300,
+                        width: 300,
+                        overflow: 'hidden'
+                    }).append($('#what')
+                        .attr('id', 'container')
+                        .css({
+                            height: 100,
+                            width: 100
+                        })).append($('#where')
+                        .attr('id', 'container')
+                        .css({
+                            marginTop: 250,
+                            marginLeft: 250,
+                            height: 30,
+                            width: 30
+                        })).appendTo(document.body);
+            },
+
+            drop: function() {
+                $('#whatWrapper').remove();
+            }
+        },
+
         svg: {
             create: function() {
                 const $container = $(
