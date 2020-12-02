@@ -4,9 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+@use "../../base/switch";
 
 // adduse
-
 
 $material-switch-shadow-blur-radius: 10px;
 $material-switch-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
