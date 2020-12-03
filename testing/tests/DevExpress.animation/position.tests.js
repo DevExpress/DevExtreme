@@ -1156,7 +1156,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         assert.strictEqual(result.v.flip, false, 'vertical flip is not occurred');
     });
 
-    QUnit.test('collision should be fired if container with overflow: hidden limited the space if it is larger than window', function(assert) {
+    QUnit.test('collision should be fired if container has overflow: hidden and it is larger than window', function(assert) {
         const $container = $('#container');
         const $what = $('#what');
         const $where = $('#where');
