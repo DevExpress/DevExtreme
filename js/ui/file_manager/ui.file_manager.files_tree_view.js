@@ -239,16 +239,12 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     _updateExpandedStateToCurrentDirectory() {
-        this.toggleDirectoryExpandedStateRecursive(this._getCurrentDirectory(), true);
-    }
-
-    toggleDirectoryExpandedStateRecursive(directoryInfo, state) {
         const dirLine = [ ];
-        for(let dirInfo = directoryInfo; dirInfo; dirInfo = dirInfo.parentDirectory) {
+        for(let dirInfo = this._getCurrentDirectory(); dirInfo; dirInfo = dirInfo.parentDirectory) {
             dirLine.unshift(dirInfo);
         }
 
-        return this.toggleDirectoryLineExpandedState(dirLine, state);
+        return this.toggleDirectoryLineExpandedState(dirLine, true);
     }
 
     toggleDirectoryLineExpandedState(dirLine, state) {
