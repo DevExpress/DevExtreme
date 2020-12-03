@@ -1,7 +1,9 @@
 import $ from 'jquery';
 
 import 'ui/progress_bar';
+
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
