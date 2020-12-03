@@ -16,6 +16,9 @@ module.exports = {
         '!./js/renovation/**/*.j.tsx',
         '!./js/renovation/**/__tests__/**/*',
     ],
+    coveragePathIgnorePatterns: [
+        './js/renovation/ui/scroll_view/scrollable.tsx', // https://github.com/enzymejs/enzyme/issues/2327
+    ],
     coverageDirectory: './js/renovation/code_coverage',
     coverageThreshold: {
         './js/renovation/**/*.tsx': {

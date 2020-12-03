@@ -14,7 +14,7 @@ import {
     RangeRule,
     RequiredRule,
     StringLengthRule
-} from './validation_engine';
+} from './validation_rules';
 
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }
