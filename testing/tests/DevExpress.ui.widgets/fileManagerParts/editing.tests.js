@@ -1232,6 +1232,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal($folderNodes.eq(2).find('span').text(), 'Folder 2', 'second folder is not target folder');
         assert.equal($folderNodes.eq(3).find('span').text(), 'Folder 3', 'third folder is not target folder');
     });
+
     test('parent and selected folders must be disabled: copy folder in folders area (T939043)', function(assert) {
         this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);

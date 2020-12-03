@@ -18,6 +18,7 @@ const TREE_VIEW_ITEM_CLASS = 'dx-treeview-item';
 class FileManagerFilesTreeView extends Widget {
 
     _initMarkup() {
+        this._initActions();
         this._getCurrentDirectory = this.option('getCurrentDirectory');
 
         this._createFileActionsButton = noop;
@@ -36,10 +37,11 @@ class FileManagerFilesTreeView extends Widget {
             parentIdExpr: 'parentDirectory.getInternalKey',
             displayExpr: itemInfo => itemInfo.getDisplayName(),
             hasItemsExpr: 'fileItem.hasSubDirectories',
-            onItemClick: this._createActionByOption('onDirectoryClick'),
+            onItemClick: e => this._actions.onDirectoryClick(e),
             onItemExpanded: e => this._onFilesTreeViewItemExpanded(e),
             onItemCollapsed: e => this._onFilesTreeViewItemCollapsed(e),
-            onItemRendered: e => this._onFilesTreeViewItemRendered(e)
+            onItemRendered: e => this._onFilesTreeViewItemRendered(e),
+            onContentReady: () => this._actions.onFilesTreeViewContentReady()
         };
 
         if(this._contextMenu) {
@@ -50,7 +52,15 @@ class FileManagerFilesTreeView extends Widget {
 
         this._filesTreeView = this._createComponent($treeView, TreeViewSearch, treeViewOptions);
 
-        eventsEngine.on($treeView, 'click', this._createActionByOption('onClick'));
+        eventsEngine.on($treeView, 'click', () => this._actions.onClick());
+    }
+
+    _initActions() {
+        this._actions = {
+            onClick: this._createActionByOption('onClick'),
+            onDirectoryClick: this._createActionByOption('onDirectoryClick'),
+            onFilesTreeViewContentReady: this._createActionByOption('onFilesTreeViewContentReady')
+        };
     }
 
     _render() {
@@ -134,9 +144,14 @@ class FileManagerFilesTreeView extends Widget {
 
     toggleNodeDisabledState(key, state) {
         const node = this._getNodeByKey(key);
+        if(!node) {
+            return;
+        }
         const items = this._filesTreeView.option('items');
         const itemIndex = items.map(item => item.getInternalKey()).indexOf(node.getInternalKey());
-        this._filesTreeView.option(`items[${itemIndex}].disabled`, state);
+        if(itemIndex !== -1) {
+            this._filesTreeView.option(`items[${itemIndex}].disabled`, state);
+        }
     }
 
     _updateFocusedElement() {
@@ -191,8 +206,10 @@ class FileManagerFilesTreeView extends Widget {
             case 'getCurrentDirectory':
                 this.getCurrentDirectory = this.option(name);
                 break;
+            case 'onClick':
             case 'onDirectoryClick':
-                this._filesTreeView.option('onItemClick', this._createActionByOption('onDirectoryClick'));
+            case 'onFilesTreeViewContentReady':
+                this._actions[name] = this._createActionByOption(name);
                 break;
             default:
                 super._optionChanged(args);
@@ -239,12 +256,16 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     _updateExpandedStateToCurrentDirectory() {
+        return this.toggleDirectoryExpandedStateRecursive(this._getCurrentDirectory(), true);
+    }
+
+    toggleDirectoryExpandedStateRecursive(directoryInfo, state) {
         const dirLine = [ ];
-        for(let dirInfo = this._getCurrentDirectory(); dirInfo; dirInfo = dirInfo.parentDirectory) {
+        for(let dirInfo = directoryInfo; dirInfo; dirInfo = dirInfo.parentDirectory) {
             dirLine.unshift(dirInfo);
         }
 
-        return this.toggleDirectoryLineExpandedState(dirLine, true);
+        return this.toggleDirectoryLineExpandedState(dirLine, state);
     }
 
     toggleDirectoryLineExpandedState(dirLine, state) {

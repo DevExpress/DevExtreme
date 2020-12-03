@@ -14,7 +14,7 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
     show() {
         this._resetDialogSelectedDirectory();
-        this._filesTreeView && this._filesTreeView.refresh();
+        this._filesTreeView?.refresh();
         super.show();
     }
 
@@ -42,8 +42,9 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
         this._filesTreeView = this._createComponent($('<div>'), FileManagerFilesTreeView, {
             getDirectories: this.option('getDirectories'),
-            getCurrentDirectory: this._getDialogSelectedDirectory.bind(this),
-            onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this)
+            getCurrentDirectory: () => this._getDialogSelectedDirectory(),
+            onDirectoryClick: (e) => this._onFilesTreeViewDirectoryClick(e),
+            onFilesTreeViewContentReady: () => this._toggleUnavailableLocationsDisabled(true)
         });
 
         this._$contentElement.append(this._filesTreeView.$element());
@@ -84,13 +85,16 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     }
 
     _toggleUnavailableLocationsDisabled(isDisabled) {
-        const unavailableLocations = this._getUnavailableLocations(isDisabled);
-        this._filesTreeView.toggleDirectoryLineExpandedState(unavailableLocations.locationsToExpand, isDisabled)
-            .then(() => this._filesTreeView.toggleDirectoryLineExpandedState(unavailableLocations.locationsToCollapse, !isDisabled)
-                .then(() => unavailableLocations.unavailableLocationKeys.forEach(key => this._filesTreeView.toggleNodeDisabledState(key, isDisabled))));
+        if(!this._filesTreeView) {
+            return;
+        }
+        const locations = this._getLocationsToProcess(isDisabled);
+        this._filesTreeView.toggleDirectoryExpandedStateRecursive(locations.locationsToExpand[0], isDisabled)
+            .then(() => this._filesTreeView.toggleDirectoryLineExpandedState(locations.locationsToCollapse, !isDisabled)
+                .then(() => locations.locationKeysToDisable.forEach(key => this._filesTreeView.toggleNodeDisabledState(key, isDisabled))));
     }
 
-    _getUnavailableLocations(isDisabled) {
+    _getLocationsToProcess(isDisabled) {
         const expandLocations = {};
         const collapseLocations = {};
         this._targetItemInfos.forEach(itemInfo => {
@@ -108,7 +112,7 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
         return {
             locationsToExpand: isDisabled ? expandMap.values : [],
             locationsToCollapse: isDisabled ? collapseMap.values : [],
-            unavailableLocationKeys: expandMap.keys.concat(...collapseMap.keys)
+            locationKeysToDisable: expandMap.keys.concat(...collapseMap.keys)
         };
     }
 
