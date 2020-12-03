@@ -27,6 +27,7 @@ const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_OVERLAY = 'dx-dropdowneditor-overlay';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXT_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
@@ -1077,8 +1078,9 @@ QUnit.module('Templates', () => {
 
         const $fieldTemplateWrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
         const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const $buttonsContainer = $dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`);
 
-        assert.roughEqual($fieldTemplateWrapper.outerWidth(), $input.outerWidth(), 1);
+        assert.roughEqual($fieldTemplateWrapper.outerWidth(), $input.outerWidth() + $buttonsContainer.outerWidth(), 1);
     });
 
     QUnit.test('fieldTemplate item element should have 100% width with field template wrapper (T826516)', function(assert) {
@@ -1102,7 +1104,9 @@ QUnit.module('Templates', () => {
 
         const $fieldTemplateWrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
         const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        assert.roughEqual($fieldTemplateWrapper.outerWidth(), $input.outerWidth(), 1);
+        const $buttonsContainer = $dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`);
+
+        assert.roughEqual($fieldTemplateWrapper.outerWidth(), $input.outerWidth() + $buttonsContainer.outerWidth(), 1);
     });
 
     QUnit.testInActiveWindow('fieldTemplate can contain a masked TextBox', function(assert) {
@@ -1154,6 +1158,22 @@ QUnit.module('Templates', () => {
             },
             opened: true
         });
+    });
+
+    QUnit.test('editor with fieldTemplate should correctly render additional action buttons on changing the "buttons" option', function(assert) {
+        const editor = $('#dropDownEditorLazy').dxDropDownEditor({
+            dataSource: [1, 2],
+            fieldTemplate: (data, container) => {
+                $('<div>').dxTextBox().appendTo(container);
+            }
+        }).dxDropDownEditor('instance');
+
+        editor.option('buttons', [{ name: 'custom', options: { text: 'test button' } }]);
+
+        const $buttons = editor.$element().find('.dx-button');
+
+        assert.strictEqual($buttons.length, 1, 'there is only one button');
+        assert.strictEqual($buttons.text(), 'test button', 'correct text');
     });
 });
 

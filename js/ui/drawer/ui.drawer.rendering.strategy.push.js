@@ -26,7 +26,7 @@ class PushStrategy extends DrawerStrategy {
 
         if(animate) {
             const animationConfig = {
-                $element: config.$content,
+                $element: $(drawer.viewContent()),
                 position: config.contentPosition,
                 direction: drawer.calcTargetPosition(),
                 duration: drawer.option('animationDuration'),
@@ -38,9 +38,9 @@ class PushStrategy extends DrawerStrategy {
             animation.moveTo(animationConfig);
         } else {
             if(drawer.isHorizontalDirection()) {
-                translator.move(config.$content, { left: config.contentPosition });
+                translator.move($(drawer.viewContent()), { left: config.contentPosition });
             } else {
-                translator.move(config.$content, { top: config.contentPosition });
+                translator.move($(drawer.viewContent()), { top: config.contentPosition });
             }
         }
     }
@@ -51,6 +51,11 @@ class PushStrategy extends DrawerStrategy {
             maxSize: this._getPanelSize(true)
         });
     }
+
+    onPanelContentRendered() {
+        $(this.getDrawerInstance().viewContent()).addClass('dx-theme-background-color');
+    }
+
 }
 
 module.exports = PushStrategy;

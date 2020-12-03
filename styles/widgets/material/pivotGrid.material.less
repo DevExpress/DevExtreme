@@ -6,10 +6,14 @@
 
 .dx-size-default() {
     @MATERIAL_PIVOTGRID_CELL_PADDING: 10px 14px;
+    @MATERIAL_PIVOTGRID_EXPANDED_CELL_PADDING: 10px 14px 10px 19px;
+    @MATERIAL_PIVOTGRID_TOTAL_TEXT_LEFT_PADDING: 22px;
 }
 
 .dx-size-compact() {
     @MATERIAL_PIVOTGRID_CELL_PADDING: 7px 8px;
+    @MATERIAL_PIVOTGRID_EXPANDED_CELL_PADDING: 7px 8px 7px 13px;
+    @MATERIAL_PIVOTGRID_TOTAL_TEXT_LEFT_PADDING: 16px;
 }
 
 @MATERIAL_PIVOTGRID_HEADERS_FONT_SIZE: 12px;
@@ -71,6 +75,15 @@
 
         td {
             padding: @MATERIAL_PIVOTGRID_CELL_PADDING;
+
+            &.dx-pivotgrid-collapsed,
+            &.dx-pivotgrid-expanded {
+                padding: @MATERIAL_PIVOTGRID_EXPANDED_CELL_PADDING;
+
+                > span {
+                    padding: 0 5px 0 10px;
+                }
+            }
         }
     }
 
@@ -85,12 +98,11 @@
         }
     }
 
-    .dx-row-total.dx-last-cell {
-        padding-left: 22px;
-    }
-
-    .dx-grandtotal.dx-last-cell {
-        padding-left: 22px;
+    .dx-row-total,
+    .dx-grandtotal {
+        &.dx-last-cell {
+            padding-left: @MATERIAL_PIVOTGRID_TOTAL_TEXT_LEFT_PADDING;
+        }
     }
 
     .dx-column-header,
@@ -105,7 +117,7 @@
     }
 
     .dx-expand-icon-container {
-        margin: 0 0 0 5px;
+        margin: 0;
         .dx-icon(chevronright);
 
         font-size: @MATERIAL_PIVOTGRID_HEADERS_FONT_SIZE;
@@ -127,13 +139,6 @@
         .dx-icon-font-centered-sizing(@MATERIAL_PIVOTGRID_CHEVRON_ICON_SIZE);
 
         color: @pivotgrid-chevron-icon-color;
-    }
-
-    .dx-pivotgrid-collapsed,
-    .dx-pivotgrid-expanded {
-        > span {
-            padding: 0 5px 0 10px;
-        }
     }
 
     .dx-area-tree-view {
