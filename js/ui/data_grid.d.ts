@@ -1109,24 +1109,8 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 itemData:any
-       * @type_function_param1_field3 itemElement:dxElement
-       * @type_function_param1_field4 fromIndex:number
-       * @type_function_param1_field5 toIndex:number
-       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 fromData:any
-       * @type_function_param1_field9 toData:any
-       * @type_function_param1_field10 dropInsideItem:boolean
-       */
-      onAdd?: ((e: { event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 cancel:boolean
+       * @type_function_param1_field1 component:this
+       * @type_function_param1_field2 event:event
        * @type_function_param1_field3 itemData:any
        * @type_function_param1_field4 itemElement:dxElement
        * @type_function_param1_field5 fromIndex:number
@@ -1137,13 +1121,96 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field10 toData:any
        * @type_function_param1_field11 dropInsideItem:boolean
        */
-      onDragChange?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
+      onAdd?: ((e: { component?: T, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 cancel:boolean
+       * @type_function_param1_field1 component:this
+       * @type_function_param1_field2 event:event
+       * @type_function_param1_field3 cancel:boolean
+       * @type_function_param1_field4 itemData:any
+       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field6 fromIndex:number
+       * @type_function_param1_field7 toIndex:number
+       * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+       * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+       * @type_function_param1_field10 fromData:any
+       * @type_function_param1_field11 toData:any
+       * @type_function_param1_field1/ dropInsideItem:boolean
+       */
+      onDragChange?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type_function_param1 e:object
+       * @type_function_param1_field1 component:this
+       * @type_function_param1_field2 event:event
+       * @type_function_param1_field3 cancel:boolean
+       * @type_function_param1_field4 itemData:any
+       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field6 fromIndex:number
+       * @type_function_param1_field7 toIndex:number
+       * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+       * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+       * @type_function_param1_field10 fromData:any
+       * @type_function_param1_field11 toData:any
+       * @type_function_param1_field1/ dropInsideItem:boolean
+       */
+      onDragEnd?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type_function_param1 e:object
+       * @type_function_param1_field1 component:this
+       * @type_function_param1_field2 event:event
+       * @type_function_param1_field3 cancel:boolean
+       * @type_function_param1_field4 itemData:any
+       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field6 fromIndex:number
+       * @type_function_param1_field7 toIndex:number
+       * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+       * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+       * @type_function_param1_field10 fromData:any
+       * @type_function_param1_field11 toData:any
+       * @type_function_param1_field1/ dropInsideItem:boolean
+       */
+      onDragMove?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type_function_param1 e:object
+       * @type_function_param1_field1 component:this
+       * @type_function_param1_field2 event:event
+       * @type_function_param1_field3 cancel:boolean
+       * @type_function_param1_field4 itemData:any
+       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field6 fromIndex:number
+       * @type_function_param1_field7 fromData:any
+       */
+      onDragStart?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, fromData?: any }) => any),
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type_function_param1 e:object
+       * @type_function_param1_field1 component:this
+       * @type_function_param1_field2 event:event
+       * @type_function_param1_field3 itemData:any
+       * @type_function_param1_field4 itemElement:dxElement
+       * @type_function_param1_field5 fromIndex:number
+       * @type_function_param1_field6 toIndex:number
+       * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+       * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+       * @type_function_param1_field9 fromData:any
+       * @type_function_param1_field10 toData:any
+       */
+      onRemove?: ((e: { component?: T, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type_function_param1 e:object
+       * @type_function_param1_field1 component:this
+       * @type_function_param1_field2 event:event
        * @type_function_param1_field3 itemData:any
        * @type_function_param1_field4 itemElement:dxElement
        * @type_function_param1_field5 fromIndex:number
@@ -1153,69 +1220,9 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field9 fromData:any
        * @type_function_param1_field10 toData:any
        * @type_function_param1_field11 dropInsideItem:boolean
+       * @type_function_param1_field1/ promise:Promise<void>
        */
-      onDragEnd?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 cancel:boolean
-       * @type_function_param1_field3 itemData:any
-       * @type_function_param1_field4 itemElement:dxElement
-       * @type_function_param1_field5 fromIndex:number
-       * @type_function_param1_field6 toIndex:number
-       * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field9 fromData:any
-       * @type_function_param1_field10 toData:any
-       * @type_function_param1_field11 dropInsideItem:boolean
-       */
-      onDragMove?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 cancel:boolean
-       * @type_function_param1_field3 itemData:any
-       * @type_function_param1_field4 itemElement:dxElement
-       * @type_function_param1_field5 fromIndex:number
-       * @type_function_param1_field6 fromData:any
-       */
-      onDragStart?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, fromData?: any }) => any),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 itemData:any
-       * @type_function_param1_field3 itemElement:dxElement
-       * @type_function_param1_field4 fromIndex:number
-       * @type_function_param1_field5 toIndex:number
-       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 fromData:any
-       * @type_function_param1_field9 toData:any
-       */
-      onRemove?: ((e: { event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 itemData:any
-       * @type_function_param1_field3 itemElement:dxElement
-       * @type_function_param1_field4 fromIndex:number
-       * @type_function_param1_field5 toIndex:number
-       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field8 fromData:any
-       * @type_function_param1_field9 toData:any
-       * @type_function_param1_field10 dropInsideItem:boolean
-       * @type_function_param1_field11 promise:Promise<void>
-       */
-      onReorder?: ((e: { event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any),
+      onReorder?: ((e: { component?: T, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
