@@ -394,8 +394,14 @@ const DateBox = DropDownEditor.inherit({
         this._strategy.popupShowingHandler();
     },
 
+    _popupShownHandler: function() {
+        this.callBase();
+        this._strategy.renderOpenedState();
+    },
+
     _popupHiddenHandler: function() {
         this.callBase();
+        this._strategy.renderOpenedState();
         this._strategy.popupHiddenHandler();
     },
 
@@ -571,8 +577,6 @@ const DateBox = DropDownEditor.inherit({
         if(this._strategy.isAdaptivityChanged()) {
             this._refreshStrategy();
         }
-
-        this._strategy.renderOpenedState();
     },
 
     _getPopupTitle: function() {
@@ -621,8 +625,8 @@ const DateBox = DropDownEditor.inherit({
     },
 
     _dispose: function() {
-        this._strategy && this._strategy.dispose();
         this.callBase();
+        this._strategy?.dispose();
     },
 
     _isNativeType: function() {
