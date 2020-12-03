@@ -244,6 +244,7 @@ class FileManager extends Widget {
         this._actions.onSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
 
         this._updateToolbar(selectedItemInfos);
+        this._setItemsViewAreaActive(true);
     }
 
     _onItemViewFocusedItemChanged(e) {
