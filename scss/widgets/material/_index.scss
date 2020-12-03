@@ -10,6 +10,7 @@ $mode: null !default;
 @use "./card";
 @use "./fieldset";
 @use "./common";
+@use "../base/resizable";
 
 // public widgets
 @use "./box";
@@ -71,4 +72,3 @@ $mode: null !default;
 @use "./diagram";
 @use "./gantt";
 @use "./sortable";
-@use "../base/resizable";
