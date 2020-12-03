@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import browser from 'core/utils/browser';
 
 const SCHEDULER_DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 const SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
@@ -255,37 +256,58 @@ const testIndicators = function(testCases, $element, assert) {
         assert.equal($allDayPanel.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).length, 1, 'Shader was rendered in appropriate cells');
     });
 
-    QUnit.test('Shader on allDayPanel should have correct height, Day view', function(assert) {
-        this.instance.option({
-            indicatorTime: new Date(2017, 8, 5, 12, 45),
-            showAllDayPanel: true,
-            allDayExpanded: false,
-            shadeUntilCurrentTime: true
-        });
-        const $element = this.instance.$element();
+    if(!browser.msie) {
+        QUnit.test('Shader on allDayPanel should have correct height, Day view', function(assert) {
+            this.instance.option({
+                indicatorTime: new Date(2017, 8, 5, 12, 45),
+                showAllDayPanel: true,
+                allDayExpanded: false,
+                shadeUntilCurrentTime: true
+            });
+            const $element = this.instance.$element();
 
-        assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 23, 2.1, 'Indicator has correct height');
+            assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 23, 2.1, 'Indicator has correct height');
 
-        this.instance.option('allDayExpanded', true);
+            this.instance.option('allDayExpanded', true);
 
-        assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 73, 2.1, 'Indicator has correct height');
-    });
-
-    QUnit.test('Shader should occupy correct cell count', function(assert) {
-        this.instance.option({
-            indicatorTime: new Date(2017, 8, 5, 12, 45)
+            assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 73, 2.1, 'Indicator has correct height');
         });
 
-        const $element = this.instance.$element();
+        QUnit.test('Shader should occupy correct cell count', function(assert) {
+            this.instance.option({
+                indicatorTime: new Date(2017, 8, 5, 12, 45)
+            });
 
-        const testCase = {
-            lastShaderHeight: 24.5,
-            lastShaderIndexes: [9],
-            shaderCount: 11
-        };
+            const $element = this.instance.$element();
 
-        testShader(testCase, $element, assert);
-    });
+            const testCase = {
+                lastShaderHeight: 24.5,
+                lastShaderIndexes: [9],
+                shaderCount: 11
+            };
+
+            testShader(testCase, $element, assert);
+        });
+
+        QUnit.test('Shader should be rendered correctly, Day view with groups', function(assert) {
+            this.instance.option({
+                indicatorTime: new Date(2017, 8, 6, 12, 45),
+                intervalCount: 3
+            });
+
+            this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }]);
+            const $element = this.instance.$element();
+
+            const testCase = {
+                lastShaderHeight: 24.5,
+                lastShaderIndexes: [82, 85, 88],
+                shaderCount: 132,
+                allDayShaderCount: 6
+            };
+
+            testShader(testCase, $element, assert);
+        });
+    }
 
     QUnit.test('Shader should occupy correct cell count, Day view with intervalCount, indicatorTime = startDayHour', function(assert) {
         this.instance.option({
@@ -304,26 +326,6 @@ const testIndicators = function(testCases, $element, assert) {
 
         testShader(testCase, $element, assert);
     });
-
-    QUnit.test('Shader should be rendered correctly, Day view with groups', function(assert) {
-        this.instance.option({
-            indicatorTime: new Date(2017, 8, 6, 12, 45),
-            intervalCount: 3
-        });
-
-        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }]);
-        const $element = this.instance.$element();
-
-        const testCase = {
-            lastShaderHeight: 24.5,
-            lastShaderIndexes: [82, 85, 88],
-            shaderCount: 132,
-            allDayShaderCount: 6
-        };
-
-        testShader(testCase, $element, assert);
-    });
-
 
     QUnit.test('TimePanel currentTime cell should have specific class, Day view', function(assert) {
         this.instance.option({
@@ -493,27 +495,29 @@ const testIndicators = function(testCases, $element, assert) {
         testIndicators(testCases, $element, assert);
     });
 
-    QUnit.test('Shader should be rendered correctly, Day view with groups', function(assert) {
-        this.instance.option({
-            indicatorTime: new Date(2017, 8, 6, 12, 50),
-            intervalCount: 3,
-            startDayHour: 11,
-            endDayHour: 14
+    if(!browser.msie) {
+        QUnit.test('Shader should be rendered correctly, Day view with groups', function(assert) {
+            this.instance.option({
+                indicatorTime: new Date(2017, 8, 6, 12, 50),
+                intervalCount: 3,
+                startDayHour: 11,
+                endDayHour: 14
+            });
+
+            this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }]);
+
+            const $element = this.instance.$element();
+
+            const testCase = {
+                lastShaderHeight: 32.6562,
+                lastShaderIndexes: [10, 28, 46],
+                shaderCount: 36,
+                allDayShaderCount: 6
+            };
+
+            testShader(testCase, $element, assert);
         });
-
-        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }]);
-
-        const $element = this.instance.$element();
-
-        const testCase = {
-            lastShaderHeight: 32.6562,
-            lastShaderIndexes: [10, 28, 46],
-            shaderCount: 36,
-            allDayShaderCount: 6
-        };
-
-        testShader(testCase, $element, assert);
-    });
+    }
 
     QUnit.test('TimePanel currentTime cell should have specific class, Day view', function(assert) {
         this.instance.option({
@@ -568,24 +572,26 @@ const testIndicators = function(testCases, $element, assert) {
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 0, 'Indicator wasn\'t rendered');
     });
 
-    QUnit.test('Shader should be rendered correctly, Week view', function(assert) {
-        this.instance.option({
-            indicatorTime: new Date(2017, 8, 6, 12, 50),
-            startDayHour: 11,
-            endDayHour: 14
+    if(!browser.msie) {
+        QUnit.test('Shader should be rendered correctly, Week view', function(assert) {
+            this.instance.option({
+                indicatorTime: new Date(2017, 8, 6, 12, 50),
+                startDayHour: 11,
+                endDayHour: 14
+            });
+
+            const $element = this.instance.$element();
+
+            const testCase = {
+                lastShaderHeight: 32.6562,
+                lastShaderIndexes: [24],
+                shaderCount: 26,
+                allDayShaderCount: 4
+            };
+
+            testShader(testCase, $element, assert);
         });
-
-        const $element = this.instance.$element();
-
-        const testCase = {
-            lastShaderHeight: 32.6562,
-            lastShaderIndexes: [24],
-            shaderCount: 26,
-            allDayShaderCount: 4
-        };
-
-        testShader(testCase, $element, assert);
-    });
+    }
 
     QUnit.test('Shader should be rendered for \'overdue\' views', function(assert) {
         this.instance.option({
@@ -708,26 +714,28 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         testIndicators(testCases, $element, assert);
     });
 
-    QUnit.test('Shader should have correct position and size, Week view with groupByDate = true', function(assert) {
-        this.instance.option({
-            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }],
-            groupByDate: true,
-            indicatorTime: new Date(2017, 8, 5, 12, 45),
-            startDayHour: 12,
-            endDayHour: 14
+    if(!browser.msie) {
+        QUnit.test('Shader should have correct position and size, Week view with groupByDate = true', function(assert) {
+            this.instance.option({
+                groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }],
+                groupByDate: true,
+                indicatorTime: new Date(2017, 8, 5, 12, 45),
+                startDayHour: 12,
+                endDayHour: 14
+            });
+
+            const $element = this.instance.$element();
+
+            const testCase = {
+                lastShaderHeight: 24.5,
+                lastShaderIndexes: [27, 28, 29],
+                shaderCount: 39,
+                allDayShaderCount: 9
+            };
+
+            testShader(testCase, $element, assert);
         });
-
-        const $element = this.instance.$element();
-
-        const testCase = {
-            lastShaderHeight: 24.5,
-            lastShaderIndexes: [27, 28, 29],
-            shaderCount: 39,
-            allDayShaderCount: 9
-        };
-
-        testShader(testCase, $element, assert);
-    });
+    }
 });
 
 (function() {
