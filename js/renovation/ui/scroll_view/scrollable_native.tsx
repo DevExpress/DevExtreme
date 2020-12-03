@@ -112,6 +112,10 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
 
   @Method()
   scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
+    if (element === undefined || element === null) {
+      return;
+    }
+
     if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
       const scrollOffset = {
         top: 0,
