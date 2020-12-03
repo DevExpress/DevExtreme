@@ -511,7 +511,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         assert.equal($element.find('.dx-data-row').length, 1, 'one filtered row is rendered');
         assert.equal($searchBox.length, 1, 'searchPanel is rendered');
         assert.equal($searchBox.dxTextBox('instance').option('value'), 'Name 1', 'searchPanel text is applied');
-        assert.equal($searchBox.find('input').attr('aria-label'), 'Search in tree list', 'aria-label');
+        assert.equal($searchBox.find('input').attr('aria-label'), 'Search in the tree list', 'aria-label');
     });
 
     QUnit.test('Selectable treeList should have right default options', function(assert) {
