@@ -29,6 +29,9 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return this.scheduler.timeZoneCalculator;
     }
 
+    get workspace() { return this.scheduler.getWorkSpace(); }
+    get viewDataProvider() { return this.workspace.viewDataProvider; }
+
     create(rawAppointment) {
         const { scheduler } = this;
         const appointment = scheduler.createAppointmentAdapter(rawAppointment);
@@ -45,13 +48,16 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         gridAppointmentList = this._getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment);
 
-        return this._createAppointmentInfos(gridAppointmentList, itemResources, this._isAllDayAppointment(rawAppointment));
+        return this._createAppointmentInfos(
+            gridAppointmentList,
+            itemResources,
+            this._isAllDayAppointment(rawAppointment),
+            appointment.isRecurrent
+        );
     }
 
     _isAllDayAppointment(rawAppointment) {
-        const scheduler = this.scheduler;
-
-        return scheduler.appointmentTakesAllDay(rawAppointment) && scheduler._workSpace.supportAllDayRow();
+        return this.scheduler.appointmentTakesAllDay(rawAppointment) && this.workspace.supportAllDayRow();
     }
 
     _createAppointments(appointment, resources) {
@@ -304,13 +310,13 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return dateUtils.roundDateByStartDayHour(resultDate, startDayHour);
     }
 
-    _createAppointmentInfos(gridAppointments, appointmentResources, allDay) {
+    _createAppointmentInfos(gridAppointments, resources, allDay, recurrent) {
         let result = [];
 
         for(let i = 0; i < gridAppointments.length; i++) {
             const coordinates = this.scheduler._workSpace.getCoordinatesByDateInGroup(
                 gridAppointments[i].startDate,
-                appointmentResources,
+                resources,
                 allDay
             );
 
@@ -330,29 +336,89 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 }
 
 export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSettingsGeneratorBaseStrategy {
+    get viewDataProvider() { return this.workspace.viewDataProvider; }
+    get isVerticalGrouping() { return this.workspace._isVerticalGroupedWorkSpace(); }
+
+    _createAppointmentInfos(gridAppointments, resources, allDay, recurrent) {
+        if(recurrent) {
+            return this._createRecurrentAppointmentInfos(gridAppointments, resources, allDay);
+        }
+
+        return super._createAppointmentInfos(gridAppointments, resources, allDay, recurrent);
+    }
+
+    _createRecurrentAppointmentInfos(gridAppointments, resources, allDay) {
+        const result = [];
+
+        gridAppointments.forEach(appointment => {
+            const { source } = appointment;
+            const { groupIndex } = source;
+
+            const coordinate = this.workspace.getCoordinatesByDate(
+                appointment.startDate,
+                groupIndex,
+                allDay
+            );
+
+            extend(coordinate, {
+                info: {
+                    appointment,
+                    sourceAppointment: source
+                }
+            });
+
+            result.push(coordinate);
+        });
+
+        return result;
+    }
+
+    _cropAppointmentsByStartDayHour(appointments, rawAppointment) {
+        return appointments.filter(appointment => {
+            const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
+
+            if(!firstViewDate) return false;
+
+            const startDayHour = this._getViewStartDayHour(firstViewDate);
+            const startDate = new Date(appointment.startDate);
+
+            appointment.startDate = this._getAppointmentResultDate({
+                appointment,
+                rawAppointment,
+                startDate,
+                startDayHour,
+                firstViewDate
+            });
+
+            return true;
+        });
+    }
+
     _createRecurrenceAppointments(appointment, resources) {
         const { duration } = appointment;
         const result = [];
-        const workspace = this.scheduler._workSpace;
-        const groupIndices = workspace._isVerticalGroupedWorkSpace() && workspace._getGroupCount()
+        const groupIndices = this.isVerticalGrouping && this.workspace._getGroupCount()
             ? this._getGroupIndices(resources)
             : [0];
 
         groupIndices.forEach(groupIndex => {
             const option = this._createRecurrenceOptions(appointment, groupIndex);
             const generatedStartDates = getRecurrenceProcessor().generateDates(option);
-            const dates = generatedStartDates.map(date => {
-                const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
-                utcDate.setTime(utcDate.getTime() + duration);
-                const endDate = timeZoneUtils.createDateFromUTCWithLocalOffset(utcDate);
+            const recurrentInfo = generatedStartDates
+                .map(date => {
+                    const startDate = new Date(date);
+                    const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
+                    utcDate.setTime(utcDate.getTime() + duration);
+                    const endDate = timeZoneUtils.createDateFromUTCWithLocalOffset(utcDate);
 
-                return {
-                    startDate: new Date(date),
-                    endDate: endDate
-                };
-            });
+                    return {
+                        startDate,
+                        endDate,
+                        groupIndex
+                    };
+                });
 
-            result.push(...dates);
+            result.push(...recurrentInfo);
         });
 
         return result;
@@ -392,14 +458,25 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     }
 
     _updateGroupIndices(appointments, itemResources) {
-        const workspace = this.scheduler.getWorkSpace();
-        const groupIndices = workspace._isVerticalGroupedWorkSpace()
+        const groupIndices = this.isVerticalGrouping
             ? this._getGroupIndices(itemResources)
             : [0];
+        const result = [];
 
         groupIndices.forEach(groupIndex => {
-            appointments.forEach(appointment => appointment.groupIndex = groupIndex);
+            const groupStartDate = this.viewDataProvider.getGroupStartDate(groupIndex);
+
+            if(groupStartDate) {
+                appointments.forEach(appointment => {
+                    const appointmentCopy = extend({}, appointment);
+                    appointmentCopy.groupIndex = groupIndex;
+
+                    result.push(appointmentCopy);
+                });
+            }
         });
+
+        return result;
     }
 
     _getGroupIndices(resources) {
@@ -415,10 +492,10 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     }
 
     _createAppointments(appointment, resources) {
-        const result = super._createAppointments(appointment, resources);
+        const appointments = super._createAppointments(appointment, resources);
 
-        this._updateGroupIndices(result, resources);
-
-        return result;
+        return !appointment.isRecurrent
+            ? this._updateGroupIndices(appointments, resources)
+            : appointments;
     }
 }
