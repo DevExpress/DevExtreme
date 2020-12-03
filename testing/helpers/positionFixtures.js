@@ -225,9 +225,9 @@
             }
         },
 
-        customContainerWithCollision: {
+        customContainer: {
             create: function() {
-                $('<div>')
+                const $container = $('<div>')
                     .attr('id', 'container')
                     .css({
                         position: 'absolute',
@@ -236,23 +236,39 @@
                         height: 300,
                         width: 300,
                         overflow: 'hidden'
-                    }).append($('#what')
-                        .attr('id', 'container')
-                        .css({
-                            height: 100,
-                            width: 100
-                        })).append($('#where')
-                        .attr('id', 'container')
-                        .css({
-                            marginTop: 250,
-                            marginLeft: 250,
-                            height: 30,
-                            width: 30
-                        })).appendTo(document.body);
+                    }).appendTo(document.body);
+
+                $('<div>')
+                    .attr('id', 'what')
+                    .css({
+                        height: 100,
+                        position: 'absolute',
+                        width: 100
+                    }).appendTo($container);
+
+                $('<div>')
+                    .attr('id', 'where')
+                    .css({
+                        height: 30,
+                        width: 30,
+                        position: 'absolute',
+                        top: 250,
+                        left: 250,
+                    }).appendTo($container);
+
+                $('<div>')
+                    .attr('id', 'bounds')
+                    .css({
+                        position: 'absolute',
+                        top: 240,
+                        left: 240,
+                        height: 150,
+                        width: 150
+                    }).appendTo($container);
             },
 
             drop: function() {
-                $('#whatWrapper').remove();
+                $('#container').remove();
             }
         },
 

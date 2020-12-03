@@ -1126,29 +1126,47 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
 (function containerModule() {
     QUnit.module('container', {
         beforeEach() {
-            fixtures.customContainerWithCollision.create();
+            fixtures.customContainer.create();
         },
         afterEach() {
-            fixtures.customContainerWithCollision.drop();
+            fixtures.customContainer.drop();
         }
     });
 
-    QUnit.test('coordinates should not be rounded if option precise is true in position method', function(assert) {
-        // const $container = $('#container');
+    QUnit.test('collision should be fired if container with overflow: hidden limited the space', function(assert) {
+        const $container = $('#container');
         const $what = $('#what');
         const $where = $('#where');
-        // translator.move($where, { top: 0.5, left: 0.5 });
-        // const location = translator.locate($where);
 
-        setupPosition($what, {
-            of: $where,
-            at: 'top left',
-            my: 'top left'
-        });
-        const pos = translator.locate($what);
+        const result = calculatePosition($what, { my: 'top left', at: 'bottom left', of: $where, collision: 'flip', container: $container });
 
-        assert.equal(pos.top, location.top - $where.offset().top);
-        assert.equal(pos.left, location.left - $where.offset().left);
+        assert.strictEqual(result.h.flip, true, 'horizontal flip occurred');
+        assert.strictEqual(result.v.flip, true, 'vertical flip occurred');
+    });
+
+    QUnit.test('container limits should works with boundaries', function(assert) {
+        const $container = $('#container');
+        const $what = $('#what');
+        const $where = $('#where');
+        const $bounds = $('#bounds');
+
+        const result = calculatePosition($what, { my: 'top left', at: 'bottom left', of: $where, collision: 'flip', container: $container, boundary: $bounds });
+
+        assert.strictEqual(result.h.flip, false, 'horizontal flip not occurred');
+        assert.strictEqual(result.v.flip, false, 'vertical flip not occurred');
+    });
+
+    QUnit.test('collision should be fired if container with overflow: hidden limited the space if conntent is scrolled', function(assert) {
+        const $container = $('#container');
+        const $what = $('#what');
+        const $where = $('#where');
+
+        // $(window).scrollTop(20);
+        const result = calculatePosition($what, { my: 'top left', at: 'bottom left', of: $where, collision: 'flip', container: $container });
+        assert.strictEqual(result.h.flip, true, 'horizontal flip occurred');
+        assert.strictEqual(result.v.flip, true, 'vertical flip occurred');
+
+        $(window).scrollTop(0);
     });
 
 })();
