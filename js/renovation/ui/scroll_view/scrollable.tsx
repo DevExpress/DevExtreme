@@ -6,6 +6,7 @@ import {
   Fragment,
 } from 'devextreme-generator/component_declaration/common';
 
+import { combineClasses } from '../../utils/combine_classes';
 import {
   ScrollableLocation, ScrollOffset,
 } from './types.d';
@@ -20,6 +21,7 @@ import { ScrollableSimulated } from './scrollable_simulated';
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
+    cssClasses,
     scrollableRef,
     scrollableProps,
     props: {
@@ -34,6 +36,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       {useNative && (
       <ScrollableNative
         ref={scrollableRef as any}
+        classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -43,6 +46,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       {!useNative && (
       <ScrollableSimulated
         ref={scrollableRef as any}
+        classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -120,5 +124,13 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     const { useNative, ...restProps } = this.props;
 
     return restProps;
+  }
+
+  get cssClasses(): string {
+    const { classes } = this.props;
+
+    return combineClasses({
+      [`${classes}`]: !!classes,
+    });
   }
 }
