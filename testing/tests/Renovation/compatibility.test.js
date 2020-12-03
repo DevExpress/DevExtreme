@@ -13,7 +13,7 @@ const PRIVATE_JQUERY_WIDGETS = [
     'TooltipItemLayout', 'TimePanelTableLayout',
     'DayDateTableLayout', 'WeekTableLayout', 'WorkWeekTableLayout',
     'AllDayPanelLayout', 'AllDayPanelTitle',
-    'GridPager'
+    'GridPager', 'Scrollable',
 ];
 const INPROGRESS_WIDGETS = ['Widget', 'ScrollView', 'DataGrid'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
