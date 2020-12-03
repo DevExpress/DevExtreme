@@ -916,6 +916,7 @@ module('AppointmentSettings', {
             {
                 y: 2500,
                 appointmentRects: [
+                    { left: -9685, top: -10093, height: 4 },
                     { left: -9685, top: -9743, height: 500 }
                 ]
             },
