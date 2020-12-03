@@ -22,7 +22,7 @@ import { createEvent } from 'events/utils/index';
 
 import Pager from 'ui/pager';
 
-import { act } from 'preact/test-utils';
+// import { act } from 'preact/test-utils';
 
 QUnit.module('Pager', {
     beforeEach: function() {
@@ -128,9 +128,9 @@ QUnit.module('Pager', {
         const pagerView = this.pagerView;
 
         // act
-        act(() => {
-            pagerView.render(testElement);
-        });
+        // act(() => {
+        pagerView.render(testElement);
+        // });
         $(testElement.find('.dx-page')[5]).trigger('dxclick');
 
         this.clock.tick();
@@ -699,9 +699,7 @@ QUnit.module('Pager', {
             pageIndex: 0,
             totalCount: 6
         };
-        act(() => {
-            this.pagerView.render($testElement);
-        });
+        this.pagerView.render($testElement);
         // act
         $pageElement = $(this.pagerView.element().find('.dx-pages .dx-page').eq(2)).focus();
         $pageElement.trigger(createEvent('keydown', { target: $pageElement.get(0), key: 'Enter' }));
@@ -728,9 +726,7 @@ QUnit.module('Pager', {
             pageIndex: 0,
             totalCount: 6
         };
-        act(() => {
-            this.pagerView.render($testElement);
-        });
+        this.pagerView.render($testElement);
 
         // act
         assert.equal(this.pagerView.element().find('.dx-page-sizes .dx-page-size.dx-selection').text(), '', 'Page size not selected');
