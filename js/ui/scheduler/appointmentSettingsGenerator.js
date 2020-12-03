@@ -340,7 +340,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     get isVerticalGrouping() { return this.workspace._isVerticalGroupedWorkSpace(); }
 
     _createAppointmentInfos(gridAppointments, resources, allDay, recurrent) {
-        if(recurrent) {
+        if(recurrent && this.isVerticalGrouping) {
             return this._createRecurrentAppointmentInfos(gridAppointments, resources, allDay);
         }
 
