@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import Tabs from 'ui/tabs';
+import { hasWindow } from 'core/utils/window';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 QUnit.testStart(() => {
@@ -135,11 +136,13 @@ QUnit.module('Aria accessibility', {
                 helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
                 helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
 
-                helper.widget.option(sourceName, [{ text: 'Item_1' }, { text: 'Item_2' }]);
+                if(!hasWindow()) { // skip for server side rendering
+                    helper.widget.option(sourceName, [{ text: 'Item_1' }, { text: 'Item_2' }]);
 
-                assert.strictEqual(helper.getItems().length, 2, 'items count');
-                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
-                helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
+                    assert.strictEqual(helper.getItems().length, 2, 'items count');
+                    helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
+                    helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
+                }
             });
 
             QUnit.test(`3 items, reorder item3 <--> item2, repaintChangesOnly: ${repaintChangesOnly}, use: ${sourceName}`, function(assert) {
