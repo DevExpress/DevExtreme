@@ -140,7 +140,7 @@ export const Export = {
                         onCellRendered({
                             jsPDFDocument: data.doc,
                             gridCell: gridCell,
-                            cellRect: {
+                            cellCoordinates: {
                                 x: data.cell.x,
                                 y: data.cell.y,
                                 width: data.cell.width,

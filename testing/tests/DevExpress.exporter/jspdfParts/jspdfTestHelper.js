@@ -18,7 +18,7 @@ class JSPdfDataGridTestHelper {
 
     checkOnCellRendered(eventArgs, expectedCells, callIndex) {
         assert.strictEqual(eventArgs.jsPDFDocument, this.jsPDFDocument, `checkOnCellRendered: jsPDFDocument, ${callIndex}`);
-        assert.ok(eventArgs.cellRect, `checkOnCellRendered: cellRect, ${callIndex}`);
+        assert.ok(eventArgs.cellCoordinates, `checkOnCellRendered: cellCoordinates, ${callIndex}`);
 
         this.checkGridCell(eventArgs, expectedCells, callIndex);
     }
