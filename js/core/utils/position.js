@@ -41,7 +41,7 @@ const getBoundingRect = (element) => {
 
 const getAvailableBoundsContainer = (container) => {
     const $container = container && $(container);
-    let result = window;
+    let result;
 
     if($container && $container.length && !isWindow($container.get(0))) {
         const $containerWithParents = [].slice.call($container.parents());
