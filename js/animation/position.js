@@ -284,8 +284,6 @@ const calculatePosition = function(what, options) {
         const windowHeight = win.height();
         let boundaryLeft = win.scrollLeft();
         let boundaryTop = win.scrollTop();
-        let containerLeft = win.scrollLeft();
-        let containerTop = win.scrollTop();
         const documentElement = domAdapter.getDocumentElement();
         const hZoomLevel = touch ? documentElement.clientWidth / windowWidth : 1;
         const vZoomLevel = touch ? documentElement.clientHeight / windowHeight : 1;
@@ -310,25 +308,36 @@ const calculatePosition = function(what, options) {
             boundaryHeight = $boundary.height();
         }
 
+        let horizontalMin = boundaryLeft + h.boundaryOffset;
+        let horizontalMax = boundaryLeft + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset;
+        let verticalMin = boundaryTop + v.boundaryOffset;
+        let verticalMax = boundaryTop + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset;
+
         if(container && !isWindow(container)) {
             const $container = $(container);
             const containerPosition = $container.offset();
 
-            containerLeft = containerPosition.left;
-            containerTop = containerPosition.top;
+            const containerLeft = containerPosition.left;
+            const containerTop = containerPosition.top;
 
             containerWidth = $container.width();
             containerHeight = $container.height();
+
+            horizontalMin = Math.max(horizontalMin, containerLeft);
+            horizontalMax = Math.min(horizontalMax, containerLeft + containerWidth / hZoomLevel - h.mySize);
+            verticalMin = Math.max(verticalMin, containerTop);
+            verticalMax = Math.min(verticalMax, containerTop + containerHeight / vZoomLevel - v.mySize);
         }
+
 
         return {
             h: {
-                min: Math.max(boundaryLeft + h.boundaryOffset, containerLeft),
-                max: Math.min(boundaryLeft + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset, containerLeft + containerWidth / hZoomLevel - h.mySize)
+                min: horizontalMin,
+                max: horizontalMax
             },
             v: {
-                min: Math.max(boundaryTop + v.boundaryOffset, containerTop),
-                max: Math.min(boundaryTop + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset, containerTop + containerHeight / vZoomLevel - v.mySize)
+                min: verticalMin,
+                max: verticalMax
             }
         };
     })();

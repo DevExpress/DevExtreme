@@ -491,6 +491,7 @@ const Overlay = Widget.inherit({
         this._position = typeof position === 'function' ? position() : position;
         const container = this.option('container');
         if(container && !isWindow(container)) {
+            this._position = this._position || {};
             this._position.container = getAvailableBoundsContainer(container);
         }
     },
