@@ -49,10 +49,10 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
 
       it('should not render top & bottom pockets', () => {
         const scrollable = shallow(viewFunction({ props: { } } as any) as JSX.Element);
-        const scrollableTop = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-top-pocket');
-        expect(scrollableTop.exists()).toBe(false);
-        const scrollableBottom = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-bottom-pocket');
-        expect(scrollableBottom.exists()).toBe(false);
+        const topPocket = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-top-pocket');
+        expect(topPocket.exists()).toBe(false);
+        const bottomPocket = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-bottom-pocket');
+        expect(bottomPocket.exists()).toBe(false);
       });
 
       it('should render top & bottom pockets', () => {
@@ -60,10 +60,10 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
           props:
           { forceGeneratePockets: true },
         } as any) as JSX.Element);
-        const scrollableTop = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-top-pocket');
-        expect(scrollableTop.exists()).toBe(true);
-        const scrollableBottom = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-bottom-pocket');
-        expect(scrollableBottom.exists()).toBe(true);
+        const topPocket = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-top-pocket');
+        expect(topPocket.exists()).toBe(true);
+        const bottomPocket = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-bottom-pocket');
+        expect(bottomPocket.exists()).toBe(true);
       });
 
       it('should render slot', () => {
