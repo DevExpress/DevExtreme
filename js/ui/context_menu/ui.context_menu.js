@@ -189,7 +189,7 @@ class ContextMenu extends MenuBase {
         };
         return extend(super._supportedKeys(), {
             space: selectItem,
-            esc: this.hide
+            escape: this.hide
         });
     }
 
@@ -776,8 +776,6 @@ class ContextMenu extends MenuBase {
         each(shownSubmenus, (_, $submenu) => {
             this._hideSubmenu($submenu);
         });
-
-        this.option('focusedElement', null);
     }
 
     _visibilityChanged(visible) {
