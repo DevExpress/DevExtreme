@@ -111,7 +111,8 @@ module('crossScrollingEnabled = true', config, () => {
 
         pointer.down().move(0, dragDistance);
 
-        const currentPosition = translator.locate($appointment);
+        const $draggedAppointment = $(scheduler.appointments.getAppointment().get(0)).parent();
+        const currentPosition = translator.locate($draggedAppointment);
 
         assert.roughEqual(startPosition.top, currentPosition.top - dragDistance, 1.001, 'Appointment position is correct');
         pointer.up();
@@ -199,7 +200,10 @@ module('crossScrollingEnabled = true', config, () => {
 
             pointer.down().move(dragDistance, 0);
 
-            assert.roughEqual(startPosition.left, translator.locate($appointment).left - dragDistance, 2, 'Appointment position is correct');
+            const $draggedAppointment = $(scheduler.appointments.getAppointment().get(0)).parent();
+            const currentPosition = translator.locate($draggedAppointment);
+
+            assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, 'Appointment position is correct');
             pointer.up();
         });
 
@@ -225,7 +229,8 @@ module('crossScrollingEnabled = true', config, () => {
 
             pointer.down().move(dragDistance, 0);
 
-            const currentPosition = translator.locate($appointment);
+            const $draggedAppointment = $(scheduler.appointments.getAppointment().get(0)).parent();
+            const currentPosition = translator.locate($draggedAppointment);
 
             assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, 'Appointment position is correct');
             pointer.up();
@@ -260,7 +265,8 @@ module('crossScrollingEnabled = true', config, () => {
             const pointer = pointerMock($appointment).start();
             pointer.down().move(100, 0);
 
-            const currentPosition = translator.locate($appointment);
+            const $draggedAppointment = $(scheduler.appointments.getAppointment().get(0)).parent();
+            const currentPosition = translator.locate($draggedAppointment);
 
             assert.equal(currentPosition.left, startPosition.left - 400 + 100, 'Appointment position is correct');
             pointer.up();
