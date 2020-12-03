@@ -5,6 +5,10 @@ import DOMComponent, {
 } from '../../core/dom_component';
 
 import {
+  Device
+} from '../../core/devices';
+
+import {
     dxElement
 } from '../../core/element';
 
@@ -21,8 +25,7 @@ export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
 
 export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
     /**
-     * @docid BaseWidgetOptions.disabled
-     * @type boolean
+     * @docid
      * @default false
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -30,28 +33,35 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     disabled?: boolean;
     /**
-     * @docid BaseWidgetOptions.export
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     export?: BaseWidgetExport;
     /**
-     * @docid BaseWidgetOptions.loadingIndicator
+     * @docid
+     * @type_function_return number|string
+     * @prevFileNamespace DevExpress.viz
+     * @hidden
+     */
+    height?: number | string | (() => number | string);
+    /**
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     loadingIndicator?: BaseWidgetLoadingIndicator;
     /**
-     * @docid BaseWidgetOptions.margin
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     margin?: BaseWidgetMargin;
     /**
-     * @docid BaseWidgetOptions.onDrawn
+     * @docid
      * @extends Action
      * @notUsedInTheme
      * @action
@@ -60,7 +70,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     onDrawn?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
-     * @docid BaseWidgetOptions.onExported
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.viz
@@ -68,8 +78,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     onExported?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
-     * @docid BaseWidgetOptions.onExporting
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
@@ -81,8 +90,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     onExporting?: ((e: { component?: T, element?: dxElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => any);
     /**
-     * @docid BaseWidgetOptions.onFileSaving
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field3 fileName:string
      * @type_function_param1_field4 format:string
@@ -95,9 +103,8 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     onFileSaving?: ((e: { component?: T, element?: dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
     /**
-     * @docid BaseWidgetOptions.onIncidentOccurred
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:any
      * @action
@@ -106,8 +113,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     onIncidentOccurred?: ((e: { component?: T, element?: dxElement, model?: any, target?: any }) => any);
     /**
-     * @docid BaseWidgetOptions.pathModified
-     * @type boolean
+     * @docid
      * @default false
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -115,8 +121,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     pathModified?: boolean;
     /**
-     * @docid BaseWidgetOptions.redrawOnResize
-     * @type boolean
+     * @docid
      * @default true
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -124,8 +129,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     redrawOnResize?: boolean;
     /**
-     * @docid BaseWidgetOptions.rtlEnabled
-     * @type boolean
+     * @docid
      * @notUsedInTheme
      * @default false
      * @prevFileNamespace DevExpress.viz
@@ -133,7 +137,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     rtlEnabled?: boolean;
     /**
-     * @docid BaseWidgetOptions.size
+     * @docid
      * @type object
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -141,7 +145,7 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     size?: BaseWidgetSize;
     /**
-     * @docid BaseWidgetOptions.theme
+     * @docid
      * @type Enums.VizTheme
      * @default 'generic.light'
      * @prevFileNamespace DevExpress.viz
@@ -149,24 +153,30 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     theme?: 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
     /**
-     * @docid BaseWidgetOptions.title
+     * @docid
      * @type object|string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     title?: BaseWidgetTitle | string;
     /**
-     * @docid BaseWidgetOptions.tooltip
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     tooltip?: BaseWidgetTooltip;
+    /**
+     * @docid
+     * @type_function_return number|string
+     * @prevFileNamespace DevExpress.viz
+     * @hidden
+     */
+    width?: number | string | (() => number | string);
 }
 export interface BaseWidgetExport {
     /**
      * @docid BaseWidgetOptions.export.backgroundColor
-     * @type string
      * @default '#ffffff'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -174,7 +184,6 @@ export interface BaseWidgetExport {
     backgroundColor?: string;
     /**
      * @docid BaseWidgetOptions.export.enabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -182,7 +191,6 @@ export interface BaseWidgetExport {
     enabled?: boolean;
     /**
      * @docid BaseWidgetOptions.export.fileName
-     * @type string
      * @default 'file'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -198,7 +206,6 @@ export interface BaseWidgetExport {
     formats?: Array<'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG'>;
     /**
      * @docid BaseWidgetOptions.export.margin
-     * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -206,7 +213,6 @@ export interface BaseWidgetExport {
     margin?: number;
     /**
      * @docid BaseWidgetOptions.export.printingEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -214,7 +220,6 @@ export interface BaseWidgetExport {
     printingEnabled?: boolean;
     /**
      * @docid BaseWidgetOptions.export.proxyUrl
-     * @type string
      * @default undefined
      * @deprecated
      * @prevFileNamespace DevExpress.viz
@@ -223,7 +228,6 @@ export interface BaseWidgetExport {
     proxyUrl?: string;
     /**
      * @docid BaseWidgetOptions.export.svgToCanvas
-     * @type function
      * @type_function_param1 svg:SVGElement
      * @type_function_param2 canvas:HTMLCanvasElement
      * @type_function_return Promise<void>
@@ -236,7 +240,6 @@ export interface BaseWidgetExport {
 export interface BaseWidgetLoadingIndicator {
     /**
      * @docid BaseWidgetOptions.loadingIndicator.backgroundColor
-     * @type string
      * @default '#FFFFFF'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -244,7 +247,6 @@ export interface BaseWidgetLoadingIndicator {
     backgroundColor?: string;
     /**
      * @docid BaseWidgetOptions.loadingIndicator.enabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -252,7 +254,6 @@ export interface BaseWidgetLoadingIndicator {
     enabled?: boolean;
     /**
      * @docid BaseWidgetOptions.loadingIndicator.font
-     * @type Font
      * @default '#767676' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -260,7 +261,6 @@ export interface BaseWidgetLoadingIndicator {
     font?: Font;
     /**
      * @docid BaseWidgetOptions.loadingIndicator.show
-     * @type boolean
      * @default false
      * @fires BaseWidgetOptions.onOptionChanged
      * @prevFileNamespace DevExpress.viz
@@ -269,7 +269,6 @@ export interface BaseWidgetLoadingIndicator {
     show?: boolean;
     /**
      * @docid BaseWidgetOptions.loadingIndicator.text
-     * @type string
      * @default 'Loading...'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -279,7 +278,6 @@ export interface BaseWidgetLoadingIndicator {
 export interface BaseWidgetMargin {
     /**
      * @docid BaseWidgetOptions.margin.bottom
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -287,7 +285,6 @@ export interface BaseWidgetMargin {
     bottom?: number;
     /**
      * @docid BaseWidgetOptions.margin.left
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -295,7 +292,6 @@ export interface BaseWidgetMargin {
     left?: number;
     /**
      * @docid BaseWidgetOptions.margin.right
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -303,7 +299,6 @@ export interface BaseWidgetMargin {
     right?: number;
     /**
      * @docid BaseWidgetOptions.margin.top
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -313,7 +308,6 @@ export interface BaseWidgetMargin {
 export interface BaseWidgetSize {
     /**
      * @docid BaseWidgetOptions.size.height
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -321,7 +315,6 @@ export interface BaseWidgetSize {
     height?: number;
     /**
      * @docid BaseWidgetOptions.size.width
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -331,7 +324,6 @@ export interface BaseWidgetSize {
 export interface BaseWidgetTitle {
     /**
      * @docid BaseWidgetOptions.title.font
-     * @type Font
      * @default '#232323' [prop](color)
      * @default 28 [prop](size)
      * @default 200 [prop](weight)
@@ -350,15 +342,38 @@ export interface BaseWidgetTitle {
     horizontalAlignment?: 'center' | 'left' | 'right';
     /**
      * @docid BaseWidgetOptions.title.margin
-     * @type number | object
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    margin?: number | { bottom?: number, left?: number, right?: number, top?: number };
+    margin?: number | {
+      /**
+       * @docid BaseWidgetOptions.title.margin.bottom
+       * @prevFileNamespace DevExpress.viz
+       * @default 10
+       */
+      bottom?: number,
+      /**
+       * @docid BaseWidgetOptions.title.margin.left
+       * @prevFileNamespace DevExpress.viz
+       * @default 10
+       */
+      left?: number,
+      /**
+       * @docid BaseWidgetOptions.title.margin.right
+       * @prevFileNamespace DevExpress.viz
+       * @default 10
+       */
+      right?: number,
+      /**
+       * @docid BaseWidgetOptions.title.margin.top
+       * @prevFileNamespace DevExpress.viz
+       * @default 10
+       */
+      top?: number
+    };
     /**
      * @docid BaseWidgetOptions.title.placeholderSize
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -366,14 +381,48 @@ export interface BaseWidgetTitle {
     placeholderSize?: number;
     /**
      * @docid BaseWidgetOptions.title.subtitle
-     * @type object|string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: VizTextOverflowType, wordWrap?: WordWrapType } | string;
+    subtitle?: {
+      /**
+       * @docid BaseWidgetOptions.title.subtitle.font
+       * @prevFileNamespace DevExpress.viz
+       * @default '#232323' [prop](color)
+       * @default 16 [prop](size)
+       * @default 200 [prop](weight)
+       * @extends CommonVizLightFontFamily
+       */
+      font?: Font,
+      /**
+       * @docid BaseWidgetOptions.title.subtitle.offset
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       */
+      offset?: number,
+      /**
+       * @docid BaseWidgetOptions.title.subtitle.text
+       * @prevFileNamespace DevExpress.viz
+       * @default null
+       */
+      text?: string,
+      /**
+       * @docid BaseWidgetOptions.title.subtitle.textOverflow
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.VizTextOverflow
+       * @default "ellipsis"
+       */
+      textOverflow?: VizTextOverflowType,
+      /**
+       * @docid BaseWidgetOptions.title.subtitle.wordWrap
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.VizWordWrap
+       * @default "normal"
+       */
+      wordWrap?: WordWrapType
+    } | string;
     /**
      * @docid BaseWidgetOptions.title.text
-     * @type string
      * @default null
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -407,7 +456,6 @@ export interface BaseWidgetTitle {
 export interface BaseWidgetTooltip {
     /**
      * @docid BaseWidgetOptions.tooltip.arrowLength
-     * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -415,14 +463,44 @@ export interface BaseWidgetTooltip {
     arrowLength?: number;
     /**
      * @docid BaseWidgetOptions.tooltip.border
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, dashStyle?: DashStyleType, opacity?: number, visible?: boolean, width?: number };
+    border?: {
+      /**
+       * @docid BaseWidgetOptions.tooltip.border.color
+       * @prevFileNamespace DevExpress.viz
+       * @default '#d3d3d3'
+       */
+      color?: string,
+      /**
+       * @docid BaseWidgetOptions.tooltip.border.dashStyle
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.DashStyle
+       * @default 'solid'
+       */
+      dashStyle?: DashStyleType,
+      /**
+       * @docid BaseWidgetOptions.tooltip.border.opacity
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
+      opacity?: number,
+      /**
+       * @docid BaseWidgetOptions.tooltip.border.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default true
+       */
+      visible?: boolean,
+      /**
+       * @docid BaseWidgetOptions.tooltip.border.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 1
+       */
+      width?: number
+    };
     /**
      * @docid BaseWidgetOptions.tooltip.color
-     * @type string
      * @default '#ffffff'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -430,7 +508,6 @@ export interface BaseWidgetTooltip {
     color?: string;
     /**
      * @docid BaseWidgetOptions.tooltip.container
-     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -438,7 +515,6 @@ export interface BaseWidgetTooltip {
     container?: string | Element | JQuery;
     /**
      * @docid BaseWidgetOptions.tooltip.cornerRadius
-     * @type number
      * @default 0
      * @default 4 [for](Material)
      * @prevFileNamespace DevExpress.viz
@@ -447,7 +523,6 @@ export interface BaseWidgetTooltip {
     cornerRadius?: number;
     /**
      * @docid BaseWidgetOptions.tooltip.enabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -455,7 +530,6 @@ export interface BaseWidgetTooltip {
     enabled?: boolean;
     /**
      * @docid BaseWidgetOptions.tooltip.font
-     * @type Font
      * @default '#232323' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -470,7 +544,6 @@ export interface BaseWidgetTooltip {
     format?: format;
     /**
      * @docid BaseWidgetOptions.tooltip.opacity
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -478,7 +551,6 @@ export interface BaseWidgetTooltip {
     opacity?: number;
     /**
      * @docid BaseWidgetOptions.tooltip.paddingLeftRight
-     * @type number
      * @default 18
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -486,7 +558,6 @@ export interface BaseWidgetTooltip {
     paddingLeftRight?: number;
     /**
      * @docid BaseWidgetOptions.tooltip.paddingTopBottom
-     * @type number
      * @default 15
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -494,14 +565,43 @@ export interface BaseWidgetTooltip {
     paddingTopBottom?: number;
     /**
      * @docid BaseWidgetOptions.tooltip.shadow
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
+    shadow?: {
+      /**
+       * @docid BaseWidgetOptions.tooltip.shadow.blur
+       * @prevFileNamespace DevExpress.viz
+       * @default 2
+       */
+      blur?: number,
+      /**
+       * @docid BaseWidgetOptions.tooltip.shadow.color
+       * @prevFileNamespace DevExpress.viz
+       * @default #000000
+       */
+      color?: string,
+      /**
+       * @docid BaseWidgetOptions.tooltip.shadow.offsetX
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       */
+      offsetX?: number,
+      /**
+       * @docid BaseWidgetOptions.tooltip.shadow.offsetY
+       * @prevFileNamespace DevExpress.viz
+       * @default 4
+       */
+      offsetY?: number,
+      /**
+       * @docid BaseWidgetOptions.tooltip.shadow.opacity
+       * @prevFileNamespace DevExpress.viz
+       * @default 0.4
+       */
+      opacity?: number
+    };
     /**
      * @docid BaseWidgetOptions.tooltip.zIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -509,8 +609,7 @@ export interface BaseWidgetTooltip {
     zIndex?: number;
 }
 /**
- * @docid BaseWidget
- * @type object
+ * @docid
  * @hidden
  * @inherits DOMComponent
  * @prevFileNamespace DevExpress.viz
@@ -519,7 +618,18 @@ export default class BaseWidget extends DOMComponent {
     constructor(element: Element, options?: BaseWidgetOptions)
     constructor(element: JQuery, options?: BaseWidgetOptions)
     /**
-     * @docid BaseWidgetMethods.exportTo
+     * @docid
+     * @static
+     * @publicName defaultOptions(rule)
+     * @param1 rule:Object
+     * @param1_field1 device:Device|Array<Device>|function
+     * @param1_field2 options:Object
+     * @prevFileNamespace DevExpress.viz
+     * @hidden
+     */
+    static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
+    /**
+     * @docid
      * @publicName exportTo(fileName, format)
      * @param1 fileName:string
      * @param2 format:string
@@ -528,7 +638,7 @@ export default class BaseWidget extends DOMComponent {
      */
     exportTo(fileName: string, format: string): void;
     /**
-     * @docid BaseWidgetMethods.getSize
+     * @docid
      * @publicName getSize()
      * @return BaseWidgetOptions.size
      * @prevFileNamespace DevExpress.viz
@@ -536,35 +646,35 @@ export default class BaseWidget extends DOMComponent {
      */
     getSize(): BaseWidgetSize;
     /**
-     * @docid BaseWidgetMethods.hideLoadingIndicator
+     * @docid
      * @publicName hideLoadingIndicator()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideLoadingIndicator(): void;
     /**
-     * @docid BaseWidgetMethods.print
+     * @docid
      * @publicName print()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     print(): void;
     /**
-     * @docid BaseWidgetMethods.render
+     * @docid
      * @publicName render()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     render(): void;
     /**
-     * @docid BaseWidgetMethods.showLoadingIndicator
+     * @docid
      * @publicName showLoadingIndicator()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     showLoadingIndicator(): void;
     /**
-     * @docid BaseWidgetMethods.svg
+     * @docid
      * @publicName svg()
      * @return string
      * @prevFileNamespace DevExpress.viz
@@ -573,41 +683,41 @@ export default class BaseWidget extends DOMComponent {
     svg(): string;
 }
 
+/**
+ * @docid
+ * @type object
+ * @hidden
+ */
 export interface Font {
     /**
-     * @docid Font.color
-     * @type string
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     color?: string;
     /**
-     * @docid Font.family
-     * @type string
+     * @docid
      * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     family?: string;
     /**
-     * @docid Font.opacity
-     * @type number
+     * @docid
      * @default 1
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     opacity?: number;
     /**
-     * @docid Font.size
-     * @type string|number
+     * @docid
      * @default 12
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     size?: string | number;
     /**
-     * @docid Font.weight
-     * @type number
+     * @docid
      * @default 400
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -615,141 +725,217 @@ export interface Font {
     weight?: number;
 }
 
+/**
+* @docid
+* @type object
+*/
 export interface BaseWidgetAnnotationConfig {
     /**
-     * @docid BaseWidgetAnnotationConfig.allowDragging
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     allowDragging?: boolean;
     /**
-     * @docid BaseWidgetAnnotationConfig.arrowLength
-     * @type number
+     * @docid
      * @default 14
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     arrowLength?: number;
     /**
-     * @docid BaseWidgetAnnotationConfig.arrowWidth
-     * @type number
+     * @docid
      * @default 14
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     arrowWidth?: number;
     /**
-     * @docid BaseWidgetAnnotationConfig.border
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyleType, opacity?: number, visible?: boolean, width?: number };
+    border?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default '#dddddd'
+      */
+      color?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 0
+      * @default 4 [for](Material)
+      */
+      cornerRadius?: number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @type Enums.DashStyle
+      * @default 'solid'
+      */
+      dashStyle?: DashStyleType,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default undefined
+      */
+      opacity?: number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default true
+      */
+      visible?: boolean,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 1
+      */
+      width?: number
+    };
     /**
-     * @docid BaseWidgetAnnotationConfig.color
-     * @type string
+     * @docid
      * @default '#ffffff'
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     color?: string;
     /**
-     * @docid BaseWidgetAnnotationConfig.data
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     data?: any;
     /**
-     * @docid BaseWidgetAnnotationConfig.description
-     * @type string
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     description?: string;
     /**
-     * @docid BaseWidgetAnnotationConfig.font
-     * @type Font
+     * @docid
      * @default '#333333' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     font?: Font;
     /**
-     * @docid BaseWidgetAnnotationConfig.height
-     * @type number
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     height?: number;
     /**
-     * @docid BaseWidgetAnnotationConfig.image
-     * @type string|object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    image?: string | { height?: number, url?: string, width?: number };
+    image?: string | {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 30
+      */
+      height?: number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default undefined
+      */
+      url?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 30
+      */
+      width?: number
+    };
     /**
-     * @docid BaseWidgetAnnotationConfig.offsetX
-     * @type number
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     offsetX?: number;
     /**
-     * @docid BaseWidgetAnnotationConfig.offsetY
-     * @type number
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     offsetY?: number;
     /**
-     * @docid BaseWidgetAnnotationConfig.opacity
-     * @type number
+     * @docid
      * @default 0.9
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     opacity?: number;
     /**
-     * @docid BaseWidgetAnnotationConfig.paddingLeftRight
-     * @type number
+     * @docid
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     paddingLeftRight?: number;
     /**
-     * @docid BaseWidgetAnnotationConfig.paddingTopBottom
-     * @type number
+     * @docid
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     paddingTopBottom?: number;
     /**
-     * @docid BaseWidgetAnnotationConfig.shadow
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
+    shadow?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 4
+      */
+      blur?: number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default '#000000'
+      */
+      color?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 0
+      */
+      offsetX?: number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 1
+      */
+      offsetY?: number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 0.15
+      */
+      opacity?: number
+    };
     /**
-     * @docid BaseWidgetAnnotationConfig.text
-     * @type string
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     text?: string;
     /**
-     * @docid BaseWidgetAnnotationConfig.textOverflow
+     * @docid
      * @type Enums.VizTextOverflow
      * @default "ellipsis"
      * @prevFileNamespace DevExpress.viz
@@ -757,15 +943,14 @@ export interface BaseWidgetAnnotationConfig {
      */
     textOverflow?: VizTextOverflowType;
     /**
-     * @docid BaseWidgetAnnotationConfig.tooltipEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     tooltipEnabled?: boolean;
     /**
-     * @docid BaseWidgetAnnotationConfig.type
+     * @docid
      * @type Enums.AnnotationType
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -773,15 +958,14 @@ export interface BaseWidgetAnnotationConfig {
      */
     type?: 'text' | 'image' | 'custom';
     /**
-     * @docid BaseWidgetAnnotationConfig.width
-     * @type number
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     width?: number;
     /**
-     * @docid BaseWidgetAnnotationConfig.wordWrap
+     * @docid
      * @type Enums.VizWordWrap
      * @default "normal"
      * @prevFileNamespace DevExpress.viz
@@ -789,16 +973,14 @@ export interface BaseWidgetAnnotationConfig {
      */
     wordWrap?: WordWrapType;
     /**
-     * @docid BaseWidgetAnnotationConfig.x
-     * @type number
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     x?: number;
     /**
-     * @docid BaseWidgetAnnotationConfig.y
-     * @type number
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

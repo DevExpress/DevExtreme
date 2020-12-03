@@ -4,7 +4,6 @@ import {
 
 /**
  * @docid ui.template
- * @type template
  * @namespace DevExpress.ui
  * @deprecated
  * @prevFileNamespace DevExpress.ui

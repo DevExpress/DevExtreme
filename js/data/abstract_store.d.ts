@@ -6,22 +6,19 @@ import {
 
 export interface StoreOptions<T = Store> {
     /**
-     * @docid StoreOptions.errorHandler
-     * @type function
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     errorHandler?: Function;
     /**
-     * @docid StoreOptions.key
-     * @type string|Array<string>
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     key?: string | Array<string>;
     /**
-     * @docid StoreOptions.onInserted
-     * @type function
+     * @docid
      * @type_function_param1 values:object
      * @type_function_param2 key:object|string|number
      * @action
@@ -30,8 +27,7 @@ export interface StoreOptions<T = Store> {
      */
     onInserted?: ((values: any, key: any | string | number) => any);
     /**
-     * @docid StoreOptions.onInserting
-     * @type function
+     * @docid
      * @type_function_param1 values:object
      * @action
      * @prevFileNamespace DevExpress.data
@@ -39,8 +35,7 @@ export interface StoreOptions<T = Store> {
      */
     onInserting?: ((values: any) => any);
     /**
-     * @docid StoreOptions.onLoaded
-     * @type function
+     * @docid
      * @type_function_param1 result:Array<any>
      * @action
      * @prevFileNamespace DevExpress.data
@@ -48,8 +43,7 @@ export interface StoreOptions<T = Store> {
      */
     onLoaded?: ((result: Array<any>) => any);
     /**
-     * @docid StoreOptions.onLoading
-     * @type function
+     * @docid
      * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @prevFileNamespace DevExpress.data
@@ -57,24 +51,21 @@ export interface StoreOptions<T = Store> {
      */
     onLoading?: ((loadOptions: LoadOptions) => any);
     /**
-     * @docid StoreOptions.onModified
-     * @type function
+     * @docid
      * @action
      * @prevFileNamespace DevExpress.data
      * @public
      */
     onModified?: Function;
     /**
-     * @docid StoreOptions.onModifying
-     * @type function
+     * @docid
      * @action
      * @prevFileNamespace DevExpress.data
      * @public
      */
     onModifying?: Function;
     /**
-     * @docid StoreOptions.onPush
-     * @type function
+     * @docid
      * @type_function_param1 changes:Array<any>
      * @action
      * @prevFileNamespace DevExpress.data
@@ -82,8 +73,7 @@ export interface StoreOptions<T = Store> {
      */
     onPush?: ((changes: Array<any>) => any);
     /**
-     * @docid StoreOptions.onRemoved
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @action
      * @prevFileNamespace DevExpress.data
@@ -91,8 +81,7 @@ export interface StoreOptions<T = Store> {
      */
     onRemoved?: ((key: any | string | number) => any);
     /**
-     * @docid StoreOptions.onRemoving
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @action
      * @prevFileNamespace DevExpress.data
@@ -100,8 +89,7 @@ export interface StoreOptions<T = Store> {
      */
     onRemoving?: ((key: any | string | number) => any);
     /**
-     * @docid StoreOptions.onUpdated
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @action
@@ -110,8 +98,7 @@ export interface StoreOptions<T = Store> {
      */
     onUpdated?: ((key: any | string | number, values: any) => any);
     /**
-     * @docid StoreOptions.onUpdating
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @action
@@ -121,8 +108,7 @@ export interface StoreOptions<T = Store> {
     onUpdating?: ((key: any | string | number, values: any) => any);
 }
 /**
- * @docid Store
- * @type object
+ * @docid
  * @hidden
  * @module data/abstract_store
  * @export default
@@ -131,7 +117,7 @@ export interface StoreOptions<T = Store> {
 export default class Store {
     constructor(options?: StoreOptions)
     /**
-     * @docid StoreMethods.byKey
+     * @docid
      * @publicName byKey(key)
      * @param1 key:object|string|number
      * @return Promise<any>
@@ -140,7 +126,7 @@ export default class Store {
      */
     byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid StoreMethods.insert
+     * @docid
      * @publicName insert(values)
      * @param1 values:object
      * @return Promise<any>
@@ -149,7 +135,7 @@ export default class Store {
      */
     insert(values: any): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid StoreMethods.key
+     * @docid
      * @publicName key()
      * @return any
      * @prevFileNamespace DevExpress.data
@@ -157,7 +143,7 @@ export default class Store {
      */
     key(): any;
     /**
-     * @docid StoreMethods.keyOf
+     * @docid
      * @publicName keyOf(obj)
      * @param1 obj:object
      * @return any
@@ -166,7 +152,7 @@ export default class Store {
      */
     keyOf(obj: any): any;
     /**
-     * @docid StoreMethods.load
+     * @docid
      * @publicName load()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -174,7 +160,7 @@ export default class Store {
      */
     load(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid StoreMethods.load
+     * @docid
      * @publicName load(options)
      * @param1 options:LoadOptions
      * @return Promise<any>
@@ -183,7 +169,7 @@ export default class Store {
      */
     load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid StoreMethods.off
+     * @docid
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
@@ -192,7 +178,7 @@ export default class Store {
      */
     off(eventName: string): this;
     /**
-     * @docid StoreMethods.off
+     * @docid
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -202,7 +188,7 @@ export default class Store {
      */
     off(eventName: string, eventHandler: Function): this;
     /**
-     * @docid StoreMethods.on
+     * @docid
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -212,7 +198,7 @@ export default class Store {
      */
     on(eventName: string, eventHandler: Function): this;
     /**
-     * @docid StoreMethods.on
+     * @docid
      * @publicName on(events)
      * @param1 events:object
      * @return this
@@ -221,7 +207,7 @@ export default class Store {
      */
     on(events: any): this;
     /**
-     * @docid StoreMethods.push
+     * @docid
      * @publicName push(changes)
      * @param1 changes:Array<any>
      * @prevFileNamespace DevExpress.data
@@ -229,7 +215,7 @@ export default class Store {
      */
     push(changes: Array<any>): void;
     /**
-     * @docid StoreMethods.remove
+     * @docid
      * @publicName remove(key)
      * @param1 key:object|string|number
      * @return Promise<void>
@@ -238,7 +224,7 @@ export default class Store {
      */
     remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid StoreMethods.totalCount
+     * @docid
      * @publicName totalCount(options)
      * @param1 obj:object
      * @param1_field1 filter:object
@@ -249,7 +235,7 @@ export default class Store {
      */
     totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
     /**
-     * @docid StoreMethods.update
+     * @docid
      * @publicName update(key, values)
      * @param1 key:object|string|number
      * @param2 values:object

@@ -9,64 +9,56 @@ import CollectionWidget, {
 
 export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
     /**
-     * @docid dxMultiViewOptions.animationEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationEnabled?: boolean;
     /**
-     * @docid dxMultiViewOptions.dataSource
-     * @type string|Array<string,dxMultiViewItem,object>|DataSource|DataSourceOptions
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxMultiViewItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxMultiViewOptions.deferRendering
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
-     * @docid dxMultiViewOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxMultiViewOptions.items
-     * @type Array<string, dxMultiViewItem, object>
+     * @docid
      * @fires dxMultiViewOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxMultiViewItem | any>;
     /**
-     * @docid dxMultiViewOptions.loop
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     loop?: boolean;
     /**
-     * @docid dxMultiViewOptions.selectedIndex
-     * @type number
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
     /**
-     * @docid dxMultiViewOptions.swipeEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -74,7 +66,7 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     swipeEnabled?: boolean;
 }
 /**
- * @docid dxMultiView
+ * @docid
  * @inherits CollectionWidget
  * @module ui/multi_view
  * @export default
@@ -86,6 +78,11 @@ export default class dxMultiView extends CollectionWidget {
     constructor(element: JQuery, options?: dxMultiViewOptions)
 }
 
+/**
+* @docid
+* @inherits CollectionWidgetItem
+* @type object
+*/
 export interface dxMultiViewItem extends CollectionWidgetItem {
 }
 

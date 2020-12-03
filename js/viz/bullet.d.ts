@@ -4,16 +4,14 @@ import BaseSparkline, {
 
 export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
     /**
-     * @docid dxBulletOptions.color
-     * @type string
+     * @docid
      * @default '#e8c267'
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     color?: string;
     /**
-     * @docid dxBulletOptions.endScaleValue
-     * @type number
+     * @docid
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -21,24 +19,21 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      */
     endScaleValue?: number;
     /**
-     * @docid dxBulletOptions.showTarget
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTarget?: boolean;
     /**
-     * @docid dxBulletOptions.showZeroLevel
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     showZeroLevel?: boolean;
     /**
-     * @docid dxBulletOptions.startScaleValue
-     * @type number
+     * @docid
      * @default 0
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -46,8 +41,7 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      */
     startScaleValue?: number;
     /**
-     * @docid dxBulletOptions.target
-     * @type number
+     * @docid
      * @default 0
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -55,24 +49,21 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      */
     target?: number;
     /**
-     * @docid dxBulletOptions.targetColor
-     * @type string
+     * @docid
      * @default '#666666'
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     targetColor?: string;
     /**
-     * @docid dxBulletOptions.targetWidth
-     * @type number
+     * @docid
      * @default 4
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     targetWidth?: number;
     /**
-     * @docid dxBulletOptions.value
-     * @type number
+     * @docid
      * @default 0
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -81,7 +72,7 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
     value?: number;
 }
 /**
- * @docid dxBullet
+ * @docid
  * @inherits BaseSparkline
  * @module viz/bullet
  * @export default

@@ -5,24 +5,24 @@
 
 $generic-toolbar-menu-top-padding: null !default;
 $generic-toolbar-menu-bottom-padding: null !default;
-$generic-mobile-toolbar-height: 36px;
+$generic-mobile-toolbar-height: 36px !default;
 
 @if $size == "default" {
-  $generic-toolbar-menu-top-padding: 7px;
-  $generic-toolbar-menu-bottom-padding: 8px;
+  $generic-toolbar-menu-top-padding: 7px !default;
+  $generic-toolbar-menu-bottom-padding: 8px !default;
 }
 
 @else if $size == "compact" {
-  $generic-toolbar-menu-top-padding: 4px;
-  $generic-toolbar-menu-bottom-padding: 4px;
+  $generic-toolbar-menu-top-padding: 4px !default;
+  $generic-toolbar-menu-bottom-padding: 4px !default;
 }
 
-$generic-toolbar-height: $generic-base-inline-widget-height;
-$generic-toolbar-padding: 0;
-$generic-toolbar-item-spacing: 5px;
-$generic-toolbar-label-font-size: $generic-m-font-size;
-$generic-toolbar-section-padding: 15px;
+$generic-toolbar-height: $generic-base-inline-widget-height !default;
+$generic-toolbar-padding: 0 !default;
+$generic-toolbar-item-spacing: 5px !default;
+$generic-toolbar-label-font-size: $generic-m-font-size !default;
+$generic-toolbar-section-padding: 15px !default;
 
-$generic-mobile-toolbar-padding: 0;
-$generic-mobile-toolbar-item-spacing: 5px;
-$generic-mobile-toolbar-label-font-size: 20px;
+$generic-mobile-toolbar-padding: 0 !default;
+$generic-mobile-toolbar-item-spacing: 5px !default;
+$generic-mobile-toolbar-label-font-size: 20px !default;

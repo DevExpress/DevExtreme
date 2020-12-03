@@ -142,8 +142,27 @@ QUnit.module('MonthView markup', {
     QUnit.test('today must be decorated with a css class', function(assert) {
         this.reinit({});
 
-        const todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
+        const todayCell = this.$element.find(`.${CALENDAR_TODAY_CLASS}`);
         assert.equal(todayCell.length, 1);
+    });
+
+    QUnit.test('correct date must be decorated with a css class when _todayDate is specified', function(assert) {
+        this.reinit({
+            date: new Date(2021, 0, 15),
+            _todayDate: () => new Date(2021, 0, 1)
+        });
+
+        const todayCell = this.$element.find(`.${CALENDAR_TODAY_CLASS}`);
+
+        assert.strictEqual($(todayCell).text(), '1');
+    });
+
+    QUnit.test('correct date must be decorated with a css class after _todayDate runtime change', function(assert) {
+        this.view.option('_todayDate', () => new Date(2013, 9, 1));
+
+        const todayCell = this.$element.find(`.${CALENDAR_TODAY_CLASS}`);
+
+        assert.strictEqual($(todayCell).text(), '1');
     });
 
     QUnit.test('value time component should not be compared in min and max options', function(assert) {
@@ -229,8 +248,19 @@ QUnit.module('YearView markup', {
     QUnit.test('today must be decorated with a css class', function(assert) {
         this.reinit({});
 
-        const todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
+        const todayCell = this.$element.find(`.${CALENDAR_TODAY_CLASS}`);
         assert.equal(todayCell.length, 1);
+    });
+
+    QUnit.test('correct date must be decorated with a css class when _todayDate is specified', function(assert) {
+        this.reinit({
+            date: new Date(2021, 0, 15),
+            _todayDate: () => new Date(2021, 10, 15)
+        });
+
+        const todayCell = this.$element.find(`.${CALENDAR_TODAY_CLASS}`);
+
+        assert.strictEqual($(todayCell).text(), 'Nov');
     });
 });
 
@@ -299,8 +329,19 @@ QUnit.module('DecadeView', {
     QUnit.test('today must be decorated with a css class', function(assert) {
         this.reinit({});
 
-        const todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
+        const todayCell = this.$element.find(`.${CALENDAR_TODAY_CLASS}`);
         assert.equal(todayCell.length, 1);
+    });
+
+    QUnit.test('correct date must be decorated with a css class when _todayDate is specified', function(assert) {
+        this.reinit({
+            date: new Date(2021, 0, 15),
+            _todayDate: () => new Date(2030, 0, 15)
+        });
+
+        const todayCell = this.$element.find(`.${CALENDAR_TODAY_CLASS}`);
+
+        assert.strictEqual($(todayCell).text(), '2030');
     });
 });
 
@@ -377,8 +418,19 @@ QUnit.module('CenturyView', {
     QUnit.test('today must be decorated with a css class', function(assert) {
         this.reinit({});
 
-        const todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
+        const todayCell = this.$element.find(`.${CALENDAR_TODAY_CLASS}`);
         assert.equal(todayCell.length, 1);
+    });
+
+    QUnit.test('correct date must be decorated with a css class when _todayDate is specified', function(assert) {
+        this.reinit({
+            date: new Date(2021, 0, 15),
+            _todayDate: () => new Date(2050, 0, 15)
+        });
+
+        const todayCell = this.$element.find(`.${CALENDAR_TODAY_CLASS}`);
+
+        assert.strictEqual($(todayCell).text(), '2050 - 2059');
     });
 });
 

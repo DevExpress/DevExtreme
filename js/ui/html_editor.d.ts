@@ -24,49 +24,43 @@ import {
 
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
-     * @docid dxHtmlEditorOptions.customizeModules
-     * @type function
+     * @docid
      * @type_function_param1 config:object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     customizeModules?: ((config: any) => any);
     /**
-     * @docid dxHtmlEditorOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxHtmlEditorOptions.mediaResizing
-     * @type dxHtmlEditorMediaResizing
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     mediaResizing?: dxHtmlEditorMediaResizing;
     /**
-     * @docid dxHtmlEditorOptions.mentions
-     * @type Array<dxHtmlEditorMention>
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     mentions?: Array<dxHtmlEditorMention>;
     /**
-     * @docid dxHtmlEditorOptions.name
-     * @type string
+     * @docid
      * @hidden false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid dxHtmlEditorOptions.onFocusIn
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -75,9 +69,8 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      */
     onFocusIn?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxHtmlEditorOptions.onFocusOut
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -86,23 +79,21 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      */
     onFocusOut?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxHtmlEditorOptions.placeholder
-     * @type string
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     placeholder?: string;
     /**
-     * @docid dxHtmlEditorOptions.toolbar
-     * @type dxHtmlEditorToolbar
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     toolbar?: dxHtmlEditorToolbar;
     /**
-     * @docid dxHtmlEditorOptions.valueType
+     * @docid
      * @type Enums.HtmlEditorValueType
      * @default "html"
      * @prevFileNamespace DevExpress.ui
@@ -110,8 +101,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      */
     valueType?: 'html' | 'markdown';
     /**
-     * @docid dxHtmlEditorOptions.variables
-     * @type dxHtmlEditorVariables
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -119,7 +109,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     variables?: dxHtmlEditorVariables;
 }
 /**
- * @docid dxHtmlEditor
+ * @docid
  * @inherits Editor
  * @hasTranscludedContent
  * @isEditor
@@ -132,14 +122,14 @@ export default class dxHtmlEditor extends Editor {
     constructor(element: Element, options?: dxHtmlEditorOptions)
     constructor(element: JQuery, options?: dxHtmlEditorOptions)
     /**
-     * @docid dxHtmlEditorMethods.clearHistory
+     * @docid
      * @publicName clearHistory()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     clearHistory(): void;
     /**
-     * @docid dxHtmlEditorMethods.delete
+     * @docid
      * @publicName delete(index, length)
      * @param1 index:number
      * @param2 length:number
@@ -148,7 +138,7 @@ export default class dxHtmlEditor extends Editor {
      */
     delete(index: number, length: number): void;
     /**
-     * @docid dxHtmlEditorMethods.format
+     * @docid
      * @publicName format(formatName, formatValue)
      * @param1 formatName:Enums.HtmlEditorFormat|string
      * @param2 formatValue:any
@@ -157,7 +147,7 @@ export default class dxHtmlEditor extends Editor {
      */
     format(formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatLine
+     * @docid
      * @publicName formatLine(index, length, formatName, formatValue)
      * @param1 index:number
      * @param2 length:number
@@ -168,7 +158,7 @@ export default class dxHtmlEditor extends Editor {
      */
     formatLine(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatLine
+     * @docid
      * @publicName formatLine(index, length, formats)
      * @param1 index:number
      * @param2 length:number
@@ -178,7 +168,7 @@ export default class dxHtmlEditor extends Editor {
      */
     formatLine(index: number, length: number, formats: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatText
+     * @docid
      * @publicName formatText(index, length, formatName, formatValue)
      * @param1 index:number
      * @param2 length:number
@@ -189,7 +179,7 @@ export default class dxHtmlEditor extends Editor {
      */
     formatText(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatText
+     * @docid
      * @publicName formatText(index, length, formats)
      * @param1 index:number
      * @param2 length:number
@@ -199,7 +189,7 @@ export default class dxHtmlEditor extends Editor {
      */
     formatText(index: number, length: number, formats: any): void;
     /**
-     * @docid dxHtmlEditorMethods.get
+     * @docid
      * @publicName get(componentPath)
      * @param1 componentPath:string
      * @return Object
@@ -208,7 +198,7 @@ export default class dxHtmlEditor extends Editor {
      */
     get(componentPath: string): any;
     /**
-     * @docid dxHtmlEditorMethods.getFormat
+     * @docid
      * @publicName getFormat(index, length)
      * @param1 index:number
      * @param2 length:number
@@ -218,7 +208,7 @@ export default class dxHtmlEditor extends Editor {
      */
     getFormat(index: number, length: number): any;
     /**
-     * @docid dxHtmlEditorMethods.getLength
+     * @docid
      * @publicName getLength()
      * @return number
      * @prevFileNamespace DevExpress.ui
@@ -226,7 +216,7 @@ export default class dxHtmlEditor extends Editor {
      */
     getLength(): number;
     /**
-     * @docid dxHtmlEditorMethods.getModule
+     * @docid
      * @publicName getModule(moduleName)
      * @param1 moduleName:string
      * @return Object
@@ -235,7 +225,7 @@ export default class dxHtmlEditor extends Editor {
      */
     getModule(moduleName: string): any;
     /**
-     * @docid dxHtmlEditorMethods.getQuillInstance
+     * @docid
      * @publicName getQuillInstance()
      * @return Object
      * @prevFileNamespace DevExpress.ui
@@ -243,7 +233,7 @@ export default class dxHtmlEditor extends Editor {
      */
     getQuillInstance(): any;
     /**
-     * @docid dxHtmlEditorMethods.getSelection
+     * @docid
      * @publicName getSelection()
      * @return Object
      * @prevFileNamespace DevExpress.ui
@@ -251,7 +241,7 @@ export default class dxHtmlEditor extends Editor {
      */
     getSelection(): any;
     /**
-     * @docid dxHtmlEditorMethods.insertEmbed
+     * @docid
      * @publicName insertEmbed(index, type, config)
      * @param1 index:number
      * @param2 type:string
@@ -261,7 +251,7 @@ export default class dxHtmlEditor extends Editor {
      */
     insertEmbed(index: number, type: string, config: any): void;
     /**
-     * @docid dxHtmlEditorMethods.insertText
+     * @docid
      * @publicName insertText(index, text, formats)
      * @param1 index:number
      * @param2 text:string
@@ -271,14 +261,14 @@ export default class dxHtmlEditor extends Editor {
      */
     insertText(index: number, text: string, formats: any): void;
     /**
-     * @docid dxHtmlEditorMethods.redo
+     * @docid
      * @publicName redo()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     redo(): void;
     /**
-     * @docid dxHtmlEditorMethods.register
+     * @docid
      * @publicName register(components)
      * @param1 modules:Object
      * @prevFileNamespace DevExpress.ui
@@ -286,7 +276,7 @@ export default class dxHtmlEditor extends Editor {
      */
     register(modules: any): void;
     /**
-     * @docid dxHtmlEditorMethods.removeFormat
+     * @docid
      * @publicName removeFormat(index, length)
      * @param1 index:number
      * @param2 length:number
@@ -295,7 +285,7 @@ export default class dxHtmlEditor extends Editor {
      */
     removeFormat(index: number, length: number): void;
     /**
-     * @docid dxHtmlEditorMethods.setSelection
+     * @docid
      * @publicName setSelection(index, length)
      * @param1 index:number
      * @param2 length:number
@@ -304,7 +294,7 @@ export default class dxHtmlEditor extends Editor {
      */
     setSelection(index: number, length: number): void;
     /**
-     * @docid dxHtmlEditorMethods.undo
+     * @docid
      * @publicName undo()
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -312,18 +302,20 @@ export default class dxHtmlEditor extends Editor {
     undo(): void;
 }
 
+/**
+* @docid
+* @type object
+*/
 export interface dxHtmlEditorMediaResizing {
     /**
-     * @docid dxHtmlEditorMediaResizing.allowedTargets
-     * @type Array<string>
+     * @docid
      * @default ["image"]
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowedTargets?: Array<string>;
     /**
-     * @docid dxHtmlEditorMediaResizing.enabled
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -331,18 +323,20 @@ export interface dxHtmlEditorMediaResizing {
     enabled?: boolean;
 }
 
+/**
+* @docid
+* @type object
+*/
 export interface dxHtmlEditorMention {
     /**
-     * @docid dxHtmlEditorMention.dataSource
-     * @type Array<string>|DataSource|DataSourceOptions
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: Array<string> | DataSource | DataSourceOptions;
     /**
-     * @docid dxHtmlEditorMention.displayExpr
-     * @type string|function(item)
+     * @docid
      * @default "this"
      * @type_function_param1 item:object
      * @type_function_return string
@@ -351,8 +345,7 @@ export interface dxHtmlEditorMention {
      */
     displayExpr?: string | ((item: any) => string);
     /**
-     * @docid dxHtmlEditorMention.itemTemplate
-     * @type template|function
+     * @docid
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -363,23 +356,21 @@ export interface dxHtmlEditorMention {
      */
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxHtmlEditorMention.marker
-     * @type string
+     * @docid
      * @default "@"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     marker?: string;
     /**
-     * @docid dxHtmlEditorMention.minSearchLength
-     * @type number
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     minSearchLength?: number;
     /**
-     * @docid dxHtmlEditorMention.searchExpr
+     * @docid
      * @type getter|Array<getter>
      * @default "this"
      * @prevFileNamespace DevExpress.ui
@@ -387,16 +378,14 @@ export interface dxHtmlEditorMention {
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
-     * @docid dxHtmlEditorMention.searchTimeout
-     * @type number
+     * @docid
      * @default 500
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchTimeout?: number;
     /**
-     * @docid dxHtmlEditorMention.template
-     * @type template|function
+     * @docid
      * @default null
      * @type_function_param1 mentionData:object
      * @type_function_param1_field1 marker:string
@@ -409,8 +398,7 @@ export interface dxHtmlEditorMention {
      */
     template?: template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxHtmlEditorMention.valueExpr
-     * @type string|function
+     * @docid
      * @default "this"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -418,24 +406,26 @@ export interface dxHtmlEditorMention {
     valueExpr?: string | Function;
 }
 
+/**
+* @docid
+* @type object
+*/
 export interface dxHtmlEditorToolbar {
     /**
-     * @docid dxHtmlEditorToolbar.container
-     * @type string|Element|jQuery
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     container?: string | Element | JQuery;
     /**
-     * @docid dxHtmlEditorToolbar.items
+     * @docid
      * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
     /**
-     * @docid dxHtmlEditorToolbar.multiline
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -443,42 +433,48 @@ export interface dxHtmlEditorToolbar {
     multiline?: boolean;
 }
 
+/**
+* @docid
+* @inherits dxToolbarItem
+*/
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
-     * @docid dxHtmlEditorToolbarItem.formatName
+     * @docid
      * @type Enums.HtmlEditorToolbarItem|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
     /**
-     * @docid dxHtmlEditorToolbarItem.formatValues
-     * @type Array<string,number,boolean>
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     formatValues?: Array<string | number | boolean>;
     /**
-     * @docid dxHtmlEditorToolbarItem.location
+     * @docid
      * @default "before"
+     * @type Enums.ToolbarItemLocation
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     location?: 'after' | 'before' | 'center';
 }
 
+/**
+* @docid
+* @type object
+*/
 export interface dxHtmlEditorVariables {
     /**
-     * @docid dxHtmlEditorVariables.dataSource
-     * @type string|Array<string>|DataSource|DataSourceOptions
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string> | DataSource | DataSourceOptions;
     /**
-     * @docid dxHtmlEditorVariables.escapeChar
-     * @type string|Array<string>
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public

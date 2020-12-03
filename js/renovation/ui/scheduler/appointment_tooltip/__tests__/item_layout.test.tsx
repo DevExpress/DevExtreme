@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Fragment } from 'devextreme-generator/component_declaration/common';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../../ui/scheduler';
@@ -55,7 +54,7 @@ describe('TooltipItemLayout', () => {
     );
 
     it('should combine `className` with predefined classes', () => {
-      const tooltipItemLayout = render({ props: { className: 'custom-class' } }).childAt(0);
+      const tooltipItemLayout = render({ props: { className: 'custom-class' } });
 
       expect(tooltipItemLayout.hasClass('dx-tooltip-appointment-item'))
         .toBe(true);
@@ -66,30 +65,24 @@ describe('TooltipItemLayout', () => {
     it('should spread restAttributes', () => {
       const tooltipItemLayout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
 
-      expect(tooltipItemLayout.childAt(0).prop('custom-attribute'))
+      expect(tooltipItemLayout.prop('custom-attribute'))
         .toBe('customAttribute');
     });
 
     it('should render appointment item with marker, content and delete button', () => {
       const tooltipItemLayout = render({});
 
-      expect(tooltipItemLayout.type())
-        .toBe(Fragment);
-      expect(tooltipItemLayout.children())
-        .toHaveLength(1);
-
-      const layout = tooltipItemLayout.childAt(0);
-      expect(layout.is('.dx-tooltip-appointment-item'))
+      expect(tooltipItemLayout.is('.dx-tooltip-appointment-item'))
         .toBe(true);
-      expect(layout.children())
+      expect(tooltipItemLayout.children())
         .toHaveLength(3);
 
-      expect(layout.childAt(0).type())
+      expect(tooltipItemLayout.childAt(0).type())
         .toBe(Marker);
-      expect(layout.childAt(1).type())
+      expect(tooltipItemLayout.childAt(1).type())
         .toBe(TooltipItemContent);
 
-      const buttonContainer = layout.childAt(2);
+      const buttonContainer = tooltipItemLayout.childAt(2);
       expect(buttonContainer.is('.dx-tooltip-appointment-item-delete-button-container'))
         .toBe(true);
     });

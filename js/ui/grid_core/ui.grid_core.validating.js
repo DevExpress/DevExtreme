@@ -1234,21 +1234,25 @@ export default {
                     },
 
                     focus: function($element, hideBorder) {
-                        const $focus = $element && $element.closest(this._getFocusCellSelector());
+                        if(!arguments.length) return this.callBase();
+
+                        const $tooltips = $element && $element.closest('.' + this.addWidgetPrefix(ROWS_VIEW_CLASS)).find(this._getTooltipsSelector());
+                        $tooltips && $tooltips.remove();
+
+                        if($element?.hasClass('dx-row')) {
+                            return this.callBase($element, hideBorder);
+                        }
+
+                        const $focus = $element?.closest(this._getFocusCellSelector());
                         const callBase = this.callBase;
                         const validator = $focus && ($focus.data('dxValidator') || $element.find('.' + this.addWidgetPrefix(VALIDATOR_CLASS)).eq(0).data('dxValidator'));
                         const rowOptions = $focus && $focus.closest('.dx-row').data('options');
                         const editingController = this.getController('editing');
                         const change = rowOptions ? editingController.getChangeByKey(rowOptions.key) : null;
                         let validationResult;
-                        const $tooltips = $focus && $focus.closest('.' + this.addWidgetPrefix(ROWS_VIEW_CLASS)).find(this._getTooltipsSelector());
                         const $cell = $focus && $focus.is('td') ? $focus : null;
                         const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
                         const validatingController = this.getController('validating');
-
-                        if(!arguments.length) return this.callBase();
-
-                        $tooltips && $tooltips.remove();
 
                         if(validator) {
                             validatingController.setValidator(validator);

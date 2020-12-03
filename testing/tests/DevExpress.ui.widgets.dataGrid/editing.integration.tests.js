@@ -1378,6 +1378,31 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.strictEqual($($(dataGrid.$element()).find('.dx-error-row')).length, 0, 'no errors');
     });
+
+    QUnit.test('Edit cell content should not overflow a cell (T953436)', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, checked: true, name: 'name', description: 'description' }],
+            keyExpr: 'id',
+            selection: {
+                mode: 'multiple'
+            },
+            columns: ['checked', {
+                dataField: 'name',
+                showEditorAlways: true
+            }, 'description']
+        });
+
+        this.clock.tick();
+
+        const $dataCells = $(dataGrid.getRowElement(0)).find('td');
+
+        // assert
+        assert.equal($dataCells.length, 4, 'cells count');
+        $dataCells.each((_, cell) => {
+            assert.strictEqual($(cell).css('overflow'), 'hidden', 'overflow hidden');
+        });
+    });
 });
 
 QUnit.module('Editing', baseModuleConfig, () => {
@@ -2181,6 +2206,63 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             // assert
             assert.equal(validationCallback.callCount, 3, 'validation callback call count');
+        });
+    });
+
+    ['Row', 'Cell', 'Batch'].forEach(editMode => {
+        [false, true].forEach(repaintChangesOnly => {
+            QUnit.testInActiveWindow(`${editMode} - the data parameter of the validationCallback should not be empty on cell focus (repaintChangesOnly = ${repaintChangesOnly}) (T950070)`, function(assert) {
+                // arrange
+                const validationCallback = sinon.spy(e => {
+                    assert.deepEqual(e.data, { id: 1, name: 'test' }, 'row data');
+
+                    return true;
+                });
+                const dataGrid = createDataGrid({
+                    dataSource: [{ id: 1, name: 'test' }],
+                    keyExpr: 'id',
+                    repaintChangesOnly,
+                    columns: [
+                        {
+                            dataField: 'id',
+                            validationRules: [
+                                { type: 'custom', validationCallback }
+                            ]
+                        },
+                        {
+                            dataField: 'name',
+                            validationRules: [
+                                { type: 'custom', validationCallback }
+                            ]
+                        }
+                    ],
+                    editing: {
+                        mode: editMode.toLowerCase(),
+                        allowUpdating: true
+                    },
+                    loadingTimeout: undefined
+                });
+
+                // act
+                if(editMode === 'Row') {
+                    dataGrid.editRow(0);
+                } else {
+                    dataGrid.editCell(0, 0);
+                }
+                this.clock.tick();
+                $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').focus();
+                this.clock.tick();
+                if(editMode !== 'Row') {
+                    dataGrid.editCell(0, 1);
+                    this.clock.tick();
+                }
+                $(dataGrid.getCellElement(0, 1)).find('.dx-texteditor-input').focus();
+                this.clock.tick();
+
+
+                // assert
+                assert.equal(validationCallback.callCount, 2, 'validation callback call count');
+            });
         });
     });
 });

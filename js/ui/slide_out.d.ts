@@ -19,16 +19,14 @@ import CollectionWidget, {
 
 export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     /**
-     * @docid dxSlideOutOptions.activeStateEnabled
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxSlideOutOptions.contentTemplate
-     * @type template|function
+     * @docid
      * @default "content"
      * @type_function_param1 container:dxElement
      * @type_function_return string|Element|jQuery
@@ -37,24 +35,21 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      */
     contentTemplate?: template | ((container: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxSlideOutOptions.dataSource
-     * @type string|Array<string,dxSlideOutItem,object>|DataSource|DataSourceOptions
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxSlideOutItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxSlideOutOptions.items
-     * @type Array<string, dxSlideOutItem, object>
+     * @docid
      * @fires dxSlideOutOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxSlideOutItem | any>;
     /**
-     * @docid dxSlideOutOptions.menuGroupTemplate
-     * @type template|function
+     * @docid
      * @default "menuGroup"
      * @type_function_param1 groupData:object
      * @type_function_param2 groupIndex:number
@@ -65,16 +60,14 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      */
     menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | Element | JQuery);
     /**
-     * @docid dxSlideOutOptions.menuGrouped
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     menuGrouped?: boolean;
     /**
-     * @docid dxSlideOutOptions.menuItemTemplate
-     * @type template|function
+     * @docid
      * @default "menuItem"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -85,7 +78,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      */
     menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxSlideOutOptions.menuPosition
+     * @docid
      * @type Enums.SlideOutMenuPosition
      * @default "normal"
      * @prevFileNamespace DevExpress.ui
@@ -93,15 +86,14 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      */
     menuPosition?: 'inverted' | 'normal';
     /**
-     * @docid dxSlideOutOptions.menuVisible
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     menuVisible?: boolean;
     /**
-     * @docid dxSlideOutOptions.onMenuGroupRendered
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -109,7 +101,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      */
     onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxSlideOutOptions.onMenuItemRendered
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -117,16 +109,14 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      */
     onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxSlideOutOptions.selectedIndex
-     * @type number
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
     /**
-     * @docid dxSlideOutOptions.swipeEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -134,7 +124,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     swipeEnabled?: boolean;
 }
 /**
- * @docid dxSlideOut
+ * @docid
  * @inherits CollectionWidget
  * @module ui/slide_out
  * @export default
@@ -145,7 +135,7 @@ export default class dxSlideOut extends CollectionWidget {
     constructor(element: Element, options?: dxSlideOutOptions)
     constructor(element: JQuery, options?: dxSlideOutOptions)
     /**
-     * @docid dxSlideOutMethods.hide
+     * @docid
      * @publicName hideMenu()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -153,7 +143,7 @@ export default class dxSlideOut extends CollectionWidget {
      */
     hideMenu(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxSlideOutMethods.show
+     * @docid
      * @publicName showMenu()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -161,7 +151,7 @@ export default class dxSlideOut extends CollectionWidget {
      */
     showMenu(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxSlideOutMethods.toggleMenuVisibility
+     * @docid
      * @publicName toggleMenuVisibility(showing)
      * @param1 showing:boolean
      * @return Promise<void>
@@ -171,10 +161,14 @@ export default class dxSlideOut extends CollectionWidget {
     toggleMenuVisibility(showing: boolean): Promise<void> & JQueryPromise<void>;
 }
 
+/**
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxSlideOutItem extends CollectionWidgetItem {
     /**
-     * @docid dxSlideOutItem.menuTemplate
-     * @type template|function
+     * @docid
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -1,5 +1,5 @@
 import {
-    dxBaseGauge,
+    BaseGauge,
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
     BaseGaugeScale,
@@ -9,37 +9,47 @@ import {
 
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
-     * @docid dxCircularGaugeOptions.geometry
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    geometry?: { endAngle?: number, startAngle?: number };
+    geometry?: {
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 315
+       */
+      endAngle?: number,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @default 225
+       */
+      startAngle?: number
+    };
     /**
-     * @docid dxCircularGaugeOptions.rangeContainer
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
+     * @type object
      * @public
      */
     rangeContainer?: dxCircularGaugeRangeContainer;
     /**
-     * @docid dxCircularGaugeOptions.scale
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     scale?: dxCircularGaugeScale;
     /**
-     * @docid dxCircularGaugeOptions.subvalueIndicator
-     * @type GaugeIndicator
+     * @docid
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     subvalueIndicator?: GaugeIndicator;
     /**
-     * @docid dxCircularGaugeOptions.valueIndicator
-     * @type GaugeIndicator
+     * @docid
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -57,7 +67,6 @@ export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
     orientation?: 'center' | 'inside' | 'outside';
     /**
      * @docid dxCircularGaugeOptions.rangeContainer.width
-     * @type number
      * @default 5
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -92,7 +101,6 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     hideFirstOrLast?: 'first' | 'last';
     /**
      * @docid dxCircularGaugeOptions.scale.label.indentFromTick
-     * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -100,14 +108,14 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     indentFromTick?: number;
 }
 /**
- * @docid dxCircularGauge
+ * @docid
  * @inherits BaseGauge
  * @module viz/circular_gauge
  * @export default
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxCircularGauge extends dxBaseGauge {
+export default class dxCircularGauge extends BaseGauge {
     constructor(element: Element, options?: dxCircularGaugeOptions)
     constructor(element: JQuery, options?: dxCircularGaugeOptions)
 }

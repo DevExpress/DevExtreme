@@ -29,7 +29,7 @@ import type {
   CompareRule,
   EmailRule,
   AsyncRule,
-} from '../../../ui/validation_engine';
+} from '../../../ui/validation_rules.d';
 import type { format } from '../../../ui/widget/ui.widget';
 import type dxSortable from '../../../ui/sortable';
 import type dxDraggable from '../../../ui/draggable';

@@ -2,7 +2,7 @@
 export type PaletteType = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
 export type PaletteExtensionModeType = 'alternate' | 'blend' | 'extrapolate';
 /**
- * @docid vizmethods.currentPalette
+ * @docid viz.currentPalette
  * @publicName currentPalette()
  * @return string
  * @static
@@ -14,7 +14,7 @@ export type PaletteExtensionModeType = 'alternate' | 'blend' | 'extrapolate';
 export function currentPalette(): string;
 
 /**
- * @docid vizmethods.currentPalette
+ * @docid viz.currentPalette
  * @publicName currentPalette(paletteName)
  * @param1 paletteName:string
  * @static
@@ -26,7 +26,7 @@ export function currentPalette(): string;
 export function currentPalette(paletteName: string): void;
 
 /**
- * @docid vizmethods.generateColors
+ * @docid viz.generateColors
  * @publicName generateColors(palette, count, options)
  * @param1 palette:Enums.VizPalette|Array<string>
  * @param2 count:number
@@ -43,7 +43,7 @@ export function currentPalette(paletteName: string): void;
 export function generateColors(palette: PaletteType | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionModeType, baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
 
 /**
- * @docid vizmethods.getPalette
+ * @docid viz.getPalette
  * @publicName getPalette(paletteName)
  * @param1 paletteName:string
  * @return object
@@ -56,7 +56,7 @@ export function generateColors(palette: PaletteType | Array<string>, count: numb
 export function getPalette(paletteName: string): any;
 
 /**
- * @docid vizmethods.registerPalette
+ * @docid viz.registerPalette
  * @publicName registerPalette(paletteName, palette)
  * @param1 paletteName:string
  * @param2 palette:object

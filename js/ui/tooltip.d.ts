@@ -5,7 +5,7 @@ import dxPopover, {
 export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
 }
 /**
- * @docid dxTooltip
+ * @docid
  * @inherits dxPopover
  * @hasTranscludedContent
  * @module ui/tooltip

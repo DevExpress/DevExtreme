@@ -284,6 +284,14 @@ Tooltip.prototype = {
         return this.plaque.clear().draw(parameters);
     },
 
+    isCursorOnTooltip: function(x, y) {
+        if(this._options.interactive && this.isEnabled()) {
+            const box = this.plaque.getBBox();
+            return x > box.x && x < box.x + box.width && y > box.y && y < box.y + box.height;
+        }
+        return false;
+    },
+
     hide: function() {
         const that = this;
         hideElement(that._wrapper);

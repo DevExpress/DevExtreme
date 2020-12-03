@@ -1760,6 +1760,60 @@ module('Appointments', {
         assert.ok(instance._appointments._isRepaintAll(), 'Full repaint flag is set');
     });
 
+    [
+        {
+            groupOrientation: 'horizontal',
+            expectedReducers: [true, true, true, true, false, false]
+        }, {
+            groupOrientation: 'vertical',
+            expectedReducers: [true, true, false]
+        }
+    ].forEach(option => {
+        test(`A regular virtual reccurrent appointment should not have a reducer icon if ${option.groupOrientation} group orientation`, function(assert) {
+            this.createInstance({
+                dataSource: [{
+                    text: 'Appointment 1',
+                    startDate: new Date(2020, 10, 6, 9, 30),
+                    endDate: new Date(2020, 10, 7, 9, 20),
+                    recurrenceRule: 'FREQ=DAILY',
+                    ownerId: [1, 2]
+                }],
+                currentDate: new Date(2020, 10, 5),
+                views: [{
+                    type: 'day',
+                    groupOrientation: option.groupOrientation,
+                    cellDuration: 5,
+                    intervalCount: 3
+
+                }],
+                currentView: 'day',
+                groups: ['ownerId'],
+                startDayHour: 9,
+                endDayHour: 16,
+                resources: [
+                    {
+                        field: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'one' },
+                            { id: 2, text: 'two' }
+                        ]
+                    }
+                ],
+                scrolling: {
+                    mode: 'virtual'
+                }
+            });
+
+            const { expectedReducers } = option;
+            const appointments = this.scheduler.instance.getAppointmentsInstance();
+            const { settings } = appointments.option('items')[0];
+
+            assert.equal(settings.length, expectedReducers.length, 'Appointment settings amount is correct');
+            expectedReducers.forEach((expected, i) => {
+                assert.equal(!!settings[i].appointmentReduced, expected, `Part ${i} has correct reducer state`);
+            });
+        });
+    });
 
     ['vertical', 'horizontal'].forEach(groupOrientation => {
         test(`Created appointments should be fully repainted in ${groupOrientation} group orientation`, function(assert) {

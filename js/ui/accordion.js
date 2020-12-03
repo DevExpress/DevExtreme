@@ -105,11 +105,6 @@ const Accordion = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-        /**
-        * @name dxAccordionItem
-        * @inherits CollectionWidgetItem
-        * @type object
-        */
         this._templateManager.addDefaultTemplates({
             title: new BindableTemplate(function($container, data) {
                 if(isPlainObject(data)) {

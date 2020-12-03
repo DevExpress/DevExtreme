@@ -9,7 +9,7 @@ import { exportPivotGrid } from 'excel_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
-import { ExcelJSOptionTests } from './exceljs.option.tests.js';
+import { ExcelJSOptionTests } from './exceljs.options.tests.js';
 import browser from 'core/utils/browser';
 
 import typeUtils from 'core/utils/type';

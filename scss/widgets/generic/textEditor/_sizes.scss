@@ -5,9 +5,9 @@
 $generic-texteditor-clear-icon-oversize: null !default;
 
 @if $size == "default" {
-  $generic-texteditor-clear-icon-oversize: 2px;
+  $generic-texteditor-clear-icon-oversize: 2px !default;
 }
 
 @else if $size == "compact" {
-  $generic-texteditor-clear-icon-oversize: 1px;
+  $generic-texteditor-clear-icon-oversize: 1px !default;
 }

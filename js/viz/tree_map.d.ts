@@ -22,6 +22,7 @@ import {
 } from '../events/index';
 
 import BaseWidget, {
+    BaseWidgetMargin,
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
@@ -31,76 +32,231 @@ import BaseWidget, {
 
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
-     * @docid dxTreeMapOptions.childrenField
-     * @type string
+     * @docid
      * @default 'items'
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     childrenField?: string;
     /**
-     * @docid dxTreeMapOptions.colorField
-     * @type string
+     * @docid
      * @default 'color'
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     colorField?: string;
     /**
-     * @docid dxTreeMapOptions.colorizer
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    colorizer?: { colorCodeField?: string, colorizeGroups?: boolean, palette?: Array<string> | PaletteType, paletteExtensionMode?: PaletteExtensionModeType, range?: Array<number>, type?: 'discrete' | 'gradient' | 'none' | 'range' };
+    colorizer?: {
     /**
-     * @docid dxTreeMapOptions.dataSource
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default undefined
+      */
+      colorCodeField?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default false
+      */
+      colorizeGroups?: boolean,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @extends CommonVizPalette
+      * @type Array<string>|Enums.VizPalette
+      */
+      palette?: Array<string> | PaletteType,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @type Enums.VizPaletteExtensionMode
+      * @default 'blend'
+      */
+      paletteExtensionMode?: PaletteExtensionModeType,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default undefined
+      */
+      range?: Array<number>,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @type Enums.TreeMapColorizerType
+      * @default undefined
+      */
+      type?: 'discrete' | 'gradient' | 'none' | 'range'
+    };
+    /**
+     * @docid
      * @extends CommonVizDataSource
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     dataSource?: Array<any> | DataSource | DataSourceOptions | string;
     /**
-     * @docid dxTreeMapOptions.group
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: VizTextOverflowType, visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
+    group?: {
     /**
-     * @docid dxTreeMapOptions.hoverEnabled
-     * @type boolean
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      */
+      border?: {
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default "#d3d3d3"
+        */
+        color?: string,
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default 1
+        */
+        width?: number
+      },
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default "#eeeeee"
+      */
+      color?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+     * @default undefined
+      */
+      headerHeight?: number,
+      /**
+      * @docid
+     * @prevFileNamespace DevExpress.viz
+      * @default undefined
+      */
+      hoverEnabled?: boolean,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      */
+      hoverStyle?: {
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        */
+        border?: {
+          /**
+          * @docid
+          * @prevFileNamespace DevExpress.viz
+          * @default undefined
+          */
+          color?: string,
+          /**
+          * @docid
+          * @prevFileNamespace DevExpress.viz
+          * @default undefined
+          */
+          width?: number
+        },
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default undefined
+        */
+        color?: string
+      },
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      */
+      label?: {
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default '#767676' [prop](color)
+        * @default 600 [prop](weight)
+        */
+        font?: Font,
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @type Enums.VizTextOverflow
+        * @default "ellipsis"
+        */
+        textOverflow?: VizTextOverflowType,
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default true
+        */
+        visible?: boolean
+      },
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      */
+      selectionStyle?: {
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        */
+        border?: {
+          /**
+          * @docid
+          * @prevFileNamespace DevExpress.viz
+          * @default "#232323"
+          */
+          color?: string,
+          /**
+          * @docid
+          * @prevFileNamespace DevExpress.viz
+          * @default undefined
+          */
+          width?: number
+        },
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default undefined
+        */
+        color?: string
+      }
+    };
+    /**
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hoverEnabled?: boolean;
     /**
-     * @docid dxTreeMapOptions.idField
-     * @type string
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     idField?: string;
     /**
-     * @docid dxTreeMapOptions.interactWithGroup
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     interactWithGroup?: boolean;
     /**
-     * @docid dxTreeMapOptions.labelField
-     * @type string
+     * @docid
      * @default 'name'
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     labelField?: string;
     /**
-     * @docid dxTreeMapOptions.layoutAlgorithm
+     * @docid
      * @type Enums.TreeMapLayoutAlgorithm | function
      * @type_function_param1 e:object
      * @type_function_param1_field1 rect:Array<number>
@@ -112,7 +268,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     layoutAlgorithm?: 'sliceanddice' | 'squarified' | 'strip' | ((e: { rect?: Array<number>, sum?: number, items?: Array<any> }) => any);
     /**
-     * @docid dxTreeMapOptions.layoutDirection
+     * @docid
      * @type Enums.TreeMapLayoutDirection
      * @default 'leftTopRightBottom'
      * @prevFileNamespace DevExpress.viz
@@ -120,17 +276,22 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     layoutDirection?: 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
     /**
-     * @docid dxTreeMapOptions.maxDepth
-     * @type number
+     * @docid
+     * @type object
+     * @prevFileNamespace DevExpress.viz
+     * @hidden
+     */
+    margin?: BaseWidgetMargin;
+    /**
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     maxDepth?: number;
     /**
-     * @docid dxTreeMapOptions.onClick
+     * @docid
      * @extends Action
-     * @type function|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 node:dxTreeMapNode
@@ -141,9 +302,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     onClick?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, event?: event, node?: dxTreeMapNode }) => any) | string;
     /**
-     * @docid dxTreeMapOptions.onDrill
+     * @docid
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -153,9 +313,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     onDrill?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, node?: dxTreeMapNode }) => any);
     /**
-     * @docid dxTreeMapOptions.onHoverChanged
+     * @docid
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -165,9 +324,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     onHoverChanged?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, node?: dxTreeMapNode }) => any);
     /**
-     * @docid dxTreeMapOptions.onNodesInitialized
+     * @docid
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 root:dxTreeMapNode
      * @notUsedInTheme
@@ -177,9 +335,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     onNodesInitialized?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, root?: dxTreeMapNode }) => any);
     /**
-     * @docid dxTreeMapOptions.onNodesRendering
+     * @docid
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -189,9 +346,8 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     onNodesRendering?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, node?: dxTreeMapNode }) => any);
     /**
-     * @docid dxTreeMapOptions.onSelectionChanged
+     * @docid
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -201,15 +357,14 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     onSelectionChanged?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, node?: dxTreeMapNode }) => any);
     /**
-     * @docid dxTreeMapOptions.parentField
-     * @type string
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     parentField?: string;
     /**
-     * @docid dxTreeMapOptions.selectionMode
+     * @docid
      * @type Enums.SelectionMode
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -217,22 +372,138 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     selectionMode?: 'multiple' | 'none' | 'single';
     /**
-     * @docid dxTreeMapOptions.tile
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tile?: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: VizTextOverflowType, visible?: boolean, wordWrap?: WordWrapType }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
+    tile?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      */
+      border?: {
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default "#000000"
+        */
+        color?: string,
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default 1
+        */
+        width?: number
+      },
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default "#$5f8b95"
+      */
+      color?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      */
+      hoverStyle?: {
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        */
+        border?: {
+          /**
+          * @docid
+          * @prevFileNamespace DevExpress.viz
+          * @default undefined
+          */
+          color?: string,
+          /**
+          * @docid
+          * @prevFileNamespace DevExpress.viz
+          * @default undefined
+          */
+          width?: number
+        },
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default undefined
+        */
+        color?: string
+      },
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      */
+      label?: {
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default '#FFFFFF' [prop](color)
+        * @default 300 [prop](weight)
+        */
+        font?: Font,
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @type Enums.VizTextOverflow
+        * @default "ellipsis"
+        */
+        textOverflow?: VizTextOverflowType,
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @defaultValue true
+        */
+        visible?: boolean,
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @type Enums.VizWordWrap
+        * @default "normal"
+        */
+        wordWrap?: WordWrapType
+      },
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      */
+      selectionStyle?: {
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        */
+        border?: {
+          /**
+          * @docid
+          * @prevFileNamespace DevExpress.viz
+          * @default "#232323"
+          */
+          color?: string,
+          /**
+          * @docid
+          * @prevFileNamespace DevExpress.viz
+          * @default undefined
+          */
+          width?: number
+        },
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.viz
+        * @default undefined
+        */
+        color?: string
+      }
+    };
     /**
-     * @docid dxTreeMapOptions.tooltip
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     tooltip?: dxTreeMapTooltip;
     /**
-     * @docid dxTreeMapOptions.valueField
-     * @type string
+     * @docid
      * @default 'value'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -242,7 +513,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
 export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.contentTemplate
-     * @type template|function(info, element)
      * @type_function_param1 info:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
@@ -257,7 +527,6 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type function(info)
      * @type_function_param1 info:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
@@ -269,7 +538,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     customizeTooltip?: ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }) => any);
 }
 /**
- * @docid dxTreeMap
+ * @docid
  * @inherits BaseWidget, DataHelperMixin
  * @module viz/tree_map
  * @export default
@@ -280,21 +549,21 @@ export default class dxTreeMap extends BaseWidget {
     constructor(element: Element, options?: dxTreeMapOptions)
     constructor(element: JQuery, options?: dxTreeMapOptions)
     /**
-     * @docid dxTreeMapMethods.clearSelection
+     * @docid
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid dxTreeMapMethods.drillUp
+     * @docid
      * @publicName drillUp()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     drillUp(): void;
     /**
-     * @docid dxTreeMapMethods.getCurrentNode
+     * @docid
      * @publicName getCurrentNode()
      * @return dxTreeMapNode
      * @prevFileNamespace DevExpress.viz
@@ -303,7 +572,7 @@ export default class dxTreeMap extends BaseWidget {
     getCurrentNode(): dxTreeMapNode;
     getDataSource(): DataSource;
     /**
-     * @docid dxTreeMapMethods.getRootNode
+     * @docid
      * @publicName getRootNode()
      * @return dxTreeMapNode
      * @prevFileNamespace DevExpress.viz
@@ -311,14 +580,14 @@ export default class dxTreeMap extends BaseWidget {
      */
     getRootNode(): dxTreeMapNode;
     /**
-     * @docid dxTreeMapMethods.hideTooltip
+     * @docid
      * @publicName hideTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideTooltip(): void;
     /**
-     * @docid dxTreeMapMethods.resetDrillDown
+     * @docid
      * @publicName resetDrillDown()
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -326,9 +595,13 @@ export default class dxTreeMap extends BaseWidget {
     resetDrillDown(): void;
 }
 
+/**
+* @docid
+* @publicName Node
+*/
 export interface dxTreeMapNode {
     /**
-     * @docid dxTreeMapNodeMethods.customize
+     * @docid
      * @publicName customize(options)
      * @param1 options:object
      * @prevFileNamespace DevExpress.viz
@@ -336,21 +609,20 @@ export interface dxTreeMapNode {
      */
     customize(options: any): void;
     /**
-     * @docid dxTreeMapNodeFields.data
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     data?: any;
     /**
-     * @docid dxTreeMapNodeMethods.drillDown
+     * @docid
      * @publicName drillDown()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     drillDown(): void;
     /**
-     * @docid dxTreeMapNodeMethods.getAllChildren
+     * @docid
      * @publicName getAllChildren()
      * @return Array<dxTreeMapNode>
      * @prevFileNamespace DevExpress.viz
@@ -358,7 +630,7 @@ export interface dxTreeMapNode {
      */
     getAllChildren(): Array<dxTreeMapNode>;
     /**
-     * @docid dxTreeMapNodeMethods.getAllNodes
+     * @docid
      * @publicName getAllNodes()
      * @return Array<dxTreeMapNode>
      * @prevFileNamespace DevExpress.viz
@@ -366,7 +638,7 @@ export interface dxTreeMapNode {
      */
     getAllNodes(): Array<dxTreeMapNode>;
     /**
-     * @docid dxTreeMapNodeMethods.getChild
+     * @docid
      * @publicName getChild(index)
      * @param1 index:number
      * @return dxTreeMapNode
@@ -375,7 +647,7 @@ export interface dxTreeMapNode {
      */
     getChild(index: number): dxTreeMapNode;
     /**
-     * @docid dxTreeMapNodeMethods.getChildrenCount
+     * @docid
      * @publicName getChildrenCount()
      * @return number
      * @prevFileNamespace DevExpress.viz
@@ -383,7 +655,7 @@ export interface dxTreeMapNode {
      */
     getChildrenCount(): number;
     /**
-     * @docid dxTreeMapNodeMethods.getParent
+     * @docid
      * @publicName getParent()
      * @return dxTreeMapNode
      * @prevFileNamespace DevExpress.viz
@@ -391,14 +663,13 @@ export interface dxTreeMapNode {
      */
     getParent(): dxTreeMapNode;
     /**
-     * @docid dxTreeMapNodeFields.index
-     * @type number
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     index?: number;
     /**
-     * @docid dxTreeMapNodeMethods.isActive
+     * @docid
      * @publicName isActive()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -406,7 +677,7 @@ export interface dxTreeMapNode {
      */
     isActive(): boolean;
     /**
-     * @docid dxTreeMapNodeMethods.isHovered
+     * @docid
      * @publicName isHovered()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -414,7 +685,7 @@ export interface dxTreeMapNode {
      */
     isHovered(): boolean;
     /**
-     * @docid dxTreeMapNodeMethods.isleaf
+     * @docid
      * @publicName isLeaf()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -422,7 +693,7 @@ export interface dxTreeMapNode {
      */
     isLeaf(): boolean;
     /**
-     * @docid dxTreeMapNodeMethods.isSelected
+     * @docid
      * @publicName isSelected()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -430,7 +701,7 @@ export interface dxTreeMapNode {
      */
     isSelected(): boolean;
     /**
-     * @docid dxTreeMapNodeMethods.label
+     * @docid
      * @publicName label()
      * @return string
      * @prevFileNamespace DevExpress.viz
@@ -438,7 +709,7 @@ export interface dxTreeMapNode {
      */
     label(): string;
     /**
-     * @docid dxTreeMapNodeMethods.label
+     * @docid
      * @publicName label(label)
      * @param1 label:string
      * @prevFileNamespace DevExpress.viz
@@ -446,21 +717,20 @@ export interface dxTreeMapNode {
      */
     label(label: string): void;
     /**
-     * @docid dxTreeMapNodeFields.level
-     * @type number
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     level?: number;
     /**
-     * @docid dxTreeMapNodeMethods.resetCustomization
+     * @docid
      * @publicName resetCustomization()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     resetCustomization(): void;
     /**
-     * @docid dxTreeMapNodeMethods.select
+     * @docid
      * @publicName select(state)
      * @param1 state:boolean
      * @prevFileNamespace DevExpress.viz
@@ -468,14 +738,14 @@ export interface dxTreeMapNode {
      */
     select(state: boolean): void;
     /**
-     * @docid dxTreeMapNodeMethods.showTooltip
+     * @docid
      * @publicName showTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTooltip(): void;
     /**
-     * @docid dxTreeMapNodeMethods.value
+     * @docid
      * @publicName value()
      * @return number
      * @prevFileNamespace DevExpress.viz

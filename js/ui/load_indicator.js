@@ -217,13 +217,13 @@ const LoadIndicator = Widget.inherit({
     }
 
     /**
-    * @name dxLoadIndicatorMethods.registerKeyHandler
+    * @name dxLoadIndicator.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxLoadIndicatorMethods.focus
+    * @name dxLoadIndicator.focus
     * @publicName focus()
     * @hidden
     */

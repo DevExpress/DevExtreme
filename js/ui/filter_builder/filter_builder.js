@@ -80,50 +80,15 @@ const FilterBuilder = Widget.inherit({
 
             onEditorPrepared: null,
 
-            /**
-            * @name dxFilterBuilderField
-            * @type object
-            */
-
             onValueChanged: null,
 
             fields: [],
-
-
-            /**
-             * @name dxFilterBuilderField.lookup.dataSource
-             * @type Array<any>|DataSourceOptions|Store
-             * @default undefined
-             */
-
-            /**
-             * @name dxFilterBuilderField.lookup.valueExpr
-             * @type string|function(data)
-             * @default undefined
-             * @type_function_param1 data:object
-             * @type_function_return string|number|boolean
-             */
-
-            /**
-             * @name dxFilterBuilderField.lookup.displayExpr
-             * @type string|function(data)
-             * @default undefined
-             * @type_function_param1 data:object
-             * @type_function_return string
-             */
-
-            /**
-             * @name dxFilterBuilderField.lookup.allowClearing
-             * @type boolean
-             * @default false
-             */
 
             /**
              * @name dxFilterBuilderField.defaultFilterOperation
              * @type Enums.FilterBuilderFieldFilterOperations | string
              * @hidden
              */
-
 
             /**
             * @name dxFilterBuilderOptions.defaultGroupOperation
@@ -142,29 +107,9 @@ const FilterBuilder = Widget.inherit({
             allowHierarchicalFields: false,
 
             groupOperationDescriptions: {
-                /**
-                 * @name dxFilterBuilderOptions.groupOperationDescriptions.and
-                 * @type string
-                 * @default "And"
-                 */
                 and: messageLocalization.format('dxFilterBuilder-and'),
-                /**
-                 * @name dxFilterBuilderOptions.groupOperationDescriptions.or
-                 * @type string
-                 * @default "Or"
-                 */
                 or: messageLocalization.format('dxFilterBuilder-or'),
-                /**
-                 * @name dxFilterBuilderOptions.groupOperationDescriptions.notAnd
-                 * @type string
-                 * @default "Not And"
-                 */
                 notAnd: messageLocalization.format('dxFilterBuilder-notAnd'),
-                /**
-                 * @name dxFilterBuilderOptions.groupOperationDescriptions.notOr
-                 * @type string
-                 * @default "Not Or"
-                 */
                 notOr: messageLocalization.format('dxFilterBuilder-notOr'),
             },
 
@@ -172,90 +117,19 @@ const FilterBuilder = Widget.inherit({
 
             closePopupOnTargetScroll: true,
 
-            /**
-             * @name dxFilterBuilderCustomOperation
-             * @type object
-             */
-
-
             filterOperationDescriptions: {
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.between
-                 * @type string
-                 * @default "Between"
-                 */
                 between: messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.equal
-                 * @type string
-                 * @default "Equals"
-                 */
                 equal: messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.notEqual
-                 * @type string
-                 * @default "Does not equal"
-                 */
                 notEqual: messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.lessThan
-                 * @type string
-                 * @default "Less than"
-                 */
                 lessThan: messageLocalization.format('dxFilterBuilder-filterOperationLess'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.lessThanOrEqual
-                 * @type string
-                 * @default "Less than or equal to"
-                 */
                 lessThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.greaterThan
-                 * @type string
-                 * @default "Greater than"
-                 */
                 greaterThan: messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.greaterThanOrEqual
-                 * @type string
-                 * @default "Greater than or equal to"
-                 */
                 greaterThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.startsWith
-                 * @type string
-                 * @default "Starts with"
-                 */
                 startsWith: messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.contains
-                 * @type string
-                 * @default "Contains"
-                 */
                 contains: messageLocalization.format('dxFilterBuilder-filterOperationContains'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.notContains
-                 * @type string
-                 * @default "Does not contain"
-                 */
                 notContains: messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.endsWith
-                 * @type string
-                 * @default "Ends with"
-                 */
                 endsWith: messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.isBlank
-                 * @type string
-                 * @default "Is blank"
-                 */
                 isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.isNotBlank
-                 * @type string
-                 * @default "Is not blank"
-                 */
                 isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank')
             }
         });
