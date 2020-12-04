@@ -54,6 +54,7 @@ $scheduler-header-panel-table-cell-height: $scheduler-workspace-date-table-cell-
   position: absolute;
   top: 0;
   pointer-events: none;
+  z-index: 1000;
 }
 
 .dx-scheduler-work-space-week,
