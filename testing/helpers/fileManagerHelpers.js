@@ -50,6 +50,7 @@ export const Consts = {
     TOOLBAR_SEPARATOR_ITEM: 'dx-filemanager-toolbar-separator-item',
     DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
+    FOLDER_CHOOSER_DIALOG_CLASS: 'dx-filemanager-dialog-folder-chooser-popup',
     POPUP_NORMAL_CLASS: 'dx-popup-normal',
     POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
     BUTTON_CLASS: 'dx-button',
@@ -435,6 +436,10 @@ export class FileManagerWrapper {
 
     getSplitter() {
         return this._$element.find(`.${Consts.SPLITTER_CLASS}`);
+    }
+
+    getFolderChooserDialog() {
+        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
     }
 
     getDialogTextInput() {
