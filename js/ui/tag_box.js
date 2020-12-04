@@ -1254,6 +1254,7 @@ const TagBox = SelectBox.inherit({
     _searchHandler: function(e) {
         if(this.option('searchEnabled') && !!e && !this._isTagRemoved) {
             this.callBase(e);
+            this._setListDataSourceFilter();
         }
 
         this._updateWidgetHeight();
