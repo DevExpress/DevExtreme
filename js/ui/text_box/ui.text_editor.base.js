@@ -83,11 +83,6 @@ const TextEditorBase = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxTextEditorButton
-            * @type object
-            */
-
             buttons: void 0,
 
             value: '',

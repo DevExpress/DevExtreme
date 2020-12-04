@@ -570,7 +570,7 @@ QUnit.test('getDataSource method', function(assert) {
     assert.ok(map.getLayers()[0].getDataSource() instanceof DataSource);
 });
 
-QUnit.test('Bounds calculation', function(assert) {
+QUnit.test('Bounds calculation. polygon', function(assert) {
     const map = this.createLayers({
         dataSource: createData('Polygon', [
             [
@@ -587,4 +587,21 @@ QUnit.test('Bounds calculation', function(assert) {
     const bounds = map.getLayers()[0].getBounds();
 
     assert.deepEqual(bounds, [0, 0, 400, 300]);
+});
+
+QUnit.test('Bounds calculation. multipolygon', function(assert) {
+    const map = this.createLayers({
+        dataSource: createData('MultiPolygon', [
+            [[
+                [
+                    [50, 0],
+                    [3, 10]
+                ]
+            ]]
+        ])
+    });
+
+    const bounds = map.getLayers()[0].getBounds();
+
+    assert.deepEqual(bounds, [3, 0, 50, 10]);
 });

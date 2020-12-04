@@ -8,7 +8,7 @@ import {
 
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**
-     * @docid dxSliderOptions.value
+     * @docid
      * @default 50
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -16,7 +16,7 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     value?: number;
 }
 /**
- * @docid dxSlider
+ * @docid
  * @isEditor
  * @inherits dxSliderBase
  * @module ui/slider
@@ -37,66 +37,113 @@ export default class dxSlider extends dxTrackBar {
  */
 export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     /**
-     * @docid dxSliderBaseOptions.activeStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxSliderBaseOptions.focusStateEnabled
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxSliderBaseOptions.hoverStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxSliderBaseOptions.keyStep
+     * @docid
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyStep?: number;
     /**
-     * @docid dxSliderBaseOptions.label
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    label?: { format?: format, position?: 'bottom' | 'top', visible?: boolean };
+    label?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default function(value) { return value }
+      */
+      format?: format,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @type Enums.VerticalEdge
+      * @default 'bottom'
+      */
+      position?: 'bottom' | 'top',
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default false
+      */
+      visible?: boolean
+    };
     /**
-     * @docid dxSliderBaseOptions.name
+     * @docid
      * @hidden false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid dxSliderBaseOptions.showRange
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showRange?: boolean;
     /**
-     * @docid dxSliderBaseOptions.step
+     * @docid
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     step?: number;
     /**
-     * @docid dxSliderBaseOptions.tooltip
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tooltip?: { enabled?: boolean, format?: format, position?: 'bottom' | 'top', showMode?: 'always' | 'onHover' };
+    tooltip?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default false
+      */
+      enabled?: boolean,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default function(value) { return value }
+      */
+      format?: format,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @type Enums.VerticalEdge
+      * @default 'top'
+      */
+      position?: 'bottom' | 'top',
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @type Enums.SliderTooltipShowMode
+      * @default 'onHover'
+      */
+      showMode?: 'always' | 'onHover'
+    };
 }
 
 declare global {

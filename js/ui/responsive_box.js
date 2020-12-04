@@ -24,48 +24,7 @@ const ResponsiveBox = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxResponsiveBoxOptions.rows.baseSize
-            * @type number | Enums.Mode
-            * @default 0
-            */
-            /**
-            * @name dxResponsiveBoxOptions.rows.shrink
-            * @type number
-            * @default 1
-            */
-            /**
-            * @name dxResponsiveBoxOptions.rows.ratio
-            * @type number
-            * @default 1
-            */
-            /**
-            * @name dxResponsiveBoxOptions.rows.screen
-            * @type string
-            * @default undefined
-            */
             rows: [],
-
-            /**
-            * @name dxResponsiveBoxOptions.cols.baseSize
-            * @type number | Enums.Mode
-            * @default 0
-            */
-            /**
-            * @name dxResponsiveBoxOptions.cols.shrink
-            * @type number
-            * @default 1
-            */
-            /**
-            * @name dxResponsiveBoxOptions.cols.ratio
-            * @type number
-            * @default 1
-            */
-            /**
-            * @name dxResponsiveBoxOptions.cols.screen
-            * @type string
-            * @default undefined
-            */
             cols: [],
 
             screenByWidth: null,
@@ -700,34 +659,6 @@ const ResponsiveBox = CollectionWidget.inherit({
     * @hidden
     */
 });
-/**
-* @name dxResponsiveBoxItem
-* @inherits CollectionWidgetItem
-* @type object
-*/
-/**
-* @name dxResponsiveBoxItem.location.row
-* @type number
-*/
-/**
-* @name dxResponsiveBoxItem.location.col
-* @type number
-*/
-/**
-* @name dxResponsiveBoxItem.location.rowspan
-* @type number
-* @default undefined
-*/
-/**
-* @name dxResponsiveBoxItem.location.colspan
-* @type number
-* @default undefined
-*/
-/**
-* @name dxResponsiveBoxItem.location.screen
-* @type string
-* @default undefined
-*/
 
 registerComponent('dxResponsiveBox', ResponsiveBox);
 

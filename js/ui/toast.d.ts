@@ -17,23 +17,23 @@ import dxOverlay, {
 
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
-     * @docid dxToastOptions.animation
-     * @type object
+     * @docid
      * @default { show: { type: "fade", duration: 400, from: 0, to: 1 }, hide: { type: "fade", duration: 400, to: 0 } }
      * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} [for](Android)
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type object
      */
     animation?: dxToastAnimation;
     /**
-     * @docid dxToastOptions.closeOnClick
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     closeOnClick?: boolean;
     /**
-     * @docid dxToastOptions.closeOnOutsideClick
+     * @docid
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @default true [for](Android)
@@ -42,14 +42,14 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      */
     closeOnOutsideClick?: boolean | ((event: event) => boolean);
     /**
-     * @docid dxToastOptions.closeOnSwipe
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     closeOnSwipe?: boolean;
     /**
-     * @docid dxToastOptions.displayTime
+     * @docid
      * @default 2000
      * @default 4000 [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -57,7 +57,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      */
     displayTime?: number;
     /**
-     * @docid dxToastOptions.height
+     * @docid
      * @type_function_return number|string
      * @default 'auto'
      * @prevFileNamespace DevExpress.ui
@@ -65,7 +65,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxToastOptions.maxWidth
+     * @docid
      * @type_function_return number|string
      * @default 568 [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -73,14 +73,14 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      */
     maxWidth?: number | string | (() => number | string);
     /**
-     * @docid dxToastOptions.message
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid dxToastOptions.minWidth
+     * @docid
      * @type_function_return number|string
      * @default 344 [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -88,7 +88,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      */
     minWidth?: number | string | (() => number | string);
     /**
-     * @docid dxToastOptions.position
+     * @docid
      * @default "bottom center"
      * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} [for](Android)
      * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } [for](phones_on_Android)
@@ -97,14 +97,14 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      */
     position?: positionConfig | string;
     /**
-     * @docid dxToastOptions.shading
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     shading?: boolean;
     /**
-     * @docid dxToastOptions.type
+     * @docid
      * @type Enums.ToastType
      * @default 'info'
      * @prevFileNamespace DevExpress.ui
@@ -112,7 +112,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      */
     type?: 'custom' | 'error' | 'info' | 'success' | 'warning';
     /**
-     * @docid dxToastOptions.width
+     * @docid
      * @type_function_return number|string
      * @default function() {return $(window).width() * 0.8 }
      * @default 'auto' [for](Android)
@@ -139,7 +139,7 @@ export interface dxToastAnimation extends dxOverlayAnimation {
     show?: animationConfig;
 }
 /**
- * @docid dxToast
+ * @docid
  * @inherits dxOverlay
  * @module ui/toast
  * @export default

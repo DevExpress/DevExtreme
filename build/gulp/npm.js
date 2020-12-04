@@ -13,27 +13,37 @@ const MODULES = require('./modules_metadata.json');
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
-const env = require('./env-variables');
 const headerPipes = require('./header-pipes.js');
 const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 const renovationPipes = require('./renovation-pipes');
-const { ifRenovation } = require('./utils');
+const { ifRenovationPackage, packageDir, isEsmPackage, isRenovationPackage, isRegularPackage } = require('./utils');
 const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
-const renovation = env.USE_RENOVATION;
 
 const srcGlobsPattern = (path, exclude) => [
     `${path}/**/*.js`,
     `!${exclude}/**/*.*`,
     `!${path}/bundles/*.js`,
+    `!${path}/cjs/bundles/**/*`,
+    `!${path}/esm/bundles/**/*`,
     `!${path}/bundles/modules/parts/*.js`,
     `!${path}/viz/vector_map.utils/*.js`,
     `!${path}/viz/docs/*.js`
 ];
 
-const srcGlobs = srcGlobsPattern(
+const regularSrcGlobs = srcGlobsPattern(
     ctx.TRANSPILED_PROD_PATH,
+    ctx.TRANSPILED_PROD_RENOVATION_PATH
+);
+
+const esmPackageJsonGlobs = [
+    `${ctx.TRANSPILED_PROD_ESM_PATH}/**/*.json`,
+    `!${ctx.TRANSPILED_PROD_ESM_PATH}/viz/vector_map.utils/**/*`
+];
+
+const esmSrcGlobs = srcGlobsPattern(
+    ctx.TRANSPILED_PROD_ESM_PATH,
     ctx.TRANSPILED_PROD_RENOVATION_PATH
 );
 
@@ -42,10 +52,9 @@ const renovationSrcGlobs = srcGlobsPattern(
     ctx.TRANSPILED_PROD_PATH
 );
 
-const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
-
 const distGlobsPattern = (jsFolder, exclude) => [
     'artifacts/**/*.*',
+    '!artifacts/transpiled**/**/*',
     '!artifacts/npm/**/*.*',
     '!artifacts/ts/jquery*',
     '!artifacts/ts/knockout*',
@@ -67,22 +76,37 @@ const distGlobsPattern = (jsFolder, exclude) => [
     `!${jsFolder}/dx-gantt*`,
     `!${jsFolder}/dx-quill*`,
     `!${renovationPipes.TEMP_PATH}/**/*.*`,
-    `!${ctx.TRANSPILED_PROD_RENOVATION_PATH}/**/*.*`,
-    `!${ctx.TRANSPILED_PROD_PATH}/**/*.*`,
     `!${exclude}/**/*.*`,
 ];
 
-const distGlobs = distGlobsPattern(ctx.RESULT_JS_PATH, ctx.RESULT_JS_RENOVATION_PATH);
+const regularDistGlobs = distGlobsPattern(ctx.RESULT_JS_PATH, ctx.RESULT_JS_RENOVATION_PATH);
 const renovationDistGlobs = distGlobsPattern(ctx.RESULT_JS_RENOVATION_PATH, ctx.RESULT_JS_PATH);
+
+let srcGlobs = null;
+let distGlobs = null;
+
+if(isEsmPackage) {
+    srcGlobs = esmSrcGlobs;
+    distGlobs = regularDistGlobs;
+} else if(isRenovationPackage) {
+    srcGlobs = renovationSrcGlobs;
+    distGlobs = renovationDistGlobs;
+} else if(isRegularPackage) {
+    srcGlobs = regularSrcGlobs;
+    distGlobs = regularDistGlobs;
+}
+
+const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
 const addDefaultExport = lazyPipe().pipe(() =>
     through.obj((chunk, enc, callback) => {
-        const moduleName = chunk.relative.replace('.js', '').split('\\').join('/');
+        const moduleName = chunk.relative.replace('.js', '').replace(/^cjs(\/|\\)/, '').split('\\').join('/');
         const moduleMeta = MODULES.filter(({ name }) => name === moduleName)[0];
 
         if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
-            chunk.contents = Buffer.from(`${String(chunk.contents)}
-                module.exports.default = module.exports;`);
+            chunk.contents = Buffer.from(
+                `${String(chunk.contents)}module.exports.default = module.exports;`
+            );
         }
         callback(null, chunk);
     })
@@ -95,6 +119,10 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(headerPipes.starLicense())
         .pipe(compressionPipes.beautify())
         .pipe(gulp.dest(dist)),
+
+    gulp
+        .src(esmPackageJsonGlobs)
+        .pipe(gulpIf(isEsmPackage, gulp.dest(dist))),
 
     gulp
         .src(jsonGlobs)
@@ -116,7 +144,7 @@ const sources = (src, dist, distGlob) => (() => merge(
 
     gulp
         .src(distGlob)
-        .pipe(gulpIf(renovation, replace(
+        .pipe(gulpIf(isRenovationPackage, replace(
             new RegExp(renovatedComponents
                 .map(({ name }) => (`dxr${name}`))
                 .join('|'), 'g'),
@@ -129,41 +157,32 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(gulp.dest(dist))
 ));
 
+const packagePath = `${resultPath}/${packageDir}`;
 
-gulp.task('npm-sources', gulp.series(
-    'ts-sources',
-    sources(srcGlobs, `${resultPath}/devextreme`, distGlobs),
-    ifRenovation(
-        sources(renovationSrcGlobs, `${resultPath}/devextreme-renovation`, renovationDistGlobs)
-    ),
-    ifRenovation((done) =>
-        fs.rename(
-            `${resultPath}/devextreme-renovation/dist/js-renovation`,
-            `${resultPath}/devextreme-renovation/dist/js`,
-            (err) => {
-                if(err) throw err;
-                done();
-            }
-        ))
+gulp.task('npm-sources', gulp.series('ts-sources', sources(srcGlobs, packagePath, distGlobs),
+    ifRenovationPackage((done) =>
+        fs.rename(`${packagePath}/dist/js-renovation`, `${packagePath}/dist/js`, (err) => {
+            if(err) throw err;
+            done();
+        })
+    )
 ));
 
-gulp.task('npm-sass', gulp
-    .parallel(
-        () => gulp
-            .src('scss/**/*')
-            .pipe(dataUri())
-            .pipe(gulp.dest(`${resultPath}/devextreme/scss`))
-            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss`))),
+const scssDir = `${resultPath}/${packageDir}/scss`;
 
-        () => gulp
-            .src('fonts/**/*', { base: '.' })
-            .pipe(gulp.dest(`${resultPath}/devextreme/scss/widgets/material/typography`))
-            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/material/typography`))),
+gulp.task('npm-sass', gulp.parallel(
+    () => gulp
+        .src('scss/**/*')
+        .pipe(dataUri())
+        .pipe(gulp.dest(scssDir)),
 
-        () => gulp
-            .src('icons/**/*', { base: '.' })
-            .pipe(gulp.dest(`${resultPath}/devextreme/scss/widgets/base`))
-            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/base`))),
-    ));
+    () => gulp
+        .src('fonts/**/*', { base: '.' })
+        .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),
+
+    () => gulp
+        .src('icons/**/*', { base: '.' })
+        .pipe(gulp.dest(`${scssDir}/widgets/base`)),
+));
 
 gulp.task('npm', gulp.series('npm-sources', 'ts-modules-check', 'npm-sass'));

@@ -48,31 +48,6 @@ const HtmlEditor = Editor.inherit({
             customizeModules: null,
 
             formDialogOptions: null
-
-            /**
-            * @name dxHtmlEditorToolbar
-            * @type object
-            */
-
-            /**
-            * @name dxHtmlEditorToolbarItem
-            * @inherits dxToolbarItem
-            */
-
-            /**
-            * @name dxHtmlEditorVariables
-            * @type object
-            */
-
-            /**
-            * @name dxHtmlEditorMediaResizing
-            * @type object
-            */
-
-            /**
-            * @name dxHtmlEditorMention
-            * @type object
-            */
         });
     },
 

@@ -45,7 +45,6 @@ describe('PagerContent', () => {
       expect(widget.props()).toMatchObject({
         rtlEnabled: true,
         className: 'className',
-        visible: true,
         'rest-attribute': props.restAttributes['rest-attribute'],
       });
       expect(tree.find(Widget).instance()).toBe(widget.instance());
@@ -80,6 +79,20 @@ describe('PagerContent', () => {
         // rtlEnabled: true,
         showNavigationButtons: true,
         totalCount: 100,
+      });
+    });
+
+    it('visible = false', () => {
+      const rootElementRef = {} as HTMLDivElement;
+      const props = {
+        props: {
+          visible: false,
+          rootElementRef,
+        },
+      } as Partial<PagerContent>;
+      const widget = mount(<PagerContentComponent {...props as any} /> as any).childAt(0);
+      expect(widget.props()).toMatchObject({
+        visible: false,
       });
     });
 

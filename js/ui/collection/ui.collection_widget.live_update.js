@@ -59,7 +59,12 @@ export default CollectionWidget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems, e) {
-        e && e.changes ? this._modifyByChanges(e.changes) : this.callBase(newItems, e);
+        if(e?.changes) {
+            this._modifyByChanges(e.changes);
+        } else {
+            this.callBase(newItems, e);
+            this._refreshItemsCache();
+        }
     },
 
     _isItemEquals: function(item1, item2) {

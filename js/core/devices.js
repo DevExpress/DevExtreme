@@ -28,14 +28,6 @@ const KNOWN_UA_TABLE = {
     'desktop': 'desktop'
 };
 
-/**
-* @name Device
-* @section commonObjectStructures
-* @type object
-* @namespace DevExpress
-* @module core/devices
-* @export default
-*/
 const DEFAULT_DEVICE = {
     deviceType: 'desktop',
     platform: 'generic',

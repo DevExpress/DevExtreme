@@ -3079,7 +3079,7 @@ declare module DevExpress.ui {
         /**
          * [descr:AsyncRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /**
          * [descr:AsyncRule.validationCallback]
          */
@@ -3234,7 +3234,7 @@ declare module DevExpress.ui {
         /**
          * [descr:CompareRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:CustomRule]
@@ -3255,7 +3255,7 @@ declare module DevExpress.ui {
         /**
          * [descr:CustomRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /**
          * [descr:CustomRule.validationCallback]
          */
@@ -3415,7 +3415,7 @@ declare module DevExpress.ui {
         /**
          * [descr:EmailRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:GridBase.Options]
@@ -4436,7 +4436,7 @@ declare module DevExpress.ui {
         /**
          * [descr:NumericRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:PatternRule]
@@ -4457,7 +4457,7 @@ declare module DevExpress.ui {
         /**
          * [descr:PatternRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:RangeRule]
@@ -4486,7 +4486,7 @@ declare module DevExpress.ui {
         /**
          * [descr:RangeRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:RequiredRule]
@@ -4503,7 +4503,7 @@ declare module DevExpress.ui {
         /**
          * [descr:RequiredRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:SearchBoxMixin.Options]
@@ -4567,7 +4567,7 @@ declare module DevExpress.ui {
         /**
          * [descr:StringLengthRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:Widget.Options]
@@ -5368,7 +5368,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGrid.Options.rowTemplate]
          */
-        rowTemplate?: DevExpress.core.template | ((rowElement: DevExpress.core.dxElement, rowInfo: any) => any);
+        rowTemplate?: DevExpress.core.template | ((rowElement: DevExpress.core.dxElement, rowInfo: { key?: any, data?: any, component?: dxDataGrid, values?: Array<any>, rowIndex?: number, columns?: Array<dxDataGridColumn>, isSelected?: boolean, rowType?: string, groupIndex?: number, isExpanded?: boolean }) => any);
         /**
          * [descr:dxDataGrid.Options.scrolling]
          */
@@ -5959,7 +5959,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramAddShapeArgs.position]
          */
-        position?: any;
+        position?: { x?: number, y?: number };
         /**
          * [descr:dxDiagramAddShapeArgs.shape]
          */
@@ -6032,11 +6032,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramChangeConnectorPointsArgs.newPoints]
          */
-        newPoints?: Array<any>;
+        newPoints?: Array<{ x?: number, y?: number }>;
         /**
          * [descr:dxDiagramChangeConnectorPointsArgs.oldPoints]
          */
-        oldPoints?: Array<any>;
+        oldPoints?: Array<{ x?: number, y?: number }>;
     }
     /**
      * [descr:dxDiagramChangeConnectorTextArgs]
@@ -6087,7 +6087,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramConnector.points]
          */
-        points?: Array<any>;
+        points?: Array<{ x?: number, y?: number }>;
         /**
          * [descr:dxDiagramConnector.texts]
          */
@@ -6172,11 +6172,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramMoveShapeArgs.newPosition]
          */
-        newPosition?: Array<any>;
+        newPosition?: { x?: number, y?: number };
         /**
          * [descr:dxDiagramMoveShapeArgs.oldPosition]
          */
-        oldPosition?: Array<any>;
+        oldPosition?: { x?: number, y?: number };
         /**
          * [descr:dxDiagramMoveShapeArgs.shape]
          */
@@ -6189,11 +6189,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramResizeShapeArgs.newSize]
          */
-        newSize?: Array<any>;
+        newSize?: { height?: number, width?: number };
         /**
          * [descr:dxDiagramResizeShapeArgs.oldSize]
          */
-        oldSize?: Array<any>;
+        oldSize?: { height?: number, width?: number };
         /**
          * [descr:dxDiagramResizeShapeArgs.shape]
          */
@@ -6210,11 +6210,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramShape.position]
          */
-        position?: any;
+        position?: { x?: number, y?: number };
         /**
          * [descr:dxDiagramShape.size]
          */
-        size?: any;
+        size?: { height?: number, width?: number };
         /**
          * [descr:dxDiagramShape.text]
          */

@@ -17,7 +17,8 @@ import {
 } from '../ui/widget/ui.widget';
 
 import {
-    basePointObject
+    basePointObject,
+    baseSeriesObject
 } from './chart';
 
 import {
@@ -47,43 +48,54 @@ import {
 export type PieSeriesType = 'donut' | 'doughnut' | 'pie';
 export type SegmentsDirectionType = 'anticlockwise' | 'clockwise';
 
+/**
+* @docid
+* @type object
+* @inherits BaseLegendItem
+*/
 export interface PieChartLegendItem extends BaseLegendItem {
     /**
-     * @docid PieChartLegendItem.argument
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     argument?: string | Date | number;
     /**
-     * @docid PieChartLegendItem.argumentIndex
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     argumentIndex?: number;
     /**
-     * @docid PieChartLegendItem.points
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     points?: Array<piePointObject>;
     /**
-     * @docid PieChartLegendItem.text
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     text?: any;
 }
 
+/**
+ * @docid
+ * @type object
+ * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
+ * @hidden
+ */
 export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
     /**
-     * @docid PieChartSeries.name
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     name?: string;
     /**
-     * @docid PieChartSeries.tag
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -92,14 +104,14 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
 }
 export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
-     * @docid dxPieChartOptions.adaptiveLayout
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     adaptiveLayout?: dxPieChartAdaptiveLayout;
     /**
-     * @docid dxPieChartOptions.centerTemplate
+     * @docid
      * @default undefined
      * @type_function_param1 component:dxPieChart
      * @type_function_param2 element:SVGGElement
@@ -109,7 +121,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      */
     centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | SVGElement | JQuery);
     /**
-     * @docid dxPieChartOptions.commonSeriesSettings
+     * @docid
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
      * @hideDefaults true
      * @inheritAll
@@ -118,14 +130,14 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      */
     commonSeriesSettings?: any;
     /**
-     * @docid dxPieChartOptions.diameter
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     diameter?: number;
     /**
-     * @docid dxPieChartOptions.innerRadius
+     * @docid
      * @default 0.5
      * @propertyOf dxPieChartSeriesTypes.DoughnutSeries
      * @prevFileNamespace DevExpress.viz
@@ -133,21 +145,21 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      */
     innerRadius?: number;
     /**
-     * @docid dxPieChartOptions.legend
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     legend?: dxPieChartLegend;
     /**
-     * @docid dxPieChartOptions.minDiameter
+     * @docid
      * @default 0.5
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     minDiameter?: number;
     /**
-     * @docid dxPieChartOptions.onLegendClick
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -160,7 +172,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      */
     onLegendClick?: ((e: { component?: dxPieChart, element?: dxElement, model?: any, event?: event, target?: string | number, points?: Array<piePointObject> }) => any) | string;
     /**
-     * @docid dxPieChartOptions.palette
+     * @docid
      * @extends CommonVizPalette
      * @type Array<string>|Enums.VizPalette
      * @prevFileNamespace DevExpress.viz
@@ -168,7 +180,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      */
     palette?: Array<string> | PaletteType;
     /**
-     * @docid dxPieChartOptions.resolveLabelOverlapping
+     * @docid
      * @type Enums.PieChartResolveLabelOverlapping
      * @default "none"
      * @prevFileNamespace DevExpress.viz
@@ -176,7 +188,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      */
     resolveLabelOverlapping?: 'hide' | 'none' | 'shift';
     /**
-     * @docid dxPieChartOptions.segmentsDirection
+     * @docid
      * @type Enums.PieChartSegmentsDirection
      * @default 'clockwise'
      * @prevFileNamespace DevExpress.viz
@@ -184,7 +196,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      */
     segmentsDirection?: SegmentsDirectionType;
     /**
-     * @docid dxPieChartOptions.series
+     * @docid
      * @default undefined
      * @hideDefaults true
      * @inheritAll
@@ -193,29 +205,43 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      */
     series?: PieChartSeries | Array<PieChartSeries>;
     /**
-     * @docid dxPieChartOptions.seriesTemplate
+     * @docid
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    seriesTemplate?: { customizeSeries?: ((seriesName: any) => PieChartSeries), nameField?: string };
+    seriesTemplate?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @type_function_param1 seriesName:any
+      * @type_function_return PieChartSeries
+      */
+      customizeSeries?: ((seriesName: any) => PieChartSeries),
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 'series'
+      */
+      nameField?: string
+    };
     /**
-     * @docid dxPieChartOptions.sizeGroup
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     sizeGroup?: string;
     /**
-     * @docid dxPieChartOptions.startAngle
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     startAngle?: number;
     /**
-     * @docid dxPieChartOptions.type
+     * @docid
      * @type Enums.PieChartType
      * @default 'pie'
      * @prevFileNamespace DevExpress.viz
@@ -223,20 +249,20 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      */
     type?: PieSeriesType;
     /**
-     * @docid dxPieChartOptions.annotations
+     * @docid
      * @inherits dxPieChartOptions.commonAnnotationSettings
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     annotations?: Array<dxPieChartAnnotationConfig | any>;
     /**
-     * @docid dxPieChartOptions.commonAnnotationSettings
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     commonAnnotationSettings?: dxPieChartCommonAnnotationConfig;
     /**
-     * @docid dxPieChartOptions.customizeAnnotation
+     * @docid
      * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
      * @type_function_return dxPieChartAnnotationConfig
      * @default undefined
@@ -246,9 +272,15 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      */
     customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig);
 }
+
+/**
+* @docid
+* @type object
+* @inherits dxPieChartCommonAnnotationConfig
+*/
 export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationConfig {
     /**
-     * @docid dxPieChartAnnotationConfig.name
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -256,9 +288,14 @@ export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationCo
     name?: string;
 }
 
+/**
+* @docid
+* @type object
+* @inherits BaseWidgetAnnotationConfig
+*/
 export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
-     * @docid dxPieChartCommonAnnotationConfig.location
+     * @docid
      * @type Enums.PieChartAnnotationLocation
      * @default 'center'
      * @prevFileNamespace DevExpress.viz
@@ -266,21 +303,21 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      */
     location?: 'center' | 'edge';
     /**
-     * @docid dxPieChartCommonAnnotationConfig.argument
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     argument?: number | Date | string;
     /**
-     * @docid dxPieChartCommonAnnotationConfig.series
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     series?: string;
     /**
-     * @docid dxPieChartCommonAnnotationConfig.customizeTooltip
+     * @docid
      * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
      * @type_function_return object
      * @default undefined
@@ -290,7 +327,7 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      */
     customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => any);
     /**
-     * @docid dxPieChartCommonAnnotationConfig.template
+     * @docid
      * @default undefined
      * @type_function_param1 annotation:dxPieChartCommonAnnotationConfig|any
      * @type_function_param2 element:SVGGElement
@@ -300,7 +337,7 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      */
     template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
     /**
-     * @docid dxPieChartCommonAnnotationConfig.tooltipTemplate
+     * @docid
      * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
      * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
@@ -371,7 +408,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
     markerTemplate?: template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
 }
 /**
- * @docid dxPieChart
+ * @docid
  * @inherits BaseChart
  * @module viz/pie_chart
  * @export default
@@ -382,7 +419,7 @@ export default class dxPieChart extends BaseChart {
     constructor(element: Element, options?: dxPieChartOptions)
     constructor(element: JQuery, options?: dxPieChartOptions)
     /**
-     * @docid dxPieChart.getInnerRadius
+     * @docid
      * @publicName getInnerRadius()
      * @return number
      * @prevFileNamespace DevExpress.viz
@@ -391,23 +428,27 @@ export default class dxPieChart extends BaseChart {
     getInnerRadius(): number;
 }
 
+/**
+ * @docid
+ * @type object
+ */
 export interface dxPieChartSeriesTypes {
     /**
-     * @docid dxPieChartSeriesTypes.CommonPieChartSeries
+     * @docid
      * @type object
      * @hidden
      * @prevFileNamespace DevExpress.viz
      */
     CommonPieChartSeries?: dxPieChartSeriesTypesCommonPieChartSeries;
     /**
-     * @docid dxPieChartSeriesTypes.DoughnutSeries
+     * @docid
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     DoughnutSeries?: any;
     /**
-     * @docid dxPieChartSeriesTypes.PieSeries
+     * @docid
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -435,7 +476,33 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number };
+    border?: {
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.color
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
+      color?: string,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.dashStyle
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.DashStyle
+       * @default undefined
+       */
+      dashStyle?: DashStyleType,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
+      visible?: boolean,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.width
+       * @prevFileNamespace DevExpress.viz
+       * @default 2
+       */
+      width?: number
+    };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.color
      * @default undefined
@@ -456,13 +523,210 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    hoverStyle?: { border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number } };
+    hoverStyle?: {
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border
+       * @prevFileNamespace DevExpress.viz
+       */
+      border?: {
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.color
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
+        color?: string,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.dashStyle
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.DashStyle
+         * @default undefined
+         */
+        dashStyle?: DashStyleType,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.visible
+         * @prevFileNamespace DevExpress.viz
+         * @default false
+         */
+        visible?: boolean,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.width
+         * @prevFileNamespace DevExpress.viz
+         * @default 3
+         */
+        width?: number
+      },
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
+      color?: string,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching
+       * @prevFileNamespace DevExpress.viz
+       */
+      hatching?: {
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.direction
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.HatchingDirection
+         * @default 'right'
+         */
+        direction?: HatchingDirectionType,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.opacity
+         * @prevFileNamespace DevExpress.viz
+         * @default 0.75
+         */
+        opacity?: number,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.step
+         * @prevFileNamespace DevExpress.viz
+         * @default 10
+         */
+        step?: number,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.width
+         * @prevFileNamespace DevExpress.viz
+         * @default 4
+         */
+        width?: number
+      }
+    };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    label?: { argumentFormat?: format, backgroundColor?: string, border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, connector?: { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), font?: Font, format?: format, position?: 'columns' | 'inside' | 'outside', radialOffset?: number, rotationAngle?: number, textOverflow?: VizTextOverflowType, visible?: boolean, wordWrap?: WordWrapType };
+    label?: {
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat
+       * @prevFileNamespace DevExpress.viz
+       * @extends CommonVizFormat
+       */
+      argumentFormat?: format,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.backgroundColor
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
+      backgroundColor?: string,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border
+       * @prevFileNamespace DevExpress.viz
+       */
+      border?: {
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.color
+         * @prevFileNamespace DevExpress.viz
+         * @default  '#d3d3d3'
+         */
+        color?: string,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.DashStyle
+         * @default 'solid'
+         */
+        dashStyle?: DashStyleType,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible
+         * @prevFileNamespace DevExpress.viz
+         * @default false
+         */
+        visible?: boolean,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.width
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
+        width?: number
+      },
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.connector
+       * @prevFileNamespace DevExpress.viz
+       */
+      connector?: {
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.connector.color
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
+        color?: string,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.connector.visible
+         * @prevFileNamespace DevExpress.viz
+         * @default false
+         */
+        visible?: boolean,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.connector.width
+         * @prevFileNamespace DevExpress.viz
+         * @default 1
+         */
+        width?: number
+      },
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.customizeText
+       * @prevFileNamespace DevExpress.viz
+       * @type_function_param1 pointInfo:object
+       * @type_function_return string
+       * @notUsedInTheme
+       */
+      customizeText?: ((pointInfo: any) => string),
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.font
+       * @prevFileNamespace DevExpress.viz
+       * @default '#FFFFFF' [prop](color)
+       * @default 14 [prop](size)
+       */
+      font?: Font,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.format
+       * @prevFileNamespace DevExpress.viz
+       * @extends CommonVizFormat
+       */
+      format?: format,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.position
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.PieChartLabelPosition
+       * @default 'outside'
+       */
+      position?: 'columns' | 'inside' | 'outside',
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.radialOffset
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       */
+      radialOffset?: number,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.rotationAngle
+       * @prevFileNamespace DevExpress.viz
+       * @default 0
+       */
+      rotationAngle?: number,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.textOverflow
+       * @prevFileNamespace DevExpress.viz
+       * @default 'ellipsis'
+       * @type Enums.VizTextOverflow
+       */
+      textOverflow?: VizTextOverflowType,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.visible
+       * @prevFileNamespace DevExpress.viz
+       * @default false
+       */
+      visible?: boolean,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap
+       * @prevFileNamespace DevExpress.viz
+       * @default 'normal'
+       * @type Enums.VizWordWrap
+       */
+      wordWrap?: WordWrapType
+    };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount
      * @default undefined
@@ -490,13 +754,108 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    selectionStyle?: { border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number } };
+    selectionStyle?: {
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border
+       * @prevFileNamespace DevExpress.viz
+       */
+      border?: {
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.color
+         * @prevFileNamespace DevExpress.viz
+         * @default undefined
+         */
+        color?: string,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.dashStyle
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.DashStyle
+         * @default undefined
+         */
+        dashStyle?: DashStyleType,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.visible
+         * @prevFileNamespace DevExpress.viz
+         * @default false
+         */
+        visible?: boolean,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.width
+         * @prevFileNamespace DevExpress.viz
+         * @default 3
+         */
+        width?: number
+      },
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
+      color?: string,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching
+       * @prevFileNamespace DevExpress.viz
+       */
+      hatching?: {
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.direction
+         * @prevFileNamespace DevExpress.viz
+         * @type Enums.HatchingDirection
+         * @default 'right'
+         */
+        direction?: HatchingDirectionType,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.opacity
+         * @prevFileNamespace DevExpress.viz
+         * @default 0.5
+         */
+        opacity?: number,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.step
+         * @prevFileNamespace DevExpress.viz
+         * @default 10
+         */
+        step?: number,
+        /**
+         * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.width
+         * @prevFileNamespace DevExpress.viz
+         * @default 4
+         */
+        width?: number
+      }
+    };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    smallValuesGrouping?: { groupName?: string, mode?: 'none' | 'smallValueThreshold' | 'topN', threshold?: number, topCount?: number };
+    smallValuesGrouping?: {
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.groupName
+       * @prevFileNamespace DevExpress.viz
+       * @default 'others'
+       */
+      groupName?: string,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.mode
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.SmallValuesGroupingMode
+       * @default 'none'
+       */
+      mode?: 'none' | 'smallValueThreshold' | 'topN',
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.threshold
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
+      threshold?: number,
+      /**
+       * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.topCount
+       * @prevFileNamespace DevExpress.viz
+       * @default undefined
+       */
+      topCount?: number
+    };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.tagField
      * @default 'tag'
@@ -513,16 +872,22 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     valueField?: string;
 }
 
+/**
+* @docid
+* @publicName Point
+* @type object
+* @inherits basePointObject
+*/
 export interface piePointObject extends basePointObject {
     /**
-     * @docid piePointObject.hide
+     * @docid
      * @publicName hide()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hide(): void;
     /**
-     * @docid piePointObject.isVisible
+     * @docid
      * @publicName isVisible()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -530,18 +895,48 @@ export interface piePointObject extends basePointObject {
      */
     isVisible(): boolean;
     /**
-     * @docid piePointObject.percent
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     percent?: string | number | Date;
     /**
-     * @docid piePointObject.show
+     * @docid
      * @publicName show()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     show(): void;
+}
+
+/**
+* @docid
+* @publicName Series
+* @type object
+* @inherits baseSeriesObject
+*/
+export interface pieChartSeriesObject extends baseSeriesObject {
+  /**
+   * @docid
+   * @prevFileNamespace DevExpress.viz
+   * @publicName hover()
+   * @hidden
+   */
+  hover(): void;
+  /**
+   * @docid
+   * @prevFileNamespace DevExpress.viz
+   * @publicName clearHover()
+   * @hidden
+   */
+  clearHover(): void;
+  /**
+   * @docid
+   * @prevFileNamespace DevExpress.viz
+   * @publicName isHovered()
+   * @hidden
+   */
+  isHovered(): boolean;
 }
 
 declare global {

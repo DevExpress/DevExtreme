@@ -1,0 +1,84 @@
+@use "./mixins" as *;
+
+// adduse
+
+.dx-switch {
+  display: inline-block;
+  cursor: pointer;
+
+  @include user-select(none);
+
+  -webkit-user-drag: none;
+}
+
+.dx-switch-wrapper {
+  display: inline-block;
+  text-align: left;
+  height: 100%;
+  width: 100%;
+
+  &::before {
+    display: inline-block;
+    height: 100%;
+    content: '';
+    vertical-align: middle;
+  }
+}
+
+.dx-switch-inner {
+  display: flex;
+}
+
+.dx-switch-container {
+  display: inline-block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.dx-state-disabled {
+  &.dx-switch,
+  .dx-switch {
+    cursor: default;
+  }
+}
+
+.dx-switch-inner { // stylelint-disable-line no-duplicate-selectors
+  transform: translateX(-50%);
+}
+
+.dx-switch-handle {
+  transform: translateX(0%);
+}
+
+.dx-switch-on-value {
+  .dx-switch-inner {
+    transform: translateX(0%);
+  }
+
+  .dx-switch-handle {
+    transform: translateX(-100%);
+  }
+}
+
+.dx-rtl {
+  &.dx-switch-wrapper,
+  .dx-switch-wrapper {
+    text-align: right;
+  }
+
+  .dx-switch-inner {
+    transform: translateX(50%);
+  }
+
+  .dx-switch-handle {
+    transform: translateX(-100%);
+  }
+
+  &.dx-switch-on-value {
+    .dx-switch-handle {
+      transform: translateX(0%);
+    }
+  }
+}

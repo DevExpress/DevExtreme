@@ -1,6 +1,8 @@
 import $ from 'jquery';
 
 import 'common.css!';
+import 'generic_light.css!';
+
 import 'ui/resizable';
 
 QUnit.testStart(function() {

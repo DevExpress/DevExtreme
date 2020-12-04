@@ -10,7 +10,7 @@ import {
 
 export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     /**
-     * @docid CustomStoreOptions.byKey
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -18,14 +18,14 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      */
     byKey?: ((key: any | string | number) => Promise<any> | JQueryPromise<any>);
     /**
-     * @docid CustomStoreOptions.cacheRawData
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.data
      * @public
      */
     cacheRawData?: boolean;
     /**
-     * @docid CustomStoreOptions.insert
+     * @docid
      * @type_function_param1 values:object
      * @type_function_return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -33,7 +33,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      */
     insert?: ((values: any) => Promise<any> | JQueryPromise<any>);
     /**
-     * @docid CustomStoreOptions.load
+     * @docid
      * @type_function_param1 options:LoadOptions
      * @type_function_return Promise<any>|Array<any>
      * @prevFileNamespace DevExpress.data
@@ -41,7 +41,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      */
     load?: ((options: LoadOptions) => Promise<any> | JQueryPromise<any> | Array<any>);
     /**
-     * @docid CustomStoreOptions.loadMode
+     * @docid
      * @type string
      * @default 'processed'
      * @acceptValues 'processed'|'raw'
@@ -50,7 +50,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      */
     loadMode?: 'processed' | 'raw';
     /**
-     * @docid CustomStoreOptions.remove
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_return Promise<void>
      * @prevFileNamespace DevExpress.data
@@ -58,7 +58,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      */
     remove?: ((key: any | string | number) => Promise<void> | JQueryPromise<void>);
     /**
-     * @docid CustomStoreOptions.totalCount
+     * @docid
      * @type_function_param1 loadOptions:object
      * @type_function_param1_field1 filter:object
      * @type_function_param1_field2 group:object
@@ -68,7 +68,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      */
     totalCount?: ((loadOptions: { filter?: any, group?: any }) => Promise<number> | JQueryPromise<number>);
     /**
-     * @docid CustomStoreOptions.update
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @type_function_return Promise<any>
@@ -77,7 +77,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      */
     update?: ((key: any | string | number, values: any) => Promise<any> | JQueryPromise<any>);
     /**
-     * @docid CustomStoreOptions.useDefaultSearch
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.data
      * @public
@@ -85,7 +85,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     useDefaultSearch?: boolean;
 }
 /**
- * @docid CustomStore
+ * @docid
  * @inherits Store
  * @module data/custom_store
  * @export default
@@ -95,7 +95,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
 export default class CustomStore extends Store {
     constructor(options?: CustomStoreOptions)
     /**
-     * @docid CustomStore.clearRawDataCache
+     * @docid
      * @publicName clearRawDataCache()
      * @prevFileNamespace DevExpress.data
      * @public

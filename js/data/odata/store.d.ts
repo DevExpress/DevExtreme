@@ -10,7 +10,7 @@ import {
 
 export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     /**
-     * @docid ODataStoreOptions.beforeSend
+     * @docid
      * @type_function_param1 options:object
      * @type_function_param1_field1 url:string
      * @type_function_param1_field2 async:boolean
@@ -24,13 +24,13 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      */
     beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
     /**
-     * @docid ODataStoreOptions.deserializeDates
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     deserializeDates?: boolean;
     /**
-     * @docid ODataStoreOptions.errorHandler
+     * @docid
      * @type_function_param1 e:Error
      * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
@@ -40,27 +40,27 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      */
     errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
     /**
-     * @docid ODataStoreOptions.fieldTypes
+     * @docid
      * @default {}
      * @prevFileNamespace DevExpress.data
      * @public
      */
     fieldTypes?: any;
     /**
-     * @docid ODataStoreOptions.filterToLower
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     filterToLower?: boolean;
     /**
-     * @docid ODataStoreOptions.jsonp
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public
      */
     jsonp?: boolean;
     /**
-     * @docid ODataStoreOptions.keyType
+     * @docid
      * @type string|object
      * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"
      * @prevFileNamespace DevExpress.data
@@ -68,8 +68,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      */
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
     /**
-     * @docid ODataStoreOptions.onLoading
-     * @type function(loadOptions)
+     * @docid
      * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @prevFileNamespace DevExpress.data
@@ -77,13 +76,13 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      */
     onLoading?: ((loadOptions: LoadOptions) => any);
     /**
-     * @docid ODataStoreOptions.url
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     url?: string;
     /**
-     * @docid ODataStoreOptions.version
+     * @docid
      * @default 2
      * @acceptValues 2|3|4
      * @prevFileNamespace DevExpress.data
@@ -91,7 +90,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
      */
     version?: number;
     /**
-     * @docid ODataStoreOptions.withCredentials
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public
@@ -99,7 +98,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     withCredentials?: boolean;
 }
 /**
- * @docid ODataStore
+ * @docid
  * @inherits Store
  * @module data/odata/store
  * @export default
@@ -110,7 +109,7 @@ export default class ODataStore extends Store {
     constructor(options?: ODataStoreOptions)
     byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid ODataStore.byKey
+     * @docid
      * @publicName byKey(key, extraOptions)
      * @param1 key:object|string|number
      * @param2 extraOptions:object
@@ -122,7 +121,7 @@ export default class ODataStore extends Store {
      */
     byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid ODataStore.createQuery
+     * @docid
      * @publicName createQuery(loadOptions)
      * @param1 loadOptions:object
      * @return object

@@ -5,8 +5,6 @@ import typeUtils from 'core/utils/type';
 import 'common.css!';
 import 'generic_light.css!';
 import Pager from 'ui/pager';
-import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js';
-import { RenovatedPagerForTest } from '../../helpers/renovationPagerHelper.js';
 
 const PAGER_LIGHT_MODE_WIDTH = 200;
 
@@ -23,7 +21,7 @@ function isLightMode(pager) {
     return pager.$element().hasClass('dx-light-mode');
 }
 
-QUnit.module('Pager', createRenovationModuleConfig(Pager, RenovatedPagerForTest, {
+QUnit.module('Pager', {
     beforeEach: function() {
         this.checkPages = function(pages, values, selectedValue) {
             let i;
@@ -47,7 +45,7 @@ QUnit.module('Pager', createRenovationModuleConfig(Pager, RenovatedPagerForTest,
             return true;
         };
     }
-}),
+},
 function() {
     const isRenovation = !!Pager.IS_RENOVATED_WIDGET;
     const getPagesElement = function(rootElement) {

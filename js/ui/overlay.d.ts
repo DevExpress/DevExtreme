@@ -22,17 +22,17 @@ import Widget, {
 
 export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     /**
-     * @docid dxOverlayOptions.animation
-     * @type object
+     * @docid
      * @default { show: { type: "pop", duration: 300, from: { scale: 0.55 } }, hide: { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
      * @ref
      * @default { show: { type: 'fade', duration: 400 }, hide: { type: 'fade', duration: 400, to: { opacity: 0 }, from: { opacity: 1 } }} [for](Android_below_version_4.2)
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type object
      */
     animation?: dxOverlayAnimation;
     /**
-     * @docid dxOverlayOptions.closeOnOutsideClick
+     * @docid
      * @default false
      * @type_function_param1 event:event
      * @type_function_return Boolean
@@ -41,7 +41,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     closeOnOutsideClick?: boolean | ((event: event) => boolean);
     /**
-     * @docid dxOverlayOptions.contentTemplate
+     * @docid
      * @default "content"
      * @type_function_param1 contentElement:dxElement
      * @type_function_return string|Element|jQuery
@@ -50,21 +50,21 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     contentTemplate?: template | ((contentElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxOverlayOptions.deferRendering
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
-     * @docid dxOverlayOptions.dragEnabled
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dragEnabled?: boolean;
     /**
-     * @docid dxOverlayOptions.height
+     * @docid
      * @default function() { return $(window).height() * 0.8 }
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -72,7 +72,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxOverlayOptions.maxHeight
+     * @docid
      * @default null
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -80,7 +80,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     maxHeight?: number | string | (() => number | string);
     /**
-     * @docid dxOverlayOptions.maxWidth
+     * @docid
      * @default null
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -88,7 +88,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     maxWidth?: number | string | (() => number | string);
     /**
-     * @docid dxOverlayOptions.minHeight
+     * @docid
      * @default null
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -96,7 +96,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     minHeight?: number | string | (() => number | string);
     /**
-     * @docid dxOverlayOptions.minWidth
+     * @docid
      * @default null
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -104,7 +104,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     minWidth?: number | string | (() => number | string);
     /**
-     * @docid dxOverlayOptions.onHidden
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -112,7 +112,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     onHidden?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxOverlayOptions.onHiding
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
@@ -122,7 +122,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     onHiding?: ((e: { component?: T, element?: dxElement, model?: any, cancel?: boolean }) => any);
     /**
-     * @docid dxOverlayOptions.onShowing
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -130,7 +130,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     onShowing?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxOverlayOptions.onShown
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -138,7 +138,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     onShown?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxOverlayOptions.position
+     * @docid
      * @default { my: 'center', at: 'center', of: window }
      * @fires dxOverlayOptions.onPositioning
      * @fires dxOverlayOptions.onPositioned
@@ -147,21 +147,21 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     position?: any;
     /**
-     * @docid dxOverlayOptions.shading
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     shading?: boolean;
     /**
-     * @docid dxOverlayOptions.shadingColor
+     * @docid
      * @default ''
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     shadingColor?: string;
     /**
-     * @docid dxOverlayOptions.visible
+     * @docid
      * @default false
      * @fires dxOverlayOptions.onShowing
      * @fires dxOverlayOptions.onHiding
@@ -170,7 +170,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      */
     visible?: boolean;
     /**
-     * @docid dxOverlayOptions.width
+     * @docid
      * @default function() {return $(window).width() * 0.8 }
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -195,7 +195,7 @@ export interface dxOverlayAnimation {
     show?: animationConfig;
 }
 /**
- * @docid dxOverlay
+ * @docid
  * @inherits Widget
  * @module ui/overlay
  * @hidden
@@ -205,7 +205,7 @@ export default class dxOverlay extends Widget {
     constructor(element: Element, options?: dxOverlayOptions)
     constructor(element: JQuery, options?: dxOverlayOptions)
     /**
-     * @docid dxOverlay.content
+     * @docid
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -213,7 +213,7 @@ export default class dxOverlay extends Widget {
      */
     content(): dxElement;
     /**
-     * @docid dxOverlay.hide
+     * @docid
      * @publicName hide()
      * @return Promise<boolean>
      * @prevFileNamespace DevExpress.ui
@@ -221,14 +221,14 @@ export default class dxOverlay extends Widget {
      */
     hide(): Promise<boolean> & JQueryPromise<boolean>;
     /**
-     * @docid dxOverlay.repaint
+     * @docid
      * @publicName repaint()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaint(): void;
     /**
-     * @docid dxOverlay.show
+     * @docid
      * @publicName show()
      * @return Promise<boolean>
      * @prevFileNamespace DevExpress.ui
@@ -236,7 +236,7 @@ export default class dxOverlay extends Widget {
      */
     show(): Promise<boolean> & JQueryPromise<boolean>;
     /**
-     * @docid dxOverlay.toggle
+     * @docid
      * @publicName toggle(showing)
      * @param1 showing:boolean
      * @return Promise<boolean>
