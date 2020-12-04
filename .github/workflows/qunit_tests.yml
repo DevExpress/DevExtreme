@@ -15,6 +15,9 @@ jobs:
     timeout-minutes: 60
 
     steps:
+    - name: Setup utils
+      run: |
+        apt-get install -y dbus-x11 httping x11vnc xvfb
     - name: Get sources
       uses: actions/checkout@v2
 
