@@ -25,6 +25,10 @@ export const CLASSES = {
     scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
     schedulerSmall: '.dx-scheduler-small',
 
+    calendar: 'dx-scheduler-navigator-calendar',
+    calendarToday: '.dx-calendar-today',
+    calendarSelected: '.dx-calendar-selected-date',
+
     dateTableCell: '.dx-scheduler-date-table-cell',
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
 
@@ -86,9 +90,33 @@ class NavigatorCaption extends ClickElementWrapper {
     }
 }
 
+class CalendarCell extends ClickElementWrapper {
+    get value() {
+        return parseInt(this.getElement().find('span').eq(0).text());
+    }
+}
+
+class Calendar extends ElementWrapper {
+    constructor() {
+        super(CLASSES.calendar);
+    }
+
+    get today() {
+        return new CalendarCell(CLASSES.calendarToday);
+    }
+
+    get selected() {
+        return new CalendarCell(CLASSES.calendarSelected);
+    }
+}
+
 class NavigatorPopover extends ElementWrapper {
     get isVisible() {
         return this.content.getElement().is(':visible');
+    }
+
+    get calendar() {
+        return new Calendar();
     }
 
     get content() {
@@ -314,6 +342,12 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
         this.workSpace = {
             getWorkSpace: () => $('.dx-scheduler-work-space'),
+
+            getMonthCurrentDay: () => parseInt($('.dx-scheduler-date-table-current-date > div').text()),
+            getWeekCurrentDay: () => {
+                const value = $('.dx-scheduler-header-panel-current-time-cell').text();
+                return parseInt(value.replace(/^\D+/g, ''));
+            },
 
             getDateTableScrollable: () => $('.dx-scheduler-date-table-scrollable'),
             getHeaderScrollable: () => $('.dx-scheduler-header-scrollable'),
