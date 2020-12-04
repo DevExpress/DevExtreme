@@ -152,14 +152,18 @@ function run_test {
                     --enable-features=OverlayScrollbar
                 )
             fi
+            if [ $GITHUBACTION == "true" ]; then
+                echo "$chrome_command"
+                printf '  %s\n' "${chrome_args[@]}"
+            else
+                tput setaf 6
+                echo "$chrome_command"
+                printf '  %s\n' "${chrome_args[@]}"
+                tput setaf 9
 
-            tput setaf 6
-            echo "$chrome_command"
-            printf '  %s\n' "${chrome_args[@]}"
-            tput setaf 9
-
-            google-chrome-stable --version
-            eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
+                google-chrome-stable --version
+                eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
+            fi
         ;;
 
     esac
