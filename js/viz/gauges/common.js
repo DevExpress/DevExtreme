@@ -51,6 +51,8 @@ export const dxGauge = dxBaseGauge.inherit({
             themeManager: that._themeManager
         });
         that._initScale();
+        that._subvalueIndicatorContainer = that._renderer.g().attr({ class: 'dxg-subvalue-indicators' })
+            .linkOn(that._renderer.root, 'valueIndicator').enableLinks();
     },
 
     _fontFields: [
@@ -81,6 +83,7 @@ export const dxGauge = dxBaseGauge.inherit({
 
         that._rangeContainer.dispose();
         that._disposeValueIndicators();
+        that._subvalueIndicatorContainer.linkOff();
 
         that._scale = that._scaleGroup = that._rangeContainer = null;
     },
@@ -147,6 +150,7 @@ export const dxGauge = dxBaseGauge.inherit({
 
         that._rangeContainer.render(_extend(that._getOption('rangeContainer'), { vertical: that._area.vertical }));
         that._renderScale(scaleOptions);
+        that._subvalueIndicatorContainer.linkAppend();
 
         const elements = _map([that._rangeContainer].concat(that._prepareValueIndicators()), function(element) {
             return element && element.enabled ? element : null;
@@ -268,7 +272,7 @@ export const dxGauge = dxBaseGauge.inherit({
 
     _createSubvalueIndicatorsSet: function() {
         const that = this;
-        const root = that._renderer.root;
+        const root = that._subvalueIndicatorContainer;
         return new ValueIndicatorsSet({
             createIndicator: function(type, i) {
                 return that._createIndicator(type, root, 'dxg-subvalue-indicator', 'subvalue-indicator', i);

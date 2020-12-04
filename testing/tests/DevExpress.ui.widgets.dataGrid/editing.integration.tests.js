@@ -1378,6 +1378,31 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.strictEqual($($(dataGrid.$element()).find('.dx-error-row')).length, 0, 'no errors');
     });
+
+    QUnit.test('Edit cell content should not overflow a cell (T953436)', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            dataSource: [{ id: 1, checked: true, name: 'name', description: 'description' }],
+            keyExpr: 'id',
+            selection: {
+                mode: 'multiple'
+            },
+            columns: ['checked', {
+                dataField: 'name',
+                showEditorAlways: true
+            }, 'description']
+        });
+
+        this.clock.tick();
+
+        const $dataCells = $(dataGrid.getRowElement(0)).find('td');
+
+        // assert
+        assert.equal($dataCells.length, 4, 'cells count');
+        $dataCells.each((_, cell) => {
+            assert.strictEqual($(cell).css('overflow'), 'hidden', 'overflow hidden');
+        });
+    });
 });
 
 QUnit.module('Editing', baseModuleConfig, () => {

@@ -2,7 +2,9 @@ import $ from 'jquery';
 import fx from 'animation/fx';
 
 import 'ui/progress_bar';
+
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
