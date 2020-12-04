@@ -50,7 +50,6 @@ import $ from 'jquery';
 import Class from 'core/class';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { logger } from 'core/utils/console';
-import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
@@ -62,7 +61,6 @@ import messageLocalization from 'localization/message';
 import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import fx from 'animation/fx';
 import config from 'core/config';
-import pointerMock from '../../helpers/pointerMock.js';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
@@ -314,17 +312,17 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Customize text called for column only (T653374)', function(assert) {
         createDataGrid({
             columns:
-        [
-            'field1',
-            {
-                dataField: 'field2',
-                customizeText: function(cellInfo) {
-                    // assert
-                    assert.equal(cellInfo.target, 'row');
-                    return cellInfo.valueText;
-                }
-            }
-        ],
+                [
+                    'field1',
+                    {
+                        dataField: 'field2',
+                        customizeText: function(cellInfo) {
+                            // assert
+                            assert.equal(cellInfo.target, 'row');
+                            return cellInfo.valueText;
+                        }
+                    }
+                ],
             dataSource: {
                 store: [{ field1: '1123123', field2: 123 }]
             }
@@ -334,7 +332,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('noDataText option', function(assert) {
-    // act
+        // act
         const noDataText = 'Custom no data';
         const dataGrid = $('#dataGrid').dxDataGrid({
             noDataText: noDataText
@@ -345,7 +343,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T843705
     QUnit.test('DataSource should be reset after changing remoteOperations', function(assert) {
-    // arrange
+        // arrange
         let storeLoadOptions;
         const dataSource = new DataSource({
             load: function(loadOptions) {
@@ -453,10 +451,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('#dataGrid').height(400);
         let templatesRenderedCount = 0;
         $('#dataGrid').dxDataGrid({
-            columns: [{ dataField: 'field1', cellTemplate: function(cellElement) {
-                assert.equal(typeUtils.isRenderer(cellElement), !!config().useJQuery, 'cellElement is correct');
-                templatesRenderedCount++;
-            } }],
+            columns: [{
+                dataField: 'field1', cellTemplate: function(cellElement) {
+                    assert.equal(typeUtils.isRenderer(cellElement), !!config().useJQuery, 'cellElement is correct');
+                    templatesRenderedCount++;
+                }
+            }],
             loadingTimeout: undefined,
             dataSource: {
                 store: [{ field1: '1', field2: '2' }, { field1: '3', field2: '4' }],
@@ -471,10 +471,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         let templatesRenderedCount = 0;
         // act
         const $element = $('#dataGrid').dxDataGrid({
-            columns: [{ dataField: 'field1', headerCellTemplate: function(container) {
-                assert.equal(typeUtils.isRenderer(container), !!config().useJQuery, 'headerCellElement is correct');
-                $(container).addClass('field1-header'); templatesRenderedCount++;
-            } }]
+            columns: [{
+                dataField: 'field1', headerCellTemplate: function(container) {
+                    assert.equal(typeUtils.isRenderer(container), !!config().useJQuery, 'headerCellElement is correct');
+                    $(container).addClass('field1-header'); templatesRenderedCount++;
+                }
+            }]
         });
 
         // assert
@@ -532,7 +534,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T590907
     QUnit.test('Change column width via option method', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}],
@@ -549,7 +551,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Change column width via columnOption method (T628065)', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}],
@@ -569,7 +571,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T688721, T694661
     QUnit.test('column width as string should works correctly', function(assert) {
-    // act
+        // act
         const dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
             loadingTimeout: undefined,
@@ -589,7 +591,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T833605
     QUnit.test('Indexes after option change should be normalized before onOptionChanged callback', function(assert) {
-    // arrange
+        // arrange
         let onOptionChangedCallCount = 0;
         const grid = $('#dataGrid').dxDataGrid({
             loadingTimeout: undefined,
@@ -603,7 +605,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 dataField: 'field3'
             }],
             onOptionChanged: function(e) {
-            // act
+                // act
                 onOptionChangedCallCount++;
 
                 // assert
@@ -624,7 +626,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Columns hiding - columnHidingEnabled is true', function(assert) {
-    // arrange
+        // arrange
         $('#container').width(200);
 
         const dataGrid = $('#dataGrid').dxDataGrid({
@@ -666,7 +668,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Columns hiding - hidingPriority', function(assert) {
-    // arrange
+        // arrange
         $('#container').width(200);
 
         const dataGrid = $('#dataGrid').dxDataGrid({
@@ -712,7 +714,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Columns hiding - column without priority must stay (hidingPriority)', function(assert) {
-    // arrange
+        // arrange
         $('#container').width(80);
         const dataGrid = $('#dataGrid').dxDataGrid({
             loadingTimeout: undefined,
@@ -761,7 +763,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Form item of adaptive detail row is rendered with the underscore template', function(assert) {
-    // arrange
+        // arrange
         $('#container').width(200);
 
         const data = [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }];
@@ -784,7 +786,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Get correct column and column index in the onCellHoverChanged event when event is occurred for form\'s item', function(assert) {
-    // arrange
+        // arrange
         $('#container').width(200);
 
         const dataSource = [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }];
@@ -819,7 +821,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Get correct column and column index in the onCellClick event when event is occurred for form\'s item', function(assert) {
-    // arrange
+        // arrange
         $('#container').width(200);
 
         const dataSource = [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }];
@@ -850,7 +852,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T659247
     QUnit.test('Column widths for header cells should be correctly if columnAutoWidth is enabled and banded columns are used', function(assert) {
-    // arrange
+        // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 400,
             columnAutoWidth: true,
@@ -985,7 +987,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Apply minWidth when columns have \'auto\' width but the last column hasn\'t width', function(assert) {
-    // arrange
+        // arrange
         $('#container').width(200);
 
         $('#dataGrid').dxDataGrid({
@@ -1021,7 +1023,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Disable rows hover', function(assert) {
-    // arrange
+        // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [],
             columns: [
@@ -1096,7 +1098,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Test navigateToRow method if paging', function(assert) {
-    // arrange
+        // arrange
         const data = [
             { team: 'internal', name: 'Alex', age: 30 },
             { team: 'internal', name: 'Bob', age: 29 },
@@ -1153,7 +1155,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T113644
     QUnit.test('resize on change window size', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
             loadingTimeout: undefined,
@@ -1176,7 +1178,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('resize on change width', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [],
@@ -1198,7 +1200,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('resize on change height from fixed to auto', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 400,
             loadingTimeout: undefined,
@@ -1221,7 +1223,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('resize on change height from auto to fixed', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}],
@@ -1242,39 +1244,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(Math.round($dataGrid.find('.dx-datagrid').height()), 400);
     });
 
-    QUnit.test('resize column event when columnAutoWidth enabled', function(assert) {
-    // arrange, act
-        const resizedWidths = [];
-        const $dataGrid = $('#dataGrid').dxDataGrid({
-            width: 1000,
-            loadingTimeout: undefined,
-            columnAutoWidth: true,
-            dataSource: [{}],
-            columns: [
-                { dataField: 'field1' },
-                { dataField: 'field2', resized: function(width) {
-                    resizedWidths.push(width);
-                } },
-                { dataField: 'field3' },
-                { dataField: 'field4' }
-            ]
-        });
-        const dataGrid = $dataGrid.dxDataGrid('instance');
-
-
-        // assert
-        assert.equal(resizedWidths.length, 1);
-        assert.ok(Math.abs(resizedWidths[0] - 250) <= 1, 'width applied');
-
-        // act
-        dataGrid.resize();
-
-        // assert
-        assert.equal(resizedWidths.length, 3);
-        assert.strictEqual(resizedWidths[1], undefined, 'column width reset for bestFit calculation');
-        assert.ok(Math.abs(resizedWidths[2] - 250) <= 1, 'width applied');
-    });
-
     QUnit.test('height 100% when this style apply as auto', function(assert) {
         $('#qunit-fixture').addClass('qunit-fixture-auto-height');
         // arrange, act
@@ -1289,7 +1258,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T595044
     QUnit.test('aria-rowindex aria-colindex if default pager mode', function(assert) {
-    // arrange, act
+        // arrange, act
         const array = [];
         let rows;
         let i;
@@ -1328,7 +1297,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('DataGrid should apply columns that are dynamically added to a band (T815945)', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{ name: 'Alex', age: 22 }, { name: 'Sahra', age: 22 }],
             columns: [{
@@ -1354,7 +1323,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('height from extern styles', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').addClass('fixed-height').dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [],
@@ -1372,7 +1341,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T189228
     QUnit.test('height from extern styles when rendering to detached container', function(assert) {
-    // arrange
+        // arrange
         const $dataGrid = $('<div />').addClass('fixed-height').dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [],
@@ -1399,8 +1368,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T347043
     QUnit.test('height from extern styles when rendering to invisible container', function(assert) {
-    // arrange
-    // act
+        // arrange
+        // act
         $('#dataGrid').css({
             height: 400,
             position: 'relative'
@@ -1430,8 +1399,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T380698
     QUnit.test('height from style after updateDimensions when rendering to container with zero content height', function(assert) {
-    // arrange
-    // act
+        // arrange
+        // act
         const dataGrid = $('#dataGrid').css({
             border: '1px solid black',
             height: 2
@@ -1455,7 +1424,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T362517, T734767
     QUnit.test('max-height from styles', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').css('maxHeight', 400).dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
@@ -1482,7 +1451,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T849902
     QUnit.test('max-height as float number from styles', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = $('#dataGrid').css('maxHeight', '100.2px').dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
@@ -1497,7 +1466,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T820186
     QUnit.test('width 100% should be applied if container width is zero on render', function(assert) {
-    // arrange
+        // arrange
         $('#dataGrid').parent().width(0);
         $('#dataGrid').dxDataGrid({
             width: '100%',
@@ -1517,8 +1486,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('height from style after updateDimensions when rendering to container without height', function(assert) {
-    // arrange
-    // act
+        // arrange
+        // act
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [],
             columns: [
@@ -1597,7 +1566,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T108204
     QUnit.test('resize on change visibility', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').hide().dxDataGrid({
             width: 1000,
             loadingTimeout: undefined,
@@ -1620,7 +1589,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Height of Data grid is not changed when allowResizing is false and allowReordering is true', function(assert) {
-    // arrange, act
+        // arrange, act
         const testElement = $('#dataGrid').height(600);
         const $dataGrid = testElement.dxDataGrid({
             width: 1000,
@@ -1640,7 +1609,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T144297
     QUnit.test('columns width when all columns have width and dataGrid width auto', function(assert) {
-    // arrange, act
+        // arrange, act
         $('#container').width(300);
 
         const $dataGrid = $('#dataGrid').dxDataGrid({
@@ -1671,7 +1640,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T618230
     QUnit.test('last column with disabled allowResizing should not change width if all columns have width less grid\'s width', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 400,
             loadingTimeout: undefined,
@@ -1691,7 +1660,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T387828
     QUnit.test('columns width when all columns have width and dataGrid with fixed width', function(assert) {
-    // arrange
+        // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 300,
             loadingTimeout: undefined,
@@ -1714,7 +1683,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T332448
     QUnit.test('columns width when all columns have width and dataGrid width auto and showBorders enabled', function(assert) {
-    // arrange, act
+        // arrange, act
         $('#container').width(300);
 
         const $dataGrid = $('#dataGrid').dxDataGrid({
@@ -1740,7 +1709,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T154611
     QUnit.test('max-width style property must be work for grid', function(assert) {
-    // arrange, act
+        // arrange, act
         $('#dataGrid').css('max-width', 200);
         $('#container').width(300);
 
@@ -1767,7 +1736,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T144297
     QUnit.test('columns width when all columns have width, one column width in percent format and dataGrid width is auto', function(assert) {
-    // arrange, act
+        // arrange, act
         $('#container').width(400);
 
         const $dataGrid = $('#dataGrid').dxDataGrid({
@@ -1799,7 +1768,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T344125
     QUnit.test('column width does not changed after changing grid\'s width when columnAutoWidth enabled', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 100,
             loadingTimeout: undefined,
@@ -1826,7 +1795,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Correct calculate height of the grid when wordWrapEnabled is true (T443257)', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGridElement = $('#dataGrid').dxDataGrid({
             height: 300,
             loadingTimeout: undefined,
@@ -1844,7 +1813,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('expand column width when summary with alignByColumn exists', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{ field1: 1, field2: 2, field3: 3, field4: 4 }],
             loadingTimeout: undefined,
@@ -1869,7 +1838,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Check sum of views height in grid', function(assert) {
-    // arrange
+        // arrange
         function generateDataSource(count) {
             const result = [];
 
@@ -1995,7 +1964,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T862537
     QUnit.test('column should be draggable if grid contains this column and column with allowHiding: false', function(assert) {
-    // act
+        // act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             columns: [{ dataField: 'field1', allowHiding: false }, { dataField: 'field2' }],
@@ -2014,7 +1983,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Correct runtime changing of a columnChooser mode (string)', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             columns: [{ dataField: 'field1', allowSorting: false }, { dataField: 'field2' }],
@@ -2039,7 +2008,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Correct runtime changing of a columnChooser mode (object)', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             columns: [{ dataField: 'field1', allowSorting: false }, { dataField: 'field2' }],
@@ -2064,7 +2033,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('ColumnChooser\'s treeView get correct default config (without checkboxes)', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             columnChooser: { mode: 'select' },
@@ -2089,7 +2058,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T756338
     QUnit.test('keyOf should not be called too often after push with row updates', function(assert) {
-    // arrange
+        // arrange
         const arrayStore = new ArrayStore({
             data: [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
             key: 'id'
@@ -2118,7 +2087,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('isReady when loading', function(assert) {
-    // act
+        // act
         const d = $.Deferred();
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -2138,8 +2107,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('command column widths calculated from styles', function(assert) {
-    // arrange
-    // act
+        // arrange
+        // act
         const $dataGrid = $('#dataGridWithStyle').dxDataGrid({
             loadingTimeout: undefined,
             dataSource: {
@@ -2160,7 +2129,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T317140
     QUnit.test('Error on loading', function(assert) {
-    // act
+        // act
         const dataGrid = createDataGrid({
             columns: ['field1', 'field2'],
             dataSource: {
@@ -2182,7 +2151,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Raise error if key field is missed', function(assert) {
-    // act
+        // act
         const errorUrl = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/E1046';
         const dataGrid = createDataGrid({
             columns: ['field1'],
@@ -2201,7 +2170,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Raise error if key field is missed and one of columns is named \'key\'', function(assert) {
-    // act
+        // act
         const errorUrl = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/E1046';
         const dataGrid = createDataGrid({
             columns: ['key'],
@@ -2220,7 +2189,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Not raise error if key field is null', function(assert) {
-    // act
+        // act
         const dataGrid = createDataGrid({
             columns: ['field1'],
             keyExpr: 'ID',
@@ -2236,7 +2205,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T334530
     QUnit.test('columnHeaders visibility after change some options', function(assert) {
-    // act
+        // act
         const dataGrid = createDataGrid({
             columns: ['field1', 'field2'],
             dataSource: []
@@ -2327,7 +2296,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T439040
     QUnit.test('Toolbar templates should be called when toolbar is attached to dom', function(assert) {
-    // arrange, act
+        // arrange, act
         let toolbarPreparingCallCount = 0;
         let toolbarTemplateCallCount = 0;
 
@@ -2353,7 +2322,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T471984
     QUnit.test('Custom toolbar item should be aligned', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             editing: {
                 allowAdding: true
@@ -2378,7 +2347,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     if(browser.msie && parseInt(browser.version) <= 11) {
         QUnit.test('Update the scrollable for IE browsers when the adaptive column is hidden', function(assert) {
-        // arrange
+            // arrange
 
 
             const dataGrid = createDataGrid({
@@ -2706,7 +2675,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // B232542
     QUnit.test('dataSource change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ id: 1111 }]
@@ -2724,7 +2693,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T216940
     QUnit.test('dataSource change to equal instance', function(assert) {
-    // arrange, act
+        // arrange, act
 
         const dataSource = [{ id: 1 }];
 
@@ -2746,7 +2715,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T260011
     QUnit.test('dataSource change to null', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ id: 1111 }]
@@ -2771,7 +2740,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T405875
     QUnit.test('dataSource changing reset columns order when dataSource structure is changed', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ field1: 1, field3: 3 }]
@@ -2789,7 +2758,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('dataSource changing not reset columns order when dataSource structure is not changed', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ field1: 1, field2: 2 }]
@@ -2810,7 +2779,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T531189
     QUnit.test('noData should be hidden after assign dataSource and height', function(assert) {
-    // arrange, act
+        // arrange, act
 
         const dataGrid = createDataGrid({
             columns: ['id']
@@ -2832,7 +2801,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T231356
     QUnit.test('rtlEnabled change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
         });
 
@@ -2845,7 +2814,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T288385
     QUnit.test('disabled change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
         });
 
@@ -2857,7 +2826,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('dataSource pageSize change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             dataSource: {
                 store: [{ id: 1111 }]
@@ -2876,7 +2845,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('columns change', function(assert) {
-    // arrange, act
+        // arrange, act
         let loadingCount = 0;
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -2910,7 +2879,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T365730
     QUnit.test('columns change to empty array', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ a: 1111, b: 222 }]
@@ -2932,7 +2901,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T388879
     QUnit.test('change columns at the time refresh the grid', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: 100,
             dataSource: [{ column1: 1, column2: 2 }, { column1: 3, column2: 4 }],
@@ -2962,7 +2931,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T196532
     QUnit.test('columns change when changed dataSource parameters', function(assert) {
-    // arrange, act
+        // arrange, act
         let loadingCount = 0;
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -3019,7 +2988,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('Toolbar update it\'s items only when corresponding options are change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             remoteOperations: { filtering: true, sorting: true, paging: true },
@@ -3060,7 +3029,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('customizeColumns change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ a: 1111, b: 222 }],
@@ -3092,7 +3061,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('several options change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             commonColumnSettings: { allowSorting: false },
             loadingTimeout: undefined,
@@ -3116,7 +3085,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('paging change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: {
@@ -3141,7 +3110,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('paging change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: {
@@ -3171,7 +3140,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T677650
     QUnit.test('paging change if nested options are not changed', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: {
@@ -3200,7 +3169,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T121445
     QUnit.test('pager.allowedPageSizes change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: {
@@ -3222,7 +3191,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T121445
     QUnit.test('pager.visible change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             height: 100,
             loadingTimeout: undefined,
@@ -3244,7 +3213,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T121445
     QUnit.test('pager light-mode should be correct after change pageSize', function(assert) {
-    // arrange, act
+        // arrange, act
         const data = [];
         for(let i = 0; i < 11; ++i) {
             data.push({ value: i });
@@ -3278,7 +3247,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T120699
     QUnit.test('showRowLines/showColumnLines change', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ a: 1111, b: 222 }]
@@ -3308,7 +3277,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('dataSource instance of DataSource', function(assert) {
-    // arrange, act
+        // arrange, act
         let errorMessage;
 
         logger.error = function(message) {
@@ -3334,7 +3303,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T221734
     QUnit.test('using dataSource instance after disposing DataGrid', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataSource = new DataSource({
             store: [{ id: 1111 }]
         });
@@ -3569,7 +3538,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T148740
     QUnit.test('Updating after changing the option', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
             dataSource: {
@@ -3600,7 +3569,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T113684
     QUnit.test('Height rows view = height content', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             height: 200,
             columns: ['field1', 'field2'],
@@ -3620,7 +3589,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('Height rows view auto when no height option', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
             dataSource: {
@@ -3637,7 +3606,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('Assign column options', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{ field1: '1', field2: '2' }]
         });
@@ -3652,7 +3621,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     });
 
     QUnit.test('Assign column options with beginUpdate/endUpdate', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{ field1: '1', field2: '2', field3: '3' }]
         });
@@ -3686,7 +3655,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T427432
     QUnit.test('Assign grid option and refresh in beginUpdate/endUpdate', function(assert) {
-    // arrange, act
+        // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
             selection: {
                 mode: 'multiple'
@@ -3714,47 +3683,9 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.strictEqual($dataGrid.find('.dx-data-row').children().length, 2, 'data cells count');
     });
 
-    // T181974, T152353
-    QUnit.test('Reset last non-command column width when width 100% in style', function(assert) {
-    // arrange
-        const $dataGrid = $('#dataGrid').css('width', '100%').dxDataGrid({
-            dataSource: [{ field1: '1', field2: '2', field3: '3', field4: '4', field5: '5' }],
-            groupPanel: {
-                visible: true
-            },
-            columns: [
-                {
-                    dataField: 'field1',
-                    width: 50
-                },
-                {
-                    dataField: 'field2',
-                    width: 100
-                }
-            ],
-            editing: {
-                mode: 'row',
-                allowUpdating: true
-            },
-            allowColumnReordering: true,
-            allowColumnResizing: true
-        });
-
-        // act
-        this.clock.tick();
-        const $cols = $dataGrid.find('colgroup').first().find('col');
-
-        // assert
-        assert.equal($cols.length, 3);
-        assert.equal($cols.get(0).style.width, '50px', 'first column width is not reset');
-        assert.equal($cols.get(1).style.width, 'auto', 'second column width is reset - this is last non-command column');
-        assert.notStrictEqual($cols.get(2).style.width, 'auto', 'command column width is not reset');
-        assert.equal($dataGrid.width(), $dataGrid.parent().width());
-    });
-
     // T689294
     QUnit.test('onContentReady when there is no dataSource and stateStoring is enabled', function(assert) {
-    // arrange
+        // arrange
         let contentReadyCallCount = 0;
 
         // act
@@ -3778,7 +3709,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
     // T824018
     QUnit.test('The onOptionChanged event should be called once when changing column option', function(assert) {
-    // arrange
+        // arrange
         const onOptionChanged = sinon.spy();
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -3798,7 +3729,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 QUnit.module('API methods', baseModuleConfig, () => {
 
     QUnit.test('get methods for grid without options', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({});
 
         // act, assert
@@ -3809,7 +3740,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('begin custom loading', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ id: 1111 }]
@@ -3832,7 +3763,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T619196
     QUnit.test('begin custom loading and refresh', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1111 }]
         });
@@ -3861,7 +3792,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('begin custom loading without message', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ id: 1111 }]
@@ -3883,7 +3814,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('add column', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ id: 1111 }]
@@ -3897,7 +3828,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('expandAll', function(assert) {
-    // arrange, act
+        // arrange, act
         let expandAllGroupIndex;
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -3916,7 +3847,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('collapseAll', function(assert) {
-    // arrange, act
+        // arrange, act
         let collapseAllGroupIndex;
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -3936,7 +3867,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // B239291
     QUnit.test('component refresh', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ testField: 'TestValue' }]
@@ -3951,7 +3882,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('refresh', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: []
@@ -4007,7 +3938,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T257132
     QUnit.test('refresh $.Callbacks memory leaks', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: []
@@ -4040,7 +3971,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('getSelectedRowsData when storeSelectedItems enabled', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ testField: 'TestValue' }],
@@ -4055,7 +3986,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('pageCount', function(assert) {
-    // act
+        // act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: {
@@ -4072,7 +4003,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('columnCount', function(assert) {
-    // act
+        // act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [{ field1: 1, field2: 2, field3: 3 }]
@@ -4086,7 +4017,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('getRowElement', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             columns: ['field1', 'field2', 'field3'],
@@ -4106,7 +4037,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('There is no console errors when call getCellElement at command column\'s cell', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             columns: [{ dataField: 'field1' }],
@@ -4148,7 +4079,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Should update grid after error row rendered (T755293)', function(assert) {
-    // arrange act
+        // arrange act
         const eventArray = [];
         const dataGrid = createDataGrid({
             columns: [{ dataField: 'field1', fixed: true }, { dataField: 'field2' }],
@@ -4178,7 +4109,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T726366
     QUnit.test('Column hiding should works correctly if all columns have width', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             width: 300,
             columnWidth: 100,
@@ -4200,7 +4131,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T172125
     QUnit.test('resize when all columns have width', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             columns: [
                 { dataField: 'field1', width: 50 },
@@ -4223,7 +4154,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T335767
     QUnit.test('skip columns synchronization on window resize when grid size is not changed', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             columns: [
                 { dataField: 'field1', width: 50 },
@@ -4253,7 +4184,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T372519
     QUnit.test('rowsView height is not changed on window resize when grid container is not visible', function(assert) {
-    // arrange, act
+        // arrange, act
 
         const dataGrid = createDataGrid({
             height: 500,
@@ -4282,7 +4213,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T196595
     QUnit.test('change pageIndex when all columns have width', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             paging: {
                 pageSize: 3
@@ -4370,12 +4301,12 @@ QUnit.module('API methods', baseModuleConfig, () => {
             columns: [{
                 dataField: 'id',
                 lookup: {
-                    dataSource: createRemoteDataSource([ { id: 1, text: 'Test 1' } ]),
+                    dataSource: createRemoteDataSource([{ id: 1, text: 'Test 1' }]),
                     valueExpr: 'id',
                     displayExpr: 'text'
                 }
             }],
-            dataSource: createRemoteDataSource([ { id: 1 } ])
+            dataSource: createRemoteDataSource([{ id: 1 }])
         });
 
         // act
@@ -4460,7 +4391,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T296786
     QUnit.test('beginCustomLoading in onInitialized', function(assert) {
-    // arrange, act
+        // arrange, act
         let initialized;
         const dataGrid = createDataGrid({
             onInitialized: function(e) {
@@ -4481,7 +4412,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T461925
     QUnit.test('columnOption in onInitialized', function(assert) {
-    // arrange, act
+        // arrange, act
         let initialized;
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -4506,7 +4437,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T494138
     QUnit.test('Change expand column width in onInitialized', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             onInitialized: function(e) {
@@ -4524,7 +4455,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Repaint row', function(assert) {
-    // arrange
+        // arrange
         const dataSource = new DataSource({
             store: {
                 type: 'array',
@@ -4560,7 +4491,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Repaint rows', function(assert) {
-    // arrange
+        // arrange
         const dataSource = new DataSource({
             store: {
                 type: 'array',
@@ -4603,7 +4534,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Repaint rows with repaintChangesOnly', function(assert) {
-    // arrange
+        // arrange
         const dataSource = new DataSource({
             store: {
                 type: 'array',
@@ -4647,7 +4578,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Refresh with changesOnly', function(assert) {
-    // arrange
+        // arrange
         const dataSource = new DataSource({
             store: {
                 type: 'array',
@@ -4685,7 +4616,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Refresh with highlighting and check oldValue', function(assert) {
-    // arrange
+        // arrange
         const dataSource = new DataSource({
             store: {
                 type: 'array',
@@ -4751,7 +4682,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('highlighting works, if twoWayBinding is enabled and watchMethod is set', function(assert) {
-    // arrange
+        // arrange
         const callbacks = [];
         const dataSource = new DataSource({
             store: {
@@ -4804,7 +4735,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Refresh with changesOnly and cellTemplate', function(assert) {
-    // arrange
+        // arrange
         const dataSource = new DataSource({
             store: {
                 type: 'array',
@@ -4851,7 +4782,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Refresh with changesOnly and cellPrepared/rowPrepared', function(assert) {
-    // arrange
+        // arrange
         const dataSource = new DataSource({
             store: {
                 type: 'array',
@@ -4897,7 +4828,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Row alt classes and row indexes should be updated after refresh with changesOnly', function(assert) {
-    // arrange
+        // arrange
         const dataSource = new DataSource({
             store: {
                 type: 'array',
@@ -4931,7 +4862,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Change dataSource to new with new item instances if repaintChangesOnly is true', function(assert) {
-    // arrange
+        // arrange
         const cellPreparedArgs = [];
         const rowPreparedArgs = [];
         const watchUpdateArgs = [];
@@ -4988,7 +4919,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T699807
     QUnit.test('Change dataSource array during state loading', function(assert) {
-    // arrange
+        // arrange
         const stateDeferred = $.Deferred();
         const dataGrid = createDataGrid({
             stateStoring: {
@@ -5024,7 +4955,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('watch in cellPrepared should works after push', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({
             dataSource: {
                 store: {
@@ -5072,7 +5003,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('oldValue argument should exists in cellPrepared after push', function(assert) {
-    // arrange
+        // arrange
         let cellPreparedArgs = [];
         const dataGrid = createDataGrid({
             dataSource: {
@@ -5109,7 +5040,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('push changes for adaptive row', function(assert) {
-    // arrange
+        // arrange
         const dataSource = new DataSource({
             pushAggregationTimeout: 0,
             store: {
@@ -5146,7 +5077,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Refresh with changesOnly and summary', function(assert) {
-    // arrange
+        // arrange
         const dataSource = new DataSource({
             store: {
                 type: 'array',
@@ -5189,14 +5120,14 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T558189
     QUnit.test('Band columns should be displayed correctly after state is reset', function(assert) {
-    // arrange
+        // arrange
         let columns;
         const dataGrid = createDataGrid({
             dataSource: [{ field1: 1, field2: 2, field3: 3, field4: 4 }],
             paging: {
                 pageIndex: 0
             },
-            customizeColumns: function() {},
+            customizeColumns: function() { },
             columns: ['field1', 'field2', { caption: 'Band Column', columns: ['field3', 'field4'] }]
         });
 
@@ -5216,7 +5147,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T709033
     QUnit.test('Band columns should be displayed correctly after adding columns and changing the summary', function(assert) {
-    // arrange
+        // arrange
         let visibleColumns;
         const dataGrid = createDataGrid({
             dataSource: [{ field1: 1, field2: 2, field3: 3 }, { field1: 4, field2: 5, field3: 6 }],
@@ -5248,7 +5179,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T829029
     QUnit.test('Change columnWidth via option method', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({
             dataSource: [{ field1: 1, field2: 2, field3: 3 }],
             columnWidth: 50,
@@ -5269,7 +5200,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 QUnit.module('templates', baseModuleConfig, () => {
 
     QUnit.test('template no found - create text node', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({});
 
         const container = $('<div />').appendTo('#qunit-fixture');
@@ -5284,7 +5215,7 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     QUnit.test('test template in dataGrid container', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({});
 
         const container = $('<div />').appendTo('#qunit-fixture');
@@ -5299,7 +5230,7 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     QUnit.test('test template in script outside container', function(assert) {
-    // arrange
+        // arrange
         setTemplateEngine({
             compile: function(element) {
                 element = $(element);
@@ -5324,7 +5255,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
     // T474695
     QUnit.test('jsrender row template should works', function(assert) {
-    // arrange, act
+        // arrange, act
         setTemplateEngine('jsrender');
 
         const dataGrid = createDataGrid({
@@ -5345,7 +5276,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
     // TODO: deprecated, remove it in 15.1
     QUnit.test('test template in script outside container (get by selector)', function(assert) {
-    // arrange
+        // arrange
         setTemplateEngine({
             compile: function(element) {
                 element = $(element);
@@ -5369,7 +5300,7 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     QUnit.test('getTemplate in gridView', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({});
 
         const container = $('<div />').appendTo('#qunit-fixture');
@@ -5385,7 +5316,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
     // T344195
     QUnit.test('Setting cellTemplate via DOM node with id attribute', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             dataSource: [{ column1: 'test1', column2: 'test2' }],
             columns: [{ dataField: 'column1', cellTemplate: document.getElementById('scriptTestTemplate1') }, { dataField: 'column2', cellTemplate: document.getElementById('scriptTestTemplate2') }]
@@ -5401,7 +5332,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
     // T344195
     QUnit.test('Setting cellTemplate via DOM node without id attribute', function(assert) {
-    // arrange, act
+        // arrange, act
         const $template1 = $('#scriptTestTemplate1').removeAttr('id');
         const $template2 = $('#scriptTestTemplate2').removeAttr('id');
 
@@ -5422,7 +5353,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
     // T344195
     QUnit.test('Setting cellTemplate via dxTemplate', function(assert) {
-    // arrange, act
+        // arrange, act
 
         const dataGrid = createDataGrid({
             dataSource: [{ column1: 'test1', column2: 'test2' }],
@@ -5439,7 +5370,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
     // T312012
     QUnit.test('Setting rowTemplate via dxTemplate', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             rowTemplate: 'testRow',
@@ -5533,7 +5464,7 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     QUnit.test('rowElement argument of rowTemplate option is correct', function(assert) {
-    // arrange, act
+        // arrange, act
         createDataGrid({
             rowTemplate: function(rowElement) {
                 assert.equal(typeUtils.isRenderer(rowElement), !!config().useJQuery, 'rowElement is correct');
@@ -5545,7 +5476,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
     // T120698
     QUnit.test('totalCount', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: {
@@ -5712,7 +5643,7 @@ QUnit.module('columnWidth auto option', {
 
     // T709106
     QUnit.test('column widths if all columns have width auto and columnAutoWidth is true', function(assert) {
-    // act
+        // act
         const dataGrid = $('#dataGrid').css('width', '').dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}],
@@ -6001,7 +5932,7 @@ QUnit.module('Modules', {
     });
 
     QUnit.test('Render view after invalidate', function(assert) {
-    // arrange
+        // arrange
         const testView = new gridCore.View({
             isReady: function() {
                 return true;
@@ -6126,7 +6057,7 @@ QUnit.module('Modules', {
     });
 
     QUnit.test('Begin and end update', function(assert) {
-    // arrange
+        // arrange
         const moduleItem = new gridCore.Controller();
         let endUpdateCounter = 0;
 
@@ -6179,841 +6110,5 @@ QUnit.module('Formatting', baseModuleConfig, () => {
                 return Math.round(options.value) + ' rub';
             }
         }), '216 rub');
-    });
-});
-
-QUnit.module('Row dragging', baseModuleConfig, () => {
-
-    // T831020
-    QUnit.test('The draggable row should have correct markup when defaultOptions is specified', function(assert) {
-    // arrange
-        DataGrid.defaultOptions({
-            options: {
-                filterRow: {
-                    visible: true
-                },
-                groupPanel: {
-                    visible: true
-                },
-                filterPanel: {
-                    visible: true
-                }
-            }
-        });
-
-        try {
-            const dataGrid = createDataGrid({
-                dataSource: [{ field1: 1, field2: 2, field3: 3 }],
-                rowDragging: {
-                    allowReordering: true
-                }
-            });
-
-            this.clock.tick();
-
-            // act
-            pointerMock(dataGrid.getCellElement(0, 0)).start().down().move(100, 100);
-
-            // assert
-            const $draggableRow = $('body').children('.dx-sortable-dragging');
-            assert.strictEqual($draggableRow.length, 1, 'has draggable row');
-
-            const $visibleView = $draggableRow.find('.dx-gridbase-container').children(':visible');
-            assert.strictEqual($visibleView.length, 1, 'markup of the draggable row is correct');
-            assert.ok($visibleView.hasClass('dx-datagrid-rowsview'), 'rowsview is visible');
-        } finally {
-            DataGrid.defaultOptions({
-                options: {
-                    filterRow: {
-                        visible: false
-                    },
-                    groupPanel: {
-                        visible: false
-                    },
-                    filterPanel: {
-                        visible: false
-                    }
-                }
-            });
-        }
-    });
-});
-
-QUnit.module('Column Resizing', baseModuleConfig, () => {
-    QUnit.test('Resize columns', function(assert) {
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            width: 470,
-            selection: { mode: 'multiple', showCheckBoxesMode: 'always' },
-            commonColumnSettings: {
-                allowResizing: true
-            },
-            loadingTimeout: undefined,
-            dataSource: [{}, {}, {}, {}],
-            columns: [{ dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }, { dataField: 'room', width: 100 }, { dataField: 'birthDay', width: 100 }]
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 1 };
-        resizeController._setupResizingInfo(-9830);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: -9780,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        // assert
-        const headersCols = $('.dx-datagrid-headers' + ' col');
-        const rowsCols = $('.dx-datagrid-rowsview col');
-        assert.equal($(headersCols[1]).css('width'), '150px', 'width of two column - headers view');
-        assert.equal($(headersCols[2]).css('width'), '50px', 'width of three column - headers view');
-        assert.equal($(rowsCols[1]).css('width'), '150px', 'width of two column - rows view');
-        assert.equal($(rowsCols[2]).css('width'), '50px', 'width of three column - rows view');
-    });
-
-    // T804582
-    QUnit.test('Cursor should switch style when it was moved to columns separator if grid has only one row and big header panel', function(assert) {
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            dataSource: [{}],
-            allowColumnResizing: true,
-            columnChooser: {
-                enabled: true
-            },
-            columns: ['field1', 'field2']
-        });
-        const headerPanel = dataGrid.find('.dx-datagrid-header-panel');
-        const columnsSeparator = dataGrid.find('.dx-datagrid-columns-separator');
-
-        headerPanel.outerHeight('70px', true);
-
-        columnsSeparator.trigger($.Event('dxpointermove', {
-            data: {
-                _isResizing: false,
-            },
-            pageY: columnsSeparator.offset().top + headerPanel.outerHeight() + 1,
-            pageX: columnsSeparator.offset().left + dataGrid.width() / 2
-        }));
-
-        assert.equal(columnsSeparator.css('cursor'), 'col-resize', 'cursor style');
-    });
-
-    // T846832
-    QUnit.test('Columns should not shake during resizing', function(assert) {
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            width: 1000,
-            dataSource: [{}],
-            loadingTimeout: undefined,
-            columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
-            showBorders: true,
-            allowColumnResizing: true
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-        const widths = [];
-        const offset = $('#dataGrid').offset();
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 1 };
-
-        resizeController._startResizing({
-            event: {
-                data: resizeController,
-                type: 'touchstart',
-                pageX: offset.left + 200,
-                pageY: offset.top + 15,
-                preventDefault: function() {},
-                stopPropagation: function() {}
-            }
-        });
-
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                pageX: offset.left + 50,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        resizeController._endResizing({
-            event: {
-                data: resizeController
-            }
-        });
-
-        // assert
-        let $cells = $('#dataGrid').find('td');
-
-        assert.roughEqual($cells.eq(0).width(), 34, 1.01, 'first column width');
-        assert.roughEqual($cells.eq(1).width(), 333, 1.01, 'second column width');
-
-        for(let i = 0; i < 5; i++) {
-            widths.push($('#dataGrid').find('td').eq(i).width());
-        }
-
-        // act
-        resizeController._startResizing({
-            event: {
-                data: resizeController,
-                type: 'touchstart',
-                pageX: offset.left + 50,
-                pageY: offset.top + 15,
-                preventDefault: function() {},
-                stopPropagation: function() {}
-            }
-        });
-
-        resizeController._moveSeparator({
-            event: {
-                type: 'dxpointermove',
-                data: resizeController,
-                pageX: offset.left + 51,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        resizeController._endResizing({
-            event: {
-                data: resizeController
-            }
-        });
-
-        // assert
-        $cells = $('#dataGrid').find('td');
-
-        assert.equal($cells.eq(0).width(), widths[0] + 1, 'first column width');
-        assert.equal($cells.eq(1).width(), widths[1] - 1, 'second column width');
-
-        for(let i = 2; i < 5; i++) {
-            assert.equal($cells.eq(i).width(), widths[i], 'width was not affected');
-        }
-    });
-
-    // T527538
-    QUnit.test('Grid\'s height should be updated during column resizing if column headers height is changed', function(assert) {
-        // arrange
-        const $dataGrid = $('#dataGrid').dxDataGrid({
-            height: 300,
-            wordWrapEnabled: true,
-            allowColumnResizing: true,
-            loadingTimeout: undefined,
-            dataSource: [{}],
-            columns: [{ dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }]
-        });
-        const instance = $dataGrid.dxDataGrid('instance');
-
-        const columnHeadersViewHeight = instance.getView('columnHeadersView').getHeight();
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-        resizeController._setupResizingInfo(-9900);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: -9970,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        // assert
-        assert.ok(instance.getView('columnHeadersView').getHeight() > columnHeadersViewHeight, 'column headers height is changed');
-        assert.equal($dataGrid.children().height(), 300, 'widget\'s height is not changed');
-        assert.equal(instance.columnOption(0, 'width'), 30, 'column 0 width');
-        assert.equal(instance.columnOption(1, 'width'), 170, 'column 1 width');
-    });
-
-    // T356865
-    QUnit.test('Resize grid after column resizing', function(assert) {
-        $('#container').width(200);
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            allowColumnResizing: true,
-            dataSource: [{}],
-            columns: ['firstName', 'lastName']
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-
-        resizeController._setupResizingInfo(-9900);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: -9880,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        $('#container').width(400);
-        instance.updateDimensions();
-
-        // assert
-        assert.strictEqual(instance.$element().width(), 400);
-        assert.strictEqual(instance.columnOption(0, 'width'), '60.000%');
-        assert.strictEqual(instance.columnOption(1, 'width'), '40.000%');
-
-        const colGroups = $('.dx-datagrid colgroup');
-        assert.strictEqual(colGroups.length, 2);
-
-        for(let i = 0; i < colGroups.length; i++) {
-            const headersCols = colGroups.eq(i).find('col');
-
-            assert.strictEqual(headersCols.length, 2);
-            assert.strictEqual(headersCols[0].style.width, '60%');
-            assert.strictEqual(headersCols[1].style.width, '40%');
-        }
-    });
-
-    QUnit.test('Resize grid after column resizing when adaptColumnWidthByRatio false', function(assert) {
-        $('#container').width(200);
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            adaptColumnWidthByRatio: false,
-            allowColumnResizing: true,
-            dataSource: [{}],
-            columns: ['firstName', 'lastName']
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-
-        resizeController._setupResizingInfo(-9900);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: -9880,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        $('#container').width(400);
-        instance.updateDimensions();
-
-        // assert
-        assert.strictEqual(instance.$element().width(), 200);
-        assert.strictEqual(instance.columnOption(0, 'width'), 120);
-        assert.strictEqual(instance.columnOption(1, 'width'), 80);
-
-        const colGroups = $('.dx-datagrid colgroup');
-        assert.strictEqual(colGroups.length, 2);
-
-        for(let i = 0; i < colGroups.length; i++) {
-            const headersCols = colGroups.eq(i).find('col');
-
-            assert.strictEqual(headersCols.length, 2);
-            assert.strictEqual(headersCols[0].style.width, '120px');
-            assert.strictEqual(headersCols[1].style.width, 'auto');
-        }
-
-    });
-
-    QUnit.test('Resize grid after column resizing to left when columnResizingMode is widget', function(assert) {
-        $('#container').width(300);
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            columnResizingMode: 'widget',
-            allowColumnResizing: true,
-            dataSource: [{}],
-            columns: ['firstName', 'lastName', 'age']
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-
-        const startPosition = -9900;
-        resizeController._setupResizingInfo(startPosition);
-        resizeController._moveSeparator({ // T881314
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: startPosition - 20,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        // assert
-        assert.strictEqual(instance.$element().children().width(), 280);
-        assert.strictEqual(instance.columnOption(0, 'width'), 80);
-        assert.strictEqual(instance.columnOption(1, 'width'), 100);
-        assert.strictEqual(instance.columnOption(2, 'width'), 100);
-
-        const colGroups = $('.dx-datagrid colgroup');
-        assert.strictEqual(colGroups.length, 2);
-
-        for(let i = 0; i < colGroups.length; i++) {
-            const headersCols = colGroups.eq(i).find('col');
-
-            assert.strictEqual(headersCols.length, 3);
-            assert.strictEqual(headersCols[0].style.width, '80px');
-            assert.strictEqual(headersCols[1].style.width, '100px');
-            assert.strictEqual(headersCols[2].style.width, 'auto');
-        }
-    });
-
-    // T649906
-    QUnit.test('Last column width should be reseted during column resizing to left when columnResizingMode is widget', function(assert) {
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            width: 400,
-            loadingTimeout: undefined,
-            columnResizingMode: 'widget',
-            allowColumnResizing: true,
-            dataSource: [{}],
-            columns: ['id', 'firstName', 'lastName', { dataField: 'age', allowResizing: false }]
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-
-        const startPosition = -9900;
-        resizeController._setupResizingInfo(startPosition);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: startPosition - 20,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        // assert
-        assert.strictEqual(instance.columnOption(0, 'width'), 80);
-        assert.strictEqual(instance.columnOption(0, 'visibleWidth'), 80);
-        assert.strictEqual(instance.columnOption(1, 'width'), 100);
-        assert.strictEqual(instance.columnOption(1, 'visibleWidth'), 100);
-        assert.strictEqual(instance.columnOption(2, 'width'), 100);
-        assert.strictEqual(instance.columnOption(2, 'visibleWidth'), 'auto');
-        assert.strictEqual(instance.columnOption(3, 'width'), 100);
-        assert.strictEqual(instance.columnOption(3, 'visibleWidth'), 100);
-
-        const colGroups = $('.dx-datagrid colgroup');
-        assert.strictEqual(colGroups.length, 2);
-
-        for(let i = 0; i < colGroups.length; i++) {
-            const headersCols = colGroups.eq(i).find('col');
-
-            assert.strictEqual(headersCols.length, 4);
-            assert.strictEqual(headersCols[0].style.width, '80px');
-            assert.strictEqual(headersCols[1].style.width, '100px');
-            assert.strictEqual(headersCols[2].style.width, 'auto');
-            assert.strictEqual(headersCols[3].style.width, '100px');
-        }
-    });
-
-    // T649906
-    QUnit.test('Last column width should not be reseted during column resizing to right when columnResizingMode is widget', function(assert) {
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            width: 400,
-            loadingTimeout: undefined,
-            columnResizingMode: 'widget',
-            allowColumnResizing: true,
-            dataSource: [{}],
-            columns: ['id', 'firstName', 'lastName', { dataField: 'age', allowResizing: false }]
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-
-        const startPosition = -9900;
-        resizeController._setupResizingInfo(startPosition);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: startPosition + 20,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        // assert
-        assert.strictEqual(instance.columnOption(0, 'width'), 120);
-        assert.strictEqual(instance.columnOption(0, 'visibleWidth'), undefined);
-        assert.strictEqual(instance.columnOption(1, 'width'), 100);
-        assert.strictEqual(instance.columnOption(1, 'visibleWidth'), undefined);
-        assert.strictEqual(instance.columnOption(2, 'width'), 100);
-        assert.strictEqual(instance.columnOption(2, 'visibleWidth'), undefined);
-        assert.strictEqual(instance.columnOption(3, 'width'), 100);
-        assert.strictEqual(instance.columnOption(3, 'visibleWidth'), undefined);
-
-        const colGroups = $('.dx-datagrid colgroup');
-        assert.strictEqual(colGroups.length, 2);
-
-        for(let i = 0; i < colGroups.length; i++) {
-            const headersCols = colGroups.eq(i).find('col');
-
-            assert.strictEqual(headersCols.length, 4);
-            assert.strictEqual(headersCols[0].style.width, '120px');
-            assert.strictEqual(headersCols[1].style.width, '100px');
-            assert.strictEqual(headersCols[2].style.width, '100px');
-            assert.strictEqual(headersCols[3].style.width, '100px');
-        }
-    });
-
-    QUnit.test('Resize grid after column resizing to left when columnResizingMode is widget and minWidth is assigned', function(assert) {
-        $('#container').width(300);
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            columnResizingMode: 'widget',
-            allowColumnResizing: true,
-            dataSource: [{}],
-            columns: [{ dataField: 'firstName', minWidth: 50 }, 'lastName', 'age']
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-
-        const startPosition = -9900;
-        resizeController._setupResizingInfo(startPosition);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: startPosition - 50,
-                preventDefault: commonUtils.noop
-            }
-        });
-        resizeController._moveSeparator({ // T881314
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: startPosition - 60,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-
-        // assert
-        assert.strictEqual(instance.$element().children().width(), 250);
-        assert.strictEqual(instance.columnOption(0, 'width'), 50);
-        assert.strictEqual(instance.columnOption(1, 'width'), 100);
-        assert.strictEqual(instance.columnOption(2, 'width'), 100);
-
-        const colGroups = $('.dx-datagrid colgroup');
-        assert.strictEqual(colGroups.length, 2);
-
-        for(let i = 0; i < colGroups.length; i++) {
-            const headersCols = colGroups.eq(i).find('col');
-
-            assert.strictEqual(headersCols.length, 3);
-            assert.strictEqual(headersCols[0].style.width, '50px');
-            assert.strictEqual(headersCols[1].style.width, '100px');
-            assert.strictEqual(headersCols[2].style.width, 'auto');
-        }
-    });
-
-    QUnit.test('Resize grid after column resizing to left when columnResizingMode is nextColumn and minWidth is assigned', function(assert) {
-        $('#container').width(200);
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            columnResizingMode: 'nextColumn',
-            allowColumnResizing: true,
-            dataSource: [{}],
-            columns: ['firstName', { dataField: 'lastName', minWidth: 50 }]
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-
-        const startPosition = -9900;
-        resizeController._setupResizingInfo(startPosition);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: startPosition + 50,
-                preventDefault: commonUtils.noop
-            }
-        });
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: startPosition + 60,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        instance.updateDimensions();
-
-        // assert
-        assert.strictEqual(instance.$element().children().width(), 200);
-        assert.strictEqual(instance.columnOption(0, 'width'), '75.000%');
-        assert.strictEqual(instance.columnOption(1, 'width'), '25.000%');
-
-        const colGroups = $('.dx-datagrid colgroup');
-        assert.strictEqual(colGroups.length, 2);
-
-        for(let i = 0; i < colGroups.length; i++) {
-            const headersCols = colGroups.eq(i).find('col');
-
-            assert.strictEqual(headersCols.length, 2);
-            assert.strictEqual(headersCols[0].style.width, '75%');
-            assert.strictEqual(headersCols[1].style.width, '25%');
-        }
-    });
-
-    // T670844
-    QUnit.test('Resize column if all columns have percent widths and columnResizingMode is nextColumn', function(assert) {
-        $('#container').width(200);
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            columnResizingMode: 'nextColumn',
-            allowColumnResizing: true,
-            dataSource: [{}],
-            columns: [
-                { dataField: 'field1', width: '50%' },
-                { dataField: 'field2', width: '50%' },
-                { dataField: 'field3', width: '50%' },
-                { dataField: 'field4', width: '50%' }
-            ]
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-
-        const startPosition = -9900;
-        resizeController._setupResizingInfo(startPosition);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: startPosition + 25,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        instance.updateDimensions();
-
-        // assert
-        assert.strictEqual(instance.$element().children().width(), 200);
-        assert.strictEqual(instance.columnOption(0, 'width'), '75.000%');
-        assert.strictEqual(instance.columnOption(1, 'width'), '25.000%');
-
-        const colGroups = $('.dx-datagrid colgroup');
-        assert.strictEqual(colGroups.length, 2);
-
-        for(let i = 0; i < colGroups.length; i++) {
-            const headersCols = colGroups.eq(i).find('col');
-
-            assert.strictEqual(headersCols.length, 4);
-            assert.strictEqual(headersCols[0].style.width, '75%');
-            assert.strictEqual(headersCols[1].style.width, '25%');
-        }
-    });
-
-    QUnit.test('Resize grid after column resizing to left when columnResizingMode is widget and grid\'s width is 100%', function(assert) {
-        $('#container').width(300);
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            width: '100%',
-            loadingTimeout: undefined,
-            columnResizingMode: 'widget',
-            allowColumnResizing: true,
-            dataSource: [{}],
-            columns: ['firstName', 'lastName', 'age']
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-
-        const startPosition = -9900;
-        resizeController._setupResizingInfo(startPosition);
-        resizeController._moveSeparator({ // T881314
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: startPosition - 20,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        // assert
-        assert.strictEqual(instance.$element().children().width(), 300);
-        assert.strictEqual(instance.columnOption(0, 'width'), 80);
-        assert.strictEqual(instance.columnOption(1, 'width'), 100);
-        assert.strictEqual(instance.columnOption(2, 'width'), 100);
-
-        const colGroups = $('.dx-datagrid colgroup');
-        assert.strictEqual(colGroups.length, 2);
-
-        for(let i = 0; i < colGroups.length; i++) {
-            const headersCols = colGroups.eq(i).find('col');
-
-            assert.strictEqual(headersCols.length, 3);
-            assert.strictEqual(headersCols[0].style.width, '80px');
-            assert.strictEqual(headersCols[1].style.width, '100px');
-            assert.strictEqual(headersCols[2].style.width, 'auto');
-        }
-    });
-
-    QUnit.test('Resize grid after column resizing to right when columnResizingMode is widget', function(assert) {
-        $('#container').width(300);
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            columnResizingMode: 'widget',
-            allowColumnResizing: true,
-            dataSource: [{}],
-            columns: ['firstName', 'lastName', 'age']
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-
-        const startPosition = -9900;
-        resizeController._setupResizingInfo(startPosition);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: startPosition + 120,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        // assert
-        assert.strictEqual(instance.$element().children().width(), 300);
-        assert.strictEqual(instance.columnOption(0, 'width'), 220);
-        assert.strictEqual(instance.columnOption(1, 'width'), 100);
-        assert.strictEqual(instance.columnOption(2, 'width'), 100);
-
-        const colGroups = $('.dx-datagrid colgroup');
-        assert.strictEqual(colGroups.length, 2);
-
-        for(let i = 0; i < colGroups.length; i++) {
-            const headersCols = colGroups.eq(i).find('col');
-
-            assert.strictEqual(headersCols.length, 3);
-            assert.strictEqual(headersCols[0].style.width, '220px');
-            assert.strictEqual(headersCols[1].style.width, '100px');
-            assert.strictEqual(headersCols[2].style.width, '100px');
-        }
-    });
-
-    QUnit.test('Resize command column', function(assert) {
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            width: 470,
-            selection: { mode: 'multiple', showCheckBoxesMode: 'always' },
-            commonColumnSettings: {
-                allowResizing: true
-            },
-            loadingTimeout: undefined,
-            dataSource: [{}, {}, {}, {}],
-            columns: [{ type: 'selection' }, { dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }, { dataField: 'room', width: 100 }, { dataField: 'birthDay', width: 100 }]
-        });
-        const instance = dataGrid.dxDataGrid('instance');
-
-        // act
-        const resizeController = instance.getController('columnsResizer');
-        resizeController._isResizing = true;
-        resizeController._targetPoint = { columnIndex: 0 };
-        resizeController._setupResizingInfo(-9930);
-        resizeController._moveSeparator({
-            event: {
-                data: resizeController,
-                type: 'mousemove',
-                pageX: -9850,
-                preventDefault: commonUtils.noop
-            }
-        });
-
-        // assert
-        const headersCols = $('.dx-datagrid-headers' + ' col');
-        assert.equal($(headersCols[0]).css('width'), '150px', 'width of the first column - headers view');
-        assert.equal($(headersCols[1]).css('width'), '20px', 'width of the second column - headers view');
-    });
-
-    QUnit.module('RTL mode', () => {
-        QUnit.test('The separator position should be correct when a parent grid container in RTL mode', function(assert) {
-            // arrange
-            const $testElement = $('#dataGrid');
-
-            $testElement.parent().attr('dir', 'rtl').css({ width: '1000px', height: '500px' });
-
-            const instance = $testElement.dxDataGrid({
-                commonColumnSettings: {
-                    allowResizing: true
-                },
-                rtlEnabled: true,
-                columnResizingMode: 'widget',
-                allowColumnResizing: true,
-                loadingTimeout: undefined,
-                dataSource: [{}],
-                columns: [
-                    { caption: 'Column 1', width: '125px' },
-                    { caption: 'Column 2', width: '125px' },
-                    { caption: 'Column 3', width: '125px' },
-                    { caption: 'Column 4', width: '125px' }
-                ]
-            }).dxDataGrid('instance');
-
-            // act
-            const resizeController = instance.getController('columnsResizer');
-            resizeController._isResizing = true;
-            resizeController._targetPoint = { columnIndex: 0 };
-            resizeController._setupResizingInfo(-9125);
-            resizeController._moveSeparator({
-                event: {
-                    data: resizeController,
-                    type: 'mousemove',
-                    pageX: -9225,
-                    preventDefault: commonUtils.noop
-                }
-            });
-
-            // assert
-            assert.deepEqual($(resizeController._columnsSeparatorView.element()).offset(), { left: -9225, top: -10000 }, 'separator position');
-        });
     });
 });
