@@ -17,6 +17,11 @@ import { exportDataGrid } from './exporter/jspdf/export_data_grid';
 * @name PdfDataGridCell.groupSummaryItems.value
 * @type any
 */
+/**
+* @name PdfDataGridCellCoordinates
+* @namespace DevExpress.pdfExporter
+* @type object
+*/
 
 export {
     exportDataGrid

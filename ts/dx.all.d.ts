@@ -3026,6 +3026,27 @@ declare module DevExpress.pdfExporter {
         value?: any;
     }
     /**
+     * [descr:PdfDataGridCellCoordinates]
+     */
+    export interface PdfDataGridCellCoordinates {
+        /**
+         * [descr:PdfDataGridCellCoordinates.height]
+         */
+        height?: number;
+        /**
+         * [descr:PdfDataGridCellCoordinates.width]
+         */
+        width?: number;
+        /**
+         * [descr:PdfDataGridCellCoordinates.x]
+         */
+        x?: number;
+        /**
+         * [descr:PdfDataGridCellCoordinates.y]
+         */
+        y?: number;
+    }
+    /**
      * [descr:PdfExportDataGridProps]
      */
     export interface PdfExportDataGridProps {
@@ -3049,6 +3070,10 @@ declare module DevExpress.pdfExporter {
          * [descr:PdfExportDataGridProps.keepColumnWidths]
          */
         keepColumnWidths?: boolean;
+        /**
+         * [descr:PdfExportDataGridProps.onCellRendered]
+         */
+        onCellRendered?: ((options: { jsPDFDocument?: any, gridCell?: PdfDataGridCell, cellCoordinates?: PdfDataGridCellCoordinates }) => any);
         /**
          * [descr:PdfExportDataGridProps.selectedRowsOnly]
          */
