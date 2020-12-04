@@ -1,15 +1,13 @@
-name: QUnit tests
+name: QUnit tests linux
 
 on: [push, pull_request]
 
 jobs:
-  renovationtest:
+  test:
     strategy:
       matrix:
         RENOVATION: [ true ]
         BROWSER: [ google-chrome ]
-        CONSTEL: [ export ]
-        JQUERY: [ jquery=3 ]
         CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
         JQUERY: [ jquery=3 ]
 
