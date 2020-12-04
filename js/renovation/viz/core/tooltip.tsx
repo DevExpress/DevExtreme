@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState, Fragment,
-  RefObject,
+  RefObject, Method,
 } from 'devextreme-generator/component_declaration/common';
 
 import { PathSvgElement } from './renderers/svg_path';
@@ -9,10 +9,12 @@ import { ShadowFilter } from './renderers/shadow_filter';
 import { getNextDefsSvgId } from './renderers/utils';
 
 import { Size, Border } from './common/types.d';
+import { Format } from '../common/types.d';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle,
 } from './common/tooltip_utils';
+import { formatValue } from '../common/utils';
 
 export const viewFunction = ({
   textRef,
@@ -103,6 +105,10 @@ export class TooltipProps {
 
   @OneWay() opacity?: number;
 
+  @OneWay() format?: Format;
+
+  @OneWay() argumentFormat?: Format;
+
   @OneWay() canvas = {
     left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
   };
@@ -139,6 +145,12 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Effect()
   calculateSize(): void {
     this.size = this.textRef.getBBox();
+  }
+
+  @Method()
+  formatValue(value, _specialFormat): string {
+    const { format, argumentFormat } = this.props;
+    return formatValue(value, _specialFormat, { format, argumentFormat });
   }
 
   get fullSize(): Size {
