@@ -83,7 +83,8 @@ export class CompactAppointmentsHelper {
         return (e) => {
             const config = {
                 itemData: e.itemData.appointment,
-                itemElement: e.itemElement
+                itemElement: e.itemElement,
+                targetedAppointment: e.itemData.targetedAppointment,
             };
 
             const createClickEvent = extendFromObject(this.instance.fire('mapAppointmentFields', config), e, false);

@@ -9,35 +9,35 @@ import CollectionWidget, {
 
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**
-     * @docid dxTileViewOptions.activeStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxTileViewOptions.baseItemHeight
+     * @docid
      * @default 100
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     baseItemHeight?: number;
     /**
-     * @docid dxTileViewOptions.baseItemWidth
+     * @docid
      * @default 100
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     baseItemWidth?: number;
     /**
-     * @docid dxTileViewOptions.dataSource
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxTileViewItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxTileViewOptions.direction
+     * @docid
      * @type Enums.Orientation
      * @default 'horizontal'
      * @prevFileNamespace DevExpress.ui
@@ -45,14 +45,14 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      */
     direction?: 'horizontal' | 'vertical';
     /**
-     * @docid dxTileViewOptions.focusStateEnabled
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxTileViewOptions.height
+     * @docid
      * @default 500
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -60,28 +60,28 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxTileViewOptions.hoverStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxTileViewOptions.itemMargin
+     * @docid
      * @default 20
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemMargin?: number;
     /**
-     * @docid dxTileViewOptions.items
+     * @docid
      * @fires dxTileViewOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxTileViewItem | any>;
     /**
-     * @docid dxTileViewOptions.showScrollbar
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -89,7 +89,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     showScrollbar?: boolean;
 }
 /**
- * @docid dxTileView
+ * @docid
  * @inherits CollectionWidget
  * @module ui/tile_view
  * @export default
@@ -100,7 +100,7 @@ export default class dxTileView extends CollectionWidget {
     constructor(element: Element, options?: dxTileViewOptions)
     constructor(element: JQuery, options?: dxTileViewOptions)
     /**
-     * @docid dxtileview.scrollPosition
+     * @docid
      * @publicName scrollPosition()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -109,16 +109,21 @@ export default class dxTileView extends CollectionWidget {
     scrollPosition(): number;
 }
 
+/**
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxTileViewItem extends CollectionWidgetItem {
     /**
-     * @docid dxTileViewItem.heightRatio
+     * @docid
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     heightRatio?: number;
     /**
-     * @docid dxTileViewItem.widthRatio
+     * @docid
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public

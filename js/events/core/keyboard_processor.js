@@ -26,7 +26,7 @@ const KeyboardProcessor = Class.inherit({
 
         if(this._element) {
             this._processFunction = (e) => {
-                const isNotFocusTarget = this._focusTarget && this._focusTarget !== e.target && inArray(e.target, this._focusTarget) < 0;
+                const isNotFocusTarget = this._focusTarget && this._focusTarget !== e.target && inArray(e.target, $(this._focusTarget)) < 0;
                 const shouldSkipProcessing = this._isComposingJustFinished && e.which === 229 || this._isComposing || isNotFocusTarget;
 
                 this._isComposingJustFinished = false;

@@ -46,62 +46,13 @@ export default {
             },
 
             loadPanel: {
-                /**
-                 * @name GridBaseOptions.loadPanel.enabled
-                 * @type boolean|Enums.Mode
-                 * @default "auto"
-                 */
                 enabled: 'auto',
-                /**
-                 * @name GridBaseOptions.loadPanel.text
-                 * @type string
-                 * @default "Loading..."
-                 */
                 text: messageLocalization.format('Loading'),
-                /**
-                 * @name GridBaseOptions.loadPanel.width
-                 * @type number
-                 * @default 200
-                 */
                 width: 200,
-                /**
-                 * @name GridBaseOptions.loadPanel.height
-                 * @type number
-                 * @default 90
-                 */
                 height: 90,
-                /**
-                * @name GridBaseOptions.loadPanel.showIndicator
-                * @type boolean
-                * @default true
-                */
                 showIndicator: true,
-
-                /**
-                * @name GridBaseOptions.loadPanel.indicatorSrc
-                * @type string
-                * @default ""
-                */
                 indicatorSrc: '',
-
-                /**
-                * @name GridBaseOptions.loadPanel.showPane
-                * @type boolean
-                * @default true
-                */
                 showPane: true
-
-                /**
-                * @name GridBaseOptions.loadPanel.shading
-                * @type boolean
-                * @default false
-                */
-
-                /**
-                * @name GridBaseOptions.loadPanel.shadingColor
-                * @type string
-                * @default ''
-                */
             },
             rowTemplate: null,
             columnAutoWidth: false,
@@ -374,7 +325,10 @@ export default {
                                             break;
                                         case 'insert':
                                             if(!$rowsElement.length) {
-                                                tableElement && $newRowElement.prependTo(tableElement.children('tbody'));
+                                                if(tableElement) {
+                                                    const target = $newRowElement.is('tbody') ? tableElement : tableElement.children('tbody');
+                                                    $newRowElement.prependTo(target);
+                                                }
                                             } else if($rowElement.length) {
                                                 $newRowElement.insertBefore($rowElement);
                                             } else {
@@ -1167,13 +1121,3 @@ export default {
         })())
     }
 };
-/**
- * @name dxDataGridRowObject
- * @type object
- */
-/**
- * @name dxTreeListRowObject
- * @type object
- */
-
-

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import Tabs from 'ui/tabs';
+import windowUtils from 'core/utils/window';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 QUnit.testStart(() => {
@@ -120,31 +121,66 @@ QUnit.module('Aria accessibility', {
         helper.$widget.remove();
     }
 }, () => {
-    QUnit.test('3 items', function() {
-        helper.createWidget({ items: this.items });
+    ['items', 'dataSource'].forEach((sourceName) => {
+        [true, false].forEach((repaintChangesOnly) => {
+            QUnit.test(`3 items, repaintChangesOnly: ${repaintChangesOnly}, use: ${sourceName}`, function() {
+                helper.createWidget({ [`${sourceName}`]: this.items, repaintChangesOnly });
 
-        helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
+                helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
+            });
+
+            QUnit.test(`[item1], add new item2, repaintChangesOnly: ${repaintChangesOnly}, use: ${sourceName}`, function(assert) {
+                helper.createWidget({ [`${sourceName}`]: [{ text: 'Item_1' }], repaintChangesOnly });
+
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
+                helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
+
+                if(!windowUtils.hasWindow()) {
+                    assert.ok(true, 'no window');
+                    return;
+                }
+
+                helper.widget.option(sourceName, [{ text: 'Item_1' }, { text: 'Item_2' }]);
+
+                assert.strictEqual(helper.getItems().length, 2, 'items count');
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
+                helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
+            });
+
+            QUnit.test(`3 items, reorder item3 <--> item2, repaintChangesOnly: ${repaintChangesOnly}, use: ${sourceName}`, function(assert) {
+                helper.createWidget({ [`${sourceName}`]: this.items, repaintChangesOnly });
+
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
+                helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
+
+                helper.widget.option(sourceName, [{ text: 'Item_1' }, { text: 'Item_3' }, { text: 'Item_2' }]);
+                assert.strictEqual(helper.getItems().length, 3, 'items count');
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
+                helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
+            });
+
+            QUnit.test(`3 items, selectedIndex: 1, repaintChangesOnly: ${repaintChangesOnly}, use: ${sourceName}`, function() {
+                helper.createWidget({ [`${sourceName}`]: this.items, selectedIndex: 1, repaintChangesOnly });
+
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
+                helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'tab' });
+            });
+
+            QUnit.test(`3 items, selectedIndex: 1, set focusedElement: items[1] -> clean focusedElement, repaintChangesOnly: ${repaintChangesOnly}, use: ${sourceName}`, function() {
+                helper.createWidget({ [`${sourceName}`]: this.items, selectedIndex: 1, repaintChangesOnly });
+
+                helper.widget.option('focusedElement', helper.getItems().eq(1));
+                helper.checkAttributes(helper.$widget, { role: 'tablist', 'aria-activedescendant': helper.widget.getFocusedItemId(), tabindex: '0' }, 'widget');
+                helper.checkItemsAttributes([1], { focusedItemIndex: 1, attributes: ['aria-selected'], role: 'tab' });
+
+                helper.widget.option('focusedElement', null);
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
+                helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'tab' });
+            });
+        });
     });
 
-    QUnit.test('3 items, selectedIndex: 1', function() {
-        helper.createWidget({ items: this.items, selectedIndex: 1 });
-
-        helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'tab' });
-    });
-
-    QUnit.test('3 items, selectedIndex: 1, set focusedElement: items[1] -> clean focusedElement', function() {
-        helper.createWidget({ items: this.items, selectedIndex: 1 });
-
-        helper.widget.option('focusedElement', helper.getItems().eq(1));
-        helper.checkAttributes(helper.$widget, { role: 'tablist', 'aria-activedescendant': helper.widget.getFocusedItemId(), tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([1], { focusedItemIndex: 1, attributes: ['aria-selected'], role: 'tab' });
-
-        helper.widget.option('focusedElement', null);
-        helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'tab' });
-    });
 });
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';

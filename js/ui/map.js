@@ -107,33 +107,6 @@ const Map = Widget.inherit({
             provider: 'google',
 
             autoAdjust: true,
-
-            /**
-            * @name dxMapOptions.markers.location
-            * @extends MapLocationType
-            * @inherits MapLocation
-            */
-            /**
-            * @name dxMapOptions.markers.tooltip
-            * @type string|object
-            */
-            /**
-            * @name dxMapOptions.markers.tooltip.text
-            * @type string
-            */
-            /**
-            * @name dxMapOptions.markers.tooltip.isShown
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxMapOptions.markers.onClick
-            * @type function
-            */
-            /**
-            * @name dxMapOptions.markers.iconSrc
-            * @type string
-            */
             markers: [],
 
             markerIconSrc: null,
@@ -142,32 +115,6 @@ const Map = Widget.inherit({
 
             onMarkerRemoved: null,
 
-            /**
-            * @name dxMapOptions.routes.locations
-            * @extends MapLocationType
-            * @inherits MapLocation
-            * @type Array<Object>
-            */
-            /**
-            * @name dxMapOptions.routes.mode
-            * @type Enums.GeoMapRouteMode
-            * @default 'driving'
-            */
-            /**
-            * @name dxMapOptions.routes.color
-            * @type string
-            * @default '#0000FF'
-            */
-            /**
-            * @name dxMapOptions.routes.weight
-            * @type number
-            * @default 5
-            */
-            /**
-            * @name dxMapOptions.routes.opacity
-            * @type number
-            * @default 0.5
-            */
             routes: [],
 
             onRouteAdded: null,
@@ -175,48 +122,14 @@ const Map = Widget.inherit({
             onRouteRemoved: null,
 
             key: {
-                /**
-                * @name dxMapOptions.key.bing
-                * @type string
-                * @default ""
-                */
                 bing: '',
-
-                /**
-                * @name dxMapOptions.key.google
-                * @type string
-                * @default ""
-                */
                 google: '',
-
-                /**
-                * @name dxMapOptions.key.googleStatic
-                * @type string
-                * @default ""
-                */
                 googleStatic: ''
             },
 
             apiKey: {
-                /**
-                * @name dxMapOptions.apiKey.bing
-                * @type string
-                * @default ""
-                */
                 bing: '',
-
-                /**
-                * @name dxMapOptions.apiKey.google
-                * @type string
-                * @default ""
-                */
                 google: '',
-
-                /**
-                * @name dxMapOptions.apiKey.googleStatic
-                * @type string
-                * @default ""
-                */
                 googleStatic: ''
             },
 

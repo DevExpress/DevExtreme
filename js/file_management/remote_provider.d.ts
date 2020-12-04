@@ -4,21 +4,20 @@ import FileSystemProviderBase, {
 
 export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
     /**
-     * @docid RemoteFileSystemProviderOptions.endpointUrl
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     endpointUrl?: string;
     /**
-     * @docid RemoteFileSystemProviderOptions.hasSubDirectoriesExpr
-     * @type string|function(fileSystemItem)
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     hasSubDirectoriesExpr?: string | Function;
 }
 /**
- * @docid RemoteFileSystemProvider
+ * @docid
  * @inherits FileSystemProviderBase
  * @module file_management/remote_provider
  * @namespace DevExpress.fileManagement

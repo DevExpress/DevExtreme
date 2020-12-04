@@ -301,16 +301,6 @@ const Draggable = DOMComponent.inherit({
             scrollSensitivity: 60,
             group: undefined,
             data: undefined,
-            /**
-             * @name DraggableBaseOptions.cursorOffset.x
-             * @type number
-             * @default 0
-             */
-            /**
-             * @name DraggableBaseOptions.cursorOffset.y
-             * @type number
-             * @default 0
-             */
         });
     },
 

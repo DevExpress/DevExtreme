@@ -188,28 +188,6 @@ const Popover = Popup.inherit({
             * @hidden
             */
 
-            /**
-            * @name dxPopoverOptions.showEvent.name
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxPopoverOptions.showEvent.delay
-            * @type number
-            * @default undefined
-            */
-
-            /**
-            * @name dxPopoverOptions.hideEvent.name
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxPopoverOptions.hideEvent.delay
-            * @type number
-            * @default undefined
-            */
-
             fullScreen: false,
             closeOnTargetScroll: true,
             arrowPosition: '',

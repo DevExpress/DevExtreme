@@ -8,49 +8,49 @@ import {
 
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     /**
-     * @docid WidgetOptions.accessKey
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     accessKey?: string;
     /**
-     * @docid WidgetOptions.activeStateEnabled
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid WidgetOptions.disabled
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
     /**
-     * @docid WidgetOptions.focusStateEnabled
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid WidgetOptions.hint
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hint?: string;
     /**
-     * @docid WidgetOptions.hoverStateEnabled
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid WidgetOptions.onContentReady
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -58,14 +58,14 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
      */
     onContentReady?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
-     * @docid WidgetOptions.tabIndex
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     tabIndex?: number;
     /**
-     * @docid WidgetOptions.visible
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -73,7 +73,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     visible?: boolean;
 }
 /**
- * @docid Widget
+ * @docid
  * @inherits DOMComponent
  * @module ui/widget/ui.widget
  * @export default
@@ -84,14 +84,14 @@ export default class Widget extends DOMComponent {
     constructor(element: Element, options?: WidgetOptions)
     constructor(element: JQuery, options?: WidgetOptions)
     /**
-     * @docid Widget.focus
+     * @docid
      * @publicName focus()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focus(): void;
     /**
-     * @docid Widget.registerKeyHandler
+     * @docid
      * @publicName registerKeyHandler(key, handler)
      * @param1 key:string
      * @param2 handler:function
@@ -100,7 +100,7 @@ export default class Widget extends DOMComponent {
      */
     registerKeyHandler(key: string, handler: Function): void;
     /**
-     * @docid Widget.repaint
+     * @docid
      * @publicName repaint()
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -117,7 +117,7 @@ export default class Widget extends DOMComponent {
 export var dxItem: any;
 
 /**
- * @docid format
+ * @docid
  * @type Enums.Format|string|function|Object
  * @type_function_param1 value:number|date
  * @type_function_return string
@@ -126,4 +126,35 @@ export var dxItem: any;
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date), precision?: number, type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' };
+export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | {
+  /**
+  * @docid
+  * @prevFileNamespace DevExpress.ui
+  */
+  currency?: string,
+  /**
+  * @docid
+  * @prevFileNamespace DevExpress.ui
+  * @type_function_param1 value:number|date
+  * @type_function_return string
+  */
+  formatter?: ((value: number | Date) => string),
+  /**
+  * @docid
+  * @prevFileNamespace DevExpress.ui
+  * @type_function_param1 value:string
+  * @type_function_return number|date
+  */
+  parser?: ((value: string) => number | Date),
+  /**
+  * @docid
+  * @prevFileNamespace DevExpress.ui
+  */
+  precision?: number,
+  /**
+  * @docid
+  * @prevFileNamespace DevExpress.ui
+  * @type Enums.Format
+  */
+  type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime'
+};

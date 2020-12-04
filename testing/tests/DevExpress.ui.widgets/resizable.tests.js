@@ -1,10 +1,11 @@
 import translator from 'animation/translator';
-import 'common.css!';
 import visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
 import 'ui/resizable';
 import pointerMock from '../../helpers/pointerMock.js';
 
+import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =

@@ -1049,9 +1049,14 @@ MapLayer.prototype = _extend({
                 if(!_isArray(coords)) {
                     return;
                 }
-                const initValue = coords[0];
 
-                return coords.reduce((min, c) => {
+                const coordsToBoundsSearch = (_isArray(coords[0][0]) ?
+                    coords.reduce((ac, val) => ac.concat(val), [])
+                    : coords);
+
+                const initValue = coordsToBoundsSearch[0];
+
+                return coordsToBoundsSearch.reduce((min, c) => {
                     return [_min(min[0], c[0]), _min(min[1], c[1]), _max(min[2], c[0]), _max(min[3], c[1])];
                 }, [initValue[0], initValue[1], initValue[0], initValue[1]]);
             })

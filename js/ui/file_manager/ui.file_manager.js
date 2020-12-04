@@ -421,16 +421,6 @@ class FileManager extends Widget {
 
             focusedItemKey: undefined,
 
-            /**
-            * @name dxFileManagerToolbar
-            * @type object
-            */
-
-            /**
-            * @name dxFileManagerToolbarItem
-            * @inherits dxToolbarItem
-            */
-
             toolbar: {
                 items: [
                     'showNavPane', 'create', 'upload', 'switchView',
@@ -451,17 +441,6 @@ class FileManager extends Widget {
                 ]
             },
 
-
-            /**
-            * @name dxFileManagerContextMenu
-            * @type object
-            */
-
-            /**
-            * @name dxFileManagerContextMenuItem
-            * @inherits dxContextMenuItem
-            */
-
             contextMenu: {
                 items: [
                     'create', 'upload', 'rename', 'move', 'copy', 'delete', 'refresh', 'download'
@@ -469,41 +448,13 @@ class FileManager extends Widget {
             },
 
             itemView: {
-                /**
-                 * @name dxFileManagerOptions.itemView.details
-                 * @type object
-                 */
-                /**
-                 * @name dxFileManagerDetailsColumn
-                 * @type object
-                 */
                 details: {
-                    /**
-                     * @name dxFileManagerOptions.itemView.details.columns
-                     * @type Array<dxFileManagerDetailsColumn, string>
-                     * @default ["thumbnail", "name", "dateModified", "size"]
-                     */
                     columns: [
                         'thumbnail', 'name', 'dateModified', 'size'
                     ]
                 },
-                /**
-                * @name dxFileManagerOptions.itemView.mode
-                * @type Enums.FileManagerItemViewMode
-                * @default "details"
-                */
                 mode: 'details', // "thumbnails"
-                /**
-                * @name dxFileManagerOptions.itemView.showFolders
-                * @type boolean
-                * @default true
-                */
                 showFolders: true,
-                /**
-                * @name dxFileManagerOptions.itemView.showParentFolder
-                * @type boolean
-                * @default true
-                */
                 showParentFolder: true
             },
 
@@ -528,63 +479,17 @@ class FileManager extends Widget {
             allowedFileExtensions: [],
 
             upload: {
-                /**
-                * @name dxFileManagerOptions.upload.maxFileSize
-                * @type number
-                * @default 0
-                */
                 maxFileSize: 0,
-
-                /**
-                * @name dxFileManagerOptions.upload.chunkSize
-                * @type number
-                * @default 200000
-                */
                 chunkSize: 200000
             },
 
             permissions: {
-                /**
-                 * @name dxFileManagerOptions.permissions.create
-                 * @type boolean
-                 * @default false
-                 */
                 create: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.copy
-                 * @type boolean
-                 * @default false
-                 */
                 copy: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.move
-                 * @type boolean
-                 * @default false
-                 */
                 move: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.delete
-                 * @type boolean
-                 * @default false
-                 */
                 delete: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.rename
-                 * @type boolean
-                 * @default false
-                 */
                 rename: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.upload
-                 * @type boolean
-                 * @default false
-                 */
                 upload: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.download
-                 * @type boolean
-                 * @default false
-                 */
                 download: false
             }
         });

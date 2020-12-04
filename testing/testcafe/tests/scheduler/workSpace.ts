@@ -37,8 +37,11 @@ test('Horizontal selection between two workspace cells should focus cells betwee
   const scheduler = new Scheduler('#container');
 
   await t
+    .setTestSpeed(0.5)
+    .resizeWindow(1200, 800)
     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 3))
-    .expect(scheduler.dateTableCells.filter('.dx-state-focused').count).eql(4);
+    .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
+    .eql(4);
 }).before(() => createScheduler({
   views: ['timelineWeek'],
   currentDate: new Date(2015, 1, 9),

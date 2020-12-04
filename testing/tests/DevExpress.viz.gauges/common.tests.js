@@ -468,7 +468,16 @@ QUnit.test('Subvalue indicators are rendered', function(assert) {
 
         assert.strictEqual(target.renderer, gauge._renderer, 'renderer is passed');
         assert.strictEqual(target.translator, gauge._translator, 'translator is passed');
-        assert.strictEqual(target.owner, gauge._renderer.root, 'root element is passed');
+
+        const subvalueIndicatorsContainer = gauge._renderer.g.getCall(7).returnValue;
+        assert.strictEqual(target.owner, subvalueIndicatorsContainer, 'root element is passed');
+        assert.deepEqual(subvalueIndicatorsContainer.attr.firstCall.args[0], { class: 'dxg-subvalue-indicators' });
+        assert.strictEqual(subvalueIndicatorsContainer.linkOn.callCount, 1);
+        assert.strictEqual(subvalueIndicatorsContainer.linkOn.firstCall.args[0], gauge._renderer.root);
+        assert.strictEqual(subvalueIndicatorsContainer.linkOn.firstCall.args[1], 'valueIndicator');
+        assert.strictEqual(subvalueIndicatorsContainer.enableLinks.callCount, 1);
+        assert.strictEqual(subvalueIndicatorsContainer.linkAppend.callCount, 1);
+
         assert.strictEqual(target.tracker, gauge._tracker, 'tracker is passed');
 
         assert.ok(target.root, 'root');

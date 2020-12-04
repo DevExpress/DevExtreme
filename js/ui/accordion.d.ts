@@ -23,7 +23,7 @@ import CollectionWidget, {
 
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**
-     * @docid dxAccordionOptions.animationDuration
+     * @docid
      * @default 300
      * @default 200 [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -31,35 +31,35 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      */
     animationDuration?: number;
     /**
-     * @docid dxAccordionOptions.collapsible
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     collapsible?: boolean;
     /**
-     * @docid dxAccordionOptions.dataSource
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxAccordionItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxAccordionOptions.deferRendering
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
-     * @docid dxAccordionOptions.focusStateEnabled
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxAccordionOptions.height
+     * @docid
      * @default undefined
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -67,14 +67,14 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxAccordionOptions.hoverStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxAccordionOptions.itemTemplate
+     * @docid
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -85,7 +85,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      */
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxAccordionOptions.itemTitleTemplate
+     * @docid
      * @default "title"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -96,21 +96,21 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      */
     itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxAccordionOptions.items
+     * @docid
      * @fires dxAccordionOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxAccordionItem | any>;
     /**
-     * @docid dxAccordionOptions.multiple
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     multiple?: boolean;
     /**
-     * @docid dxAccordionOptions.onItemTitleClick
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
@@ -123,14 +123,14 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      */
     onItemTitleClick?: ((e: { component?: dxAccordion, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any) | string;
     /**
-     * @docid dxAccordionOptions.repaintChangesOnly
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid dxAccordionOptions.selectedIndex
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -138,7 +138,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     selectedIndex?: number;
 }
 /**
- * @docid dxAccordion
+ * @docid
  * @inherits CollectionWidget
  * @module ui/accordion
  * @export default
@@ -149,7 +149,7 @@ export default class dxAccordion extends CollectionWidget {
     constructor(element: Element, options?: dxAccordionOptions)
     constructor(element: JQuery, options?: dxAccordionOptions)
     /**
-     * @docid dxAccordion.collapseItem
+     * @docid
      * @publicName collapseItem(index)
      * @param1 index:numeric
      * @return Promise<void>
@@ -158,7 +158,7 @@ export default class dxAccordion extends CollectionWidget {
      */
     collapseItem(index: number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxAccordion.expandItem
+     * @docid
      * @publicName expandItem(index)
      * @param1 index:numeric
      * @return Promise<void>
@@ -167,7 +167,7 @@ export default class dxAccordion extends CollectionWidget {
      */
     expandItem(index: number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxAccordion.updateDimensions
+     * @docid
      * @publicName updateDimensions()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -176,15 +176,20 @@ export default class dxAccordion extends CollectionWidget {
     updateDimensions(): Promise<void> & JQueryPromise<void>;
 }
 
+/**
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxAccordionItem extends CollectionWidgetItem {
     /**
-     * @docid dxAccordionItem.icon
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid dxAccordionItem.title
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -9,6 +9,7 @@ $size: null !default;
 @use "./card";
 @use "./fieldset";
 @use "./common";
+@use "../base/resizable";
 
 // public widgets
 @use "./box";
@@ -70,4 +71,3 @@ $size: null !default;
 @use "./diagram";
 @use "./gantt";
 @use "./sortable";
-

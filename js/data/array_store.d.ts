@@ -4,14 +4,14 @@ import Store, {
 
 export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
     /**
-     * @docid ArrayStoreOptions.data
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     data?: Array<any>;
 }
 /**
- * @docid ArrayStore
+ * @docid
  * @inherits Store
  * @module data/array_store
  * @export default
@@ -21,14 +21,14 @@ export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
 export default class ArrayStore extends Store {
     constructor(options?: ArrayStoreOptions)
     /**
-     * @docid ArrayStore.clear
+     * @docid
      * @publicName clear()
      * @prevFileNamespace DevExpress.data
      * @public
      */
     clear(): void;
     /**
-     * @docid ArrayStore.createQuery
+     * @docid
      * @publicName createQuery()
      * @return object
      * @prevFileNamespace DevExpress.data

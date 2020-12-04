@@ -10,33 +10,33 @@ import {
 
 export interface DataSourceOptions {
     /**
-     * @docid DataSourceOptions.customQueryParams
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     customQueryParams?: any;
     /**
-     * @docid DataSourceOptions.expand
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     expand?: Array<string> | string;
     /**
-     * @docid DataSourceOptions.filter
+     * @docid
      * @type Filter expression
      * @prevFileNamespace DevExpress.data
      * @public
      */
     filter?: string | Array<any> | Function;
     /**
-     * @docid DataSourceOptions.group
+     * @docid
      * @type Group expression
      * @prevFileNamespace DevExpress.data
      * @public
      */
     group?: string | Array<any> | Function;
     /**
-     * @docid DataSourceOptions.map
+     * @docid
      * @type_function_param1 dataItem:object
      * @type_function_return object
      * @prevFileNamespace DevExpress.data
@@ -44,7 +44,7 @@ export interface DataSourceOptions {
      */
     map?: ((dataItem: any) => any);
     /**
-     * @docid DataSourceOptions.onChanged
+     * @docid
      * @type_function_param1 e:Object
      * @type_function_param1_field1 changes:Array<any>
      * @action
@@ -53,7 +53,7 @@ export interface DataSourceOptions {
      */
     onChanged?: ((e: { changes?: Array<any> }) => any);
     /**
-     * @docid DataSourceOptions.onLoadError
+     * @docid
      * @type_function_param1 error:Object
      * @type_function_param1_field1 message:string
      * @action
@@ -62,7 +62,7 @@ export interface DataSourceOptions {
      */
     onLoadError?: ((error: { message?: string }) => any);
     /**
-     * @docid DataSourceOptions.onLoadingChanged
+     * @docid
      * @type_function_param1 isLoading:boolean
      * @action
      * @prevFileNamespace DevExpress.data
@@ -70,21 +70,21 @@ export interface DataSourceOptions {
      */
     onLoadingChanged?: ((isLoading: boolean) => any);
     /**
-     * @docid DataSourceOptions.pageSize
+     * @docid
      * @default 20
      * @prevFileNamespace DevExpress.data
      * @public
      */
     pageSize?: number;
     /**
-     * @docid DataSourceOptions.paginate
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.data
      * @public
      */
     paginate?: boolean;
     /**
-     * @docid DataSourceOptions.postProcess
+     * @docid
      * @type_function_param1 data:Array<any>
      * @type_function_return Array<any>
      * @prevFileNamespace DevExpress.data
@@ -92,69 +92,69 @@ export interface DataSourceOptions {
      */
     postProcess?: ((data: Array<any>) => Array<any>);
     /**
-     * @docid DataSourceOptions.pushAggregationTimeout
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.data
      * @public
      */
     pushAggregationTimeout?: number;
     /**
-     * @docid DataSourceOptions.requireTotalCount
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     requireTotalCount?: boolean;
     /**
-     * @docid DataSourceOptions.reshapeOnPush
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public
      */
     reshapeOnPush?: boolean;
     /**
-     * @docid DataSourceOptions.searchExpr
+     * @docid
      * @type getter|Array<getter>
      * @prevFileNamespace DevExpress.data
      * @public
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
-     * @docid DataSourceOptions.searchOperation
+     * @docid
      * @default "contains"
      * @prevFileNamespace DevExpress.data
      * @public
      */
     searchOperation?: string;
     /**
-     * @docid DataSourceOptions.searchValue
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.data
      * @public
      */
     searchValue?: any;
     /**
-     * @docid DataSourceOptions.select
+     * @docid
      * @type Select expression
      * @prevFileNamespace DevExpress.data
      * @public
      */
     select?: string | Array<any> | Function;
     /**
-     * @docid DataSourceOptions.sort
+     * @docid
      * @type Sort expression
      * @prevFileNamespace DevExpress.data
      * @public
      */
     sort?: string | Array<any> | Function;
     /**
-     * @docid DataSourceOptions.store
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     store?: Store | StoreOptions | Array<any> | any;
 }
 /**
- * @docid DataSource
+ * @docid
  * @module data/data_source
  * @export default
  * @prevFileNamespace DevExpress.data
@@ -166,7 +166,7 @@ export default class DataSource {
     constructor(store: Store);
     constructor(url: string);
     /**
-     * @docid DataSource.cancel
+     * @docid
      * @publicName cancel(operationId)
      * @return boolean
      * @prevFileNamespace DevExpress.data
@@ -174,14 +174,14 @@ export default class DataSource {
      */
     cancel(): boolean;
     /**
-     * @docid DataSource.dispose
+     * @docid
      * @publicName dispose()
      * @prevFileNamespace DevExpress.data
      * @public
      */
     dispose(): void;
     /**
-     * @docid DataSource.filter
+     * @docid
      * @publicName filter()
      * @return object
      * @prevFileNamespace DevExpress.data
@@ -189,7 +189,7 @@ export default class DataSource {
      */
     filter(): any;
     /**
-     * @docid DataSource.filter
+     * @docid
      * @publicName filter(filterExpr)
      * @param1 filterExpr:object
      * @prevFileNamespace DevExpress.data
@@ -197,7 +197,7 @@ export default class DataSource {
      */
     filter(filterExpr: any): void;
     /**
-     * @docid DataSource.group
+     * @docid
      * @publicName group()
      * @return object
      * @prevFileNamespace DevExpress.data
@@ -205,7 +205,7 @@ export default class DataSource {
      */
     group(): any;
     /**
-     * @docid DataSource.group
+     * @docid
      * @publicName group(groupExpr)
      * @param1 groupExpr:object
      * @prevFileNamespace DevExpress.data
@@ -213,7 +213,7 @@ export default class DataSource {
      */
     group(groupExpr: any): void;
     /**
-     * @docid DataSource.isLastPage
+     * @docid
      * @publicName isLastPage()
      * @return boolean
      * @prevFileNamespace DevExpress.data
@@ -221,7 +221,7 @@ export default class DataSource {
      */
     isLastPage(): boolean;
     /**
-     * @docid DataSource.isLoaded
+     * @docid
      * @publicName isLoaded()
      * @return boolean
      * @prevFileNamespace DevExpress.data
@@ -229,7 +229,7 @@ export default class DataSource {
      */
     isLoaded(): boolean;
     /**
-     * @docid DataSource.isLoading
+     * @docid
      * @publicName isLoading()
      * @return boolean
      * @prevFileNamespace DevExpress.data
@@ -237,7 +237,7 @@ export default class DataSource {
      */
     isLoading(): boolean;
     /**
-     * @docid DataSource.items
+     * @docid
      * @publicName items()
      * @return Array<any>
      * @prevFileNamespace DevExpress.data
@@ -245,7 +245,7 @@ export default class DataSource {
      */
     items(): Array<any>;
     /**
-     * @docid DataSource.key
+     * @docid
      * @publicName key()
      * @return object|string|number
      * @prevFileNamespace DevExpress.data
@@ -253,7 +253,7 @@ export default class DataSource {
      */
     key(): any & string & number;
     /**
-     * @docid DataSource.load
+     * @docid
      * @publicName load()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -261,7 +261,7 @@ export default class DataSource {
      */
     load(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid DataSource.loadOptions
+     * @docid
      * @publicName loadOptions()
      * @return object
      * @prevFileNamespace DevExpress.data
@@ -269,7 +269,7 @@ export default class DataSource {
      */
     loadOptions(): any;
     /**
-     * @docid DataSource.off
+     * @docid
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
@@ -278,7 +278,7 @@ export default class DataSource {
      */
     off(eventName: string): this;
     /**
-     * @docid DataSource.off
+     * @docid
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -288,7 +288,7 @@ export default class DataSource {
      */
     off(eventName: string, eventHandler: Function): this;
     /**
-     * @docid DataSource.on
+     * @docid
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -298,7 +298,7 @@ export default class DataSource {
      */
     on(eventName: string, eventHandler: Function): this;
     /**
-     * @docid DataSource.on
+     * @docid
      * @publicName on(events)
      * @param1 events:object
      * @return this
@@ -307,7 +307,7 @@ export default class DataSource {
      */
     on(events: any): this;
     /**
-     * @docid DataSource.pageIndex
+     * @docid
      * @publicName pageIndex()
      * @return numeric
      * @prevFileNamespace DevExpress.data
@@ -315,7 +315,7 @@ export default class DataSource {
      */
     pageIndex(): number;
     /**
-     * @docid DataSource.pageIndex
+     * @docid
      * @publicName pageIndex(newIndex)
      * @param1 newIndex:numeric
      * @prevFileNamespace DevExpress.data
@@ -323,7 +323,7 @@ export default class DataSource {
      */
     pageIndex(newIndex: number): void;
     /**
-     * @docid DataSource.pageSize
+     * @docid
      * @publicName pageSize()
      * @return numeric
      * @prevFileNamespace DevExpress.data
@@ -331,7 +331,7 @@ export default class DataSource {
      */
     pageSize(): number;
     /**
-     * @docid DataSource.pageSize
+     * @docid
      * @publicName pageSize(value)
      * @param1 value:numeric
      * @prevFileNamespace DevExpress.data
@@ -339,7 +339,7 @@ export default class DataSource {
      */
     pageSize(value: number): void;
     /**
-     * @docid DataSource.paginate
+     * @docid
      * @publicName paginate()
      * @return Boolean
      * @prevFileNamespace DevExpress.data
@@ -347,7 +347,7 @@ export default class DataSource {
      */
     paginate(): boolean;
     /**
-     * @docid DataSource.paginate
+     * @docid
      * @publicName paginate(value)
      * @param1 value:Boolean
      * @prevFileNamespace DevExpress.data
@@ -355,7 +355,7 @@ export default class DataSource {
      */
     paginate(value: boolean): void;
     /**
-     * @docid DataSource.reload
+     * @docid
      * @publicName reload()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -363,7 +363,7 @@ export default class DataSource {
      */
     reload(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid DataSource.requireTotalCount
+     * @docid
      * @publicName requireTotalCount()
      * @return boolean
      * @prevFileNamespace DevExpress.data
@@ -371,7 +371,7 @@ export default class DataSource {
      */
     requireTotalCount(): boolean;
     /**
-     * @docid DataSource.requireTotalCount
+     * @docid
      * @publicName requireTotalCount(value)
      * @param1 value:boolean
      * @prevFileNamespace DevExpress.data
@@ -379,7 +379,7 @@ export default class DataSource {
      */
     requireTotalCount(value: boolean): void;
     /**
-     * @docid DataSource.searchExpr
+     * @docid
      * @publicName searchExpr()
      * @return getter|Array<getter>
      * @prevFileNamespace DevExpress.data
@@ -387,7 +387,7 @@ export default class DataSource {
      */
     searchExpr(): string & Function & Array<string | Function>;
     /**
-     * @docid DataSource.searchExpr
+     * @docid
      * @publicName searchExpr(expr)
      * @param1 expr:getter|Array<getter>
      * @prevFileNamespace DevExpress.data
@@ -395,7 +395,7 @@ export default class DataSource {
      */
     searchExpr(expr: string | Function | Array<string | Function>): void;
     /**
-     * @docid DataSource.searchOperation
+     * @docid
      * @publicName searchOperation()
      * @return string
      * @prevFileNamespace DevExpress.data
@@ -403,7 +403,7 @@ export default class DataSource {
      */
     searchOperation(): string;
     /**
-     * @docid DataSource.searchOperation
+     * @docid
      * @publicName searchOperation(op)
      * @param1 op:string
      * @prevFileNamespace DevExpress.data
@@ -411,7 +411,7 @@ export default class DataSource {
      */
     searchOperation(op: string): void;
     /**
-     * @docid DataSource.searchValue
+     * @docid
      * @publicName searchValue()
      * @return any
      * @prevFileNamespace DevExpress.data
@@ -419,7 +419,7 @@ export default class DataSource {
      */
     searchValue(): any;
     /**
-     * @docid DataSource.searchValue
+     * @docid
      * @publicName searchValue(value)
      * @param1 value:any
      * @prevFileNamespace DevExpress.data
@@ -427,7 +427,7 @@ export default class DataSource {
      */
     searchValue(value: any): void;
     /**
-     * @docid DataSource.select
+     * @docid
      * @publicName select()
      * @return any
      * @prevFileNamespace DevExpress.data
@@ -435,7 +435,7 @@ export default class DataSource {
      */
     select(): any;
     /**
-     * @docid DataSource.select
+     * @docid
      * @publicName select(expr)
      * @param1 expr:any
      * @prevFileNamespace DevExpress.data
@@ -443,7 +443,7 @@ export default class DataSource {
      */
     select(expr: any): void;
     /**
-     * @docid DataSource.sort
+     * @docid
      * @publicName sort()
      * @return any
      * @prevFileNamespace DevExpress.data
@@ -451,7 +451,7 @@ export default class DataSource {
      */
     sort(): any;
     /**
-     * @docid DataSource.sort
+     * @docid
      * @publicName sort(sortExpr)
      * @param1 sortExpr:any
      * @prevFileNamespace DevExpress.data
@@ -459,7 +459,7 @@ export default class DataSource {
      */
     sort(sortExpr: any): void;
     /**
-     * @docid DataSource.store
+     * @docid
      * @publicName store()
      * @return object
      * @prevFileNamespace DevExpress.data
@@ -467,7 +467,7 @@ export default class DataSource {
      */
     store(): any;
     /**
-     * @docid DataSource.totalCount
+     * @docid
      * @publicName totalCount()
      * @return numeric
      * @prevFileNamespace DevExpress.data

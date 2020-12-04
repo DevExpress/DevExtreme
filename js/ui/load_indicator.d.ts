@@ -4,7 +4,7 @@ import Widget, {
 
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
-     * @docid dxLoadIndicatorOptions.indicatorSrc
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -12,7 +12,7 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     indicatorSrc?: string;
 }
 /**
- * @docid dxLoadIndicator
+ * @docid
  * @inherits Widget
  * @module ui/load_indicator
  * @export default

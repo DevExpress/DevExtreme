@@ -283,7 +283,7 @@ export default class PreactWrapper extends DOMComponent {
           const $children = $parent.contents();
 
           Object.keys(data).forEach((name) => {
-            if (domAdapter.isNode(data[name])) {
+            if (data[name] && domAdapter.isNode(data[name])) {
               data[name] = getPublicElement($(data[name]));
             }
           });

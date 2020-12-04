@@ -5,7 +5,7 @@ const _round = Math.round;
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import { clone } from '../../core/utils/object';
-import { dxBaseGauge } from './base_gauge';
+import { BaseGauge } from './base_gauge';
 import { dxGauge, createIndicatorCreator } from './common';
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
 import * as linearIndicators from './linear_indicators';
@@ -204,7 +204,7 @@ const dxLinearGauge = dxGauge.inherit({
         }
     },
 
-    _factory: clone(dxBaseGauge.prototype._factory)
+    _factory: clone(BaseGauge.prototype._factory)
 });
 
 function selectRectBySizes(srcRect, sizes, margins) {

@@ -70,16 +70,6 @@ class ContextMenu extends MenuBase {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            /**
-            * @name dxContextMenuOptions.showEvent.name
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxContextMenuOptions.showEvent.delay
-            * @type number
-            * @default undefined
-            */
             showEvent: DEFAULT_SHOW_EVENT,
 
             closeOnOutsideClick: true,
@@ -120,11 +110,6 @@ class ContextMenu extends MenuBase {
             /**
             * @name dxContextMenuOptions.selectedItems
             * @hidden
-            */
-            /**
-            * @name dxContextMenuItem
-            * @inherits dxMenuBaseItem
-            * @type object
             */
 
             onLeftFirstItem: null,
@@ -188,7 +173,7 @@ class ContextMenu extends MenuBase {
         };
         return extend(super._supportedKeys(), {
             space: selectItem,
-            esc: this.hide
+            escape: this.hide
         });
     }
 
