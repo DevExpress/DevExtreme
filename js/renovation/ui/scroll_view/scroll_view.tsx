@@ -21,7 +21,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
     cssClasses,
     scrollableRef,
-    scrollViewProps,
+    props,
     restAttributes,
   } = viewModel;
 
@@ -30,7 +30,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       classes={cssClasses}
       ref={scrollableRef as any}
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...scrollViewProps}
+      {...props}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     />
@@ -106,10 +106,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   // clientWidth(): number {
   //   return this.scrollableRef.clientWidth();
   // }
-
-  get scrollViewProps(): ScrollViewPropsType {
-    return this.props;
-  }
 
   // eslint-disable-next-line class-methods-use-this
   get cssClasses(): string {

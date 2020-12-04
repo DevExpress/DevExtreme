@@ -13,7 +13,6 @@ import {
 
 import {
   ScrollablePropsType,
-  ScrollableInternalPropsType,
 } from './scrollable_props';
 
 import { ScrollableNative } from './scrollable_native';
@@ -23,16 +22,15 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     cssClasses,
     scrollableRef,
-    scrollableProps,
     props: {
       useNative,
+      ...scrollableProps
     },
     restAttributes,
   } = viewModel;
 
   return (
     <Fragment>
-      {/* TODO: ADD IDs / Vue adds <div>, Angular adds wrapper as <div> */}
       {useNative && (
       <ScrollableNative
         ref={scrollableRef as any}
@@ -118,12 +116,6 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   @Method()
   clientWidth(): number {
     return this.scrollableRef.clientWidth();
-  }
-
-  get scrollableProps(): ScrollableInternalPropsType {
-    const { useNative, ...restProps } = this.props;
-
-    return restProps;
   }
 
   get cssClasses(): string {
