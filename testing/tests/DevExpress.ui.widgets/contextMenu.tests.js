@@ -2288,7 +2288,7 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
             .keyDown('up');
 
         assert.equal($(instance.option('focusedElement')).text(), 'item 22');
-    });  
+    });
 });
 
 
