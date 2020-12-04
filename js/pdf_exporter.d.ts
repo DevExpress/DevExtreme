@@ -55,24 +55,30 @@ export interface PdfDataGridCell {
     value?: any;
 }
 
+/**
+* @docid
+* @namespace DevExpress.pdfExporter
+* @prevFileNamespace DevExpress
+* @type object
+*/
 export interface PdfDataGridCellCoordinates {
     /**
-     * @docid PdfDataGridCellCoordinates.x
+     * @docid
      * @public
      */
     x?: number;
     /**
-     * @docid PdfDataGridCellCoordinates.y
+     * @docid
      * @public
      */
     y?: number;
     /**
-     * @docid PdfDataGridCellCoordinates.width
+     * @docid
      * @public
      */
     width?: number;
     /**
-     * @docid PdfDataGridCellCoordinates.height
+     * @docid
      * @public
      */
     height?: number;
@@ -122,7 +128,7 @@ export interface PdfExportDataGridProps {
      */
     customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any}) => any);
     /**
-     * @docid PdfExportDataGridProps.onCellRendered
+     * @docid
      * @type_function_param1 options:Object
      * @type_function_param1_field1 jsPDFDocument:Object
      * @type_function_param1_field2 gridCell:PdfDataGridCell
