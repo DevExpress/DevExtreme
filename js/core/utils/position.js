@@ -2,7 +2,7 @@ import config from '../config';
 import $ from '../renderer';
 import { each } from '../utils/iterator';
 import { isWindow } from '../utils/type';
-import { getWindow } from '../utils/window';
+import { getWindow, hasWindow } from '../utils/window';
 
 const window = getWindow();
 
@@ -50,7 +50,7 @@ const getAvailableBoundsContainer = (container) => {
         each($containerWithParents, function(i, parent) {
             if(parent === $('body').get(0)) {
                 return false;
-            } else if(window.getComputedStyle(parent).overflowY === 'hidden') {
+            } else if(hasWindow() && window.getComputedStyle(parent).overflowY === 'hidden') {
                 result = $(parent);
                 return false;
             }
