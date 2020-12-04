@@ -292,8 +292,18 @@ class Gantt extends Widget {
     }
     _getTreeListRowHeight() {
         const $row = this._treeList._$element.find('.dx-data-row');
-        const height = $row.length ? getBoundingRect($row.last().get(0)).height : GANTT_DEFAULT_ROW_HEIGHT;
-        return height ? height : GANTT_DEFAULT_ROW_HEIGHT;
+        let height = $row.length ? getBoundingRect($row.last().get(0)).height : GANTT_DEFAULT_ROW_HEIGHT;
+        if(!height) {
+            height = GANTT_DEFAULT_ROW_HEIGHT;
+        }
+        this._correctRowsViewRowHeight(height);
+        return height;
+    }
+    _correctRowsViewRowHeight(height) {
+        const view = this._treeList._views && this._treeList._views['rowsView'];
+        if(view?._rowHeight !== height) {
+            view._rowHeight = height;
+        }
     }
     _getTreeListHeaderHeight() {
         return getBoundingRect(this._treeList._$element.find('.dx-treelist-headers').get(0)).height;
