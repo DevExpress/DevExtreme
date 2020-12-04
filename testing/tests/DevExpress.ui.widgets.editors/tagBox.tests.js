@@ -1021,7 +1021,8 @@ QUnit.module('the "text" option', moduleSetup, () => {
     QUnit.test('value selecting after search should clear text option value', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: ['item1', 'item2'],
-            searchEnabled: true
+            searchEnabled: true,
+            searchTimeout: 0
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
@@ -1029,7 +1030,6 @@ QUnit.module('the "text" option', moduleSetup, () => {
         const keyboard = new keyboardMock($input);
 
         keyboard.type('i');
-        this.clock.tick(TIME_TO_WAIT);
 
         const $firstItem = $tagBox.find(`.${LIST_ITEM_CLASS}`).eq(0);
         $firstItem.click();
