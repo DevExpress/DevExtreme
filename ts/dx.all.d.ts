@@ -9389,6 +9389,10 @@ declare module DevExpress.ui {
          */
         dataSource?: Array<any> | DevExpress.data.PivotGridDataSource | DevExpress.data.PivotGridDataSourceOptions;
         /**
+         * [descr:dxPivotGrid.Options.encodeHtml]
+         */
+        encodeHtml?: boolean;
+        /**
          * [descr:dxPivotGrid.Options.export]
          */
         export?: { enabled?: boolean, fileName?: string, ignoreExcelErrors?: boolean, proxyUrl?: string };
