@@ -2264,6 +2264,31 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
             assert.strictEqual(menu.option('focusedElement'), null);
         });
     });
+
+    QUnit.test('vertical keyboard navigation works cyclically (T952882)', function(assert) {
+        const instance = new ContextMenu(this.$element, {
+            items: [
+                { text: 'item 1' },
+                { text: 'item 2', items: [{ text: 'item 21' }, { text: 'item 22' }, { text: 'item 23' }] },
+                { text: 'item 3' }
+            ],
+            focusStateEnabled: true
+        });
+
+        instance.show();
+
+        keyboardMock(instance.itemsContainer())
+            .keyDown('down')
+            .keyDown('down')
+            .keyDown('right')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up');
+
+        assert.equal($(instance.option('focusedElement')).text(), 'item 22');
+    });
 });
 
 
