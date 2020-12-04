@@ -676,6 +676,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
             } else {
                 this._focusEditFormCell($cell);
                 this._editingController.cancelEditData();
+                if(this._dataController.items().length === 0) {
+                    this._resetFocusedCell();
+                    this.getController('editorFactory').loseFocus();
+                }
             }
             eventArgs.originalEvent.preventDefault();
         }
