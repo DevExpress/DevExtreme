@@ -351,22 +351,27 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
 
         gridAppointments.forEach(appointment => {
             const { source } = appointment;
-            const { groupIndex } = source;
+            const {
+                groupIndex,
+                startDate
+            } = source;
 
             const coordinate = this.workspace.getCoordinatesByDate(
-                appointment.startDate,
+                startDate,
                 groupIndex,
                 allDay
             );
 
-            extend(coordinate, {
-                info: {
-                    appointment,
-                    sourceAppointment: source
-                }
-            });
+            if(coordinate) {
+                extend(coordinate, {
+                    info: {
+                        appointment,
+                        sourceAppointment: source
+                    }
+                });
 
-            result.push(coordinate);
+                result.push(coordinate);
+            }
         });
 
         return result;
