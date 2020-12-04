@@ -41,7 +41,7 @@ jobs:
         CONSTEL: ${{ matrix.CONSTEL }}
         JQUERY: ${{ matrix.JQUERY }}
         BROWSER: ${{ matrix.BROWSER }}
-        RENOVATION: ${{ RENOVATION }}
+        RENOVATION: ${{ matrix.RENOVATION }}
         GITHUBACTION: "true"
         TARGET: "test"
       run: |
