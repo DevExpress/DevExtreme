@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import config from 'core/config';
-import { isWindow } from 'core/utils/type';
 import { getDefaultAlignment, getBoundingRect, getAvailableBoundsContainer } from 'core/utils/position.js';
 
 const { module: testModule, test } = QUnit;
@@ -87,8 +86,8 @@ testModule('getAvailableBoundsContainer', {
         this.$container.appendTo($('#qunit-fixture'));
     }
 }, function() {
-    test('getAvailableBoundsContainer should return window if container and its parents has no overflow: hidden styles', function(assert) {
-        assert.ok(isWindow(getAvailableBoundsContainer(this.$container).get(0)));
+    test('getAvailableBoundsContainer should return undefined if container and its parents has no overflow: hidden styles', function(assert) {
+        assert.strictEqual(getAvailableBoundsContainer(this.$container), undefined);
     });
 
     test('getAvailableBoundsContainer should return container if container has overflow: hidden styles', function(assert) {
