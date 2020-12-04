@@ -1,4 +1,7 @@
-import { RecalculateCoordinates, TooltipCoordinates, Size } from './types.d';
+import {
+  RecalculateCoordinates, TooltipCoordinates, Size, CustomizedOptions,
+} from './types.d';
+import { isFunction, isPlainObject, isDefined } from '../../../../core/utils/type';
 
 const {
   max, min, PI, cos, sin, asin, round, ceil, floor,
@@ -274,4 +277,26 @@ export function getCloudAngle(
   }
 
   return angle;
+}
+
+export function prepareData(data, customizeTooltip, color, border, font): CustomizedOptions {
+  let customize = {} as CustomizedOptions;
+
+  if (isFunction(customizeTooltip)) {
+    customize = customizeTooltip.call(data, data);
+    customize = isPlainObject(customize) ? customize : {};
+    if ('text' in customize) {
+      customize.text = isDefined(customize.text) ? String(customize.text) : '';
+    }
+    if ('html' in customize) {
+      customize.html = isDefined(customize.html) ? String(customize.html) : '';
+    }
+  }
+  if (!('text' in customize) && !('html' in customize)) {
+    customize.text = data.valueText || data.description || '';
+  }
+  customize.color = customize.color || color;
+  customize.borderColor = customize.borderColor || (border || {}).color;
+  customize.fontColor = customize.fontColor || (font || {}).color;
+  return customize;
 }

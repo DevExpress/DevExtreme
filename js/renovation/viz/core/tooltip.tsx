@@ -8,11 +8,11 @@ import { TextSvgElement } from './renderers/svg_text';
 import { ShadowFilter } from './renderers/shadow_filter';
 import { getNextDefsSvgId } from './renderers/utils';
 
-import { Size, Border } from './common/types.d';
+import { Size, Border, CustomizedOptions } from './common/types.d';
 import { Format } from '../common/types.d';
 
 import {
-  getCloudPoints, recalculateCoordinates, getCloudAngle,
+  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData,
 } from './common/tooltip_utils';
 import { formatValue } from '../common/utils';
 
@@ -21,8 +21,9 @@ export const viewFunction = ({
   size,
   fullSize,
   border,
+  customizedOptions,
   props: {
-    color, text, x, y, font, shadow, opacity,
+    x, y, font, shadow, opacity,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
@@ -51,8 +52,8 @@ export const viewFunction = ({
         <PathSvgElement
           d={getCloudPoints(fullSize, correctedCoordinates, angle,
             { cornerRadius, arrowWidth }, true)}
-          fill={color}
-          stroke={border.stroke}
+          fill={customizedOptions.color}
+          stroke={customizedOptions.borderColor}
           strokeWidth={border.strokeWidth}
           strokeOpacity={border.strokeOpacity}
           dashStyle={border.dashStyle}
@@ -61,9 +62,9 @@ export const viewFunction = ({
         />
         <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
           <TextSvgElement
-            text={text}
+            text={customizedOptions.text}
             styles={{
-              fill: font.color,
+              fill: customizedOptions.fontColor,
               fontFamily: font.family,
               fontSize: font.size,
               fontWeight: font.weight,
@@ -85,7 +86,7 @@ export class TooltipProps {
     color: '#d3d3d3', width: 1, dashStyle: 'solid', opacity: undefined, visible: true,
   };
 
-  @OneWay() text = '';
+  @OneWay() data: any = {};
 
   @OneWay() paddingLeftRight = 18;
 
@@ -108,6 +109,8 @@ export class TooltipProps {
   @OneWay() format?: Format;
 
   @OneWay() argumentFormat?: Format;
+
+  @OneWay() customizeTooltip?: (info: any) => CustomizedOptions;
 
   @OneWay() canvas = {
     left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
@@ -172,5 +175,13 @@ export class Tooltip extends JSXComponent(TooltipProps) {
       };
     }
     return {};
+  }
+
+  get customizedOptions(): CustomizedOptions {
+    const {
+      data, customizeTooltip, color, border, font,
+    } = this.props;
+
+    return prepareData(data, customizeTooltip, color, border, font);
   }
 }
