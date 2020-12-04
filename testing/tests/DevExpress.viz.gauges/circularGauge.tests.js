@@ -536,4 +536,15 @@ const TestPointerElement = TestElement.inherit({
         }, 'new radius');
         assert.deepEqual(gauge._canvas, canvas, 'gauge canvas is not changed');
     });
+
+    QUnit.module('Disposing', environment);
+
+    QUnit.test('Disposing', function(assert) {
+        const gauge = new dxCircularGauge(this.container, {});
+        const group = gauge._renderer.g.getCall(8).returnValue;
+
+        this.container.remove();
+
+        assert.strictEqual(group.linkOff.callCount, 1);
+    });
 })();

@@ -173,7 +173,7 @@ class ContextMenu extends MenuBase {
         };
         return extend(super._supportedKeys(), {
             space: selectItem,
-            esc: this.hide
+            escape: this.hide
         });
     }
 

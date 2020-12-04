@@ -565,6 +565,17 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
             'both' as ScrollableDirection,
           ];
 
+          each([undefined, null]).describe('scrollbarSize: %o', (fakeElement) => {
+            it('should not be exepted when element is not exist', () => {
+              const containerRef = createContainerRef({ top: 200, left: 0 }, 'both', 10);
+              const scrollView = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(fakeElement, {});
+
+              expect(true).toEqual(true);
+            });
+          });
+
           each([5, 10, 20]).describe('scrollbarSize: %o', (scrollBarSize) => {
             each(directions).describe('Orientation: %o', (orientation) => {
               each(offsets).describe('Element is smaller than container. Offset: %o', (offset) => {

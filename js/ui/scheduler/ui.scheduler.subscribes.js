@@ -387,7 +387,8 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
-        const targetedData = this.getTargetedAppointment(config.itemData, config.itemElement);
+        const { itemData, itemElement, targetedAppointment } = config;
+        const targetedData = targetedAppointment || this.getTargetedAppointment(itemData, itemElement);
 
         return {
             appointmentData: config.itemData,
