@@ -5,10 +5,10 @@ import messageLocalization from 'localization/message';
 import { extend } from 'core/utils/extend';
 
 const LoadPanelTests = {
-    runTests(moduleConfig, exportFunc, getComponent) {
+    runTests(moduleConfig, exportFunc, getComponent, document) {
         QUnit.module('LoadPanel', moduleConfig, () => {
             [undefined, { enabled: true, text: 'Export to .Extention...' }].forEach((loadPanelConfig) => {
-                QUnit.test(`LoadPanel - loadPanel: ${JSON.stringify(loadPanelConfig)}`, async function(assert) {
+                QUnit.test(`LoadPanel - loadPanel: ${JSON.stringify(loadPanelConfig)}`, function(assert) {
                     const done = assert.async();
                     const component = getComponent();
 
@@ -28,7 +28,7 @@ const LoadPanelTests = {
                         extend(expectedLoadPanelSettingsOnExporting, { animation: null });
                     }
 
-                    exportFunc({ component: component, worksheet: this.worksheet, loadPanel: loadPanelConfig }).then(() => {
+                    exportFunc({ component: component, [document]: this[document], loadPanel: loadPanelConfig }).then(() => {
                         assert.strictEqual(loadPanelOnShownHandlerCallCount, 1, 'loadPanel should be shown on Exporting');
                         assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'loadPanel settings on exporting');
                         assert.deepEqual(component.option('loadPanel'), initialLoadPanelSettings, 'loadPanel settings restored after exporting');
@@ -51,7 +51,7 @@ const LoadPanelTests = {
                 component.option('loadPanel.onShown', loadPanelOnShownHandler);
                 const initialLoadPanelSettings = component.option('loadPanel');
 
-                exportFunc({ component: component, worksheet: this.worksheet, loadPanel: { enabled: false } }).then(() => {
+                exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: false } }).then(() => {
                     assert.strictEqual(loadPanelOnShownHandlerCallCount, 0, 'loadPanel should not be shown on Exporting');
                     assert.deepEqual(component.option('loadPanel'), initialLoadPanelSettings, 'loadPanel settings');
                     done();
@@ -86,7 +86,7 @@ const LoadPanelTests = {
 
                         component.option('loadPanel.onShown', loadPanelOnShownHandler);
 
-                        exportFunc({ component: component, worksheet: this.worksheet }).then(() => {
+                        exportFunc({ component: component, [document]: this[document] }).then(() => {
                             assert.strictEqual(actualLoadPanelText, localizationText.expected, 'loadPanel.text');
                             done();
                         });

@@ -5734,4 +5734,4 @@ LoadPanelTests.runTests(moduleConfig, exportPivotGrid, () => $('#pivotGrid').dxP
     store: [
         { row1: 'A', col1: 'a' },
     ]
-}).dxPivotGrid('instance'));
+}).dxPivotGrid('instance'), 'worksheet');
