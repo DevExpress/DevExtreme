@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import config from 'core/config';
-import { getDefaultAlignment, getBoundingRect, getAvailableBoundsContainer } from 'core/utils/position.js';
+import { getDefaultAlignment, getBoundingRect, getCustomBoundaryContainer } from 'core/utils/position.js';
 
 const { module: testModule, test } = QUnit;
 
@@ -68,7 +68,7 @@ testModule('getBoundingRect', {
 });
 
 
-testModule('getAvailableBoundsContainer', {
+testModule('getCustomBoundaryContainer', {
     beforeEach() {
         this.$container = $('<div>').attr('id', 'container').css({
             width: 200,
@@ -86,17 +86,17 @@ testModule('getAvailableBoundsContainer', {
         this.$container.appendTo($('#qunit-fixture'));
     }
 }, function() {
-    test('getAvailableBoundsContainer should return undefined if container and its parents has no overflow: hidden styles', function(assert) {
-        assert.strictEqual(getAvailableBoundsContainer(this.$container), undefined);
+    test('getCustomBoundaryContainer should return undefined if container and its parents has no overflow: hidden styles', function(assert) {
+        assert.strictEqual(getCustomBoundaryContainer(this.$container), undefined);
     });
 
-    test('getAvailableBoundsContainer should return container if container has overflow: hidden styles', function(assert) {
+    test('getCustomBoundaryContainer should return container if container has overflow: hidden styles', function(assert) {
         this.$container.css('overflow', 'hidden');
-        assert.deepEqual(getAvailableBoundsContainer(this.$container).attr('id'), 'container');
+        assert.strictEqual(getCustomBoundaryContainer(this.$container).attr('id'), 'container');
     });
 
-    test('getAvailableBoundsContainer should return container parent if it has overflow: hidden styles', function(assert) {
+    test('getCustomBoundaryContainer should return container parent if it has overflow: hidden styles', function(assert) {
         this.$container.css('overflow', 'hidden');
-        assert.deepEqual(getAvailableBoundsContainer(this.$container).attr('id'), 'container');
+        assert.strictEqual(getCustomBoundaryContainer(this.$innerContainer).attr('id'), 'container');
     });
 });

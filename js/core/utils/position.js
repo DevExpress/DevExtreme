@@ -39,18 +39,16 @@ const getBoundingRect = (element) => {
     return rect;
 };
 
-const getAvailableBoundsContainer = (container) => {
+const getCustomBoundaryContainer = (container) => {
     const $container = container && $(container);
     let result;
 
-    if($container && $container.length && !isWindow($container.get(0))) {
+    if($container && $container.length && hasWindow() && !isWindow($(container).get(0))) {
         const $containerWithParents = [].slice.call($container.parents());
         $containerWithParents.unshift($container.get(0));
 
         each($containerWithParents, function(i, parent) {
-            if(parent === $('body').get(0)) {
-                return false;
-            } else if(hasWindow() && window.getComputedStyle(parent).overflowY === 'hidden') {
+            if(parent !== $('body').get(0) && window.getComputedStyle(parent).overflowY === 'hidden') {
                 result = $(parent);
                 return false;
             }
@@ -63,5 +61,5 @@ const getAvailableBoundsContainer = (container) => {
 export {
     getBoundingRect,
     getDefaultAlignment,
-    getAvailableBoundsContainer
+    getCustomBoundaryContainer
 };

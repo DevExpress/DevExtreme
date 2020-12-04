@@ -1127,6 +1127,7 @@ QUnit.module('popup', moduleConfig, () => {
 
     QUnit.test('popup is rendered at the top of element if container limited place below (T948335)', function(assert) {
         const items = [];
+        $('#qunit-fixture').addClass('qunit-fixture-visible');
         for(let i = 0; i < 20; i++) {
             items.push(`item ${i}`);
         }
@@ -1136,9 +1137,9 @@ QUnit.module('popup', moduleConfig, () => {
             .attr('id', 'specific-container')
             .css('overflow', 'hidden')
             .height(windowHeight / 3)
-            .insertBefore('#qunit-fixture');
+            .appendTo('#qunit-fixture');
         const $element = $('#dropDownList')
-            .css('margin-top', (windowHeight / 4) + 'px')
+            .css('margin-top', windowHeight / 4)
             .appendTo(parentContainer);
 
         const instance = $element.dxDropDownList({

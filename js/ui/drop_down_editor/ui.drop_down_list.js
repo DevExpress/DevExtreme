@@ -6,7 +6,7 @@ import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { noop, ensureDefined, grep } from '../../core/utils/common';
 import { isDefined, isObject } from '../../core/utils/type';
-import { getAvailableBoundsContainer } from '../../core/utils/position';
+import { getCustomBoundaryContainer } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import DropDownEditor from './ui.drop_down_editor';
@@ -267,7 +267,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _updateCustomBoundaryContainer: function() {
-        this._$customBoundaryContainer = getAvailableBoundsContainer(this.option('dropDownOptions.container'));
+        this._$customBoundaryContainer = getCustomBoundaryContainer(this.option('dropDownOptions.container'));
     },
 
     _popupWrapperClass: function() {
