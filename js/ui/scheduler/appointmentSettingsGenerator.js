@@ -80,7 +80,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 startDate,
                 endDate
             } = item;
-            const endTime = endDate.getTime();
+            const endTime = endDate?.getTime();
 
             if(startDate.getTime() === endTime) {
                 endDate.setTime(endTime + toMs('minute'));
