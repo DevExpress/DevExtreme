@@ -365,7 +365,12 @@ QUnit.module('Integration: allDay appointments', {
 
             QUnit.test('AllDay appointments should not be filtered by start & end day hour (day view)', function(assert) {
                 const tasks = [
-                    { key: 1, text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), allDay: true }
+                    {
+                        key: 1,
+                        text: 'One',
+                        startDate: new Date(2015, 2, 16),
+                        endDate: new Date(2015, 2, 16, 2), allDay: true
+                    }
                 ];
 
                 const dataSource = new DataSource({
@@ -388,7 +393,7 @@ QUnit.module('Integration: allDay appointments', {
                 this.instance.option('currentView', 'day');
                 const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
-                assert.equal($appointments.length, 1, 'There are two appointments');
+                assert.equal($appointments.length, 1, 'There are one appointment');
             });
 
             QUnit.test('All-day appointment should be resized correctly', function(assert) {
