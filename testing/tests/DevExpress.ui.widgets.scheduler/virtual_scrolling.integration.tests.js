@@ -1523,8 +1523,8 @@ module('AppointmentSettings', {
                                 } = expect[index];
 
                                 assert.equal(setting.groupIndex, groupIndex, `Settings groupIndex ${setting.groupIndex} is correct`);
-                                assert.equal(setting.top, top, `Settings top ${setting.top} is correct`);
-                                assert.equal(setting.left, left, `Settings left ${setting.left} is correct`);
+                                assert.roughEqual(setting.top, top, 1.01, `Settings top ${setting.top} is correct`);
+                                assert.roughEqual(setting.left, left, 1.01, `Settings left ${setting.left} is correct`);
                                 assert.equal(setting.height, height, `Settings height ${setting.height} is correct`);
                             });
                         });
