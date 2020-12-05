@@ -160,10 +160,9 @@ function run_test {
                 echo "$chrome_command"
                 printf '  %s\n' "${chrome_args[@]}"
                 tput setaf 9
-
-                google-chrome-stable --version
-                eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
             fi
+            google-chrome-stable --version
+            eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
         ;;
 
     esac
