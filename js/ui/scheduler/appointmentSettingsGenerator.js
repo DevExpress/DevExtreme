@@ -354,31 +354,33 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         const result = [];
 
         gridAppointments.forEach(appointment => {
-            const { source } = appointment;
+            const { source, startDate, endDate } = appointment;
             const { groupIndex } = source;
 
-            const coordinate = this.workspace.getCoordinatesByDate(
-                appointment.startDate,
-                groupIndex,
-                allDay
-            );
+            if(this.viewDataProvider.isGroupIntersectDateInterval(groupIndex, startDate, endDate)) {
+                const coordinate = this.workspace.getCoordinatesByDate(
+                    appointment.startDate,
+                    groupIndex,
+                    allDay
+                );
 
-            if(coordinate) {
-                extend(coordinate, {
-                    info: {
-                        appointment,
-                        sourceAppointment: source
-                    }
-                });
+                if(coordinate) {
+                    extend(coordinate, {
+                        info: {
+                            appointment,
+                            sourceAppointment: source
+                        }
+                    });
 
-                result.push(coordinate);
+                    result.push(coordinate);
+                }
             }
         });
 
         return result;
     }
 
-    _cropAppointmentsByStartDayHour1(appointments, rawAppointment, isAllDay) {
+    _cropAppointmentsByStartDayHour(appointments, rawAppointment, isAllDay) {
         return appointments.filter(appointment => {
             const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
 
