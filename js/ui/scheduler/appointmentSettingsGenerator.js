@@ -65,16 +65,31 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _createAppointments(appointment, resources) {
-        const appointmentList = this._createRecurrenceAppointments(appointment, resources);
+        let appointments = this._createRecurrenceAppointments(appointment, resources);
 
-        if(appointmentList.length === 0) {
-            appointmentList.push({
+        if(appointments.length === 0) {
+            appointments.push({
                 startDate: appointment.startDate,
                 endDate: appointment.endDate
             });
         }
 
-        return appointmentList;
+        // T817857
+        appointments = appointments.map(item => {
+            const {
+                startDate,
+                endDate
+            } = item;
+            const endTime = endDate.getTime();
+
+            if(startDate.getTime() === endTime) {
+                endDate.setTime(endTime + toMs('minute'));
+            }
+
+            return item;
+        });
+
+        return appointments;
     }
 
     _canProcessNotNativeTimezoneDates(appointmentList, appointment) {
@@ -343,37 +358,44 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     get isVerticalGrouping() { return this.workspace._isVerticalGroupedWorkSpace(); }
 
     _createAppointmentInfos(gridAppointments, resources, allDay, recurrent) {
+        const appointments = allDay
+            ? gridAppointments
+            : gridAppointments.filter(item => {
+                const { source, startDate, endDate } = item;
+                const { groupIndex } = source;
+
+                return this.viewDataProvider.isGroupIntersectDateInterval(groupIndex, startDate, endDate);
+            });
+
         if(recurrent && this.isVerticalGrouping) {
-            return this._createRecurrentAppointmentInfos(gridAppointments, resources, allDay);
+            return this._createRecurrentAppointmentInfos(appointments, resources, allDay);
         }
 
-        return super._createAppointmentInfos(gridAppointments, resources, allDay, recurrent);
+        return super._createAppointmentInfos(appointments, resources, allDay, recurrent);
     }
 
     _createRecurrentAppointmentInfos(gridAppointments, resources, allDay) {
         const result = [];
 
         gridAppointments.forEach(appointment => {
-            const { source, startDate, endDate } = appointment;
+            const { source } = appointment;
             const { groupIndex } = source;
 
-            if(this.viewDataProvider.isGroupIntersectDateInterval(groupIndex, startDate, endDate)) {
-                const coordinate = this.workspace.getCoordinatesByDate(
-                    appointment.startDate,
-                    groupIndex,
-                    allDay
-                );
+            const coordinate = this.workspace.getCoordinatesByDate(
+                appointment.startDate,
+                groupIndex,
+                allDay
+            );
 
-                if(coordinate) {
-                    extend(coordinate, {
-                        info: {
-                            appointment,
-                            sourceAppointment: source
-                        }
-                    });
+            if(coordinate) {
+                extend(coordinate, {
+                    info: {
+                        appointment,
+                        sourceAppointment: source
+                    }
+                });
 
-                    result.push(coordinate);
-                }
+                result.push(coordinate);
             }
         });
 
