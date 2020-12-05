@@ -378,7 +378,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         return result;
     }
 
-    _cropAppointmentsByStartDayHour(appointments, rawAppointment, isAllDay) {
+    _cropAppointmentsByStartDayHour1(appointments, rawAppointment, isAllDay) {
         return appointments.filter(appointment => {
             const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
 
@@ -397,7 +397,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
 
             return !isAllDay
                 ? appointment.endDate > appointment.startDate
-                : appointment.endDate >= appointment.startDate;
+                : true;
         });
     }
 
