@@ -901,72 +901,72 @@ module('AppointmentSettings', {
             });
         });
 
+        test(`Appointment with multiple resources should be rendered correctly if vertical grouping and view=${viewName}`, function(assert) {
+            const data = [{
+                startDate: new Date(2020, 9, 12, 1, 30),
+                endDate: new Date(2020, 9, 12, 22, 30),
+                priorityId: [1, 2],
+            }];
 
-        [
-            {
-                y: 0,
-                appointmentRects: [
-                    { left: -9685, top: -9693, height: 450 }
-                ]
-            },
-            {
-                y: 1000,
-                appointmentRects: [
-                    { left: -9685, top: -10093, height: 850 }
-                ]
-            },
-            {
-                y: 2500,
-                appointmentRects: [
-                    { left: -9685, top: -9743, height: 500 }
-                ]
-            },
-            {
-                y: 4500,
-                appointmentRects: [
-                    { left: -9685, top: -10093, height: 450 }
-                ]
-            }
-        ].forEach(option => {
-            test(`Appointment with multiple resources should be rendered correctly if vertical grouping and scrollY: ${option.y}`, function(assert) {
-                const data = [{
-                    startDate: new Date(2020, 9, 12, 1, 30),
-                    endDate: new Date(2020, 9, 12, 22, 30),
-                    priorityId: [1, 2],
-                }];
-                this.createInstance({
-                    dataSource: data,
-                    views: [{
-                        type: 'week',
-                        groupOrientation: 'vertical'
-                    }],
-                    currentView: 'week',
-                    currentDate: new Date(2020, 9, 12),
-                    groups: ['priorityId'],
-                    resources: [{
-                        fieldExpr: 'priorityId',
-                        allowMultiple: true,
-                        dataSource: [{ id: 1 }, { id: 2 }]
-                    }],
-                    scrolling: { mode: 'virtual' },
-                    height: 500,
-                });
+            this.createInstance({
+                dataSource: data,
+                views: [{
+                    type: 'week',
+                    groupOrientation: 'vertical'
+                }],
+                currentView: 'week',
+                currentDate: new Date(2020, 9, 12),
+                groups: ['priorityId'],
+                resources: [{
+                    fieldExpr: 'priorityId',
+                    allowMultiple: true,
+                    dataSource: [{ id: 1 }, { id: 2 }]
+                }],
+                scrolling: { mode: 'virtual' },
+                height: 500,
+            });
 
-                const { instance } = this.scheduler;
-                const workspace = instance.getWorkSpace();
-                const scrollable = workspace.getScrollable();
+            const { instance } = this.scheduler;
+            const workspace = instance.getWorkSpace();
+            const scrollable = workspace.getScrollable();
 
-                workspace.virtualScrollingDispatcher.getRenderTimeout = () => -1;
+            workspace.virtualScrollingDispatcher.getRenderTimeout = () => -1;
 
-                return asyncWrapper(assert, promise => {
-                    return asyncScrollTest(
+            return asyncWrapper(assert, promise => {
+                [
+                    {
+                        y: 0,
+                        appointmentRects: [
+                            { left: -9685, top: -9693, height: 450 }
+                        ]
+                    },
+                    {
+                        y: 1000,
+                        appointmentRects: [
+                            { left: -9685, top: -10093, height: 850 }
+                        ]
+                    },
+                    {
+                        y: 2500,
+                        appointmentRects: [
+                            { left: -9685, top: -9743, height: 500 }
+                        ]
+                    },
+                    {
+                        y: 4500,
+                        appointmentRects: [
+                            { left: -9685, top: -10093, height: 450 }
+                        ]
+                    }
+                ].forEach(option => {
+                    promise = asyncScrollTest(
                         promise,
                         () => scrollable.scrollTo({ y: option.y }),
                         () => {
                             assert.equal(
                                 this.scheduler.appointments.getAppointmentCount(),
                                 option.appointmentRects.length,
-                                'Appointment count is correct'
+                                `Appointment count is correct when scrollOffset: ${option.y}`
                             );
 
                             option.appointmentRects.forEach((expectedRect, index) => {
@@ -987,6 +987,8 @@ module('AppointmentSettings', {
                         }
                     );
                 });
+
+                return promise;
             });
         });
 
