@@ -64,7 +64,8 @@ export const asyncWrapper = (assert, callback) => {
     const promise = Promise.resolve();
 
     return callback(promise)
-        .finally(done);
+        .catch(e => assert.ok(false, e.stack))
+        .then(done);
 };
 
 export const execAsync = (promise, callback, asyncCallback, timeout) => {
