@@ -19,7 +19,7 @@ $scheduler-droppable-cell-background-color: null !default;
 $scheduler-appointment-text-color: null !default;
 $scheduler-fill-focused-appointment: null !default;
 $scheduler-dd-appointment-hover-text-color: null !default;
-$scheduler-tooltip-appointment-item-content-color: null !default;
+$scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-appointment-overlay-bg: null !default;
 
 @use "../mixins" as *;
@@ -27,7 +27,7 @@ $scheduler-appointment-overlay-bg: null !default;
 @use "./common";
 @use "./tooltip" with (
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
-  $scheduler-tooltip-appointment-item-content-color: $scheduler-tooltip-appointment-item-content-color,
+  $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg
 );
 @use "./appointment";
