@@ -59,6 +59,33 @@ export const checkResultByDeviceType = (assert, callback) => {
     }
 };
 
+export const asyncWrapper = (assert, callback) => {
+    const done = assert.async();
+    const promise = Promise.resolve();
+
+    return callback(promise)
+        .then(done);
+};
+
+export const execAsync = (promise, callback, asyncCallback, timeout) => {
+    return promise.then(() => {
+
+        callback && callback();
+
+        return new Promise((resolve) => {
+            setTimeout(() => {
+
+                asyncCallback();
+
+                resolve();
+            }, timeout);
+        });
+    });
+};
+
+export const asyncScrollTest = (promise, callback, asyncCallback) => {
+    return execAsync(promise, callback, asyncCallback, 20);
+};
 
 class ElementWrapper {
     constructor(selector, parent) {
