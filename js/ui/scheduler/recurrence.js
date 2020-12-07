@@ -184,8 +184,7 @@ class RecurrenceProcessor {
             const splitDates = options.exception.split(',');
             const exceptDates = this._getDatesByRecurrenceException(splitDates, startDateUtc);
             exceptDates.forEach(date => {
-                const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
-                this.rRuleSet.exdate(utcDate);
+                this.rRuleSet.exdate(new Date(date));
             });
         }
     }
