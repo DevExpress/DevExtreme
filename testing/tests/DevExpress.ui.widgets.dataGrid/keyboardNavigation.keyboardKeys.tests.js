@@ -1927,6 +1927,46 @@ QUnit.module('Keyboard keys', {
         assert.ok(!this.editingController.isEditing(), 'editing canceled');
     });
 
+    // T952470
+    QUnit.testInActiveWindow('Escape for cancel new row editing when store is empty', function(assert) {
+        // arrange
+        const $container = $('#container');
+
+        this.options = {
+            columns: ['field'],
+            dataSource: [],
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            editing: {
+                allowAdding: true
+            }
+        };
+        setupModules(this, { initViews: true });
+
+        // act
+        this.gridView.render($container);
+
+        this.addRow();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.getVisibleRows().length, 1, 'row is added');
+        const $focusOverlay = $container.find('.dx-datagrid-focus-overlay');
+        assert.ok($focusOverlay.length, 'focus overlay');
+        assert.notOk($focusOverlay.hasClass('dx-hidden'), 'focus overlay is visible');
+
+        // act
+        this.triggerKeyDown('escape', false, false, $container.find('input')[0]);
+
+        // assert
+        assert.equal(this.getVisibleRows().length, 0, 'no rows');
+        assert.ok(!this.keyboardNavigationController._isEditing, 'editing is canceled');
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {}, 'focusedCellPosition');
+        assert.ok(!this.editingController.isEditing(), 'editing canceled');
+        assert.ok($focusOverlay.hasClass('dx-hidden'), 'focus overlay is hidden');
+    });
+
     QUnit.testInActiveWindow('Escape for cancel batch editing', function(assert) {
         // arrange
         const $container = $('#container');

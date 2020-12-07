@@ -917,4 +917,235 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', copiedFileIndex), '\xa0', 'file size is correct');
     });
 
+    test('it\'s impossible to select disabled folder (dialog remains open) (T939043)', function(assert) {
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getContextMenuItem('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is visible');
+
+        let $folderNodes = this.wrapper.getFolderNodes(true);
+
+        $folderNodes.eq(0).trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+        this.clock.tick(400);
+        assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is still visible');
+
+        $folderNodes.eq(1).trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+        this.clock.tick(400);
+        assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is still visible');
+
+        $folderNodes.eq(3).trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.notOk(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is invisible');
+        assert.equal(this.wrapper.getFocusedItemText(), 'Folder 3', 'target folder should be selected');
+
+        $folderNodes = this.wrapper.getFolderNodes();
+        assert.equal($folderNodes.eq(4).find('span').text(), 'Folder 1', 'target folder copied');
+        $folderNodes.eq(4).trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1-1.txt', 'file copied with target folder');
+        assert.equal(this.wrapper.getDetailsItemName(1), 'File 1-2.jpg', 'file copied with target folder');
+
+        $folderNodes = this.wrapper.getFolderNodes();
+        assert.equal($folderNodes.eq(1).find('span').text(), 'Folder 1', 'first folder is target folder');
+        assert.equal($folderNodes.eq(2).find('span').text(), 'Folder 2', 'second folder is not target folder');
+        assert.equal($folderNodes.eq(3).find('span').text(), 'Folder 3', 'third folder is not target folder');
+    });
+
+    test('parent and selected folders must be disabled: copy folder in folders area (T939043)', function(assert) {
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getContextMenuItem('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        assert.strictEqual($folderNodes.length, 4, 'there are only 4 nodes');
+        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
+        assert.ok($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
+        assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
+        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
+        assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
+        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
+    });
+
+    test('parent and selected folders must be disabled: copy folder in files area via context menu (T939043)', function(assert) {
+        this.$element.dxFileManager('option', { itemView: { showFolders: true } });
+        this.clock.tick(400);
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getContextMenuItem('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        assert.strictEqual($folderNodes.length, 4, 'there are only 4 nodes');
+        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
+        assert.ok($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
+        assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
+        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
+        assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
+        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
+    });
+
+    test('parent and all of selected folders must be disabled: copy folders in files area via toolbar (T939043)', function(assert) {
+        this.$element.dxFileManager('option', {
+            selectionMode: 'multiple',
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxhold');
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxhold');
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        assert.strictEqual($folderNodes.length, 4, 'there are only 4 nodes');
+        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
+        assert.ok($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
+        assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
+        assert.ok($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is disabled');
+        assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
+        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
+    });
+
+    QUnit.skip('parent and selected folders must be disabled: copy folder in deep location (T939043)', function(assert) {
+        this.$element.dxFileManager('option', {
+            currentPath: 'Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1',
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getContextMenuItem('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        assert.strictEqual($folderNodes.length, 9, 'there are only 9 nodes');
+        assert.notOk($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is enabled');
+        assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
+        assert.notOk($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is enabled');
+        assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
+
+        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1\' node is enabled');
+        assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 1.1\' node is visible');
+        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1\' node is enabled');
+        assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 1.1.1\' node is visible');
+
+        assert.ok($folderNodes.eq(4).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1\' node is disabled');
+        assert.ok($folderNodes.eq(4).is(':visible'), '\'Folder 1.1.1.1\' node is visible');
+        assert.ok($folderNodes.eq(5).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1.1\' node is disabled');
+        assert.ok($folderNodes.eq(5).is(':visible'), '\'Folder 1.1.1.1.1\' node is visible');
+
+        assert.notOk($folderNodes.eq(6).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.2\' node is enabled');
+        assert.ok($folderNodes.eq(6).is(':visible'), '\'Folder 1.2\' node is visible');
+
+        assert.notOk($folderNodes.eq(7).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
+        assert.ok($folderNodes.eq(7).is(':visible'), '\'Folder 2\' node is visible');
+        assert.notOk($folderNodes.eq(8).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.ok($folderNodes.eq(8).is(':visible'), '\'Folder 3\' node is visible');
+    });
+
+    QUnit.skip('parent and selected folders must be disabled and selected folder must be collapsed: copy folder in deep location (T939043)', function(assert) {
+        this.$element.dxFileManager('option', {
+            currentPath: 'Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1',
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getContextMenuItem('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        let $folderNodes = this.wrapper.getFolderNodes(true);
+        assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is visible');
+        assert.strictEqual($folderNodes.length, 9, 'there are only 9 nodes');
+        this.wrapper.getDialogButton('Cancel').trigger('dxclick');
+        this.clock.tick(400);
+        assert.notOk(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is invisible');
+
+        this.$element.dxFileManager('option', { currentPath: 'Folder 1' });
+        this.clock.tick(400);
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getContextMenuItem('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        $folderNodes = this.wrapper.getFolderNodes(true);
+        assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is visible');
+        assert.strictEqual($folderNodes.length, 9, 'there are only 9 nodes');
+        assert.notOk($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is enabled');
+        assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
+        assert.ok($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
+        assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
+
+        assert.ok($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1\' node is disabled');
+        assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 1.1\' node is visible');
+        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1\' node is enabled');
+        assert.notOk($folderNodes.eq(3).is(':visible'), '\'Folder 1.1.1\' node is invisible');
+
+        assert.notOk($folderNodes.eq(4).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1\' node is enabled');
+        assert.notOk($folderNodes.eq(4).is(':visible'), '\'Folder 1.1.1.1\' node is invisible');
+        assert.notOk($folderNodes.eq(5).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1.1\' node is enabled');
+        assert.notOk($folderNodes.eq(5).is(':visible'), '\'Folder 1.1.1.1.1\' node is invisible');
+
+        assert.notOk($folderNodes.eq(6).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.2\' node is enabled');
+        assert.ok($folderNodes.eq(6).is(':visible'), '\'Folder 1.2\' node is visible');
+
+        assert.notOk($folderNodes.eq(7).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
+        assert.ok($folderNodes.eq(7).is(':visible'), '\'Folder 2\' node is visible');
+        assert.notOk($folderNodes.eq(8).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.ok($folderNodes.eq(8).is(':visible'), '\'Folder 3\' node is visible');
+    });
+
+    test('only parent folder must be disabled if there are no selected folders (T939043)', function(assert) {
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getContextMenuItem('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        assert.strictEqual($folderNodes.length, 4, 'there are only 4 nodes');
+        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
+        assert.notOk($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is enabled');
+        assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
+        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
+        assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
+        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
+
+        $folderNodes.eq(1).trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Folder 1', 'target folder should be selected');
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1-1.txt', 'it\'s target folder');
+        assert.equal(this.wrapper.getDetailsItemName(1), 'File 1-2.jpg', 'it\'s target folder');
+        assert.equal(this.wrapper.getDetailsItemName(2), 'File 1.txt', 'file copied to target folder');
+    });
 });

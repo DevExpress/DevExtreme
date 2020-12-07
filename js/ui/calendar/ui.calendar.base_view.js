@@ -40,7 +40,8 @@ const BaseView = Widget.inherit({
             onCellClick: null,
             rowCount: 3,
             colCount: 4,
-            allowValueSelection: true
+            allowValueSelection: true,
+            _todayDate: () => new Date()
         });
     },
 
@@ -324,6 +325,9 @@ const BaseView = Widget.inherit({
             case 'rtlEnabled':
                 this._cacheAppendMethodName(value);
                 this.callBase(args);
+                break;
+            case '_todayDate':
+                this._renderBody();
                 break;
             default:
                 this.callBase(args);

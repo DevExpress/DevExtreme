@@ -74,12 +74,15 @@ const LeftDrawerTester = {
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + leftTemplateSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
+            assert.ok(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), 'view element should override panel element');
         }
         function checkShrink(assert, env) {
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + leftTemplateSize, top: env.drawerRect.top, width: env.drawerRect.width - leftTemplateSize, height: env.drawerRect.height }, 'view');
             checkMargin(assert, getTemplateParent(env.templateElement), 0, 0, 0, 0, 'template should be visible by position');
+            assert.strictEqual(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), false, 'theme-background-color is not used in shrink mode');
         }
         function checkOverlap(assert, env) {
+            assert.strictEqual(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), false, 'theme-background-color is not used in shrink mode');
             checkBoundingClientRect(assert, getTemplateParent(env.templateElement), { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template.parentElement size should not cut template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
             assert.equal(window.getComputedStyle(getTemplateParent(env.templateElement)).zIndex, '1501', 'template should be shown over view');
@@ -121,6 +124,7 @@ const LeftDrawerTester = {
                 window.getComputedStyle(getTemplateParent(env.templateElement)).position === 'absolute' &&
                 window.getComputedStyle(env.viewElement.parentElement).transform.indexOf('matrix') >= 0,
                 'template element should be hidden, view element should be visible');
+            assert.ok(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), 'view element should override panel element');
         }
         function checkShrink(assert, env) {
             if(env.revealMode === 'expand') {
@@ -132,8 +136,10 @@ const LeftDrawerTester = {
             }
             assert.strictEqual(window.getComputedStyle(getTemplateParent(env.templateElement)).overflow, 'hidden', 'template should not be visible by parent.overflow');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
+            assert.strictEqual(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), false, 'theme-background-color is not used in shrink mode');
         }
         function checkOverlap(assert, env) {
+            assert.strictEqual(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), false, 'theme-background-color is not used in shrink mode');
             if(env.revealMode === 'expand') {
                 if(env.minSize) {
                     checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template');
@@ -291,7 +297,7 @@ const RightDrawerTester = {
                     if(env.templateElement === null) {
                         assert.ok(true);
                     } else {
-                        checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right - rightTemplateSize, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template');
+                        checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template');
                         checkBoundingClientRect(assert, getTemplateParent(env.templateElement), { width: 0 }, 'template.parentElement');
                         assert.strictEqual(window.getComputedStyle(getTemplateParent(env.templateElement)).overflow, 'hidden', 'template element should be hidden');
                     }
