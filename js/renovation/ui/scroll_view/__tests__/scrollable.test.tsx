@@ -43,15 +43,15 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
     describe('Render', () => {
       it('should render scrollable content', () => {
         const scrollable = shallow(viewFunction({ props: { } } as any) as JSX.Element);
-        const scrollableContent = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content');
+        const scrollableContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content');
         expect(scrollableContent.exists()).toBe(true);
       });
 
       it('should not render top & bottom pockets', () => {
         const scrollable = shallow(viewFunction({ props: { } } as any) as JSX.Element);
-        const topPocket = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-top-pocket');
+        const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-top-pocket');
         expect(topPocket.exists()).toBe(false);
-        const bottomPocket = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-bottom-pocket');
+        const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-bottom-pocket');
         expect(bottomPocket.exists()).toBe(false);
       });
 
@@ -60,9 +60,9 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
           props:
           { forceGeneratePockets: true },
         } as any) as JSX.Element);
-        const topPocket = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-top-pocket');
+        const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-top-pocket');
         expect(topPocket.exists()).toBe(true);
-        const bottomPocket = scrollable.find('.dx-scrollable-wrapper .dx-scrollable-container .dx-scrollable-content > .dx-scrollview-bottom-pocket');
+        const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-bottom-pocket');
         expect(bottomPocket.exists()).toBe(true);
       });
 
