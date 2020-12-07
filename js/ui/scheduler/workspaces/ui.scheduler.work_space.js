@@ -88,6 +88,7 @@ const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_ROW_CLASS = 'dx-scheduler-date-table-row';
 const DATE_TABLE_FOCUSED_CELL_CLASS = 'dx-scheduler-focused-cell';
 const VIRTUAL_ROW_CLASS = 'dx-scheduler-virtual-row';
+const VIRTUAL_CELL_CLASS = 'dx-scheduler-virtual-cell';
 
 const DATE_TABLE_DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 
@@ -2392,7 +2393,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getAllCells(allDay) {
         if(this._isVerticalGroupedWorkSpace()) {
-            return this._$dateTable.find('td');
+            return this._$dateTable.find(`td:not(.${VIRTUAL_CELL_CLASS})`);
         }
 
         const cellClass = allDay && this.supportAllDayRow()
@@ -2562,7 +2563,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getCellDataInRenovatedView($cell) {
         let rowIndex = $cell.parent().index();
-        this.isVirtualScrolling() && --rowIndex;
+        if(this.isVirtualScrolling()) {
+            rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
+        }
 
         const columnIndex = $cell.index();
 
@@ -3327,7 +3330,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this.isVirtualScrolling()
             && !(isAllDayCell && !isVerticalGrouping)) {
-            rowIndex -= 1;
+            rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
         }
 
         return { rowIndex, columnIndex };
