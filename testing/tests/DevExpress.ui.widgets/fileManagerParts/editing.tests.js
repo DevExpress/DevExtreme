@@ -1301,7 +1301,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
     });
 
-    test('parent and selected folders must be disabled: copy folder in deep location (T939043)', function(assert) {
+    QUnit.skip('parent and selected folders must be disabled: copy folder in deep location (T939043)', function(assert) {
         this.$element.dxFileManager('option', {
             currentPath: 'Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1',
             itemView: {
@@ -1341,7 +1341,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.ok($folderNodes.eq(8).is(':visible'), '\'Folder 3\' node is visible');
     });
 
-    test('parent and selected folders must be disabled and selected folder must be collapsed: copy folder in deep location (T939043)', function(assert) {
+    QUnit.skip('parent and selected folders must be disabled and selected folder must be collapsed: copy folder in deep location (T939043)', function(assert) {
         this.$element.dxFileManager('option', {
             currentPath: 'Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1',
             itemView: {
