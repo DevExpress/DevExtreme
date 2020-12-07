@@ -1,5 +1,5 @@
 import {
-  RecalculateCoordinates, TooltipCoordinates, Size, CustomizedOptions,
+  RecalculateCoordinates, TooltipCoordinates, Size, CustomizedOptions, CustomizeTooltipFn,
 } from './types.d';
 import { isFunction, isPlainObject, isDefined } from '../../../../core/utils/type';
 
@@ -279,8 +279,20 @@ export function getCloudAngle(
   return angle;
 }
 
-export function prepareData(data, customizeTooltip, color, border, font): CustomizedOptions {
-  let customize = {} as CustomizedOptions;
+export function prepareData(
+  data, color: string,
+  border: { color: string; width: number; dashStyle: string;
+    opacity?: number; visible: boolean;},
+  font: {
+    color: string; family: string;
+    opacity: number; size: number;
+    weight: number;
+  },
+  customizeTooltip?: CustomizeTooltipFn,
+): CustomizedOptions {
+  let customize = {} as {
+    text?: string; html?: string; color?: string; borderColor?: string; fontColor?: string;
+  };
 
   if (isFunction(customizeTooltip)) {
     customize = customizeTooltip.call(data, data);
@@ -296,7 +308,7 @@ export function prepareData(data, customizeTooltip, color, border, font): Custom
     customize.text = data.valueText || data.description || '';
   }
   customize.color = customize.color || color;
-  customize.borderColor = customize.borderColor || (border || {}).color;
-  customize.fontColor = customize.fontColor || (font || {}).color;
-  return customize;
+  customize.borderColor = customize.borderColor || border.color;
+  customize.fontColor = customize.fontColor || font.color;
+  return customize as CustomizedOptions;
 }

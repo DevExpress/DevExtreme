@@ -1,7 +1,7 @@
 import { Format, FormatObject } from './types.d';
 import formatHelper from '../../../format_helper';
 
-export function formatValue(value: number|Date, specialFormat: string,
+export function getFormatValue(value: number|Date, specialFormat: string,
   { argumentFormat, format }: { argumentFormat?: Format; format?: Format }): string {
   let option = format;
   if (specialFormat) {

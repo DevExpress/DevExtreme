@@ -8,13 +8,15 @@ import { TextSvgElement } from './renderers/svg_text';
 import { ShadowFilter } from './renderers/shadow_filter';
 import { getNextDefsSvgId } from './renderers/utils';
 
-import { Size, Border, CustomizedOptions } from './common/types.d';
+import {
+  Size, Border, CustomizedOptions, CustomizeTooltipFn,
+} from './common/types.d';
 import { Format } from '../common/types.d';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData,
 } from './common/tooltip_utils';
-import { formatValue } from '../common/utils';
+import { getFormatValue } from '../common/utils';
 
 export const viewFunction = ({
   textRef,
@@ -110,7 +112,7 @@ export class TooltipProps {
 
   @OneWay() argumentFormat?: Format;
 
-  @OneWay() customizeTooltip?: (info: any) => CustomizedOptions;
+  @OneWay() customizeTooltip?: CustomizeTooltipFn;
 
   @OneWay() canvas = {
     left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
@@ -151,9 +153,9 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   }
 
   @Method()
-  formatValue(value, _specialFormat): string {
+  formatValue(value, specialFormat): string {
     const { format, argumentFormat } = this.props;
-    return formatValue(value, _specialFormat, { format, argumentFormat });
+    return getFormatValue(value, specialFormat, { format, argumentFormat });
   }
 
   get fullSize(): Size {
@@ -182,6 +184,6 @@ export class Tooltip extends JSXComponent(TooltipProps) {
       data, customizeTooltip, color, border, font,
     } = this.props;
 
-    return prepareData(data, customizeTooltip, color, border, font);
+    return prepareData(data, color, border, font, customizeTooltip);
   }
 }
