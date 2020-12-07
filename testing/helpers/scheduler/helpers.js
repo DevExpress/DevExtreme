@@ -64,19 +64,25 @@ export const asyncWrapper = (assert, callback) => {
     const promise = Promise.resolve();
 
     return callback(promise)
+        .catch(e => assert.ok(false, e.stack))
         .then(done);
 };
 
 export const execAsync = (promise, callback, asyncCallback, timeout) => {
     return promise.then(() => {
+        return new Promise((resolve, reject) => {
+            const execCallback = func => {
+                try {
+                    func();
+                } catch(e) {
+                    reject(e);
+                }
+            };
 
-        callback && callback();
+            callback && execCallback(callback);
 
-        return new Promise((resolve) => {
             setTimeout(() => {
-
-                asyncCallback();
-
+                execCallback(asyncCallback);
                 resolve();
             }, timeout);
         });
