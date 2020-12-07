@@ -1323,6 +1323,11 @@ class Scheduler extends Widget {
         result.max = new Date(this._dateOption('max'));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
 
+        result.todayDate = () => {
+            const result = this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
+            return result;
+        };
+
         return result;
     }
 
