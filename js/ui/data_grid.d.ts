@@ -1137,7 +1137,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field10 fromData:any
        * @type_function_param1_field11 toData:any
-       * @type_function_param1_field1/ dropInsideItem:boolean
+       * @type_function_param1_field12 dropInsideItem:boolean
        */
       onDragChange?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
       /**
@@ -1155,7 +1155,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field10 fromData:any
        * @type_function_param1_field11 toData:any
-       * @type_function_param1_field1/ dropInsideItem:boolean
+       * @type_function_param1_field12 dropInsideItem:boolean
        */
       onDragEnd?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
       /**
@@ -1173,7 +1173,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field10 fromData:any
        * @type_function_param1_field11 toData:any
-       * @type_function_param1_field1/ dropInsideItem:boolean
+       * @type_function_param1_field12 dropInsideItem:boolean
        */
       onDragMove?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
       /**
@@ -1220,7 +1220,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field9 fromData:any
        * @type_function_param1_field10 toData:any
        * @type_function_param1_field11 dropInsideItem:boolean
-       * @type_function_param1_field1/ promise:Promise<void>
+       * @type_function_param1_field12 promise:Promise<void>
        */
       onReorder?: ((e: { component?: T, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any),
       /**
