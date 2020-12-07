@@ -1031,7 +1031,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
 
         keyboard.type('i');
 
-        const $firstItem = $tagBox.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        const $firstItem = $(tagBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(0);
         $firstItem.click();
 
         assert.strictEqual(tagBox.option('text'), '', 'text is cleared');
