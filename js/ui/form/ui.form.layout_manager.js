@@ -678,9 +678,14 @@ const LayoutManager = Widget.inherit({
 
         const editorElem = $editor.children().first();
         const $validationTarget = editorElem.hasClass(TEMPLATE_WRAPPER_CLASS) ? editorElem.children().first() : editorElem;
+        const validationTargetInstance = $validationTarget && $validationTarget.data('dx-validation-target');
 
-        if($validationTarget && $validationTarget.data('dx-validation-target')) {
+        if(validationTargetInstance) {
             that._renderValidator($validationTarget, item);
+
+            if(isMaterial()) {
+                that._addWrapperInvalidClass(validationTargetInstance);
+            }
         }
 
         that._renderHelpText(item, $editor, helpID);
@@ -937,10 +942,6 @@ const LayoutManager = Widget.inherit({
                 editorInstance.setAria('labelledby', renderOptions.labelID);
                 editorInstance.setAria('required', renderOptions.isRequired);
 
-                if(isMaterial()) {
-                    that._addWrapperInvalidClass(editorInstance);
-                }
-
                 if(renderOptions.dataField) {
                     that._bindDataField(editorInstance, renderOptions, $container);
                 }
@@ -948,6 +949,7 @@ const LayoutManager = Widget.inherit({
                 errors.log('E1035', e.message);
             }
         }
+
 
         return editorInstance;
     },
