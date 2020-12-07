@@ -167,12 +167,11 @@ const Scrollable = DOMComponent.inherit({
         this._updateBounds();
         if(this._isHorizontalAndRtlEnabled()) {
             deferUpdate(() => {
-                const containerElement = this._container().get(0);
-                let scrollLeft = containerElement.scrollWidth - containerElement.clientWidth - this._rtlConfig.scrollRight;
+                let scrollLeft = this._getMaxOffset().left - this._rtlConfig.scrollRight;
 
                 if(scrollLeft <= 0) {
                     scrollLeft = 0;
-                    this._rtlConfig.scrollRight = containerElement.scrollWidth - containerElement.clientWidth;
+                    this._rtlConfig.scrollRight = this._getMaxOffset().left;
                 }
 
                 deferRender(() => {
@@ -184,6 +183,15 @@ const Scrollable = DOMComponent.inherit({
                 });
             });
         }
+    },
+
+    _getMaxOffset: function() {
+        const { scrollWidth, clientWidth, scrollHeight, clientHeight } = this._container().get(0);
+
+        return {
+            left: scrollWidth - clientWidth,
+            top: scrollHeight - clientHeight,
+        };
     },
 
     _updateBounds: function() {
@@ -214,10 +222,10 @@ const Scrollable = DOMComponent.inherit({
 
     _updateRtlConfig: function() {
         if(this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
-            const { clientWidth, scrollWidth, scrollLeft } = this._container().get(0);
+            const { clientWidth, scrollLeft } = this._container().get(0);
             const windowPixelRatio = this._getWindowDevicePixelRatio();
             if(this._rtlConfig.windowPixelRatio === windowPixelRatio && this._rtlConfig.clientWidth === clientWidth) {
-                this._rtlConfig.scrollRight = (scrollWidth - (scrollLeft + clientWidth));
+                this._rtlConfig.scrollRight = this._getMaxOffset().left - scrollLeft;
             }
             this._rtlConfig.clientWidth = clientWidth;
             this._rtlConfig.windowPixelRatio = windowPixelRatio;
@@ -418,10 +426,14 @@ const Scrollable = DOMComponent.inherit({
     },
 
     scrollOffset: function() {
-        const location = this._location();
+        return this._getScrollOffset();
+    },
+
+    _getScrollOffset() {
+        const { top, left } = this._location();
         return {
-            top: -location.top,
-            left: -location.left
+            top: -top,
+            left: -left
         };
     },
 

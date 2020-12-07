@@ -565,6 +565,7 @@ export const SimulatedStrategy = Class.inherit({
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
+        this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
     },
 
     render: function() {
@@ -871,14 +872,9 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     _createActionArgs: function() {
-        const scrollerX = this._scrollers[HORIZONTAL];
-        const scrollerY = this._scrollers[VERTICAL];
-        const location = this.location();
+        const { horizontal: scrollerX, vertical: scrollerY } = this._scrollers;
 
-        this._scrollOffset = {
-            top: scrollerY && -location.top,
-            left: scrollerX && -location.left
-        };
+        this._scrollOffset = this._getScrollOffset();
 
         return {
             event: this._eventForUserAction,
