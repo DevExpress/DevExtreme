@@ -9,7 +9,9 @@ import {
     createWrapper,
     initTestMarkup,
     checkResultByDeviceType,
-    isDesktopEnvironment
+    isDesktopEnvironment,
+    asyncScrollTest,
+    asyncWrapper
 } from '../../helpers/scheduler/helpers.js';
 
 const supportedViews = ['day', 'week', 'workWeek'];
@@ -916,6 +918,7 @@ module('AppointmentSettings', {
             {
                 y: 2500,
                 appointmentRects: [
+                    { left: -9685, top: -10093, height: 4 },
                     { left: -9685, top: -9743, height: 500 }
                 ]
             },
@@ -1103,58 +1106,65 @@ module('AppointmentSettings', {
 
         const scrollable = instance.getWorkSpace().getScrollable();
 
-        [
-            {
-                offsetY: 0,
-                expectedSettings: [
-                    {
-                        groupIndex: 0,
-                        topPositions: [50, 150, 250, 350, 450, 550, 650, 750]
-                    }
-                ]
-            },
-            {
-                offsetY: 2000,
-                expectedSettings: [
-                    {
-                        groupIndex: 0,
-                        topPositions: [1750, 1850, 1950, 2050, 2150, 2250, 2350]
-                    },
-                    {
-                        groupIndex: 1,
-                        topPositions: [2500, 2600, 2700]
-                    },
-                ]
-            },
-            {
-                offsetY: 4000,
-                expectedSettings: [
-                    {
-                        groupIndex: 1,
-                        topPositions: [3800, 3900, 4000, 4100, 4200, 4300, 4400, 4500, 4600, 4700]
-                    }
-                ]
-            },
-        ].forEach(option => {
-            scrollable.scrollTo({ y: option.offsetY });
+        return asyncWrapper(assert, (promise) => {
+            [
+                {
+                    offsetY: 0,
+                    expectedSettings: [
+                        {
+                            groupIndex: 0,
+                            topPositions: [50, 150, 250, 350, 450, 550, 650, 750]
+                        }
+                    ]
+                },
+                {
+                    offsetY: 2000,
+                    expectedSettings: [
+                        {
+                            groupIndex: 0,
+                            topPositions: [1750, 1850, 1950, 2050, 2150, 2250, 2350]
+                        },
+                        {
+                            groupIndex: 1,
+                            topPositions: [2500, 2600, 2700]
+                        },
+                    ]
+                },
+                {
+                    offsetY: 4000,
+                    expectedSettings: [
+                        {
+                            groupIndex: 1,
+                            topPositions: [3800, 3900, 4000, 4100, 4200, 4300, 4400, 4500, 4600, 4700]
+                        }
+                    ]
+                },
+            ].forEach(option => {
+                promise = asyncScrollTest(
+                    promise,
+                    () => scrollable.scrollTo({ y: option.offsetY }),
+                    () => {
+                        const filteredItems = instance.getFilteredItems();
 
-            const filteredItems = instance.getFilteredItems();
-
-            filteredItems.forEach((dataItem, index) => {
-                const settings = instance.fire('createAppointmentSettings', dataItem);
-                const {
-                    groupIndex,
-                    topPositions
-                } = option.expectedSettings[index];
-                topPositions.forEach((top, index) => {
-                    assert.equal(settings[index].groupIndex, groupIndex, `Appointment groupIndex ${groupIndex} is correct for offsetY: ${option.offsetY}`);
-                    assert.equal(settings[index].top, top, `Appointment top position ${top} is correct for offsetY: ${option.offsetY}`);
-                });
+                        filteredItems.forEach((dataItem, index) => {
+                            const settings = instance.fire('createAppointmentSettings', dataItem);
+                            const {
+                                groupIndex,
+                                topPositions
+                            } = option.expectedSettings[index];
+                            topPositions.forEach((top, index) => {
+                                assert.equal(settings[index].groupIndex, groupIndex, `Appointment groupIndex ${groupIndex} is correct for offsetY: ${option.offsetY}`);
+                                assert.equal(settings[index].top, top, `Appointment top position ${top} is correct for offsetY: ${option.offsetY}`);
+                            });
+                        });
+                    });
             });
 
+            return promise;
         });
     });
 });
+
 
 module('Appointment filtering', function() {
     module('Init', function() {
@@ -1450,25 +1460,33 @@ module('Appointment filtering', function() {
 
             const scrollable = instance.getWorkSpace().getScrollable();
 
-            [
-                { offsetY: 0, expectedDataIndices: [0] },
-                { offsetY: 500, expectedDataIndices: [0] },
-                { offsetY: 1000, expectedDataIndices: [0] },
-                { offsetY: 2000, expectedDataIndices: [0, 1] },
-                { offsetY: 2500, expectedDataIndices: [0, 1] },
-                { offsetY: 4000, expectedDataIndices: [1] },
-                { offsetY: 4500, expectedDataIndices: [1] },
-            ].forEach(option => {
-                scrollable.scrollTo({ y: option.offsetY });
+            return asyncWrapper(assert, promise => {
+                [
+                    { offsetY: 0, expectedDataIndices: [0] },
+                    { offsetY: 500, expectedDataIndices: [0] },
+                    { offsetY: 1000, expectedDataIndices: [0] },
+                    { offsetY: 2000, expectedDataIndices: [0, 1] },
+                    { offsetY: 2500, expectedDataIndices: [0, 1] },
+                    { offsetY: 4000, expectedDataIndices: [1] },
+                    { offsetY: 4500, expectedDataIndices: [1] },
+                ].forEach(option => {
+                    promise = asyncScrollTest(
+                        promise,
+                        () => scrollable.scrollTo({ y: option.offsetY }),
+                        () => {
+                            const filteredItems = instance.getFilteredItems();
 
-                const filteredItems = instance.getFilteredItems();
+                            const { expectedDataIndices } = option;
+                            assert.equal(filteredItems.length, expectedDataIndices.length, 'Filtered items length is correct');
 
-                const { expectedDataIndices } = option;
-                assert.equal(filteredItems.length, expectedDataIndices.length, 'Filtered items length is correct');
-
-                expectedDataIndices.forEach((dataIndex, index) => {
-                    assert.deepEqual(filteredItems[index], data[dataIndex], `Filtered item ${index} is correct`);
+                            expectedDataIndices.forEach((dataIndex, index) => {
+                                assert.deepEqual(filteredItems[index], data[dataIndex], `Filtered item ${index} is correct`);
+                            });
+                        }
+                    );
                 });
+
+                return promise;
             });
         });
     });
@@ -1725,12 +1743,18 @@ module('Appointment filtering', function() {
 
             const scrollable = this.instance.getWorkSpace().getScrollable();
 
-            scrollable.scrollTo({ y: 600 });
+            return asyncWrapper(assert, promise => {
+                return asyncScrollTest(
+                    promise,
+                    () => scrollable.scrollTo({ y: 600 }),
+                    () => {
+                        const filteredItems = this.instance.getFilteredItems();
 
-            const filteredItems = this.instance.getFilteredItems();
+                        assert.equal(filteredItems.length, 1, 'Filtered items length is correct');
+                        assert.deepEqual(filteredItems[0], data[0], 'Filtered item is correct');
+                    });
 
-            assert.equal(filteredItems.length, 1, 'Filtered items length is correct');
-            assert.deepEqual(filteredItems[0], data[0], 'Filtered item is correct');
+            });
         });
     });
 });
