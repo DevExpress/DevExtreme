@@ -8,7 +8,8 @@ jobs:
       matrix:
         RENOVATION: [ true ]
         BROWSER: [ google-chrome ]
-        CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
+        CONSTEL: [ export, viz, renovation ]
+        # CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
         JQUERY: [ jquery=3 ]
 
     runs-on: ubuntu-latest
