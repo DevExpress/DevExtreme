@@ -127,7 +127,8 @@ const SchedulerHeader = Widget.inherit({
             tabIndex: this.option('tabIndex'),
             focusStateEnabled: this.option('focusStateEnabled'),
             observer: this.option('observer'),
-            customizeDateNavigatorText: this.option('customizeDateNavigatorText')
+            customizeDateNavigatorText: this.option('customizeDateNavigatorText'),
+            todayDate: this.option('todayDate')
         });
 
         this._navigator.$element().appendTo(this.$element());
