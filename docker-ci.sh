@@ -46,6 +46,7 @@ function run_test {
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
     [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
+    [ "$RENOVATION" == "true" ] && url="$url&renovation=true"
 
     if [ -n "$TZ" ]; then
         ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
@@ -57,8 +58,10 @@ function run_test {
         x11vnc -display :99 2>/dev/null &
     fi
 
+    if [ "$GITHUBACTION" != "true" ]; then
     npm i
     npm run build
+    fi
 
     dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
@@ -149,12 +152,15 @@ function run_test {
                     --enable-features=OverlayScrollbar
                 )
             fi
-
-            tput setaf 6
-            echo "$chrome_command"
-            printf '  %s\n' "${chrome_args[@]}"
-            tput setaf 9
-
+            if [ $GITHUBACTION == "true" ]; then
+                echo "$chrome_command"
+                printf '  %s\n' "${chrome_args[@]}"
+            else
+                tput setaf 6
+                echo "$chrome_command"
+                printf '  %s\n' "${chrome_args[@]}"
+                tput setaf 9
+            fi
             google-chrome-stable --version
             eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
         ;;

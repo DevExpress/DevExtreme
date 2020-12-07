@@ -131,6 +131,7 @@ gulp.task('transpile', gulp.series(
         transpile(src, ctx.TRANSPILED_PROD_PATH),
         transpile(src, ctx.TRANSPILED_PATH, transpileConfig.cjs, false),
         ifRenovationPackage(transpile(src, ctx.TRANSPILED_PROD_RENOVATION_PATH, transpileConfig.cjs)),
+        ifRenovationPackage(transpile(src, ctx.TRANSPILED_RENOVATION_PATH, transpileConfig.cjs, false, true)),
     ]),
     ifEsmPackage(transpileEsm(ctx.TRANSPILED_PROD_ESM_PATH)),
 ));
@@ -148,6 +149,7 @@ const replaceVersion = () => gulp.parallel([
     replaceTask(ctx.TRANSPILED_PATH),
     replaceTask(ctx.TRANSPILED_PROD_PATH),
     ifRenovationPackage(() => replaceTask(ctx.TRANSPILED_PROD_RENOVATION_PATH))(),
+    ifRenovationPackage(() => replaceTask(ctx.TRANSPILED_RENOVATION_PATH))(),
     ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './esm')))(),
     ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './cjs')))(),
 ]);
