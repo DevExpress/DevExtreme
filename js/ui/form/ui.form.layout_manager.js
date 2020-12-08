@@ -950,7 +950,6 @@ const LayoutManager = Widget.inherit({
             }
         }
 
-
         return editorInstance;
     },
 
