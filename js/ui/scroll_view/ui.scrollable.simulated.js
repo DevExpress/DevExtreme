@@ -874,7 +874,12 @@ export const SimulatedStrategy = Class.inherit({
     _createActionArgs: function() {
         const { horizontal: scrollerX, vertical: scrollerY } = this._scrollers;
 
-        this._scrollOffset = this._getScrollOffset();
+        const offset = this._getScrollOffset();
+
+        this._scrollOffset = {
+            top: scrollerY && offset.top,
+            left: scrollerX && offset.left
+        };
 
         return {
             event: this._eventForUserAction,
