@@ -69,7 +69,7 @@ export const asyncWrapper = (assert, callback) => {
         .then(done);
 };
 
-export const execAsync = (promise, callback, asyncCallback, timeout) => {
+export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout) => {
     return promise.then(() => {
         return new Promise((resolve, reject) => {
             const execCallback = func => {
@@ -80,7 +80,7 @@ export const execAsync = (promise, callback, asyncCallback, timeout) => {
                 }
             };
 
-            callback && execCallback(callback);
+            beforeAsyncCallback && execCallback(beforeAsyncCallback);
 
             setTimeout(() => {
                 execCallback(asyncCallback);
@@ -90,8 +90,9 @@ export const execAsync = (promise, callback, asyncCallback, timeout) => {
     });
 };
 
-export const asyncScrollTest = (promise, callback, asyncCallback) => {
-    return execAsync(promise, callback, asyncCallback, 20);
+export const asyncScrollTest = (promise, beforeAsyncCallback, asyncCallback) => {
+    const scrollTimeout = 20;
+    return execAsync(promise, beforeAsyncCallback, asyncCallback, scrollTimeout);
 };
 
 class ElementWrapper {
