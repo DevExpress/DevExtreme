@@ -52,7 +52,7 @@ export const getRelativeLocation = (element: HTMLElement): ScrollableLocation =>
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
   props: {
-    disabled, height, width, rtlEnabled, children,
+    disabled, height, width, rtlEnabled, children, forceGeneratePockets,
   },
   restAttributes,
 }: ScrollableNative): JSX.Element => (
@@ -67,7 +67,9 @@ export const viewFunction = ({
     <div className="dx-scrollable-wrapper">
       <div className="dx-scrollable-container" ref={containerRef as any}>
         <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef as any}>
+          {forceGeneratePockets && <div className="dx-scrollview-top-pocket" />}
           {children}
+          {forceGeneratePockets && <div className="dx-scrollview-bottom-pocket" />}
         </div>
       </div>
     </div>
@@ -222,11 +224,12 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
   }
 
   get cssClasses(): string {
-    const { direction } = this.props;
+    const { direction, classes } = this.props;
 
     const classesMap = {
-      'dx-scrollview dx-scrollable dx-scrollable-native dx-scrollable-renovated dx-scrollable-native-generic': true,
+      'dx-scrollable dx-scrollable-native dx-scrollable-renovated dx-scrollable-native-generic': true,
       [`dx-scrollable-${direction}`]: true,
+      [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
   }
