@@ -42,23 +42,23 @@ class SchedulerTableCreator {
             allDayElementIndex++;
         }
 
-        for(let i = 0; i < rowCount; i++) {
+        for(let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
             row = domAdapter.createElement(ROW_SELECTOR);
             tableBody.appendChild(row);
 
-            const isLastRowInGroup = (i + 1) % rowCountInGroup === 0;
+            const isLastRowInGroup = (rowIndex + 1) % rowCountInGroup === 0;
 
             if(options.rowClass) {
                 row.className = options.rowClass;
             }
 
-            for(let j = 0; j < options.cellCount; j++) {
+            for(let columnIndex = 0; columnIndex < options.cellCount; columnIndex++) {
                 const td = domAdapter.createElement('td');
                 row.appendChild(td);
 
                 if(options.cellClass) {
                     if(isFunction(options.cellClass)) {
-                        td.className = options.cellClass(i, j);
+                        td.className = options.cellClass(rowIndex, columnIndex);
                     } else {
                         td.className = options.cellClass;
                     }
@@ -70,20 +70,31 @@ class SchedulerTableCreator {
                 let dataValue;
 
                 if(options.getCellData) {
-                    cellDataObject = options.getCellData(td, i, j, groupIndex);
+                    cellDataObject = options.getCellData(td, rowIndex, columnIndex, groupIndex);
                     dataKey = cellDataObject.key;
                     dataValue = cellDataObject.value;
                     dataKey && elementData(td, dataKey, dataValue);
                 }
 
                 if(options.cellTemplate && options.cellTemplate.render) {
+                    let $templateContainer = $(td);
+                    if(options.addTemplateWrapper) {
+                        $templateContainer = $('<div>').appendTo($(td));
+                        $templateContainer.addClass(options.templateWrapperClass);
+                    }
+
+                    const additionalTemplateData = options.getTemplateData
+                        ? options.getTemplateData(rowIndex)
+                        : {};
+
                     const templateOptions = {
                         model: {
-                            text: options.getCellText ? options.getCellText(i, j) : '',
-                            date: options.getCellDate ? options.getCellDate(i) : undefined
+                            text: options.getCellText ? options.getCellText(rowIndex, columnIndex) : '',
+                            date: options.getCellDate ? options.getCellDate(rowIndex) : undefined,
+                            ...additionalTemplateData,
                         },
-                        container: getPublicElement($(td)),
-                        index: i * options.cellCount + j
+                        container: getPublicElement($templateContainer),
+                        index: rowIndex * options.cellCount + columnIndex,
                     };
 
                     if(dataValue) {
@@ -108,7 +119,10 @@ class SchedulerTableCreator {
 
                 } else {
                     if(options.getCellText) {
-                        td.innerHTML = '<div>' + options.getCellText(i, j) + '</div>';
+                        $('<div>')
+                            .text(options.getCellText(rowIndex, columnIndex))
+                            .addClass(options.getCellTextClass)
+                            .appendTo($(td));
                     }
                 }
             }

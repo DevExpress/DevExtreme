@@ -31,31 +31,28 @@ import dxScrollable from './scroll_view/ui.scrollable';
 import Widget from './widget/ui.widget';
 export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
-     * @docid dxTreeListOptions.autoExpandAll
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     autoExpandAll?: boolean;
     /**
-     * @docid dxTreeListOptions.columns
-     * @type Array<dxTreeListColumn,string>
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     columns?: Array<dxTreeListColumn | string>;
     /**
-     * @docid dxTreeListOptions.customizeColumns
-     * @type function(columns)
+     * @docid
      * @type_function_param1 columns:Array<dxTreeListColumn>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     customizeColumns?: ((columns: Array<dxTreeListColumn>) => any);
     /**
-     * @docid dxTreeListOptions.dataStructure
+     * @docid
      * @type Enums.TreeListDataStructure
      * @default "plain"
      * @prevFileNamespace DevExpress.ui
@@ -63,23 +60,21 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     dataStructure?: 'plain' | 'tree';
     /**
-     * @docid dxTreeListOptions.editing
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type object
      */
     editing?: dxTreeListEditing;
     /**
-     * @docid dxTreeListOptions.expandNodesOnFiltering
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandNodesOnFiltering?: boolean;
     /**
-     * @docid dxTreeListOptions.expandedRowKeys
-     * @type Array<any>
+     * @docid
      * @default []
      * @fires dxTreeListOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -87,7 +82,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     expandedRowKeys?: Array<any>;
     /**
-     * @docid dxTreeListOptions.filterMode
+     * @docid
      * @type Enums.TreeListFilterMode
      * @default "withAncestors"
      * @prevFileNamespace DevExpress.ui
@@ -95,31 +90,27 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
     /**
-     * @docid dxTreeListOptions.hasItemsExpr
-     * @type string|function
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hasItemsExpr?: string | Function;
     /**
-     * @docid dxTreeListOptions.itemsExpr
-     * @type string|function
+     * @docid
      * @default "items"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemsExpr?: string | Function;
     /**
-     * @docid dxTreeListOptions.keyExpr
-     * @type string|function
+     * @docid
      * @default "id"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyExpr?: string | Function;
     /**
-     * @docid dxTreeListOptions.onCellClick
-     * @type function(e)|string
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -140,8 +131,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onCellClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any) | string;
     /**
-     * @docid dxTreeListOptions.onCellDblClick
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -162,8 +152,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onCellDblClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any);
     /**
-     * @docid dxTreeListOptions.onCellHoverChanged
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 eventType:string
      * @type_function_param1_field5 data:object
@@ -184,8 +173,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onCellHoverChanged?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any);
     /**
-     * @docid dxTreeListOptions.onCellPrepared
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -210,8 +198,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onCellPrepared?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, cellElement?: dxElement, watch?: Function, oldValue?: any }) => any);
     /**
-     * @docid dxTreeListOptions.onContextMenuPreparing
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:Object
      * @type_function_param1_field4 items:Array<Object>
      * @type_function_param1_field5 target:string
@@ -227,8 +214,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onContextMenuPreparing?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
     /**
-     * @docid dxTreeListOptions.onEditingStart
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -241,8 +227,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onEditingStart?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => any);
     /**
-     * @docid dxTreeListOptions.onEditorPrepared
-     * @type function(options)
+     * @docid
      * @type_function_param1 options:object
      * @type_function_param1_field4 parentType:string
      * @type_function_param1_field5 value:any
@@ -262,8 +247,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onEditorPrepared?: ((options: { component?: dxTreeList, element?: dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: dxElement, readOnly?: boolean, dataField?: string, row?: dxTreeListRowObject }) => any);
     /**
-     * @docid dxTreeListOptions.onEditorPreparing
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 parentType:string
      * @type_function_param1_field5 value:any
@@ -286,8 +270,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onEditorPreparing?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxTreeListRowObject }) => any);
     /**
-     * @docid dxTreeListOptions.onFocusedCellChanged
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 cellElement:dxElement
      * @type_function_param1_field5 columnIndex:number
@@ -301,8 +284,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onFocusedCellChanged?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, cellElement?: dxElement, columnIndex?: number, rowIndex?: number, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any);
     /**
-     * @docid dxTreeListOptions.onFocusedCellChanging
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 cellElement:dxElement
      * @type_function_param1_field5 prevColumnIndex:number
@@ -321,8 +303,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, cellElement?: dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxTreeListRowObject>, columns?: Array<dxTreeListColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
     /**
-     * @docid dxTreeListOptions.onFocusedRowChanged
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 rowElement:dxElement
      * @type_function_param1_field5 rowIndex:number
@@ -334,8 +315,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onFocusedRowChanged?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, rowElement?: dxElement, rowIndex?: number, row?: dxTreeListRowObject }) => any);
     /**
-     * @docid dxTreeListOptions.onFocusedRowChanging
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 rowElement:dxElement
      * @type_function_param1_field5 prevRowIndex:number
@@ -350,8 +330,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onFocusedRowChanging?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, rowElement?: dxElement, prevRowIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxTreeListRowObject>, cancel?: boolean }) => any);
     /**
-     * @docid dxTreeListOptions.onNodesInitialized
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 root:dxTreeListNode
      * @extends Action
@@ -361,8 +340,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onNodesInitialized?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, root?: dxTreeListNode }) => any);
     /**
-     * @docid dxTreeListOptions.onRowClick
-     * @type function(e)|string
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -385,8 +363,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onRowClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
     /**
-     * @docid dxTreeListOptions.onRowDblClick
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 data:object
@@ -406,8 +383,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onRowDblClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement }) => any);
     /**
-     * @docid dxTreeListOptions.onRowPrepared
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field4 data:object
      * @type_function_param1_field5 key:any
@@ -428,55 +404,71 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      */
     onRowPrepared?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement, node?: dxTreeListNode, level?: number }) => any);
     /**
-     * @docid dxTreeListOptions.paging
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type object
      */
     paging?: dxTreeListPaging;
     /**
-     * @docid dxTreeListOptions.parentIdExpr
-     * @type string|function
+     * @docid
      * @default "parentId"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     parentIdExpr?: string | Function;
     /**
-     * @docid dxTreeListOptions.remoteOperations
+     * @docid
      * @type object|Enums.Mode
      * @default "auto"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    remoteOperations?: { filtering?: boolean, grouping?: boolean, sorting?: boolean } | 'auto';
+    remoteOperations?: {
     /**
-     * @docid dxTreeListOptions.rootValue
-     * @type any
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
+      filtering?: boolean,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
+      grouping?: boolean,
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @default false
+       */
+      sorting?: boolean
+    } | 'auto';
+    /**
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     rootValue?: any;
     /**
-     * @docid dxTreeListOptions.scrolling
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type object
      */
     scrolling?: dxTreeListScrolling;
     /**
-     * @docid dxTreeListOptions.selection
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type object
      */
     selection?: dxTreeListSelection;
 }
 export interface dxTreeListEditing extends GridBaseEditing {
     /**
      * @docid dxTreeListOptions.editing.allowAdding
-     * @type boolean|function
      * @default false
      * @type_function_param1 options:object
      * @type_function_param1_field1 component:dxTreeList
@@ -488,7 +480,6 @@ export interface dxTreeListEditing extends GridBaseEditing {
     allowAdding?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowDeleting
-     * @type boolean|function
      * @default false
      * @type_function_param1 options:object
      * @type_function_param1_field1 component:dxTreeList
@@ -500,7 +491,6 @@ export interface dxTreeListEditing extends GridBaseEditing {
     allowDeleting?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowUpdating
-     * @type boolean|function
      * @default false
      * @type_function_param1 options:object
      * @type_function_param1_field1 component:dxTreeList
@@ -521,7 +511,6 @@ export interface dxTreeListEditing extends GridBaseEditing {
 export interface dxTreeListEditingTexts extends GridBaseEditingTexts {
     /**
      * @docid dxTreeListOptions.editing.texts.addRowToNode
-     * @type string
      * @default "Add"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -531,7 +520,6 @@ export interface dxTreeListEditingTexts extends GridBaseEditingTexts {
 export interface dxTreeListPaging extends GridBasePaging {
     /**
      * @docid dxTreeListOptions.paging.enabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -551,7 +539,6 @@ export interface dxTreeListScrolling extends GridBaseScrolling {
 export interface dxTreeListSelection extends GridBaseSelection {
     /**
      * @docid dxTreeListOptions.selection.recursive
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -559,7 +546,7 @@ export interface dxTreeListSelection extends GridBaseSelection {
     recursive?: boolean;
 }
 /**
- * @docid dxTreeList
+ * @docid
  * @inherits GridBase
  * @module ui/tree_list
  * @export default
@@ -570,7 +557,7 @@ export default class dxTreeList extends Widget implements GridBase {
     constructor(element: Element, options?: dxTreeListOptions)
     constructor(element: JQuery, options?: dxTreeListOptions)
     /**
-     * @docid dxTreeListMethods.addColumn
+     * @docid
      * @publicName addColumn(columnOptions)
      * @param1 columnOptions:object|string
      * @prevFileNamespace DevExpress.ui
@@ -578,7 +565,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     addColumn(columnOptions: any | string): void;
     /**
-     * @docid dxTreeListMethods.addRow
+     * @docid
      * @publicName addRow()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -586,7 +573,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     addRow(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.addRow
+     * @docid
      * @publicName addRow(parentId)
      * @param1 parentId:any
      * @return Promise<void>
@@ -595,7 +582,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     addRow(parentId: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.collapseRow
+     * @docid
      * @publicName collapseRow(key)
      * @param1 key:any
      * @return Promise<void>
@@ -604,7 +591,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     collapseRow(key: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.expandRow
+     * @docid
      * @publicName expandRow(key)
      * @param1 key:any
      * @return Promise<void>
@@ -613,7 +600,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     expandRow(key: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.forEachNode
+     * @docid
      * @publicName forEachNode(callback)
      * @param1 callback:function
      * @prevFileNamespace DevExpress.ui
@@ -621,7 +608,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     forEachNode(callback: Function): void;
     /**
-     * @docid dxTreeListMethods.forEachNode
+     * @docid
      * @publicName forEachNode(nodes, callback)
      * @param1 nodes:Array<dxTreeListNode>
      * @param2 callback:function
@@ -630,7 +617,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     forEachNode(nodes: Array<dxTreeListNode>, callback: Function): void;
     /**
-     * @docid dxTreeListMethods.getNodeByKey
+     * @docid
      * @publicName getNodeByKey(key)
      * @param1 key:object|string|number
      * @return dxTreeListNode
@@ -639,7 +626,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getNodeByKey(key: any | string | number): dxTreeListNode;
     /**
-     * @docid dxTreeListMethods.getRootNode
+     * @docid
      * @publicName getRootNode()
      * @return dxTreeListNode
      * @prevFileNamespace DevExpress.ui
@@ -647,7 +634,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getRootNode(): dxTreeListNode;
     /**
-     * @docid dxTreeListMethods.getSelectedRowKeys
+     * @docid
      * @publicName getSelectedRowKeys()
      * @return Array<any>
      * @prevFileNamespace DevExpress.ui
@@ -655,7 +642,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getSelectedRowKeys(): Array<any>;
     /**
-     * @docid dxTreeListMethods.getSelectedRowKeys
+     * @docid
      * @publicName getSelectedRowKeys(mode)
      * @param1 mode:string
      * @return Array<any>
@@ -664,7 +651,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getSelectedRowKeys(mode: string): Array<any>;
     /**
-     * @docid dxTreeListMethods.getSelectedRowsData
+     * @docid
      * @publicName getSelectedRowsData()
      * @return Array<any>
      * @prevFileNamespace DevExpress.ui
@@ -672,7 +659,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getSelectedRowsData(): Array<any>;
     /**
-     * @docid dxTreeListMethods.getSelectedRowsData
+     * @docid
      * @publicName getSelectedRowsData(mode)
      * @param1 mode:string
      * @return Array<any>
@@ -681,7 +668,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getSelectedRowsData(mode: string): Array<any>;
     /**
-     * @docid dxTreeListMethods.getVisibleColumns
+     * @docid
      * @publicName getVisibleColumns()
      * @return Array<dxTreeListColumn>
      * @prevFileNamespace DevExpress.ui
@@ -689,7 +676,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getVisibleColumns(): Array<dxTreeListColumn>;
     /**
-     * @docid dxTreeListMethods.getVisibleColumns
+     * @docid
      * @publicName getVisibleColumns(headerLevel)
      * @param1 headerLevel:number
      * @return Array<dxTreeListColumn>
@@ -698,7 +685,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getVisibleColumns(headerLevel: number): Array<dxTreeListColumn>;
     /**
-     * @docid dxTreeListMethods.getVisibleRows
+     * @docid
      * @publicName getVisibleRows()
      * @return Array<dxTreeListRowObject>
      * @prevFileNamespace DevExpress.ui
@@ -706,7 +693,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getVisibleRows(): Array<dxTreeListRowObject>;
     /**
-     * @docid dxTreeListMethods.isRowExpanded
+     * @docid
      * @publicName isRowExpanded(key)
      * @param1 key:any
      * @return boolean
@@ -715,7 +702,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     isRowExpanded(key: any): boolean;
     /**
-     * @docid dxTreeListMethods.loadDescendants
+     * @docid
      * @publicName loadDescendants()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -723,7 +710,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     loadDescendants(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.loadDescendants
+     * @docid
      * @publicName loadDescendants(keys)
      * @param1 keys:Array<any>
      * @return Promise<void>
@@ -732,7 +719,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     loadDescendants(keys: Array<any>): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.loadDescendants
+     * @docid
      * @publicName loadDescendants(keys, childrenOnly)
      * @param1 keys:Array<any>
      * @param2 childrenOnly:boolean
@@ -810,17 +797,21 @@ export default class dxTreeList extends Widget implements GridBase {
     updateDimensions(): void;
 }
 
+/**
+ * @docid
+ * @inherits GridBaseColumn
+ * @type object
+ */
 export interface dxTreeListColumn extends GridBaseColumn {
     /**
-     * @docid dxTreeListColumn.buttons
+     * @docid
      * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxTreeListColumnButton>;
     /**
-     * @docid dxTreeListColumn.cellTemplate
-     * @type template|function
+     * @docid
      * @type_function_param1 cellElement:dxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 data:object
@@ -840,16 +831,14 @@ export interface dxTreeListColumn extends GridBaseColumn {
      */
     cellTemplate?: template | ((cellElement: dxElement, cellInfo: { data?: any, component?: dxTreeList, value?: any, oldValue?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, row?: dxTreeListRowObject, rowType?: string, watch?: Function }) => any);
     /**
-     * @docid dxTreeListColumn.columns
-     * @type Array<dxTreeListColumn,string>
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     columns?: Array<dxTreeListColumn | string>;
     /**
-     * @docid dxTreeListColumn.editCellTemplate
-     * @type template|function
+     * @docid
      * @type_function_param1 cellElement:dxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 setValue(newValue, newText):any
@@ -869,8 +858,7 @@ export interface dxTreeListColumn extends GridBaseColumn {
      */
     editCellTemplate?: template | ((cellElement: dxElement, cellInfo: { setValue?: any, data?: any, component?: dxTreeList, value?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, row?: dxTreeListRowObject, rowType?: string, watch?: Function }) => any);
     /**
-     * @docid dxTreeListColumn.headerCellTemplate
-     * @type template|function
+     * @docid
      * @type_function_param1 columnHeader:dxElement
      * @type_function_param2 headerInfo:object
      * @type_function_param2_field1 component:dxTreeList
@@ -881,7 +869,7 @@ export interface dxTreeListColumn extends GridBaseColumn {
      */
     headerCellTemplate?: template | ((columnHeader: dxElement, headerInfo: { component?: dxTreeList, columnIndex?: number, column?: dxTreeListColumn }) => any);
     /**
-     * @docid dxTreeListColumn.type
+     * @docid
      * @publicName type
      * @type Enums.TreeListCommandColumnType
      * @prevFileNamespace DevExpress.ui
@@ -890,17 +878,21 @@ export interface dxTreeListColumn extends GridBaseColumn {
     type?: 'adaptive' | 'buttons';
 }
 
+/**
+ * @docid
+ * @inherits GridBaseColumnButton
+ * @type object
+ */
 export interface dxTreeListColumnButton extends GridBaseColumnButton {
     /**
-     * @docid dxTreeListColumnButton.name
+     * @docid
      * @type Enums.TreeListColumnButtonName|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
     /**
-     * @docid dxTreeListColumnButton.onClick
-     * @type function(e)|string
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 element:dxElement
@@ -913,8 +905,7 @@ export interface dxTreeListColumnButton extends GridBaseColumnButton {
      */
     onClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
     /**
-     * @docid dxTreeListColumnButton.template
-     * @type template|function
+     * @docid
      * @type_function_param1 cellElement:dxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 component:dxTreeList
@@ -931,8 +922,7 @@ export interface dxTreeListColumnButton extends GridBaseColumnButton {
      */
     template?: template | ((cellElement: dxElement, cellInfo: { component?: dxTreeList, data?: any, key?: any, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject }) => string | Element | JQuery);
     /**
-     * @docid dxTreeListColumnButton.visible
-     * @type boolean|function
+     * @docid
      * @default true
      * @type_function_param1 options:object
      * @type_function_param1_field1 component:dxTreeList
@@ -945,125 +935,116 @@ export interface dxTreeListColumnButton extends GridBaseColumnButton {
     visible?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => boolean);
 }
 
+/**
+ * @docid
+ * @type object
+ */
 export interface dxTreeListNode {
     /**
-     * @docid dxTreeListNode.children
-     * @type Array<dxTreeListNode>
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     children?: Array<dxTreeListNode>;
     /**
-     * @docid dxTreeListNode.data
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     data?: any;
     /**
-     * @docid dxTreeListNode.hasChildren
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hasChildren?: boolean;
     /**
-     * @docid dxTreeListNode.key
-     * @type any
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     key?: any;
     /**
-     * @docid dxTreeListNode.level
-     * @type number
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     level?: number;
     /**
-     * @docid dxTreeListNode.parent
-     * @type dxTreeListNode
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     parent?: dxTreeListNode;
     /**
-     * @docid dxTreeListNode.visible
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
 }
 
+/**
+ * @docid
+ * @type object
+ */
 export interface dxTreeListRowObject {
     /**
-     * @docid dxTreeListRowObject.isEditing
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     isEditing?: boolean;
     /**
-     * @docid dxTreeListRowObject.isExpanded
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     isExpanded?: boolean;
     /**
-     * @docid dxTreeListRowObject.isNewRow
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     isNewRow?: boolean;
     /**
-     * @docid dxTreeListRowObject.isSelected
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     isSelected?: boolean;
     /**
-     * @docid dxTreeListRowObject.key
-     * @type any
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     key?: any;
     /**
-     * @docid dxTreeListRowObject.level
-     * @type number
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     level?: number;
     /**
-     * @docid dxTreeListRowObject.node
-     * @type dxTreeListNode
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     node?: dxTreeListNode;
     /**
-     * @docid dxTreeListRowObject.rowIndex
-     * @type number
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     rowIndex?: number;
     /**
-     * @docid dxTreeListRowObject.rowType
-     * @type string
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     rowType?: string;
     /**
-     * @docid dxTreeListRowObject.values
-     * @type Array<any>
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */

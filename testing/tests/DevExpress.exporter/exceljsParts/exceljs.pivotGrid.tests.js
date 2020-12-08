@@ -1,15 +1,12 @@
 import $ from 'jquery';
-import localization from 'localization';
-import ja from 'localization/messages/ja.json!';
-import messageLocalization from 'localization/message';
-import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
 import { ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportPivotGrid } from 'excel_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
-import { ExcelJSOptionTests } from './exceljs.option.tests.js';
+import { ExcelJSOptionTests } from './exceljs.options.tests.js';
+import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import browser from 'core/utils/browser';
 
 import typeUtils from 'core/utils/type';
@@ -5570,137 +5567,6 @@ QUnit.module('Text customization', moduleConfig, () => {
     });
 });
 
-QUnit.module('LoadPanel', moduleConfig, () => {
-    [undefined, { enabled: true, text: 'Export to .xlsx...' }].forEach((loadPanelConfig) => {
-        QUnit.test(`LoadPanel - loadPanel: ${JSON.stringify(loadPanelConfig)}`, function(assert) {
-            const done = assert.async();
-            const ds = {
-                fields: [
-                    { area: 'row', dataField: 'row1', dataType: 'string' },
-                    { area: 'column', dataField: 'col1', dataType: 'string' },
-                    { area: 'data', summaryType: 'count', dataType: 'number' }
-                ],
-                store: [
-                    { row1: 'A', col1: 'a' },
-                ]
-            };
-
-            const pivotGrid = $('#pivotGrid').dxPivotGrid({
-                dataSource: ds,
-                loadPanel: {
-                    enabled: false
-                }
-            }).dxPivotGrid('instance');
-
-            let actualLoadPanelSettingsOnExporting;
-
-            const loadPanelOnShownHandler = () => {
-                actualLoadPanelSettingsOnExporting = extend({}, pivotGrid.option('loadPanel'));
-            };
-
-            pivotGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-            const initialLoadPanelSettings = extend({}, pivotGrid.option('loadPanel'));
-            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
-
-            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet, loadPanel: loadPanelConfig }).then(() => {
-                assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'loadPanel settings on exporting');
-                assert.deepEqual(pivotGrid.option('loadPanel'), initialLoadPanelSettings, 'loadPanel settings restored after exporting');
-                done();
-            });
-        });
-
-        QUnit.test('LoadPanel - loadPanel: { enabled: false }', function(assert) {
-            assert.expect();
-            const done = assert.async();
-            const ds = {
-                fields: [
-                    { area: 'row', dataField: 'row1', dataType: 'string' },
-                    { area: 'column', dataField: 'col1', dataType: 'string' },
-                    { area: 'data', summaryType: 'count', dataType: 'number' }
-                ],
-                store: [
-                    { row1: 'A', col1: 'a' },
-                ]
-            };
-
-            const pivotGrid = $('#pivotGrid').dxPivotGrid({
-                dataSource: ds,
-                loadPanel: {
-                    enabled: false
-                }
-            }).dxPivotGrid('instance');
-
-            let loadPanelOnShownHandlerCallCount = 0;
-
-            const loadPanelOnShownHandler = (e) => {
-                loadPanelOnShownHandlerCallCount++;
-            };
-
-            pivotGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-            const initialLoadPanelSettings = pivotGrid.option('loadPanel');
-
-            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet, loadPanel: { enabled: false } }).then(() => {
-                assert.strictEqual(loadPanelOnShownHandlerCallCount, 0, 'loadPanel should not be shown on Exporting');
-                assert.deepEqual(pivotGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings');
-                done();
-            });
-        });
-
-        [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
-            QUnit.test(`LoadPanel - ${localizationText.type} localization text, locale('ja')`, function(assert) {
-                const done = assert.async();
-                const ds = {
-                    fields: [
-                        { area: 'row', dataField: 'row1', dataType: 'string' },
-                        { area: 'column', dataField: 'col1', dataType: 'string' },
-                        { area: 'data', summaryType: 'count', dataType: 'number' }
-                    ],
-                    store: [
-                        { row1: 'A', col1: 'a' },
-                    ]
-                };
-                const locale = localization.locale();
-
-                try {
-                    if(localizationText.type === 'default') {
-                        localization.loadMessages(ja);
-                    } else {
-                        messageLocalization.load({
-                            'ja': {
-                                'dxDataGrid-exporting': '!CUSTOM TEXT!'
-                            }
-                        });
-                    }
-
-                    localization.locale('ja');
-
-                    const pivotGrid = $('#pivotGrid').dxPivotGrid({
-                        dataSource: ds,
-                        loadPanel: {
-                            enabled: false
-                        }
-                    }).dxPivotGrid('instance');
-
-                    let actualLoadPanelText;
-
-                    const loadPanelOnShownHandler = () => {
-                        actualLoadPanelText = pivotGrid.option('loadPanel').text;
-                    };
-
-                    pivotGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-
-                    exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
-                        assert.strictEqual(actualLoadPanelText, localizationText.expected, 'loadPanel.text');
-                        done();
-                    });
-                } finally {
-                    localization.locale(locale);
-                }
-            });
-        });
-    });
-});
-
 QUnit.module('Sort options', moduleConfig, () => {
     ['asc', 'desc'].forEach(sortOrder => {
         QUnit.test(`Export [3 rows x 1 column] & row.sortOrder = ${sortOrder}`, function(assert) {
@@ -5858,4 +5724,14 @@ ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'LBP', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
-ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, function() { return $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'); });
+ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, () => $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'));
+LoadPanelTests.runTests(moduleConfig, exportPivotGrid, () => $('#pivotGrid').dxPivotGrid({
+    fields: [
+        { area: 'row', dataField: 'row1', dataType: 'string' },
+        { area: 'column', dataField: 'col1', dataType: 'string' },
+        { area: 'data', summaryType: 'count', dataType: 'number' }
+    ],
+    store: [
+        { row1: 'A', col1: 'a' },
+    ]
+}).dxPivotGrid('instance'), 'worksheet');

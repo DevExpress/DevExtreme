@@ -2,8 +2,7 @@ import '../../jquery_augmentation';
 
 export interface ODataContextOptions {
     /**
-     * @docid ODataContextOptions.beforeSend
-     * @type function
+     * @docid
      * @type_function_param1 options:object
      * @type_function_param1_field1 url:string
      * @type_function_param1_field2 async:boolean
@@ -17,22 +16,19 @@ export interface ODataContextOptions {
      */
     beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
     /**
-     * @docid ODataContextOptions.deserializeDates
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     deserializeDates?: boolean;
     /**
-     * @docid ODataContextOptions.entities
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     entities?: any;
     /**
-     * @docid ODataContextOptions.errorHandler
-     * @type function
+     * @docid
      * @type_function_param1 e:Error
      * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
@@ -42,30 +38,26 @@ export interface ODataContextOptions {
      */
     errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
     /**
-     * @docid ODataContextOptions.filterToLower
-     * @type boolean
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     filterToLower?: boolean;
     /**
-     * @docid ODataContextOptions.jsonp
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public
      */
     jsonp?: boolean;
     /**
-     * @docid ODataContextOptions.url
-     * @type string
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     url?: string;
     /**
-     * @docid ODataContextOptions.version
-     * @type number
+     * @docid
      * @default 2
      * @acceptValues 2|3|4
      * @prevFileNamespace DevExpress.data
@@ -73,8 +65,7 @@ export interface ODataContextOptions {
      */
     version?: number;
     /**
-     * @docid ODataContextOptions.withCredentials
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public
@@ -82,8 +73,7 @@ export interface ODataContextOptions {
     withCredentials?: boolean;
 }
 /**
- * @docid ODataContext
- * @type object
+ * @docid
  * @module data/odata/context
  * @export default
  * @prevFileNamespace DevExpress.data
@@ -92,7 +82,7 @@ export interface ODataContextOptions {
 export default class ODataContext {
     constructor(options?: ODataContextOptions)
     /**
-     * @docid ODataContextmethods.get
+     * @docid
      * @publicName get(operationName, params)
      * @param1 operationName:string
      * @param2 params:object
@@ -102,7 +92,7 @@ export default class ODataContext {
      */
     get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid ODataContextmethods.invoke
+     * @docid
      * @publicName invoke(operationName, params, httpMethod)
      * @param1 operationName:string
      * @param2 params:object
@@ -113,7 +103,7 @@ export default class ODataContext {
      */
     invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid ODataContextmethods.objectLink
+     * @docid
      * @publicName objectLink(entityAlias, key)
      * @param1 entityAlias:string
      * @param2 key:object|string|number

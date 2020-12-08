@@ -68,33 +68,6 @@ const Widget = DOMComponent.inherit({
             * @hidden
             */
             onFocusOut: null,
-
-
-            /**
-            * @name format.type
-            * @type Enums.Format
-            */
-            /**
-            * @name format.precision
-            * @type number
-            */
-            /**
-            * @name format.currency
-            * @type String
-            */
-            /**
-            * @name format.formatter
-            * @type function
-            * @type_function_param1 value:number|date
-            * @type_function_return string
-            */
-            /**
-            * @name format.parser
-            * @type function
-            * @type_function_param1 value:string
-            * @type_function_return number|date
-            */
-
             onKeyboardHandled: null,
             ignoreParentReadOnly: false
         });

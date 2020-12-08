@@ -923,7 +923,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _shouldGetItemsFromPlain: function(values) {
-        return values && this._dataSource.isLoaded() && !this._wasSearch() && values.length <= this._getPlainItems().length;
+        return values && this._dataSource.isLoaded() && values.length <= this._getPlainItems().length;
     },
 
     _getItemsFromPlain: function(values) {
@@ -1254,6 +1254,7 @@ const TagBox = SelectBox.inherit({
     _searchHandler: function(e) {
         if(this.option('searchEnabled') && !!e && !this._isTagRemoved) {
             this.callBase(e);
+            this._setListDataSourceFilter();
         }
 
         this._updateWidgetHeight();

@@ -16,16 +16,14 @@ import {
 
 export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
-     * @docid DataExpressionMixinOptions.dataSource
-     * @type string|Array<CollectionWidgetItem, object>|DataSource|DataSourceOptions
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<CollectionWidgetItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid DataExpressionMixinOptions.displayExpr
-     * @type string|function(item)
+     * @docid
      * @default undefined
      * @type_function_param1 item:object
      * @type_function_return string
@@ -34,8 +32,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      */
     displayExpr?: string | ((item: any) => string);
     /**
-     * @docid DataExpressionMixinOptions.itemTemplate
-     * @type template|function
+     * @docid
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -46,23 +43,20 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      */
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid DataExpressionMixinOptions.items
-     * @type Array<CollectionWidgetItem, object>
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<CollectionWidgetItem | any>;
     /**
-     * @docid DataExpressionMixinOptions.value
-     * @type any
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
     /**
-     * @docid DataExpressionMixinOptions.valueExpr
-     * @type string|function(item)
+     * @docid
      * @default "this"
      * @type_function_param1 item:object
      * @type_function_return string|number|boolean
@@ -72,7 +66,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     valueExpr?: string | ((item: any) => string | number | boolean);
 }
 /**
- * @docid DataExpressionMixin
+ * @docid
  * @module ui/editor/ui.data_expression
  * @inherits DataHelperMixin
  * @export default

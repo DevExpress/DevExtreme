@@ -27,34 +27,39 @@ import BaseWidget, {
     Font
 } from './core/base_widget';
 
+/**
+* @docid
+* @type object
+*/
 export interface BarGaugeBarInfo {
     /**
-     * @docid BarGaugeBarInfo.color
-     * @type string
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     color?: string;
     /**
-     * @docid BarGaugeBarInfo.index
-     * @type number
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     index?: number;
     /**
-     * @docid BarGaugeBarInfo.value
-     * @type number
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     value?: number;
 }
 
+/**
+* @docid
+* @inherits BaseLegendItem
+* @type object
+*/
 export interface BarGaugeLegendItem extends BaseLegendItem {
     /**
-     * @docid BarGaugeLegendItem.item
-     * @type BarGaugeBarInfo
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -63,32 +68,28 @@ export interface BarGaugeLegendItem extends BaseLegendItem {
 
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
-     * @docid dxBarGaugeOptions.animation
-     * @type object
+     * @docid
      * @inherits BaseGaugeOptions.animation
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     animation?: any;
     /**
-     * @docid dxBarGaugeOptions.backgroundColor
-     * @type string
+     * @docid
      * @default '#e0e0e0'
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     backgroundColor?: string;
     /**
-     * @docid dxBarGaugeOptions.barSpacing
-     * @type number
+     * @docid
      * @default 4
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     barSpacing?: number;
     /**
-     * @docid dxBarGaugeOptions.baseValue
-     * @type number
+     * @docid
      * @default 0
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -96,8 +97,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     baseValue?: number;
     /**
-     * @docid dxBarGaugeOptions.endValue
-     * @type number
+     * @docid
      * @default 100
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -105,21 +105,79 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     endValue?: number;
     /**
-     * @docid dxBarGaugeOptions.geometry
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    geometry?: { endAngle?: number, startAngle?: number };
+    geometry?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 315
+      */
+      endAngle?: number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 225
+      */
+      startAngle?: number
+    };
     /**
-     * @docid dxBarGaugeOptions.label
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    label?: { connectorColor?: string, connectorWidth?: number, customizeText?: ((barValue: { value?: number, valueText?: string }) => string), font?: Font, format?: format, indent?: number, visible?: boolean };
+    label?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default undefined
+      */
+      connectorColor?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 2
+      */
+      connectorWidth?: number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @type_function_param1 barValue:object
+      * @type_function_param1_field1 value:Number
+      * @type_function_param1_field2 valueText:string
+      * @type_function_return string
+      * @notUsedInTheme
+      */
+      customizeText?: ((barValue: { value?: number, valueText?: string }) => string),
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 16 [prop](size)
+      */
+      font?: Font,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @extends CommonVizFormat
+      */
+      format?: format,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default 20
+      */
+      indent?: number,
     /**
-     * @docid dxBarGaugeOptions.legend
+      * @docid
+      * @prevFileNamespace DevExpress.viz
+      * @default true
+      */
+      visible?: boolean
+    };
+    /**
+     * @docid
      * @inherits BaseLegend
      * @type object
      * @prevFileNamespace DevExpress.viz
@@ -127,16 +185,15 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     legend?: dxBarGaugeLegend;
     /**
-     * @docid dxBarGaugeOptions.loadingIndicator
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     loadingIndicator?: dxBarGaugeLoadingIndicator;
     /**
-     * @docid dxBarGaugeOptions.onTooltipHidden
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -146,9 +203,8 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     onTooltipHidden?: ((e: { component?: dxBarGauge, element?: dxElement, model?: any, target?: any }) => any);
     /**
-     * @docid dxBarGaugeOptions.onTooltipShown
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -158,14 +214,15 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     onTooltipShown?: ((e: { component?: dxBarGauge, element?: dxElement, model?: any, target?: any }) => any);
     /**
-     * @docid dxBarGaugeOptions.palette
+     * @docid
      * @extends CommonVizPalette
+     * @type Array<string>|Enums.VizPalette
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     palette?: Array<string> | PaletteType;
     /**
-     * @docid dxBarGaugeOptions.paletteExtensionMode
+     * @docid
      * @default 'blend'
      * @type Enums.VizPaletteExtensionMode
      * @prevFileNamespace DevExpress.viz
@@ -173,15 +230,14 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     paletteExtensionMode?: PaletteExtensionModeType;
     /**
-     * @docid dxBarGaugeOptions.relativeInnerRadius
-     * @type number
+     * @docid
      * @default 0.3
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     relativeInnerRadius?: number;
     /**
-     * @docid dxBarGaugeOptions.resolveLabelOverlapping
+     * @docid
      * @type Enums.BarGaugeResolveLabelOverlapping
      * @default 'hide'
      * @prevFileNamespace DevExpress.viz
@@ -189,8 +245,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     resolveLabelOverlapping?: 'hide' | 'none';
     /**
-     * @docid dxBarGaugeOptions.startValue
-     * @type number
+     * @docid
      * @default 0
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -198,15 +253,14 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
      */
     startValue?: number;
     /**
-     * @docid dxBarGaugeOptions.tooltip
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     tooltip?: dxBarGaugeTooltip;
     /**
-     * @docid dxBarGaugeOptions.values
-     * @type Array<number>
+     * @docid
      * @default []
      * @notUsedInTheme
      * @fires BaseWidgetOptions.onOptionChanged
@@ -218,7 +272,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
 export interface dxBarGaugeLegend extends BaseLegend {
     /**
      * @docid dxBarGaugeOptions.legend.customizeHint
-     * @type function(arg)
      * @type_function_param1 arg:object
      * @type_function_param1_field1 item:BarGaugeBarInfo
      * @type_function_param1_field2 text:string
@@ -229,7 +282,6 @@ export interface dxBarGaugeLegend extends BaseLegend {
     customizeHint?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
     /**
      * @docid dxBarGaugeOptions.legend.customizeItems
-     * @type function(items)
      * @type_function_param1 items:Array<BarGaugeLegendItem>
      * @type_function_return Array<BarGaugeLegendItem>
      * @prevFileNamespace DevExpress.viz
@@ -238,7 +290,6 @@ export interface dxBarGaugeLegend extends BaseLegend {
     customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>);
     /**
      * @docid dxBarGaugeOptions.legend.customizeText
-     * @type function(arg)
      * @type_function_param1 arg:object
      * @type_function_param1_field1 item:BarGaugeBarInfo
      * @type_function_param1_field2 text:string
@@ -257,7 +308,6 @@ export interface dxBarGaugeLegend extends BaseLegend {
     itemTextFormat?: format;
     /**
      * @docid dxBarGaugeOptions.legend.markerTemplate
-     * @type template|function
      * @default undefined
      * @type_function_param1 legendItem:BarGaugeLegendItem
      * @type_function_param2 element:SVGGElement
@@ -268,7 +318,6 @@ export interface dxBarGaugeLegend extends BaseLegend {
     markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
     /**
      * @docid dxBarGaugeOptions.legend.visible
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -276,11 +325,16 @@ export interface dxBarGaugeLegend extends BaseLegend {
     visible?: boolean;
 }
 export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
+    /**
+    * @docid dxBarGaugeOptions.loadingIndicator.enabled
+    * @prevFileNamespace DevExpress.viz
+    * @hidden
+    */
+    enabled?: boolean
 }
 export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.contentTemplate
-     * @type template|function(scaleValue, element)
      * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
@@ -295,7 +349,6 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type function(scaleValue)
      * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
@@ -307,7 +360,6 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
     /**
      * @docid dxBarGaugeOptions.tooltip.interactive
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -315,7 +367,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     interactive?: boolean;
 }
 /**
- * @docid dxBarGauge
+ * @docid
  * @inherits BaseWidget
  * @module viz/bar_gauge
  * @export default
@@ -326,7 +378,7 @@ export default class dxBarGauge extends BaseWidget {
     constructor(element: Element, options?: dxBarGaugeOptions)
     constructor(element: JQuery, options?: dxBarGaugeOptions)
     /**
-     * @docid dxbargaugemethods.values
+     * @docid
      * @publicName values()
      * @return Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -334,7 +386,7 @@ export default class dxBarGauge extends BaseWidget {
      */
     values(): Array<number>;
     /**
-     * @docid dxbargaugemethods.values
+     * @docid
      * @publicName values(newValues)
      * @param1 values:Array<number>
      * @prevFileNamespace DevExpress.viz

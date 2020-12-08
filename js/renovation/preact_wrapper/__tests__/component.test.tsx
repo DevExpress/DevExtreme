@@ -540,6 +540,24 @@ describe('templates and slots', () => {
       expect(getPublicElement).toHaveBeenNthCalledWith(1, $(param1));
       expect(getPublicElement).toHaveBeenNthCalledWith(2, $(templateRoot));
     });
+
+    it('Tempate\'s data can have null/undefined values', () => {
+      const getPublicElement = jest.fn(($el) => $el.get(0));
+      setPublicElementWrapper(getPublicElement);
+
+      const template = jest.fn();
+
+      act(() => $('#component').dxTemplatedTestWidget({
+        elementTemplate: template,
+        elementTemplatePayload: { nullParam: null, undefinedParam: undefined },
+      }));
+
+      const templateRoot = $('#component').children('.templates-root')[0];
+      expect(template.mock.calls[0]).toEqual([{
+        nullParam: null,
+        undefinedParam: undefined,
+      }, templateRoot]);
+    });
   });
 
   it('insert template content to templates root', () => {

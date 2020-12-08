@@ -5,9 +5,9 @@
 $material-tooltip-padding: null !default;
 
 @if $size == "default" {
-  $material-tooltip-padding: 6px 8px;
+  $material-tooltip-padding: 6px 8px !default;
 }
 
 @else if $size == "compact" {
-  $material-tooltip-padding: 4px 6px;
+  $material-tooltip-padding: 4px 6px !default;
 }

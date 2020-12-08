@@ -29,6 +29,7 @@ const ALL_DAY_TITLE_CLASS = 'dx-scheduler-all-day-title';
 const VERTICAL_GROUP_TABLE_CLASS = 'dx-scheduler-work-space-vertical-group-table';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
+const CELL_TEXT_CLASS = 'dx-scheduler-date-table-cell-text';
 const TIME_PANEL_CELL_CLASS = 'dx-scheduler-time-panel-cell';
 const HEADER_PANEL_CELL_CLASS = 'dx-scheduler-header-panel-cell';
 const HORIZONTAL_SIZES_CLASS = 'dx-scheduler-cell-sizes-horizontal';
@@ -1201,7 +1202,8 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
         $element.find('.dx-scheduler-date-table tr>td').each(function(index, cell) {
             const date = new Date(firstDate);
             date.setDate(firstDate.getDate() + index);
-            assert.equal($(cell).text(), dateLocalization.format(date, 'dd'), 'Cell has a right date');
+            const $cellText = $(cell).find(`.${CELL_TEXT_CLASS}`);
+            assert.equal($cellText.text(), dateLocalization.format(date, 'dd'), 'Cell has a right date');
         });
     });
 

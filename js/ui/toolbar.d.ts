@@ -17,24 +17,21 @@ import CollectionWidget, {
 
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**
-     * @docid  dxToolbarOptions.dataSource
-     * @type string|Array<string,dxToolbarItem,object>|DataSource|DataSourceOptions
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxToolbarItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxToolbarOptions.items
-     * @type Array<string, dxToolbarItem, object>
+     * @docid
      * @fires dxToolbarOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxToolbarItem | any>;
     /**
-     * @docid dxToolbarOptions.menuItemTemplate
-     * @type template|function
+     * @docid
      * @default "menuItem"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -45,9 +42,8 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      */
     menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxToolbarOptions.height
+     * @docid
      * @deprecated
-     * @type number|string|function
      * @default undefined
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -56,7 +52,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     height?: number | string | (() => number | string);
 }
 /**
- * @docid dxToolbar
+ * @docid
  * @inherits CollectionWidget
  * @module ui/toolbar
  * @export default
@@ -68,17 +64,22 @@ export default class dxToolbar extends CollectionWidget {
     constructor(element: JQuery, options?: dxToolbarOptions)
 }
 
+
+/**
+* @docid
+* @inherits CollectionWidgetItem
+* @type object
+*/
 export interface dxToolbarItem extends CollectionWidgetItem {
     /**
-     * @docid dxToolbarItem.cssClass
-     * @type string
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cssClass?: string;
     /**
-     * @docid dxToolbarItem.locateInMenu
+     * @docid
      * @type Enums.ToolbarItemLocateInMenuMode
      * @default 'never'
      * @prevFileNamespace DevExpress.ui
@@ -86,7 +87,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      */
     locateInMenu?: 'always' | 'auto' | 'never';
     /**
-     * @docid dxToolbarItem.location
+     * @docid
      * @type Enums.ToolbarItemLocation
      * @default 'center'
      * @prevFileNamespace DevExpress.ui
@@ -94,22 +95,20 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      */
     location?: 'after' | 'before' | 'center';
     /**
-     * @docid dxToolbarItem.menuItemTemplate
-     * @type template|function
+     * @docid
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     menuItemTemplate?: template | (() => string | Element | JQuery);
     /**
-     * @docid dxToolbarItem.options
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     options?: any;
     /**
-     * @docid dxToolbarItem.showText
+     * @docid
      * @type Enums.ToolbarItemShowTextMode
      * @default 'always'
      * @prevFileNamespace DevExpress.ui
@@ -117,7 +116,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      */
     showText?: 'always' | 'inMenu';
     /**
-     * @docid dxToolbarItem.widget
+     * @docid
      * @type Enums.ToolbarItemWidget
      * @prevFileNamespace DevExpress.ui
      * @public

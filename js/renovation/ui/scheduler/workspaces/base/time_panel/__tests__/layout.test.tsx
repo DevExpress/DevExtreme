@@ -102,6 +102,7 @@ describe('TimePanelLayout', () => {
           isVirtual: 'isVirtual',
           topVirtualRowHeight: 100,
           bottomVirtualRowHeight: 200,
+          virtualCellsCount: 1,
         });
 
       const rows = layout.find(Row);

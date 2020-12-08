@@ -11,21 +11,21 @@ $generic-h3-font-size: null !default;
 $generic-h5-font-size: null !default;
 
 @if $size == "default" {
-  $generic-xl-font-size: 34px;
-  $generic-l-font-size: 28px;
-  $generic-m-font-size: 20px;
-  $generic-s-font-size: 18px;
-  $generic-xs-font-size: 12px;
-  $generic-h3-font-size: 22px;
-  $generic-h5-font-size: 16px;
+  $generic-xl-font-size: 34px !default;
+  $generic-l-font-size: 28px !default;
+  $generic-m-font-size: 20px !default;
+  $generic-s-font-size: 18px !default;
+  $generic-xs-font-size: 12px !default;
+  $generic-h3-font-size: 22px !default;
+  $generic-h5-font-size: 16px !default;
 }
 
 @else if $size == "compact" {
-  $generic-xl-font-size: 29px;
-  $generic-l-font-size: 24px;
-  $generic-m-font-size: 18px;
-  $generic-s-font-size: 16px;
-  $generic-xs-font-size: 10px;
-  $generic-h3-font-size: 20px;
-  $generic-h5-font-size: 14px;
+  $generic-xl-font-size: 29px !default;
+  $generic-l-font-size: 24px !default;
+  $generic-m-font-size: 18px !default;
+  $generic-s-font-size: 16px !default;
+  $generic-xs-font-size: 10px !default;
+  $generic-h3-font-size: 20px !default;
+  $generic-h5-font-size: 14px !default;
 }

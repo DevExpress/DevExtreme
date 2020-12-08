@@ -1,5 +1,5 @@
 /**
- * @docid setTemplateEngine
+ * @docid
  * @publicName setTemplateEngine(name)
  * @param1 templateEngineName:string
  * @namespace DevExpress
@@ -11,7 +11,7 @@
 declare function setTemplateEngine(templateEngineName: string): void;
 
 /**
- * @docid setTemplateEngine
+ * @docid
  * @publicName setTemplateEngine(options)
  * @param1 templateEngineOptions:object
  * @param1_field1 compile:function(html, $element)

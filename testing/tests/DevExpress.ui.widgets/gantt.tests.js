@@ -134,6 +134,25 @@ QUnit.module('Markup', moduleConfig, () => {
         const ganttViewRowElement = this.$element.find(GANTT_VIEW_ROW_SELECTOR).get(0);
         assert.roughEqual(treeListRowElement.getBoundingClientRect().height, ganttViewRowElement.getBoundingClientRect().height, 0.001, 'row heights are equal');
     });
+    test('auto height', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        const initHeight = this.$element.height();
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).first();
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.ok(initHeight > this.$element.height(), 'collapsed height');
+    });
+    test('fixed height', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('height', 800);
+        this.clock.tick();
+        const initHeight = this.$element.height();
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).first();
+        expandedElement.trigger('dxclick');
+        this.clock.tick();
+        assert.roughEqual(initHeight, this.$element.height(), 1, 'collapsed height');
+    });
 });
 
 QUnit.module('Options', moduleConfig, () => {
@@ -361,6 +380,17 @@ QUnit.module('Options', moduleConfig, () => {
         assert.ok(isHeaderContainsText('2008'), 'is still years scale type');
         this.instance.option('scaleType', 'auto');
         assert.ok(isHeaderContainsText('Sun, 10 Feb'), 'is days scale type (auto)');
+    });
+    test('calculateCellValue for key', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.instance.option('columns', [{ dataField: 'id' }]);
+        this.clock.tick();
+
+        const columns = this.instance._treeList.getVisibleColumns();
+
+        assert.strictEqual(columns.length, 1);
+        assert.strictEqual(columns[0].calculateCellValue({ id: '54' }), '54', 'number');
+        assert.strictEqual(columns[0].calculateCellValue({ id: '54a' }), '54a', 'pseudo guid');
     });
 });
 

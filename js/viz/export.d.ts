@@ -3,7 +3,7 @@ import DOMComponent from '../core/dom_component';
 
 
 /**
- * @docid vizmethods.exportFromMarkup
+ * @docid viz.exportFromMarkup
  * @publicName exportFromMarkup(markup, options)
  * @param1 markup:string
  * @param2 options:object
@@ -27,7 +27,7 @@ import DOMComponent from '../core/dom_component';
 export function exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number, svgToCanvas?: Function }): void;
 
 /**
- * @docid vizmethods.exportWidgets
+ * @docid viz.exportWidgets
  * @publicName exportWidgets(widgetInstances)
  * @param1 widgetInstances:Array<Array<DOMComponent>>
  * @static
@@ -39,7 +39,7 @@ export function exportFromMarkup(markup: string, options: { fileName?: string, f
 export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
 
 /**
- * @docid vizmethods.exportWidgets
+ * @docid viz.exportWidgets
  * @publicName exportWidgets(widgetInstances, options)
  * @param1 widgetInstances:Array<Array<DOMComponent>>
  * @param2 options:object
@@ -64,7 +64,7 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void
 export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
 
 /**
- * @docid vizmethods.getMarkup
+ * @docid viz.getMarkup
  * @publicName getMarkup(widgetInstances)
  * @param1 widgetInstances:Array<DOMComponent>
  * @return string

@@ -1,0 +1,73 @@
+// @use "../base/mixins" as *;
+
+// adduse
+
+$loadindicator-width: 32px;
+$loadindicator-height: 32px;
+
+.dx-loadindicator {
+  width: $loadindicator-width;
+  height: $loadindicator-height;
+  display: inline-block;
+  overflow: hidden;
+  border: none;
+  background-color: transparent;
+}
+
+.dx-loadindicator-wrapper {
+  width: 100%;
+  height: 100%;
+  font-size: $loadindicator-height;
+  margin: auto;
+}
+
+.dx-loadindicator-image {
+  background-size: contain;
+  transform-origin: 50% 50%;
+  background-position: 50%;
+  background-repeat: no-repeat;
+}
+
+.dx-loadindicator-icon {
+  direction: ltr;
+}
+
+.dx-loadindicator-icon-custom {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+  transform-origin: 50% 50%;
+  animation: dx-loadindicator-icon-custom-rotate 1.5s infinite linear;
+
+  @keyframes dx-loadindicator-icon-custom-rotate {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.dx-loadindicator-container {
+  > .dx-loadindicator {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    margin-top: -1 * $loadindicator-height / 2;
+    margin-left: -1 * $loadindicator-width / 2;
+
+    &.dx-loadindicator {
+      margin-top: -1 * $loadindicator-height / 2;
+      margin-left: -1 * $loadindicator-width / 2;
+    }
+  }
+}
+
+.dx-loadindicator-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}

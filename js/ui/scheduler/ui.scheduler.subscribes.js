@@ -19,6 +19,9 @@ const toMs = dateUtils.dateToMilliseconds;
 const HOUR_MS = toMs('hour');
 
 const subscribes = {
+    getTimeZoneCalculator: function() {
+        return this.timeZoneCalculator;
+    },
     isCurrentViewAgenda: function() {
         return this.option('currentView') === 'agenda';
     },
@@ -36,6 +39,12 @@ const subscribes = {
 
     isVirtualScrolling: function() {
         return this.isVirtualScrolling();
+    },
+
+    getVirtualScrollingState: function() {
+        return this.fire('isVirtualScrolling')
+            ? this.getWorkSpace().virtualScrollingDispatcher.getState()
+            : null;
     },
 
     setCellDataCacheAlias: function(appointment, geometry) {
@@ -169,24 +178,20 @@ const subscribes = {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
 
-    getTextAndFormatDate(appointment, targetedAppointment, format) { // TODO: rename to createFormattedDateText
-        const appointmentAdapter = this.createAppointmentAdapter(appointment);
-        const adapter = this.createAppointmentAdapter(targetedAppointment || appointment)
-            .clone({ pathTimeZone: 'toGrid' });
+    getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
+        const appointmentAdapter = this.createAppointmentAdapter(appointmentRaw);
+        const targetedAdapter = this.createAppointmentAdapter(targetedAppointmentRaw || appointmentRaw);
 
-        const formatType = format || this.fire('_getTypeFormat', adapter.startDate, adapter.endDate, adapter.allDay);
+        // TODO pull out time zone converting from appointment adapter for knockout(T947938)
+        const startDate = this.timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
+        const endDate = this.timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
+
+        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, targetedAdapter.allDay);
 
         return {
-            text: adapter.text || appointmentAdapter.text,
-            formatDate: this.fire('_formatDates', adapter.startDate, adapter.endDate, formatType)
+            text: targetedAdapter.text || appointmentAdapter.text,
+            formatDate: this.fire('_formatDates', startDate, endDate, formatType)
         };
-    },
-
-    _getAppointmentFields(data, arrayOfFields) {
-        return arrayOfFields.reduce((accumulator, field) => {
-            accumulator[field] = this.fire('getField', field, data);
-            return accumulator;
-        }, {});
     },
 
     _getTypeFormat(startDate, endDate, isAllDay) {
@@ -385,7 +390,8 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
-        const targetedData = this.getTargetedAppointment(config.itemData, config.itemElement);
+        const { itemData, itemElement, targetedAppointment } = config;
+        const targetedData = targetedAppointment || this.getTargetedAppointment(itemData, itemElement);
 
         return {
             appointmentData: config.itemData,
@@ -585,21 +591,8 @@ const subscribes = {
         return result;
     },
 
-    getAgendaRows: function(options) {
-        const renderingStrategy = this._layoutManager.getRenderingStrategyInstance();
-        const calculateRows = renderingStrategy.calculateRows.bind(renderingStrategy);
-        const d = new Deferred();
-
-        function rowsCalculated(appointments) {
-            const result = calculateRows(appointments, options.agendaDuration, options.currentDate);
-            this._dataSourceLoadedCallback.remove(rowsCalculated);
-
-            d.resolve(result);
-        }
-
-        this._dataSourceLoadedCallback.add(rowsCalculated);
-
-        return d.promise();
+    getLayoutManager: function() {
+        return this._layoutManager;
     },
 
     getAgendaVerticalStepHeight: function() {
@@ -779,12 +772,6 @@ const subscribes = {
 
     isAdaptive: function() {
         return this.option('adaptivityEnabled');
-    },
-
-    moveBack: function() {
-        const dragBehavior = this.getWorkSpace().dragBehavior;
-
-        dragBehavior && dragBehavior.moveBack();
     },
 
     validateDayHours: function() {

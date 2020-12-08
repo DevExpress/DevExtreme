@@ -4,6 +4,8 @@ import { getGanttViewCore } from './gantt_importer';
 import { TaskAreaContainer } from './ui.gantt.task.area.container';
 import dateLocalization from '../../localization/date';
 import { isDefined } from '../../core/utils/type';
+import messageLocalization from '../../localization/message';
+import { format } from '../../core/utils/string';
 
 
 export class GanttView extends Widget {
@@ -80,10 +82,22 @@ export class GanttView extends Widget {
             dayNames: dateLocalization.getDayNames('wide'),
             abbrMonthNames: dateLocalization.getMonthNames('abbreviated'),
             abbrDayNames: dateLocalization.getDayNames('abbreviated'),
-            quarterNames: dateLocalization.getQuarterNames(),
+            quarterNames: this._getQuarterNames(),
             amText: dateLocalization.getPeriodNames()[0],
             pmText: dateLocalization.getPeriodNames()[1]
         };
+    }
+    _getQuarterNames() {
+        const quarterFormat = messageLocalization.format('dxGantt-quarter');
+        if(!quarterFormat) {
+            return dateLocalization.getQuarterNames();
+        }
+        return [
+            format(quarterFormat, 1),
+            format(quarterFormat, 2),
+            format(quarterFormat, 3),
+            format(quarterFormat, 4)
+        ];
     }
     _getTaskTitlePosition(value) {
         switch(value) {
@@ -135,6 +149,9 @@ export class GanttView extends Widget {
             case 'width':
                 super._optionChanged(args);
                 this._ganttViewCore.setWidth(args.value);
+                break;
+            case 'height':
+                this._ganttViewCore.setHeight(args.value);
                 break;
             case 'tasks':
             case 'dependencies':

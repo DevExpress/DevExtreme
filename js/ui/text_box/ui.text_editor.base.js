@@ -83,11 +83,6 @@ const TextEditorBase = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxTextEditorButton
-            * @type object
-            */
-
             buttons: void 0,
 
             value: '',
@@ -239,7 +234,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderInput: function() {
-        this._$textEditorContainer = $('<div>')
+        this._$buttonsContainer = this._$textEditorContainer = $('<div>')
             .addClass(TEXTEDITOR_CONTAINER_CLASS)
             .appendTo(this.$element());
 
@@ -298,8 +293,8 @@ const TextEditorBase = Editor.inherit({
     _renderButtonContainers: function() {
         const buttons = this.option('buttons');
 
-        this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, this._$textEditorContainer);
-        this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, this._$textEditorContainer);
+        this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, this._$buttonsContainer);
+        this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, this._$buttonsContainer);
     },
 
     _clean() {
@@ -308,6 +303,7 @@ const TextEditorBase = Editor.inherit({
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
         this._$textEditorContainer = null;
+        this._$buttonsContainer = null;
         this.callBase();
     },
 

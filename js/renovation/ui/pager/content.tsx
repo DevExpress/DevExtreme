@@ -32,6 +32,7 @@ export const viewFunction = ({
     pageCount, showPageSizes, pageSize, pageSizes,
     pagesCountText, rtlEnabled,
     showNavigationButtons, totalCount,
+    visible,
   },
   restAttributes,
 }: PagerContent) => (
@@ -39,6 +40,7 @@ export const viewFunction = ({
     rootElementRef={widgetRootElementRef}
     rtlEnabled={rtlEnabled}
     classes={classes}
+    visible={visible}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >

@@ -780,6 +780,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
             } else {
                 this._focusEditFormCell($cell);
                 this._editingController.cancelEditData();
+                if(this._dataController.items().length === 0) {
+                    this._resetFocusedCell();
+                    this._editorFactory.loseFocus();
+                }
             }
             eventArgs.originalEvent.preventDefault();
         }
@@ -1859,7 +1863,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 });
 
 /**
-* @name GridBaseMethods.registerKeyHandler
+* @name GridBase.registerKeyHandler
 * @publicName registerKeyHandler(key, handler)
 * @hidden
 */
@@ -1870,30 +1874,9 @@ export default {
             useLegacyKeyboardNavigation: false,
 
             keyboardNavigation: {
-                /**
-                 * @name GridBaseOptions.keyboardNavigation.enabled
-                 * @type boolean
-                 * @default true
-                 */
                 enabled: true,
-
-                /**
-                 * @name GridBaseOptions.keyboardNavigation.enterKeyAction
-                 * @type Enums.GridEnterKeyAction
-                 * @default "startEdit"
-                 */
                 enterKeyAction: 'startEdit',
-                /**
-                 * @name GridBaseOptions.keyboardNavigation.enterKeyDirection
-                 * @type Enums.GridEnterKeyDirection
-                 * @default "none"
-                 */
                 enterKeyDirection: 'none',
-                /**
-                 * @name GridBaseOptions.keyboardNavigation.editOnKeyPress
-                 * @type boolean
-                 * @default false
-                 */
                 editOnKeyPress: false
             }
         };

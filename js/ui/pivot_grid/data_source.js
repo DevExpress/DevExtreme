@@ -558,10 +558,6 @@ export default Class.inherit((function() {
                 that._eventsStrategy.fireEvent('progressChanged', [progress]);
             });
 
-            /**
-            * @name PivotGridDataSourceOptions.store.type
-            * @type Enums.PivotGridStoreType
-            */
             that._store = store;
             that._paginate = !!options.paginate;
             that._pageSize = options.pageSize || 40;

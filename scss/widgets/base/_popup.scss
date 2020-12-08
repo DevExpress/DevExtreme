@@ -1,0 +1,112 @@
+@use "./mixins" as *;
+
+// adduse
+
+.dx-popup-title {
+  padding: 10px;
+  min-height: 19px;
+  -webkit-user-drag: none;
+
+  @include user-select(none);
+
+  white-space: normal;
+}
+
+@mixin dx-popup-content-auto-resizing() {
+  > .dx-scrollable,
+  > .dx-treeview > .dx-scrollable {
+    max-height: inherit;
+    min-height: inherit;
+
+    > .dx-scrollable-wrapper,
+    > .dx-scrollable-wrapper > .dx-scrollable-container,
+    > div > .dx-scrollable-wrapper,
+    > div > .dx-scrollable-wrapper > .dx-scrollable-container {
+      max-height: inherit;
+      min-height: inherit;
+    }
+  }
+
+  > .dx-widget {
+    max-height: inherit;
+  }
+}
+
+.dx-popup-draggable .dx-popup-title {
+  cursor: move;
+  touch-action: pinch-zoom;
+}
+
+.dx-overlay-content {
+  & > .dx-template-wrapper.dx-popup-title {
+    height: auto;
+    width: auto;
+  }
+
+  & .dx-popup-content > .dx-template-wrapper {
+    height: 100%;
+    width: 100%;
+  }
+
+  .dx-popup-content {
+    box-sizing: content-box;
+  }
+}
+
+.dx-popup-flex-height {
+  display: flex;
+  flex-wrap: wrap;
+
+  @at-root #{selector-append(".dx-overlay-wrapper .dx-overlay-content", &)} {
+    > .dx-popup-title,
+    > .dx-popup-bottom {
+      width: 100%;
+    }
+  }
+
+  .dx-popup-content {
+    box-sizing: border-box;
+    height: auto;
+    flex: 1;
+    max-width: 100%;
+    flex-basis: 100%;
+  }
+}
+
+.dx-popup-content {
+  padding: 10px;
+  -webkit-user-drag: none;
+
+  &.dx-dialog-content {
+    padding: 0;
+  }
+
+  .dx-popup-inherit-height & {
+    @include dx-popup-content-auto-resizing();
+
+    > .dx-template-wrapper {
+      max-height: inherit;
+      min-height: inherit;
+
+      @include dx-popup-content-auto-resizing();
+    }
+  }
+}
+
+.dx-dialog-root {
+  .dx-overlay-shader {
+    background-color: #444;
+  }
+}
+
+.dx-dialog-message {
+  padding: 10px 10px 5px 10px;
+}
+
+.dx-prevent-safari-scrolling {
+  position: fixed;
+  margin: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+}

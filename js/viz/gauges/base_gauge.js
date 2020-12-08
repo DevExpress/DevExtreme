@@ -13,7 +13,7 @@ import { plugin as tooltipPlugin } from '../core/tooltip';
 import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
 
 const _format = formatHelper.format;
-export const dxBaseGauge = BaseWidget.inherit({
+export const BaseGauge = BaseWidget.inherit({
     _rootClassPrefix: 'dxg',
 
     _themeSection: 'gauge',
@@ -266,14 +266,14 @@ function compareArraysElements(array1, array2) {
 }
 
 // PLUGINS_SECTION
-dxBaseGauge.addPlugin(exportPlugin);
-dxBaseGauge.addPlugin(titlePlugin);
-dxBaseGauge.addPlugin(tooltipPlugin);
-dxBaseGauge.addPlugin(loadingIndicatorPlugin);
+BaseGauge.addPlugin(exportPlugin);
+BaseGauge.addPlugin(titlePlugin);
+BaseGauge.addPlugin(tooltipPlugin);
+BaseGauge.addPlugin(loadingIndicatorPlugin);
 
 // These are gauges specifics on using tooltip - they require refactoring.
-const _setTooltipOptions = dxBaseGauge.prototype._setTooltipOptions;
-dxBaseGauge.prototype._setTooltipOptions = function() {
+const _setTooltipOptions = BaseGauge.prototype._setTooltipOptions;
+BaseGauge.prototype._setTooltipOptions = function() {
     _setTooltipOptions.apply(this, arguments);
     this._tracker && this._tracker.setTooltipState(this._tooltip.isEnabled());
 };

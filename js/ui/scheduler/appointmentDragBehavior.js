@@ -1,6 +1,5 @@
 import $ from '../../core/renderer';
 import Draggable from '../draggable';
-import { locate, move } from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
 import { LIST_ITEM_DATA_KEY } from './constants';
 
@@ -16,7 +15,7 @@ export default class AppointmentDragBehavior {
             top: 0
         };
 
-        this.currentAppointment = null;
+        this.appointmentInfo = null;
     }
 
     isAllDay(appointment) {
@@ -24,7 +23,14 @@ export default class AppointmentDragBehavior {
     }
 
     onDragStart(e) {
-        this.initialPosition = locate($(e.itemElement));
+        const { itemSettings, itemData, initialPosition } = e;
+
+        this.initialPosition = initialPosition;
+        this.appointmentInfo = {
+            appointment: itemData,
+            settings: itemSettings,
+        };
+
         this.appointments.notifyObserver('hideAppointmentTooltip');
     }
 
@@ -45,8 +51,6 @@ export default class AppointmentDragBehavior {
         const container = this.appointments._getAppointmentContainer(this.isAllDay($appointment));
         container.append($appointment);
 
-        this.currentAppointment = $appointment;
-
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
             event: e,
             data: this.appointments._getItemData($appointment),
@@ -56,8 +60,11 @@ export default class AppointmentDragBehavior {
     }
 
     getItemData(appointmentElement) {
-        const itemData = $(appointmentElement).data(LIST_ITEM_DATA_KEY);
-        return itemData?.targetedAppointment || itemData?.appointment || this.appointments._getItemData(appointmentElement);
+        const dataFromTooltip = $(appointmentElement).data(LIST_ITEM_DATA_KEY);
+        const itemDataFromTooltip = dataFromTooltip?.appointment;
+        const itemDataFromGrid = this.appointments._getItemData(appointmentElement);
+
+        return itemDataFromTooltip || itemDataFromGrid;
     }
 
     getItemSettings(appointment) {
@@ -90,6 +97,7 @@ export default class AppointmentDragBehavior {
 
     createDragEndHandler(options, appointmentDragging) {
         return (e) => {
+            this.appointmentInfo = null;
             appointmentDragging.onDragEnd && appointmentDragging.onDragEnd(e);
 
             if(!e.cancel) {
@@ -135,9 +143,15 @@ export default class AppointmentDragBehavior {
         }));
     }
 
-    moveBack() {
-        if(this.currentAppointment && this.initialPosition.left !== undefined && this.initialPosition.top !== undefined) {
-            move(this.currentAppointment, this.initialPosition);
+    updateDragSource(appointment, settings) {
+        const { appointmentInfo } = this;
+        if(appointmentInfo || appointment) {
+            const currentAppointment = appointment || appointmentInfo.appointment;
+            const currentSettings = settings || appointmentInfo.settings;
+
+            this.appointments._setDragSourceAppointment(
+                currentAppointment, currentSettings,
+            );
         }
     }
 }

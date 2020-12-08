@@ -1466,6 +1466,19 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             // assert
             assert.equal(errors.log.callCount, 1, 'one error');
             assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            assert.equal(errors.log.lastCall.args[1], '"TestField"', 'error argument');
+            errors.log.restore();
+        });
+
+        QUnit.test('Multiple duplicated dataFields', function(assert) {
+            sinon.spy(errors, 'log');
+            const columns = ['TestField', 'TestField', 'TestField2', 'TestField2'];
+            this.applyOptions({ columns });
+
+            // assert
+            assert.equal(errors.log.callCount, 1, 'one error');
+            assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            assert.equal(errors.log.lastCall.args[1], '"TestField", "TestField2"', 'error argument');
             errors.log.restore();
         });
 
@@ -1483,6 +1496,7 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             // assert
             assert.equal(errors.log.callCount, 1, 'one error');
             assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            assert.equal(errors.log.lastCall.args[1], '"TestField"', 'error argument');
             errors.log.restore();
         });
 
@@ -1497,6 +1511,7 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             // assert
             assert.equal(errors.log.callCount, 1, 'one error');
             assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            assert.equal(errors.log.lastCall.args[1], '"TestField"', 'error argument');
             errors.log.restore();
         });
 
@@ -1514,6 +1529,7 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             // assert
             assert.equal(errors.log.callCount, 1, 'one error');
             assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            assert.equal(errors.log.lastCall.args[1], '"TestField"', 'error argument');
             errors.log.restore();
         });
 
@@ -1639,6 +1655,7 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             // assert
             assert.equal(errors.log.callCount, 1, 'one error');
             assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
+            assert.equal(errors.log.lastCall.args[1], '"Test1"', 'error argument');
             errors.log.restore();
         });
 

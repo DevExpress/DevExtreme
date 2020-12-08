@@ -4,31 +4,27 @@ import FileSystemProviderBase, {
 
 export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseOptions<ObjectFileSystemProvider> {
     /**
-     * @docid ObjectFileSystemProviderOptions.contentExpr
-     * @type string|function(fileSystemItem)
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     contentExpr?: string | Function;
     /**
-     * @docid ObjectFileSystemProviderOptions.data
-     * @type Array<any>
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     data?: Array<any>;
     /**
-     * @docid ObjectFileSystemProviderOptions.itemsExpr
-     * @type string|function(fileSystemItem)
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     itemsExpr?: string | Function;
 }
 /**
- * @docid ObjectFileSystemProvider
+ * @docid
  * @inherits FileSystemProviderBase
- * @type object
  * @module file_management/object_provider
  * @namespace DevExpress.fileManagement
  * @export default
