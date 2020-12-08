@@ -113,6 +113,8 @@ const getExpectedResult = (date, mode, stringDate) => {
 
 const prepareDateString = (type, year, month, day) => type === 'text' ? `${month}/${day}/${year}` : `${year}-${month}-${day}`;
 
+const isAndroid = () => devices.real().android;
+
 QUnit.module('datebox tests', moduleConfig, () => {
     QUnit.test('value is null after reset', function(assert) {
         const date = new Date(2012, 10, 26, 16, 40, 23);
@@ -623,8 +625,10 @@ QUnit.module('hidden input', {}, () => {
         assert.equal($hiddenInput.val(), expectedStringValue, 'input value is correct after widget value change');
     });
 
-    QUnit.test('click on drop-down button should call click on input to show native picker (T824701)', function(assert) {
-        const clickSpy = sinon.spy();
+    QUnit.test(`click on drop-down button should ${isAndroid() ? '' : 'not'} call click on input to show native picker, ${devices.real().platform} device (T824701, T950897)`, function(assert) {
+        const clickStub = sinon.stub();
+        const isAndroidDevice = isAndroid();
+        const expectedCallCount = isAndroidDevice ? 1 : 0;
         const $element = $('#dateBox').dxDateBox({
             pickerType: 'native',
             showDropDownButton: true
@@ -632,13 +636,13 @@ QUnit.module('hidden input', {}, () => {
 
         $element
             .find(`.${TEXTEDITOR_INPUT_CLASS}`)
-            .on('click', clickSpy);
+            .on('click', clickStub);
 
         $element
             .find(`.${DROP_DOWN_BUTTON_CLASS}`)
             .trigger('dxclick');
 
-        assert.ok(clickSpy.calledOnce);
+        assert.strictEqual(clickStub.callCount, expectedCallCount, `${devices.real().platform} device, editor should ${isAndroidDevice ? '' : 'not'} trigger click on the input`);
     });
 });
 
