@@ -361,6 +361,23 @@ module('View Data Provider', () => {
                     'Cell data [3, 1] is correct'
                 );
             });
+
+            test('isGroupIntersectDateInterval', function(assert) {
+                assert.ok(
+                    this.viewDataProvider.isGroupIntersectDateInterval(2, new Date(2020, 7, 24), new Date(2020, 7, 24, 15)),
+                    'View date interval intersected'
+                );
+
+                assert.notOk(
+                    this.viewDataProvider.isGroupIntersectDateInterval(2, new Date(2020, 7, 23), new Date(2020, 7, 23, 15)),
+                    'View date interval is not Intersected'
+                );
+
+                assert.notOk(
+                    this.viewDataProvider.isGroupIntersectDateInterval(2, new Date(2020, 7, 26), new Date(2020, 7, 26, 15)),
+                    'View date interval is not Intersected'
+                );
+            });
         });
 
         module('findCellPositionInMap', function() {
