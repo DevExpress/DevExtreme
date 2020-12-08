@@ -878,7 +878,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const filter = this.dataController._generateOperationFilterByKey('Dan', data[1], false);
 
-        assert.equal(JSON.stringify(filter), '[["name","<","Dan"],"or",[["name","=","Dan"],"and",["name","<","Dan"]]]', 'Operation filter');
+        assert.equal(JSON.stringify(filter), '[[["name","<","Dan"],"or",["name","=",null]],"or",[["name","=","Dan"],"and",["name","<","Dan"]]]', 'Operation filter');
     });
 
     // T755462
