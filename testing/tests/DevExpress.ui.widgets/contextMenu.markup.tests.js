@@ -2,6 +2,7 @@ import $ from 'jquery';
 import ContextMenu from 'ui/context_menu';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
