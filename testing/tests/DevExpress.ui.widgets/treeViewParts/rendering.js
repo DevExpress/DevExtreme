@@ -9,6 +9,9 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 
+const NODE_LOAD_INDICATOR_CLASS = 'dx-treeview-node-loadindicator';
+const DX_LOAD_INDICATOR_CLASS = 'dx-loadindicator';
+
 QUnit.module('Rendering', {
     beforeEach: function() {
         fx.off = true;
@@ -93,6 +96,22 @@ QUnit.test('Toggle visibility action', function(assert) {
 
     nodes = treeView.getNodes();
     assert.ok(!nodes[0].expanded);
+});
+
+QUnit.test('Correct loadIndicator is hidden after expanding node (T955388)', function(assert) {
+    const wrapper = new TreeViewTestWrapper({
+        items: [{ id: '1', items: [{ id: '1_1' }] }],
+        itemTemplate: function(itemData, itemIndex, itemElement) {
+            const loadIndicator = document.createElement('div');
+            loadIndicator.classList.add(DX_LOAD_INDICATOR_CLASS);
+            itemElement.append(loadIndicator);
+        }
+    });
+
+    wrapper.instance.expandItem('1');
+
+    const treeViewLoadIndicator = wrapper.getElement().find(`.${NODE_LOAD_INDICATOR_CLASS}`);
+    assert.ok(wrapper.hasInvisibleClass(treeViewLoadIndicator));
 });
 
 QUnit.test('\'getNodes\' method', function(assert) {
