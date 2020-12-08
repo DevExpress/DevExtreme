@@ -8,8 +8,9 @@ import {
 import {
   ScrollableNative,
   viewFunction as viewFunctionNative,
-  ensureLocation,
 } from '../scrollable_native';
+
+import { ensureLocation } from '../scrollable_utils';
 
 import {
   ScrollableSimulated,
