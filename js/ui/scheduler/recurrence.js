@@ -144,24 +144,33 @@ class RecurrenceProcessor {
         // const currentOffset = initialDate ? initialDate.getTimezoneOffset() : this._getTimeZoneOffset();
         const newDate = this._prepareDateArrayToParse(arrayDate);
 
+        const values = [
+            parseInt(newDate[1]),
+            parseInt(newDate[2]),
+            parseInt(newDate[3]),
+            parseInt(newDate[4]) || 0,
+            parseInt(newDate[5]) || 0,
+            parseInt(newDate[6]) || 0
+        ];
+
         if(isUtc) {
             return new Date(Date.UTC(
-                parseInt(newDate[1]),
-                parseInt(newDate[2]),
-                parseInt(newDate[3]),
-                parseInt(newDate[4]),
-                parseInt(newDate[5]),
-                parseInt(newDate[6]))
+                values[0],
+                values[1],
+                values[2],
+                values[3],
+                values[4],
+                values[5])
             );
         }
 
         return new Date(
-            parseInt(newDate[1]),
-            parseInt(newDate[2]),
-            parseInt(newDate[3]),
-            parseInt(newDate[4]),
-            parseInt(newDate[5]),
-            parseInt(newDate[6])
+            values[0],
+            values[1],
+            values[2],
+            values[3],
+            values[4],
+            values[5]
         );
     }
 
