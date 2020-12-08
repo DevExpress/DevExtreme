@@ -46,5 +46,5 @@ $(function(){
         min: 0,
         showSpinButtons: false,
         readOnly: true
-    }).data("dxNumberBox");
+    }).dxNumberBox("instance");
 });

@@ -43,5 +43,5 @@ $(function(){
         value: "smith@corp.com",
         readOnly: true,
         hoverStateEnabled: false
-    }).data("dxTextBox");
+    }).dxTextBox("instance");
 });
