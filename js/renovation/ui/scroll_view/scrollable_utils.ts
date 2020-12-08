@@ -38,16 +38,26 @@ function getRelativeLocation(element: HTMLElement): ScrollableLocation {
   return result;
 }
 
-export function isDirection(
-  direction: ScrollableDirection, currentDirection: ScrollableDirection,
-): boolean {
-  if (direction === DIRECTION_VERTICAL) {
-    return currentDirection !== DIRECTION_HORIZONTAL;
+export class ScrollDirection {
+  direction: ScrollableDirection;
+
+  readonly DIRECTION_HORIZONTAL = 'horizontal';
+
+  readonly DIRECTION_VERTICAL = 'vertical';
+
+  readonly DIRECTION_BOTH = 'both';
+
+  constructor(direction: ScrollableDirection) {
+    this.direction = direction;
   }
-  if (direction === DIRECTION_HORIZONTAL) {
-    return currentDirection !== DIRECTION_VERTICAL;
+
+  get isHorizontal(): boolean {
+    return this.direction === DIRECTION_HORIZONTAL || this.direction === DIRECTION_BOTH;
   }
-  return currentDirection === direction;
+
+  get isVertical(): boolean {
+    return this.direction === DIRECTION_VERTICAL || this.direction === DIRECTION_BOTH;
+  }
 }
 
 function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): number {
@@ -61,11 +71,13 @@ export function getBoundaryProps(
 ): Partial<ScrollableBoundary> {
   const { left, top } = scrollOffset;
   const boundaryProps: Partial<ScrollableBoundary> = {};
-  if (isDirection(DIRECTION_HORIZONTAL, direction) || isDirection(DIRECTION_BOTH, direction)) {
+  const { isHorizontal, isVertical } = new ScrollDirection(direction);
+
+  if (isHorizontal) {
     boundaryProps.reachedLeft = left <= 0;
     boundaryProps.reachedRight = Math.round(left) >= getMaxScrollOffset('width', containerRef);
   }
-  if (isDirection(DIRECTION_VERTICAL, direction) || isDirection(DIRECTION_BOTH, direction)) {
+  if (isVertical) {
     boundaryProps.reachedTop = top <= 0;
     boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', containerRef);
   }

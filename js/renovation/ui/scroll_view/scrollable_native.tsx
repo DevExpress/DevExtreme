@@ -19,7 +19,7 @@ import {
 } from './types.d';
 
 import {
-  ensureLocation, isDirection, normalizeCoordinate,
+  ensureLocation, ScrollDirection, normalizeCoordinate,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
   DIRECTION_VERTICAL,
@@ -74,11 +74,12 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
   @Method()
   scrollBy(distance: number | Partial<ScrollableLocation>): void {
     const location = ensureLocation(distance);
+    const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
 
-    if (isDirection(DIRECTION_VERTICAL, this.props.direction)) {
+    if (isVertical) {
       this.containerRef.scrollTop += Math.round(location.top);
     }
-    if (isDirection(DIRECTION_HORIZONTAL, this.props.direction)) {
+    if (isHorizontal) {
       this.containerRef.scrollLeft += normalizeCoordinate('left', Math.round(location.left), this.props.rtlEnabled);
     }
   }
