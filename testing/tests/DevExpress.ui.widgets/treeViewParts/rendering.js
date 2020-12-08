@@ -102,9 +102,8 @@ QUnit.test('Correct loadIndicator is hidden after expanding node (T955388)', fun
     const wrapper = new TreeViewTestWrapper({
         items: [{ id: '1', items: [{ id: '1_1' }] }],
         itemTemplate: function(itemData, itemIndex, itemElement) {
-            const loadIndicator = document.createElement('div');
-            loadIndicator.classList.add(DX_LOAD_INDICATOR_CLASS);
-            itemElement.append(loadIndicator);
+            const loadIndicator = $('<div />').addClass(DX_LOAD_INDICATOR_CLASS);
+            $(itemElement).append(loadIndicator);
         }
     });
 
