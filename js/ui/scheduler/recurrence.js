@@ -140,28 +140,29 @@ class RecurrenceProcessor {
             return null;
         }
 
-        // const isUTCString = arrayDate[8] !== undefined;
+        const isUtc = arrayDate[8] !== undefined;
         // const currentOffset = initialDate ? initialDate.getTimezoneOffset() : this._getTimeZoneOffset();
         const newDate = this._prepareDateArrayToParse(arrayDate);
 
-        return new Date(Date.UTC(
+        if(isUtc) {
+            return new Date(Date.UTC(
+                parseInt(newDate[1]),
+                parseInt(newDate[2]),
+                parseInt(newDate[3]),
+                parseInt(newDate[4]),
+                parseInt(newDate[5]),
+                parseInt(newDate[6]))
+            );
+        }
+
+        return new Date(
             parseInt(newDate[1]),
             parseInt(newDate[2]),
             parseInt(newDate[3]),
             parseInt(newDate[4]),
             parseInt(newDate[5]),
-            parseInt(newDate[6])));
-
-        // let date = new (Function.prototype.bind.apply(Date, this._prepareDateArrayToParse(arrayDate)))();
-
-        // currentOffset = currentOffset * toMs('minute');
-
-        // if(isUTCString) {
-        //     // date = new Date(date.getTime() - currentOffset);
-        //     date = new Date(date);
-        // }
-
-        // return date;
+            parseInt(newDate[6])
+        );
     }
 
     _dispose() {
