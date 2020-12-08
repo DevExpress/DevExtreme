@@ -660,6 +660,15 @@ const EditingController = modules.ViewController.inherit((function() {
                 return;
             }
 
+            args.value.forEach(change => {
+                if(change.type === 'insert') {
+                    const { key } = this._getInsertKey({ key: change.key });
+                    if(!isDefined(change.key)) {
+                        change.key = key;
+                    }
+                }
+            });
+
             dataController.updateItems({
                 repaintChangesOnly: true
             });
@@ -770,7 +779,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const pageIndex = dataSource.pageIndex();
             const beginPageIndex = dataSource.beginPageIndex ? dataSource.beginPageIndex() : pageIndex;
             const endPageIndex = dataSource.endPageIndex ? dataSource.endPageIndex() : pageIndex;
-            const { insertKey } = this._getInternalData(change.key);
+            const insertKey = this._getInternalData(change.key)?.insertKey || {};
 
             if(scrollingMode !== 'standard') {
                 switch(changeType) {
@@ -831,16 +840,25 @@ const EditingController = modules.ViewController.inherit((function() {
 
             const changes = this.getChanges();
             changes.forEach(change => {
-                const key = change.key;
+                const isInsert = change.type === DATA_EDIT_DATA_INSERT_TYPE;
 
-                if(isDefined(key) && change.type === DATA_EDIT_DATA_INSERT_TYPE) {
-                    const loadedRowIndex = this._getLoadedRowIndexByInsertKey(items, e, key);
+                if(!isInsert) {
+                    return;
+                }
 
-                    const item = this._generateNewItem(key);
-                    if(loadedRowIndex >= 0 && this._needInsertItem(change, changeType, items, item)) {
-                        const { insertKey } = this._getInternalData(key);
-                        items.splice(insertKey.dataRowIndex ? loadedRowIndex : 0, 0, item);
-                    }
+                let key = change.key;
+                let insertKey = this._getInternalData(key)?.insertKey;
+                if(isInsert && (!isDefined(change.key) || !isDefined(insertKey))) {
+                    const keys = this._getInsertKey();
+                    change.key = keys.key;
+                    key = keys.key;
+                    insertKey = keys.insertKey;
+                }
+
+                const loadedRowIndex = this._getLoadedRowIndexByInsertKey(items, e, key);
+                const item = this._generateNewItem(key);
+                if(loadedRowIndex >= 0 && this._needInsertItem(change, changeType, items, item)) {
+                    items.splice(insertKey.dataRowIndex ? loadedRowIndex : 0, 0, item);
                 }
             });
 
@@ -899,16 +917,14 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        _getInsertKey: function(parentKey) {
-            const that = this;
-            const dataController = that._dataController;
+        _createInsertKey: function(parentKey) {
+            const dataController = this._dataController;
             const rows = dataController.items();
-            const editMode = getEditMode(that);
 
             const insertKey = {
                 parentKey,
                 pageIndex: dataController.pageIndex(),
-                rowIndex: that._getInsertRowIndex(parentKey)
+                rowIndex: this._getInsertRowIndex(parentKey)
             };
 
             const row = rows[insertKey.rowIndex];
@@ -921,15 +937,25 @@ const EditingController = modules.ViewController.inherit((function() {
                 return index < insertKey.rowIndex && (row.rowType === 'data' && !row.isNewRow || row.rowType === 'group');
             }).length;
 
-            insertKey[INSERT_INDEX] = that._getInsertIndex();
+            insertKey[INSERT_INDEX] = this._getInsertIndex();
 
-            const key = String(new Guid());
+            return insertKey;
+        },
+
+        _getInsertKey: function({ parentKey, key } = {}) {
+            let insertKey;
+
+            if(!isDefined(key)) {
+                key = String(new Guid());
+                insertKey = this._createInsertKey(parentKey);
+            } else {
+                insertKey = this._getInternalData(key)?.insertKey;
+                if(!isDefined(insertKey)) {
+                    insertKey = this._createInsertKey(parentKey);
+                }
+            }
 
             this._addInternalData({ insertKey, key });
-
-            if(editMode !== EDIT_MODE_BATCH) {
-                this._setEditRowKey(key, true);
-            }
 
             return { insertKey, key };
         },
@@ -953,8 +979,9 @@ const EditingController = modules.ViewController.inherit((function() {
         _getInsertIndex: function() {
             let maxInsertIndex = 0;
             this.getChanges().forEach(editItem => {
-                const { insertKey } = this._getInternalData(editItem.key);
-                if(editItem.type === DATA_EDIT_DATA_INSERT_TYPE && insertKey[INSERT_INDEX] > maxInsertIndex) {
+                const insertKey = this._getInternalData(editItem.key)?.insertKey;
+
+                if(isDefined(insertKey) && editItem.type === DATA_EDIT_DATA_INSERT_TYPE && insertKey[INSERT_INDEX] > maxInsertIndex) {
                     maxInsertIndex = insertKey[INSERT_INDEX];
                 }
             });
@@ -1025,8 +1052,12 @@ const EditingController = modules.ViewController.inherit((function() {
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
             const that = this;
             const oldEditRowIndex = that._getVisibleEditRowIndex();
-            const { insertKey, key } = that._getInsertKey(parentKey);
+            const { insertKey, key } = that._getInsertKey({ parentKey });
             const editMode = getEditMode(that);
+
+            if(editMode !== EDIT_MODE_BATCH) {
+                this._setEditRowKey(key, true);
+            }
 
             that._addChange({ key, data, type: DATA_EDIT_DATA_INSERT_TYPE });
 
