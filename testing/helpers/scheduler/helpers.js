@@ -25,10 +25,15 @@ export const CLASSES = {
     scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
     schedulerSmall: '.dx-scheduler-small',
 
+    calendar: 'dx-scheduler-navigator-calendar',
+    calendarToday: '.dx-calendar-today',
+    calendarSelected: '.dx-calendar-selected-date',
+
     dateTableCell: '.dx-scheduler-date-table-cell',
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
 
     appointment: '.dx-scheduler-appointment',
+    appointmentDragSource: '.dx-scheduler-appointment-drag-source',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -86,9 +91,33 @@ class NavigatorCaption extends ClickElementWrapper {
     }
 }
 
+class CalendarCell extends ClickElementWrapper {
+    get value() {
+        return parseInt(this.getElement().find('span').eq(0).text());
+    }
+}
+
+class Calendar extends ElementWrapper {
+    constructor() {
+        super(CLASSES.calendar);
+    }
+
+    get today() {
+        return new CalendarCell(CLASSES.calendarToday);
+    }
+
+    get selected() {
+        return new CalendarCell(CLASSES.calendarSelected);
+    }
+}
+
 class NavigatorPopover extends ElementWrapper {
     get isVisible() {
         return this.content.getElement().is(':visible');
+    }
+
+    get calendar() {
+        return new Calendar();
     }
 
     get content() {
@@ -209,6 +238,13 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
             getAppointmentPosition: (index = 0) => locate($(this.appointments.getAppointment(index))),
 
+            getDragSource: () => this.appointments
+                .getAppointments()
+                .filter(CLASSES.appointmentDragSource),
+
+            getFakeAppointment: () => $('.dx-scheduler-fixed-appointments .dx-scheduler-appointment'),
+            getFakeAppointmentWrapper: () => this.appointments.getFakeAppointment().parent(),
+
             find: (text) => {
                 return this.appointments
                     .getAppointments()
@@ -239,9 +275,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 click: (index = 0) => this.appointments.compact.getButton(index).trigger('dxclick'),
 
                 getAppointment: (index = 0) => $('.dx-list-item').eq(index),
-
-                getFakeAppointment: () => $('.dx-scheduler-fixed-appointments .dx-scheduler-appointment')
-            }
+            },
         };
 
         this.appointmentPopup = {
@@ -301,7 +335,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
         this.appointmentForm = {
             getFormInstance: () => this.appointmentPopup.getPopup().find('.dx-form').dxForm('instance'),
             getEditor: name => this.appointmentForm.getFormInstance().getEditor(name),
-            setSubject: (value) => this.appointmentForm.getEditor('text').option('value', value),
+            setSubject: (value, fieldName = 'text') => this.appointmentForm.getEditor(fieldName).option('value', value),
             setStartDate: (value) => this.appointmentForm.getEditor('startDate').option('value', value),
             setEndDate: (value) => this.appointmentForm.getEditor('endDate').option('value', value),
 
@@ -314,6 +348,12 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
         this.workSpace = {
             getWorkSpace: () => $('.dx-scheduler-work-space'),
+
+            getMonthCurrentDay: () => parseInt($('.dx-scheduler-date-table-current-date > div').text()),
+            getWeekCurrentDay: () => {
+                const value = $('.dx-scheduler-header-panel-current-time-cell').text();
+                return parseInt(value.replace(/^\D+/g, ''));
+            },
 
             getDateTableScrollable: () => $('.dx-scheduler-date-table-scrollable'),
             getHeaderScrollable: () => $('.dx-scheduler-header-scrollable'),

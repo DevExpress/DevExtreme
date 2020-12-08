@@ -88,7 +88,7 @@ class Gantt extends Widget {
             dataSource: this._tasksRaw,
             keyExpr: keyExpr,
             parentIdExpr: parentIdExpr,
-            columns: this.option('columns'),
+            columns: this._getTreeListColumns(),
             columnResizingMode: 'nextColumn',
             height: this._getTreeListHeight(),
             width: this.option('taskListWidth'),
@@ -170,6 +170,8 @@ class Gantt extends Widget {
 
     _onApplyPanelSize(e) {
         this._setInnerElementsWidth(e);
+        const rowHeight = this._getTreeListRowHeight();
+        this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
     }
 
     _onTreeListContentReady(e) {
@@ -233,6 +235,19 @@ class Gantt extends Widget {
         this._hasHeight = isDefined(this.option('height')) && this.option('height') !== '';
         return this._hasHeight ? '100%' : '';
     }
+    _getTreeListColumns() {
+        const columns = this.option('columns');
+        if(columns) {
+            for(let i = 0; i < columns.length; i++) {
+                const column = columns[i];
+                const isKeyColumn = column.dataField === this.option(`${GANTT_TASKS}.keyExpr`) || column.dataField === this.option(`${GANTT_TASKS}.parentIdExpr`);
+                if(isKeyColumn && !column.dataType) {
+                    column.dataType = 'object';
+                }
+            }
+        }
+        return columns;
+    }
     _onGanttViewSelectionChanged(e) {
         this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(e.id));
     }
@@ -277,8 +292,18 @@ class Gantt extends Widget {
     }
     _getTreeListRowHeight() {
         const $row = this._treeList._$element.find('.dx-data-row');
-        const height = $row.length ? getBoundingRect($row.last().get(0)).height : GANTT_DEFAULT_ROW_HEIGHT;
-        return height ? height : GANTT_DEFAULT_ROW_HEIGHT;
+        let height = $row.length ? getBoundingRect($row.last().get(0)).height : GANTT_DEFAULT_ROW_HEIGHT;
+        if(!height) {
+            height = GANTT_DEFAULT_ROW_HEIGHT;
+        }
+        this._correctRowsViewRowHeight(height);
+        return height;
+    }
+    _correctRowsViewRowHeight(height) {
+        const view = this._treeList._views && this._treeList._views['rowsView'];
+        if(view?._rowHeight !== height) {
+            view._rowHeight = height;
+        }
     }
     _getTreeListHeaderHeight() {
         return getBoundingRect(this._treeList._$element.find('.dx-treelist-headers').get(0)).height;
@@ -1371,7 +1396,7 @@ class Gantt extends Widget {
                 this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
                 break;
             case 'columns':
-                this._setTreeListOption('columns', this.option(args.name));
+                this._setTreeListOption('columns', this._getTreeListColumns());
                 break;
             case 'taskListWidth':
                 this._setInnerElementsWidth();

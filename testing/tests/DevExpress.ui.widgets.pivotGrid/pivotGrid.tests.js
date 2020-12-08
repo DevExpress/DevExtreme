@@ -6274,6 +6274,64 @@ QUnit.module('Vertical headers', {
             });
         });
     });
+
+    ['allowExpandAll', 'allowSortingBySummary', 'allowFiltering'].forEach(option => {
+        function getSourceData() {
+            return {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
+                ],
+                store: [{ row1: 'row1', col1: 'column1' }]
+            };
+        }
+
+        [false, true].forEach(isEnabledInGrid => {
+            ['simpleObject', 'pivotGridDataSource'].forEach(dataSourceType => {
+                QUnit.test(`grid.${option}=${isEnabledInGrid} -> grid.${option}=${!isEnabledInGrid}. Changing option of pivotGrid affects the field option (T950953). dataSourceType: ${dataSourceType}`, function(assert) {
+                    const getFields = (grid) => grid.getDataSource().fields();
+
+                    const dataSource = getSourceData();
+                    const gridOptions = {};
+                    gridOptions[option] = isEnabledInGrid;
+                    gridOptions.dataSource = dataSourceType === 'simpleObject'
+                        ? dataSource
+                        : new PivotGridDataSource(dataSource);
+
+                    const grid = $('#pivotGrid').dxPivotGrid(gridOptions).dxPivotGrid('instance');
+                    this.clock.tick();
+                    getFields(grid).forEach(field => assert.strictEqual(field[option], isEnabledInGrid, 'option is initialized correctly'));
+
+                    grid.option(option, !isEnabledInGrid);
+                    this.clock.tick();
+                    getFields(grid).forEach(field => assert.strictEqual(field[option], !isEnabledInGrid, 'option is changed'));
+                });
+
+                [false, true].forEach(isEnabledInField => {
+                    QUnit.test(`grid.${option}=${isEnabledInGrid}, grid.allFields.${option}=${isEnabledInField} -> grid.${option}=${!isEnabledInGrid}. Changing option of pivotGrid doesn't affects the field option if it has value (T950953). dataSourceType: ${dataSourceType}`, function(assert) {
+                        const getFields = (grid) => grid.getDataSource().fields();
+
+                        const dataSource = getSourceData();
+                        const gridOptions = {};
+                        gridOptions[option] = isEnabledInGrid;
+                        dataSource.fields.forEach(f => f[option] = isEnabledInField);
+                        gridOptions.dataSource = dataSourceType === 'simpleObject'
+                            ? dataSource
+                            : new PivotGridDataSource(dataSource);
+
+                        const grid = $('#pivotGrid').dxPivotGrid(gridOptions).dxPivotGrid('instance');
+                        this.clock.tick();
+                        getFields(grid).forEach(field => assert.strictEqual(field[option], isEnabledInField, 'option is initialized correctly'));
+
+                        grid.option(option, !isEnabledInGrid);
+                        this.clock.tick();
+                        getFields(grid).forEach(field => assert.strictEqual(field[option], isEnabledInField, 'option is not changed'));
+                    });
+                });
+            });
+        });
+    });
 });
 
 QUnit.module('Data area', () => {

@@ -572,15 +572,13 @@ const Sortable = Draggable.inherit({
             case 'autoUpdate':
                 break;
             case 'fromIndex':
-                if(!this._$sourceElement) {
-                    [false, true].forEach((isDragSource) => {
-                        const fromIndex = isDragSource ? args.value : args.previousValue;
-                        if(fromIndex !== null) {
-                            const $fromElement = $(this._getItems()[fromIndex]);
-                            this._toggleDragSourceClass(isDragSource, $fromElement);
-                        }
-                    });
-                }
+                [false, true].forEach((isDragSource) => {
+                    const fromIndex = isDragSource ? args.value : args.previousValue;
+                    if(fromIndex !== null) {
+                        const $fromElement = $(this._getItems()[fromIndex]);
+                        this._toggleDragSourceClass(isDragSource, $fromElement);
+                    }
+                });
                 break;
             case 'dropInsideItem':
                 this._optionChangedDropInsideItem(args);

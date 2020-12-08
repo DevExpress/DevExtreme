@@ -6,9 +6,9 @@
 @use "../../base/icons" as *;
 @use "../textEditor" as *;
 @use "../common/sizes" as *;
+@use "../../base/tagBox";
 
 // adduse
-
 
 .dx-tagbox {
   .dx-texteditor-input-container {

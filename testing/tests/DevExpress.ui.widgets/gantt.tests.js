@@ -381,6 +381,17 @@ QUnit.module('Options', moduleConfig, () => {
         this.instance.option('scaleType', 'auto');
         assert.ok(isHeaderContainsText('Sun, 10 Feb'), 'is days scale type (auto)');
     });
+    test('calculateCellValue for key', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.instance.option('columns', [{ dataField: 'id' }]);
+        this.clock.tick();
+
+        const columns = this.instance._treeList.getVisibleColumns();
+
+        assert.strictEqual(columns.length, 1);
+        assert.strictEqual(columns[0].calculateCellValue({ id: '54' }), '54', 'number');
+        assert.strictEqual(columns[0].calculateCellValue({ id: '54a' }), '54a', 'pseudo guid');
+    });
 });
 
 QUnit.module('Events', moduleConfig, () => {

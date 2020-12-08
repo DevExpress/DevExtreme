@@ -117,7 +117,7 @@ const VIEWS_CONFIG = {
 
 class Scheduler extends Widget {
     _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
+        const defaultOptions = extend(super._getDefaultOptions(), {
             /**
                 * @pseudo StartDayHour
                 * @type number
@@ -691,6 +691,12 @@ class Scheduler extends Widget {
                 * @inherits CollectionWidgetItem
                 * @type object
                 */
+        });
+
+        return extend(true, defaultOptions, {
+            integrationOptions: {
+                useDeferUpdateForTemplates: false
+            }
         });
     }
 
@@ -1324,7 +1330,7 @@ class Scheduler extends Widget {
                 if(this._isAgenda()) {
                     this._workSpace._renderView();
                     // TODO: remove rows calculation from this callback
-                    this._dataSourceLoadedCallback.fireWith(this, [result]);
+                    this._dataSourceLoadedCallback.fireWith(this, [this.getFilteredItems()]);
                 }
             }).bind(this));
         }
@@ -1624,6 +1630,11 @@ class Scheduler extends Widget {
         result.min = new Date(this._dateOption('min'));
         result.max = new Date(this._dateOption('max'));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
+
+        result.todayDate = () => {
+            const result = this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
+            return result;
+        };
 
         return result;
     }

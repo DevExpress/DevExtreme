@@ -342,12 +342,6 @@ const DateView = Editor.inherit({
     _clean: function() {
         this.callBase();
         delete this._$rollersContainer;
-    },
-
-    _dispose: function() {
-        clearTimeout(this._deferredRenderDayTimeout);
-        clearTimeout(this._deferredRenderMonthTimeout);
-        this.callBase();
     }
 });
 

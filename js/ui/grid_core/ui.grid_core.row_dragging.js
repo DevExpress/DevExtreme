@@ -288,12 +288,13 @@ export default {
                  * @name GridBaseOptions.rowDragging.onDragStart
                  * @type function(e)
                  * @type_function_param1 e:object
-                 * @type_function_param1_field1 event:event
-                 * @type_function_param1_field2 cancel:boolean
-                 * @type_function_param1_field3 itemData:any
-                 * @type_function_param1_field4 itemElement:dxElement
-                 * @type_function_param1_field5 fromIndex:number
-                 * @type_function_param1_field6 fromData:any
+                 * @type_function_param1_field1 component:this
+                 * @type_function_param1_field2 event:event
+                 * @type_function_param1_field3 cancel:boolean
+                 * @type_function_param1_field4 itemData:any
+                 * @type_function_param1_field5 itemElement:dxElement
+                 * @type_function_param1_field6 fromIndex:number
+                 * @type_function_param1_field7 fromData:any
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onDragMove
