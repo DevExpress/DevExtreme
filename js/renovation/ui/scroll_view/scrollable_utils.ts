@@ -6,10 +6,14 @@ import {
   ScrollableLocation, ScrollOffset, ScrollableBoundary, ScrollableDirection,
 } from './types.d';
 
-const DIRECTION_VERTICAL = 'vertical';
-const DIRECTION_HORIZONTAL = 'horizontal';
-const DIRECTION_BOTH = 'both';
-const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
+export const DIRECTION_VERTICAL = 'vertical';
+export const DIRECTION_HORIZONTAL = 'horizontal';
+export const DIRECTION_BOTH = 'both';
+export const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
+export const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
+export const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+export const SCROLLVIEW_TOP_POCKET_CLASS = 'dx-scrollview-top-pocket';
+export const SCROLLVIEW_BOTTOM_POCKET_CLASS = 'dx-scrollview-bottom-pocket';
 
 export function ensureLocation(
   location: number | Partial<ScrollableLocation>,

@@ -22,11 +22,14 @@ import {
   ensureLocation, isDirection, normalizeCoordinate,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
+  DIRECTION_VERTICAL,
+  DIRECTION_HORIZONTAL,
+  SCROLLABLE_CONTAINER_CLASS,
+  SCROLLABLE_CONTENT_CLASS,
+  SCROLLABLE_WRAPPER_CLASS,
+  SCROLLVIEW_BOTTOM_POCKET_CLASS,
+  SCROLLVIEW_TOP_POCKET_CLASS,
 } from './scrollable_utils';
-
-const DIRECTION_VERTICAL = 'vertical';
-const DIRECTION_HORIZONTAL = 'horizontal';
-const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
@@ -43,12 +46,12 @@ export const viewFunction = ({
     width={width}
     {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
-    <div className="dx-scrollable-wrapper">
-      <div className="dx-scrollable-container" ref={containerRef as any}>
+    <div className={SCROLLABLE_WRAPPER_CLASS}>
+      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef as any}>
         <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef as any}>
-          {forceGeneratePockets && <div className="dx-scrollview-top-pocket" />}
+          {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
           {children}
-          {forceGeneratePockets && <div className="dx-scrollview-bottom-pocket" />}
+          {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
         </div>
       </div>
     </div>
