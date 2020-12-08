@@ -8,8 +8,9 @@ import {
 import {
   ScrollableNative,
   viewFunction as viewFunctionNative,
-  ensureLocation,
 } from '../scrollable_native';
+
+import { ensureLocation } from '../scrollable_utils';
 
 import {
   ScrollableSimulated,
@@ -183,26 +184,6 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
       describe('Effects', () => {
         beforeEach(clearEventHandlers);
 
-        it('scrollEffect', () => {
-          const scrollOffset = { top: 150, left: 150 };
-          const containerRef = createContainerRef(scrollOffset);
-          const onScroll = jest.fn();
-          const scrollable = new Scrollable({ onScroll });
-          scrollable.containerRef = containerRef as HTMLDivElement;
-
-          scrollable.scrollEffect();
-          emit('scroll');
-
-          expect(onScroll).toHaveBeenCalledTimes(1);
-          expect(onScroll.mock.calls[0][0]).toMatchObject({
-            scrollOffset,
-            reachedTop: false,
-            reachedBottom: false,
-            reachedLeft: false,
-            reachedRight: false,
-          });
-        });
-
         each(['vertical', 'horizontal', 'both']).describe('ScrollEffect params. Direction: %o', (direction) => {
           const checkScrollParams = (
             actualParams,
@@ -220,6 +201,26 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
 
             expect(actualParams).toMatchObject(checkedParams);
           };
+
+          it('scrollEffect', () => {
+            const scrollOffset = { top: 150, left: 150 };
+            const containerRef = createContainerRef(scrollOffset);
+            const onScroll = jest.fn();
+            const scrollable = new Scrollable({ onScroll, direction });
+            scrollable.containerRef = containerRef as HTMLDivElement;
+
+            scrollable.scrollEffect();
+            emit('scroll');
+
+            expect(onScroll).toHaveBeenCalledTimes(1);
+            checkScrollParams(onScroll.mock.calls[0][0], {
+              scrollOffset,
+              reachedTop: false,
+              reachedBottom: false,
+              reachedLeft: false,
+              reachedRight: false,
+            });
+          });
 
           it('ScrollPosition: { top: 0, left: 0 }', () => {
             const scrollOffset = { top: 0, left: 0 };
@@ -596,12 +597,12 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
           });
 
           each([5, 10, 20]).describe('scrollbarSize: %o', (scrollBarSize) => {
-            each(directions).describe('Orientation: %o', (orientation) => {
+            each(directions).describe('Direction: %o', (direction) => {
               each(offsets).describe('Element is smaller than container. Offset: %o', (offset) => {
-                it('should scroll to element from top side by vertical orientation', () => {
+                it('should scroll to element from top side by vertical direction', () => {
                   const element = createTargetElement({ location: { top: 20, left: 0 } });
                   const containerRef = createContainerRef({ top: 200, left: 0 },
-                    orientation, scrollBarSize);
+                    direction, scrollBarSize);
 
                   const scrollable = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
                   scrollable.containerRef = containerRef;
@@ -611,17 +612,17 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollLeft).toEqual(0);
                 });
 
-                it('should scroll to element from bottom side by vertical orientation.', () => {
+                it('should scroll to element from bottom side by vertical direction.', () => {
                   const element = createTargetElement({ location: { top: 500, left: 0 } });
                   const containerRef = createContainerRef({ top: 100, left: 0 },
-                    orientation, scrollBarSize);
+                    direction, scrollBarSize);
 
                   const scrollable = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
                   scrollable.containerRef = containerRef;
 
                   scrollable.scrollToElement(element, offset);
 
-                  const scrollOffset = orientation === 'vertical' || orientation === 'both'
+                  const scrollOffset = direction === 'vertical' || direction === 'both'
                     ? scrollBarSize
                     : 0;
 
@@ -629,10 +630,10 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollLeft).toEqual(0);
                 });
 
-                it('should scroll to element from left side by horizontal orientation', () => {
+                it('should scroll to element from left side by horizontal direction', () => {
                   const element = createTargetElement({ location: { left: 20, top: 0 } });
                   const containerRef = createContainerRef({ left: 200, top: 0 },
-                    orientation, scrollBarSize);
+                    direction, scrollBarSize);
 
                   const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
                   scrollable.containerRef = containerRef;
@@ -644,23 +645,23 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollTop).toEqual(0);
                 });
 
-                it('should scroll to element from right side by horizontal orientation', () => {
+                it('should scroll to element from right side by horizontal direction', () => {
                   const element = createTargetElement({ location: { left: 500, top: 0 } });
                   const containerRef = createContainerRef({ left: 100, top: 0 },
-                    orientation, scrollBarSize);
+                    direction, scrollBarSize);
 
                   const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
-                  const scrollOffset = orientation === 'horizontal' || orientation === 'both'
+                  const scrollOffset = direction === 'horizontal' || direction === 'both'
                     ? scrollBarSize
                     : 0;
                   expect(containerRef.scrollLeft).toEqual(250 + getOffsetValue('right', offset) + scrollOffset);
                   expect(containerRef.scrollTop).toEqual(0);
                 });
 
-                it('should scroll to element from left side and top side by both orientation', () => {
+                it('should scroll to element from left side and top side by both direction', () => {
                   const element = createTargetElement({ location: { left: 20, top: 20 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
                   const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
@@ -671,7 +672,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
                 });
 
-                it('should scroll to element from right side and top side by both orientation', () => {
+                it('should scroll to element from right side and top side by both direction', () => {
                   const element = createTargetElement({ location: { left: 500, top: 20 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
                   const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
@@ -682,7 +683,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
                 });
 
-                it('should scroll to element from left side and bottom side by both orientation', () => {
+                it('should scroll to element from left side and bottom side by both direction', () => {
                   const element = createTargetElement({ location: { left: 20, top: 500 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
                   const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
@@ -693,7 +694,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollTop).toEqual(250 + getOffsetValue('bottom', offset) + scrollBarSize);
                 });
 
-                it('should scroll to element from right side and bottom side by both orientation', () => {
+                it('should scroll to element from right side and bottom side by both direction', () => {
                   const element = createTargetElement({ location: { left: 500, top: 500 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
                   const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
@@ -717,35 +718,35 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
               });
 
               /* eslint-disable jest/no-identical-title */
-              each(offsets).describe(`Element larger than container. Offset: %o, scrollbarSize: ${scrollBarSize}, orientation: ${orientation}`, (offset) => {
-                it('should scroll to element from top side by vertical orientation', () => {
+              each(offsets).describe(`Element larger than container. Offset: %o, scrollbarSize: ${scrollBarSize}, direction: ${direction}`, (offset) => {
+                it('should scroll to element from top side by vertical direction', () => {
                   const element = createTargetElement({
                     location: { top: 20, left: 0 },
                     width: 400,
                     height: 400,
                   });
                   const containerRef = createContainerRef({ top: 200, left: 0 },
-                    orientation, scrollBarSize);
+                    direction, scrollBarSize);
 
                   const scrollable = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
-                  const scrollOffset = orientation === 'vertical' || orientation === 'both'
+                  const scrollOffset = direction === 'vertical' || direction === 'both'
                     ? scrollBarSize
                     : 0;
                   expect(containerRef.scrollTop).toEqual(120 + getOffsetValue('bottom', offset) + scrollOffset);
                   expect(containerRef.scrollLeft).toEqual(0);
                 });
 
-                it('should scroll to element from bottom side by vertical orientation', () => {
+                it('should scroll to element from bottom side by vertical direction', () => {
                   const element = createTargetElement({
                     location: { top: 500, left: 0 },
                     width: 400,
                     height: 400,
                   });
                   const containerRef = createContainerRef({ top: 100, left: 0 },
-                    orientation, scrollBarSize);
+                    direction, scrollBarSize);
 
                   const scrollable = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
                   scrollable.containerRef = containerRef;
@@ -755,34 +756,34 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollLeft).toEqual(0);
                 });
 
-                it('should scroll to element from left side by horizontal orientation', () => {
+                it('should scroll to element from left side by horizontal direction', () => {
                   const element = createTargetElement({
                     location: { left: 20, top: 0 },
                     width: 400,
                     height: 400,
                   });
                   const containerRef = createContainerRef({ left: 200, top: 0 },
-                    orientation, scrollBarSize);
+                    direction, scrollBarSize);
 
                   const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
-                  const scrollOffset = orientation === 'horizontal' || orientation === 'both'
+                  const scrollOffset = direction === 'horizontal' || direction === 'both'
                     ? scrollBarSize
                     : 0;
                   expect(containerRef.scrollLeft).toEqual(120 + getOffsetValue('right', offset) + scrollOffset);
                   expect(containerRef.scrollTop).toEqual(0);
                 });
 
-                it('should scroll to element from right side by horizontal orientation', () => {
+                it('should scroll to element from right side by horizontal direction', () => {
                   const element = createTargetElement({
                     location: { left: 500, top: 0 },
                     width: 400,
                     height: 400,
                   });
                   const containerRef = createContainerRef({ left: 100, top: 0 },
-                    orientation, scrollBarSize);
+                    direction, scrollBarSize);
 
                   const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
                   scrollable.containerRef = containerRef;
@@ -792,7 +793,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollTop).toEqual(0);
                 });
 
-                it('should scroll to element from left side and top side by both orientation', () => {
+                it('should scroll to element from left side and top side by both direction', () => {
                   const element = createTargetElement({
                     location: { left: 20, top: 20 },
                     width: 400,
@@ -807,7 +808,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollTop).toEqual(120 + getOffsetValue('bottom', offset) + scrollBarSize);
                 });
 
-                it('should scroll to element from right side and top side by both orientation', () => {
+                it('should scroll to element from right side and top side by both direction', () => {
                   const element = createTargetElement({
                     location: { left: 500, top: 20 },
                     width: 400,
@@ -822,7 +823,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollTop).toEqual(120 + getOffsetValue('bottom', offset) + scrollBarSize);
                 });
 
-                it('should scroll to element from left side and bottom side by both orientation', () => {
+                it('should scroll to element from left side and bottom side by both direction', () => {
                   const element = createTargetElement({
                     location: { left: 20, top: 500 },
                     width: 400,
@@ -837,7 +838,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                   expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
                 });
 
-                it('should scroll to element from right side and bottom side by both orientation', () => {
+                it('should scroll to element from right side and bottom side by both direction', () => {
                   const element = createTargetElement({
                     location: { left: 500, top: 500 },
                     width: 400,
@@ -909,7 +910,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
 
           describe('rtlEnabled', () => {
             describe('Element is smaller than container. rtlEnabled: true', () => {
-              it('should scroll to element from right side by horizontal orientation', () => {
+              it('should scroll to element from right side by horizontal direction', () => {
                 const element = createTargetElement({ location: { top: 0, left: -320 } });
                 const containerRef = createContainerRef({ top: 0, left: 0 }, 'both', undefined, true);
 
@@ -919,7 +920,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
               });
 
-              it('should scroll to element from left side by horizontal orientation', () => {
+              it('should scroll to element from left side by horizontal direction', () => {
                 const element = createTargetElement({ location: { top: 0, left: 0 } });
                 const containerRef = createContainerRef({ top: 0, left: -320 }, 'both', undefined, true);
 
@@ -929,7 +930,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
               });
 
-              it('should scroll to element from right side by horizontal orientation for IE', () => {
+              it('should scroll to element from right side by horizontal direction for IE', () => {
                 testBehavior.positive = true;
                 const element = createTargetElement({ location: { top: 0, left: -320 } });
                 const containerRef = createContainerRef({ top: 0, left: 0 }, 'both', undefined, true);
@@ -943,7 +944,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
             });
 
             describe('Element is larger than container. rtlEnabled: true', () => {
-              it('should scroll to element from right side by horizontal orientation', () => {
+              it('should scroll to element from right side by horizontal direction', () => {
                 const element = createTargetElement({
                   location: {
                     top: 0, left: -320, width: 400, height: 400,
@@ -957,7 +958,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
               });
 
-              it('should scroll to element from left side by horizontal orientation', () => {
+              it('should scroll to element from left side by horizontal direction', () => {
                 const element = createTargetElement({
                   location: {
                     top: 0, left: 0, width: 400, height: 400,
