@@ -47,6 +47,7 @@ class RecurrenceProcessor {
 
         const minTime = minDateUtc.getTime();
         const leftBorder = this._getLeftBorder(options, minDateUtc, duration);
+
         this.rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
@@ -139,17 +140,28 @@ class RecurrenceProcessor {
             return null;
         }
 
-        const isUTCString = arrayDate[8] !== undefined;
-        let currentOffset = initialDate ? initialDate.getTimezoneOffset() : this._getTimeZoneOffset();
-        let date = new (Function.prototype.bind.apply(Date, this._prepareDateArrayToParse(arrayDate)))();
+        // const isUTCString = arrayDate[8] !== undefined;
+        // const currentOffset = initialDate ? initialDate.getTimezoneOffset() : this._getTimeZoneOffset();
+        const newDate = this._prepareDateArrayToParse(arrayDate);
 
-        currentOffset = currentOffset * toMs('minute');
+        return new Date(Date.UTC(
+            parseInt(newDate[1]),
+            parseInt(newDate[2]),
+            parseInt(newDate[3]),
+            parseInt(newDate[4]),
+            parseInt(newDate[5]),
+            parseInt(newDate[6])));
 
-        if(isUTCString) {
-            date = new Date(date.getTime() - currentOffset);
-        }
+        // let date = new (Function.prototype.bind.apply(Date, this._prepareDateArrayToParse(arrayDate)))();
 
-        return date;
+        // currentOffset = currentOffset * toMs('minute');
+
+        // if(isUTCString) {
+        //     // date = new Date(date.getTime() - currentOffset);
+        //     date = new Date(date);
+        // }
+
+        // return date;
     }
 
     _dispose() {
