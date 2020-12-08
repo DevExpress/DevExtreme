@@ -21,8 +21,7 @@ import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { Deferred } from '../../core/utils/deferred';
 import timeZoneUtils from './utils.timeZone.js';
-
-const APPOINTMENT_SETTINGS_NAME = 'dxAppointmentSettings';
+import { APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_SETTINGS_KEY } from './constants';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
@@ -47,7 +46,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const tabHandler = function(e) {
             const appointments = this._getAccessAppointments();
             const focusedAppointment = appointments.filter('.dx-state-focused');
-            let index = focusedAppointment.data(APPOINTMENT_SETTINGS_NAME).sortedIndex;
+            let index = focusedAppointment.data(APPOINTMENT_SETTINGS_KEY).sortedIndex;
             const lastIndex = appointments.length - 1;
 
             if((index > 0 && e.shiftKey) || (index < lastIndex && !e.shiftKey)) {
@@ -81,7 +80,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const appointments = this._getAccessAppointments();
 
         return appointments.filter(function(_, $item) {
-            return elementData($item, APPOINTMENT_SETTINGS_NAME).sortedIndex === sortedIndex;
+            return elementData($item, APPOINTMENT_SETTINGS_KEY).sortedIndex === sortedIndex;
         }).eq(0);
     },
 
@@ -453,17 +452,21 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     _renderItem: function(index, item, container) {
         const itemData = item.itemData;
+        const $items = [];
 
         for(let i = 0; i < item.settings.length; i++) {
             const setting = item.settings[i];
             this._currentAppointmentSettings = setting;
             const $item = this.callBase(index, itemData, container);
-            $item.data(APPOINTMENT_SETTINGS_NAME, setting);
+            $item.data(APPOINTMENT_SETTINGS_KEY, setting);
+            $items.push($item);
         }
+
+        return $items;
     },
 
     _getItemContent: function($itemFrame) {
-        $itemFrame.data(APPOINTMENT_SETTINGS_NAME, this._currentAppointmentSettings);
+        $itemFrame.data(APPOINTMENT_SETTINGS_KEY, this._currentAppointmentSettings);
         const $itemContent = this.callBase($itemFrame);
         return $itemContent;
     },
@@ -497,7 +500,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointment: function($appointment, settings) {
-        $appointment.data(APPOINTMENT_SETTINGS_NAME, settings);
+        $appointment.data(APPOINTMENT_SETTINGS_KEY, settings);
 
         this._applyResourceDataAttr($appointment);
         const data = this._getItemData($appointment);
@@ -558,7 +561,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 this._$currentAppointment = $(e.element);
 
                 if(this.invoke('needRecalculateResizableArea')) {
-                    const updatedArea = this._calculateResizableArea(this._$currentAppointment.data(APPOINTMENT_SETTINGS_NAME), this._$currentAppointment.data('dxItemData'));
+                    const updatedArea = this._calculateResizableArea(this._$currentAppointment.data(APPOINTMENT_SETTINGS_KEY), this._$currentAppointment.data('dxItemData'));
 
                     e.component.option('area', updatedArea);
                     e.component._renderDragOffsets(e.event);
@@ -717,7 +720,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _tryGetAppointmentColor: function(appointment) {
-        const settings = $(appointment).data(APPOINTMENT_SETTINGS_NAME);
+        const settings = $(appointment).data(APPOINTMENT_SETTINGS_KEY);
         if(!settings) {
             return undefined;
         }
@@ -932,14 +935,14 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const coords = this._initialCoordinates;
 
         if(dragEvent) {
+            this._removeDragSourceClassFromDraggedAppointment();
+
             if(isDeferred(dragEvent.cancel)) {
                 dragEvent.cancel.resolve(true);
             } else {
                 dragEvent.cancel = true;
             }
         }
-
-        this.notifyObserver('moveBack');
 
         if($appointment && !dragEvent) {
             if(coords) {
@@ -1024,6 +1027,38 @@ const SchedulerAppointments = CollectionWidget.inherit({
         } else {
             currentDate.setHours(originalDate.getHours(), originalDate.getMinutes(), originalDate.getSeconds(), originalDate.getMilliseconds());
         }
+    },
+
+    _removeDragSourceClassFromDraggedAppointment: function() {
+        const $appointments = this._itemElements().filter(`.${APPOINTMENT_DRAG_SOURCE_CLASS}`);
+
+        $appointments.each((_, element) => {
+            const appointmentInstance = $(element).dxSchedulerAppointment('instance');
+
+            appointmentInstance.option('isDragSource', false);
+        });
+    },
+
+    _setDragSourceAppointment: function(appointment, settings) {
+        const $appointments = this._findItemElementByItem(appointment);
+        const { startDate, endDate } = settings.info.sourceAppointment;
+        const { groupIndex } = settings;
+
+        $appointments.forEach(($item) => {
+            const { info: itemInfo, groupIndex: itemGroupIndex } = $item.data(APPOINTMENT_SETTINGS_KEY);
+
+            const {
+                startDate: itemStartDate,
+                endDate: itemEndDate,
+            } = itemInfo.sourceAppointment;
+
+            const appointmentInstance = $item.dxSchedulerAppointment('instance');
+            const isDragSource = startDate.getTime() === itemStartDate.getTime()
+                && endDate.getTime() === itemEndDate.getTime()
+                && groupIndex === itemGroupIndex;
+
+            appointmentInstance.option('isDragSource', isDragSource);
+        });
     }
 
 }).include(publisherMixin);

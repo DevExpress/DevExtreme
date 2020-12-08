@@ -33,6 +33,7 @@ export const CLASSES = {
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
 
     appointment: '.dx-scheduler-appointment',
+    appointmentDragSource: '.dx-scheduler-appointment-drag-source',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -270,6 +271,13 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
             getAppointmentPosition: (index = 0) => locate($(this.appointments.getAppointment(index))),
 
+            getDragSource: () => this.appointments
+                .getAppointments()
+                .filter(CLASSES.appointmentDragSource),
+
+            getFakeAppointment: () => $('.dx-scheduler-fixed-appointments .dx-scheduler-appointment'),
+            getFakeAppointmentWrapper: () => this.appointments.getFakeAppointment().parent(),
+
             find: (text) => {
                 return this.appointments
                     .getAppointments()
@@ -300,9 +308,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 click: (index = 0) => this.appointments.compact.getButton(index).trigger('dxclick'),
 
                 getAppointment: (index = 0) => $('.dx-list-item').eq(index),
-
-                getFakeAppointment: () => $('.dx-scheduler-fixed-appointments .dx-scheduler-appointment')
-            }
+            },
         };
 
         this.appointmentPopup = {

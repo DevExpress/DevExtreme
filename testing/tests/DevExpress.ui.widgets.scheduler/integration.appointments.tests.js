@@ -1573,8 +1573,10 @@ QUnit.module('Integration: Appointments', {
 
                 const pointer = pointerMock($appointment).start().down().move(10, 10);
 
-                assert.roughEqual(translator.locate($appointment).top, startPosition.top + 10, 1.5, 'Start position is correct');
-                assert.roughEqual(translator.locate($appointment).left, startPosition.left + 10, 1.5, 'Start position is correct');
+                const $draggedAppointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).parent().eq(0);
+
+                assert.roughEqual(translator.locate($draggedAppointment).top, startPosition.top + 10, 1.5, 'Start position is correct');
+                assert.roughEqual(translator.locate($draggedAppointment).left, startPosition.left + 10, 1.5, 'Start position is correct');
 
                 $(this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
                 pointer.up();
@@ -1629,8 +1631,10 @@ QUnit.module('Integration: Appointments', {
 
                 const pointer = pointerMock($appointment).start().down().move(10, 10);
 
-                assert.roughEqual(translator.locate($appointment).top, startPosition.top + 10, 2.1, 'Start position is correct');
-                assert.roughEqual(translator.locate($appointment).left, startPosition.left + 10, 1.5, 'Start position is correct');
+                const $draggedAppointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).parent().eq(0);
+
+                assert.roughEqual(translator.locate($draggedAppointment).top, startPosition.top + 10, 2.1, 'Start position is correct');
+                assert.roughEqual(translator.locate($draggedAppointment).left, startPosition.left + 10, 1.5, 'Start position is correct');
 
                 $(this.instance.$element().find('.dx-scheduler-all-day-table-cell')).eq(11).trigger(dragEvents.enter);
                 pointer.up();
