@@ -4,6 +4,7 @@ import {
   Ref,
   ComponentBindings,
   OneWay,
+  Method,
 } from 'devextreme-generator/component_declaration/common';
 
 import {
@@ -13,6 +14,10 @@ import {
 import {
   ScrollableProps,
 } from './scrollable_props';
+
+import {
+  ScrollableLocation, ScrollOffset,
+} from './types.d';
 
 import BaseWidgetProps from '../../utils/base_props';
 import { combineClasses } from '../../utils/combine_classes';
@@ -52,60 +57,60 @@ export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEn
 export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Ref() scrollableRef!: Scrollable;
 
-  // @Method()
-  // content(): HTMLDivElement {
-  //   return this.scrollableRef.content();
-  // }
+  @Method()
+  content(): HTMLDivElement {
+    return this.scrollableRef.content();
+  }
 
-  // @Method()
-  // scrollBy(distance: number | Partial<ScrollableLocation>): void {
-  //   this.scrollableRef.scrollBy(distance);
-  // }
+  @Method()
+  scrollBy(distance: number | Partial<ScrollableLocation>): void {
+    this.scrollableRef.scrollBy(distance);
+  }
 
-  // @Method()
-  // scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
-  //   this.scrollableRef.scrollTo(targetLocation);
-  // }
+  @Method()
+  scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
+    this.scrollableRef.scrollTo(targetLocation);
+  }
 
-  // @Method()
-  // scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
-  //   this.scrollableRef.scrollToElement(element, offset);
-  // }
+  @Method()
+  scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
+    this.scrollableRef.scrollToElement(element, offset);
+  }
 
-  // @Method()
-  // scrollHeight(): number {
-  //   return this.scrollableRef.scrollHeight();
-  // }
+  @Method()
+  scrollHeight(): number {
+    return this.scrollableRef.scrollHeight();
+  }
 
-  // @Method()
-  // scrollWidth(): number {
-  //   return this.scrollableRef.scrollWidth();
-  // }
+  @Method()
+  scrollWidth(): number {
+    return this.scrollableRef.scrollWidth();
+  }
 
-  // @Method()
-  // scrollOffset(): ScrollableLocation {
-  //   return this.scrollableRef.scrollOffset();
-  // }
+  @Method()
+  scrollOffset(): ScrollableLocation {
+    return this.scrollableRef.scrollOffset();
+  }
 
-  // @Method()
-  // scrollTop(): number {
-  //   return this.scrollableRef.scrollTop();
-  // }
+  @Method()
+  scrollTop(): number {
+    return this.scrollableRef.scrollTop();
+  }
 
-  // @Method()
-  // scrollLeft(): number {
-  //   return this.scrollableRef.scrollLeft();
-  // }
+  @Method()
+  scrollLeft(): number {
+    return this.scrollableRef.scrollLeft();
+  }
 
-  // @Method()
-  // clientHeight(): number {
-  //   return this.scrollableRef.clientHeight();
-  // }
+  @Method()
+  clientHeight(): number {
+    return this.scrollableRef.clientHeight();
+  }
 
-  // @Method()
-  // clientWidth(): number {
-  //   return this.scrollableRef.clientWidth();
-  // }
+  @Method()
+  clientWidth(): number {
+    return this.scrollableRef.clientWidth();
+  }
 
   // eslint-disable-next-line class-methods-use-this
   get cssClasses(): string {
