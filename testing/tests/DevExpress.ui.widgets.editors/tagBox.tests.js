@@ -986,7 +986,8 @@ QUnit.module('the "text" option', moduleSetup, () => {
 
     QUnit.test('typed value should be passed to text option', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-            searchEnabled: true
+            searchEnabled: true,
+            searchTimeout: 0
         });
         this.clock.tick(TIME_TO_WAIT);
 
@@ -1006,7 +1007,8 @@ QUnit.module('the "text" option', moduleSetup, () => {
 
     QUnit.test('focusout after search should clear text option value', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-            searchEnabled: true
+            searchEnabled: true,
+            searchTimeout: 0
         });
         this.clock.tick(TIME_TO_WAIT);
 
@@ -1043,7 +1045,8 @@ QUnit.module('the "text" option', moduleSetup, () => {
 
     QUnit.test('custom item adding should clear text option value', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-            acceptCustomValue: true
+            acceptCustomValue: true,
+            searchTimeout: 0
         });
         this.clock.tick(TIME_TO_WAIT);
 
