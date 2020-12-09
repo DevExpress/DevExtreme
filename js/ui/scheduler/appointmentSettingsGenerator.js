@@ -66,8 +66,9 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
     _createAppointments(appointment, resources) {
         let appointments = this._createRecurrenceAppointments(appointment, resources);
+        const isRecurrenceAppointment = appointment.recurrenceRule;
 
-        if(appointments.length === 0) {
+        if(!isRecurrenceAppointment && appointments.length === 0) {
             appointments.push({
                 startDate: appointment.startDate,
                 endDate: appointment.endDate
