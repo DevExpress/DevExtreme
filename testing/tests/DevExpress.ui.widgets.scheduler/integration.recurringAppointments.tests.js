@@ -472,17 +472,17 @@ QUnit.testStart(function() {
                 currentDate: new Date(2015, 1, 12),
                 dataSource: [{
                     text: 'Task 1',
-                    startDate: new Date(2014, 1, 12, 3),
-                    endDate: new Date(2014, 1, 12, 4),
+                    startDate: new Date('2014-02-12T11:00:00.000Z'),
+                    endDate: new Date('2014-02-12T14:00:00.000Z'),
                     allDay: false,
                     recurrenceRule: 'FREQ=WEEKLY',
-                    recurrenceException: '20150210T230000Z'
+                    recurrenceException: '20150211T110000Z'
                 }],
                 currentView: 'week',
                 height: 600
             });
 
-            assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'sdfsdf');
+            assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'There are no appointments');
         });
 
         QUnit.test('Updated single item should not have recurrenceException ', function(assert) {
