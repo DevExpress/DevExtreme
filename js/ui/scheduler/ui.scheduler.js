@@ -1673,7 +1673,6 @@ class Scheduler extends Widget {
     }
 
     _singleAppointmentChangesHandler(rawAppointment, rawTargetedAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        // const appointment = this.createAppointmentAdapter(rawAppointment);
         const targetedAppointment = this.createAppointmentAdapter(rawTargetedAppointment);
         const updatedAppointment = this.createAppointmentAdapter(rawAppointment);
 
@@ -1687,7 +1686,6 @@ class Scheduler extends Widget {
             this.addAppointment(rawTargetedAppointment);
         }
 
-        // const correctedExceptionDate = this._getCorrectedExceptionDateByDST(exceptionDate, appointment, targetedAppointment);
         const correctedExceptionDate = exceptionDate;
         updatedAppointment.recurrenceException = this._createRecurrenceException(correctedExceptionDate, rawAppointment);
 
