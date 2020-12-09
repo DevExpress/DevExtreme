@@ -430,10 +430,9 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _getScrollOffset() {
-        const { top, left } = this._location();
         return {
-            top: -top,
-            left: -left
+            top: -this._location().top,
+            left: -this._location().left
         };
     },
 
