@@ -5,16 +5,7 @@ import $ from 'jquery';
 import 'common.css!';
 import 'generic_light.css!';
 
-QUnit.module('scrollToItem', {
-    beforeEach: function() {
-        this.nativeScrollableStyleElement = $('<style id="scrollableRtlStyles"></style>').get(0);
-        this.nativeScrollableStyleElement.innerHTML = '.dx-treeview-node-container { overflow: visible;}';
-    },
-    afterEach: function() {
-        $('#scrollableRtlStyles').remove();
-        delete this.nativeScrollableStyleElement;
-    }
-}, () => {
+QUnit.module('scrollToItem', () => {
     if(browser.msie) {
         return;
     }
@@ -28,7 +19,8 @@ QUnit.module('scrollToItem', {
             animationEnabled: false,
             items: items,
             rtlEnabled: config.rtlEnabled,
-            onContentReady: config.onContentReady
+            onContentReady: config.onContentReady,
+            scrollableUseNative: config.scrollableUseNative
         });
 
         if(config.initialPosition) {
@@ -63,15 +55,15 @@ QUnit.module('scrollToItem', {
         [false, true].forEach(expanded => {
             [false, true].forEach(disabled => {
                 [false, true].forEach(rtlEnabled => {
-                    [false, true].forEach(useNative => {
+                    [false, true].forEach(scrollableUseNative => {
                         configs.push({
                             expanded,
                             scrollDirection,
                             disabled,
                             rtlEnabled,
-                            useNative,
+                            scrollableUseNative,
                             keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'],
-                            description: `expanded: ${expanded}, rtlEnabled: ${rtlEnabled}, disabled: ${disabled}, scrollDirection: ${scrollDirection}, useNative: ${useNative} `
+                            description: `expanded: ${expanded}, rtlEnabled: ${rtlEnabled}, disabled: ${disabled}, scrollDirection: ${scrollDirection}, scrollableUseNative: ${scrollableUseNative} `
                         });
                     });
                 });
@@ -85,14 +77,9 @@ QUnit.module('scrollToItem', {
                 let completionCallback = null;
                 let isFirstContentReadyEvent = true;
                 const options = $.extend({}, config, {
-                    onContentReady: (e) => {
+                    onContentReady: function(e) {
                         if(isFirstContentReadyEvent) {
                             isFirstContentReadyEvent = false;
-
-                            if(config.useNative) {
-                                document.body.appendChild(this.nativeScrollableStyleElement);
-                                e.component._scrollableContainer.option('useNative', true);
-                            }
 
                             completionCallback = e.component.scrollToItem(key);
                         }
@@ -119,19 +106,7 @@ QUnit.module('scrollToItem', {
 
         [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
             QUnit.test(`config:${config.description}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
-                let isFirstContentReadyEvent = true;
-                const options = $.extend({}, config, {
-                    initialPosition, onContentReady: (e) => {
-                        if(isFirstContentReadyEvent) {
-                            isFirstContentReadyEvent = false;
-
-                            if(config.useNative) {
-                                document.body.appendChild(this.nativeScrollableStyleElement);
-                                e.component._scrollableContainer.option('useNative', true);
-                            }
-                        }
-                    }
-                });
+                const options = $.extend({}, config, { initialPosition });
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 config.keysToScroll.forEach(key => {
                     const completionCallback = wrapper.instance.scrollToItem(key);
