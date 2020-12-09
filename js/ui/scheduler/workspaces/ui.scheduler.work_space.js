@@ -3393,7 +3393,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getTimePanelCells() {
         return this.$element().find(`.${TIME_PANEL_CELL_CLASS}`);
-
     }
 }
 

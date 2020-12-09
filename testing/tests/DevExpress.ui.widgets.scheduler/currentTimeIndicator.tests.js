@@ -8,6 +8,7 @@ const SCHEDULER_DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top'
 const SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-bottom';
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const SCHEDULER_DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
+const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -440,7 +441,7 @@ const testIndicators = function(testCases, $element, assert) {
         const $element = this.instance.$element();
         const $cell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
 
-        assert.ok($cell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
+        assert.ok($cell.hasClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS), 'Cell has specific class');
     });
 
     QUnit.test('TimePanel currentTime cell should have specific class, Day view with intervalCount', function(assert) {
@@ -452,7 +453,7 @@ const testIndicators = function(testCases, $element, assert) {
         const $element = this.instance.$element();
         const $cell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
 
-        assert.ok($cell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
+        assert.ok($cell.hasClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS), 'Cell has specific class');
     });
 })('DateTime indicator on Day View');
 
@@ -646,7 +647,7 @@ const testIndicators = function(testCases, $element, assert) {
         });
 
         const $element = this.instance.$element();
-        const $cell = $element.find('.dx-scheduler-time-panel-current-time-cell');
+        const $cell = $element.find(`.${TIME_PANEL_CURRENT_TIME_CELL_CLASS}`);
 
         assert.equal($cell.length, 2, 'Cells has specific class');
     });
@@ -827,9 +828,9 @@ const testIndicators = function(testCases, $element, assert) {
         const $secondCell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
         const $thirdCell = $element.find('.dx-scheduler-time-panel-cell').eq(10);
 
-        assert.ok($firstCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
-        assert.ok($secondCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
-        assert.notOk($thirdCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell hasn\'t specific class');
+        assert.ok($firstCell.hasClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS), 'Cell has specific class');
+        assert.ok($secondCell.hasClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS), 'Cell has specific class');
+        assert.notOk($thirdCell.hasClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS), 'Cell hasn\'t specific class');
     });
 
     QUnit.test('DateHeader currentTime cell should have specific class, Week view', function(assert) {
