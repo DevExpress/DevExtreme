@@ -174,11 +174,12 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
   }
 
   get cssClasses(): string {
-    const { direction, classes } = this.props;
+    const { direction, classes, disabled } = this.props;
 
     const classesMap = {
       'dx-scrollable dx-scrollview dx-scrollable-native dx-scrollable-native-generic dx-scrollable-renovated': true,
       [`dx-scrollable-${direction}`]: true,
+      'dx-scrollable-disabled': !!disabled,
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);

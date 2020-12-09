@@ -174,11 +174,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   }
 
   get cssClasses(): string {
-    const { direction, classes } = this.props;
+    const { direction, classes, disabled } = this.props;
 
     const classesMap = {
       'dx-scrollable dx-scrollview dx-scrollable-simulated dx-scrollable-renovated': true,
       [`dx-scrollable-${direction}`]: true,
+      'dx-scrollable-disabled': !!disabled,
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
