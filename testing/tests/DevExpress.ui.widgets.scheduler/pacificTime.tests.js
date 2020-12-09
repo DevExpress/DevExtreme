@@ -39,7 +39,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 2, 7, 1),
             endDate: new Date(2020, 2, 7, 2),
             currentDate: summerDSTDate,
-            recurrenceException: '20200311T090000Z'
+            recurrenceException: '20200311T080000Z'
         };
 
         const testCase1AmTo3AmSummerTime = {
@@ -54,7 +54,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 2, 7, 1),
             endDate: new Date(2020, 2, 7, 3),
             currentDate: summerDSTDate,
-            recurrenceException: '20200311T090000Z'
+            recurrenceException: '20200311T080000Z'
         };
 
         const testCase2AmTo3AmSummerTime = {
@@ -69,7 +69,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 2, 7, 2),
             endDate: new Date(2020, 2, 7, 3),
             currentDate: summerDSTDate,
-            recurrenceException: '20200311T100000Z'
+            recurrenceException: '20200311T090000Z'
         };
 
         const testCase1AmTo2AmWinterTime = {
@@ -84,7 +84,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 9, 25, 1),
             endDate: new Date(2020, 9, 25, 2),
             currentDate: winterDSTDate,
-            recurrenceException: '20201102T080000Z'
+            recurrenceException: '20201102T090000Z'
         };
 
         const testCase1AmTo3AmWinterTime = {
@@ -99,7 +99,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 9, 25, 1),
             endDate: new Date(2020, 9, 25, 3),
             currentDate: winterDSTDate,
-            recurrenceException: '20201102T080000Z'
+            recurrenceException: '20201102T090000Z'
         };
 
         const testCase2AmTo3AmWinterTime = {
@@ -114,7 +114,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 9, 25, 2),
             endDate: new Date(2020, 9, 25, 3),
             currentDate: winterDSTDate,
-            recurrenceException: '20201102T090000Z'
+            recurrenceException: '20201102T100000Z'
         };
 
         [
