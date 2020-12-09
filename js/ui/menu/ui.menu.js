@@ -898,6 +898,7 @@ class Menu extends MenuBase {
     _optionChanged(args) {
         if(ACTIONS.indexOf(args.name) >= 0) {
             this._initActions();
+            return;
         }
 
         switch(args.name) {
