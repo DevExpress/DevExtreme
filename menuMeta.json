@@ -414,7 +414,8 @@
             "MvcAdditionalFiles": [
               "/Models/SampleData/OrdersWithCustomerInfo.cs",
               "/Models/OrderWithCustomerInfo.cs",
-              "/Models/CustomerInfo.cs"
+              "/Models/CustomerInfo.cs",
+              "/Models/ApplyFilterType.cs"
             ]
           }
         ]
