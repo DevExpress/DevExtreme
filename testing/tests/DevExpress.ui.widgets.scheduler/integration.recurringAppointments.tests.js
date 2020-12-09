@@ -467,6 +467,24 @@ QUnit.testStart(function() {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
+        QUnit.test('Appointment shouldn\'t render on view if he is excluded from recurrence', function(assert) {
+            const scheduler = createWrapper({
+                currentDate: new Date(2015, 1, 12),
+                dataSource: [{
+                    text: 'Task 1',
+                    startDate: new Date(2014, 1, 12, 3),
+                    endDate: new Date(2014, 1, 12, 4),
+                    allDay: false,
+                    recurrenceRule: 'FREQ=WEEKLY',
+                    recurrenceException: '20150210T230000Z'
+                }],
+                currentView: 'week',
+                height: 600
+            });
+
+            assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'sdfsdf');
+        });
+
         QUnit.test('Updated single item should not have recurrenceException ', function(assert) {
             const data = new DataSource({
                 store: [
