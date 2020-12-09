@@ -929,6 +929,11 @@ module('AppointmentSettings', {
         });
 
         test(`Appointment with multiple resources should be rendered correctly if vertical grouping and view=${viewName}`, function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
             const data = [{
                 startDate: new Date(2020, 9, 12, 1, 30),
                 endDate: new Date(2020, 9, 12, 22, 30),
@@ -1098,6 +1103,11 @@ module('AppointmentSettings', {
     });
 
     test('Recurrent appointment should have correct settings in vertical group orientation', function(assert) {
+        if(!isDesktopEnvironment()) {
+            assert.ok(true, 'This test is for desktop only');
+            return;
+        }
+
         const data = [{
             text: 'Test0',
             priorityId: 1,
@@ -1198,6 +1208,11 @@ module('AppointmentSettings', {
     });
 
     test('A vertically grouped long recurrent appointment should not have duplicates', function(assert) {
+        if(!isDesktopEnvironment()) {
+            assert.ok(true, 'This test is for desktop only');
+            return;
+        }
+
         const data = [{
             text: 'Website Re-Design Plan',
             priorityId: [1, 2],
@@ -1338,6 +1353,11 @@ module('AppointmentSettings', {
     });
 
     test('Horizontally grouped recurrent appointment should not have duplicates', function(assert) {
+        if(!isDesktopEnvironment()) {
+            assert.ok(true, 'This test is for desktop only');
+            return;
+        }
+
         const data = [{
             text: 'Test0',
             priorityId: [1, 2],
