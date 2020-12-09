@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
+import devices from '../../../../core/devices';
 import {
   clear as clearEventHandlers, emit,
 } from '../../../test_utils/events_mock';
@@ -1052,7 +1053,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
 
             if (instance instanceof ScrollableNative) {
               expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
-              expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native-generic'));
+              expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${devices.current().platform}`));
             } else {
               expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
             }

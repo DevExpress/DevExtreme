@@ -9,6 +9,7 @@ import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import devices from '../../../core/devices';
 
 import {
   ScrollableInternalPropsType,
@@ -177,7 +178,7 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
     const { direction, classes, disabled } = this.props;
 
     const classesMap = {
-      'dx-scrollable dx-scrollview dx-scrollable-native dx-scrollable-native-generic dx-scrollable-renovated': true,
+      [`dx-scrollable dx-scrollview dx-scrollable-native dx-scrollable-native-${devices.current().platform} dx-scrollable-renovated`]: true,
       [`dx-scrollable-${direction}`]: true,
       'dx-scrollable-disabled': !!disabled,
       [`${classes}`]: !!classes,
