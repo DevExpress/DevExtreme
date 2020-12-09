@@ -600,6 +600,21 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
     }
 
+    _getCurrentTimeRowIndex() {
+        const currentTimeCellIndex = super._getCurrentTimeRowIndex();
+
+        if(currentTimeCellIndex === undefined) {
+            return undefined;
+        }
+
+        const cellCountInDay = this._getCellCountInDay(true);
+        const today = dateUtils.trimTime(new Date(this._getToday()));
+        const date = dateUtils.trimTime(new Date(this.getStartViewDate()));
+        const currentDayIndex = (today.getTime() - date.getTime()) / toMs('day');
+
+        return currentDayIndex * cellCountInDay + currentTimeCellIndex;
+    }
+
     _getCurrentTimePanelCellIndices() {
         const rowCountPerGroup = this._getCellCount();
         const currentTimeCellIndex = this._getCurrentTimeRowIndex();
@@ -608,18 +623,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             return [];
         }
 
-        const cellCountInDay = this._getCellCountInDay(true);
-        const today = dateUtils.trimTime(new Date(this._getToday()));
-        const date = dateUtils.trimTime(new Date(this.getStartViewDate()));
-        const currentDayIndex = (today.getTime() - date.getTime()) / toMs('day');
-        const currentDateCellIndex = currentDayIndex * cellCountInDay + currentTimeCellIndex;
-
         const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
             ? this._getGroupCount()
             : 1;
 
         return [...(new Array(horizontalGroupCount))]
-            .map((_, groupIndex) => rowCountPerGroup * groupIndex + currentDateCellIndex);
+            .map((_, groupIndex) => rowCountPerGroup * groupIndex + currentTimeCellIndex);
     }
 }
 

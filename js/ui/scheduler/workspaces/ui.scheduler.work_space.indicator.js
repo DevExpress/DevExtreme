@@ -227,17 +227,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         return false;
     }
 
-    _getTimeCellClass(i) {
-        const startViewDate = this._getTimeCellDate(i);
-        const cellClass = super._getTimeCellClass(i);
-
-        if(this._isCurrentTime(startViewDate)) {
-            return cellClass + ' ' + TIME_PANEL_CURRENT_TIME_CELL_CLASS;
-        }
-
-        return cellClass;
-    }
-
     _getHeaderPanelCellClass(i) {
         const cellClass = super._getHeaderPanelCellClass(i);
 
