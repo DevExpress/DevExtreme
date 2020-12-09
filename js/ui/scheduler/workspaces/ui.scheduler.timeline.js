@@ -336,25 +336,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return false;
     }
 
-    _isCurrentTimeHeaderCell(headerIndex) {
-        let result = false;
-
-        if(this.isIndicationOnView()) {
-            let date = this._getDateByIndex(headerIndex);
-
-            const now = this._getToday();
-            date = new Date(date);
-
-            if(dateUtils.sameDate(now, date)) {
-                const startCellDate = new Date(date);
-                let endCellDate = new Date(date);
-                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
-
-                result = dateUtils.dateInRange(now, startCellDate, endCellDate);
-            }
-        }
-
-        return result;
+    _isCurrentTimeHeaderCell() {
+        return false;
     }
 
     _cleanView() {

@@ -197,27 +197,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         });
     }
 
-    _isCurrentTime(date) {
-        if(this.isIndicationOnView()) {
-            const today = this._getToday();
-            let result = false;
-            date = new Date(date);
-
-            date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
-
-            let startCellDate = new Date(date);
-            let endCellDate = new Date(date);
-
-            if(dateUtils.sameDate(today, date)) {
-                startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration() + 1);
-                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
-
-                result = dateUtils.dateInRange(today, startCellDate, endCellDate);
-            }
-            return result;
-        }
-    }
-
     _isCurrentTimeHeaderCell(headerIndex) {
         if(this.isIndicationOnView()) {
             const date = this._getDateByIndex(headerIndex);
