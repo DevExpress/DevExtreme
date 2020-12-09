@@ -129,12 +129,16 @@ class RecurrenceProcessor {
         return result.toUpperCase();
     }
 
-    getDateByAsciiString(string) {
-        if(typeof string !== 'string') {
-            return string;
+    _parseExceptionToRawArray(value) {
+        return value.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+    }
+
+    getDateByAsciiString(exceptionText) {
+        if(typeof exceptionText !== 'string') {
+            return exceptionText;
         }
 
-        const result = string.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+        const result = this._parseExceptionToRawArray(exceptionText);
 
         if(!result) {
             return null;
