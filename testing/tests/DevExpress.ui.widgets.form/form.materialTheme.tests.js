@@ -6,7 +6,8 @@ import 'ui/form/ui.form';
 import 'common.css!';
 import 'material_blue_light.css!';
 import FormLayoutTestWrapper from '../../helpers/FormLayoutTestWrapper.js';
-import { FIELD_ITEM_CONTENT_WRAPPER_CLASS } from 'ui/form/constants';
+
+const FIELD_ITEM_CONTENT_WRAPPER_CLASS = 'dx-field-item-content-wrapper';
 
 function testChromeOnly(name, callback) {
     if(!browser.chrome) {
