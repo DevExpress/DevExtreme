@@ -12,6 +12,7 @@ export const DIRECTION_BOTH = 'both';
 export const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 export const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
 export const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+export const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 export const SCROLLVIEW_TOP_POCKET_CLASS = 'dx-scrollview-top-pocket';
 export const SCROLLVIEW_BOTTOM_POCKET_CLASS = 'dx-scrollview-bottom-pocket';
 

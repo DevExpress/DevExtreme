@@ -42,10 +42,10 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
 }].forEach(({ viewFunction, Scrollable }) => {
   describe('Scrollable', () => {
     describe('Render', () => {
-      it('should render scrollable content', () => {
+      it('should render scrollView content', () => {
         const scrollable = shallow(viewFunction({ props: { } } as any) as JSX.Element);
-        const scrollableContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content');
-        expect(scrollableContent.exists()).toBe(true);
+        const scrollViewContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
+        expect(scrollViewContent.exists()).toBe(true);
       });
 
       it('should not render top & bottom pockets', () => {
