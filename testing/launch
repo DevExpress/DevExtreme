@@ -14,11 +14,12 @@ if(parseInt(versions.node.split('.')[0]) < 6) {
 watchForTests();
 
 function watchForTests ()  {
+    let isRunnerStarted = false;
     let componentsGenerationCompleted = false;
     let transpileCompleted = false;
     let stylesCompilationCompleted = false;
 
-    spawn('npx', [
+    const processes = spawn('npx', [
             'gulp',
             'generate-components-watch',
             'transpile-watch',
@@ -29,17 +30,20 @@ function watchForTests ()  {
             cwd: join(__dirname, '../'),
             env
         }
-    ).stdout.on('data', (data) => {
+    )
+    processes.stdout.on('data', (data) => {
         componentsGenerationCompleted = componentsGenerationCompleted || data.indexOf('generate-components task is watching for changes') !== -1;
         transpileCompleted = transpileCompleted || data.indexOf('transpile task is watching for changes') !== -1;
         stylesCompilationCompleted = stylesCompilationCompleted || data.indexOf('style-compiler-themes task is watching for changes') !== -1;
 
         process.stdout.write(data);
 
-        if (componentsGenerationCompleted && transpileCompleted && stylesCompilationCompleted) {
+        if (!isRunnerStarted && componentsGenerationCompleted && transpileCompleted && stylesCompilationCompleted) {
+            isRunnerStarted = true;
             execRunner();
         }
-    });
+    })
+    processes.stderr.on('data', (data) => process.stdout.write(data));
 }
 
 function execRunner () {

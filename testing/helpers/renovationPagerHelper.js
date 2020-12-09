@@ -3,7 +3,9 @@ import RenovatedPager from 'renovation/ui/pager/pager.j.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { act } from 'preact/test-utils';
 
-export class RenovatedPagerForTest extends RenovatedPager {
+// default export not supported
+export class WrappedWidget extends RenovatedPager {
+
     get _$pagesSizeChooser() {
         return this._$element.find('.dx-page-sizes');
     }
@@ -38,3 +40,4 @@ export class RenovatedPagerForTest extends RenovatedPager {
         pages[currentIndex]._$page.trigger('dxclick');
     }
 }
+

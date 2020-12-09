@@ -1,86 +1,109 @@
 import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
+import { ExportLoadPanel } from './exporter/export_load_panel';
 
+/**
+* @docid
+* @namespace DevExpress.pdfExporter
+* @prevFileNamespace DevExpress
+* @type object
+*/
 export interface PdfDataGridCell {
     /**
-     * @docid PdfDataGridCell.column
+     * @docid
      * @public
      */
     column?: dxDataGridColumn;
     /**
-     * @docid PdfDataGridCell.data
+     * @docid
      * @public
      */
     data?: any;
     /**
-     * @docid PdfDataGridCell.groupIndex
+     * @docid
      * @public
      */
     groupIndex?: number;
     /**
-     * @docid PdfDataGridCell.groupSummaryItems
+     * @docid
      * @public
      */
-    groupSummaryItems?: Array<{ name?: string, value?: any }>;
+    groupSummaryItems?: Array<{
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress
+      */
+      name?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress
+      */
+      value?: any
+    }>;
     /**
-     * @docid PdfDataGridCell.rowType
+     * @docid
      * @public
      */
     rowType?: string;
     /**
-     * @docid PdfDataGridCell.totalSummaryItemName
+     * @docid
      * @public
      */
     totalSummaryItemName?: string;
     /**
-     * @docid PdfDataGridCell.value
+     * @docid
      * @public
      */
     value?: any;
 }
 
 /**
-* @docid PdfExportDataGridProps
+* @docid
 * @namespace DevExpress.pdfExporter
 */
 export interface PdfExportDataGridProps {
      /**
-     * @docid PdfExportDataGridProps.jsPDFDocument
+     * @docid
      * @default undefined
      * @public
      */
     jsPDFDocument?: object;
      /**
-     * @docid PdfExportDataGridProps.autoTableOptions
+     * @docid
      * @default undefined
      * @public
      */
     autoTableOptions?: object;
     /**
-     * @docid PdfExportDataGridProps.component
+     * @docid
      * @default undefined
      * @public
      */
     component?: dxDataGrid;
     /**
-     * @docid PdfExportDataGridProps.selectedRowsOnly
+     * @docid
      * @default false
      * @public
      */
     selectedRowsOnly?: boolean;
     /**
-     * @docid PdfExportDataGridProps.keepColumnWidths
+     * @docid
      * @default true
      * @public
      */
     keepColumnWidths?: boolean;
     /**
-     * @docid PdfExportDataGridProps.customizeCell
+     * @docid
      * @type_function_param1 options:Object
      * @type_function_param1_field1 gridCell:PdfDataGridCell
      * @type_function_param1_field2 pdfCell:Object
      * @public
      */
     customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any}) => any);
+     /**
+     * @docid
+     * @public
+     */
+    loadPanel?: ExportLoadPanel;
 }
 
 /**

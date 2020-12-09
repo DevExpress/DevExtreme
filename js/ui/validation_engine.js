@@ -298,67 +298,22 @@ class EmailRuleValidator extends BaseRuleValidator {
 }
 
 const rulesValidators = {
-    /**
-     * @name RequiredRule
-     * @section dxValidator
-     * @type object
-     */
     'required': new RequiredRuleValidator(),
 
-    /**
-     * @name NumericRule
-     * @section dxValidator
-     * @type object
-     */
     'numeric': new NumericRuleValidator(),
 
-    /**
-     * @name RangeRule
-     * @section dxValidator
-     * @type object
-     */
     'range': new RangeRuleValidator(),
 
-    /**
-     * @name StringLengthRule
-     * @section dxValidator
-     * @type object
-     */
     'stringLength': new StringLengthRuleValidator(),
 
-    /**
-     * @name CustomRule
-     * @section dxValidator
-     * @type object
-     */
     'custom': new CustomRuleValidator(),
 
-    /**
-     * @name AsyncRule
-     * @section dxValidator
-     * @type object
-     */
     'async': new AsyncRuleValidator(),
 
-    /**
-     * @name CompareRule
-     * @section dxValidator
-     * @type object
-     */
     'compare': new CompareRuleValidator(),
 
-    /**
-     * @name PatternRule
-     * @section dxValidator
-     * @type object
-     */
     'pattern': new PatternRuleValidator(),
 
-    /**
-     * @name EmailRule
-     * @section dxValidator
-     * @type object
-     */
     'email': new EmailRuleValidator()
 };
 
@@ -373,10 +328,6 @@ const GroupConfig = Class.inherit({
     },
 
     validate() {
-        /**
-         * @name dxValidationGroupResult
-         * @type Object
-         */
         const result = {
             isValid: true,
             brokenRules: [],
@@ -631,10 +582,6 @@ const ValidationEngine = {
     },
 
     validate(value, rules, name) {
-        /**
-         * @name dxValidatorResult
-         * @type Object
-         */
         let result = {
             name: name,
             value: value,

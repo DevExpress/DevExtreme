@@ -28,15 +28,7 @@ const SlideOut = CollectionWidget.inherit({
     },
 
     _getDefaultOptions: function() {
-        /**
-        * @name dxSlideOutItem
-        * @inherits CollectionWidgetItem
-        * @type object
-        */
-
         return extend(this.callBase(), {
-
-
             activeStateEnabled: false,
 
             menuItemTemplate: 'menuItem',

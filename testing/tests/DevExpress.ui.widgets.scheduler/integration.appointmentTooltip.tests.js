@@ -1312,4 +1312,36 @@ QUnit.module('New common tooltip for compact and cell appointments', moduleConfi
         assert.equal(findButton(0).option('text'), getExpectedText(0), 'dxButton component should placed in first item of compact tooltip');
         assert.equal(findButton(1).option('text'), getExpectedText(1), 'dxButton component should placed in second item of compact tooltip');
     });
+
+    test('onAppointmentDblClick should have correct targetedAppointmentData', function(assert) {
+        const scheduler = createScheduler({
+            views: [{
+                type: 'week',
+                maxAppointmentsPerCell: 1,
+            }],
+            currentDate: new Date(2020, 11, 1),
+            dataSource: [{
+                startDate: new Date(2020, 11, 1, 9),
+                endDate: new Date(2020, 11, 1, 9, 30),
+                recurrenceRule: 'FREQ=DAILY',
+            }, {
+                startDate: new Date(2020, 11, 1, 9),
+                endDate: new Date(2020, 11, 1, 9, 30),
+                recurrenceRule: 'FREQ=DAILY',
+            }],
+            currentView: 'week',
+            onAppointmentClick: ({ targetedAppointmentData }) => {
+                const expectedAppointment = {
+                    startDate: new Date(2020, 11, 3, 9),
+                    endDate: new Date(2020, 11, 3, 9, 30),
+                    recurrenceRule: 'FREQ=DAILY',
+                };
+                assert.deepEqual(targetedAppointmentData, expectedAppointment, 'Correct targeted appointment');
+            },
+        });
+
+        scheduler.appointments.compact.click(2);
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentPopup.dialog.hide();
+    });
 });

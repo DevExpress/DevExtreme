@@ -1,9 +1,16 @@
 import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
 import dxPivotGrid, { dxPivotGridPivotGridCell } from './ui/pivot_grid';
+import { ExportLoadPanel } from './exporter/export_load_panel';
 
+/**
+* @docid
+* @namespace DevExpress.excelExporter
+* @prevFileNamespace DevExpress
+* @type object
+*/
 export interface ExcelDataGridCell {
     /**
-     * @docid ExcelDataGridCell.column
+     * @docid
      * @public
      */
     column?: dxDataGridColumn;
@@ -13,127 +20,102 @@ export interface ExcelDataGridCell {
      */
     data?: any;
     /**
-     * @docid ExcelDataGridCell.groupIndex
+     * @docid
      * @public
      */
     groupIndex?: number;
     /**
-     * @docid ExcelDataGridCell.groupSummaryItems
+     * @docid
      * @public
      */
-    groupSummaryItems?: Array<{ name?: string, value?: any }>;
+    groupSummaryItems?: Array<{
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress
+      */
+      name?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress
+      */
+      value?: any
+    }>;
     /**
-     * @docid ExcelDataGridCell.rowType
+     * @docid
      * @public
      */
     rowType?: string;
     /**
-     * @docid ExcelDataGridCell.totalSummaryItemName
+     * @docid
      * @public
      */
     totalSummaryItemName?: string;
     /**
-     * @docid ExcelDataGridCell.value
+     * @docid
      * @public
      */
     value?: any;
 }
 
 /**
-* @docid ExcelPivotGridCell
+* @docid
 * @namespace DevExpress.excelExporter
 * @inherits dxPivotGridPivotGridCell
 */
 export interface ExcelPivotGridCell extends dxPivotGridPivotGridCell {
     /**
-     * @docid ExcelPivotGridCell.area
+     * @docid
      * @public
      */
     area?: string;
     /**
-     * @docid ExcelPivotGridCell.rowIndex
+     * @docid
      * @public
      */
     rowIndex?: number;
     /**
-     * @docid ExcelPivotGridCell.columnIndex
+     * @docid
      * @public
      */
     columnIndex?: number;
 }
 
+/**
+* @docid
+* @prevFileNamespace DevExpress
+* @namespace DevExpress.excelExporter
+* @type object
+*/
 export interface CellAddress {
     /**
-     * @docid CellAddress.row
+     * @docid
      * @public
      */
     row?: number;
     /**
-     * @docid CellAddress.column
+     * @docid
      * @public
      */
     column?: number;
 }
 
+/**
+* @docid
+* @prevFileNamespace DevExpress
+* @namespace DevExpress.excelExporter
+* @type object
+*/
 export interface CellRange {
     /**
-     * @docid CellRange.from
+     * @docid
      * @public
      */
     from?: CellAddress;
     /**
-     * @docid CellRange.to
+     * @docid
      * @public
      */
     to?: CellAddress;
-}
-
-export interface ExportLoadPanel {
-    /**
-     * @docid ExportLoadPanel.enabled
-     * @default true
-     */
-    enabled?: boolean;
-    /**
-     * @docid ExportLoadPanel.text
-     * @default "Exporting..."
-     */
-    text?: string;
-    /**
-     * @docid ExportLoadPanel.width
-     * @default 200
-     */
-    width?: number;
-    /**
-     * @docid ExportLoadPanel.height
-     * @default 90
-     */
-    height?: number;
-    /**
-     * @docid ExportLoadPanel.showIndicator
-     * @default true
-     */
-    showIndicator?: boolean;
-    /**
-     * @docid ExportLoadPanel.indicatorSrc
-     * @default ""
-     */
-    indicatorSrc?: string;
-    /**
-     * @docid ExportLoadPanel.showPane
-     * @default true
-     */
-    showPane?: boolean;
-    /**
-     * @docid ExportLoadPanel.shading
-     * @default false
-     */
-    shading?: boolean;
-    /**
-     * @docid ExportLoadPanel.shadingColor
-     * @default ''
-     */
-    shadingColor?: string;
 }
 
 /**
@@ -143,56 +125,56 @@ export interface ExportLoadPanel {
 */
 export interface ExcelExportBaseProps {
     /**
-     * @docid ExcelExportBaseProps.worksheet
+     * @docid
      * @default undefined
      * @public
      */
     worksheet?: object;
     /**
-     * @docid ExcelExportBaseProps.topLeftCell
+     * @docid
      * @default { row: 1, column: 1 }
      * @public
      */
     topLeftCell?: CellAddress | string;
     /**
-     * @docid ExcelExportBaseProps.keepColumnWidths
+     * @docid
      * @default true
      * @public
      */
     keepColumnWidths?: boolean;
     /**
-     * @docid ExcelExportBaseProps.loadPanel
+     * @docid
      * @public
      */
     loadPanel?: ExportLoadPanel;
 }
 
 /**
-* @docid ExcelExportDataGridProps
+* @docid
 * @namespace DevExpress.excelExporter
 * @inherits ExcelExportBaseProps
 */
 export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
     /**
-     * @docid ExcelExportDataGridProps.component
+     * @docid
      * @default undefined
      * @public
      */
     component?: dxDataGrid;
     /**
-     * @docid ExcelExportDataGridProps.selectedRowsOnly
+     * @docid
      * @default false
      * @public
      */
     selectedRowsOnly?: boolean;
     /**
-     * @docid ExcelExportDataGridProps.autoFilterEnabled
+     * @docid
      * @default false
      * @public
      */
     autoFilterEnabled?: boolean;
     /**
-     * @docid ExcelExportDataGridProps.customizeCell
+     * @docid
      * @type_function_param1 options:Object
      * @type_function_param1_field1 gridCell:ExcelDataGridCell
      * @type_function_param1_field2 excelCell:Object
@@ -208,13 +190,13 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
 */
 export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
     /**
-     * @docid ExcelExportPivotGridProps.component
+     * @docid
      * @default undefined
      * @public
      */
     component?: dxPivotGrid;
     /**
-     * @docid ExcelExportPivotGridProps.customizeCell
+     * @docid
      * @type_function_param1 options:Object
      * @type_function_param1_field1 pivotCell:ExcelPivotGridCell
      * @type_function_param1_field2 excelCell:Object

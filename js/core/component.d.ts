@@ -4,7 +4,7 @@ import {
 
 export interface ComponentOptions<T = Component> {
   /**
-   * @docid ComponentOptions.onDisposing
+   * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
    * @default null
@@ -14,7 +14,7 @@ export interface ComponentOptions<T = Component> {
    */
   onDisposing?: ((e: { component?: T }) => any);
   /**
-   * @docid ComponentOptions.onInitialized
+   * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
    * @type_function_param1_field2 element:dxElement
@@ -25,7 +25,7 @@ export interface ComponentOptions<T = Component> {
    */
   onInitialized?: ((e: { component?: T, element?: dxElement }) => any);
   /**
-   * @docid ComponentOptions.onOptionChanged
+   * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
    * @type_function_param1_field4 name:string
@@ -39,7 +39,7 @@ export interface ComponentOptions<T = Component> {
   onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => any);
 }
 /**
-* @docid Component
+* @docid
 * @module core/component
 * @export default
 * @namespace DevExpress
@@ -50,21 +50,21 @@ export interface ComponentOptions<T = Component> {
 export default class Component {
   constructor(options?: ComponentOptions);
   /**
-   * @docid component.beginupdate
+   * @docid
    * @publicName beginUpdate()
    * @prevFileNamespace DevExpress.core
    * @public
    */
   beginUpdate(): void;
   /**
-   * @docid component.endupdate
+   * @docid
    * @publicName endUpdate()
    * @prevFileNamespace DevExpress.core
    * @public
    */
   endUpdate(): void;
   /**
-   * @docid component.instance
+   * @docid
    * @publicName instance()
    * @return this
    * @prevFileNamespace DevExpress.core
@@ -72,7 +72,7 @@ export default class Component {
    */
   instance(): this;
   /**
-   * @docid Component.off
+   * @docid
    * @publicName off(eventName)
    * @param1 eventName:string
    * @return this
@@ -81,7 +81,7 @@ export default class Component {
    */
   off(eventName: string): this;
   /**
-   * @docid Component.off
+   * @docid
    * @publicName off(eventName, eventHandler)
    * @param1 eventName:string
    * @param2 eventHandler:function
@@ -91,7 +91,7 @@ export default class Component {
    */
   off(eventName: string, eventHandler: Function): this;
   /**
-   * @docid Component.on
+   * @docid
    * @publicName on(eventName, eventHandler)
    * @param1 eventName:string
    * @param2 eventHandler:function
@@ -101,7 +101,7 @@ export default class Component {
    */
   on(eventName: string, eventHandler: Function): this;
   /**
-   * @docid Component.on
+   * @docid
    * @publicName on(events)
    * @param1 events:object
    * @return this
@@ -110,7 +110,7 @@ export default class Component {
    */
   on(events: any): this;
   /**
-   * @docid component.option
+   * @docid
    * @publicName option()
    * @return object
    * @prevFileNamespace DevExpress.core
@@ -118,7 +118,7 @@ export default class Component {
    */
   option(): any;
   /**
-   * @docid component.option
+   * @docid
    * @publicName option(optionName)
    * @param1 optionName:string
    * @return any
@@ -127,7 +127,7 @@ export default class Component {
    */
   option(optionName: string): any;
   /**
-   * @docid component.option
+   * @docid
    * @publicName option(optionName, optionValue)
    * @param1 optionName:string
    * @param2 optionValue:any
@@ -136,7 +136,7 @@ export default class Component {
    */
   option(optionName: string, optionValue: any): void;
   /**
-   * @docid component.option
+   * @docid
    * @publicName option(options)
    * @param1 options:object
    * @prevFileNamespace DevExpress.core
@@ -144,7 +144,7 @@ export default class Component {
    */
   option(options: any): void;
   /**
-   * @docid component.resetOption
+   * @docid
    * @publicName resetOption(optionName)
    * @param1 optionName:string
    * @prevFileNamespace DevExpress.core

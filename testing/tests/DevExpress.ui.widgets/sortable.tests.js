@@ -3325,6 +3325,21 @@ QUnit.module('update', moduleConfig, () => {
         assert.notOk(getElement(0).hasClass('dx-sortable-source-hidden'), 'source-hidden class is removed');
     });
 
+    QUnit.test('source element should be cleared after change fromIndex to null (T952492)', function(assert) {
+        const sortable = this.createSortable({ dropFeedbackMode: 'push' });
+
+        sortable.option('fromIndex', 0);
+        repaintItems(2);
+
+        // act
+        sortable.update();
+        sortable.option('fromIndex', null);
+
+        // assert
+        assert.notOk(getElement(0).hasClass('dx-sortable-source'), 'source class is removed');
+        assert.notOk(getElement(0).hasClass('dx-sortable-source-hidden'), 'source-hidden class is removed');
+    });
+
     QUnit.test('itemPoints should be updated', function(assert) {
         const sortable = this.createSortable({ dropFeedbackMode: 'push' });
 

@@ -115,16 +115,6 @@ const ListEdit = ListBase.inherit({
             */
             selectAllText: localizationMessage.format('dxList-selectAll'),
 
-            /**
-            * @name dxListOptions.menuItems.text
-            * @type string
-            */
-            /**
-            * @name dxListOptions.menuItems.action
-            * @type function
-            * @type_function_param1 itemElement:dxElement
-            * @type_function_param2 itemData:object
-            */
             menuItems: [],
 
             menuMode: 'context',

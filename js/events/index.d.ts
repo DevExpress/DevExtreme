@@ -1,38 +1,38 @@
 import '../jquery_augmentation';
 
 /**
- * @docid dxEvent
+ * @docid
  * @section commonObjectStructures
  * @prevFileNamespace DevExpress.events
  * @public
  */
 export class dxEvent {
     /**
-     * @docid dxEvent.currentTarget
+     * @docid
      * @prevFileNamespace DevExpress.events
      * @public
      */
     currentTarget: Element;
     /**
-     * @docid dxEvent.data
+     * @docid
      * @prevFileNamespace DevExpress.events
      * @public
      */
     data: any;
     /**
-     * @docid dxEvent.delegateTarget
+     * @docid
      * @prevFileNamespace DevExpress.events
      * @public
      */
     delegateTarget: Element;
     /**
-     * @docid dxEvent.target
+     * @docid
      * @prevFileNamespace DevExpress.events
      * @public
      */
     target: Element;
     /**
-     * @docid dxEvent.isDefaultPrevented
+     * @docid
      * @publicName isDefaultPrevented()
      * @return boolean
      * @prevFileNamespace DevExpress.events
@@ -40,7 +40,7 @@ export class dxEvent {
      */
     isDefaultPrevented(): boolean;
     /**
-     * @docid dxEvent.isImmediatePropagationStopped
+     * @docid
      * @publicName isImmediatePropagationStopped()
      * @return boolean
      * @prevFileNamespace DevExpress.events
@@ -48,7 +48,7 @@ export class dxEvent {
      */
     isImmediatePropagationStopped(): boolean;
     /**
-     * @docid dxEvent.isPropagationStopped
+     * @docid
      * @publicName isPropagationStopped()
      * @return boolean
      * @prevFileNamespace DevExpress.events
@@ -56,21 +56,21 @@ export class dxEvent {
      */
     isPropagationStopped(): boolean;
     /**
-     * @docid dxEvent.preventDefault
+     * @docid
      * @publicName preventDefault()
      * @prevFileNamespace DevExpress.events
      * @public
      */
     preventDefault(): void;
     /**
-     * @docid dxEvent.stopImmediatePropagation
+     * @docid
      * @publicName stopImmediatePropagation()
      * @prevFileNamespace DevExpress.events
      * @public
      */
     stopImmediatePropagation(): void;
     /**
-     * @docid dxEvent.stopPropagation
+     * @docid
      * @publicName stopPropagation()
      * @prevFileNamespace DevExpress.events
      * @public
@@ -79,7 +79,7 @@ export class dxEvent {
 }
 
 /**
- * @docid event
+ * @docid
  * @type dxEvent|jQuery.Event
  * @hidden
  * @prevFileNamespace DevExpress.events
@@ -87,7 +87,7 @@ export class dxEvent {
 export type event = dxEvent | JQueryEventObject;
 
 /**
- * @docid eventsHandler
+ * @docid
  * @publicName handler(event, extraParameters)
  * @param1 event:dxEvent
  * @param2 extraParameters:object

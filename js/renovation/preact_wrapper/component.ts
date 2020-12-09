@@ -93,10 +93,6 @@ export default class PreactWrapper extends DOMComponent {
       this._preactReplaced ? undefined : containerNode,
     );
     this._preactReplaced = true;
-
-    if (containerNode.parentNode === this._documentFragment) {
-      this._documentFragment.removeChild(containerNode);
-    }
   }
 
   _render() {}
@@ -283,7 +279,7 @@ export default class PreactWrapper extends DOMComponent {
           const $children = $parent.contents();
 
           Object.keys(data).forEach((name) => {
-            if (domAdapter.isNode(data[name])) {
+            if (data[name] && domAdapter.isNode(data[name])) {
               data[name] = getPublicElement($(data[name]));
             }
           });

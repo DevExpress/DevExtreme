@@ -12,7 +12,7 @@ import dxSelectBox, {
 
 export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     /**
-     * @docid dxTagBoxOptions.applyValueMode
+     * @docid
      * @type Enums.EditorApplyValueMode
      * @default "instantly"
      * @prevFileNamespace DevExpress.ui
@@ -20,28 +20,28 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      */
     applyValueMode?: 'instantly' | 'useButtons';
     /**
-     * @docid dxTagBoxOptions.hideSelectedItems
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hideSelectedItems?: boolean;
     /**
-     * @docid dxTagBoxOptions.maxDisplayedTags
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxDisplayedTags?: number;
     /**
-     * @docid dxTagBoxOptions.multiline
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     multiline?: boolean;
     /**
-     * @docid dxTagBoxOptions.onMultiTagPreparing
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 multiTagElement:dxElement
@@ -54,7 +54,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      */
     onMultiTagPreparing?: ((e: { component?: dxTagBox, element?: dxElement, model?: any, multiTagElement?: dxElement, selectedItems?: Array<string | number | any>, text?: string, cancel?: boolean }) => any);
     /**
-     * @docid dxTagBoxOptions.onSelectAllValueChanged
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
@@ -64,7 +64,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      */
     onSelectAllValueChanged?: ((e: { component?: dxTagBox, element?: dxElement, model?: any, value?: boolean }) => any);
     /**
-     * @docid dxTagBoxOptions.onSelectionChanged
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 addedItems:Array<string,number,Object>
@@ -75,7 +75,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      */
     onSelectionChanged?: ((e: { component?: dxTagBox, element?: dxElement, model?: any, addedItems?: Array<string | number | any>, removedItems?: Array<string | number | any> }) => any);
     /**
-     * @docid dxTagBoxOptions.selectAllMode
+     * @docid
      * @type Enums.SelectAllMode
      * @default 'page'
      * @prevFileNamespace DevExpress.ui
@@ -83,28 +83,28 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      */
     selectAllMode?: 'allPages' | 'page';
     /**
-     * @docid dxTagBoxOptions.selectedItems
+     * @docid
      * @readonly
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<string | number | any>;
     /**
-     * @docid dxTagBoxOptions.showDropDownButton
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
-     * @docid dxTagBoxOptions.showMultiTagOnly
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showMultiTagOnly?: boolean;
     /**
-     * @docid dxTagBoxOptions.tagTemplate
+     * @docid
      * @default "tag"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemElement:dxElement
@@ -114,7 +114,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      */
     tagTemplate?: template | ((itemData: any, itemElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxTagBoxOptions.value
+     * @docid
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -122,7 +122,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     value?: Array<string | number | any>;
 }
 /**
- * @docid dxTagBox
+ * @docid
  * @isEditor
  * @inherits dxSelectBox
  * @module ui/tag_box

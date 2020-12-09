@@ -16,49 +16,62 @@ import {
 
 export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectionWidgetOptions<T> {
     /**
-     * @docid dxMenuBaseOptions.activeStateEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxMenuBaseOptions.animation
+     * @docid
      * @default { show: { type: "fade", from: 0, to: 1, duration: 100 }, hide: { type: "fade", from: 1, to: 0, duration: 100 } }
      * @ref
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    animation?: { hide?: animationConfig, show?: animationConfig };
+    animation?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default { type: "fade", from: 1, to: 0, duration: 100 }
+      */
+      hide?: animationConfig,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default { type: "fade", from: 0, to: 1, duration: 100 }
+      */
+      show?: animationConfig
+    };
     /**
-     * @docid dxMenuBaseOptions.cssClass
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cssClass?: string;
     /**
-     * @docid dxMenuBaseOptions.dataSource
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<dxMenuBaseItem> | DataSource | DataSourceOptions;
     /**
-     * @docid dxMenuBaseOptions.items
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxMenuBaseItem>;
     /**
-     * @docid dxMenuBaseOptions.selectByClick
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectByClick?: boolean;
     /**
-     * @docid dxMenuBaseOptions.selectionMode
+     * @docid
      * @type Enums.MenuSelectionMode
      * @default none
      * @prevFileNamespace DevExpress.ui
@@ -66,16 +79,43 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
      */
     selectionMode?: 'none' | 'single';
     /**
-     * @docid dxMenuBaseOptions.showSubmenuMode
+     * @docid
      * @type Object|Enums.ShowSubmenuMode
-     * @default { name: "onHover", delay: { show: 0, hide: 0 } }
+     * @default { name: "onHover", delay: { show: 50, hide: 300 } }
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showSubmenuMode?: { delay?: { hide?: number, show?: number } | number, name?: 'onClick' | 'onHover' } | 'onClick' | 'onHover';
+    showSubmenuMode?: {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default { show: 50, hide: 300 }
+      */
+      delay?: {
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.ui
+        * @default 300
+        */
+        hide?: number,
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.ui
+        * @default 50
+        */
+        show?: number
+      } | number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @type Enums.ShowSubmenuMode
+      * @default "onHover"
+      */
+      name?: 'onClick' | 'onHover'
+    } | 'onClick' | 'onHover';
 }
 /**
- * @docid dxMenuBase
+ * @docid
  * @inherits HierarchicalCollectionWidget
  * @hidden
  * @prevFileNamespace DevExpress.ui
@@ -84,7 +124,7 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
     constructor(element: Element, options?: dxMenuBaseOptions)
     constructor(element: JQuery, options?: dxMenuBaseOptions)
     /**
-     * @docid dxMenuBase.selectItem
+     * @docid
      * @publicName selectItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
@@ -92,7 +132,7 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
      */
     selectItem(itemElement: Element): void;
     /**
-     * @docid dxMenuBase.unselectItem
+     * @docid
      * @publicName unselectItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui

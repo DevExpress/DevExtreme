@@ -124,10 +124,6 @@ const CollectionWidget = Widget.inherit({
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
             dataSource: null,
-            /**
-            * @name CollectionWidgetItem
-            * @type object
-            */
 
             _itemAttributes: {},
             itemTemplateProperty: 'template',

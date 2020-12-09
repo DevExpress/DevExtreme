@@ -5,7 +5,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
 const registerComponent = require('core/component_registrator');
 const resizeCallbacks = require('core/utils/resize_callbacks');
 const baseGaugeModule = require('viz/gauges/base_gauge');
-const dxBaseGauge = baseGaugeModule.dxBaseGauge;
+const BaseGauge = baseGaugeModule.BaseGauge;
 const formatValue = baseGaugeModule.formatValue;
 const getSampleText = baseGaugeModule.getSampleText;
 const titleModule = require('viz/core/title');
@@ -17,9 +17,9 @@ const themeManagerModule = require('viz/gauges/theme_manager');
 const ThemeManager = themeManagerModule.ThemeManager;
 const Tracker = require('viz/gauges/tracker');
 
-registerComponent('dxBaseGauge', dxBaseGauge);
+registerComponent('BaseGauge', BaseGauge);
 
-const factory = dxBaseGauge.prototype._factory;
+const factory = BaseGauge.prototype._factory;
 
 const BASE_METHODS = ['_invalidate', '_refresh'];
 // var ABSTRACT_FIELDS = ["_width", "_height", "_rootRect"];
@@ -40,11 +40,11 @@ StubThemeManager.prototype.setTheme = function() {
 };
 
 $.each(BASE_METHODS, function(_, name) {
-    dxBaseGauge.prototype[name] = sinon.stub();
+    BaseGauge.prototype[name] = sinon.stub();
 });
 
 $.each(ABSTRACT_METHODS, function(_, name) {
-    dxBaseGauge.prototype[name] = sinon.stub();
+    BaseGauge.prototype[name] = sinon.stub();
 });
 
 rendererModule.Renderer = sinon.spy(function() {
@@ -87,15 +87,15 @@ const environment = {
         this.title = new StubTitle();
         const baseMethods = this.baseMethods = {};
         $.each(BASE_METHODS, function(_, name) {
-            baseMethods[name] = dxBaseGauge.prototype[name];
+            baseMethods[name] = BaseGauge.prototype[name];
         });
         const abstractMethods = this.abstractMethods = {};
         $.each(ABSTRACT_METHODS, function(_, name) {
-            abstractMethods[name] = dxBaseGauge.prototype[name];
+            abstractMethods[name] = BaseGauge.prototype[name];
         });
         abstractMethods._getDefaultSize.returns({});
         // $.each(ABSTRACT_FIELDS, function (_, name) {
-        //    delete dxBaseGauge.prototype[name];
+        //    delete BaseGauge.prototype[name];
         // });
         this.clock = sinon.useFakeTimers();
         // this.setAbstractField("_width", 200);
@@ -113,11 +113,11 @@ const environment = {
         this.title = null;
 
         $.each(BASE_METHODS, function(_, name) {
-            dxBaseGauge.prototype[name].reset();
+            BaseGauge.prototype[name].reset();
         });
 
         $.each(ABSTRACT_METHODS, function(_, name) {
-            dxBaseGauge.prototype[name].reset();
+            BaseGauge.prototype[name].reset();
         });
 
         rendererModule.Renderer.reset();
@@ -126,7 +126,7 @@ const environment = {
         factory.createTracker.reset();
     },
     createGauge: function(options) {
-        return new dxBaseGauge(this.$container, options);
+        return new BaseGauge(this.$container, options);
     },
     waitForCallback: function() {
         this.clock.tick(0);
@@ -138,7 +138,7 @@ QUnit.module('General', environment);
 QUnit.test('Instance type', function(assert) {
     const gauge = this.createGauge();
 
-    assert.ok(gauge instanceof dxBaseGauge);
+    assert.ok(gauge instanceof BaseGauge);
 });
 
 QUnit.test('Components creation', function(assert) {

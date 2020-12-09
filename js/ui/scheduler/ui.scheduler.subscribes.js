@@ -19,6 +19,9 @@ const toMs = dateUtils.dateToMilliseconds;
 const HOUR_MS = toMs('hour');
 
 const subscribes = {
+    getTimeZoneCalculator: function() {
+        return this.timeZoneCalculator;
+    },
     isCurrentViewAgenda: function() {
         return this.option('currentView') === 'agenda';
     },
@@ -387,7 +390,8 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
-        const targetedData = this.getTargetedAppointment(config.itemData, config.itemElement);
+        const { itemData, itemElement, targetedAppointment } = config;
+        const targetedData = targetedAppointment || this.getTargetedAppointment(itemData, itemElement);
 
         return {
             appointmentData: config.itemData,
@@ -587,21 +591,8 @@ const subscribes = {
         return result;
     },
 
-    getAgendaRows: function(options) {
-        const renderingStrategy = this._layoutManager.getRenderingStrategyInstance();
-        const calculateRows = renderingStrategy.calculateRows.bind(renderingStrategy);
-        const d = new Deferred();
-
-        function rowsCalculated(appointments) {
-            const result = calculateRows(appointments, options.agendaDuration, options.currentDate);
-            this._dataSourceLoadedCallback.remove(rowsCalculated);
-
-            d.resolve(result);
-        }
-
-        this._dataSourceLoadedCallback.add(rowsCalculated);
-
-        return d.promise();
+    getLayoutManager: function() {
+        return this._layoutManager;
     },
 
     getAgendaVerticalStepHeight: function() {
@@ -781,12 +772,6 @@ const subscribes = {
 
     isAdaptive: function() {
         return this.option('adaptivityEnabled');
-    },
-
-    moveBack: function() {
-        const dragBehavior = this.getWorkSpace().dragBehavior;
-
-        dragBehavior && dragBehavior.moveBack();
     },
 
     validateDayHours: function() {

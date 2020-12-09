@@ -1,18 +1,18 @@
 /**
- * @docid dxSchedulerTimeZone
+ * @docid
  * @prevFileNamespace DevExpress
  */
 export interface dxSchedulerTimeZone {
-    /** 
-     * @docid dxSchedulerTimeZone.id
+    /**
+     * @docid
      */
     id: string;
     /**
-     * @docid dxSchedulerTimeZone.offset
+     * @docid
      */
     offset: number;
     /**
-     * @docid dxSchedulerTimeZone.title
+     * @docid
      */
     title: string;
 }
