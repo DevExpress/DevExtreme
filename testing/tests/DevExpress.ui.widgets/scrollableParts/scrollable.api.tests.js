@@ -714,10 +714,7 @@ class ScrollableTestHelper {
     checkScrollOffset({ left, top, maxScrollOffset, epsilon = 0.001 }, message) {
         const scrollOffset = getScrollOffset(this.$scrollable);
         QUnit.assert.roughEqual(this.getMaxScrollOffset().horizontal, maxScrollOffset, epsilon, 'horizontal maxScrollOffset');
-
-        const expectedScrollOffsetLeft = left;
-
-        QUnit.assert.roughEqual(-scrollOffset.left, expectedScrollOffsetLeft, epsilon, 'scrollOffset.left');
+        QUnit.assert.roughEqual(-scrollOffset.left, left, epsilon, 'scrollOffset.left');
         QUnit.assert.roughEqual(-scrollOffset.top, top, epsilon, 'scrollOffset.top');
         QUnit.assert.roughEqual(this.scrollable.scrollLeft(), left, epsilon, message || 'scrollable.scrollLeft()');
         QUnit.assert.roughEqual(this.scrollable.scrollTop(), top, epsilon, 'scrollable.scrollTop()');
