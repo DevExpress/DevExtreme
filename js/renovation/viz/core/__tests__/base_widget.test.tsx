@@ -12,7 +12,7 @@ import { Canvas } from '../common/types.d';
 
 describe('BaseWidget', () => {
   describe('View', () => {
-    it('should pass all necessary properties to the svg element (by default)', () => {
+    it('should pass size property and defs child element to the svg element (by default)', () => {
       const widget = shallow(<BaseWidgetComponent {...{ props: {} } as any} /> as JSX.Element);
 
       expect(widget.find(RootSvgElement).props()).toMatchObject({
@@ -22,7 +22,7 @@ describe('BaseWidget', () => {
       expect(widget.find(RootSvgElement).childAt(0).html()).toEqual('<defs></defs>');
     });
 
-    it('should pass all necessary properties', () => {
+    it('should pass all necessary properties: canvas and classes', () => {
       const props = {
         canvas: {
           width: 820,
@@ -112,18 +112,20 @@ describe('BaseWidget', () => {
   });
 
   describe('Methods', () => {
-    it('svg method', () => {
-      const widget = new BaseWidget({ });
-      const root = { } as SVGElement;
-      widget.svgElementRef = root;
+    describe('svg method', () => {
+      it('should return svg root element', () => {
+        const widget = new BaseWidget({ });
+        const root = { } as SVGElement;
+        widget.svgElementRef = root;
 
-      expect(widget.svg()).toEqual(root);
+        expect(widget.svg()).toEqual(root);
+      });
     });
   });
 
   describe('Logic', () => {
     describe('cssClasses', () => {
-      it('default classes', () => {
+      it('should add default classes', () => {
         const widget = new BaseWidget({ });
         expect(widget.cssClasses).toBe('dx-widget dx-visibility-change-handler');
       });
@@ -135,19 +137,19 @@ describe('BaseWidget', () => {
     });
 
     describe('pointerEventsState', () => {
-      it('default', () => {
+      it('should return undefined by default', () => {
         const widget = new BaseWidget({ });
 
         expect(widget.pointerEventsState).toBe(undefined);
       });
 
-      it('set visible state', () => {
+      it('should set visible state', () => {
         const widget = new BaseWidget({ pointerEvents: 'visible' });
 
         expect(widget.pointerEventsState).toBe('visible');
       });
 
-      it('set disabled state', () => {
+      it('should set disabled state', () => {
         const widget = new BaseWidget({ disabled: true });
 
         expect(widget.pointerEventsState).toBe('none');
@@ -337,14 +339,14 @@ describe('BaseWidget', () => {
           });
         });
 
-      it('config is undefined', () => {
+      it('should return global config when context config is undefined', () => {
         config().rtlEnabled = false;
         const widget = new BaseWidget({ rtlEnabled: false });
         widget.config = undefined;
         expect(widget.shouldRenderConfigProvider).toBe(true);
       });
 
-      it('config and props are undefined', () => {
+      it('should return global config when props.rtlEnabled is undefined', () => {
         config().rtlEnabled = true;
         const widget = new BaseWidget({ rtlEnabled: undefined });
         widget.config = undefined;

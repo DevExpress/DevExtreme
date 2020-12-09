@@ -42,7 +42,7 @@ describe('TextSvgElement', () => {
       };
     };
 
-    it('Default render (empty text)', () => {
+    it('should pass empty text (no content)', () => {
       const { props, instance, children } = render(undefined, undefined, { styles: { whiteSpace: 'pre' }, textAnchor: 'middle', isStroked: false });
       expect(props).toMatchObject({
         x: 10,
@@ -55,7 +55,7 @@ describe('TextSvgElement', () => {
       expect(children).toHaveLength(0);
     });
 
-    it('Default render', () => {
+    it('should pass text from props', () => {
       const { props, instance, children } = render('Some text', [], { styles: { whiteSpace: 'pre' }, textAnchor: 'middle', isStroked: false });
       expect(props).toMatchObject({
         x: 10,
@@ -69,7 +69,7 @@ describe('TextSvgElement', () => {
       expect(children.at(0).text()).toBe('Some text');
     });
 
-    it('Multiline render', () => {
+    it('should pass multiline text', () => {
       const { children } = render('Some\ntext', [
         { style: { fontSize: '12px' }, className: 'first-line', value: 'Some' },
         { style: { fontSize: '14px' }, className: 'second-line', value: 'text' },
@@ -83,7 +83,7 @@ describe('TextSvgElement', () => {
       expect(children.at(1).prop('style')).toStrictEqual({ fontSize: '14px' });
     });
 
-    it('Multiline render (text with stroke)', () => {
+    it('should pass multiline text with stroke', () => {
       const { children } = render('Some\ntext', [
         { style: { fontSize: '12px' }, className: 'first-line', value: 'Some' },
         { style: { fontSize: '14px' }, className: 'second-line', value: 'text' },
@@ -100,7 +100,7 @@ describe('TextSvgElement', () => {
 
   describe('Behavior', () => {
     describe('effectUpdateText', () => {
-      it('Single line text', () => {
+      it('should not create tspan for single line text', () => {
         const text = new TextSvgElement({
           text: 'Text',
         });
@@ -110,7 +110,7 @@ describe('TextSvgElement', () => {
         expect(text.parseTspanElements).toHaveBeenCalledTimes(0);
       });
 
-      it('Align text nodes to center', () => {
+      it('should align text nodes to center', () => {
         const text = new TextSvgElement({
           text: 'Multiline\ntext',
           textsAlignment: 'center',
@@ -128,7 +128,7 @@ describe('TextSvgElement', () => {
         expect(text.textRef.children[1].setAttribute).toHaveBeenCalledTimes(0);
       });
 
-      it('Align text nodes to right', () => {
+      it('should align text nodes to right', () => {
         const text = new TextSvgElement({
           text: 'Multiline\ntext',
           textsAlignment: 'right',
@@ -147,7 +147,7 @@ describe('TextSvgElement', () => {
         expect(text.textRef.children[1].setAttribute).toHaveBeenCalledWith('dx', 30);
       });
 
-      it('Align text nodes to leftt', () => {
+      it('should align text nodes to left', () => {
         const text = new TextSvgElement({
           text: 'Multiline\ntext',
           textsAlignment: 'left',
@@ -166,7 +166,7 @@ describe('TextSvgElement', () => {
         expect(text.textRef.children[1].setAttribute).toHaveBeenCalledWith('dx', -30);
       });
 
-      it('Locate text nodes by default', () => {
+      it('should locate text nodes by default', () => {
         const text = new TextSvgElement({
           text: 'Multiline\ntext',
           x: 50,
@@ -188,7 +188,7 @@ describe('TextSvgElement', () => {
         expect(text.textRef.children[1].setAttribute).lastCalledWith('dy', 12);
       });
 
-      it('Locate text nodes with style', () => {
+      it('should locate text nodes with style', () => {
         const text = new TextSvgElement({
           text: '<div><p>Text1</p><br /><p style="font-size: 18px">TextText2</p><p>StilText2</p></div>',
           x: 50,
@@ -213,7 +213,7 @@ describe('TextSvgElement', () => {
         expect(text.textRef.children[1].setAttribute).lastCalledWith('dy', 18);
       });
 
-      it('dashStyle=dash', () => {
+      it('should set dash attributes to text when dashStyle=dash', () => {
         const text = new TextSvgElement({
           text: 'Multiline\ntext',
           dashStyle: 'dash',
@@ -229,7 +229,7 @@ describe('TextSvgElement', () => {
         expect(text.textRef.setAttribute).toHaveBeenCalledWith('stroke-dasharray', '4,3');
       });
 
-      it('dashStyle=longdash dot', () => {
+      it('should set dash attributes to text when dashStyle=longdash dot', () => {
         const text = new TextSvgElement({
           text: 'Multiline\ntext',
           dashStyle: 'longdash dot',
@@ -246,7 +246,7 @@ describe('TextSvgElement', () => {
         expect(text.textRef.setAttribute).toHaveBeenCalledWith('stroke-dasharray', '32,12,4,12');
       });
 
-      it('transformation', () => {
+      it('should set transformation attributes to text', () => {
         const text = new TextSvgElement({
           text: 'Multiline\ntext',
           rotate: 25,
@@ -266,7 +266,7 @@ describe('TextSvgElement', () => {
         expect(text.textRef.setAttribute).toHaveBeenCalledWith('transform', 'translate(15,-25) rotate(25,0,0) scale(1.1,0.8)');
       });
 
-      it('Stroke text nodes', () => {
+      it('should pass stroke to text nodes', () => {
         const text = new TextSvgElement({
           text: 'Multiline\ntext',
           stroke: 'red',
@@ -298,7 +298,7 @@ describe('TextSvgElement', () => {
         expect(text.textRef.children[1].setAttribute).nthCalledWith(4, 'stroke-linejoin', 'round');
       });
 
-      it('Stroke text nodes - default opacity', () => {
+      it('should pass stroke to text nodes - default opacity', () => {
         const text = new TextSvgElement({
           text: 'Multiline\ntext',
           stroke: 'any',
@@ -320,24 +320,26 @@ describe('TextSvgElement', () => {
   });
 
   describe('Logic', () => {
-    it('styles (no style)', () => {
-      const text = new TextSvgElement({ });
+    describe('styles', () => {
+      it('should apply whiteSpace by default', () => {
+        const text = new TextSvgElement({ });
 
-      expect(text.styles).toStrictEqual({ whiteSpace: 'pre' });
-    });
+        expect(text.styles).toStrictEqual({ whiteSpace: 'pre' });
+      });
 
-    it('styles', () => {
-      const text = new TextSvgElement({ styles: { fill: 'red', fontSize: '14px' } });
+      it('should apply styles from props', () => {
+        const text = new TextSvgElement({ styles: { fill: 'red', fontSize: '14px' } });
 
-      expect(text.styles).toStrictEqual({
-        whiteSpace: 'pre',
-        fill: 'red',
-        fontSize: '14px',
+        expect(text.styles).toStrictEqual({
+          whiteSpace: 'pre',
+          fill: 'red',
+          fontSize: '14px',
+        });
       });
     });
 
     describe('isStroked', () => {
-      it('At least one of the properties is not defined: stroke or strokeWidth', () => {
+      it('should return false if at least one of the properties is not defined: stroke or strokeWidth', () => {
         const text0 = new TextSvgElement({ });
         const text1 = new TextSvgElement({ stroke: '#232323' });
         const text2 = new TextSvgElement({ strokeWidth: 2 });
@@ -347,19 +349,19 @@ describe('TextSvgElement', () => {
         expect(text2.isStroked).toBe(false);
       });
 
-      it('Defined only both props: stroke and strokeWidth', () => {
+      it('should return true if defined both props: stroke and strokeWidth', () => {
         const text = new TextSvgElement({ stroke: '#232323', strokeWidth: 2 });
         expect(text.isStroked).toBe(true);
       });
     });
 
     describe('textAnchor', () => {
-      it('Default', () => {
+      it('should return undefined by default', () => {
         const text = new TextSvgElement({ });
         expect(text.textAnchor).toBe(undefined);
       });
 
-      it('rtl is off', () => {
+      it('should applay not inverted anchor when rtl is off', () => {
         const text0 = new TextSvgElement({ align: 'center' });
         const text1 = new TextSvgElement({ align: 'left' });
         const text2 = new TextSvgElement({ align: 'right' });
@@ -369,7 +371,7 @@ describe('TextSvgElement', () => {
         expect(text2.textAnchor).toBe('end');
       });
 
-      it('rtl is on', () => {
+      it('should applay inverted anchor when rtl is on', () => {
         const text0 = new TextSvgElement({ align: 'center' });
         text0.config = { rtlEnabled: true };
         const text1 = new TextSvgElement({ align: 'left' });
@@ -384,17 +386,17 @@ describe('TextSvgElement', () => {
     });
 
     describe('textItems', () => {
-      it('No text', () => {
+      it('should return undefined when no text', () => {
         const text = new TextSvgElement({ });
         expect(text.textItems).toBe(undefined);
       });
 
-      it('Simple text', () => {
+      it('should return undefined when simple text (single line, isStroked === false)', () => {
         const text = new TextSvgElement({ text: 'Single line text' });
         expect(text.textItems).toBe(undefined);
       });
 
-      it('Simple text with stroke', () => {
+      it('should return one text item when single line text with stroke', () => {
         const text = new TextSvgElement({ text: 'Text with stroke', stroke: '#cccccc', strokeWidth: 1 });
         expect(text.textItems).toHaveLength(1);
         expect(text.textItems?.[0]).toStrictEqual({
@@ -403,7 +405,7 @@ describe('TextSvgElement', () => {
         });
       });
 
-      it('Text with new line symbol', () => {
+      it('should return text items when text with new line symbol', () => {
         const text = new TextSvgElement({ text: 'Multi\nline\ntext' });
 
         expect(text.textItems).toHaveLength(3);
@@ -419,7 +421,7 @@ describe('TextSvgElement', () => {
         });
       });
 
-      it('Parse HTML text', () => {
+      it('should return text items from parsed HTML text', () => {
         const text = new TextSvgElement({ text: '<div style="font-size: 20px"><p style="font-size: 16px"><b>Text1</b></p><br /><p class="second-line"><i>TextText2</i></p></div>' });
 
         expect(text.textItems).toHaveLength(2);

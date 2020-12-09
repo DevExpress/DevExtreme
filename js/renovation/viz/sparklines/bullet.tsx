@@ -8,7 +8,7 @@ import {
   Consumer,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
-import { rtlEnabled } from '../core/utils';
+import { mergeRtlEnabled } from '../core/utils';
 import { BaseWidgetProps } from '../core/base_props';
 import { BaseWidget } from '../core/base_widget';
 import { createAxis } from './utils';
@@ -199,7 +199,8 @@ export class Bullet extends JSXComponent(BulletProps) {
   }
 
   get rtlEnabled(): boolean | undefined {
-    return rtlEnabled(this.props as BaseWidgetProps, this.config);
+    const { rtlEnabled } = this.props;
+    return mergeRtlEnabled(rtlEnabled, this.config);
   }
 
   get tooltipEnabled(): boolean {

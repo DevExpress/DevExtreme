@@ -6,7 +6,7 @@ import { PathSvgElement } from '../svg_path';
 
 describe('SvgPattern', () => {
   describe('View', () => {
-    it('View with custom hatching', () => {
+    it('should render with custom hatching', () => {
       const vm = {
         props: {
           id: 'DevExpress_1-hatching-1',
@@ -39,7 +39,7 @@ describe('SvgPattern', () => {
       });
     });
 
-    it('View with default hatching', () => {
+    it('should render with default hatching', () => {
       const vm = {
         props: {
           id: 'DevExpress_1-hatching-1',
@@ -75,29 +75,29 @@ describe('SvgPattern', () => {
 
   describe('Logic', () => {
     describe('step', () => {
-      it('hatching.step = undefined', () => {
+      it('should return step when hatching.step = undefined', () => {
         const pattern = new SvgPattern({ id: 'DevExpress_1-hatching-1' });
         expect(pattern.step).toBe(6);
       });
 
-      it('hatching.step = 8', () => {
+      it('should return specified hatching.step', () => {
         const pattern = new SvgPattern({ hatching: { step: 8 } });
         expect(pattern.step).toBe(8);
       });
     });
 
     describe('d', () => {
-      it('default hatching', () => {
+      it('should return path for hatching', () => {
         const pattern = new SvgPattern({ id: 'DevExpress_1-hatching-1' });
         expect(pattern.d).toBe('M 0 0 L 6 6 M -3 3 L 3 9 M 3 -3 L 9 3');
       });
 
-      it('hatching.direction = right', () => {
+      it('should return path  with hatching.direction = right', () => {
         const pattern = new SvgPattern({ hatching: { direction: 'right' } });
         expect(pattern.d).toBe('M 3 -3 L -3 3 M 0 6 L 6 0 M 9 3 L 3 9');
       });
 
-      it('hatching.step = 7', () => {
+      it('should return path when hatching.step specified', () => {
         const pattern = new SvgPattern({ hatching: { step: 7 } });
         expect(pattern.d).toBe('M 0 0 L 7 7 M -3.5 3.5 L 3.5 10.5 M 3.5 -3.5 L 10.5 3.5');
       });

@@ -172,7 +172,7 @@ describe('Bullet', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('cssClasses', () => {
-        it('default classes', () => {
+        it('should add default classes', () => {
           const bullet = new Bullet({ });
           expect(bullet.cssClasses).toBe('dxb dxb-bullet');
         });
@@ -184,7 +184,7 @@ describe('Bullet', () => {
       });
 
       describe('cssClassName', () => {
-        it('default className', () => {
+        it('should add default className', () => {
           const bullet = new Bullet({ });
           expect(bullet.cssClassName).toBe('dx-bullet');
         });
@@ -219,17 +219,17 @@ describe('Bullet', () => {
       });
 
       describe('tooltipEnabled', () => {
-        it('default', () => {
+        it('should return false by default', () => {
           const bullet = new Bullet({ });
           expect(bullet.tooltipEnabled).toBe(false);
         });
 
-        it('it\'s enough value to enabled tooltip', () => {
+        it('should return true if props.value exists', () => {
           const bullet = new Bullet({ value: 10 });
           expect(bullet.tooltipEnabled).toBe(true);
         });
 
-        it('it\'s enough target to enabled tooltip', () => {
+        it('should return true if props.target exists', () => {
           const bullet = new Bullet({ target: 100 });
           expect(bullet.tooltipEnabled).toBe(true);
         });
@@ -251,23 +251,25 @@ describe('Bullet', () => {
     });
 
     describe('Internal Methods', () => {
-      it('onCanvasChange', () => {
-        const canvas = {
-          height: 400,
-          width: 600,
-          top: 10,
-          left: 20,
-          right: 30,
-          bottom: 40,
-        };
-        const bullet = new Bullet({ });
-        bullet.onCanvasChange(canvas);
+      describe('onCanvasChange', () => {
+        it('should change canvas state', () => {
+          const canvas = {
+            height: 400,
+            width: 600,
+            top: 10,
+            left: 20,
+            right: 30,
+            bottom: 40,
+          };
+          const bullet = new Bullet({ });
+          bullet.onCanvasChange(canvas);
 
-        expect(bullet.canvasState).toEqual(canvas);
+          expect(bullet.canvasState).toEqual(canvas);
+        });
       });
 
       describe('prepareScaleProps', () => {
-        it('get default scale props by prepareScaleProps', () => {
+        it('should return default scale props (no props)', () => {
           const bullet = new Bullet({ });
           const scaleProps = bullet.prepareScaleProps();
 
@@ -280,7 +282,7 @@ describe('Bullet', () => {
           });
         });
 
-        it('get scale props by target and value (target > value > 0)', () => {
+        it('should return scale props by target and value (target > value > 0)', () => {
           const bullet = new Bullet({ target: 200, value: 100 });
           const scaleProps = bullet.prepareScaleProps();
 
@@ -293,7 +295,7 @@ describe('Bullet', () => {
           });
         });
 
-        it('get scale props by target and value (target < value < 0)', () => {
+        it('should return scale props by target and value (target < value < 0)', () => {
           const bullet = new Bullet({ target: -200, value: -100 });
           const scaleProps = bullet.prepareScaleProps();
 
@@ -306,7 +308,7 @@ describe('Bullet', () => {
           });
         });
 
-        it('get scale props by startScaleValue and endScaleValue (startScaleValue < endScaleValue)', () => {
+        it('should return scale props by startScaleValue and endScaleValue (startScaleValue < endScaleValue)', () => {
           const bullet = new Bullet({ startScaleValue: 100, endScaleValue: 200 });
           const scaleProps = bullet.prepareScaleProps();
 
@@ -319,7 +321,7 @@ describe('Bullet', () => {
           });
         });
 
-        it('get inverted scale props by startScaleValue and endScaleValue (startScaleValue < endScaleValue)', () => {
+        it('should return inverted scale props by startScaleValue and endScaleValue (startScaleValue < endScaleValue)', () => {
           const bullet = new Bullet({ startScaleValue: 200, endScaleValue: 100 });
           const scaleProps = bullet.prepareScaleProps();
 
@@ -338,7 +340,7 @@ describe('Bullet', () => {
 
         describe('getBarValueShape', () => {
           describe('value > 0', () => {
-            it('startScaleValue > 0 and value < endScaleValue', () => {
+            it('should return correct points when startScaleValue > 0 and value < endScaleValue', () => {
               const scaleProps = {
                 inverted: false,
                 value: 15,
@@ -354,7 +356,7 @@ describe('Bullet', () => {
               expect(valueShape).toEqual([100, 9, 150, 9, 150, 1, 100, 1]);
             });
 
-            it('startScaleValue > 0 and value > endScaleValue', () => {
+            it('should return correct points when startScaleValue > 0 and value > endScaleValue', () => {
               const scaleProps = {
                 inverted: false,
                 value: 25,
@@ -370,7 +372,7 @@ describe('Bullet', () => {
               expect(valueShape).toEqual([100, 9, 200, 9, 200, 1, 100, 1]);
             });
 
-            it('startScaleValue > 0 and value < startScaleValue', () => {
+            it('should return correct points when startScaleValue > 0 and value < startScaleValue', () => {
               const scaleProps = {
                 inverted: false,
                 value: 5,
@@ -386,7 +388,7 @@ describe('Bullet', () => {
               expect(valueShape).toEqual([100, 9, 100, 9, 100, 1, 100, 1]);
             });
 
-            it('startScaleValue < 0 and value < endScaleValue', () => {
+            it('should return correct points when startScaleValue < 0 and value < endScaleValue', () => {
               const scaleProps = {
                 inverted: false,
                 value: 15,
@@ -404,7 +406,7 @@ describe('Bullet', () => {
           });
 
           describe('value < 0', () => {
-            it('endScaleValue < 0 and value > startScaleValue', () => {
+            it('should return correct points when endScaleValue < 0 and value > startScaleValue', () => {
               const scaleProps = {
                 inverted: false,
                 value: -15,
@@ -420,7 +422,7 @@ describe('Bullet', () => {
               expect(valueShape).toEqual([-100, 9, -150, 9, -150, 1, -100, 1]);
             });
 
-            it('endScaleValue < 0 and value < startScaleValue', () => {
+            it('should return correct points when endScaleValue < 0 and value < startScaleValue', () => {
               const scaleProps = {
                 inverted: false,
                 value: -25,
@@ -436,7 +438,7 @@ describe('Bullet', () => {
               expect(valueShape).toEqual([-100, 9, -200, 9, -200, 1, -100, 1]);
             });
 
-            it('endScaleValue < 0 and value > endScaleValue', () => {
+            it('should return correct points when endScaleValue < 0 and value > endScaleValue', () => {
               const scaleProps = {
                 inverted: false,
                 value: -5,
@@ -452,7 +454,7 @@ describe('Bullet', () => {
               expect(valueShape).toEqual([-100, 9, -100, 9, -100, 1, -100, 1]);
             });
 
-            it('endScaleValue > 0 and value > startScaleValue', () => {
+            it('should return correct points when endScaleValue > 0 and value > startScaleValue', () => {
               const scaleProps = {
                 inverted: false,
                 value: -15,
@@ -470,35 +472,39 @@ describe('Bullet', () => {
           });
         });
 
-        it('getTargetShape', () => {
-          const scaleProps = {
-            inverted: false,
-            value: 15,
-            target: 15,
-            startScaleValue: 10,
-            endScaleValue: 20,
-          };
-          const bullet = new Bullet({ });
-          bullet.argumentAxis.getTranslator = getTranslator;
-          bullet.valueAxis.getTranslator = getTranslator;
-          const valueShape = bullet.getTargetShape(scaleProps);
+        describe('getTargetShape', () => {
+          it('should return correct points', () => {
+            const scaleProps = {
+              inverted: false,
+              value: 15,
+              target: 15,
+              startScaleValue: 10,
+              endScaleValue: 20,
+            };
+            const bullet = new Bullet({ });
+            bullet.argumentAxis.getTranslator = getTranslator;
+            bullet.valueAxis.getTranslator = getTranslator;
+            const valueShape = bullet.getTargetShape(scaleProps);
 
-          expect(valueShape).toEqual([150, 0.2, 150, 9.8]);
+            expect(valueShape).toEqual([150, 0.2, 150, 9.8]);
+          });
         });
 
-        it('getZeroLevelShape', () => {
-          getTranslator = () => ({ translate: (x: number) => x * 100 + 10 });
-          const bullet = new Bullet({ });
-          bullet.argumentAxis.getTranslator = getTranslator;
-          bullet.valueAxis.getTranslator = getTranslator;
-          const valueShape = bullet.getZeroLevelShape();
+        describe('getZeroLevelShape', () => {
+          it('should return correct points', () => {
+            getTranslator = () => ({ translate: (x: number) => x * 100 + 10 });
+            const bullet = new Bullet({ });
+            bullet.argumentAxis.getTranslator = getTranslator;
+            bullet.valueAxis.getTranslator = getTranslator;
+            const valueShape = bullet.getZeroLevelShape();
 
-          expect(valueShape).toEqual([10, 12, 10, 108]);
+            expect(valueShape).toEqual([10, 12, 10, 108]);
+          });
         });
       });
 
       describe('isValidTarget', () => {
-        it('should hide target - showTarget = false', () => {
+        it('should hide target when showTarget = false', () => {
           const scaleProps = {
             inverted: false,
             value: 100,
@@ -511,7 +517,7 @@ describe('Bullet', () => {
           expect(bullet.isValidTarget(scaleProps)).toBe(false);
         });
 
-        it('should hide target - target > endScaleValue', () => {
+        it('should hide target when target > endScaleValue', () => {
           const scaleProps = {
             inverted: false,
             value: 100,
@@ -524,7 +530,7 @@ describe('Bullet', () => {
           expect(bullet.isValidTarget(scaleProps)).toBe(false);
         });
 
-        it('should hide target - target < startScaleValue', () => {
+        it('should hide target when target < startScaleValue', () => {
           const scaleProps = {
             inverted: false,
             value: 100,
@@ -552,7 +558,7 @@ describe('Bullet', () => {
       });
 
       describe('isValidZeroLevel', () => {
-        it('should hide target - showZeroLevel = false', () => {
+        it('should hide target when showZeroLevel = false', () => {
           const scaleProps = {
             inverted: false,
             value: 100,
@@ -565,7 +571,7 @@ describe('Bullet', () => {
           expect(bullet.isValidZeroLevel(scaleProps)).toBe(false);
         });
 
-        it('should hide zero level - endScaleValue < 0', () => {
+        it('should hide zero level when endScaleValue < 0', () => {
           const scaleProps = {
             inverted: false,
             value: 100,
@@ -578,7 +584,7 @@ describe('Bullet', () => {
           expect(bullet.isValidZeroLevel(scaleProps)).toBe(false);
         });
 
-        it('should hide zero level - startScaleValue> 0', () => {
+        it('should hide zero level when startScaleValue> 0', () => {
           const scaleProps = {
             inverted: false,
             value: 100,

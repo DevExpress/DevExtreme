@@ -4,7 +4,7 @@ import { RootSvgElement, RootSvgElementProps, viewFunction as RootSvgElementComp
 
 describe('SvgPattern', () => {
   describe('View', () => {
-    it('default', () => {
+    it('should render default html', () => {
       const vm = {
         props: {} as RootSvgElementProps,
       };
@@ -35,7 +35,7 @@ describe('SvgPattern', () => {
         + ' width="820" height="440" direction="ltr"><defs></defs></svg>');
     });
 
-    it('rtlEnabled', () => {
+    it('should pass rtlEnabled prop', () => {
       const vm = {
         props: {
           className: 'dxc dxc-chart',
@@ -51,7 +51,7 @@ describe('SvgPattern', () => {
 
   describe('Behavior', () => {
     describe('setRootElementRef', () => {
-      it('set rootElementRef to div ref', () => {
+      it('should set rootElementRef to div ref', () => {
         const widgetRef = {} as SVGElement;
         const component = new RootSvgElement({
           rootElementRef: {},
@@ -62,7 +62,7 @@ describe('SvgPattern', () => {
         expect(component.props.rootElementRef).toBe(component.svgRef);
       });
 
-      it('hasnt rootElementRef', () => {
+      it('should not set rootElementRef to div ref when not initialized', () => {
         const component = new RootSvgElement({ });
         component.svgRef = {} as SVGElement;
         component.setRootElementRef();
