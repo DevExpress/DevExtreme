@@ -104,7 +104,7 @@ describe('Render', () => {
 });
 
 describe('Effect', () => {
-  it('test with constructor', () => {
+  it('should return size', () => {
     const tooltip = new Tooltip({ text: 'Tooltip test text' });
     const box = {
       x: 1, y: 2, width: 10, height: 20,
