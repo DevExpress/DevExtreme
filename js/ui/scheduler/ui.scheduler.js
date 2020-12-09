@@ -1631,6 +1631,11 @@ class Scheduler extends Widget {
         result.max = new Date(this._dateOption('max'));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
 
+        result.todayDate = () => {
+            const result = this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
+            return result;
+        };
+
         return result;
     }
 
@@ -2110,9 +2115,7 @@ class Scheduler extends Widget {
         const adapter = this.createAppointmentAdapter(appointment);
         const targetedAdapter = adapter.clone();
 
-        const isRecurrenceAppointment = adapter.recurrenceRule && getRecurrenceProcessor().isValidRecurrenceRule(adapter.recurrenceRule);
-
-        if(this._isAgenda() && isRecurrenceAppointment) {
+        if(this._isAgenda() && adapter.isRecurrent) {
             const getStartDate = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
             const newStartDate = getStartDate($(element), adapter.startDate).startDate;
 

@@ -188,7 +188,7 @@ class ContextMenu extends MenuBase {
         };
         return extend(super._supportedKeys(), {
             space: selectItem,
-            esc: this.hide
+            escape: this.hide
         });
     }
 
@@ -221,36 +221,42 @@ class ContextMenu extends MenuBase {
         switch(location) {
             case FOCUS_UP:
                 $newTarget = $activeItemHighlighted ? this._prevItem($items) : $oldTarget;
-
+                this._setFocusedElement($newTarget);
                 if($oldTarget.is($items.first())) {
                     this._actions.onLeftFirstItem($oldTarget);
                 }
                 break;
             case FOCUS_DOWN:
                 $newTarget = $activeItemHighlighted ? this._nextItem($items) : $oldTarget;
-
+                this._setFocusedElement($newTarget);
                 if($oldTarget.is($items.last())) {
                     this._actions.onLeftLastItem($oldTarget);
                 }
                 break;
             case FOCUS_RIGHT:
                 $newTarget = this.option('rtlEnabled') ? this._hideSubmenuHandler() : this._expandSubmenuHandler($items, location);
+                this._setFocusedElement($newTarget);
                 break;
             case FOCUS_LEFT:
                 $newTarget = this.option('rtlEnabled') ? this._expandSubmenuHandler($items, location) : this._hideSubmenuHandler();
+                this._setFocusedElement($newTarget);
                 break;
             case FOCUS_FIRST:
                 $newTarget = $items.first();
+                this._setFocusedElement($newTarget);
                 break;
             case FOCUS_LAST:
                 $newTarget = $items.last();
+                this._setFocusedElement($newTarget);
                 break;
             default:
                 return super._moveFocus(location);
         }
+    }
 
-        if($newTarget.length !== 0) {
-            this.option('focusedElement', getPublicElement($newTarget));
+    _setFocusedElement($element) {
+        if($element && $element.length !== 0) {
+            this.option('focusedElement', getPublicElement($element));
         }
     }
 
@@ -311,7 +317,7 @@ class ContextMenu extends MenuBase {
         }
 
         this._actions.onExpandLastSubmenu($curItem);
-        return $curItem;
+        return undefined;
     }
 
     _clean() {

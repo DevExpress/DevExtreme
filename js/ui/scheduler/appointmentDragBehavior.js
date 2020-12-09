@@ -1,6 +1,5 @@
 import $ from '../../core/renderer';
 import Draggable from '../draggable';
-import { locate } from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
 import { LIST_ITEM_DATA_KEY } from './constants';
 
@@ -26,7 +25,7 @@ export default class AppointmentDragBehavior {
     onDragStart(e) {
         const { itemSettings, itemData, initialPosition } = e;
 
-        this.initialPosition = initialPosition || locate($(e.itemElement));
+        this.initialPosition = initialPosition;
         this.appointmentInfo = {
             appointment: itemData,
             settings: itemSettings,

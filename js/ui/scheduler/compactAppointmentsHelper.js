@@ -1,13 +1,13 @@
 import $ from '../../core/renderer';
 import Button from '../button';
-import { resetPosition, move } from '../../animation/translator';
+import { move } from '../../animation/translator';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { when } from '../../core/utils/deferred';
 import { extendFromObject } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { AppointmentTooltipInfo } from './dataStructures';
-import { LIST_ITEM_DATA_KEY, FIXED_CONTAINER_CLASS, LIST_ITEM_CLASS } from './constants';
+import { LIST_ITEM_DATA_KEY, LIST_ITEM_CLASS } from './constants';
 
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
@@ -73,7 +73,7 @@ export class CompactAppointmentsHelper {
     _getExtraOptionsForTooltip(options) {
         return {
             clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
-            dragBehavior: options.allowDrag && this._createTooltipDragBehavior(options).bind(this),
+            dragBehavior: options.allowDrag && this._createTooltipDragBehavior().bind(this),
             dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // deprecated option
             isButtonClick: true
         };
@@ -94,60 +94,20 @@ export class CompactAppointmentsHelper {
         };
     }
 
-    _createTooltipDragBehavior(options) {
+    _createTooltipDragBehavior() {
         return (e) => {
-            let dragElement;
             const $element = $(e.element);
-            const dragBehavior = this.instance.getWorkSpace().dragBehavior;
+            const workSpace = this.instance.getWorkSpace();
 
-            dragBehavior.addTo($element, {
+            const getItemData = (itemElement) => $(itemElement).data(LIST_ITEM_DATA_KEY)?.appointment;
+            const getItemSettings = (_, event) => event.itemSettings;
+            const options = {
                 filter: `.${LIST_ITEM_CLASS}`,
-                container: this.instance.$element().find(`.${FIXED_CONTAINER_CLASS}`),
-                cursorOffset: () => {
-                    const $dragElement = $(dragElement);
-                    return {
-                        x: $dragElement.width() / 2,
-                        y: $dragElement.height() / 2
-                    };
-                },
-                dragTemplate: () => {
-                    return dragElement;
-                },
-                onDragStart: (e) => {
-                    const event = e.event;
-                    const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+                isSetCursorOffset: true,
+            };
 
-                    if(itemData && !itemData.appointment.disabled) {
-                        event.data = event.data || {};
-                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings);
-
-                        dragBehavior.onDragStart(event.data);
-                        resetPosition($(dragElement));
-                    }
-                },
-                onDragEnd: (e) => {
-                    const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
-                    if(itemData && !itemData.appointment.disabled) {
-                        dragBehavior.onDragEnd(e);
-                    }
-                }
-            });
+            workSpace._createDragBehaviorBase($element, getItemData, getItemSettings, options);
         };
-    }
-
-    _createDragAppointment(itemData, settings) {
-        const appointments = this.instance.getAppointmentsInstance();
-        const appointmentIndex = appointments.option('items').length;
-
-        settings.isCompact = false;
-        settings.virtual = false;
-
-        appointments._renderItem(appointmentIndex, {
-            itemData: itemData,
-            settings: [settings]
-        });
-
-        return appointments._findItemElementByItem(itemData)[0];
     }
 
     _getCollectorOffset(width, cellWidth) {
