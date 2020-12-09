@@ -6,6 +6,7 @@ import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
+import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
@@ -39,7 +40,6 @@ const NativeStrategy = Class.inherit({
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
-        this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
         this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
     },
 
@@ -56,9 +56,13 @@ const NativeStrategy = Class.inherit({
         if(this._showScrollbar && this._useSimulatedScrollbar) {
             this._renderScrollbars();
         }
+
+        this._scrollRtlBehavior = getScrollRtlBehavior();
     },
 
     updateBounds: noop,
+
+    updateRtlPosition: noop,
 
     _renderPushBackOffset: function() {
         const pushBackValue = this.option('pushBackValue');
@@ -141,6 +145,22 @@ const NativeStrategy = Class.inherit({
         };
     },
 
+    _getScrollOffset: function() {
+        const { top, left } = this.location();
+
+        return {
+            top: -top,
+            left: this._isScrollInverted() ? this._getMaxOffset().left - Math.abs(left) : -left
+        };
+    },
+
+    _isScrollInverted: function() {
+        const { rtlEnabled } = this.option();
+        const { decreasing, positive } = this._scrollRtlBehavior;
+
+        return rtlEnabled && (decreasing ^ positive);
+    },
+
     _isReachedLeft: function() {
         return this._isDirection(HORIZONTAL) ? this.location().left >= 0 : undefined;
     },
@@ -150,7 +170,7 @@ const NativeStrategy = Class.inherit({
     },
 
     handleScroll: function(e) {
-        this._component._updateRtlConfig();
+        this._updateRtlConfig();
         if(!this._isScrollLocationChanged()) {
             // NOTE: ignoring scroll events when scroll location was not changed (for Android browser - B250122)
             e.stopImmediatePropagation();
@@ -284,9 +304,25 @@ const NativeStrategy = Class.inherit({
     },
 
     scrollBy: function(distance) {
-        const location = this.location();
-        this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
-        this._$container.scrollLeft(Math.round(-location.left - distance.left));
+        const { top, left } = this.location();
+        const { pushBackValue } = this.option();
+
+        this._$container.scrollTop(Math.round(-top - distance.top + pushBackValue));
+        this._$container.scrollLeft(this._normalizeLeftOffset(Math.round(-left - distance.left)));
+    },
+
+    _normalizeLeftOffset: function(offset) {
+        if(this._isScrollInverted()) {
+            const { positive } = this._scrollRtlBehavior;
+
+            if(positive) {
+                offset = Math.abs(offset - this._getMaxOffset().left);
+            } else {
+                offset -= this._getMaxOffset().left;
+            }
+        }
+
+        return offset;
     },
 
     validate: function(e) {
