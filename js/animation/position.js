@@ -124,10 +124,10 @@ const adjustBoundary = function(container, boundaryPreset, positionOptions) {
 
     if(container && !isWindow(container)) {
         const $container = $(container);
-        const containerPosition = $container.offset();
-
-        const containerLeft = containerPosition.left;
-        const containerTop = containerPosition.top;
+        const {
+            left: containerLeft,
+            top: containerTop
+        } = $container.offset();
 
         const containerWidth = $container.width();
         const containerHeight = $container.height();
