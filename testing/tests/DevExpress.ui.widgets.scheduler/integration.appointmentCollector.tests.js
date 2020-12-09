@@ -456,45 +456,6 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
         }
     });
 
-    QUnit.test('Collapse appointment should process the onAppointmentClick event correctly if e.cancel = true', function(assert) {
-        const spy = sinon.spy();
-        this.createInstance({
-            currentDate: new Date(2015, 2, 4),
-            views: ['month'],
-            width: 840,
-            height: 500,
-            currentView: 'month',
-            firstDayOfWeek: 1,
-            onAppointmentClick(e) {
-                e.cancel = true;
-            }
-        });
-        const showAppointmentPopup = this.instance.showAppointmentPopup;
-        this.instance.showAppointmentPopup = spy;
-        try {
-            const appointments = [
-                { startDate: new Date(2015, 2, 4), text: 'a', endDate: new Date(2015, 2, 4, 0, 30) },
-                { startDate: new Date(2015, 2, 4), text: 'b', endDate: new Date(2015, 2, 4, 0, 30) },
-                { startDate: new Date(2015, 2, 4), text: 'c', endDate: new Date(2015, 2, 4, 0, 30) },
-                { startDate: new Date(2015, 2, 4), text: 'd', endDate: new Date(2015, 2, 4, 0, 30) },
-                { startDate: new Date(2015, 2, 4), text: 'e', endDate: new Date(2015, 2, 4, 0, 30) },
-                { startDate: new Date(2015, 2, 4), text: 'f', endDate: new Date(2015, 2, 4, 0, 30) },
-                { startDate: new Date(2015, 2, 4), text: 'g', endDate: new Date(2015, 2, 4, 0, 30) }
-            ];
-
-            const instance = this.instance;
-
-            instance.option('dataSource', appointments);
-
-            this.scheduler.appointments.compact.click();
-            this.scheduler.tooltip.clickOnItem(2);
-
-            assert.notOk(spy.calledOnce, 'showAppointmentPopup wasn\'t called');
-        } finally {
-            this.instance.showAppointmentPopup = showAppointmentPopup;
-        }
-    });
-
     QUnit.test('Appointment collector should be painted depend on resource color', function(assert) {
         const colors = [
             '#ff0000',

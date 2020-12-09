@@ -1,5 +1,5 @@
 import {
-    dxBaseGauge,
+    BaseGauge,
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
     BaseGaugeScale,
@@ -9,34 +9,42 @@ import {
 
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
-     * @docid dxLinearGaugeOptions.geometry
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    geometry?: { orientation?: 'horizontal' | 'vertical' };
+    geometry?: {
     /**
-     * @docid dxLinearGaugeOptions.rangeContainer
+       * @docid
+       * @prevFileNamespace DevExpress.viz
+       * @type Enums.Orientation
+       * @default 'horizontal'
+       */
+      orientation?: 'horizontal' | 'vertical'
+    };
+    /**
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     rangeContainer?: dxLinearGaugeRangeContainer;
     /**
-     * @docid dxLinearGaugeOptions.scale
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     scale?: dxLinearGaugeScale;
     /**
-     * @docid dxLinearGaugeOptions.subvalueIndicator
+     * @docid
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     subvalueIndicator?: GaugeIndicator;
     /**
-     * @docid dxLinearGaugeOptions.valueIndicator
+     * @docid
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -65,7 +73,20 @@ export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    width?: { end?: number, start?: number } | number;
+    width?: {
+      /**
+       * @docid dxLinearGaugeOptions.rangeContainer.width.start
+       * @prevFileNamespace DevExpress.viz
+       * @default 5
+       */
+      start?: number,
+      /**
+       * @docid dxLinearGaugeOptions.rangeContainer.width.end
+       * @prevFileNamespace DevExpress.viz
+       * @default 5
+       */
+      end?: number
+    } | number;
 }
 export interface dxLinearGaugeScale extends BaseGaugeScale {
     /**
@@ -109,14 +130,14 @@ export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
     indentFromTick?: number;
 }
 /**
- * @docid dxLinearGauge
+ * @docid
  * @inherits BaseGauge
  * @module viz/linear_gauge
  * @export default
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxLinearGauge extends dxBaseGauge {
+export default class dxLinearGauge extends BaseGauge {
     constructor(element: Element, options?: dxLinearGaugeOptions)
     constructor(element: JQuery, options?: dxLinearGaugeOptions)
 }

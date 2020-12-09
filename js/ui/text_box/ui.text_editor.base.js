@@ -422,11 +422,7 @@ const TextEditorBase = Editor.inherit({
         this.callBase.apply(this, arguments);
 
         const $input = this._input();
-        if(value) {
-            $input.attr('disabled', true);
-        } else {
-            $input.removeAttr('disabled');
-        }
+        $input.prop('disabled', value);
     },
 
     _toggleTabIndex: function() {

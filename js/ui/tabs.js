@@ -80,7 +80,8 @@ const Tabs = CollectionWidget.inherit({
             selectOnFocus: true,
             loopItemFocus: false,
             useInkRipple: false,
-            badgeExpr: function(data) { return data ? data.badge : undefined; }
+            badgeExpr: function(data) { return data ? data.badge : undefined; },
+            _itemAttributes: { role: 'tab' },
         });
     },
 
@@ -178,7 +179,6 @@ const Tabs = CollectionWidget.inherit({
     _initMarkup: function() {
         this._deferredTemplates = [];
         this.callBase();
-        this.setAria('role', 'tab', this.itemElements());
 
         this.option('useInkRipple') && this._renderInkRipple();
 

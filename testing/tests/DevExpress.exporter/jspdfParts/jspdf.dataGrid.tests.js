@@ -4,6 +4,7 @@ import 'jspdf-autotable';
 
 import { isDefined, isFunction } from 'core/utils/type';
 import { JSPdfDataGridTestHelper } from './jspdfTestHelper.js';
+import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { JSPdfOptionTests } from './jspdf.options.tests.js';
 import { exportDataGrid } from 'pdf_exporter';
 
@@ -4489,5 +4490,6 @@ QUnit.module('customizeCell', moduleConfig, () => {
 });
 
 JSPdfOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, function() { return $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'); });
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, () => $('#dataGrid').dxDataGrid({ dataSource: [{ f1: 'f1_1' }], loadingTimeout: undefined }).dxDataGrid('instance'), 'jsPDFDocument');
 
 

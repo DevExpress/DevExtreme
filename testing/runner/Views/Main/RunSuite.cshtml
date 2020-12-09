@@ -7,7 +7,7 @@
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
     var npmModule = Model.Renovation
-        ? "transpiled-renovation-npm"
+        ? "transpiled-renovation"
         : "transpiled";
 
     string GetJQueryUrl() {
@@ -168,7 +168,7 @@
             }
 
             var baseURL = QUnit.urlParams.renovation
-                ? '@Url.Content("~/artifacts/transpiled-renovation-npm")'
+                ? '@Url.Content("~/artifacts/transpiled-renovation")'
                 : '@Url.Content("~/artifacts/transpiled")';
 
             SystemJS.config({

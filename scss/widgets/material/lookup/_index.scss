@@ -8,6 +8,7 @@
 @use "../textEditor/colors" as *;
 @use "../dropDownEditor" as *;
 @use "../common/mixins" as *;
+@use "../../base/lookup";
 
 // adduse
 @use "../dropDownList";
