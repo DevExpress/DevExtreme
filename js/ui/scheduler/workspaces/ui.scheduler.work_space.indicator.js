@@ -60,6 +60,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
                 const date = this._getToday();
 
                 this._renderIndicator(date, groupCount);
+                this._setCurrentTimeCell();
             }
         }
     }
@@ -176,8 +177,20 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _refreshDateTimeIndication() {
         this._cleanDateTimeIndicator();
-        this._shader && this._shader.clean();
+        this._cleanCurrentTimeCell();
+
+        this._shader?.clean();
+
         this._renderDateTimeIndication();
+    }
+
+    _setCurrentTimeCell() {
+        const timePanelCells = this._getTimePanelCells();
+        const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+        currentTimeCellIndices.forEach((timePanelCellIndex) => {
+            timePanelCells.eq(timePanelCellIndex)
+                .addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
+        });
     }
 
     _isCurrentTime(date) {
@@ -251,6 +264,12 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         this.$element().find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
     }
 
+    _cleanCurrentTimeCell() {
+        this.$element()
+            .find(`.${TIME_PANEL_CURRENT_TIME_CELL_CLASS}`)
+            .removeClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
+    }
+
     _cleanWorkSpace() {
         super._cleanWorkSpace();
 
@@ -295,6 +314,54 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             indicatorUpdateInterval: 5 * toMs('minute'),
             shadeUntilCurrentTime: true
         });
+    }
+
+    _getCurrentTimeRowIndex() {
+        const today = this._getToday();
+        const date = new Date(this.getStartViewDate());
+        date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+        const cellDuration = this.getCellDuration();
+
+        const currentTime = today.getTime();
+        const time = date.getTime();
+
+        const index = Math.floor((currentTime - time) / cellDuration);
+
+        if(index < 0) {
+            return undefined;
+        }
+
+        return index;
+    }
+
+    _getCurrentTimePanelCellIndices() {
+        const rowCountPerGroup = this._getTimePanelRowCount();
+        const currentTimeRowIndex = this._getCurrentTimeRowIndex();
+
+        if(currentTimeRowIndex === undefined) {
+            return [];
+        }
+
+        let cellIndices;
+        if(currentTimeRowIndex === 0) {
+            cellIndices = [currentTimeRowIndex];
+        } else {
+            cellIndices = currentTimeRowIndex % 2 === 0
+                ? [currentTimeRowIndex - 1, currentTimeRowIndex]
+                : [currentTimeRowIndex, currentTimeRowIndex + 1];
+        }
+
+        const verticalGroupCount = this._isVerticalGroupedWorkSpace()
+            ? this._getGroupCount()
+            : 1;
+
+        return [...(new Array(verticalGroupCount))]
+            .reduce((currentIndices, _, groupIndex) => {
+                return [
+                    ...currentIndices,
+                    ...cellIndices.map(cellIndex => rowCountPerGroup * groupIndex + cellIndex),
+                ];
+            }, []);
     }
 }
 

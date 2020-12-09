@@ -3301,6 +3301,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     _isShowAllDayPanel() {
         return this.option('showAllDayPanel');
     }
+
+    _getTimePanelCells() {
+        return this.$element().find(`.${TIME_PANEL_CELL_CLASS}`);
+    }
 }
 
 export default SchedulerWorkSpace;

@@ -20,6 +20,8 @@ const HEADER_PANEL_CELL_CLASS = 'dx-scheduler-header-panel-cell';
 const HEADER_PANEL_WEEK_CELL_CLASS = 'dx-scheduler-header-panel-week-cell';
 const HEADER_ROW_CLASS = 'dx-scheduler-header-row';
 
+const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
+
 const HORIZONTAL = 'horizontal';
 const DATE_TABLE_CELL_BORDER = 1;
 const DATE_TABLE_HEADER_MARGIN = 10;
@@ -576,6 +578,48 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getRowCountWithAllDayRows() {
         return this._getRowCount();
+    }
+
+    _setCurrentTimeCell() {
+        const timePanelCells = this._getTimePanelCells();
+        const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+        currentTimeCellIndices.forEach((timePanelCellIndex) => {
+            timePanelCells.eq(timePanelCellIndex)
+                .addClass(HEADER_CURRENT_TIME_CELL_CLASS);
+        });
+    }
+
+    _cleanCurrentTimeCell() {
+        this.$element()
+            .find(`.${HEADER_CURRENT_TIME_CELL_CLASS}`)
+            .removeClass(HEADER_CURRENT_TIME_CELL_CLASS);
+    }
+
+    _getTimePanelCells() {
+        return this.$element()
+            .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
+    }
+
+    _getCurrentTimePanelCellIndices() {
+        const rowCountPerGroup = this._getCellCount();
+        const currentTimeCellIndex = this._getCurrentTimeRowIndex();
+
+        if(currentTimeCellIndex === undefined) {
+            return [];
+        }
+
+        const cellCountInDay = this._getCellCountInDay(true);
+        const today = dateUtils.trimTime(new Date(this._getToday()));
+        const date = dateUtils.trimTime(new Date(this.getStartViewDate()));
+        const currentDayIndex = (today.getTime() - date.getTime()) / toMs('day');
+        const currentDateCellIndex = currentDayIndex * cellCountInDay + currentTimeCellIndex;
+
+        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+            ? this._getGroupCount()
+            : 1;
+
+        return [...(new Array(horizontalGroupCount))]
+            .map((_, groupIndex) => rowCountPerGroup * groupIndex + currentDateCellIndex);
     }
 }
 
