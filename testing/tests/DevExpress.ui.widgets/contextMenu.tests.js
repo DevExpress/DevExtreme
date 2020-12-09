@@ -11,6 +11,7 @@ import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelp
 
 import 'ui/button';
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =

@@ -563,6 +563,7 @@
     "dxGantt-deleteSelectedTask": "Kiválasztott feladat törlése",
     "dxGantt-zoomIn": "Nagyítás",
     "dxGantt-zoomOut": "Kicsinyítés",
-    "dxGantt-fullScreen": "Teljes képernyő"
+    "dxGantt-fullScreen": "Teljes képernyő",
+    "dxGantt-quarter": "TODO"
   }
 }

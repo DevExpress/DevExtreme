@@ -531,6 +531,7 @@
         "dxGantt-deleteSelectedTask": "選択したタスクを削除",
         "dxGantt-zoomIn": "拡大",
         "dxGantt-zoomOut": "縮小",
-        "dxGantt-fullScreen": "全画面表示"
+        "dxGantt-fullScreen": "全画面表示",
+        "dxGantt-quarter": "Q{0}"
     }
 }

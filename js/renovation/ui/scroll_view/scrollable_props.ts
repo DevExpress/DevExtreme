@@ -11,6 +11,10 @@ export class ScrollableInternalProps {
 
   @OneWay() direction: ScrollableDirection = 'vertical';
 
+  @OneWay() classes?: string;
+
+  @OneWay() forceGeneratePockets = false;
+
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
 }
 
