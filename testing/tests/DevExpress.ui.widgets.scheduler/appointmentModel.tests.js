@@ -166,6 +166,66 @@ const timeZoneCalculator = {
         });
     });
 
+    QUnit.test('Appointment model should take into account current view startDayHour, endDayHour.', function(assert) {
+        const appointments = [
+            {
+                text: 'a',
+                StartDate: new Date(2021, 8, 6, 9, 30),
+                EndDate: new Date(2021, 8, 6, 11, 30)
+            }
+        ];
+
+        const dataSource = new DataSource({
+            store: appointments
+        });
+
+        const appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
+            getter: {
+                startDate: compileGetter('StartDate'),
+                endDate: compileGetter('EndDate'),
+                recurrenceRule: compileGetter('RecurrenceRule'),
+                recurrenceException: compileGetter('Exception'),
+                allDay: compileGetter('AllDay'),
+                startDateTimeZone: compileGetter('StartDateTimeZone'),
+                endDateTimeZone: compileGetter('EndDateTimeZone')
+            },
+            setter: {
+                startDate: compileSetter('StartDate'),
+                endDate: compileSetter('EndDate'),
+                recurrenceRule: compileSetter('RecurrenceRule'),
+                recurrenceException: compileSetter('Exception'),
+                allDay: compileSetter('AllDay')
+            },
+            expr: {
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }
+        });
+
+        appointmentModel.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
+
+        dataSource.load().done(() => {
+            dataSource.filter('priorityId', '=', 1);
+
+            appointmentModel.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
+
+            const result = appointmentModel.filterLoadedAppointments({
+                startDayHour: 9,
+                endDayHour: 11,
+                viewStartDayHour: 9,
+                viewEndDayHour: 18,
+                min: new Date(2021, 8, 6, 9),
+                max: new Date(2021, 8, 6, 18),
+                allDay: false
+            }, timeZoneCalculator);
+
+            assert.deepEqual(result, appointments, 'Items feltered correcly');
+        });
+    });
+
     QUnit.test('Appointment model filterByDate should filter dataSource correctly without copying dateFilter', function(assert) {
         const dateFilter = [
             [
