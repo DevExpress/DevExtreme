@@ -635,11 +635,11 @@ export default {
 
                 _needInsertItem: function({ key }) {
                     let result = this.callBase.apply(this, arguments);
-                    const insertKey = this._getInternalData(key)?.insertKey;
+                    const insertInfo = this._getInternalData(key)?.insertInfo;
                     const validationData = this.getController('validating')._getValidationData(key);
 
                     if(result && !validationData?.isValid) {
-                        result = insertKey.pageIndex === this._pageIndex;
+                        result = insertInfo.pageIndex === this._pageIndex;
                     }
 
                     return result;
@@ -698,9 +698,9 @@ export default {
                     if(that.getEditMode() === EDIT_MODE_BATCH && changeType !== 'prepend' && changeType !== 'append') {
                         for(i = 0; i < changes.length; i++) {
                             const key = changes[i].key;
-                            const insertKey = that.getController('editing')._getInternalData(key)?.insertKey;
+                            const insertInfo = that.getController('editing')._getInternalData(key)?.insertInfo;
                             const validationData = validatingController._getValidationData(key);
-                            if(validationData && changes[i].type && validationData.pageIndex === that._pageIndex && insertKey?.pageIndex !== that._pageIndex) {
+                            if(validationData && changes[i].type && validationData.pageIndex === that._pageIndex && insertInfo?.pageIndex !== that._pageIndex) {
                                 addInValidItem(changes[i], validationData);
                             }
                         }
