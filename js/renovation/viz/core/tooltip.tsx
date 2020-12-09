@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState, Fragment,
+  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState,
   RefObject, Method,
 } from 'devextreme-generator/component_declaration/common';
 
@@ -20,62 +20,96 @@ import { getFormatValue } from '../common/utils';
 
 export const viewFunction = ({
   textRef,
-  size,
-  fullSize,
+  cloudRef,
+  htmlRef,
+  textSize,
+  cloudSize,
+  textSizeWPaddings,
   border,
+  filterId,
   customizedOptions,
+  setCurrentState,
   props: {
     x, y, font, shadow, opacity,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
-  const filterId = getNextDefsSvgId();
   const correctedCoordinates = recalculateCoordinates({
-    canvas, anchorX: x, anchorY: y, size: fullSize, offset, arrowLength,
+    canvas, anchorX: x, anchorY: y, size: textSizeWPaddings, offset, arrowLength,
   });
-  const angle = getCloudAngle(fullSize, correctedCoordinates);
+  const angle = getCloudAngle(textSizeWPaddings, correctedCoordinates);
+  const d = getCloudPoints(textSizeWPaddings, correctedCoordinates, angle,
+    { cornerRadius, arrowWidth }, true);
+  setCurrentState(d);
   return (
-    <Fragment>
-      <defs>
-        <ShadowFilter
-          id={filterId}
-          x="-50%"
-          y="-50%"
-          width="200%"
-          height="200%"
-          blur={shadow.blur}
-          color={shadow.color}
-          offsetX={shadow.offsetX}
-          offsetY={shadow.offsetY}
-          opacity={shadow.opacity}
-        />
-      </defs>
-      <g pointerEvents="none" filter={`url(#${filterId})`}>
-        <PathSvgElement
-          d={getCloudPoints(fullSize, correctedCoordinates, angle,
-            { cornerRadius, arrowWidth }, true)}
-          fill={customizedOptions.color}
-          stroke={customizedOptions.borderColor}
-          strokeWidth={border.strokeWidth}
-          strokeOpacity={border.strokeOpacity}
-          dashStyle={border.dashStyle}
-          opacity={opacity}
-          transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
-        />
-        <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
-          <TextSvgElement
-            text={customizedOptions.text}
-            styles={{
-              fill: customizedOptions.fontColor,
-              fontFamily: font.family,
-              fontSize: font.size,
-              fontWeight: font.weight,
-              opacity: font.opacity,
-            }}
+    <div
+      style={{
+        position: 'absolute',
+        overflow: 'hidden',
+        pointerEvents: 'none',
+        left: cloudSize.x,
+        top: cloudSize.y,
+      }}
+    >
+      <svg width={cloudSize.width} height={cloudSize.height}>
+        <defs>
+          <ShadowFilter
+            id={filterId}
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+            blur={shadow.blur}
+            color={shadow.color}
+            offsetX={shadow.offsetX}
+            offsetY={shadow.offsetY}
+            opacity={shadow.opacity}
           />
+        </defs>
+        <g
+          pointerEvents="none"
+          filter={`url(#${filterId})`}
+          ref={cloudRef as any}
+          transform={`translate(${-cloudSize.x}, ${-cloudSize.y})`}
+        >
+          <PathSvgElement
+            d={d}
+            fill={customizedOptions.color}
+            stroke={customizedOptions.borderColor}
+            strokeWidth={border.strokeWidth}
+            strokeOpacity={border.strokeOpacity}
+            dashStyle={border.dashStyle}
+            opacity={opacity}
+            transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
+          />
+          {customizedOptions.html ? null
+            : (
+              <g
+                textAnchor="middle"
+                ref={textRef as any}
+                transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - textSize.height / 2 - textSize.y})`}
+              >
+                <TextSvgElement
+                  text={customizedOptions.text}
+                  styles={{
+                    fill: customizedOptions.fontColor,
+                    fontFamily: font.family,
+                    fontSize: font.size,
+                    fontWeight: font.weight,
+                    opacity: font.opacity,
+                  }}
+                />
+              </g>
+            )}
         </g>
-      </g>
-    </Fragment>
+      </svg>
+      {!customizedOptions.html ? null
+        : (
+          <div ref={htmlRef as any}>
+            {customizedOptions.html}
+          </div>
+        )}
+    </div>
   );
 };
 
@@ -141,15 +175,46 @@ export class TooltipProps {
   isSVG: true,
 })
 export class Tooltip extends JSXComponent(TooltipProps) {
-  @InternalState() size: { x: number; y: number; width: number; height: number } = {
+  @InternalState() filterId: string = getNextDefsSvgId();
+
+  @InternalState() textSize = {
     x: 0, y: 0, width: 0, height: 0,
   };
 
+  @InternalState() cloudSize = {
+    x: 0, y: 0, width: 0, height: 0,
+  };
+
+  @InternalState() d?: string;
+
+  setCurrentState(d: string): void {
+    if (this.d !== d) {
+      this.d = d;
+    }
+  }
+
+  @Ref() cloudRef!: RefObject<SVGGElement>;
+
   @Ref() textRef!: RefObject<SVGGElement>;
+
+  @Ref() htmlRef!: RefObject<HTMLElement>;
 
   @Effect()
   calculateSize(): void {
-    this.size = this.textRef.getBBox();
+    this.textSize = this.textRef ? this.textRef.getBBox() : this.htmlRef.getBoundingClientRect();
+  }
+
+  @Effect()
+  calculateCloudSize(): void {
+    if (this.d) {
+      const size = this.cloudRef.getBBox();
+      this.cloudSize = {
+        x: Math.floor(size.x - this.margins.lm),
+        y: Math.floor(size.y - this.margins.tm),
+        width: size.width + this.margins.lm + this.margins.rm,
+        height: size.height + this.margins.tm + this.margins.bm,
+      };
+    }
   }
 
   @Method()
@@ -158,11 +223,11 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     return getFormatValue(value, specialFormat, { format, argumentFormat });
   }
 
-  get fullSize(): Size {
+  get textSizeWPaddings(): Size {
     const { paddingLeftRight, paddingTopBottom } = this.props;
     return {
-      width: this.size.width + paddingLeftRight * 2,
-      height: this.size.height + paddingTopBottom * 2,
+      width: this.textSize.width + paddingLeftRight * 2,
+      height: this.textSize.height + paddingTopBottom * 2,
     };
   }
 
@@ -185,5 +250,19 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     } = this.props;
 
     return prepareData(data, color, border, font, customizeTooltip);
+  }
+
+  get margins(): { lm: number; rm: number; tm: number; bm: number } {
+    const { max } = Math;
+    const { shadow } = this.props;
+    const xOff = shadow.offsetX;
+    const yOff = shadow.offsetY;
+    const blur = shadow.blur * 2 + 1;
+    return {
+      lm: max(blur - xOff, 0), // left margin
+      rm: max(blur + xOff, 0), // right margin
+      tm: max(blur - yOff, 0), // top margin
+      bm: max(blur + yOff, 0), // bottom margin
+    };
   }
 }
