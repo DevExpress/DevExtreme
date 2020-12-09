@@ -977,6 +977,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         const tagBox = $('#tagBox').dxTagBox({
             items: ['item1', 'item2'],
         }).dxTagBox('instance');
+        this.clock.tick(TIME_TO_WAIT);
 
         tagBox.option('value', ['item1']);
 
@@ -987,6 +988,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         const $tagBox = $('#tagBox').dxTagBox({
             searchEnabled: true
         });
+        this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
@@ -1006,6 +1008,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         const $tagBox = $('#tagBox').dxTagBox({
             searchEnabled: true
         });
+        this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
@@ -1042,6 +1045,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         const $tagBox = $('#tagBox').dxTagBox({
             acceptCustomValue: true
         });
+        this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
