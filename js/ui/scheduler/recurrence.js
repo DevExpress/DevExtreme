@@ -129,48 +129,37 @@ class RecurrenceProcessor {
         return result.toUpperCase();
     }
 
-    getDateByAsciiString(string, initialDate) {
+    getDateByAsciiString(string) {
         if(typeof string !== 'string') {
             return string;
         }
 
-        const arrayDate = string.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+        const result = string.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
 
-        if(!arrayDate) {
+        if(!result) {
             return null;
         }
 
-        const isUtc = arrayDate[8] !== undefined;
-        // const currentOffset = initialDate ? initialDate.getTimezoneOffset() : this._getTimeZoneOffset();
-        const newDate = this._prepareDateArrayToParse(arrayDate);
-
-        const values = [
-            parseInt(newDate[1]),
-            parseInt(newDate[2]),
-            parseInt(newDate[3]),
-            parseInt(newDate[4]) || 0,
-            parseInt(newDate[5]) || 0,
-            parseInt(newDate[6]) || 0
-        ];
+        const [year, month, date, hours, minutes, seconds, isUtc] = this._createDateTuple(result);
 
         if(isUtc) {
             return new Date(Date.UTC(
-                values[0],
-                values[1],
-                values[2],
-                values[3],
-                values[4],
-                values[5])
+                year,
+                month,
+                date,
+                hours,
+                minutes,
+                seconds)
             );
         }
 
         return new Date(
-            values[0],
-            values[1],
-            values[2],
-            values[3],
-            values[4],
-            values[5]
+            year,
+            month,
+            date,
+            hours,
+            minutes,
+            seconds
         );
     }
 
@@ -203,9 +192,12 @@ class RecurrenceProcessor {
         this._createRRule(ruleOptions);
 
         if(options.exception) {
-            const splitDates = options.exception.split(',');
-            const exceptDates = this._getDatesByRecurrenceException(splitDates, startDateUtc);
-            exceptDates.forEach(date => {
+            const exceptionStrings = options.exception;
+            const exceptionDates = exceptionStrings
+                .split(',')
+                .map(rule => this.getDateByAsciiString(rule));
+
+            exceptionDates.forEach(date => {
                 const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
                 this.rRuleSet.exdate(utcDate);
             });
@@ -229,12 +221,6 @@ class RecurrenceProcessor {
         }
 
         return minDateUtc;
-    }
-
-    _getDatesByRecurrenceException(ruleValues, date) {
-        const result = [];
-        ruleValues.forEach(rule => result.push(this.getDateByAsciiString(rule, date)));
-        return result;
     }
 
     _parseRecurrenceRule(recurrence) {
@@ -272,21 +258,31 @@ class RecurrenceProcessor {
         return ruleObject;
     }
 
-    _prepareDateArrayToParse(arrayDate) {
-        arrayDate.shift();
+    _createDateTuple(parseResult) {
+        const isUtc = parseResult[8] !== undefined;
 
-        if(arrayDate[3] === undefined) {
-            arrayDate.splice(3);
+        parseResult.shift();
+
+        if(parseResult[3] === undefined) {
+            parseResult.splice(3);
         } else {
-            arrayDate.splice(3, 1);
-            arrayDate.splice(6);
+            parseResult.splice(3, 1);
+            parseResult.splice(6);
         }
 
-        arrayDate[1]--;
+        parseResult[1]--;
 
-        arrayDate.unshift(null);
+        parseResult.unshift(null);
 
-        return arrayDate;
+        return [
+            parseInt(parseResult[1]),
+            parseInt(parseResult[2]),
+            parseInt(parseResult[3]),
+            parseInt(parseResult[4]) || 0,
+            parseInt(parseResult[5]) || 0,
+            parseInt(parseResult[6]) || 0,
+            isUtc
+        ];
     }
 }
 
