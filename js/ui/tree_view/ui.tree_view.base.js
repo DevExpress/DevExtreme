@@ -582,6 +582,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderScrollableContainer: function() {
         this._scrollableContainer = this._createComponent($('<div>').appendTo(this.$element()), Scrollable, {
             direction: this.option('scrollDirection'),
+            useNative: this.option('scrollableUseNative'),
             useKeyboard: false
         });
     },
