@@ -331,4 +331,57 @@ module('Current Time Cell Indication Updating', {
             assert.ok(currentCell.hasClass(HEADER_PANEL_CURRENT_TIME_CELL_CLASS), 'The current time cell has current-time class');
         });
     });
+
+    ['day', 'week'].forEach(view => {
+        test(`Current Time Panel Cell indication should be updated if it was invisible in ${view} view`, function(assert) {
+            const scheduler = createWrapper({
+                ...getBaseConfig({ type: view }),
+                startDayHour: 13,
+            });
+
+            let timePanelCells = scheduler.workSpace.getTimePanelCells();
+            let currentTimeCells = scheduler.workSpace.getTimePanelCurrentTimeCells();
+
+            assert.equal(currentTimeCells.length, 0, 'Correct number of current time cells');
+
+            this.clock.tick(HOUR);
+
+            timePanelCells = scheduler.workSpace.getTimePanelCells();
+            const cell = timePanelCells.eq(0);
+            currentTimeCells = scheduler.workSpace.getTimePanelCurrentTimeCells();
+
+            assert.equal(currentTimeCells.length, 1, 'Correct number of current time cells');
+            assert.ok(cell.hasClass(CURRENT_TIME_CELL_CLASS), 'The current time cell has current-time class');
+        });
+    });
+
+    [{
+        view: 'timelineDay',
+        cellIndex: 0,
+        timeDifference: HOUR,
+    }, {
+        view: 'timelineWeek',
+        cellIndex: 6,
+        timeDifference: HOUR,
+    }].forEach(({ view, cellIndex, timeDifference }) => {
+        test(`Current Header Panel Cell indication should work correctly in simple case in ${view} view`, function(assert) {
+            const scheduler = createWrapper({
+                ...getBaseConfig({ type: view }),
+                startDayHour: 13,
+            });
+
+            let currentTimeCells = scheduler.workSpace.getHeaderPanelCurrentTimeCells();
+
+            assert.equal(currentTimeCells.length, 0, 'Correct number of current time cells');
+
+            this.clock.tick(timeDifference);
+
+            const headerPanelCells = scheduler.workSpace.getOrdinaryHeaderPanelCells();
+            const currentCell = headerPanelCells.eq(cellIndex);
+            currentTimeCells = scheduler.workSpace.getHeaderPanelCurrentTimeCells();
+
+            assert.equal(currentTimeCells.length, 1, 'Correct number of current time cells');
+            assert.ok(currentCell.hasClass(HEADER_PANEL_CURRENT_TIME_CELL_CLASS), 'The current time cell has current-time class');
+        });
+    });
 });
