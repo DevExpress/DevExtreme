@@ -33,6 +33,7 @@ export const CLASSES = {
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
 
     appointment: '.dx-scheduler-appointment',
+    appointmentDragSource: '.dx-scheduler-appointment-drag-source',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -64,27 +65,34 @@ export const asyncWrapper = (assert, callback) => {
     const promise = Promise.resolve();
 
     return callback(promise)
+        .catch(e => assert.ok(false, e.stack))
         .then(done);
 };
 
-export const execAsync = (promise, callback, asyncCallback, timeout) => {
+export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout) => {
     return promise.then(() => {
+        return new Promise((resolve, reject) => {
+            const execCallback = func => {
+                try {
+                    func();
+                } catch(e) {
+                    reject(e);
+                }
+            };
 
-        callback && callback();
+            beforeAsyncCallback && execCallback(beforeAsyncCallback);
 
-        return new Promise((resolve) => {
             setTimeout(() => {
-
-                asyncCallback();
-
+                execCallback(asyncCallback);
                 resolve();
             }, timeout);
         });
     });
 };
 
-export const asyncScrollTest = (promise, callback, asyncCallback) => {
-    return execAsync(promise, callback, asyncCallback, 20);
+export const asyncScrollTest = (promise, beforeAsyncCallback, asyncCallback) => {
+    const scrollTimeout = 20;
+    return execAsync(promise, beforeAsyncCallback, asyncCallback, scrollTimeout);
 };
 
 class ElementWrapper {
@@ -264,6 +272,13 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
             getAppointmentPosition: (index = 0) => locate($(this.appointments.getAppointment(index))),
 
+            getDragSource: () => this.appointments
+                .getAppointments()
+                .filter(CLASSES.appointmentDragSource),
+
+            getFakeAppointment: () => $('.dx-scheduler-fixed-appointments .dx-scheduler-appointment'),
+            getFakeAppointmentWrapper: () => this.appointments.getFakeAppointment().parent(),
+
             find: (text) => {
                 return this.appointments
                     .getAppointments()
@@ -294,9 +309,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 click: (index = 0) => this.appointments.compact.getButton(index).trigger('dxclick'),
 
                 getAppointment: (index = 0) => $('.dx-list-item').eq(index),
-
-                getFakeAppointment: () => $('.dx-scheduler-fixed-appointments .dx-scheduler-appointment')
-            }
+            },
         };
 
         this.appointmentPopup = {

@@ -472,6 +472,13 @@ export default class ViewDataProvider {
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];
     }
 
+    isGroupIntersectDateInterval(groupIndex, startDate, endDate) {
+        const groupStartDate = this.getGroupStartDate(groupIndex);
+        const groupEndDate = this.getGroupEndDate(groupIndex);
+
+        return startDate < groupEndDate && endDate > groupStartDate;
+    }
+
     findGlobalCellPosition(date, groupIndex = 0, allDay = false) {
         const { completeViewDataMap, _workspace: workspace } = this;
 

@@ -2,66 +2,60 @@ import {
   Component,
   JSXComponent,
   Ref,
+  ComponentBindings,
+  OneWay,
   Method,
-  Fragment,
 } from 'devextreme-generator/component_declaration/common';
 
-import { combineClasses } from '../../utils/combine_classes';
+import {
+  Scrollable,
+} from './scrollable';
+
+import {
+  ScrollableProps,
+} from './scrollable_props';
+
 import {
   ScrollableLocation, ScrollOffset,
 } from './types.d';
 
-import {
-  ScrollablePropsType,
-} from './scrollable_props';
+import BaseWidgetProps from '../../utils/base_props';
+import { combineClasses } from '../../utils/combine_classes';
 
-import { ScrollableNative } from './scrollable_native';
-import { ScrollableSimulated } from './scrollable_simulated';
-
-export const viewFunction = (viewModel: Scrollable): JSX.Element => {
+export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
     cssClasses,
     scrollableRef,
-    props: {
-      useNative,
-      ...scrollableProps
-    },
+    props,
     restAttributes,
   } = viewModel;
 
   return (
-    <Fragment>
-      {useNative && (
-      <ScrollableNative
-        ref={scrollableRef as any}
-        classes={cssClasses}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...scrollableProps}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...restAttributes}
-      />
-      )}
-      {!useNative && (
-      <ScrollableSimulated
-        ref={scrollableRef as any}
-        classes={cssClasses}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...scrollableProps}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...restAttributes}
-      />
-      )}
-    </Fragment>
+    <Scrollable
+      classes={cssClasses}
+      ref={scrollableRef as any}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...props}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...restAttributes}
+    />
   );
 };
+
+@ComponentBindings()
+export class ScrollViewProps extends ScrollableProps {
+  @OneWay() someProp?: string;
+}
+
+export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
 @Component({
   jQuery: { register: true },
   view: viewFunction,
 })
 
-export class Scrollable extends JSXComponent<ScrollablePropsType>() {
-  @Ref() scrollableRef!: ScrollableNative;
+export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
+  @Ref() scrollableRef!: Scrollable;
 
   @Method()
   content(): HTMLDivElement {
@@ -118,11 +112,10 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.clientWidth();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   get cssClasses(): string {
-    const { classes } = this.props;
-
     return combineClasses({
-      [`${classes}`]: !!classes,
+      'dx-scrollview': true,
     });
   }
 }

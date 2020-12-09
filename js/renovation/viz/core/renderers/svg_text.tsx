@@ -37,7 +37,6 @@ export const viewFunction = ({
   },
 }: TextSvgElement): JSX.Element => {
   const texts = textItems || [];
-
   return (
     <text
       ref={textRef as any}
@@ -51,12 +50,12 @@ export const viewFunction = ({
       strokeOpacity={strokeOpacity}
       opacity={opacity}
     >
-      {texts.length && isStroked && texts.map(({ style, className, value }, index) => (
+      {texts.length ? isStroked && texts.map(({ style, className, value }, index) => (
         <tspan key={index} style={style} className={className}>{value}</tspan>
-      ))}
-      {texts.length && texts.map(({ style, className, value }, index) => (
+      )) : null}
+      {texts.length ? texts.map(({ style, className, value }, index) => (
         <tspan key={index} style={style} className={className}>{value}</tspan>
-      ))}
+      )) : null}
       {!(texts.length) && text}
     </text>
   );
