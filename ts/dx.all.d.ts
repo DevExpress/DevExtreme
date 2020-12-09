@@ -3050,6 +3050,10 @@ declare module DevExpress.pdfExporter {
          */
         keepColumnWidths?: boolean;
         /**
+         * [descr:PdfExportDataGridProps.loadPanel]
+         */
+        loadPanel?: DevExpress.excelExporter.ExportLoadPanel;
+        /**
          * [descr:PdfExportDataGridProps.selectedRowsOnly]
          */
         selectedRowsOnly?: boolean;
