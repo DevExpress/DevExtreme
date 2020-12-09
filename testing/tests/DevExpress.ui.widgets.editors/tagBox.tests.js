@@ -1024,17 +1024,16 @@ QUnit.module('the "text" option', moduleSetup, () => {
             searchEnabled: true,
             searchTimeout: 0
         });
+        this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = new keyboardMock($input);
 
         keyboard.type('i');
-        this.clock.tick(TIME_TO_WAIT);
 
         const $listItems = $(tagBox.content()).find(`.${LIST_ITEM_CLASS}`);
         $listItems.first().trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT);
 
         assert.strictEqual(tagBox.option('text'), '', 'text is cleared');
     });
