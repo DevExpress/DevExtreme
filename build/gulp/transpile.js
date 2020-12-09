@@ -4,6 +4,7 @@ const babel = require('gulp-babel');
 const flatMap = require('gulp-flatmap');
 const fs = require('fs');
 const gulp = require('gulp');
+
 const gulpIf = require('gulp-if');
 const normalize = require('normalize-path');
 const notify = require('gulp-notify');
@@ -15,7 +16,6 @@ const watch = require('gulp-watch');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
-const env = require('./env-variables');
 const globTs = require('./ts').GLOB_TS;
 const renovationPipes = require('./renovation-pipes');
 const { ifRenovationPackage, ifEsmPackage } = require('./utils');
@@ -79,14 +79,17 @@ const createModuleConfig = (name, dir, filePath) => {
     return JSON.stringify(result, null, 2);
 };
 
-const transpile = (src, dist, config = transpileConfig.cjs, removeDebug = true) => (() =>
-    gulp
+const transpile = (src, dist, config = transpileConfig.cjs, removeDebug = true, wrapWidgetForQUnit = false) => {
+    const isRenovationDist = dist === ctx.TRANSPILED_RENOVATION_PATH || dist === ctx.TRANSPILED_PROD_RENOVATION_PATH;
+    const task = () => gulp
         .src(src)
         .pipe(gulpIf(removeDebug, compressionPipes.removeDebug()))
-        .pipe(gulpIf(env.USE_RENOVATION, renovationPipes.replaceWidgets()))
+        .pipe(gulpIf(isRenovationDist, renovationPipes.replaceWidgets(wrapWidgetForQUnit)))
         .pipe(babel(config))
-        .pipe(gulp.dest(dist))
-);
+        .pipe(gulp.dest(dist));
+    task.displayName = 'transpile:' + dist;
+    return task;
+};
 
 const transpileEsm = (dist) => gulp.series.apply(gulp, [
     transpile(src, path.join(dist, './esm'), transpileConfig.esm),
@@ -120,38 +123,61 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
         }))
         .pipe(gulp.dest(dist))
 ]);
+gulp.task('tmp',);
 
 gulp.task('transpile', gulp.series(
     'bundler-config',
-    transpile(src, ctx.TRANSPILED_PROD_PATH),
-    transpile(src, ctx.TRANSPILED_PATH, transpileConfig.cjs, false),
-    ifRenovationPackage(transpile(src, ctx.TRANSPILED_PROD_RENOVATION_PATH)),
+    gulp.parallel([
+        transpile(src, ctx.TRANSPILED_PROD_PATH),
+        transpile(src, ctx.TRANSPILED_PATH, transpileConfig.cjs, false),
+        ifRenovationPackage(transpile(src, ctx.TRANSPILED_PROD_RENOVATION_PATH, transpileConfig.cjs)),
+        ifRenovationPackage(transpile(src, ctx.TRANSPILED_RENOVATION_PATH, transpileConfig.cjs, false, true)),
+    ]),
     ifEsmPackage(transpileEsm(ctx.TRANSPILED_PROD_ESM_PATH)),
 ));
 
-const replaceTask = (sourcePath) => (() => gulp
-    .src(path.join(sourcePath, 'core/version.js'), { base: './' })
-    .pipe(replace('%VERSION%', ctx.version.script))
-    .pipe(gulp.dest('./'))
-);
+const replaceTask = (sourcePath) => {
+    const task = () => gulp
+        .src(path.join(sourcePath, 'core/version.js'), { base: './' })
+        .pipe(replace('%VERSION%', ctx.version.script))
+        .pipe(gulp.dest('./'));
+    task.displayName = `replace-version:${sourcePath}`;
+    return task;
+};
 
-gulp.task('version-replace', gulp.series('transpile', gulp.parallel([
+const replaceVersion = () => gulp.parallel([
     replaceTask(ctx.TRANSPILED_PATH),
     replaceTask(ctx.TRANSPILED_PROD_PATH),
     ifRenovationPackage(() => replaceTask(ctx.TRANSPILED_PROD_RENOVATION_PATH))(),
+    ifRenovationPackage(() => replaceTask(ctx.TRANSPILED_RENOVATION_PATH))(),
     ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './esm')))(),
     ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './cjs')))(),
-])));
+]);
 
-gulp.task('transpile-watch', gulp.series('version-replace', () =>
-    watch(src).on('ready', () => console.log('transpile task is watching for changes...'))
-        .pipe(plumber({
-            errorHandler: notify
-                .onError('Error: <%= error.message %>')
-                .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
-        }))
-        .pipe(babel(transpileConfig.cjs))
-        .pipe(gulp.dest(ctx.TRANSPILED_PATH))
+gulp.task('version-replace', gulp.series('transpile', replaceVersion()));
+
+gulp.task('transpile-watch', gulp.series(
+    gulp.parallel([
+        transpile(src, ctx.TRANSPILED_PATH, transpileConfig.cjs, false),
+        transpile(src, ctx.TRANSPILED_RENOVATION_PATH, transpileConfig.cjs, false, true)
+    ]),
+    replaceVersion(),
+    () => {
+        const watchTask = watch(src).on('ready', () => console.log('transpile task is watching for changes...'))
+            .pipe(plumber({
+                errorHandler: notify
+                    .onError('Error: <%= error.message %>')
+                    .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
+            }));
+        watchTask
+            .pipe(babel(transpileConfig.cjs))
+            .pipe(gulp.dest(ctx.TRANSPILED_PATH));
+        watchTask
+            .pipe(renovationPipes.replaceWidgets(true))
+            .pipe(babel(transpileConfig.cjs))
+            .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH));
+        return watchTask;
+    }
 ));
 
 gulp.task('transpile-tests', gulp.series('bundler-config', () =>

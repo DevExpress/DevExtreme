@@ -241,7 +241,8 @@ const SchedulerNavigator = Widget.inherit({
             min: undefined,
             max: undefined,
             firstDayOfWeek: undefined,
-            _useShortDateFormat: false
+            _useShortDateFormat: false,
+            todayDate: () => new Date()
         });
     },
 
@@ -438,6 +439,7 @@ const SchedulerNavigator = Widget.inherit({
             max: this.option('max'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             value: this.option('date'),
+            _todayDate: this.option('todayDate'),
             focusStateEnabled: this.option('focusStateEnabled'),
             onValueChanged: (function(e) {
                 if(!this.option('visible')) return;

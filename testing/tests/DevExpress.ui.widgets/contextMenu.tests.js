@@ -11,6 +11,7 @@ import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelp
 
 import 'ui/button';
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -2244,6 +2245,50 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
         assert.strictEqual(focusedItem.is(instance.option('focusedElement')), true, 'focusedElement');
         assert.strictEqual(getFocusedItemText(instance), 'Item 1', 'focusedItem text');
         assert.strictEqual(getVisibleSubmenuCount(instance), 1, 'submenu.count');
+    });
+
+    [
+        (menu, keyboard) => menu.hide(),
+        (menu, keyboard) => keyboard.keyDown('esc')
+    ].forEach(hideFunction => {
+        QUnit.test(`FocusedElement should be cleaned when context menu was hidden by ${hideFunction} function (T952882)`, function(assert) {
+            const menu = new ContextMenu(this.$element, {
+                items: [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ],
+                focusStateEnabled: true
+            });
+            menu.show();
+
+            const keyboard = keyboardMock(menu.itemsContainer());
+            keyboard.keyDown('down');
+
+            hideFunction(menu, keyboard);
+            assert.strictEqual(menu.option('focusedElement'), null);
+        });
+    });
+
+    QUnit.test('vertical keyboard navigation works cyclically (T952882)', function(assert) {
+        const instance = new ContextMenu(this.$element, {
+            items: [
+                { text: 'item 1' },
+                { text: 'item 2', items: [{ text: 'item 21' }, { text: 'item 22' }, { text: 'item 23' }] },
+                { text: 'item 3' }
+            ],
+            focusStateEnabled: true
+        });
+
+        instance.show();
+
+        keyboardMock(instance.itemsContainer())
+            .keyDown('down')
+            .keyDown('down')
+            .keyDown('right')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up');
+
+        assert.equal($(instance.option('focusedElement')).text(), 'item 22');
     });
 });
 

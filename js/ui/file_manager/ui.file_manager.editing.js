@@ -277,13 +277,13 @@ class FileManagerEditingControl extends Widget {
 
     _tryMove(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._showDialog(this._dialogManager.getMoveDialog())
+        return this._showDialog(this._dialogManager.getMoveDialog(itemInfos))
             .then(({ folder }) => this._controller.moveItems(itemInfos, folder));
     }
 
     _tryCopy(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._showDialog(this._dialogManager.getCopyDialog())
+        return this._showDialog(this._dialogManager.getCopyDialog(itemInfos))
             .then(({ folder }) => this._controller.copyItems(itemInfos, folder));
     }
 

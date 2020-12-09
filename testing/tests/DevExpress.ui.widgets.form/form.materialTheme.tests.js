@@ -6,6 +6,7 @@ import 'ui/form/ui.form';
 import 'common.css!';
 import 'material_blue_light.css!';
 import FormLayoutTestWrapper from '../../helpers/FormLayoutTestWrapper.js';
+import { FIELD_ITEM_CONTENT_WRAPPER_CLASS } from 'ui/form/constants';
 
 function testChromeOnly(name, callback) {
     if(!browser.chrome) {
@@ -450,5 +451,74 @@ QUnit.module('Left label location scenarios', () => {
 
         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 128, 0, 71, 15);
         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 118, 71, 929, 31);
+    });
+});
+
+QUnit.module('dx-invalid class on dx-field-item-content-wrapper (T949269)', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    const invalidClass = 'dx-invalid';
+    const formData = {
+        field1: ''
+    };
+
+    QUnit.testInActiveWindow('dx-invalid class is added for invalid focused editor (simple item)', function(assert) {
+        const formInstance = $('#form').dxForm({
+            formData,
+            items: [{
+                dataField: 'field1',
+                helpText: 'help',
+                isRequired: true
+            }]
+        }).dxForm('instance');
+
+        formInstance.validate();
+
+        const editorInstance = formInstance.getEditor('field1');
+        const wrapper = $(editorInstance.element()).closest(`.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`);
+
+        assert.notOk(wrapper.hasClass(invalidClass));
+        editorInstance.focus();
+        this.clock.tick();
+        assert.ok(wrapper.hasClass(invalidClass));
+    });
+
+    QUnit.testInActiveWindow('dx-invalid class is added for invalid focused editor (template)', function(assert) {
+        let editorElement;
+        $('#form').dxForm({
+            validationGroup: 'formGroup',
+            formData,
+            items: [
+                {
+                    dataField: 'field1',
+                    helpText: 'help',
+                    template: function(data, itemElement) {
+                        editorElement = $('<div>').dxTextBox({
+                            value: ''
+                        }).dxValidator({
+                            validationGroup: 'formGroup',
+                            validationRules: [{
+                                type: 'required',
+                                message: 'LastName is required'
+                            }]
+                        }).appendTo(itemElement);
+                    }
+                }
+            ]
+        })
+            .dxForm('instance')
+            .validate();
+
+        const wrapper = $(editorElement).closest(`.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`);
+
+        assert.notOk(wrapper.hasClass(invalidClass));
+        $(editorElement).dxTextBox('instance').focus();
+        this.clock.tick();
+        assert.ok(wrapper.hasClass(invalidClass));
     });
 });
