@@ -52,6 +52,7 @@ describe('DateTableLayoutBase', () => {
         isVirtual: 'isVirtual',
         topVirtualRowHeight: 100,
         bottomVirtualRowHeight: 200,
+        virtualCellsCount: 3,
       });
 
       expect(layout.hasClass('some-class'))
@@ -66,6 +67,7 @@ describe('DateTableLayoutBase', () => {
           isVirtual: 'isVirtual',
           topVirtualRowHeight: 100,
           bottomVirtualRowHeight: 200,
+          virtualCellsCount: 3,
         });
       expect(table.hasClass('some-class'))
         .toBe(true);
@@ -125,6 +127,13 @@ describe('DateTableLayoutBase', () => {
               .toEqual(value);
           });
         });
+      });
+
+      it('virtualCellsCount', () => {
+        const layout = new DateTableLayoutBase({ viewData: viewDataBase });
+
+        expect(layout.virtualCellsCount)
+          .toBe(1);
       });
     });
   });

@@ -1,28 +1,36 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot, Fragment,
+  Component, ComponentBindings, JSXComponent, OneWay, Slot,
 } from 'devextreme-generator/component_declaration/common';
-import { Row } from './row';
 import { addHeightToStyle } from '../utils';
+import { VirtualRow } from './virtual-row';
 
-export const viewFunction = (viewModel: Table): JSX.Element => (
+export const viewFunction = ({
+  hasBottomVirtualRow,
+  hasTopVirtualRow,
+  style,
+  restAttributes,
+  props: {
+    virtualCellsCount,
+    className,
+    children,
+    topVirtualRowHeight,
+    bottomVirtualRowHeight,
+  },
+}: Table): JSX.Element => (
   <table
         // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    className={viewModel.props.className}
-    style={viewModel.style}
+    {...restAttributes}
+    className={className}
+    style={style}
   >
     <tbody>
-      <Fragment>
-        {
-        viewModel.props.isVirtual
-          && <Row isVirtual height={viewModel.props.topVirtualRowHeight} />
-        }
-        {viewModel.props.children}
-        {
-        viewModel.props.isVirtual
-          && <Row isVirtual height={viewModel.props.bottomVirtualRowHeight} />
-        }
-      </Fragment>
+      {hasTopVirtualRow && (
+        <VirtualRow height={topVirtualRowHeight} cellsCount={virtualCellsCount} />
+      )}
+      {children}
+      {hasBottomVirtualRow && (
+        <VirtualRow height={bottomVirtualRowHeight} cellsCount={virtualCellsCount} />
+      )}
     </tbody>
   </table>
 );
@@ -31,15 +39,17 @@ export const viewFunction = (viewModel: Table): JSX.Element => (
 export class TableProps {
   @OneWay() className?: string = '';
 
-  @OneWay() topVirtualRowHeight?: number = 0;
+  @OneWay() topVirtualRowHeight = 0;
 
-  @OneWay() bottomVirtualRowHeight?: number = 0;
+  @OneWay() bottomVirtualRowHeight = 0;
+
+  @OneWay() virtualCellsCount = 0;
 
   @OneWay() isVirtual?: boolean = false;
 
   @OneWay() height?: number;
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | JSX.Element[];
 }
 
 @Component({
@@ -52,5 +62,17 @@ export class Table extends JSXComponent(TableProps) {
     const { style } = this.restAttributes;
 
     return addHeightToStyle(height, style);
+  }
+
+  get hasTopVirtualRow(): boolean {
+    const { isVirtual, topVirtualRowHeight } = this.props;
+
+    return !!isVirtual && !!topVirtualRowHeight;
+  }
+
+  get hasBottomVirtualRow(): boolean {
+    const { isVirtual, bottomVirtualRowHeight } = this.props;
+
+    return !!isVirtual && !!bottomVirtualRowHeight;
   }
 }

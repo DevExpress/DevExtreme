@@ -1,4 +1,5 @@
 import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
+import { ExportLoadPanel } from './exporter/export_load_panel';
 
 /**
 * @docid
@@ -98,6 +99,11 @@ export interface PdfExportDataGridProps {
      * @public
      */
     customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any}) => any);
+     /**
+     * @docid
+     * @public
+     */
+    loadPanel?: ExportLoadPanel;
 }
 
 /**

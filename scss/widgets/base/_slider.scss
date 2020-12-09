@@ -22,23 +22,13 @@ $slider-tooltip-arrow-height: 7px;
 
 .dx-slider-label-position-bottom {
   padding-bottom: 14px;
-
-  .dx-slider-label {
-    bottom: -8px;
-  }
 }
 
 .dx-slider-label-position-top {
   padding-top: 14px;
-
-  .dx-slider-label {
-    top: -8px;
-  }
 }
 
 .dx-slider {
-  line-height: 0;
-
   &::before {
     display: inline-block;
     height: 100%;
