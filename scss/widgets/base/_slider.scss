@@ -1,0 +1,105 @@
+@use "./mixins" as *;
+@use "./popover/mixins" as *;
+
+// adduse
+$slider-tooltip-content-height: 28px;
+$slider-tooltip-arrow-height: 7px;
+
+.dx-slider-label {
+  position: absolute;
+  font-size: 0.85em;
+
+  &:last-child {
+    right: 0;
+    left: auto;
+  }
+
+  .dx-rtl &:last-child {
+    left: 0;
+    right: auto;
+  }
+}
+
+.dx-slider-label-position-bottom {
+  padding-bottom: 14px;
+}
+
+.dx-slider-label-position-top {
+  padding-top: 14px;
+}
+
+.dx-slider {
+  &::before {
+    display: inline-block;
+    height: 100%;
+    content: '';
+    vertical-align: middle;
+  }
+
+  .dx-overlay-content {
+    height: $slider-tooltip-content-height;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  @include user-select(none);
+  @include dx-popover-arrow-size(2 * $slider-tooltip-arrow-height);
+}
+
+.dx-slider-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.dx-slider-bar {
+  position: relative;
+}
+
+.dx-slider-range {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.dx-slider-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  pointer-events: auto;
+  -webkit-user-drag: none;
+
+  .dx-tooltip-wrapper .dx-popup-content {
+    line-height: 0;
+  }
+}
+
+.dx-state-disabled {
+  .dx-slider-wrapper {
+    cursor: default;
+  }
+}
+
+.dx-rtl .dx-slider-handle {
+  right: auto;
+  left: 0;
+}
+
+.dx-slider-tooltip-on-hover {
+  .dx-tooltip {
+    visibility: hidden;
+  }
+
+  &.dx-state-active,
+  &.dx-state-hover {
+    .dx-tooltip {
+      visibility: visible;
+    }
+  }
+}

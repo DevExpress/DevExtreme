@@ -4,7 +4,7 @@ import Editor, {
 
 export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
     /**
-     * @docid dxRecurrenceEditorOptions.value
+     * @docid
      * @default null
      * @fires dxRecurrenceEditorOptions.onValueChanged
      * @prevFileNamespace DevExpress.ui
@@ -13,7 +13,7 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
     value?: string;
 }
 /**
- * @docid dxRecurrenceEditor
+ * @docid
  * @isEditor
  * @inherits Editor
  * @module ui/recurrence_editor

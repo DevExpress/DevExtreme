@@ -2,6 +2,8 @@ import { isDate, isDefined, isObject, isFunction, isNumeric } from '../../core/u
 import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 import numberLocalization from '../../localization/number';
+import messageLocalization from '../../localization/message';
+import { hasWindow } from '../../core/utils/window';
 
 export const Export = {
     getFullOptions: function(options) {
@@ -22,6 +24,15 @@ export const Export = {
                 throw Error('The "autoTableOptions" option must be of object type.');
             }
             fullOptions.autoTableOptions = extend(true, {}, this._getDefaultAutoTableOptions(), fullOptions.autoTableOptions);
+        }
+        if(!isDefined(fullOptions.loadPanel)) {
+            fullOptions.loadPanel = {};
+        }
+        if(!isDefined(fullOptions.loadPanel.enabled)) {
+            fullOptions.loadPanel.enabled = true;
+        }
+        if(!isDefined(fullOptions.loadPanel.text)) {
+            fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
         }
 
         return fullOptions;
@@ -51,6 +62,20 @@ export const Export = {
         };
     },
 
+    _setLoadPanelOptions: function(component, options) {
+        if(!hasWindow()) {
+            return;
+        }
+
+        component._setOptionWithoutOptionChange('loadPanel', options);
+        this._renderLoadPanel(component);
+    },
+
+    _renderLoadPanel: function(component) {
+        const rowsView = component.getView('rowsView');
+        rowsView._renderLoadPanel(rowsView.element(), rowsView.element().parent());
+    },
+
     export: function(options) {
         const {
             jsPDFDocument,
@@ -58,8 +83,17 @@ export const Export = {
             component,
             customizeCell,
             keepColumnWidths,
-            selectedRowsOnly
+            selectedRowsOnly,
+            loadPanel
         } = options;
+
+        const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
+        if('animation' in component.option('loadPanel')) {
+            loadPanel.animation = null;
+        }
+
+        this._setLoadPanelOptions(component, loadPanel);
+
         const dataProvider = component.getDataProvider(selectedRowsOnly);
         const wrapText = !!component.option('wordWrapEnabled');
 
@@ -132,6 +166,8 @@ export const Export = {
                 ///#ENDDEBUG
 
                 resolve();
+            }).always(() => {
+                this._setLoadPanelOptions(component, initialLoadPanelOptions);
             });
         });
     },

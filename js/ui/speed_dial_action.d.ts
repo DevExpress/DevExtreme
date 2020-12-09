@@ -12,28 +12,28 @@ import Widget, {
 
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**
-     * @docid dxSpeedDialActionOptions.icon
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid dxSpeedDialActionOptions.index
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     index?: number;
     /**
-     * @docid dxSpeedDialActionOptions.label
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     label?: string;
     /**
-     * @docid dxSpeedDialActionOptions.onClick
+     * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field1 event:event
      * @type_function_param1_field2 component:this
@@ -45,7 +45,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      */
     onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: dxElement, actionElement?: dxElement }) => any);
     /**
-     * @docid dxSpeedDialActionOptions.onContentReady
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 actionElement:dxElement
@@ -55,14 +55,14 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      */
     onContentReady?: ((e: { component?: dxSpeedDialAction, element?: dxElement, model?: any, actionElement?: dxElement }) => any);
     /**
-     * @docid dxSpeedDialActionOptions.visible
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
 }
 /**
- * @docid dxSpeedDialAction
+ * @docid
  * @inherits Widget
  * @module ui/speed_dial_action
  * @export default

@@ -35,6 +35,11 @@ const FILE_MANAGER_ITEM_CUSTOM_THUMBNAIL_CLASS = FILE_MANAGER_CLASS + '-item-cus
 
 const PARENT_DIRECTORY_KEY_PREFIX = '[*DXPDK*]$40F96F03-FBD8-43DF-91BE-F55F4B8BA871$';
 
+const VIEW_AREAS = {
+    folders: 'navPane',
+    items: 'itemView'
+};
+
 class FileManager extends Widget {
 
     _initTemplates() {
@@ -148,7 +153,7 @@ class FileManager extends Widget {
     }
 
     _createFilesTreeView(container) {
-        this._filesTreeViewContextMenu = this._createContextMenu(false, 'navPane');
+        this._filesTreeViewContextMenu = this._createContextMenu(false, VIEW_AREAS.folders);
 
         const $filesTreeView = $('<div>')
             .addClass(FILE_MANAGER_DIRS_PANEL_CLASS)
@@ -165,7 +170,7 @@ class FileManager extends Widget {
     }
 
     _createItemView($container, viewMode) {
-        this._itemViewContextMenu = this._createContextMenu(true, 'itemView');
+        this._itemViewContextMenu = this._createContextMenu(true, VIEW_AREAS.items);
 
         const itemViewOptions = this.option('itemView');
 
@@ -179,6 +184,7 @@ class FileManager extends Widget {
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onFocusedItemChanged: this._onItemViewFocusedItemChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
+            onContextMenuShowing: () => this._onContextMenuShowing(VIEW_AREAS.items),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option('customizeDetailColumns'),
             detailColumns: this.option('itemView.details.columns')
@@ -208,6 +214,7 @@ class FileManager extends Widget {
             commandManager: this._commandManager,
             items: this.option('contextMenu.items'),
             onItemClick: (args) => this._actions.onContextMenuItemClick(args),
+            onContextMenuShowing: () => this._onContextMenuShowing(viewArea),
             isolateCreationItemCommands,
             viewArea
         });
@@ -237,6 +244,7 @@ class FileManager extends Widget {
         this._actions.onSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
 
         this._updateToolbar(selectedItemInfos);
+        this._setItemsViewAreaActive(true);
     }
 
     _onItemViewFocusedItemChanged(e) {
@@ -391,6 +399,10 @@ class FileManager extends Widget {
         this._setItemsViewAreaActive(true);
     }
 
+    _onContextMenuShowing(viewArea) {
+        this._setItemsViewAreaActive(viewArea === VIEW_AREAS.items);
+    }
+
     _getItemThumbnailInfo(fileInfo) {
         const func = this.option('customizeThumbnail');
         const thumbnail = isFunction(func) ? func(fileInfo.fileItem) : fileInfo.fileItem.thumbnail;
@@ -421,16 +433,6 @@ class FileManager extends Widget {
 
             focusedItemKey: undefined,
 
-            /**
-            * @name dxFileManagerToolbar
-            * @type object
-            */
-
-            /**
-            * @name dxFileManagerToolbarItem
-            * @inherits dxToolbarItem
-            */
-
             toolbar: {
                 items: [
                     'showNavPane', 'create', 'upload', 'switchView',
@@ -451,17 +453,6 @@ class FileManager extends Widget {
                 ]
             },
 
-
-            /**
-            * @name dxFileManagerContextMenu
-            * @type object
-            */
-
-            /**
-            * @name dxFileManagerContextMenuItem
-            * @inherits dxContextMenuItem
-            */
-
             contextMenu: {
                 items: [
                     'create', 'upload', 'rename', 'move', 'copy', 'delete', 'refresh', 'download'
@@ -469,41 +460,13 @@ class FileManager extends Widget {
             },
 
             itemView: {
-                /**
-                 * @name dxFileManagerOptions.itemView.details
-                 * @type object
-                 */
-                /**
-                 * @name dxFileManagerDetailsColumn
-                 * @type object
-                 */
                 details: {
-                    /**
-                     * @name dxFileManagerOptions.itemView.details.columns
-                     * @type Array<dxFileManagerDetailsColumn, string>
-                     * @default ["thumbnail", "name", "dateModified", "size"]
-                     */
                     columns: [
                         'thumbnail', 'name', 'dateModified', 'size'
                     ]
                 },
-                /**
-                * @name dxFileManagerOptions.itemView.mode
-                * @type Enums.FileManagerItemViewMode
-                * @default "details"
-                */
                 mode: 'details', // "thumbnails"
-                /**
-                * @name dxFileManagerOptions.itemView.showFolders
-                * @type boolean
-                * @default true
-                */
                 showFolders: true,
-                /**
-                * @name dxFileManagerOptions.itemView.showParentFolder
-                * @type boolean
-                * @default true
-                */
                 showParentFolder: true
             },
 
@@ -528,63 +491,17 @@ class FileManager extends Widget {
             allowedFileExtensions: [],
 
             upload: {
-                /**
-                * @name dxFileManagerOptions.upload.maxFileSize
-                * @type number
-                * @default 0
-                */
                 maxFileSize: 0,
-
-                /**
-                * @name dxFileManagerOptions.upload.chunkSize
-                * @type number
-                * @default 200000
-                */
                 chunkSize: 200000
             },
 
             permissions: {
-                /**
-                 * @name dxFileManagerOptions.permissions.create
-                 * @type boolean
-                 * @default false
-                 */
                 create: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.copy
-                 * @type boolean
-                 * @default false
-                 */
                 copy: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.move
-                 * @type boolean
-                 * @default false
-                 */
                 move: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.delete
-                 * @type boolean
-                 * @default false
-                 */
                 delete: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.rename
-                 * @type boolean
-                 * @default false
-                 */
                 rename: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.upload
-                 * @type boolean
-                 * @default false
-                 */
                 upload: false,
-                /**
-                 * @name dxFileManagerOptions.permissions.download
-                 * @type boolean
-                 * @default false
-                 */
                 download: false
             }
         });
@@ -775,7 +692,7 @@ class FileManager extends Widget {
         this._setCurrentDirectory(newCurrentDirectory);
 
         if(newCurrentDirectory) {
-            this._filesTreeView.expandDirectory(newCurrentDirectory.parentDirectory);
+            this._filesTreeView.toggleDirectoryExpandedState(newCurrentDirectory.parentDirectory, true);
         }
     }
 

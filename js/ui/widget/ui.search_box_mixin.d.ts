@@ -4,21 +4,21 @@ import {
 
 export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
     /**
-     * @docid SearchBoxMixinOptions.searchEditorOptions
+     * @docid
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchEditorOptions?: dxTextBoxOptions;
     /**
-     * @docid SearchBoxMixinOptions.searchEnabled
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchEnabled?: boolean;
     /**
-     * @docid SearchBoxMixinOptions.searchExpr
+     * @docid
      * @type getter|Array<getter>
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -26,7 +26,7 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
-     * @docid SearchBoxMixinOptions.searchMode
+     * @docid
      * @type Enums.CollectionSearchMode
      * @default 'contains'
      * @prevFileNamespace DevExpress.ui
@@ -34,14 +34,14 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
      */
     searchMode?: 'contains' | 'startswith' | 'equals';
     /**
-     * @docid SearchBoxMixinOptions.searchTimeout
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchTimeout?: number;
     /**
-     * @docid SearchBoxMixinOptions.searchValue
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -49,7 +49,7 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
     searchValue?: string;
 }
 /**
- * @docid SearchBoxMixin
+ * @docid
  * @module ui/widget/ui.search_box_mixin
  * @export default
  * @hidden

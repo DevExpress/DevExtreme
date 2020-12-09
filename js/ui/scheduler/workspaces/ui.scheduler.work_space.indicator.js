@@ -18,8 +18,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
     _getToday() {
         const todayDate = this.option('indicatorTime') || new Date();
-
         const timeZoneCalculator = this._getTimeZoneCalculator();
+
         return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
     }
 

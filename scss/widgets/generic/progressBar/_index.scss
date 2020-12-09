@@ -4,8 +4,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+@use "../../base/progressBar";
 
 // adduse
+
 $generic-bar-height: 6px;
 $generic-background-width: 90%;
 $generic-progressbar-border-radius: 2px;

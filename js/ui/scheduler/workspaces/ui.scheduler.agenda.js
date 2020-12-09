@@ -26,6 +26,8 @@ const INNER_CELL_MARGIN = 5;
 const OUTER_CELL_MARGIN = 20;
 
 class SchedulerAgenda extends SchedulerWorkSpace {
+    get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
+
     _init() {
         super._init();
         this._activeStateUnit = undefined;
@@ -130,12 +132,6 @@ class SchedulerAgenda extends SchedulerWorkSpace {
     _renderView() {
         this._setFirstViewDate();
         this._rows = [];
-        this.invoke('getAgendaRows', {
-            agendaDuration: this.option('agendaDuration'),
-            currentDate: new Date(this.option('currentDate'))
-        }).done((function(rows) {
-            this._recalculateAgenda(rows);
-        }).bind(this));
     }
 
     _recalculateAgenda(rows) {
@@ -329,18 +325,23 @@ class SchedulerAgenda extends SchedulerWorkSpace {
     _prepareCellTemplateOptions(text, date, rowIndex, $cell) {
         const groupsOpt = this.option('groups');
         const groups = {};
-        const path = groupsOpt.length && this._getPathToLeaf(rowIndex) || [];
+        const isGroupedView = !!groupsOpt.length;
+        const path = isGroupedView && this._getPathToLeaf(rowIndex) || [];
 
         path.forEach(function(resourceValue, resourceIndex) {
             const resourceName = groupsOpt[resourceIndex].name;
             groups[resourceName] = resourceValue;
         });
+        const groupIndex = isGroupedView
+            ? this._getGroupIndexByResourceId(groups)
+            : undefined;
 
         return {
             model: {
-                text: text,
-                date: date,
-                groups: groups
+                text,
+                date,
+                groups,
+                groupIndex,
             },
             container: getPublicElement($cell),
             index: rowIndex
@@ -447,6 +448,28 @@ class SchedulerAgenda extends SchedulerWorkSpace {
         }
 
         return result;
+    }
+
+    _calculateRows(appointments) {
+        return this.renderingStrategy.calculateRows(
+            appointments,
+            this.option('agendaDuration'),
+            this.option('currentDate'));
+    }
+
+    preRenderAppointments(options) {
+        super.preRenderAppointments(options);
+
+        this._calculateRows(options.appointments);
+    }
+
+    onDataSourceChanged(appointments) {
+        super.onDataSourceChanged();
+
+        this._renderView();
+
+        const rows = this._calculateRows(appointments);
+        this._recalculateAgenda(rows);
     }
 
     getAgendaVerticalStepHeight() {

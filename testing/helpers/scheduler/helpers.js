@@ -22,18 +22,18 @@ export const CLASSES = {
     navigatorNextButton: '.dx-scheduler-navigator-next',
     navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
     navigatorPopoverContent: '.dx-scheduler-navigator-calendar-popover > .dx-overlay-content',
+    scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
+    schedulerSmall: '.dx-scheduler-small',
 
     calendar: 'dx-scheduler-navigator-calendar',
     calendarToday: '.dx-calendar-today',
     calendarSelected: '.dx-calendar-selected-date',
 
-    scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
-    schedulerSmall: '.dx-scheduler-small',
-
     dateTableCell: '.dx-scheduler-date-table-cell',
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
 
     appointment: '.dx-scheduler-appointment',
+    appointmentDragSource: '.dx-scheduler-appointment-drag-source',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -60,6 +60,40 @@ export const checkResultByDeviceType = (assert, callback) => {
     }
 };
 
+export const asyncWrapper = (assert, callback) => {
+    const done = assert.async();
+    const promise = Promise.resolve();
+
+    return callback(promise)
+        .catch(e => assert.ok(false, e.stack))
+        .then(done);
+};
+
+export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout) => {
+    return promise.then(() => {
+        return new Promise((resolve, reject) => {
+            const execCallback = func => {
+                try {
+                    func();
+                } catch(e) {
+                    reject(e);
+                }
+            };
+
+            beforeAsyncCallback && execCallback(beforeAsyncCallback);
+
+            setTimeout(() => {
+                execCallback(asyncCallback);
+                resolve();
+            }, timeout);
+        });
+    });
+};
+
+export const asyncScrollTest = (promise, beforeAsyncCallback, asyncCallback) => {
+    const scrollTimeout = 20;
+    return execAsync(promise, beforeAsyncCallback, asyncCallback, scrollTimeout);
+};
 
 class ElementWrapper {
     constructor(selector, parent) {
@@ -93,7 +127,7 @@ class NavigatorCaption extends ClickElementWrapper {
 
 class CalendarCell extends ClickElementWrapper {
     get value() {
-        return parseInt(this.getElement().find('span').text());
+        return parseInt(this.getElement().find('span').eq(0).text());
     }
 }
 
@@ -116,12 +150,12 @@ class NavigatorPopover extends ElementWrapper {
         return this.content.getElement().is(':visible');
     }
 
-    get content() {
-        return new ElementWrapper(CLASSES.navigatorPopoverContent);
-    }
-
     get calendar() {
         return new Calendar();
+    }
+
+    get content() {
+        return new ElementWrapper(CLASSES.navigatorPopoverContent);
     }
 
     get hasScroll() {
@@ -238,6 +272,13 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
             getAppointmentPosition: (index = 0) => locate($(this.appointments.getAppointment(index))),
 
+            getDragSource: () => this.appointments
+                .getAppointments()
+                .filter(CLASSES.appointmentDragSource),
+
+            getFakeAppointment: () => $('.dx-scheduler-fixed-appointments .dx-scheduler-appointment'),
+            getFakeAppointmentWrapper: () => this.appointments.getFakeAppointment().parent(),
+
             find: (text) => {
                 return this.appointments
                     .getAppointments()
@@ -268,9 +309,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 click: (index = 0) => this.appointments.compact.getButton(index).trigger('dxclick'),
 
                 getAppointment: (index = 0) => $('.dx-list-item').eq(index),
-
-                getFakeAppointment: () => $('.dx-scheduler-fixed-appointments .dx-scheduler-appointment')
-            }
+            },
         };
 
         this.appointmentPopup = {

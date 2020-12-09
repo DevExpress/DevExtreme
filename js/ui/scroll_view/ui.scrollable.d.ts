@@ -14,7 +14,7 @@ import {
 
 export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptions<T> {
     /**
-     * @docid dxScrollableOptions.bounceEnabled
+     * @docid
      * @default false [for](desktop)
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -22,7 +22,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      */
     bounceEnabled?: boolean;
     /**
-     * @docid dxScrollableOptions.direction
+     * @docid
      * @type Enums.ScrollDirection
      * @default "vertical"
      * @prevFileNamespace DevExpress.ui
@@ -30,14 +30,14 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      */
     direction?: 'both' | 'horizontal' | 'vertical';
     /**
-     * @docid dxScrollableOptions.disabled
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
     /**
-     * @docid dxScrollableOptions.onScroll
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -52,7 +52,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      */
     onScroll?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
     /**
-     * @docid dxScrollableOptions.onUpdated
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -67,7 +67,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      */
     onUpdated?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
     /**
-     * @docid dxScrollableOptions.scrollByContent
+     * @docid
      * @default false [for](non-touch_devices)
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -75,7 +75,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      */
     scrollByContent?: boolean;
     /**
-     * @docid dxScrollableOptions.scrollByThumb
+     * @docid
      * @default true [for](desktop)
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -83,7 +83,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      */
     scrollByThumb?: boolean;
     /**
-     * @docid dxScrollableOptions.showScrollbar
+     * @docid
      * @default 'onHover' [for](desktop)
      * @type string
      * @acceptValues 'onScroll'|'onHover'|'always'|'never'
@@ -93,7 +93,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      */
     showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
     /**
-     * @docid dxScrollableOptions.useNative
+     * @docid
      * @default false [for](desktop)
      * @default true [for](Mac)
      * @default true
@@ -103,7 +103,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     useNative?: boolean;
 }
 /**
- * @docid dxScrollable
+ * @docid
  * @inherits DOMComponent
  * @namespace DevExpress.ui
  * @hidden
@@ -113,7 +113,7 @@ export default class dxScrollable extends DOMComponent {
     constructor(element: Element, options?: dxScrollableOptions)
     constructor(element: JQuery, options?: dxScrollableOptions)
     /**
-     * @docid dxScrollable.clientHeight
+     * @docid
      * @publicName clientHeight()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -121,7 +121,7 @@ export default class dxScrollable extends DOMComponent {
      */
     clientHeight(): number;
     /**
-     * @docid dxScrollable.clientWidth
+     * @docid
      * @publicName clientWidth()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -129,7 +129,7 @@ export default class dxScrollable extends DOMComponent {
      */
     clientWidth(): number;
     /**
-     * @docid dxScrollable.content
+     * @docid
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -137,7 +137,7 @@ export default class dxScrollable extends DOMComponent {
      */
     content(): dxElement;
     /**
-     * @docid dxScrollable.scrollBy
+     * @docid
      * @publicName scrollBy(distance)
      * @param1 distance:numeric
      * @prevFileNamespace DevExpress.ui
@@ -145,7 +145,7 @@ export default class dxScrollable extends DOMComponent {
      */
     scrollBy(distance: number): void;
     /**
-     * @docid dxScrollable.scrollBy
+     * @docid
      * @publicName scrollBy(distanceObject)
      * @param1 distanceObject:object
      * @prevFileNamespace DevExpress.ui
@@ -153,7 +153,7 @@ export default class dxScrollable extends DOMComponent {
      */
     scrollBy(distanceObject: any): void;
     /**
-     * @docid dxScrollable.scrollHeight
+     * @docid
      * @publicName scrollHeight()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -161,7 +161,7 @@ export default class dxScrollable extends DOMComponent {
      */
     scrollHeight(): number;
     /**
-     * @docid dxScrollable.scrollLeft
+     * @docid
      * @publicName scrollLeft()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -169,7 +169,7 @@ export default class dxScrollable extends DOMComponent {
      */
     scrollLeft(): number;
     /**
-     * @docid dxScrollable.scrollOffset
+     * @docid
      * @publicName scrollOffset()
      * @return object
      * @prevFileNamespace DevExpress.ui
@@ -177,7 +177,7 @@ export default class dxScrollable extends DOMComponent {
      */
     scrollOffset(): any;
     /**
-     * @docid dxScrollable.scrollTo
+     * @docid
      * @publicName scrollTo(targetLocation)
      * @param1 targetLocation:numeric
      * @prevFileNamespace DevExpress.ui
@@ -185,7 +185,7 @@ export default class dxScrollable extends DOMComponent {
      */
     scrollTo(targetLocation: number): void;
     /**
-     * @docid dxScrollable.scrollTo
+     * @docid
      * @publicName scrollTo(targetLocationObject)
      * @param1 targetLocation:object
      * @prevFileNamespace DevExpress.ui
@@ -193,7 +193,7 @@ export default class dxScrollable extends DOMComponent {
      */
     scrollTo(targetLocation: any): void;
     /**
-     * @docid dxScrollable.scrollToElement
+     * @docid
      * @publicName scrollToElement(targetLocation)
      * @param1 element:Element|jQuery
      * @prevFileNamespace DevExpress.ui
@@ -201,7 +201,7 @@ export default class dxScrollable extends DOMComponent {
      */
     scrollToElement(element: Element | JQuery): void;
     /**
-     * @docid dxScrollable.scrollTop
+     * @docid
      * @publicName scrollTop()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -209,7 +209,7 @@ export default class dxScrollable extends DOMComponent {
      */
     scrollTop(): number;
     /**
-     * @docid dxScrollable.scrollWidth
+     * @docid
      * @publicName scrollWidth()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -217,7 +217,7 @@ export default class dxScrollable extends DOMComponent {
      */
     scrollWidth(): number;
     /**
-     * @docid dxScrollable.update
+     * @docid
      * @publicName update()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui

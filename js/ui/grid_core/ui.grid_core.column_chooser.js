@@ -427,53 +427,13 @@ export default {
     defaultOptions: function() {
         return {
             columnChooser: {
-                /**
-                 * @name GridBaseOptions.columnChooser.enabled
-                 * @type boolean
-                 * @default false
-                 */
                 enabled: false,
-                /**
-                 * @name GridBaseOptions.columnChooser.allowSearch
-                 * @type boolean
-                 * @default false
-                 */
                 allowSearch: false,
-                /**
-                 * @name GridBaseOptions.columnChooser.searchTimeout
-                 * @type number
-                 * @default 500
-                 */
                 searchTimeout: 500,
-                /**
-                 * @name GridBaseOptions.columnChooser.mode
-                 * @type Enums.GridColumnChooserMode
-                 * @default "dragAndDrop"
-                 */
                 mode: 'dragAndDrop',
-                /**
-                 * @name GridBaseOptions.columnChooser.width
-                 * @type number
-                 * @default 250
-                 */
                 width: 250,
-                /**
-                 * @name GridBaseOptions.columnChooser.height
-                 * @type number
-                 * @default 260
-                 */
                 height: 260,
-                /**
-                 * @name GridBaseOptions.columnChooser.title
-                 * @type string
-                 * @default "Column Chooser"
-                 */
                 title: messageLocalization.format('dxDataGrid-columnChooserTitle'),
-                /**
-                 * @name GridBaseOptions.columnChooser.emptyPanelText
-                 * @type string
-                 * @default "Drag a column here to hide it"
-                 */
                 emptyPanelText: messageLocalization.format('dxDataGrid-columnChooserEmptyText'),
                 // TODO private option
                 container: undefined

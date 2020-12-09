@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as TableView, Table } from '../table';
+import { VirtualRow } from '../virtual-row';
 
 describe('LayoutBase', () => {
   describe('Render', () => {
@@ -51,45 +52,23 @@ describe('LayoutBase', () => {
         .toBe(true);
     });
 
-    it('should render virtual table', () => {
-      const layout = render({
-        props: {
-          className: 'some-class',
-          children: <tr className="some-content" />,
-          isVirtual: true,
-        },
+    [true, false].forEach((hasTopVirtualRow) => {
+      [true, false].forEach((hasBottomVirtualRow) => {
+        it(`should render virtual table correctly when hasTopVirtualRow
+          is ${hasTopVirtualRow} and hasBottomVirtualRow is ${hasBottomVirtualRow}`, () => {
+          const table = render({
+            hasTopVirtualRow,
+            hasBottomVirtualRow,
+          });
+
+          const topVirtualRowsCount = hasTopVirtualRow ? 1 : 0;
+          const bottomVirtualRowsCount = hasBottomVirtualRow ? 1 : 0;
+
+          const virtualRows = table.find(VirtualRow);
+          expect(virtualRows)
+            .toHaveLength(topVirtualRowsCount + bottomVirtualRowsCount);
+        });
       });
-
-      const table = layout.find('table');
-      expect(table.hasClass('some-class'))
-        .toBe(true);
-
-      const virtualRows = layout.find('[isVirtual=true]');
-      expect(virtualRows)
-        .toHaveLength(2);
-
-      expect(layout.find('.some-content').exists())
-        .toBe(true);
-    });
-
-    it('should not render virtual table', () => {
-      const layout = render({
-        props: {
-          className: 'some-class',
-          children: <tr className="some-content" />,
-        },
-      });
-
-      const table = layout.find('table');
-      expect(table.hasClass('some-class'))
-        .toBe(true);
-
-      const virtualRows = layout.find('[isVirtual=true]');
-      expect(virtualRows)
-        .toHaveLength(0);
-
-      expect(layout.find('.some-content').exists())
-        .toBe(true);
     });
   });
 
@@ -100,6 +79,50 @@ describe('LayoutBase', () => {
 
         expect(layout.style)
           .toStrictEqual({ height: '100px' });
+      });
+
+      describe('Virtual Rows', () => {
+        [true, false].forEach((isVirtual) => {
+          it(`should return "hasTopVirtualRow" as false if "isVirtual" is ${isVirtual} and "topVirtualRowHeight" is undefined`, () => {
+            const layout = new Table({
+              isVirtual,
+              topVirtualRowHeight: undefined,
+            });
+
+            expect(layout.hasTopVirtualRow)
+              .toBe(false);
+          });
+
+          it(`should return "hasTopVirtualRow" as ${isVirtual} if "isVirtual" is ${isVirtual} and "topVirtualRowHeight" is defined`, () => {
+            const layout = new Table({
+              isVirtual,
+              topVirtualRowHeight: 500,
+            });
+
+            expect(layout.hasTopVirtualRow)
+              .toBe(isVirtual);
+          });
+
+          it(`should return "hasTopVirtualRow" as false if "isVirtual" is ${isVirtual} and "bottomVirtualRowHeight" is undefined`, () => {
+            const layout = new Table({
+              isVirtual,
+              bottomVirtualRowHeight: undefined,
+            });
+
+            expect(layout.hasBottomVirtualRow)
+              .toBe(false);
+          });
+
+          it(`should return "hasTopVirtualRow" as ${isVirtual} if "isVirtual" is ${isVirtual} and "bottomVirtualRowHeight" is defined`, () => {
+            const layout = new Table({
+              isVirtual,
+              bottomVirtualRowHeight: 500,
+            });
+
+            expect(layout.hasBottomVirtualRow)
+              .toBe(isVirtual);
+          });
+        });
       });
     });
   });

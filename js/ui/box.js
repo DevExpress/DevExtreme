@@ -700,12 +700,6 @@ class Box extends CollectionWidget {
     * @hidden
     */
 }
-/**
-* @name dxBoxItem
-* @inherits CollectionWidgetItem
-* @type object
-*/
-
 
 Box.ItemClass = BoxItem;
 
