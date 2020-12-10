@@ -827,9 +827,9 @@ const testIndicators = function(testCases, $element, assert) {
         const $secondCell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
         const $thirdCell = $element.find('.dx-scheduler-time-panel-cell').eq(10);
 
-        assert.ok($firstCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
+        assert.notOk($firstCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell does not have specific class');
         assert.ok($secondCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
-        assert.notOk($thirdCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell hasn\'t specific class');
+        assert.ok($thirdCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
     });
 
     QUnit.test('DateHeader currentTime cell should have specific class, Week view', function(assert) {

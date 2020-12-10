@@ -40,6 +40,7 @@ module('Current Time Cell Indication Updating', {
         }],
         startDayHour: 10,
         endDayHour: 14,
+        indicatorUpdateInterval: 300000,
     });
 
     const basicViewsConfig = ['day', 'week'];
