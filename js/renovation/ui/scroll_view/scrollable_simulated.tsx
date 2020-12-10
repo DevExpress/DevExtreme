@@ -6,6 +6,7 @@ import {
   Effect,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
+import { ScrollBar } from './scrollable_scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -36,6 +37,7 @@ export const viewFunction = ({
   cssClasses, contentRef, containerRef,
   props: {
     disabled, height, width, rtlEnabled, children, forceGeneratePockets,
+    showScrollbar, direction,
   },
   restAttributes,
 }: ScrollableSimulated): JSX.Element => (
@@ -56,6 +58,12 @@ export const viewFunction = ({
           </div>
           {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
         </div>
+        { showScrollbar !== 'never' && (
+        <ScrollBar
+          direction={direction}
+          showScrollbar={showScrollbar}
+        />
+        ) }
       </div>
     </div>
   </Widget>

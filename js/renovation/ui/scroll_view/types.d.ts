@@ -12,6 +12,8 @@ export interface ScrollEventArgs extends Partial<ScrollableBoundary> {
 
 export type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
 
+export type ShowScrollBarMode = 'onScroll' | 'onHover' | 'always' | 'never';
+
 export interface ScrollableLocation {
   top: number;
   left: number;

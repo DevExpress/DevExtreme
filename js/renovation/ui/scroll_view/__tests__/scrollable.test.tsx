@@ -29,6 +29,7 @@ import {
   ScrollOffset,
   ScrollableDirection,
 } from '../types.d';
+import { ScrollBar } from '../scrollable_scrollbar';
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
@@ -94,7 +95,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
         } as Partial<any>;
         const scrollable = mount(viewFunction(props as any) as JSX.Element);
 
-        expect(scrollable.find(Widget).props()).toMatchObject({
+        expect(scrollable.find(Widget).at(0).props()).toMatchObject({
           classes: cssClasses,
           ...props.props,
         });
@@ -118,6 +119,43 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
         } as any as Partial<any>;
         const scrollable = mount(viewFunction(props as any) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
+      });
+
+      describe('ScrollBar', () => {
+        ['never', 'always', 'onScroll', 'onHover'].forEach((showScrollbar) => {
+          it('Scrollbar should render only if simulated strategy is used and showScrollbar not equals never', () => {
+            const instance = new Scrollable({});
+            const scrollable = mount(
+              viewFunction({ props: { showScrollbar } } as any) as JSX.Element,
+            );
+
+            const scrollBar = scrollable.find(ScrollBar);
+            const needRenderScrollbars = (instance instanceof ScrollableSimulated) && showScrollbar !== 'never';
+            expect(scrollBar.exists()).toBe(needRenderScrollbars);
+          });
+        });
+
+        ['horizontal', 'vertical', 'both'].forEach((direction) => {
+          it('Scrollbar has correct direction class', () => {
+            const instance = new Scrollable({});
+            const scrollable = mount(
+              viewFunction({ props: { direction } } as any) as JSX.Element,
+            );
+
+            const horizontalScrollBar = scrollable.find('.dx-scrollable-container .dx-scrollbar-horizontal');
+            const verticalScrollBar = scrollable.find('.dx-scrollable-container .dx-scrollbar-vertical');
+            const bothScrollBar = scrollable.find('.dx-scrollable-container .dx-scrollbar-both');
+            if (instance instanceof ScrollableSimulated) {
+              expect(horizontalScrollBar.exists()).toBe(direction === 'horizontal');
+              expect(verticalScrollBar.exists()).toBe(direction === 'vertical');
+              expect(bothScrollBar.exists()).toBe(direction === 'both');
+            } else {
+              expect(horizontalScrollBar.exists()).toBe(false);
+              expect(verticalScrollBar.exists()).toBe(false);
+              expect(bothScrollBar.exists()).toBe(false);
+            }
+          });
+        });
       });
     });
 

@@ -3,13 +3,15 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { EventCallback } from '../common/event_callback.d';
 import BaseWidgetProps from '../../utils/base_props';
-import { ScrollableDirection, ScrollEventArgs } from './types.d';
+import { ScrollableDirection, ShowScrollBarMode, ScrollEventArgs } from './types.d';
 
 @ComponentBindings()
 export class ScrollableInternalProps {
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
   @OneWay() direction: ScrollableDirection = 'vertical';
+
+  @OneWay() showScrollbar?: ShowScrollBarMode;
 
   @OneWay() classes?: string;
 
