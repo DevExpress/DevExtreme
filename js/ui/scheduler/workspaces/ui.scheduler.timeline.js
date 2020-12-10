@@ -8,6 +8,7 @@ import dateUtils from '../../../core/utils/date';
 import tableCreatorModule from '../ui.scheduler.table_creator';
 const { tableCreator } = tableCreatorModule;
 import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
+import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
 
 import timeZoneUtils from '../utils.timeZone';
 
@@ -19,8 +20,6 @@ const HORIZONTAL_GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-horizontal-g
 const HEADER_PANEL_CELL_CLASS = 'dx-scheduler-header-panel-cell';
 const HEADER_PANEL_WEEK_CELL_CLASS = 'dx-scheduler-header-panel-week-cell';
 const HEADER_ROW_CLASS = 'dx-scheduler-header-row';
-
-const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 
 const HORIZONTAL = 'horizontal';
 const DATE_TABLE_CELL_BORDER = 1;

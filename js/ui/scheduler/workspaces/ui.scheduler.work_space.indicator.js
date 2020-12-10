@@ -4,13 +4,13 @@ import registerComponent from '../../../core/component_registrator';
 import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
 import { hasWindow } from '../../../core/utils/window';
+import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS = 'dx-scheduler-date-time-indicator-simple';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
-const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _getTimeZoneCalculator() {
