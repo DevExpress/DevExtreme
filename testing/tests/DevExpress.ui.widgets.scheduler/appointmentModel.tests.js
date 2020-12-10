@@ -1,4 +1,4 @@
-const dxSchedulerAppointmentModel = require('ui/scheduler/ui.scheduler.appointment_model');
+const dxSchedulerAppointmentModel = require('ui/scheduler/ui.scheduler.appointment_model'); 
 const dataCoreUtils = require('core/utils/data');
 const compileGetter = dataCoreUtils.compileGetter;
 const compileSetter = dataCoreUtils.compileSetter;
