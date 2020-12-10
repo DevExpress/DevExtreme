@@ -284,27 +284,11 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         });
     }
 
-    _getCurrentTimeRowIndex() {
-        const today = this._getToday();
-        const date = new Date(this.getStartViewDate());
-        date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
-        const cellDuration = this.getCellDuration();
-
-        const currentTime = today.getTime();
-        const time = date.getTime();
-
-        const index = Math.floor((currentTime - time) / cellDuration);
-
-        if(index < 0) {
-            return undefined;
-        }
-
-        return index;
-    }
-
     _getCurrentTimePanelCellIndices() {
         const rowCountPerGroup = this._getTimePanelRowCount();
-        const currentTimeRowIndex = this._getCurrentTimeRowIndex();
+        const today = this._getToday();
+        const index = this.getCellIndexByDate(today);
+        const { rowIndex: currentTimeRowIndex } = this._getCellCoordinatesByIndex(index);
 
         if(currentTimeRowIndex === undefined) {
             return [];

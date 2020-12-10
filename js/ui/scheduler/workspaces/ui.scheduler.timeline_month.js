@@ -109,18 +109,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             cellPosition: 0
         };
     }
-
-    _getCurrentTimeRowIndex() {
-        const today = dateUtils.trimTime(new Date(this._getToday()));
-        const date = dateUtils.trimTime(new Date(this.getStartViewDate()));
-        const index = (today.getTime() - date.getTime()) / toMs('day');
-
-        if(index < 0) {
-            return undefined;
-        }
-
-        return index;
-    }
 }
 
 registerComponent('dxSchedulerTimelineMonth', SchedulerTimelineMonth);

@@ -583,24 +583,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
     }
 
-    _getCurrentTimeRowIndex() {
-        const currentTimeCellIndex = super._getCurrentTimeRowIndex();
-
-        if(currentTimeCellIndex === undefined) {
-            return undefined;
-        }
-
-        const cellCountInDay = this._getCellCountInDay(true);
-        const today = dateUtils.trimTime(new Date(this._getToday()));
-        const date = dateUtils.trimTime(new Date(this.getStartViewDate()));
-        const currentDayIndex = (today.getTime() - date.getTime()) / toMs('day');
-
-        return currentDayIndex * cellCountInDay + currentTimeCellIndex;
-    }
-
     _getCurrentTimePanelCellIndices() {
         const rowCountPerGroup = this._getCellCount();
-        const currentTimeCellIndex = this._getCurrentTimeRowIndex();
+        const today = this._getToday();
+        const index = this.getCellIndexByDate(today);
+        const { cellIndex: currentTimeCellIndex } = this._getCellCoordinatesByIndex(index);
 
         if(currentTimeCellIndex === undefined) {
             return [];
