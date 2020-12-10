@@ -1807,6 +1807,79 @@ QUnit.module('keyboard navigation', {
         assert.notOk($items.eq(1).hasClass(DX_STATE_FOCUSED_CLASS), 'item was not focused');
         assert.notOk($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'first item lose focus');
     });
+
+    [false, true].forEach(rtlEnabled => {
+        QUnit.test(`rtlEnabled: ${rtlEnabled}, orientation: horizontal. focusedElement is null after expanding and closing submenu with 1 nesting level (T952882)`, function(assert) {
+            this.instance.option({ rtlEnabled, orientation: 'horizontal', items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }, { text: 'Item 2' }] });
+            this.keyboard.press('down');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+
+            this.keyboard.press('down');
+            this.keyboard.press(rtlEnabled ? 'left' : 'right');
+            assert.equal(this.instance._visibleSubmenu, null);
+
+            this.keyboard.press(rtlEnabled ? 'right' : 'left');
+            this.keyboard.press('down');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+        });
+
+        QUnit.test(`rtlEnabled: ${rtlEnabled}, orientation: horizontal. focusedElement is null after expanding and closing submenu with 2 nesting level (T952882)`, function(assert) {
+            this.instance.option({ rtlEnabled, orientation: 'horizontal', items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111' }] }] }, { text: 'Item 2' }] });
+            this.keyboard.press('down');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+
+            this.keyboard.press('down');
+            this.keyboard.press(rtlEnabled ? 'left' : 'right');
+            this.keyboard.press(rtlEnabled ? 'left' : 'right');
+            assert.equal(this.instance._visibleSubmenu, null);
+
+            this.keyboard.press(rtlEnabled ? 'right' : 'left');
+            this.keyboard.press('down');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+        });
+
+        QUnit.test(`rtlEnabled: ${rtlEnabled}, orientation: vertical. focusedElement is null after expanding and closing submenu with 1 nesting level (T952882)`, function(assert) {
+            this.instance.option({ rtlEnabled, orientation: 'vertical', items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }, { text: 'Item 2' }] });
+            this.keyboard.press(rtlEnabled ? 'left' : 'right');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+
+            this.keyboard.press(rtlEnabled ? 'left' : 'right');
+            this.keyboard.press('down');
+            assert.equal(this.instance._visibleSubmenu, null);
+
+            this.keyboard.press('up');
+            this.keyboard.press(rtlEnabled ? 'left' : 'right');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+        });
+
+        QUnit.test(`rtlEnabled: ${rtlEnabled}, orientation: vertical. focusedElement is null after expanding and closing submenu with 2 nesting level (T952882)`, function(assert) {
+            this.instance.option({ rtlEnabled, orientation: 'vertical', items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111' }] }] }, { text: 'Item 2' }] });
+            this.keyboard.press(rtlEnabled ? 'left' : 'right');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+
+            this.keyboard.press(rtlEnabled ? 'left' : 'right');
+            this.keyboard.press(rtlEnabled ? 'left' : 'right');
+            this.keyboard.press('down');
+            assert.equal(this.instance._visibleSubmenu, null);
+
+            this.keyboard.press('up');
+            this.keyboard.press(rtlEnabled ? 'left' : 'right');
+            assert.equal(this.instance._visibleSubmenu.option('focusedElement'), null);
+        });
+    });
+
+    QUnit.test('orientation: horizontal. vertical keyboard navigation works cyclically (T952882)', function(assert) {
+        this.instance.option({ orientation: 'horizontal', items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [ { text: 'Item 111' }, { text: 'Item 112' }, { text: 'Item 113' } ] } ] }] });
+        this.keyboard.press('down')
+            .press('down')
+            .press('right')
+            .press('up')
+            .press('up')
+            .press('up')
+            .press('up');
+
+        assert.equal($(this.instance._visibleSubmenu.option('focusedElement')).text(), 'Item 113');
+    });
 });
 
 QUnit.module('Menu with templates', {

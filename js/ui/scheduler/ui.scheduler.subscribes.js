@@ -19,6 +19,9 @@ const toMs = dateUtils.dateToMilliseconds;
 const HOUR_MS = toMs('hour');
 
 const subscribes = {
+    getTimeZoneCalculator: function() {
+        return this.timeZoneCalculator;
+    },
     isCurrentViewAgenda: function() {
         return this.option('currentView') === 'agenda';
     },
@@ -387,7 +390,8 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
-        const targetedData = this.getTargetedAppointment(config.itemData, config.itemElement);
+        const { itemData, itemElement, targetedAppointment } = config;
+        const targetedData = targetedAppointment || this.getTargetedAppointment(itemData, itemElement);
 
         return {
             appointmentData: config.itemData,
@@ -472,6 +476,9 @@ const subscribes = {
     prerenderFilter: function() {
         const dateRange = this.getWorkSpace().getDateRange();
         const resources = this._resourcesManager.getResourcesData();
+        const startDayHour = this._getCurrentViewOption('startDayHour');
+        const endDayHour = this._getCurrentViewOption('endDayHour');
+
         let allDay;
 
         if(!this.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
@@ -479,8 +486,10 @@ const subscribes = {
         }
 
         return this._appointmentModel.filterLoadedAppointments({
-            startDayHour: this._getCurrentViewOption('startDayHour'),
-            endDayHour: this._getCurrentViewOption('endDayHour'),
+            startDayHour,
+            endDayHour,
+            viewStartDayHour: startDayHour,
+            viewEndDayHour: endDayHour,
             min: dateRange[0],
             max: dateRange[1],
             resources: resources,
@@ -520,6 +529,8 @@ const subscribes = {
                 isVirtualScrolling: true,
                 startDayHour,
                 endDayHour,
+                viewStartDayHour: this._getCurrentViewOption('startDayHour'),
+                viewEndDayHour: this._getCurrentViewOption('endDayHour'),
                 min: startDate,
                 max: endDate,
                 resources: groupResources,
@@ -768,12 +779,6 @@ const subscribes = {
 
     isAdaptive: function() {
         return this.option('adaptivityEnabled');
-    },
-
-    moveBack: function() {
-        const dragBehavior = this.getWorkSpace().dragBehavior;
-
-        dragBehavior && dragBehavior.moveBack();
     },
 
     validateDayHours: function() {

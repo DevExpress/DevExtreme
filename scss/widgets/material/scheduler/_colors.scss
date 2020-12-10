@@ -74,3 +74,6 @@ $scheduler-other-month-cell-opacity: 0.5 !default;
 $scheduler-fill-focused-appointment: false !default;
 $scheduler-time-indicator-background-color: rgba(0, 0, 0, 0.03) !default;
 $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
+
+$scheduler-tooltip-appointment-text-color: $base-text-color !default;
+$scheduler-appointment-overlay-bg: $base-bg !default;

@@ -58,7 +58,8 @@ const compareLocales = function(first, second, assert) {
         'dxDiagram-shapeText',
         'dxDiagram-shapeEllipse',
         'dxDiagram-shapeContainerDefaultText',
-        'dxFileManager-listDetailsColumnCaptionName'
+        'dxFileManager-listDetailsColumnCaptionName',
+        'dxGantt-quarter'
     ];
 
     $.each(firstLocaleMessages, function(name, value) {

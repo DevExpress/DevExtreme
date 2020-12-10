@@ -803,6 +803,47 @@ declare module DevExpress {
         urlFor(key: string): string;
     }
     /**
+     * [descr:ExportLoadPanel]
+     */
+    export interface ExportLoadPanel {
+        /**
+         * [descr:ExportLoadPanel.enabled]
+         */
+        enabled?: boolean;
+        /**
+         * [descr:ExportLoadPanel.height]
+         */
+        height?: number;
+        /**
+         * [descr:ExportLoadPanel.indicatorSrc]
+         */
+        indicatorSrc?: string;
+        /**
+         * [descr:ExportLoadPanel.shading]
+         */
+        shading?: boolean;
+        /**
+         * [descr:ExportLoadPanel.shadingColor]
+         */
+        shadingColor?: string;
+        /**
+         * [descr:ExportLoadPanel.showIndicator]
+         */
+        showIndicator?: boolean;
+        /**
+         * [descr:ExportLoadPanel.showPane]
+         */
+        showPane?: boolean;
+        /**
+         * [descr:ExportLoadPanel.text]
+         */
+        text?: string;
+        /**
+         * [descr:ExportLoadPanel.width]
+         */
+        width?: number;
+    }
+    /**
      * [descr:TransitionExecutor]
      */
     export class TransitionExecutor {
@@ -2648,47 +2689,6 @@ declare module DevExpress.excelExporter {
         rowIndex?: number;
     }
     /**
-     * [descr:ExportLoadPanel]
-     */
-    export interface ExportLoadPanel {
-        /**
-         * [descr:ExportLoadPanel.enabled]
-         */
-        enabled?: boolean;
-        /**
-         * [descr:ExportLoadPanel.height]
-         */
-        height?: number;
-        /**
-         * [descr:ExportLoadPanel.indicatorSrc]
-         */
-        indicatorSrc?: string;
-        /**
-         * [descr:ExportLoadPanel.shading]
-         */
-        shading?: boolean;
-        /**
-         * [descr:ExportLoadPanel.shadingColor]
-         */
-        shadingColor?: string;
-        /**
-         * [descr:ExportLoadPanel.showIndicator]
-         */
-        showIndicator?: boolean;
-        /**
-         * [descr:ExportLoadPanel.showPane]
-         */
-        showPane?: boolean;
-        /**
-         * [descr:ExportLoadPanel.text]
-         */
-        text?: string;
-        /**
-         * [descr:ExportLoadPanel.width]
-         */
-        width?: number;
-    }
-    /**
      * [descr:excelExporter.exportDataGrid(options)]
      */
     export function exportDataGrid(options: ExcelExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
@@ -3049,6 +3049,10 @@ declare module DevExpress.pdfExporter {
          * [descr:PdfExportDataGridProps.keepColumnWidths]
          */
         keepColumnWidths?: boolean;
+        /**
+         * [descr:PdfExportDataGridProps.loadPanel]
+         */
+        loadPanel?: ExportLoadPanel;
         /**
          * [descr:PdfExportDataGridProps.selectedRowsOnly]
          */
@@ -10422,7 +10426,12 @@ declare module DevExpress.ui {
          */
         hideAppointmentTooltip(): void;
         /**
+         * [descr:dxScheduler.scrollTo(date, group, allDay)]
+         */
+        scrollTo(date: Date, group?: any, allDay?: boolean): void;
+        /**
          * [descr:dxScheduler.scrollToTime(hours, minutes, date)]
+         * @deprecated [depNote:dxScheduler.scrollToTime(hours, minutes, date)]
          */
         scrollToTime(hours: number, minutes: number, date?: Date): void;
         /**

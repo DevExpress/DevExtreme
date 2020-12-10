@@ -1,4 +1,6 @@
 $scheduler-appointment-base-color: null !default;
+$scheduler-tooltip-appointment-text-color: null !default;
+$scheduler-appointment-overlay-bg: null !default;
 
 .dx-popup-wrapper.dx-scheduler-appointment-tooltip-wrapper,
 .dx-scheduler-overlay-panel {
@@ -33,12 +35,17 @@ $scheduler-appointment-base-color: null !default;
       margin-left: 5px;
     }
 
+    .dx-tooltip-appointment-item-delete-button .dx-icon {
+      color: $scheduler-tooltip-appointment-text-color;
+    }
+
     .dx-tooltip-appointment-item-content {
       flex-basis: 100%;
       margin: 5px 10px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      color: $scheduler-tooltip-appointment-text-color;
 
       .dx-tooltip-appointment-item-content-subject {
         text-align: left;
@@ -63,6 +70,6 @@ $scheduler-appointment-base-color: null !default;
 .dx-scheduler-overlay-panel {
   .dx-overlay-content {
     position: relative;
-    background: #fff;
+    background: $scheduler-appointment-overlay-bg;
   }
 }

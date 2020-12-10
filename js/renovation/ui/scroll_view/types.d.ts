@@ -7,7 +7,7 @@ export interface ScrollableBoundary {
 
 export interface ScrollEventArgs extends Partial<ScrollableBoundary> {
   event: Event;
-  scrollOffset: Partial<ScrollOffset>;
+  scrollOffset: ScrollableLocation;
 }
 
 export type ScrollableDirection = 'both' | 'horizontal' | 'vertical';

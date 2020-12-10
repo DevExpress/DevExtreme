@@ -6,6 +6,8 @@
 @use "../../base/mixins" as *;
 @use "../../base/icons" as *;
 @use "../../base/scheduler" as baseScheduler with (
+  $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
+  $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
   $scheduler-appointment-start-color: $scheduler-appointment-start-color,
   $scheduler-base-border-color: $scheduler-base-border-color,

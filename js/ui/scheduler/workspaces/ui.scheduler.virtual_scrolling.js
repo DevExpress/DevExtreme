@@ -42,6 +42,12 @@ export default class VirtualScrollingDispatcher {
             : getWindow().innerHeight;
     }
 
+    get topVirtualRowsCount() {
+        const { topVirtualRowHeight } = this.getState();
+
+        return topVirtualRowHeight > 0 ? 1 : 0;
+    }
+
     getRenderTimeout() {
         return VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT;
     }
@@ -140,11 +146,11 @@ export default class VirtualScrollingDispatcher {
             clearTimeout(this._renderAppointmentTimeout);
 
             this._renderAppointmentTimeout = setTimeout(
-                () => workspace.invoke('renderAppointments'),
+                () => workspace.updateAppointments(),
                 renderTimeout
             );
         } else {
-            workspace.invoke('renderAppointments');
+            workspace.updateAppointments();
         }
     }
 }

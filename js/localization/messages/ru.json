@@ -530,6 +530,7 @@
         "dxGantt-deleteSelectedTask": "Удалить выделенную задачу",
         "dxGantt-zoomIn": "Увеличить масштаб",
         "dxGantt-zoomOut": "Уменьшить масштаб",
-        "dxGantt-fullScreen": "Полноэкранный режим"
+        "dxGantt-fullScreen": "Полноэкранный режим",
+        "dxGantt-quarter": "{0}-й кв."
     }
 }
