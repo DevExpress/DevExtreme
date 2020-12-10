@@ -60,7 +60,7 @@ $transparent-border: 1px solid transparent;
     ol li[data-list=ordered].ql-indent-#{$counter} {
       counter-increment: list-#{$counter};
 
-      &::before { // stylelint-disable-line selector-class-pattern
+      &::before {
         content: counter(list-#{$counter}, nth($list-style, ($counter % 3) + 1)) ". ";
       }
     }
@@ -222,11 +222,11 @@ $transparent-border: 1px solid transparent;
     }
   }
 
-  li[data-list=ordered] {  // stylelint-disable-line no-duplicate-selectors
+  li[data-list=ordered] {
     counter-reset: add-counter-reset($max-indent);
     counter-increment: list-0;
 
-    &::before {  // stylelint-disable-line no-duplicate-selectors, selector-class-pattern
+    &::before {
       content: counter(list-0, nth($list-style, 1)) ". ";
     }
   }
@@ -237,7 +237,7 @@ $transparent-border: 1px solid transparent;
   .dx-rtl & li { // stylelint-disable-line no-duplicate-selectors
     padding-right: $list-style-outer-width;
 
-    &::before { // stylelint-disable-line no-duplicate-selectors, selector-class-pattern
+    &::before { // stylelint-disable-line no-duplicate-selectors
       margin-left: $list-style-margin;
       margin-right: -1 * $list-style-outer-width;
       text-align: left;
