@@ -1,10 +1,7 @@
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js';
-import dxrButton from 'renovation/ui/button.j';
-import dxButton from 'ui/button';
-
+import 'ui/button';
 import 'common.css!';
 
 QUnit.testStart(function() {
@@ -31,7 +28,7 @@ const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
 const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
 
-QUnit.module('Button markup', createRenovationModuleConfig(dxButton, dxrButton), function() {
+QUnit.module('Button markup', function() {
     QUnit.test('markup init', function(assert) {
         const element = $('#button').dxButton();
 

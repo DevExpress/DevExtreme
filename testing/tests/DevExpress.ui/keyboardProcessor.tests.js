@@ -5,7 +5,7 @@ const { test } = QUnit;
 
 QUnit.module('keyboardProcessor', {
     beforeEach: function() {
-        this.element = $('<div>');
+        this.element = $('<div><div id="child"><div><div/>');
         this.normalizedKeyName = 'downArrow';
         this.ctrlKey = true;
         this.originalKey = 'ArrowDown';
@@ -66,6 +66,20 @@ QUnit.module('keyboardProcessor', {
         this.processor._processFunction(this.keyDownEvent);
 
         assert.ok(stubHandler.notCalled, 'event was not processed');
+    });
+    test('keyboardProcessor should not process event for child element (renovation scenario without jQuery)', function(assert) {
+        const stubHandler = sinon.stub();
+        const element = this.element[0];
+        this.processor = new KeyboardProcessor({
+            element: element,
+            handler: stubHandler,
+            focusTarget: element.children[0]
+        });
+
+        this.element.trigger($.Event('compositionstart'));
+        this.element.trigger($.Event('compositionend'));
+        this.element.trigger(this.keyDownEvent);
+        assert.ok(stubHandler.notCalled, 'event wasnt processed');
     });
 
     test('keyboardProcessor should not process events during IME composition', function(assert) {

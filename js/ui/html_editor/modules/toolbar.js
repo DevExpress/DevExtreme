@@ -389,7 +389,7 @@ if(Quill) {
 
         get _defaultPasteIndex() {
             const selection = this.quill.getSelection();
-            return selection && selection.index || this.quill.getLength();
+            return isDefined(selection?.index) ? selection.index : this.quill.getLength();
         }
 
         get _imageFormItems() {
