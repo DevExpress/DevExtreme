@@ -20,7 +20,6 @@ QUnit.module('scrollToItem', () => {
             items: items,
             rtlEnabled: config.rtlEnabled,
             onContentReady: config.onContentReady,
-            scrollableUseNative: config.scrollableUseNative
         });
 
         if(config.initialPosition) {
@@ -55,16 +54,13 @@ QUnit.module('scrollToItem', () => {
         [false, true].forEach(expanded => {
             [false, true].forEach(disabled => {
                 [false, true].forEach(rtlEnabled => {
-                    [false, true].forEach(scrollableUseNative => {
-                        configs.push({
-                            expanded,
-                            scrollDirection,
-                            disabled,
-                            rtlEnabled,
-                            scrollableUseNative,
-                            keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'],
-                            description: `expanded: ${expanded}, rtlEnabled: ${rtlEnabled}, disabled: ${disabled}, scrollDirection: ${scrollDirection}, scrollableUseNative: ${scrollableUseNative} `
-                        });
+                    configs.push({
+                        expanded,
+                        scrollDirection,
+                        disabled,
+                        rtlEnabled,
+                        keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'],
+                        description: `expanded: ${expanded}, rtlEnabled: ${rtlEnabled}, disabled: ${disabled}, scrollDirection: ${scrollDirection}`
                     });
                 });
             });
