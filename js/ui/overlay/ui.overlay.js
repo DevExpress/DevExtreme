@@ -5,7 +5,6 @@ import { locate, move, resetPosition } from '../../animation/translator';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import domAdapter from '../../core/dom_adapter';
-import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import { inArray } from '../../core/utils/array';
@@ -29,8 +28,8 @@ import {
 import pointerEvents from '../../events/pointer';
 import { keyboard } from '../../events/short';
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
-import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
-import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
+import domUtils from '../../core/utils/dom';
+import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_top_overlay';
 import Resizable from '../resizable';
 import { tabbable } from '../widget/selectors';
 import swatch from '../widget/swatch_container';
@@ -674,7 +673,7 @@ const Overlay = Widget.inherit({
         this._stopAnimation();
 
         if(!visible) {
-            triggerHidingEvent(this._$content);
+            domUtils.triggerHidingEvent(this._$content);
         }
 
         this._toggleVisibility(visible);
@@ -700,8 +699,8 @@ const Overlay = Widget.inherit({
             this._moveToContainer();
             this._renderGeometry();
 
-            triggerShownEvent(this._$content);
-            triggerResizeEvent(this._$content);
+            domUtils.triggerShownEvent(this._$content);
+            domUtils.triggerResizeEvent(this._$content);
         } else {
             this._moveFromContainer();
         }
@@ -925,7 +924,7 @@ const Overlay = Widget.inherit({
         const contentTemplate = this._getTemplate(contentTemplateOption);
         const transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
         contentTemplate && contentTemplate.render({
-            container: getPublicElement(this.$content()),
+            container: domUtils.getPublicElement(this.$content()),
             noModel: true,
             transclude,
             onRendered: () => {
@@ -1490,13 +1489,13 @@ const Overlay = Widget.inherit({
     },
 
     content: function() {
-        return getPublicElement(this._$content);
+        return domUtils.getPublicElement(this._$content);
     },
 
     repaint: function() {
         if(this._contentAlreadyRendered) {
             this._renderGeometry();
-            triggerResizeEvent(this._$content);
+            domUtils.triggerResizeEvent(this._$content);
         } else {
             this.callBase();
         }
