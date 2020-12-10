@@ -401,6 +401,11 @@ module('AppointmentSettings', {
 
         ['horizontal', 'vertical'].forEach(groupOrientation => {
             test(`A long appointment should be correctly croped if view: ${viewName}, ${groupOrientation} group orientation`, function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 const longAppointment = {
                     startDate: new Date(2015, 2, 4, 0, 10),
                     endDate: new Date(2015, 2, 4, 23, 50)
@@ -501,6 +506,11 @@ module('AppointmentSettings', {
             }
         ].forEach(option => {
             test(`Long appointment should be rendered correctly vertical grouping and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 const data = [{
                     startDate: new Date(2020, 9, 12, 1, 30),
                     endDate: new Date(2020, 9, 13, 0, 30),
@@ -629,6 +639,11 @@ module('AppointmentSettings', {
             }
         ].forEach(option => {
             test(`Long appointment should be rendered correctly if horizontal grouping, ${viewName} view, and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 const data = [{
                     startDate: new Date(2020, 9, 12, 1, 30),
                     endDate: new Date(2020, 9, 13, 0, 30),
@@ -743,6 +758,11 @@ module('AppointmentSettings', {
             }
         ].forEach(option => {
             test(`Long appointment part should be rendered correctly without render the main part if vertical grouping and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 const data = [{
                     startDate: new Date(2020, 9, 12, 11, 30),
                     endDate: new Date(2020, 9, 13, 10, 30),
@@ -867,6 +887,11 @@ module('AppointmentSettings', {
             }
         ].forEach(option => {
             test(`Long appointment part should be rendered correctly without render the main part if horizontal grouping and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 const data = [{
                     startDate: new Date(2020, 9, 12, 11, 30),
                     endDate: new Date(2020, 9, 13, 10, 30),
@@ -1025,6 +1050,11 @@ module('AppointmentSettings', {
         });
 
         test(`Appointment with multiple resources should be rendered correctly if horizontal grouping and ${viewName} view`, function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
             const data = [{
                 startDate: new Date(2020, 9, 12, 1, 30),
                 endDate: new Date(2020, 9, 12, 22, 30),
@@ -1982,6 +2012,11 @@ module('Appointment filtering', function() {
         }
     }, function() {
         test('Scrolling Down if groupOrientation: "vertical"', function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
             this.createInstance();
 
             const { instance } = this;
@@ -2016,6 +2051,11 @@ module('Appointment filtering', function() {
         });
 
         test('Scrolling Up if groupOrientation: "vertical"', function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
             this.createInstance();
 
             const { instance } = this;
@@ -2050,6 +2090,10 @@ module('Appointment filtering', function() {
         });
 
         test('Scrolling Down if groups, resources, groupOrientation: "vertical"', function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
 
             this.createInstance({
                 groups: ['resourceId0'],
@@ -2100,6 +2144,11 @@ module('Appointment filtering', function() {
         });
 
         test('Next day appointments should be filtered if "vertical" group orientation', function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
             this.createInstance({
                 groups: ['resourceId0'],
                 dataSource: [{
