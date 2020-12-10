@@ -179,6 +179,34 @@ const initMyLocation = function(data) {
         + data.offset;
 };
 
+const adjustBoundary = function(container, boundaryPreset, positionOptions) {
+    let result;
+
+    if(container && !isWindow(container)) {
+        const $container = $(container);
+        const {
+            left: containerLeft,
+            top: containerTop
+        } = $container.offset();
+
+        const containerWidth = $container.width();
+        const containerHeight = $container.height();
+
+        result = {
+            h: {
+                min: Math.max(boundaryPreset.h.min, containerLeft),
+                max: Math.min(boundaryPreset.h.max, containerLeft + containerWidth / positionOptions.hZoomLevel - positionOptions.hMySize)
+            },
+            v: {
+                min: Math.max(boundaryPreset.v.min, containerTop),
+                max: Math.min(boundaryPreset.v.max, containerTop + containerHeight / positionOptions.vZoomLevel - positionOptions.vMySize)
+            }
+        };
+    }
+
+    return result || boundaryPreset;
+};
+
 const collisionResolvers = {
 
     'fit': function(data, bounds) {
@@ -280,6 +308,7 @@ const calculatePosition = function(what, options) {
     const offset = normalizeOffset(options.offset);
     const collision = normalizeCollision(options.collision);
     const boundary = options.boundary;
+    const container = options.container;
     const boundaryOffset = normalizeOffset(options.boundaryOffset);
 
     const h = {
@@ -341,8 +370,8 @@ const calculatePosition = function(what, options) {
         const win = $(window);
         const windowWidth = win.width();
         const windowHeight = win.height();
-        let left = win.scrollLeft();
-        let top = win.scrollTop();
+        let boundaryLeft = win.scrollLeft();
+        let boundaryTop = win.scrollTop();
         const documentElement = domAdapter.getDocumentElement();
         const hZoomLevel = support.touch ? documentElement.clientWidth / windowWidth : 1;
         const vZoomLevel = support.touch ? documentElement.clientHeight / windowHeight : 1;
@@ -358,23 +387,30 @@ const calculatePosition = function(what, options) {
             const $boundary = $(boundary);
             const boundaryPosition = $boundary.offset();
 
-            left = boundaryPosition.left;
-            top = boundaryPosition.top;
+            boundaryLeft = boundaryPosition.left;
+            boundaryTop = boundaryPosition.top;
 
             boundaryWidth = $boundary.width();
             boundaryHeight = $boundary.height();
         }
 
-        return {
+        const boundaryPreset = {
             h: {
-                min: left + h.boundaryOffset,
-                max: left + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset
+                min: boundaryLeft + h.boundaryOffset,
+                max: boundaryLeft + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset
             },
             v: {
-                min: top + v.boundaryOffset,
-                max: top + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset
+                min: boundaryTop + v.boundaryOffset,
+                max: boundaryTop + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset
             }
         };
+
+        return adjustBoundary(container, boundaryPreset, {
+            hZoomLevel,
+            vZoomLevel,
+            hMySize: h.mySize,
+            vMySize: v.mySize
+        });
     })();
 
     h.oversize = calculateOversize(h, bounds.h);

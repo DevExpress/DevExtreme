@@ -1,40 +1,45 @@
-const $ = require('../../core/renderer');
-const domAdapter = require('../../core/dom_adapter');
-const windowUtils = require('../../core/utils/window');
-const ready = require('../../core/utils/ready_callbacks').add;
-const window = windowUtils.getWindow();
-const navigator = windowUtils.getNavigator();
-const eventsEngine = require('../../events/core/events_engine');
-const fx = require('../../animation/fx');
-const translator = require('../../animation/translator');
-const compareVersions = require('../../core/utils/version').compare;
-const viewPortUtils = require('../../core/utils/view_port');
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const getPublicElement = require('../../core/utils/dom').getPublicElement;
-const viewPortChanged = viewPortUtils.changeCallback;
-const hideTopOverlayCallback = require('../../mobile/hide_top_overlay').hideCallback;
-const positionUtils = require('../../animation/position');
-const fitIntoRange = require('../../core/utils/math').fitIntoRange;
-const domUtils = require('../../core/utils/dom');
-const noop = require('../../core/utils/common').noop;
-const typeUtils = require('../../core/utils/type');
-const each = require('../../core/utils/iterator').each;
-const devices = require('../../core/devices');
-const browser = require('../../core/utils/browser');
-const registerComponent = require('../../core/component_registrator');
-const Widget = require('../widget/ui.widget');
-const keyboard = require('../../events/short').keyboard;
-
-const selectors = require('../widget/selectors');
-const dragEvents = require('../../events/drag');
-const eventUtils = require('../../events/utils');
-const pointerEvents = require('../../events/pointer');
-const Resizable = require('../resizable');
-const EmptyTemplate = require('../../core/templates/empty_template').EmptyTemplate;
-const Deferred = require('../../core/utils/deferred').Deferred;
-const zIndexPool = require('./z_index');
-const swatch = require('../widget/swatch_container');
+import fx from '../../animation/fx';
+import positionUtils from '../../animation/position';
+import { getCustomBoundaryContainer } from '../../core/utils/position';
+import { locate, move, resetPosition } from '../../animation/translator';
+import registerComponent from '../../core/component_registrator';
+import devices from '../../core/devices';
+import domAdapter from '../../core/dom_adapter';
+import { getPublicElement } from '../../core/element';
+import $ from '../../core/renderer';
+import { EmptyTemplate } from '../../core/templates/empty_template';
+import { inArray } from '../../core/utils/array';
+import browser from '../../core/utils/browser';
+import { noop } from '../../core/utils/common';
+import { Deferred } from '../../core/utils/deferred';
+import { contains, resetActiveElement } from '../../core/utils/dom';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { fitIntoRange } from '../../core/utils/math';
+import readyCallbacks from '../../core/utils/ready_callbacks';
+import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent } from '../../core/utils/type';
+import { compare as compareVersions } from '../../core/utils/version';
+import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
+import { getNavigator, getWindow, hasWindow } from '../../core/utils/window';
+import eventsEngine from '../../events/core/events_engine';
+import {
+    start as dragEventStart,
+    move as dragEventMove
+} from '../../events/drag';
+import pointerEvents from '../../events/pointer';
+import { keyboard } from '../../events/short';
+import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
+import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
+import Resizable from '../resizable';
+import { tabbable } from '../widget/selectors';
+import swatch from '../widget/swatch_container';
+import Widget from '../widget/ui.widget';
+import * as zIndexPool from './z_index';
+const ready = readyCallbacks.add;
+const window = getWindow();
+const navigator = getNavigator();
+const viewPortChanged = changeCallback;
 
 const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
@@ -98,7 +103,7 @@ const forceRepaint = function($element) {
 
 
 const getElement = value => {
-    if(typeUtils.isEvent(value)) {
+    if(isEvent(value)) {
         value = value.target;
     }
 
@@ -265,7 +270,7 @@ const Overlay = Widget.inherit({
             }
         }, {
             device: function() {
-                return !windowUtils.hasWindow();
+                return !hasWindow();
             },
             options: {
                 width: null,
@@ -335,7 +340,7 @@ const Overlay = Widget.inherit({
     },
 
     _initTarget: function(target) {
-        if(!typeUtils.isDefined(target)) {
+        if(!isDefined(target)) {
             return;
         }
 
@@ -352,7 +357,7 @@ const Overlay = Widget.inherit({
             let option = options;
             while(option) {
                 if(pathParts.length === 1) {
-                    if(typeUtils.isPlainObject(option)) {
+                    if(isPlainObject(option)) {
                         option[pathParts.shift()] = target;
                     }
                     break;
@@ -364,7 +369,7 @@ const Overlay = Widget.inherit({
     },
 
     _initContainer: function(container) {
-        container = container === undefined ? viewPortUtils.value() : container;
+        container = container === undefined ? viewPort() : container;
 
         const $element = this.$element();
         let $container = $element.closest(container);
@@ -404,14 +409,14 @@ const Overlay = Widget.inherit({
 
         let closeOnOutsideClick = this.option('closeOnOutsideClick');
 
-        if(typeUtils.isFunction(closeOnOutsideClick)) {
+        if(isFunction(closeOnOutsideClick)) {
             closeOnOutsideClick = closeOnOutsideClick(e);
         }
 
         const $container = this._$content;
-        const isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target);
+        const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
         const isInnerOverlay = $(e.target).closest('.' + INNER_OVERLAY_CLASS).length;
-        const outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
+        const outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || contains($container.get(0), e.target));
 
         if(outsideClick && closeOnOutsideClick) {
             this._outsideClickHandler(e);
@@ -484,11 +489,16 @@ const Overlay = Widget.inherit({
     _normalizePosition: function() {
         const position = this.option('position');
         this._position = typeof position === 'function' ? position() : position;
+        const container = this.option('container');
+        if(container) {
+            this._position = this._position || {};
+            this._position.container = getCustomBoundaryContainer(container);
+        }
     },
 
     _getAnimationConfig: function() {
         let animation = this.option('animation');
-        if(typeUtils.isFunction(animation)) animation = animation.call(this);
+        if(isFunction(animation)) animation = animation.call(this);
         return animation;
     },
 
@@ -633,7 +643,7 @@ const Overlay = Widget.inherit({
         const shouldResetActiveElement = !!this._$content.find(activeElement).length;
 
         if(shouldResetActiveElement) {
-            domUtils.resetActiveElement();
+            resetActiveElement();
         }
     },
 
@@ -664,7 +674,7 @@ const Overlay = Widget.inherit({
         this._stopAnimation();
 
         if(!visible) {
-            domUtils.triggerHidingEvent(this._$content);
+            triggerHidingEvent(this._$content);
         }
 
         this._toggleVisibility(visible);
@@ -690,8 +700,8 @@ const Overlay = Widget.inherit({
             this._moveToContainer();
             this._renderGeometry();
 
-            domUtils.triggerShownEvent(this._$content);
-            domUtils.triggerResizeEvent(this._$content);
+            triggerShownEvent(this._$content);
+            triggerResizeEvent(this._$content);
         } else {
             this._moveFromContainer();
         }
@@ -736,7 +746,7 @@ const Overlay = Widget.inherit({
     },
 
     _toggleTabTerminator: function(enabled) {
-        const eventName = eventUtils.addNamespace('keydown', this.NAME);
+        const eventName = addNamespace('keydown', this.NAME);
         if(enabled) {
             eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
         } else {
@@ -750,11 +760,11 @@ const Overlay = Widget.inherit({
         const result = { first: null, last: null };
 
         for(let i = 0; i <= elementsCount; i++) {
-            if(!result.first && $elements.eq(i).is(selectors.tabbable)) {
+            if(!result.first && $elements.eq(i).is(tabbable)) {
                 result.first = $elements.eq(i);
             }
 
-            if(!result.last && $elements.eq(elementsCount - i).is(selectors.tabbable)) {
+            if(!result.last && $elements.eq(elementsCount - i).is(tabbable)) {
                 result.last = $elements.eq(elementsCount - i);
             }
 
@@ -767,7 +777,7 @@ const Overlay = Widget.inherit({
     },
 
     _tabKeyHandler: function(e) {
-        if(eventUtils.normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
+        if(normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
             return;
         }
 
@@ -779,7 +789,7 @@ const Overlay = Widget.inherit({
         const isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0);
         const isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0);
         const isEmptyTabList = tabbableElements.length === 0;
-        const isOutsideTarget = !domUtils.contains(this._$wrapper.get(0), e.target);
+        const isOutsideTarget = !contains(this._$wrapper.get(0), e.target);
 
         if(isTabOnLast || isShiftTabOnFirst ||
             isEmptyTabList || isOutsideTarget) {
@@ -794,7 +804,7 @@ const Overlay = Widget.inherit({
     },
 
     _toggleSubscriptions: function(enabled) {
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             this._toggleHideTopOverlayCallback(enabled);
             this._toggleParentsScrollSubscription(enabled);
         }
@@ -820,7 +830,7 @@ const Overlay = Widget.inherit({
         const target = this._position.of || $();
         const closeOnScroll = this.option('closeOnTargetScroll');
         let $parents = getElement(target).parents();
-        const scrollEvent = eventUtils.addNamespace('scroll', this.NAME);
+        const scrollEvent = addNamespace('scroll', this.NAME);
 
         if(devices.real().deviceType === 'desktop') {
             $parents = $parents.add(window);
@@ -840,7 +850,7 @@ const Overlay = Widget.inherit({
     _targetParentsScrollHandler: function(e) {
         let closeHandled = false;
         const closeOnScroll = this.option('closeOnTargetScroll');
-        if(typeUtils.isFunction(closeOnScroll)) {
+        if(isFunction(closeOnScroll)) {
             closeHandled = closeOnScroll(e);
         }
 
@@ -943,8 +953,8 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        const startEventName = eventUtils.addNamespace(dragEvents.start, this.NAME);
-        const updateEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
+        const startEventName = addNamespace(dragEventStart, this.NAME);
+        const updateEventName = addNamespace(dragEventMove, this.NAME);
 
         eventsEngine.off($dragTarget, startEventName);
         eventsEngine.off($dragTarget, updateEventName);
@@ -983,7 +993,7 @@ const Overlay = Widget.inherit({
 
     _renderScrollTerminator: function() {
         const $scrollTerminator = this._wrapper();
-        const terminatorEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
+        const terminatorEventName = addNamespace(dragEventMove, this.NAME);
 
         eventsEngine.off($scrollTerminator, terminatorEventName);
         eventsEngine.on($scrollTerminator, terminatorEventName, {
@@ -1027,7 +1037,7 @@ const Overlay = Widget.inherit({
     },
 
     _getDragResizeContainer: function() {
-        const isContainerDefined = viewPortUtils.originalViewPort().get(0) || this.option('container');
+        const isContainerDefined = originalViewPort().get(0) || this.option('container');
         const $container = !isContainerDefined ? $(window) : this._$container;
 
         return $container;
@@ -1071,9 +1081,9 @@ const Overlay = Widget.inherit({
     },
 
     _changePosition: function(offset) {
-        const position = translator.locate(this._$content);
+        const position = locate(this._$content);
 
-        translator.move(this._$content, {
+        move(this._$content, {
             left: position.left + offset.left,
             top: position.top + offset.top
         });
@@ -1082,10 +1092,10 @@ const Overlay = Widget.inherit({
     },
 
     _allowedOffsets: function() {
-        const position = translator.locate(this._$content);
+        const position = locate(this._$content);
         const deltaSize = this._deltaSize();
         const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
-        const shaderOffset = this.option('shading') && !this.option('container') && !this._isWindow(this._getContainer()) ? translator.locate(this._$wrapper) : { top: 0, left: 0 };
+        const shaderOffset = this.option('shading') && !this.option('container') && !this._isWindow(this._getContainer()) ? locate(this._$wrapper) : { top: 0, left: 0 };
         const boundaryOffset = this.option('boundaryOffset');
 
         return {
@@ -1131,7 +1141,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometry: function(isDimensionChanged) {
-        if(this.option('visible') && windowUtils.hasWindow()) {
+        if(this.option('visible') && hasWindow()) {
             this._renderGeometryImpl(isDimensionChanged);
         }
     },
@@ -1202,7 +1212,7 @@ const Overlay = Widget.inherit({
     },
 
     _isWindow: function($element) {
-        return !!$element && typeUtils.isWindow($element.get(0));
+        return !!$element && isWindow($element.get(0));
     },
 
     _renderWrapperPosition: function() {
@@ -1219,7 +1229,7 @@ const Overlay = Widget.inherit({
         let positionOf = null;
 
         if(!container && position) {
-            positionOf = typeUtils.isEvent(position.of) ? window : (position.of || window);
+            positionOf = isEvent(position.of) ? window : (position.of || window);
         }
 
         return getElement(container || positionOf);
@@ -1249,7 +1259,7 @@ const Overlay = Widget.inherit({
         } else {
             this._renderOverlayBoundaryOffset();
 
-            translator.resetPosition(this._$content);
+            resetPosition(this._$content);
 
             const position = this._transformStringPosition(this._position, POSITION_ALIASES);
             const resultPosition = positionUtils.setup(this._$content, position);
@@ -1264,7 +1274,7 @@ const Overlay = Widget.inherit({
     },
 
     _transformStringPosition: function(position, positionAliases) {
-        if(typeUtils.isString(position)) {
+        if(isString(position)) {
             position = extend({}, positionAliases[position]);
         }
 
@@ -1486,7 +1496,7 @@ const Overlay = Widget.inherit({
     repaint: function() {
         if(this._contentAlreadyRendered) {
             this._renderGeometry();
-            domUtils.triggerResizeEvent(this._$content);
+            triggerResizeEvent(this._$content);
         } else {
             this.callBase();
         }
