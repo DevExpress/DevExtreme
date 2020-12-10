@@ -10422,7 +10422,12 @@ declare module DevExpress.ui {
          */
         hideAppointmentTooltip(): void;
         /**
+         * [descr:dxScheduler.scrollTo(date, group, allDay)]
+         */
+        scrollTo(date: Date, group?: any, allDay?: boolean): void;
+        /**
          * [descr:dxScheduler.scrollToTime(hours, minutes, date)]
+         * @deprecated [depNote:dxScheduler.scrollToTime(hours, minutes, date)]
          */
         scrollToTime(hours: number, minutes: number, date?: Date): void;
         /**
