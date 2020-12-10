@@ -735,7 +735,7 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleScroll: function() {
-        this._component._updateRtlConfig();
+        this._updateRtlConfig();
         this._scrollAction();
     },
 
@@ -996,11 +996,67 @@ export const SimulatedStrategy = Class.inherit({
         };
     },
 
-    updateBounds: function() {
+    _updateBounds: function() {
         this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
     },
 
+    _isHorizontalAndRtlEnabled: function() {
+        return this.option('rtlEnabled') && this.option('direction') !== VERTICAL;
+    },
+
+    updateRtlPosition: function(needInitializeRtlConfig) {
+        if(needInitializeRtlConfig) {
+            this._rtlConfig = {
+                scrollRight: 0,
+                clientWidth: this._$container.get(0).clientWidth,
+                windowPixelRatio: this._getWindowDevicePixelRatio()
+            };
+        }
+
+        this._updateBounds();
+        if(this._isHorizontalAndRtlEnabled()) {
+            deferUpdate(() => {
+                let scrollLeft = this._getMaxLeftOffset() - this._rtlConfig.scrollRight;
+
+                if(scrollLeft <= 0) {
+                    scrollLeft = 0;
+                    this._rtlConfig.scrollRight = this._getMaxLeftOffset();
+                }
+
+                deferRender(() => {
+                    if(this._getScrollOffset().left !== scrollLeft) {
+                        this._rtlConfig.skipUpdating = true;
+                        this._component.scrollTo({ left: scrollLeft });
+                        this._rtlConfig.skipUpdating = false;
+                    }
+                });
+            });
+        }
+    },
+
+    _updateRtlConfig: function() {
+        if(this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
+            const { clientWidth, scrollLeft } = this._$container.get(0);
+            const windowPixelRatio = this._getWindowDevicePixelRatio();
+            if(this._rtlConfig.windowPixelRatio === windowPixelRatio && this._rtlConfig.clientWidth === clientWidth) {
+                this._rtlConfig.scrollRight = (this._getMaxLeftOffset() - scrollLeft);
+            }
+            this._rtlConfig.clientWidth = clientWidth;
+            this._rtlConfig.windowPixelRatio = windowPixelRatio;
+        }
+    },
+
+    _getWindowDevicePixelRatio: function() {
+        return hasWindow()
+            ? getWindow().devicePixelRatio
+            : 1;
+    },
+
     scrollBy: function(distance) {
+        if(!distance.top && !distance.left) {
+            return;
+        }
+
         const verticalScroller = this._scrollers[VERTICAL];
         const horizontalScroller = this._scrollers[HORIZONTAL];
 
@@ -1015,6 +1071,8 @@ export const SimulatedStrategy = Class.inherit({
         this._startAction();
         this._eventHandler('scrollBy', { x: distance.left, y: distance.top });
         this._endAction();
+
+        this._updateRtlConfig();
     },
 
     validate: function(e) {
