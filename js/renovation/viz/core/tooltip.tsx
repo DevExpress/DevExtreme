@@ -45,13 +45,12 @@ export const viewFunction = ({
     <div
       style={{
         position: 'absolute',
-        overflow: 'hidden',
         pointerEvents: 'none',
         left: cloudSize.x,
         top: cloudSize.y,
       }}
     >
-      <svg width={cloudSize.width} height={cloudSize.height}>
+      <svg width={cloudSize.width} height={cloudSize.height} style={{ position: 'absolute' }}>
         <defs>
           <ShadowFilter
             id={filterId}
@@ -105,9 +104,20 @@ export const viewFunction = ({
       </svg>
       {!customizedOptions.html ? null
         : (
-          <div ref={htmlRef as any}>
-            {customizedOptions.html}
-          </div>
+          <div
+            ref={htmlRef as any}
+            style={{
+              position: 'relative',
+              display: 'inline-block',
+              left: correctedCoordinates.x - cloudSize.x - textSize.width / 2,
+              top: correctedCoordinates.y - cloudSize.y - textSize.height / 2,
+              fill: customizedOptions.fontColor,
+              fontFamily: font.family,
+              fontSize: font.size,
+              fontWeight: font.weight,
+              opacity: font.opacity,
+            }}
+          />
         )}
     </div>
   );
@@ -198,6 +208,14 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Ref() textRef!: RefObject<SVGGElement>;
 
   @Ref() htmlRef!: RefObject<HTMLElement>;
+
+  @Effect()
+  setHtmlText(): void {
+    const htmlText = this.customizedOptions.html;
+    if (htmlText) {
+      this.htmlRef.innerHTML = htmlText;
+    }
+  }
 
   @Effect()
   calculateSize(): void {

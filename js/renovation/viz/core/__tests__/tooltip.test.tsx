@@ -7,24 +7,34 @@ import {
 import { getFormatValue } from '../../common/utils';
 
 jest.mock('../common/tooltip_utils', () => ({
-  getCloudPoints: jest.fn().mockReturnValue('test_cloud_points'),
-  recalculateCoordinates: jest.fn().mockReturnValue({
-    x: 4, y: 5, anchorX: 11, anchorY: 12,
-  }),
-  getCloudAngle: jest.fn().mockReturnValue(180),
-  prepareData: jest.fn().mockReturnValue({
-    text: 'customized_tooltip_text',
-    color: 'customized_color',
-    borderColor: 'customized_border_color',
-    fontColor: 'customized_font_color',
-  }),
+  getCloudPoints: jest.fn(),
+  recalculateCoordinates: jest.fn(),
+  getCloudAngle: jest.fn(),
+  prepareData: jest.fn(),
 }));
 
 jest.mock('../../common/utils', () => ({
-  getFormatValue: jest.fn().mockReturnValue('formated_value'),
+  getFormatValue: jest.fn(),
 }));
 
 describe('Render', () => {
+  beforeEach(() => {
+    (getCloudPoints as jest.Mock).mockReturnValue('test_cloud_points');
+    (recalculateCoordinates as jest.Mock).mockReturnValue({
+      x: 4, y: 5, anchorX: 11, anchorY: 12,
+    });
+    (getCloudAngle as jest.Mock).mockReturnValue(180);
+    (prepareData as jest.Mock).mockReturnValue({
+      text: 'customized_tooltip_text',
+      color: 'customized_color',
+      borderColor: 'customized_border_color',
+      fontColor: 'customized_font_color',
+    });
+    (getFormatValue as jest.Mock).mockReturnValue('formated_value');
+  });
+
+  afterEach(() => jest.resetAllMocks);
+
   const tooltipProps = {
     data: {
       valueText: 'Tooltip value text',
@@ -57,9 +67,14 @@ describe('Render', () => {
   };
 
   const props = {
-    size: {
+    textSize: {
       width: 40, height: 30, x: 1, y: 2,
     },
+    cloudSize: {
+      width: 50, height: 38, x: 3, y: 4,
+    },
+    setCurrentState: jest.fn(),
+    filterId: 'filterId',
     customizedOptions: {
       borderColor: 'customized_border_color',
       color: 'customized_color',
@@ -73,15 +88,37 @@ describe('Render', () => {
       dashStyle: 'dash_style_test',
     },
     textRef: {},
-    fullSize: { width: 48, height: 40 },
+    htmlRef: {},
+    cloudRef: {},
+    textSizeWPaddings: { width: 48, height: 40 },
     props: tooltipProps,
-  } as Partial<Tooltip>;
+  };
+
+  it('should render main div', () => {
+    const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
+    expect(tooltip.find('div').at(0).props().style).toEqual({
+      pointerEvents: 'none',
+      left: 3,
+      top: 4,
+      position: 'absolute',
+    });
+  });
+
+  it('should render svg', () => {
+    const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
+    expect(tooltip.find('svg').props()).toMatchObject({
+      width: 50,
+      height: 38,
+      style: { position: 'absolute' },
+    });
+  });
 
   it('should render groups', () => {
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
 
     expect(tooltip.find('g').at(0).props()).toMatchObject({
       pointerEvents: 'none',
+      transform: 'translate(-3, -4)',
     });
 
     expect(tooltip.find('g').at(1).props()).toMatchObject({
@@ -142,7 +179,7 @@ describe('Render', () => {
 
     expect(tooltip.find('defs')).toHaveLength(1);
     expect(tooltip.find('ShadowFilter').props()).toMatchObject({
-      id: 'DevExpress_4',
+      id: 'filterId',
       x: '-50%',
       y: '-50%',
       width: '200%',
@@ -155,7 +192,25 @@ describe('Render', () => {
     });
     expect(tooltip.find('g').at(0).props()).toMatchObject({
       pointerEvents: 'none',
-      filter: 'url(#DevExpress_4)',
+      filter: 'url(#filterId)',
+    });
+  });
+
+  it('should render div for html text', () => {
+    const customizedOptions = { ...props.customizedOptions, html: 'html text' };
+    const tooltip = shallow(
+      <TooltipComponent {...{ ...props, customizedOptions } as any} /> as any,
+    );
+    expect(tooltip.find('div').at(1).props().style).toMatchObject({
+      position: 'relative',
+      display: 'inline-block',
+      left: -19,
+      top: -14,
+      fill: 'customized_font_color',
+      fontFamily: 'test_family_color',
+      fontSize: 15,
+      fontWeight: 600,
+      opacity: 0.4,
     });
   });
 });
@@ -171,7 +226,47 @@ describe('Effect', () => {
     } as any;
     tooltip.calculateSize();
 
-    expect(tooltip.size).toBe(box);
+    expect(tooltip.textSize).toBe(box);
+  });
+
+  it('should set html text', () => {
+    (prepareData as jest.Mock).mockReturnValue({
+      html: 'customized_html_text',
+    });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } });
+    tooltip.htmlRef = {} as any;
+    tooltip.setHtmlText();
+
+    expect(tooltip.htmlRef.innerHTML).toEqual('customized_html_text');
+  });
+
+  it('should not set html text, html option is not by user', () => {
+    (prepareData as jest.Mock).mockReturnValue({
+      text: 'customized_tooltip_text',
+    });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } });
+    tooltip.htmlRef = {} as any;
+    tooltip.setHtmlText();
+
+    expect(tooltip.htmlRef.innerHTML).toEqual(undefined);
+  });
+
+  it('should calculate cloud size', () => {
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' }, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
+    tooltip.d = 'test_d';
+    tooltip.cloudRef = {
+      getBBox: jest.fn().mockReturnValue({
+        x: 7, y: 9, width: 13, height: 15,
+      }),
+    } as any;
+    tooltip.calculateCloudSize();
+
+    expect(tooltip.cloudSize).toEqual({
+      x: 7,
+      y: 9,
+      width: 28.2,
+      height: 32.2,
+    });
   });
 });
 
@@ -193,9 +288,20 @@ describe('Getters', () => {
     visible: true,
   };
 
-  it('should return full size of tooltip', () => {
+  beforeEach(() => {
+    (prepareData as jest.Mock).mockReturnValue({
+      text: 'customized_tooltip_text',
+      color: 'customized_color',
+      borderColor: 'customized_border_color',
+      fontColor: 'customized_font_color',
+    });
+  });
+
+  afterEach(() => jest.resetAllMocks);
+
+  it('should return text size with paddings of tooltip', () => {
     const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' }, paddingLeftRight: 4, paddingTopBottom: 3 });
-    expect(tooltip.fullSize).toEqual({ width: 8, height: 6 });
+    expect(tooltip.textSizeWPaddings).toEqual({ width: 8, height: 6 });
   });
 
   it('should return border options', () => {
@@ -243,5 +349,15 @@ describe('Getters', () => {
 
     expect(prepareData)
       .toBeCalledWith(props.data, props.color, props.border, props.font, undefined);
+  });
+
+  it('should return margins', () => {
+    const tooltip = new Tooltip({ shadow: { offsetX: 11, offsetY: 12, blur: 2 } as any });
+    expect(tooltip.margins).toEqual({
+      lm: 0,
+      tm: 0,
+      rm: 16,
+      bm: 17,
+    });
   });
 });
