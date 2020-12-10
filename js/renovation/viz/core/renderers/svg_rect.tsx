@@ -5,6 +5,7 @@ import {
   OneWay,
   Ref,
   Effect,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import SvgGraphicsProps from './base_graphics_props';
 import {
@@ -18,7 +19,7 @@ export const viewFunction = ({
   },
 }: RectSvgElement): JSX.Element => (
   <rect
-    ref={rectRef as any}
+    ref={rectRef}
     x={x}
     y={y}
     width={width}
@@ -54,7 +55,7 @@ export class RectSvgElementProps extends SvgGraphicsProps {
   isSVG: true,
 })
 export class RectSvgElement extends JSXComponent(RectSvgElementProps) {
-  @Ref() rectRef!: SVGGraphicsElement;
+  @Ref() rectRef!: RefObject<SVGRectElement>;
 
   get parsedProps(): RectSvgElementProps {
     let tmpX: number;

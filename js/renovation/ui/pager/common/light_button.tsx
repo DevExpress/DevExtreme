@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot, Event, Ref, Effect, Consumer,
+  Component, ComponentBindings, JSXComponent, OneWay, Slot, Event, Ref, Effect, Consumer, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToClickEvent } from '../../../utils/subscribe_to_event';
 import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return.d';
@@ -14,8 +14,7 @@ export const viewFunction = ({
   },
 }: LightButton) => (
   <div
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ref={widgetRef as any}
+    ref={widgetRef}
     className={className}
     tabIndex={0}
     role="button"
@@ -41,7 +40,7 @@ export class LightButtonProps {
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class LightButton extends JSXComponent<LightButtonProps, 'onClick'>() {
-  @Ref() widgetRef!: HTMLDivElement;
+  @Ref() widgetRef!: RefObject<HTMLDivElement>;
 
   @Consumer(KeyboardActionContext)
   keyboardContext!: KeyboardActionContextType;

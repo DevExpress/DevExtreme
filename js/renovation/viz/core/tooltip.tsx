@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState,
+  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import { PathSvgElement } from './renderers/svg_path';
@@ -34,7 +34,7 @@ export const viewFunction = ({
         strokeWidth={border.width}
         transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
       />
-      <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
+      <g textAnchor="middle" ref={textRef} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
         <TextSvgElement text={text} />
       </g>
     </g>
@@ -80,7 +80,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     x: 0, y: 0, width: 0, height: 0,
   };
 
-  @Ref() textRef!: SVGGElement;
+  @Ref() textRef!: RefObject<SVGGElement>;
 
   @Effect()
   calculateSize(): void {

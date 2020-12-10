@@ -9,6 +9,7 @@ import {
   Effect,
   Event,
   ForwardRef,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
@@ -54,8 +55,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
 
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
-      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-      ref={viewModel.widgetRef as any}
+      ref={viewModel.widgetRef}
       rootElementRef={viewModel.target}
       accessKey={viewModel.props.accessKey}
       activeStateEnabled={viewModel.props.activeStateEnabled}
@@ -80,13 +80,13 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <input ref={viewModel.inputRef as any} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
+      <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
       <div className="dx-checkbox-container">
-        <span className="dx-checkbox-icon" ref={viewModel.iconRef as any} />
+        <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
         {text && (<span className="dx-checkbox-text">{text}</span>)}
       </div>
       {viewModel.props.useInkRipple
-                && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef as any} />}
+                && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
       {viewModel.rendered && viewModel.shouldShowValidationMessage
                 && (
                 <ValidationMessage
@@ -155,15 +155,15 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 export class CheckBox extends JSXComponent(CheckBoxProps) {
   rendered = false;
 
-  @Ref() iconRef!: HTMLDivElement;
+  @Ref() iconRef!: RefObject<HTMLDivElement>;
 
-  @Ref() inkRippleRef!: InkRipple;
+  @Ref() inkRippleRef!: RefObject<InkRipple>;
 
-  @Ref() inputRef!: HTMLInputElement;
+  @Ref() inputRef!: RefObject<HTMLInputElement>;
 
-  @Ref() widgetRef!: Widget;
+  @Ref() widgetRef!: RefObject<Widget>;
 
-  @ForwardRef() target!: HTMLDivElement;
+  @ForwardRef() target!: RefObject<HTMLDivElement>;
 
   @Effect({ run: 'once' })
   afterInitEffect(): EffectReturn {
