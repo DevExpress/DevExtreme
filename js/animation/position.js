@@ -59,7 +59,6 @@
 
 
 import $ from '../core/renderer';
-
 import { splitPair, pairToObject } from '../core/utils/common';
 import { each } from '../core/utils/iterator';
 import { getWindow } from '../core/utils/window';
@@ -177,6 +176,34 @@ const initMyLocation = function(data) {
         + getAlignFactor(data.atAlign) * data.atSize
         - getAlignFactor(data.myAlign) * data.mySize
         + data.offset;
+};
+
+const adjustBoundary = function(container, boundaryPreset, positionOptions) {
+    let result;
+
+    if(container && !isWindow(container)) {
+        const $container = $(container);
+        const {
+            left: containerLeft,
+            top: containerTop
+        } = $container.offset();
+
+        const containerWidth = $container.width();
+        const containerHeight = $container.height();
+
+        result = {
+            h: {
+                min: Math.max(boundaryPreset.h.min, containerLeft),
+                max: Math.min(boundaryPreset.h.max, containerLeft + containerWidth / positionOptions.hZoomLevel - positionOptions.hMySize)
+            },
+            v: {
+                min: Math.max(boundaryPreset.v.min, containerTop),
+                max: Math.min(boundaryPreset.v.max, containerTop + containerHeight / positionOptions.vZoomLevel - positionOptions.vMySize)
+            }
+        };
+    }
+
+    return result || boundaryPreset;
 };
 
 const collisionResolvers = {
@@ -354,8 +381,6 @@ const calculatePosition = function(what, options) {
 
         let boundaryWidth = windowWidth;
         let boundaryHeight = windowHeight;
-        let containerWidth = windowWidth;
-        let containerHeight = windowHeight;
 
         if(boundary) {
             const $boundary = $(boundary);
@@ -368,38 +393,23 @@ const calculatePosition = function(what, options) {
             boundaryHeight = $boundary.height();
         }
 
-        let horizontalMin = boundaryLeft + h.boundaryOffset;
-        let horizontalMax = boundaryLeft + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset;
-        let verticalMin = boundaryTop + v.boundaryOffset;
-        let verticalMax = boundaryTop + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset;
-
-        if(container && !isWindow(container)) {
-            const $container = $(container);
-            const containerPosition = $container.offset();
-
-            const containerLeft = containerPosition.left;
-            const containerTop = containerPosition.top;
-
-            containerWidth = $container.width();
-            containerHeight = $container.height();
-
-            horizontalMin = Math.max(horizontalMin, containerLeft);
-            horizontalMax = Math.min(horizontalMax, containerLeft + containerWidth / hZoomLevel - h.mySize);
-            verticalMin = Math.max(verticalMin, containerTop);
-            verticalMax = Math.min(verticalMax, containerTop + containerHeight / vZoomLevel - v.mySize);
-        }
-
-
-        return {
+        const boundaryPreset = {
             h: {
-                min: horizontalMin,
-                max: horizontalMax
+                min: boundaryLeft + h.boundaryOffset,
+                max: boundaryLeft + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset
             },
             v: {
-                min: verticalMin,
-                max: verticalMax
+                min: boundaryTop + v.boundaryOffset,
+                max: boundaryTop + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset
             }
         };
+
+        return adjustBoundary(container, boundaryPreset, {
+            hZoomLevel,
+            vZoomLevel,
+            hMySize: h.mySize,
+            vMySize: v.mySize
+        });
     })();
 
     h.oversize = calculateOversize(h, bounds.h);
