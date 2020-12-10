@@ -851,7 +851,7 @@ module('Common', commonModuleConfig, () => {
                 endDate: new Date(2018, 4, 21, 11, 30)
             }],
             height: 600,
-            views: [{ type: 'day', maxAppointmentsPerCell: 1 }],
+            views: ['day'],
             currentDate: new Date(2018, 4, 21),
             startDayHour: 9,
             endDayHour: 16
