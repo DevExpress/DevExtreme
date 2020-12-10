@@ -469,6 +469,9 @@ const subscribes = {
     prerenderFilter: function() {
         const dateRange = this.getWorkSpace().getDateRange();
         const resources = this._resourcesManager.getResourcesData();
+        const startDayHour = this._getCurrentViewOption('startDayHour');
+        const endDayHour = this._getCurrentViewOption('endDayHour');
+
         let allDay;
 
         if(!this.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
@@ -476,8 +479,10 @@ const subscribes = {
         }
 
         return this._appointmentModel.filterLoadedAppointments({
-            startDayHour: this._getCurrentViewOption('startDayHour'),
-            endDayHour: this._getCurrentViewOption('endDayHour'),
+            startDayHour,
+            endDayHour,
+            viewStartDayHour: startDayHour,
+            viewEndDayHour: endDayHour,
             min: dateRange[0],
             max: dateRange[1],
             resources: resources,
@@ -517,6 +522,8 @@ const subscribes = {
                 isVirtualScrolling: true,
                 startDayHour,
                 endDayHour,
+                viewStartDayHour: this._getCurrentViewOption('startDayHour'),
+                viewEndDayHour: this._getCurrentViewOption('endDayHour'),
                 min: startDate,
                 max: endDate,
                 resources: groupResources,
