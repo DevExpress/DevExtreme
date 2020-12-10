@@ -562,7 +562,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return this._getRowCount();
     }
 
-    _setCurrentTimeCell() {
+    _setCurrentTimeCells() {
         const timePanelCells = this._getTimePanelCells();
         const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
         currentTimeCellIndices.forEach((timePanelCellIndex) => {
@@ -571,7 +571,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         });
     }
 
-    _cleanCurrentTimeCell() {
+    _cleanCurrentTimeCells() {
         this.$element()
             .find(`.${HEADER_CURRENT_TIME_CELL_CLASS}`)
             .removeClass(HEADER_CURRENT_TIME_CELL_CLASS);
@@ -583,7 +583,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getCurrentTimePanelCellIndices() {
-        const rowCountPerGroup = this._getCellCount();
+        const columnCountPerGroup = this._getCellCount();
         const today = this._getToday();
         const index = this.getCellIndexByDate(today);
         const { cellIndex: currentTimeCellIndex } = this._getCellCoordinatesByIndex(index);
@@ -597,7 +597,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             : 1;
 
         return [...(new Array(horizontalGroupCount))]
-            .map((_, groupIndex) => rowCountPerGroup * groupIndex + currentTimeCellIndex);
+            .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeCellIndex);
     }
 }
 

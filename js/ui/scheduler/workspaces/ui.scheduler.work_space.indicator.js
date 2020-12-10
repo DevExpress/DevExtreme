@@ -64,7 +64,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
                 const date = this._getToday();
 
                 this._renderIndicator(date, groupCount);
-                this._setCurrentTimeCell();
+                this._setCurrentTimeCells();
             }
         }
     }
@@ -181,14 +181,14 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _refreshDateTimeIndication() {
         this._cleanDateTimeIndicator();
-        this._cleanCurrentTimeCell();
+        this._cleanCurrentTimeCells();
 
         this._shader?.clean();
 
         this._renderDateTimeIndication();
     }
 
-    _setCurrentTimeCell() {
+    _setCurrentTimeCells() {
         const timePanelCells = this._getTimePanelCells();
         const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
         currentTimeCellIndices.forEach((timePanelCellIndex) => {
@@ -232,7 +232,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         this.$element().find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
     }
 
-    _cleanCurrentTimeCell() {
+    _cleanCurrentTimeCells() {
         this.$element()
             .find(`.${TIME_PANEL_CURRENT_TIME_CELL_CLASS}`)
             .removeClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
