@@ -29,7 +29,7 @@ interface ItemTemplateProps {
   container: HTMLDivElement;
 }
 interface ListItemProps {
-  itemData?: AppointmentItem;
+  itemData: AppointmentItem;
 }
 
 export const viewFunction = (viewModel: AppointmentList): JSX.Element => (
@@ -87,8 +87,8 @@ export class AppointmentList extends JSXComponent<AppointmentListProps, 'target'
   get onItemClick() {
     return ({ itemData }: ListItemProps): void => {
       const { showAppointmentPopup } = this.props;
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      showAppointmentPopup?.(itemData!.data, false, getCurrentAppointment(itemData!));
+
+      showAppointmentPopup?.(itemData.data, false, getCurrentAppointment(itemData));
     };
   }
 }
