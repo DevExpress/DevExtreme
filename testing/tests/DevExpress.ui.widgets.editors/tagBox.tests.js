@@ -977,6 +977,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         const tagBox = $('#tagBox').dxTagBox({
             items: ['item1', 'item2'],
         }).dxTagBox('instance');
+        this.clock.tick(TIME_TO_WAIT);
 
         tagBox.option('value', ['item1']);
 
@@ -985,33 +986,41 @@ QUnit.module('the "text" option', moduleSetup, () => {
 
     QUnit.test('typed value should be passed to text option', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-            searchEnabled: true
+            searchEnabled: true,
+            searchTimeout: 0
         });
+        this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = new keyboardMock($input);
 
         keyboard.type('i');
+        this.clock.tick(TIME_TO_WAIT);
         assert.strictEqual(tagBox.option('text'), 'i', 'text is correct');
 
         keyboard.type('t');
+        this.clock.tick(TIME_TO_WAIT);
         assert.strictEqual(tagBox.option('text'), 'it', 'text is correct');
 
         keyboard.press('backspace');
+        this.clock.tick(TIME_TO_WAIT);
         assert.strictEqual(tagBox.option('text'), 'i', 'text is correct');
     });
 
     QUnit.test('focusout after search should clear text option value', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-            searchEnabled: true
+            searchEnabled: true,
+            searchTimeout: 0
         });
+        this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = new keyboardMock($input);
 
         keyboard.type('i');
+        this.clock.tick(TIME_TO_WAIT);
 
         $input.focusout();
 
@@ -1031,6 +1040,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         const keyboard = new keyboardMock($input);
 
         keyboard.type('i');
+        this.clock.tick(TIME_TO_WAIT);
 
         const $listItems = $(tagBox.content()).find(`.${LIST_ITEM_CLASS}`);
         $listItems.first().trigger('dxclick');
@@ -1040,8 +1050,10 @@ QUnit.module('the "text" option', moduleSetup, () => {
 
     QUnit.test('custom item adding should clear text option value', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-            acceptCustomValue: true
+            acceptCustomValue: true,
+            searchTimeout: 0
         });
+        this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
@@ -1050,6 +1062,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         keyboard
             .type('i')
             .press('enter');
+        this.clock.tick(TIME_TO_WAIT);
 
         assert.strictEqual(tagBox.option('text'), '', 'text is cleared');
     });
