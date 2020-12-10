@@ -68,7 +68,7 @@ class FileManagerFilesTreeView extends Widget {
 
         const that = this;
         setTimeout(() => {
-            that.updateCurrentDirectory();
+            that._updateFocusedElement();
         });
     }
 
@@ -225,14 +225,10 @@ class FileManagerFilesTreeView extends Widget {
         if(!treeViewNode) {
             return deferred.reject().promise();
         }
-        // const publicNode = this._filesTreeView._dataAdapter.getPublicNode(treeViewNode);
-        // const itemsLength = treeViewNode.internalFields.item.items.length;
         if(treeViewNode.expanded === state || treeViewNode.itemsLoaded && !treeViewNode.fileItem.hasSubDirectories) {
             return deferred.resolve().promise();
         }
-
         const action = state ? 'expandItem' : 'collapseItem';
-        // console.log(directoryInfo.getDisplayName() + ' ' + state);
         return this._filesTreeView[action](directoryInfo.getInternalKey());
     }
 
