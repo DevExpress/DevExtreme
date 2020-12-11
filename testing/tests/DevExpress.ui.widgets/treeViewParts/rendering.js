@@ -109,8 +109,12 @@ QUnit.test('Correct loadIndicator is hidden after expanding node (T955388)', fun
 
     wrapper.instance.expandItem('1');
 
-    const treeViewLoadIndicator = wrapper.getElement().find(`.${NODE_LOAD_INDICATOR_CLASS}`);
+    const treeViewLoadIndicator = wrapper.getNodeLoadIndicator(wrapper.getElement());
     assert.ok(wrapper.hasInvisibleClass(treeViewLoadIndicator));
+
+    const loadIndicators = wrapper.getElement().find(`.${DX_LOAD_INDICATOR_CLASS}:not(.${NODE_LOAD_INDICATOR_CLASS})`);
+    assert.notOk(wrapper.hasInvisibleClass(loadIndicators.eq(0)));
+    assert.notOk(wrapper.hasInvisibleClass(loadIndicators.eq(1)));
 });
 
 QUnit.test('\'getNodes\' method', function(assert) {
