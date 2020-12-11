@@ -33,6 +33,7 @@ export const viewFunction = ({
     x, y, font, shadow, opacity,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
+  interactive,
 }: Tooltip): JSX.Element => {
   const correctedCoordinates = recalculateCoordinates({
     canvas, anchorX: x, anchorY: y, size: textSizeWPaddings, offset, arrowLength,
@@ -66,7 +67,7 @@ export const viewFunction = ({
           />
         </defs>
         <g
-          pointerEvents="none"
+          pointerEvents={interactive ? 'all' : 'none'}
           filter={`url(#${filterId})`}
           ref={cloudRef as any}
           transform={`translate(${-cloudSize.x}, ${-cloudSize.y})`}
@@ -177,6 +178,8 @@ export class TooltipProps {
     offsetY: 4,
     opacity: 0.4,
   };
+
+  @OneWay() interactive = false;
 }
 
 @Component({

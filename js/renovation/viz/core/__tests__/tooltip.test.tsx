@@ -213,6 +213,14 @@ describe('Render', () => {
       opacity: 0.4,
     });
   });
+
+  it('should render interactive content', () => {
+    const tooltip = shallow(<TooltipComponent interactive {...props as any} /> as any);
+
+    expect(tooltip.find('g').at(0).props()).toMatchObject({
+      pointerEvents: 'all',
+    });
+  });
 });
 
 describe('Effect', () => {
