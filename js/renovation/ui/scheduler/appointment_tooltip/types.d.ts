@@ -40,7 +40,7 @@ export type GetTextAndFormatDateFn = (
 ) => FormattedContent;
 
 export type GetSingleAppointmentFn = (
-  appointment: dxSchedulerAppointment, target: HTMLElement,
+  appointment: dxSchedulerAppointment, target?: HTMLElement,
 ) => dxSchedulerAppointment;
 
 export type CheckAndDeleteAppointmentFn = (
@@ -51,3 +51,11 @@ export type ShowAppointmentPopupFn = (
   appointment: dxSchedulerAppointment, visibleButtons: boolean,
   currentAppointment: dxSchedulerAppointment,
 ) => void;
+
+export interface AppointmentTooltipTemplate {
+  model: {
+    appointmentData: dxSchedulerAppointment;
+    targetedAppointmentData: dxSchedulerAppointment;
+  };
+  index: number;
+}

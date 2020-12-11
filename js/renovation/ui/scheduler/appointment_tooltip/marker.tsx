@@ -38,7 +38,7 @@ export class Marker extends JSXComponent(MarkerProps) {
     });
   }
 
-  get style() {
+  get style(): { [key: string]: string | undefined } {
     return { background: this.appointmentColor };
   }
 }

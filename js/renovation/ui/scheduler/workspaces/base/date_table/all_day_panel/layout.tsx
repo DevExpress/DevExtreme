@@ -41,7 +41,7 @@ export class AllDayPanelLayoutProps extends LayoutProps {
 })
 export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {
   get allDayPanelData(): ViewCellData[] | undefined {
-    return this.props.viewData!.groupedData[0].allDayPanel;
+    return this.props.viewData.groupedData[0].allDayPanel;
   }
 
   get emptyTableHeight(): number | undefined {

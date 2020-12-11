@@ -83,21 +83,8 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 itemData:any
-       * @type_function_param1_field3 itemElement:dxElement
-       * @type_function_param1_field4 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field5 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field6 fromData:any
-       * @type_function_param1_field7 toData:any
-       */
-      onAdd?: ((e: { event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 cancel:boolean
+       * @type_function_param1_field1 component:dxScheduler
+       * @type_function_param1_field2 event:event
        * @type_function_param1_field3 itemData:any
        * @type_function_param1_field4 itemElement:dxElement
        * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
@@ -105,44 +92,62 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field7 fromData:any
        * @type_function_param1_field8 toData:any
        */
-      onDragEnd?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
+      onAdd?: ((e: { component?: dxScheduler, event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 cancel:boolean
+       * @type_function_param1_field1 component:dxScheduler
+       * @type_function_param1_field2 event:event
+       * @type_function_param1_field3 cancel:boolean
+       * @type_function_param1_field4 itemData:any
+       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+       * @type_function_param1_field8 fromData:any
+       * @type_function_param1_field9 toData:any
+       */
+      onDragEnd?: ((e: { component?: dxScheduler, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type_function_param1 e:object
+       * @type_function_param1_field1 component:dxScheduler
+       * @type_function_param1_field2 event:event
+       * @type_function_param1_field3 cancel:boolean
+       * @type_function_param1_field4 itemData:any
+       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+       * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+       * @type_function_param1_field8 fromData:any
+       * @type_function_param1_field9 toData:any
+       */
+      onDragMove?: ((e: { component?: dxScheduler, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type_function_param1 e:object
+       * @type_function_param1_field1 component:dxScheduler
+       * @type_function_param1_field2 event:event
+       * @type_function_param1_field3 cancel:boolean
+       * @type_function_param1_field4 itemData:any
+       * @type_function_param1_field5 itemElement:dxElement
+       * @type_function_param1_field6 fromData:any
+       */
+      onDragStart?: ((e: { component?: dxScheduler, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromData?: any }) => any),
+      /**
+       * @docid
+       * @prevFileNamespace DevExpress.ui
+       * @type_function_param1 e:object
+       * @type_function_param1_field1 component:dxScheduler
+       * @type_function_param1_field2 event:event
        * @type_function_param1_field3 itemData:any
        * @type_function_param1_field4 itemElement:dxElement
        * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
        * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 fromData:any
-       * @type_function_param1_field8 toData:any
        */
-      onDragMove?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 cancel:boolean
-       * @type_function_param1_field3 itemData:any
-       * @type_function_param1_field4 itemElement:dxElement
-       * @type_function_param1_field5 fromData:any
-       */
-      onDragStart?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromData?: any }) => any),
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @type_function_param1 e:object
-       * @type_function_param1_field1 event:event
-       * @type_function_param1_field2 itemData:any
-       * @type_function_param1_field3 itemElement:dxElement
-       * @type_function_param1_field4 fromComponent:dxSortable|dxDraggable
-       * @type_function_param1_field5 toComponent:dxSortable|dxDraggable
-       * @type_function_param1_field6 fromData:any
-       */
-      onRemove?: ((e: { event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => any),
+      onRemove?: ((e: { component?: dxScheduler, event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
