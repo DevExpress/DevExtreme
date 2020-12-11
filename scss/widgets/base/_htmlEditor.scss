@@ -60,7 +60,7 @@ $transparent-border: 1px solid transparent;
     ol li[data-list=ordered].ql-indent-#{$counter} {
       counter-increment: list-#{$counter};
 
-      & > .ql-ui::before { // stylelint-disable-line selector-class-pattern
+      &::before {
         content: counter(list-#{$counter}, nth($list-style, ($counter % 3) + 1)) ". ";
       }
     }
@@ -77,9 +77,7 @@ $transparent-border: 1px solid transparent;
   &:not(.dx-state-disabled) {
     li[data-list=checked],
     li[data-list=unchecked] {
-      > .ql-ui { // stylelint-disable-line selector-class-pattern
-        cursor: pointer;
-      }
+      cursor: pointer;
     }
   }
 }
@@ -180,20 +178,19 @@ $transparent-border: 1px solid transparent;
     padding-left: $list-style-outer-width;
     position: relative;
 
-    // stylelint-disable selector-class-pattern
-    &[data-list=bullet] > .ql-ui::before {
+    &[data-list=bullet]::before {
       content: '\2022';
     }
 
-    &[data-list=checked] > .ql-ui::before {
+    &[data-list=checked]::before {
       content: '\2611';
     }
 
-    &[data-list=unchecked] > .ql-ui::before {
+    &[data-list=unchecked]::before {
       content: '\2610';
     }
 
-    & > .ql-ui::before {
+    &::before {
       display: inline-block;
       margin-left: -1 * $list-style-outer-width;
       margin-right: $list-style-margin;
@@ -202,25 +199,34 @@ $transparent-border: 1px solid transparent;
       width: $list-style-width;
     }
 
+    > .ql-ui { // stylelint-disable-line selector-class-pattern
+      visibility: hidden;
+    }
+
+    &[data-list=unchecked],
+    &[data-list=checked] {
+      > .ql-ui { // stylelint-disable-line selector-class-pattern
+        visibility: visible;
+      }
+    }
+
     .dx-rtl & {
       padding-left: 0;
       padding-right: $list-style-outer-width;
 
-      & > .ql-ui::before {
+      &::before {
         margin-left: $list-style-margin;
         margin-right: -1 * $list-style-outer-width;
         text-align: left;
       }
     }
-
-    // stylelint-enable selector-class-pattern
   }
 
-  li[data-list=ordered] {  // stylelint-disable-line no-duplicate-selectors
+  li[data-list=ordered] {
     counter-reset: add-counter-reset($max-indent);
     counter-increment: list-0;
 
-    & > .ql-ui::before {  // stylelint-disable-line no-duplicate-selectors, selector-class-pattern
+    &::before {
       content: counter(list-0, nth($list-style, 1)) ". ";
     }
   }
@@ -231,7 +237,7 @@ $transparent-border: 1px solid transparent;
   .dx-rtl & li { // stylelint-disable-line no-duplicate-selectors
     padding-right: $list-style-outer-width;
 
-    & > .ql-ui::before { // stylelint-disable-line no-duplicate-selectors, selector-class-pattern
+    &::before { // stylelint-disable-line no-duplicate-selectors
       margin-left: $list-style-margin;
       margin-right: -1 * $list-style-outer-width;
       text-align: left;
