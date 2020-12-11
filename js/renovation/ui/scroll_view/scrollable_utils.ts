@@ -15,6 +15,7 @@ export const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 export const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 export const SCROLLVIEW_TOP_POCKET_CLASS = 'dx-scrollview-top-pocket';
 export const SCROLLVIEW_BOTTOM_POCKET_CLASS = 'dx-scrollview-bottom-pocket';
+export const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-wrapper';
 
 export function ensureLocation(
   location: number | Partial<ScrollableLocation>,
