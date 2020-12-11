@@ -1534,7 +1534,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
         // Cause rerender of the grid and appointments
-        virtualScrollingDispatcher._updateRender();
+        virtualScrollingDispatcher.renderer.updateRender();
 
         appointments = scheduler.appointments.find(appointmentTitle);
         dragSource = scheduler.appointments.getDragSource();
@@ -1951,7 +1951,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
             virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
             // Cause rerender of the grid and appointments
-            virtualScrollingDispatcher._updateRender();
+            virtualScrollingDispatcher.renderer.updateRender();
 
 
             const $firstAppointment = scheduler.appointments.find(firstAppointmentTitle).eq(dragSourceIndex);
@@ -2077,7 +2077,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
         // Cause rerender of the grid and appointments
-        virtualScrollingDispatcher._updateRender();
+        virtualScrollingDispatcher.renderer.updateRender();
 
         const dragSource = scheduler.appointments.getDragSource(0);
 
@@ -2127,7 +2127,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             .move(cellCenter.left - positionBeforeDrag.left, cellCenter.top - positionBeforeDrag.top);
 
         // Cause rerender of the grid and appointments
-        virtualScrollingDispatcher._updateRender();
+        virtualScrollingDispatcher.renderer.updateRender();
 
         const draggedAppointment = scheduler.appointments.getFakeAppointmentWrapper();
         const nextPointer = pointerMock(draggedAppointment);
