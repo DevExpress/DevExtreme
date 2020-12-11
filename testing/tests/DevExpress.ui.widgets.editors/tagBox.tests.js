@@ -438,15 +438,6 @@ QUnit.module('tags', moduleSetup, () => {
         assert.equal($.trim($tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS).text()), '01', 'selected first and second items');
     });
 
-    QUnit.test('\'text\' option should have correct value when item value is zero', function(assert) {
-        const tagBox = $('#tagBox').dxTagBox({
-            value: [0],
-            items: [0, 1]
-        }).dxTagBox('instance');
-
-        assert.equal(tagBox.option('text'), '0');
-    });
-
     QUnit.test('tag should have correct value when item value is an empty string', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: ['', 1, 2, 3],
@@ -978,6 +969,102 @@ QUnit.module('the \'value\' option', moduleSetup, () => {
         instance.option('displayExpr', 'name');
         const $tag = $element.find('.' + TAGBOX_TAG_CONTENT_CLASS);
         assert.equal($tag.text(), 'one', 'tag render displayValue');
+    });
+});
+
+QUnit.module('the "text" option', moduleSetup, () => {
+    QUnit.test('value change should not change text option', function(assert) {
+        const tagBox = $('#tagBox').dxTagBox({
+            items: ['item1', 'item2'],
+        }).dxTagBox('instance');
+        this.clock.tick(TIME_TO_WAIT);
+
+        tagBox.option('value', ['item1']);
+
+        assert.strictEqual(tagBox.option('text'), '', 'text is empty');
+    });
+
+    QUnit.test('typed value should be passed to text option', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            searchEnabled: true,
+            searchTimeout: 0
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const tagBox = $tagBox.dxTagBox('instance');
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const keyboard = new keyboardMock($input);
+
+        keyboard.type('i');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.strictEqual(tagBox.option('text'), 'i', 'text is correct');
+
+        keyboard.type('t');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.strictEqual(tagBox.option('text'), 'it', 'text is correct');
+
+        keyboard.press('backspace');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.strictEqual(tagBox.option('text'), 'i', 'text is correct');
+    });
+
+    QUnit.test('focusout after search should clear text option value', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            searchEnabled: true,
+            searchTimeout: 0
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const tagBox = $tagBox.dxTagBox('instance');
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const keyboard = new keyboardMock($input);
+
+        keyboard.type('i');
+        this.clock.tick(TIME_TO_WAIT);
+
+        $input.focusout();
+
+        assert.strictEqual(tagBox.option('text'), '', 'text is cleared');
+    });
+
+    QUnit.test('value selecting after search should clear text option value', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: ['item1', 'item2'],
+            searchEnabled: true,
+            searchTimeout: 0
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const tagBox = $tagBox.dxTagBox('instance');
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const keyboard = new keyboardMock($input);
+
+        keyboard.type('i');
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $listItems = $(tagBox.content()).find(`.${LIST_ITEM_CLASS}`);
+        $listItems.first().trigger('dxclick');
+
+        assert.strictEqual(tagBox.option('text'), '', 'text is cleared');
+    });
+
+    QUnit.test('custom item adding should clear text option value', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            acceptCustomValue: true,
+            searchTimeout: 0
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const tagBox = $tagBox.dxTagBox('instance');
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const keyboard = new keyboardMock($input);
+
+        keyboard
+            .type('i')
+            .press('enter');
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.strictEqual(tagBox.option('text'), '', 'text is cleared');
     });
 });
 

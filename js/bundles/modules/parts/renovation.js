@@ -8,4 +8,5 @@ module.exports = [
     // { name: 'ScrollView', pathInRenovationFolder: 'ui/scroll_view.j', pathInJSFolder: 'ui/scroll_view.js' },
     // { name: 'DataGrid', pathInRenovationFolder: 'ui/data_grid/data_grid.j', pathInJSFolder: 'ui/button.js' },
     { name: 'Pager', pathInRenovationFolder: 'ui/pager/pager.j', pathInJSFolder: 'ui/pager.js', pathToWrapper: '../../../testing/helpers/renovationPagerHelper.js' },
+    // { name: 'Bullet', pathInRenovationFolder: 'viz/sparklines/bullet.j', pathInJSFolder: 'viz/sparklines/bullet.js' },
 ];

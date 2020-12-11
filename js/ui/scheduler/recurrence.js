@@ -47,6 +47,7 @@ class RecurrenceProcessor {
 
         const minTime = minDateUtc.getTime();
         const leftBorder = this._getLeftBorder(options, minDateUtc, duration);
+
         this.rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
             const endAppointmentTime = date.getTime() + duration;
 
@@ -128,28 +129,42 @@ class RecurrenceProcessor {
         return result.toUpperCase();
     }
 
-    getDateByAsciiString(string, initialDate) {
-        if(typeof string !== 'string') {
-            return string;
+    _parseExceptionToRawArray(value) {
+        return value.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+    }
+
+    getDateByAsciiString(exceptionText) {
+        if(typeof exceptionText !== 'string') {
+            return exceptionText;
         }
 
-        const arrayDate = string.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+        const result = this._parseExceptionToRawArray(exceptionText);
 
-        if(!arrayDate) {
+        if(!result) {
             return null;
         }
 
-        const isUTCString = arrayDate[8] !== undefined;
-        let currentOffset = initialDate ? initialDate.getTimezoneOffset() : this._getTimeZoneOffset();
-        let date = new (Function.prototype.bind.apply(Date, this._prepareDateArrayToParse(arrayDate)))();
+        const [year, month, date, hours, minutes, seconds, isUtc] = this._createDateTuple(result);
 
-        currentOffset = currentOffset * toMs('minute');
-
-        if(isUTCString) {
-            date = new Date(date.getTime() - currentOffset);
+        if(isUtc) {
+            return new Date(Date.UTC(
+                year,
+                month,
+                date,
+                hours,
+                minutes,
+                seconds)
+            );
         }
 
-        return date;
+        return new Date(
+            year,
+            month,
+            date,
+            hours,
+            minutes,
+            seconds
+        );
     }
 
     _dispose() {
@@ -181,9 +196,12 @@ class RecurrenceProcessor {
         this._createRRule(ruleOptions);
 
         if(options.exception) {
-            const splitDates = options.exception.split(',');
-            const exceptDates = this._getDatesByRecurrenceException(splitDates, startDateUtc);
-            exceptDates.forEach(date => {
+            const exceptionStrings = options.exception;
+            const exceptionDates = exceptionStrings
+                .split(',')
+                .map(rule => this.getDateByAsciiString(rule));
+
+            exceptionDates.forEach(date => {
                 const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
                 this.rRuleSet.exdate(utcDate);
             });
@@ -207,12 +225,6 @@ class RecurrenceProcessor {
         }
 
         return minDateUtc;
-    }
-
-    _getDatesByRecurrenceException(ruleValues, date) {
-        const result = [];
-        ruleValues.forEach(rule => result.push(this.getDateByAsciiString(rule, date)));
-        return result;
     }
 
     _parseRecurrenceRule(recurrence) {
@@ -250,21 +262,31 @@ class RecurrenceProcessor {
         return ruleObject;
     }
 
-    _prepareDateArrayToParse(arrayDate) {
-        arrayDate.shift();
+    _createDateTuple(parseResult) {
+        const isUtc = parseResult[8] !== undefined;
 
-        if(arrayDate[3] === undefined) {
-            arrayDate.splice(3);
+        parseResult.shift();
+
+        if(parseResult[3] === undefined) {
+            parseResult.splice(3);
         } else {
-            arrayDate.splice(3, 1);
-            arrayDate.splice(6);
+            parseResult.splice(3, 1);
+            parseResult.splice(6);
         }
 
-        arrayDate[1]--;
+        parseResult[1]--;
 
-        arrayDate.unshift(null);
+        parseResult.unshift(null);
 
-        return arrayDate;
+        return [
+            parseInt(parseResult[1]),
+            parseInt(parseResult[2]),
+            parseInt(parseResult[3]),
+            parseInt(parseResult[4]) || 0,
+            parseInt(parseResult[5]) || 0,
+            parseInt(parseResult[6]) || 0,
+            isUtc
+        ];
     }
 }
 

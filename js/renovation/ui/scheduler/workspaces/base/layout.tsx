@@ -7,7 +7,7 @@ export const viewFunction = (viewModel: LayoutBase): JSX.Element => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <div {...viewModel.restAttributes}>
     <viewModel.props.headerPanelTemplate
-      viewCellsData={viewModel.props.viewData!.groupedData[0].dateTable}
+      viewCellsData={viewModel.props.viewData.groupedData[0].dateTable}
     />
     <viewModel.props.dateTableTemplate viewData={viewModel.props.viewData} />
   </div>

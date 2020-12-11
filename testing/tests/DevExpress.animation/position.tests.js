@@ -1122,3 +1122,58 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 })();
+
+(function containerModule() {
+    QUnit.module('container', {
+        beforeEach() {
+            fixtures.customContainer.create();
+        },
+        afterEach() {
+            fixtures.customContainer.drop();
+        }
+    });
+
+    QUnit.test('collision should be fired if container with overflow: hidden limited the space', function(assert) {
+        const $container = $('#container');
+        const $what = $('#what');
+        const $where = $('#where');
+
+        const result = calculatePosition($what, { my: 'top left', at: 'bottom left', of: $where, collision: 'flip', container: $container });
+
+        assert.strictEqual(result.h.flip, true, 'horizontal flip occurred');
+        assert.strictEqual(result.v.flip, true, 'vertical flip occurred');
+    });
+
+    QUnit.test('container limits should works with boundaries', function(assert) {
+        const $container = $('#container');
+        const $what = $('#what');
+        const $where = $('#where');
+        const $bounds = $('#bounds');
+
+        const result = calculatePosition($what, { my: 'top left', at: 'bottom left', of: $where, collision: 'flip', container: $container, boundary: $bounds });
+
+        assert.strictEqual(result.h.flip, false, 'horizontal flip is not occurred');
+        assert.strictEqual(result.v.flip, false, 'vertical flip is not occurred');
+    });
+
+    QUnit.test('collision should be fired if container has overflow: hidden and it is larger than window', function(assert) {
+        const $container = $('#container');
+        const $what = $('#what');
+        const $where = $('#where');
+        const windowHeight = $(window).height();
+        const windowWidth = $(window).width();
+
+        $container.css('width', windowHeight + 100);
+        $container.css('height', windowWidth + 100);
+
+        $where.css({
+            top: windowHeight - 100,
+            left: windowWidth - 100,
+        });
+
+        const result = calculatePosition($what, { my: 'top left', at: 'bottom left', of: $where, collision: 'flip', container: $container });
+        assert.strictEqual(result.h.flip, true, 'horizontal flip occurred');
+        assert.strictEqual(result.v.flip, true, 'vertical flip occurred');
+    });
+
+})();

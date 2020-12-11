@@ -39,6 +39,8 @@ const NativeStrategy = Class.inherit({
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
+        this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
+        this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
     },
 
     render: function() {
@@ -127,20 +129,24 @@ const NativeStrategy = Class.inherit({
     },
 
     _createActionArgs: function() {
-        const location = this.location();
-        const containerElement = this._$container.get(0);
+        const { left, top } = this.location();
 
         return {
             event: this._eventForUserAction,
-            scrollOffset: {
-                top: -location.top,
-                left: -location.left
-            },
-            reachedLeft: this._isDirection(HORIZONTAL) ? location.left >= 0 : undefined,
-            reachedRight: this._isDirection(HORIZONTAL) ? Math.abs(location.left) >= containerElement.scrollWidth - containerElement.clientWidth : undefined,
-            reachedTop: this._isDirection(VERTICAL) ? location.top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(location.top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * this.option('pushBackValue') : undefined
+            scrollOffset: this._getScrollOffset(),
+            reachedLeft: this._isReachedLeft(left),
+            reachedRight: this._isReachedRight(left),
+            reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
+            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top - 2 * this.option('pushBackValue') : undefined
         };
+    },
+
+    _isReachedLeft: function() {
+        return this._isDirection(HORIZONTAL) ? this.location().left >= 0 : undefined;
+    },
+
+    _isReachedRight: function() {
+        return this._isDirection(HORIZONTAL) ? Math.abs(this.location().left) >= this._getMaxOffset().left : undefined;
     },
 
     handleScroll: function(e) {
@@ -305,9 +311,9 @@ const NativeStrategy = Class.inherit({
             result = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
         } else {
             if(e.shiftKey) {
-                result = (container.clientWidth + container.scrollLeft) >= container.scrollWidth;
+                result = container.scrollLeft >= this._getMaxOffset().left;
             } else {
-                result = (container.clientHeight + container.scrollTop) >= container.scrollHeight;
+                result = container.scrollTop >= this._getMaxOffset().top;
             }
         }
 

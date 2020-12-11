@@ -50,7 +50,7 @@ describe('TooltipItemLayout', () => {
         {...defaultViewModel}
         {...viewModel}
         props={{ ...defaultProps, ...viewModel.props }}
-      /> as any,
+      />,
     );
 
     it('should combine `className` with predefined classes', () => {
@@ -92,7 +92,7 @@ describe('TooltipItemLayout', () => {
 
       expect(marker.props())
         .toMatchObject({
-          color: defaultProps.item!.color,
+          color: defaultProps.item.color,
         });
     });
 
@@ -133,7 +133,7 @@ describe('TooltipItemLayout', () => {
       const renderWithTemplate = () => shallow(
         <TooltipItemLayoutView
           props={{ ...defaultProps, itemContentTemplate: template }}
-          {...defaultViewModel}
+          {...defaultViewModel as any}
           currentAppointment={currentAppointment}
         />,
       );
@@ -162,7 +162,7 @@ describe('TooltipItemLayout', () => {
         const tooltipItemLayout = shallow(
           <TooltipItemLayoutView
             props={{ ...defaultProps }}
-            {...defaultViewModel}
+            {...defaultViewModel as any}
           />,
         );
 
@@ -260,7 +260,7 @@ describe('TooltipItemLayout', () => {
           expect(onDeleteButtonClick)
             .toEqual(expect.any(Function));
 
-          const event = { event: { stopPropagation } };
+          const event = { event: { stopPropagation } } as any;
           onDeleteButtonClick(event);
 
           expect(onHide)

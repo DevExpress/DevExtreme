@@ -8,6 +8,7 @@ import {
   OneWay,
   Effect,
   Ref,
+  Consumer,
 } from 'devextreme-generator/component_declaration/common';
 import { LabelAlignment } from './types.d';
 import SvgGraphicsProps from './base_graphics_props';
@@ -24,6 +25,7 @@ import {
   applyGraphicProps,
 } from './utils';
 import { isDefined } from '../../../../core/utils/type';
+import { ConfigContextValue, ConfigContext } from '../../../ui/common/config_context';
 
 const KEY_STROKE = 'stroke';
 
@@ -35,7 +37,6 @@ export const viewFunction = ({
   },
 }: TextSvgElement): JSX.Element => {
   const texts = textItems || [];
-
   return (
     <text
       ref={textRef as any}
@@ -49,12 +50,12 @@ export const viewFunction = ({
       strokeOpacity={strokeOpacity}
       opacity={opacity}
     >
-      {texts.length && isStroked && texts.map(({ style, className, value }, index) => (
+      {texts.length ? isStroked && texts.map(({ style, className, value }, index) => (
         <tspan key={index} style={style} className={className}>{value}</tspan>
-      ))}
-      {texts.length && texts.map(({ style, className, value }, index) => (
+      )) : null}
+      {texts.length ? texts.map(({ style, className, value }, index) => (
         <tspan key={index} style={style} className={className}>{value}</tspan>
-      ))}
+      )) : null}
       {!(texts.length) && text}
     </text>
   );
@@ -75,8 +76,6 @@ export class TextSvgElementProps extends SvgGraphicsProps {
   @OneWay() styles?: { [key: string]: any };
 
   @OneWay() encodeHtml = true;
-
-  @OneWay() rtl = false;
 }
 
 @Component({
@@ -86,6 +85,9 @@ export class TextSvgElementProps extends SvgGraphicsProps {
 })
 export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   @Ref() textRef!: SVGGraphicsElement;
+
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
 
   get styles(): { [key: string]: any } {
     const style = this.props.styles || {};
@@ -121,7 +123,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   }
 
   get textAnchor(): string | undefined {
-    return convertAlignmentToAnchor(this.props.align, this.props.rtl);
+    return convertAlignmentToAnchor(this.props.align, this.config?.rtlEnabled);
   }
 
   @Effect()

@@ -12,51 +12,55 @@ import { AllDayPanelTableBody } from './all_day_panel/table_body';
 import { MonthDateTableCell } from '../../month/date_table/cell';
 import { DateTableCellBase } from './cell';
 
-export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
-  <Fragment>
-    {viewModel.props.viewData!
-      .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
-        <Fragment key={getKeyByGroup(groupIndex)}>
-          {getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex) && (
-            <AllDayPanelTableBody
-              viewData={allDayPanel}
-              dataCellTemplate={viewModel.props.dataCellTemplate}
-              isVerticalGroupOrientation
-            />
-          )}
-          {dateTable.map((cellsRow) => (
-            <DateTableRow
-              className="dx-scheduler-date-table-row"
-              key={cellsRow[0].key}
-            >
-              {cellsRow.map(({
-                startDate,
-                endDate,
-                groups,
-                groupIndex: cellGroupIndex,
-                index,
-                isFirstGroupCell,
-                isLastGroupCell,
-                key,
-              }: ViewCellData) => (
-                <viewModel.cell
-                  isFirstGroupCell={isFirstGroupCell}
-                  isLastGroupCell={isLastGroupCell}
-                  startDate={startDate}
-                  endDate={endDate}
-                  groups={groups}
-                  groupIndex={cellGroupIndex}
-                  index={index}
-                  dataCellTemplate={viewModel.props.dataCellTemplate}
-                  key={key}
-                />
-              ))}
-            </DateTableRow>
-          ))}
-        </Fragment>
-      ))}
-  </Fragment>
-);
+export const viewFunction = ({ props, cell: Cell }: DateTableBody): JSX.Element => {
+  const { viewData, dataCellTemplate } = props;
+
+  return (
+    <Fragment>
+      {viewData
+        .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
+          <Fragment key={getKeyByGroup(groupIndex)}>
+            {getIsGroupedAllDayPanel(viewData, groupIndex) && (
+              <AllDayPanelTableBody
+                viewData={allDayPanel}
+                dataCellTemplate={dataCellTemplate}
+                isVerticalGroupOrientation
+              />
+            )}
+            {dateTable.map((cellsRow) => (
+              <DateTableRow
+                className="dx-scheduler-date-table-row"
+                key={cellsRow[0].key}
+              >
+                {cellsRow.map(({
+                  startDate,
+                  endDate,
+                  groups,
+                  groupIndex: cellGroupIndex,
+                  index,
+                  isFirstGroupCell,
+                  isLastGroupCell,
+                  key,
+                }: ViewCellData) => (
+                  <Cell
+                    isFirstGroupCell={isFirstGroupCell}
+                    isLastGroupCell={isLastGroupCell}
+                    startDate={startDate}
+                    endDate={endDate}
+                    groups={groups}
+                    groupIndex={cellGroupIndex}
+                    index={index}
+                    dataCellTemplate={dataCellTemplate}
+                    key={key}
+                  />
+                ))}
+              </DateTableRow>
+            ))}
+          </Fragment>
+        ))}
+    </Fragment>
+  );
+};
 
 @ComponentBindings()
 export class DateTableBodyProps extends LayoutProps {
