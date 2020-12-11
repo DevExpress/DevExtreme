@@ -74,7 +74,7 @@ export class ListProps extends WidgetProps {
     component?: LegacyList;
     element?: dxElement;
     model?: any;
-    itemData?: any;
+    itemData: any;
     itemElement?: dxElement;
     itemIndex?: number | any;
     jQueryEvent?: JQueryEventObject;
