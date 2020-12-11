@@ -748,14 +748,14 @@ export default {
                     }
                 },
 
-                updateFocusElementTabIndex: function($cellElements) {
+                updateFocusElementTabIndex: function($cellElements, preventScroll) {
                     if(this.option('focusedRowEnabled')) {
-                        this._setFocusedRowElementTabIndex();
+                        this._setFocusedRowElementTabIndex(preventScroll);
                     } else {
                         this.callBase($cellElements);
                     }
                 },
-                _setFocusedRowElementTabIndex: function() {
+                _setFocusedRowElementTabIndex: function(preventScroll) {
                     const focusedRowKey = this.option('focusedRowKey');
                     const tabIndex = this.option('tabIndex') || 0;
                     const dataController = this._dataController;
@@ -773,7 +773,7 @@ export default {
 
                     $row.attr('tabIndex', tabIndex);
 
-                    if(rowIndex >= 0) {
+                    if(rowIndex >= 0 && !preventScroll) {
                         if(columnIndex < 0) {
                             columnIndex = 0;
                         }
