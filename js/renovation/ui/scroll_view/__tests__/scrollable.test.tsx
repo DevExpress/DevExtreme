@@ -148,7 +148,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
 
       const createContainerRef = (
         location: Partial<ScrollableLocation>,
-        direction?: ScrollableDirection,
+        direction: ScrollableDirection = 'vertical',
         scrollBarWidth = 17,
         isRtlEnabled = false,
       ): HTMLDivElement => {
@@ -586,7 +586,6 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
           }];
 
           const directions = [
-            undefined,
             'horizontal' as ScrollableDirection,
             'vertical' as ScrollableDirection,
             'both' as ScrollableDirection,
