@@ -34,6 +34,8 @@ describe('TimePanelLayout', () => {
         groupIndex: 2,
         index: 0,
         key: '1',
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
       }, {
         startDate: new Date(2020, 6, 9, 2),
         endDate: new Date(2020, 6, 9, 3),
@@ -42,6 +44,8 @@ describe('TimePanelLayout', () => {
         groupIndex: 2,
         index: 1,
         key: '2',
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
       }], [{
         startDate: new Date(2020, 6, 9, 3),
         endDate: new Date(2020, 6, 9, 4),
@@ -50,6 +54,8 @@ describe('TimePanelLayout', () => {
         groupIndex: 2,
         index: 2,
         key: '3',
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
       }, {
         startDate: new Date(2020, 6, 9, 4),
         endDate: new Date(2020, 6, 9, 4),
@@ -58,6 +64,8 @@ describe('TimePanelLayout', () => {
         groupIndex: 2,
         index: 3,
         key: '4',
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
       }]],
       groupIndex: 2,
     }],

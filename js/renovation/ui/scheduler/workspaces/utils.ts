@@ -15,7 +15,7 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
 export const getKeyByGroup = (groupIndex: number): string => groupIndex.toString();
 
 export const addHeightToStyle = (
-  height?: number, style?: any,
+  height?: number, style?: { [key: string]: string | number | undefined },
 ): { [key: string]: string | number | undefined } => {
   const nextStyle = style || {};
 
