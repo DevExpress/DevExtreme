@@ -56,10 +56,14 @@ jest.mock('../../../../core/devices', () => {
         expect(scrollableContent.exists()).toBe(true);
       });
 
-      it('should not render scrollView content', () => {
-        const scrollable = mount(viewFunction({ props: { } } as any) as JSX.Element);
-        const scrollViewContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
-        expect(scrollViewContent.exists()).toBe(false);
+      [true, false].forEach((needScrollViewWrappers) => {
+        it(`should render scrollView content only if needScrollViewWrappers option is enabled. needScrollViewWrappers=${needScrollViewWrappers}`, () => {
+          const scrollable = mount(
+            viewFunction({ props: { needScrollViewWrappers } } as any) as JSX.Element,
+          );
+          const scrollViewContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
+          expect(scrollViewContent.exists()).toBe(needScrollViewWrappers);
+        });
       });
 
       it('should not render top & bottom pockets', () => {
