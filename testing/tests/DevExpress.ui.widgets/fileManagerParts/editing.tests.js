@@ -323,7 +323,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes(true);
-        $folderNodes.eq(3).trigger('dxclick');
+        $folderNodes.eq(5).trigger('dxclick');
 
         this.wrapper.getDialogButton('Move').trigger('dxclick');
         this.clock.tick(400);
@@ -360,7 +360,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes(true);
-        $folderNodes.eq(3).trigger('dxclick');
+        $folderNodes.eq(5).trigger('dxclick');
 
         this.wrapper.getDialogButton('Copy').trigger('dxclick');
         this.clock.tick(400);
