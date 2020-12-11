@@ -153,7 +153,9 @@ export class TooltipStrategyBase {
         $itemElement.append(this._createItemListMarker(color));
         $itemElement.append(this._createItemListInfo(this._options.createFormattedDateText(appointment, targetedAppointment)));
 
-        if(!appointment.disabled && (editing && editing.allowDeleting === true || editing === true)) {
+        const disabled = this._options.getAppointmentDisabled(appointment);
+
+        if(!disabled && (editing && editing.allowDeleting === true || editing === true)) {
             $itemElement.append(this._createDeleteButton(appointment, targetedAppointment));
         }
 
