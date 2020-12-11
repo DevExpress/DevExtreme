@@ -64,7 +64,7 @@ export class AppointmentListProps {
 
   @OneWay() focusStateEnabled?: boolean = false;
 
-  @OneWay() target!: HTMLElement;
+  @OneWay() target?: HTMLElement;
 
   @Event() showAppointmentPopup?: ShowAppointmentPopupFn = noop;
 
@@ -83,7 +83,7 @@ export class AppointmentListProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class AppointmentList extends JSXComponent<AppointmentListProps, 'target'>() {
+export class AppointmentList extends JSXComponent(AppointmentListProps) {
   get onItemClick() {
     return ({ itemData }: ListItemProps): void => {
       const { showAppointmentPopup } = this.props;

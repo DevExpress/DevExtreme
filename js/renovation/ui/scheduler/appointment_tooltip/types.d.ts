@@ -40,7 +40,7 @@ export type GetTextAndFormatDateFn = (
 ) => FormattedContent;
 
 export type GetSingleAppointmentFn = (
-  appointment: dxSchedulerAppointment, target: HTMLElement,
+  appointment: dxSchedulerAppointment, target?: HTMLElement,
 ) => dxSchedulerAppointment;
 
 export type CheckAndDeleteAppointmentFn = (
