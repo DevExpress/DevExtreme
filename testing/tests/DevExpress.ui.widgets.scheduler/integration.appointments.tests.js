@@ -4768,6 +4768,53 @@ QUnit.module('Integration: Appointments', {
             assert.equal(scheduler.appointments.getAppointmentPosition(0).top, scheduler.appointments.getAppointmentPosition(1).top, 'Appointment positions are correct');
         });
 
+        [{
+            disabled: true,
+            result: true,
+            text: 'disabled is true'
+        }, {
+            disabled: false,
+            result: false,
+            text: 'disabled is false'
+        }, {
+            result: false,
+            text: 'disabled is undefined'
+        }, {
+            disabled: () => false,
+            result: false,
+            text: 'disabled is function, return false'
+        }, {
+            disabled: () => true,
+            result: true,
+            text: 'disabled is function, return true'
+        }].forEach(testCase => {
+            QUnit.test(`Appointment tooltip should be consider disabled property of appointment (${testCase.text})`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: [{
+                        text: 'Website Re-Design Plan',
+                        startDate: new Date(2021, 4, 24, 1),
+                        endDate: new Date(2021, 4, 24, 2),
+                        disabled: testCase.disabled
+                    }],
+                    currentDate: new Date(2021, 4, 24),
+                    height: 600
+                });
+
+                const getAppointmentDisabled = sinon.spy(scheduler.instance._appointmentTooltip._options, 'getAppointmentDisabled');
+
+                scheduler.appointments.click();
+
+                const deleteButton = scheduler.tooltip.getDeleteButton();
+                const getAppointmentDisabledResult = getAppointmentDisabled.returnValues[0];
+
+                const isExistDeleteButton = !!deleteButton.length;
+                const isDisabled = testCase.result;
+
+                assert.equal(isExistDeleteButton, !isDisabled, `visibility button should be equal ${!isDisabled}`);
+                assert.equal(getAppointmentDisabledResult, isDisabled, `getAppointmentDisabled should be return ${isDisabled}`);
+            });
+        });
+
         QUnit.test('targetedAppointmentData should has valid targeted resource on onAppointmentClick event', function(assert) {
             const data = [{
                 text: 'Website Re-Design Plan',

@@ -92,7 +92,7 @@ class AppointmentAdapter {
     }
 
     get disabled() {
-        return this.getField(PROPERTY_NAMES.disabled);
+        return !!this.getField(PROPERTY_NAMES.disabled);
     }
 
     get timeZoneCalculator() {
