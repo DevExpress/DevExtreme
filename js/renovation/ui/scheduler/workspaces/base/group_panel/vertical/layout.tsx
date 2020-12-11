@@ -62,7 +62,7 @@ export class GroupPanelVerticalLayoutProps {
   view: viewFunction,
 })
 export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelVerticalLayoutProps) {
-  get style(): { [key: string]: string | number | undefined } {
+  get style(): any {
     const { height } = this.props;
     const { style } = this.restAttributes;
 

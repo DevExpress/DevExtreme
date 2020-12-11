@@ -30,7 +30,7 @@ export class VirtualRowProps extends RowProps {
   view: viewFunction,
 })
 export class VirtualRow extends JSXComponent(VirtualRowProps) {
-  get style(): { [key: string]: string | number | undefined } {
+  get style(): any {
     const { height } = this.props;
     const { style } = this.restAttributes;
 
