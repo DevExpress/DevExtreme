@@ -29,10 +29,17 @@ import {
   ScrollOffset,
   ScrollableDirection,
 } from '../types.d';
+import Mock = jest.Mock;
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
+
+jest.mock('../../../../core/devices', () => {
+  const actualDevices = jest.requireActual('../../../../core/devices').default;
+  actualDevices.current = jest.fn(() => ({ platform: 'generic' }));
+  return actualDevices;
+});
 
 [{
   viewFunction: viewFunctionNative,
@@ -1046,16 +1053,19 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
     describe('Logic', () => {
       describe('Getters', () => {
         describe('cssClasses', () => {
-          it('should add scrolling classes by default', () => {
-            const instance = new Scrollable({});
-            expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
+          ['desktop', 'ios', 'android'].forEach((platform) => {
+            it('should add scrolling classes by default', () => {
+              (devices.current as Mock).mockImplementation(() => ({ platform }));
+              const instance = new Scrollable({});
+              expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
 
-            if (instance instanceof ScrollableNative) {
-              expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
-              expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${devices.current().platform}`));
-            } else {
-              expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-            }
+              if (instance instanceof ScrollableNative) {
+                expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
+                expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${platform}`));
+              } else {
+                expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+              }
+            });
           });
 
           it('should add vertical direction class', () => {
