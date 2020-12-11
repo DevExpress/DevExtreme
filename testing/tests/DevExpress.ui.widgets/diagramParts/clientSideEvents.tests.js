@@ -247,13 +247,13 @@ QUnit.module('ClientSideEvents.requestOperation', {
         instance._diagramInstance.commandManager.getCommand(DiagramCommand.Delete).execute();
         callCount += 2;
         assert.equal(onRequestEditOperation.getCalls().length, callCount);
-        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['operation'], 'changeConnection');
-        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['args'].connector.id, '2');
-        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['args'].shape, undefined);
-        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['allowed'], false);
-        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['operation'], 'deleteShape');
-        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].shape.id, '0');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['operation'], 'changeConnection');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].connector.id, '2');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].shape, undefined);
         assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['allowed'], false);
+        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['operation'], 'deleteShape');
+        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['args'].shape.id, '0');
+        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['allowed'], false);
         assert.equal(instance._diagramInstance.model.items.length, 3);
 
         instance._diagramInstance.selection.set(['2']);
