@@ -7,6 +7,7 @@ import {
   ForwardRef,
   Consumer,
   Fragment,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { isDefined } from '../../../core/utils/type';
 import { combineClasses } from '../../utils/combine_classes';
@@ -64,7 +65,7 @@ export const viewFunction = (viewModel: BaseWidget): JSX.Element => {
   const canvas = viewModel.props.canvas || { };
   const widget = (
     <div
-      ref={viewModel.containerRef as any}
+      ref={viewModel.containerRef}
       className={viewModel.cssClasses}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...viewModel.restAttributes}
@@ -102,9 +103,9 @@ export const viewFunction = (viewModel: BaseWidget): JSX.Element => {
   view: viewFunction,
 })
 export class BaseWidget extends JSXComponent(BaseWidgetProps) {
-  @Ref() containerRef!: HTMLDivElement;
+  @Ref() containerRef!: RefObject<HTMLDivElement>;
 
-  @ForwardRef() svgElementRef!: SVGElement;
+  @ForwardRef() svgElementRef!: RefObject<SVGElement>;
 
   @Consumer(ConfigContext)
   config?: ConfigContextValue;

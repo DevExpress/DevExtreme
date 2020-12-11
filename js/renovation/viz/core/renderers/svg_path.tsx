@@ -5,6 +5,7 @@ import {
   OneWay,
   Ref,
   Effect,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import {
   PathType,
@@ -27,7 +28,7 @@ export const viewFunction = ({
   },
 }: PathSvgElement): JSX.Element => (
   <path
-    ref={pathRef as any}
+    ref={pathRef}
     className={className}
     d={d}
     fill={fill}
@@ -59,7 +60,7 @@ export class PathSvgElementProps extends SvgGraphicsProps {
   isSVG: true,
 })
 export class PathSvgElement extends JSXComponent(PathSvgElementProps) {
-  @Ref() pathRef!: SVGGraphicsElement;
+  @Ref() pathRef!: RefObject<SVGPathElement>;
 
   get d(): string | undefined {
     let path = this.props.d;
