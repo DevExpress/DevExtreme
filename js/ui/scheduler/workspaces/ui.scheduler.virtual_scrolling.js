@@ -49,6 +49,13 @@ export default class VirtualScrollingDispatcher {
             : getWindow().innerHeight;
     }
 
+    get viewportWidth() {
+        return this.width
+            ? this.workspace.$element().width()
+            : getWindow().innerWidth;
+    }
+
+
     get topVirtualRowsCount() {
         const { topVirtualRowHeight } = this.getState();
 
@@ -75,6 +82,12 @@ export default class VirtualScrollingDispatcher {
             workspace: this.workspace,
             viewportHeight: this.viewportHeight,
             rowHeight: this.rowHeight
+        });
+
+        this.horizontalVirtualScrolling = new HorizontalVirtualScrolling({
+            workspace: this.workspace,
+            viewportWidth: this.viewportWidth,
+            cellWidth: this.cellWidth
         });
     }
 
@@ -119,9 +132,7 @@ export default class VirtualScrollingDispatcher {
     _process(scrollPosition) {
         if(scrollPosition) {
             this.verticalVirtualScrolling.updateState(scrollPosition);
-
-            // TODO
-            // this.horizontalVirtualScrolling.updateState(scrollPosition);
+            this.horizontalVirtualScrolling.updateState(scrollPosition);
 
             this.renderer.updateRender();
         }
@@ -139,18 +150,59 @@ export default class VirtualScrollingDispatcher {
     }
 }
 
-class VerticalVirtualScrolling {
+class VirtualScrollingBase {
     constructor(options) {
-        this._workspace = options.workspace;
-        this._viewportHeight = options.viewportHeight;
-        this._rowHeight = options.rowHeight;
-
-        this._init();
+        this.init(options);
     }
 
-    // TODO get rid of the workspace
-    getWorkspace() {
-        return this._workspace;
+    get workspace() { return this._workspace; }
+
+    init(options) {
+        this._workspace = options.workspace;
+    }
+}
+
+class HorizontalVirtualScrolling extends VirtualScrollingBase {
+    constructor(options) {
+        super(options);
+    }
+
+    init(options) {
+        super.init(options);
+
+        this._viewportWidth = options.viewportWidth;
+        this._cellWidth = options.cellWidth;
+
+        const scrollPosition = {
+            top: 0,
+            left: 0
+        };
+
+        this._state = {
+            prevScrollPosition: scrollPosition,
+            startIndex: -1,
+            rowCount: 0,
+            topVirtualRowCount: 0,
+            bottomVirtualRowCount: 0,
+            topOutlineCount: 0,
+            bottomOutlineCount: 0,
+            topVirtualRowHeight: 0,
+            bottomVirtualRowHeight: 0,
+            topOutlineHeight: 0,
+            bottomOutlineHeight: 0
+        };
+
+        this.updateState(scrollPosition);
+    }
+
+    updateState(scrollPosition) {
+        // TODO
+    }
+}
+
+class VerticalVirtualScrolling extends VirtualScrollingBase {
+    constructor(options) {
+        super(options);
     }
 
     get viewportHeight() { return this._viewportHeight; }
@@ -169,7 +221,12 @@ class VerticalVirtualScrolling {
         return Math.floor(this._getPageSize() / 2);
     }
 
-    _init() {
+    init(options) {
+        super.init(options);
+
+        this._viewportHeight = options.viewportHeight;
+        this._rowHeight = options.rowHeight;
+
         const scrollPosition = {
             top: 0,
             left: 0
@@ -244,7 +301,6 @@ class VerticalVirtualScrolling {
     }
 
     calculateCoordinatesByDataAndPosition(cellData, position, date) {
-        const { _workspace: workSpace } = this;
         const {
             rowIndex, columnIndex,
         } = position;
@@ -260,13 +316,13 @@ class VerticalVirtualScrolling {
             ? 0
             : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
 
-        const cellWidth = workSpace.getCellWidth();
+        const cellWidth = this.workSpace.getCellWidth();
 
         const top = (rowIndex + scrollInCell) * this.rowHeight;
         let left = cellWidth * columnIndex;
 
-        if(workSpace.option('rtlEnabled')) {
-            left = workSpace.getScrollableOuterWidth() - left;
+        if(this.workSpace.option('rtlEnabled')) {
+            left = this.workSpace.getScrollableOuterWidth() - left;
         }
 
         return { top, left };
@@ -291,10 +347,9 @@ class VerticalVirtualScrolling {
             topOutlineCount
         } = topRowsInfo;
 
-        const workspace = this.getWorkspace();
-        const groupCount = workspace._getGroupCount();
-        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
-        const totalRowCount = workspace._getTotalRowCount(groupCount, isVerticalGrouping);
+        const groupCount = this.workspace._getGroupCount();
+        const isVerticalGrouping = this.workspace._isVerticalGroupedWorkSpace();
+        const totalRowCount = this.workspace._getTotalRowCount(groupCount, isVerticalGrouping);
 
         return totalRowCount - topVirtualRowCount - topOutlineCount;
     }
@@ -377,7 +432,6 @@ class Renderer {
     }
 
     _renderAppointments() {
-        const { workspace } = this;
         const renderTimeout = this.getRenderTimeout();
 
         if(renderTimeout >= 0) {
@@ -385,11 +439,11 @@ class Renderer {
             clearTimeout(this._renderAppointmentTimeout);
 
             this._renderAppointmentTimeout = setTimeout(
-                () => workspace.updateAppointments(),
+                () => this.workspace.updateAppointments(),
                 renderTimeout
             );
         } else {
-            workspace.updateAppointments();
+            this.workspace.updateAppointments();
         }
     }
 }
