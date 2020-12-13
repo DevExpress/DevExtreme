@@ -993,7 +993,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-        const keyboard = new keyboardMock($input);
+        const keyboard = keyboardMock($input, true);
 
         keyboard.type('i');
         this.clock.tick(TIME_TO_WAIT);
@@ -1017,7 +1017,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-        const keyboard = new keyboardMock($input);
+        const keyboard = keyboardMock($input);
 
         keyboard.type('i');
         this.clock.tick(TIME_TO_WAIT);
@@ -1037,7 +1037,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-        const keyboard = new keyboardMock($input);
+        const keyboard = keyboardMock($input);
 
         keyboard.type('i');
         this.clock.tick(TIME_TO_WAIT);
@@ -1057,7 +1057,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
 
         const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-        const keyboard = new keyboardMock($input);
+        const keyboard = keyboardMock($input);
 
         keyboard
             .type('i')
