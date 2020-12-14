@@ -113,7 +113,7 @@ export default class AppointmentDragBehavior {
 
     createDropHandler(appointmentDragging) {
         return (e) => {
-            const updatedData = this.appointments.invoke(e.itemData);
+            const updatedData = this.appointments.invoke('getUpdatedData', e.itemData);
             e.itemData = extend({}, e.itemData, updatedData);
 
             if(e.fromComponent !== e.toComponent) {
