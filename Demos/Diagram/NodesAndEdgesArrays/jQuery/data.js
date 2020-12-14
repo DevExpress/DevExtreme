@@ -84,18 +84,6 @@ var flowEdges = [
   },
   {
     "fromId": 120,
-    "id": 128,
-    "text": null,
-    "toId": 120
-  },
-  {
-    "fromId": 127,
-    "id": 129,
-    "text": null,
-    "toId": 127
-  },
-  {
-    "fromId": 120,
     "id": 130,
     "text": "",
     "toId": 127
