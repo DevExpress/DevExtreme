@@ -11,7 +11,7 @@ import {
   viewFunction as viewFunctionNative,
 } from '../scrollable_native';
 
-import { ensureLocation } from '../scrollable_utils';
+import { ensureLocation, SCROLLABLE_DISABLED_CLASS } from '../scrollable_utils';
 
 import {
   ScrollableSimulated,
@@ -29,11 +29,20 @@ import {
   ScrollOffset,
   ScrollableDirection,
 } from '../types.d';
+
 import { ScrollBar } from '../scrollable_scrollbar';
+
+import Mock = jest.Mock;
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
+
+jest.mock('../../../../core/devices', () => {
+  const actualDevices = jest.requireActual('../../../../core/devices').default;
+  actualDevices.current = jest.fn(() => ({ platform: 'generic' }));
+  return actualDevices;
+});
 
 [{
   viewFunction: viewFunctionNative,
@@ -44,10 +53,20 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
 }].forEach(({ viewFunction, Scrollable }) => {
   describe('Scrollable', () => {
     describe('Render', () => {
-      it('should render scrollView content', () => {
+      it('should render scrollable content', () => {
         const scrollable = shallow(viewFunction({ props: { } } as any) as JSX.Element);
-        const scrollViewContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
-        expect(scrollViewContent.exists()).toBe(true);
+        const scrollableContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content');
+        expect(scrollableContent.exists()).toBe(true);
+      });
+
+      [true, false].forEach((needScrollViewWrappers) => {
+        it(`should render scrollView content only if needScrollViewWrappers option is enabled. needScrollViewWrappers=${needScrollViewWrappers}`, () => {
+          const scrollable = mount(
+            viewFunction({ props: { needScrollViewWrappers } } as any) as JSX.Element,
+          );
+          const scrollViewContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
+          expect(scrollViewContent.exists()).toBe(needScrollViewWrappers);
+        });
       });
 
       it('should not render top & bottom pockets', () => {
@@ -67,11 +86,6 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
         expect(topPocket.exists()).toBe(true);
         const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-bottom-pocket');
         expect(bottomPocket.exists()).toBe(true);
-      });
-
-      it('Scrollable should have dx-scrollable-disabled if disabled', () => {
-        const instance = new Scrollable({ disabled: true });
-        expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-disabled'));
       });
 
       it('should render slot', () => {
@@ -185,7 +199,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
 
       const createContainerRef = (
         location: Partial<ScrollableLocation>,
-        direction?: ScrollableDirection,
+        direction: ScrollableDirection = 'vertical',
         scrollBarWidth = 17,
         isRtlEnabled = false,
       ): HTMLDivElement => {
@@ -623,7 +637,6 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
           }];
 
           const directions = [
-            undefined,
             'horizontal' as ScrollableDirection,
             'vertical' as ScrollableDirection,
             'both' as ScrollableDirection,
@@ -1084,17 +1097,19 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
     describe('Logic', () => {
       describe('Getters', () => {
         describe('cssClasses', () => {
-          it('should add scrolling classes by default', () => {
-            const instance = new Scrollable({});
-            expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
-            expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollview'));
+          ['desktop', 'ios', 'android'].forEach((platform) => {
+            it('should add scrolling classes by default', () => {
+              (devices.current as Mock).mockImplementation(() => ({ platform }));
+              const instance = new Scrollable({});
+              expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
 
-            if (instance instanceof ScrollableNative) {
-              expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
-              expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${devices.current().platform}`));
-            } else {
-              expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-            }
+              if (instance instanceof ScrollableNative) {
+                expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
+                expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${platform}`));
+              } else {
+                expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+              }
+            });
           });
 
           it('should add vertical direction class', () => {
@@ -1116,6 +1131,16 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
             expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-both'));
             expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-vertical'));
             expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-horizontal'));
+          });
+
+          [true, false].forEach((isDisabled) => {
+            it(`Scrollable should have dx-scrollable-disabled if disabled. Disabled: ${isDisabled}`, () => {
+              const instance = new Scrollable({ disabled: isDisabled });
+
+              expect(instance.cssClasses).toEqual(isDisabled
+                ? expect.stringMatching(SCROLLABLE_DISABLED_CLASS)
+                : expect.not.stringMatching(SCROLLABLE_DISABLED_CLASS));
+            });
           });
         });
       });

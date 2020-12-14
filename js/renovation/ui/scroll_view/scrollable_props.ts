@@ -17,6 +17,8 @@ export class ScrollableInternalProps {
 
   @OneWay() forceGeneratePockets = false;
 
+  @OneWay() needScrollViewWrappers = false;
+
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
 }
 

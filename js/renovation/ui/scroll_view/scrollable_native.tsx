@@ -31,12 +31,14 @@ import {
   SCROLLVIEW_CONTENT_CLASS,
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
+  SCROLLABLE_DISABLED_CLASS,
 } from './scrollable_utils';
 
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
   props: {
-    disabled, height, width, rtlEnabled, children, forceGeneratePockets,
+    disabled, height, width, rtlEnabled, children,
+    forceGeneratePockets, needScrollViewWrappers,
   },
   restAttributes,
 }: ScrollableNative): JSX.Element => (
@@ -52,9 +54,8 @@ export const viewFunction = ({
       <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef as any}>
         <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef as any}>
           {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
-          <div className={SCROLLVIEW_CONTENT_CLASS}>
-            {children}
-          </div>
+          {needScrollViewWrappers && <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>}
+          {!needScrollViewWrappers && children}
           {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
         </div>
       </div>
@@ -178,9 +179,9 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
     const { direction, classes, disabled } = this.props;
 
     const classesMap = {
-      [`dx-scrollable dx-scrollview dx-scrollable-native dx-scrollable-native-${devices.current().platform} dx-scrollable-renovated`]: true,
+      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${devices.current().platform} dx-scrollable-renovated`]: true,
       [`dx-scrollable-${direction}`]: true,
-      'dx-scrollable-disabled': !!disabled,
+      [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
