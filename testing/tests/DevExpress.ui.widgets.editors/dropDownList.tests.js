@@ -1125,42 +1125,6 @@ QUnit.module('popup', moduleConfig, () => {
         parentContainer.remove();
     });
 
-    QUnit.test('popup is rendered at the top of element if container limited place below (T948335)', function(assert) {
-        const items = [];
-        $('#qunit-fixture').addClass('qunit-fixture-visible');
-        for(let i = 0; i < 20; i++) {
-            items.push(`item ${i}`);
-        }
-
-        try {
-            const windowHeight = $(window).outerHeight();
-            const parentContainer = $('<div>')
-                .attr('id', 'specific-container')
-                .css('overflow', 'hidden')
-                .height(windowHeight / 3)
-                .appendTo('#qunit-fixture');
-            const $element = $('#dropDownList')
-                .css('margin-top', windowHeight / 4)
-                .appendTo(parentContainer);
-
-            const instance = $element.dxDropDownList({
-                items,
-                dropDownOptions: {
-                    container: parentContainer
-                }
-            }).dxDropDownList('instance');
-
-            instance.open();
-            this.clock.tick();
-
-            const $overlay = $(instance.content()).parent();
-            assert.roughEqual($element.offset().top - $overlay.offset().top, $overlay.height(), 2);
-            assert.ok($overlay.offset().top < $element.offset().top);
-        } finally {
-            $('#qunit-fixture').removeClass('qunit-fixture-visible');
-        }
-    });
-
     QUnit.test('skip gesture event class attach only when popup is opened', function(assert) {
         const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
         const $dropDownList = $('#dropDownList').dxDropDownList({
