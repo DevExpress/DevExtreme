@@ -1,6 +1,11 @@
 import {
-  Component, ComponentBindings, JSXComponent, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  Template,
 } from 'devextreme-generator/component_declaration/common';
+import { GroupedViewData, ViewCellData } from '../types.d';
 import { LayoutProps } from './layout_props';
 
 export const viewFunction = (viewModel: LayoutBase): JSX.Element => (
@@ -15,9 +20,13 @@ export const viewFunction = (viewModel: LayoutBase): JSX.Element => (
 
 @ComponentBindings()
 export class LayoutBaseProps extends LayoutProps {
-  @Template() headerPanelTemplate?: any;
+  @Template() headerPanelTemplate: JSXTemplate<{
+    viewCellsData: ViewCellData[][];
+  }> = () => null;
 
-  @Template() dateTableTemplate?: any;
+  @Template() dateTableTemplate: JSXTemplate<{
+    viewData: GroupedViewData;
+  }> = () => null;
 }
 
 @Component({

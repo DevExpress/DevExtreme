@@ -1,8 +1,16 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  OneWay,
+  Template,
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
-import { ViewCellData } from '../../types.d';
+import {
+  DateTimeCellTemplateProps,
+  ViewCellData,
+} from '../../types.d';
 import { isVerticalGroupOrientation } from '../../utils';
 import { GroupOrientation } from '../../../types.d';
 
@@ -43,9 +51,9 @@ export class HeaderPanelLayoutProps {
 
   @OneWay() groupOrientation?: GroupOrientation;
 
-  @Template() cellTemplate?: any;
+  @Template() cellTemplate: JSXTemplate<ViewCellData> = () => null;
 
-  @Template() dateCellTemplate?: any;
+  @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
 @Component({

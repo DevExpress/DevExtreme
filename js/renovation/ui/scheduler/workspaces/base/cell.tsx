@@ -1,5 +1,11 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  OneWay,
+  Slot,
+  Template,
 } from 'devextreme-generator/component_declaration/common';
 import { getGroupCellClasses } from '../utils';
 import { ContentTemplateProps } from '../types.d';
@@ -32,7 +38,7 @@ export class CellBaseProps {
 
   @OneWay() isLastGroupCell? = false;
 
-  @OneWay() startDate?: Date = new Date();
+  @OneWay() startDate: Date = new Date();
 
   @OneWay() endDate?: Date = new Date();
 
@@ -48,9 +54,9 @@ export class CellBaseProps {
 
   @OneWay() contentTemplateProps?: ContentTemplateProps;
 
-  @Template() contentTemplate?: any;
+  @Template() contentTemplate?: JSXTemplate;
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element;
 }
 
 @Component({
