@@ -12,15 +12,14 @@ import dxDropDownEditor, {
 
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
-     * @docid dxColorBoxOptions.applyButtonText
-     * @type string
+     * @docid
      * @default "OK"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyButtonText?: string;
     /**
-     * @docid dxColorBoxOptions.applyValueMode
+     * @docid
      * @type Enums.EditorApplyValueMode
      * @default "useButtons"
      * @prevFileNamespace DevExpress.ui
@@ -28,24 +27,21 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      */
     applyValueMode?: 'instantly' | 'useButtons';
     /**
-     * @docid dxColorBoxOptions.cancelButtonText
-     * @type string
+     * @docid
      * @default "Cancel"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cancelButtonText?: string;
     /**
-     * @docid dxColorBoxOptions.editAlphaChannel
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     editAlphaChannel?: boolean;
     /**
-     * @docid dxColorBoxOptions.fieldTemplate
-     * @type template|function
+     * @docid
      * @default null
      * @type_function_param1 value:string
      * @type_function_param2 fieldElement:dxElement
@@ -55,23 +51,21 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      */
     fieldTemplate?: template | ((value: string, fieldElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxColorBoxOptions.keyStep
-     * @type number
+     * @docid
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyStep?: number;
     /**
-     * @docid dxColorBoxOptions.value
-     * @type string
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string;
 }
 /**
- * @docid dxColorBox
+ * @docid
  * @isEditor
  * @inherits dxDropDownEditor
  * @module ui/color_box

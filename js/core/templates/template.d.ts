@@ -1,14 +1,13 @@
 export interface dxTemplateOptions {
     /**
-     * @docid dxTemplateOptions.name
-     * @type string
+     * @docid
      * @prevFileNamespace DevExpress.core
      * @public
      */
     name?: string;
 }
 /**
- * @docid dxTemplate
+ * @docid
  * @section uiWidgetMarkupComponents
  * @type object
  * @prevFileNamespace DevExpress.core
@@ -20,8 +19,7 @@ export class Template {
 }
 
 /**
- * @docid template
- * @type String|function|Element|jQuery
+ * @docid
  * @section Common
  * @prevFileNamespace DevExpress.core
  * @public

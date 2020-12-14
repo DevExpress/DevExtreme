@@ -1,7 +1,7 @@
 
 
 /**
- * @docid vizmethods.refreshPaths
+ * @docid viz.refreshPaths
  * @publicName refreshPaths()
  * @static
  * @module viz/utils

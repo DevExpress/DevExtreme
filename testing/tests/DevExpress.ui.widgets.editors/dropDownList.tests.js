@@ -1124,6 +1124,42 @@ QUnit.module('popup', moduleConfig, () => {
         parentContainer.remove();
     });
 
+    QUnit.test('popup is rendered at the top of element if container limited place below (T948335)', function(assert) {
+        const items = [];
+        $('#qunit-fixture').addClass('qunit-fixture-visible');
+        for(let i = 0; i < 20; i++) {
+            items.push(`item ${i}`);
+        }
+
+        try {
+            const windowHeight = $(window).outerHeight();
+            const parentContainer = $('<div>')
+                .attr('id', 'specific-container')
+                .css('overflow', 'hidden')
+                .height(windowHeight / 3)
+                .appendTo('#qunit-fixture');
+            const $element = $('#dropDownList')
+                .css('margin-top', windowHeight / 4)
+                .appendTo(parentContainer);
+
+            const instance = $element.dxDropDownList({
+                items,
+                dropDownOptions: {
+                    container: parentContainer
+                }
+            }).dxDropDownList('instance');
+
+            instance.open();
+            this.clock.tick();
+
+            const $overlay = $(instance.content()).parent();
+            assert.roughEqual($element.offset().top - $overlay.offset().top, $overlay.height(), 2);
+            assert.ok($overlay.offset().top < $element.offset().top);
+        } finally {
+            $('#qunit-fixture').removeClass('qunit-fixture-visible');
+        }
+    });
+
     QUnit.test('skip gesture event class attach only when popup is opened', function(assert) {
         const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
         const $dropDownList = $('#dropDownList').dxDropDownList({
@@ -1278,6 +1314,54 @@ QUnit.module('popup', moduleConfig, () => {
         } finally {
             assert.strictEqual(exception, null);
         }
+    });
+
+    QUnit.test('widget has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881)', function(assert) {
+        const items = [{
+            id: 1,
+            value: 'value11'
+        }, {
+            id: 2,
+            value: 'value12'
+        }];
+        const onContentReadySpy = sinon.spy();
+        const dropDownList = $('#dropDownList').dxDropDownList({
+            displayExpr: 'value',
+            valueExpr: 'id',
+            dataSource: new DataSource({
+                store: [],
+                paginate: true,
+                pageSize: 2
+            }),
+            opened: true,
+            onContentReady: onContentReadySpy
+        }).dxDropDownList('instance');
+        const listInstance = $(`.${LIST_CLASS}`).dxList('instance');
+        listInstance.option({
+            'pageLoadMode': 'scrollBottom',
+            'useNativeScrolling': 'true'
+        });
+        listInstance.option();
+        dropDownList.close();
+
+        dropDownList.option('dataSource', new DataSource({
+            store: items,
+            paginate: true,
+            pageSize: 2
+        }));
+
+        dropDownList.open();
+        this.clock.tick();
+
+        const popupHeight = $(dropDownList.content()).height();
+
+        dropDownList.close();
+        dropDownList.open();
+
+        const recalculatedPopupHeight = $(dropDownList.content()).height();
+
+        assert.strictEqual(popupHeight, recalculatedPopupHeight);
+        assert.strictEqual(listInstance.option('_revertPageOnEmptyLoad'), true, 'default list _revertPageOnEmptyLoad is correct');
     });
 });
 

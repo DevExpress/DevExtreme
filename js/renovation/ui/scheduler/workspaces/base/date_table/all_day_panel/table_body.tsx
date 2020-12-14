@@ -11,7 +11,7 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
     {...viewModel.restAttributes}
     className={`dx-scheduler-all-day-table-row ${viewModel.props.className}`}
   >
-    {viewModel.props.viewData!.map(({
+    {viewModel.props.viewData.map(({
       startDate,
       endDate,
       groups,
@@ -38,7 +38,7 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
 
 @ComponentBindings()
 export class AllDayPanelTableBodyProps {
-  @OneWay() viewData?: ViewCellData[];
+  @OneWay() viewData: ViewCellData[] = [];
 
   @OneWay() isVerticalGroupOrientation?: boolean = false;
 

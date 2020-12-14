@@ -1,44 +1,68 @@
 #!/usr/bin/env node
 
-const path = require('path');
 const http = require('http');
-const gulp = require('gulp');
-const childProcess = require('child_process');
-const os = require('os');
-
+const { join } = require('path');
+const { spawn } = require('child_process');
+const { platform } = require('os');
+const { env, versions } = require('process');
 const PORT = require('./../ports.json').qunit;
 
-if(parseInt(process.versions.node.split('.')[0]) < 6) {
+if(parseInt(versions.node.split('.')[0]) < 6) {
     throw 'Node version is too low';
 }
 
 watchForTests();
 
-childProcess.spawn(
-    'dotnet',
-    [ path.join(__dirname, 'runner/bin/runner.dll') ],
-    { stdio: 'inherit' }
-);
-waitForRunner();
+function watchForTests ()  {
+    let isRunnerStarted = false;
+    let componentsGenerationCompleted = false;
+    let transpileCompleted = false;
+    let stylesCompilationCompleted = false;
 
+    const processes = spawn('npx', [
+            'gulp',
+            'generate-components-watch',
+            'transpile-watch',
+            'style-compiler-themes-dev'
+        ], {
+            //stdio: 'inherit',
+            shell: true,
+            cwd: join(__dirname, '../'),
+            env
+        }
+    )
+    processes.stdout.on('data', (data) => {
+        componentsGenerationCompleted = componentsGenerationCompleted || data.indexOf('generate-components task is watching for changes') !== -1;
+        transpileCompleted = transpileCompleted || data.indexOf('transpile task is watching for changes') !== -1;
+        stylesCompilationCompleted = stylesCompilationCompleted || data.indexOf('style-compiler-themes task is watching for changes') !== -1;
 
-function watchForTests() {
-    const process = require('process');
-    process.chdir(path.join(__dirname, '../'));
+        process.stdout.write(data);
 
-    require('../gulpfile');
-    gulp.parallel(
-        'generate-components-watch',
-        'transpile-watch',
-        'style-compiler-themes-dev'
-    )();
+        if (!isRunnerStarted && componentsGenerationCompleted && transpileCompleted && stylesCompilationCompleted) {
+            isRunnerStarted = true;
+            execRunner();
+        }
+    })
+    processes.stderr.on('data', (data) => process.stdout.write(data));
+}
+
+function execRunner () {
+    spawn(
+        'dotnet',
+        [ join(__dirname, 'runner/bin/runner.dll') ],
+        { stdio: 'inherit' }
+    );
+
+    waitForRunner();
 }
 
 function waitForRunner() {
     const timestamp = Date.now();
-    http.request({ port: PORT }, res => openBrowser())
-        .on('error', e => setTimeout(
-            function() {
+
+    http
+        .request({ port: PORT }, openBrowser)
+        .on('error', () => setTimeout(
+            () => {
                 console.log('waiting...');
                 waitForRunner();
             },
@@ -48,19 +72,15 @@ function waitForRunner() {
 }
 
 function openBrowser() {
-    childProcess.spawn(
+    spawn(
         getBrowserCommand(),
         [ 'http://localhost:' + PORT ],
-        {
-            shell: true,
-            detached: true
-        }
+        { shell: true, detached: true }
     );
 }
 
-
 function getBrowserCommand() {
-    switch(os.platform()) {
+    switch(platform()) {
         case 'win32':
             return 'start';
 

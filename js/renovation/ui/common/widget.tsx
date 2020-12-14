@@ -11,6 +11,7 @@ import {
   Slot,
   Consumer,
   ForwardRef,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import '../../../events/click';
 import '../../../events/hover';
@@ -43,6 +44,7 @@ const getAria = (args: object): { [name: string]: string } => Object.keys(args).
 const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string => {
   const isFocusable = !!model.focusStateEnabled && !model.disabled;
   const isHoverable = !!model.hoverStateEnabled && !model.disabled;
+  const canBeActive = !!model.activeStateEnabled && !model.disabled;
   const classesMap = {
     'dx-widget': true,
     [String(model.classes)]: !!model.classes,
@@ -50,7 +52,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string =>
     'dx-state-disabled': !!model.disabled,
     'dx-state-invisible': !model.visible,
     'dx-state-focused': !!model.focused && isFocusable,
-    'dx-state-active': !!model.active,
+    'dx-state-active': !!model.active && canBeActive,
     'dx-state-hover': !!model.hovered && isHoverable && !model.active,
     'dx-rtl': !!model.rtlEnabled,
     'dx-visibility-change-handler': !!model.onVisibilityChange,
@@ -62,7 +64,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string =>
 export const viewFunction = (viewModel: Widget): JSX.Element => {
   const widget = (
     <div
-      ref={viewModel.widgetRef as any}
+      ref={viewModel.widgetRef}
       {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
       tabIndex={viewModel.tabIndex}
       title={viewModel.props.hint}
@@ -86,7 +88,7 @@ export const viewFunction = (viewModel: Widget): JSX.Element => {
 
 @ComponentBindings()
 export class WidgetProps extends BaseWidgetProps {
-  @ForwardRef() rootElementRef?: HTMLDivElement;
+  @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
   @OneWay() _feedbackHideTimeout?: number = 400;
 
@@ -135,7 +137,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   @InternalState() hovered = false;
 
   @Ref()
-  widgetRef!: HTMLDivElement;
+  widgetRef!: RefObject<HTMLDivElement>;
 
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
@@ -363,6 +365,7 @@ export class Widget extends JSXComponent(WidgetProps) {
       classes,
       className,
       disabled,
+      activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
       onVisibilityChange,
@@ -376,6 +379,7 @@ export class Widget extends JSXComponent(WidgetProps) {
       className,
       classes,
       disabled,
+      activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
       onVisibilityChange,

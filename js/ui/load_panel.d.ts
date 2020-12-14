@@ -13,39 +13,37 @@ import dxOverlay, {
 
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
-     * @docid dxLoadPanelOptions.animation
-     * @type object
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @type object
      */
     animation?: dxLoadPanelAnimation;
     /**
-     * @docid dxLoadPanelOptions.container
-     * @type string|Element|jQuery
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     container?: string | Element | JQuery;
     /**
-     * @docid dxLoadPanelOptions.delay
-     * @type Number
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     delay?: number;
     /**
-     * @docid dxLoadPanelOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxLoadPanelOptions.height
+     * @docid
+     * @type_function_return number|string
      * @default 90
      * @default 60 [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -53,30 +51,30 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxLoadPanelOptions.indicatorSrc
-     * @type string
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     indicatorSrc?: string;
     /**
-     * @docid dxLoadPanelOptions.maxHeight
+     * @docid
      * @default 60 [for](Material)
+     * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxHeight?: number | string | (() => number | string);
     /**
-     * @docid dxLoadPanelOptions.maxWidth
+     * @docid
      * @default 60 [for](Material)
+     * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxWidth?: number | string | (() => number | string);
     /**
-     * @docid dxLoadPanelOptions.message
-     * @type string
+     * @docid
      * @default "Loading ..."
      * @default "" [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -84,14 +82,14 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      */
     message?: string;
     /**
-     * @docid dxLoadPanelOptions.position
+     * @docid
      * @type Enums.PositionAlignment|positionConfig|function
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
     /**
-     * @docid dxLoadPanelOptions.shadingColor
+     * @docid
      * @default 'transparent'
      * @default '' [for](Android|iOS)
      * @prevFileNamespace DevExpress.ui
@@ -99,25 +97,24 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      */
     shadingColor?: string;
     /**
-     * @docid dxLoadPanelOptions.showIndicator
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showIndicator?: boolean;
     /**
-     * @docid dxLoadPanelOptions.showPane
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showPane?: boolean;
     /**
-     * @docid dxLoadPanelOptions.width
+     * @docid
      * @default 222
      * @default 60 [for](Material)
+     * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -126,7 +123,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
 export interface dxLoadPanelAnimation extends dxOverlayAnimation {
     /**
      * @docid dxLoadPanelOptions.animation.hide
-     * @type animationConfig
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -134,7 +130,6 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
     hide?: animationConfig;
     /**
      * @docid dxLoadPanelOptions.animation.show
-     * @type animationConfig
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -142,7 +137,7 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
     show?: animationConfig;
 }
 /**
- * @docid dxLoadPanel
+ * @docid
  * @inherits dxOverlay
  * @module ui/load_panel
  * @export default

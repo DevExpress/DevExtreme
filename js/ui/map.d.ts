@@ -14,16 +14,14 @@ import Widget, {
 
 export interface MapLocation {
     /**
-     * @docid MapLocation.lat
-     * @type number
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     lat?: number;
     /**
-     * @docid MapLocation.lng
-     * @type number
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -33,23 +31,40 @@ export interface MapLocation {
 
 export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
-     * @docid dxMapOptions.apiKey
-     * @type string|object
+     * @docid
      * @default { bing: '', google: '', googleStatic: '' }
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    apiKey?: string | { bing?: string, google?: string, googleStatic?: string };
+    apiKey?: string | {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default ""
+      */
+      bing?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default ""
+      */
+      google?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default ""
+      */
+      googleStatic?: string
+    };
     /**
-     * @docid dxMapOptions.autoAdjust
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     autoAdjust?: boolean;
     /**
-     * @docid dxMapOptions.center
+     * @docid
      * @extends MapLocationType
      * @fires dxMapOptions.onOptionChanged
      * @inherits MapLocation
@@ -58,56 +73,105 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     center?: any | string | Array<number>;
     /**
-     * @docid dxMapOptions.controls
+     * @docid
      * @default false
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     controls?: boolean;
     /**
-     * @docid dxMapOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxMapOptions.height
+     * @docid
      * @default 300
+     * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxMapOptions.key
-     * @type string|object
+     * @docid
      * @default { bing: '', google: '', googleStatic: '' }
      * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxMapOptions.apiKey
      */
-    key?: string | { bing?: string, google?: string, googleStatic?: string };
+    key?: string | {
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default ""
+      */
+      bing?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default ""
+      */
+      google?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default ""
+      */
+      googleStatic?: string
+    };
     /**
-     * @docid dxMapOptions.markerIconSrc
-     * @type string
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     markerIconSrc?: string;
     /**
-     * @docid dxMapOptions.markers
-     * @type Array<Object>
+     * @docid
      * @fires dxMapOptions.onMarkerAdded
      * @fires dxMapOptions.onMarkerRemoved
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    markers?: Array<{ iconSrc?: string, location?: any | string | Array<number>, onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }>;
+    markers?: Array<{
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      */
+      iconSrc?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @extends MapLocationType
+      * @inherits MapLocation
+      */
+      location?: any | string | Array<number>,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      */
+      onClick?: Function,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      */
+      tooltip?: string | {
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.ui
+        * @default false
+        */
+        isShown?: boolean,
+        /**
+        * @docid
+        * @prevFileNamespace DevExpress.ui
+        */
+        text?: string
+      }
+    }>;
     /**
-     * @docid dxMapOptions.onClick
-     * @type function(e)|string
+     * @docid
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 location:object
@@ -118,9 +182,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     onClick?: ((e: { component?: dxMap, element?: dxElement, model?: any, location?: any, event?: event }) => any) | string;
     /**
-     * @docid dxMapOptions.onMarkerAdded
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalMarker:object
@@ -130,9 +193,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     onMarkerAdded?: ((e: { component?: dxMap, element?: dxElement, model?: any, options?: any, originalMarker?: any }) => any);
     /**
-     * @docid dxMapOptions.onMarkerRemoved
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @action
@@ -141,9 +203,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     onMarkerRemoved?: ((e: { component?: dxMap, element?: dxElement, model?: any, options?: any }) => any);
     /**
-     * @docid dxMapOptions.onReady
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 originalMap:object
      * @action
@@ -152,9 +213,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     onReady?: ((e: { component?: dxMap, element?: dxElement, model?: any, originalMap?: any }) => any);
     /**
-     * @docid dxMapOptions.onRouteAdded
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalRoute:object
@@ -164,9 +224,8 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     onRouteAdded?: ((e: { component?: dxMap, element?: dxElement, model?: any, options?: any, originalRoute?: any }) => any);
     /**
-     * @docid dxMapOptions.onRouteRemoved
+     * @docid
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @action
@@ -175,7 +234,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     onRouteRemoved?: ((e: { component?: dxMap, element?: dxElement, model?: any, options?: any }) => any);
     /**
-     * @docid dxMapOptions.provider
+     * @docid
      * @type Enums.GeoMapProvider
      * @default "google"
      * @prevFileNamespace DevExpress.ui
@@ -183,16 +242,49 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     provider?: 'bing' | 'google' | 'googleStatic';
     /**
-     * @docid dxMapOptions.routes
-     * @type Array<Object>
+     * @docid
      * @fires dxMapOptions.onRouteAdded
      * @fires dxMapOptions.onRouteRemoved
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    routes?: Array<{ color?: string, locations?: Array<any>, mode?: 'driving' | 'walking', opacity?: number, weight?: number }>;
+    routes?: Array<{
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default '#0000FF'
+      */
+      color?: string,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @extends MapLocationType
+      * @inherits MapLocation
+      * @type Array<object>
+      */
+      locations?: Array<any>,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @type Enums.GeoMapRouteMode
+      * @default 'driving'
+      */
+      mode?: 'driving' | 'walking',
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default 0.5
+      */
+      opacity?: number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.ui
+      * @default 5
+      */
+      weight?: number
+    }>;
     /**
-     * @docid dxMapOptions.type
+     * @docid
      * @type Enums.GeoMapType
      * @default "roadmap"
      * @prevFileNamespace DevExpress.ui
@@ -200,15 +292,15 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      */
     type?: 'hybrid' | 'roadmap' | 'satellite';
     /**
-     * @docid dxMapOptions.width
+     * @docid
      * @default 300
+     * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     width?: number | string | (() => number | string);
     /**
-     * @docid dxMapOptions.zoom
-     * @type number
+     * @docid
      * @default 1
      * @fires dxMapOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -217,7 +309,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     zoom?: number;
 }
 /**
- * @docid dxMap
+ * @docid
  * @inherits Widget
  * @module ui/map
  * @export default
@@ -228,7 +320,7 @@ export default class dxMap extends Widget {
     constructor(element: Element, options?: dxMapOptions)
     constructor(element: JQuery, options?: dxMapOptions)
     /**
-     * @docid dxMapMethods.addmarker
+     * @docid
      * @publicName addMarker(markerOptions)
      * @param1 markerOptions:Object|Array<Object>
      * @return Promise<Object>
@@ -237,7 +329,7 @@ export default class dxMap extends Widget {
      */
     addMarker(markerOptions: any | Array<any>): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid dxMapMethods.addroute
+     * @docid
      * @publicName addRoute(routeOptions)
      * @param1 options:object|Array<Object>
      * @return Promise<Object>
@@ -246,7 +338,7 @@ export default class dxMap extends Widget {
      */
     addRoute(options: any | Array<any>): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid dxMapMethods.removemarker
+     * @docid
      * @publicName removeMarker(marker)
      * @param1 marker:Object|number|Array<Object>
      * @return Promise<void>
@@ -255,7 +347,7 @@ export default class dxMap extends Widget {
      */
     removeMarker(marker: any | number | Array<any>): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxMapMethods.removeroute
+     * @docid
      * @publicName removeRoute(route)
      * @param1 route:object|number|Array<Object>
      * @return Promise<void>

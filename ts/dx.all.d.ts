@@ -803,6 +803,47 @@ declare module DevExpress {
         urlFor(key: string): string;
     }
     /**
+     * [descr:ExportLoadPanel]
+     */
+    export interface ExportLoadPanel {
+        /**
+         * [descr:ExportLoadPanel.enabled]
+         */
+        enabled?: boolean;
+        /**
+         * [descr:ExportLoadPanel.height]
+         */
+        height?: number;
+        /**
+         * [descr:ExportLoadPanel.indicatorSrc]
+         */
+        indicatorSrc?: string;
+        /**
+         * [descr:ExportLoadPanel.shading]
+         */
+        shading?: boolean;
+        /**
+         * [descr:ExportLoadPanel.shadingColor]
+         */
+        shadingColor?: string;
+        /**
+         * [descr:ExportLoadPanel.showIndicator]
+         */
+        showIndicator?: boolean;
+        /**
+         * [descr:ExportLoadPanel.showPane]
+         */
+        showPane?: boolean;
+        /**
+         * [descr:ExportLoadPanel.text]
+         */
+        text?: string;
+        /**
+         * [descr:ExportLoadPanel.width]
+         */
+        width?: number;
+    }
+    /**
      * [descr:TransitionExecutor]
      */
     export class TransitionExecutor {
@@ -992,39 +1033,39 @@ declare module DevExpress {
     /**
      * [descr:localization]
      */
-    export class localization {
+    module localization {
         /**
          * [descr:localization.formatDate(value, format)]
          */
-        static formatDate(value: Date, format: DevExpress.ui.format): string;
+        export function formatDate(value: Date, format: DevExpress.ui.format): string;
         /**
          * [descr:localization.formatMessage(key, value)]
          */
-        static formatMessage(key: string, value: string | Array<string>): string;
+        export function formatMessage(key: string, value: string | Array<string>): string;
         /**
          * [descr:localization.formatNumber(value, format)]
          */
-        static formatNumber(value: number, format: DevExpress.ui.format): string;
+        export function formatNumber(value: number, format: DevExpress.ui.format): string;
         /**
          * [descr:localization.loadMessages(messages)]
          */
-        static loadMessages(messages: any): void;
+        export function loadMessages(messages: any): void;
         /**
          * [descr:localization.locale()]
          */
-        static locale(): string;
+        export function locale(): string;
         /**
          * [descr:localization.locale(locale)]
          */
-        static locale(locale: string): void;
+        export function locale(locale: string): void;
         /**
          * [descr:localization.parseDate(text, format)]
          */
-        static parseDate(text: string, format: DevExpress.ui.format): Date;
+        export function parseDate(text: string, format: DevExpress.ui.format): Date;
         /**
          * [descr:localization.parseNumber(text, format)]
          */
-        static parseNumber(text: string, format: DevExpress.ui.format): number;
+        export function parseNumber(text: string, format: DevExpress.ui.format): number;
     }
     /**
      * [descr:positionConfig]
@@ -1078,137 +1119,137 @@ declare module DevExpress {
     /**
      * [descr:ui]
      */
-    export class ui {
+    module ui {
         /**
          * [descr:ui.notify(message,type,displayTime)]
          */
-        static notify(message: string, type?: string, displayTime?: number): void;
+        export function notify(message: string, type?: string, displayTime?: number): void;
         /**
          * [descr:ui.notify(options,type,displayTime)]
          */
-        static notify(options: any, type?: string, displayTime?: number): void;
+        export function notify(options: any, type?: string, displayTime?: number): void;
         /**
          * [descr:ui.repaintFloatingActionButton()]
          */
-        static repaintFloatingActionButton(): void;
+        export function repaintFloatingActionButton(): void;
         /**
          * [descr:ui.setTemplateEngine(name)]
          */
-        static setTemplateEngine(templateEngineName: string): void;
+        export function setTemplateEngine(templateEngineName: string): void;
         /**
          * [descr:ui.setTemplateEngine(options)]
          */
-        static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
+        export function setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
     }
     /**
      * [descr:validationEngine]
      */
-    export class validationEngine {
+    module validationEngine {
         /**
          * [descr:validationEngine.getGroupConfig()]
          */
-        static getGroupConfig(): any;
+        export function getGroupConfig(): any;
         /**
          * [descr:validationEngine.getGroupConfig(group)]
          */
-        static getGroupConfig(group: string | any): any;
+        export function getGroupConfig(group: string | any): any;
         /**
          * [descr:validationEngine.registerModelForValidation(model)]
          */
-        static registerModelForValidation(model: any): void;
+        export function registerModelForValidation(model: any): void;
         /**
          * [descr:validationEngine.resetGroup()]
          */
-        static resetGroup(): void;
+        export function resetGroup(): void;
         /**
          * [descr:validationEngine.resetGroup(group)]
          */
-        static resetGroup(group: string | any): void;
+        export function resetGroup(group: string | any): void;
         /**
          * [descr:validationEngine.unregisterModelForValidation(model)]
          */
-        static unregisterModelForValidation(model: any): void;
+        export function unregisterModelForValidation(model: any): void;
         /**
          * [descr:validationEngine.validateGroup()]
          */
-        static validateGroup(): DevExpress.ui.dxValidationGroupResult;
+        export function validateGroup(): DevExpress.ui.dxValidationGroupResult;
         /**
          * [descr:validationEngine.validateGroup(group)]
          */
-        static validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
+        export function validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
         /**
          * [descr:validationEngine.validateModel(model)]
          */
-        static validateModel(model: any): any;
+        export function validateModel(model: any): any;
     }
     /**
      * [descr:viz]
      */
-    export class viz {
+    module viz {
         /**
          * [descr:viz.currentPalette()]
          */
-        static currentPalette(): string;
+        export function currentPalette(): string;
         /**
          * [descr:viz.currentPalette(paletteName)]
          */
-        static currentPalette(paletteName: string): void;
+        export function currentPalette(paletteName: string): void;
         /**
          * [descr:viz.currentTheme()]
          */
-        static currentTheme(): string;
+        export function currentTheme(): string;
         /**
          * [descr:viz.currentTheme(platform, colorScheme)]
          */
-        static currentTheme(platform: string, colorScheme: string): void;
+        export function currentTheme(platform: string, colorScheme: string): void;
         /**
          * [descr:viz.currentTheme(theme)]
          */
-        static currentTheme(theme: string): void;
+        export function currentTheme(theme: string): void;
         /**
          * [descr:viz.exportFromMarkup(markup, options)]
          */
-        static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number, svgToCanvas?: Function }): void;
+        export function exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number, svgToCanvas?: Function }): void;
         /**
          * [descr:viz.exportWidgets(widgetInstances)]
          */
-        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
+        export function exportWidgets(widgetInstances: Array<Array<DevExpress.DOMComponent>>): void;
         /**
          * [descr:viz.exportWidgets(widgetInstances, options)]
          */
-        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
+        export function exportWidgets(widgetInstances: Array<Array<DevExpress.DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
         /**
          * [descr:viz.generateColors(palette, count, options)]
          */
-        static generateColors(palette: 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
+        export function generateColors(palette: 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
         /**
          * [descr:viz.getMarkup(widgetInstances)]
          */
-        static getMarkup(widgetInstances: Array<DOMComponent>): string;
+        export function getMarkup(widgetInstances: Array<DevExpress.DOMComponent>): string;
         /**
          * [descr:viz.getPalette(paletteName)]
          */
-        static getPalette(paletteName: string): any;
+        export function getPalette(paletteName: string): any;
         /**
          * [descr:viz.getTheme(theme)]
          */
-        static getTheme(theme: string): any;
+        export function getTheme(theme: string): any;
         /**
          * [descr:viz.refreshPaths()]
          */
-        static refreshPaths(): void;
+        export function refreshPaths(): void;
         /**
          * [descr:viz.refreshTheme()]
          */
-        static refreshTheme(): void;
+        export function refreshTheme(): void;
         /**
          * [descr:viz.registerPalette(paletteName, palette)]
          */
-        static registerPalette(paletteName: string, palette: any): void;
+        export function registerPalette(paletteName: string, palette: any): void;
         /**
          * [descr:viz.registerTheme(customTheme, baseTheme)]
          */
-        static registerTheme(customTheme: any, baseTheme: string): void;
+        export function registerTheme(customTheme: any, baseTheme: string): void;
     }
 }
 declare module DevExpress.core {
@@ -2648,47 +2689,6 @@ declare module DevExpress.excelExporter {
         rowIndex?: number;
     }
     /**
-     * [descr:ExportLoadPanel]
-     */
-    export interface ExportLoadPanel {
-        /**
-         * [descr:ExportLoadPanel.enabled]
-         */
-        enabled?: boolean;
-        /**
-         * [descr:ExportLoadPanel.height]
-         */
-        height?: number;
-        /**
-         * [descr:ExportLoadPanel.indicatorSrc]
-         */
-        indicatorSrc?: string;
-        /**
-         * [descr:ExportLoadPanel.shading]
-         */
-        shading?: boolean;
-        /**
-         * [descr:ExportLoadPanel.shadingColor]
-         */
-        shadingColor?: string;
-        /**
-         * [descr:ExportLoadPanel.showIndicator]
-         */
-        showIndicator?: boolean;
-        /**
-         * [descr:ExportLoadPanel.showPane]
-         */
-        showPane?: boolean;
-        /**
-         * [descr:ExportLoadPanel.text]
-         */
-        text?: string;
-        /**
-         * [descr:ExportLoadPanel.width]
-         */
-        width?: number;
-    }
-    /**
      * [descr:excelExporter.exportDataGrid(options)]
      */
     export function exportDataGrid(options: ExcelExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
@@ -3050,6 +3050,10 @@ declare module DevExpress.pdfExporter {
          */
         keepColumnWidths?: boolean;
         /**
+         * [descr:PdfExportDataGridProps.loadPanel]
+         */
+        loadPanel?: ExportLoadPanel;
+        /**
          * [descr:PdfExportDataGridProps.selectedRowsOnly]
          */
         selectedRowsOnly?: boolean;
@@ -3079,7 +3083,7 @@ declare module DevExpress.ui {
         /**
          * [descr:AsyncRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /**
          * [descr:AsyncRule.validationCallback]
          */
@@ -3234,7 +3238,7 @@ declare module DevExpress.ui {
         /**
          * [descr:CompareRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:CustomRule]
@@ -3255,7 +3259,7 @@ declare module DevExpress.ui {
         /**
          * [descr:CustomRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /**
          * [descr:CustomRule.validationCallback]
          */
@@ -3415,7 +3419,7 @@ declare module DevExpress.ui {
         /**
          * [descr:EmailRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:GridBase.Options]
@@ -3656,7 +3660,7 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBase.Options.rowDragging]
          */
-        rowDragging?: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | Element | JQuery, container?: string | Element | JQuery, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: 'both' | 'horizontal' | 'vertical', dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery), dropFeedbackMode?: 'push' | 'indicate', filter?: string, group?: string, handle?: string, onAdd?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragChange?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragEnd?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragMove?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragStart?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, fromData?: any }) => any), onRemove?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onReorder?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean };
+        rowDragging?: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | Element | JQuery, container?: string | Element | JQuery, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: 'both' | 'horizontal' | 'vertical', dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery), dropFeedbackMode?: 'push' | 'indicate', filter?: string, group?: string, handle?: string, onAdd?: ((e: { component?: T, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragChange?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragEnd?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragMove?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragStart?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, fromData?: any }) => any), onRemove?: ((e: { component?: T, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onReorder?: ((e: { component?: T, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean };
         /**
          * [descr:GridBase.Options.scrolling]
          */
@@ -4436,7 +4440,7 @@ declare module DevExpress.ui {
         /**
          * [descr:NumericRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:PatternRule]
@@ -4457,7 +4461,7 @@ declare module DevExpress.ui {
         /**
          * [descr:PatternRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:RangeRule]
@@ -4486,7 +4490,7 @@ declare module DevExpress.ui {
         /**
          * [descr:RangeRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:RequiredRule]
@@ -4503,7 +4507,7 @@ declare module DevExpress.ui {
         /**
          * [descr:RequiredRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:SearchBoxMixin.Options]
@@ -4567,7 +4571,7 @@ declare module DevExpress.ui {
         /**
          * [descr:StringLengthRule.type]
          */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        type: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
      * [descr:Widget.Options]
@@ -5368,7 +5372,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDataGrid.Options.rowTemplate]
          */
-        rowTemplate?: DevExpress.core.template | ((rowElement: DevExpress.core.dxElement, rowInfo: any) => any);
+        rowTemplate?: DevExpress.core.template | ((rowElement: DevExpress.core.dxElement, rowInfo: { key?: any, data?: any, component?: dxDataGrid, values?: Array<any>, rowIndex?: number, columns?: Array<dxDataGridColumn>, isSelected?: boolean, rowType?: string, groupIndex?: number, isExpanded?: boolean }) => any);
         /**
          * [descr:dxDataGrid.Options.scrolling]
          */
@@ -5959,7 +5963,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramAddShapeArgs.position]
          */
-        position?: any;
+        position?: { x?: number, y?: number };
         /**
          * [descr:dxDiagramAddShapeArgs.shape]
          */
@@ -6032,11 +6036,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramChangeConnectorPointsArgs.newPoints]
          */
-        newPoints?: Array<any>;
+        newPoints?: Array<{ x?: number, y?: number }>;
         /**
          * [descr:dxDiagramChangeConnectorPointsArgs.oldPoints]
          */
-        oldPoints?: Array<any>;
+        oldPoints?: Array<{ x?: number, y?: number }>;
     }
     /**
      * [descr:dxDiagramChangeConnectorTextArgs]
@@ -6087,7 +6091,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramConnector.points]
          */
-        points?: Array<any>;
+        points?: Array<{ x?: number, y?: number }>;
         /**
          * [descr:dxDiagramConnector.texts]
          */
@@ -6172,11 +6176,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramMoveShapeArgs.newPosition]
          */
-        newPosition?: Array<any>;
+        newPosition?: { x?: number, y?: number };
         /**
          * [descr:dxDiagramMoveShapeArgs.oldPosition]
          */
-        oldPosition?: Array<any>;
+        oldPosition?: { x?: number, y?: number };
         /**
          * [descr:dxDiagramMoveShapeArgs.shape]
          */
@@ -6189,11 +6193,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramResizeShapeArgs.newSize]
          */
-        newSize?: Array<any>;
+        newSize?: { height?: number, width?: number };
         /**
          * [descr:dxDiagramResizeShapeArgs.oldSize]
          */
-        oldSize?: Array<any>;
+        oldSize?: { height?: number, width?: number };
         /**
          * [descr:dxDiagramResizeShapeArgs.shape]
          */
@@ -6210,11 +6214,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramShape.position]
          */
-        position?: any;
+        position?: { x?: number, y?: number };
         /**
          * [descr:dxDiagramShape.size]
          */
-        size?: any;
+        size?: { height?: number, width?: number };
         /**
          * [descr:dxDiagramShape.text]
          */
@@ -8696,7 +8700,7 @@ declare module DevExpress.ui {
          * [descr:dxLookup.Options.closeOnOutsideClick]
          * @deprecated [depNote:dxLookup.Options.closeOnOutsideClick]
          */
-        closeOnOutsideClick?: boolean | (() => boolean);
+        closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
         /**
          * [descr:dxLookup.Options.dropDownCentered]
          */
@@ -9388,6 +9392,10 @@ declare module DevExpress.ui {
          * [descr:dxPivotGrid.Options.dataSource]
          */
         dataSource?: Array<any> | DevExpress.data.PivotGridDataSource | DevExpress.data.PivotGridDataSourceOptions;
+        /**
+         * [descr:dxPivotGrid.Options.encodeHtml]
+         */
+        encodeHtml?: boolean;
         /**
          * [descr:dxPivotGrid.Options.export]
          */
@@ -10148,7 +10156,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxScheduler.Options.appointmentDragging]
          */
-        appointmentDragging?: { autoScroll?: boolean, data?: any, group?: string, onAdd?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragEnd?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragMove?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragStart?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromData?: any }) => any), onRemove?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => any), scrollSensitivity?: number, scrollSpeed?: number };
+        appointmentDragging?: { autoScroll?: boolean, data?: any, group?: string, onAdd?: ((e: { component?: dxScheduler, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragEnd?: ((e: { component?: dxScheduler, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragMove?: ((e: { component?: dxScheduler, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragStart?: ((e: { component?: dxScheduler, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromData?: any }) => any), onRemove?: ((e: { component?: dxScheduler, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => any), scrollSensitivity?: number, scrollSpeed?: number };
         /**
          * [descr:dxScheduler.Options.appointmentTemplate]
          */
@@ -10418,7 +10426,12 @@ declare module DevExpress.ui {
          */
         hideAppointmentTooltip(): void;
         /**
+         * [descr:dxScheduler.scrollTo(date, group, allDay)]
+         */
+        scrollTo(date: Date, group?: any, allDay?: boolean): void;
+        /**
          * [descr:dxScheduler.scrollToTime(hours, minutes, date)]
+         * @deprecated [depNote:dxScheduler.scrollToTime(hours, minutes, date)]
          */
         scrollToTime(hours: number, minutes: number, date?: Date): void;
         /**
@@ -12554,23 +12567,23 @@ declare module DevExpress.ui {
     /**
      * [descr:ui.themes]
      */
-    export class themes {
+    module themes {
         /**
          * [descr:ui.themes.current()]
          */
-        static current(): string;
+        export function current(): string;
         /**
          * [descr:ui.themes.current(themeName)]
          */
-        static current(themeName: string): void;
+        export function current(themeName: string): void;
         /**
          * [descr:ui.themes.initialized(callback)]
          */
-        static initialized(callback: Function): void;
+        export function initialized(callback: Function): void;
         /**
          * [descr:ui.themes.ready(callback)]
          */
-        static ready(callback: Function): void;
+        export function ready(callback: Function): void;
     }
 }
 declare module DevExpress.ui.dialog {
@@ -19757,7 +19770,7 @@ declare module DevExpress.viz {
     /**
      * [descr:polarChartSeriesObject]
      */
-    export class polarChartSeriesObject extends baseSeriesObject {
+    export interface polarChartSeriesObject extends baseSeriesObject {
     }
     /**
      * [descr:polarPointObject]

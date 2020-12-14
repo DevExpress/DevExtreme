@@ -1,34 +1,28 @@
 'use strict';
 
+const path = require('path');
 const lazyPipe = require('lazypipe');
 const gulpEach = require('gulp-each');
 const gulpIf = require('gulp-if');
 const replace = require('gulp-replace');
+
 const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 
-const toUnderscoreCase = str => str.replace(/\.?([A-Z])/g, (x, y) => '_' + y.toLowerCase()).replace(/^_/, '');
-const renovatedComponentsMeta = renovatedComponents.map(component => ({ name: component.name, fileName: toUnderscoreCase(component.name), ...component }));
-const renovatedNamesRegEx = new RegExp(renovatedComponentsMeta.map(({ fileName }) => ('^' + fileName + '\\b')).join('|'), 'i');
-const renovationFolder = /renovation/g;
-const renovationFileRegEx = new RegExp(renovatedComponentsMeta.map(({ fileName }) => ('ui(\\\\|\\/)' + fileName)).join('|'), 'i');
-const jsFileExtension = '.js';
+const overwriteWidgetTemplate = require('./overwrite-renovation-widget.js');
+const overwriteQUnitWidgetTemplate = require('./overwrite-qunit-renovation-widget.js');
 
-function isOldComponentRenovated(file) {
-    const isRenovatedName = !!file.basename.match(renovatedNamesRegEx); // only renovated file names
-    const isNotRenovationFolder = file.path.match(renovationFolder) === null; // without renovation folder
-    const isJsFile = file.extname === jsFileExtension;
-    const isCorrectFilePath = !!file.path.match(renovationFileRegEx); // without ui/text_box/../button.js
-
-    return isRenovatedName && isNotRenovationFolder && isJsFile && isCorrectFilePath;
-}
+const fileToComponentMap = {};
+renovatedComponents.forEach((component) => {
+    fileToComponentMap[path.resolve(path.join('./js/', component.pathInJSFolder))] = component;
+});
 
 module.exports = {
     TEMP_PATH: 'artifacts/_renovation-temp',
-    replaceWidgets: lazyPipe()
+    replaceWidgets: (wrapWidgetForQUnit) => (lazyPipe()
         .pipe(function() {
-            return gulpIf(isOldComponentRenovated, gulpEach((content, file, callback) => {
-                const component = renovatedComponentsMeta.find(component => component.fileName === file.stem);
-                const fileContext = 'import Widget from "../renovation/' + component.pathInRenovationFolder + '";export default Widget;';
+            return gulpIf((file) => fileToComponentMap[file.path], gulpEach((content, file, callback) => {
+                const component = fileToComponentMap[file.path];
+                const fileContext = wrapWidgetForQUnit ? overwriteQUnitWidgetTemplate(component) : overwriteWidgetTemplate(component);
                 callback(null, fileContext);
             }));
         })
@@ -36,5 +30,5 @@ module.exports = {
             return gulpIf(function(file) {
                 return file.basename === 'ui.scheduler.work_space.js';
             }, replace('renovateRender: false', 'renovateRender: true'));
-        })
+        }))()
 };

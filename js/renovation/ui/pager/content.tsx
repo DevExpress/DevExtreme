@@ -1,7 +1,7 @@
 // A lot of refs needed any
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, ForwardRef, Provider, Effect,
+  Component, ComponentBindings, JSXComponent, OneWay, ForwardRef, Provider, Effect, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import { InfoText } from './info';
@@ -32,6 +32,7 @@ export const viewFunction = ({
     pageCount, showPageSizes, pageSize, pageSizes,
     pagesCountText, rtlEnabled,
     showNavigationButtons, totalCount,
+    visible,
   },
   restAttributes,
 }: PagerContent) => (
@@ -39,6 +40,7 @@ export const viewFunction = ({
     rootElementRef={widgetRootElementRef}
     rtlEnabled={rtlEnabled}
     classes={classes}
+    visible={visible}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
@@ -89,13 +91,13 @@ export class PagerContentProps extends PagerProps {
 
   @OneWay() isLargeDisplayMode = true;
 
-  @ForwardRef() rootElementRef?: HTMLDivElement;
+  @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
-  @ForwardRef() pageSizesRef?: HTMLDivElement;
+  @ForwardRef() pageSizesRef?: RefObject<HTMLDivElement>;
 
-  @ForwardRef() pagesRef?: HTMLElement;
+  @ForwardRef() pagesRef?: RefObject<HTMLElement>;
 
-  @ForwardRef() infoTextRef?: HTMLDivElement;
+  @ForwardRef() infoTextRef?: RefObject<HTMLDivElement>;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })

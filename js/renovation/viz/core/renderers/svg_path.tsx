@@ -3,6 +3,9 @@ import {
   ComponentBindings,
   JSXComponent,
   OneWay,
+  Ref,
+  Effect,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import {
   PathType,
@@ -11,14 +14,22 @@ import {
   LineCap,
 } from './types.d';
 import SvgGraphicsProps from './base_graphics_props';
-import { combinePathParam, buildPathSegments } from './utils';
+import {
+  combinePathParam,
+  buildPathSegments,
+  applyGraphicProps,
+} from './utils';
 
 export const viewFunction = ({
-  d, props: {
-    fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity,
+  pathRef,
+  d,
+  props: {
+    className, fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity, transform,
   },
 }: PathSvgElement): JSX.Element => (
   <path
+    ref={pathRef}
+    className={className}
     d={d}
     fill={fill}
     stroke={stroke}
@@ -26,6 +37,7 @@ export const viewFunction = ({
     strokeOpacity={strokeOpacity}
     strokeLinecap={strokeLineCap}
     opacity={opacity}
+    transform={transform}
   />
 );
 
@@ -38,6 +50,8 @@ export class PathSvgElementProps extends SvgGraphicsProps {
   @OneWay() d = '';
 
   @OneWay() strokeLineCap?: LineCap;
+
+  @OneWay() transform?: string;
 }
 
 @Component({
@@ -46,6 +60,8 @@ export class PathSvgElementProps extends SvgGraphicsProps {
   isSVG: true,
 })
 export class PathSvgElement extends JSXComponent(PathSvgElementProps) {
+  @Ref() pathRef!: RefObject<SVGPathElement>;
+
   get d(): string | undefined {
     let path = this.props.d;
     let segments: Segment[] = [];
@@ -56,5 +72,10 @@ export class PathSvgElement extends JSXComponent(PathSvgElementProps) {
     }
 
     return path;
+  }
+
+  @Effect()
+  effectUpdateShape(): void {
+    applyGraphicProps(this.pathRef, this.props);
   }
 }

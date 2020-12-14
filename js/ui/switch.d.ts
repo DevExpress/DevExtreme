@@ -4,56 +4,49 @@ import Editor, {
 
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**
-     * @docid dxSwitchOptions.activeStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxSwitchOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxSwitchOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxSwitchOptions.name
-     * @type string
+     * @docid
      * @hidden false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid dxSwitchOptions.switchedOffText
-     * @type string
+     * @docid
      * @default "OFF"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     switchedOffText?: string;
     /**
-     * @docid dxSwitchOptions.switchedOnText
-     * @type string
+     * @docid
      * @default "ON"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     switchedOnText?: string;
     /**
-     * @docid dxSwitchOptions.value
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -61,7 +54,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     value?: boolean;
 }
 /**
- * @docid dxSwitch
+ * @docid
  * @isEditor
  * @inherits Editor
  * @module ui/switch

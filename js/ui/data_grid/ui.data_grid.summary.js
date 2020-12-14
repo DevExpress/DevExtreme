@@ -375,224 +375,24 @@ gridCore.registerModule('summary', {
     defaultOptions: function() {
         return {
             summary: {
-                /**
-                 * @name dxDataGridOptions.summary.groupItems
-                 * @type Array<Object>
-                 * @default undefined
-                 */
                 groupItems: undefined,
-                /**
-                 * @name dxDataGridOptions.summary.groupItems.name
-                 * @type string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.groupItems.column
-                 * @type string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.groupItems.summaryType
-                 * @type Enums.SummaryType|string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.groupItems.valueFormat
-                 * @type format
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.groupItems.displayFormat
-                 * @type string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.groupItems.customizeText
-                 * @type function(itemInfo)
-                 * @type_function_param1 itemInfo:object
-                 * @type_function_param1_field1 value:string|number|date
-                 * @type_function_param1_field2 valueText:string
-                 * @type_function_return string
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.groupItems.showInGroupFooter
-                 * @type boolean
-                 * @default false
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.groupItems.alignByColumn
-                 * @type boolean
-                 * @default false
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.groupItems.showInColumn
-                 * @type string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.groupItems.skipEmptyValues
-                 * @type boolean
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems
-                 * @type Array<Object>
-                 * @default undefined
-                 */
                 totalItems: undefined,
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.name
-                 * @type string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.column
-                 * @type string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.showInColumn
-                 * @type string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.summaryType
-                 * @type Enums.SummaryType|string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.valueFormat
-                 * @type format
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.displayFormat
-                 * @type string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.customizeText
-                 * @type function(itemInfo)
-                 * @type_function_param1 itemInfo:object
-                 * @type_function_param1_field1 value:string|number|date
-                 * @type_function_param1_field2 valueText:string
-                 * @type_function_return string
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.alignment
-                 * @type Enums.HorizontalAlignment
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.cssClass
-                 * @type string
-                 * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.skipEmptyValues
-                 * @type boolean
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.calculateCustomSummary
-                 * @type function(options)
-                 * @type_function_param1 options:object
-                 * @type_function_param1_field1 component:dxDataGrid
-                 * @type_function_param1_field2 name:string
-                 * @type_function_param1_field3 summaryProcess:string
-                 * @type_function_param1_field4 value:any
-                 * @type_function_param1_field5 totalValue:any
-                 * @type_function_param1_field6 groupIndex:number
-                 */
                 calculateCustomSummary: undefined,
-                /**
-                 * @name dxDataGridOptions.summary.skipEmptyValues
-                 * @type boolean
-                 * @default true
-                 */
                 skipEmptyValues: true,
-                /**
-                 * @name dxDataGridOptions.summary.recalculateWhileEditing
-                 * @type boolean
-                 * @default false
-                 */
                 recalculateWhileEditing: false,
-                /**
-                 * @name dxDataGridOptions.summary.texts
-                 * @type object
-                 */
                 texts: {
-                    /**
-                     * @name dxDataGridOptions.summary.texts.sum
-                     * @type string
-                     * @default "Sum={0}"
-                     */
                     sum: messageLocalization.getFormatter('dxDataGrid-summarySum'),
-                    /**
-                     * @name dxDataGridOptions.summary.texts.sumOtherColumn
-                     * @type string
-                     * @default "Sum of {1} is {0}"
-                     */
                     sumOtherColumn: messageLocalization.getFormatter('dxDataGrid-summarySumOtherColumn'),
-                    /**
-                     * @name dxDataGridOptions.summary.texts.min
-                     * @type string
-                     * @default "Min={0}"
-                     */
                     min: messageLocalization.getFormatter('dxDataGrid-summaryMin'),
-                    /**
-                     * @name dxDataGridOptions.summary.texts.minOtherColumn
-                     * @type string
-                     * @default "Min of {1} is {0}"
-                     */
                     minOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMinOtherColumn'),
-                    /**
-                     * @name dxDataGridOptions.summary.texts.max
-                     * @type string
-                     * @default "Max={0}"
-                     */
                     max: messageLocalization.getFormatter('dxDataGrid-summaryMax'),
-                    /**
-                     * @name dxDataGridOptions.summary.texts.maxOtherColumn
-                     * @type string
-                     * @default "Max of {1} is {0}"
-                     */
                     maxOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryMaxOtherColumn'),
-                    /**
-                     * @name dxDataGridOptions.summary.texts.avg
-                     * @type string
-                     * @default "Avg={0}"
-                     */
                     avg: messageLocalization.getFormatter('dxDataGrid-summaryAvg'),
-                    /**
-                     * @name dxDataGridOptions.summary.texts.avgOtherColumn
-                     * @type string
-                     * @default "Avg of {1} is {0}"
-                     */
                     avgOtherColumn: messageLocalization.getFormatter('dxDataGrid-summaryAvgOtherColumn'),
-                    /**
-                     * @name dxDataGridOptions.summary.texts.count
-                     * @type string
-                     * @default "Count={0}"
-                     */
                     count: messageLocalization.getFormatter('dxDataGrid-summaryCount')
                 }
             },
             sortByGroupSummaryInfo: undefined
-            /**
-             * @name dxDataGridOptions.sortByGroupSummaryInfo.summaryItem
-             * @type string|number
-             * @default undefined
-             */
-            /**
-             * @name dxDataGridOptions.sortByGroupSummaryInfo.groupColumn
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxDataGridOptions.sortByGroupSummaryInfo.sortOrder
-             * @type Enums.SortOrder
-             * @default undefined
-             * @acceptValues undefined
-             */
         };
     },
     views: {

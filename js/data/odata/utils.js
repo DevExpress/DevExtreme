@@ -352,7 +352,7 @@ const interpretLightJsonFormat = obj => ({
 
 export const EdmLiteral = Class.inherit({
     /**
-    * @name EdmLiteralMethods.ctor
+    * @name EdmLiteral.ctor
     * @publicName ctor(value)
     * @param1 value:string
     */

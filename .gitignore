@@ -1,5 +1,6 @@
 .idea
 /artifacts
+/testing/testcafe/artifacts
 /dotnet_packages
 /js/bundles/dx.custom.js
 /js/localization/default_messages.js
@@ -10,4 +11,6 @@ bin
 node_modules
 obj
 project.lock.json
+package-lock.json
 yarn.lock
+.DS_Store

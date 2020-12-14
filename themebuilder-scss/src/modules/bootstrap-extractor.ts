@@ -81,6 +81,16 @@ export default class BootstrapExtractor {
     return `dx-varibles-collector {${variables}}`;
   }
 
+  static convertRemToPx(cssValue: string): string {
+    const remValueRegex = /(\d*?\.?\d+?)rem([;\s])?/g;
+    const replaceHandler = (match: string, value: string, separator: string): string => {
+      const pixelsInRem = 16;
+      const pxValue = Math.round(parseFloat(value) * pixelsInRem);
+      return `${pxValue}px${separator || ''}`;
+    };
+    return cssValue.replace(remValueRegex, replaceHandler);
+  }
+
   async extract(): Promise<ConfigMetaItem[]> {
     const css = await this.compiler(await this.sourceProcessor());
     const serviceCodeRegex = /dx-varibles-collector\s{([\s\S]*)}/;
@@ -91,8 +101,9 @@ export default class BootstrapExtractor {
     let match = ruleRegex.exec(serviceCode);
     while (match !== null) {
       const key = `$${match[1]}`;
-      const value = match[2];
-      if (value !== 'dx-empty') {
+      const valueMatch = match[2];
+      if (valueMatch !== 'dx-empty') {
+        const value = BootstrapExtractor.convertRemToPx(valueMatch);
         result.push({ key, value });
       }
       match = ruleRegex.exec(serviceCode);

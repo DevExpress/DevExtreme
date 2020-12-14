@@ -3,7 +3,7 @@ import registerComponent from '../../core/component_registrator';
 import { clone } from '../../core/utils/object';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { dxBaseGauge } from './base_gauge';
+import { BaseGauge } from './base_gauge';
 import { dxGauge, createIndicatorCreator } from './common';
 import { normalizeAngle, getCosAndSin } from '../core/utils';
 const _normalizeAngle = normalizeAngle;
@@ -226,7 +226,7 @@ const dxCircularGauge = dxGauge.inherit({
         return { width: 300, height: 300 };
     },
 
-    _factory: clone(dxBaseGauge.prototype._factory)
+    _factory: clone(BaseGauge.prototype._factory)
 });
 
 function getWidth(rect) {

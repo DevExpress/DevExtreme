@@ -6,14 +6,23 @@ import {
   JSXComponent,
   OneWay,
   Slot,
+  Ref,
+  ForwardRef,
+  Effect,
+  Consumer,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
+import { ConfigContextValue, ConfigContext } from '../../../ui/common/config_context';
 
 export const viewFunction = ({
+  svgRef,
+  config,
   props: {
-    className, width, height, direction, children,
+    className, width, height, pointerEvents, filter, children,
   },
 }: RootSvgElement): JSX.Element => (
   <svg
+    ref={svgRef}
     xmlns="http://www.w3.org/2000/svg"
     version="1.1"
     className={className}
@@ -31,7 +40,9 @@ export const viewFunction = ({
     }}
     width={width}
     height={height}
-    direction={direction}
+    direction={config?.rtlEnabled ? 'rtl' : 'ltr'}
+    pointerEvents={pointerEvents}
+    filter={filter}
   >
     {children}
   </svg>
@@ -39,13 +50,17 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class RootSvgElementProps {
+  @ForwardRef() rootElementRef?: RefObject<SVGElement>;
+
   @OneWay() className = '';
 
-  @OneWay() height = 400;
+  @OneWay() height = 0;
 
-  @OneWay() width = 400;
+  @OneWay() width = 0;
 
-  @OneWay() direction?: 'ltr' | 'rtl';
+  @OneWay() pointerEvents?: string;
+
+  @OneWay() filter?: string;
 
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 }
@@ -55,4 +70,17 @@ export class RootSvgElementProps {
   view: viewFunction,
   isSVG: true,
 })
-export class RootSvgElement extends JSXComponent(RootSvgElementProps) {}
+export class RootSvgElement extends JSXComponent(RootSvgElementProps) {
+  @Ref() svgRef!: RefObject<SVGSVGElement>;
+
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
+  @Effect({ run: 'once' })
+  setRootElementRef(): void {
+    const { rootElementRef } = this.props;
+    if (rootElementRef) {
+      this.props.rootElementRef = this.svgRef;
+    }
+  }
+}

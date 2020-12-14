@@ -145,35 +145,10 @@ export default {
     defaultOptions() {
         return {
             sorting: {
-                /**
-                 * @name GridBaseOptions.sorting.mode
-                 * @type Enums.GridSortingMode
-                 * @default "single"
-                 */
                 mode: 'single',
-                /**
-                 * @name GridBaseOptions.sorting.ascendingText
-                 * @type string
-                 * @default "Sort Ascending"
-                 */
                 ascendingText: messageLocalization.format('dxDataGrid-sortingAscendingText'),
-                /**
-                 * @name GridBaseOptions.sorting.descendingText
-                 * @type string
-                 * @default "Sort Descending"
-                 */
                 descendingText: messageLocalization.format('dxDataGrid-sortingDescendingText'),
-                /**
-                 * @name GridBaseOptions.sorting.clearText
-                 * @type string
-                 * @default "Clear Sorting"
-                 */
                 clearText: messageLocalization.format('dxDataGrid-sortingClearText'),
-                /**
-                 * @name GridBaseOptions.sorting.showSortIndexes
-                 * @type boolean
-                 * @default true
-                 */
                 showSortIndexes: true
             }
         };

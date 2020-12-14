@@ -6,7 +6,10 @@ import { GroupOrientation } from '../../types.d';
 
 @ComponentBindings()
 export class LayoutProps {
-  @OneWay() viewData?: GroupedViewData;
+  @OneWay() viewData: GroupedViewData = {
+    groupedData: [],
+    cellCountInGroupRow: 0,
+  };
 
   @OneWay() groupOrientation?: GroupOrientation;
 

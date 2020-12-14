@@ -9,39 +9,35 @@ import CollectionWidget, {
 
 export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**
-     * @docid dxTileViewOptions.activeStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxTileViewOptions.baseItemHeight
-     * @type number
+     * @docid
      * @default 100
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     baseItemHeight?: number;
     /**
-     * @docid dxTileViewOptions.baseItemWidth
-     * @type number
+     * @docid
      * @default 100
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     baseItemWidth?: number;
     /**
-     * @docid dxTileViewOptions.dataSource
-     * @type string|Array<string,dxTileViewItem,object>|DataSource|DataSourceOptions
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxTileViewItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxTileViewOptions.direction
+     * @docid
      * @type Enums.Orientation
      * @default 'horizontal'
      * @prevFileNamespace DevExpress.ui
@@ -49,16 +45,14 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      */
     direction?: 'horizontal' | 'vertical';
     /**
-     * @docid dxTileViewOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxTileViewOptions.height
-     * @type number|string|function
+     * @docid
      * @default 500
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -66,32 +60,28 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxTileViewOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxTileViewOptions.itemMargin
-     * @type number
+     * @docid
      * @default 20
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemMargin?: number;
     /**
-     * @docid dxTileViewOptions.items
-     * @type Array<string, dxTileViewItem, object>
+     * @docid
      * @fires dxTileViewOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxTileViewItem | any>;
     /**
-     * @docid dxTileViewOptions.showScrollbar
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -99,7 +89,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     showScrollbar?: boolean;
 }
 /**
- * @docid dxTileView
+ * @docid
  * @inherits CollectionWidget
  * @module ui/tile_view
  * @export default
@@ -110,7 +100,7 @@ export default class dxTileView extends CollectionWidget {
     constructor(element: Element, options?: dxTileViewOptions)
     constructor(element: JQuery, options?: dxTileViewOptions)
     /**
-     * @docid dxtileviewmethods.scrollPosition
+     * @docid
      * @publicName scrollPosition()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -119,18 +109,21 @@ export default class dxTileView extends CollectionWidget {
     scrollPosition(): number;
 }
 
+/**
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxTileViewItem extends CollectionWidgetItem {
     /**
-     * @docid dxTileViewItem.heightRatio
-     * @type number
+     * @docid
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     heightRatio?: number;
     /**
-     * @docid dxTileViewItem.widthRatio
-     * @type number
+     * @docid
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public

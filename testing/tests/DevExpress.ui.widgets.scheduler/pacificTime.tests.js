@@ -39,7 +39,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 2, 7, 1),
             endDate: new Date(2020, 2, 7, 2),
             currentDate: summerDSTDate,
-            recurrenceException: '20200311T090000Z'
+            recurrenceException: '20200311T080000Z'
         };
 
         const testCase1AmTo3AmSummerTime = {
@@ -54,7 +54,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 2, 7, 1),
             endDate: new Date(2020, 2, 7, 3),
             currentDate: summerDSTDate,
-            recurrenceException: '20200311T090000Z'
+            recurrenceException: '20200311T080000Z'
         };
 
         const testCase2AmTo3AmSummerTime = {
@@ -69,7 +69,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 2, 7, 2),
             endDate: new Date(2020, 2, 7, 3),
             currentDate: summerDSTDate,
-            recurrenceException: '20200311T100000Z'
+            recurrenceException: '20200311T090000Z'
         };
 
         const testCase1AmTo2AmWinterTime = {
@@ -84,7 +84,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 9, 25, 1),
             endDate: new Date(2020, 9, 25, 2),
             currentDate: winterDSTDate,
-            recurrenceException: '20201102T080000Z'
+            recurrenceException: '20201102T090000Z'
         };
 
         const testCase1AmTo3AmWinterTime = {
@@ -99,7 +99,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 9, 25, 1),
             endDate: new Date(2020, 9, 25, 3),
             currentDate: winterDSTDate,
-            recurrenceException: '20201102T080000Z'
+            recurrenceException: '20201102T090000Z'
         };
 
         const testCase2AmTo3AmWinterTime = {
@@ -114,7 +114,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             startDate: new Date(2020, 9, 25, 2),
             endDate: new Date(2020, 9, 25, 3),
             currentDate: winterDSTDate,
-            recurrenceException: '20201102T090000Z'
+            recurrenceException: '20201102T100000Z'
         };
 
         [
@@ -250,6 +250,89 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
     });
 
     module('Common', moduleConfig, () => {
+        module('Today and current day in calendar', () => {
+            const views = ['month', 'week'];
+
+            const schedulerTimeZone = 24 - (new Date()).getTimezoneOffset() / 60; // So that the difference between the local time zone is more than a day
+
+            const getTodayValue = (offset = 0) => {
+                const currentDate = new Date();
+                return (new Date(currentDate.setDate(currentDate.getDate() + offset))).getDate();
+            };
+
+            const getViewToday = (scheduler, view) => {
+                if(view === 'month') {
+                    return scheduler.workSpace.getMonthCurrentDay();
+                }
+                if(view === 'week') {
+                    return scheduler.workSpace.getWeekCurrentDay();
+                }
+                new Error('Invalid view type');
+            };
+
+            views.forEach(currentView => {
+                [{
+                    timeZone: undefined,
+                    today: getTodayValue()
+                }, {
+                    timeZone: schedulerTimeZone,
+                    today: getTodayValue(1)
+                }].forEach(({ timeZone, today }) => {
+                    test(`Today in calendar should be equal with today in grid, view='${currentView}' timeZone='${timeZone}' (T946335)`, function(assert) {
+                        const scheduler = createWrapper({
+                            timeZone,
+                            currentView,
+                            views,
+                            dataSource: [],
+                            height: 600
+                        });
+
+                        assert.equal(getViewToday(scheduler, currentView), today, 'Grid\'s today value should be valid');
+
+                        const { navigator } = scheduler.header;
+                        navigator.caption.click();
+
+                        const calendarToday = navigator.popover.calendar.today.value;
+
+                        assert.equal(calendarToday, today, 'Calendar\'s today value should be valid');
+                    });
+                });
+            });
+
+            [{
+                timeZone: undefined,
+                expectedToday: getTodayValue()
+            }, {
+                timeZone: schedulerTimeZone,
+                expectedToday: getTodayValue(1)
+            }].forEach(({ timeZone, expectedToday }) => {
+                test(`Scheduler should be valid display today after change view type, timeZone='${timeZone}'`, function(assert) {
+                    const scheduler = createWrapper({
+                        timeZone,
+                        views,
+                        currentView: 'month',
+                        dataSource: [],
+                        height: 600
+                    });
+
+                    const { navigator } = scheduler.header;
+                    const { calendar } = navigator.popover;
+
+                    views.forEach(currentView => {
+                        scheduler.option('currentView', currentView);
+
+                        assert.equal(getViewToday(scheduler, currentView), expectedToday, `Grid's today value should be valid after set '${currentView}' view`);
+
+                        navigator.caption.click();
+
+                        assert.equal(calendar.today.value, expectedToday, `Calendar's today value should be valid after set '${currentView}' view`);
+
+                        navigator.caption.click(); // for hide calendar
+                    });
+                });
+            });
+        });
+
         test('onAppointmentFormOpening should have correct dates on new appointment when custom timezone(T862350)', function(assert) {
             const assertDate = new Date(2015, 0, 25, 2, 0);
             const scheduler = createWrapper({

@@ -4,33 +4,29 @@ import ArrayStore, {
 
 export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
     /**
-     * @docid LocalStoreOptions.flushInterval
-     * @type number
+     * @docid
      * @default 10000
      * @prevFileNamespace DevExpress.data
      * @public
      */
     flushInterval?: number;
     /**
-     * @docid LocalStoreOptions.immediate
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public
      */
     immediate?: boolean;
     /**
-     * @docid LocalStoreOptions.name
-     * @type string
+     * @docid
      * @prevFileNamespace DevExpress.data
      * @public
      */
     name?: string;
 }
 /**
- * @docid LocalStore
+ * @docid
  * @inherits ArrayStore
- * @type object
  * @module data/local_store
  * @export default
  * @prevFileNamespace DevExpress.data
@@ -39,7 +35,7 @@ export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
 export default class LocalStore extends ArrayStore {
     constructor(options?: LocalStoreOptions)
     /**
-     * @docid LocalStoreMethods.clear
+     * @docid
      * @publicName clear()
      * @prevFileNamespace DevExpress.data
      * @public

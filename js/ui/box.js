@@ -689,23 +689,17 @@ class Box extends CollectionWidget {
     }
 
     /**
-    * @name dxBoxMethods.registerKeyHandler
+    * @name dxBox.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxBoxMethods.focus
+    * @name dxBox.focus
     * @publicName focus()
     * @hidden
     */
 }
-/**
-* @name dxBoxItem
-* @inherits CollectionWidgetItem
-* @type object
-*/
-
 
 Box.ItemClass = BoxItem;
 

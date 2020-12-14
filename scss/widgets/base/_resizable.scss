@@ -1,0 +1,93 @@
+// adduse
+
+$handle-offset: 0;
+$one-side-handle-size: 3px + $handle-offset;
+$two-side-handle-size: 6px + $handle-offset;
+
+.dx-resizable {
+  display: block;
+  position: relative;
+}
+
+.dx-resizable-handle {
+  position: absolute;
+  z-index: 50;
+
+  .dx-state-disabled & {
+    cursor: default;
+  }
+}
+
+.dx-resizable-handle-left,
+.dx-resizable-handle-right {
+  top: -$handle-offset;
+  height: 100%;
+  width: $one-side-handle-size;
+}
+
+.dx-resizable-handle-left {
+  left: -$handle-offset;
+  cursor: e-resize;
+}
+
+.dx-resizable-handle-right {
+  right: -$handle-offset;
+  cursor: e-resize;
+}
+
+.dx-resizable-handle-top,
+.dx-resizable-handle-bottom {
+  left: -$handle-offset;
+  width: 100%;
+  height: $one-side-handle-size;
+}
+
+.dx-resizable-handle-top {
+  top: -$handle-offset;
+  cursor: s-resize;
+}
+
+.dx-resizable-handle-bottom {
+  bottom: -$handle-offset;
+  cursor: s-resize;
+}
+
+.dx-resizable-handle-corner-bottom-left,
+.dx-resizable-handle-corner-bottom-right,
+.dx-resizable-handle-corner-top-left,
+.dx-resizable-handle-corner-top-right {
+  width: $two-side-handle-size;
+  height: $two-side-handle-size;
+}
+
+.dx-resizable-handle-corner-top-left,
+.dx-resizable-handle-corner-bottom-right {
+  cursor: se-resize;
+}
+
+.dx-resizable-handle-corner-top-right,
+.dx-resizable-handle-corner-bottom-left {
+  cursor: ne-resize;
+}
+
+.dx-resizable-handle-corner-top-left,
+.dx-resizable-handle-corner-bottom-left {
+  left: -$handle-offset;
+  border-bottom-right-radius: 100%;
+}
+
+.dx-resizable-handle-corner-top-right,
+.dx-resizable-handle-corner-bottom-right {
+  right: -$handle-offset;
+  border-bottom-left-radius: 100%;
+}
+
+.dx-resizable-handle-corner-top-left,
+.dx-resizable-handle-corner-top-right {
+  top: -$handle-offset;
+}
+
+.dx-resizable-handle-corner-bottom-left,
+.dx-resizable-handle-corner-bottom-right {
+  bottom: -$handle-offset;
+}

@@ -172,11 +172,6 @@ const Gallery = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
         /**
-        * @name dxGalleryItem
-        * @inherits CollectionWidgetItem
-        * @type object
-        */
-        /**
         * @name dxGalleryItem.visible
         * @hidden
         */

@@ -88,7 +88,7 @@ class Gantt extends Widget {
             dataSource: this._tasksRaw,
             keyExpr: keyExpr,
             parentIdExpr: parentIdExpr,
-            columns: this.option('columns'),
+            columns: this._getTreeListColumns(),
             columnResizingMode: 'nextColumn',
             height: this._getTreeListHeight(),
             width: this.option('taskListWidth'),
@@ -170,6 +170,8 @@ class Gantt extends Widget {
 
     _onApplyPanelSize(e) {
         this._setInnerElementsWidth(e);
+        const rowHeight = this._getTreeListRowHeight();
+        this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
     }
 
     _onTreeListContentReady(e) {
@@ -233,6 +235,19 @@ class Gantt extends Widget {
         this._hasHeight = isDefined(this.option('height')) && this.option('height') !== '';
         return this._hasHeight ? '100%' : '';
     }
+    _getTreeListColumns() {
+        const columns = this.option('columns');
+        if(columns) {
+            for(let i = 0; i < columns.length; i++) {
+                const column = columns[i];
+                const isKeyColumn = column.dataField === this.option(`${GANTT_TASKS}.keyExpr`) || column.dataField === this.option(`${GANTT_TASKS}.parentIdExpr`);
+                if(isKeyColumn && !column.dataType) {
+                    column.dataType = 'object';
+                }
+            }
+        }
+        return columns;
+    }
     _onGanttViewSelectionChanged(e) {
         this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(e.id));
     }
@@ -277,8 +292,18 @@ class Gantt extends Widget {
     }
     _getTreeListRowHeight() {
         const $row = this._treeList._$element.find('.dx-data-row');
-        const height = $row.length ? getBoundingRect($row.last().get(0)).height : GANTT_DEFAULT_ROW_HEIGHT;
-        return height ? height : GANTT_DEFAULT_ROW_HEIGHT;
+        let height = $row.length ? getBoundingRect($row.last().get(0)).height : GANTT_DEFAULT_ROW_HEIGHT;
+        if(!height) {
+            height = GANTT_DEFAULT_ROW_HEIGHT;
+        }
+        this._correctRowsViewRowHeight(height);
+        return height;
+    }
+    _correctRowsViewRowHeight(height) {
+        const view = this._treeList._views && this._treeList._views['rowsView'];
+        if(view?._rowHeight !== height) {
+            view._rowHeight = height;
+        }
     }
     _getTreeListHeaderHeight() {
         return getBoundingRect(this._treeList._$element.find('.dx-treelist-headers').get(0)).height;
@@ -996,167 +1021,37 @@ class Gantt extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
-            * @name dxGanttStripLine
-            * @type object
-            */
-
-            /**
             * @name dxGanttOptions.rtlEnabled
             * @hidden
             */
 
-            /**
-            * @name dxGanttToolbar
-            * @type object
-            */
-
-            /**
-            * @name dxGanttToolbarItem
-            * @inherits dxToolbarItem
-            */
-
-            /**
-            * @name dxGanttContextMenu
-            * @type object
-            */
-
-            /**
-            * @name dxGanttContextMenuItem
-            * @inherits dxContextMenuItem
-            */
-
             tasks: {
-                /**
-                * @name dxGanttOptions.tasks.dataSource
-                * @type Array<Object>|DataSource|DataSourceOptions
-                * @default null
-                */
                 dataSource: null,
-                /**
-                * @name dxGanttOptions.tasks.keyExpr
-                * @type string|function
-                * @default "id"
-                */
                 keyExpr: 'id',
-                /**
-                * @name dxGanttOptions.tasks.parentIdExpr
-                * @type string|function
-                * @default "parentId"
-                */
                 parentIdExpr: 'parentId',
-                /**
-                * @name dxGanttOptions.tasks.startExpr
-                * @type string|function
-                * @default "start"
-                */
                 startExpr: 'start',
-                /**
-                * @name dxGanttOptions.tasks.endExpr
-                * @type string|function
-                * @default "end"
-                */
                 endExpr: 'end',
-                /**
-                * @name dxGanttOptions.tasks.progressExpr
-                * @type string|function
-                * @default "progress"
-                */
                 progressExpr: 'progress',
-                /**
-                * @name dxGanttOptions.tasks.titleExpr
-                * @type string|function
-                * @default "title"
-                */
                 titleExpr: 'title',
-                /**
-                * @name dxGanttOptions.tasks.colorExpr
-                * @type string|function
-                * @default "color"
-                */
                 colorExpr: 'color'
             },
             dependencies: {
-                /**
-                * @name dxGanttOptions.dependencies.dataSource
-                * @type Array<Object>|DataSource|DataSourceOptions
-                * @default null
-                */
                 dataSource: null,
-                /**
-                * @name dxGanttOptions.dependencies.keyExpr
-                * @type string|function
-                * @default "id"
-                */
                 keyExpr: 'id',
-                /**
-                * @name dxGanttOptions.dependencies.predecessorIdExpr
-                * @type string|function
-                * @default "predecessorId"
-                */
                 predecessorIdExpr: 'predecessorId',
-                /**
-                * @name dxGanttOptions.dependencies.successorIdExpr
-                * @type string|function
-                * @default "successorId"
-                */
                 successorIdExpr: 'successorId',
-                /**
-                * @name dxGanttOptions.dependencies.typeExpr
-                * @type string|function
-                * @default "type"
-                */
                 typeExpr: 'type'
             },
             resources: {
-                /**
-                * @name dxGanttOptions.resources.dataSource
-                * @type Array<Object>|DataSource|DataSourceOptions
-                * @default null
-                */
                 dataSource: null,
-                /**
-                * @name dxGanttOptions.resources.keyExpr
-                * @type string|function
-                * @default "id"
-                */
                 keyExpr: 'id',
-                /**
-                * @name dxGanttOptions.resources.textExpr
-                * @type string|function
-                * @default "text"
-                */
                 textExpr: 'text',
-                /**
-                * @name dxGanttOptions.resources.colorExpr
-                * @type string|function
-                * @default "color"
-                */
                 colorExpr: 'color'
             },
             resourceAssignments: {
-                /**
-                * @name dxGanttOptions.resourceAssignments.dataSource
-                * @type Array<Object>|DataSource|DataSourceOptions
-                * @default null
-                */
                 dataSource: null,
-                /**
-                * @name dxGanttOptions.resourceAssignments.keyExpr
-                * @type string|function
-                * @default "id"
-                */
                 keyExpr: 'id',
-                /**
-                * @name dxGanttOptions.resourceAssignments.taskIdExpr
-                * @type string|function
-                * @default "taskId"
-                */
                 taskIdExpr: 'taskId',
-                /**
-                * @name dxGanttOptions.resourceAssignments.resourceIdExpr
-                * @type string|function
-                * @default "resourceId"
-                */
                 resourceIdExpr: 'resourceId'
             },
             columns: undefined,
@@ -1187,79 +1082,19 @@ class Gantt extends Widget {
             stripLines: undefined,
             scaleType: 'auto',
             editing: {
-                /**
-                * @name dxGanttOptions.editing.enabled
-                * @type boolean
-                * @default false
-                */
                 enabled: false,
-                /**
-                * @name dxGanttOptions.editing.allowTaskAdding
-                * @type boolean
-                * @default true
-                */
                 allowTaskAdding: true,
-                /**
-                * @name dxGanttOptions.editing.allowTaskDeleting
-                * @type boolean
-                * @default true
-                */
                 allowTaskDeleting: true,
-                /**
-                * @name dxGanttOptions.editing.allowTaskUpdating
-                * @type boolean
-                * @default true
-                */
                 allowTaskUpdating: true,
-                /**
-                * @name dxGanttOptions.editing.allowDependencyAdding
-                * @type boolean
-                * @default true
-                */
                 allowDependencyAdding: true,
-                /**
-                 * @name dxGanttOptions.editing.allowDependencyDeleting
-                 * @type boolean
-                 * @default true
-                 */
                 allowDependencyDeleting: true,
-                /**
-                * @name dxGanttOptions.editing.allowResourceAdding
-                * @type boolean
-                * @default true
-                */
                 allowResourceAdding: true,
-                /**
-                * @name dxGanttOptions.editing.allowResourceDeleting
-                * @type boolean
-                * @default true
-                */
                 allowResourceDeleting: true,
-                /**
-                * @name dxGanttOptions.editing.allowResourceUpdating
-                * @type boolean
-                * @default true
-                */
                 allowResourceUpdating: true,
-                /**
-                * @name dxGanttOptions.editing.allowTaskResourceUpdating
-                * @type boolean
-                * @default true
-                */
                 allowTaskResourceUpdating: true
             },
             validation: {
-                /**
-                * @name dxGanttOptions.validation.validateDependencies
-                * @type boolean
-                * @default false
-                */
                 validateDependencies: false,
-                /**
-                * @name dxGanttOptions.validation.autoUpdateParentTasks
-                * @type boolean
-                * @default false
-                */
                 autoUpdateParentTasks: false
             },
             toolbar: null,
@@ -1371,7 +1206,7 @@ class Gantt extends Widget {
                 this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
                 break;
             case 'columns':
-                this._setTreeListOption('columns', this.option(args.name));
+                this._setTreeListOption('columns', this._getTreeListColumns());
                 break;
             case 'taskListWidth':
                 this._setInnerElementsWidth();

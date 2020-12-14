@@ -5,7 +5,8 @@ import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { noop, ensureDefined, grep } from '../../core/utils/common';
-import { isWindow, isDefined, isObject } from '../../core/utils/type';
+import { isDefined, isObject } from '../../core/utils/type';
+import { getCustomBoundaryContainer } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import DropDownEditor from './ui.drop_down_editor';
@@ -266,22 +267,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _updateCustomBoundaryContainer: function() {
-        const customContainer = this.option('dropDownOptions.container');
-        const $container = customContainer && $(customContainer);
-
-        if($container && $container.length && !isWindow($container.get(0))) {
-            const $containerWithParents = [].slice.call($container.parents());
-            $containerWithParents.unshift($container.get(0));
-
-            each($containerWithParents, function(i, parent) {
-                if(parent === $('body').get(0)) {
-                    return false;
-                } else if(window.getComputedStyle(parent).overflowY === 'hidden') {
-                    this._$customBoundaryContainer = $(parent);
-                    return false;
-                }
-            }.bind(this));
-        }
+        this._$customBoundaryContainer = getCustomBoundaryContainer(this.option('dropDownOptions.container'));
     },
 
     _popupWrapperClass: function() {
@@ -540,6 +526,7 @@ const DropDownList = DropDownEditor.inherit({
             groupTemplate: this.option('groupTemplate'),
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
+            _revertPageOnEmptyLoad: true,
             hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
             focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false
         };

@@ -288,19 +288,19 @@ const ValidationSummary = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxValidationSummaryMethods.registerKeyHandler
+    * @name dxValidationSummary.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxValidationSummaryMethods.getDataSource
+    * @name dxValidationSummary.getDataSource
     * @publicName getDataSource()
     * @hidden
     */
 
     /**
-    * @name dxValidationSummaryMethods.focus
+    * @name dxValidationSummary.focus
     * @publicName focus()
     * @hidden
     */

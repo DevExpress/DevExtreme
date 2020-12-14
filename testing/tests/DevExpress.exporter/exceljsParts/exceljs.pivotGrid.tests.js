@@ -1,8 +1,4 @@
 import $ from 'jquery';
-import localization from 'localization';
-import ja from 'localization/messages/ja.json!';
-import messageLocalization from 'localization/message';
-import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
 import { ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportPivotGrid } from 'excel_exporter';
@@ -10,6 +6,7 @@ import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHel
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.options.tests.js';
+import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import browser from 'core/utils/browser';
 
 import typeUtils from 'core/utils/type';
@@ -5485,6 +5482,140 @@ QUnit.module('Scenarios', moduleConfig, () => {
             });
         });
     });
+
+    [true, false].forEach(encodeHtml => {
+        QUnit.test(`Export [string x string x string]. encodeHtml=${encodeHtml}, area=row`, function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', dataField: 'value', summaryType: 'min', dataType: 'string' }
+                ],
+                store: [
+                    { row1: '<a>a</a>', col1: 'a', value: 'text' },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                encodeHtml,
+                width: 1000,
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataSource: ds
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
+            ], [
+                { excelCell: { value: '<a>a</a>', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['<a>a</a>'], rowspan: 1, text: '<a>a</a>', type: 'D' } },
+                { excelCell: { value: 'text', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'string', format: undefined, rowPath: ['<a>a</a>'], rowType: 'D', rowspan: 1, text: 'text' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft);
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                helper.checkFont(expectedCells);
+                helper.checkAlignment(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test(`Export [string x string x string]. encodeHtml=${encodeHtml}, area=column`, function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', dataField: 'value', summaryType: 'min', dataType: 'string' }
+                ],
+                store: [
+                    { row1: 'A', col1: '<a>a</a>', value: 'text' },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                encodeHtml,
+                width: 1000,
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataSource: ds
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: '<a>a</a>', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['<a>a</a>'], rowspan: 1, text: '<a>a</a>', type: 'D', width: 100 } }
+            ], [
+                { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                { excelCell: { value: 'text', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['<a>a</a>'], columnType: 'D', dataIndex: 0, dataType: 'string', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: 'text' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft);
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                helper.checkFont(expectedCells);
+                helper.checkAlignment(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                done();
+            });
+        });
+
+        QUnit.test(`Export [string x string x string]. encodeHtml=${encodeHtml}, area=data`, function(assert) {
+            const done = assert.async();
+            const ds = {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', dataField: 'value', summaryType: 'min', dataType: 'string' }
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', value: '<a>a</a>' },
+                ]
+            };
+
+            const pivotGrid = $('#pivotGrid').dxPivotGrid({
+                encodeHtml,
+                width: 1000,
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataSource: ds
+            }).dxPivotGrid('instance');
+
+            const expectedCells = [[
+                { excelCell: { value: '', alignment: alignCenterTopWrap }, pivotCell: { alignment: 'left', colspan: 1, rowspan: 1, text: '', width: 100 } },
+                { excelCell: { value: 'a', alignment: alignCenterTopWrap }, pivotCell: { area: 'column', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['a'], rowspan: 1, text: 'a', type: 'D', width: 100 } }
+            ], [
+                { excelCell: { value: 'A', alignment: alignLeftTopWrap }, pivotCell: { area: 'row', colspan: 1, dataSourceIndex: 1, isLast: true, path: ['A'], rowspan: 1, text: 'A', type: 'D' } },
+                { excelCell: { value: '<a>a</a>', alignment: alignRightTopWrap }, pivotCell: { area: 'data', colspan: 1, columnPath: ['a'], columnType: 'D', dataIndex: 0, dataType: 'string', format: undefined, rowPath: ['A'], rowType: 'D', rowspan: 1, text: '<a>a</a>' } }
+            ]];
+
+            helper.extendExpectedCells(expectedCells, topLeft);
+
+            exportPivotGrid(getOptions(this, pivotGrid, expectedCells)).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                helper.checkFont(expectedCells);
+                helper.checkAlignment(expectedCells);
+                helper.checkValues(expectedCells);
+                helper.checkMergeCells(expectedCells, topLeft);
+                helper.checkOutlineLevel([0, 0], topLeft.row);
+                helper.checkAutoFilter(false, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row, xSplit: topLeft.column });
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
+                done();
+            });
+        });
+    });
 });
 
 QUnit.module('Text customization', moduleConfig, () => {
@@ -5565,137 +5696,6 @@ QUnit.module('Text customization', moduleConfig, () => {
             exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
                 assert.equal(this.worksheet.getCell('B2').value, expectedText);
                 done();
-            });
-        });
-    });
-});
-
-QUnit.module('LoadPanel', moduleConfig, () => {
-    [undefined, { enabled: true, text: 'Export to .xlsx...' }].forEach((loadPanelConfig) => {
-        QUnit.test(`LoadPanel - loadPanel: ${JSON.stringify(loadPanelConfig)}`, function(assert) {
-            const done = assert.async();
-            const ds = {
-                fields: [
-                    { area: 'row', dataField: 'row1', dataType: 'string' },
-                    { area: 'column', dataField: 'col1', dataType: 'string' },
-                    { area: 'data', summaryType: 'count', dataType: 'number' }
-                ],
-                store: [
-                    { row1: 'A', col1: 'a' },
-                ]
-            };
-
-            const pivotGrid = $('#pivotGrid').dxPivotGrid({
-                dataSource: ds,
-                loadPanel: {
-                    enabled: false
-                }
-            }).dxPivotGrid('instance');
-
-            let actualLoadPanelSettingsOnExporting;
-
-            const loadPanelOnShownHandler = () => {
-                actualLoadPanelSettingsOnExporting = extend({}, pivotGrid.option('loadPanel'));
-            };
-
-            pivotGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-            const initialLoadPanelSettings = extend({}, pivotGrid.option('loadPanel'));
-            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
-
-            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet, loadPanel: loadPanelConfig }).then(() => {
-                assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'loadPanel settings on exporting');
-                assert.deepEqual(pivotGrid.option('loadPanel'), initialLoadPanelSettings, 'loadPanel settings restored after exporting');
-                done();
-            });
-        });
-
-        QUnit.test('LoadPanel - loadPanel: { enabled: false }', function(assert) {
-            assert.expect();
-            const done = assert.async();
-            const ds = {
-                fields: [
-                    { area: 'row', dataField: 'row1', dataType: 'string' },
-                    { area: 'column', dataField: 'col1', dataType: 'string' },
-                    { area: 'data', summaryType: 'count', dataType: 'number' }
-                ],
-                store: [
-                    { row1: 'A', col1: 'a' },
-                ]
-            };
-
-            const pivotGrid = $('#pivotGrid').dxPivotGrid({
-                dataSource: ds,
-                loadPanel: {
-                    enabled: false
-                }
-            }).dxPivotGrid('instance');
-
-            let loadPanelOnShownHandlerCallCount = 0;
-
-            const loadPanelOnShownHandler = (e) => {
-                loadPanelOnShownHandlerCallCount++;
-            };
-
-            pivotGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-            const initialLoadPanelSettings = pivotGrid.option('loadPanel');
-
-            exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet, loadPanel: { enabled: false } }).then(() => {
-                assert.strictEqual(loadPanelOnShownHandlerCallCount, 0, 'loadPanel should not be shown on Exporting');
-                assert.deepEqual(pivotGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings');
-                done();
-            });
-        });
-
-        [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
-            QUnit.test(`LoadPanel - ${localizationText.type} localization text, locale('ja')`, function(assert) {
-                const done = assert.async();
-                const ds = {
-                    fields: [
-                        { area: 'row', dataField: 'row1', dataType: 'string' },
-                        { area: 'column', dataField: 'col1', dataType: 'string' },
-                        { area: 'data', summaryType: 'count', dataType: 'number' }
-                    ],
-                    store: [
-                        { row1: 'A', col1: 'a' },
-                    ]
-                };
-                const locale = localization.locale();
-
-                try {
-                    if(localizationText.type === 'default') {
-                        localization.loadMessages(ja);
-                    } else {
-                        messageLocalization.load({
-                            'ja': {
-                                'dxDataGrid-exporting': '!CUSTOM TEXT!'
-                            }
-                        });
-                    }
-
-                    localization.locale('ja');
-
-                    const pivotGrid = $('#pivotGrid').dxPivotGrid({
-                        dataSource: ds,
-                        loadPanel: {
-                            enabled: false
-                        }
-                    }).dxPivotGrid('instance');
-
-                    let actualLoadPanelText;
-
-                    const loadPanelOnShownHandler = () => {
-                        actualLoadPanelText = pivotGrid.option('loadPanel').text;
-                    };
-
-                    pivotGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-
-                    exportPivotGrid({ component: pivotGrid, worksheet: this.worksheet }).then(() => {
-                        assert.strictEqual(actualLoadPanelText, localizationText.expected, 'loadPanel.text');
-                        done();
-                    });
-                } finally {
-                    localization.locale(locale);
-                }
             });
         });
     });
@@ -5858,4 +5858,14 @@ ExcelJSLocalizationFormatTests.runPivotGridCurrencyTests([
     { value: 'LBP', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
-ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, function() { return $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'); });
+ExcelJSOptionTests.runTests(moduleConfig, exportPivotGrid.__internals._getFullOptions, () => $('#pivotGrid').dxPivotGrid({}).dxPivotGrid('instance'));
+LoadPanelTests.runTests(moduleConfig, exportPivotGrid, () => $('#pivotGrid').dxPivotGrid({
+    fields: [
+        { area: 'row', dataField: 'row1', dataType: 'string' },
+        { area: 'column', dataField: 'col1', dataType: 'string' },
+        { area: 'data', summaryType: 'count', dataType: 'number' }
+    ],
+    store: [
+        { row1: 'A', col1: 'a' },
+    ]
+}).dxPivotGrid('instance'), 'worksheet');

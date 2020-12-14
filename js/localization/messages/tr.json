@@ -441,6 +441,7 @@
         "dxGantt-deleteSelectedTask": "TODO",
         "dxGantt-zoomIn": "TODO",
         "dxGantt-zoomOut": "TODO",
-        "dxGantt-fullScreen": "TODO"
+        "dxGantt-fullScreen": "TODO",
+        "dxGantt-quarter": "TODO"
     }
 }

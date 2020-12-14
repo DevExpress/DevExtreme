@@ -531,6 +531,7 @@
         "dxGantt-deleteSelectedTask": "Ausgewählte Aufgabe löschen",
         "dxGantt-zoomIn": "Vergrößern",
         "dxGantt-zoomOut": "Verkleinern",
-        "dxGantt-fullScreen": "Vollbildmodus"
+        "dxGantt-fullScreen": "Vollbildmodus",
+        "dxGantt-quarter": "Q{0}"
     }
 }

@@ -4,32 +4,28 @@ import dxTextBox, {
 
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     /**
-     * @docid dxTextAreaOptions.autoResizeEnabled
-     * @type boolean
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     autoResizeEnabled?: boolean;
     /**
-     * @docid dxTextAreaOptions.maxHeight
-     * @type numeric|string
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxHeight?: number | string;
     /**
-     * @docid dxTextAreaOptions.minHeight
-     * @type numeric|string
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     minHeight?: number | string;
     /**
-     * @docid dxTextAreaOptions.spellcheck
-     * @type boolean
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -37,7 +33,7 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     spellcheck?: boolean;
 }
 /**
- * @docid dxTextArea
+ * @docid
  * @isEditor
  * @inherits dxTextBox
  * @module ui/text_area
