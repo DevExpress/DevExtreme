@@ -6258,19 +6258,55 @@ QUnit.module('Vertical headers', {
             });
         });
 
-        QUnit.test(`applyChangesMode=${applyChangesMode}. pivotGrid.dataSource.reload()`, function(assert) {
+        QUnit.test(`applyChangesMode=${applyChangesMode}. pivotGrid.dataSource.state(newState) multiple times`, function(assert) {
             createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
-                let isEventTriggered = false;
-                fieldChooser.option('onOptionChanged', (e) => {
-                    if(e.name === 'state') {
-                        isEventTriggered = true;
-                    }
-                });
+                let dataSourceEventsCount = 0;
+                fieldChooser.getDataSource().on('changed', () => { dataSourceEventsCount++; });
 
+                let stateEventsCount = 0;
+                const prevStateChangingHandler = fieldChooser._processStateChange;
+                fieldChooser._processStateChange = (newState) => {
+                    stateEventsCount++;
+                    prevStateChangingHandler.call(fieldChooser, newState);
+                };
+
+                const state = fieldChooser.getDataSource().state();
+                state.fields[1].area = undefined;
+
+                fieldChooser.option('state', state);
+                fieldChooser.option('state', state);
+                fieldChooser.option('state', state);
+                clock.tick();
+
+                if(applyChangesMode === 'instantly') {
+                    assert.equal(dataSourceEventsCount, 1, 'dataSource is reloaded only once');
+                    assert.equal(stateEventsCount, 1, 'state is processed only once');
+                } else {
+                    assert.equal(dataSourceEventsCount, 0, 'dataSource is not reloaded');
+                    assert.equal(stateEventsCount, 3, 'state is processed 3 times');
+                }
+            });
+        });
+
+        QUnit.test(`applyChangesMode=${applyChangesMode}. pivotGrid.dataSource.reload() multiple times`, function(assert) {
+            createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
+                let dataSourceEventsCount = 0;
+                fieldChooser.getDataSource().on('changed', () => { dataSourceEventsCount++; });
+
+                let stateEventsCount = 0;
+                const prevStateChangingHandler = fieldChooser._processStateChange;
+                fieldChooser._processStateChange = (newState) => {
+                    stateEventsCount++;
+                    prevStateChangingHandler.call(fieldChooser, newState);
+                };
+
+                grid.getDataSource().reload();
+                grid.getDataSource().reload();
                 grid.getDataSource().reload();
                 clock.tick();
 
-                assert.equal(isEventTriggered, false, 'option changed is not triggered');
+                assert.equal(dataSourceEventsCount, 3, 'datasource is reloaded 3 times');
+                assert.equal(stateEventsCount, 0, 'state is not processed if it is not changed');
             });
         });
     });
