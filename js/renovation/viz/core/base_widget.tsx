@@ -17,7 +17,13 @@ import { ConfigProvider } from '../../ui/common/config_provider';
 import { RootSvgElement } from './renderers/svg_root';
 import { GrayScaleFilter } from './renderers/gray_scale_filter';
 import { Canvas } from './common/types.d';
-import { sizeIsValid, pickPositiveValue, mergeRtlEnabled } from './utils';
+import {
+  sizeIsValid,
+  pickPositiveValue,
+  mergeRtlEnabled,
+  getElementWidth,
+  getElementHeight,
+} from './utils';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 
 const getCssClasses = (model: Partial<BaseWidgetProps>): string => {
@@ -34,8 +40,8 @@ const calculateCanvas = (model: Partial<BaseWidgetProps> & Partial<BaseWidget>):
   const { height, width } = model.size ?? {};
   const margin = model.margin ?? {};
   const defaultCanvas = model.defaultCanvas ?? {};
-  const elementWidth = !sizeIsValid(width) ? model.containerRef?.clientWidth : 0;
-  const elementHeight = !sizeIsValid(height) ? model.containerRef?.clientHeight : 0;
+  const elementWidth = !sizeIsValid(width) ? getElementWidth(model.containerRef) : 0;
+  const elementHeight = !sizeIsValid(height) ? getElementHeight(model.containerRef) : 0;
   const canvas = {
     width: Number(width) <= 0 ? 0 : Math.floor(pickPositiveValue([
       width,

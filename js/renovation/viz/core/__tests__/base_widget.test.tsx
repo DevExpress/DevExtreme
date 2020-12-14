@@ -9,6 +9,9 @@ import { ConfigProvider } from '../../../ui/common/config_provider';
 import config from '../../../../core/config';
 import { clear as clearEventHandlers } from '../../../test_utils/events_mock';
 import { Canvas } from '../common/types.d';
+import getElementComputedStyle from '../../../ui/pager/utils/get_computed_style';
+
+jest.mock('../../../ui/pager/utils/get_computed_style');
 
 describe('BaseWidget', () => {
   describe('View', () => {
@@ -175,21 +178,32 @@ describe('BaseWidget', () => {
       });
 
       it('should get size from container element', () => {
+        (getElementComputedStyle as jest.Mock).mockReturnValue({
+          width: '400px',
+          paddingLeft: '10px',
+          paddingRight: '10px',
+          height: '300px',
+          paddingTop: '10px',
+          paddingBottom: '10px',
+        });
         const widget = new BaseWidget({ });
-        const containerElement = {
-          clientWidth: 400,
-          clientHeight: 300,
-        };
-        widget.containerRef = containerElement as HTMLDivElement;
         widget.setCanvas();
 
         expect(widget.props.canvas).toMatchObject({
-          width: 400,
-          height: 300,
+          width: 380,
+          height: 280,
         });
       });
 
       it('should get default canvas from props (props.defaultCanvas)', () => {
+        (getElementComputedStyle as jest.Mock).mockReturnValue({
+          width: '0px',
+          paddingLeft: '0px',
+          paddingRight: '0px',
+          height: '0px',
+          paddingTop: '0px',
+          paddingBottom: '0px',
+        });
         const defaultCanvas: Canvas = {
           width: 500,
           height: 300,
@@ -212,15 +226,18 @@ describe('BaseWidget', () => {
       });
 
       it('should get merged size from props.size and container element', () => {
+        (getElementComputedStyle as jest.Mock).mockReturnValue({
+          width: '400px',
+          paddingLeft: '0px',
+          paddingRight: '0px',
+          height: '300px',
+          paddingTop: '0px',
+          paddingBottom: '0px',
+        });
         const widget = new BaseWidget({
           size: { width: 600, height: undefined },
           canvas: { width: 300, height: 100 },
         });
-        const containerElement = {
-          clientWidth: 400,
-          clientHeight: 300,
-        };
-        widget.containerRef = containerElement as HTMLDivElement;
         widget.setCanvas();
 
         expect(widget.props.canvas).toMatchObject({
