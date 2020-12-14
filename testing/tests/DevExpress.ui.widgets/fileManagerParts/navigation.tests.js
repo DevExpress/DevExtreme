@@ -816,7 +816,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         this.clock.tick(700);
 
         infos = this.progressPanelWrapper.getInfos();
-        assert.strictEqual(infos.length, 2, 'There is some notification on panel');
+        assert.ok(infos.length > 0, 'There is some notification on panel');
 
         assert.strictEqual(infos[0].common.commonText, 'The directory cannot be opened', 'Title is correct');
 
