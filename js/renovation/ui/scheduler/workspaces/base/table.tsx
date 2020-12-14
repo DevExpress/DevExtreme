@@ -57,7 +57,7 @@ export class TableProps {
   view: viewFunction,
 })
 export class Table extends JSXComponent(TableProps) {
-  get style(): any {
+  get style(): { [key: string]: string | number | undefined } {
     const { height } = this.props;
     const { style } = this.restAttributes;
 
