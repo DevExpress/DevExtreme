@@ -48,10 +48,10 @@ export default class AppointmentDragBehavior {
 
     onDragEnd(e) {
         const element = this.getAppointmentElement(e);
-        container.append(element);
 
         const rawAppointment = this.appointments._getItemData(element);
         const container = this.appointments._getAppointmentContainer(this.isAllDay(element));
+        container.append(element);
 
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
             event: e,
