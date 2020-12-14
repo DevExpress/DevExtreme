@@ -225,53 +225,6 @@
             }
         },
 
-        customContainer: {
-            create: function() {
-                const $container = $('<div>')
-                    .attr('id', 'container')
-                    .css({
-                        position: 'absolute',
-                        top: 100,
-                        left: 100,
-                        height: 300,
-                        width: 300,
-                        overflow: 'hidden'
-                    }).appendTo(document.body);
-
-                $('<div>')
-                    .attr('id', 'what')
-                    .css({
-                        height: 100,
-                        position: 'absolute',
-                        width: 100
-                    }).appendTo($container);
-
-                $('<div>')
-                    .attr('id', 'where')
-                    .css({
-                        height: 30,
-                        width: 30,
-                        position: 'absolute',
-                        top: 250,
-                        left: 250,
-                    }).appendTo($container);
-
-                $('<div>')
-                    .attr('id', 'bounds')
-                    .css({
-                        position: 'absolute',
-                        top: 240,
-                        left: 240,
-                        height: 150,
-                        width: 150
-                    }).appendTo($container);
-            },
-
-            drop: function() {
-                $('#container').remove();
-            }
-        },
-
         svg: {
             create: function() {
                 const $container = $(
