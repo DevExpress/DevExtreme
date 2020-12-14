@@ -82,7 +82,7 @@ export interface DateTimeCellTemplateProps extends BaseTemplateProps {
   data: DateCellTemplateData;
 }
 
-interface GroupCellTemplateData {
+interface ResourceCellTemplateData {
   data: GroupItem;
   id: number | string;
   text?: string;
@@ -90,6 +90,6 @@ interface GroupCellTemplateData {
 }
 
 export interface ResourceCellTemplateProps extends BaseTemplateProps {
-  data: GroupCellTemplateData;
+  data: ResourceCellTemplateData;
 }
 
