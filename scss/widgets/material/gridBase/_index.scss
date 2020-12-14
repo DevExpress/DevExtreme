@@ -186,6 +186,10 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
   }
 
+  .dx-placeholder::before {
+    font-size: $material-grid-base-cell-font-size;
+  }
+
   .dx-#{$widget-name} {
     line-height: inherit;
 
@@ -414,7 +418,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       }
 
       .dx-placeholder::before {
-        font-size: $material-grid-base-cell-font-size;
         padding-right: $material-grid-base-cell-horizontal-padding;
         padding-left: $material-grid-base-cell-horizontal-padding;
       }
