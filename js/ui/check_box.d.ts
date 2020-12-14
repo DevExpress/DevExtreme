@@ -47,6 +47,7 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
      * @docid dxCheckBoxOptions.value
      * @type boolean
      * @default false
+     * @acceptValues undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
