@@ -47,11 +47,11 @@ export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
 export class HeaderPanelLayoutProps {
   @OneWay() className?: string = '';
 
-  @OneWay() viewCellsData?: ViewCellData[][] = [[]];
+  @OneWay() viewCellsData!: ViewCellData[][];
 
   @OneWay() groupOrientation?: GroupOrientation;
 
-  @Template() cellTemplate: JSXTemplate<ViewCellData> = () => null;
+  @Template() cellTemplate!: JSXTemplate<ViewCellData>;
 
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
@@ -60,7 +60,9 @@ export class HeaderPanelLayoutProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class HeaderPanelLayout extends JSXComponent(HeaderPanelLayoutProps) {
+export class HeaderPanelLayout extends JSXComponent<
+HeaderPanelLayoutProps, 'cellTemplate' | 'viewCellsData'
+>() {
   get isVerticalGroupOrientation(): boolean {
     const { groupOrientation } = this.props;
 

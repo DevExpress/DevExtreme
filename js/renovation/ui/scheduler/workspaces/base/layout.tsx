@@ -20,17 +20,19 @@ export const viewFunction = (viewModel: LayoutBase): JSX.Element => (
 
 @ComponentBindings()
 export class LayoutBaseProps extends LayoutProps {
-  @Template() headerPanelTemplate: JSXTemplate<{
+  @Template() headerPanelTemplate!: JSXTemplate<{
     viewCellsData: ViewCellData[][];
-  }> = () => null;
+  }>;
 
-  @Template() dateTableTemplate: JSXTemplate<{
+  @Template() dateTableTemplate!: JSXTemplate<{
     viewData: GroupedViewData;
-  }> = () => null;
+  }>;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class LayoutBase extends JSXComponent(LayoutBaseProps) {}
+export class LayoutBase extends JSXComponent<
+LayoutBaseProps, 'headerPanelTemplate' | 'dateTableTemplate'
+>() {}
