@@ -11,8 +11,10 @@ const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtu
 export default class VirtualScrollingDispatcher {
     constructor(workspace) {
         this._workspace = workspace;
-        this._virtualScrolling = null;
+        this._verticalVirtualScrolling = null;
+        this._horizontalVirtualScrolling = null;
         this._rowHeight = ROW_HEIGHT;
+        this._renderer = new Renderer(this.workspace);
 
         this._createVirtualScrolling();
         this._attachScrollableEvents();
@@ -20,12 +22,17 @@ export default class VirtualScrollingDispatcher {
 
     get workspace() { return this._workspace; }
 
+    get renderer() { return this._renderer; }
+
     get isVirtualScrolling() { return this.workspace.isVirtualScrolling(); }
 
     get minScrollOffset() { return MIN_SCROLL_OFFSET; }
 
-    get virtualScrolling() { return this._virtualScrolling; }
-    set virtualScrolling(value) { this._virtualScrolling = value; }
+    get verticalVirtualScrolling() { return this._verticalVirtualScrolling; }
+    set verticalVirtualScrolling(value) { this._verticalVirtualScrolling = value; }
+
+    get horizontalVirtualScrolling() { return this._horizontalVirtualScrolling; }
+    set horizontalVirtualScrolling(value) { this._horizontalVirtualScrolling = value; }
 
     get document() { return domAdapter.getDocument(); }
 
@@ -48,16 +55,13 @@ export default class VirtualScrollingDispatcher {
         return topVirtualRowHeight > 0 ? 1 : 0;
     }
 
-    getRenderTimeout() {
-        return VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT;
+
+    getState() { // TODO - separate state
+        return this.verticalVirtualScrolling.getState();
     }
 
-    getState() {
-        return this.virtualScrolling.getState();
-    }
-
-    calculateCoordinatesByDataAndPosition(cellData, position, date) {
-        return this.virtualScrolling.calculateCoordinatesByDataAndPosition(cellData, position, date);
+    calculateCoordinatesByDataAndPosition(cellData, position, date) { // TODO -> strategies
+        return this.verticalVirtualScrolling.calculateCoordinatesByDataAndPosition(cellData, position, date);
     }
 
     dispose() {
@@ -67,11 +71,11 @@ export default class VirtualScrollingDispatcher {
     }
 
     _createVirtualScrolling() {
-        this.virtualScrolling = new VirtualScrolling(
-            this.workspace,
-            this.viewportHeight,
-            this.rowHeight
-        );
+        this.verticalVirtualScrolling = new VerticalVirtualScrolling({
+            workspace: this.workspace,
+            viewportHeight: this.viewportHeight,
+            rowHeight: this.rowHeight
+        });
     }
 
     _attachScrollableEvents() {
@@ -113,54 +117,33 @@ export default class VirtualScrollingDispatcher {
     }
 
     _process(scrollPosition) {
-        scrollPosition
-            && this.virtualScrolling.updateState(scrollPosition)
-            && this._updateRender();
+        if(scrollPosition) {
+            this.verticalVirtualScrolling.updateState(scrollPosition);
+
+            // TODO
+            // this.horizontalVirtualScrolling.updateState(scrollPosition);
+
+            this.renderer.updateRender();
+        }
     }
 
     updateDimensions() {
         const cellHeight = this.workspace.getCellHeight(false);
         if(cellHeight !== this.rowHeight) {
             this.rowHeight = cellHeight;
+
             this._createVirtualScrolling();
 
-            this._renderDateTable();
-        }
-    }
-
-    _updateRender() {
-        this._renderDateTable();
-        this._renderAppointments();
-    }
-
-    _renderDateTable() {
-        this.workspace.renderRWorkspace(false);
-    }
-
-    _renderAppointments() {
-        const { workspace } = this;
-        const renderTimeout = this.getRenderTimeout();
-
-        if(renderTimeout >= 0) {
-
-            clearTimeout(this._renderAppointmentTimeout);
-
-            this._renderAppointmentTimeout = setTimeout(
-                () => workspace.updateAppointments(),
-                renderTimeout
-            );
-        } else {
-            workspace.updateAppointments();
+            this.renderer._renderDateTable();
         }
     }
 }
 
-class VirtualScrolling {
-    constructor(workspace, viewportHeight, rowHeight) {
-        this._workspace = workspace;
-        this._viewportHeight = viewportHeight;
-        this._renderAppointmentTimeout = null;
-        this._rowHeight = rowHeight;
+class VerticalVirtualScrolling {
+    constructor(options) {
+        this._workspace = options.workspace;
+        this._viewportHeight = options.viewportHeight;
+        this._rowHeight = options.rowHeight;
 
         this._init();
     }
@@ -368,6 +351,45 @@ class VirtualScrolling {
         if(needAddRows) {
             state.topVirtualRowHeight = topVirtualRowHeight;
             state.bottomVirtualRowHeight = bottomVirtualRowHeight;
+        }
+    }
+}
+
+class Renderer {
+    constructor(workspace) {
+        this._workspace = workspace;
+        this._renderAppointmentTimeout = null;
+    }
+
+    getRenderTimeout() {
+        return VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT;
+    }
+
+    get workspace() { return this._workspace; }
+
+    updateRender() {
+        this._renderDateTable();
+        this._renderAppointments();
+    }
+
+    _renderDateTable() {
+        this.workspace.renderRWorkspace(false);
+    }
+
+    _renderAppointments() {
+        const { workspace } = this;
+        const renderTimeout = this.getRenderTimeout();
+
+        if(renderTimeout >= 0) {
+
+            clearTimeout(this._renderAppointmentTimeout);
+
+            this._renderAppointmentTimeout = setTimeout(
+                () => workspace.updateAppointments(),
+                renderTimeout
+            );
+        } else {
+            workspace.updateAppointments();
         }
     }
 }

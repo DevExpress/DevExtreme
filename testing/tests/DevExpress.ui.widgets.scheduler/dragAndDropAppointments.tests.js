@@ -1561,10 +1561,10 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(dragSource.length, 1, 'Drag source exists');
 
         const { virtualScrollingDispatcher } = workSpace;
-        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
         // Cause rerender of the grid and appointments
-        virtualScrollingDispatcher._updateRender();
+        virtualScrollingDispatcher.renderer.updateRender();
 
         appointments = scheduler.appointments.find(appointmentTitle);
         dragSource = scheduler.appointments.getDragSource();
@@ -1838,7 +1838,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             .move(0, 50);
 
         const { virtualScrollingDispatcher } = schedulerInstance.getWorkSpace();
-        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
         scheduler.instance.scrollTo(new Date(2020, 9, 14, 18));
 
@@ -1979,9 +1979,9 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             const schedulerInstance = scheduler.instance;
             const { virtualScrollingDispatcher } = schedulerInstance.getWorkSpace();
 
-            virtualScrollingDispatcher.getRenderTimeout = () => -1;
+            virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
             // Cause rerender of the grid and appointments
-            virtualScrollingDispatcher._updateRender();
+            virtualScrollingDispatcher.renderer.updateRender();
 
 
             const $firstAppointment = scheduler.appointments.find(firstAppointmentTitle).eq(dragSourceIndex);
@@ -2104,10 +2104,10 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         const workSpace = schedulerInstance.getWorkSpace();
 
         const { virtualScrollingDispatcher } = workSpace;
-        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
         // Cause rerender of the grid and appointments
-        virtualScrollingDispatcher._updateRender();
+        virtualScrollingDispatcher.renderer.updateRender();
 
         const dragSource = scheduler.appointments.getDragSource(0);
 
@@ -2137,7 +2137,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         const workSpace = schedulerInstance.getWorkSpace();
 
         const { virtualScrollingDispatcher } = workSpace;
-        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
         const $appointment = scheduler.appointments.find(appointmentTitle).first();
         const positionBeforeDrag = getAbsolutePosition($appointment);
@@ -2157,7 +2157,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             .move(cellCenter.left - positionBeforeDrag.left, cellCenter.top - positionBeforeDrag.top);
 
         // Cause rerender of the grid and appointments
-        virtualScrollingDispatcher._updateRender();
+        virtualScrollingDispatcher.renderer.updateRender();
 
         const draggedAppointment = scheduler.appointments.getFakeAppointmentWrapper();
         const nextPointer = pointerMock(draggedAppointment);
@@ -2263,7 +2263,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         const workSpace = schedulerInstance.getWorkSpace();
 
         const { virtualScrollingDispatcher } = workSpace;
-        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
         const $appointment = scheduler.appointments.find(appointmentTitle).first();
         const positionBeforeDrag = getAbsolutePosition($appointment);

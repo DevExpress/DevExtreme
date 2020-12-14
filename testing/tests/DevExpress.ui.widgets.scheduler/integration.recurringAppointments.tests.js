@@ -45,7 +45,7 @@ QUnit.testStart(function() {
 
                 const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
                 if(virtualScrollingDispatcher) {
-                    virtualScrollingDispatcher.getRenderTimeout = () => -1;
+                    virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
                 }
 
                 this.scheduler = new SchedulerTestWrapper(this.instance);
