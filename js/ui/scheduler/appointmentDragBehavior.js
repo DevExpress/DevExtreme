@@ -47,14 +47,19 @@ export default class AppointmentDragBehavior {
     }
 
     onDragEnd(e) {
-        const $appointment = this.getAppointmentElement(e);
-        const container = this.appointments._getAppointmentContainer(this.isAllDay($appointment));
-        container.append($appointment);
+        const element = this.getAppointmentElement(e);
+        const rawAppointment = this.appointments._getItemData(element);
+        const container = this.appointments._getAppointmentContainer(this.isAllDay(element));
+        container.append(element);
 
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
+            // event: e,
+            // data: this.appointments._getItemData($appointment),
+            // $appointment: $appointment,
+            // coordinates: this.initialPosition
             event: e,
-            data: this.appointments._getItemData($appointment),
-            $appointment: $appointment,
+            element,
+            rawAppointment,
             coordinates: this.initialPosition
         });
     }

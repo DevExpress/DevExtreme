@@ -2058,10 +2058,14 @@ class Scheduler extends Widget {
     _getUpdatedData(options) {
         const target = options.data || options;
         const cellData = this.getTargetCellData();
+
+        const cellStartDate = this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
+        const cellEndDate = this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
+
         const targetAllDay = this.fire('getField', 'allDay', target);
         let targetStartDate = new Date(this.fire('getField', 'startDate', target));
         let targetEndDate = new Date(this.fire('getField', 'endDate', target));
-        let date = cellData.startDate || targetStartDate;
+        let date = cellStartDate || targetStartDate;
 
         if(!targetStartDate || isNaN(targetStartDate)) {
             targetStartDate = date;
@@ -2069,9 +2073,9 @@ class Scheduler extends Widget {
         const targetStartTime = targetStartDate.getTime();
 
         if(!targetEndDate || isNaN(targetEndDate)) {
-            targetEndDate = cellData.endDate;
+            targetEndDate = cellEndDate;
         }
-        const targetEndTime = targetEndDate.getTime() || cellData.endData;
+        const targetEndTime = targetEndDate.getTime() || cellEndDate;
 
         const duration = targetEndTime - targetStartTime;
 
