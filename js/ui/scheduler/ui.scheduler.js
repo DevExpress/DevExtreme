@@ -2059,8 +2059,8 @@ class Scheduler extends Widget {
         const target = options.data || options;
         const cellData = this.getTargetCellData();
 
-        const cellStartDate = this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' });
-        const cellEndDate = this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' });
+        const cellStartDate = cellData.startDate ? this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' }) : undefined;
+        const cellEndDate = cellData.endDate ? this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' }) : undefined;
 
         const targetAllDay = this.fire('getField', 'allDay', target);
         let targetStartDate = new Date(this.fire('getField', 'startDate', target));

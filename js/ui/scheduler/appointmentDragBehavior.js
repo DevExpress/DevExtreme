@@ -116,11 +116,10 @@ export default class AppointmentDragBehavior {
 
     createDropHandler(appointmentDragging) {
         return (e) => {
-            const rawAppointment = extend({}, e.itemData, this.appointments.invoke('getUpdatedData', {
+            const updatedData = this.appointments.invoke('getUpdatedData', {
                 data: e.itemData
-            }));
-
-            e.itemData = this.scheduler.createAppointmentAdapter(rawAppointment).clone({ pathTimeZone: 'fromGrid' }).source();
+            });
+            e.itemData = extend({}, e.itemData, updatedData);
 
             if(e.fromComponent !== e.toComponent) {
                 appointmentDragging.onAdd && appointmentDragging.onAdd(e);
