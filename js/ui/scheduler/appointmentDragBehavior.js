@@ -48,15 +48,12 @@ export default class AppointmentDragBehavior {
 
     onDragEnd(e) {
         const element = this.getAppointmentElement(e);
-        const rawAppointment = this.appointments._getItemData(element);
-        const container = this.appointments._getAppointmentContainer(this.isAllDay(element));
         container.append(element);
 
+        const rawAppointment = this.appointments._getItemData(element);
+        const container = this.appointments._getAppointmentContainer(this.isAllDay(element));
+
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
-            // event: e,
-            // data: this.appointments._getItemData($appointment),
-            // $appointment: $appointment,
-            // coordinates: this.initialPosition
             event: e,
             element,
             rawAppointment,
@@ -116,9 +113,7 @@ export default class AppointmentDragBehavior {
 
     createDropHandler(appointmentDragging) {
         return (e) => {
-            const updatedData = this.appointments.invoke('getUpdatedData', {
-                data: e.itemData
-            });
+            const updatedData = this.appointments.invoke(e.itemData);
             e.itemData = extend({}, e.itemData, updatedData);
 
             if(e.fromComponent !== e.toComponent) {

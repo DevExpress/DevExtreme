@@ -89,15 +89,15 @@ const subscribes = {
         }).bind(this));
     },
 
-    getUpdatedData: function(options) {
-        return this._getUpdatedData({ data: options.data });
+    getUpdatedData: function(rawAppointment) {
+        return this._getUpdatedData(rawAppointment);
     },
 
     updateAppointmentAfterDrag: function({ event, element, rawAppointment, coordinates }) {
         const info = utils.dataAccessors.getAppointmentInfo(element);
 
         const appointment = this.createAppointmentAdapter(rawAppointment);
-        const targetedAppointment = this.createAppointmentAdapter(extend({}, rawAppointment, this._getUpdatedData({ data: rawAppointment })));
+        const targetedAppointment = this.createAppointmentAdapter(extend({}, rawAppointment, this._getUpdatedData(rawAppointment)));
         const targetedRawAppointment = targetedAppointment.source();
 
         const newCellIndex = this._workSpace.getDroppableCellIndex();

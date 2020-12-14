@@ -2055,48 +2055,47 @@ class Scheduler extends Widget {
         }).show();
     }
 
-    _getUpdatedData(options) {
-        const target = options.data || options;
-        const cellData = this.getTargetCellData();
+    _getUpdatedData(rawAppointment) {
+        const targetCellData = this.getTargetCellData();
+        const appointment = this.createAppointmentAdapter(rawAppointment);
 
-        const cellStartDate = cellData.startDate ? this.timeZoneCalculator.createDate(cellData.startDate, { path: 'fromGrid' }) : undefined;
-        const cellEndDate = cellData.endDate ? this.timeZoneCalculator.createDate(cellData.endDate, { path: 'fromGrid' }) : undefined;
+        const cellStartDate = targetCellData.startDate ? this.timeZoneCalculator.createDate(targetCellData.startDate, { path: 'fromGrid' }) : undefined;
+        const cellEndDate = targetCellData.endDate ? this.timeZoneCalculator.createDate(targetCellData.endDate, { path: 'fromGrid' }) : undefined;
 
-        const targetAllDay = this.fire('getField', 'allDay', target);
-        let targetStartDate = new Date(this.fire('getField', 'startDate', target));
-        let targetEndDate = new Date(this.fire('getField', 'endDate', target));
-        let date = cellStartDate || targetStartDate;
+        let appointmentStartDate = new Date(appointment.startDate);
+        let appointmentEndDate = new Date(appointment.endDate);
+        let date = cellStartDate || appointmentStartDate;
 
-        if(!targetStartDate || isNaN(targetStartDate)) {
-            targetStartDate = date;
+        if(!appointmentStartDate || isNaN(appointmentStartDate)) {
+            appointmentStartDate = date;
         }
-        const targetStartTime = targetStartDate.getTime();
+        const targetStartTime = appointmentStartDate.getTime();
 
-        if(!targetEndDate || isNaN(targetEndDate)) {
-            targetEndDate = cellEndDate;
+        if(!appointmentEndDate || isNaN(appointmentEndDate)) {
+            appointmentEndDate = cellEndDate;
         }
-        const targetEndTime = targetEndDate.getTime() || cellEndDate;
+        const targetEndTime = appointmentEndDate.getTime() || cellEndDate;
 
         const duration = targetEndTime - targetStartTime;
 
         if(this._workSpace.keepOriginalHours()) {
-            const diff = targetStartTime - dateUtils.trimTime(targetStartDate).getTime();
+            const diff = targetStartTime - dateUtils.trimTime(appointmentStartDate).getTime();
             date = new Date(dateUtils.trimTime(date).getTime() + diff);
         }
 
-        const updatedData = {};
-        const allDay = cellData.allDay;
+        const result = {};
+        const allDay = targetCellData.allDay;
 
-        this.fire('setField', 'allDay', updatedData, allDay);
-        this.fire('setField', 'startDate', updatedData, date);
+        this.fire('setField', 'allDay', result, allDay);
+        this.fire('setField', 'startDate', result, date);
 
         let endDate = new Date(date.getTime() + duration);
 
-        if(this.appointmentTakesAllDay(target) && !updatedData.allDay && this._workSpace.supportAllDayRow()) {
+        if(this.appointmentTakesAllDay(rawAppointment) && !result.allDay && this._workSpace.supportAllDayRow()) {
             endDate = this._workSpace.calculateEndDate(date);
         }
 
-        if(targetAllDay && !this._workSpace.supportAllDayRow() && !this._workSpace.keepOriginalHours()) {
+        if(appointment.allDay && !this._workSpace.supportAllDayRow() && !this._workSpace.keepOriginalHours()) {
             const dateCopy = new Date(date);
             dateCopy.setHours(0);
 
@@ -2107,12 +2106,12 @@ class Scheduler extends Widget {
             }
         }
 
-        endDate = new Date(endDate.getTime() - timeZoneUtils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
+        endDate = new Date(endDate.getTime() - timeZoneUtils.getTimezoneOffsetChangeInMs(appointmentStartDate, appointmentEndDate, date, endDate));
 
-        this.fire('setField', 'endDate', updatedData, endDate);
-        this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
+        this.fire('setField', 'endDate', result, endDate);
+        this._resourcesManager.setResourcesToItem(result, targetCellData.groups);
 
-        return updatedData;
+        return result;
     }
 
     getTargetedAppointment(appointment, element) {
