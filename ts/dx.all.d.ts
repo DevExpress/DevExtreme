@@ -7768,25 +7768,49 @@ declare module DevExpress.ui {
          */
         onCustomCommand?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, name?: string }) => any);
         /**
+         * [descr:dxGantt.Options.onDependencyDeleted]
+         */
+        onDependencyDeleted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, key?: any }) => any);
+        /**
          * [descr:dxGantt.Options.onDependencyDeleting]
          */
         onDependencyDeleting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
+        /**
+         * [descr:dxGantt.Options.onDependencyInserted]
+         */
+        onDependencyInserted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, values?: any, key?: any }) => any);
         /**
          * [descr:dxGantt.Options.onDependencyInserting]
          */
         onDependencyInserting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any }) => any);
         /**
+         * [descr:dxGantt.Options.onResourceAssigned]
+         */
+        onResourceAssigned?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, values?: any, key?: any }) => any);
+        /**
          * [descr:dxGantt.Options.onResourceAssigning]
          */
         onResourceAssigning?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any }) => any);
+        /**
+         * [descr:dxGantt.Options.onResourceDeleted]
+         */
+        onResourceDeleted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, key?: any }) => any);
         /**
          * [descr:dxGantt.Options.onResourceDeleting]
          */
         onResourceDeleting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
         /**
+         * [descr:dxGantt.Options.onResourceInserted]
+         */
+        onResourceInserted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, values?: any, key?: any }) => any);
+        /**
          * [descr:dxGantt.Options.onResourceInserting]
          */
         onResourceInserting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any }) => any);
+        /**
+         * [descr:dxGantt.Options.onResourceUnassigned]
+         */
+        onResourceUnassigned?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, key?: any, values?: any }) => any);
         /**
          * [descr:dxGantt.Options.onResourceUnassigning]
          */
@@ -7804,6 +7828,10 @@ declare module DevExpress.ui {
          */
         onTaskDblClick?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, event?: DevExpress.events.event, key?: any, data?: any }) => any);
         /**
+         * [descr:dxGantt.Options.onTaskDeleted]
+         */
+        onTaskDeleted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, key?: any }) => any);
+        /**
          * [descr:dxGantt.Options.onTaskDeleting]
          */
         onTaskDeleting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
@@ -7812,6 +7840,10 @@ declare module DevExpress.ui {
          */
         onTaskEditDialogShowing?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any, key?: any, readOnlyFields?: Array<string>, hiddenFields?: Array<string> }) => any);
         /**
+         * [descr:dxGantt.Options.onTaskInserted]
+         */
+        onTaskInserted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, values?: any, key?: any }) => any);
+        /**
          * [descr:dxGantt.Options.onTaskInserting]
          */
         onTaskInserting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any }) => any);
@@ -7819,6 +7851,10 @@ declare module DevExpress.ui {
          * [descr:dxGantt.Options.onTaskMoving]
          */
         onTaskMoving?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => any);
+        /**
+         * [descr:dxGantt.Options.onTaskUpdated]
+         */
+        onTaskUpdated?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, values?: any, key?: any }) => any);
         /**
          * [descr:dxGantt.Options.onTaskUpdating]
          */
