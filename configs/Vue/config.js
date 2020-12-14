@@ -4,6 +4,9 @@ System.config({
     '*.vue': {
       loader: 'vue-loader'
     },
+    'devextreme/localization.js': {
+      "esModule": true
+    },
     /** devextreme-aspnet-data-nojquery */
     'devextreme-aspnet-data-nojquery': {
       'esModule': true

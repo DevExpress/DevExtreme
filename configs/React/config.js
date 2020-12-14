@@ -1,6 +1,9 @@
 System.config({
   transpiler: 'plugin-babel',
   meta: {
+    'devextreme/localization.js': {
+      "esModule": true
+    },
     /** devextreme-aspnet-data-nojquery */
     'devextreme-aspnet-data-nojquery': {
       'esModule': true
