@@ -43,7 +43,7 @@ export class GanttDataCache {
         this._clearTimer(key);
     }
     _clearCache(key) {
-        this._cache[key];
+        delete this._cache[key];
     }
     _clearTimer(key) {
         const timers = this._timers;
