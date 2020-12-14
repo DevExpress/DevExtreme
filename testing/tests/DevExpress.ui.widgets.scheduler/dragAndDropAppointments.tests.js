@@ -842,6 +842,36 @@ module('Common', commonModuleConfig, () => {
 
         pointer.up();
     });
+
+    test('Dragged appointment should not have a right border', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'App 1',
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            }],
+            height: 600,
+            views: ['day'],
+            currentDate: new Date(2018, 4, 21),
+            startDayHour: 9,
+            endDayHour: 16
+        });
+
+        const $appointment = scheduler.appointments.getAppointment();
+        const positionBeforeDrag = getAbsolutePosition($appointment);
+
+        const pointer = pointerMock($appointment)
+            .start()
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(50, 50);
+
+        const fakeAppointment = scheduler.appointments.getFakeAppointment();
+        fakeAppointment.css('border-left', 'none');
+
+        assert.equal(fakeAppointment.outerWidth() - fakeAppointment.innerWidth(), 0, 'Correct width');
+
+        pointer.up();
+    });
 });
 
 module('appointmentDragging customization', $.extend({}, {
