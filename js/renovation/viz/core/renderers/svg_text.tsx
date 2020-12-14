@@ -8,6 +8,7 @@ import {
   OneWay,
   Effect,
   Ref,
+  RefObject,
   Consumer,
 } from 'devextreme-generator/component_declaration/common';
 import { LabelAlignment } from './types.d';
@@ -39,7 +40,7 @@ export const viewFunction = ({
   const texts = textItems || [];
   return (
     <text
-      ref={textRef as any}
+      ref={textRef}
       x={x}
       y={y}
       style={styles}
@@ -84,7 +85,7 @@ export class TextSvgElementProps extends SvgGraphicsProps {
   isSVG: true,
 })
 export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
-  @Ref() textRef!: SVGGraphicsElement;
+  @Ref() textRef!: RefObject<SVGTextElement>;
 
   @Consumer(ConfigContext)
   config?: ConfigContextValue;

@@ -6,6 +6,7 @@ import {
   Ref,
   InternalState,
   Consumer,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
 import { mergeRtlEnabled } from '../core/utils';
@@ -90,7 +91,7 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
   const isValidBullet = isValidBulletScale(scaleProps);
   return (
     <BaseWidget
-      ref={viewModel.widgetRef as any}
+      ref={viewModel.widgetRef}
       classes={viewModel.cssClasses}
       className={viewModel.cssClassName}
       size={viewModel.props.size}
@@ -170,7 +171,7 @@ export class BulletProps extends BaseWidgetProps {
   },
 })
 export class Bullet extends JSXComponent(BulletProps) {
-  @Ref() widgetRef!: BaseWidget;
+  @Ref() widgetRef!: RefObject<BaseWidget>;
 
   @InternalState() argumentAxis = createAxis(true);
 
