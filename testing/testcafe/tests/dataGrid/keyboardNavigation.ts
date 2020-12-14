@@ -2,6 +2,7 @@ import { Selector, ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
+import CommandCell from '../../model/dataGrid/command-cell';
 
 fixture.disablePageReloads`Keyboard Navigation`
   .page(url(__dirname, '../container.html'))
@@ -1884,9 +1885,12 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
           allowUpdating: true,
         },
       });
-    }).after(() => ClientFunction(() => {
-      $('#myinput').remove();
-    })());
+    }).after(async () => {
+      await ClientFunction(() => {
+        $('#myinput').remove();
+      })();
+      await disposeWidgets();
+    });
   });
 });
 
@@ -1971,7 +1975,529 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     dataSource: [],
     columns: ['id'],
   });
-}).after(() => ClientFunction(() => {
-  $('#myinput1').remove();
-  $('#myinput2').remove();
-})());
+}).after(async () => {
+  await ClientFunction(() => {
+    $('#myinput1').remove();
+    $('#myinput2').remove();
+  })();
+  await disposeWidgets();
+});
+
+[false, true].forEach((isCommandColumnFixed) => {
+  test(`The first cell should be focused on pressing the tab key after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the left side (T951849)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const headers = dataGrid.getHeaders();
+    const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
+
+    async function checkNavigationOfAllCells(): Promise<void> {
+      let $buttonElement: Selector;
+      let $commandCell: CommandCell;
+
+      await t
+        .click(headers.getHeaderRow(0).getHeaderCell(1).element)
+        .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(headers.getHeaderRow(0).getHeaderCell(2).element.focused)
+        .ok()
+        .pressKey('tab');
+
+      if (isCommandColumnFixed) {
+        $commandCell = dataGrid.getFixedDataRow(0).getCommandCell(0);
+        $buttonElement = $commandCell.getButton(0);
+      } else {
+        $commandCell = dataGrid.getDataRow(0).getCommandCell(0);
+        $buttonElement = $commandCell.getButton(0);
+      }
+
+      await t
+        .expect($commandCell.element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect($buttonElement.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 1).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 2).element.focused)
+        .ok()
+        .pressKey('tab');
+
+      if (isCommandColumnFixed) {
+        $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(0).getButton(0);
+      } else {
+        $buttonElement = dataGrid.getDataRow(1).getCommandCell(0).getButton(0);
+      }
+
+      await t
+        .expect($buttonElement.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 1).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 2).element.focused)
+        .ok();
+    }
+
+    await checkNavigationOfAllCells();
+
+    await t
+      .pressKey('tab')
+      .expect(dataGrid.getDataCell(1, 2).element.focused)
+      .notOk()
+      .click(Selector('body'), {
+        offsetY: dataGridOffsetBottom + 10,
+      });
+
+    await checkNavigationOfAllCells();
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { name: 'Alex', c0: 'c0_0' },
+        { name: 'Ben', c0: 'c0_1' },
+      ],
+      keyExpr: 'name',
+      columns: [{ type: 'buttons', fixed: isCommandColumnFixed, fixedPosition: 'left' }, 'name', 'c0'],
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        useIcons: true,
+      },
+      sorting: {
+        mode: 'none',
+      },
+    });
+  });
+
+  test(`The cell focus should be restored on pressing shift and tab keys when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the left side (T951849)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const headers = dataGrid.getHeaders();
+
+    async function checkNavigationOfAllCells(): Promise<void> {
+      let $commandCell: CommandCell;
+      let $buttonElement: Selector;
+
+      await t
+        .click(headers.getHeaderRow(0).getHeaderCell(1).element)
+        .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(headers.getHeaderRow(0).getHeaderCell(2).element.focused)
+        .ok()
+        .pressKey('tab');
+
+      if (isCommandColumnFixed) {
+        $commandCell = dataGrid.getFixedDataRow(0).getCommandCell(0);
+        $buttonElement = $commandCell.getButton(0);
+      } else {
+        $commandCell = dataGrid.getDataRow(0).getCommandCell(0);
+        $buttonElement = $commandCell.getButton(0);
+      }
+
+      await t
+        .expect($commandCell.element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect($buttonElement.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 1).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 2).element.focused)
+        .ok()
+        .pressKey('tab');
+
+      if (isCommandColumnFixed) {
+        $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(0).getButton(0);
+      } else {
+        $buttonElement = dataGrid.getDataRow(1).getCommandCell(0).getButton(0);
+      }
+
+      await t
+        .expect($buttonElement.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 1).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 2).element.focused)
+        .ok();
+    }
+
+    await checkNavigationOfAllCells();
+
+    await t
+      .pressKey('tab')
+      .expect(dataGrid.getDataCell(1, 2).element.focused)
+      .notOk()
+      .pressKey('shift+tab')
+      .expect(dataGrid.getDataCell(1, 2).element.focused)
+      .ok();
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { name: 'Alex', c0: 'c0_0' },
+        { name: 'Ben', c0: 'c0_1' },
+      ],
+      keyExpr: 'name',
+      columns: [{ type: 'buttons', fixed: isCommandColumnFixed, fixedPosition: 'left' }, 'name', 'c0'],
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        useIcons: true,
+      },
+      sorting: {
+        mode: 'none',
+      },
+    });
+  });
+
+  test(`The first cell should be focused on pressing the tab key after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const headers = dataGrid.getHeaders();
+    const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
+    let $buttonElement: Selector;
+
+    async function checkNavigationOfAllCells(): Promise<void> {
+      await t
+        .click(headers.getHeaderRow(0).getHeaderCell(0).element)
+        .expect(headers.getHeaderRow(0).getHeaderCell(0).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 0).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 1).element.focused)
+        .ok()
+        .pressKey('tab');
+
+      if (isCommandColumnFixed) {
+        $buttonElement = dataGrid.getFixedDataRow(0).getCommandCell(2).getButton(0);
+      } else {
+        $buttonElement = dataGrid.getDataRow(0).getCommandCell(2).getButton(0);
+      }
+
+      await t
+        .expect($buttonElement.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 0).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 1).element.focused)
+        .ok()
+        .pressKey('tab');
+
+      if (isCommandColumnFixed) {
+        $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0);
+      } else {
+        $buttonElement = dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
+      }
+
+      await t
+        .expect($buttonElement.focused)
+        .ok();
+    }
+
+    await checkNavigationOfAllCells();
+
+    await t
+      .pressKey('tab');
+
+    if (isCommandColumnFixed) {
+      $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0);
+    } else {
+      $buttonElement = dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
+    }
+
+    await t
+      .expect($buttonElement.focused)
+      .notOk()
+      .click(Selector('body'), {
+        offsetY: dataGridOffsetBottom + 10,
+      });
+
+    await checkNavigationOfAllCells();
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { name: 'Alex', c0: 'c0_0' },
+        { name: 'Ben', c0: 'c0_1' },
+      ],
+      keyExpr: 'name',
+      columns: ['name', 'c0', { type: 'buttons', fixed: isCommandColumnFixed, fixedPosition: 'right' }],
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        useIcons: true,
+      },
+      sorting: {
+        mode: 'none',
+      },
+    });
+  });
+
+  test(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const headers = dataGrid.getHeaders();
+    const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
+
+    async function checkNavigationOfAllCells(): Promise<void> {
+      let $buttonElement: Selector;
+
+      await t
+        .click(headers.getHeaderRow(0).getHeaderCell(0).element)
+        .expect(headers.getHeaderRow(0).getHeaderCell(0).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 0).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 1).element.focused)
+        .ok()
+        .pressKey('tab');
+
+      if (isCommandColumnFixed) {
+        $buttonElement = dataGrid.getFixedDataRow(0).getCommandCell(2).getButton(0);
+      } else {
+        $buttonElement = dataGrid.getDataRow(0).getCommandCell(2).getButton(0);
+      }
+
+      await t
+        .expect($buttonElement.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 0).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 1).element.focused)
+        .ok();
+    }
+
+    await checkNavigationOfAllCells();
+
+    await t
+      .click(Selector('body'), {
+        offsetY: dataGridOffsetBottom + 10,
+      })
+      .pressKey('shift+tab')
+      .expect(dataGrid.getDataCell(0, 0).element.focused)
+      .ok();
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { name: 'Alex', c0: 'c0_0' },
+        { name: 'Ben', c0: 'c0_1' },
+      ],
+      keyExpr: 'name',
+      columns: ['name', 'c0', { type: 'buttons', fixed: isCommandColumnFixed, fixedPosition: 'right' }],
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        useIcons: true,
+      },
+      sorting: {
+        mode: 'none',
+      },
+    });
+  });
+
+  test(`The cell focus should be restored on pressing shift and tab keys when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const headers = dataGrid.getHeaders();
+    let $buttonElement: Selector;
+
+    async function checkNavigationOfAllCells(): Promise<void> {
+      await t
+        .click(headers.getHeaderRow(0).getHeaderCell(0).element)
+        .expect(headers.getHeaderRow(0).getHeaderCell(0).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(headers.getHeaderRow(0).getHeaderCell(1).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 0).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 1).element.focused)
+        .ok()
+        .pressKey('tab');
+
+      if (isCommandColumnFixed) {
+        $buttonElement = dataGrid.getFixedDataRow(0).getCommandCell(2).getButton(0);
+      } else {
+        $buttonElement = dataGrid.getDataRow(0).getCommandCell(2).getButton(0);
+      }
+
+      await t
+        .expect($buttonElement.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 0).element.focused)
+        .ok()
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 1).element.focused)
+        .ok()
+        .pressKey('tab');
+
+      if (isCommandColumnFixed) {
+        $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0);
+      } else {
+        $buttonElement = dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
+      }
+
+      await t
+        .expect($buttonElement.focused)
+        .ok();
+    }
+
+    await checkNavigationOfAllCells();
+
+    await t
+      .pressKey('tab');
+
+    if (isCommandColumnFixed) {
+      $buttonElement = dataGrid.getFixedDataRow(1).getCommandCell(2).getButton(0);
+    } else {
+      $buttonElement = dataGrid.getDataRow(1).getCommandCell(2).getButton(0);
+    }
+
+    await t
+      .expect($buttonElement.focused)
+      .notOk()
+      .pressKey('shift+tab')
+      .expect($buttonElement.focused)
+      .ok()
+      .pressKey('shift+tab')
+      .expect(dataGrid.getDataCell(1, 1).element.focused)
+      .ok();
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { name: 'Alex', c0: 'c0_0' },
+        { name: 'Ben', c0: 'c0_1' },
+      ],
+      keyExpr: 'name',
+      columns: ['name', 'c0', { type: 'buttons', fixed: isCommandColumnFixed, fixedPosition: 'right' }],
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        useIcons: true,
+      },
+      sorting: {
+        mode: 'none',
+      },
+    });
+  });
+});
+
+test('Grid should get focus when the focus method is called (T955678)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const button = Selector('#mycontainer');
+
+  // act
+  await t
+    .click(button);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(1).isFocusedRow)
+    .ok();
+
+  // act
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .ok();
+
+  // act
+  await t
+    .click(Selector('body'), {
+      offsetY: 20,
+      offsetX: 200,
+    })
+    .click(button)
+    .pressKey('right');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .click(Selector('body'), {
+      offsetY: 20,
+      offsetX: 200,
+    })
+    .click(button);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(1).isFocusedRow)
+    .ok();
+}).before(async () => {
+  await ClientFunction(() => {
+    $('<div id="mycontainer">').prependTo('body');
+  })();
+  await createWidget('dxButton', {
+    text: 'Focus',
+    onClick() {
+      ($('#container') as any).dxDataGrid('instance').focus();
+    },
+  }, false, '#mycontainer');
+  await createWidget('dxDataGrid', {
+    dataSource: [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+  });
+}).after(async () => {
+  await disposeWidgets();
+  await ClientFunction(() => {
+    $('#mycontainer').remove();
+  })();
+});
