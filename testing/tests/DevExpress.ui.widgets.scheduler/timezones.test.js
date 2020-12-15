@@ -834,17 +834,32 @@ module('Scheduler grid', moduleConfig, () => {
                     const appointment = scheduler.appointmentList[0];
                     const initialPosition = appointment.rectangle;
 
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right on init');
+
                     appointment.drag.toCell(25);
                     assert.ok(appointment.rectangle.x > initialPosition.x, 'drag to left: current X position should be larger than initial X');
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 24 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to right cell');
 
                     appointment.drag.toCell(24);
                     assert.equal(appointment.rectangle.x, initialPosition.x, 'drag to right: current X position should be equal initial X');
 
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to lefy cell');
+
                     appointment.drag.toCell(17);
                     assert.ok(appointment.rectangle.y < initialPosition.y, 'drag to top: current Y position should be smaller than initial Y');
 
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 16 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to top cell');
+
                     appointment.drag.toCell(24);
                     assert.equal(appointment.rectangle.y, initialPosition.y, 'drag to bottom: current Y position should be equal initial Y');
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to bottom cell');
                 });
             });
         });
