@@ -148,12 +148,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 key:any
+     * @type_function_param1_field4 values:any
+     * @type_function_param1_field5 key:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskDeleted?: ((e: { component?: dxGantt, element?: dxElement, model?: any, key?: any }) => any);
+    onTaskDeleted?: ((e: { component?: dxGantt, element?: dxElement, model?: any, values?: any, key?: any }) => any);
     /**
      * @docid dxGanttOptions.onTaskUpdating
      * @extends Action
@@ -249,12 +250,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 key:any
+     * @type_function_param1_field4 values:any
+     * @type_function_param1_field5 key:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDependencyDeleted?: ((e: { component?: dxGantt, element?: dxElement, model?: any, key?: any }) => any);
+    onDependencyDeleted?: ((e: { component?: dxGantt, element?: dxElement, model?: any, values?: any, key?: any }) => any);
     /**
      * @docid dxGanttOptions.onResourceInserting
      * @extends Action
@@ -294,12 +296,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @docid dxGanttOptions.onResourceDeleted
      * @extends Action
      * @type_function_param1 e:object
-     * @type_function_param1_field4 key:any
+     * @type_function_param1_field4 values:any
+     * @type_function_param1_field5 key:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResourceDeleted?: ((e: { component?: dxGantt, element?: dxElement, model?: any, key?: any }) => any);
+    onResourceDeleted?: ((e: { component?: dxGantt, element?: dxElement, model?: any, values?: any, key?: any }) => any);
     /**
      * @docid dxGanttOptions.onResourceAssigning
      * @extends Action
