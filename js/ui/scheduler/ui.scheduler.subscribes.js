@@ -106,7 +106,8 @@ const subscribes = {
         const becomeAllDay = targetedAppointment.allDay;
         const wasAllDay = appointment.allDay;
 
-        const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() && (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
+        const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() &&
+            (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
 
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
             this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, (function() {

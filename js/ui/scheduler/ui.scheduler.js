@@ -2055,12 +2055,12 @@ class Scheduler extends Widget {
         }).show();
     }
 
-    _getUpdatedData(rawAppointment) {
-        const targetCellData = this.getTargetCellData();
+    _getUpdatedData(rawAppointment) { // TODO rename
+        const targetCell = this.getTargetCellData();
         const appointment = this.createAppointmentAdapter(rawAppointment);
 
-        const cellStartDate = targetCellData.startDate ? this.timeZoneCalculator.createDate(targetCellData.startDate, { path: 'fromGrid' }) : undefined;
-        const cellEndDate = targetCellData.endDate ? this.timeZoneCalculator.createDate(targetCellData.endDate, { path: 'fromGrid' }) : undefined;
+        const cellStartDate = targetCell.startDate ? this.timeZoneCalculator.createDate(targetCell.startDate, { path: 'fromGrid' }) : undefined;
+        const cellEndDate = targetCell.endDate ? this.timeZoneCalculator.createDate(targetCell.endDate, { path: 'fromGrid' }) : undefined;
 
         let appointmentStartDate = new Date(appointment.startDate);
         let appointmentEndDate = new Date(appointment.endDate);
@@ -2070,30 +2070,27 @@ class Scheduler extends Widget {
         if(!appointmentStartDate || isNaN(appointmentStartDate)) {
             appointmentStartDate = resultedStartDate;
         }
-        const targetStartTime = appointmentStartDate.getTime();
 
         if(!appointmentEndDate || isNaN(appointmentEndDate)) {
             appointmentEndDate = cellEndDate;
         }
 
-        const targetEndTime = appointmentEndDate.getTime() || cellEndDate;
-        const duration = targetEndTime - targetStartTime;
+        const duration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
 
-        if(this._workSpace.keepOriginalHours()) {
+        if(this._workSpace.keepOriginalHours() && appointment.startDate) {
             const { trimTime } = dateUtils;
 
             const newStartDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
-            const diff = newStartDate.getTime() - trimTime(newStartDate).getTime();
+            const timeInMs = newStartDate.getTime() - trimTime(newStartDate).getTime();
 
-            resultedStartDate = new Date(trimTime(targetCellData.startDate).getTime() + diff);
+            const targetCellMock = targetCell?.startDate || newStartDate;
+            resultedStartDate = new Date(trimTime(targetCellMock).getTime() + timeInMs);
             resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
-        const result = {};
-        const allDay = targetCellData.allDay;
-
-        this.fire('setField', 'allDay', result, allDay);
-        this.fire('setField', 'startDate', result, resultedStartDate);
+        const result = this.createAppointmentAdapter({});
+        result.allDay = targetCell.allDay;
+        result.startDate = resultedStartDate;
 
         let resultedEndDate = new Date(resultedStartDate.getTime() + duration);
 
@@ -2112,12 +2109,13 @@ class Scheduler extends Widget {
             }
         }
 
-        resultedEndDate = new Date(resultedEndDate.getTime() - timeZoneUtils.getTimezoneOffsetChangeInMs(appointmentStartDate, appointmentEndDate, resultedStartDate, resultedEndDate));
+        const timeZoneOffset = timeZoneUtils.getTimezoneOffsetChangeInMs(appointmentStartDate, appointmentEndDate, resultedStartDate, resultedEndDate);
+        result.endDate = new Date(resultedEndDate.getTime() - timeZoneOffset);
 
-        this.fire('setField', 'endDate', result, resultedEndDate);
-        this._resourcesManager.setResourcesToItem(result, targetCellData.groups);
+        const rawResult = result.source();
+        this._resourcesManager.setResourcesToItem(rawResult, targetCell.groups);
 
-        return result;
+        return rawResult;
     }
 
     getTargetedAppointment(appointment, element) {
