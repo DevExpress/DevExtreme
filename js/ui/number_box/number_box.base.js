@@ -26,14 +26,18 @@ const NumberBoxBase = TextEditor.inherit({
     _supportedKeys: function() {
         return extend(this.callBase(), {
             upArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._spinUpChangeHandler(e);
+                if(!isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this._spinUpChangeHandler(e);
+                }
             },
             downArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._spinDownChangeHandler(e);
+                if(!isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this._spinDownChangeHandler(e);
+                }
             },
             enter: function() {
             }
