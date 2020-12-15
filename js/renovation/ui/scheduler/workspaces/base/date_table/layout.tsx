@@ -1,9 +1,12 @@
 import {
-  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import { Table } from '../table';
 import { DateTableBody } from './table_body';
-import { LayoutProps } from '../layout_props';
+import { DateTableLayoutProps } from './layout_props';
 
 export const viewFunction = ({
   props,
@@ -35,10 +38,8 @@ export const viewFunction = ({
   );
 };
 @ComponentBindings()
-export class DateTableLayoutBaseProps extends LayoutProps {
+export class DateTableLayoutBaseProps extends DateTableLayoutProps {
   @OneWay() className?: string;
-
-  @Template() cellTemplate!: JSXTemplate<any>;
 }
 
 @Component({

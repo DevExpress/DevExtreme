@@ -1,5 +1,7 @@
 import {
-  Component, ComponentBindings, JSXComponent, Fragment, Template, JSXTemplate,
+  Component,
+  JSXComponent,
+  Fragment,
 } from 'devextreme-generator/component_declaration/common';
 import { Row as DateTableRow } from '../row';
 import { ViewCellData } from '../../types.d';
@@ -7,8 +9,8 @@ import {
   getKeyByGroup,
   getIsGroupedAllDayPanel,
 } from '../../utils';
-import { LayoutProps } from '../layout_props';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
+import { DateTableLayoutProps } from './layout_props';
 
 export const viewFunction = ({ props }: DateTableBody): JSX.Element => {
   const { viewData, dataCellTemplate, cellTemplate: Cell } = props;
@@ -60,13 +62,8 @@ export const viewFunction = ({ props }: DateTableBody): JSX.Element => {
   );
 };
 
-@ComponentBindings()
-export class DateTableBodyProps extends LayoutProps {
-  @Template() cellTemplate!: JSXTemplate<any>;
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent<DateTableBodyProps, 'cellTemplate'>() {}
+export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {}
