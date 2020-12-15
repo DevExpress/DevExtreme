@@ -2055,7 +2055,7 @@ class Scheduler extends Widget {
         }).show();
     }
 
-    _getUpdatedData(rawAppointment) { // TODO rename
+    _getUpdatedData(rawAppointment) {
         const targetCell = this.getTargetCellData();
         const appointment = this.createAppointmentAdapter(rawAppointment);
 
@@ -2080,16 +2080,21 @@ class Scheduler extends Widget {
         if(this._workSpace.keepOriginalHours() && appointment.startDate) {
             const { trimTime } = dateUtils;
 
-            const newStartDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
-            const timeInMs = newStartDate.getTime() - trimTime(newStartDate).getTime();
+            const startDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
+            const timeInMs = startDate.getTime() - trimTime(startDate).getTime();
 
-            const targetCellMock = targetCell?.startDate || newStartDate;
-            resultedStartDate = new Date(trimTime(targetCellMock).getTime() + timeInMs);
+            // Condition '|| startDate' only for drag n drop tests.
+            // Since we are simulating only drag events on appointment and skip selection on cell,
+            // target cell doesn't exist in the test environment.
+            const cellStartDate = targetCell.startDate || startDate;
+            resultedStartDate = new Date(trimTime(cellStartDate).getTime() + timeInMs);
             resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
         const result = this.createAppointmentAdapter({});
-        result.allDay = targetCell.allDay;
+        if(targetCell.allDay !== undefined) {
+            result.allDay = targetCell.allDay;
+        }
         result.startDate = resultedStartDate;
 
         let resultedEndDate = new Date(resultedStartDate.getTime() + duration);
