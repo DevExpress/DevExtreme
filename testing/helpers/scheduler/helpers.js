@@ -124,7 +124,7 @@ class Appointment extends ClickElementWrapper {
         super(CLASSES.appointment, parent, index);
     }
 
-    get position() {
+    get rectangle() {
         const elementRect = this.getElement().get(0).getBoundingClientRect();
 
         return {
