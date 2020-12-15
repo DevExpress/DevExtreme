@@ -1234,12 +1234,21 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(this.isVirtualScrolling()) {
-            const virtualScrollingState = this.virtualScrollingDispatcher.getState();
+            const {
+                verticalScrollingState,
+                horizontalScrollingState
+            } = this.virtualScrollingDispatcher;
+
             extend(options, {
-                topVirtualRowHeight: virtualScrollingState.topVirtualRowHeight,
-                bottomVirtualRowHeight: virtualScrollingState.bottomVirtualRowHeight,
-                startRowIndex: virtualScrollingState.startIndex,
-                rowCount: virtualScrollingState.rowCount,
+                topVirtualRowHeight: verticalScrollingState.virtualItemSizeBefore,
+                bottomVirtualRowHeight: verticalScrollingState.virtualItemSizeAfter,
+                startRowIndex: verticalScrollingState.startIndex,
+                rowCount: verticalScrollingState.itemCount,
+
+                leftVirtualCellHeight: horizontalScrollingState.virtualItemSizeBefore,
+                rightVirtualCellHeight: horizontalScrollingState.virtualItemSizeAfter,
+                startCellIndex: horizontalScrollingState.startIndex,
+                cellCount: horizontalScrollingState.itemCount,
             });
         } else {
             options.rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());

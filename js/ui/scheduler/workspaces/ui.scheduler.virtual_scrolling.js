@@ -4,6 +4,7 @@ import { getWindow } from '../../../core/utils/window';
 import { addNamespace } from '../../../events/utils/index';
 
 const ROW_HEIGHT = 50;
+const CELL_WIDTH = 150;
 const MIN_SCROLL_OFFSET = 10;
 const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
@@ -12,6 +13,7 @@ export default class VirtualScrollingDispatcher {
     constructor(workspace) {
         this._workspace = workspace;
         this._rowHeight = ROW_HEIGHT;
+        this._cellWidth = CELL_WIDTH;
         this._renderer = new Renderer(this.workspace);
 
         this._createVirtualScrolling();
@@ -51,7 +53,8 @@ export default class VirtualScrollingDispatcher {
             : getWindow().innerHeight;
     }
 
-    get cellWidth() { return this.workspace.getCellWidth(); }
+    get cellWidth() { return this._cellWidth; }
+    set cellWidth(value) { this._cellWidth = value; }
 
     get viewportWidth() {
         return this.width
@@ -60,9 +63,9 @@ export default class VirtualScrollingDispatcher {
     }
 
     get topVirtualRowsCount() {
-        const { topVirtualRowHeight } = this.state;
+        const { virtualItemSizeBefore } = this.verticalScrollingState;
 
-        return topVirtualRowHeight > 0
+        return virtualItemSizeBefore > 0
             ? 1
             : 0;
     }
@@ -164,8 +167,13 @@ export default class VirtualScrollingDispatcher {
 
     updateDimensions() {
         const cellHeight = this.workspace.getCellHeight(false);
-        if(cellHeight !== this.rowHeight) {
+        const cellWidth = this.workspace.getCellWidth();
+
+        const needUpdate = cellHeight !== this.rowHeight || cellWidth !== this.cellWidth;
+
+        if(needUpdate) {
             this.rowHeight = cellHeight;
+            this.cellWidth = cellWidth;
 
             this._createVirtualScrolling();
 
