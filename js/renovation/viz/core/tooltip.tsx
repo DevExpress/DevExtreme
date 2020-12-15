@@ -30,10 +30,9 @@ export const viewFunction = ({
   customizedOptions,
   setCurrentState,
   props: {
-    x, y, font, shadow, opacity,
+    x, y, font, shadow, opacity, interactive,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
-  interactive,
 }: Tooltip): JSX.Element => {
   const correctedCoordinates = recalculateCoordinates({
     canvas, anchorX: x, anchorY: y, size: textSizeWPaddings, offset, arrowLength,

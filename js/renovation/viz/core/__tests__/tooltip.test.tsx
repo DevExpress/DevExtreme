@@ -214,8 +214,10 @@ describe('Render', () => {
     });
   });
 
-  it('should render interactive content', () => {
-    const tooltip = shallow(<TooltipComponent interactive {...props as any} /> as any);
+  it('should be interactive', () => {
+    const tooltip = shallow(<TooltipComponent
+      {...{ ...props, props: { ...props.props, interactive: true } } as any}
+    /> as any);
 
     expect(tooltip.find('g').at(0).props()).toMatchObject({
       pointerEvents: 'all',
