@@ -9,7 +9,7 @@ import { inArray } from '../../core/utils/array';
 import devices from '../../core/devices';
 import browser from '../../core/utils/browser';
 import TextEditor from '../text_box/ui.text_editor';
-import { addNamespace, getChar, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, getChar, isCommandKeyPressed, normalizeKeyName } from '../../events/utils/index';
 import SpinButtons from './number_box.spins';
 import messageLocalization from '../../localization/message';
 import { Deferred } from '../../core/utils/deferred';
@@ -176,7 +176,7 @@ const NumberBoxBase = TextEditor.inherit({
         if(!isInputCharValid) {
             const keyName = normalizeKeyName(e);
             // NOTE: Additional check for Firefox control keys
-            if(e.metaKey || e.ctrlKey || keyName && (inArray(keyName, FIREFOX_CONTROL_KEYS) >= 0)) {
+            if(isCommandKeyPressed(e) || keyName && (inArray(keyName, FIREFOX_CONTROL_KEYS) >= 0)) {
                 return;
             }
 
