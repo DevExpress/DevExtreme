@@ -219,22 +219,40 @@ class VirtualScrollingBase {
         };
     }
 
+    get maxScrollPosition() {
+        return this.getTotalItemCount() * this.itemSize - this.viewportSize;
+    }
+
     needUpdateState(position) {
         const {
             prevPosition,
             startIndex
         } = this.state;
+        const isFirstInitialization = startIndex < 0;
+
+        if(!isFirstInitialization && (position === 0 || position === this.maxScrollPosition)) {
+            return true;
+        }
 
         const currentPosition = prevPosition;
         const currentItemsCount = Math.floor(currentPosition / this.itemSize);
-        const isFirstInitialization = startIndex < 0;
         const itemsCount = Math.floor(position / this.itemSize);
-        const isStartIndexChanged = Math.abs(currentItemsCount - itemsCount) > this.outlineCount;
+        const isStartIndexChanged = Math.abs(currentItemsCount - itemsCount) >= this.outlineCount;
 
         return isFirstInitialization || isStartIndexChanged;
     }
 
+    _correctPosition(position) {
+        if(position < 0) {
+            return 0;
+        }
+
+        return Math.min(position, this.maxScrollPosition);
+    }
+
     updateState(position) {
+        position = this._correctPosition(position);
+
         if(!this.needUpdateState(position)) {
             return false;
         }
@@ -257,7 +275,7 @@ class VirtualScrollingBase {
 
         const itemCountAfter = Math.floor(position / this.itemSize);
 
-        this.state.prevPosition = position;
+        this.state.prevPosition = itemCountAfter * this.itemSize;
         this.state.startIndex = itemCountAfter - outlineCountBefore;
         this.state.virtualItemCountBefore = virtualItemCountBefore;
         this.state.outlineCountBefore = outlineCountBefore;
