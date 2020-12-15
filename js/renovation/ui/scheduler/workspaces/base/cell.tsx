@@ -46,7 +46,7 @@ export class CellBaseProps {
 
   @OneWay() index = 0;
 
-  @OneWay() contentTemplateProps?: ContentTemplateProps = {
+  @OneWay() contentTemplateProps: ContentTemplateProps = {
     data: {},
     index: 0,
   };
