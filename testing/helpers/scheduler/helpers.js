@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import { locate } from 'animation/translator';
+import dragEvents from 'events/drag';
 import devices from 'core/devices';
+import pointerMock from '../../helpers/pointerMock.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -33,6 +35,7 @@ export const CLASSES = {
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
 
     appointment: '.dx-scheduler-appointment',
+    appointmentDate: '.dx-scheduler-appointment-content-date',
     appointmentDragSource: '.dx-scheduler-appointment-drag-source',
 
     resizableHandle: {
@@ -96,22 +99,57 @@ export const asyncScrollTest = (promise, beforeAsyncCallback, asyncCallback) => 
 };
 
 class ElementWrapper {
-    constructor(selector, parent) {
+    constructor(selector, parent, index = 0) {
         this.selector = selector;
         this.parent = parent;
+        this.index = 0;
     }
 
     getElement() {
         if(this.parent) {
-            return this.parent.find(this.selector);
+            return this.parent.find(this.selector).eq(this.index);
         }
-        return $(this.selector);
+        return $(this.selector).eq(this.index);
     }
 }
 
 class ClickElementWrapper extends ElementWrapper {
     click() {
         this.getElement().trigger('dxclick');
+    }
+}
+
+class Appointment extends ClickElementWrapper {
+    constructor(parent, index) {
+        super(CLASSES.appointment, parent, index);
+    }
+
+    get position() {
+        const elementRect = this.getElement().get(0).getBoundingClientRect();
+
+        return {
+            x: elementRect.x,
+            y: elementRect.y
+        };
+    }
+
+    get date() {
+        return this.getElement().find(CLASSES.appointmentDate).text();
+    }
+
+    get drag() {
+        return {
+            toCell: cellNumber => {
+                const cell = $(CLASSES.dateTableCell).eq(cellNumber).get(0);
+                const cellRect = cell.getBoundingClientRect();
+                const elementRect = this.getElement().get(0).getBoundingClientRect();
+
+                const pointer = pointerMock(this.getElement()).start();
+                pointer.down().move(cellRect.x - elementRect.x, cellRect.y - elementRect.y);
+                $(cell).trigger(dragEvents.enter);
+                pointer.up();
+            }
+        };
     }
 }
 
@@ -483,6 +521,17 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
     get header() {
         return new HeaderWrapper();
+    }
+
+    get appointmentList() {
+        const result = [];
+        const length = this.getElement().find(CLASSES.appointment).length;
+
+        for(let i = 0; i < length; i++) {
+            result.push(new Appointment(this.getElement(), i));
+        }
+
+        return result;
     }
 
     option(name, value) {
