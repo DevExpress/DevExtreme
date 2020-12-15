@@ -381,7 +381,7 @@ QUnit.module('Header panel', {
 
         // assert
         const $toolbar = testElement.find('.dx-toolbar');
-        assert.equal($toolbar.attr('aria-label'), 'Data grid\'s toolbar', 'aria-label');
+        assert.equal($toolbar.attr('aria-label'), 'Data grid toolbar', 'aria-label');
     });
 
     QUnit.test('Hide search panel', function(assert) {

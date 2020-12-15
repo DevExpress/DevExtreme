@@ -157,7 +157,7 @@
         "dxDataGrid-ariaSearchInGrid": "Search in the data grid",
         "dxDataGrid-ariaSelectAll": "Select all",
         "dxDataGrid-ariaSelectRow": "Select row",
-        "dxDataGrid-ariaToolbar": "Data grid's toolbar",
+        "dxDataGrid-ariaToolbar": "Data grid toolbar",
         "dxDataGrid-filterBuilderPopupTitle": "Filter Builder",
         "dxDataGrid-filterPanelCreateFilter": "Create Filter",
         "dxDataGrid-filterPanelClearFilter": "Clear",
@@ -165,7 +165,7 @@
 
         "dxTreeList-ariaTreeList": "Tree list",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
-        "dxTreeList-ariaToolbar": "Tree list's toolbar",
+        "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Add",
 
         "dxPager-infoText": "Page {0} of {1} ({2} items)",

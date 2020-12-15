@@ -97,7 +97,7 @@ QUnit.module('Header panel', { beforeEach: setupModule, afterEach: teardownModul
         // assert
         const $toolbar = $testElement.find('.dx-toolbar');
         assert.equal($toolbar.length, 1, 'toolbar');
-        assert.equal($toolbar.attr('aria-label'), 'Tree list\'s toolbar', 'toolbar aria-label');
+        assert.equal($toolbar.attr('aria-label'), 'Tree list toolbar', 'toolbar aria-label');
     });
 });
 
