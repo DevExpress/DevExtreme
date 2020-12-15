@@ -337,6 +337,8 @@
         testTemplate('empty', '<%-%>', 'undefined');
         testTemplate('space', '<%- %>', 'undefined');
         testTemplate('space', '<%-  %>', 'undefined');
+        testTemplate('empty string', '<%- \'\' %>', '');
+        testTemplate('nonempty string', '<%- \'a\' %>', 'a');
 
         QUnit.module('Alternative syntax (T831170)', function() {
             testTemplate('enabled', 'a [%= \'b\' %] c', 'a b c');
