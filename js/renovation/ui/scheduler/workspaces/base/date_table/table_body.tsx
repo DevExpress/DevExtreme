@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, Fragment, OneWay,
+  Component, ComponentBindings, JSXComponent, Fragment, Template, JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
 import { Row as DateTableRow } from '../row';
 import { ViewCellData } from '../../types.d';
@@ -9,11 +9,9 @@ import {
 } from '../../utils';
 import { LayoutProps } from '../layout_props';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
-import { MonthDateTableCell } from '../../month/date_table/cell';
-import { DateTableCellBase } from './cell';
 
-export const viewFunction = ({ props, cell: Cell }: DateTableBody): JSX.Element => {
-  const { viewData, dataCellTemplate } = props;
+export const viewFunction = ({ props }: DateTableBody): JSX.Element => {
+  const { viewData, dataCellTemplate, cellTemplate: Cell } = props;
 
   return (
     <Fragment>
@@ -64,18 +62,11 @@ export const viewFunction = ({ props, cell: Cell }: DateTableBody): JSX.Element 
 
 @ComponentBindings()
 export class DateTableBodyProps extends LayoutProps {
-  @OneWay() viewType?: string;
+  @Template() cellTemplate!: JSXTemplate<any>;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent(DateTableBodyProps) {
-  // This is a workaround: cannot use template inside a template
-  get cell(): any {
-    const { viewType } = this.props;
-
-    return viewType === 'month' ? MonthDateTableCell : DateTableCellBase;
-  }
-}
+export class DateTableBody extends JSXComponent<DateTableBodyProps, 'cellTemplate'>() {}

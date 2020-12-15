@@ -1,11 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { viewFunction as TableBodyView, DateTableBody } from '../table_body';
+import { viewFunction as TableBodyView } from '../table_body';
 import { Row } from '../../row';
 import { AllDayPanelTableBody } from '../all_day_panel/table_body';
 import * as utilsModule from '../../../utils';
-import { DateTableCellBase } from '../cell';
-import { MonthDateTableCell } from '../../../month/date_table/cell';
 
 const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel').mockImplementation(() => true);
 
@@ -48,7 +46,6 @@ describe('DateTableBody', () => {
 
     const render = (viewModel) => shallow(
       <TableBodyView
-        cell={DateTableCellBase}
         {...viewModel}
         props={{
           viewData,
@@ -105,7 +102,7 @@ describe('DateTableBody', () => {
           .toBe(viewData.groupedData[0].dateTable[index][0].key);
       };
 
-      const cells = tableBody.find(DateTableCellBase);
+      const cells = tableBody.find(cellTemplate);
       expect(cells)
         .toHaveLength(3);
 
@@ -147,26 +144,6 @@ describe('DateTableBody', () => {
       const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
       expect(allDayPanelTableBody.exists())
         .toBe(false);
-    });
-  });
-
-  describe('Logic', () => {
-    describe('Getters', () => {
-      describe('cell', () => {
-        it('should return MonthDateTableCell when view type is month', () => {
-          const layout = new DateTableBody({ viewType: 'month' });
-
-          expect(layout.cell)
-            .toBe(MonthDateTableCell);
-        });
-
-        it('should return DateTableCellBase when view type is not month', () => {
-          const layout = new DateTableBody({ viewType: 'day' });
-
-          expect(layout.cell)
-            .toBe(DateTableCellBase);
-        });
-      });
     });
   });
 });
