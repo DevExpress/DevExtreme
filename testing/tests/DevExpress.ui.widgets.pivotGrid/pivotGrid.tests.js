@@ -6246,15 +6246,67 @@ QUnit.module('Vertical headers', {
             fx.off = false;
         }
 
-        QUnit.test(`applyChangesMode=${applyChangesMode}. fieldChooser.option(state, newState)`, function(assert) {
+        QUnit.test(`applyChangesMode=${applyChangesMode}. fieldChooser.option(state, newState). fieldChooser.applyChanges()`, function(assert) {
             createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
                 const fields = grid.getDataSource().state().fields;
                 fieldChooser.option('state', { rowExpandedPaths: [['row1']], columnExpandedPaths: [['column1']], fields: fields });
                 clock.tick();
 
-                const dataSourceState = grid.getDataSource().state();
+                let dataSourceState = grid.getDataSource().state();
                 assert.deepEqual(dataSourceState.rowExpandedPaths, applyChangesMode === 'instantly' ? [['row1']] : []);
                 assert.deepEqual(dataSourceState.columnExpandedPaths, applyChangesMode === 'instantly' ? [['column1']] : []);
+
+                fieldChooser.applyChanges();
+                clock.tick();
+
+                dataSourceState = grid.getDataSource().state();
+                const optionState = fieldChooser.option('state');
+
+                assert.deepEqual(dataSourceState.rowExpandedPaths, [['row1']]);
+                assert.deepEqual(dataSourceState.columnExpandedPaths, [['column1']]);
+
+                assert.deepEqual(optionState.rowExpandedPaths, [['row1']]);
+                assert.deepEqual(optionState.columnExpandedPaths, [['column1']]);
+            });
+        });
+
+        QUnit.test(`applyChangesMode=${applyChangesMode}. fieldChooser.option(state, newState). fieldChooser.cancelChanges()`, function(assert) {
+            createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
+                const fields = grid.getDataSource().state().fields;
+                fieldChooser.option('state', { rowExpandedPaths: [['row1']], columnExpandedPaths: [['column1']], fields: fields });
+                clock.tick();
+
+                let dataSourceState = grid.getDataSource().state();
+                assert.deepEqual(dataSourceState.rowExpandedPaths, applyChangesMode === 'instantly' ? [['row1']] : []);
+                assert.deepEqual(dataSourceState.columnExpandedPaths, applyChangesMode === 'instantly' ? [['column1']] : []);
+
+                fieldChooser.cancelChanges();
+                clock.tick();
+
+                dataSourceState = grid.getDataSource().state();
+                const optionState = fieldChooser.option('state');
+
+                assert.deepEqual(dataSourceState.rowExpandedPaths, applyChangesMode === 'instantly' ? [['row1']] : []);
+                assert.deepEqual(dataSourceState.columnExpandedPaths, applyChangesMode === 'instantly' ? [['column1']] : []);
+
+                assert.deepEqual(optionState.rowExpandedPaths, applyChangesMode === 'instantly' ? [['row1']] : []);
+                assert.deepEqual(optionState.columnExpandedPaths, applyChangesMode === 'instantly' ? [['column1']] : []);
+            });
+        });
+
+        QUnit.test(`applyChangesMode=${applyChangesMode}. onOptionChanged must be fired if dataSource changed`, function(assert) {
+            createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
+                let isEventTriggered = false;
+                fieldChooser.option('onOptionChanged', (e) => {
+                    if(e.name === 'state') {
+                        isEventTriggered = true;
+                    }
+                });
+
+                grid.getDataSource()._eventsStrategy.fireEvent('changed');
+                clock.tick();
+
+                assert.equal(isEventTriggered, true, 'event is triggered');
             });
         });
 
@@ -6262,13 +6314,6 @@ QUnit.module('Vertical headers', {
             createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
                 let dataSourceEventsCount = 0;
                 fieldChooser.getDataSource().on('changed', () => { dataSourceEventsCount++; });
-
-                let stateEventsCount = 0;
-                const prevStateChangingHandler = fieldChooser._processStateChange;
-                fieldChooser._processStateChange = (newState) => {
-                    stateEventsCount++;
-                    prevStateChangingHandler.call(fieldChooser, newState);
-                };
 
                 const state = fieldChooser.getDataSource().state();
                 state.fields[1].area = undefined;
@@ -6280,33 +6325,9 @@ QUnit.module('Vertical headers', {
 
                 if(applyChangesMode === 'instantly') {
                     assert.equal(dataSourceEventsCount, 1, 'dataSource is reloaded only once');
-                    assert.equal(stateEventsCount, 1, 'state is processed only once');
                 } else {
                     assert.equal(dataSourceEventsCount, 0, 'dataSource is not reloaded');
-                    assert.equal(stateEventsCount, 3, 'state is processed 3 times');
                 }
-            });
-        });
-
-        QUnit.test(`applyChangesMode=${applyChangesMode}. pivotGrid.dataSource.reload() multiple times`, function(assert) {
-            createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
-                let dataSourceEventsCount = 0;
-                fieldChooser.getDataSource().on('changed', () => { dataSourceEventsCount++; });
-
-                let stateEventsCount = 0;
-                const prevStateChangingHandler = fieldChooser._processStateChange;
-                fieldChooser._processStateChange = (newState) => {
-                    stateEventsCount++;
-                    prevStateChangingHandler.call(fieldChooser, newState);
-                };
-
-                grid.getDataSource().reload();
-                grid.getDataSource().reload();
-                grid.getDataSource().reload();
-                clock.tick();
-
-                assert.equal(dataSourceEventsCount, 3, 'datasource is reloaded 3 times');
-                assert.equal(stateEventsCount, 0, 'state is not processed if it is not changed');
             });
         });
     });

@@ -108,15 +108,6 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
         }
     },
 
-    _processStateChange: function(newState) {
-        if(this.option('applyChangesMode') === 'instantly') {
-            this._dataSource.state(newState);
-        } else {
-            this._clean(true);
-            this._renderComponent();
-        }
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case 'dataSource':
@@ -129,8 +120,11 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                     break;
                 }
 
-                if(getStringState(this._dataSource.state()) !== getStringState(args.value)) {
-                    this._processStateChange(args.value);
+                if(this.option('applyChangesMode') === 'instantly' && getStringState(this._dataSource.state()) !== getStringState(args.value)) {
+                    this._dataSource.state(args.value);
+                } else {
+                    this._clean(true);
+                    this._renderComponent();
                 }
                 break;
             case 'headerFilter':
