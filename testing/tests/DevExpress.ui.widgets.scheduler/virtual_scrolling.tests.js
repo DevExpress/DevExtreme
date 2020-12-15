@@ -457,29 +457,59 @@ module('Virtual Scrolling', {
     });
 
     module('Validation', function() {
-        [5, 15, 25, 50, 100, 150, 200].forEach(totalRowCount => {
-            test(`Check virtual scrolling state where totalRowCount: ${totalRowCount}`, function(assert) {
-                let offset;
+        module('Vertical', function() {
+            [5, 15, 25, 50, 100, 150, 200].forEach(totalRowCount => {
+                test(`Check virtual scrolling state where totalRowCount: ${totalRowCount}`, function(assert) {
+                    let offset;
 
-                this.prepareInstance({ totalRowCount });
+                    this.prepareInstance({ totalRowCount });
 
-                for(offset = 0; offset <= 825; offset += 15) {
-                    try {
-                        this.scrollVertical(offset);
-                    } catch(e) {
-                        assert.ok(false, e.message);
+                    for(offset = 0; offset <= 5000; offset += 15) {
+                        try {
+                            this.scrollVertical(offset);
+                        } catch(e) {
+                            assert.ok(false, e.message);
+                        }
                     }
-                }
 
-                for(; offset >= 0; offset -= 10) {
-                    try {
-                        this.scrollVertical(offset);
-                    } catch(e) {
-                        assert.ok(false, e.message);
+                    for(; offset >= 0; offset -= 10) {
+                        try {
+                            this.scrollVertical(offset);
+                        } catch(e) {
+                            assert.ok(false, e.message);
+                        }
                     }
-                }
 
-                assert.ok(true, 'State validation checked');
+                    assert.ok(true, 'State validation checked');
+                });
+            });
+        });
+
+        module('Horizontal', function() {
+            [5, 15, 25, 50, 100].forEach(totalCellCount => {
+                test(`Check virtual scrolling state where totalCellCount: ${totalCellCount}`, function(assert) {
+                    let offset;
+
+                    this.prepareInstance({ totalCellCount });
+
+                    for(offset = 0; offset <= 15000; offset += 45) {
+                        try {
+                            this.scrollVertical(offset);
+                        } catch(e) {
+                            assert.ok(false, e.message);
+                        }
+                    }
+
+                    for(; offset >= 0; offset -= 10) {
+                        try {
+                            this.scrollVertical(offset);
+                        } catch(e) {
+                            assert.ok(false, e.message);
+                        }
+                    }
+
+                    assert.ok(true, 'State validation checked');
+                });
             });
         });
     });
