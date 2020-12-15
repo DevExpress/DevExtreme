@@ -660,17 +660,21 @@ const EditingController = modules.ViewController.inherit((function() {
                 return;
             }
 
-            args.value.forEach(change => {
+            this._processInsertChanges(args.value);
+
+            dataController.updateItems({
+                repaintChangesOnly: true
+            });
+        },
+
+        _processInsertChanges: function(changes) {
+            changes.forEach(change => {
                 if(change.type === 'insert') {
-                    const { key } = this._getInsertInfo({ key: change.key });
+                    const { key } = this._addInsertInfo({ key: change.key });
                     if(!isDefined(change.key)) {
                         change.key = key;
                     }
                 }
-            });
-
-            dataController.updateItems({
-                repaintChangesOnly: true
             });
         },
 
@@ -849,7 +853,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 let key = change.key;
                 let insertInfo = this._getInternalData(key)?.insertInfo;
                 if(!isDefined(change.key) || !isDefined(insertInfo)) {
-                    const keys = this._getInsertInfo();
+                    const keys = this._addInsertInfo();
                     change.key = keys.key;
                     key = keys.key;
                     insertInfo = keys.insertInfo;
@@ -942,7 +946,7 @@ const EditingController = modules.ViewController.inherit((function() {
             return insertInfo;
         },
 
-        _getInsertInfo: function({ parentKey, key } = {}) {
+        _addInsertInfo: function({ parentKey, key } = {}) {
             let insertInfo;
 
             if(!isDefined(key)) {
@@ -1052,7 +1056,7 @@ const EditingController = modules.ViewController.inherit((function() {
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
             const that = this;
             const oldEditRowIndex = that._getVisibleEditRowIndex();
-            const { insertInfo, key } = that._getInsertInfo({ parentKey });
+            const { insertInfo, key } = that._addInsertInfo({ parentKey });
             const editMode = getEditMode(that);
 
             if(editMode !== EDIT_MODE_BATCH) {
