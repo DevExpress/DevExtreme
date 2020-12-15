@@ -5490,13 +5490,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             const keyboardController = this.getController('keyboardNavigation');
 
             assert.equal(this.pageIndex(), 0, 'Page index');
-            assert.equal(keyboardController.getVisibleRowIndex(), -1, 'Focused row index');
+            assert.notOk(keyboardController.getVisibleRowIndex(), 'Focused row index');
 
             this.navigateToRow('Zeb');
             this.clock.tick();
 
             assert.equal(this.pageIndex(), 1, 'Page index');
-            assert.equal(keyboardController.getVisibleRowIndex(), -1, 'Focused row index');
+            assert.notOk(keyboardController.getVisibleRowIndex(), 'Focused row index');
         });
 
         QUnit.test('Test navigateToRow method if virtualScrolling', function(assert) {
