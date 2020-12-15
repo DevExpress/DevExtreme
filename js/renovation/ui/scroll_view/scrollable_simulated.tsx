@@ -4,6 +4,7 @@ import {
   Method,
   Ref,
   Effect,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
@@ -47,8 +48,8 @@ export const viewFunction = ({
     {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     <div className={SCROLLABLE_WRAPPER_CLASS}>
-      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef as any}>
-        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef as any}>
+      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
+        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
           {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
           {children}
           {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
@@ -62,9 +63,9 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsType>() {
-  @Ref() contentRef!: HTMLDivElement;
+  @Ref() contentRef!: RefObject<HTMLDivElement>;
 
-  @Ref() containerRef!: HTMLDivElement;
+  @Ref() containerRef!: RefObject<HTMLDivElement>;
 
   @Method()
   content(): HTMLDivElement {

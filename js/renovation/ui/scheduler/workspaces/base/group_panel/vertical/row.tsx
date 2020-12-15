@@ -4,13 +4,13 @@ import {
 import { GroupPanelVerticalCell } from './cell';
 import { GroupRenderItem, ResourceCellTemplateProps } from '../../../types.d';
 
-export const viewFunction = (viewModel: Row) => (
+export const viewFunction = (viewModel: Row): JSX.Element => (
   <div
     className={`dx-scheduler-group-row ${viewModel.props.className}`}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
   >
-    {viewModel.props.groupItems!.map(({
+    {viewModel.props.groupItems.map(({
       text, id, data, key, color,
     }, index) => (
       <GroupPanelVerticalCell
@@ -28,7 +28,7 @@ export const viewFunction = (viewModel: Row) => (
 
 @ComponentBindings()
 export class RowProps {
-  @OneWay() groupItems?: GroupRenderItem[];
+  @OneWay() groupItems: GroupRenderItem[] = [];
 
   @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 

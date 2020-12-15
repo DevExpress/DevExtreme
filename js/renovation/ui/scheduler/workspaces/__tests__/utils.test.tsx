@@ -70,11 +70,24 @@ describe('Workspaces utils', () => {
       const viewData: GroupedViewData = {
         groupedData: [{
           dateTable: [[{
-            startDate: new Date(2020, 1, 2), endDate: new Date(2020, 1, 2), text: 'test', index: 0, key: '1',
+            startDate: new Date(2020, 1, 2),
+            endDate: new Date(2020, 1, 2),
+            text: 'test',
+            index: 0,
+            key: '1',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }]],
           allDayPanel: [{
-            startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1', index: 0, key: '2',
+            startDate: new Date(2020, 1, 1),
+            endDate: new Date(2020, 1, 1),
+            text: 'test1',
+            index: 0,
+            key: '2',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }],
+          groupIndex: 1,
         }],
         cellCountInGroupRow: 1,
       };
@@ -87,20 +100,46 @@ describe('Workspaces utils', () => {
       const viewData: GroupedViewData = {
         groupedData: [{
           dateTable: [[{
-            startDate: new Date(2020, 1, 2), endDate: new Date(2020, 1, 2), text: 'test', index: 0, key: '1',
+            startDate: new Date(2020, 1, 2),
+            endDate: new Date(2020, 1, 2),
+            text: 'test',
+            index: 0,
+            key: '1',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }]],
           allDayPanel: [{
-            startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1', index: 0, key: '2',
+            startDate: new Date(2020, 1, 1),
+            endDate: new Date(2020, 1, 1),
+            text: 'test1',
+            index: 0,
+            key: '2',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }],
           isGroupedAllDayPanel: true,
+          groupIndex: 1,
         }, {
           dateTable: [[{
-            startDate: new Date(2020, 1, 3), endDate: new Date(2020, 1, 3), text: 'test3', index: 0, key: '3',
+            startDate: new Date(2020, 1, 3),
+            endDate: new Date(2020, 1, 3),
+            text: 'test3',
+            index: 0,
+            key: '3',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }]],
           allDayPanel: [{
-            startDate: new Date(2020, 1, 4), endDate: new Date(2020, 1, 4), text: 'test4', index: 0, key: '4',
+            startDate: new Date(2020, 1, 4),
+            endDate: new Date(2020, 1, 4),
+            text: 'test4',
+            index: 0,
+            key: '4',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }],
           isGroupedAllDayPanel: true,
+          groupIndex: 2,
         }],
         cellCountInGroupRow: 1,
       };

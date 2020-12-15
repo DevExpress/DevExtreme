@@ -32,7 +32,7 @@ const getGroupsRenderData = (groups: Group[]): GroupRenderItem[][] => {
   });
 };
 
-export const viewFunction = (viewModel: GroupPanelVerticalLayout) => (
+export const viewFunction = (viewModel: GroupPanelVerticalLayout): JSX.Element => (
   <div
     className={`dx-scheduler-work-space-vertical-group-table ${viewModel.props.className}`}
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -53,7 +53,7 @@ export const viewFunction = (viewModel: GroupPanelVerticalLayout) => (
 
 @ComponentBindings()
 export class GroupPanelVerticalLayoutProps {
-  @OneWay() groups?: Group[] = [];
+  @OneWay() groups: Group[] = [];
 
   @OneWay() height?: number;
 
@@ -77,6 +77,6 @@ export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelVerticalLay
   get groupsRenderData(): GroupRenderItem[][] {
     const { groups } = this.props;
 
-    return getGroupsRenderData(groups!);
+    return getGroupsRenderData(groups);
   }
 }

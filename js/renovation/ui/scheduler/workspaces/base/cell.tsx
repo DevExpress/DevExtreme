@@ -23,7 +23,7 @@ export const viewFunction = (viewModel: CellBase): JSX.Element => {
       {ContentTemplate && (
         <ContentTemplate
           // eslint-disable-next-line react/jsx-props-no-spreading
-          {...viewModel.props.contentTemplateProps!}
+          {...viewModel.props.contentTemplateProps}
         />
       )}
     </td>
@@ -52,7 +52,10 @@ export class CellBaseProps {
 
   @OneWay() index = 0;
 
-  @OneWay() contentTemplateProps?: ContentTemplateProps;
+  @OneWay() contentTemplateProps: ContentTemplateProps = {
+    data: {},
+    index: 0,
+  };
 
   @Template() contentTemplate?: JSXTemplate;
 

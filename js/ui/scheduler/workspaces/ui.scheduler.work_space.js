@@ -3390,6 +3390,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.invoke('renderAppointments');
         this.dragBehavior?.updateDragSource();
     }
+
+    _getTimePanelCells() {
+        return this.$element().find(`.${TIME_PANEL_CELL_CLASS}`);
+    }
 }
 
 export default SchedulerWorkSpace;

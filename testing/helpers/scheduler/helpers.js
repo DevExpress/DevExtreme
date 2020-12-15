@@ -31,6 +31,11 @@ export const CLASSES = {
 
     dateTableCell: '.dx-scheduler-date-table-cell',
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
+    timePanelCell: '.dx-scheduler-time-panel-cell',
+    headerPanelCell: '.dx-scheduler-header-panel-cell',
+    weekHeaderPanelCell: '.dx-scheduler-header-panel-week-cell',
+    currentTimeCell: '.dx-scheduler-time-panel-current-time-cell',
+    headerPanelCurrentTimeCell: '.dx-scheduler-header-panel-current-time-cell',
 
     appointment: '.dx-scheduler-appointment',
     appointmentDragSource: '.dx-scheduler-appointment-drag-source',
@@ -430,6 +435,10 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
             getAllDayCells: () => $('.dx-scheduler-all-day-table-cell'),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
+            getTimePanelCells: () => $(CLASSES.timePanelCell),
+            getOrdinaryHeaderPanelCells: () => $(`${CLASSES.headerPanelCell}:not(${CLASSES.weekHeaderPanelCell})`),
+            getTimePanelCurrentTimeCells: () => $(CLASSES.currentTimeCell),
+            getHeaderPanelCurrentTimeCells: () => $(CLASSES.headerPanelCurrentTimeCell),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
             getCellHeight: () => this.workSpace.getCells().eq(0).outerHeight(),
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),

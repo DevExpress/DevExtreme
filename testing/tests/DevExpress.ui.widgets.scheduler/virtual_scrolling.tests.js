@@ -8,7 +8,7 @@ import { addNamespace } from 'events/utils/index';
 
 const { test, module } = QUnit;
 
-module('Virtual Scrolling', {
+module('Vertical virtual Scrolling', {
     beforeEach: function() {
         this.prepareInstance = function(settings) {
             settings = settings || {};
@@ -73,9 +73,9 @@ module('Virtual Scrolling', {
             };
 
             this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this.workspaceMock);
-            this.virtualScrollingDispatcher.getRenderTimeout = () => -1;
+            this.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
             this.virtualScrollingDispatcher.getHeight = () => settings.height;
-            this.virtualScrolling = this.virtualScrollingDispatcher.virtualScrolling;
+            this.verticalVirtualScrolling = this.virtualScrollingDispatcher.verticalVirtualScrolling;
         };
     },
     afterEach: function() {
@@ -87,7 +87,7 @@ module('Virtual Scrolling', {
         test('Init', function(assert) {
             this.prepareInstance();
 
-            const state = this.virtualScrolling.getState();
+            const state = this.verticalVirtualScrolling.getState();
 
             assert.equal(state.pageSize, 6, 'PageSize');
             assert.equal(state.topVirtualRowCount, 0, 'Top virtual row count');
@@ -136,7 +136,7 @@ module('Virtual Scrolling', {
             const isVerticalGroupedWorkSpaceSpy = sinon.spy(this.workspaceMock, '_isVerticalGroupedWorkSpace');
             const isGroupedAllDayPanelSpy = sinon.spy(this.workspaceMock, 'isGroupedAllDayPanel');
 
-            this.virtualScrolling.updateState({ top: 200 });
+            this.verticalVirtualScrolling.updateState({ top: 200 });
 
             assert.ok(isVerticalGroupedWorkSpaceSpy.called, '_isVerticalGroupedWorkSpaceSpy was called');
             assert.ok(getTotalRowCountSpy.called, 'getTotalRowCountSpy was called');
@@ -160,7 +160,7 @@ module('Virtual Scrolling', {
             ].forEach(step => {
                 this.scrollDown(step.top);
 
-                const state = this.virtualScrolling.getState();
+                const state = this.verticalVirtualScrolling.getState();
 
                 assert.equal(state.pageSize, 6, 'pageSize');
                 assert.equal(state.rowCount, step.rowCount, 'rowCount');
@@ -185,7 +185,7 @@ module('Virtual Scrolling', {
             ].forEach(step => {
                 this.scrollDown(step.top);
 
-                const state = this.virtualScrolling.getState();
+                const state = this.verticalVirtualScrolling.getState();
 
                 assert.equal(state.pageSize, 6, 'pageSize');
                 assert.equal(state.rowCount, step.rowCount, 'rowCount');
@@ -211,7 +211,7 @@ module('Virtual Scrolling', {
             ].forEach(step => {
                 this.scrollDown(step.top);
 
-                const state = this.virtualScrolling.getState();
+                const state = this.verticalVirtualScrolling.getState();
 
                 assert.deepEqual(state.topVirtualRowHeight, step.topVirtualRowHeight, 'Layout map topVirtualRowHeight');
                 assert.deepEqual(state.bottomVirtualRowHeight, step.bottomVirtualRowHeight, 'Layout map bottomVirtualRowHeight');
@@ -220,7 +220,7 @@ module('Virtual Scrolling', {
 
         test('Scroll event position should be checked correctly before update state', function(assert) {
             this.prepareInstance();
-            const spy = sinon.spy(this.virtualScrolling, 'needUpdateState');
+            const spy = sinon.spy(this.verticalVirtualScrolling, 'needUpdateState');
 
             [
                 { y: 50, expectedNeedUpdate: false },

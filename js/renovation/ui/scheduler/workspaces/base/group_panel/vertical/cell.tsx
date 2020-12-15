@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { GroupItem, ResourceCellTemplateProps } from '../../../types.d';
 
-export const viewFunction = (viewModel: GroupPanelVerticalCell) => {
+export const viewFunction = (viewModel: GroupPanelVerticalCell): JSX.Element => {
   const CellTemplate = viewModel.props.cellTemplate;
 
   return (

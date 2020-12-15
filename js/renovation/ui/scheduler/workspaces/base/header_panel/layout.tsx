@@ -22,7 +22,7 @@ export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
   >
     <thead>
       <Row>
-        {viewModel.props.viewCellsData![0].map(({
+        {viewModel.props.viewCellsData[0].map(({
           startDate, endDate, today, groups, groupIndex, index, key,
         }) => (
           <viewModel.props.cellTemplate
