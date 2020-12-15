@@ -330,7 +330,7 @@ const FocusController = core.ViewController.inherit((function() {
                 that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
 
                 that._prepareFocusedRow({
-                    changedItem: change.items[focusedRowIndex],
+                    changedItem: change?.items?.[focusedRowIndex],
                     $tableElement: $tableElement,
                     focusedRowIndex: focusedRowIndex,
                     isMainTable: isMainTable
