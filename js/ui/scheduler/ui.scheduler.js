@@ -2064,51 +2064,57 @@ class Scheduler extends Widget {
 
         let appointmentStartDate = new Date(appointment.startDate);
         let appointmentEndDate = new Date(appointment.endDate);
-        let date = cellStartDate || appointmentStartDate;
+
+        let resultedStartDate = cellStartDate || appointmentStartDate;
 
         if(!appointmentStartDate || isNaN(appointmentStartDate)) {
-            appointmentStartDate = date;
+            appointmentStartDate = resultedStartDate;
         }
         const targetStartTime = appointmentStartDate.getTime();
 
         if(!appointmentEndDate || isNaN(appointmentEndDate)) {
             appointmentEndDate = cellEndDate;
         }
-        const targetEndTime = appointmentEndDate.getTime() || cellEndDate;
 
+        const targetEndTime = appointmentEndDate.getTime() || cellEndDate;
         const duration = targetEndTime - targetStartTime;
 
         if(this._workSpace.keepOriginalHours()) {
-            const diff = targetStartTime - dateUtils.trimTime(appointmentStartDate).getTime();
-            date = new Date(dateUtils.trimTime(date).getTime() + diff);
+            const { trimTime } = dateUtils;
+
+            const newStartDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
+            const diff = newStartDate.getTime() - trimTime(newStartDate).getTime();
+
+            resultedStartDate = new Date(trimTime(targetCellData.startDate).getTime() + diff);
+            resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
         const result = {};
         const allDay = targetCellData.allDay;
 
         this.fire('setField', 'allDay', result, allDay);
-        this.fire('setField', 'startDate', result, date);
+        this.fire('setField', 'startDate', result, resultedStartDate);
 
-        let endDate = new Date(date.getTime() + duration);
+        let resultedEndDate = new Date(resultedStartDate.getTime() + duration);
 
         if(this.appointmentTakesAllDay(rawAppointment) && !result.allDay && this._workSpace.supportAllDayRow()) {
-            endDate = this._workSpace.calculateEndDate(date);
+            resultedEndDate = this._workSpace.calculateEndDate(resultedStartDate);
         }
 
         if(appointment.allDay && !this._workSpace.supportAllDayRow() && !this._workSpace.keepOriginalHours()) {
-            const dateCopy = new Date(date);
+            const dateCopy = new Date(resultedStartDate);
             dateCopy.setHours(0);
 
-            endDate = new Date(dateCopy.getTime() + duration);
+            resultedEndDate = new Date(dateCopy.getTime() + duration);
 
-            if(endDate.getHours() !== 0) {
-                endDate.setHours(this._getCurrentViewOption('endDayHour'));
+            if(resultedEndDate.getHours() !== 0) {
+                resultedEndDate.setHours(this._getCurrentViewOption('endDayHour'));
             }
         }
 
-        endDate = new Date(endDate.getTime() - timeZoneUtils.getTimezoneOffsetChangeInMs(appointmentStartDate, appointmentEndDate, date, endDate));
+        resultedEndDate = new Date(resultedEndDate.getTime() - timeZoneUtils.getTimezoneOffsetChangeInMs(appointmentStartDate, appointmentEndDate, resultedStartDate, resultedEndDate));
 
-        this.fire('setField', 'endDate', result, endDate);
+        this.fire('setField', 'endDate', result, resultedEndDate);
         this._resourcesManager.setResourcesToItem(result, targetCellData.groups);
 
         return result;
