@@ -1026,11 +1026,19 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         this.clock.tick();
 
         let key;
-        this.instance.option('onTaskDeleted', (e) => { key = e.key; });
+        let values;
+        this.instance.option('onTaskDeleted', (e) => {
+            key = e.key;
+            values = e.values;
+        });
         const taskToDelete = tasks[tasks.length - 1];
         this.instance.option('selectedRowKey', taskToDelete.id.toString());
         getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(taskToDelete.id.toString(), false);
         this.clock.tick();
+        assert.equal(values['parentId'], taskToDelete.parentId, 'check values parentId');
+        assert.equal(values['title'], taskToDelete.title, 'check values title');
+        assert.equal(values['start'], taskToDelete.start, 'check values start');
+        assert.equal(values['end'], taskToDelete.end, 'check values end');
         assert.equal(key, taskToDelete.id, 'check key');
     });
     test('task updating - canceling', function(assert) {
@@ -1347,15 +1355,22 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         this.clock.tick();
 
         let key;
+        let values;
         this.instance.option('onDependencyDeleted', (e) => {
             key = e.key;
+            values = e.values;
         });
-        this.instance.deleteDependency(0);
+        const dependencyToDelete = dependencies[0];
+        this.instance.deleteDependency(dependencyToDelete.id);
+
         const $confirmDialog = $('body').find(POPUP_SELECTOR);
         const $yesButton = $confirmDialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $yesButton.trigger('dxclick');
         this.clock.tick();
         assert.equal(key, 0, 'key is right');
+        assert.equal(values.predecessorId, dependencyToDelete.predecessorId, 'check values predecessorId');
+        assert.equal(values.successorId, dependencyToDelete.successorId, 'check values successorId');
+        assert.equal(values.type, dependencyToDelete.type, 'check values type');
     });
     test('resource inserting - canceling', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1640,9 +1655,14 @@ QUnit.module('Edit api', moduleConfig, () => {
     });
     test('deleteResource + onResourceDeleted', function(assert) {
         let key;
+        let values;
+
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.instance.option('onResourceDeleted', (e) => { key = e.key; });
+        this.instance.option('onResourceDeleted', (e) => {
+            key = e.key;
+            values = e.values;
+        });
         this.clock.tick();
 
         const count = resources.length;
@@ -1654,6 +1674,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         const removedResource = resources.filter((t) => t.id === resourceToDelete.id)[0];
         assert.equal(removedResource, undefined, 'dependency was removed');
         assert.equal(key, resourceToDelete.id, 'check key');
+        assert.equal(values.text, resourceToDelete.text, 'check key');
     });
     test('assignResourceToTask', function(assert) {
         let values;

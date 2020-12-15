@@ -656,8 +656,7 @@ class Gantt extends Widget {
     }
     _raiseDeletingAction(optionName, coreArgs) {
         const action = this._getDeletingAction(optionName);
-        const needCacheAssignmentData = optionName === GANTT_RESOURCE_ASSIGNMENTS;
-        const values = needCacheAssignmentData || action ? this._convertCoreToMappedData(optionName, coreArgs.values) : null;
+        const values = this._convertCoreToMappedData(optionName, coreArgs.values);
 
         if(action) {
             const args = { cancel: false, key: coreArgs.key, values: values };
@@ -665,18 +664,15 @@ class Gantt extends Widget {
             coreArgs.cancel = args.cancel;
         }
 
-        if(needCacheAssignmentData && !coreArgs.cancel) {
+        if(!coreArgs.cancel) {
             this._cache.saveData(coreArgs.key, values);
         }
     }
     _raiseDeletedAction(optionName, key) {
         const action = this._getDeletedAction(optionName);
         if(action) {
-            const args = { key: key };
-            if(optionName === GANTT_RESOURCE_ASSIGNMENTS) {
-                args.values = { };
-                this._cache.pullDataFromCache(key, args.values);
-            }
+            const args = { key: key, values: { } };
+            this._cache.pullDataFromCache(key, args.values);
             action(args);
         }
     }

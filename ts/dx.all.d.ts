@@ -7770,7 +7770,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGantt.Options.onDependencyDeleted]
          */
-        onDependencyDeleted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, key?: any }) => any);
+        onDependencyDeleted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, values?: any, key?: any }) => any);
         /**
          * [descr:dxGantt.Options.onDependencyDeleting]
          */
@@ -7794,7 +7794,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGantt.Options.onResourceDeleted]
          */
-        onResourceDeleted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, key?: any }) => any);
+        onResourceDeleted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, values?: any, key?: any }) => any);
         /**
          * [descr:dxGantt.Options.onResourceDeleting]
          */
@@ -7810,7 +7810,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGantt.Options.onResourceUnassigned]
          */
-        onResourceUnassigned?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, key?: any, values?: any }) => any);
+        onResourceUnassigned?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, values?: any, key?: any }) => any);
         /**
          * [descr:dxGantt.Options.onResourceUnassigning]
          */
@@ -7830,7 +7830,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGantt.Options.onTaskDeleted]
          */
-        onTaskDeleted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, key?: any }) => any);
+        onTaskDeleted?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, values?: any, key?: any }) => any);
         /**
          * [descr:dxGantt.Options.onTaskDeleting]
          */
