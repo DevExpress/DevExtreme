@@ -1,6 +1,7 @@
 import fx from 'animation/fx';
 import translator from 'animation/translator';
 import 'common.css!';
+import 'generic_light.css!';
 import config from 'core/config';
 import errors from 'core/errors';
 import resizeCallbacks from 'core/utils/resize_callbacks';

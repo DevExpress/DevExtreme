@@ -324,15 +324,13 @@ export default class ViewDataProvider {
     }
 
     findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay) {
+        if(isAllDay) {
+            return this.findAllDayGroupCellStartDate(groupIndex, startDate);
+        }
+
         const { dateTable } = this.getGroupData(groupIndex);
 
-        if(isAllDay) {
-            const groupStartDate = this.getGroupStartDate(groupIndex);
-
-            return groupStartDate > startDate
-                ? groupStartDate
-                : startDate;
-        }
+        if(!dateTable.length) return;
 
         for(let i = 0; i < dateTable[0].length; ++i) {
             let cell = dateTable[0][i];
@@ -353,6 +351,14 @@ export default class ViewDataProvider {
                 }
             }
         }
+    }
+
+    findAllDayGroupCellStartDate(groupIndex, startDate) {
+        const groupStartDate = this.getGroupStartDate(groupIndex);
+
+        return groupStartDate > startDate
+            ? groupStartDate
+            : startDate;
     }
 
     getCellsGroup(groupIndex) {
@@ -464,6 +470,13 @@ export default class ViewDataProvider {
     getGroupData(groupIndex) {
         const { groupedData } = this.viewData;
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];
+    }
+
+    isGroupIntersectDateInterval(groupIndex, startDate, endDate) {
+        const groupStartDate = this.getGroupStartDate(groupIndex);
+        const groupEndDate = this.getGroupEndDate(groupIndex);
+
+        return startDate < groupEndDate && endDate > groupStartDate;
     }
 
     findGlobalCellPosition(date, groupIndex = 0, allDay = false) {

@@ -59,18 +59,28 @@ export default CollectionWidget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems, e) {
-        e && e.changes ? this._modifyByChanges(e.changes) : this.callBase(newItems, e);
+        if(e?.changes) {
+            this._modifyByChanges(e.changes);
+        } else {
+            this.callBase(newItems, e);
+            this._refreshItemsCache();
+        }
     },
 
     _isItemEquals: function(item1, item2) {
         if(item1 && item1[PRIVATE_KEY_FIELD]) {
             item1 = item1.data;
         }
+
         try {
             return JSON.stringify(item1) === JSON.stringify(item2);
         } catch(e) {
             return item1 === item2;
         }
+    },
+
+    _isItemStrictEquals: function(item1, item2) {
+        return this._isItemEquals(item1, item2);
     },
 
     _partialRefresh: function() {
@@ -81,7 +91,7 @@ export default CollectionWidget.inherit({
                 }
                 return this.keyOf(data);
             };
-            const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemEquals);
+            const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemStrictEquals.bind(this));
             if(result && this._itemsCache.length) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();

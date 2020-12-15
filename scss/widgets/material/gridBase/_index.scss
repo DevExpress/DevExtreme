@@ -184,10 +184,10 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         @include dx-icon-sizing($material-grid-base-header-icon-size);
       }
     }
+  }
 
-    .dx-placeholder::before {
-      font-size: $material-grid-base-cell-font-size;
-    }
+  .dx-placeholder::before {
+    font-size: $material-grid-base-cell-font-size;
   }
 
   .dx-#{$widget-name} {
@@ -415,6 +415,11 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         padding-top: 0;
         padding-bottom: 0;
         margin-top: 0;
+      }
+
+      .dx-placeholder::before {
+        padding-right: $material-grid-base-cell-horizontal-padding;
+        padding-left: $material-grid-base-cell-horizontal-padding;
       }
 
       &.dx-validation-pending {

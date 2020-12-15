@@ -36,13 +36,13 @@ class FileManagerDialogManager {
         });
     }
 
-    getCopyDialog() {
-        this._chooseDirectoryDialog.switchToCopyDialog();
+    getCopyDialog(targetItemInfos) {
+        this._chooseDirectoryDialog.switchToCopyDialog(targetItemInfos);
         return this._chooseDirectoryDialog;
     }
 
-    getMoveDialog() {
-        this._chooseDirectoryDialog.switchToMoveDialog();
+    getMoveDialog(targetItemInfos) {
+        this._chooseDirectoryDialog.switchToMoveDialog(targetItemInfos);
         return this._chooseDirectoryDialog;
     }
 

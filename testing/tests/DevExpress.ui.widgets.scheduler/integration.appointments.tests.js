@@ -1573,8 +1573,10 @@ QUnit.module('Integration: Appointments', {
 
                 const pointer = pointerMock($appointment).start().down().move(10, 10);
 
-                assert.roughEqual(translator.locate($appointment).top, startPosition.top + 10, 1.5, 'Start position is correct');
-                assert.roughEqual(translator.locate($appointment).left, startPosition.left + 10, 1.5, 'Start position is correct');
+                const $draggedAppointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).parent().eq(0);
+
+                assert.roughEqual(translator.locate($draggedAppointment).top, startPosition.top + 10, 1.5, 'Start position is correct');
+                assert.roughEqual(translator.locate($draggedAppointment).left, startPosition.left + 10, 1.5, 'Start position is correct');
 
                 $(this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
                 pointer.up();
@@ -1629,8 +1631,10 @@ QUnit.module('Integration: Appointments', {
 
                 const pointer = pointerMock($appointment).start().down().move(10, 10);
 
-                assert.roughEqual(translator.locate($appointment).top, startPosition.top + 10, 2.1, 'Start position is correct');
-                assert.roughEqual(translator.locate($appointment).left, startPosition.left + 10, 1.5, 'Start position is correct');
+                const $draggedAppointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).parent().eq(0);
+
+                assert.roughEqual(translator.locate($draggedAppointment).top, startPosition.top + 10, 2.1, 'Start position is correct');
+                assert.roughEqual(translator.locate($draggedAppointment).left, startPosition.left + 10, 1.5, 'Start position is correct');
 
                 $(this.instance.$element().find('.dx-scheduler-all-day-table-cell')).eq(11).trigger(dragEvents.enter);
                 pointer.up();
@@ -4762,6 +4766,53 @@ QUnit.module('Integration: Appointments', {
             });
 
             assert.equal(scheduler.appointments.getAppointmentPosition(0).top, scheduler.appointments.getAppointmentPosition(1).top, 'Appointment positions are correct');
+        });
+
+        [{
+            disabled: true,
+            result: true,
+            text: 'disabled is true'
+        }, {
+            disabled: false,
+            result: false,
+            text: 'disabled is false'
+        }, {
+            result: false,
+            text: 'disabled is undefined'
+        }, {
+            disabled: () => false,
+            result: false,
+            text: 'disabled is function, return false'
+        }, {
+            disabled: () => true,
+            result: true,
+            text: 'disabled is function, return true'
+        }].forEach(testCase => {
+            QUnit.test(`Appointment tooltip should be consider disabled property of appointment (${testCase.text})`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: [{
+                        text: 'Website Re-Design Plan',
+                        startDate: new Date(2021, 4, 24, 1),
+                        endDate: new Date(2021, 4, 24, 2),
+                        disabled: testCase.disabled
+                    }],
+                    currentDate: new Date(2021, 4, 24),
+                    height: 600
+                });
+
+                const getAppointmentDisabled = sinon.spy(scheduler.instance._appointmentTooltip._options, 'getAppointmentDisabled');
+
+                scheduler.appointments.click();
+
+                const deleteButton = scheduler.tooltip.getDeleteButton();
+                const getAppointmentDisabledResult = getAppointmentDisabled.returnValues[0];
+
+                const isExistDeleteButton = !!deleteButton.length;
+                const isDisabled = testCase.result;
+
+                assert.equal(isExistDeleteButton, !isDisabled, `visibility button should be equal ${!isDisabled}`);
+                assert.equal(getAppointmentDisabledResult, isDisabled, `getAppointmentDisabled should be return ${isDisabled}`);
+            });
         });
 
         QUnit.test('targetedAppointmentData should has valid targeted resource on onAppointmentClick event', function(assert) {

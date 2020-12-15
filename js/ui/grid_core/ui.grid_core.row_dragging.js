@@ -288,51 +288,71 @@ export default {
                  * @name GridBaseOptions.rowDragging.onDragStart
                  * @type function(e)
                  * @type_function_param1 e:object
-                 * @type_function_param1_field1 event:event
-                 * @type_function_param1_field2 cancel:boolean
-                 * @type_function_param1_field3 itemData:any
-                 * @type_function_param1_field4 itemElement:dxElement
-                 * @type_function_param1_field5 fromIndex:number
-                 * @type_function_param1_field6 fromData:any
+                 * @type_function_param1_field1 component:this
+                 * @type_function_param1_field2 event:event
+                 * @type_function_param1_field3 cancel:boolean
+                 * @type_function_param1_field4 itemData:any
+                 * @type_function_param1_field5 itemElement:dxElement
+                 * @type_function_param1_field6 fromIndex:number
+                 * @type_function_param1_field7 fromData:any
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onDragMove
                  * @type function(e)
                  * @type_function_param1 e:object
-                 * @type_function_param1_field1 event:event
-                 * @type_function_param1_field2 cancel:boolean
-                 * @type_function_param1_field3 itemData:any
-                 * @type_function_param1_field4 itemElement:dxElement
-                 * @type_function_param1_field5 fromIndex:number
-                 * @type_function_param1_field6 toIndex:number
-                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field9 fromData:any
-                 * @type_function_param1_field10 toData:any
-                 * @type_function_param1_field11 dropInsideItem:boolean
+                 * @type_function_param1_field1 component:this
+                 * @type_function_param1_field2 event:event
+                 * @type_function_param1_field3 cancel:boolean
+                 * @type_function_param1_field4 itemData:any
+                 * @type_function_param1_field5 itemElement:dxElement
+                 * @type_function_param1_field6 fromIndex:number
+                 * @type_function_param1_field7 toIndex:number
+                 * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field10 fromData:any
+                 * @type_function_param1_field11 toData:any
+                 * @type_function_param1_field12 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onDragEnd
                  * @type function(e)
                  * @type_function_param1 e:object
-                 * @type_function_param1_field1 event:event
-                 * @type_function_param1_field2 cancel:boolean
-                 * @type_function_param1_field3 itemData:any
-                 * @type_function_param1_field4 itemElement:dxElement
-                 * @type_function_param1_field5 fromIndex:number
-                 * @type_function_param1_field6 toIndex:number
-                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field9 fromData:any
-                 * @type_function_param1_field10 toData:any
-                 * @type_function_param1_field11 dropInsideItem:boolean
+                 * @type_function_param1_field1 component:this
+                 * @type_function_param1_field2 event:event
+                 * @type_function_param1_field3 cancel:boolean
+                 * @type_function_param1_field4 itemData:any
+                 * @type_function_param1_field5 itemElement:dxElement
+                 * @type_function_param1_field6 fromIndex:number
+                 * @type_function_param1_field7 toIndex:number
+                 * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field10 fromData:any
+                 * @type_function_param1_field11 toData:any
+                 * @type_function_param1_field12 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onDragChange
                  * @type function(e)
                  * @type_function_param1 e:object
-                 * @type_function_param1_field1 event:event
-                 * @type_function_param1_field2 cancel:boolean
+                 * @type_function_param1_field1 component:this
+                 * @type_function_param1_field2 event:event
+                 * @type_function_param1_field3 cancel:boolean
+                 * @type_function_param1_field4 itemData:any
+                 * @type_function_param1_field5 itemElement:dxElement
+                 * @type_function_param1_field6 fromIndex:number
+                 * @type_function_param1_field7 toIndex:number
+                 * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field10 fromData:any
+                 * @type_function_param1_field11 toData:any
+                 * @type_function_param1_field12 dropInsideItem:boolean
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.onAdd
+                 * @type function(e)
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field1 component:this
+                 * @type_function_param1_field2 event:event
                  * @type_function_param1_field3 itemData:any
                  * @type_function_param1_field4 itemElement:dxElement
                  * @type_function_param1_field5 fromIndex:number
@@ -344,49 +364,36 @@ export default {
                  * @type_function_param1_field11 dropInsideItem:boolean
                  */
                 /**
-                 * @name GridBaseOptions.rowDragging.onAdd
-                 * @type function(e)
-                 * @type_function_param1 e:object
-                 * @type_function_param1_field1 event:event
-                 * @type_function_param1_field2 itemData:any
-                 * @type_function_param1_field3 itemElement:dxElement
-                 * @type_function_param1_field4 fromIndex:number
-                 * @type_function_param1_field5 toIndex:number
-                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field8 fromData:any
-                 * @type_function_param1_field9 toData:any
-                 * @type_function_param1_field10 dropInsideItem:boolean
-                 */
-                /**
                  * @name GridBaseOptions.rowDragging.onRemove
                  * @type function(e)
                  * @type_function_param1 e:object
-                 * @type_function_param1_field1 event:event
-                 * @type_function_param1_field2 itemData:any
-                 * @type_function_param1_field3 itemElement:dxElement
-                 * @type_function_param1_field4 fromIndex:number
-                 * @type_function_param1_field5 toIndex:number
-                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field8 fromData:any
-                 * @type_function_param1_field9 toData:any
+                 * @type_function_param1_field1 component:this
+                 * @type_function_param1_field2 event:event
+                 * @type_function_param1_field3 itemData:any
+                 * @type_function_param1_field4 itemElement:dxElement
+                 * @type_function_param1_field5 fromIndex:number
+                 * @type_function_param1_field6 toIndex:number
+                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field9 fromData:any
+                 * @type_function_param1_field10 toData:any
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onReorder
                  * @type function(e)
                  * @type_function_param1 e:object
-                 * @type_function_param1_field1 event:event
-                 * @type_function_param1_field2 itemData:any
-                 * @type_function_param1_field3 itemElement:dxElement
-                 * @type_function_param1_field4 fromIndex:number
-                 * @type_function_param1_field5 toIndex:number
-                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field8 fromData:any
-                 * @type_function_param1_field9 toData:any
-                 * @type_function_param1_field10 dropInsideItem:boolean
-                 * @type_function_param1_field11 promise:Promise<void>
+                 * @type_function_param1_field1 component:this
+                 * @type_function_param1_field2 event:event
+                 * @type_function_param1_field3 itemData:any
+                 * @type_function_param1_field4 itemElement:dxElement
+                 * @type_function_param1_field5 fromIndex:number
+                 * @type_function_param1_field6 toIndex:number
+                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field9 fromData:any
+                 * @type_function_param1_field10 toData:any
+                 * @type_function_param1_field11 dropInsideItem:boolean
+                 * @type_function_param1_field12 promise:Promise<void>
                  */
             }
         };

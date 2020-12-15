@@ -53,6 +53,8 @@ const TD = '<td>';
 const DIV = '<div>';
 const TEST_HEIGHT = 66666;
 
+const FIELD_CALCULATED_OPTIONS = ['allowSorting', 'allowSortingBySummary', 'allowFiltering', 'allowExpandAll'];
+
 function getArraySum(array) {
     let sum = 0;
 
@@ -633,6 +635,21 @@ const PivotGrid = Widget.inherit({
         });
     },
 
+    _updateCalculatedOptions: function(fields) {
+        const that = this;
+        each(fields, function(index, field) {
+            each(FIELD_CALCULATED_OPTIONS, function(_, optionName) {
+                const isCalculated = field._initProperties
+                    && (optionName in field._initProperties)
+                    && (field._initProperties[optionName] === undefined);
+                const needUpdate = field[optionName] === undefined || isCalculated;
+                if(needUpdate) {
+                    setFieldProperty(field, optionName, that.option(optionName));
+                }
+            });
+        });
+    },
+
     _getDataControllerOptions: function() {
         const that = this;
         return {
@@ -649,13 +666,7 @@ const PivotGrid = Widget.inherit({
             hideEmptySummaryCells: that.option('hideEmptySummaryCells'),
 
             onFieldsPrepared: function(fields) {
-                each(fields, function(index, field) {
-                    each(['allowSorting', 'allowSortingBySummary', 'allowFiltering', 'allowExpandAll'], function(_, optionName) {
-                        if(field[optionName] === undefined) {
-                            setFieldProperty(field, optionName, that.option(optionName));
-                        }
-                    });
-                });
+                that._updateCalculatedOptions(fields);
             }
         };
     },
@@ -725,6 +736,11 @@ const PivotGrid = Widget.inherit({
 
     _optionChanged: function(args) {
         const that = this;
+
+        if(FIELD_CALCULATED_OPTIONS.indexOf(args.name) >= 0) {
+            const fields = this.getDataSource().fields();
+            this._updateCalculatedOptions(fields);
+        }
 
         switch(args.name) {
             case 'dataSource':

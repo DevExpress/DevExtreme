@@ -584,6 +584,7 @@ const TagBox = SelectBox.inherit({
     _clearTextValue: function() {
         this._input().val('');
         this._toggleEmptinessEventHandler();
+        this.option('text', '');
     },
 
     _focusInHandler: function(e) {
@@ -592,6 +593,12 @@ const TagBox = SelectBox.inherit({
         }
 
         this.callBase(e);
+    },
+
+    _renderInputValue: function() {
+        this.option('displayValue', this._searchValue());
+
+        return this.callBase();
     },
 
     _restoreInputText: function(saveEditingValue) {
@@ -1088,7 +1095,7 @@ const TagBox = SelectBox.inherit({
 
     _customItemAddedHandler: function(e) {
         this.callBase(e);
-        this._input().val('');
+        this._clearTextValue();
     },
 
     _removeTagHandler: function(args) {
@@ -1254,6 +1261,7 @@ const TagBox = SelectBox.inherit({
     _searchHandler: function(e) {
         if(this.option('searchEnabled') && !!e && !this._isTagRemoved) {
             this.callBase(e);
+            this._setListDataSourceFilter();
         }
 
         this._updateWidgetHeight();

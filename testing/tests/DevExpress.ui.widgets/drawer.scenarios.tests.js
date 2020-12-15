@@ -11,9 +11,9 @@ import 'ui/select_box';
 import 'ui/tab_panel';
 import 'ui/text_box';
 import 'ui/tree_view';
-import 'generic_light.css!';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import dxDrawer from 'ui/drawer';
 
@@ -237,20 +237,6 @@ configs.forEach(config => {
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 template: drawerTesters[config.position].template()
-            }));
-
-            this.clock.tick(100);
-            drawer.option('opened', true);
-            this.clock.tick(100);
-
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
-        });
-
-        testOrSkip('opened: false -> opened: true, forceTemplateWrapper', () => configIs('overlap', 'right', 'expand'), function(assert) {
-            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: false,
-                template: drawerTesters[config.position].template(true)
             }));
 
             this.clock.tick(100);

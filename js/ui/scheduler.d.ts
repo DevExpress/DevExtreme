@@ -63,7 +63,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentDragging?: { autoScroll?: boolean, data?: any, group?: string, onAdd?: ((e: { event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragEnd?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragMove?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragStart?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromData?: any }) => any), onRemove?: ((e: { event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => any), scrollSensitivity?: number, scrollSpeed?: number };
+    appointmentDragging?: { autoScroll?: boolean, data?: any, group?: string, onAdd?: ((e: { component: dxScheduler, event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragEnd?: ((e: { component: dxScheduler, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragMove?: ((e: { component: dxScheduler, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragStart?: ((e: { component: dxScheduler, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromData?: any }) => any), onRemove?: ((e: { component: dxScheduler, event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => any), scrollSensitivity?: number, scrollSpeed?: number };
     /**
      * @docid dxSchedulerOptions.appointmentTemplate
      * @extends AppointmentTemplate
@@ -660,11 +660,22 @@ export default class dxScheduler extends Widget {
      */
     hideAppointmentTooltip(): void;
     /**
+     * @docid dxSchedulerMethods.scrollTo
+     * @publicName scrollTo(date, group, allDay)
+     * @param1 date:Date
+     * @param2 group:Object|undefined
+     * @param3 allDay:Boolean|undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    scrollTo(date: Date, group?: object, allDay?: boolean): void;
+    /**
      * @docid dxSchedulerMethods.scrollToTime
      * @publicName scrollToTime(hours, minutes, date)
      * @param1 hours:Number
      * @param2 minutes:Number
      * @param3 date:Date|undefined
+     * @deprecated
      * @prevFileNamespace DevExpress.ui
      * @public
      */

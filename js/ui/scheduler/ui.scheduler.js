@@ -509,31 +509,47 @@ class Scheduler extends Widget {
                * @name dxSchedulerOptions.appointmentDragging.onDragStart
                * @type function(e)
                * @type_function_param1 e:object
-               * @type_function_param1_field1 event:event
-               * @type_function_param1_field2 cancel:boolean
-               * @type_function_param1_field3 itemData:any
-               * @type_function_param1_field4 itemElement:dxElement
-               * @type_function_param1_field5 fromData:any
+               * @type_function_param1_field1 component:dxScheduler
+               * @type_function_param1_field2 event:event
+               * @type_function_param1_field3 cancel:boolean
+               * @type_function_param1_field4 itemData:any
+               * @type_function_param1_field5 itemElement:dxElement
+               * @type_function_param1_field6 fromData:any
                */
             /**
                * @name dxSchedulerOptions.appointmentDragging.onDragMove
                * @type function(e)
                * @type_function_param1 e:object
-               * @type_function_param1_field1 event:event
-               * @type_function_param1_field2 cancel:boolean
-               * @type_function_param1_field3 itemData:any
-               * @type_function_param1_field4 itemElement:dxElement
-               * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
-               * @type_function_param1_field7 fromData:any
-               * @type_function_param1_field8 toData:any
+               * @type_function_param1_field1 component:dxScheduler
+               * @type_function_param1_field2 event:event
+               * @type_function_param1_field3 cancel:boolean
+               * @type_function_param1_field4 itemData:any
+               * @type_function_param1_field5 itemElement:dxElement
+               * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field8 fromData:any
+               * @type_function_param1_field9 toData:any
                */
             /**
                * @name dxSchedulerOptions.appointmentDragging.onDragEnd
                * @type function(e)
                * @type_function_param1 e:object
-               * @type_function_param1_field1 event:event
-               * @type_function_param1_field2 cancel:boolean
+               * @type_function_param1_field1 component:dxScheduler
+               * @type_function_param1_field2 event:event
+               * @type_function_param1_field3 cancel:boolean
+               * @type_function_param1_field4 itemData:any
+               * @type_function_param1_field5 itemElement:dxElement
+               * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field8 fromData:any
+               * @type_function_param1_field9 toData:any
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onAdd
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 component:dxScheduler
+               * @type_function_param1_field2 event:event
                * @type_function_param1_field3 itemData:any
                * @type_function_param1_field4 itemElement:dxElement
                * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
@@ -542,27 +558,16 @@ class Scheduler extends Widget {
                * @type_function_param1_field8 toData:any
                */
             /**
-               * @name dxSchedulerOptions.appointmentDragging.onAdd
-               * @type function(e)
-               * @type_function_param1 e:object
-               * @type_function_param1_field1 event:event
-               * @type_function_param1_field2 itemData:any
-               * @type_function_param1_field3 itemElement:dxElement
-               * @type_function_param1_field4 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field5 toComponent:dxSortable|dxDraggable
-               * @type_function_param1_field6 fromData:any
-               * @type_function_param1_field7 toData:any
-               */
-            /**
                * @name dxSchedulerOptions.appointmentDragging.onRemove
                * @type function(e)
                * @type_function_param1 e:object
-               * @type_function_param1_field1 event:event
-               * @type_function_param1_field2 itemData:any
-               * @type_function_param1_field3 itemElement:dxElement
-               * @type_function_param1_field4 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field5 toComponent:dxSortable|dxDraggable
-               * @type_function_param1_field6 fromData:any
+               * @type_function_param1_field1 component:dxScheduler
+               * @type_function_param1_field2 event:event
+               * @type_function_param1_field3 itemData:any
+               * @type_function_param1_field4 itemElement:dxElement
+               * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field7 fromData:any
                */
             showAllDayPanel: true,
 
@@ -1330,7 +1335,7 @@ class Scheduler extends Widget {
                 if(this._isAgenda()) {
                     this._workSpace._renderView();
                     // TODO: remove rows calculation from this callback
-                    this._dataSourceLoadedCallback.fireWith(this, [result]);
+                    this._dataSourceLoadedCallback.fireWith(this, [this.getFilteredItems()]);
                 }
             }).bind(this));
         }
@@ -1539,7 +1544,8 @@ class Scheduler extends Widget {
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
 
-            createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('getTextAndFormatDate', appointment, targetedAppointment, format)
+            createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('getTextAndFormatDate', appointment, targetedAppointment, format),
+            getAppointmentDisabled: appointment => this.createAppointmentAdapter(appointment).disabled
         };
     }
 
@@ -1630,6 +1636,11 @@ class Scheduler extends Widget {
         result.min = new Date(this._dateOption('min'));
         result.max = new Date(this._dateOption('max'));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
+
+        result.todayDate = () => {
+            const result = this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
+            return result;
+        };
 
         return result;
     }
@@ -1976,7 +1987,6 @@ class Scheduler extends Widget {
     }
 
     _singleAppointmentChangesHandler(rawAppointment, rawTargetedAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        const appointment = this.createAppointmentAdapter(rawAppointment);
         const targetedAppointment = this.createAppointmentAdapter(rawTargetedAppointment);
         const updatedAppointment = this.createAppointmentAdapter(rawAppointment);
 
@@ -1990,7 +2000,7 @@ class Scheduler extends Widget {
             this.addAppointment(rawTargetedAppointment);
         }
 
-        const correctedExceptionDate = this._getCorrectedExceptionDateByDST(exceptionDate, appointment, targetedAppointment);
+        const correctedExceptionDate = exceptionDate;
         updatedAppointment.recurrenceException = this._createRecurrenceException(correctedExceptionDate, rawAppointment);
 
         if(isPopupEditing) {
@@ -2110,9 +2120,7 @@ class Scheduler extends Widget {
         const adapter = this.createAppointmentAdapter(appointment);
         const targetedAdapter = adapter.clone();
 
-        const isRecurrenceAppointment = adapter.recurrenceRule && getRecurrenceProcessor().isValidRecurrenceRule(adapter.recurrenceRule);
-
-        if(this._isAgenda() && isRecurrenceAppointment) {
+        if(this._isAgenda() && adapter.isRecurrent) {
             const getStartDate = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
             const newStartDate = getStartDate($(element), adapter.startDate).startDate;
 
