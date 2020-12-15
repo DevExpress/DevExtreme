@@ -1,9 +1,7 @@
 ﻿import React from 'react';
 import DataGrid, { Column, Selection, Summary, TotalItem } from 'devextreme-react/data-grid';
 import service from './data.js';
-import Globalize from 'globalize';
-import 'devextreme/localization/globalize/date';
-import 'devextreme/localization/globalize/currency';
+import { formatDate } from 'devextreme/localization';
 
 class App extends React.Component {
   constructor(props) {
@@ -11,7 +9,7 @@ class App extends React.Component {
     this.orders = service.getOrders();
   }
   customizeDate(data) {
-    return `First: ${ Globalize.formatDate(data.value, { date: 'medium' })}`;
+    return `First: ${ formatDate(data.value, 'MMM dd, yyyy')}`;
   }
   render() {
     return (

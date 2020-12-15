@@ -19,7 +19,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 if(fieldData.diff) {
                     options.cellElement.addClass((fieldData.diff > 0) ? "inc" : "dec");
                     fieldHtml += "<div class='current-value'>" +
-                        Globalize.formatCurrency(fieldData.value, "USD") +
+                        DevExpress.localization.formatNumber(fieldData.value, {type: "currency", currency: "USD", precision: 2 }) +
                         "</div> <div class='diff'>" +
                         Math.abs(fieldData.diff).toFixed(2) +
                         "  </div>";

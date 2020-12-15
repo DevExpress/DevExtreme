@@ -36,7 +36,7 @@ window.onload = function() {
                     column: "OrderDate",
                     summaryType: "min",
                     customizeText: function(data) {
-                        return "First: " + Globalize.formatDate(data.value, { date: "medium" });
+                        return "First: " + DevExpress.localization.formatDate(data.value, "MMM dd, yyyy");
                     }
                 }, {
                     column: "SaleAmount",

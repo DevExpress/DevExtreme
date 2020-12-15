@@ -1,4 +1,11 @@
 $(function() {
+    var currencyFormatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+
     var filterBuilderInstance = $("#filterBuilder").dxFilterBuilder({
         fields: fields,
         value: filter
@@ -15,7 +22,7 @@ $(function() {
             $("<img>").attr("src", data.ImageSrc).appendTo(result);
             $("<div>").text(data.Name).appendTo(result);
             $("<div>").addClass("price")
-                .html(Globalize.formatCurrency(data.Price, "USD", { maximumFractionDigits: 0 })).appendTo(result);
+                .html(currencyFormatter.format(data.Price)).appendTo(result);
             return result;
         }
     });

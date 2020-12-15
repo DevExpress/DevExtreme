@@ -1,3 +1,5 @@
+var formatDate = new Intl.DateTimeFormat("en-US").format;
+
 window.onload = function() {
     var viewModel = {
         dataGridOptions: {
