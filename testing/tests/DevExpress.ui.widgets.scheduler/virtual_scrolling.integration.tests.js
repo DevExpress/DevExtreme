@@ -188,10 +188,10 @@ module('Vertical virtual scrolling', () => {
 
                     virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
-                    const { pageSize } = virtualScrollingDispatcher.getState();
+                    const { pageSize } = virtualScrollingDispatcher.verticalVirtualScrolling;
                     const { innerHeight } = getWindow();
 
-                    const rowHeight = virtualScrollingDispatcher._verticalVirtualScrolling.rowHeight;
+                    const rowHeight = virtualScrollingDispatcher.rowHeight;
                     const expectedPageSize = Math.ceil(innerHeight / rowHeight);
 
                     assert.equal(pageSize, expectedPageSize, 'Page size is correct');
