@@ -36,7 +36,6 @@
         );
     }
 }(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor, console) {
-
     if(QUnit.urlParams['nojquery']) {
         return;
     }
@@ -332,6 +331,12 @@
         );
 
         testTemplate('obj', '<%- obj.text %>', 'Test button');
+
+        testTemplate('null', '<% var a = null; %><%- a %>', '');
+        testTemplate('undefined', '<% var a = undefined; %><%- a %>', '');
+        testTemplate('empty', '<%-%>', 'undefined');
+        testTemplate('space', '<%- %>', 'undefined');
+        testTemplate('space', '<%-  %>', 'undefined');
 
         QUnit.module('Alternative syntax (T831170)', function() {
             testTemplate('enabled', 'a [%= \'b\' %] c', 'a b c');
