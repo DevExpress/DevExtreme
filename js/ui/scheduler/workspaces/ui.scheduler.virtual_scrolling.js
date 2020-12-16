@@ -87,7 +87,32 @@ export default class VirtualScrollingDispatcher {
     }
 
     calculateCoordinatesByDataAndPosition(cellData, position, date) {
-        return this.verticalVirtualScrolling.calculateCoordinatesByDataAndPosition(cellData, position, date);
+        const { _workspace: workSpace } = this;
+        const {
+            rowIndex, columnIndex,
+        } = position;
+        const {
+            startDate, endDate, allDay,
+        } = cellData;
+
+        const timeToScroll = date.getTime();
+        const cellStartTime = startDate.getTime();
+        const cellEndTime = endDate.getTime();
+
+        const scrollInCell = allDay
+            ? 0
+            : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
+
+        const cellWidth = workSpace.getCellWidth();
+
+        const top = (rowIndex + scrollInCell) * this.rowHeight;
+        let left = cellWidth * columnIndex;
+
+        if(workSpace.option('rtlEnabled')) {
+            left = workSpace.getScrollableOuterWidth() - left;
+        }
+
+        return { top, left };
     }
 
     dispose() {

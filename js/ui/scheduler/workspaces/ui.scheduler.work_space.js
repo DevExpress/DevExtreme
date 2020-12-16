@@ -1219,11 +1219,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         const allDayElements = this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined;
         const rowCountInGroup = this._getRowCount();
 
+        const cellCount = this._getTotalCellCount(groupCount);
+
         const options = {
             horizontalGroupCount,
             verticalGroupCount,
             rowCountInGroup,
-            cellCount: this._getTotalCellCount(groupCount),
+            cellCount,
             cellCountInGroupRow: this._getCellCount(),
             cellDataGetters: [this._getCellData.bind(this)],
             allDayElements,
@@ -1248,7 +1250,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 leftVirtualCellHeight: horizontalScrollingState.virtualItemSizeBefore,
                 rightVirtualCellHeight: horizontalScrollingState.virtualItemSizeAfter,
                 startCellIndex: horizontalScrollingState.startIndex,
-                cellCount: horizontalScrollingState.itemCount,
+                // TODO - horizontal virtual scrolling
+                // cellCount: horizontalScrollingState.itemCount
             });
         } else {
             options.rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());
@@ -2604,14 +2607,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getVirtualRowOffset() {
         return this.isVirtualScrolling()
-            ? this.virtualScrollingDispatcher.getState().topVirtualRowHeight
+            ? this.virtualScrollingDispatcher.verticalScrollingState.virtualItemSizeBefore
             : 0;
     }
 
     _getCellDataInRenovatedView($cell) {
         let rowIndex = $cell.parent().index();
         if(this.isVirtualScrolling()) {
-            rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
+            rowIndex -= this.virtualScrollingDispatcher.virtualItemCountBefore;
         }
 
         const columnIndex = $cell.index();
@@ -3117,8 +3120,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         let fullScrolledRowCount = scrollableScrollTop / cellHeight;
         if(this.isVirtualScrolling()) {
-            const virtualScrollingState = this.virtualScrollingDispatcher.getState();
-            fullScrolledRowCount -= virtualScrollingState.topVirtualRowCount;
+            const { verticalScrollingState } = this.virtualScrollingDispatcher;
+            fullScrolledRowCount -= verticalScrollingState.virtualItemCountBefore;
         }
 
         let scrolledRowCount = Math.floor(fullScrolledRowCount);
@@ -3385,7 +3388,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this.isVirtualScrolling()
             && !(isAllDayCell && !isVerticalGrouping)) {
-            rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
+            rowIndex -= this.virtualScrollingDispatcher.verticalScrollingState.virtualItemCountBefore;
         }
 
         return { rowIndex, columnIndex };
