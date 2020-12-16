@@ -647,6 +647,22 @@ QUnit.module('keyboard navigation', {
         assert.ok(!this.dropDownEditor.option('opened'), 'overlay is visible on alt+up press');
     });
 
+    [
+        { key: 'ArrowUp', ctrlKey: true },
+        { key: 'ArrowDown', ctrlKey: true },
+        { key: 'ArrowUp', metaKey: true },
+        { key: 'ArrowDown', metaKey: true }
+    ].forEach((keyDownConfig) => {
+        const commandKey = keyDownConfig.ctrlKey ? 'ctrl' : 'command';
+        QUnit.test(`default behavior of ${keyDownConfig.key} arrow key with ${commandKey} key should not be prevented`, function(assert) {
+            this.keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+
+            assert.notOk(this.keyboard.event.isDefaultPrevented(), 'event is not prevented');
+            assert.notOk(this.keyboard.event.isPropagationStopped(), 'propogation is not stopped');
+            assert.notOk(this.dropDownEditor.option('opened'), 'overlay is closed');
+        });
+    });
+
     QUnit.test('space/altDown key press on readOnly drop down doesn\'t toggle popup visibility', function(assert) {
         const altDown = $.Event('keydown', { key: 'ArrowDown', altKey: true });
 
