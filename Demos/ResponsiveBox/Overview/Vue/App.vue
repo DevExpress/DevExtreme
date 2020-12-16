@@ -123,7 +123,7 @@ export default {
 };
 </script>
 <style>
-.demo-container, #page{
+.demo-container, #app, #page{
     height: 100%;
     min-height: 300px;
 }
