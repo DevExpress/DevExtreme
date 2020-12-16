@@ -11,6 +11,7 @@ describe('PathSvgElement', () => {
         fill: 'red',
         stroke: '#ffaa66',
         opacity: 0.8,
+        pointerEvents: 'pointerEvents',
       };
       const props = {
         points: [1, 2, 3, 4],

@@ -104,12 +104,12 @@ describe('Render', () => {
     });
   });
 
-  it('should render svg', () => {
+  it('should render root svg', () => {
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
-    expect(tooltip.find('svg').props()).toMatchObject({
+    expect(tooltip.find('RootSvgElement').props()).toMatchObject({
       width: 50,
       height: 38,
-      style: { position: 'absolute' },
+      styles: { position: 'absolute' },
     });
   });
 
@@ -117,7 +117,6 @@ describe('Render', () => {
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
 
     expect(tooltip.find('g').at(0).props()).toMatchObject({
-      pointerEvents: 'none',
       transform: 'translate(-3, -4)',
     });
 
@@ -192,7 +191,6 @@ describe('Render', () => {
       opacity: 0.4,
     });
     expect(tooltip.find('g').at(0).props()).toMatchObject({
-      pointerEvents: 'none',
       filter: 'url(#filterId)',
     });
   });
@@ -217,11 +215,47 @@ describe('Render', () => {
 
   it('should be interactive', () => {
     const tooltip = shallow(<TooltipComponent
-      {...{ ...props, props: { ...props.props, interactive: true } } as any}
+      {...{ ...props, pointerEvents: 'auto', props: { ...props.props, interactive: true } } as any}
     /> as any);
 
-    expect(tooltip.find('g').at(0).props()).toMatchObject({
-      pointerEvents: 'all',
+    expect(tooltip.find('RootSvgElement').props()).toMatchObject({
+      styles: {
+        msUserSelect: 'text',
+        MozUserSelect: 'auto',
+        WebkitUserSelect: 'auto',
+      },
+    });
+    expect(tooltip.find('PathSvgElement').props()).toMatchObject({
+      pointerEvents: 'auto',
+    });
+    expect(tooltip.find('TextSvgElement').props()).toMatchObject({
+      styles: {
+        pointerEvents: 'auto',
+      },
+    });
+  });
+
+  it('should be interactive with html text', () => {
+    const customizedOptions = { ...props.customizedOptions, html: 'html text' };
+    const tooltip = shallow(
+      <TooltipComponent {...{
+        ...props, pointerEvents: 'auto', customizedOptions, props: { ...props.props, interactive: true },
+      } as any}
+      /> as any,
+    );
+
+    expect(tooltip.find('RootSvgElement').props()).toMatchObject({
+      styles: {
+        msUserSelect: 'text',
+        MozUserSelect: 'auto',
+        WebkitUserSelect: 'auto',
+      },
+    });
+    expect(tooltip.find('PathSvgElement').props()).toMatchObject({
+      pointerEvents: 'auto',
+    });
+    expect(tooltip.find('div').at(1).props().style).toMatchObject({
+      pointerEvents: 'auto',
     });
   });
 });
@@ -400,6 +434,18 @@ describe('Getters', () => {
       rm: 16,
       bm: 17,
     });
+  });
+
+  it('should return pointer events, interactive', () => {
+    const tooltip = new Tooltip({ interactive: true });
+
+    expect(tooltip.pointerEvents).toEqual('auto');
+  });
+
+  it('should return pointer events, not interactive', () => {
+    const tooltip = new Tooltip({ interactive: false });
+
+    expect(tooltip.pointerEvents).toEqual('none');
   });
 });
 

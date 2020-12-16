@@ -7,6 +7,7 @@ import { PathSvgElement } from './renderers/svg_path';
 import { TextSvgElement } from './renderers/svg_text';
 import { ShadowFilter } from './renderers/shadow_filter';
 import { getNextDefsSvgId } from './renderers/utils';
+import { RootSvgElement } from './renderers/svg_root';
 
 import {
   Size, Border, CustomizedOptions, CustomizeTooltipFn,
@@ -29,6 +30,7 @@ export const viewFunction = ({
   filterId,
   customizedOptions,
   setCurrentState,
+  pointerEvents,
   props: {
     x, y, font, shadow, opacity, interactive,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
@@ -41,6 +43,11 @@ export const viewFunction = ({
   const d = getCloudPoints(textSizeWPaddings, correctedCoordinates, angle,
     { cornerRadius, arrowWidth }, true);
   setCurrentState(d);
+  const styles = interactive ? {
+    msUserSelect: 'text',
+    MozUserSelect: 'auto',
+    WebkitUserSelect: 'auto',
+  } : {};
   return (
     <div
       style={{
@@ -50,7 +57,14 @@ export const viewFunction = ({
         top: cloudSize.y,
       }}
     >
-      <svg width={cloudSize.width} height={cloudSize.height} style={{ position: 'absolute' }}>
+      <RootSvgElement
+        width={cloudSize.width}
+        height={cloudSize.height}
+        styles={{
+          position: 'absolute',
+          ...styles,
+        }}
+      >
         <defs>
           <ShadowFilter
             id={filterId}
@@ -66,12 +80,12 @@ export const viewFunction = ({
           />
         </defs>
         <g
-          pointerEvents={interactive ? 'all' : 'none'}
           filter={`url(#${filterId})`}
           ref={cloudRef as any}
           transform={`translate(${-cloudSize.x}, ${-cloudSize.y})`}
         >
           <PathSvgElement
+            pointerEvents={pointerEvents}
             d={d}
             fill={customizedOptions.color}
             stroke={customizedOptions.borderColor}
@@ -98,12 +112,13 @@ export const viewFunction = ({
                     fontSize: font.size,
                     fontWeight: font.weight,
                     opacity: font.opacity,
+                    pointerEvents,
                   }}
                 />
               </g>
             )}
         </g>
-      </svg>
+      </RootSvgElement>
       {!customizedOptions.html ? null
         : (
           <div
@@ -118,6 +133,7 @@ export const viewFunction = ({
               fontSize: font.size,
               fontWeight: font.weight,
               opacity: font.opacity,
+              pointerEvents,
             }}
           />
         )}
@@ -286,5 +302,10 @@ export class Tooltip extends JSXComponent(TooltipProps) {
       tm: max(blur - yOff, 0), // top margin
       bm: max(blur + yOff, 0), // bottom margin
     };
+  }
+
+  get pointerEvents(): 'auto' | 'none' {
+    const { interactive } = this.props;
+    return interactive ? 'auto' : 'none';
   }
 }
