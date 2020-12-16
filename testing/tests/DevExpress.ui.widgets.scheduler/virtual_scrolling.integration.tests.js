@@ -584,130 +584,6 @@ module('Vertical virtual scrolling', () => {
             [
                 {
                     showAllDayPanel: true,
-                    steps: [{
-                        y: 0,
-                        appointmentRects: [
-                            { left: -9835, top: -9689, height: 500 },
-                            { left: -9771, top: -9839, height: 50 },
-                            { left: -9387, top: -9689, height: 500 },
-                            { left: -9323, top: -9839, height: 50 }
-                        ]
-                    }, {
-                        y: 1000,
-                        appointmentRects: [
-                            { left: -9835, top: -10039, height: 850 },
-                            { left: -9771, top: -10839, height: 50 },
-                            { left: -9387, top: -10039, height: 850 },
-                            { left: -9323, top: -10839, height: 50 }
-                        ]
-                    }, {
-                        y: 2200,
-                        appointmentRects: [
-                            { left: -9835, top: -10051, height: 550 },
-                            { left: -9771, top: -11901, height: 50 },
-                            { left: -9387, top: -10051, height: 550 },
-                            { left: -9323, top: -11901, height: 50 }
-                        ]
-                    }]
-                },
-                {
-                    showAllDayPanel: false,
-                    steps: [{
-                        y: 0,
-                        appointmentRects: [
-                            { left: -9835, top: -9712, height: 500 },
-                            { left: -9771, top: -9862, height: 50 },
-                            { left: -9387, top: -9712, height: 500 },
-                            { left: -9323, top: -9862, height: 50 }
-                        ]
-                    }, {
-                        y: 1000,
-                        appointmentRects: [
-                            { left: -9835, top: -10062, height: 850 },
-                            { left: -9771, top: -10862, height: 50 },
-                            { left: -9387, top: -10062, height: 850 },
-                            { left: -9323, top: -10862, height: 50 }
-                        ]
-                    }, {
-                        y: 2200,
-                        appointmentRects: [
-                            { left: -9835, top: -10099, height: 600 },
-                            { left: -9771, top: -11899, height: 50 },
-                            { left: -9387, top: -10099, height: 600 },
-                            { left: -9323, top: -11899, height: 50 }
-                        ]
-                    }]
-                }
-            ].forEach(option => {
-                test(`Long appointment should be rendered correctly if horizontal grouping, ${viewName} view, and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
-
-                    const data = [{
-                        startDate: new Date(2020, 9, 12, 1, 30),
-                        endDate: new Date(2020, 9, 13, 0, 30),
-                        priorityId: 1
-                    }, {
-                        startDate: new Date(2020, 9, 12, 1, 30),
-                        endDate: new Date(2020, 9, 13, 0, 30),
-                        priorityId: 2,
-                    }];
-                    this.createInstance({
-                        dataSource: data,
-                        currentView: 'week',
-                        currentDate: new Date(2020, 9, 12),
-                        groups: ['priorityId'],
-                        resources: [{
-                            fieldExpr: 'priorityId',
-                            allowMultiple: false,
-                            dataSource: [{ id: 1 }, { id: 2 }]
-                        }],
-                        scrolling: { mode: 'virtual' },
-                        showAllDayPanel: option.showAllDayPanel,
-                        height: 500,
-                    });
-
-                    const { instance } = this.scheduler;
-                    const workspace = instance.getWorkSpace();
-                    const scrollable = workspace.getScrollable();
-
-                    workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
-
-                    return asyncWrapper(assert, promise => {
-                        option.steps.forEach(step => {
-                            promise = asyncScrollTest(
-                                promise,
-                                () => { scrollable.scrollTo({ y: step.y }); },
-                                () => {
-                                    assert.equal(
-                                        this.scheduler.appointments.getAppointmentCount(),
-                                        step.appointmentRects.length,
-                                        `Appointment count is correct if scrollY: ${step.y}`
-                                    );
-
-                                    step.appointmentRects.forEach((expectedRect, index) => {
-                                        const appointmentRect = this.scheduler.appointments
-                                            .getAppointment(index)
-                                            .get(0)
-                                            .getBoundingClientRect();
-
-                                        assert.roughEqual(expectedRect.left, appointmentRect.left, 2.01, `appointment part #${index} left is correct`);
-                                        assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
-                                        assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
-                                    });
-                                });
-                        });
-
-                        return promise;
-                    });
-                });
-            });
-
-            [
-                {
-                    showAllDayPanel: true,
                     steps: [
                         {
                             y: 0,
@@ -1129,6 +1005,132 @@ module('Vertical virtual scrolling', () => {
                     });
 
                     return promise;
+                });
+            });
+        });
+
+        module('Week view', () => {
+            [
+                {
+                    showAllDayPanel: true,
+                    steps: [{
+                        y: 0,
+                        appointmentRects: [
+                            { left: -9835, top: -9689, height: 500 },
+                            { left: -9771, top: -9839, height: 50 },
+                            { left: -9387, top: -9689, height: 500 },
+                            { left: -9323, top: -9839, height: 50 }
+                        ]
+                    }, {
+                        y: 1000,
+                        appointmentRects: [
+                            { left: -9835, top: -10039, height: 850 },
+                            { left: -9771, top: -10839, height: 50 },
+                            { left: -9387, top: -10039, height: 850 },
+                            { left: -9323, top: -10839, height: 50 }
+                        ]
+                    }, {
+                        y: 2200,
+                        appointmentRects: [
+                            { left: -9835, top: -10151, height: 650 },
+                            { left: -9771, top: -11901, height: 50 },
+                            { left: -9387, top: -10151, height: 650 },
+                            { left: -9323, top: -11901, height: 50 }
+                        ]
+                    }]
+                },
+                {
+                    showAllDayPanel: false,
+                    steps: [{
+                        y: 0,
+                        appointmentRects: [
+                            { left: -9835, top: -9712, height: 500 },
+                            { left: -9771, top: -9862, height: 50 },
+                            { left: -9387, top: -9712, height: 500 },
+                            { left: -9323, top: -9862, height: 50 }
+                        ]
+                    }, {
+                        y: 1000,
+                        appointmentRects: [
+                            { left: -9835, top: -10062, height: 850 },
+                            { left: -9771, top: -10862, height: 50 },
+                            { left: -9387, top: -10062, height: 850 },
+                            { left: -9323, top: -10862, height: 50 }
+                        ]
+                    }, {
+                        y: 2200,
+                        appointmentRects: [
+                            { left: -9835, top: -10149, height: 650 },
+                            { left: -9771, top: -11899, height: 50 },
+                            { left: -9387, top: -10149, height: 650 },
+                            { left: -9323, top: -11899, height: 50 }
+                        ]
+                    }]
+                }
+            ].forEach(option => {
+                test(`Long appointment should be rendered correctly if horizontal grouping, and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
+                    const data = [{
+                        startDate: new Date(2020, 9, 12, 1, 30),
+                        endDate: new Date(2020, 9, 13, 0, 30),
+                        priorityId: 1
+                    }, {
+                        startDate: new Date(2020, 9, 12, 1, 30),
+                        endDate: new Date(2020, 9, 13, 0, 30),
+                        priorityId: 2,
+                    }];
+                    this.createInstance({
+                        dataSource: data,
+                        currentView: 'week',
+                        currentDate: new Date(2020, 9, 12),
+                        groups: ['priorityId'],
+                        resources: [{
+                            fieldExpr: 'priorityId',
+                            allowMultiple: false,
+                            dataSource: [{ id: 1 }, { id: 2 }]
+                        }],
+                        scrolling: { mode: 'virtual' },
+                        showAllDayPanel: option.showAllDayPanel,
+                        height: 500,
+                    });
+
+                    const { instance } = this.scheduler;
+                    const workspace = instance.getWorkSpace();
+                    const scrollable = workspace.getScrollable();
+
+                    workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+
+                    return asyncWrapper(assert, promise => {
+                        option.steps.forEach(step => {
+                            promise = asyncScrollTest(
+                                promise,
+                                () => { scrollable.scrollTo({ y: step.y }); },
+                                () => {
+                                    assert.equal(
+                                        this.scheduler.appointments.getAppointmentCount(),
+                                        step.appointmentRects.length,
+                                        `Appointment count is correct if scrollY: ${step.y}`
+                                    );
+
+                                    step.appointmentRects.forEach((expectedRect, index) => {
+                                        const appointmentRect = this.scheduler.appointments
+                                            .getAppointment(index)
+                                            .get(0)
+                                            .getBoundingClientRect();
+
+                                        assert.roughEqual(expectedRect.left, appointmentRect.left, 2.01, `appointment part #${index} left is correct`);
+                                        assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
+                                        assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
+                                    });
+                                });
+                        });
+
+                        return promise;
+                    });
                 });
             });
         });
