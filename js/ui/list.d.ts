@@ -337,7 +337,8 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid dxListOptions.pageLoadMode
      * @type Enums.ListPageLoadMode
      * @default "scrollBottom"
-     * @default 'nextButton' [for](desktop)
+     * @default "scrollBottom" [for](Mac)
+     * @default "nextButton" [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
