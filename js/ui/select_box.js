@@ -564,6 +564,7 @@ const SelectBox = DropDownList.inherit({
             }
         }
 
+        e.target = this._input().get(0);
         this.callBase(e);
     },
 
