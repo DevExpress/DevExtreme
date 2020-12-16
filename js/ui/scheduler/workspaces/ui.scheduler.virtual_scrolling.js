@@ -79,13 +79,6 @@ export default class VirtualScrollingDispatcher {
     get verticalScrollingState() { return this.scrollingState.vertical; }
     get horizontalScrollingState() { return this.scrollingState.horizontal; }
 
-    getState() {
-        return {
-            vertical: this.verticalVirtualScrolling.state,
-            horizontal: this.horizontalVirtualScrolling.state
-        };
-    }
-
     calculateCoordinatesByDataAndPosition(cellData, position, date) {
         const { _workspace: workSpace } = this;
         const {
