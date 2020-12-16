@@ -2319,26 +2319,40 @@ class Scheduler extends Widget {
         return recurrenceException;
     }
 
-    _convertRecurrenceException(exceptionString, startDate, startDateTimeZone) {
+    _convertRecurrenceException(exceptionString, startDate, appointmentTimeZone) {
         exceptionString = exceptionString.replace(/\s/g, '');
 
-        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
-        const convertedStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
-        let convertedExceptionDate = this.fire('convertDateByTimezone', exceptionDate, startDateTimeZone);
+        const getConvertedToTimeZone = date => {
+            return this.timeZoneCalculator.createDate(date, {
+                path: 'toAppointment',
+                appointmentTimeZone
+            });
+        };
 
-        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), startDateTimeZone);
+        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
+        const convertedStartDate = getConvertedToTimeZone(startDate);
+        let convertedExceptionDate = getConvertedToTimeZone(exceptionDate);
+
+        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), appointmentTimeZone);
         exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
         return exceptionString;
     }
 
-    dayHasAppointment(day, appointment, trimTime) {
-        let startDate = new Date(this.fire('getField', 'startDate', appointment));
-        let endDate = new Date(this.fire('getField', 'endDate', appointment));
-        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointment);
-        const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointment);
+    dayHasAppointment(day, rawAppointment, trimTime) {
+        const getConvertedToTimeZone = (date, appointmentTimeZone) => {
+            return this.timeZoneCalculator.createDate(date, {
+                path: 'toAppointment',
+                appointmentTimeZone
+            });
+        };
 
-        startDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
-        endDate = this.fire('convertDateByTimezone', endDate, endDateTimeZone);
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+
+        let startDate = new Date(appointment.startDate);
+        let endDate = new Date(appointment.endDate);
+
+        startDate = getConvertedToTimeZone(startDate, appointment.startDateTimeZone);
+        endDate = getConvertedToTimeZone(endDate, appointment.endDateTimeZone);
 
         if(day.getTime() === endDate.getTime()) {
             return startDate.getTime() === endDate.getTime();
