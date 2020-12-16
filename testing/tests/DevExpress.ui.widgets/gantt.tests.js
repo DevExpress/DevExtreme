@@ -2676,7 +2676,6 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
         const customTooltipFunction = (task, container) => {
-            $(container).empty();
             return customTooltipText;
         };
         this.clock.tick();
@@ -2695,10 +2694,7 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestCustomTooltipJQuery';
         const customTooltipJQuery = $('<div>TestCustomTooltipJQuery</div>');
-        const customTooltipFunction = (task, container) => {
-            $(container).empty();
-            return customTooltipJQuery;
-        };
+        const customTooltipFunction = customTooltipJQuery;
         this.clock.tick();
         this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
         this.clock.tick();
@@ -2715,31 +2711,15 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
         const customTooltipFunction = (task, container) => {
-            if(task.id === 1) {
-                return;
-            }
-            const template = container.innerHTML;
-            $(container).empty();
-            if(task.id === 2) {
-                return;
-            }
             if(task.id === 3 || task.id === 4) {
                 return customTooltipText;
             }
-            return template;
+            return;
         };
         this.clock.tick();
         this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
         this.clock.tick();
         const ganttCore = getGanttViewCore(this.instance);
-        this.clock.tick();
-        ganttCore.taskEditController.show(0);
-        ganttCore.taskEditController.showTaskInfo(0, 0);
-        this.clock.tick();
-        const tooltipTitleText = this.$element.find(TOOLTIP_SELECTOR).text();
-        const taskTitle = tasks[0].title;
-        assert.equal(tooltipTitleText.indexOf(taskTitle), 0, 'Default template works correctly');
-        ganttCore.taskEditController.tooltip.hide();
         this.clock.tick();
         ganttCore.taskEditController.show(1);
         ganttCore.taskEditController.showTaskInfo(0, 0);
