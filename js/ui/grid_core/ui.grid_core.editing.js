@@ -660,8 +660,21 @@ const EditingController = modules.ViewController.inherit((function() {
                 return;
             }
 
+            this._processInsertChanges(args.value);
+
             dataController.updateItems({
                 repaintChangesOnly: true
+            });
+        },
+
+        _processInsertChanges: function(changes) {
+            changes.forEach(change => {
+                if(change.type === 'insert') {
+                    const { key } = this._addInsertInfo({ key: change.key });
+                    if(!isDefined(change.key)) {
+                        change.key = key;
+                    }
+                }
             });
         },
 
@@ -770,41 +783,44 @@ const EditingController = modules.ViewController.inherit((function() {
             const pageIndex = dataSource.pageIndex();
             const beginPageIndex = dataSource.beginPageIndex ? dataSource.beginPageIndex() : pageIndex;
             const endPageIndex = dataSource.endPageIndex ? dataSource.endPageIndex() : pageIndex;
+            const insertInfo = this._getInternalData(change.key)?.insertInfo || {};
 
             if(scrollingMode !== 'standard') {
                 switch(changeType) {
                     case 'append':
-                        return change.key.pageIndex === endPageIndex;
+                        return insertInfo.pageIndex === endPageIndex;
                     case 'prepend':
-                        return change.key.pageIndex === beginPageIndex;
+                        return insertInfo.pageIndex === beginPageIndex;
                     case 'refresh':
-                        change.key.rowIndex = 0;
-                        change.key.dataRowIndex = 0;
-                        change.key.pageIndex = 0;
+                        insertInfo.rowIndex = 0;
+                        insertInfo.dataRowIndex = 0;
+                        insertInfo.pageIndex = 0;
                         break;
                     default:
-                        return change.key.pageIndex >= beginPageIndex && change.key.pageIndex <= endPageIndex;
+                        return insertInfo.pageIndex >= beginPageIndex && insertInfo.pageIndex <= endPageIndex;
                 }
             }
 
-            return change.key.pageIndex === pageIndex;
+            return insertInfo.pageIndex === pageIndex;
         },
 
         _generateNewItem: function(key) {
             const item = {
                 key: key
             };
+            const insertInfo = this._getInternalData(key)?.insertInfo;
 
-            if(key && key[INSERT_INDEX]) {
-                item[INSERT_INDEX] = key[INSERT_INDEX];
+            if(insertInfo?.[INSERT_INDEX]) {
+                item[INSERT_INDEX] = insertInfo[INSERT_INDEX];
             }
 
             return item;
         },
-        _getLoadedRowIndexByInsertKey: function(items, change, key) {
+        _getLoadedRowIndexByInsertInfo: function(items, change, key) {
             const dataController = this._dataController;
             const loadedRowIndexOffset = dataController.getRowIndexOffset(true);
-            let loadedRowIndex = key.dataRowIndex - loadedRowIndexOffset;
+            const insertInfo = this._getInternalData(key)?.insertInfo;
+            let loadedRowIndex = (insertInfo ? insertInfo.dataRowIndex : 0) - loadedRowIndexOffset;
 
             if(change.changeType === 'append') {
                 loadedRowIndex -= dataController.items(true).length;
@@ -828,15 +844,25 @@ const EditingController = modules.ViewController.inherit((function() {
 
             const changes = this.getChanges();
             changes.forEach(change => {
-                const key = change.key;
+                const isInsert = change.type === DATA_EDIT_DATA_INSERT_TYPE;
 
-                if(isDefined(key) && change.type === DATA_EDIT_DATA_INSERT_TYPE) {
-                    const loadedRowIndex = this._getLoadedRowIndexByInsertKey(items, e, key);
+                if(!isInsert) {
+                    return;
+                }
 
-                    const item = this._generateNewItem(key);
-                    if(loadedRowIndex >= 0 && this._needInsertItem(change, changeType, items, item)) {
-                        items.splice(key.dataRowIndex ? loadedRowIndex : 0, 0, item);
-                    }
+                let key = change.key;
+                let insertInfo = this._getInternalData(key)?.insertInfo;
+                if(!isDefined(change.key) || !isDefined(insertInfo)) {
+                    const keys = this._addInsertInfo();
+                    change.key = keys.key;
+                    key = keys.key;
+                    insertInfo = keys.insertInfo;
+                }
+
+                const loadedRowIndex = this._getLoadedRowIndexByInsertInfo(items, e, key);
+                const item = this._generateNewItem(key);
+                if(loadedRowIndex >= 0 && this._needInsertItem(change, changeType, items, item)) {
+                    items.splice(insertInfo.dataRowIndex ? loadedRowIndex : 0, 0, item);
                 }
             });
 
@@ -895,35 +921,47 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        _getInsertKey: function(parentKey) {
-            const that = this;
-            const dataController = that._dataController;
+        _createInsertInfo: function(parentKey) {
+            const dataController = this._dataController;
             const rows = dataController.items();
-            const editMode = getEditMode(that);
 
-            const insertKey = {
+            const insertInfo = {
                 parentKey,
                 pageIndex: dataController.pageIndex(),
-                rowIndex: that._getInsertRowIndex(parentKey)
+                rowIndex: this._getInsertRowIndex(parentKey)
             };
 
-            const row = rows[insertKey.rowIndex];
+            const row = rows[insertInfo.rowIndex];
 
             if(row && (!row.isEditing && row.rowType === 'detail' || row.rowType === 'detailAdaptive')) {
-                insertKey.rowIndex++;
+                insertInfo.rowIndex++;
             }
 
-            insertKey.dataRowIndex = dataController.getRowIndexOffset() + rows.filter(function(row, index) {
-                return index < insertKey.rowIndex && (row.rowType === 'data' && !row.isNewRow || row.rowType === 'group');
+            insertInfo.dataRowIndex = dataController.getRowIndexOffset() + rows.filter(function(row, index) {
+                return index < insertInfo.rowIndex && (row.rowType === 'data' && !row.isNewRow || row.rowType === 'group');
             }).length;
 
-            if(editMode !== EDIT_MODE_BATCH) {
-                this._setEditRowKey(insertKey, true);
+            insertInfo[INSERT_INDEX] = this._getInsertIndex();
+
+            return insertInfo;
+        },
+
+        _addInsertInfo: function({ parentKey, key } = {}) {
+            let insertInfo;
+
+            if(!isDefined(key)) {
+                key = String(new Guid());
+                insertInfo = this._createInsertInfo(parentKey);
+            } else {
+                insertInfo = this._getInternalData(key)?.insertInfo;
+                if(!isDefined(insertInfo)) {
+                    insertInfo = this._createInsertInfo(parentKey);
+                }
             }
 
-            insertKey[INSERT_INDEX] = that._getInsertIndex();
+            this._addInternalData({ insertInfo, key });
 
-            return insertKey;
+            return { insertInfo, key };
         },
 
         _getInsertRowIndex: function(parentKey) {
@@ -944,9 +982,11 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _getInsertIndex: function() {
             let maxInsertIndex = 0;
-            this.getChanges().forEach(function(editItem) {
-                if(editItem.type === DATA_EDIT_DATA_INSERT_TYPE && editItem.key[INSERT_INDEX] > maxInsertIndex) {
-                    maxInsertIndex = editItem.key[INSERT_INDEX];
+            this.getChanges().forEach(editItem => {
+                const insertInfo = this._getInternalData(editItem.key)?.insertInfo;
+
+                if(isDefined(insertInfo) && editItem.type === DATA_EDIT_DATA_INSERT_TYPE && insertInfo[INSERT_INDEX] > maxInsertIndex) {
+                    maxInsertIndex = insertInfo[INSERT_INDEX];
                 }
             });
             return maxInsertIndex + 1;
@@ -1016,23 +1056,27 @@ const EditingController = modules.ViewController.inherit((function() {
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
             const that = this;
             const oldEditRowIndex = that._getVisibleEditRowIndex();
-            const insertKey = that._getInsertKey(parentKey);
+            const { insertInfo, key } = that._addInsertInfo({ parentKey });
             const editMode = getEditMode(that);
 
-            that._addChange({ key: insertKey, data: data, type: DATA_EDIT_DATA_INSERT_TYPE });
+            if(editMode !== EDIT_MODE_BATCH) {
+                this._setEditRowKey(key, true);
+            }
+
+            that._addChange({ key, data, type: DATA_EDIT_DATA_INSERT_TYPE });
 
             that._dataController.updateItems({
                 changeType: 'update',
-                rowIndices: [initialOldEditRowIndex, oldEditRowIndex, insertKey.rowIndex]
+                rowIndices: [initialOldEditRowIndex, oldEditRowIndex, insertInfo.rowIndex]
             });
 
             if(editMode === EDIT_MODE_POPUP) {
-                that._showEditPopup(insertKey.rowIndex);
+                that._showEditPopup(insertInfo.rowIndex);
             } else {
-                that._focusFirstEditableCellInRow(insertKey.rowIndex);
+                that._focusFirstEditableCellInRow(insertInfo.rowIndex);
             }
 
-            that._afterInsertRow({ key: insertKey, data: data });
+            that._afterInsertRow({ key, data });
         },
 
         _focusFirstEditableCellInRow: function(rowIndex) {

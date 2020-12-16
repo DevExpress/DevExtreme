@@ -4385,58 +4385,56 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         });
 
         if(editMode !== 'popup') {
-            QUnit.test(`change with type = 'insert' in init configuration (editMode = ${editMode})`, function(assert) {
-            // arrange
-                const changes = [{
-                    data: { field: 'test' },
-                    key: {
-                        '__DX_INSERT_INDEX__': 1,
-                        'dataRowIndex': 0,
-                        'pageIndex': 0,
-                        'parentKey': undefined,
-                        'rowIndex': 0
-                    },
-                    type: 'insert'
-                }];
-                const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
-                const dataGrid = $('#dataGrid').dxDataGrid({
-                    dataSource: data,
-                    keyExpr: 'id',
-                    editing: {
-                        allowUpdating: true,
-                        mode: editMode,
-                        changes
-                    },
-                    loadingTimeout: undefined
-                }).dxDataGrid('instance');
+            ['testkey', undefined].forEach(key => {
+                QUnit.test(`change with type = 'insert' in init configuration (editMode = ${editMode}, key = ${key})`, function(assert) {
+                // arrange
+                    const changes = [{
+                        data: { field: 'test' },
+                        key,
+                        type: 'insert'
+                    }];
+                    const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
+                    const dataGrid = $('#dataGrid').dxDataGrid({
+                        dataSource: data,
+                        keyExpr: 'id',
+                        editing: {
+                            allowUpdating: true,
+                            mode: editMode,
+                            changes
+                        }
+                    }).dxDataGrid('instance');
 
-                // assert
-                let visibleRows = dataGrid.getVisibleRows();
-                const $insertedRow = $(dataGrid.getRowElement(0));
-                const $cells = $insertedRow.find('td');
+                    this.clock.tick();
 
-                assert.equal(visibleRows.length, 3, 'three rows');
-                assert.ok(visibleRows[0].isNewRow, 'new row');
-                assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
-                assert.equal(data.length, 2, 'row count in datasource');
+                    // assert
+                    let visibleRows = dataGrid.getVisibleRows();
+                    const $insertedRow = $(dataGrid.getRowElement(0));
+                    const $cells = $insertedRow.find('td');
 
-                if(editMode !== 'popup') {
-                    assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
-                    assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
-                    assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
-                }
+                    assert.equal(visibleRows.length, 3, 'three rows');
+                    assert.ok(visibleRows[0].isNewRow, 'new row');
+                    assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+                    assert.equal(data.length, 2, 'row count in datasource');
 
-                // act
-                dataGrid.saveEditData();
+                    if(editMode !== 'popup') {
+                        assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                        assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                        assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+                    }
 
-                // assert
-                assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+                    // act
+                    dataGrid.saveEditData();
+                    this.clock.tick();
 
-                visibleRows = dataGrid.getVisibleRows();
-                assert.equal(visibleRows.length, 3, 'three rows');
-                assert.notOk(visibleRows[0].isNewRow, 'not new row');
-                assert.equal(data.length, 3, 'row count in datasource');
-                assert.equal(data[2].field, 'test', 'field value was posted');
+                    // assert
+                    assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+
+                    visibleRows = dataGrid.getVisibleRows();
+                    assert.equal(visibleRows.length, 3, 'three rows');
+                    assert.notOk(visibleRows[0].isNewRow, 'not new row');
+                    assert.equal(data.length, 3, 'row count in datasource');
+                    assert.equal(data[2].field, 'test', 'field value was posted');
+                });
             });
         }
 
