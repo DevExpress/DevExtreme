@@ -675,7 +675,13 @@ export default {
                                     filter = [booleanFilter, 'or', filter];
                                 }
                             } else {
-                                filter = [[selector, sortInfo.desc ? '>' : '<', value], 'or', filter];
+                                const filterOperation = sortInfo.desc ? '>' : '<';
+                                let sortFilter = [selector, filterOperation, value];
+                                if(!sortInfo.desc) {
+                                    sortFilter = [sortFilter, 'or', [selector, '=', null]];
+                                }
+
+                                filter = [sortFilter, 'or', filter];
                             }
                         });
                     }
