@@ -22,7 +22,7 @@ export const viewFunction = ({
   restAttributes,
 }: DateTableLayoutBase): JSX.Element => (
   <Table
-  // eslint-disable-next-line react/jsx-props-no-spreading
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
     isVirtual={isVirtual}
     topVirtualRowHeight={topVirtualRowHeight}
