@@ -878,7 +878,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const filter = this.dataController._generateOperationFilterByKey('Dan', data[1], false);
 
-        assert.equal(JSON.stringify(filter), '[["name","<","Dan"],"or",[["name","=","Dan"],"and",["name","<","Dan"]]]', 'Operation filter');
+        assert.equal(JSON.stringify(filter), '[[["name","<","Dan"],"or",["name","=",null]],"or",[["name","=","Dan"],"and",["name","<","Dan"]]]', 'Operation filter');
     });
 
     // T755462
@@ -1239,6 +1239,37 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         assert.equal(foundRowCount, 8, 'Found row count');
+    });
+
+    ['string', 'number', 'date', 'boolean'].forEach(dataField => {
+        [true, false].forEach(desc => {
+            QUnit.test(`Get row index if sort by column with null values (dataType = ${dataField}, desc = ${desc})`, function(assert) {
+                // arrange
+                const done = assert.async();
+                const dataSource = createDataSource([
+                    { id: 1, string: 'aaa', number: 1, date: new Date(1999, 1, 1), boolean: false },
+                    { id: 2, string: 'bbb', number: 2, date: new Date(1999, 1, 2), boolean: true },
+                    { id: 3, string: null, number: null, date: null, boolean: null }],
+                { key: 'id' },
+                { sort: [{ selector: dataField, desc }], pageSize: 1, paginate: true }
+                );
+
+                this.applyOptions({
+                    dataSource: dataSource
+                });
+
+                // act
+                const dataController = this.dataController;
+                dataController._refreshDataSource();
+
+                // assert
+                dataController.getGlobalRowIndexByKey(1).done(globalRowIndex => {
+                    assert.equal(dataController.pageCount(), 3, 'Page count');
+                    assert.equal(globalRowIndex, 1, 'globalRowIndex');
+                    done();
+                });
+            });
+        });
     });
 
     QUnit.test('Get row index if group by one column and simple key', function(assert) {
