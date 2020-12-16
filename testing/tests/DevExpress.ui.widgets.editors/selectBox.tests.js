@@ -2000,6 +2000,21 @@ QUnit.module('editing', moduleSetup, () => {
         $selectBox.dxSelectBox('blur');
     });
 
+    QUnit.test('editor can be focused out when fieldTemplate is used and acceptCustomValue is true (T957627) ', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            acceptCustomValue: true,
+            fieldTemplate: (data, elem) => {
+                $('<div>').appendTo(elem).dxTextBox();
+            },
+        });
+
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        $input.focus();
+        $input.blur();
+
+        assert.notOk($selectBox.hasClass(STATE_FOCUSED_CLASS), 'editor is focused out');
+    });
+
     QUnit.testInActiveWindow('input value should be restored on focusout if clearing is manually prevented', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             searchEnabled: true,
