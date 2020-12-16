@@ -10,7 +10,7 @@ import {
 import { Widget, viewFunction, WidgetProps } from '../widget';
 import { isFakeClickEvent } from '../../../../events/utils/index';
 import { ConfigProvider } from '../../../common/config_provider';
-import resolveRtlEnabled, { resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),

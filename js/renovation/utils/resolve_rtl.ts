@@ -2,7 +2,7 @@ import { ConfigContextValue } from '../common/config_context';
 import { isDefined } from '../../core/utils/type';
 import globalConfig from '../../core/config';
 
-export default function resolveRtlEnabled(rtlProp?: boolean, config?: ConfigContextValue):
+export function resolveRtlEnabled(rtlProp?: boolean, config?: ConfigContextValue):
 boolean | undefined {
   if (rtlProp !== undefined) {
     return rtlProp;

@@ -28,7 +28,7 @@ import BaseWidgetProps from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { ConfigProvider } from '../../common/config_provider';
-import resolveRtlEnabled, { resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 
 const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {

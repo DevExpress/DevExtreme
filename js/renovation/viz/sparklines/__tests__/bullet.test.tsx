@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Bullet, viewFunction as BulletComponent } from '../bullet';
 import { PathSvgElement } from '../../core/renderers/svg_path';
-import resolveRtlEnabled from '../../../utils/resolve_rtl';
+import { resolveRtlEnabled } from '../../../utils/resolve_rtl';
 
 jest.mock('../../../utils/resolve_rtl');
 

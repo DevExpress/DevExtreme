@@ -8,7 +8,7 @@ import { ConfigProvider } from '../../../common/config_provider';
 import { clear as clearEventHandlers } from '../../../test_utils/events_mock';
 import { Canvas } from '../common/types.d';
 import getElementComputedStyle from '../../../utils/get_computed_style';
-import resolveRtlEnabled, { resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
 
 jest.mock('../../../utils/resolve_rtl');
 jest.mock('../../../utils/get_computed_style');

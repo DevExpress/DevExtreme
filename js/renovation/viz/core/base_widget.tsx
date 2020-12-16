@@ -23,7 +23,7 @@ import {
   getElementWidth,
   getElementHeight,
 } from './utils';
-import resolveRtlEnabled, { resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 
 const getCssClasses = (model: Partial<BaseWidgetProps>): string => {

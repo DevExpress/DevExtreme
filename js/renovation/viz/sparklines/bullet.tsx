@@ -9,7 +9,7 @@ import {
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
-import resolveRtlEnabled from '../../utils/resolve_rtl';
+import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 import { BaseWidgetProps } from '../core/base_props';
 import { BaseWidget } from '../core/base_widget';
 import { createAxis } from './utils';
