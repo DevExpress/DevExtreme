@@ -246,14 +246,6 @@ export const ListBase = CollectionWidget.inherit({
                     pageLoadingText: '',
                     useInkRipple: true
                 }
-            },
-            {
-                device: function() {
-                    return devices.real().mac;
-                },
-                options: {
-                    pageLoadMode: 'scrollBottom'
-                }
             }
         ]);
     },
