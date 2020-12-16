@@ -12,7 +12,7 @@ import { each } from '../../core/utils/iterator';
 import Action from '../../core/action';
 import Guid from '../../core/guid';
 import Widget from '../widget/ui.widget';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import DataHelperMixin from '../../data_helper';
 import CollectionWidgetItem from './item';
@@ -71,9 +71,11 @@ const CollectionWidget = Widget.inherit({
             enter.call(this, e);
         };
         const move = function(location, e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this._moveFocus(location, e);
+            if(!isCommandKeyPressed(e)) {
+                e.preventDefault();
+                e.stopPropagation();
+                this._moveFocus(location, e);
+            }
         };
         return extend(this.callBase(), {
             space: space,

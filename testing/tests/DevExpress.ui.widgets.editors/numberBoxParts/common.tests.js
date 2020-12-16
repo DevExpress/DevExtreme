@@ -1910,6 +1910,30 @@ QUnit.module('keyboard navigation', {}, () => {
         keyboard.triggerEvent('keypress', { keyCode: 109, key: 'Subtract' });
         assert.equal(keyPressStub.lastCall.args[0].isDefaultPrevented(), false, 'Subtract key is not prevented');
     });
+
+    [
+        { key: 'ArrowUp', ctrlKey: true },
+        { key: 'ArrowDown', ctrlKey: true },
+        { key: 'ArrowUp', metaKey: true },
+        { key: 'ArrowDown', metaKey: true }
+    ].forEach((keyDownConfig) => {
+        const commandKey = keyDownConfig.ctrlKey ? 'ctrl' : 'command';
+        QUnit.test(`default behavior of ${keyDownConfig.key} arrow key with ${commandKey} key should not be prevented`, function(assert) {
+            const initialValue = 1;
+            const $numberBox = $('#numberbox').dxNumberBox({
+                focusStateEnabled: true,
+                value: initialValue
+            });
+            const $input = $numberBox.find(`.${INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
+
+            keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+
+            assert.strictEqual($input.val(), initialValue.toString(), 'input value still same');
+            assert.notOk(keyboard.event.isDefaultPrevented(), 'event is not prevented');
+            assert.notOk(keyboard.event.isPropagationStopped(), 'propogation is not stopped');
+        });
+    });
 });
 
 QUnit.module('number validation', {}, () => {
