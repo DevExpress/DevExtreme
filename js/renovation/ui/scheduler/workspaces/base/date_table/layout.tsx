@@ -9,34 +9,34 @@ import { DateTableBody } from './table_body';
 import { DateTableLayoutProps } from './layout_props';
 
 export const viewFunction = ({
-  props,
+  props: {
+    cellTemplate,
+    viewData,
+    dataCellTemplate,
+  },
   isVirtual,
   topVirtualRowHeight,
   bottomVirtualRowHeight,
   virtualCellsCount,
   classes,
   restAttributes,
-}: DateTableLayoutBase): JSX.Element => {
-  const { cellTemplate, viewData, dataCellTemplate } = props;
-
-  return (
-    <Table
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
-      isVirtual={isVirtual}
-      topVirtualRowHeight={topVirtualRowHeight}
-      bottomVirtualRowHeight={bottomVirtualRowHeight}
-      virtualCellsCount={virtualCellsCount}
-      className={classes}
-    >
-      <DateTableBody
-        cellTemplate={cellTemplate}
-        viewData={viewData}
-        dataCellTemplate={dataCellTemplate}
-      />
-    </Table>
-  );
-};
+}: DateTableLayoutBase): JSX.Element => (
+  <Table
+  // eslint-disable-next-line react/jsx-props-no-spreading
+    {...restAttributes}
+    isVirtual={isVirtual}
+    topVirtualRowHeight={topVirtualRowHeight}
+    bottomVirtualRowHeight={bottomVirtualRowHeight}
+    virtualCellsCount={virtualCellsCount}
+    className={classes}
+  >
+    <DateTableBody
+      cellTemplate={cellTemplate}
+      viewData={viewData}
+      dataCellTemplate={dataCellTemplate}
+    />
+  </Table>
+);
 @ComponentBindings()
 export class DateTableLayoutBaseProps extends DateTableLayoutProps {
   @OneWay() className?: string;
