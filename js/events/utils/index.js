@@ -219,3 +219,5 @@ export const normalizeKeyName = ({ key, which }) => {
 export const getChar = ({ key, which }) => key || String.fromCharCode(which);
 
 export const addNamespace = mappedAddNamespace;
+
+export const isCommandKeyPressed = ({ ctrlKey, metaKey }) => ctrlKey || metaKey;
