@@ -2056,38 +2056,40 @@ class Scheduler extends Widget {
     }
 
     _getUpdatedData(rawAppointment) {
+        const getConvertedFromGrid = date => date ? this.timeZoneCalculator.createDate(date, { path: 'fromGrid' }) : undefined;
+        const isValidDate = date => !isNaN(new Date(date).getTime());
+
         const targetCell = this.getTargetCellData();
         const appointment = this.createAppointmentAdapter(rawAppointment);
 
-        const cellStartDate = targetCell.startDate ? this.timeZoneCalculator.createDate(targetCell.startDate, { path: 'fromGrid' }) : undefined;
-        const cellEndDate = targetCell.endDate ? this.timeZoneCalculator.createDate(targetCell.endDate, { path: 'fromGrid' }) : undefined;
+        const cellStartDate = getConvertedFromGrid(targetCell.startDate);
+        const cellEndDate = getConvertedFromGrid(targetCell.endDate);
 
         let appointmentStartDate = new Date(appointment.startDate);
         let appointmentEndDate = new Date(appointment.endDate);
-
         let resultedStartDate = cellStartDate || appointmentStartDate;
 
-        if(!appointmentStartDate || isNaN(appointmentStartDate)) {
+        if(!isValidDate(appointmentStartDate)) {
             appointmentStartDate = resultedStartDate;
         }
 
-        if(!appointmentEndDate || isNaN(appointmentEndDate)) {
+        if(!isValidDate(appointmentEndDate)) {
             appointmentEndDate = cellEndDate;
         }
 
         const duration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
 
-        if(this._workSpace.keepOriginalHours() && appointment.startDate) {
+        const isKeepAppointmentHours = this._workSpace.keepOriginalHours()
+            && isValidDate(appointment.startDate)
+            && isValidDate(cellStartDate);
+
+        if(isKeepAppointmentHours) {
             const { trimTime } = dateUtils;
 
             const startDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
             const timeInMs = startDate.getTime() - trimTime(startDate).getTime();
 
-            // Condition '|| startDate' only for drag n drop tests.
-            // Since we are simulating only drag events on appointment and skip selection on cell,
-            // target cell doesn't exist in the test environment.
-            const cellStartDate = targetCell.startDate || startDate;
-            resultedStartDate = new Date(trimTime(cellStartDate).getTime() + timeInMs);
+            resultedStartDate = new Date(trimTime(targetCell.startDate).getTime() + timeInMs);
             resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 

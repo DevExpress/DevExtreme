@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import { locate } from 'animation/translator';
-import dragEvents from 'events/drag';
 import devices from 'core/devices';
 import pointerMock from '../../helpers/pointerMock.js';
 
@@ -144,9 +143,19 @@ class Appointment extends ClickElementWrapper {
                 const cellRect = cell.getBoundingClientRect();
                 const elementRect = this.getElement().get(0).getBoundingClientRect();
 
+                const appointmentPos = {
+                    x: elementRect.x + elementRect.width / 2,
+                    y: elementRect.y + elementRect.height / 2
+                };
+
+                const cellPos = {
+                    x: cellRect.x + cellRect.width / 2,
+                    y: cellRect.y + cellRect.height / 2
+                };
+
                 const pointer = pointerMock(this.getElement()).start();
-                pointer.down().move(cellRect.x - elementRect.x, cellRect.y - elementRect.y);
-                $(cell).trigger(dragEvents.enter);
+                pointer.down(appointmentPos.x, appointmentPos.y)
+                    .move(cellPos.x - appointmentPos.x, cellPos.y - appointmentPos.y);
                 pointer.up();
             }
         };
