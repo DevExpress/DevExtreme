@@ -351,6 +351,13 @@ testComponentDefaults(List,
     }
 );
 
+testComponentDefaults(List,
+    { mac: true },
+    {
+        pageLoadMode: 'scrollBottom'
+    }
+);
+
 if(!(/chrome/i.test(navigator.userAgent))) {
     testComponentDefaults(LoadIndicator,
         {},
