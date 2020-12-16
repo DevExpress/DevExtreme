@@ -30,7 +30,7 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "devexpress-diagram": "2.0.8",
-    "devexpress-gantt": "2.0.11",
+    "devexpress-gantt": "2.0.12",
     "devextreme-quill": "~0.9.6",
     "jszip": "^2.0.0 || ^3.0.0",
     "preact": "^10.4.5",
