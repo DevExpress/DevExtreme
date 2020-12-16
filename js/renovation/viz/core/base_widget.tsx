@@ -12,19 +12,18 @@ import {
 import { isDefined } from '../../../core/utils/type';
 import { combineClasses } from '../../utils/combine_classes';
 import { BaseWidgetProps } from './base_props';
-import globalConfig from '../../../core/config';
-import { ConfigContextValue, ConfigContext } from '../../ui/common/config_context';
-import { ConfigProvider } from '../../ui/common/config_provider';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
+import { ConfigProvider } from '../../common/config_provider';
 import { RootSvgElement } from './renderers/svg_root';
 import { GrayScaleFilter } from './renderers/gray_scale_filter';
 import { Canvas } from './common/types.d';
 import {
   sizeIsValid,
   pickPositiveValue,
-  mergeRtlEnabled,
   getElementWidth,
   getElementHeight,
 } from './utils';
+import resolveRtlEnabled, { resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 
 const getCssClasses = (model: Partial<BaseWidgetProps>): string => {
@@ -131,17 +130,13 @@ export class BaseWidget extends JSXComponent(BaseWidgetProps) {
   }
 
   get shouldRenderConfigProvider(): boolean {
-    const isPropDefined = isDefined(this.props.rtlEnabled);
-    const onlyGlobalDefined = isDefined(globalConfig().rtlEnabled)
-    && !isPropDefined && !isDefined(this.config?.rtlEnabled);
-    return (isPropDefined
-    && (this.props.rtlEnabled !== this.config?.rtlEnabled))
-    || onlyGlobalDefined;
+    const { rtlEnabled } = this.props;
+    return resolveRtlEnabledDefinition(rtlEnabled, this.config);
   }
 
   get rtlEnabled(): boolean | undefined {
     const { rtlEnabled } = this.props;
-    return mergeRtlEnabled(rtlEnabled, this.config);
+    return resolveRtlEnabled(rtlEnabled, this.config);
   }
 
   get pointerEventsState(): string | undefined {

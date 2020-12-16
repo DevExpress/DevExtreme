@@ -26,7 +26,7 @@ import {
   applyGraphicProps,
 } from './utils';
 import { isDefined } from '../../../../core/utils/type';
-import { ConfigContextValue, ConfigContext } from '../../../ui/common/config_context';
+import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const KEY_STROKE = 'stroke';
 

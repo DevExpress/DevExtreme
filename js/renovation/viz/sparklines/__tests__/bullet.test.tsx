@@ -2,7 +2,9 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Bullet, viewFunction as BulletComponent } from '../bullet';
 import { PathSvgElement } from '../../core/renderers/svg_path';
-import config from '../../../../core/config';
+import resolveRtlEnabled from '../../../utils/resolve_rtl';
+
+jest.mock('../../../utils/resolve_rtl');
 
 describe('Bullet', () => {
   const prepareInternalComponents = jest.fn(() => ({
@@ -196,25 +198,13 @@ describe('Bullet', () => {
       });
 
       describe('rtlEnabled', () => {
-        it('should return value from props if props has value', () => {
-          const bullet = new Bullet({ rtlEnabled: false });
-          // emulate context
-          bullet.config = { rtlEnabled: true };
-
-          expect(bullet.rtlEnabled).toBe(false);
-        });
-
-        it('should return value from parent rtlEnabled context if props isnt defined', () => {
+        it('should call utils method resolveRtlEnabled', () => {
+          (resolveRtlEnabled as jest.Mock).mockReturnValue(false);
           const bullet = new Bullet({ });
-          // emulate context
-          bullet.config = { rtlEnabled: true };
-          expect(bullet.rtlEnabled).toBe(true);
-        });
+          const { rtlEnabled } = bullet;
 
-        it('should return value from config if any other props isnt defined', () => {
-          config().rtlEnabled = true;
-          const bullet = new Bullet({ });
-          expect(bullet.rtlEnabled).toBe(true);
+          expect(rtlEnabled).toBe(false);
+          expect(resolveRtlEnabled).toHaveBeenCalledTimes(1);
         });
       });
 
@@ -620,7 +610,7 @@ describe('Bullet', () => {
             startScaleValue: 0,
             endScaleValue: 20,
           };
-          const bullet = new Bullet({ rtlEnabled: false });
+          const bullet = new Bullet({ });
           const axesRanges = bullet.updateRange(scaleProps);
 
           expect(axesRanges).toEqual({
@@ -640,7 +630,8 @@ describe('Bullet', () => {
           });
         });
 
-        it('should not invert arg axis by rtlEnabled', () => {
+        it('should invert arg axis by rtlEnabled', () => {
+          (resolveRtlEnabled as jest.Mock).mockReturnValue(true);
           const scaleProps = {
             inverted: false,
             value: 5,
@@ -648,7 +639,7 @@ describe('Bullet', () => {
             startScaleValue: 0,
             endScaleValue: 20,
           };
-          const bullet = new Bullet({ rtlEnabled: true });
+          const bullet = new Bullet({ });
           const axesRanges = bullet.updateRange(scaleProps);
 
           expect(axesRanges).toMatchObject({
@@ -656,6 +647,7 @@ describe('Bullet', () => {
               invert: true,
             },
           });
+          (resolveRtlEnabled as jest.Mock).mockReturnValue(false);
         });
       });
 
@@ -678,7 +670,7 @@ describe('Bullet', () => {
           };
           const updateArgumentAxis = jest.fn();
           const updateValueAxis = jest.fn();
-          const bullet = new Bullet({ rtlEnabled: false });
+          const bullet = new Bullet({ });
           bullet.canvasState = canvas;
           bullet.argumentAxis.update = updateArgumentAxis;
           bullet.valueAxis.update = updateValueAxis;
