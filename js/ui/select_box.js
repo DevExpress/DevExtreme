@@ -536,31 +536,26 @@ const SelectBox = DropDownList.inherit({
     },
 
     _focusOutHandler: function(e) {
-        const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
-        const shouldCancelSearch = this._wasSearch() &&
-            !this.option('acceptCustomValue') &&
-            this.option('searchEnabled') &&
-            this.option('opened') &&
-            !isOverlayTarget;
-        const preventNestedFocusEvent = this._preventNestedFocusEvent(e);
-
-        if(!preventNestedFocusEvent) {
+        if(!this._preventNestedFocusEvent(e)) {
+            const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
             if(!isOverlayTarget) {
-                if(!shouldCancelSearch) {
-                    this.callBase(e);
-                }
                 this._restoreInputText();
                 this._clearSearchTimer();
             }
+
+            const shouldCancelSearch = this._wasSearch() &&
+                !this.option('acceptCustomValue') &&
+                this.option('searchEnabled') &&
+                this.option('opened') &&
+                !isOverlayTarget;
 
             if(shouldCancelSearch) {
                 this._searchCanceled();
             }
         }
 
-        if(preventNestedFocusEvent || shouldCancelSearch) {
-            this.callBase(e);
-        }
+        e.target = this._input().get(0);
+        this.callBase(e);
     },
 
     _isOverlayNestedTarget: function(target) {
