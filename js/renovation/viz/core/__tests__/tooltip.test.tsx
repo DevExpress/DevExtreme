@@ -134,8 +134,9 @@ describe('Render', () => {
     expect(tooltip.find('PathSvgElement').props()).toMatchObject({
       d: 'test_cloud_points',
       strokeWidth: 3,
-      stroke: 'test_color1',
-      fill: 'test_color2',
+      stroke: 'customized_border_color',
+      fill: 'customized_color',
+      opacity: 0.4,
       rotate: 180,
       rotateX: 4,
       rotateY: 5,
@@ -239,6 +240,19 @@ describe('Effect', () => {
     expect(tooltip.textSize).toBe(box);
   });
 
+  it('should return size of html text', () => {
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } });
+    const box = {
+      x: 1, y: 2, width: 10, height: 20,
+    };
+    tooltip.htmlRef = {
+      getBoundingClientRect: jest.fn().mockReturnValue(box),
+    } as any;
+    tooltip.calculateSize();
+
+    expect(tooltip.textSize).toBe(box);
+  });
+
   it('should set html text', () => {
     (prepareData as jest.Mock).mockReturnValue({
       html: 'customized_html_text',
@@ -276,6 +290,23 @@ describe('Effect', () => {
       y: 9,
       width: 28.2,
       height: 32.2,
+    });
+  });
+
+  it('should not calculate cloud size, d is not defined', () => {
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' }, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
+    tooltip.cloudRef = {
+      getBBox: jest.fn().mockReturnValue({
+        x: 7, y: 9, width: 13, height: 15,
+      }),
+    } as any;
+    tooltip.calculateCloudSize();
+
+    expect(tooltip.cloudSize).toEqual({
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
     });
   });
 });
@@ -369,5 +400,17 @@ describe('Getters', () => {
       rm: 16,
       bm: 17,
     });
+  });
+});
+
+describe('SetCurrentState', () => {
+  it('should set current d', () => {
+    const tooltip = new Tooltip({ });
+
+    tooltip.setCurrentState('path_1');
+    expect(tooltip.d).toEqual('path_1');
+    tooltip.setCurrentState('path_2');
+    tooltip.setCurrentState('path_2');
+    expect(tooltip.d).toEqual('path_2');
   });
 });

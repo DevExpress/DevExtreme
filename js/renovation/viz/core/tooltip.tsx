@@ -79,7 +79,9 @@ export const viewFunction = ({
             strokeOpacity={border.strokeOpacity}
             dashStyle={border.dashStyle}
             opacity={opacity}
-            transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
+            rotate={angle}
+            rotateX={correctedCoordinates.x}
+            rotateY={correctedCoordinates.y}
           />
           {customizedOptions.html ? null
             : (
