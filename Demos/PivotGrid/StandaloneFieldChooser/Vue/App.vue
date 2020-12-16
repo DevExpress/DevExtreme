@@ -34,11 +34,11 @@
         <DxButton
           text="Apply"
           type="default"
-          @onClick="applyClick()"
+          @click="applyClick()"
         />
         <DxButton
           text="Cancel"
-          @onClick="cancelClick()"
+          @click="cancelClick()"
         />
       </div>
 
