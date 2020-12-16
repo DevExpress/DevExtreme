@@ -2007,10 +2007,10 @@ QUnit.module('editing', moduleSetup, () => {
                 $('<div>').appendTo(elem).dxTextBox();
             },
         });
+        const instance = $selectBox.dxSelectBox('instance');
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-        $input.focus();
-        $input.blur();
+        instance.focus();
+        instance.blur();
 
         assert.notOk($selectBox.hasClass(STATE_FOCUSED_CLASS), 'editor is focused out');
     });
