@@ -63,9 +63,7 @@ export default class VirtualScrollingDispatcher {
     }
 
     get topVirtualRowsCount() {
-        const { virtualItemSizeBefore } = this.verticalScrollingState;
-
-        return virtualItemSizeBefore > 0
+        return this.verticalScrollingState.virtualItemCountBefore > 0
             ? 1
             : 0;
     }
