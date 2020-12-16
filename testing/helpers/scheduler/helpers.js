@@ -127,8 +127,8 @@ class Appointment extends ClickElementWrapper {
         const elementRect = this.getElement().get(0).getBoundingClientRect();
 
         return {
-            x: elementRect.x,
-            y: elementRect.y
+            x: elementRect.left,
+            y: elementRect.top
         };
     }
 
@@ -144,13 +144,13 @@ class Appointment extends ClickElementWrapper {
                 const elementRect = this.getElement().get(0).getBoundingClientRect();
 
                 const appointmentPos = {
-                    x: elementRect.x + elementRect.width / 2,
-                    y: elementRect.y + elementRect.height / 2
+                    x: elementRect.left + elementRect.width / 2,
+                    y: elementRect.top + elementRect.height / 2
                 };
 
                 const cellPos = {
-                    x: cellRect.x + cellRect.width / 2,
-                    y: cellRect.y + cellRect.height / 2
+                    x: cellRect.left + cellRect.width / 2,
+                    y: cellRect.top + cellRect.height / 2
                 };
 
                 const pointer = pointerMock(this.getElement()).start();

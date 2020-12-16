@@ -784,22 +784,22 @@ module('Scheduler grid', moduleConfig, () => {
                 appointment.drag.toCell(18);
                 assert.equal(appointment.date, '1:00 AM - 2:00 AM', 'time shouldn\'t change after drag to right cell');
                 assert.ok(appointment.rectangle.x > initialPosition.x, 'drag to right: current X position should be larger than initial X');
-                assert.equal(appointment.rectangle.y, initialPosition.y, 'drag to right: current Y position should be equal initial Y');
+                assert.roughEqual(appointment.rectangle.y, initialPosition.y, 1, 'drag to right: current Y position should be equal initial Y');
 
                 appointment.drag.toCell(17);
                 assert.equal(appointment.date, '1:00 AM - 2:00 AM', 'time shouldn\'t change after drag to left cell');
-                assert.equal(appointment.rectangle.x, initialPosition.x, 'drag ro left: current X position should be equal initial X');
-                assert.equal(appointment.rectangle.y, initialPosition.y, 'drag to left: current Y position should be equal initial Y');
+                assert.roughEqual(appointment.rectangle.x, initialPosition.x, 1, 'drag ro left: current X position should be equal initial X');
+                assert.roughEqual(appointment.rectangle.y, initialPosition.y, 1, 'drag to left: current Y position should be equal initial Y');
 
                 appointment.drag.toCell(10);
                 assert.equal(appointment.date, '12:30 AM - 1:30 AM', 'time should be change after drag to top cell');
                 assert.ok(appointment.rectangle.y < initialPosition.y, 'drag to top: current Y position should be smaller than initial Y');
-                assert.equal(appointment.rectangle.x, initialPosition.x, 'drag to top: current X position should be equal initial X');
+                assert.roughEqual(appointment.rectangle.x, initialPosition.x, 1, 'drag to top: current X position should be equal initial X');
 
                 appointment.drag.toCell(17);
                 assert.equal(appointment.date, '1:00 AM - 2:00 AM', 'time shouldn\'t change after drag to bottom cell');
-                assert.equal(appointment.rectangle.y, initialPosition.y, 'drag to bottom: current Y position should be equal initial Y');
-                assert.equal(appointment.rectangle.x, initialPosition.x, 'drag to bottom: current X position should be equal initial X');
+                assert.roughEqual(appointment.rectangle.y, initialPosition.y, 1, 'drag to bottom: current Y position should be equal initial Y');
+                assert.roughEqual(appointment.rectangle.x, initialPosition.x, 1, 'drag to bottom: current X position should be equal initial X');
             });
         });
 
