@@ -565,7 +565,7 @@ export const SimulatedStrategy = Class.inherit({
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
-        this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
+        this._getMaxScrollOffset = scrollable._getMaxOffset.bind(scrollable);
     },
 
     render: function() {
@@ -891,6 +891,13 @@ export const SimulatedStrategy = Class.inherit({
         };
     },
 
+    _getScrollOffset() {
+        return {
+            top: -this.location().top,
+            left: -this.location().left
+        };
+    },
+
     _eventHandler: function(eventName) {
         const args = [].slice.call(arguments).slice(1);
         const deferreds = map(this._scrollers, (scroller) => {
@@ -1016,11 +1023,11 @@ export const SimulatedStrategy = Class.inherit({
         this._updateBounds();
         if(this._isHorizontalAndRtlEnabled()) {
             deferUpdate(() => {
-                let scrollLeft = this._getMaxLeftOffset() - this._rtlConfig.scrollRight;
+                let scrollLeft = this._getMaxScrollOffset().left - this._rtlConfig.scrollRight;
 
                 if(scrollLeft <= 0) {
                     scrollLeft = 0;
-                    this._rtlConfig.scrollRight = this._getMaxLeftOffset();
+                    this._rtlConfig.scrollRight = this._getMaxScrollOffset().left;
                 }
 
                 deferRender(() => {
@@ -1039,7 +1046,7 @@ export const SimulatedStrategy = Class.inherit({
             const { clientWidth, scrollLeft } = this._$container.get(0);
             const windowPixelRatio = this._getWindowDevicePixelRatio();
             if(this._rtlConfig.windowPixelRatio === windowPixelRatio && this._rtlConfig.clientWidth === clientWidth) {
-                this._rtlConfig.scrollRight = (this._getMaxLeftOffset() - scrollLeft);
+                this._rtlConfig.scrollRight = (this._getMaxScrollOffset().left - scrollLeft);
             }
             this._rtlConfig.clientWidth = clientWidth;
             this._rtlConfig.windowPixelRatio = windowPixelRatio;

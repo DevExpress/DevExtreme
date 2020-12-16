@@ -377,20 +377,13 @@ const Scrollable = DOMComponent.inherit({
     },
 
     scrollOffset: function() {
-        return this._getScrollOffset();
+        return this._strategy._getScrollOffset();
     },
 
     _isRtlNativeStrategy: function() {
         const { useNative, rtlEnabled } = this.option();
 
         return useNative && rtlEnabled;
-    },
-
-    _getScrollOffset() {
-        return {
-            top: -this._location().top,
-            left: -this._location().left
-        };
     },
 
     scrollTop: function() {
@@ -435,7 +428,6 @@ const Scrollable = DOMComponent.inherit({
 
         this._updateIfNeed();
         this._strategy.scrollBy(distance);
-        this._updateRtlConfig();
     },
 
     scrollTo: function(targetLocation) {

@@ -41,7 +41,7 @@ const NativeStrategy = Class.inherit({
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
-        this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
+        this._getMaxScrollOffset = scrollable._getMaxOffset.bind(scrollable);
     },
 
     render: function() {
@@ -137,10 +137,10 @@ const NativeStrategy = Class.inherit({
         return {
             event: this._eventForUserAction,
             scrollOffset: this._getScrollOffset(),
-            reachedLeft: this._isReachedLeft(left),
-            reachedRight: this._isReachedRight(left),
+            reachedLeft: this._isScrollInverted() ? this._isReachedRight(-left) : this._isReachedLeft(left),
+            reachedRight: this._isScrollInverted() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
             reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top - 2 * this.option('pushBackValue') : undefined
+            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxScrollOffset().top - 2 * this.option('pushBackValue') : undefined
         };
     },
 
@@ -149,7 +149,7 @@ const NativeStrategy = Class.inherit({
 
         return {
             top: -top,
-            left: this._isScrollInverted() ? this._getMaxOffset().left - Math.abs(left) : -left
+            left: this._isScrollInverted() ? this._getMaxScrollOffset().left - Math.abs(left) : -left
         };
     },
 
@@ -160,16 +160,15 @@ const NativeStrategy = Class.inherit({
         return rtlEnabled && (decreasing ^ positive);
     },
 
-    _isReachedLeft: function() {
-        return this._isDirection(HORIZONTAL) ? this.location().left >= 0 : undefined;
+    _isReachedLeft: function(left) {
+        return this._isDirection(HORIZONTAL) ? left >= 0 : undefined;
     },
 
-    _isReachedRight: function() {
-        return this._isDirection(HORIZONTAL) ? Math.abs(this.location().left) >= this._getMaxOffset().left : undefined;
+    _isReachedRight: function(left) {
+        return this._isDirection(HORIZONTAL) ? Math.abs(left) >= this._getMaxScrollOffset().left : undefined;
     },
 
     handleScroll: function(e) {
-        this._component._updateRtlConfig();
         if(!this._isScrollLocationChanged()) {
             // NOTE: ignoring scroll events when scroll location was not changed (for Android browser - B250122)
             e.stopImmediatePropagation();
@@ -319,9 +318,9 @@ const NativeStrategy = Class.inherit({
             const { positive } = this._scrollRtlBehavior;
 
             if(positive) {
-                offset = Math.abs(offset - this._getMaxLeftOffset());
+                offset = Math.abs(offset - this._getMaxScrollOffset().left);
             } else {
-                offset -= this._getMaxLeftOffset();
+                offset -= this._getMaxScrollOffset().left;
             }
         }
 
@@ -350,9 +349,9 @@ const NativeStrategy = Class.inherit({
             result = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
         } else {
             if(e.shiftKey) {
-                result = container.scrollLeft >= this._getMaxOffset().left;
+                result = container.scrollLeft >= this._getMaxScrollOffset().left;
             } else {
-                result = container.scrollTop >= this._getMaxOffset().top;
+                result = container.scrollTop >= this._getMaxScrollOffset().top;
             }
         }
 

@@ -112,5 +112,9 @@ QUnit.test('rtlEnabled scrolls to very right position when a width was changing 
     scrollable.option('width', 50);
 
     const veryRightPosition = scrollable.$content().width() - $scrollable.width();
-    assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
+
+    const containerElement = scrollable._$container.get(0);
+    const maxHorizontalOffset = containerElement.scrollWidth - containerElement.clientWidth;
+
+    assert.equal(scrollable.scrollLeft(), maxHorizontalOffset - veryRightPosition, 'scrolled to very right position');
 });
