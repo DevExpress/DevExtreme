@@ -54,11 +54,9 @@ const SelectBox = DropDownList.inherit({
                     this._cleanInputSelection();
                 }
 
-                if(this._wasSearch()) {
-                    this._clearFilter();
-                }
-
                 parent.tab && parent.tab.apply(this, arguments);
+
+                this._cancelSearchIfNeed();
             },
             upArrow: function(e) {
                 if(parent.upArrow && parent.upArrow.apply(this, arguments)) {
@@ -448,7 +446,7 @@ const SelectBox = DropDownList.inherit({
 
         if(!isVisible) {
             this._restoreInputText(true);
-            this._searchCanceled();
+            this._cancelSearchIfNeed();
         }
 
         if(this._wasSearch() && isVisible) {
@@ -500,6 +498,16 @@ const SelectBox = DropDownList.inherit({
         this.callBase();
     },
 
+    _popupHiddenHandler: function() {
+        this.callBase();
+
+        if(this._shouldCancelSearch()) {
+            this._wasSearch(false);
+            this._searchCanceled();
+            this._shouldCancelSearch(false);
+        }
+    },
+
     _restoreInputText: function(saveEditingValue) {
         if(this.option('readOnly')) {
             return;
@@ -544,14 +552,14 @@ const SelectBox = DropDownList.inherit({
                 this._clearSearchTimer();
             }
 
-            this._searchCanceled(e);
+            this._cancelSearchIfNeed(e);
         }
 
         e.target = this._input().get(0);
         this.callBase(e);
     },
 
-    _searchCanceled: function(e) {
+    _cancelSearchIfNeed: function(e) {
         const { acceptCustomValue, searchEnabled } = this.option();
         const isOverlayTarget = this._isOverlayNestedTarget(e?.relatedTarget);
 
@@ -561,9 +569,22 @@ const SelectBox = DropDownList.inherit({
             !isOverlayTarget;
 
         if(shouldCancelSearch) {
-            this._wasSearch(false);
-            this.callBase();
+            const isPopupVisible = this._popup._hideAnimationProcessing;
+            if(isPopupVisible) {
+                this._shouldCancelSearch(true);
+            } else {
+                this._wasSearch(false);
+                this._searchCanceled();
+            }
         }
+    },
+
+    _shouldCancelSearch: function(value) {
+        if(!arguments.length) {
+            return this._shouldCancelSearchValue;
+        }
+
+        this._shouldCancelSearchValue = value;
     },
 
     _isOverlayNestedTarget: function(target) {
@@ -627,10 +648,6 @@ const SelectBox = DropDownList.inherit({
 
         this._saveValueChangeEvent(e.event);
 
-        if(this._shouldClearFilter()) {
-            this._searchCanceled();
-        }
-
         this._completeSelection(this._valueGetter(e.itemData));
 
         if(this._shouldCloseOnItemClick()) {
@@ -639,6 +656,10 @@ const SelectBox = DropDownList.inherit({
 
         if(this.option('searchEnabled') && previousValue === this._valueGetter(e.itemData)) {
             this._updateField(e.itemData);
+        }
+
+        if(this._shouldClearFilter()) {
+            this._cancelSearchIfNeed();
         }
     },
 

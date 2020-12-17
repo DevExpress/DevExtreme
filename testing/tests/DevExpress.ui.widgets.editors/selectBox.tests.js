@@ -2753,9 +2753,26 @@ QUnit.module('search', moduleSetup, () => {
 
             keyboard
                 .type(' ')
-                .press('tab')
-                .blur();
+                .press('tab');
 
+            assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+        });
+
+        QUnit.test('after selecting item using tab (T618791)', function(assert) {
+            const $selectBox = $('#selectBox').dxSelectBox({
+                searchEnabled: true,
+                dataSource: ['1', '2', '3'],
+                searchTimeout: 0
+            });
+            const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+            const selectBox = $selectBox.dxSelectBox('instance');
+            const keyboard = keyboardMock($input);
+
+            keyboard
+                .type('1')
+                .press('tab');
+
+            assert.strictEqual(selectBox.option('opened'), false, 'selectBox was closed');
             assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
         });
 
@@ -3392,24 +3409,6 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal(selectBox.option('value'), item, 'value is correct');
     });
 
-    QUnit.test('filter should be cleared after item selection via tab', function(assert) {
-        const $selectBox = $('#selectBox').dxSelectBox({
-            searchEnabled: true,
-            dataSource: ['aaa', 'bbb'],
-            opened: true,
-            searchTimeout: 0
-        });
-        const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-        const selectBox = $selectBox.dxSelectBox('instance');
-        const keyboard = keyboardMock($input);
-
-        keyboard.type('a');
-        keyboard.press('tab');
-
-        assert.equal(selectBox.option('opened'), false, 'selectBox was closed');
-        assert.equal(selectBox.getDataSource().searchValue(), null, 'filter was cleared');
-    });
-
     QUnit.test('Opening selectBox after search should not load data if the \'showDataBeforeSearch\' option is false', function(assert) {
         const dataSource = new DataSource({
             load: () => {
@@ -3475,6 +3474,151 @@ QUnit.module('search', moduleSetup, () => {
     });
 });
 
+QUnit.module('search should be canceled only after popup hide animation completion', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('after "tab" pressing', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            dataSource: ['1', '2', '3'],
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type(' ');
+        this.clock.tick(TIME_TO_WAIT);
+
+        keyboard.press('tab');
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 0, 'search has not been cancelled before animation end');
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+    });
+
+    QUnit.test('after selecting item using tab', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            dataSource: ['1', '2', '3'],
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('1');
+        this.clock.tick(TIME_TO_WAIT);
+
+        keyboard.press('tab');
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'search has not been cancelled before animation end');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+    });
+
+    QUnit.test('after click outside of popup', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            dataSource: ['1', '2', '3'],
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('1');
+        this.clock.tick(TIME_TO_WAIT);
+
+        $('body').trigger('dxpointerdown');
+        selectBox.blur();
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'search has not been cancelled before animation end');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+    });
+
+    QUnit.test('after item selection by click', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            dataSource: ['1', '2', '3'],
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('1');
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $firstItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        $firstItem.trigger('dxclick');
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'search has not been cancelled before animation end');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+    });
+
+    QUnit.test('after item selection by enter', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            dataSource: ['1', '2', '3'],
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('1');
+        this.clock.tick(TIME_TO_WAIT);
+
+        keyboard.press('enter');
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'search has not been cancelled before animation end');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+    });
+
+    QUnit.test('after item adding when acceptCustomValue is true', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            dataSource: ['1', '2', '3'],
+            acceptCustomValue: true,
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('123');
+        this.clock.tick(TIME_TO_WAIT);
+
+        keyboard.press('enter');
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 0, 'search has not been cancelled before animation end');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+    });
+
+    QUnit.test('after click on input field even if no item was selected', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            dataSource: ['1', '2', '3'],
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('1');
+        this.clock.tick(TIME_TO_WAIT);
+
+        $input.trigger('dxclick');
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'search has not been cancelled before animation end');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+    });
+});
 
 QUnit.module('search substitution', {
     beforeEach: function() {
