@@ -569,7 +569,7 @@ const SelectBox = DropDownList.inherit({
             !isOverlayTarget;
 
         if(shouldCancelSearch) {
-            const isPopupVisible = this._popup._hideAnimationProcessing;
+            const isPopupVisible = this._popup?._hideAnimationProcessing;
             if(isPopupVisible) {
                 this._shouldCancelSearch(true);
             } else {
