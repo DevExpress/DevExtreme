@@ -352,6 +352,10 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
         return options;
     }
+
+    isVirtualScrolling() {
+        return false;
+    }
 }
 
 registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth);
