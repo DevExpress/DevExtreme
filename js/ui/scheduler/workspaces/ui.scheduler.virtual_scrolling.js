@@ -4,6 +4,7 @@ import { getWindow } from '../../../core/utils/window';
 import { addNamespace } from '../../../events/utils/index';
 
 const ROW_HEIGHT = 50;
+const CELL_WIDTH = 150;
 const MIN_SCROLL_OFFSET = 10;
 const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
@@ -11,9 +12,8 @@ const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtu
 export default class VirtualScrollingDispatcher {
     constructor(workspace) {
         this._workspace = workspace;
-        this._verticalVirtualScrolling = null;
-        this._horizontalVirtualScrolling = null;
         this._rowHeight = ROW_HEIGHT;
+        this._cellWidth = CELL_WIDTH;
         this._renderer = new Renderer(this.workspace);
 
         this._createVirtualScrolling();
@@ -40,6 +40,10 @@ export default class VirtualScrollingDispatcher {
         return this.workspace.invoke('getOption', 'height');
     }
 
+    get width() {
+        return this.workspace.invoke('getOption', 'width');
+    }
+
     get rowHeight() { return this._rowHeight; }
     set rowHeight(value) { this._rowHeight = value; }
 
@@ -49,19 +53,57 @@ export default class VirtualScrollingDispatcher {
             : getWindow().innerHeight;
     }
 
+    get cellWidth() { return this._cellWidth; }
+    set cellWidth(value) { this._cellWidth = value; }
+
+    get viewportWidth() {
+        return this.width
+            ? this.workspace.$element().width()
+            : getWindow().innerWidth;
+    }
+
     get topVirtualRowsCount() {
-        const { topVirtualRowHeight } = this.getState();
-
-        return topVirtualRowHeight > 0 ? 1 : 0;
+        return this.verticalScrollingState.virtualItemCountBefore > 0
+            ? 1
+            : 0;
     }
 
-
-    getState() { // TODO - separate state
-        return this.verticalVirtualScrolling.getState();
+    get scrollingState() {
+        return {
+            vertical: this.verticalVirtualScrolling.state,
+            horizontal: this.horizontalVirtualScrolling.state
+        };
     }
+    get verticalScrollingState() { return this.scrollingState.vertical; }
+    get horizontalScrollingState() { return this.scrollingState.horizontal; }
 
-    calculateCoordinatesByDataAndPosition(cellData, position, date) { // TODO -> strategies
-        return this.verticalVirtualScrolling.calculateCoordinatesByDataAndPosition(cellData, position, date);
+    calculateCoordinatesByDataAndPosition(cellData, position, date) {
+        const { _workspace: workSpace } = this;
+        const {
+            rowIndex, columnIndex,
+        } = position;
+        const {
+            startDate, endDate, allDay,
+        } = cellData;
+
+        const timeToScroll = date.getTime();
+        const cellStartTime = startDate.getTime();
+        const cellEndTime = endDate.getTime();
+
+        const scrollInCell = allDay
+            ? 0
+            : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
+
+        const cellWidth = workSpace.getCellWidth();
+
+        const top = (rowIndex + scrollInCell) * this.rowHeight;
+        let left = cellWidth * columnIndex;
+
+        if(workSpace.option('rtlEnabled')) {
+            left = workSpace.getScrollableOuterWidth() - left;
+        }
+
+        return { top, left };
     }
 
     dispose() {
@@ -76,12 +118,21 @@ export default class VirtualScrollingDispatcher {
             viewportHeight: this.viewportHeight,
             rowHeight: this.rowHeight
         });
+
+        this.horizontalVirtualScrolling = new HorizontalVirtualScrolling({
+            workspace: this.workspace,
+            viewportWidth: this.viewportWidth,
+            cellWidth: this.cellWidth
+        });
     }
 
     _attachScrollableEvents() {
-        this.height
-            ? this._attachScrollableScroll()
-            : this._attachWindowScroll();
+        if(this.height || this.width) {
+            this._attachScrollableScroll();
+        }
+        if(!this.height || !this.width) {
+            this._attachWindowScroll();
+        }
     }
 
     _attachScrollableScroll() {
@@ -118,10 +169,13 @@ export default class VirtualScrollingDispatcher {
 
     _process(scrollPosition) {
         if(scrollPosition) {
-            this.verticalVirtualScrolling.updateState(scrollPosition);
+            const {
+                left,
+                top
+            } = scrollPosition;
 
-            // TODO
-            // this.horizontalVirtualScrolling.updateState(scrollPosition);
+            this.verticalVirtualScrolling.updateState(top);
+            this.horizontalVirtualScrolling.updateState(left);
 
             this.renderer.updateRender();
         }
@@ -129,8 +183,13 @@ export default class VirtualScrollingDispatcher {
 
     updateDimensions() {
         const cellHeight = this.workspace.getCellHeight(false);
-        if(cellHeight !== this.rowHeight) {
+        const cellWidth = this.workspace.getCellWidth();
+
+        const needUpdate = cellHeight !== this.rowHeight || cellWidth !== this.cellWidth;
+
+        if(needUpdate) {
             this.rowHeight = cellHeight;
+            this.cellWidth = cellWidth;
 
             this._createVirtualScrolling();
 
@@ -139,219 +198,234 @@ export default class VirtualScrollingDispatcher {
     }
 }
 
-class VerticalVirtualScrolling {
+class VirtualScrollingBase {
     constructor(options) {
         this._workspace = options.workspace;
-        this._viewportHeight = options.viewportHeight;
-        this._rowHeight = options.rowHeight;
+        this._state = this.defaultState;
+        this._viewportSize = options.viewportSize;
+        this._itemSize = options.itemSize;
 
-        this._init();
+        this.updateState(0);
     }
 
-    // TODO get rid of the workspace
-    getWorkspace() {
-        return this._workspace;
+    get viewportSize() { return this._viewportSize; }
+    get itemSize() { return this._itemSize; }
+    get state() { return this._state; }
+    set state(value) { this._state = value; }
+
+    get startIndex() { return this.state.startIndex; }
+
+    get pageSize() {
+        return Math.ceil(this.viewportSize / this.itemSize);
     }
 
-    get viewportHeight() { return this._viewportHeight; }
-
-    get rowHeight() { return this._rowHeight; }
-
-    getState() {
-        return this._state;
+    get outlineCount() {
+        return Math.floor(this.pageSize / 2);
     }
 
-    _getPageSize() {
-        return Math.ceil(this.viewportHeight / this.rowHeight);
-    }
+    get workspace() { return this._workspace; }
+    get groupCount() { return this.workspace._getGroupCount(); }
+    get isVerticalGrouping() { return this.workspace._isVerticalGroupedWorkSpace(); }
 
-    _getOutlineCount() {
-        return Math.floor(this._getPageSize() / 2);
-    }
-
-    _init() {
-        const scrollPosition = {
-            top: 0,
-            left: 0
-        };
-
-        this._state = {
-            pageSize: this._getPageSize(),
-            prevScrollPosition: scrollPosition,
+    get defaultState() {
+        return {
+            prevPosition: 0,
             startIndex: -1,
-            rowCount: 0,
-            topVirtualRowCount: 0,
-            bottomVirtualRowCount: 0,
-            topOutlineCount: 0,
-            bottomOutlineCount: 0,
-            topVirtualRowHeight: 0,
-            bottomVirtualRowHeight: 0,
-            topOutlineHeight: 0,
-            bottomOutlineHeight: 0
+            itemCount: 0,
+            virtualItemCountBefore: 0,
+            virtualItemCountAfter: 0,
+            outlineCountBefore: 0,
+            outlineCountAfter: 0,
+            virtualItemSizeBefore: 0,
+            virtualItemSizeAfter: 0,
+            outlineSizeBefore: 0,
+            outlineSizeAfter: 0
         };
-
-        this.updateState(scrollPosition);
     }
 
-    needUpdateState(scrollPosition) {
-        const state = this.getState();
-        const top = scrollPosition.top;
-        const currentTopPosition = state.prevScrollPosition.top;
-        const currentTopRowsCount = Math.floor(currentTopPosition / this.rowHeight);
-        const isFirstInitialization = state.startIndex < 0;
-        const topRowsCount = Math.floor(top / this.rowHeight);
-        const isStartIndexChanged = Math.abs(currentTopRowsCount - topRowsCount) > this._getOutlineCount();
+    get maxScrollPosition() {
+        return this.getTotalItemCount() * this.itemSize - this.viewportSize;
+    }
+
+    needUpdateState(position) {
+        const {
+            prevPosition,
+            startIndex
+        } = this.state;
+        const isFirstInitialization = startIndex < 0;
+
+        if(!isFirstInitialization && (position === 0 || position === this.maxScrollPosition)) {
+            return true;
+        }
+
+        const currentPosition = prevPosition;
+        const currentItemsCount = Math.floor(currentPosition / this.itemSize);
+        const itemsCount = Math.floor(position / this.itemSize);
+        const isStartIndexChanged = Math.abs(currentItemsCount - itemsCount) >= this.outlineCount;
 
         return isFirstInitialization || isStartIndexChanged;
     }
 
-    updateState(scrollPosition) {
-        if(!this.needUpdateState(scrollPosition)) {
+    _correctPosition(position) {
+        if(position < 0) {
+            return 0;
+        }
+
+        return Math.min(position, this.maxScrollPosition);
+    }
+
+    updateState(position) {
+        position = this._correctPosition(position);
+
+        if(!this.needUpdateState(position)) {
             return false;
         }
 
-        const topRowsInfo = this._calcTopRowsInfo(scrollPosition);
-        const topRowsDelta = this._calcTopRowsDelta(topRowsInfo);
-        const {
-            bottomOutlineCount,
-            bottomVirtualRowCount,
-            rowCountWithBottom
-        } = this._calcBottomRowsInfo(topRowsDelta);
+        const itemsInfoBefore = this._calcItemInfoBefore(position);
+        const itemsDeltaBefore = this._calcItemDeltaBefore(itemsInfoBefore);
 
         const {
-            topVirtualRowCount,
-            topOutlineCount
-        } = topRowsInfo;
+            outlineCountAfter,
+            virtualItemCountAfter,
+            itemCountWithAfter
+        } = this._calcItemInfoAfter(itemsDeltaBefore);
 
-        const rowCount = topOutlineCount + rowCountWithBottom + bottomOutlineCount;
+        const {
+            virtualItemCountBefore,
+            outlineCountBefore
+        } = itemsInfoBefore;
 
-        const { top } = scrollPosition;
-        const topRowsCount = Math.floor(top / this.rowHeight);
+        const itemCount = outlineCountBefore + itemCountWithAfter + outlineCountAfter;
 
-        const state = this.getState();
+        const itemCountAfter = Math.floor(position / this.itemSize);
 
-        state.prevScrollPosition = scrollPosition;
-        state.startIndex = topRowsCount - topOutlineCount;
-        state.topVirtualRowCount = topVirtualRowCount;
-        state.topOutlineCount = topOutlineCount;
-        state.rowCount = rowCount;
-        state.bottomOutlineCount = bottomOutlineCount;
-        state.bottomVirtualRowCount = bottomVirtualRowCount;
+        this.state.prevPosition = itemCountAfter * this.itemSize;
+        this.state.startIndex = itemCountAfter - outlineCountBefore;
+        this.state.virtualItemCountBefore = virtualItemCountBefore;
+        this.state.outlineCountBefore = outlineCountBefore;
+        this.state.itemCount = itemCount;
+        this.state.outlineCountAfter = outlineCountAfter;
+        this.state.virtualItemCountAfter = virtualItemCountAfter;
 
         this._updateStateCore();
 
         return true;
     }
 
-    calculateCoordinatesByDataAndPosition(cellData, position, date) {
-        const { _workspace: workSpace } = this;
-        const {
-            rowIndex, columnIndex,
-        } = position;
-        const {
-            startDate, endDate, allDay,
-        } = cellData;
+    _calcItemInfoBefore(position) {
+        let virtualItemCountBefore = Math.floor(position / this.itemSize);
 
-        const timeToScroll = date.getTime();
-        const cellStartTime = startDate.getTime();
-        const cellEndTime = endDate.getTime();
+        const outlineCountBefore = Math.min(virtualItemCountBefore, this.outlineCount);
 
-        const scrollInCell = allDay
-            ? 0
-            : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
-
-        const cellWidth = workSpace.getCellWidth();
-
-        const top = (rowIndex + scrollInCell) * this.rowHeight;
-        let left = cellWidth * columnIndex;
-
-        if(workSpace.option('rtlEnabled')) {
-            left = workSpace.getScrollableOuterWidth() - left;
-        }
-
-        return { top, left };
-    }
-
-    _calcTopRowsInfo(scrollPosition) {
-        const { top } = scrollPosition;
-        let topVirtualRowCount = Math.floor(top / this.rowHeight);
-        const topOutlineCount = Math.min(topVirtualRowCount, this._getOutlineCount());
-
-        topVirtualRowCount -= topOutlineCount;
+        virtualItemCountBefore -= outlineCountBefore;
 
         return {
-            topVirtualRowCount,
-            topOutlineCount
+            virtualItemCountBefore,
+            outlineCountBefore
         };
     }
 
-    _calcTopRowsDelta(topRowsInfo) {
+    _calcItemDeltaBefore(itemInfoBefore) {
         const {
-            topVirtualRowCount,
-            topOutlineCount
-        } = topRowsInfo;
+            virtualItemCountBefore,
+            outlineCountBefore
+        } = itemInfoBefore;
 
-        const workspace = this.getWorkspace();
-        const groupCount = workspace._getGroupCount();
-        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
-        const totalRowCount = workspace._getTotalRowCount(groupCount, isVerticalGrouping);
+        const totalItemCount = this.getTotalItemCount();
 
-        return totalRowCount - topVirtualRowCount - topOutlineCount;
+        return totalItemCount - virtualItemCountBefore - outlineCountBefore;
     }
 
-    _calcBottomRowsInfo(topRowsDelta) {
-        const { pageSize } = this.getState();
-        const rowCountWithBottom = topRowsDelta >= pageSize
-            ? pageSize
-            : topRowsDelta;
+    getTotalItemCount() {
+        throw 'This method should be implemented';
+    }
 
-        let bottomVirtualRowCount = topRowsDelta - rowCountWithBottom;
+    _calcItemInfoAfter(itemsDeltaBefore) {
+        const itemCountWithAfter = itemsDeltaBefore >= this.pageSize
+            ? this.pageSize
+            : itemsDeltaBefore;
 
-        const bottomOutlineCount = bottomVirtualRowCount > 0
-            ? Math.min(bottomVirtualRowCount, this._getOutlineCount())
+        let virtualItemCountAfter = itemsDeltaBefore - itemCountWithAfter;
+
+        const outlineCountAfter = virtualItemCountAfter > 0
+            ? Math.min(virtualItemCountAfter, this.outlineCount)
             : 0;
 
-        if(bottomVirtualRowCount > 0) {
-            bottomVirtualRowCount -= bottomOutlineCount;
+        if(virtualItemCountAfter > 0) {
+            virtualItemCountAfter -= outlineCountAfter;
         }
 
         return {
-            bottomVirtualRowCount,
-            bottomOutlineCount,
-            rowCountWithBottom
+            virtualItemCountAfter,
+            outlineCountAfter,
+            itemCountWithAfter
         };
     }
 
     _updateStateCore() {
-        const state = this.getState();
-        const topVirtualRowCount = state.topVirtualRowCount;
-        const bottomVirtualRowCount = state.bottomVirtualRowCount;
-        const topOutlineCount = state.topOutlineCount;
-        const bottomOutlineCount = state.bottomOutlineCount;
+        const { state } = this;
 
-        const prevTopVirtualRowHeight = state.topVirtualRowHeight;
-        const prevBottomVirtualRowHeight = state.bottomVirtualRowHeight;
-        const prevTopOutlineHeight = state.topOutlineHeight;
-        const prevBottomOutlineHeight = state.bottomOutlineHeight;
+        const virtualItemCountBefore = state.virtualItemCountBefore;
+        const virtualItemCountAfter = state.virtualItemCountAfter;
+        const outlineCountBefore = state.outlineCountBefore;
+        const outlineCountAfter = state.outlineCountAfter;
 
-        const topVirtualRowHeight = this.rowHeight * topVirtualRowCount;
-        const bottomVirtualRowHeight = this.rowHeight * bottomVirtualRowCount;
-        const topOutlineHeight = this.rowHeight * topOutlineCount;
-        const bottomOutlineHeight = this.rowHeight * bottomOutlineCount;
+        const prevVirtualItemSizeBefore = state.virtualItemSizeBefore;
+        const prevVirtualItemSizeAfter = state.virtualItemSizeAfter;
+        const prevOutlineSizeBefore = state.outlineSizeBefore;
+        const prevOutlineSizeAfter = state.outlineSizeAfter;
 
-        const prevTopVirtualHeight = prevTopVirtualRowHeight + prevTopOutlineHeight;
-        const topVirtualHeight = topVirtualRowHeight + topOutlineHeight;
-        const prevBottomVirtualHeight = prevBottomVirtualRowHeight + prevBottomOutlineHeight;
-        const bottomVirtualHeight = bottomVirtualRowHeight + bottomOutlineHeight;
+        const virtualItemSizeBefore = this.itemSize * virtualItemCountBefore;
+        const virtualItemSizeAfter = this.itemSize * virtualItemCountAfter;
+        const outlineSizeBefore = this.itemSize * outlineCountBefore;
+        const outlineSizeAfter = this.itemSize * outlineCountAfter;
 
-        const isAppend = prevTopVirtualHeight < topVirtualHeight;
-        const isPrepend = prevBottomVirtualHeight < bottomVirtualHeight;
-        const needAddRows = isAppend || isPrepend;
+        const prevVirtualSizeBefore = prevVirtualItemSizeBefore + prevOutlineSizeBefore;
+        const virtualSizeBefore = virtualItemSizeBefore + outlineSizeBefore;
+        const prevVirtualSizeAfter = prevVirtualItemSizeAfter + prevOutlineSizeAfter;
+        const virtualSizeAfter = virtualItemSizeAfter + outlineSizeAfter;
 
-        if(needAddRows) {
-            state.topVirtualRowHeight = topVirtualRowHeight;
-            state.bottomVirtualRowHeight = bottomVirtualRowHeight;
+        const isAppend = prevVirtualSizeBefore < virtualSizeBefore;
+        const isPrepend = prevVirtualSizeAfter < virtualSizeAfter;
+        const needAddItems = isAppend || isPrepend;
+
+        if(needAddItems) {
+            state.virtualItemSizeBefore = virtualItemSizeBefore;
+            state.virtualItemSizeAfter = virtualItemSizeAfter;
         }
+    }
+}
+
+class VerticalVirtualScrolling extends VirtualScrollingBase {
+    constructor(options) {
+        super({
+            workspace: options.workspace,
+            viewportSize: options.viewportHeight,
+            itemSize: options.rowHeight
+        });
+    }
+
+    get prevTopPosition() { return this.state.prevPosition; }
+    get rowCount() { return this.state.itemCount; }
+    get topVirtualRowCount() { return this.state.virtualItemCountBefore; }
+    get bottomVirtualRowCount() { return this.state.virtualItemCountAfter; }
+
+    getTotalItemCount() {
+        return this.workspace._getTotalRowCount(this.groupCount, this.isVerticalGrouping);
+    }
+}
+
+class HorizontalVirtualScrolling extends VirtualScrollingBase {
+    constructor(options) {
+        super({
+            workspace: options.workspace,
+            viewportSize: options.viewportWidth,
+            itemSize: options.cellWidth
+        });
+    }
+
+    getTotalItemCount() {
+        return this.workspace._getTotalCellCount(this.groupCount, this.isVerticalGrouping);
     }
 }
 
@@ -377,7 +451,6 @@ class Renderer {
     }
 
     _renderAppointments() {
-        const { workspace } = this;
         const renderTimeout = this.getRenderTimeout();
 
         if(renderTimeout >= 0) {
@@ -385,11 +458,11 @@ class Renderer {
             clearTimeout(this._renderAppointmentTimeout);
 
             this._renderAppointmentTimeout = setTimeout(
-                () => workspace.updateAppointments(),
+                () => this.workspace.updateAppointments(),
                 renderTimeout
             );
         } else {
-            workspace.updateAppointments();
+            this.workspace.updateAppointments();
         }
     }
 }
