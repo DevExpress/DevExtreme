@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { Tooltip, viewFunction as TooltipComponent } from '../tooltip';
 import {
   recalculateCoordinates, getCloudAngle, getCloudPoints, prepareData,
@@ -257,6 +257,19 @@ describe('Render', () => {
     expect(tooltip.find('div').at(1).props().style).toMatchObject({
       pointerEvents: 'auto',
     });
+  });
+
+  it('should render contentTemplate', () => {
+    const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
+    const tooltip = mount(<TooltipComponent {...{
+      ...props,
+      props: { ...props.props, contentTemplate },
+    } as any}
+    />);
+
+    expect(tooltip.find('div').at(1).children()).toHaveLength(1);
+    expect(tooltip.find('div').at(1).children().props()).toEqual({ valueText: 'Tooltip value text' });
+    expect(tooltip.find('.tooltip-template').text()).toBe('Tooltip value text_template');
   });
 });
 

@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState,
-  RefObject, Method,
+  RefObject, Method, Template,
 } from 'devextreme-generator/component_declaration/common';
 
 import { PathSvgElement } from './renderers/svg_path';
@@ -33,6 +33,7 @@ export const viewFunction = ({
   pointerEvents,
   props: {
     x, y, font, shadow, opacity, interactive,
+    contentTemplate: TooltipTemplate, data,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
@@ -97,7 +98,7 @@ export const viewFunction = ({
             rotateX={correctedCoordinates.x}
             rotateY={correctedCoordinates.y}
           />
-          {customizedOptions.html ? null
+          {(customizedOptions.html || TooltipTemplate) ? null
             : (
               <g
                 textAnchor="middle"
@@ -119,7 +120,7 @@ export const viewFunction = ({
             )}
         </g>
       </RootSvgElement>
-      {!customizedOptions.html ? null
+      {!(customizedOptions.html || TooltipTemplate) ? null
         : (
           <div
             ref={htmlRef as any}
@@ -135,7 +136,10 @@ export const viewFunction = ({
               opacity: font.opacity,
               pointerEvents,
             }}
-          />
+          >
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            {TooltipTemplate && (<TooltipTemplate {...data} />)}
+          </div>
         )}
     </div>
   );
@@ -197,6 +201,8 @@ export class TooltipProps {
   };
 
   @OneWay() interactive = false;
+
+  @Template() contentTemplate?: (props: { data: any }) => JSX.Element;
 }
 
 @Component({
