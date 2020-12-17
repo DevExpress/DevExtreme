@@ -1,40 +1,52 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import { Table } from '../table';
 import { DateTableBody } from './table_body';
-import { LayoutProps } from '../layout_props';
+import { DateTableLayoutProps } from './layout_props';
 
-export const viewFunction = (viewModel: DateTableLayoutBase): JSX.Element => (
+export const viewFunction = ({
+  props: {
+    cellTemplate,
+    viewData,
+    dataCellTemplate,
+  },
+  isVirtual,
+  topVirtualRowHeight,
+  bottomVirtualRowHeight,
+  virtualCellsCount,
+  classes,
+  restAttributes,
+}: DateTableLayoutBase): JSX.Element => (
   <Table
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    isVirtual={viewModel.isVirtual}
-    topVirtualRowHeight={viewModel.topVirtualRowHeight}
-    bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
-    virtualCellsCount={viewModel.virtualCellsCount}
-    className={viewModel.classes}
+    {...restAttributes}
+    isVirtual={isVirtual}
+    topVirtualRowHeight={topVirtualRowHeight}
+    bottomVirtualRowHeight={bottomVirtualRowHeight}
+    virtualCellsCount={virtualCellsCount}
+    className={classes}
   >
     <DateTableBody
-      // This is a workaround: cannot use template inside a template
-      viewType={viewModel.props.viewType}
-      viewData={viewModel.props.viewData}
-      dataCellTemplate={viewModel.props.dataCellTemplate}
+      cellTemplate={cellTemplate}
+      viewData={viewData}
+      dataCellTemplate={dataCellTemplate}
     />
   </Table>
 );
 @ComponentBindings()
-export class DateTableLayoutBaseProps extends LayoutProps {
+export class DateTableLayoutBaseProps extends DateTableLayoutProps {
   @OneWay() className?: string;
-
-  @OneWay() viewType?: string;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) {
+export class DateTableLayoutBase extends JSXComponent<DateTableLayoutBaseProps, 'cellTemplate'>() {
   get classes(): string {
     return `dx-scheduler-date-table ${this.props.className}`;
   }
