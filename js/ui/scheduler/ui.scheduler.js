@@ -2301,31 +2301,29 @@ class Scheduler extends Widget {
     }
 
     // TODO: use for appointment model
-    _getRecurrenceException(appointmentData) {
-        let recurrenceException = this.fire('getField', 'recurrenceException', appointmentData);
+    _getRecurrenceException(rawAppointment) {
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+        const recurrenceException = appointment.recurrenceException;
 
         if(recurrenceException) {
-            const startDate = this.fire('getField', 'startDate', appointmentData);
             const exceptions = recurrenceException.split(',');
-            const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
 
             for(let i = 0; i < exceptions.length; i++) {
-                exceptions[i] = this._convertRecurrenceException(exceptions[i], startDate, startDateTimeZone);
+                exceptions[i] = this._convertRecurrenceException(exceptions[i], appointment.startDate);
             }
 
-            recurrenceException = exceptions.join();
+            return exceptions.join();
         }
 
         return recurrenceException;
     }
 
-    _convertRecurrenceException(exceptionString, startDate, appointmentTimeZone) {
+    _convertRecurrenceException(exceptionString, startDate) {
         exceptionString = exceptionString.replace(/\s/g, '');
 
         const getConvertedToTimeZone = date => {
             return this.timeZoneCalculator.createDate(date, {
-                path: 'toAppointment',
-                appointmentTimeZone
+                path: 'toGrid'
             });
         };
 
@@ -2333,17 +2331,14 @@ class Scheduler extends Widget {
         const convertedStartDate = getConvertedToTimeZone(startDate);
         let convertedExceptionDate = getConvertedToTimeZone(exceptionDate);
 
-        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), appointmentTimeZone);
+        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'));
         exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
         return exceptionString;
     }
 
     dayHasAppointment(day, rawAppointment, trimTime) {
-        const getConvertedToTimeZone = (date, appointmentTimeZone) => {
-            return this.timeZoneCalculator.createDate(date, {
-                path: 'toAppointment',
-                appointmentTimeZone
-            });
+        const getConvertedToTimeZone = date => {
+            return this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
         };
 
         const appointment = this.createAppointmentAdapter(rawAppointment);
@@ -2351,8 +2346,8 @@ class Scheduler extends Widget {
         let startDate = new Date(appointment.startDate);
         let endDate = new Date(appointment.endDate);
 
-        startDate = getConvertedToTimeZone(startDate, appointment.startDateTimeZone);
-        endDate = getConvertedToTimeZone(endDate, appointment.endDateTimeZone);
+        startDate = getConvertedToTimeZone(startDate);
+        endDate = getConvertedToTimeZone(endDate);
 
         if(day.getTime() === endDate.getTime()) {
             return startDate.getTime() === endDate.getTime();
