@@ -8,7 +8,7 @@ import { extend } from '../../core/utils/extend';
 import { touch } from '../../core/utils/support';
 import { name as clickEventName } from '../../events/click';
 import messageLocalization from '../../localization/message';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
 import holdEvent from '../../events/hold';
 import Selection from '../selection/selection';
 import { Deferred } from '../../core/utils/deferred';
@@ -805,7 +805,7 @@ export default {
                     if(!that.isClickableElement($(dxEvent.target))) {
                         if(!isSelectionDisabled && (that.option(SELECTION_MODE) !== 'multiple' || that.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
                             if(that.getController('selection').changeItemSelection(e.rowIndex, {
-                                control: dxEvent.ctrlKey || dxEvent.metaKey,
+                                control: isCommandKeyPressed(dxEvent),
                                 shift: dxEvent.shiftKey
                             })) {
                                 dxEvent.preventDefault();

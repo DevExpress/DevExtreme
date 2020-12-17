@@ -4,6 +4,7 @@ import {
   Method,
   Ref,
   Effect,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { ScrollBar } from './scrollable_scrollbar';
@@ -38,7 +39,7 @@ export const viewFunction = ({
   cssClasses, contentRef, containerRef,
   props: {
     disabled, height, width, rtlEnabled, children,
-    forceGeneratePockets, needScrollViewWrappers,
+    forceGeneratePockets, needScrollViewContentWrapper,
     showScrollbar, direction,
   },
   restAttributes,
@@ -52,11 +53,12 @@ export const viewFunction = ({
     {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     <div className={SCROLLABLE_WRAPPER_CLASS}>
-      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef as any}>
-        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef as any}>
+      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
+        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
           {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
-          {needScrollViewWrappers && <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>}
-          {!needScrollViewWrappers && children}
+          {needScrollViewContentWrapper && (
+            <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
+          {!needScrollViewContentWrapper && children}
           {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
         </div>
         { showScrollbar !== 'never' && (
@@ -74,9 +76,9 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsType>() {
-  @Ref() contentRef!: HTMLDivElement;
+  @Ref() contentRef!: RefObject<HTMLDivElement>;
 
-  @Ref() containerRef!: HTMLDivElement;
+  @Ref() containerRef!: RefObject<HTMLDivElement>;
 
   @Method()
   content(): HTMLDivElement {

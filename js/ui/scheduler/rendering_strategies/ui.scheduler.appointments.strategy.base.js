@@ -23,7 +23,6 @@ class BaseRenderingStrategy {
     }
 
     get isVirtualScrolling() { return this.instance.fire('isVirtualScrolling'); }
-    get virtualScrollingState() { return this.instance.fire('getVirtualScrollingState'); }
 
     _isAdaptive() {
         return this.instance.fire('isAdaptive');

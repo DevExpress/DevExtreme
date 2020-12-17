@@ -5,6 +5,7 @@ import {
   ComponentBindings,
   OneWay,
   Method,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import {
@@ -33,12 +34,12 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   return (
     <Scrollable
       classes={cssClasses}
-      ref={scrollableRef as any}
+      ref={scrollableRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
-      needScrollViewWrappers
+      needScrollViewContentWrapper
     />
   );
 };
@@ -56,7 +57,7 @@ export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEn
 })
 
 export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
-  @Ref() scrollableRef!: Scrollable;
+  @Ref() scrollableRef!: RefObject<Scrollable>;
 
   @Method()
   content(): HTMLDivElement {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Ref, Component, JSXComponent, Method,
+  Ref, Component, JSXComponent, Method, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import LegacyDataGrid from '../../../ui/data_grid/ui.data_grid';
 
@@ -14,7 +14,7 @@ export const viewFunction = ({
   domComponentRef, props, restAttributes,
 }: DataGrid): JSX.Element => (
   <DomComponentWrapper
-    ref={domComponentRef as any}
+    ref={domComponentRef}
     componentType={LegacyDataGrid as any}
     componentProps={props}
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -29,7 +29,7 @@ export const viewFunction = ({
 })
 export class DataGrid extends JSXComponent(DataGridProps) {
   @Ref()
-  domComponentRef!: DomComponentWrapper;
+  domComponentRef!: RefObject<DomComponentWrapper>;
 
   get instance(): any {
     return this.domComponentRef.getInstance();

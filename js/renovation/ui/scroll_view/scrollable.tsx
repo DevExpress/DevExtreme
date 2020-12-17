@@ -4,6 +4,7 @@ import {
   Ref,
   Method,
   Fragment,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import { combineClasses } from '../../utils/combine_classes';
@@ -33,7 +34,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     <Fragment>
       {useNative && (
       <ScrollableNative
-        ref={scrollableRef as any}
+        ref={scrollableRef}
         classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...scrollableProps}
@@ -43,7 +44,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       )}
       {!useNative && (
       <ScrollableSimulated
-        ref={scrollableRef as any}
+        ref={scrollableRef}
         classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...scrollableProps}
@@ -61,7 +62,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 })
 
 export class Scrollable extends JSXComponent<ScrollablePropsType>() {
-  @Ref() scrollableRef!: ScrollableNative;
+  @Ref() scrollableRef!: RefObject<ScrollableNative>;
 
   @Method()
   content(): HTMLDivElement {

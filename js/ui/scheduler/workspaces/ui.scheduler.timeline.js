@@ -8,6 +8,7 @@ import dateUtils from '../../../core/utils/date';
 import tableCreatorModule from '../ui.scheduler.table_creator';
 const { tableCreator } = tableCreatorModule;
 import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
+import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
 
 import timeZoneUtils from '../utils.timeZone';
 
@@ -334,25 +335,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return false;
     }
 
-    _isCurrentTimeHeaderCell(headerIndex) {
-        let result = false;
-
-        if(this.isIndicationOnView()) {
-            let date = this._getDateByIndex(headerIndex);
-
-            const now = this._getToday();
-            date = new Date(date);
-
-            if(dateUtils.sameDate(now, date)) {
-                const startCellDate = new Date(date);
-                let endCellDate = new Date(date);
-                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
-
-                result = dateUtils.dateInRange(now, startCellDate, endCellDate);
-            }
-        }
-
-        return result;
+    _isCurrentTimeHeaderCell() {
+        return false;
     }
 
     _cleanView() {
@@ -576,6 +560,44 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getRowCountWithAllDayRows() {
         return this._getRowCount();
+    }
+
+    _setCurrentTimeCells() {
+        const timePanelCells = this._getTimePanelCells();
+        const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+        currentTimeCellIndices.forEach((timePanelCellIndex) => {
+            timePanelCells.eq(timePanelCellIndex)
+                .addClass(HEADER_CURRENT_TIME_CELL_CLASS);
+        });
+    }
+
+    _cleanCurrentTimeCells() {
+        this.$element()
+            .find(`.${HEADER_CURRENT_TIME_CELL_CLASS}`)
+            .removeClass(HEADER_CURRENT_TIME_CELL_CLASS);
+    }
+
+    _getTimePanelCells() {
+        return this.$element()
+            .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
+    }
+
+    _getCurrentTimePanelCellIndices() {
+        const columnCountPerGroup = this._getCellCount();
+        const today = this._getToday();
+        const index = this.getCellIndexByDate(today);
+        const { cellIndex: currentTimeCellIndex } = this._getCellCoordinatesByIndex(index);
+
+        if(currentTimeCellIndex === undefined) {
+            return [];
+        }
+
+        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+            ? this._getGroupCount()
+            : 1;
+
+        return [...(new Array(horizontalGroupCount))]
+            .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeCellIndex);
     }
 }
 

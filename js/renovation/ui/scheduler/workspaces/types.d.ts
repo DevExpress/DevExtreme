@@ -45,16 +45,51 @@ export interface Group {
   data: GroupItem[];
 }
 
-interface TemplateDataProps {
-  date?: Date;
-  startDate?: Date;
-  endDate?: Date;
-  text?: string;
+interface BaseTemplateData {
   groups?: object;
   groupIndex?: number;
   allDay?: boolean;
+  text?: string;
 }
-export interface ContentTemplateProps {
-  data: TemplateDataProps;
+
+interface DataCellTemplateData extends BaseTemplateData {
+  startDate: Date;
+  endDate: Date;
+}
+
+interface DateCellTemplateData extends BaseTemplateData {
+  date: Date;
+}
+
+interface TemplateData extends BaseTemplateData {
+  date?: Date;
+  startDate?: Date;
+  endDate?: Date;
+}
+
+interface BaseTemplateProps {
   index: number;
 }
+export interface ContentTemplateProps extends BaseTemplateProps {
+  data: TemplateData;
+}
+
+export interface DataCellTemplateProps extends BaseTemplateProps {
+  data: DataCellTemplateData;
+}
+
+export interface DateTimeCellTemplateProps extends BaseTemplateProps {
+  data: DateCellTemplateData;
+}
+
+interface ResourceCellTemplateData {
+  data: GroupItem;
+  id: number | string;
+  text?: string;
+  color?: string;
+}
+
+export interface ResourceCellTemplateProps extends BaseTemplateProps {
+  data: ResourceCellTemplateData;
+}
+

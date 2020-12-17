@@ -32,15 +32,13 @@ import {
 
 import { ScrollBar } from '../scrollable_scrollbar';
 
-import Mock = jest.Mock;
-
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
-  actualDevices.current = jest.fn(() => ({ platform: 'generic' }));
+  actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
   return actualDevices;
 });
 
@@ -59,13 +57,13 @@ jest.mock('../../../../core/devices', () => {
         expect(scrollableContent.exists()).toBe(true);
       });
 
-      [true, false].forEach((needScrollViewWrappers) => {
-        it(`should render scrollView content only if needScrollViewWrappers option is enabled. needScrollViewWrappers=${needScrollViewWrappers}`, () => {
+      [true, false].forEach((needScrollViewContentWrapper) => {
+        it(`should render scrollView content only if needScrollViewContentWrapper option is enabled. needScrollViewContentWrapper=${needScrollViewContentWrapper}`, () => {
           const scrollable = mount(
-            viewFunction({ props: { needScrollViewWrappers } } as any) as JSX.Element,
+            viewFunction({ props: { needScrollViewContentWrapper } } as any) as JSX.Element,
           );
           const scrollViewContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
-          expect(scrollViewContent.exists()).toBe(needScrollViewWrappers);
+          expect(scrollViewContent.exists()).toBe(needScrollViewContentWrapper);
         });
       });
 
@@ -1097,9 +1095,9 @@ jest.mock('../../../../core/devices', () => {
     describe('Logic', () => {
       describe('Getters', () => {
         describe('cssClasses', () => {
-          ['desktop', 'ios', 'android'].forEach((platform) => {
-            it('should add scrolling classes by default', () => {
-              (devices.current as Mock).mockImplementation(() => ({ platform }));
+          ['android', 'ios', 'generic'].forEach((platform: any) => {
+            it(`should add scrolling classes by default. Platform: ${platform}`, () => {
+              devices.real = () => ({ platform });
               const instance = new Scrollable({});
               expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
 

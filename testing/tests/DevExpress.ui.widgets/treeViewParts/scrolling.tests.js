@@ -2,6 +2,9 @@ import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import browser from 'core/utils/browser';
 import $ from 'jquery';
 
+import 'common.css!';
+import 'generic_light.css!';
+
 QUnit.module('scrollToItem', () => {
     if(browser.msie) {
         return;
@@ -16,7 +19,7 @@ QUnit.module('scrollToItem', () => {
             animationEnabled: false,
             items: items,
             rtlEnabled: config.rtlEnabled,
-            onContentReady: config.onContentReady
+            onContentReady: config.onContentReady,
         });
 
         if(config.initialPosition) {
@@ -73,6 +76,7 @@ QUnit.module('scrollToItem', () => {
                     onContentReady: function(e) {
                         if(isFirstContentReadyEvent) {
                             isFirstContentReadyEvent = false;
+
                             completionCallback = e.component.scrollToItem(key);
                         }
                     }
