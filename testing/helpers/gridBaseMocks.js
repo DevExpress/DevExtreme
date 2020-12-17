@@ -16,6 +16,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 if(options.items[i].rowIndex === undefined) {
                     options.items[i].rowIndex = i;
                 }
+                if(options.items[i].rowType === undefined) {
+                    options.items[i].rowType = 'data';
+                }
             }
         }
 
