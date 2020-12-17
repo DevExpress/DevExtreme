@@ -3565,20 +3565,32 @@ QUnit.module('Integration: Appointments', {
                                 { id: 2, text: 'two' }
                             ]
                         }
-                    ]
+                    ],
                 });
+                const $element = $(this.instance.$element());
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const cellPosition = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(6).position().left;
+                const $appointment = $element.find(`.${APPOINTMENT_CLASS}`).eq(0);
+                const cell = $element.find(`.${DATE_TABLE_CELL_CLASS}`);
+                const cellOffset = cell.eq(6).offset();
+                const cellWidth = cell.outerWidth();
+                const cellHeight = cell.outerHeight();
+                const positionBeforeDrag = $appointment.offset();
 
-                $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(6).trigger(dragEvents.enter);
-                pointerMock($appointment).start().down().move(10, 10).up();
+                const pointer = pointerMock($appointment);
+                pointer.start()
+                    .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                    .move(
+                        cellOffset.left - positionBeforeDrag.left + cellWidth / 2,
+                        cellOffset.top - positionBeforeDrag.top + cellHeight / 2,
+                    )
+                    .up();
 
                 this.clock.tick();
-                const $firstPart = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $secondPart = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(1);
+                const $firstPart = $element.find('.' + APPOINTMENT_CLASS).eq(0);
+                const $secondPart = $element.find('.' + APPOINTMENT_CLASS).eq(1);
+                const cellPosition = $element.find('.' + DATE_TABLE_CELL_CLASS).eq(6).position();
 
-                assert.roughEqual($firstPart.position().left, cellPosition, 2, 'correct left position');
+                assert.roughEqual($firstPart.position().left, cellPosition.left, 2, 'correct left position');
                 assert.equal($secondPart.position().left, 0, 'correct left position');
             });
 
