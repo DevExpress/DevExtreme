@@ -1033,7 +1033,6 @@ QUnit.module('Initialization', {
 
         const updatedData = scheduler.instance._getUpdatedData({ text: 'test' });
         assert.deepEqual(updatedData, {
-            allDay: undefined,
             endDate: endCellDate,
             startDate: startCellDate
         }, 'Updated data is correct');

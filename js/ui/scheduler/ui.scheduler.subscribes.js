@@ -89,39 +89,35 @@ const subscribes = {
         }).bind(this));
     },
 
-    getUpdatedData: function(options) {
-        return this._getUpdatedData({ data: options.data });
+    getUpdatedData: function(rawAppointment) {
+        return this._getUpdatedData(rawAppointment);
     },
 
-    updateAppointmentAfterDrag: function(options) {
-        const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
+    updateAppointmentAfterDrag: function({ event, element, rawAppointment, coordinates }) {
+        const info = utils.dataAccessors.getAppointmentInfo(element);
 
-        const sourceAppointment = options.data;
-        const sourceAppointmentAdapter = this.createAppointmentAdapter(sourceAppointment);
-
-        const currentAppointmentAdapter = this.createAppointmentAdapter(extend({}, sourceAppointment, this._getUpdatedData(options)))
-            .clone({ pathTimeZone: 'fromGrid' });
-        const currentAppointmentWithoutConverting = currentAppointmentAdapter.source();
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+        const targetedAppointment = this.createAppointmentAdapter(extend({}, rawAppointment, this._getUpdatedData(rawAppointment)));
+        const targetedRawAppointment = targetedAppointment.source();
 
         const newCellIndex = this._workSpace.getDroppableCellIndex();
-        const oldCellIndex = this._workSpace.getCellIndexByCoordinates(options.coordinates);
+        const oldCellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
 
-        const becomeAllDay = currentAppointmentAdapter.allDay;
-        const wasAllDay = sourceAppointmentAdapter.allDay;
+        const becomeAllDay = targetedAppointment.allDay;
+        const wasAllDay = appointment.allDay;
 
-        const dragEvent = options.event;
-
-        const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() && (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
+        const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() &&
+            (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
 
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
-            this._checkRecurringAppointment(sourceAppointment, currentAppointmentWithoutConverting, info.sourceAppointment.startDate, (function() {
+            this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, (function() {
 
-                this._updateAppointment(sourceAppointment, currentAppointmentWithoutConverting, function() {
-                    this._appointments.moveAppointmentBack(dragEvent);
-                }, dragEvent);
-            }).bind(this), undefined, undefined, dragEvent);
+                this._updateAppointment(rawAppointment, targetedRawAppointment, function() {
+                    this._appointments.moveAppointmentBack(event);
+                }, event);
+            }).bind(this), undefined, undefined, event);
         } else {
-            this._appointments.moveAppointmentBack(dragEvent);
+            this._appointments.moveAppointmentBack(event);
         }
     },
 
