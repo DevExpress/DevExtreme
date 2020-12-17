@@ -29,7 +29,6 @@ import {
   ScrollOffset,
   ScrollableDirection,
 } from '../types.d';
-import Mock = jest.Mock;
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
@@ -1057,9 +1056,9 @@ jest.mock('../../../../core/devices', () => {
     describe('Logic', () => {
       describe('Getters', () => {
         describe('cssClasses', () => {
-          ['desktop', 'ios', 'android'].forEach((platform) => {
+          ['android', 'ios', 'generic'].forEach((platform: any) => {
             it('should add scrolling classes by default', () => {
-              (devices.real as Mock).mockImplementation(() => ({ platform }));
+              devices.real = () => ({ platform });
               const instance = new Scrollable({});
               expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
 
