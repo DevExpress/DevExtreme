@@ -4,7 +4,7 @@ import {
 import { DataCellTemplateProps, ViewCellData } from '../../types.d';
 import { LayoutProps } from '../layout_props';
 
-interface CellTemplateProps extends ViewCellData {
+export interface CellTemplateProps extends ViewCellData {
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }
 
