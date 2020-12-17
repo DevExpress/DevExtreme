@@ -14,7 +14,7 @@ import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
 import utils from './utils';
 
 const HOURS_IN_DAY = 24;
-const MINUTES_IN_HOUR = 60;
+// const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
 const HOUR_MS = toMs('hour');
 
@@ -638,65 +638,6 @@ const subscribes = {
     getClientTimezoneOffset: function(date) {
         date = date || new Date();
         return timeZoneUtils.getClientTimezoneOffset(date);
-    },
-
-    convertDateByTimezone: function(date, appointmentTimezone, skipAppointmentTimezone) {
-        date = new Date(date);
-
-        const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
-        if(!skipAppointmentTimezone || skipAppointmentTimezone && !appointmentTimezone) {
-            date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
-        }
-
-        return date;
-    },
-
-    convertDateByTimezoneBack: function(date, appointmentTimezone, skipAppointmentTimezone) {
-        date = new Date(date);
-
-        const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
-        if(!skipAppointmentTimezone || skipAppointmentTimezone && !appointmentTimezone) {
-            date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
-        }
-
-        return date;
-    },
-
-    translateDateToAppointmentTimeZone: function(date, offsets, back) {
-        const operation = back ? -1 : 1;
-        const dateInUTC = date.getTime() - operation * offsets.client * toMs('hour');
-        return new Date(dateInUTC + operation * offsets.appointment * toMs('hour'));
-    },
-
-    translateDateToCommonTimeZone: function(date, offsets, back) {
-        const operation = back ? -1 : 1;
-        if(typeof offsets.common === 'number') {
-            const offset = offsets.common - offsets.appointment;
-            const hoursOffset = (offset < 0 ? -1 : 1) * Math.floor(Math.abs(offset));
-            const minutesOffset = offset % 1;
-
-            date.setHours(date.getHours() + operation * hoursOffset);
-            date.setMinutes(date.getMinutes() + operation * minutesOffset * MINUTES_IN_HOUR);
-        }
-        return date;
-    },
-
-    getComplexOffsets: function(scheduler, date, appointmentTimezone) {
-        const clientTimezoneOffset = -this.getClientTimezoneOffset(date) / toMs('hour');
-        const commonTimezoneOffset = scheduler._getTimezoneOffsetByOption(date);
-        let appointmentTimezoneOffset = timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date);
-
-        if(typeof appointmentTimezoneOffset !== 'number') {
-            appointmentTimezoneOffset = clientTimezoneOffset;
-        }
-
-        return {
-            client: clientTimezoneOffset,
-            common: isDefined(commonTimezoneOffset) ? commonTimezoneOffset : clientTimezoneOffset,
-            appointment: appointmentTimezoneOffset
-        };
     },
 
     getTargetedAppointmentData: function(appointment, element) {
