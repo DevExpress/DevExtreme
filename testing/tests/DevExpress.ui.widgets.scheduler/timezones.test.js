@@ -270,6 +270,96 @@ module('Common', moduleConfig, () => {
 });
 
 module('API', moduleConfig, () => {
+    [undefined, timeZones.UTC, timeZones.LosAngeles].forEach(timeZone => {
+        test(`addAppointment should be raised events with right args, timezone='${timeZone}'`, function(assert) {
+            const appointment = {
+                text: 'test',
+                startDate: new Date(2020, 6, 15, 14),
+                endDate: new Date(2020, 6, 15, 15)
+            };
+
+            const scheduler = createWrapper({
+                timeZone,
+                views: ['day'],
+                currentView: 'day',
+                dataSource: [],
+                onAppointmentAdded: e => {
+                    assert.deepEqual(e.appointmentData, appointment, 'onAppointmentAdded should have right appointment');
+                },
+                onAppointmentAdding: e => {
+                    assert.deepEqual(e.appointmentData, appointment, 'onAppointmentAdding should have right appointment');
+                }
+            });
+
+            scheduler.instance.addAppointment(appointment);
+            assert.deepEqual(scheduler.option('dataSource')[0], appointment, 'appointment should be push to dataSource right');
+
+            assert.expect(3);
+        });
+    });
+
+    [undefined, timeZones.UTC, timeZones.LosAngeles].forEach(timeZone => {
+        test(`updateAppointment should be raised events with right args, timezone='${timeZone}'`, function(assert) {
+            const appointment = {
+                text: 'test',
+                startDate: new Date(2020, 6, 15, 14),
+                endDate: new Date(2020, 6, 15, 15)
+            };
+
+            const newAppointment = {
+                text: 'test',
+                startDate: new Date(2020, 6, 16, 15),
+                endDate: new Date(2020, 6, 16, 16)
+            };
+
+            const scheduler = createWrapper({
+                timeZone,
+                views: ['day'],
+                currentView: 'day',
+                dataSource: [appointment],
+                onAppointmentUpdated: e => {
+                    assert.deepEqual(e.appointmentData, newAppointment, 'onAppointmentUpdated should have right appointment');
+                },
+                onAppointmentUpdating: e => {
+                    assert.deepEqual(e.newData, newAppointment, 'onAppointmentUpdating should have right appointment');
+                }
+            });
+
+            scheduler.instance.updateAppointment(appointment, newAppointment);
+            assert.deepEqual(scheduler.option('dataSource')[0], newAppointment, 'appointment should be updated in dataSource right');
+
+            assert.expect(3);
+        });
+    });
+
+    [undefined, timeZones.UTC, timeZones.LosAngeles].forEach(timeZone => {
+        test(`deleteAppointment should be raised events with right args, timezone='${timeZone}'`, function(assert) {
+            const appointment = {
+                text: 'test',
+                startDate: new Date(2020, 6, 15, 14),
+                endDate: new Date(2020, 6, 15, 15)
+            };
+
+            const scheduler = createWrapper({
+                timeZone,
+                views: ['day'],
+                currentView: 'day',
+                dataSource: [appointment],
+                onAppointmentDeleted: e => {
+                    assert.deepEqual(e.appointmentData, appointment, 'onAppointmentDeleted should have right appointment');
+                },
+                onAppointmentDeleting: e => {
+                    assert.deepEqual(e.appointmentData, appointment, 'onAppointmentDeleting should have right appointment');
+                }
+            });
+
+            scheduler.instance.deleteAppointment(appointment);
+            assert.deepEqual(scheduler.option('dataSource').length, 0, 'appointment should be deleted');
+
+            assert.expect(3);
+        });
+    });
+
     test('onAppointmentAdding event args should be consistent with adding appointment when custom timezone (T686572)', function(assert) {
         const scheduler = createWrapper({
             currentDate: new Date(2016, 4, 7),
