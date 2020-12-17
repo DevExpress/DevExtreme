@@ -113,8 +113,8 @@ const SelectBox = DropDownList.inherit({
                         e.preventDefault();
 
                         if(isCustomText) {
-                            this._valueChangeEventHandler(e);
                             if(isOpened) this._toggleOpenState();
+                            this._valueChangeEventHandler(e);
                         }
 
                         return isOpened;
@@ -552,19 +552,19 @@ const SelectBox = DropDownList.inherit({
                 this._clearSearchTimer();
             }
 
-            this._cancelSearchIfNeed(e);
+            this._cancelSearchIfNeed({ event: e });
         }
 
         e.target = this._input().get(0);
         this.callBase(e);
     },
 
-    _cancelSearchIfNeed: function(e) {
+    _cancelSearchIfNeed: function({ event, ignoreAcceptCustomValue } = {}) {
         const { acceptCustomValue, searchEnabled } = this.option();
-        const isOverlayTarget = this._isOverlayNestedTarget(e?.relatedTarget);
+        const isOverlayTarget = this._isOverlayNestedTarget(event?.relatedTarget);
 
         const shouldCancelSearch = this._wasSearch() &&
-            !acceptCustomValue &&
+            (!acceptCustomValue || ignoreAcceptCustomValue) &&
             searchEnabled &&
             !isOverlayTarget;
 
@@ -758,9 +758,7 @@ const SelectBox = DropDownList.inherit({
 
         item = item || null;
         this.option('selectedItem', item);
-        if(this._shouldClearFilter()) {
-            this._filterDataSource(null);
-        }
+        this._cancelSearchIfNeed({ ignoreAcceptCustomValue: true });
         this._setValue(this._valueGetter(item));
         this._renderDisplayText(this._displayGetter(item));
     },
