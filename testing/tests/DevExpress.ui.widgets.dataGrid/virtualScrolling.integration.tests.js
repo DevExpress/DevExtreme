@@ -3027,15 +3027,15 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                         rowRenderingMode
                     }
                 });
-                const scrollTopPotions = 350;
+                const scrollTopPosition = 350;
 
                 // act
                 this.clock.tick();
-                dataGrid.getScrollable().scrollTo({ top: scrollTopPotions });
+                dataGrid.getScrollable().scrollTo({ top: scrollTopPosition });
                 this.clock.tick();
 
                 // assert
-                assert.deepEqual(dataGrid.getScrollable().scrollTop(), scrollTopPotions, 'correct scroll position');
+                assert.deepEqual(dataGrid.getScrollable().scrollTop(), scrollTopPosition, 'correct scroll position');
                 assert.deepEqual(dataGrid.getVisibleRows()[0].key, 1, 'first visible row key');
             });
         });
