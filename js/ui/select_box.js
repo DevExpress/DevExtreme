@@ -444,11 +444,6 @@ const SelectBox = DropDownList.inherit({
 
         isVisible = arguments.length ? isVisible : !this.option('opened');
 
-        if(!isVisible) {
-            this._restoreInputText(true);
-            this._cancelSearchIfNeed();
-        }
-
         if(this._wasSearch() && isVisible) {
             this._wasSearch(false);
             const showDataImmediately = this.option('showDataBeforeSearch') || this.option('minSearchLength') === 0;
@@ -469,6 +464,11 @@ const SelectBox = DropDownList.inherit({
         }
 
         this.callBase(isVisible);
+
+        if(!isVisible) {
+            this._restoreInputText(true);
+            this._cancelSearchIfNeed();
+        }
     },
 
     _renderTooltip: function() {
