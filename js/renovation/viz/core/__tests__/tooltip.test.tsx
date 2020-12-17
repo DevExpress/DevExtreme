@@ -66,7 +66,9 @@ describe('Render', () => {
       strokeWidth: 3,
       stroke: 'test_color1',
       fill: 'test_color2',
-      transform: 'rotate(180 4 5)',
+      rotate: 180,
+      rotateX: 4,
+      rotateY: 5,
     });
 
     expect(recalculateCoordinates).toBeCalledWith({
