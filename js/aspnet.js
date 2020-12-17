@@ -61,7 +61,7 @@
                 let expression = `${value}`;
                 if(encode) {
                     expression = `arguments[1](${value} ?? '')`;
-                    if(/^ *$/.test(value)) {
+                    if(/^\s*$/.test(value)) {
                         expression = `arguments[1](${value})`;
                     }
                 }

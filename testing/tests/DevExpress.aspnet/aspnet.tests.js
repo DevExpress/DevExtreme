@@ -336,6 +336,9 @@
         testTemplate('undefined', '<% var a = undefined; %><%- a %>', '');
         testTemplate('empty', '<%-%>', 'undefined');
         testTemplate('space', '<%- %>', 'undefined');
+        testTemplate('tab', '<%-\t%>', 'undefined');
+        testTemplate('new line', '<%-\n%>', 'undefined');
+        testTemplate('return', '<%-\r%>', 'undefined');
         testTemplate('two spaces', '<%-  %>', 'undefined');
         testTemplate('empty string', '<%- \'\' %>', '');
         testTemplate('nonempty string', '<%- \'a\' %>', 'a');
