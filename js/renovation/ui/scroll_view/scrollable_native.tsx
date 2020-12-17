@@ -10,6 +10,7 @@ import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import devices from '../../../core/devices';
 
 import {
   ScrollableInternalPropsType,
@@ -28,14 +29,17 @@ import {
   SCROLLABLE_CONTAINER_CLASS,
   SCROLLABLE_CONTENT_CLASS,
   SCROLLABLE_WRAPPER_CLASS,
+  SCROLLVIEW_CONTENT_CLASS,
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
+  SCROLLABLE_DISABLED_CLASS,
 } from './scrollable_utils';
 
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
   props: {
-    disabled, height, width, rtlEnabled, children, forceGeneratePockets,
+    disabled, height, width, rtlEnabled, children,
+    forceGeneratePockets, needScrollViewContentWrapper,
   },
   restAttributes,
 }: ScrollableNative): JSX.Element => (
@@ -51,7 +55,9 @@ export const viewFunction = ({
       <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
         <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
           {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
-          {children}
+          {needScrollViewContentWrapper && (
+            <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
+          {!needScrollViewContentWrapper && children}
           {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
         </div>
       </div>
@@ -172,11 +178,12 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
   }
 
   get cssClasses(): string {
-    const { direction, classes } = this.props;
+    const { direction, classes, disabled } = this.props;
 
     const classesMap = {
-      'dx-scrollable dx-scrollable-native dx-scrollable-renovated dx-scrollable-native-generic': true,
+      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${devices.real().platform} dx-scrollable-renovated`]: true,
       [`dx-scrollable-${direction}`]: true,
+      [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
