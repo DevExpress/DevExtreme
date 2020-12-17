@@ -135,7 +135,7 @@ jest.mock('../../../../core/devices', () => {
 
       describe('ScrollBar', () => {
         ['never', 'always', 'onScroll', 'onHover'].forEach((showScrollbar) => {
-          it('Scrollbar should render only if simulated strategy is used and showScrollbar not equals never', () => {
+          it(`Scrollbar should render only if simulated strategy is used and showScrollbar not equals never. showScrollbar=${showScrollbar}`, () => {
             const instance = new Scrollable({});
             const scrollable = mount(
               viewFunction({ props: { showScrollbar } } as any) as JSX.Element,
@@ -148,7 +148,7 @@ jest.mock('../../../../core/devices', () => {
         });
 
         ['horizontal', 'vertical', 'both'].forEach((direction) => {
-          it('Scrollbar has correct direction class', () => {
+          it(`Scrollbar has correct direction class. Direction=${direction}`, () => {
             const instance = new Scrollable({});
             const scrollable = mount(
               viewFunction({ props: { direction } } as any) as JSX.Element,
