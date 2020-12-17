@@ -754,6 +754,121 @@ module('Scheduler grid', moduleConfig, () => {
         });
     });
 
+    if(isDesktopEnvironment()) {
+        [{
+            timeZone: undefined,
+            startDate: new Date(2015, 11, 23, 1),
+            endDate: new Date(2015, 11, 23, 2)
+        }, {
+            timeZone: timeZones.LosAngeles,
+            startDate: '2015-12-23T09:00:00.000Z',
+            endDate: '2015-12-23T10:00:00.000Z'
+        }].forEach(({ timeZone, startDate, endDate }) => {
+            test(`Drag n drop should work right in week view if timezone='${timeZone}'`, function(assert) {
+                const scheduler = createWrapper({
+                    currentDate: new Date(2015, 11, 23),
+                    views: ['week'],
+                    currentView: 'week',
+                    timeZone,
+                    focusStateEnabled: false, // fix for 'Not cleared timer detected.'
+                    dataSource: [{
+                        text: 'a',
+                        startDate,
+                        endDate
+                    }]
+                });
+
+                const appointment = scheduler.appointmentList[0];
+                const initialPosition = appointment.rectangle;
+
+                appointment.drag.toCell(18);
+                assert.equal(appointment.date, '1:00 AM - 2:00 AM', 'time shouldn\'t change after drag to right cell');
+                assert.ok(appointment.rectangle.x > initialPosition.x, 'drag to right: current X position should be larger than initial X');
+                assert.roughEqual(appointment.rectangle.y, initialPosition.y, 1, 'drag to right: current Y position should be equal initial Y');
+
+                appointment.drag.toCell(17);
+                assert.equal(appointment.date, '1:00 AM - 2:00 AM', 'time shouldn\'t change after drag to left cell');
+                assert.roughEqual(appointment.rectangle.x, initialPosition.x, 1, 'drag ro left: current X position should be equal initial X');
+                assert.roughEqual(appointment.rectangle.y, initialPosition.y, 1, 'drag to left: current Y position should be equal initial Y');
+
+                appointment.drag.toCell(10);
+                assert.equal(appointment.date, '12:30 AM - 1:30 AM', 'time should be change after drag to top cell');
+                assert.ok(appointment.rectangle.y < initialPosition.y, 'drag to top: current Y position should be smaller than initial Y');
+                assert.roughEqual(appointment.rectangle.x, initialPosition.x, 1, 'drag to top: current X position should be equal initial X');
+
+                appointment.drag.toCell(17);
+                assert.equal(appointment.date, '1:00 AM - 2:00 AM', 'time shouldn\'t change after drag to bottom cell');
+                assert.roughEqual(appointment.rectangle.y, initialPosition.y, 1, 'drag to bottom: current Y position should be equal initial Y');
+                assert.roughEqual(appointment.rectangle.x, initialPosition.x, 1, 'drag to bottom: current X position should be equal initial X');
+            });
+        });
+
+        [{
+            timeZone: undefined,
+            startDate: new Date(2015, 11, 23, 8),
+            endDate: new Date(2015, 11, 23, 13)
+        }, {
+            timeZone: timeZones.LosAngeles,
+            startDate: '2015-12-23T16:00:00.000Z',
+            endDate: '2015-12-23T21:00:00.000Z'
+        }].forEach(({ timeZone, startDate, endDate }) => {
+            [{
+                startDayHour: 0,
+                endDayHour: 24
+            }, {
+                startDayHour: 8,
+                endDayHour: 15,
+            }].forEach(({ startDayHour, endDayHour }) => {
+                test(`Drag n drop should work right in month view if timezone='${timeZone}' and startDayHour=${startDayHour}, endDayHour=${endDayHour}`, function(assert) {
+                    const scheduler = createWrapper({
+                        currentDate: new Date(2015, 11, 23),
+                        views: ['month'],
+                        currentView: 'month',
+                        timeZone,
+                        startDayHour,
+                        endDayHour,
+                        focusStateEnabled: false, // fix for 'Not cleared timer detected.'
+                        dataSource: [{
+                            text: 'a',
+                            startDate,
+                            endDate
+                        }]
+                    });
+
+                    const appointment = scheduler.appointmentList[0];
+                    const initialPosition = appointment.rectangle;
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right on init');
+
+                    appointment.drag.toCell(25);
+                    assert.ok(appointment.rectangle.x > initialPosition.x, 'drag to left: current X position should be larger than initial X');
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 24 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to right cell');
+
+                    appointment.drag.toCell(24);
+                    assert.equal(appointment.rectangle.x, initialPosition.x, 'drag to right: current X position should be equal initial X');
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to lefy cell');
+
+                    appointment.drag.toCell(17);
+                    assert.ok(appointment.rectangle.y < initialPosition.y, 'drag to top: current Y position should be smaller than initial Y');
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 16 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to top cell');
+
+                    appointment.drag.toCell(24);
+                    assert.equal(appointment.rectangle.y, initialPosition.y, 'drag to bottom: current Y position should be equal initial Y');
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to bottom cell');
+                });
+            });
+        });
+    }
+
     test('Recurrence appointment with \'Etc/UTC\' tz should be updated correctly via drag(T394991)', function(assert) {
         const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
         try {
