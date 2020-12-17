@@ -3482,13 +3482,23 @@ QUnit.module('Integration: Appointments', {
                                 { id: 2, text: 'two' }
                             ]
                         }
-                    ]
+                    ],
+                    height: 1500,
                 });
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const $element = $(this.instance.$element());
 
-                $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(54).trigger(dragEvents.enter);
-                pointerMock($appointment).start().down().move(10, 10).up();
+                const $appointment = $element.find(`.${APPOINTMENT_CLASS}`).eq(0);
+                const positionBeforeDrag = $appointment.offset();
+
+                const $cell = $element.find(`.${DATE_TABLE_CELL_CLASS}`).eq(54);
+                const cellHeight = $cell.outerHeight();
+                const pointer = pointerMock($appointment);
+
+                pointer.start()
+                    .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                    .move(0, 5 * cellHeight);
+                pointer.up();
 
                 this.clock.tick();
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
