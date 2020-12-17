@@ -339,6 +339,11 @@
         testTemplate('two spaces', '<%-  %>', 'undefined');
         testTemplate('empty string', '<%- \'\' %>', '');
         testTemplate('nonempty string', '<%- \'a\' %>', 'a');
+        testTemplate('WA from T954324, null', '<% var value = null; %><%- (value != null ? value : \'\') %>', '');
+        testTemplate('WA from T954324, undefined', '<% var value = undefined; %><%- (value != null ? value : \'\') %>', '');
+        testTemplate('WA from T954324, nempty string', '<% var value = \'\'; %><%- (value != null ? value : \'\') %>', '');
+        testTemplate('WA from T954324, nonempty string', '<% var value = \'a\'; %><%- (value != null ? value : \'\') %>', 'a');
+
 
         QUnit.module('Alternative syntax (T831170)', function() {
             testTemplate('enabled', 'a [%= \'b\' %] c', 'a b c');
