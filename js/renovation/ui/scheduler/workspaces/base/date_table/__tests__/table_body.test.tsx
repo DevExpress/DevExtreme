@@ -20,6 +20,10 @@ describe('DateTableBody', () => {
           isFirstGroupCell: true,
           isLastGroupCell: false,
           key: '1',
+          text: 'test 1',
+          today: true,
+          otherMonth: true,
+          firstDayOfMonth: true,
         }], [{
           startDate: new Date(2020, 6, 9, 1),
           endDate: new Date(2020, 6, 9, 1, 30),
@@ -29,6 +33,10 @@ describe('DateTableBody', () => {
           isFirstGroupCell: false,
           isLastGroupCell: false,
           key: '2',
+          text: 'test 2',
+          today: false,
+          otherMonth: false,
+          firstDayOfMonth: true,
         }], [{
           startDate: new Date(2020, 6, 9, 2),
           endDate: new Date(2020, 6, 9, 2, 30),
@@ -38,6 +46,10 @@ describe('DateTableBody', () => {
           isFirstGroupCell: false,
           isLastGroupCell: true,
           key: '3',
+          text: 'test 3',
+          today: false,
+          otherMonth: false,
+          firstDayOfMonth: false,
         }]],
         allDayPanel: [{ startDate: new Date(), key: '1' }],
       }],
@@ -81,34 +93,51 @@ describe('DateTableBody', () => {
 
       const assert = (
         cells: any,
-        index: number,
-        isFirstGroupCell: boolean,
-        isLastGroupCell: boolean,
+        rowIndex: number,
       ): void => {
-        const cell = cells.at(index);
+        const cell = cells.at(rowIndex);
+        const data = viewData.groupedData[0].dateTable[rowIndex][0];
+        const {
+          startDate,
+          endDate,
+          groups,
+          groupIndex,
+          index,
+          text,
+          today,
+          otherMonth,
+          firstDayOfMonth,
+          isFirstGroupCell,
+          isLastGroupCell,
+          key,
+        } = data;
 
         expect(cell.props())
           .toMatchObject({
-            startDate: viewData.groupedData[0].dateTable[index][0].startDate,
-            endDate: viewData.groupedData[0].dateTable[index][0].endDate,
-            groups: viewData.groupedData[0].dateTable[index][0].groups,
-            groupIndex: viewData.groupedData[0].dateTable[index][0].groupIndex,
-            index: viewData.groupedData[0].dateTable[index][0].index,
+            startDate,
+            endDate,
+            groups,
+            groupIndex,
+            index,
+            text,
+            today,
+            otherMonth,
+            firstDayOfMonth,
             isFirstGroupCell,
             isLastGroupCell,
             dataCellTemplate,
           });
         expect(cell.key())
-          .toBe(viewData.groupedData[0].dateTable[index][0].key);
+          .toBe(key);
       };
 
       const cells = tableBody.find(cellTemplate);
       expect(cells)
         .toHaveLength(3);
 
-      assert(cells, 0, true, false);
-      assert(cells, 1, false, false);
-      assert(cells, 2, false, true);
+      assert(cells, 0);
+      assert(cells, 1);
+      assert(cells, 2);
     });
 
     it('should render AllDayPanelBody correctly and call getIsGroupedAllDayPanel', () => {

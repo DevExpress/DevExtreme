@@ -150,7 +150,7 @@ class ViewDataGenerator {
         for(let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
             const cellDataValue = cellDataGetters.reduce((data, getter) => ({
                 ...data,
-                ...getter(undefined, rowIndex, columnIndex, groupIndex).value
+                ...getter(undefined, rowIndex, columnIndex, groupIndex, data.startDate).value
             }), {});
 
             cellDataValue.index = this._calculateCellIndex(

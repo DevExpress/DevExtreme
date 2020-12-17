@@ -1,7 +1,7 @@
 export interface ViewCellData {
   startDate: Date;
   endDate: Date;
-  text: string;
+  text?: string;
   otherMonth?: boolean;
   today?: boolean;
   allDay?: boolean;
@@ -11,6 +11,7 @@ export interface ViewCellData {
   isFirstGroupCell: boolean;
   isLastGroupCell: boolean;
   key: string;
+  firstDayOfMonth?: boolean;
 }
 
 interface ViewData {

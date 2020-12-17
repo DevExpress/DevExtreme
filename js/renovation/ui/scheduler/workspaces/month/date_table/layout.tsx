@@ -16,5 +16,6 @@ export const viewFunction = (viewModel: MonthDateTableLayout): JSX.Element => (
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: { register: true },
 })
 export class MonthDateTableLayout extends JSXComponent(LayoutProps) {}
