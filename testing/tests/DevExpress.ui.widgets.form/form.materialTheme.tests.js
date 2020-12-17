@@ -6,7 +6,7 @@ import 'ui/form/ui.form';
 import 'common.css!';
 import 'material_blue_light.css!';
 import FormLayoutTestWrapper from '../../helpers/FormLayoutTestWrapper.js';
-import { FIELD_ITEM_CONTENT_WRAPPER_CLASS, LABEL_VERTICAL_ALIGNMENT_CLASS } from 'ui/form/constants';
+import { FIELD_ITEM_CONTENT_WRAPPER_CLASS } from 'ui/form/constants';
 
 function testChromeOnly(name, callback) {
     if(!browser.chrome) {
@@ -553,7 +553,7 @@ QUnit.module('check validation message location', {
 
         $editorElement.dxSelectBox('instance').focus();
         this.clock.tick();
-        assert.ok($editorElement.closest(`.${LABEL_VERTICAL_ALIGNMENT_CLASS}`), 'form has top labels');
+
         assert.equal($(invalidMessage).find('.dx-overlay-wrapper').css('transform'), 'matrix(1, 0, 0, 1, 0, 0)', 'change validation overlay wrapper style to fix message at bottom');
         assert.equal($(invalidMessage).find('.dx-overlay-content').css('transform'), 'matrix(1, 0, 0, 1, 0, 0)', 'change validation overlay content style to fix message at bottom');
     });
