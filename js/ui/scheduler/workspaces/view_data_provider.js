@@ -33,10 +33,9 @@ class ViewDataGenerator {
     }
 
     _generateViewDataMap(completeViewDataMap, options) {
-        const { startRowIndex, rowCount } = options;
+        const { startRowIndex, rowCount, showAllDayPanel } = options;
 
         const isVerticalGrouping = this.workspace._isVerticalGroupedWorkSpace();
-        const showAllDayPanel = this.workspace._isShowAllDayPanel();
 
         const indexDifference = isVerticalGrouping || !showAllDayPanel ? 0 : 1;
         const correctedStartRowIndex = startRowIndex + indexDifference;
@@ -54,6 +53,7 @@ class ViewDataGenerator {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
             cellCountInGroupRow,
+            showAllDayPanel,
         } = options;
         const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
 
@@ -88,7 +88,6 @@ class ViewDataGenerator {
 
         const isVirtualScrolling = this.workspace.isVirtualScrolling();
         const isVerticalGrouping = this.workspace._isVerticalGroupedWorkSpace();
-        const showAllDayPanel = this.workspace._isShowAllDayPanel();
 
         if(!isVerticalGrouping && showAllDayPanel) {
             groupedData[0].allDayPanel = completeViewDataMap[0];
@@ -125,7 +124,7 @@ class ViewDataGenerator {
 
     _generateAllDayPanelData(options, groupIndex, rowCount, cellCount) {
         const workSpace = this.workspace;
-        if(!workSpace._isShowAllDayPanel()) {
+        if(!options.showAllDayPanel) {
             return null;
         }
 
@@ -381,7 +380,7 @@ export default class ViewDataProvider {
         const workspace = this._workspace;
         const rowsPerGroup = workspace._getRowCountWithAllDayRows();
         const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
-        const isShowAllDayPanel = workspace._isShowAllDayPanel();
+        const isShowAllDayPanel = workspace._isShowAllDayPanel() && workspace.supportAllDayRow();
 
         const firstRowInGroup = isVerticalGrouping ? groupIndex * rowsPerGroup : 0;
         const lastRowInGroup = isVerticalGrouping
@@ -482,7 +481,7 @@ export default class ViewDataProvider {
     findGlobalCellPosition(date, groupIndex = 0, allDay = false) {
         const { completeViewDataMap, _workspace: workspace } = this;
 
-        const showAllDayPanel = workspace._isShowAllDayPanel();
+        const showAllDayPanel = workspace._isShowAllDayPanel() && workspace.supportAllDayRow();
         const isVerticalGroupOrientation = workspace._isVerticalGroupedWorkSpace();
 
         for(let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {

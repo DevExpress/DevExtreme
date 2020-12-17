@@ -144,10 +144,12 @@ const verticalWorkSpaceMock = {
         topVirtualRowHeight: undefined,
         bottomVirtualRowHeight: undefined,
         cellCountInGroupRow: undefined,
-        groupOrientation: 'vertical'
+        groupOrientation: 'vertical',
+        showAllDayPanel: true,
     }),
     _isVerticalGroupedWorkSpace: () => true,
     _isShowAllDayPanel: () => true,
+    supportAllDayRow: () => true,
     isGroupedAllDayPanel: () => true,
     isVirtualScrolling: () => false,
 };
@@ -158,10 +160,12 @@ const horizontalWorkSpaceMock = {
         topVirtualRowHeight: undefined,
         bottomVirtualRowHeight: undefined,
         cellCountInGroupRow: undefined,
-        groupOrientation: 'horizontal'
+        groupOrientation: 'horizontal',
+        showAllDayPanel: true,
     }),
     _isVerticalGroupedWorkSpace: () => false,
     _isShowAllDayPanel: () => true,
+    supportAllDayRow: () => true,
     isGroupedAllDayPanel: () => false,
     isVirtualScrolling: () => false,
 };
@@ -617,10 +621,12 @@ module('View Data Provider', () => {
                     topVirtualRowHeight: 50,
                     bottomVirtualRowHeight: 50,
                     cellCountInGroupRow: 2,
-                    groupOrientation: 'vertical'
+                    groupOrientation: 'vertical',
+                    showAllDayPanel: true,
                 }),
                 _isVerticalGroupedWorkSpace: () => true,
                 _isShowAllDayPanel: () => true,
+                supportAllDayRow: () => true,
                 isGroupedAllDayPanel: () => true,
                 isVirtualScrolling: () => true,
             };
@@ -631,10 +637,12 @@ module('View Data Provider', () => {
                     topVirtualRowHeight: 50,
                     bottomVirtualRowHeight: 50,
                     cellCountInGroupRow: 1,
-                    groupOrientation: 'horizontal'
+                    groupOrientation: 'horizontal',
+                    showAllDayPanel: true,
                 }),
                 _isVerticalGroupedWorkSpace: () => false,
                 _isShowAllDayPanel: () => true,
+                supportAllDayRow: () => true,
                 isGroupedAllDayPanel: () => false,
                 isVirtualScrolling: () => true,
             };

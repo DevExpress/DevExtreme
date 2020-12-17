@@ -13,8 +13,8 @@ import {
     asyncWrapper
 } from '../../helpers/scheduler/helpers.js';
 
-const supportedViews = ['day', 'week', 'workWeek'];
-const unsupportedViews = ['month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
+const supportedViews = ['day', 'week', 'workWeek']; // TODO: add month view
+const unsupportedViews = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 
 const {
     testStart,
