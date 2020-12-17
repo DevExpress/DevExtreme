@@ -9,11 +9,11 @@ import {
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
-import { mergeRtlEnabled } from '../core/utils';
+import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 import { BaseWidgetProps } from '../core/base_props';
 import { BaseWidget } from '../core/base_widget';
 import { createAxis } from './utils';
-import { ConfigContextValue, ConfigContext } from '../../ui/common/config_context';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { PathSvgElement } from '../core/renderers/svg_path';
 import { Canvas } from '../core/common/types.d';
 
@@ -201,7 +201,7 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   get rtlEnabled(): boolean | undefined {
     const { rtlEnabled } = this.props;
-    return mergeRtlEnabled(rtlEnabled, this.config);
+    return resolveRtlEnabled(rtlEnabled, this.config);
   }
 
   get tooltipEnabled(): boolean {

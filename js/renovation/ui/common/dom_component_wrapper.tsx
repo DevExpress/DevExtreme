@@ -11,7 +11,7 @@ import {
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import type DomComponent from '../../../core/dom_component';
-import { ConfigContextValue, ConfigContext } from './config_context';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { EventCallback } from './event_callback.d';
 import { renderTemplate } from '../../utils/render_template';
 
