@@ -33,12 +33,12 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   return (
     <Scrollable
       classes={cssClasses}
-      ref={scrollableRef as any}
+      ref={scrollableRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
-      needScrollViewWrappers
+      needScrollViewContentWrapper
     />
   );
 };

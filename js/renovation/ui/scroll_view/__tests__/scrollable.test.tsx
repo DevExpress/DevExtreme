@@ -56,13 +56,13 @@ jest.mock('../../../../core/devices', () => {
         expect(scrollableContent.exists()).toBe(true);
       });
 
-      [true, false].forEach((needScrollViewWrappers) => {
-        it(`should render scrollView content only if needScrollViewWrappers option is enabled. needScrollViewWrappers=${needScrollViewWrappers}`, () => {
+      [true, false].forEach((needScrollViewContentWrapper) => {
+        it(`should render scrollView content only if needScrollViewContentWrapper option is enabled. needScrollViewContentWrapper=${needScrollViewContentWrapper}`, () => {
           const scrollable = mount(
-            viewFunction({ props: { needScrollViewWrappers } } as any) as JSX.Element,
+            viewFunction({ props: { needScrollViewContentWrapper } } as any) as JSX.Element,
           );
           const scrollViewContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
-          expect(scrollViewContent.exists()).toBe(needScrollViewWrappers);
+          expect(scrollViewContent.exists()).toBe(needScrollViewContentWrapper);
         });
       });
 

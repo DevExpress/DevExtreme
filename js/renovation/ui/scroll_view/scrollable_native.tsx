@@ -38,7 +38,7 @@ export const viewFunction = ({
   cssClasses, contentRef, containerRef,
   props: {
     disabled, height, width, rtlEnabled, children,
-    forceGeneratePockets, needScrollViewWrappers,
+    forceGeneratePockets, needScrollViewContentWrapper,
   },
   restAttributes,
 }: ScrollableNative): JSX.Element => (
@@ -51,11 +51,12 @@ export const viewFunction = ({
     {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     <div className={SCROLLABLE_WRAPPER_CLASS}>
-      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef as any}>
-        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef as any}>
+      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
+        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
           {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
-          {needScrollViewWrappers && <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>}
-          {!needScrollViewWrappers && children}
+          {needScrollViewContentWrapper && (
+            <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
+          {!needScrollViewContentWrapper && children}
           {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
         </div>
       </div>
