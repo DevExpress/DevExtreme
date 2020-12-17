@@ -271,7 +271,7 @@ module('Common', moduleConfig, () => {
 
 module('API', moduleConfig, () => {
     [undefined, timeZones.UTC, timeZones.LosAngeles].forEach(timeZone => {
-        test(`addAppointment should be raised events with right args, timezone='${timeZone}'`, function(assert) {
+        test(`Correct args should be passed into events when appointment is added, timezone='${timeZone}'`, function(assert) {
             const appointment = {
                 text: 'test',
                 startDate: new Date(2020, 6, 15, 14),
@@ -299,7 +299,7 @@ module('API', moduleConfig, () => {
     });
 
     [undefined, timeZones.UTC, timeZones.LosAngeles].forEach(timeZone => {
-        test(`updateAppointment should be raised events with right args, timezone='${timeZone}'`, function(assert) {
+        test(`Correct args should be passed into events when appointment is updated, timezone='${timeZone}'`, function(assert) {
             const appointment = {
                 text: 'test',
                 startDate: new Date(2020, 6, 15, 14),
@@ -333,7 +333,7 @@ module('API', moduleConfig, () => {
     });
 
     [undefined, timeZones.UTC, timeZones.LosAngeles].forEach(timeZone => {
-        test(`deleteAppointment should be raised events with right args, timezone='${timeZone}'`, function(assert) {
+        test(`Correct args should be passed into events when appointment is deleted, timezone='${timeZone}'`, function(assert) {
             const appointment = {
                 text: 'test',
                 startDate: new Date(2020, 6, 15, 14),
