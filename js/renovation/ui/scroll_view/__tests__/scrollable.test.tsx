@@ -37,7 +37,7 @@ jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
-  actualDevices.current = jest.fn(() => ({ platform: 'generic' }));
+  actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
   return actualDevices;
 });
 
@@ -1059,7 +1059,7 @@ jest.mock('../../../../core/devices', () => {
         describe('cssClasses', () => {
           ['desktop', 'ios', 'android'].forEach((platform) => {
             it('should add scrolling classes by default', () => {
-              (devices.current as Mock).mockImplementation(() => ({ platform }));
+              (devices.real as Mock).mockImplementation(() => ({ platform }));
               const instance = new Scrollable({});
               expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
 
