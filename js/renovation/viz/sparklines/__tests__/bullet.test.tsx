@@ -172,6 +172,10 @@ describe('Bullet', () => {
   });
 
   describe('Logic', () => {
+    beforeEach(() => {
+      jest.resetAllMocks();
+    });
+
     describe('Getters', () => {
       describe('cssClasses', () => {
         it('should add default classes', () => {
@@ -647,7 +651,6 @@ describe('Bullet', () => {
               invert: true,
             },
           });
-          (resolveRtlEnabled as jest.Mock).mockReturnValue(false);
         });
       });
 

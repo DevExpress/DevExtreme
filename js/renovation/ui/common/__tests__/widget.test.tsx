@@ -613,6 +613,10 @@ describe('Widget', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
+      beforeEach(() => {
+        jest.resetAllMocks();
+      });
+
       describe('attributes', () => {
         it('should return ARIA labels', () => {
           const widget = new Widget({ visible: false, aria: { id: 10, role: 'button', level: 100 } });
@@ -783,7 +787,7 @@ describe('Widget', () => {
 
       describe('rtlEnabled', () => {
         it('should call utils method resolveRtlEnabled', () => {
-          (resolveRtlEnabled as jest.Mock).mockClear();
+          (resolveRtlEnabled as jest.Mock).mockReturnValue(false);
           const widget = new Widget({ });
           const { rtlEnabled } = widget;
 
