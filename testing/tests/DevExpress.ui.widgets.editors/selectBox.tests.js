@@ -2997,7 +2997,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter is not cleared');
     });
 
-    QUnit.testInActiveWindow('Filter should not be canceled after focusout if the widget is closed (T876423)', function(assert) {
+    QUnit.testInActiveWindow('SelectBox should not open after focusout when searched item is selected by enter (T880297)', function(assert) {
         const items = ['111', '222', '333'];
 
         const $selectBox = $('#selectBox').dxSelectBox({
@@ -3009,11 +3009,13 @@ QUnit.module('search', moduleSetup, () => {
         const instance = $selectBox.dxSelectBox('instance');
         const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-        keyboardMock($input).type('1');
-        instance.close();
+        keyboardMock($input)
+            .type('1')
+            .press('enter');
+
         $input.trigger('focusout');
 
-        assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter is not clear');
+        assert.notOk(instance.option('opened'), 'selectBox is closed');
     });
 
     QUnit.testInActiveWindow('Unfiltered editor should not be load data on blur (T873258)', function(assert) {
@@ -3251,6 +3253,26 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal(selectBox.option('opened'), false, 'selectBox was closed');
         assert.equal(selectBox.getDataSource().searchValue(), null, 'filter was cleared');
     });
+
+    QUnit.test('search should be canceled after "tab" pressing if popup is opened and acceptCustomValue is false (T958027)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            dataSource: ['1', '2', '3'],
+            searchTimeout: 0,
+            opened: true
+        });
+        const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type(' ')
+            .press('tab')
+            .blur();
+
+        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+    });
+
 
     QUnit.test('Opening selectBox after search should not load data if the \'showDataBeforeSearch\' option is false', function(assert) {
         const dataSource = new DataSource({

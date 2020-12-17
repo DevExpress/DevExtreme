@@ -543,19 +543,26 @@ const SelectBox = DropDownList.inherit({
                 this._clearSearchTimer();
             }
 
-            const shouldCancelSearch = this._wasSearch() &&
-                !this.option('acceptCustomValue') &&
-                this.option('searchEnabled') &&
-                this.option('opened') &&
-                !isOverlayTarget;
-
-            if(shouldCancelSearch) {
-                this._searchCanceled();
-            }
+            this._searchCanceled(e);
         }
 
         e.target = this._input().get(0);
         this.callBase(e);
+    },
+
+    _searchCanceled: function(e) {
+        const { acceptCustomValue, searchEnabled } = this.option();
+        const isOverlayTarget = this._isOverlayNestedTarget(e?.relatedTarget);
+
+        const shouldCancelSearch = this._wasSearch() &&
+            !acceptCustomValue &&
+            searchEnabled &&
+            !isOverlayTarget;
+
+        if(shouldCancelSearch) {
+            this._wasSearch(false);
+            this.callBase();
+        }
     },
 
     _isOverlayNestedTarget: function(target) {
@@ -573,7 +580,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _shouldOpenPopup: function() {
-        return this._needPassDataSourceToList();
+        return this._needPassDataSourceToList() && this._wasSearch();
     },
 
     _isFocused: function() {
