@@ -635,11 +635,6 @@ const subscribes = {
         return this._getTimezoneOffsetByOption();
     },
 
-    getClientTimezoneOffset: function(date) {
-        date = date || new Date();
-        return timeZoneUtils.getClientTimezoneOffset(date);
-    },
-
     getTargetedAppointmentData: function(appointment, element) {
         return this.getTargetedAppointment(appointment, element);
     },
