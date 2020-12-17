@@ -1988,44 +1988,53 @@ class Scheduler extends Widget {
     }
 
     // TODO: use for appointment model
-    _getRecurrenceException(appointmentData) {
-        let recurrenceException = this.fire('getField', 'recurrenceException', appointmentData);
+    _getRecurrenceException(rawAppointment) {
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+        const recurrenceException = appointment.recurrenceException;
 
         if(recurrenceException) {
-            const startDate = this.fire('getField', 'startDate', appointmentData);
             const exceptions = recurrenceException.split(',');
-            const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
 
             for(let i = 0; i < exceptions.length; i++) {
-                exceptions[i] = this._convertRecurrenceException(exceptions[i], startDate, startDateTimeZone);
+                exceptions[i] = this._convertRecurrenceException(exceptions[i], appointment.startDate);
             }
 
-            recurrenceException = exceptions.join();
+            return exceptions.join();
         }
 
         return recurrenceException;
     }
 
-    _convertRecurrenceException(exceptionString, startDate, startDateTimeZone) {
+    _convertRecurrenceException(exceptionString, startDate) {
         exceptionString = exceptionString.replace(/\s/g, '');
 
-        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
-        const convertedStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
-        let convertedExceptionDate = this.fire('convertDateByTimezone', exceptionDate, startDateTimeZone);
+        const getConvertedToTimeZone = date => {
+            return this.timeZoneCalculator.createDate(date, {
+                path: 'toGrid'
+            });
+        };
 
-        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), startDateTimeZone);
+        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
+        const convertedStartDate = getConvertedToTimeZone(startDate);
+        let convertedExceptionDate = getConvertedToTimeZone(exceptionDate);
+
+        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'));
         exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
         return exceptionString;
     }
 
-    dayHasAppointment(day, appointment, trimTime) {
-        let startDate = new Date(this.fire('getField', 'startDate', appointment));
-        let endDate = new Date(this.fire('getField', 'endDate', appointment));
-        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointment);
-        const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointment);
+    dayHasAppointment(day, rawAppointment, trimTime) {
+        const getConvertedToTimeZone = date => {
+            return this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        };
 
-        startDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
-        endDate = this.fire('convertDateByTimezone', endDate, endDateTimeZone);
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+
+        let startDate = new Date(appointment.startDate);
+        let endDate = new Date(appointment.endDate);
+
+        startDate = getConvertedToTimeZone(startDate);
+        endDate = getConvertedToTimeZone(endDate);
 
         if(day.getTime() === endDate.getTime()) {
             return startDate.getTime() === endDate.getTime();
