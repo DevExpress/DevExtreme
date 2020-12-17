@@ -448,6 +448,7 @@ const SelectBox = DropDownList.inherit({
 
         if(!isVisible) {
             this._restoreInputText(true);
+            this._searchCanceled();
         }
 
         if(this._wasSearch() && isVisible) {
@@ -627,7 +628,7 @@ const SelectBox = DropDownList.inherit({
         this._saveValueChangeEvent(e.event);
 
         if(this._shouldClearFilter()) {
-            this._clearFilter();
+            this._searchCanceled();
         }
 
         this._completeSelection(this._valueGetter(e.itemData));
