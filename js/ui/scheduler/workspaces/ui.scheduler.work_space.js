@@ -164,6 +164,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._virtualSelectionState;
     }
 
+    get isAllDayPanelVisible() {
+        return this._isShowAllDayPanel() && this.supportAllDayRow();
+    }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -1637,7 +1641,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const headerPanelHeight = this.getHeaderPanelHeight();
         const headerHeight = this.invoke('getHeaderHeight');
-        const allDayPanelHeight = this._isAllDayPanelSupportedAndVisible()
+        const allDayPanelHeight = this.isAllDayPanelVisible
             ? this._groupedStrategy.getAllDayTableHeight()
             : 0;
 
@@ -3075,7 +3079,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     updateScrollPosition(date, groups, allDay = false) {
         const scheduler = this.option('observer');
         const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
-        const inAllDayRow = allDay && this._isAllDayPanelSupportedAndVisible();
+        const inAllDayRow = allDay && this.isAllDayPanelVisible;
 
         if(this.needUpdateScrollPosition(newDate, groups, inAllDayRow)) {
             this.scrollTo(newDate, groups, inAllDayRow, false);
@@ -3199,7 +3203,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const groupIndex = this._getGroupCount() && groups
             ? this._getGroupIndexByResourceId(groups)
             : 0;
-        const isScrollToAllDay = allDay && this._isAllDayPanelSupportedAndVisible();
+        const isScrollToAllDay = allDay && this.isAllDayPanelVisible;
 
         const coordinates = this._getScrollCoordinates(
             date.getHours(), date.getMinutes(), date, groupIndex, isScrollToAllDay,
@@ -3401,10 +3405,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getTimePanelCells() {
         return this.$element().find(`.${TIME_PANEL_CELL_CLASS}`);
-    }
-
-    _isAllDayPanelSupportedAndVisible() {
-        return this._isShowAllDayPanel() && this.supportAllDayRow();
     }
 }
 
