@@ -8,9 +8,9 @@ import { ScrollableInternalProps } from './scrollable_props';
 
 @ComponentBindings()
 export class ScrollbarProps extends ScrollableInternalProps {
-  @OneWay() showScrollbar?: ScrollableShowScrollbar;
+  @OneWay() expandable = true;
+
+  @OneWay() visibilityMode: ScrollableShowScrollbar = 'onScroll';
 
   @OneWay() direction: ScrollableDirection = 'vertical';
-
-  @OneWay() scrollByThumb = false;
 }

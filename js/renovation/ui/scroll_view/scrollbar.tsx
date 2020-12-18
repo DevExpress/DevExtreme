@@ -32,11 +32,11 @@ export const viewFunction = ({
 })
 export class ScrollBar extends JSXComponent<ScrollbarProps>() {
   get cssClasses(): string {
-    const { direction, showScrollbar, scrollByThumb } = this.props;
+    const { direction, visibilityMode, expandable } = this.props;
 
     const classesMap = {
       [`dx-scrollable-scrollbar dx-scrollbar-${direction}`]: true,
-      'dx-scrollbar-hoverable': (showScrollbar === 'onHover' || showScrollbar === 'always') && scrollByThumb,
+      'dx-scrollbar-hoverable': (visibilityMode === 'onHover' || visibilityMode === 'always') && expandable,
     };
     return combineClasses(classesMap);
   }
