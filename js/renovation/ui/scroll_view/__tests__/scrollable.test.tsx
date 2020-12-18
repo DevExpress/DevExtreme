@@ -11,7 +11,7 @@ import {
   viewFunction as viewFunctionNative,
 } from '../scrollable_native';
 
-import { ensureLocation, SCROLLABLE_DISABLED_CLASS } from '../scrollable_utils';
+import { ensureLocation, SCROLLABLE_DISABLED_CLASS, ScrollDirection } from '../scrollable_utils';
 
 import {
   ScrollableSimulated,
@@ -107,7 +107,7 @@ jest.mock('../../../../core/devices', () => {
         } as Partial<any>;
         const scrollable = mount(viewFunction(props as any) as JSX.Element);
 
-        expect(scrollable.find(Widget).at(0).props()).toMatchObject({
+        expect(scrollable.find(Widget).props()).toMatchObject({
           classes: cssClasses,
           ...props.props,
         });
@@ -134,20 +134,20 @@ jest.mock('../../../../core/devices', () => {
       });
 
       describe('ScrollBar', () => {
-        ['never', 'always', 'onScroll', 'onHover'].forEach((showScrollbar) => {
-          it(`Scrollbar should render only if simulated strategy is used and showScrollbar not equals never. showScrollbar=${showScrollbar}`, () => {
-            const instance = new Scrollable({});
-            const scrollable = mount(
-              viewFunction({ props: { showScrollbar } } as any) as JSX.Element,
-            );
+        ['horizontal', 'vertical', 'both'].forEach((direction: any) => {
+          ['never', 'always', 'onScroll', 'onHover'].forEach((showScrollbar) => {
+            it(`Scrollbar should render only if simulated strategy is used and showScrollbar not equals never. ShowScrollbar=${showScrollbar}`, () => {
+              const instance = new Scrollable({});
+              const scrollable = mount(
+                viewFunction({ props: { showScrollbar, direction } } as any) as JSX.Element,
+              );
 
-            const scrollBar = scrollable.find(ScrollBar);
-            const needRenderScrollbars = (instance instanceof ScrollableSimulated) && showScrollbar !== 'never';
-            expect(scrollBar.exists()).toBe(needRenderScrollbars);
+              const scrollBar = scrollable.find(ScrollBar);
+              const needRenderScrollbars = (instance instanceof ScrollableSimulated) && showScrollbar !== 'never';
+              expect(scrollBar.exists()).toBe(needRenderScrollbars);
+            });
           });
-        });
 
-        ['horizontal', 'vertical', 'both'].forEach((direction) => {
           it(`Scrollbar has correct direction class. Direction=${direction}`, () => {
             const instance = new Scrollable({});
             const scrollable = mount(
@@ -156,15 +156,19 @@ jest.mock('../../../../core/devices', () => {
 
             const horizontalScrollBar = scrollable.find('.dx-scrollable-container .dx-scrollbar-horizontal');
             const verticalScrollBar = scrollable.find('.dx-scrollable-container .dx-scrollbar-vertical');
-            const bothScrollBar = scrollable.find('.dx-scrollable-container .dx-scrollbar-both');
+
             if (instance instanceof ScrollableSimulated) {
-              expect(horizontalScrollBar.exists()).toBe(direction === 'horizontal');
-              expect(verticalScrollBar.exists()).toBe(direction === 'vertical');
-              expect(bothScrollBar.exists()).toBe(direction === 'both');
+              expect(horizontalScrollBar.exists()).toBe(
+                new ScrollDirection(direction).isHorizontal,
+              );
+              expect(verticalScrollBar.exists()).toBe(
+                new ScrollDirection(direction).isVertical,
+              );
+
+              expect(verticalScrollBar).not.toEqual(horizontalScrollBar);
             } else {
               expect(horizontalScrollBar.exists()).toBe(false);
               expect(verticalScrollBar.exists()).toBe(false);
-              expect(bothScrollBar.exists()).toBe(false);
             }
           });
         });

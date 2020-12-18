@@ -65,12 +65,14 @@ export const viewFunction = ({
         <ScrollBar
           direction="horizontal"
           showScrollbar={showScrollbar}
+          scrollByThumb
         />
         ) }
         { showScrollbar !== 'never' && new ScrollDirection(direction).isVertical && (
           <ScrollBar
             direction="vertical"
             showScrollbar={showScrollbar}
+            scrollByThumb
           />
         ) }
       </div>
