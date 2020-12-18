@@ -33,7 +33,7 @@ import {
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
   SCROLLABLE_DISABLED_CLASS,
-  NATIVE_SCROLLABLE_SCROLLBAR_SIMULATED,
+  SCROLLABLE_SCROLLBAR_SIMULATED,
 } from './scrollable_utils';
 import { Scrollbar } from './scrollbar';
 
@@ -206,7 +206,7 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
       [`dx-scrollable dx-scrollable-native dx-scrollable-native-${devices.real().platform} dx-scrollable-renovated`]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
-      [NATIVE_SCROLLABLE_SCROLLBAR_SIMULATED]: useSimulatedScrollbar,
+      [SCROLLABLE_SCROLLBAR_SIMULATED]: useSimulatedScrollbar,
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);

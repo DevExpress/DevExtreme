@@ -10,8 +10,13 @@ import {
   ScrollbarProps,
 } from './scrollbar_props';
 
+import {
+  SCROLLBAR_HOVERABLE_CLASS,
+} from './scrollable_utils';
+
 const SCROLLBAR_SCROLL_CLASS = 'dx-scrollable-scroll';
 const SCROLLBAR_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
+const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
 export const viewFunction = ({
   cssClasses,
@@ -36,8 +41,9 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
 
     const isHoverable = (visibilityMode === 'onHover' || visibilityMode === 'always') && expandable;
     const classesMap = {
-      [`dx-scrollable-scrollbar dx-scrollbar-${direction}`]: true,
-      'dx-scrollbar-hoverable': isHoverable,
+      [SCROLLABLE_SCROLLBAR_CLASS]: true,
+      [`dx-scrollbar-${direction}`]: true,
+      [SCROLLBAR_HOVERABLE_CLASS]: isHoverable,
     };
     return combineClasses(classesMap);
   }

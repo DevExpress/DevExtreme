@@ -13,8 +13,9 @@ import {
 
 import {
   ensureLocation,
-  NATIVE_SCROLLABLE_SCROLLBAR_SIMULATED,
+  SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_DISABLED_CLASS,
+  SCROLLBAR_HOVERABLE_CLASS,
   ScrollDirection,
 } from '../scrollable_utils';
 
@@ -198,7 +199,7 @@ jest.mock('../../../../core/devices', () => {
 
                   const needRenderScrollbars = ((instance instanceof ScrollableSimulated) || useSimulatedScrollbar === true) && showScrollbar !== 'never';
                   const isHoverable = (showScrollbar === 'onHover' || showScrollbar === 'always') && scrollByThumb;
-                  const scrollbar = scrollable.find('.dx-scrollbar-hoverable');
+                  const scrollbar = scrollable.find(`.${SCROLLBAR_HOVERABLE_CLASS}`);
 
                   expect(scrollbar.exists()).toBe(needRenderScrollbars && isHoverable);
                 });
@@ -1144,8 +1145,8 @@ jest.mock('../../../../core/devices', () => {
                   expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
                   expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${platform}`));
                   expect(instance.cssClasses).toEqual(useSimulatedScrollbar
-                    ? expect.stringMatching(NATIVE_SCROLLABLE_SCROLLBAR_SIMULATED)
-                    : expect.not.stringMatching(NATIVE_SCROLLABLE_SCROLLBAR_SIMULATED));
+                    ? expect.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED)
+                    : expect.not.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED));
                 } else {
                   expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
                 }
