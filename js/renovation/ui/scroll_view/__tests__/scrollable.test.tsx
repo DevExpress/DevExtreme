@@ -11,7 +11,12 @@ import {
   viewFunction as viewFunctionNative,
 } from '../scrollable_native';
 
-import { ensureLocation, SCROLLABLE_DISABLED_CLASS, ScrollDirection } from '../scrollable_utils';
+import {
+  ensureLocation,
+  NATIVE_SCROLLABLE_SCROLLBAR_SIMULATED,
+  SCROLLABLE_DISABLED_CLASS,
+  ScrollDirection,
+} from '../scrollable_utils';
 
 import {
   ScrollableSimulated,
@@ -1129,17 +1134,22 @@ jest.mock('../../../../core/devices', () => {
       describe('Getters', () => {
         describe('cssClasses', () => {
           ['android', 'ios', 'generic'].forEach((platform: any) => {
-            it(`should add scrolling classes by default. Platform: ${platform}`, () => {
-              devices.real = () => ({ platform });
-              const instance = new Scrollable({});
-              expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
+            [true, false].forEach((useSimulatedScrollbar) => {
+              it(`should add scrolling classes by default. Platform: ${platform}, useSimulatedScrollbar=${useSimulatedScrollbar}`, () => {
+                devices.real = () => ({ platform });
+                const instance = new Scrollable({ useSimulatedScrollbar });
+                expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
 
-              if (instance instanceof ScrollableNative) {
-                expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
-                expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${platform}`));
-              } else {
-                expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-              }
+                if (instance instanceof ScrollableNative) {
+                  expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
+                  expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${platform}`));
+                  expect(instance.cssClasses).toEqual(useSimulatedScrollbar
+                    ? expect.stringMatching(NATIVE_SCROLLABLE_SCROLLBAR_SIMULATED)
+                    : expect.not.stringMatching(NATIVE_SCROLLABLE_SCROLLBAR_SIMULATED));
+                } else {
+                  expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+                }
+              });
             });
           });
 
