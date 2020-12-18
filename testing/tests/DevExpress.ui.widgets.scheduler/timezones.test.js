@@ -8,13 +8,13 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import dateUtils from 'core/utils/date';
-import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dateLocalization from 'localization/date';
 import translator from 'animation/translator';
 import tooltip from 'ui/tooltip/ui.tooltip';
 import { DataSource } from 'data/data_source/data_source';
 import dataUtils from 'core/element_data';
 import dragEvents from 'events/drag';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
 const { testStart, test, module } = QUnit;
 
@@ -188,7 +188,7 @@ module('Common', moduleConfig, () => {
             cases.forEach(config => {
                 test(`Appointment should have correct size, position and popup content if ${config.caseName}`, function(assert) {
                     if(config.stubClientTimeZone) {
-                        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+                        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
                         try {
                             runTest(config, assert);
                         } finally {
@@ -960,7 +960,7 @@ module('Scheduler grid', moduleConfig, () => {
     }
 
     test('Recurrence appointment with \'Etc/UTC\' tz should be updated correctly via drag(T394991)', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
         try {
             const scheduler = createWrapper({
                 currentDate: new Date(2015, 11, 25),
@@ -1049,7 +1049,7 @@ module('Scheduler grid', moduleConfig, () => {
     });
 
     test('Appointment with \'Etc/UTC\' tz should be rendered correctly(T394991)', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
         try {
             const scheduler = createWrapper({
                 currentDate: new Date(2016, 5, 25),
@@ -1346,7 +1346,7 @@ module('Scheduler grid', moduleConfig, () => {
     });
 
     test('Appointment should have a correct template with custom timezone', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
 
         try {
             const scheduler = createWrapper({
@@ -1604,7 +1604,7 @@ module('Appointment popup', moduleConfig, () => {
 module('Fixed client time zone offset', {
     beforeEach() {
         this.clock = sinon.useFakeTimers();
-        this.tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+        this.tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
         fx.off = true;
     },
 
