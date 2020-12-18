@@ -14,7 +14,7 @@ import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
 import utils from './utils';
 
 const HOURS_IN_DAY = 24;
-const MINUTES_IN_HOUR = 60;
+// const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
 const HOUR_MS = toMs('hour');
 
@@ -89,39 +89,35 @@ const subscribes = {
         }).bind(this));
     },
 
-    getUpdatedData: function(options) {
-        return this._getUpdatedData({ data: options.data });
+    getUpdatedData: function(rawAppointment) {
+        return this._getUpdatedData(rawAppointment);
     },
 
-    updateAppointmentAfterDrag: function(options) {
-        const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
+    updateAppointmentAfterDrag: function({ event, element, rawAppointment, coordinates }) {
+        const info = utils.dataAccessors.getAppointmentInfo(element);
 
-        const sourceAppointment = options.data;
-        const sourceAppointmentAdapter = this.createAppointmentAdapter(sourceAppointment);
-
-        const currentAppointmentAdapter = this.createAppointmentAdapter(extend({}, sourceAppointment, this._getUpdatedData(options)))
-            .clone({ pathTimeZone: 'fromGrid' });
-        const currentAppointmentWithoutConverting = currentAppointmentAdapter.source();
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+        const targetedAppointment = this.createAppointmentAdapter(extend({}, rawAppointment, this._getUpdatedData(rawAppointment)));
+        const targetedRawAppointment = targetedAppointment.source();
 
         const newCellIndex = this._workSpace.getDroppableCellIndex();
-        const oldCellIndex = this._workSpace.getCellIndexByCoordinates(options.coordinates);
+        const oldCellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
 
-        const becomeAllDay = currentAppointmentAdapter.allDay;
-        const wasAllDay = sourceAppointmentAdapter.allDay;
+        const becomeAllDay = targetedAppointment.allDay;
+        const wasAllDay = appointment.allDay;
 
-        const dragEvent = options.event;
-
-        const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() && (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
+        const movedBetweenAllDayAndSimple = this._workSpace.supportAllDayRow() &&
+            (wasAllDay && !becomeAllDay || !wasAllDay && becomeAllDay);
 
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
-            this._checkRecurringAppointment(sourceAppointment, currentAppointmentWithoutConverting, info.sourceAppointment.startDate, (function() {
+            this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, (function() {
 
-                this._updateAppointment(sourceAppointment, currentAppointmentWithoutConverting, function() {
-                    this._appointments.moveAppointmentBack(dragEvent);
-                }, dragEvent);
-            }).bind(this), undefined, undefined, dragEvent);
+                this._updateAppointment(rawAppointment, targetedRawAppointment, function() {
+                    this._appointments.moveAppointmentBack(event);
+                }, event);
+            }).bind(this), undefined, undefined, event);
         } else {
-            this._appointments.moveAppointmentBack(dragEvent);
+            this._appointments.moveAppointmentBack(event);
         }
     },
 
@@ -649,70 +645,6 @@ const subscribes = {
 
     getTimezone: function() {
         return this._getTimezoneOffsetByOption();
-    },
-
-    getClientTimezoneOffset: function(date) {
-        date = date || new Date();
-        return timeZoneUtils.getClientTimezoneOffset(date);
-    },
-
-    convertDateByTimezone: function(date, appointmentTimezone, skipAppointmentTimezone) {
-        date = new Date(date);
-
-        const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
-        if(!skipAppointmentTimezone || skipAppointmentTimezone && !appointmentTimezone) {
-            date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
-        }
-
-        return date;
-    },
-
-    convertDateByTimezoneBack: function(date, appointmentTimezone, skipAppointmentTimezone) {
-        date = new Date(date);
-
-        const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
-        if(!skipAppointmentTimezone || skipAppointmentTimezone && !appointmentTimezone) {
-            date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
-        }
-
-        return date;
-    },
-
-    translateDateToAppointmentTimeZone: function(date, offsets, back) {
-        const operation = back ? -1 : 1;
-        const dateInUTC = date.getTime() - operation * offsets.client * toMs('hour');
-        return new Date(dateInUTC + operation * offsets.appointment * toMs('hour'));
-    },
-
-    translateDateToCommonTimeZone: function(date, offsets, back) {
-        const operation = back ? -1 : 1;
-        if(typeof offsets.common === 'number') {
-            const offset = offsets.common - offsets.appointment;
-            const hoursOffset = (offset < 0 ? -1 : 1) * Math.floor(Math.abs(offset));
-            const minutesOffset = offset % 1;
-
-            date.setHours(date.getHours() + operation * hoursOffset);
-            date.setMinutes(date.getMinutes() + operation * minutesOffset * MINUTES_IN_HOUR);
-        }
-        return date;
-    },
-
-    getComplexOffsets: function(scheduler, date, appointmentTimezone) {
-        const clientTimezoneOffset = -this.getClientTimezoneOffset(date) / toMs('hour');
-        const commonTimezoneOffset = scheduler._getTimezoneOffsetByOption(date);
-        let appointmentTimezoneOffset = timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date);
-
-        if(typeof appointmentTimezoneOffset !== 'number') {
-            appointmentTimezoneOffset = clientTimezoneOffset;
-        }
-
-        return {
-            client: clientTimezoneOffset,
-            common: isDefined(commonTimezoneOffset) ? commonTimezoneOffset : clientTimezoneOffset,
-            appointment: appointmentTimezoneOffset
-        };
     },
 
     getTargetedAppointmentData: function(appointment, element) {

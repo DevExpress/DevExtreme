@@ -184,10 +184,10 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         @include dx-icon-sizing($material-grid-base-header-icon-size);
       }
     }
-  }
 
-  .dx-placeholder::before {
-    font-size: $material-grid-base-cell-font-size;
+    .dx-placeholder::before {
+      font-size: $material-grid-base-cell-font-size;
+    }
   }
 
   .dx-#{$widget-name} {

@@ -85,8 +85,10 @@ const moduleOptions = {
             prerenderFilter: function() {
                 return that.items.length ? that.items : that.instance.option('items');
             },
-            convertDateByTimezone: function(field, timezone) {
-                return field;
+            getTimeZoneCalculator: function() {
+                return {
+                    createDate: date => date
+                };
             },
             getEndViewDate: function() {
                 return new Date(2150, 1, 1);

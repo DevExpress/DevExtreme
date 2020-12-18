@@ -16,14 +16,12 @@
             $(function(){
                 const editor = $('#editor').dxSelectBox({
                     items: ["item1", "item2"],
-                    fieldTemplate: (value) => $("<div>").dxTextBox({ value }),
                     buttons: [{
                         name: "test",
                         options: {
                             icon: "home",
                             onClick: () => {
                                 editor.option("value", "item2");
-                                editor.focus(); // NOTE: need because of editor input rerendering
                             }
                         }
                     }]
