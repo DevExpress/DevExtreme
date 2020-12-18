@@ -1154,6 +1154,11 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramRequestEditOperationReason
+ * @enum {'checkUIElementAvailability'|'modelModification'}
+ */
+
+/**
  * @typedef {string} Enums.DiagramConnectorPosition
  * @enum {'start'|'end'}
  */
