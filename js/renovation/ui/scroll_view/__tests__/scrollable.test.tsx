@@ -138,7 +138,7 @@ jest.mock('../../../../core/devices', () => {
         expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
       });
 
-      describe('ScrollBar', () => {
+      describe('Scrollbar', () => {
         ['horizontal', 'vertical', 'both'].forEach((direction: any) => {
           [true, false, undefined].forEach((useSimulatedScrollbar) => {
             ['never', 'always', 'onScroll', 'onHover'].forEach((showScrollbar) => {

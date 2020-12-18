@@ -22,7 +22,7 @@ export const viewFunction = ({
     {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     <div className={SCROLLBAR_SCROLL_CLASS}>
-      <div className={SCROLLBAR_SCROLL_CONTENT_CLASS}> </div>
+      <div className={SCROLLBAR_SCROLL_CONTENT_CLASS} />
     </div>
   </Widget>
 );
