@@ -4,6 +4,7 @@ import { Tooltip, viewFunction as TooltipComponent } from '../tooltip';
 import {
   recalculateCoordinates, getCloudAngle, getCloudPoints, prepareData,
 } from '../common/tooltip_utils';
+import { getFuncIri } from '../renderers/utils';
 import { getFormatValue } from '../../common/utils';
 
 jest.mock('../common/tooltip_utils', () => ({
@@ -15,6 +16,11 @@ jest.mock('../common/tooltip_utils', () => ({
 
 jest.mock('../../common/utils', () => ({
   getFormatValue: jest.fn(),
+}));
+
+jest.mock('../renderers/utils', () => ({
+  getNextDefsSvgId: jest.fn().mockReturnValue('id'),
+  getFuncIri: jest.fn().mockReturnValue('url(#filterId)'),
 }));
 
 describe('Render', () => {
@@ -90,7 +96,7 @@ describe('Render', () => {
     textRef: {},
     htmlRef: {},
     cloudRef: {},
-    textSizeWPaddings: { width: 48, height: 40 },
+    textSizeWithPaddings: { width: 48, height: 40 },
     props: tooltipProps,
   };
 
@@ -193,6 +199,8 @@ describe('Render', () => {
     expect(tooltip.find('g').at(0).props()).toMatchObject({
       filter: 'url(#filterId)',
     });
+
+    expect(getFuncIri).toBeCalledWith('filterId');
   });
 
   it('should render div for html text', () => {
@@ -389,7 +397,7 @@ describe('Getters', () => {
 
   it('should return text size with paddings of tooltip', () => {
     const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' }, paddingLeftRight: 4, paddingTopBottom: 3 });
-    expect(tooltip.textSizeWPaddings).toEqual({ width: 8, height: 6 });
+    expect(tooltip.textSizeWithPaddings).toEqual({ width: 8, height: 6 });
   });
 
   it('should return border options', () => {

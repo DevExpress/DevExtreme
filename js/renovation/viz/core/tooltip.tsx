@@ -6,11 +6,11 @@ import {
 import { PathSvgElement } from './renderers/svg_path';
 import { TextSvgElement } from './renderers/svg_text';
 import { ShadowFilter } from './renderers/shadow_filter';
-import { getNextDefsSvgId } from './renderers/utils';
+import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 import { RootSvgElement } from './renderers/svg_root';
 
 import {
-  Size, Border, CustomizedOptions, CustomizeTooltipFn,
+  Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn,
 } from './common/types.d';
 import { Format } from '../common/types.d';
 
@@ -25,7 +25,7 @@ export const viewFunction = ({
   htmlRef,
   textSize,
   cloudSize,
-  textSizeWPaddings,
+  textSizeWithPaddings,
   border,
   filterId,
   customizedOptions,
@@ -38,10 +38,10 @@ export const viewFunction = ({
   },
 }: Tooltip): JSX.Element => {
   const correctedCoordinates = recalculateCoordinates({
-    canvas, anchorX: x, anchorY: y, size: textSizeWPaddings, offset, arrowLength,
+    canvas, anchorX: x, anchorY: y, size: textSizeWithPaddings, offset, arrowLength,
   });
-  const angle = getCloudAngle(textSizeWPaddings, correctedCoordinates);
-  const d = getCloudPoints(textSizeWPaddings, correctedCoordinates, angle,
+  const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
+  const d = getCloudPoints(textSizeWithPaddings, correctedCoordinates, angle,
     { cornerRadius, arrowWidth }, true);
   setCurrentState(d);
   const styles = interactive ? {
@@ -81,7 +81,7 @@ export const viewFunction = ({
           />
         </defs>
         <g
-          filter={`url(#${filterId})`}
+          filter={getFuncIri(filterId)}
           ref={cloudRef as any}
           transform={`translate(${-cloudSize.x}, ${-cloudSize.y})`}
         >
@@ -149,9 +149,8 @@ export const viewFunction = ({
 export class TooltipProps {
   @OneWay() color = '#fff';
 
-  @OneWay() border: { color: string; width: number; dashStyle: string;
-    opacity?: number; visible: boolean; } = {
-    color: '#d3d3d3', width: 1, dashStyle: 'solid', opacity: undefined, visible: true,
+  @OneWay() border: InitialBorder = {
+    color: '#d3d3d3', width: 1, dashStyle: 'solid', visible: true,
   };
 
   @OneWay() data: any = {};
@@ -267,7 +266,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     return getFormatValue(value, specialFormat, { format, argumentFormat });
   }
 
-  get textSizeWPaddings(): Size {
+  get textSizeWithPaddings(): Size {
     const { paddingLeftRight, paddingTopBottom } = this.props;
     return {
       width: this.textSize.width + paddingLeftRight * 2,

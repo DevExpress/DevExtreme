@@ -1,5 +1,6 @@
 import {
   RecalculateCoordinates, TooltipCoordinates, Size, CustomizedOptions, CustomizeTooltipFn,
+  InitialBorder,
 } from './types.d';
 import { isFunction, isPlainObject, isDefined } from '../../../../core/utils/type';
 
@@ -281,18 +282,13 @@ export function getCloudAngle(
 
 export function prepareData(
   data, color: string,
-  border: { color: string; width: number; dashStyle: string;
-    opacity?: number; visible: boolean;},
+  border: InitialBorder,
   font: {
-    color: string; family: string;
-    opacity: number; size: number;
-    weight: number;
+    color: string; family: string; opacity: number; size: number; weight: number;
   },
   customizeTooltip?: CustomizeTooltipFn,
 ): CustomizedOptions {
-  let customize = {} as {
-    text?: string; html?: string; color?: string; borderColor?: string; fontColor?: string;
-  };
+  let customize = {} as CustomizedOptions;
 
   if (isFunction(customizeTooltip)) {
     customize = customizeTooltip.call(data, data);
