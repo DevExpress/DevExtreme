@@ -844,6 +844,14 @@ QUnit.module('functionality', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
         assert.equal($.trim($('.dx-item').first().text()), '0', 'filter was cleared after item selected');
 
+        keyboard.press('backspace').type('3');
+        this.clock.tick(TIME_TO_WAIT);
+        keyboard.press('esc');
+        this.clock.tick(TIME_TO_WAIT);
+        $($input).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT);
+        assert.equal($.trim($('.dx-item').first().text()), '3', 'filter was not cleared when no focusout and no item selection happened');
+
         instance.close();
         $input.focusout();
         this.clock.tick(TIME_TO_WAIT);
