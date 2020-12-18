@@ -3896,29 +3896,6 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.first().trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
     });
-
-    QUnit.test('TagBox should not request dataSource after item selecting using search when all selected items are available (T944099)', function(assert) {
-        const loadStub = sinon.stub().returns([{ id: 1, text: 'item1' }, { id: 2, text: 'item2' }]);
-        const instance = $('#tagBox').dxTagBox({
-            dataSource: {
-                load: loadStub
-            },
-            searchEnabled: true,
-            searchTimeout: 0,
-            valueExpr: 'id',
-            displayExpr: 'text',
-            searchExpr: 'text',
-            opened: true
-        }).dxTagBox('instance');
-
-        keyboardMock(instance._input()).type('1');
-        this.clock.tick(TIME_TO_WAIT);
-        const $item = $('.dx-list-item').eq(0);
-        $item.trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT);
-
-        assert.strictEqual(loadStub.callCount, 2);
-    });
 });
 
 QUnit.module('popup position and size', moduleSetup, () => {

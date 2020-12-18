@@ -2735,25 +2735,75 @@ QUnit.module('search', moduleSetup, () => {
     };
 
     QUnit.module('should be canceled after', searchModuleSetup, () => {
-        QUnit.test('focusout if popup is opened (T838753)', function(assert) {
-            this.keyboard.type('1');
-            this.$input.trigger('focusout');
+        [true, false].forEach(acceptCustomValue => {
+            QUnit.test(`focusout if popup is opened and acceptCustomValue=${acceptCustomValue}(T838753)`, function(assert) {
+                this.reinit({ acceptCustomValue });
 
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+                this.keyboard.type('1');
+                this.$input.trigger('focusout');
+
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            });
+
+            QUnit.test(`focusout if popup is closed and acceptCustomValue=${acceptCustomValue}`, function(assert) {
+                this.reinit({ acceptCustomValue });
+
+                this.keyboard.type('1');
+                this.instance.close();
+                this.$input.trigger('focusout');
+
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            });
+
+            QUnit.test(`tab pressing when popup is opened and acceptCustomValue=${acceptCustomValue}(T958027)`, function(assert) {
+                this.reinit({ acceptCustomValue });
+
+                this.keyboard
+                    .type(' ')
+                    .press('tab');
+
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            });
+
+            QUnit.test(`click outside of popup if acceptCustomValue=${acceptCustomValue}`, function(assert) {
+                this.reinit({ acceptCustomValue });
+
+                this.keyboard.type('1');
+
+                $('body').trigger('dxpointerdown');
+                this.instance.blur();
+
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            });
+
+            QUnit.test(`item selection by click if acceptCustomValue=${acceptCustomValue}`, function(assert) {
+                this.reinit({ acceptCustomValue });
+
+                this.keyboard.type('1');
+
+                const $firstItem = this.getListItems().eq(0);
+                $firstItem.trigger('dxclick');
+
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            });
+
+            QUnit.test(`item selection by enter if acceptCustomValue=${acceptCustomValue}`, function(assert) {
+                this.reinit({ acceptCustomValue });
+
+                this.keyboard
+                    .type('1')
+                    .press('enter');
+
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            });
         });
 
-        QUnit.test('focusout if popup is closed', function(assert) {
-            this.keyboard.type('1');
-            this.instance.close();
-            this.$input.trigger('focusout');
+        QUnit.test('item adding when acceptCustomValue is true', function(assert) {
+            this.reinit({ acceptCustomValue: true });
 
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
-        });
-
-        QUnit.test('tab pressing when popup is opened (T958027)', function(assert) {
             this.keyboard
-                .type(' ')
-                .press('tab');
+                .type('123')
+                .press('enter');
 
             assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
         });
@@ -2764,44 +2814,6 @@ QUnit.module('search', moduleSetup, () => {
                 .press('tab');
 
             assert.strictEqual(this.instance.option('opened'), false, 'selectBox was closed');
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
-        });
-
-        QUnit.test('click outside of popup', function(assert) {
-            this.keyboard
-                .type('1');
-
-            $('body').trigger('dxpointerdown');
-            this.instance.blur();
-
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
-        });
-
-        QUnit.test('item selection by click', function(assert) {
-            this.keyboard
-                .type('1');
-
-            const $firstItem = this.getListItems().eq(0);
-            $firstItem.trigger('dxclick');
-
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
-        });
-
-        QUnit.test('item selection by enter', function(assert) {
-            this.keyboard
-                .type('1')
-                .press('enter');
-
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
-        });
-
-        QUnit.test('item adding when acceptCustomValue is true', function(assert) {
-            this.reinit({ acceptCustomValue: true });
-
-            this.keyboard
-                .type('123')
-                .press('enter');
-
             assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
         });
     });
@@ -2818,16 +2830,6 @@ QUnit.module('search', moduleSetup, () => {
             assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
         });
 
-        QUnit.test('focusout if acceptCustomValue=true', function(assert) {
-            this.reinit({ acceptCustomValue: true });
-
-            this.keyboard
-                .type('1')
-                .blur();
-
-            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
-        });
-
         QUnit.test('popup closing without focusout or item selection', function(assert) {
             this.reinit({ acceptCustomValue: true });
 
@@ -2839,8 +2841,7 @@ QUnit.module('search', moduleSetup, () => {
         });
 
         QUnit.test('click on input', function(assert) {
-            this.keyboard
-                .type('1');
+            this.keyboard.type('1');
             this.$input.trigger('dxclick');
 
             assert.strictEqual(this.$input.val(), '1', 'input text was not cleared');
@@ -3518,25 +3519,6 @@ QUnit.module('search should be canceled only after popup hide animation completi
 
         keyboard.press('enter');
         assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 0, 'search has not been cancelled before animation end');
-        this.clock.tick(TIME_TO_WAIT);
-        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
-    });
-
-    QUnit.test('after click on input field even if no item was selected', function(assert) {
-        const $selectBox = $('#selectBox').dxSelectBox({
-            searchEnabled: true,
-            dataSource: ['1', '2', '3'],
-            searchTimeout: 0
-        });
-        const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-        const selectBox = $selectBox.dxSelectBox('instance');
-        const keyboard = keyboardMock($input);
-
-        keyboard.type('1');
-        this.clock.tick(TIME_TO_WAIT);
-
-        $input.trigger('dxclick');
-        assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'search has not been cancelled before animation end');
         this.clock.tick(TIME_TO_WAIT);
         assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
     });

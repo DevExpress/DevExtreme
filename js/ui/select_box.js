@@ -444,6 +444,10 @@ const SelectBox = DropDownList.inherit({
 
         isVisible = arguments.length ? isVisible : !this.option('opened');
 
+        if(!isVisible && !this._shouldClearFilter()) {
+            this._restoreInputText(true);
+        }
+
         if(this._wasSearch() && isVisible) {
             this._wasSearch(false);
             const showDataImmediately = this.option('showDataBeforeSearch') || this.option('minSearchLength') === 0;
@@ -464,11 +468,6 @@ const SelectBox = DropDownList.inherit({
         }
 
         this.callBase(isVisible);
-
-        if(!isVisible) {
-            this._restoreInputText(true);
-            this._cancelSearchIfNeed();
-        }
     },
 
     _renderTooltip: function() {
@@ -552,23 +551,18 @@ const SelectBox = DropDownList.inherit({
                 this._clearSearchTimer();
             }
 
-            this._cancelSearchIfNeed({ event: e });
+            this._cancelSearchIfNeed(e);
         }
 
         e.target = this._input().get(0);
         this.callBase(e);
     },
 
-    _cancelSearchIfNeed: function({ event, ignoreAcceptCustomValue } = {}) {
-        if(!this._shouldCancelSearchOnClose() && !event) {
-            return;
-        }
-
-        const { acceptCustomValue, searchEnabled } = this.option();
-        const isOverlayTarget = this._isOverlayNestedTarget(event?.relatedTarget);
+    _cancelSearchIfNeed: function(e) {
+        const { searchEnabled } = this.option();
+        const isOverlayTarget = this._isOverlayNestedTarget(e?.relatedTarget);
 
         const shouldCancelSearch = this._wasSearch() &&
-            (!acceptCustomValue || ignoreAcceptCustomValue) &&
             searchEnabled &&
             !isOverlayTarget;
 
@@ -581,10 +575,6 @@ const SelectBox = DropDownList.inherit({
                 this._searchCanceled();
             }
         }
-    },
-
-    _shouldCancelSearchOnClose: function() {
-        return true;
     },
 
     _shouldCancelSearch: function(value) {
@@ -766,7 +756,7 @@ const SelectBox = DropDownList.inherit({
 
         item = item || null;
         this.option('selectedItem', item);
-        this._cancelSearchIfNeed({ ignoreAcceptCustomValue: true });
+        this._cancelSearchIfNeed();
         this._setValue(this._valueGetter(item));
         this._renderDisplayText(this._displayGetter(item));
     },
