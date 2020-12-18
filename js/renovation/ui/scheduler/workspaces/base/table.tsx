@@ -18,7 +18,7 @@ export const viewFunction = ({
   },
 }: Table): JSX.Element => (
   <table
-        // eslint-disable-next-line react/jsx-props-no-spreading
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
     className={className}
     style={style}
