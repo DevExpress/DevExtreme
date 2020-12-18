@@ -45,8 +45,9 @@ export class DateTableLayoutBaseProps extends DateTableLayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: { register: true },
 })
-export class DateTableLayoutBase extends JSXComponent<DateTableLayoutBaseProps, 'cellTemplate'>() {
+export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) {
   get classes(): string {
     return `dx-scheduler-date-table ${this.props.className}`;
   }

@@ -10,5 +10,5 @@ export interface CellTemplateProps extends ViewCellData {
 
 @ComponentBindings()
 export class DateTableLayoutProps extends LayoutProps {
-  @Template() cellTemplate!: JSXTemplate<CellTemplateProps>;
+  @Template() cellTemplate?: JSXTemplate<CellTemplateProps>;
 }

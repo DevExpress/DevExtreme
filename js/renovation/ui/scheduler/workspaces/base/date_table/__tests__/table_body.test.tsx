@@ -1,9 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { viewFunction as TableBodyView } from '../table_body';
+import { DateTableBody, viewFunction as TableBodyView } from '../table_body';
 import { Row } from '../../row';
 import { AllDayPanelTableBody } from '../all_day_panel/table_body';
 import * as utilsModule from '../../../utils';
+import { DateTableCellBase } from '../cell';
 
 const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel').mockImplementation(() => true);
 
@@ -58,10 +59,10 @@ describe('DateTableBody', () => {
 
     const render = (viewModel) => shallow(
       <TableBodyView
+        cell={cellTemplate}
         {...viewModel}
         props={{
           viewData,
-          cellTemplate,
           ...viewModel.props,
         }}
       />,
@@ -173,6 +174,29 @@ describe('DateTableBody', () => {
       const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
       expect(allDayPanelTableBody.exists())
         .toBe(false);
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('cell', () => {
+        it('should return default Cell if a template is not provided', () => {
+          const dateTableBody = new DateTableBody({});
+          const { cell } = dateTableBody;
+
+          expect(cell)
+            .toBe(DateTableCellBase);
+        });
+
+        it('should return cellTemplate if it is provided', () => {
+          const cellTemplate = () => null;
+          const dateTableBody = new DateTableBody({ cellTemplate });
+          const { cell } = dateTableBody;
+
+          expect(cell)
+            .toBe(cellTemplate);
+        });
+      });
     });
   });
 });

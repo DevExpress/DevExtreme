@@ -258,9 +258,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         const groupCellTemplates = this._renderGroupHeader();
         this._renderDateHeader();
 
-        this._renderAllDayPanel();
-        this._renderTimePanel();
-        this._renderDateTable();
+        if(this.isRenovatedRender()) {
+            this.renderRWorkspace();
+        } else {
+            this._renderTimePanel();
+            this._renderDateTable();
+            this._renderAllDayPanel();
+        }
 
         this._shader = new HorizontalShader(this);
 
@@ -599,6 +603,16 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return [...(new Array(horizontalGroupCount))]
             .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeCellIndex);
     }
+
+    renovatedRenderSupported() { return true; }
+
+    isVirtualScrolling() {
+        return false;
+    }
+
+    renderRAllDayPanel() {}
+
+    renderRTimeTable() {}
 }
 
 registerComponent('dxSchedulerTimeline', SchedulerTimeline);

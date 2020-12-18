@@ -2,6 +2,7 @@ import {
   Component,
   JSXComponent,
   Fragment,
+  JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
 import { Row as DateTableRow } from '../row';
 import { ViewCellData } from '../../types.d';
@@ -10,23 +11,25 @@ import {
   getIsGroupedAllDayPanel,
 } from '../../utils';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
-import { DateTableLayoutProps } from './layout_props';
+import { DateTableLayoutProps, CellTemplateProps } from './layout_props';
+import { DateTableCellBase } from './cell';
 
 export const viewFunction = ({
   props: {
-    viewData, dataCellTemplate, cellTemplate: Cell,
+    viewData, dataCellTemplate,
   },
+  cell: Cell,
 }: DateTableBody): JSX.Element => (
   <Fragment>
     {viewData
       .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
         <Fragment key={getKeyByGroup(groupIndex)}>
           {getIsGroupedAllDayPanel(viewData, groupIndex) && (
-          <AllDayPanelTableBody
-            viewData={allDayPanel}
-            dataCellTemplate={dataCellTemplate}
-            isVerticalGroupOrientation
-          />
+            <AllDayPanelTableBody
+              viewData={allDayPanel}
+              dataCellTemplate={dataCellTemplate}
+              isVerticalGroupOrientation
+            />
           )}
           {dateTable.map((cellsRow) => (
             <DateTableRow
@@ -74,4 +77,11 @@ export const viewFunction = ({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {}
+export class DateTableBody extends JSXComponent(DateTableLayoutProps) {
+  // This is a workaroung for https://github.com/DevExpress/devextreme-renovation/issues/559
+  get cell(): JSXTemplate<CellTemplateProps> {
+    const { cellTemplate } = this.props;
+
+    return cellTemplate || DateTableCellBase;
+  }
+}
