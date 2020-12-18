@@ -1,13 +1,11 @@
 import $ from '../../core/renderer';
 import { isObject, isDefined } from '../../core/utils/type';
-import { noop } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { inArray } from '../../core/utils/array';
 import { camelize } from '../../core/utils/inflector';
 import registerComponent from '../../core/component_registrator';
 import Widget from '../widget/ui.widget';
-import publisherMixin from './ui.scheduler.publisher_mixin';
 import SchedulerNavigator from './ui.scheduler.navigator';
 import DropDownMenu from '../drop_down_menu';
 import Tabs from '../tabs';
@@ -33,10 +31,9 @@ const STEP_MAP = {
 
 const VIEWS = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda'];
 
-const SchedulerHeader = Widget.inherit({
-
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+class SchedulerHeader extends Widget {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             views: [],
             isAdaptive: false,
             intervalCount: 1,
@@ -48,17 +45,17 @@ const SchedulerHeader = Widget.inherit({
             useDropDownViewSwitcher: false,
             _dropDownButtonIcon: 'overlay'
         });
-    },
+    }
 
-    _setOptionsByReference: function() {
-        this.callBase();
+    _setOptionsByReference() {
+        super._setOptionsByReference();
 
         extend(this._optionsByReference, {
             currentView: true
         });
-    },
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         const value = args.value;
 
         switch(args.name) {
@@ -102,21 +99,21 @@ const SchedulerHeader = Widget.inherit({
             default:
                 this.callBase(args);
         }
-    },
+    }
 
-    _init: function() {
+    _init() {
         this.callBase();
         this.$element().addClass(COMPONENT_CLASS);
-    },
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         this.callBase();
 
         this._renderNavigator();
         this._renderViewSwitcher();
-    },
+    }
 
-    _renderNavigator: function() {
+    _renderNavigator() {
         this._navigator = this._createComponent('<div>', SchedulerNavigator, {
             min: this.option('min'),
             max: this.option('max'),
@@ -132,16 +129,16 @@ const SchedulerHeader = Widget.inherit({
         });
 
         this._navigator.$element().appendTo(this.$element());
-    },
+    }
 
-    _renderViewSwitcher: function() {
+    _renderViewSwitcher() {
         this._validateViews();
 
         const $viewSwitcher = $('<div>').addClass(VIEW_SWITCHER_CLASS).appendTo(this.$element());
         this.option('useDropDownViewSwitcher') ? this._renderViewSwitcherDropDownMenu($viewSwitcher) : this._renderViewSwitcherTabs($viewSwitcher);
-    },
+    }
 
-    _validateViews: function() {
+    _validateViews() {
         const views = this.option('views');
 
         each(views, function(_, view) {
@@ -152,14 +149,14 @@ const SchedulerHeader = Widget.inherit({
                 errors.log('W0008', viewType);
             }
         });
-    },
+    }
 
-    _getCurrentViewType: function() {
+    _getCurrentViewType() {
         const currentView = this.option('currentView');
         return currentView.type || currentView;
-    },
+    }
 
-    _renderViewSwitcherTabs: function($element) {
+    _renderViewSwitcherTabs($element) {
         const that = this;
 
         $element.addClass(TABS_EXPANDED_CLASS);
@@ -178,13 +175,13 @@ const SchedulerHeader = Widget.inherit({
             tabIndex: this.option('tabIndex'),
             focusStateEnabled: this.option('focusStateEnabled')
         });
-    },
+    }
 
-    _getItemText: function(item) {
+    _getItemText(item) {
         return item.name || messageLocalization.format('dxScheduler-switcher' + camelize(item.type || item, true));
-    },
+    }
 
-    _refreshViewSwitcher: function() {
+    _refreshViewSwitcher() {
         this._viewSwitcher._dispose();
         this._viewSwitcher.$element().remove();
 
@@ -193,18 +190,18 @@ const SchedulerHeader = Widget.inherit({
         this._removeViewSwitcherLabel();
 
         this._renderViewSwitcher();
-    },
+    }
 
-    _removeViewSwitcherLabel: function() {
+    _removeViewSwitcherLabel() {
         if(isDefined(this._$viewSwitcherLabel)) {
             this._$viewSwitcherLabel.detach();
             this._$viewSwitcherLabel.remove();
 
             delete this._$viewSwitcherLabel;
         }
-    },
+    }
 
-    _renderViewSwitcherDropDownMenu: function($element) {
+    _renderViewSwitcherDropDownMenu($element) {
         const that = this;
 
         this._$viewSwitcherLabel = $('<div>').addClass(VIEW_SWITCHER_LABEL_CLASS).appendTo(this.$element());
@@ -223,9 +220,9 @@ const SchedulerHeader = Widget.inherit({
                     .text(that._getItemText(item));
             }
         });
-    },
+    }
 
-    _changeViewSwitcherLabelText: function() {
+    _changeViewSwitcherLabelText() {
         if(!isDefined(this._$viewSwitcherLabel)) {
             return;
         }
@@ -233,23 +230,39 @@ const SchedulerHeader = Widget.inherit({
         const currentViewText = this._getItemText(currentView);
 
         this._$viewSwitcherLabel.text(currentViewText);
-    },
+    }
 
-    _getCurrentViewName: function(currentView) {
+    _getCurrentViewName(currentView) {
         return isObject(currentView) ? currentView.name || currentView.type : currentView;
-    },
+    }
 
-    _updateCurrentView: function(e) {
+    _updateCurrentView(e) {
         const selectedItem = e.itemData || e.component.option('selectedItem');
 
         const viewName = this._getCurrentViewName(selectedItem);
 
         this.notifyObserver('currentViewUpdated', viewName);
-    },
+    }
 
-    _renderFocusTarget: noop
+    _renderFocusTarget() {
 
-}).include(publisherMixin);
+    }
+
+    notifyObserver(subject, args) {
+        const observer = this.option('observer');
+        if(observer) {
+            observer.fire(subject, args);
+        }
+    }
+
+    invoke() {
+        const observer = this.option('observer');
+
+        if(observer) {
+            return observer.fire.apply(observer, arguments);
+        }
+    }
+}
 
 registerComponent('dxSchedulerHeader', SchedulerHeader);
 
