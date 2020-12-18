@@ -13,7 +13,9 @@ export class ScrollableInternalProps {
 
   @OneWay() showScrollbar?: ScrollableShowScrollbar;
 
-  @OneWay() scrollByThumb = false;
+  @OneWay() scrollByThumb? = false;
+
+  @OneWay() useSimulatedScrollbar = false;
 
   @OneWay() classes?: string;
 

@@ -34,12 +34,14 @@ import {
   SCROLLVIEW_TOP_POCKET_CLASS,
   SCROLLABLE_DISABLED_CLASS,
 } from './scrollable_utils';
+import { ScrollBar } from './scrollbar';
 
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
   props: {
     disabled, height, width, rtlEnabled, children,
     forceGeneratePockets, needScrollViewContentWrapper,
+    showScrollbar, direction, scrollByThumb, useSimulatedScrollbar,
   },
   restAttributes,
 }: ScrollableNative): JSX.Element => (
@@ -62,6 +64,20 @@ export const viewFunction = ({
         </div>
       </div>
     </div>
+    { showScrollbar !== 'never' && useSimulatedScrollbar && new ScrollDirection(direction).isHorizontal && (
+      <ScrollBar
+        direction="horizontal"
+        visibilityMode={showScrollbar}
+        expandable={scrollByThumb}
+      />
+    ) }
+    { showScrollbar !== 'never' && useSimulatedScrollbar && new ScrollDirection(direction).isVertical && (
+      <ScrollBar
+        direction="vertical"
+        visibilityMode={showScrollbar}
+        expandable={scrollByThumb}
+      />
+    ) }
   </Widget>
 );
 

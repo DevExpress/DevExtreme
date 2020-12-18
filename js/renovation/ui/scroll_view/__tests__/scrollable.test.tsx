@@ -136,15 +136,19 @@ jest.mock('../../../../core/devices', () => {
       describe('ScrollBar', () => {
         ['horizontal', 'vertical', 'both'].forEach((direction: any) => {
           ['never', 'always', 'onScroll', 'onHover'].forEach((showScrollbar) => {
-            it(`Scrollbar should render only if simulated strategy is used and showScrollbar not equals never. ShowScrollbar=${showScrollbar}`, () => {
-              const instance = new Scrollable({});
-              const scrollable = mount(
-                viewFunction({ props: { showScrollbar, direction } } as any) as JSX.Element,
-              );
+            [true, false, undefined].forEach((useSimulatedScrollbar) => {
+              it(`Scrollbar should render only if showScrollbar not equals never and simulated strategy is used or useSimulatedScrollbar is set to true. ShowScrollbar=${showScrollbar}. useSimulatedScrollbar=${useSimulatedScrollbar}`, () => {
+                const instance = new Scrollable({});
+                const scrollable = mount(
+                  viewFunction({
+                    props: { showScrollbar, direction, useSimulatedScrollbar },
+                  } as any) as JSX.Element,
+                );
 
-              const scrollBar = scrollable.find(ScrollBar);
-              const needRenderScrollbars = (instance instanceof ScrollableSimulated) && showScrollbar !== 'never';
-              expect(scrollBar.exists()).toBe(needRenderScrollbars);
+                const scrollBar = scrollable.find(ScrollBar);
+                const needRenderScrollbars = ((instance instanceof ScrollableSimulated) || useSimulatedScrollbar === true) && showScrollbar !== 'never';
+                expect(scrollBar.exists()).toBe(needRenderScrollbars);
+              });
             });
           });
 
