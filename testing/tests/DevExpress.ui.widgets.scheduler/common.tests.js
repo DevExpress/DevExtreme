@@ -18,7 +18,6 @@ import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
 import dxScheduler from 'ui/scheduler/ui.scheduler';
 import { getTimeZones } from 'time_zone_utils';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
-import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import themes from 'ui/themes';
 import errors from 'ui/widget/ui.errors';
@@ -26,6 +25,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 import { Deferred } from 'core/utils/deferred';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');
@@ -2542,7 +2542,7 @@ QUnit.module('Scrolling to time', () => {
     });
 
     QUnit.test('Appointment form should not be updated if \'cancel\' flag is defined as true (T653358)', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
 
         try {
             const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
