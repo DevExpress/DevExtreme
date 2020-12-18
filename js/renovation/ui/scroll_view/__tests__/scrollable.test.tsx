@@ -171,6 +171,27 @@ jest.mock('../../../../core/devices', () => {
               expect(verticalScrollBar.exists()).toBe(false);
             }
           });
+
+          [true, false].forEach((scrollByThumb: any) => {
+            ['never', 'always', 'onScroll', 'onHover'].forEach((showScrollbar: any) => {
+              it(`Scrollbar has correct hoverable class. showScrollbar=${showScrollbar}, scrollByThumb=${scrollByThumb}`, () => {
+                const instance = new Scrollable({ direction, scrollByThumb, showScrollbar });
+                const scrollable = mount(
+                  viewFunction({
+                    props: { direction, scrollByThumb, showScrollbar },
+                  } as any) as JSX.Element,
+                );
+
+                const needRenderScrollbars = (instance instanceof ScrollableSimulated) && showScrollbar !== 'never';
+                if (needRenderScrollbars) {
+                  const scrollbar = scrollable.find('.dx-scrollbar-hoverable');
+                  const isHoverable = (showScrollbar === 'onHover' || showScrollbar === 'always') && scrollByThumb;
+
+                  expect(scrollbar.exists()).toBe(isHoverable);
+                }
+              });
+            });
+          });
         });
       });
     });

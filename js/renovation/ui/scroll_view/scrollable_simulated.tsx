@@ -40,7 +40,7 @@ export const viewFunction = ({
   props: {
     disabled, height, width, rtlEnabled, children,
     forceGeneratePockets, needScrollViewContentWrapper,
-    showScrollbar, direction,
+    showScrollbar, direction, scrollByThumb,
   },
   restAttributes,
 }: ScrollableSimulated): JSX.Element => (
@@ -65,14 +65,14 @@ export const viewFunction = ({
         <ScrollBar
           direction="horizontal"
           showScrollbar={showScrollbar}
-          scrollByThumb
+          scrollByThumb={scrollByThumb}
         />
         ) }
         { showScrollbar !== 'never' && new ScrollDirection(direction).isVertical && (
           <ScrollBar
             direction="vertical"
             showScrollbar={showScrollbar}
-            scrollByThumb
+            scrollByThumb={scrollByThumb}
           />
         ) }
       </div>

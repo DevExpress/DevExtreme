@@ -13,6 +13,8 @@ export class ScrollableInternalProps {
 
   @OneWay() showScrollbar?: ScrollableShowScrollbar;
 
+  @OneWay() scrollByThumb = false;
+
   @OneWay() classes?: string;
 
   @OneWay() forceGeneratePockets = false;
