@@ -1237,7 +1237,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupOrientation: this.option('groupOrientation'),
             nonVirtualRowCount: this._getRowCount(),
             groupCount,
-            showAllDayPanel: this._isShowAllDayPanel() && this.supportAllDayRow(),
         };
 
         if(this.isVirtualScrolling()) {
