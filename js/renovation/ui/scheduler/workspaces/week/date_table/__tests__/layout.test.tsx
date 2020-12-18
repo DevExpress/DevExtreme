@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
-import { WeekDateTableCell } from '../cell';
+import { DateTableCellBase } from '../../../base/date_table/cell';
 
 jest.mock('../../../base/date_table/layout', () => ({
   ...jest.requireActual('../../../base/date_table/layout'),
@@ -37,7 +37,7 @@ describe('WeekTableLayout', () => {
       expect(layout.props())
         .toMatchObject({
           viewData,
-          cellTemplate: WeekDateTableCell,
+          cellTemplate: DateTableCellBase,
         });
     });
   });

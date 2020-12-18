@@ -1,12 +1,12 @@
 import { Component, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import { DateTableCellBase } from '../../base/date_table/cell';
 import { DateTableLayoutBase } from '../../base/date_table/layout';
 import { LayoutProps } from '../../base/layout_props';
-import { WeekDateTableCell } from './cell';
 
 export const viewFunction = (viewModel: WeekTableLayout): JSX.Element => (
   <DateTableLayoutBase
     viewData={viewModel.props.viewData}
-    cellTemplate={WeekDateTableCell}
+    cellTemplate={DateTableCellBase}
     dataCellTemplate={viewModel.props.dataCellTemplate}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}

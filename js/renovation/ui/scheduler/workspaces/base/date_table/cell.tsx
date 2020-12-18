@@ -52,7 +52,7 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
 
   get dataCellTemplateProps(): ContentTemplateProps {
     const {
-      index, startDate, endDate, groups, groupIndex, text, allDay,
+      index, startDate, endDate, groups, groupIndex, allDay, contentTemplateProps,
     } = this.props;
 
     return {
@@ -61,8 +61,9 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
         endDate,
         groups,
         groupIndex: groups ? groupIndex : undefined,
-        text: text || '',
+        text: '',
         allDay: allDay || undefined,
+        ...contentTemplateProps.data,
       },
       index,
     };

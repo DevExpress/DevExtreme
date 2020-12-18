@@ -7,6 +7,7 @@ import {
   DateTableCellBase,
   DateTableCellBaseProps,
 } from '../../base/date_table/cell';
+import { ContentTemplateProps } from '../../types.d';
 
 export const viewFunction = ({
   props: {
@@ -20,6 +21,7 @@ export const viewFunction = ({
     isFirstGroupCell,
     text,
   },
+  contentTemplateProps,
   classes,
   restAttributes,
 }: MonthDateTableCell): JSX.Element => (
@@ -36,6 +38,7 @@ export const viewFunction = ({
     index={index}
     isFirstGroupCell={isFirstGroupCell}
     isLastGroupCell={isLastGroupCell}
+    contentTemplateProps={contentTemplateProps}
   >
     <div className="dx-scheduler-date-table-cell-text">
       {text}
@@ -62,5 +65,10 @@ export class MonthDateTableCell extends JSXComponent(DateTableCellBaseProps) {
       'dx-scheduler-date-table-first-of-month': !!firstDayOfMonth,
       [className]: !!className,
     });
+  }
+
+  get contentTemplateProps(): ContentTemplateProps {
+    const { text, index } = this.props;
+    return { data: { text }, index };
   }
 }

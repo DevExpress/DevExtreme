@@ -59,6 +59,7 @@ describe('MonthDateTableCell', () => {
       const isFirstGroupCell = true;
       const isLastGroupCell = false;
       const dataCellTemplate = () => null;
+      const contentTemplateProps = { data: 'test' };
 
       const cell = render({
         props: {
@@ -69,6 +70,7 @@ describe('MonthDateTableCell', () => {
           isLastGroupCell,
           dataCellTemplate,
         },
+        contentTemplateProps,
       });
 
       expect(cell.props())
@@ -82,6 +84,7 @@ describe('MonthDateTableCell', () => {
           startDate,
           endDate,
           text,
+          contentTemplateProps,
         });
     });
   });
@@ -108,6 +111,23 @@ describe('MonthDateTableCell', () => {
               'dx-scheduler-date-table-current-date': true,
               'dx-scheduler-date-table-first-of-month': true,
               'dx-scheduler-date-table-other-month': true,
+            });
+        });
+      });
+
+      describe('contentTemplateProps', () => {
+        it('should add text to contentTemplateProps', () => {
+          const cell = new Cell({
+            text: 'Custom text',
+            index: 0,
+          });
+
+          const props = cell.contentTemplateProps;
+
+          expect(props)
+            .toEqual({
+              data: { text: 'Custom text' },
+              index: 0,
             });
         });
       });
