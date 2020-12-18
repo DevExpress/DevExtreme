@@ -2792,6 +2792,7 @@ QUnit.module('search', moduleSetup, () => {
 
                 this.keyboard
                     .type('1')
+                    .press('down')
                     .press('enter');
 
                 assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
@@ -3112,6 +3113,27 @@ QUnit.module('search', moduleSetup, () => {
         $input.trigger('focusout');
 
         assert.notOk(instance.option('opened'), 'selectBox is closed');
+    });
+
+    QUnit.test('SelectBox should close popup on change when acceptCustomValue is true', function(assert) {
+        const items = ['111', '222', '333'];
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchTimeout: 0,
+            items,
+            searchEnabled: true,
+            acceptCustomValue: true
+        });
+
+        const instance = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input)
+            .type('1')
+            .change();
+
+        assert.strictEqual(instance.option('value'), '1', 'new custom item is selected');
+        assert.notOk(instance.option('opened'), 'selectBox is opened');
     });
 
     QUnit.testInActiveWindow('Unfiltered editor should not be load data on blur (T873258)', function(assert) {
