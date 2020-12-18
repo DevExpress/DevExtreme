@@ -63,14 +63,14 @@ export const viewFunction = ({
             {!needScrollViewContentWrapper && children}
             {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
           </div>
-          {showScrollbar !== 'never' && isHorizontal && (
+          {isHorizontal && (
             <Scrollbar
               direction="horizontal"
               visibilityMode={showScrollbar}
               expandable={scrollByThumb}
             />
           )}
-          {showScrollbar !== 'never' && isVertical && (
+          {isVertical && (
             <Scrollbar
               direction="vertical"
               visibilityMode={showScrollbar}

@@ -16,6 +16,7 @@ import {
   SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_DISABLED_CLASS,
   SCROLLBAR_HOVERABLE_CLASS,
+  INVISIBLE_STATE_CLASS,
   ScrollDirection,
 } from '../scrollable_utils';
 
@@ -142,8 +143,8 @@ jest.mock('../../../../core/devices', () => {
       describe('Scrollbar', () => {
         ['horizontal', 'vertical', 'both'].forEach((direction: any) => {
           [true, false, undefined].forEach((useSimulatedScrollbar) => {
-            ['never', 'always', 'onScroll', 'onHover'].forEach((showScrollbar) => {
-              it(`Scrollbar should render only if showScrollbar not equals never and simulated strategy is used or useSimulatedScrollbar is set to true. ShowScrollbar=${showScrollbar}. useSimulatedScrollbar=${useSimulatedScrollbar}`, () => {
+            ['never', 'always', 'onScroll', 'onHover'].forEach((showScrollbar: any) => {
+              it(`Scrollbar should render if simulated strategy is used or useSimulatedScrollbar is set to true. ShowScrollbar=${showScrollbar}. useSimulatedScrollbar=${useSimulatedScrollbar}`, () => {
                 const instance = new Scrollable({});
                 const scrollable = mount(
                   viewFunction({
@@ -152,56 +153,75 @@ jest.mock('../../../../core/devices', () => {
                 );
 
                 const scrollBar = scrollable.find(Scrollbar);
-                const needRenderScrollbars = ((instance instanceof ScrollableSimulated) || useSimulatedScrollbar === true) && showScrollbar !== 'never';
+                const needRenderScrollbars = ((instance instanceof ScrollableSimulated)
+                  || useSimulatedScrollbar === true);
+
                 expect(scrollBar.exists()).toBe(needRenderScrollbars);
               });
-            });
 
-            it(`Scrollbar has correct direction class. Direction=${direction}`, () => {
-              const instance = new Scrollable({});
-              const scrollable = mount(
-                viewFunction({ props: { direction, useSimulatedScrollbar } } as any) as JSX.Element,
-              );
-
-              const horizontalScrollBar = scrollable.find('.dx-scrollbar-horizontal');
-              const verticalScrollBar = scrollable.find('.dx-scrollbar-vertical');
-
-              const needRenderScrollbars = (instance instanceof ScrollableSimulated)
-                || useSimulatedScrollbar === true;
-              if (needRenderScrollbars) {
-                expect(horizontalScrollBar.exists()).toBe(
-                  new ScrollDirection(direction).isHorizontal,
-                );
-                expect(verticalScrollBar.exists()).toBe(
-                  new ScrollDirection(direction).isVertical,
-                );
-
-                expect(verticalScrollBar).not.toEqual(horizontalScrollBar);
-              } else {
-                expect(horizontalScrollBar.exists()).toBe(false);
-                expect(verticalScrollBar.exists()).toBe(false);
-              }
-            });
-
-            [true, false].forEach((scrollByThumb: any) => {
-              ['never', 'always', 'onScroll', 'onHover'].forEach((showScrollbar: any) => {
-                it(`Scrollbar has correct hoverable class. showScrollbar=${showScrollbar}, scrollByThumb=${scrollByThumb}`, () => {
-                  const instance = new Scrollable({
-                    direction, scrollByThumb, showScrollbar, useSimulatedScrollbar,
-                  });
+              describe('cssClasses', () => {
+                it(`Scrollbar has correct direction class. Direction=${direction}`, () => {
+                  const instance = new Scrollable({});
                   const scrollable = mount(
                     viewFunction({
-                      props: {
-                        direction, scrollByThumb, showScrollbar, useSimulatedScrollbar,
-                      },
+                      props: { direction, useSimulatedScrollbar },
                     } as any) as JSX.Element,
                   );
 
-                  const needRenderScrollbars = ((instance instanceof ScrollableSimulated) || useSimulatedScrollbar === true) && showScrollbar !== 'never';
-                  const isHoverable = (showScrollbar === 'onHover' || showScrollbar === 'always') && scrollByThumb;
-                  const scrollbar = scrollable.find(`.${SCROLLBAR_HOVERABLE_CLASS}`);
+                  const horizontalScrollBar = scrollable.find('.dx-scrollbar-horizontal');
+                  const verticalScrollBar = scrollable.find('.dx-scrollbar-vertical');
 
-                  expect(scrollbar.exists()).toBe(needRenderScrollbars && isHoverable);
+                  const needRenderScrollbars = (instance instanceof ScrollableSimulated)
+                    || useSimulatedScrollbar === true;
+                  if (needRenderScrollbars) {
+                    expect(horizontalScrollBar.exists()).toBe(
+                      new ScrollDirection(direction).isHorizontal,
+                    );
+                    expect(verticalScrollBar.exists()).toBe(
+                      new ScrollDirection(direction).isVertical,
+                    );
+
+                    expect(verticalScrollBar).not.toEqual(horizontalScrollBar);
+                  } else {
+                    expect(horizontalScrollBar.exists()).toBe(false);
+                    expect(verticalScrollBar.exists()).toBe(false);
+                  }
+                });
+
+                it(`Scrollbar has dx-invisible class if showScrollbar set to never. Direction=${direction}, showScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}`, () => {
+                  const instance = new Scrollable({});
+                  const scrollable = mount(
+                    viewFunction({
+                      props: { direction, showScrollbar, useSimulatedScrollbar },
+                    } as any) as JSX.Element,
+                  );
+
+                  const needRenderScrollbars = (instance instanceof ScrollableSimulated)
+                    || useSimulatedScrollbar === true;
+
+                  const invisibleScrollbar = scrollable.find(`.${INVISIBLE_STATE_CLASS}`);
+                  expect(invisibleScrollbar.exists()).toBe(needRenderScrollbars && showScrollbar === 'never');
+                });
+
+                [true, false].forEach((scrollByThumb: any) => {
+                  it(`Scrollbar has correct hoverable class. showScrollbar=${showScrollbar}, scrollByThumb=${scrollByThumb}`, () => {
+                    const instance = new Scrollable({
+                      direction, scrollByThumb, showScrollbar, useSimulatedScrollbar,
+                    });
+                    const scrollable = mount(
+                      viewFunction({
+                        props: {
+                          direction, scrollByThumb, showScrollbar, useSimulatedScrollbar,
+                        },
+                      } as any) as JSX.Element,
+                    );
+
+                    const needRenderScrollbars = ((instance instanceof ScrollableSimulated) || useSimulatedScrollbar === true) && showScrollbar !== 'never';
+                    const isHoverable = (showScrollbar === 'onHover' || showScrollbar === 'always') && scrollByThumb;
+                    const scrollbar = scrollable.find(`.${SCROLLBAR_HOVERABLE_CLASS}`);
+
+                    expect(scrollbar.exists()).toBe(needRenderScrollbars && isHoverable);
+                  });
                 });
               });
             });
