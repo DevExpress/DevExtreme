@@ -2707,222 +2707,144 @@ QUnit.module('editing', moduleSetup, () => {
 });
 
 QUnit.module('search', moduleSetup, () => {
-    QUnit.module('should be canceled', () => {
-        QUnit.test('after focusout if popup is opened (T838753)', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
+    const searchModuleSetup = {
+        beforeEach: function() {
+            this.items = ['111', '222', '333'];
+            this.initConfig = {
                 searchTimeout: 0,
-                items: ['111', '222', '333'],
+                items: this.items,
                 searchEnabled: true
-            });
+            };
 
-            const instance = $selectBox.dxSelectBox('instance');
-            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            this.init = (options) => {
+                this.$element = $('#selectBox').dxSelectBox(options);
+                this.instance = this.$element.dxSelectBox('instance');
+                this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                this.keyboard = keyboardMock(this.$input);
+                this.getListItems = () => {
+                    return $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
+                };
+            };
 
-            keyboardMock($input).type('1');
-            $input.trigger('focusout');
+            this.reinit = (options) => {
+                this.init(Object.assign(this.initConfig, options));
+            };
 
-            assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
+            this.init(this.initConfig);
+        }
+    };
+
+    QUnit.module('should be canceled after', searchModuleSetup, () => {
+        QUnit.test('focusout if popup is opened (T838753)', function(assert) {
+            this.keyboard.type('1');
+            this.$input.trigger('focusout');
+
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
         });
 
-        QUnit.test('after focusout if popup is closed', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchTimeout: 0,
-                items: ['111', '222', '333'],
-                searchEnabled: true
-            });
+        QUnit.test('focusout if popup is closed', function(assert) {
+            this.keyboard.type('1');
+            this.instance.close();
+            this.$input.trigger('focusout');
 
-            const instance = $selectBox.dxSelectBox('instance');
-            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-
-            keyboardMock($input).type('1');
-            instance.close();
-            $input.trigger('focusout');
-
-            assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
         });
 
-        QUnit.test('after "tab" pressing when popup is opened (T958027)', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchEnabled: true,
-                dataSource: ['1', '2', '3'],
-                searchTimeout: 0
-            });
-            const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-            const selectBox = $selectBox.dxSelectBox('instance');
-            const keyboard = keyboardMock($input);
-
-            keyboard
+        QUnit.test('tab pressing when popup is opened (T958027)', function(assert) {
+            this.keyboard
                 .type(' ')
                 .press('tab');
 
-            assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
         });
 
-        QUnit.test('after selecting item using tab (T618791)', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchEnabled: true,
-                dataSource: ['1', '2', '3'],
-                searchTimeout: 0
-            });
-            const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-            const selectBox = $selectBox.dxSelectBox('instance');
-            const keyboard = keyboardMock($input);
-
-            keyboard
+        QUnit.test('selecting item using tab (T618791)', function(assert) {
+            this.keyboard
                 .type('1')
                 .press('tab');
 
-            assert.strictEqual(selectBox.option('opened'), false, 'selectBox was closed');
-            assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+            assert.strictEqual(this.instance.option('opened'), false, 'selectBox was closed');
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
         });
 
-        QUnit.test('after click outside of popup', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchEnabled: true,
-                dataSource: ['1', '2', '3'],
-                searchTimeout: 0
-            });
-            const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-            const selectBox = $selectBox.dxSelectBox('instance');
-            const keyboard = keyboardMock($input);
-
-            keyboard
+        QUnit.test('click outside of popup', function(assert) {
+            this.keyboard
                 .type('1');
 
             $('body').trigger('dxpointerdown');
-            selectBox.blur();
+            this.instance.blur();
 
-            assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
         });
 
-        QUnit.test('after item selection by click', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchEnabled: true,
-                dataSource: ['1', '2', '3'],
-                searchTimeout: 0
-            });
-            const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-            const selectBox = $selectBox.dxSelectBox('instance');
-            const keyboard = keyboardMock($input);
-
-            keyboard
+        QUnit.test('item selection by click', function(assert) {
+            this.keyboard
                 .type('1');
 
-            const $firstItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
+            const $firstItem = this.getListItems().eq(0);
             $firstItem.trigger('dxclick');
 
-            assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
         });
 
-        QUnit.test('after item selection by enter', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchEnabled: true,
-                dataSource: ['1', '2', '3'],
-                searchTimeout: 0
-            });
-            const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-            const selectBox = $selectBox.dxSelectBox('instance');
-            const keyboard = keyboardMock($input);
-
-            keyboard
+        QUnit.test('item selection by enter', function(assert) {
+            this.keyboard
                 .type('1')
                 .press('enter');
 
-            assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
         });
 
-        QUnit.test('after item adding when acceptCustomValue is true', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchEnabled: true,
-                dataSource: ['1', '2', '3'],
-                acceptCustomValue: true,
-                searchTimeout: 0
-            });
-            const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-            const selectBox = $selectBox.dxSelectBox('instance');
-            const keyboard = keyboardMock($input);
+        QUnit.test('item adding when acceptCustomValue is true', function(assert) {
+            this.reinit({ acceptCustomValue: true });
 
-            keyboard
+            this.keyboard
                 .type('123')
                 .press('enter');
 
-            assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
-        });
-
-        QUnit.test('after click on input field even if no item was selected', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchEnabled: true,
-                dataSource: ['1', '2', '3'],
-                searchTimeout: 0
-            });
-            const $input = $selectBox.find('.' + TEXTEDITOR_INPUT_CLASS);
-            const selectBox = $selectBox.dxSelectBox('instance');
-            const keyboard = keyboardMock($input);
-
-            keyboard
-                .type('1');
-            $input.trigger('dxclick');
-
-            assert.strictEqual($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'search was cancelled');
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
         });
     });
 
-    QUnit.module('should not be canceled', () => {
-        QUnit.test('after focusout if event target is in editor\'s overlay (T838753)', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchTimeout: 0,
-                items: ['111', '222', '333'],
-                searchEnabled: true,
-                applyValueMode: 'useButtons'
-            });
+    QUnit.module('should not be canceled after', searchModuleSetup, () => {
+        QUnit.test('focusout if event target is in editor\'s overlay (T838753)', function(assert) {
+            this.instance.option('applyValueMode', 'useButtons');
 
-            const instance = $selectBox.dxSelectBox('instance');
-            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            this.keyboard.type('1');
+            this.$input.trigger($.Event('focusout', {
+                relatedTarget: $(this.instance.content()).parent().find('.dx-toolbar-items-container')
+            }));
 
-            keyboardMock($input).type('1');
-            $input.trigger($.Event('focusout', { relatedTarget: $(instance.content()).parent().find('.dx-toolbar-items-container') }));
-
-            assert.strictEqual($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter is not cleared');
+            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
         });
 
-        QUnit.test('after focusout if acceptCustomValue=true', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchTimeout: 0,
-                items: ['111', '222', '333'],
-                searchEnabled: true,
-                acceptCustomValue: true
-            });
+        QUnit.test('focusout if acceptCustomValue=true', function(assert) {
+            this.reinit({ acceptCustomValue: true });
 
-            const instance = $selectBox.dxSelectBox('instance');
-            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-
-            const keyboard = keyboardMock($input);
-
-            keyboard
+            this.keyboard
                 .type('1')
                 .blur();
 
-            assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter is not cleared');
+            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
         });
 
-        QUnit.test('after popup closing without focusout or item selection', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchTimeout: 0,
-                items: ['111', '222', '333'],
-                searchEnabled: true,
-                acceptCustomValue: true
-            });
+        QUnit.test('popup closing without focusout or item selection', function(assert) {
+            this.reinit({ acceptCustomValue: true });
 
-            const instance = $selectBox.dxSelectBox('instance');
-            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-
-            const keyboard = keyboardMock($input);
-
-            keyboard
+            this.keyboard
                 .type('1')
                 .press('esc');
 
-            assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter is not cleared');
+            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
+        });
+
+        QUnit.test('click on input', function(assert) {
+            this.keyboard
+                .type('1');
+            this.$input.trigger('dxclick');
+
+            assert.strictEqual(this.$input.val(), '1', 'input text was not cleared');
+            assert.strictEqual(this.getListItems().length, 1, 'search was canceled');
         });
     });
 
