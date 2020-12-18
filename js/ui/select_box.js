@@ -560,6 +560,10 @@ const SelectBox = DropDownList.inherit({
     },
 
     _cancelSearchIfNeed: function({ event, ignoreAcceptCustomValue } = {}) {
+        if(!this._shouldCancelSearchOnClose() && !event) {
+            return;
+        }
+
         const { acceptCustomValue, searchEnabled } = this.option();
         const isOverlayTarget = this._isOverlayNestedTarget(event?.relatedTarget);
 
@@ -577,6 +581,10 @@ const SelectBox = DropDownList.inherit({
                 this._searchCanceled();
             }
         }
+    },
+
+    _shouldCancelSearchOnClose: function() {
+        return true;
     },
 
     _shouldCancelSearch: function(value) {

@@ -616,6 +616,10 @@ const TagBox = SelectBox.inherit({
         this.callBase(e);
     },
 
+    _shouldCancelSearchOnClose: function() {
+        return false;
+    },
+
     _getFirstPopupElement: function() {
         return this.option('showSelectionControls')
             ? this._list.$element()
