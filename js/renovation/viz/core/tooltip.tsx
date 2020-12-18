@@ -32,7 +32,9 @@ export const viewFunction = ({
         fill={color}
         stroke={border.color}
         strokeWidth={border.width}
-        transform={`rotate(${angle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
+        rotate={angle}
+        rotateX={correctedCoordinates.x}
+        rotateY={correctedCoordinates.y}
       />
       <g textAnchor="middle" ref={textRef} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
         <TextSvgElement text={text} />

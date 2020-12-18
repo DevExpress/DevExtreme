@@ -19,7 +19,6 @@ import '../../../events/hover';
 import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../../../events/short';
-import globalConfig from '../../../core/config';
 import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
@@ -27,9 +26,9 @@ import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import BaseWidgetProps from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
-import { ConfigContextValue, ConfigContext } from './config_context';
-import { ConfigProvider } from './config_provider';
-import { isDefined } from '../../../core/utils/type';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
+import { ConfigProvider } from '../../common/config_provider';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 
 const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
@@ -143,22 +142,13 @@ export class Widget extends JSXComponent(WidgetProps) {
   config?: ConfigContextValue;
 
   get shouldRenderConfigProvider(): boolean {
-    const isPropDefined = isDefined(this.props.rtlEnabled);
-    const onlyGlobalDefined = isDefined(globalConfig().rtlEnabled)
-    && !isPropDefined && !isDefined(this.config?.rtlEnabled);
-    return (isPropDefined
-    && (this.props.rtlEnabled !== this.config?.rtlEnabled))
-    || onlyGlobalDefined;
+    const { rtlEnabled } = this.props;
+    return resolveRtlEnabledDefinition(rtlEnabled, this.config);
   }
 
   get rtlEnabled(): boolean | undefined {
-    if (this.props.rtlEnabled !== undefined) {
-      return this.props.rtlEnabled;
-    }
-    if (this.config?.rtlEnabled !== undefined) {
-      return this.config.rtlEnabled;
-    }
-    return globalConfig().rtlEnabled;
+    const { rtlEnabled } = this.props;
+    return resolveRtlEnabled(rtlEnabled, this.config);
   }
 
   @Effect({ run: 'once' }) setRootElementRef(): void {

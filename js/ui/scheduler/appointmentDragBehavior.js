@@ -47,14 +47,16 @@ export default class AppointmentDragBehavior {
     }
 
     onDragEnd(e) {
-        const $appointment = this.getAppointmentElement(e);
-        const container = this.appointments._getAppointmentContainer(this.isAllDay($appointment));
-        container.append($appointment);
+        const element = this.getAppointmentElement(e);
+
+        const rawAppointment = this.appointments._getItemData(element);
+        const container = this.appointments._getAppointmentContainer(this.isAllDay(element));
+        container.append(element);
 
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
             event: e,
-            data: this.appointments._getItemData($appointment),
-            $appointment: $appointment,
+            element,
+            rawAppointment,
             coordinates: this.initialPosition
         });
     }
@@ -111,11 +113,8 @@ export default class AppointmentDragBehavior {
 
     createDropHandler(appointmentDragging) {
         return (e) => {
-            const rawAppointment = extend({}, e.itemData, this.appointments.invoke('getUpdatedData', {
-                data: e.itemData
-            }));
-
-            e.itemData = this.scheduler.createAppointmentAdapter(rawAppointment).clone({ pathTimeZone: 'fromGrid' }).source();
+            const updatedData = this.appointments.invoke('getUpdatedData', e.itemData);
+            e.itemData = extend({}, e.itemData, updatedData);
 
             if(e.fromComponent !== e.toComponent) {
                 appointmentDragging.onAdd && appointmentDragging.onAdd(e);

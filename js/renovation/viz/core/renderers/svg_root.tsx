@@ -12,7 +12,7 @@ import {
   Consumer,
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
-import { ConfigContextValue, ConfigContext } from '../../../ui/common/config_context';
+import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 export const viewFunction = ({
   svgRef,

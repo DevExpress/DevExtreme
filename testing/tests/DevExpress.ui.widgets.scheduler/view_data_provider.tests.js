@@ -148,8 +148,7 @@ const verticalWorkSpaceMock = {
         showAllDayPanel: true,
     }),
     _isVerticalGroupedWorkSpace: () => true,
-    _isShowAllDayPanel: () => true,
-    supportAllDayRow: () => true,
+    isAllDayPanelVisible: true,
     isGroupedAllDayPanel: () => true,
     isVirtualScrolling: () => false,
 };
@@ -164,8 +163,7 @@ const horizontalWorkSpaceMock = {
         showAllDayPanel: true,
     }),
     _isVerticalGroupedWorkSpace: () => false,
-    _isShowAllDayPanel: () => true,
-    supportAllDayRow: () => true,
+    isAllDayPanelVisible: true,
     isGroupedAllDayPanel: () => false,
     isVirtualScrolling: () => false,
 };
@@ -625,8 +623,7 @@ module('View Data Provider', () => {
                     showAllDayPanel: true,
                 }),
                 _isVerticalGroupedWorkSpace: () => true,
-                _isShowAllDayPanel: () => true,
-                supportAllDayRow: () => true,
+                isAllDayPanelVisible: true,
                 isGroupedAllDayPanel: () => true,
                 isVirtualScrolling: () => true,
             };
@@ -641,8 +638,7 @@ module('View Data Provider', () => {
                     showAllDayPanel: true,
                 }),
                 _isVerticalGroupedWorkSpace: () => false,
-                _isShowAllDayPanel: () => true,
-                supportAllDayRow: () => true,
+                isAllDayPanelVisible: true,
                 isGroupedAllDayPanel: () => false,
                 isVirtualScrolling: () => true,
             };

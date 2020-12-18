@@ -4347,7 +4347,7 @@ QUnit.module('Renovated Render', {
     QUnit.test('should generate text correctly in week view', function(assert) {
         this.createInstance({
             showAllDayPanel: false,
-        }, 'dxSchedulerWorkSpaceWeek');
+        }, WORKSPACE_WEEK.class);
 
         this.instance.viewDataProvider.update();
 
@@ -4415,6 +4415,21 @@ QUnit.module('Renovated Render', {
         assert.deepEqual(dateTable[0][0], firstExpectedCell, 'Correct first cell');
         assert.deepEqual(dateTable[0][3], firstDayOfMonthCell, 'Correct first cell of the month');
         assert.deepEqual(dateTable[4][6], firstDayOfNextMonthCell, 'Correct first cell of the next month');
+    });
+
+    QUnit.test('should not generate all-day panel in month view', function(assert) {
+        this.createInstance({
+            showAllDayPanel: true,
+            startDayHour: 0,
+            endDayHour: 24,
+        }, WORKSPACE_MONTH.class);
+
+        this.instance.viewDataProvider.update(true);
+
+        const { viewData } = this.instance.viewDataProvider;
+        const { allDayPanel } = viewData.groupedData[0];
+
+        assert.notOk(allDayPanel, 'All-day panel data was not generated');
     });
 
     QUnit.module('getCellData', () => {
