@@ -6248,19 +6248,55 @@ QUnit.module('Vertical headers', {
             fx.off = false;
         }
 
-        QUnit.test(`applyChangesMode=${applyChangesMode}. fieldChooser.option(state, newState)`, function(assert) {
+        QUnit.test(`applyChangesMode=${applyChangesMode}. fieldChooser.option(state, newState). fieldChooser.applyChanges()`, function(assert) {
             createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
                 const fields = grid.getDataSource().state().fields;
                 fieldChooser.option('state', { rowExpandedPaths: [['row1']], columnExpandedPaths: [['column1']], fields: fields });
                 clock.tick();
 
-                const dataSourceState = grid.getDataSource().state();
+                let dataSourceState = grid.getDataSource().state();
                 assert.deepEqual(dataSourceState.rowExpandedPaths, applyChangesMode === 'instantly' ? [['row1']] : []);
                 assert.deepEqual(dataSourceState.columnExpandedPaths, applyChangesMode === 'instantly' ? [['column1']] : []);
+
+                fieldChooser.applyChanges();
+                clock.tick();
+
+                dataSourceState = grid.getDataSource().state();
+                const optionState = fieldChooser.option('state');
+
+                assert.deepEqual(dataSourceState.rowExpandedPaths, [['row1']]);
+                assert.deepEqual(dataSourceState.columnExpandedPaths, [['column1']]);
+
+                assert.deepEqual(optionState.rowExpandedPaths, [['row1']]);
+                assert.deepEqual(optionState.columnExpandedPaths, [['column1']]);
             });
         });
 
-        QUnit.test(`applyChangesMode=${applyChangesMode}. pivotGrid.dataSource.reload()`, function(assert) {
+        QUnit.test(`applyChangesMode=${applyChangesMode}. fieldChooser.option(state, newState). fieldChooser.cancelChanges()`, function(assert) {
+            createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
+                const fields = grid.getDataSource().state().fields;
+                fieldChooser.option('state', { rowExpandedPaths: [['row1']], columnExpandedPaths: [['column1']], fields: fields });
+                clock.tick();
+
+                let dataSourceState = grid.getDataSource().state();
+                assert.deepEqual(dataSourceState.rowExpandedPaths, applyChangesMode === 'instantly' ? [['row1']] : []);
+                assert.deepEqual(dataSourceState.columnExpandedPaths, applyChangesMode === 'instantly' ? [['column1']] : []);
+
+                fieldChooser.cancelChanges();
+                clock.tick();
+
+                dataSourceState = grid.getDataSource().state();
+                const optionState = fieldChooser.option('state');
+
+                assert.deepEqual(dataSourceState.rowExpandedPaths, applyChangesMode === 'instantly' ? [['row1']] : []);
+                assert.deepEqual(dataSourceState.columnExpandedPaths, applyChangesMode === 'instantly' ? [['column1']] : []);
+
+                assert.deepEqual(optionState.rowExpandedPaths, applyChangesMode === 'instantly' ? [['row1']] : []);
+                assert.deepEqual(optionState.columnExpandedPaths, applyChangesMode === 'instantly' ? [['column1']] : []);
+            });
+        });
+
+        QUnit.test(`applyChangesMode=${applyChangesMode}. onOptionChanged must be fired if dataSource changed`, function(assert) {
             createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
                 let isEventTriggered = false;
                 fieldChooser.option('onOptionChanged', (e) => {
@@ -6269,10 +6305,31 @@ QUnit.module('Vertical headers', {
                     }
                 });
 
-                grid.getDataSource().reload();
+                grid.getDataSource()._eventsStrategy.fireEvent('changed');
                 clock.tick();
 
-                assert.equal(isEventTriggered, false, 'option changed is not triggered');
+                assert.equal(isEventTriggered, true, 'event is triggered');
+            });
+        });
+
+        QUnit.test(`applyChangesMode=${applyChangesMode}. pivotGrid.dataSource.state(newState) multiple times`, function(assert) {
+            createGridAndTestFieldChooser((grid, fieldChooser, clock) => {
+                let dataSourceEventsCount = 0;
+                fieldChooser.getDataSource().on('changed', () => { dataSourceEventsCount++; });
+
+                const state = fieldChooser.getDataSource().state();
+                state.fields[1].area = undefined;
+
+                fieldChooser.option('state', state);
+                fieldChooser.option('state', state);
+                fieldChooser.option('state', state);
+                clock.tick();
+
+                if(applyChangesMode === 'instantly') {
+                    assert.equal(dataSourceEventsCount, 1, 'dataSource is reloaded only once');
+                } else {
+                    assert.equal(dataSourceEventsCount, 0, 'dataSource is not reloaded');
+                }
             });
         });
     });
