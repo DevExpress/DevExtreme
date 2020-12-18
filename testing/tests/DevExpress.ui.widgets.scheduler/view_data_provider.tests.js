@@ -147,7 +147,7 @@ const verticalWorkSpaceMock = {
         groupOrientation: 'vertical'
     }),
     _isVerticalGroupedWorkSpace: () => true,
-    _isShowAllDayPanel: () => true,
+    isAllDayPanelVisible: true,
     isGroupedAllDayPanel: () => true,
     isVirtualScrolling: () => false,
 };
@@ -161,7 +161,7 @@ const horizontalWorkSpaceMock = {
         groupOrientation: 'horizontal'
     }),
     _isVerticalGroupedWorkSpace: () => false,
-    _isShowAllDayPanel: () => true,
+    isAllDayPanelVisible: true,
     isGroupedAllDayPanel: () => false,
     isVirtualScrolling: () => false,
 };
@@ -620,7 +620,7 @@ module('View Data Provider', () => {
                     groupOrientation: 'vertical'
                 }),
                 _isVerticalGroupedWorkSpace: () => true,
-                _isShowAllDayPanel: () => true,
+                isAllDayPanelVisible: true,
                 isGroupedAllDayPanel: () => true,
                 isVirtualScrolling: () => true,
             };
@@ -634,7 +634,7 @@ module('View Data Provider', () => {
                     groupOrientation: 'horizontal'
                 }),
                 _isVerticalGroupedWorkSpace: () => false,
-                _isShowAllDayPanel: () => true,
+                isAllDayPanelVisible: true,
                 isGroupedAllDayPanel: () => false,
                 isVirtualScrolling: () => true,
             };

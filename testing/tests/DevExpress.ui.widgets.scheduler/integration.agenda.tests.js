@@ -7,9 +7,9 @@ import Color from 'color';
 import AgendaAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.agenda';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
-import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dataUtils from 'core/element_data';
 import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -1177,7 +1177,7 @@ module('Integration: Agenda', {
     });
 
     test('All-day appointment should not be duplicated with custom timezone', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
         try {
             this.clock.restore();
             const timezoneDifference = getDeltaTz(5);

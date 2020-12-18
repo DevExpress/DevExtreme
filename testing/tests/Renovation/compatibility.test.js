@@ -12,7 +12,7 @@ import 'ui/pager';
 const PRIVATE_JQUERY_WIDGETS = [
     'TooltipItemLayout', 'TimePanelTableLayout',
     'DayDateTableLayout', 'WeekTableLayout', 'WorkWeekTableLayout',
-    'AllDayPanelLayout', 'AllDayPanelTitle',
+    'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
     'GridPager', 'Scrollable',
 ];
 const INPROGRESS_WIDGETS = ['Widget', 'ScrollView', 'DataGrid', 'Bullet'];

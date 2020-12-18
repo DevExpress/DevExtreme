@@ -1,10 +1,10 @@
 import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
-import getElementComputedStyle from '../../utils/get_computed_style';
+import getElementComputedStyle from '../../../../utils/get_computed_style';
 import messageLocalization from '../../../../../localization/message';
 
-jest.mock('../../utils/get_computed_style');
+jest.mock('../../../../utils/get_computed_style');
 jest.mock('../../../number_box', () => ({ NumberBox: React.forwardRef(() => null) }));
 jest.mock('../../../../../localization/message', () => ({
   getFormatter: jest.fn(),

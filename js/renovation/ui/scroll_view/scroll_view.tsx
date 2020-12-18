@@ -39,6 +39,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       {...props}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
+      needScrollViewContentWrapper
     />
   );
 };

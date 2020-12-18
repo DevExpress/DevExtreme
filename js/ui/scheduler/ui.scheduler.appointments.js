@@ -883,8 +883,8 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const partCount = parts.length;
         const endViewDate = this.invoke('getEndViewDate').getTime();
         const startViewDate = this.invoke('getStartViewDate').getTime();
-        const startDateTimeZone = this.invoke('getField', 'startDateTimeZone', appointment);
 
+        const timeZoneCalculator = this.invoke('getTimeZoneCalculator');
 
         result = result || {
             parts: []
@@ -895,7 +895,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
             for(let i = 1; i < partCount; i++) {
                 let startDate = this.invoke('getField', 'startDate', parts[i].settings).getTime();
-                startDate = this.invoke('convertDateByTimezone', startDate, startDateTimeZone);
+                startDate = timeZoneCalculator.createDate(startDate, { path: 'toGrid' });
 
                 if(startDate < endViewDate && startDate > startViewDate) {
                     result.parts.push(parts[i]);
@@ -972,16 +972,16 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const originalStartDate = new Date(this.invoke('getField', 'startDate', dates));
         let startDate = dateUtils.makeDate(originalStartDate);
         let endDate = dateUtils.makeDate(this.invoke('getField', 'endDate', dates));
-        const startDateTimeZone = this.invoke('getField', 'startDateTimeZone', appointment);
-        const endDateTimeZone = this.invoke('getField', 'endDateTimeZone', appointment);
         const maxAllowedDate = this.invoke('getEndViewDate');
         const startDayHour = this.invoke('getStartDayHour');
         const endDayHour = this.invoke('getEndDayHour');
         const appointmentIsLong = this.invoke('appointmentTakesSeveralDays', appointment);
         const result = [];
 
-        startDate = this.invoke('convertDateByTimezone', startDate, startDateTimeZone);
-        endDate = this.invoke('convertDateByTimezone', endDate, endDateTimeZone);
+        const timeZoneCalculator = this.invoke('getTimeZoneCalculator');
+
+        startDate = timeZoneCalculator.createDate(startDate, { path: 'toGrid' });
+        endDate = timeZoneCalculator.createDate(endDate, { path: 'toGrid' });
 
         if(startDate.getHours() <= endDayHour && startDate.getHours() >= startDayHour && !appointmentIsLong) {
             result.push(this._applyStartDateToObj(new Date(startDate), {

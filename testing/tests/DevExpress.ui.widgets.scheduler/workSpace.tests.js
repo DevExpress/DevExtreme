@@ -1567,7 +1567,8 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                         ...options,
                         scrolling: { mode: scrollingMode },
                         height: 1000,
-                        renovateRender: scrollingMode === 'virtual',
+                        renovateRender: scrollingMode === 'virtual'
+                            && workSpaceName !== 'dxSchedulerWorkSpaceMonth', // TODO: selection in month view when virtual scrolling is used
                     });
                 };
             },
@@ -2478,7 +2479,8 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     return $('#scheduler-work-space')[workSpaceName]({
                         ...options,
                         scrolling: { mode: scrollingMode },
-                        renovateRender: scrollingMode === 'virtual',
+                        renovateRender: scrollingMode === 'virtual'
+                            && workSpaceName !== 'dxSchedulerWorkSpaceMonth', // TODO: selection in month view when virtual scrolling is used,
                         height: 1000,
                     });
                 };
@@ -4345,7 +4347,7 @@ QUnit.module('Renovated Render', {
     QUnit.test('should generate text correctly in week view', function(assert) {
         this.createInstance({
             showAllDayPanel: false,
-        }, 'dxSchedulerWorkSpaceWeek');
+        }, WORKSPACE_WEEK.class);
 
         this.instance.viewDataProvider.update();
 
@@ -4354,6 +4356,80 @@ QUnit.module('Renovated Render', {
 
         assert.equal(dateTable[0][0].text, '12:00 AM', 'correct text');
         assert.equal(dateTable[1][0].text, '', 'correct text');
+    });
+
+    QUnit.test('should generate correct data for month view', function(assert) {
+        this.createInstance({
+            startDayHour: 0,
+            endDayHour: 0,
+        }, 'dxSchedulerWorkSpaceMonth');
+
+        this.instance.viewDataProvider.update();
+
+        const { viewData } = this.instance.viewDataProvider;
+        const { dateTable } = viewData.groupedData[0];
+
+        const firstExpectedCell = {
+            allDay: undefined,
+            startDate: new Date(2020, 5, 28, 0, 0),
+            endDate: new Date(2020, 5, 28, 0, 0),
+            firstDayOfMonth: false,
+            groupIndex: 0,
+            index: 0,
+            isFirstGroupCell: true,
+            isLastGroupCell: false,
+            key: 0,
+            otherMonth: true,
+            text: '28',
+            today: false,
+        };
+        const firstDayOfMonthCell = {
+            allDay: undefined,
+            startDate: new Date(2020, 6, 1, 0, 0),
+            endDate: new Date(2020, 6, 1, 0, 0),
+            firstDayOfMonth: false,
+            groupIndex: 0,
+            index: 3,
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
+            key: 3,
+            otherMonth: false,
+            text: '01',
+            today: false,
+        };
+        const firstDayOfNextMonthCell = {
+            allDay: undefined,
+            startDate: new Date(2020, 7, 1, 0, 0),
+            endDate: new Date(2020, 7, 1, 0, 0),
+            firstDayOfMonth: false,
+            groupIndex: 0,
+            index: 34,
+            isFirstGroupCell: false,
+            isLastGroupCell: true,
+            key: 34,
+            otherMonth: true,
+            text: '01',
+            today: false,
+        };
+
+        assert.deepEqual(dateTable[0][0], firstExpectedCell, 'Correct first cell');
+        assert.deepEqual(dateTable[0][3], firstDayOfMonthCell, 'Correct first cell of the month');
+        assert.deepEqual(dateTable[4][6], firstDayOfNextMonthCell, 'Correct first cell of the next month');
+    });
+
+    QUnit.test('should not generate all-day panel in month view', function(assert) {
+        this.createInstance({
+            showAllDayPanel: true,
+            startDayHour: 0,
+            endDayHour: 24,
+        }, WORKSPACE_MONTH.class);
+
+        this.instance.viewDataProvider.update(true);
+
+        const { viewData } = this.instance.viewDataProvider;
+        const { allDayPanel } = viewData.groupedData[0];
+
+        assert.notOk(allDayPanel, 'All-day panel data was not generated');
     });
 
     QUnit.module('getCellData', () => {

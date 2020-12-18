@@ -32,7 +32,7 @@ export const viewFunction = (viewModel: CellBase): JSX.Element => {
 
 @ComponentBindings()
 export class CellBaseProps {
-  @OneWay() className? = '';
+  @OneWay() className = '';
 
   @OneWay() isFirstGroupCell? = false;
 

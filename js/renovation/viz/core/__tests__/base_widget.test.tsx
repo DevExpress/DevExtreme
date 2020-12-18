@@ -1,17 +1,17 @@
 import React, { createRef } from 'react';
 import { shallow } from 'enzyme';
-import each from 'jest-each';
 import { BaseWidgetProps } from '../base_props';
 import { BaseWidget, viewFunction as BaseWidgetComponent } from '../base_widget';
 import { RootSvgElement } from '../renderers/svg_root';
 import { GrayScaleFilter } from '../renderers/gray_scale_filter';
-import { ConfigProvider } from '../../../ui/common/config_provider';
-import config from '../../../../core/config';
+import { ConfigProvider } from '../../../common/config_provider';
 import { clear as clearEventHandlers } from '../../../test_utils/events_mock';
 import { Canvas } from '../common/types.d';
-import getElementComputedStyle from '../../../ui/pager/utils/get_computed_style';
+import getElementComputedStyle from '../../../utils/get_computed_style';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
 
-jest.mock('../../../ui/pager/utils/get_computed_style');
+jest.mock('../../../utils/resolve_rtl');
+jest.mock('../../../utils/get_computed_style');
 
 describe('BaseWidget', () => {
   describe('View', () => {
@@ -328,69 +328,24 @@ describe('BaseWidget', () => {
     });
 
     describe('shouldRenderConfigProvider', () => {
-      each`
-        global       | rtlEnabled   | parentRtlEnabled | expected
-        ${true}      | ${true}      | ${true}          | ${false}
-        ${undefined} | ${undefined} | ${undefined}     | ${false}
-        ${true}      | ${true}      | ${undefined}     | ${true}
-        ${true}      | ${false}     | ${undefined}     | ${true}
-        ${true}      | ${true}      | ${false}         | ${true}
-        ${true}      | ${false}     | ${true}          | ${true}
-        ${true}      | ${undefined} | ${undefined}     | ${true}
-        ${true}      | ${undefined} | ${true}          | ${false}
-        ${true}      | ${undefined} | ${false}         | ${false}
-        ${true}      | ${true}      | ${true}          | ${false}
-        `
-        .describe('shouldRenderConfigProvider truth table', ({
-          global, rtlEnabled, parentRtlEnabled, expected,
-        }) => {
-          const name = `${JSON.stringify({
-            global, rtlEnabled, parentRtlEnabled, expected,
-          })}`;
+      it('should call utils method resolveRtlEnabledDefinition', () => {
+        (resolveRtlEnabledDefinition as jest.Mock).mockReturnValue(true);
+        const widget = new BaseWidget({ });
+        const { shouldRenderConfigProvider } = widget;
 
-          it(name, () => {
-            config().rtlEnabled = global;
-            const widget = new BaseWidget({ rtlEnabled });
-            widget.config = { rtlEnabled: parentRtlEnabled };
-            expect(widget.shouldRenderConfigProvider).toBe(expected);
-          });
-        });
-
-      it('should return global config when context config is undefined', () => {
-        config().rtlEnabled = false;
-        const widget = new BaseWidget({ rtlEnabled: false });
-        widget.config = undefined;
-        expect(widget.shouldRenderConfigProvider).toBe(true);
-      });
-
-      it('should return global config when props.rtlEnabled is undefined', () => {
-        config().rtlEnabled = true;
-        const widget = new BaseWidget({ rtlEnabled: undefined });
-        widget.config = undefined;
-        expect(widget.shouldRenderConfigProvider).toBe(true);
+        expect(shouldRenderConfigProvider).toBe(true);
+        expect(resolveRtlEnabledDefinition).toHaveBeenCalledTimes(1);
       });
     });
 
     describe('rtlEnabled', () => {
-      it('should return value from props if props has value', () => {
-        const widget = new BaseWidget({ rtlEnabled: false });
-        // emulate context
-        widget.config = { rtlEnabled: true };
-
-        expect(widget.rtlEnabled).toBe(false);
-      });
-
-      it('should return value from parent rtlEnabled context if props isnt defined', () => {
+      it('should call utils method resolveRtlEnabled', () => {
+        (resolveRtlEnabled as jest.Mock).mockReturnValue(false);
         const widget = new BaseWidget({ });
-        // emulate context
-        widget.config = { rtlEnabled: true };
-        expect(widget.rtlEnabled).toBe(true);
-      });
+        const { rtlEnabled } = widget;
 
-      it('should return value from config if any other props isnt defined', () => {
-        config().rtlEnabled = true;
-        const widget = new BaseWidget({ });
-        expect(widget.rtlEnabled).toBe(true);
+        expect(rtlEnabled).toBe(false);
+        expect(resolveRtlEnabled).toHaveBeenCalledTimes(1);
       });
     });
   });
