@@ -34,9 +34,10 @@ export class ScrollBar extends JSXComponent<ScrollbarProps>() {
   get cssClasses(): string {
     const { direction, visibilityMode, expandable } = this.props;
 
+    const isHoverable = (visibilityMode === 'onHover' || visibilityMode === 'always') && expandable;
     const classesMap = {
       [`dx-scrollable-scrollbar dx-scrollbar-${direction}`]: true,
-      'dx-scrollbar-hoverable': (visibilityMode === 'onHover' || visibilityMode === 'always') && expandable,
+      'dx-scrollbar-hoverable': isHoverable,
     };
     return combineClasses(classesMap);
   }
