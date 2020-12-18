@@ -16,7 +16,7 @@ const SCROLLBAR_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 export const viewFunction = ({
   cssClasses,
   restAttributes,
-}: ScrollBar): JSX.Element => (
+}: Scrollbar): JSX.Element => (
   <Widget
     classes={cssClasses}
     {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
@@ -30,7 +30,7 @@ export const viewFunction = ({
 @Component({
   view: viewFunction,
 })
-export class ScrollBar extends JSXComponent<ScrollbarProps>() {
+export class Scrollbar extends JSXComponent<ScrollbarProps>() {
   get cssClasses(): string {
     const { direction, visibilityMode, expandable } = this.props;
 

@@ -35,7 +35,7 @@ import {
   SCROLLABLE_DISABLED_CLASS,
   NATIVE_SCROLLABLE_SCROLLBAR_SIMULATED,
 } from './scrollable_utils';
-import { ScrollBar } from './scrollbar';
+import { Scrollbar } from './scrollbar';
 
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
@@ -66,14 +66,14 @@ export const viewFunction = ({
       </div>
     </div>
     { showScrollbar !== 'never' && useSimulatedScrollbar && new ScrollDirection(direction).isHorizontal && (
-      <ScrollBar
+      <Scrollbar
         direction="horizontal"
         visibilityMode={showScrollbar}
         expandable={scrollByThumb}
       />
     ) }
     { showScrollbar !== 'never' && useSimulatedScrollbar && new ScrollDirection(direction).isVertical && (
-      <ScrollBar
+      <Scrollbar
         direction="vertical"
         visibilityMode={showScrollbar}
         expandable={scrollByThumb}

@@ -35,7 +35,7 @@ import {
   ScrollableDirection,
 } from '../types.d';
 
-import { ScrollBar } from '../scrollbar';
+import { Scrollbar } from '../scrollbar';
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
@@ -150,7 +150,7 @@ jest.mock('../../../../core/devices', () => {
                   } as any) as JSX.Element,
                 );
 
-                const scrollBar = scrollable.find(ScrollBar);
+                const scrollBar = scrollable.find(Scrollbar);
                 const needRenderScrollbars = ((instance instanceof ScrollableSimulated) || useSimulatedScrollbar === true) && showScrollbar !== 'never';
                 expect(scrollBar.exists()).toBe(needRenderScrollbars);
               });
