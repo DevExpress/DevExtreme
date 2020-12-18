@@ -4,6 +4,7 @@ import {
   JSXComponent,
   JSXTemplate,
   Template,
+  OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import { CellBase as Cell, CellBaseProps } from '../cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
@@ -26,6 +27,12 @@ export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
 @ComponentBindings()
 export class DateTableCellBaseProps extends CellBaseProps {
   @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
+
+  @OneWay() otherMonth?: boolean = false;
+
+  @OneWay() today?: boolean = false;
+
+  @OneWay() firstDayOfMonth?: boolean = false;
 }
 
 @Component({
@@ -45,7 +52,7 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
 
   get dataCellTemplateProps(): ContentTemplateProps {
     const {
-      index, startDate, endDate, groups, groupIndex, text, allDay,
+      index, startDate, endDate, groups, groupIndex, allDay, contentTemplateProps,
     } = this.props;
 
     return {
@@ -54,8 +61,9 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
         endDate,
         groups,
         groupIndex: groups ? groupIndex : undefined,
-        text: text || '',
+        text: '',
         allDay: allDay || undefined,
+        ...contentTemplateProps.data,
       },
       index,
     };

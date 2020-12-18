@@ -42,6 +42,10 @@ export const viewFunction = ({
                 isFirstGroupCell,
                 isLastGroupCell,
                 key,
+                text,
+                otherMonth,
+                firstDayOfMonth,
+                today,
               }: ViewCellData) => (
                 <Cell
                   isFirstGroupCell={isFirstGroupCell}
@@ -53,6 +57,10 @@ export const viewFunction = ({
                   index={index}
                   dataCellTemplate={dataCellTemplate}
                   key={key}
+                  text={text}
+                  today={today}
+                  otherMonth={otherMonth}
+                  firstDayOfMonth={firstDayOfMonth}
                 />
               ))}
             </DateTableRow>

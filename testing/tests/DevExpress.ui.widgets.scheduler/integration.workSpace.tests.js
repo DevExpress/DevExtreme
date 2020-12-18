@@ -2575,6 +2575,47 @@ QUnit.module('Cell Templates in renovated views', () => {
         });
     });
 
+    QUnit.test('dataCellTemplate should have correct options in month view', function(assert) {
+        const templateOptions = [];
+
+        createWrapper({
+            dataSource: [],
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2020, 11, 1),
+            renovateRender: true,
+            dataCellTemplate: (data, index) => {
+                templateOptions.push({ ...data, index });
+            },
+        });
+
+        const firstCell = templateOptions[0];
+        const secondCell = templateOptions[20];
+
+        const firstExpectedCell = {
+            startDate: new Date(2020, 10, 29),
+            endDate: new Date(2020, 10, 30),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 0,
+            text: '29',
+        };
+        const secondExpectedCell = {
+            startDate: new Date(2020, 11, 19),
+            endDate: new Date(2020, 11, 20),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 20,
+            text: '19',
+        };
+
+        assert.equal(templateOptions.length, 42, 'Correct number of templates');
+        assert.deepEqual(firstCell, firstExpectedCell, 'Correct options in the first cell');
+        assert.deepEqual(secondCell, secondExpectedCell, 'Correct options in the second cell');
+    });
+
     [{
         viewType: 'day',
         expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
