@@ -3018,7 +3018,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
     QUnit.module('search should be canceled after', searchModuleSetup, () => {
         QUnit.test('search value clearing (T385456)', function(assert) {
-            this.keyboard
+            keyboardMock(this.$input, true)
                 .type(this.items[0][0])
                 .press('backspace');
 
