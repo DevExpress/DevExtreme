@@ -30,7 +30,7 @@ import {
   ScrollableDirection,
 } from '../types.d';
 
-import { ScrollBar } from '../scrollable_scrollbar';
+import { ScrollBar } from '../scrollbar';
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };

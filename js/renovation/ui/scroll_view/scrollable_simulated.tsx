@@ -7,7 +7,7 @@ import {
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
-import { ScrollBar } from './scrollable_scrollbar';
+import { ScrollBar } from './scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -61,11 +61,17 @@ export const viewFunction = ({
           {!needScrollViewContentWrapper && children}
           {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
         </div>
-        { showScrollbar !== 'never' && (
+        { showScrollbar !== 'never' && new ScrollDirection(direction).isHorizontal && (
         <ScrollBar
-          direction={direction}
+          direction="horizontal"
           showScrollbar={showScrollbar}
         />
+        ) }
+        { showScrollbar !== 'never' && new ScrollDirection(direction).isVertical && (
+          <ScrollBar
+            direction="vertical"
+            showScrollbar={showScrollbar}
+          />
         ) }
       </div>
     </div>
