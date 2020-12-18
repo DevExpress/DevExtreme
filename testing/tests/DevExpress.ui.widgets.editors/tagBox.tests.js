@@ -3009,7 +3009,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
                 };
             };
             this.reinit = (options) => {
-                this.init(Object.assign(initConfig, options));
+                this.init($.extend({}, initConfig, options));
             };
 
             this.init(initConfig);

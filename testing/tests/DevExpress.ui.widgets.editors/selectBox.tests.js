@@ -2727,7 +2727,7 @@ QUnit.module('search', moduleSetup, () => {
             };
 
             this.reinit = (options) => {
-                this.init(Object.assign(this.initConfig, options));
+                this.init($.extend({}, this.initConfig, options));
             };
 
             this.init(this.initConfig);
