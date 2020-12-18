@@ -4099,13 +4099,13 @@ QUnit.module('Deferred selection', {
         let selectedRowsData = [];
 
         this.setupDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: createDataSource(this.data, { key: 'id', pageSize: 2 }),
             remoteOperations: { filtering: true, sorting: true, paging: true },
             columns: [
                 { dataField: 'id', dataType: 'number' },
                 { dataField: 'name', dataType: 'string' },
-                { dataField: 'age', dataType: 'number', filterValue: '18', selectedFilterOperation: '<>' }
+                { dataField: 'age', dataType: 'number', filterValue: 18, selectedFilterOperation: '<>' }
             ],
             selection: { mode: 'multiple', deferred: true }
         });
@@ -4139,7 +4139,7 @@ QUnit.module('Deferred selection', {
         let selectedRowsData = [];
 
         this.setupDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: createDataSource(this.data, { key: 'id', pageSize: 2 }),
             remoteOperations: { filtering: true, sorting: true, paging: true },
             columns: [
