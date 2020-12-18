@@ -3486,22 +3486,13 @@ QUnit.module('Integration: Appointments', {
                     height: 1500,
                 });
 
-                const $element = $(this.instance.$element());
+                const { scheduler } = this;
 
-                const $appointment = $element.find(`.${APPOINTMENT_CLASS}`).eq(0);
-                const positionBeforeDrag = $appointment.offset();
+                const appointment = scheduler.appointmentList[0];
+                appointment.drag.toCell(54);
 
-                const $cell = $element.find(`.${DATE_TABLE_CELL_CLASS}`).eq(54);
-                const cellHeight = $cell.outerHeight();
-                const pointer = pointerMock($appointment);
-
-                pointer.start()
-                    .down(positionBeforeDrag.left, positionBeforeDrag.top)
-                    .move(0, 5 * cellHeight);
-                pointer.up();
-
-                this.clock.tick();
-                const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+                const updatedAppointment = scheduler.appointments.getAppointment().get(0);
+                const appointmentData = dataUtils.data(updatedAppointment, 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 9, 12), 'Start date is correct');
                 assert.deepEqual(appointmentData.endDate, new Date(2018, 2, 9, 12, 30), 'End date is correct');
@@ -3567,28 +3558,15 @@ QUnit.module('Integration: Appointments', {
                         }
                     ],
                 });
-                const $element = $(this.instance.$element());
 
-                const $appointment = $element.find(`.${APPOINTMENT_CLASS}`).eq(0);
-                const cell = $element.find(`.${DATE_TABLE_CELL_CLASS}`);
-                const cellOffset = cell.eq(6).offset();
-                const cellWidth = cell.outerWidth();
-                const cellHeight = cell.outerHeight();
-                const positionBeforeDrag = $appointment.offset();
+                const { scheduler } = this;
 
-                const pointer = pointerMock($appointment);
-                pointer.start()
-                    .down(positionBeforeDrag.left, positionBeforeDrag.top)
-                    .move(
-                        cellOffset.left - positionBeforeDrag.left + cellWidth / 2,
-                        cellOffset.top - positionBeforeDrag.top + cellHeight / 2,
-                    )
-                    .up();
+                const appointment = scheduler.appointmentList[0];
+                appointment.drag.toCell(6);
 
-                this.clock.tick();
-                const $firstPart = $element.find('.' + APPOINTMENT_CLASS).eq(0);
-                const $secondPart = $element.find('.' + APPOINTMENT_CLASS).eq(1);
-                const cellPosition = $element.find('.' + DATE_TABLE_CELL_CLASS).eq(6).position();
+                const $firstPart = scheduler.appointments.getAppointment(0);
+                const $secondPart = scheduler.appointments.getAppointment(1);
+                const cellPosition = scheduler.workSpace.getCell(6).position();
 
                 assert.roughEqual($firstPart.position().left, cellPosition.left, 2, 'correct left position');
                 assert.equal($secondPart.position().left, 0, 'correct left position');
