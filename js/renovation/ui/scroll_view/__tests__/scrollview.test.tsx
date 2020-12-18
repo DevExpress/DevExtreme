@@ -15,9 +15,17 @@ describe('ScrollView', () => {
         });
 
         it('should render scrollView content', () => {
-          const scrollable = mount(viewFunction({ props: { } } as any) as JSX.Element);
-          const scrollViewContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
+          const scrollView = mount(viewFunction({ props: { } } as any) as JSX.Element);
+          const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
           expect(scrollViewContent.exists()).toBe(true);
+        });
+
+        it('should not render top & bottom pockets', () => {
+          const scrollView = mount(viewFunction({ props: { } } as any) as JSX.Element);
+          const topPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-top-pocket');
+          expect(topPocket.exists()).toBe(true);
+          const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-bottom-pocket');
+          expect(bottomPocket.exists()).toBe(true);
         });
       });
     });
