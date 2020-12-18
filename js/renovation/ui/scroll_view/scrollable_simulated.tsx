@@ -43,42 +43,45 @@ export const viewFunction = ({
     showScrollbar, direction, scrollByThumb,
   },
   restAttributes,
-}: ScrollableSimulated): JSX.Element => (
-  <Widget
-    classes={cssClasses}
-    disabled={disabled}
-    rtlEnabled={rtlEnabled}
-    height={height}
-    width={width}
-    {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
-  >
-    <div className={SCROLLABLE_WRAPPER_CLASS}>
-      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
-        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
-          {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
-          {needScrollViewContentWrapper && (
-            <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
-          {!needScrollViewContentWrapper && children}
-          {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
+}: ScrollableSimulated): JSX.Element => {
+  const { isVertical, isHorizontal } = new ScrollDirection(direction);
+  return (
+    <Widget
+      classes={cssClasses}
+      disabled={disabled}
+      rtlEnabled={rtlEnabled}
+      height={height}
+      width={width}
+      {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+    >
+      <div className={SCROLLABLE_WRAPPER_CLASS}>
+        <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
+          <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
+            {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
+            {needScrollViewContentWrapper && (
+              <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
+            {!needScrollViewContentWrapper && children}
+            {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
+          </div>
+          {showScrollbar !== 'never' && isHorizontal && (
+            <Scrollbar
+              direction="horizontal"
+              visibilityMode={showScrollbar}
+              expandable={scrollByThumb}
+            />
+          )}
+          {showScrollbar !== 'never' && isVertical && (
+            <Scrollbar
+              direction="vertical"
+              visibilityMode={showScrollbar}
+              expandable={scrollByThumb}
+            />
+          )}
         </div>
-        { showScrollbar !== 'never' && new ScrollDirection(direction).isHorizontal && (
-        <Scrollbar
-          direction="horizontal"
-          visibilityMode={showScrollbar}
-          expandable={scrollByThumb}
-        />
-        ) }
-        { showScrollbar !== 'never' && new ScrollDirection(direction).isVertical && (
-          <Scrollbar
-            direction="vertical"
-            visibilityMode={showScrollbar}
-            expandable={scrollByThumb}
-          />
-        ) }
       </div>
-    </div>
-  </Widget>
-);
+    </Widget>
+  );
+};
 
 @Component({
   view: viewFunction,
