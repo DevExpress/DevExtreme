@@ -3491,8 +3491,7 @@ QUnit.module('Integration: Appointments', {
                 const appointment = scheduler.appointmentList[0];
                 appointment.drag.toCell(54);
 
-                const updatedAppointment = scheduler.appointments.getAppointment().get(0);
-                const appointmentData = dataUtils.data(updatedAppointment, 'dxItemData');
+                const appointmentData = appointment.data;
 
                 assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 9, 12), 'Start date is correct');
                 assert.deepEqual(appointmentData.endDate, new Date(2018, 2, 9, 12, 30), 'End date is correct');
@@ -3564,12 +3563,11 @@ QUnit.module('Integration: Appointments', {
                 const appointment = scheduler.appointmentList[0];
                 appointment.drag.toCell(6);
 
-                const $firstPart = scheduler.appointments.getAppointment(0);
-                const $secondPart = scheduler.appointments.getAppointment(1);
+                const $secondPart = scheduler.appointmentList[1];
                 const cellPosition = scheduler.workSpace.getCell(6).position();
 
-                assert.roughEqual($firstPart.position().left, cellPosition.left, 2, 'correct left position');
-                assert.equal($secondPart.position().left, 0, 'correct left position');
+                assert.roughEqual(appointment.position.left, cellPosition.left, 2, 'correct left position');
+                assert.equal($secondPart.position.left, 0, 'correct left position');
             });
 
             QUnit.test('Appointment should be resized correctly to left side in horizontal grouped workspace Month', function(assert) {

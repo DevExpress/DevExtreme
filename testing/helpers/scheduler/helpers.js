@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { locate } from 'animation/translator';
 import devices from 'core/devices';
 import pointerMock from '../../helpers/pointerMock.js';
+import dataUtils from 'core/element_data';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -106,7 +107,7 @@ class ElementWrapper {
     constructor(selector, parent, index = 0) {
         this.selector = selector;
         this.parent = parent;
-        this.index = 0;
+        this.index = index;
     }
 
     getElement() {
@@ -137,8 +138,17 @@ class Appointment extends ClickElementWrapper {
         };
     }
 
+    get position() {
+        return this.getElement().position();
+    }
+
     get date() {
         return this.getElement().find(CLASSES.appointmentDate).text();
+    }
+
+    get data() {
+        const currentAppointment = this.getElement().get(0);
+        return dataUtils.data(currentAppointment, 'dxItemData');
     }
 
     get drag() {
