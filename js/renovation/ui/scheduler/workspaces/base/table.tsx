@@ -15,6 +15,8 @@ export const viewFunction = ({
     children,
     topVirtualRowHeight,
     bottomVirtualRowHeight,
+    leftVirtualCellWidth,
+    rightVirtualCellWidth,
   },
 }: Table): JSX.Element => (
   <table
@@ -25,11 +27,21 @@ export const viewFunction = ({
   >
     <tbody>
       {hasTopVirtualRow && (
-        <VirtualRow height={topVirtualRowHeight} cellsCount={virtualCellsCount} />
+        <VirtualRow
+          height={topVirtualRowHeight}
+          cellsCount={virtualCellsCount}
+          leftVirtualCellWidth={leftVirtualCellWidth}
+          rightVirtualCellWidth={rightVirtualCellWidth}
+        />
       )}
       {children}
       {hasBottomVirtualRow && (
-        <VirtualRow height={bottomVirtualRowHeight} cellsCount={virtualCellsCount} />
+        <VirtualRow
+          height={bottomVirtualRowHeight}
+          cellsCount={virtualCellsCount}
+          leftVirtualCellWidth={leftVirtualCellWidth}
+          rightVirtualCellWidth={rightVirtualCellWidth}
+        />
       )}
     </tbody>
   </table>
@@ -42,6 +54,10 @@ export class TableProps {
   @OneWay() topVirtualRowHeight = 0;
 
   @OneWay() bottomVirtualRowHeight = 0;
+
+  @OneWay() leftVirtualCellWidth = 0;
+
+  @OneWay() rightVirtualCellWidth = 0;
 
   @OneWay() virtualCellsCount = 0;
 

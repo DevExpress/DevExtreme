@@ -1228,22 +1228,19 @@ class SchedulerWorkSpace extends WidgetObserver {
         const allDayElements = this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined;
         const rowCountInGroup = this._getRowCount();
 
-        const cellCount = this._getTotalCellCount(groupCount);
-        const groupOrientation = groupCount > 0
-            ? this.option('groupOrientation')
-            : this._getDefaultGroupStrategy();
+        const totalCellCount = this._getTotalCellCount(groupCount);
 
         const options = {
             horizontalGroupCount,
             verticalGroupCount,
             rowCountInGroup,
-            cellCount,
             cellCountInGroupRow: this._getCellCount(),
             cellDataGetters: [this._getCellData.bind(this)],
             allDayElements,
             startRowIndex: 0,
-            groupOrientation,
-            nonVirtualRowCount: this._getRowCount(),
+            groupOrientation: this.option('groupOrientation'),
+            totalRowCount: this._getRowCount(),
+            totalCellCount,
             groupCount,
         };
 
@@ -1254,6 +1251,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             );
         } else {
             options.rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());
+            options.cellCount = totalCellCount;
+
         }
 
         return options;

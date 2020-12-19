@@ -19,6 +19,7 @@ export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
     contentTemplate={viewModel.props.dataCellTemplate}
     contentTemplateProps={viewModel.dataCellTemplateProps}
     className={viewModel.classes}
+    style={{ width: '100px' }}
   >
     {viewModel.props.children}
   </Cell>

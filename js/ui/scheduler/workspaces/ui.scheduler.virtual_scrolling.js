@@ -4,7 +4,7 @@ import { getWindow } from '../../../core/utils/window';
 import { addNamespace } from '../../../events/utils/index';
 
 const ROW_HEIGHT = 50;
-const CELL_WIDTH = 150;
+const CELL_WIDTH = 100;
 const MIN_SCROLL_OFFSET = 10;
 const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
@@ -333,10 +333,10 @@ class VirtualScrollingBase {
 
         const itemCount = outlineCountBefore + itemCountWithAfter + outlineCountAfter;
 
-        const itemCountAfter = Math.floor(position / this.itemSize);
+        const itemCountBefore = Math.floor(position / this.itemSize);
 
-        this.state.prevPosition = itemCountAfter * this.itemSize;
-        this.state.startIndex = itemCountAfter - outlineCountBefore;
+        this.state.prevPosition = itemCountBefore * this.itemSize;
+        this.state.startIndex = itemCountBefore - outlineCountBefore;
         this.state.virtualItemCountBefore = virtualItemCountBefore;
         this.state.outlineCountBefore = outlineCountBefore;
         this.state.itemCount = itemCount;

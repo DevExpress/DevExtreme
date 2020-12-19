@@ -1,6 +1,6 @@
 import { combineClasses } from '../../../utils/combine_classes';
 import { GroupedViewData } from './types.d';
-import { GroupOrientation } from '../types.d';
+import { GroupOrientation, Style } from '../types.d';
 import { VERTICAL_GROUP_ORIENTATION } from '../consts';
 
 export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string => {
@@ -14,15 +14,33 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
 
 export const getKeyByGroup = (groupIndex: number): string => groupIndex.toString();
 
-export const addHeightToStyle = (
-  height?: number, style?: any,
-): { [key: string]: string | number | undefined } => {
+const addToStyle = (
+  style: any,
+  attr: string,
+  value: string,
+): Style => {
   const nextStyle = style || {};
+  const result = { ...nextStyle };
 
-  return {
-    ...nextStyle,
-    height: height ? `${height}px` : nextStyle.height,
-  };
+  result[attr] = value || nextStyle[value];
+
+  return result;
+};
+
+export const addHeightToStyle = (
+  value: number,
+  style?: any,
+): Style => {
+  const height = value ? `${value}px` : '';
+  return addToStyle(style, 'height', height);
+};
+
+export const addWidthToStyle = (
+  value: number,
+  style?: any,
+): Style => {
+  const width = value ? `${value}px` : '';
+  return addToStyle(style, 'width', width);
 };
 
 export const getGroupCellClasses = (
