@@ -91,23 +91,23 @@ class SchedulerHeader extends Widget {
             case 'focusStateEnabled':
                 this._viewSwitcher.option(args.name, value);
                 this._navigator.option(args.name, value);
-                this.callBase(args);
+                super._optionChanged(args);
                 break;
             case 'useDropDownViewSwitcher':
                 this._refreshViewSwitcher();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
     }
 
     _init() {
-        this.callBase();
+        super._init();
         this.$element().addClass(COMPONENT_CLASS);
     }
 
     _initMarkup() {
-        this.callBase();
+        super._initMarkup();
 
         this._renderNavigator();
         this._renderViewSwitcher();
