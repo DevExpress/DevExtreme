@@ -45,7 +45,6 @@ export class DateTableLayoutBaseProps extends DateTableLayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: { register: true },
 })
 export class DateTableLayoutBase extends JSXComponent<DateTableLayoutBaseProps, 'cellTemplate'>() {
   get classes(): string {
