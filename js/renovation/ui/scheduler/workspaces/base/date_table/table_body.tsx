@@ -2,7 +2,6 @@ import {
   Component,
   JSXComponent,
   Fragment,
-  JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
 import { Row as DateTableRow } from '../row';
 import { ViewCellData } from '../../types.d';
@@ -11,14 +10,13 @@ import {
   getIsGroupedAllDayPanel,
 } from '../../utils';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
-import { DateTableLayoutProps, CellTemplateProps } from './layout_props';
-import { DateTableCellBase } from './cell';
+import { DateTableLayoutProps } from './layout_props';
 
 export const viewFunction = ({
   props: {
     viewData, dataCellTemplate,
+    cellTemplate: Cell,
   },
-  cell: Cell,
 }: DateTableBody): JSX.Element => (
   <Fragment>
     {viewData
@@ -77,11 +75,4 @@ export const viewFunction = ({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent(DateTableLayoutProps) {
-  // This is a workaroung for https://github.com/DevExpress/devextreme-renovation/issues/559
-  get cell(): JSXTemplate<CellTemplateProps> {
-    const { cellTemplate } = this.props;
-
-    return cellTemplate || DateTableCellBase;
-  }
-}
+export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {}

@@ -37,7 +37,6 @@ import { resetPosition, locate } from '../../../animation/translator';
 import VirtualScrollingDispatcher from './ui.scheduler.virtual_scrolling';
 import ViewDataProvider from './view_data_provider';
 
-import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
 import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/layout.j';
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
@@ -1306,18 +1305,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             {
                 viewData: this.viewDataProvider.viewData,
                 timeCellTemplate: this.option('timeCellTemplate'),
-            }
-        );
-    }
-
-    renderRDateTable() {
-        this.renderRComponent(
-            this._$dateTable,
-            dxrDateTableLayout,
-            'renovatedDateTable',
-            {
-                viewData: this.viewDataProvider.viewData,
-                dataCellTemplate: this.option('dataCellTemplate'),
             }
         );
     }
