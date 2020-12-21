@@ -123,7 +123,7 @@ export const viewFunction = ({
       {!(customizedOptions.html || TooltipTemplate) ? null
         : (
           <div
-            ref={htmlRef as any}
+            ref={htmlRef}
             style={{
               position: 'relative',
               display: 'inline-block',
