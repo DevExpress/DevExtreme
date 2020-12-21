@@ -102,7 +102,7 @@ export const viewFunction = ({
             : (
               <g
                 textAnchor="middle"
-                ref={textRef as any}
+                ref={textRef}
                 transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - textSize.height / 2 - textSize.y})`}
               >
                 <TextSvgElement
