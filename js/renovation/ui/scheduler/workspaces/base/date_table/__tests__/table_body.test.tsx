@@ -58,7 +58,6 @@ describe('DateTableBody', () => {
 
     const render = (viewModel) => shallow(
       <TableBodyView
-        cell={cellTemplate}
         {...viewModel}
         props={{
           viewData,
