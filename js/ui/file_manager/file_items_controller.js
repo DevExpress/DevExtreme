@@ -540,6 +540,9 @@ export default class FileItemsController {
         }
         directoryInfo.itemsLoaded = false;
         directoryInfo.items = [ ];
+        if(directoryInfo.fileItem.dataItem) {
+            directoryInfo.fileItem.hasSubDirectories = this._fileProvider._hasSubDirs(directoryInfo.fileItem.dataItem);
+        }
     }
 
     _getFileItemDefaultIcon(fileItem) {
