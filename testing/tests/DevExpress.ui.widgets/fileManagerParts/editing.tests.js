@@ -1432,4 +1432,33 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal(this.wrapper.getDetailsItemName(1), 'File 1-2.jpg', 'it\'s target folder');
         assert.equal(this.wrapper.getDetailsItemName(2), 'File 1.txt', 'file copied to target folder');
     });
+
+    test('treeView must remove expand node icon when removed the last subfolder of a collapsed folder (T946436)', function(assert) {
+        this.fileManager.option({
+            currentPath: 'Folder 1/Folder 1.1',
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        let toggles = this.wrapper.getFolderToggles();
+        assert.strictEqual(toggles.length, 3, 'There are 3 node toggles');
+        assert.ok(toggles.eq(0).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Files\' toggle is opened');
+        assert.ok(toggles.eq(1).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1\' toggle is opened');
+        assert.notOk(toggles.eq(2).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1.1\' toggle is closed');
+
+        assert.equal(this.wrapper.getDetailsItemName(0), 'Folder 1.1.1', 'has target folder');
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        toggles = this.wrapper.getFolderToggles();
+        assert.strictEqual(toggles.length, 2, 'There are 2 node toggles left');
+        assert.ok(toggles.eq(0).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Files\' toggle is opened');
+        assert.ok(toggles.eq(1).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1\' toggle is opened');
+    });
 });
