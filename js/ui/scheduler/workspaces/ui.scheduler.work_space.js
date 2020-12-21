@@ -1224,6 +1224,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const rowCountInGroup = this._getRowCount();
 
         const cellCount = this._getTotalCellCount(groupCount);
+        const groupOrientation = groupCount > 0
+            ? this.option('groupOrientation')
+            : this._getDefaultGroupStrategy();
 
         const options = {
             horizontalGroupCount,
@@ -1234,7 +1237,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellDataGetters: [this._getCellData.bind(this)],
             allDayElements,
             startRowIndex: 0,
-            groupOrientation: this.option('groupOrientation'),
+            groupOrientation,
             nonVirtualRowCount: this._getRowCount(),
             groupCount,
         };

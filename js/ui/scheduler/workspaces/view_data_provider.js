@@ -1,4 +1,5 @@
 import dateUtils from '../../../core/utils/date';
+import { HORIZONTAL_GROUP_ORIENTATION } from '../constants';
 
 class ViewDataGenerator {
     constructor(workspace) {
@@ -159,10 +160,10 @@ class ViewDataGenerator {
             );
 
             cellDataValue.isFirstGroupCell = this._isFirstGroupCell(
-                rowIndex, columnIndex, rowCountInGroup, cellCountInGroupRow, groupCount,
+                rowIndex, columnIndex, rowCountInGroup, cellCountInGroupRow, groupCount, groupOrientation,
             );
             cellDataValue.isLastGroupCell = this._isLastGroupCell(
-                rowIndex, columnIndex, rowCountInGroup, cellCountInGroupRow, groupCount
+                rowIndex, columnIndex, rowCountInGroup, cellCountInGroupRow, groupCount, groupOrientation
             );
 
             cellDataValue.key = this._getKeyByRowAndColumn(rowIndex, columnIndex, cellCount);
@@ -231,24 +232,24 @@ class ViewDataGenerator {
         return groupedDataMap;
     }
 
-    _isFirstGroupCell(rowIndex, columnIndex, singleGroupRowCount, singleGroupColumnCount, groupCount) {
+    _isFirstGroupCell(rowIndex, columnIndex, singleGroupRowCount, singleGroupColumnCount, groupCount, groupOrientation) {
         if(this.workspace.isGroupedByDate()) {
             return columnIndex % groupCount === 0;
         }
 
-        if(this.workspace._isHorizontalGroupedWorkSpace() || groupCount === 0) {
+        if(groupOrientation === HORIZONTAL_GROUP_ORIENTATION) {
             return columnIndex % singleGroupColumnCount === 0;
         }
 
         return rowIndex % singleGroupRowCount === 0;
     }
 
-    _isLastGroupCell(rowIndex, columnIndex, singleGroupRowCount, singleGroupColumnCount, groupCount) {
+    _isLastGroupCell(rowIndex, columnIndex, singleGroupRowCount, singleGroupColumnCount, groupCount, groupOrientation) {
         if(this.workspace.isGroupedByDate()) {
             return (columnIndex + 1) % groupCount === 0;
         }
 
-        if(this.workspace._isHorizontalGroupedWorkSpace() || groupCount === 0) {
+        if(groupOrientation === HORIZONTAL_GROUP_ORIENTATION) {
             return (columnIndex + 1) % singleGroupColumnCount === 0;
         }
 
