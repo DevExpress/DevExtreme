@@ -1,5 +1,8 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction as CellView } from '../virtual-cell';
+import { viewFunction as CellView, VirtualCell } from '../virtual-cell';
+import * as combineClassesModule from '../../../../../utils/combine_classes';
+
+const combineClasses = jest.spyOn(combineClassesModule, 'combineClasses');
 
 jest.mock('../../utils', () => ({
   ...jest.requireActual('../../utils'),
@@ -19,14 +22,28 @@ describe('VirtualCell', () => {
       expect(cell.prop('customAttribute'))
         .toBe('customAttribute');
     });
+  });
 
-    it('should combine `className` with predefined classes', () => {
-      const cell = render({ props: { className: 'custom-class' } });
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('classes', () => {
+        it('should call "combineClasses" with correct parameters', () => {
+          const virtualCell = new VirtualCell({
+            className: 'custom-class',
+          });
 
-      expect(cell.hasClass('custom-class'))
-        .toBe(true);
-      expect(cell.hasClass('dx-scheduler-virtual-cell'))
-        .toBe(true);
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          virtualCell.className;
+
+          expect(combineClasses)
+            .toHaveBeenCalledTimes(1);
+          expect(combineClasses)
+            .toHaveBeenCalledWith({
+              'custom-class': true,
+              'dx-scheduler-virtual-cell': true,
+            });
+        });
+      });
     });
   });
 });
