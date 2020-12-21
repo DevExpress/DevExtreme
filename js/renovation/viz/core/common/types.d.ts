@@ -12,3 +12,13 @@ export type CustomizedOptions = { text?: string, html?: string, color?: string, 
 export type CustomizeTooltipFn = (info: any) => {
     text?: string; html?: string; color?: string; borderColor?: string; fontColor?: string;
 };
+export interface TooltipData {
+  value?: number | Date | string,
+  argument?: number | Date | string,
+  valueText?: string,
+  argumentText?: string,
+  originalValue?: number | Date | string,
+  originalArgument?: number | Date | string,
+  seriesName?: string,
+  description?: string
+}

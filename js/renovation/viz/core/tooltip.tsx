@@ -10,7 +10,7 @@ import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 import { RootSvgElement } from './renderers/svg_root';
 
 import {
-  Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn,
+  Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData,
 } from './common/types.d';
 import { Format } from '../common/types.d';
 
@@ -82,7 +82,7 @@ export const viewFunction = ({
         </defs>
         <g
           filter={getFuncIri(filterId)}
-          ref={cloudRef as any}
+          ref={cloudRef}
           transform={`translate(${-cloudSize.x}, ${-cloudSize.y})`}
         >
           <PathSvgElement
@@ -153,7 +153,7 @@ export class TooltipProps {
     color: '#d3d3d3', width: 1, dashStyle: 'solid', visible: true,
   };
 
-  @OneWay() data: any = {};
+  @OneWay() data: TooltipData = {};
 
   @OneWay() paddingLeftRight = 18;
 
@@ -201,7 +201,7 @@ export class TooltipProps {
 
   @OneWay() interactive = false;
 
-  @Template() contentTemplate?: (props: { data: any }) => JSX.Element;
+  @Template() contentTemplate?: (data: TooltipData) => JSX.Element;
 }
 
 @Component({

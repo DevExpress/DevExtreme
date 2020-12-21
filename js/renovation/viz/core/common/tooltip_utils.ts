@@ -1,6 +1,6 @@
 import {
   RecalculateCoordinates, TooltipCoordinates, Size, CustomizedOptions, CustomizeTooltipFn,
-  InitialBorder,
+  InitialBorder, TooltipData,
 } from './types.d';
 import { isFunction, isPlainObject, isDefined } from '../../../../core/utils/type';
 
@@ -281,7 +281,7 @@ export function getCloudAngle(
 }
 
 export function prepareData(
-  data, color: string,
+  data: TooltipData, color: string,
   border: InitialBorder,
   font: {
     color: string; family: string; opacity: number; size: number; weight: number;

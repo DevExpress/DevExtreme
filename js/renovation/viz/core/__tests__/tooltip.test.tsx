@@ -205,7 +205,7 @@ describe('Render', () => {
 
   it('should render div for html text', () => {
     const customizedOptions = { ...props.customizedOptions, html: 'html text' };
-    const tooltip = shallow(viewFunction({ ...props, customizedOptions }));
+    const tooltip = shallow(TooltipComponent({ ...props, customizedOptions } as any));
     expect(tooltip.find('div').at(1).props().style).toMatchObject({
       position: 'relative',
       display: 'inline-block',
@@ -220,9 +220,8 @@ describe('Render', () => {
   });
 
   it('should be interactive', () => {
-    const tooltip = shallow(<TooltipComponent
-      {...{ ...props, pointerEvents: 'auto', props: { ...props.props, interactive: true } } as any}
-    /> as any);
+    const customizedProps = { ...props.props, interactive: true };
+    const tooltip = shallow(TooltipComponent({ ...props, pointerEvents: 'auto', props: customizedProps } as any));
 
     expect(tooltip.find('RootSvgElement').props()).toMatchObject({
       styles: {
@@ -243,12 +242,10 @@ describe('Render', () => {
 
   it('should be interactive with html text', () => {
     const customizedOptions = { ...props.customizedOptions, html: 'html text' };
-    const tooltip = shallow(
-      <TooltipComponent {...{
-        ...props, pointerEvents: 'auto', customizedOptions, props: { ...props.props, interactive: true },
-      } as any}
-      /> as any,
-    );
+    const customizedProps = { ...props.props, interactive: true };
+    const tooltip = shallow(TooltipComponent({
+      ...props, pointerEvents: 'auto', customizedOptions, props: customizedProps,
+    } as any));
 
     expect(tooltip.find('RootSvgElement').props()).toMatchObject({
       styles: {
@@ -267,11 +264,8 @@ describe('Render', () => {
 
   it('should render contentTemplate', () => {
     const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
-    const tooltip = mount(<TooltipComponent {...{
-      ...props,
-      props: { ...props.props, contentTemplate },
-    } as any}
-    />);
+    const customizedProps = { ...props.props, contentTemplate };
+    const tooltip = mount(TooltipComponent({ ...props, props: customizedProps } as any));
 
     expect(tooltip.find('div').at(1).children()).toHaveLength(1);
     expect(tooltip.find('div').at(1).children().props()).toEqual({ valueText: 'Tooltip value text' });
@@ -281,7 +275,7 @@ describe('Render', () => {
 
 describe('Effect', () => {
   it('should return size', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any });
     const box = {
       x: 1, y: 2, width: 10, height: 20,
     };
@@ -294,7 +288,7 @@ describe('Effect', () => {
   });
 
   it('should return size of html text', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any });
     const box = {
       x: 1, y: 2, width: 10, height: 20,
     };
@@ -310,7 +304,7 @@ describe('Effect', () => {
     (prepareData as jest.Mock).mockReturnValue({
       html: 'customized_html_text',
     });
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any });
     tooltip.htmlRef = {} as any;
     tooltip.setHtmlText();
 
@@ -321,7 +315,7 @@ describe('Effect', () => {
     (prepareData as jest.Mock).mockReturnValue({
       text: 'customized_tooltip_text',
     });
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any });
     tooltip.htmlRef = {} as any;
     tooltip.setHtmlText();
 
@@ -329,7 +323,7 @@ describe('Effect', () => {
   });
 
   it('should calculate cloud size', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' }, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
     tooltip.d = 'test_d';
     tooltip.cloudRef = {
       getBBox: jest.fn().mockReturnValue({
@@ -347,7 +341,7 @@ describe('Effect', () => {
   });
 
   it('should not calculate cloud size, d is not defined', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' }, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
     tooltip.cloudRef = {
       getBBox: jest.fn().mockReturnValue({
         x: 7, y: 9, width: 13, height: 15,
@@ -394,13 +388,13 @@ describe('Getters', () => {
   afterEach(() => jest.resetAllMocks);
 
   it('should return text size with paddings of tooltip', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' }, paddingLeftRight: 4, paddingTopBottom: 3 });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, paddingLeftRight: 4, paddingTopBottom: 3 });
     expect(tooltip.textSizeWithPaddings).toEqual({ width: 8, height: 6 });
   });
 
   it('should return border options', () => {
     const tooltip = new Tooltip({
-      data: { valueText: 'Tooltip value text' },
+      data: { valueText: 'Tooltip value text' } as any,
       border,
     });
     expect(tooltip.border).toEqual({
@@ -413,7 +407,7 @@ describe('Getters', () => {
 
   it('should return border options, border visibility is false', () => {
     const tooltip = new Tooltip({
-      data: { valueText: 'Tooltip value text' },
+      data: { valueText: 'Tooltip value text' } as any,
       border: { ...border, visible: false },
     });
     expect(tooltip.border).toEqual({});
@@ -432,7 +426,7 @@ describe('Getters', () => {
         weight: 600,
       },
     };
-    const tooltip = new Tooltip(props);
+    const tooltip = new Tooltip(props as any);
 
     expect(tooltip.customizedOptions).toEqual({
       text: 'customized_tooltip_text',
