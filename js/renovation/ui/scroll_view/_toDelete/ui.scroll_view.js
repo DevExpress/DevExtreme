@@ -17,14 +17,14 @@ import LoadPanel from '../load_panel';
 // STYLE scrollView
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
-const SCROLLVIEW_CONTENT_CLASS = SCROLLVIEW_CLASS + '-content';
-const SCROLLVIEW_TOP_POCKET_CLASS = SCROLLVIEW_CLASS + '-top-pocket';
-const SCROLLVIEW_BOTTOM_POCKET_CLASS = SCROLLVIEW_CLASS + '-bottom-pocket';
-const SCROLLVIEW_PULLDOWN_CLASS = SCROLLVIEW_CLASS + '-pull-down';
+// const SCROLLVIEW_CONTENT_CLASS = SCROLLVIEW_CLASS + '-content';
+// const SCROLLVIEW_TOP_POCKET_CLASS = SCROLLVIEW_CLASS + '-top-pocket';
+// const SCROLLVIEW_BOTTOM_POCKET_CLASS = SCROLLVIEW_CLASS + '-bottom-pocket';
+// const SCROLLVIEW_PULLDOWN_CLASS = SCROLLVIEW_CLASS + '-pull-down';
 
-const SCROLLVIEW_REACHBOTTOM_CLASS = SCROLLVIEW_CLASS + '-scrollbottom';
-const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-indicator';
-const SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-text';
+// const SCROLLVIEW_REACHBOTTOM_CLASS = SCROLLVIEW_CLASS + '-scrollbottom';
+// const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-indicator';
+// const SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-text';
 
 const SCROLLVIEW_LOADPANEL = SCROLLVIEW_CLASS + '-loadpanel';
 
@@ -101,43 +101,44 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _initScrollableMarkup: function() {
-        this.callBase();
-        this.$element().addClass(SCROLLVIEW_CLASS);
+        // this.callBase();
+        // this.$element().addClass(SCROLLVIEW_CLASS);
 
-        this._initContent();
-        this._initTopPocket();
+        // this._initContent();
+        // this._initTopPocket();
         this._initBottomPocket();
         this._initLoadPanel();
     },
 
-    _initContent: function() {
-        const $content = $('<div>').addClass(SCROLLVIEW_CONTENT_CLASS);
-        this._$content.wrapInner($content);
-    },
+    // _initContent: function() {
+    // const $content = $('<div>').addClass(SCROLLVIEW_CONTENT_CLASS);
+    // this._$content.wrapInner($content);
+    // },
 
-    _initTopPocket: function() {
-        const $topPocket = this._$topPocket = $('<div>').addClass(SCROLLVIEW_TOP_POCKET_CLASS);
-        const $pullDown = this._$pullDown = $('<div>').addClass(SCROLLVIEW_PULLDOWN_CLASS);
-        $topPocket.append($pullDown);
-        this._$content.prepend($topPocket);
-    },
+    // _initTopPocket: function() {
+    // const $topPocket = this._$topPocket = $('<div>').addClass(SCROLLVIEW_TOP_POCKET_CLASS);
+    // const $pullDown = this._$pullDown = $('<div>').addClass(SCROLLVIEW_PULLDOWN_CLASS);
+    // $topPocket.append($pullDown);
+    // this._$content.prepend($topPocket);
+    // },
 
     _initBottomPocket: function() {
-        const $bottomPocket = this._$bottomPocket = $('<div>').addClass(SCROLLVIEW_BOTTOM_POCKET_CLASS);
-        const $reachBottom = this._$reachBottom = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_CLASS);
-        const $loadContainer = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS);
+        // const $bottomPocket = this._$bottomPocket = $('<div>').addClass(SCROLLVIEW_BOTTOM_POCKET_CLASS);
+        // const $reachBottom = this._$reachBottom = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_CLASS);
+        // const $loadContainer = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS);
         const $loadIndicator = new LoadIndicator($('<div>')).$element();
-        const $text = this._$reachBottomText = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
+        // const $text = this._$reachBottomText = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
 
         this._updateReachBottomText();
 
+        // eslint-disable-next-line no-undef
         $reachBottom
-            .append($loadContainer.append($loadIndicator))
-            .append($text);
+            // eslint-disable-next-line no-undef
+            .append($loadContainer.append($loadIndicator));
+        // .append($text);
 
-        $bottomPocket.append($reachBottom);
-
-        this._$content.append($bottomPocket);
+        // $bottomPocket.append($reachBottom);
+        // this._$content.append($bottomPocket);
     },
 
     _initLoadPanel: function() {
