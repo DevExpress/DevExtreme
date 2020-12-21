@@ -98,7 +98,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         const isRecurrence = appointmentList.length > 1;
         const isTimeZoneSet = !isEmptyObject(timeZoneName);
-        const isAppointmentTimeZoneSet = !isEmptyObject(appointment.startDateTimeZone);
+        // const isAppointmentTimeZoneSet = !isEmptyObject(appointment.startDateTimeZone);
 
         if(!isRecurrence) {
             return false;
@@ -109,7 +109,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         }
 
         return isTimeZoneSet &&
-            !isAppointmentTimeZoneSet &&
+            // !isAppointmentTimeZoneSet &&
             !isEqualLocalTimeZone(timeZoneName);
     }
 
