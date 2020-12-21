@@ -195,9 +195,10 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.clock.tick(400);
 
         this.wrapper.getFolderNodes().eq(2).trigger('dxclick');
+        this.clock.tick(400);
         let togglesCount = this.wrapper.getFolderToggles().length;
         assert.equal(this.wrapper.getFocusedItemText(), 'Folder 2', 'sub folder selected');
-        assert.ok(togglesCount >= 2, 'specfied toggles shown');
+        assert.strictEqual(togglesCount, 2, 'specfied toggles shown');
 
         this.wrapper.getToolbarButton('New directory').trigger('dxclick');
         this.clock.tick(400);
@@ -1106,7 +1107,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
         // Select destination directory 'Folder 1/Folder 1.2'
-        this.wrapper.getFolderNodeByText('Folder 1.2', true).trigger('dxclick');
+        this.wrapper.getFolderNodes(true).eq(4).trigger('dxclick');
         this.wrapper.getDialogButton('Copy').trigger('dxclick');
 
         this.clock.tick(operationDelay + 1);
@@ -1144,7 +1145,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getToolbarButton('Move to').trigger('dxclick');
         this.clock.tick(400);
         // Select destination directory 'Folder 1/Folder 1.2'
-        this.wrapper.getFolderNodeByText('Folder 1.2', true).trigger('dxclick');
+        this.wrapper.getFolderNodes(true).eq(4).trigger('dxclick');
         this.wrapper.getDialogButton('Move').trigger('dxclick');
 
         this.clock.tick(operationDelay + 1);
@@ -1442,13 +1443,9 @@ QUnit.module('Editing operations', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        let toggles = this.wrapper.getFolderToggles();
-        assert.strictEqual(toggles.length, 3, 'There are 3 node toggles');
-        assert.ok(toggles.eq(0).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Files\' toggle is opened');
-        assert.ok(toggles.eq(1).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1\' toggle is opened');
-        assert.notOk(toggles.eq(2).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1.1\' toggle is closed');
-
-        assert.equal(this.wrapper.getDetailsItemName(0), 'Folder 1.1.1', 'has target folder');
+        const togglesCount = this.wrapper.getFolderToggles().length;
+        assert.strictEqual(togglesCount, 4, 'There are some node toggles');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'Folder 1.1.1', 'has target folder');
         this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(400);
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
@@ -1456,9 +1453,6 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getDialogButton('Delete').trigger('dxclick');
         this.clock.tick(400);
 
-        toggles = this.wrapper.getFolderToggles();
-        assert.strictEqual(toggles.length, 2, 'There are 2 node toggles left');
-        assert.ok(toggles.eq(0).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Files\' toggle is opened');
-        assert.ok(toggles.eq(1).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1\' toggle is opened');
+        assert.strictEqual(this.wrapper.getFolderToggles().length, togglesCount - 2, 'number of folder toggles has decreased');
     });
 });
