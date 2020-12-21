@@ -1,10 +1,12 @@
 @use "../sizes" as *;
 
 // adduse
+@use "../toolbar/sizes" as *;
 
 $filemanager-toolbar-separator-height: null !default;
 $filemanager-toolbar-viewmode-width: null !default;
 $filemanager-toolbar-viewmode-padding: null !default;
+$filemanager-toolbar-top-bottom-padding: null !default;
 $filemanager-breadcrumbs-item-padding-top: null !default;
 $filemanager-breadcrumbs-item-padding-bottom: null !default;
 $filemanager-details-view-checkbox-column-width: null !default;
@@ -20,6 +22,7 @@ $filemanager-progress-box-button-close-margin-top: null !default;
   $filemanager-toolbar-separator-height: 36px !default;
   $filemanager-toolbar-viewmode-width: 190px !default;
   $filemanager-toolbar-viewmode-padding: 6px !default;
+  $filemanager-toolbar-top-bottom-padding: $material-toolbar-height;
   $filemanager-breadcrumbs-item-padding-top: 7px !default;
   $filemanager-breadcrumbs-item-padding-bottom: 8px !default;
   $filemanager-details-view-checkbox-column-width: 49px !default;
@@ -36,6 +39,7 @@ $filemanager-progress-box-button-close-margin-top: null !default;
   $filemanager-toolbar-separator-height: 26px !default;
   $filemanager-toolbar-viewmode-width: 150px !default;
   $filemanager-toolbar-viewmode-padding: 5px !default;
+  $filemanager-toolbar-top-bottom-padding: $material-mobile-toolbar-height;
   $filemanager-breadcrumbs-item-padding-top: 8px !default;
   $filemanager-breadcrumbs-item-padding-bottom: 9px !default;
   $filemanager-details-view-checkbox-column-width: 43px !default;
