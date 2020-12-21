@@ -3450,6 +3450,42 @@ QUnit.module('Selection with views', {
         assert.strictEqual($checkbox.dxCheckBox('option', 'value'), undefined, 'indeterminate state of checkbox');
     });
 
+    // T959045
+    QUnit.test('selectAll checkbox should be visible after change filter if no data', function(assert) {
+        let $checkbox;
+        const testElement = $('#container');
+
+        this.setup();
+        this.columnHeadersView.render(testElement);
+        this.rowsView.render(testElement);
+
+        // assert
+        $checkbox = $('.dx-header-row').find('.dx-checkbox');
+        assert.ok($checkbox.dxCheckBox('option', 'visible'), 'checkbox is visible');
+
+        // act
+        this.filter(['age', '<', 1]);
+        this.refresh();
+
+        // assert
+        $checkbox = $('.dx-header-row').find('.dx-checkbox');
+        assert.notOk($checkbox.dxCheckBox('option', 'visible'), 'checkbox is not visible');
+    });
+
+    // T959045
+    QUnit.test('selectAll checkbox should be visible if no data after first load', function(assert) {
+        const testElement = $('#container');
+
+        // act
+        this.options.dataSource.filter = ['age', '<', 1];
+        this.setup();
+        this.columnHeadersView.render(testElement);
+        this.rowsView.render(testElement);
+
+        // assert
+        const $checkbox = $('.dx-header-row').find('.dx-checkbox');
+        assert.notOk($checkbox.dxCheckBox('option', 'visible'), 'checkbox is not visible');
+    });
 
     QUnit.test('Uncheck selectAll button call deselectAll', function(assert) {
         const testElement = $('#container');
