@@ -129,18 +129,18 @@ const NativeStrategy = Class.inherit({
         this._updateAction = this._createActionByOption('onUpdated');
     },
 
-    // _createActionArgs: function() {
-    //     const { left, top } = this.location();
+    _createActionArgs: function() {
+        const { left, top } = this.location();
 
-    //     return {
-    //         event: this._eventForUserAction,
-    //         scrollOffset: this._getScrollOffset(),
-    //         reachedLeft: this._isReachedLeft(left),
-    //         reachedRight: this._isReachedRight(left),
-    //         reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
-    //         reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top - 2 * this.option('pushBackValue') : undefined
-    //     };
-    // },
+        return {
+            event: this._eventForUserAction,
+            scrollOffset: this._getScrollOffset(),
+            reachedLeft: this._isReachedLeft(left),
+            reachedRight: this._isReachedRight(left),
+            reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
+            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top - 2 * this.option('pushBackValue') : undefined
+        };
+    },
 
     // _isReachedLeft: function() {
     //     return this._isDirection(HORIZONTAL) ? this.location().left >= 0 : undefined;

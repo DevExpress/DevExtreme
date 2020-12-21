@@ -449,9 +449,9 @@ const Scrollable = DOMComponent.inherit({
     //     return this._$container.height();
     // },
 
-    // scrollHeight: function() {
-    //     return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
-    // },
+    scrollHeight: function() {
+        return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
+    },
 
     // clientWidth: function() {
     //     return this._$container.width();
@@ -552,27 +552,29 @@ const Scrollable = DOMComponent.inherit({
         this.scrollTo(scrollPosition);
     },
 
-    // getScrollElementPosition: function($element, direction, offset) {
+    getScrollElementPosition: function($element, direction, offset) {
     //     offset = offset || {};
     //     const isVertical = direction === VERTICAL;
     //     const startOffset = (isVertical ? offset.top : offset.left) || 0;
     //     const endOffset = (isVertical ? offset.bottom : offset.right) || 0;
-    //     const pushBackOffset = isVertical ? this._strategy.verticalOffset() : 0;
-    //     const elementPositionRelativeToContent = this._elementPositionRelativeToContent($element, isVertical ? 'top' : 'left');
-    //     const elementPosition = elementPositionRelativeToContent - pushBackOffset;
-    //     const elementSize = $element[isVertical ? 'outerHeight' : 'outerWidth']();
-    //     const scrollLocation = (isVertical ? this.scrollTop() : this.scrollLeft());
-    //     const clientSize = this._container().get(0)[isVertical ? 'clientHeight' : 'clientWidth'];
+        // eslint-disable-next-line no-undef
+        const pushBackOffset = isVertical ? this._strategy.verticalOffset() : 0;
+        //     const elementPositionRelativeToContent = this._elementPositionRelativeToContent($element, isVertical ? 'top' : 'left');
+        // eslint-disable-next-line no-unused-vars
+        const elementPosition = /* elementPositionRelativeToContent */ -pushBackOffset;
+        //     const elementSize = $element[isVertical ? 'outerHeight' : 'outerWidth']();
+        //     const scrollLocation = (isVertical ? this.scrollTop() : this.scrollLeft());
+        //     const clientSize = this._container().get(0)[isVertical ? 'clientHeight' : 'clientWidth'];
 
-    //     const startDistance = scrollLocation - elementPosition + startOffset;
-    //     const endDistance = scrollLocation - elementPosition - elementSize + clientSize - endOffset;
+        //     const startDistance = scrollLocation - elementPosition + startOffset;
+        //     const endDistance = scrollLocation - elementPosition - elementSize + clientSize - endOffset;
 
-    //     if(startDistance <= 0 && endDistance >= 0) {
-    //         return scrollLocation;
-    //     }
+        //     if(startDistance <= 0 && endDistance >= 0) {
+        //         return scrollLocation;
+        //     }
 
     //     return scrollLocation - (Math.abs(startDistance) > Math.abs(endDistance) ? endDistance : startDistance);
-    // },
+    },
 
     _elementPositionRelativeToContent: function($element, prop) {
         let result = 0;
