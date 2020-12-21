@@ -167,6 +167,8 @@ class FileManager extends Widget {
             onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this),
             onClick: () => this._setItemsViewAreaActive(false)
         });
+
+        this._filesTreeView.updateCurrentDirectory();
     }
 
     _createItemView($container, viewMode) {

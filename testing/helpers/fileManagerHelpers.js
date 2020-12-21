@@ -39,6 +39,7 @@ export const Consts = {
     FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
     FOLDERS_TREE_VIEW_ITEM_CLASS: 'dx-treeview-item',
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: 'dx-treeview-toggle-item-visibility',
+    FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened',
     BREADCRUMBS_CLASS: 'dx-filemanager-breadcrumbs',
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: 'dx-filemanager-breadcrumbs-parent-folder-item',
     BREADCRUMBS_SEPARATOR_ITEM_CLASS: 'dx-filemanager-breadcrumbs-separator-item',
@@ -124,13 +125,6 @@ export class FileManagerWrapper {
     getFolderNodeText(index, inDialog) {
         const text = this.getFolderNode(index, inDialog).text() || '';
         return text.replace(showMoreButtonText, '');
-    }
-
-    getFolderNodeByText(text, inDialog) {
-        return this.getFolderNodes(inDialog).filter(function(index, node) {
-            const content = $(node).text();
-            return content === text;
-        }).first();
     }
 
     getFolderToggles(inDialog) {
