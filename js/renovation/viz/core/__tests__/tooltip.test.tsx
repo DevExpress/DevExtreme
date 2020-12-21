@@ -271,6 +271,18 @@ describe('Render', () => {
     expect(tooltip.find('div').at(1).children().props()).toEqual({ valueText: 'Tooltip value text' });
     expect(tooltip.find('.tooltip-template').text()).toBe('Tooltip value text_template');
   });
+
+  it('should set on the div zIndex', () => {
+    const tooltip = shallow(<TooltipComponent {...{
+      ...props,
+      props: { ...props.props, zIndex: 3 },
+    } as any}
+    />);
+
+    expect(tooltip.find('div').at(0).props().style).toMatchObject({
+      zIndex: 3,
+    });
+  });
 });
 
 describe('Effect', () => {
@@ -364,6 +376,24 @@ describe('Methods', () => {
 
     expect(tooltip.formatValue('value', 'specialFormat')).toEqual('formated_value');
     expect(getFormatValue).toBeCalledWith('value', 'specialFormat', { format: 'format', argumentFormat: 'argument_format' });
+  });
+
+  it('should return enabled option', () => {
+    const tooltip = new Tooltip({ enabled: false });
+
+    expect(tooltip.isEnabled()).toBe(false);
+  });
+
+  it('should return shared option', () => {
+    const tooltip = new Tooltip({ shared: true });
+
+    expect(tooltip.isShared()).toBe(true);
+  });
+
+  it('should return location option', () => {
+    const tooltip = new Tooltip({ location: 'edge' });
+
+    expect(tooltip.getLocation()).toBe('edge');
   });
 });
 

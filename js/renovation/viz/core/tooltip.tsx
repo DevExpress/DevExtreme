@@ -18,6 +18,7 @@ import {
   getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData,
 } from './common/tooltip_utils';
 import { getFormatValue } from '../common/utils';
+import { normalizeEnum } from '../../../viz/core/utils';
 
 export const viewFunction = ({
   textRef,
@@ -32,7 +33,7 @@ export const viewFunction = ({
   setCurrentState,
   pointerEvents,
   props: {
-    x, y, font, shadow, opacity, interactive,
+    x, y, font, shadow, opacity, interactive, zIndex,
     contentTemplate: TooltipTemplate, data,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
@@ -56,6 +57,7 @@ export const viewFunction = ({
         pointerEvents: 'none',
         left: cloudSize.x,
         top: cloudSize.y,
+        zIndex,
       }}
     >
       <RootSvgElement
@@ -201,6 +203,14 @@ export class TooltipProps {
 
   @OneWay() interactive = false;
 
+  @OneWay() enabled = true;
+
+  @OneWay() shared = false;
+
+  @OneWay() location = 'center';
+
+  @OneWay() zIndex?: number;
+
   @Template() contentTemplate?: (data: TooltipData) => JSX.Element;
 }
 
@@ -264,6 +274,21 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   formatValue(value, specialFormat): string {
     const { format, argumentFormat } = this.props;
     return getFormatValue(value, specialFormat, { format, argumentFormat });
+  }
+
+  @Method()
+  isEnabled(): boolean {
+    return this.props.enabled;
+  }
+
+  @Method()
+  isShared(): boolean {
+    return !!this.props.shared;
+  }
+
+  @Method()
+  getLocation(): string {
+    return normalizeEnum(this.props.location);
   }
 
   get textSizeWithPaddings(): Size {
