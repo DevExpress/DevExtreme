@@ -205,9 +205,7 @@ describe('Render', () => {
 
   it('should render div for html text', () => {
     const customizedOptions = { ...props.customizedOptions, html: 'html text' };
-    const tooltip = shallow(
-      <TooltipComponent {...{ ...props, customizedOptions } as any} /> as any,
-    );
+    const tooltip = shallow(viewFunction({ ...props, customizedOptions }));
     expect(tooltip.find('div').at(1).props().style).toMatchObject({
       position: 'relative',
       display: 'inline-block',
