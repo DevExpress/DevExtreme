@@ -2612,8 +2612,8 @@ QUnit.module('Rows view', {
 
         assert.ok(!$(testElement.find('tbody > tr')[2]).hasClass('dx-group-row'));
         assert.equal($(testElement.find('tbody > tr')[2]).find('td').length, 3);
-        assert.equal($(testElement.find('tbody > tr')[2]).find('td').first().text(), '');
-        assert.equal($($(testElement.find('tbody > tr')[2]).find('td')[1]).text(), '');
+        assert.equal($(testElement.find('tbody > tr')[2]).find('td').first().text(), '\u00A0');
+        assert.equal($($(testElement.find('tbody > tr')[2]).find('td')[1]).text(), '\u00A0');
         assert.equal($(testElement.find('tbody > tr')[2]).find('td').last().text(), '3');
     });
 
