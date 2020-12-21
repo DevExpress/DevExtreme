@@ -70,6 +70,31 @@ describe('LayoutBase', () => {
         });
       });
     });
+
+    it('should correctly set the virtual cells width', () => {
+      const table = render({
+        hasTopVirtualRow: true,
+        hasBottomVirtualRow: true,
+        props: {
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 150,
+        },
+      });
+
+      const virtualRows = table.find(VirtualRow);
+
+      expect(virtualRows)
+        .toHaveLength(2);
+
+      virtualRows
+        .forEach((item) => {
+          expect(item.prop('leftVirtualCellWidth'))
+            .toEqual(100);
+
+          expect(item.prop('rightVirtualCellWidth'))
+            .toEqual(150);
+        });
+    });
   });
 
   describe('Logic', () => {
