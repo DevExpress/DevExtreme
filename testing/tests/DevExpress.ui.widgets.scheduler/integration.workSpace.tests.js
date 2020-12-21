@@ -2831,7 +2831,7 @@ QUnit.test('SelectedCellData option should not change when dateTable is scrolled
         height: 300,
         scrolling: { mode: 'virtual' },
     });
-    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
     const $cells = scheduler.workSpace.getCells();
     const $table = scheduler.workSpace.getDateTable();
@@ -2876,7 +2876,7 @@ QUnit.test('"onOptionChanged" should not be called on scroll when virtual scroll
             onOptionChangedCalls += 1;
         },
     });
-    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
     const $cells = scheduler.workSpace.getCells();
     const $table = scheduler.workSpace.getDateTable();
@@ -2919,7 +2919,7 @@ if(devices.real().deviceType === 'desktop') {
         });
 
         const { instance } = scheduler;
-        instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
         const showAppointmentPopupSpy = sinon.spy();
         instance.showAppointmentPopup = showAppointmentPopupSpy;
 
