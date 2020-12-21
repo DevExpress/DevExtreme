@@ -78,10 +78,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             let multiDaysAppointmentParts = [];
             const currentMaxAllowedPosition = currentSetting.vMax;
 
-            if(this._isMultiDayAppointment(currentSetting, height) || (isAppointmentTakesSeveralDays && !isRecurring)) {
-                if(dateUtils.sameDate(appointmentStartDate, currentSetting.info.appointment.startDate) || isRecurring) {
-                    appointmentReduced = 'head';
+            if(this._isMultiViewAppointment(currentSetting, height) || (isAppointmentTakesSeveralDays && !isRecurring)) {
+                const reduceHead = dateUtils.sameDate(appointmentStartDate, currentSetting.info.appointment.startDate) || isRecurring;
 
+                if(reduceHead) {
                     resultHeight = this._reduceMultiDayAppointment(height, {
                         top: currentSetting.top,
                         bottom: currentMaxAllowedPosition
@@ -90,10 +90,15 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                     multiDaysAppointmentParts = this._getAppointmentParts({
                         sourceAppointmentHeight: height,
                         reducedHeight: resultHeight,
-                        width: width
+                        width
                     }, currentSetting);
-                } else {
-                    appointmentReduced = 'tail';
+                }
+
+                const isMultiDay = this._isMultiDayAppointment(currentSetting, height);
+                if(isMultiDay) {
+                    appointmentReduced = reduceHead
+                        ? 'head'
+                        : 'tail';
                 }
             }
 
@@ -111,10 +116,17 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _isMultiDayAppointment(position, height) {
-        const maxTop = position.vMax;
-        const result = height > (maxTop - position.top);
+        if(this.isVirtualScrolling) {
+            const maxTop = this._getGroupHeight() - this._getGroupTopOffset(position);
 
-        return result;
+            return height > maxTop;
+        }
+
+        return false;
+    }
+
+    _isMultiViewAppointment(position, height) {
+        return height > (position.vMax - position.top);
     }
 
     _reduceMultiDayAppointment(sourceAppointmentHeight, bound) {
@@ -123,20 +135,29 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return sourceAppointmentHeight;
     }
 
-    _getTailHeight(appointmentGeometry, appointmentSettings) {
+    _getGroupHeight() {
         const workspace = this.instance.getWorkSpace();
 
-        if(!workspace.isVirtualScrolling()) {
+        return workspace.getCellHeight() * workspace._getRowCount();
+    }
+
+    _getGroupTopOffset(appointmentSettings) {
+        const groupTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
+        const allDayPanelOffset = this.instance.fire('getOffsetByAllDayPanel', appointmentSettings.groupIndex);
+        const appointmentGroupTopOffset = appointmentSettings.top - groupTop - allDayPanelOffset;
+
+        return appointmentGroupTopOffset;
+    }
+
+    _getTailHeight(appointmentGeometry, appointmentSettings) {
+        if(!this.isVirtualScrolling) {
             return appointmentGeometry.sourceAppointmentHeight - appointmentGeometry.reducedHeight;
         }
 
-        const groupTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
-        const allDayPanelOffset = this.instance.fire('getOffsetByAllDayPanel', appointmentSettings.groupIndex);
-        const cellHeight = workspace.getCellHeight();
-        const groupHeight = cellHeight * workspace._getRowCount();
-        const appointmentGroupTopOffset = appointmentSettings.top - groupTop - allDayPanelOffset;
+        const appointmentGroupTopOffset = this._getGroupTopOffset(appointmentSettings);
         const { sourceAppointmentHeight } = appointmentGeometry;
 
+        const groupHeight = this._getGroupHeight();
         const tailHeight = appointmentGroupTopOffset + sourceAppointmentHeight - groupHeight;
 
         return tailHeight;
