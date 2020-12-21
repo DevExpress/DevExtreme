@@ -1,3 +1,15 @@
+@-moz-document url-prefix() {
+  .dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
+      position: relative;
+  }
+
+  .dx-scheduler-work-space-month .dx-scheduler-date-table-cell .disable-date {
+      position: absolute;
+      width: 100%;
+      height: 100%; 
+  }
+}
+
 .disable-date,
 .dinner {
   height: 100%;
