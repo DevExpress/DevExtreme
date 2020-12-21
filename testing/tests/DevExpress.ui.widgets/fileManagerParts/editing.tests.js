@@ -1443,9 +1443,14 @@ QUnit.module('Editing operations', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        const togglesCount = this.wrapper.getFolderToggles().length;
-        assert.strictEqual(togglesCount, 4, 'There are some node toggles');
-        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'Folder 1.1.1', 'has target folder');
+        let toggles = this.wrapper.getFolderToggles();
+        assert.strictEqual(toggles.length, 4, 'There are 4 node toggles');
+        assert.ok(toggles.eq(0).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Files\' toggle is opened');
+        assert.ok(toggles.eq(1).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1\' toggle is opened');
+        assert.ok(toggles.eq(2).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1.1\' toggle is opened');
+        assert.notOk(toggles.eq(3).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1.1.1\' toggle is closed');
+
+        assert.equal(this.wrapper.getDetailsItemName(0), 'Folder 1.1.1', 'has target folder');
         this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(400);
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
@@ -1453,6 +1458,9 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getDialogButton('Delete').trigger('dxclick');
         this.clock.tick(400);
 
-        assert.strictEqual(this.wrapper.getFolderToggles().length, togglesCount - 2, 'number of folder toggles has decreased');
+        toggles = this.wrapper.getFolderToggles();
+        assert.strictEqual(toggles.length, 2, 'There are 2 node toggles left');
+        assert.ok(toggles.eq(0).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Files\' toggle is opened');
+        assert.ok(toggles.eq(1).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1\' toggle is opened');
     });
 });
