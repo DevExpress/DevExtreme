@@ -28,10 +28,6 @@ module.exports = SelectionStrategy.inherit({
     },
 
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
-        const result = new Deferred().resolve();
-        if(!this.options.plainItems().length) {
-            return result;
-        }
         if(isSelectAll) {
             const filter = this.options.filter();
             const needResetSelectionFilter = !filter || JSON.stringify(filter) === JSON.stringify(this.options.selectionFilter) && isDeselect;
@@ -58,7 +54,7 @@ module.exports = SelectionStrategy.inherit({
 
         this.onSelectionChanged();
 
-        return result;
+        return new Deferred().resolve();
     },
 
     setSelectedItems: function(keys) {

@@ -1125,7 +1125,7 @@ const createDeferredSelection = function(data, options, dataSource) {
             return dataSource.select();
         },
         plainItems: function() {
-            return dataSource ? dataSource.items() : [];
+            return dataSource.items();
         },
         filter: function() {
             return dataSource && dataSource.filter();
@@ -1329,21 +1329,6 @@ QUnit.test('selectAll when filter is defined', function(assert) {
     // assert
     assert.deepEqual(selection.selectionFilter(), ['age', '<', 18], 'selection filter when select all');
     assert.strictEqual(selection.getSelectAllState(), true, 'select all is true');
-});
-
-// T959045
-QUnit.test('selectAll when filter is defined and no data is shown', function(assert) {
-    const selection = this.createDeferredSelection(this.data);
-
-    // act
-    this.dataSource.filter(['age', '<', 1]);
-    this.dataSource.load();
-
-    selection.selectAll();
-
-    // assert
-    assert.deepEqual(selection.selectionFilter(), [], 'selection filter when select all and no data');
-    assert.strictEqual(selection.getSelectAllState(), false, 'select all is false');
 });
 
 QUnit.test('changeItemSelection after selectAll', function(assert) {
