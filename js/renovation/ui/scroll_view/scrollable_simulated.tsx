@@ -29,10 +29,11 @@ import {
   SCROLLABLE_CONTENT_CLASS,
   SCROLLABLE_WRAPPER_CLASS,
   SCROLLVIEW_CONTENT_CLASS,
-  SCROLLVIEW_BOTTOM_POCKET_CLASS,
-  SCROLLVIEW_TOP_POCKET_CLASS,
   SCROLLABLE_DISABLED_CLASS,
 } from './scrollable_utils';
+
+import { TopPocket } from './topPocket';
+import { BottomPocket } from './bottomPocket';
 
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
@@ -53,11 +54,11 @@ export const viewFunction = ({
     <div className={SCROLLABLE_WRAPPER_CLASS}>
       <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
         <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
-          {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
+          {forceGeneratePockets && <TopPocket />}
           {needScrollViewContentWrapper && (
             <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
           {!needScrollViewContentWrapper && children}
-          {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
+          {forceGeneratePockets && <BottomPocket />}
         </div>
       </div>
     </div>
