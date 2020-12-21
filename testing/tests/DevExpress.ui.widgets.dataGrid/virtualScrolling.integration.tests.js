@@ -3001,11 +3001,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     ['virtual', 'infinite'].forEach(scrollingMode => {
         ['standard', 'virtual'].forEach(rowRenderingMode => {
-            QUnit.test(`DataGrid should not skip rows on ${scrollingMode} scrolling when rowRenderingMode is ${rowRenderingMode} (T954411)`, function(assert) {
+            QUnit.test(`DataGrid should not remove top rows on ${scrollingMode} scrolling when rowRenderingMode is ${rowRenderingMode} (T954411)`, function(assert) {
                 // arrange
                 const generateData = function() {
                     const result = [];
-                    for(let i = 0; i < 500; i++) {
+                    for(let i = 0; i < 150; i++) {
                         result.push({
                             id: i + 1,
                             some: 'aaaaaaaa' + (i + 1)
@@ -3022,7 +3022,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                         autoExpandAll: true,
                         enabled: true
                     },
+                    paging: {
+                        pageSize: 5
+                    },
                     scrolling: {
+                        useNative: false,
                         mode: scrollingMode,
                         rowRenderingMode
                     }
@@ -3037,6 +3041,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 // assert
                 assert.deepEqual(dataGrid.getScrollable().scrollTop(), scrollTopPosition, 'correct scroll position');
                 assert.deepEqual(dataGrid.getVisibleRows()[0].key, 1, 'first visible row key');
+                assert.deepEqual(dataGrid.getTopVisibleRowData().id, 5, 'top visible row id');
             });
         });
     });
