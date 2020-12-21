@@ -92,4 +92,34 @@ class JSPdfDataGridTestHelper {
     }
 }
 
-export { JSPdfDataGridTestHelper };
+class JSPdfPrintInfoCalculatorTestHelper {
+    constructor(jsPDFDocument) {
+        this.jsPDFDocument = jsPDFDocument;
+    }
+
+    checkColumnWidths(expectedColumnWidths, options) {
+        const columnStyles = options.columnStyles;
+        const actualWidths = [];
+
+        for(let i = 0; i < expectedColumnWidths.length; i++) {
+            const width = columnStyles[i] ? columnStyles[i].width : 0;
+            actualWidths.push(width);
+        }
+
+        assert.deepEqual(actualWidths, expectedColumnWidths, 'Column widths');
+    }
+
+    checkCellsCoordinates(expectedCellsCoordinates, options) {
+        for(let rowIndex = 0; rowIndex < options.cells.length; rowIndex++) {
+            for(let colIndex = 0; colIndex < options.cells[rowIndex].length; colIndex++) {
+                assert.deepEqual(
+                    options.cells[rowIndex][colIndex].getCoordinates(),
+                    expectedCellsCoordinates[rowIndex][colIndex],
+                    `Cell coordinates[${rowIndex}][${colIndex}]`
+                );
+            }
+        }
+    }
+}
+
+export { JSPdfDataGridTestHelper, JSPdfPrintInfoCalculatorTestHelper };
