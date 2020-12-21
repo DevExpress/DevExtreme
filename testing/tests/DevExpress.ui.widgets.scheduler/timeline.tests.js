@@ -1149,7 +1149,7 @@ QUnit.module('Renovated Render', {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerTimelineDay') => {
             this.instance = $('#scheduler-timeline')[workSpace]({
                 renovateRender: true,
-                currentDate: new Date(2020, 6, 29),
+                currentDate: new Date(2020, 11, 21),
                 startDayHour: 0,
                 endDayHour: 1,
                 ...options,
@@ -1163,8 +1163,8 @@ QUnit.module('Renovated Render', {
 }, () => {
     QUnit.module('Generate View Data', () => {
         const cellsBase = [{
-            startDate: new Date(2020, 6, 29, 0, 0),
-            endDate: new Date(2020, 6, 29, 0, 30),
+            startDate: new Date(2020, 11, 21, 0, 0),
+            endDate: new Date(2020, 11, 21, 0, 30),
             allDay: false,
             groupIndex: 0,
             index: 0,
@@ -1172,8 +1172,8 @@ QUnit.module('Renovated Render', {
             isLastGroupCell: true,
             key: 0,
         }, {
-            startDate: new Date(2020, 6, 29, 0, 30),
-            endDate: new Date(2020, 6, 29, 1, 0),
+            startDate: new Date(2020, 11, 21, 0, 30),
+            endDate: new Date(2020, 11, 21, 1, 0),
             groupIndex: 0,
             index: 1,
             allDay: false,
@@ -1348,6 +1348,60 @@ QUnit.module('Renovated Render', {
 
             assert.deepEqual(viewData, expectedViewData, 'correct viewData');
             assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');
+        });
+
+        QUnit.test('should work correctly with timelineWeek', function(assert) {
+            this.createInstance({}, TIMELINE_WEEK.class);
+
+            this.instance.viewDataProvider.update();
+
+            const { viewData } = this.instance.viewDataProvider;
+
+            const firstCell = {
+                ...cellsBase[0],
+                startDate: new Date(2020, 11, 20, 0, 0),
+                endDate: new Date(2020, 11, 20, 0, 30),
+            };
+            const lastCell = {
+                ...cellsBase[0],
+                startDate: new Date(2020, 11, 26, 0, 30),
+                endDate: new Date(2020, 11, 26, 1, 0),
+                key: 13,
+                index: 13,
+            };
+
+            const dateTable = viewData.groupedData[0].dateTable[0];
+
+            assert.equal(dateTable.length, 14, 'Correct number of cells');
+            assert.deepEqual(dateTable[0], firstCell, 'Correct first cell');
+            assert.deepEqual(dateTable[13], lastCell, 'Correct last cell');
+        });
+
+        QUnit.test('should work correctly with timelineMonth', function(assert) {
+            this.createInstance({}, TIMELINE_MONTH.class);
+
+            this.instance.viewDataProvider.update();
+
+            const { viewData } = this.instance.viewDataProvider;
+
+            const firstCell = {
+                ...cellsBase[0],
+                startDate: new Date(2020, 11, 1, 0, 0),
+                endDate: new Date(2020, 11, 1, 1, 0),
+            };
+            const lastCell = {
+                ...cellsBase[0],
+                startDate: new Date(2020, 11, 31, 0, 0),
+                endDate: new Date(2020, 11, 31, 1, 0),
+                key: 30,
+                index: 30,
+            };
+
+            const dateTable = viewData.groupedData[0].dateTable[0];
+
+            assert.equal(dateTable.length, 31, 'Correct number of cells');
+            assert.deepEqual(dateTable[0], firstCell, 'Correct first cell');
+            assert.deepEqual(dateTable[30], lastCell, 'Correct last cell');
         });
     });
 });
