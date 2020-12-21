@@ -14,8 +14,7 @@ import { DateTableLayoutProps } from './layout_props';
 
 export const viewFunction = ({
   props: {
-    viewData, dataCellTemplate,
-    cellTemplate: Cell,
+    viewData, dataCellTemplate, cellTemplate: Cell,
   },
 }: DateTableBody): JSX.Element => (
   <Fragment>
