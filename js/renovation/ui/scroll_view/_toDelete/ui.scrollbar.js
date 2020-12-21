@@ -1,4 +1,4 @@
-import $ from '../../core/renderer';
+// import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import readyCallback from '../../core/utils/ready_callbacks';
@@ -11,12 +11,12 @@ import { extend } from '../../core/utils/extend';
 import pointerEvents from '../../events/pointer';
 
 const SCROLLBAR = 'dxScrollbar';
-const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
-const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = `${SCROLLABLE_SCROLLBAR_CLASS}-active`;
-const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
-const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
+// const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
+const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
+// const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
+// const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
-const HORIZONTAL = 'horizontal';
+// const HORIZONTAL = 'horizontal';
 const THUMB_MIN_SIZE = 15;
 
 const SCROLLBAR_VISIBLE = {
@@ -34,10 +34,10 @@ const Scrollbar = Widget.inherit({
             direction: null,
             visible: false,
             activeStateEnabled: false,
-            visibilityMode: SCROLLBAR_VISIBLE.onScroll,
+            // visibilityMode: SCROLLBAR_VISIBLE.onScroll,
             containerSize: 0,
             contentSize: 0,
-            expandable: true,
+            // expandable: true,
             scaleRatio: 1
         });
     },
@@ -47,16 +47,16 @@ const Scrollbar = Widget.inherit({
         this._isHovered = false;
     },
 
-    _initMarkup: function() {
-        this._renderThumb();
+    // _initMarkup: function() {
+    // this._renderThumb();
 
-        this.callBase();
-    },
+    // this.callBase();
+    // },
 
     _render: function() {
         this.callBase();
 
-        this._renderDirection();
+        // this._renderDirection();
         this._update();
         this._attachPointerDownHandler();
         this.option('hoverStateEnabled', this._isHoverMode());
@@ -64,28 +64,28 @@ const Scrollbar = Widget.inherit({
         this.$element().toggleClass(HOVER_ENABLED_STATE, this.option('hoverStateEnabled'));
     },
 
-    _renderThumb: function() {
-        this._$thumb = $('<div>').addClass(SCROLLABLE_SCROLL_CLASS);
-        $('<div>').addClass(SCROLLABLE_SCROLL_CONTENT_CLASS).appendTo(this._$thumb);
+    // _renderThumb: function() {
+    // this._$thumb = $('<div>').addClass(SCROLLABLE_SCROLL_CLASS);
+    // $('<div>').addClass(SCROLLABLE_SCROLL_CONTENT_CLASS).appendTo(this._$thumb);
 
-        this.$element().addClass(SCROLLABLE_SCROLLBAR_CLASS).append(this._$thumb);
-    },
+    // this.$element().addClass(SCROLLABLE_SCROLLBAR_CLASS).append(this._$thumb);
+    // },
 
     isThumb: function($element) {
         return !!this.$element().find($element).length;
     },
 
-    _isHoverMode: function() {
-        const visibilityMode = this.option('visibilityMode');
-        return (visibilityMode === SCROLLBAR_VISIBLE.onHover || visibilityMode === SCROLLBAR_VISIBLE.always) && this.option('expandable');
-    },
+    // _isHoverMode: function() {
+    // const visibilityMode = this.option('visibilityMode');
+    // return (visibilityMode === SCROLLBAR_VISIBLE.onHover || visibilityMode === SCROLLBAR_VISIBLE.always) && this.option('expandable');
+    // },
 
-    _renderDirection: function() {
-        const direction = this.option('direction');
-        this.$element().addClass('dx-scrollbar-' + direction);
-        this._dimension = direction === HORIZONTAL ? 'width' : 'height';
-        this._prop = direction === HORIZONTAL ? 'left' : 'top';
-    },
+    // _renderDirection: function() {
+    // const direction = this.option('direction');
+    // this.$element().addClass('dx-scrollbar-' + direction);
+    // this._dimension = direction === HORIZONTAL ? 'width' : 'height';
+    // this._prop = direction === HORIZONTAL ? 'left' : 'top';
+    // },
 
     _attachPointerDownHandler: function() {
         eventsEngine.on(this._$thumb, addNamespace(pointerEvents.down, SCROLLBAR), this.feedbackOn.bind(this));
