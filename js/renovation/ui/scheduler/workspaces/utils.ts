@@ -15,9 +15,9 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
 export const getKeyByGroup = (groupIndex: number): string => groupIndex.toString();
 
 const addToStyle = (
-  style: any,
   attr: string,
   value: string,
+  style?: object,
 ): Style => {
   const nextStyle = style || {};
   const result = { ...nextStyle };
@@ -28,19 +28,19 @@ const addToStyle = (
 };
 
 export const addHeightToStyle = (
-  value: number,
-  style?: any,
+  value: number | undefined,
+  style?: object,
 ): Style => {
   const height = value ? `${value}px` : '';
-  return addToStyle(style, 'height', height);
+  return addToStyle('height', height, style);
 };
 
 export const addWidthToStyle = (
-  value: number,
-  style?: any,
+  value: number | undefined,
+  style?: object,
 ): Style => {
   const width = value ? `${value}px` : '';
-  return addToStyle(style, 'width', width);
+  return addToStyle('width', width, style);
 };
 
 export const getGroupCellClasses = (
