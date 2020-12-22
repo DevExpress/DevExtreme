@@ -143,8 +143,8 @@ QUnit.module('Scroll', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        const scrollPosition = 236;
-        this.wrapper.getDetailsViewScrollableContainer().scrollTop(scrollPosition);
+        this.wrapper.getDetailsViewScrollableContainer().scrollTop(500);
+        const scrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
         this.clock.tick(400);
 
         this.wrapper.getRowNameCellInDetailsView(10).trigger(CLICK_EVENT).click();
@@ -161,11 +161,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        this.wrapper.findThumbnailsItem('File 0.txt').trigger('dxpointerdown');
-        this.clock.tick(400);
-        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'End' }));
-        this.clock.tick(400);
-
+        this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(500);
         const scrollPosition = this.wrapper.getThumbnailsViewScrollableContainer().scrollTop();
         this.clock.tick(400);
 
