@@ -8,13 +8,10 @@ import Class from '../../core/class';
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
 
-const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
-
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
-
 
 const NativeStrategy = Class.inherit({
 
@@ -49,12 +46,7 @@ const NativeStrategy = Class.inherit({
         // this._$element
         //     .addClass(SCROLLABLE_NATIVE_CLASS)
         this._$element
-            .addClass(SCROLLABLE_NATIVE_CLASS + '-' + deviceType)
-            .toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this._showScrollbar);
-
-        if(this._showScrollbar && this._useSimulatedScrollbar) {
-            this._renderScrollbars();
-        }
+            .addClass(SCROLLABLE_NATIVE_CLASS + '-' + deviceType);
     },
 
     updateBounds: noop,
