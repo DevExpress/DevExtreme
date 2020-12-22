@@ -22,6 +22,8 @@ class BaseRenderingStrategy {
         this._initPositioningStrategy();
     }
 
+    get isVirtualScrolling() { return this.instance.fire('isVirtualScrolling'); }
+
     _isAdaptive() {
         return this.instance.fire('isAdaptive');
     }
