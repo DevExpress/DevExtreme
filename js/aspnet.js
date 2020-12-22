@@ -58,14 +58,7 @@
 
             if(encode || interpolate) {
                 bag.push('_.push(');
-                let expression = `${value}`;
-                if(encode) {
-                    expression = `arguments[1](${value} ?? '')`;
-                    if(/^\s*$/.test(value)) {
-                        expression = `arguments[1](${value})`;
-                    }
-                }
-                bag.push(expression);
+                bag.push(encode ? 'arguments[1](' + value + ')' : value);
                 bag.push(');');
             } else {
                 bag.push(code + '\n');
