@@ -11,6 +11,7 @@ import seriesFamilyModule from 'viz/core/series_family';
 import seriesModule from 'viz/series/base_series';
 import vizMocks from './vizMocks.js';
 import { isDefined } from '../../js/core/utils/type.js';
+import { Range } from 'viz/translators/range';
 const LoadingIndicatorOrig = loadingIndicatorModule.LoadingIndicator;
 
 const firstCategory = 'First';
@@ -1030,7 +1031,7 @@ export const MockAxis = function(renderOptions) {
             return this._options.mockAxesSpacing || 5;
         },
         getTranslator: function() {
-            const businessRange = this.setBusinessRange.lastCall && this.setBusinessRange.lastCall.args[0] || {};
+            const businessRange = new Range(this.setBusinessRange.lastCall && this.setBusinessRange.lastCall.args[0] || {});
             businessRange.minVisible = businessRange.minVisible || businessRange.min;
             businessRange.maxVisible = businessRange.maxVisible || businessRange.max;
             return this._options && this._options.mockTranslator || new MockTranslator(businessRange);
