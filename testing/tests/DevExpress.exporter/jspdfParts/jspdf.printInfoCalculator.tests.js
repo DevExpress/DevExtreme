@@ -146,6 +146,74 @@ const JSPdfPrintInfoCalculatorTests = {
                 done();
             });
 
+            QUnit.test('2 columns, 2 rows - table width and 1 column width is defined - column[0].width > tableWidth', function(assert) {
+                const done = assert.async();
+
+                const options = {
+                    jsPDFDocument: this.jsPDFDocument,
+                    startX: 50,
+                    startY: 20,
+                    tableWidth: 100,
+                    cells: [
+                        [{ content: 'text_1_1' }, { content: 'text_1_2' }],
+                        [{ content: 'text_2_1' }, { content: 'text_2_2' }]
+                    ],
+                    columnStyles: {
+                        0: { width: 110 }
+                    }
+                };
+                ExportPrintInfoCalculator._defaultMinCellHeight = 8;
+                const calculatedOptions = ExportPrintInfoCalculator.calculate(options);
+
+                const expectedCellsCoordinates = [
+                    [
+                        { x: 50, y: 20, width: 110, height: 8 },
+                        { x: 160, y: 20, width: 0, height: 8 }
+                    ], [
+                        { x: 50, y: 28, width: 110, height: 8 },
+                        { x: 160, y: 28, width: 0, height: 8 }
+                    ]
+                ];
+                helper.checkColumnWidths([ 110, 0 ], calculatedOptions);
+                helper.checkCellsCoordinates(expectedCellsCoordinates, calculatedOptions);
+
+                done();
+            });
+
+            QUnit.test('2 columns, 2 rows - table width and 2 column width is defined - column[1].width > tableWidth', function(assert) {
+                const done = assert.async();
+
+                const options = {
+                    jsPDFDocument: this.jsPDFDocument,
+                    startX: 50,
+                    startY: 20,
+                    tableWidth: 100,
+                    cells: [
+                        [{ content: 'text_1_1' }, { content: 'text_1_2' }],
+                        [{ content: 'text_2_1' }, { content: 'text_2_2' }]
+                    ],
+                    columnStyles: {
+                        1: { width: 110 }
+                    }
+                };
+                ExportPrintInfoCalculator._defaultMinCellHeight = 8;
+                const calculatedOptions = ExportPrintInfoCalculator.calculate(options);
+
+                const expectedCellsCoordinates = [
+                    [
+                        { x: 50, y: 20, width: 0, height: 8 },
+                        { x: 50, y: 20, width: 110, height: 8 }
+                    ], [
+                        { x: 50, y: 28, width: 0, height: 8 },
+                        { x: 50, y: 28, width: 110, height: 8 }
+                    ]
+                ];
+                helper.checkColumnWidths([ 0, 110 ], calculatedOptions);
+                helper.checkCellsCoordinates(expectedCellsCoordinates, calculatedOptions);
+
+                done();
+            });
+
             QUnit.test('2 columns, 2 rows - amount of columns widths are less than table width', function(assert) {
                 const done = assert.async();
 
@@ -228,6 +296,7 @@ const JSPdfPrintInfoCalculatorTests = {
                         [{ content: 'text_2_1' }, { content: 'text_2_2' }]
                     ],
                     columnStyles: {
+                        0: { minCellHeight: 10 },
                         1: { width: 70, minCellHeight: 20 }
                     }
                 };

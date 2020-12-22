@@ -70,7 +70,11 @@ export const ExportPrintInfoCalculator = {
             }
         }
 
-        const columnAutoWidth = unAllocatedWidth / (columnCount - columnsWithAssignedWidth.length);
+        let columnAutoWidth = 0;
+        if(unAllocatedWidth > 0) {
+            columnAutoWidth = unAllocatedWidth / (columnCount - columnsWithAssignedWidth.length);
+        }
+
         for(let i = 0; i < columnCount; i++) {
             if(!isDefined(columnStyles[i])) {
                 columnStyles[i] = {};
