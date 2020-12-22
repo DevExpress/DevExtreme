@@ -153,6 +153,9 @@ jest.mock('../../../../core/devices', () => {
                 && isDefined(showScrollbar) && showScrollbar !== false);
 
               expect(scrollBar.exists()).toBe(needRenderScrollbars);
+              if (needRenderScrollbars && direction === 'both') {
+                expect(scrollBar.length).toBe(2);
+              }
             });
           });
         });
