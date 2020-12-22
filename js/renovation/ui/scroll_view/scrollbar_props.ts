@@ -10,5 +10,7 @@ import { ScrollableInternalProps } from './scrollable_props';
 export class ScrollbarProps extends ScrollableInternalProps {
   @OneWay() expandable = true;
 
+  @OneWay() visible = false;
+
   @OneWay() direction: ScrollableDirection = 'vertical';
 }
