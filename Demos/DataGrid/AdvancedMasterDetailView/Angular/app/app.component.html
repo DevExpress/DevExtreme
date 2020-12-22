@@ -1,12 +1,6 @@
-<dx-data-grid
-    id="gridContainer"
-    [dataSource]="suppliersData"  
-    [remoteOperations]="true"
-    [showBorders]="true"
->
-
-    <dxo-paging pageSize="15"></dxo-paging>
-
+<dx-data-grid id="gridContainer" [dataSource]="suppliersData" [remoteOperations]="true" [showBorders]="true">
+    
+    <dxo-paging [pageSize]="15"></dxo-paging>
     <dxi-column dataField="ContactName"></dxi-column>
     <dxi-column dataField="ContactTitle"></dxi-column>
     <dxi-column dataField="CompanyName"></dxi-column>
@@ -15,78 +9,6 @@
     <dxo-master-detail [enabled]="true" template="masterDetail"></dxo-master-detail>
 
     <div *dxTemplate="let masterDetailItem of 'masterDetail'">
-        <dx-tab-panel>            
-            <dxi-item title="Orders" template="ordersTab"></dxi-item>
-            <div *dxTemplate="let ordersTabItem of 'ordersTab'">
-                <dx-form labelLocation="top" class="form-container">
-                    <dxi-item template="productSelectBox">
-                        <dxo-label text="Product"></dxo-label>
-                    </dxi-item>
-                    <div *dxTemplate="let selectBoxItem of 'productSelectBox'">
-                        <dx-select-box
-                            [value]="productIdBySupplier[masterDetailItem.key]"
-                            [dataSource]="getProductsData(masterDetailItem.key)"
-                            [deferRendering]="false"
-                            valueExpr="ProductID"
-                            displayExpr="ProductName"
-                            (onValueChanged)="handleValueChange($event, masterDetailItem.key)"
-                        >
-                        </dx-select-box>
-                    </div>
-
-                    <dxi-item template="orderHistory">
-                        <dxo-label text="Order History"></dxo-label>
-                    </dxi-item>
-                    <div *dxTemplate="let order of 'orderHistory'">
-                        <dx-data-grid 
-                            [dataSource]="getOrderHistoryData(masterDetailItem.key)"
-                            [showBorders]="true"
-                        >
-                            <dxo-paging [pageSize]="5"></dxo-paging>
-
-                            <dxi-column dataField="OrderID"></dxi-column>
-                            <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
-                            <dxi-column dataField="ShipCountry"></dxi-column>
-                            <dxi-column dataField="ShipCity"></dxi-column>
-                            <dxi-column dataField="UnitPrice" format="currency"></dxi-column>
-                            <dxi-column dataField="Quantity"></dxi-column>
-                            <dxi-column dataField="Discount" format="percent"></dxi-column>
-
-                            <dxo-summary>
-                                <dxi-total-item
-                                    column="UnitPrice"
-                                    summaryType="sum">
-                                    <dxo-value-format
-                                        format="currency"
-                                        [precision]="2"
-                                    ></dxo-value-format>
-                                </dxi-total-item>   
-                                <dxi-total-item column="Quantity" summaryType="count"></dxi-total-item>
-                            </dxo-summary>
-                        </dx-data-grid>
-                    </div>
-                </dx-form>
-            </div>
-            <dxi-item title="Address" template="addressTab"></dxi-item>
-            <div *dxTemplate="let addressTabItem of 'addressTab'">
-                <dx-form 
-                    [formData]="masterDetailItem.data"
-                    [colCount]="2"
-                    [customizeItem]="customizeItemTemplate"
-                    class="address-form form-container"
-                >
-                    <dxi-item dataField="Address"></dxi-item>
-                    <dxi-item dataField="City"></dxi-item>
-                    <dxi-item dataField="Region"></dxi-item>
-                    <dxi-item dataField="PostalCode"></dxi-item>
-                    <dxi-item dataField="Country"></dxi-item>
-                    <dxi-item dataField="Phone"></dxi-item>
-
-                    <div *dxTemplate="let item of 'formItem'">
-                        <span>{{item.editorOptions.value}}</span>
-                    </div>
-                </dx-form>
-            </div>
-        </dx-tab-panel>
+         <detail-view [key]="masterDetailItem.key" [rowData]="masterDetailItem.data" ></detail-view>
     </div>
 </dx-data-grid>

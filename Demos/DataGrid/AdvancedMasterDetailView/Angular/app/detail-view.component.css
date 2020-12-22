@@ -1,0 +1,7 @@
+::ng-deep .form-container {
+    padding: 20px;
+}
+
+::ng-deep .address-form label {
+    font-weight: bold;
+}

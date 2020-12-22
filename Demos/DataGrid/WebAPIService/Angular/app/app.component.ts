@@ -1,6 +1,7 @@
-import { NgModule, Component, enableProdMode, ChangeDetectionStrategy } from '@angular/core';
+import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { DetailGridComponent } from './detail-grid.component';
 
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
@@ -11,8 +12,7 @@ if(!/localhost/.test(document.location.host)) {
 
 @Component({
     selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: 'app/app.component.html'
 })
 export class AppComponent {
     customersData: any;
@@ -52,18 +52,6 @@ export class AppComponent {
             }
         });
     }
-
-    getMasterDetailGridDataSource(id: number) : any {   
-        return {
-            store: AspNetData.createStore({
-                loadUrl: this.url + '/OrderDetails',
-                loadParams: { orderID : id },
-                onBeforeSend: function(method, ajaxOptions) {
-                    ajaxOptions.xhrFields = { withCredentials: true };
-                }
-            })
-        };
-    }
 }
 
 @NgModule({
@@ -71,7 +59,7 @@ export class AppComponent {
         BrowserModule,
         DxDataGridModule
     ],
-    declarations: [AppComponent],
+    declarations: [AppComponent, DetailGridComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

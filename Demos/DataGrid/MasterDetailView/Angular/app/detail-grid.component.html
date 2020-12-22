@@ -1,0 +1,7 @@
+<dx-data-grid [dataSource]="tasksDataSource" [showBorders]="true" [columnAutoWidth]="true">
+    <dxi-column dataField="Subject" dataType="string"></dxi-column>
+    <dxi-column dataField="StartDate" dataType="date"></dxi-column>
+    <dxi-column dataField="DueDate" dataType="date"></dxi-column>
+    <dxi-column dataField="Priority" dataType="string"></dxi-column>
+    <dxi-column caption="Completed" dataType="boolean" [calculateCellValue]="completedValue"></dxi-column>
+</dx-data-grid>

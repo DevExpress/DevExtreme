@@ -1,67 +1,45 @@
-<dx-data-grid
-    [dataSource]="dataSource"  
-    [remoteOperations]="true"
-    height="600"
-    showBorders="true"
-    [masterDetail]="{ enabled: true, template: 'detail' }">
-
+<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="600" [showBorders]="true">
     <dxo-filter-row [visible]="true"></dxo-filter-row>
     <dxo-header-filter [visible]="true"></dxo-header-filter>
     <dxo-group-panel [visible]="true"></dxo-group-panel>
     <dxo-scrolling mode="virtual"></dxo-scrolling>
-    <dxo-editing
-        mode="row"
-        [allowAdding]="true"
-        [allowUpdating]="true"
-        [allowDeleting]="true">
+    <dxo-editing mode="row" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true">
     </dxo-editing>
     <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
-
+    <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
     <dxi-column dataField="CustomerID" caption="Customer">
-        <dxi-validation-rule type="stringLength" max="5" message="The field Customer must be a string with a maximum length of 5."></dxi-validation-rule>
+        <dxi-validation-rule type="stringLength" [max]="5"
+            message="The field Customer must be a string with a maximum length of 5."></dxi-validation-rule>
         <dxo-lookup [dataSource]="customersData" valueExpr="Value" displayExpr="Text"></dxo-lookup>
     </dxi-column>
     <dxi-column dataField="OrderDate" dataType="date">
         <dxi-validation-rule type="required" message="The OrderDate field is required."></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Freight">
-        <dxo-header-filter 
-            groupInterval="100"></dxo-header-filter>
-        <dxi-validation-rule type="range" min="0" max="2000" message="The field Freight must be between 0 and 2000."></dxi-validation-rule>
+        <dxo-header-filter groupInterval="100"></dxo-header-filter>
+        <dxi-validation-rule type="range" [min]="0" [max]="2000"
+            message="The field Freight must be between 0 and 2000.">
+        </dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="ShipCountry">
-        <dxi-validation-rule type="stringLength" max="15" message="The field ShipCountry must be a string with a maximum length of 15."></dxi-validation-rule>
+        <dxi-validation-rule type="stringLength" max="15"
+            message="The field ShipCountry must be a string with a maximum length of 15."></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="ShipVia" caption="Shipping Company" dataType="number">
         <dxo-lookup [dataSource]="shippersData" valueExpr="Value" displayExpr="Text"></dxo-lookup>
     </dxi-column>
 
     <div *dxTemplate="let order of 'detail'">
-        <dx-data-grid
-            [dataSource]="getMasterDetailGridDataSource(order.data.OrderID)"
-            showBorders="true">            
-        </dx-data-grid>
+        <detail-grid [key]="order.key"></detail-grid>
     </div>
-
     <dxo-summary>
-        <dxi-total-item
-            column="Freight"
-            summaryType="sum">
-            <dxo-value-format
-                type="decimal"
-                [precision]="2"
-            ></dxo-value-format>
-        </dxi-total-item>    
-        <dxi-group-item
-            column="Freight"
-            summaryType="sum">
-            <dxo-value-format
-                type="decimal"
-                [precision]="2"
-            ></dxo-value-format>
+        <dxi-total-item column="Freight" summaryType="sum">
+            <dxo-value-format type="decimal" [precision]="2"></dxo-value-format>
+        </dxi-total-item>
+        <dxi-group-item column="Freight" summaryType="sum">
+            <dxo-value-format type="decimal" [precision]="2"></dxo-value-format>
         </dxi-group-item>
-        <dxi-group-item
-            summaryType="count">
+        <dxi-group-item summaryType="count">
         </dxi-group-item>
     </dxo-summary>
 </dx-data-grid>
