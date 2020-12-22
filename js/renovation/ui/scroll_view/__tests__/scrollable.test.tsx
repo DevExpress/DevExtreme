@@ -30,6 +30,8 @@ import {
   ScrollableDirection,
 } from '../types.d';
 
+import { Scrollbar } from '../scrollbar';
+
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
@@ -129,6 +131,27 @@ jest.mock('../../../../core/devices', () => {
         } as any as Partial<any>;
         const scrollable = mount(viewFunction(props as any) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
+      });
+    });
+
+    describe('Scrollbar', () => {
+      [true, false, undefined].forEach((useSimulatedScrollbar) => {
+        ['never', 'always', 'onScroll', 'onHover', true, false].forEach((showScrollbar: any) => {
+          it(`Scrollbar should render  useSimulatedScrollbar is set to true. ShowScrollbar=${showScrollbar}. useSimulatedScrollbar=${useSimulatedScrollbar}`, () => {
+            const instance = new Scrollable({});
+            const scrollable = mount(
+              viewFunction({
+                props: { showScrollbar, useSimulatedScrollbar },
+              } as any) as JSX.Element,
+            );
+
+            const scrollBar = scrollable.find(Scrollbar);
+            const needRenderScrollbars = ((instance instanceof ScrollableNative)
+             && useSimulatedScrollbar === true && showScrollbar !== false);
+
+            expect(scrollBar.exists()).toBe(needRenderScrollbars);
+          });
+        });
       });
     });
 

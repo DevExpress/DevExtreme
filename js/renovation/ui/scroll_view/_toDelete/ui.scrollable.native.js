@@ -1,15 +1,13 @@
-import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { isDxMouseWheelEvent } from '../../events/utils/index';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
 import Class from '../../core/class';
-import Scrollbar from './ui.scrollbar';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
-const SCROLLABLE_SCROLLBAR_SIMULATED = 'dx-scrollable-scrollbar-simulated';
+
 const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 
 const VERTICAL = 'vertical';
@@ -77,22 +75,6 @@ const NativeStrategy = Class.inherit({
     _renderScrollbars: function() {
         this._scrollbars = {};
         this._hideScrollbarTimeout = 0;
-
-        this._$element.addClass(SCROLLABLE_SCROLLBAR_SIMULATED);
-
-        this._renderScrollbar(VERTICAL);
-        this._renderScrollbar(HORIZONTAL);
-    },
-
-    _renderScrollbar: function(direction) {
-        if(!this._isDirection(direction)) {
-            return;
-        }
-
-        this._scrollbars[direction] = new Scrollbar($('<div>').appendTo(this._$element), {
-            direction: direction,
-            expandable: this._component.option('scrollByThumb')
-        });
     },
 
     handleInit: noop,
