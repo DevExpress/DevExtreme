@@ -33,6 +33,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     get viewDataProvider() { return this.workspace.viewDataProvider; }
 
     create(rawAppointment) {
+        // debugger;
         const { scheduler } = this;
         const appointment = scheduler.createAppointmentAdapter(rawAppointment);
         const itemResources = scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
@@ -98,7 +99,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         const isRecurrence = appointmentList.length > 1;
         const isTimeZoneSet = !isEmptyObject(timeZoneName);
-        // const isAppointmentTimeZoneSet = !isEmptyObject(appointment.startDateTimeZone);
+        // const isAppointmentTimeZoneSet = !isEmptyObject(appointment.startDateTimeZone); // TODO
 
         if(!isRecurrence) {
             return false;
@@ -109,7 +110,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         }
 
         return isTimeZoneSet &&
-            // !isAppointmentTimeZoneSet &&
+            // !isAppointmentTimeZoneSet && //TODO
             !isEqualLocalTimeZone(timeZoneName);
     }
 
@@ -130,7 +131,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _getProcessedNotNativeTimezoneDates(appointmentList, appointment) {
-        const startDateRange = appointmentList[0].startDate;
+        const startDateRange = appointment.startDate;
         const endDateRange = appointmentList[appointmentList.length - 1].endDate;
 
         const startDateRangeOffset = this.timeZoneCalculator.getOffsets(startDateRange).common;
@@ -256,6 +257,20 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
             start: appointment.startDate,
             end: appointment.endDate,
+
+            getPostProcessedException: date => {
+                const timeZoneName = this.scheduler.option('timeZone');
+                if(isEmptyObject(timeZoneName) || timeZoneUtils.isEqualLocalTimeZone(timeZoneName)) {
+                    return date;
+                }
+
+                const appointmentOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common;
+                const exceptionAppointmentOffset = this.timeZoneCalculator.getOffsets(date).common;
+
+                const diff = appointmentOffset - exceptionAppointmentOffset;
+
+                return new Date(date.getTime() - diff * dateUtils.dateToMilliseconds('hour'));
+            }
         };
     }
 
