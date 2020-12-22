@@ -442,7 +442,7 @@ class Gantt extends Widget {
     _createModelChangesListener() {
         return { // IModelChangesListener
             NotifyTaskCreated: (task, callback, errorCallback) => { this._onRecordInserted(GANTT_TASKS, task, callback); },
-            NotifyTaskRemoved: (taskId, errorCallback) => { this._onRecordRemoved(GANTT_TASKS, taskId); },
+            NotifyTaskRemoved: (taskId, errorCallback, task) => { this._onRecordRemoved(GANTT_TASKS, taskId, task); },
             NotifyTaskTitleChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'title', newValue); },
             NotifyTaskDescriptionChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'description', newValue); },
             NotifyTaskStartChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
@@ -450,13 +450,13 @@ class Gantt extends Widget {
             NotifyTaskProgressChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
 
             NotifyDependencyInserted: (dependency, callback, errorCallback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
-            NotifyDependencyRemoved: (dependencyId, errorCallback) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId); },
+            NotifyDependencyRemoved: (dependencyId, errorCallback, dependency) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId, dependency); },
 
             NotifyResourceCreated: (resource, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCES, resource, callback); },
-            NotifyResourceRemoved: (resource, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
+            NotifyResourceRemoved: (resourceId, errorCallback, resource) => { this._onRecordRemoved(GANTT_RESOURCES, resourceId, resource); },
 
             NotifyResourceAssigned: (assignment, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
-            NotifyResourceUnassigned: (assignmentId, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
+            NotifyResourceUnassigned: (assignmentId, errorCallback, assignment) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId, assignment); },
             NotifyParentDataRecalculated: (data) => { this._onParentTasksRecalculated(data); },
 
             NotifyTaskCreating: (args) => { this._raiseInsertingAction(GANTT_TASKS, args); },
@@ -502,7 +502,7 @@ class Gantt extends Widget {
             });
         }
     }
-    _onRecordRemoved(optionName, key) {
+    _onRecordRemoved(optionName, key, data) {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
             dataOption.remove(key, () => {
@@ -510,7 +510,7 @@ class Gantt extends Widget {
                     this._updateTreeListDataSource();
                 }
 
-                this._raiseDeletedAction(optionName, key);
+                this._raiseDeletedAction(optionName, key, this._convertCoreToMappedData(optionName, data));
             });
         }
     }
@@ -656,23 +656,20 @@ class Gantt extends Widget {
     }
     _raiseDeletingAction(optionName, coreArgs) {
         const action = this._getDeletingAction(optionName);
-        const values = this._convertCoreToMappedData(optionName, coreArgs.values);
-
         if(action) {
-            const args = { cancel: false, key: coreArgs.key, values: values };
+            const args = {
+                cancel: false,
+                key: coreArgs.key,
+                values: this._convertCoreToMappedData(optionName, coreArgs.values)
+            };
             action(args);
             coreArgs.cancel = args.cancel;
         }
-
-        if(!coreArgs.cancel) {
-            this._cache.saveData(coreArgs.key, values);
-        }
     }
-    _raiseDeletedAction(optionName, key) {
+    _raiseDeletedAction(optionName, key, data) {
         const action = this._getDeletedAction(optionName);
         if(action) {
-            const args = { key: key, values: { } };
-            this._cache.pullDataFromCache(key, args.values);
+            const args = { key: key, values: data };
             action(args);
         }
     }
