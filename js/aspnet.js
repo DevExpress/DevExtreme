@@ -66,7 +66,6 @@
                     }
                 }
                 bag.push(expression);
-                bag.push(encode ? 'arguments[1](' + value + ')' : value);
                 bag.push(');');
             } else {
                 bag.push(code + '\n');
