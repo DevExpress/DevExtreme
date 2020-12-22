@@ -71,7 +71,7 @@ describe('LayoutBase', () => {
       });
     });
 
-    it('should correctly set the virtual cells width', () => {
+    it('should correctly set virtual cells width', () => {
       const table = render({
         hasTopVirtualRow: true,
         hasBottomVirtualRow: true,
