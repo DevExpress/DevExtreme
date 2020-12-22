@@ -143,9 +143,6 @@ class ViewDataGenerator {
         const {
             horizontalGroupCount,
             groupOrientation,
-            rowCountInGroup,
-            cellCountInGroupRow,
-            groupCount,
         } = options;
 
         for(let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
@@ -160,10 +157,10 @@ class ViewDataGenerator {
             );
 
             cellDataValue.isFirstGroupCell = this._isFirstGroupCell(
-                rowIndex, columnIndex, rowCountInGroup, cellCountInGroupRow, groupCount, groupOrientation,
+                rowIndex, columnIndex, options,
             );
             cellDataValue.isLastGroupCell = this._isLastGroupCell(
-                rowIndex, columnIndex, rowCountInGroup, cellCountInGroupRow, groupCount, groupOrientation
+                rowIndex, columnIndex, options,
             );
 
             cellDataValue.key = this._getKeyByRowAndColumn(rowIndex, columnIndex, cellCount);
@@ -232,28 +229,42 @@ class ViewDataGenerator {
         return groupedDataMap;
     }
 
-    _isFirstGroupCell(rowIndex, columnIndex, singleGroupRowCount, singleGroupColumnCount, groupCount, groupOrientation) {
+    _isFirstGroupCell(rowIndex, columnIndex, options) {
+        const {
+            groupOrientation,
+            rowCountInGroup,
+            cellCountInGroupRow,
+            groupCount,
+        } = options;
+
         if(this.workspace.isGroupedByDate()) {
             return columnIndex % groupCount === 0;
         }
 
         if(groupOrientation === HORIZONTAL_GROUP_ORIENTATION) {
-            return columnIndex % singleGroupColumnCount === 0;
+            return columnIndex % cellCountInGroupRow === 0;
         }
 
-        return rowIndex % singleGroupRowCount === 0;
+        return rowIndex % rowCountInGroup === 0;
     }
 
-    _isLastGroupCell(rowIndex, columnIndex, singleGroupRowCount, singleGroupColumnCount, groupCount, groupOrientation) {
+    _isLastGroupCell(rowIndex, columnIndex, options) {
+        const {
+            groupOrientation,
+            rowCountInGroup,
+            cellCountInGroupRow,
+            groupCount,
+        } = options;
+
         if(this.workspace.isGroupedByDate()) {
             return (columnIndex + 1) % groupCount === 0;
         }
 
         if(groupOrientation === HORIZONTAL_GROUP_ORIENTATION) {
-            return (columnIndex + 1) % singleGroupColumnCount === 0;
+            return (columnIndex + 1) % cellCountInGroupRow === 0;
         }
 
-        return (rowIndex + 1) % singleGroupRowCount === 0;
+        return (rowIndex + 1) % rowCountInGroup === 0;
     }
 }
 
