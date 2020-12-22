@@ -25,10 +25,6 @@ const NativeStrategy = Class.inherit({
         this._$container = scrollable._$container;
         this._$content = scrollable._$content;
 
-        this._direction = scrollable.option('direction');
-        this._useSimulatedScrollbar = scrollable.option('useSimulatedScrollbar');
-        this._showScrollbar = scrollable.option('showScrollbar');
-
         this.option = scrollable.option.bind(scrollable);
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
         this._isLocked = scrollable._isLocked.bind(scrollable);
