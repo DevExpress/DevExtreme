@@ -31,6 +31,7 @@ import {
 } from '../types.d';
 
 import { Scrollbar } from '../scrollbar';
+import { isDefined } from '../../../../core/utils/type';
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
@@ -135,9 +136,9 @@ jest.mock('../../../../core/devices', () => {
     });
 
     describe('Scrollbar', () => {
-      [true, false, undefined].forEach((useSimulatedScrollbar) => {
-        ['horizontal', 'vertical', 'both'].forEach((direction) => {
-          ['never', 'always', 'onScroll', 'onHover', true, false].forEach((showScrollbar: any) => {
+      ['horizontal', 'vertical', 'both'].forEach((direction) => {
+        [true, false, undefined, null].forEach((useSimulatedScrollbar) => {
+          ['never', 'always', 'onScroll', 'onHover', true, false, undefined, null].forEach((showScrollbar: any) => {
             it(`Scrollbar should render if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
               const instance = new Scrollable({});
               const scrollable = mount(
@@ -148,7 +149,8 @@ jest.mock('../../../../core/devices', () => {
 
               const scrollBar = scrollable.find(Scrollbar);
               const needRenderScrollbars = ((instance instanceof ScrollableNative)
-                && useSimulatedScrollbar === true && showScrollbar !== false);
+                && isDefined(useSimulatedScrollbar) && useSimulatedScrollbar === true
+                && isDefined(showScrollbar) && showScrollbar !== false);
 
               expect(scrollBar.exists()).toBe(needRenderScrollbars);
             });
