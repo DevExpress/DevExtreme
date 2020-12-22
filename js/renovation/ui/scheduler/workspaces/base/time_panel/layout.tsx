@@ -24,8 +24,6 @@ export const viewFunction = ({
   props,
   topVirtualRowHeight,
   bottomVirtualRowHeight,
-  leftVirtualCellWidth,
-  rightVirtualCellWidth,
   isVerticalGroupOrientation: isVerticalGrouping,
   isVirtual,
   restAttributes,
@@ -39,8 +37,6 @@ export const viewFunction = ({
       isVirtual={isVirtual}
       topVirtualRowHeight={topVirtualRowHeight}
       bottomVirtualRowHeight={bottomVirtualRowHeight}
-      leftVirtualCellWidth={leftVirtualCellWidth}
-      rightVirtualCellWidth={rightVirtualCellWidth}
       virtualCellsCount={1}
       className="dx-scheduler-time-panel"
     >
@@ -118,14 +114,6 @@ export class TimePanelTableLayout extends JSXComponent(TimePanelTableLayoutProps
 
   get bottomVirtualRowHeight(): number {
     return this.props.viewData.bottomVirtualRowHeight || 0;
-  }
-
-  get leftVirtualCellWidth(): number {
-    return this.props.viewData.leftVirtualCellWidth || 0;
-  }
-
-  get rightVirtualCellWidth(): number {
-    return this.props.viewData.rightVirtualCellWidth || 0;
   }
 
   get isVerticalGroupOrientation(): boolean {
