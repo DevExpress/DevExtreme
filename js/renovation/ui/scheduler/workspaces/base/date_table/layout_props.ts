@@ -14,5 +14,9 @@ export class DateTableLayoutProps extends LayoutProps {
 
   @OneWay() rightVirtualCellWidth = 0;
 
+  @OneWay() topVirtualRowHeight = 0;
+
+  @OneWay() bottomVirtualRowHeight = 0;
+
   @Template() cellTemplate!: JSXTemplate<CellTemplateProps>;
 }
