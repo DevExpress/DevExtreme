@@ -546,6 +546,34 @@ QUnit.test('panes specified without names - panes created with default names', f
     assert.equal(chart.panes[1].name, 'default1');
 });
 
+QUnit.test('Define range intervals for each pane', function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { min: 0, max: 100, interval: 10 } } }));
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { min: 50, max: 150, interval: 50 } } }));
+
+    const chart = this.createChart({
+        dataSource: [],
+        panes: [{ name: 'p1' }, { name: 'p2' }],
+        series: [{ type: 'line', pane: 'p1' }, { type: 'line', pane: 'p2' }]
+    });
+
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].interval, 10);
+    assert.deepEqual(chart._argumentAxes[1].setBusinessRange.lastCall.args[0].interval, 50);
+});
+
+QUnit.test('Define common range interval for panes', function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { min: 0, max: 100, interval: 10 } } }));
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { min: 50, max: 150, interval: undefined } } }));
+
+    const chart = this.createChart({
+        dataSource: [],
+        panes: [{ name: 'p1' }, { name: 'p2' }],
+        series: [{ type: 'line', pane: 'p1' }, { type: 'line', pane: 'p2' }]
+    });
+
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].interval, 10);
+    assert.deepEqual(chart._argumentAxes[1].setBusinessRange.lastCall.args[0].interval, 10);
+});
+
 QUnit.module('Panes creation. defaultPane', commons.environment);
 
 QUnit.test('single pane - defaultPane is only pane', function(assert) {
