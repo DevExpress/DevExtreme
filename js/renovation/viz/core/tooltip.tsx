@@ -34,10 +34,12 @@ export const viewFunction = ({
   pointerEvents,
   props: {
     x, y, font, shadow, opacity, interactive, zIndex,
-    contentTemplate: TooltipTemplate, data,
+    contentTemplate: TooltipTemplate, data, visible,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
+  if (!visible) { return <div />; }
+
   const correctedCoordinates = recalculateCoordinates({
     canvas, anchorX: x, anchorY: y, size: textSizeWithPaddings, offset, arrowLength,
   });
@@ -212,6 +214,8 @@ export class TooltipProps {
   @OneWay() zIndex?: number;
 
   @Template() contentTemplate?: (data: TooltipData) => JSX.Element;
+
+  @OneWay() visible = false;
 }
 
 @Component({
@@ -254,12 +258,14 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @Effect()
   calculateSize(): void {
-    this.textSize = this.textRef ? this.textRef.getBBox() : this.htmlRef.getBoundingClientRect();
+    if (this.props.visible) {
+      this.textSize = this.textRef ? this.textRef.getBBox() : this.htmlRef.getBoundingClientRect();
+    }
   }
 
   @Effect()
   calculateCloudSize(): void {
-    if (this.d) {
+    if (this.d && this.props.visible) {
       const size = this.cloudRef.getBBox();
       this.cloudSize = {
         x: Math.floor(size.x - this.margins.lm),

@@ -70,6 +70,7 @@ describe('Render', () => {
     opacity: 0.4,
     x: 2,
     y: 3,
+    visible: true,
   };
 
   const props = {
@@ -283,11 +284,23 @@ describe('Render', () => {
       zIndex: 3,
     });
   });
+
+  it('should not render anything, visibility = false', () => {
+    const customizedProps = { ...props.props, visible: false };
+    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+
+    expect(tooltip.find('div')).toHaveLength(1);
+    expect(tooltip.find('div').props()).toEqual({});
+    expect(tooltip.find('defs')).toHaveLength(0);
+    expect(tooltip.find('ShadowFilter')).toHaveLength(0);
+    expect(tooltip.find('PathSvgElement')).toHaveLength(0);
+    expect(tooltip.find('TextSvgElement')).toHaveLength(0);
+  });
 });
 
 describe('Effect', () => {
   it('should return size', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
     const box = {
       x: 1, y: 2, width: 10, height: 20,
     };
@@ -300,7 +313,7 @@ describe('Effect', () => {
   });
 
   it('should return size of html text', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
     const box = {
       x: 1, y: 2, width: 10, height: 20,
     };
@@ -310,6 +323,15 @@ describe('Effect', () => {
     tooltip.calculateSize();
 
     expect(tooltip.textSize).toBe(box);
+  });
+
+  it('should not calculate text size for invisible tooltip', () => {
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
+    tooltip.calculateSize();
+
+    expect(tooltip.textSize).toEqual({
+      x: 0, y: 0, width: 0, height: 0,
+    });
   });
 
   it('should set html text', () => {
@@ -335,7 +357,7 @@ describe('Effect', () => {
   });
 
   it('should calculate cloud size', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
     tooltip.d = 'test_d';
     tooltip.cloudRef = {
       getBBox: jest.fn().mockReturnValue({
@@ -359,6 +381,19 @@ describe('Effect', () => {
         x: 7, y: 9, width: 13, height: 15,
       }),
     } as any;
+    tooltip.calculateCloudSize();
+
+    expect(tooltip.cloudSize).toEqual({
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+    });
+  });
+
+  it('should not calculate cloud size for invisible tooltip', () => {
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
+    tooltip.d = 'test_d';
     tooltip.calculateCloudSize();
 
     expect(tooltip.cloudSize).toEqual({
