@@ -136,7 +136,7 @@ jest.mock('../../../../core/devices', () => {
     });
 
     describe('Scrollbar', () => {
-      ['horizontal', 'vertical', 'both'].forEach((direction) => {
+      ['horizontal', 'vertical', 'both', undefined, null].forEach((direction) => {
         [true, false, undefined, null].forEach((useSimulatedScrollbar) => {
           ['never', 'always', 'onScroll', 'onHover', true, false, undefined, null].forEach((showScrollbar: any) => {
             it(`Scrollbar should render if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
@@ -150,7 +150,8 @@ jest.mock('../../../../core/devices', () => {
               const scrollBar = scrollable.find(Scrollbar);
               const needRenderScrollbars = ((instance instanceof ScrollableNative)
                 && isDefined(useSimulatedScrollbar) && useSimulatedScrollbar === true
-                && isDefined(showScrollbar) && showScrollbar !== false);
+                && isDefined(showScrollbar) && showScrollbar !== false)
+                && isDefined(direction);
 
               expect(scrollBar.exists()).toBe(needRenderScrollbars);
               if (needRenderScrollbars && direction === 'both') {
