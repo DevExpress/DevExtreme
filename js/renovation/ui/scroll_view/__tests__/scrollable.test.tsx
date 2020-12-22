@@ -137,7 +137,7 @@ jest.mock('../../../../core/devices', () => {
     describe('Scrollbar', () => {
       [true, false, undefined].forEach((useSimulatedScrollbar) => {
         ['never', 'always', 'onScroll', 'onHover', true, false].forEach((showScrollbar: any) => {
-          it(`Scrollbar should render  useSimulatedScrollbar is set to true. ShowScrollbar=${showScrollbar}. useSimulatedScrollbar=${useSimulatedScrollbar}`, () => {
+          it(`Scrollbar should render if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}. useSimulatedScrollbar=${useSimulatedScrollbar}`, () => {
             const instance = new Scrollable({});
             const scrollable = mount(
               viewFunction({
