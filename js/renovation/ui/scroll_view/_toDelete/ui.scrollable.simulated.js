@@ -13,7 +13,6 @@ import Animator from './animator';
 import devices from '../../core/devices';
 import { isDxMouseWheelEvent, addNamespace as addEventNamespace, normalizeKeyName } from '../../events/utils/index';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
-import Scrollbar from './ui.scrollbar';
 import { when, Deferred } from '../../core/utils/deferred';
 
 const realDevice = devices.real;
@@ -107,7 +106,6 @@ export const Scroller = Class.inherit({
     ctor: function(options) {
         this._initOptions(options);
         this._initAnimators();
-        this._initScrollbar();
     },
 
     _initOptions: function(options) {
@@ -127,16 +125,6 @@ export const Scroller = Class.inherit({
     _initAnimators: function() {
         this._inertiaAnimator = new InertiaAnimator(this);
         this._bounceAnimator = new BounceAnimator(this);
-    },
-
-    _initScrollbar: function() {
-        this._scrollbar = new Scrollbar($('<div>').appendTo(this._$container), {
-            direction: this._direction,
-            visible: this._scrollByThumb,
-            visibilityMode: this._visibilityModeNormalize(this._scrollbarVisible),
-            expandable: this._scrollByThumb
-        });
-        this._$scrollbar = this._scrollbar.$element();
     },
 
     _visibilityModeNormalize: function(mode) {
