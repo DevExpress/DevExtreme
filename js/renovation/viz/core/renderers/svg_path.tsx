@@ -24,7 +24,7 @@ export const viewFunction = ({
   pathRef,
   d,
   props: {
-    className, fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity,
+    className, fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity, pointerEvents,
   },
 }: PathSvgElement): JSX.Element => (
   <path
@@ -37,6 +37,7 @@ export const viewFunction = ({
     strokeOpacity={strokeOpacity}
     strokeLinecap={strokeLineCap}
     opacity={opacity}
+    pointerEvents={pointerEvents}
   />
 );
 
@@ -49,6 +50,8 @@ export class PathSvgElementProps extends SvgGraphicsProps {
   @OneWay() d = '';
 
   @OneWay() strokeLineCap?: LineCap;
+
+  @OneWay() pointerEvents?: string;
 }
 
 @Component({
