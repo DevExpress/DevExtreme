@@ -161,8 +161,12 @@ QUnit.module('Scroll', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        const scrollPosition = 400;
-        this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(scrollPosition);
+        this.wrapper.findThumbnailsItem('File 0.txt').trigger('dxpointerdown');
+        this.clock.tick(400);
+        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'End' }));
+        this.clock.tick(400);
+
+        const scrollPosition = this.wrapper.getThumbnailsViewScrollableContainer().scrollTop();
         this.clock.tick(400);
 
         this.wrapper.findThumbnailsItem('File 9.txt').trigger('dxclick');
