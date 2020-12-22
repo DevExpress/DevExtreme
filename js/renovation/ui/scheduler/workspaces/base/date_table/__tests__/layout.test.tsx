@@ -67,6 +67,8 @@ describe('DateTableLayoutBase', () => {
         isVirtual: 'isVirtual',
         topVirtualRowHeight: 100,
         bottomVirtualRowHeight: 200,
+        leftVirtualCellWidth: 300,
+        rightVirtualCellWidth: 400,
         virtualCellsCount: 3,
       });
 
@@ -96,6 +98,8 @@ describe('DateTableLayoutBase', () => {
           viewData: viewDataBase,
           cellTemplate,
           dataCellTemplate,
+          leftVirtualCellWidth: 300,
+          rightVirtualCellWidth: 400,
         });
     });
   });
@@ -123,26 +127,36 @@ describe('DateTableLayoutBase', () => {
         });
       });
 
-      [100, undefined].forEach((topVirtualRowHeight) => {
-        [500, undefined].forEach((bottomVirtualRowHeight) => {
-          it(`topVirtualRowHeight=${topVirtualRowHeight}, bottomVirtualRowHeight=${bottomVirtualRowHeight}`, () => {
-            const layout = new DateTableLayoutBase({
-              viewData: {
-                ...viewDataBase,
-                topVirtualRowHeight,
-                bottomVirtualRowHeight,
-              },
-            } as any);
+      it('should correctly set top and bottom virtual height', () => {
+        const layout = new DateTableLayoutBase({
+          viewData: {
+            ...viewDataBase,
+            topVirtualRowHeight: 100,
+            bottomVirtualRowHeight: 200,
+          },
+        } as any);
 
-            let value = topVirtualRowHeight || 0;
-            expect(layout.topVirtualRowHeight)
-              .toEqual(value);
+        expect(layout.topVirtualRowHeight)
+          .toEqual(100);
 
-            value = bottomVirtualRowHeight || 0;
-            expect(layout.bottomVirtualRowHeight)
-              .toEqual(value);
-          });
-        });
+        expect(layout.bottomVirtualRowHeight)
+          .toEqual(200);
+      });
+
+      it('should correctly set left and right virtual width', () => {
+        const layout = new DateTableLayoutBase({
+          viewData: {
+            ...viewDataBase,
+            leftVirtualCellWidth: 100,
+            rightVirtualCellWidth: 200,
+          },
+        } as any);
+
+        expect(layout.leftVirtualCellWidth)
+          .toEqual(100);
+
+        expect(layout.rightVirtualCellWidth)
+          .toEqual(200);
       });
 
       it('virtualCellsCount', () => {
