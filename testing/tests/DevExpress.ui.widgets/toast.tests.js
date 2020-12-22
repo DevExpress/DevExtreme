@@ -6,6 +6,7 @@ import Toast from 'ui/toast';
 import devices from 'core/devices.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 const TOAST_CLASS = 'dx-toast';
 const TOAST_CLASS_PREFIX = TOAST_CLASS + '-';
