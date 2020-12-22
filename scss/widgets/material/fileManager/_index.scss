@@ -46,7 +46,7 @@
 
   .dx-filemanager-toolbar {
     background: $base-bg;
-    min-height: $filemanager-toolbar-top-bottom-padding + 12px;
+    min-height: $filemanager-toolbar-height;
 
     &.dx-filemanager-file-toolbar,
     &.dx-filemanager-file-toolbar .dx-toolbar {
