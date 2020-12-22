@@ -610,7 +610,10 @@ module.exports = {
                     const $editor = $element && $element.find('.' + SELECT_CHECKBOX_CLASS);
 
                     if($element && $editor.length && that.option('selection.mode') === 'multiple') {
-                        $editor.dxCheckBox('instance').option('value', that.getController('selection').isSelectAll());
+                        $editor.dxCheckBox('instance').option({
+                            visible: !that.getController('data').isEmpty(),
+                            value: that.getController('selection').isSelectAll(),
+                        });
                     }
                 },
                 _handleDataChanged: function(e) {
@@ -623,6 +626,7 @@ module.exports = {
                 _renderSelectAllCheckBox: function($container, column) {
                     const that = this;
                     const selectionController = that.getController('selection');
+                    const isEmptyData = that.getController('data').isEmpty();
 
                     const groupElement = $('<div>')
                         .appendTo($container)
@@ -635,7 +639,7 @@ module.exports = {
                         dataType: 'boolean',
                         value: selectionController.isSelectAll(),
                         editorOptions: {
-                            visible: that.option('selection.allowSelectAll') || selectionController.isSelectAll() !== false
+                            visible: !isEmptyData && (that.option('selection.allowSelectAll') || selectionController.isSelectAll() !== false)
                         },
                         tabIndex: that.option('useLegacyKeyboardNavigation') ? -1 : (that.option('tabIndex') || 0),
                         setValue: function(value, e) {
