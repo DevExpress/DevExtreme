@@ -11,7 +11,11 @@ import {
   viewFunction as viewFunctionNative,
 } from '../scrollable_native';
 
-import { ensureLocation, SCROLLABLE_DISABLED_CLASS } from '../scrollable_utils';
+import {
+  ensureLocation,
+  SCROLLABLE_DISABLED_CLASS,
+  SCROLLABLE_SCROLLBAR_SIMULATED,
+} from '../scrollable_utils';
 
 import {
   ScrollableSimulated,
@@ -1130,6 +1134,27 @@ jest.mock('../../../../core/devices', () => {
               expect(instance.cssClasses).toEqual(isDisabled
                 ? expect.stringMatching(SCROLLABLE_DISABLED_CLASS)
                 : expect.not.stringMatching(SCROLLABLE_DISABLED_CLASS));
+            });
+          });
+
+          ['horizontal', 'vertical', 'both'].forEach((direction: any) => {
+            [true, false, undefined, null].forEach((useSimulatedScrollbar: any) => {
+              ['never', 'always', 'onScroll', 'onHover', true, false, undefined, null].forEach((showScrollbar: any) => {
+                it(`Should have SCROLLABLE_SCROLLBAR_SIMULATED if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
+                  const instance = new Scrollable({
+                    showScrollbar,
+                    useSimulatedScrollbar,
+                    direction,
+                  });
+
+                  const needRenderScrollbars = showScrollbar && useSimulatedScrollbar
+                    && (instance instanceof ScrollableNative);
+
+                  expect(instance.cssClasses).toEqual(needRenderScrollbars
+                    ? expect.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED)
+                    : expect.not.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED));
+                });
+              });
             });
           });
         });
