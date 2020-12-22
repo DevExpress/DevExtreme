@@ -95,7 +95,7 @@ const NativeStrategy = Class.inherit({
         });
     },
 
-    handleInit: noop,
+    // handleInit: noop,
     handleStart: function() {
         this._disablePushBack = true;
     },
@@ -114,8 +114,8 @@ const NativeStrategy = Class.inherit({
     handleEnd: function() {
         this._disablePushBack = false;
     },
-    handleCancel: noop,
-    handleStop: noop,
+    // handleCancel: noop,
+    // handleStop: noop,
 
     _eachScrollbar: function(callback) {
         callback = callback.bind(this);
@@ -130,14 +130,14 @@ const NativeStrategy = Class.inherit({
     },
 
     _createActionArgs: function() {
-        const { left, top } = this.location();
+        const { /* left,*/ top } = this.location();
 
         return {
-            event: this._eventForUserAction,
-            scrollOffset: this._getScrollOffset(),
-            reachedLeft: this._isReachedLeft(left),
-            reachedRight: this._isReachedRight(left),
-            reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
+            // event: this._eventForUserAction,
+            // scrollOffset: this._getScrollOffset(),
+            // reachedLeft: this._isReachedLeft(left),
+            // reachedRight: this._isReachedRight(left),
+            // reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
             reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top - 2 * this.option('pushBackValue') : undefined
         };
     },
@@ -286,7 +286,7 @@ const NativeStrategy = Class.inherit({
 
     // scrollBy: function(distance) {
     //     const location = this.location();
-    //     this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
+    //    this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
     //     this._$container.scrollLeft(Math.round(-location.left - distance.left));
     // },
 
