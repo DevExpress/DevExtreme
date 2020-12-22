@@ -101,7 +101,7 @@ class ElementWrapper {
     constructor(selector, parent, index = 0) {
         this.selector = selector;
         this.parent = parent;
-        this.index = 0;
+        this.index = index;
     }
 
     getElement() {

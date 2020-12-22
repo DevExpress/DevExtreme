@@ -33,7 +33,6 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     get viewDataProvider() { return this.workspace.viewDataProvider; }
 
     create(rawAppointment) {
-        // debugger;
         const { scheduler } = this;
         const appointment = scheduler.createAppointmentAdapter(rawAppointment);
         const itemResources = scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
@@ -114,20 +113,22 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             !isEqualLocalTimeZone(timeZoneName);
     }
 
-    _getProcessedNotNativeDateIfCrossDST(date, dateRangeOffset) {
-        const newDate = new Date(date);
+    _getProcessedNotNativeDateIfCrossDST(date, offset) {
+        if(offset < 0) { // summer time
+            const newDate = new Date(date);
 
-        const newDateMinusOneHour = new Date(newDate);
-        newDateMinusOneHour.setHours(newDateMinusOneHour.getHours() - 1);
+            const newDateMinusOneHour = new Date(newDate);
+            newDateMinusOneHour.setHours(newDateMinusOneHour.getHours() - 1);
 
-        const newDateOffset = this.timeZoneCalculator.getOffsets(newDate).common;
-        const newDateMinusOneHourOffset = this.timeZoneCalculator.getOffsets(newDateMinusOneHour).common;
+            const newDateOffset = this.timeZoneCalculator.getOffsets(newDate).common;
+            const newDateMinusOneHourOffset = this.timeZoneCalculator.getOffsets(newDateMinusOneHour).common;
 
-        if(newDateOffset !== newDateMinusOneHourOffset) {
-            return 0;
+            if(newDateOffset !== newDateMinusOneHourOffset) {
+                return 0;
+            }
         }
 
-        return dateRangeOffset;
+        return offset;
     }
 
     _getProcessedNotNativeTimezoneDates(appointmentList, appointment) {
@@ -144,10 +145,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 let diffStartDateOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common - this.timeZoneCalculator.getOffsets(a.startDate).common;
                 let diffEndDateOffset = this.timeZoneCalculator.getOffsets(appointment.endDate).common - this.timeZoneCalculator.getOffsets(a.endDate).common;
 
-                if(diffStartDateOffset < 0) { // summer time
-                    diffStartDateOffset = this._getProcessedNotNativeDateIfCrossDST(a.startDate, diffStartDateOffset);
-                    diffEndDateOffset = this._getProcessedNotNativeDateIfCrossDST(a.endDate, diffEndDateOffset);
-                }
+                diffStartDateOffset = this._getProcessedNotNativeDateIfCrossDST(a.startDate, diffStartDateOffset);
+                diffEndDateOffset = this._getProcessedNotNativeDateIfCrossDST(a.endDate, diffEndDateOffset);
 
                 const newStartDate = new Date(a.startDate.getTime() + diffStartDateOffset * toMs('hour'));
                 let newEndDate = new Date(a.endDate.getTime() + diffEndDateOffset * toMs('hour'));
@@ -267,7 +266,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 const appointmentOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common;
                 const exceptionAppointmentOffset = this.timeZoneCalculator.getOffsets(date).common;
 
-                const diff = appointmentOffset - exceptionAppointmentOffset;
+                let diff = appointmentOffset - exceptionAppointmentOffset;
+                diff = this._getProcessedNotNativeDateIfCrossDST(date, diff);
 
                 return new Date(date.getTime() - diff * dateUtils.dateToMilliseconds('hour'));
             }

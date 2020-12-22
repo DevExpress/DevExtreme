@@ -447,6 +447,84 @@ module('API', moduleConfig, () => {
 
 module('Not native date DST', moduleConfig, () => {
     module('summer time', () => {
+        const from1amTo2amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 1 a.m. to 2 a.m., exclude appointments from series',
+            startDate: new Date('2020-03-01T09:00:00.000Z'),
+            endDate: new Date('2020-03-01T10:00:00.000Z'),
+
+            expectedText: '1:00 AM - 2:00 AM',
+            recurrenceExceptions: ['20200306T090000Z', '20200308T090000Z', '20200310T080000Z']
+        };
+
+        const from1amTo3amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 1 a.m. to 3 a.m., exclude appointments from series',
+            startDate: new Date('2020-03-01T09:00:00.000Z'),
+            endDate: new Date('2020-03-01T11:00:00.000Z'),
+
+            expectedText: '1:00 AM - 3:00 AM',
+            recurrenceExceptions: ['20200306T090000Z', '20200308T090000Z', '20200310T080000Z']
+        };
+
+        const from2amTo3amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 2 a.m. to 3 a.m., exclude appointments from series',
+            startDate: new Date('2020-03-01T10:00:00.000Z'),
+            endDate: new Date('2020-03-01T11:00:00.000Z'),
+
+            expectedText: '2:00 AM - 3:00 AM',
+            recurrenceExceptions: ['20200306T100000Z', '20200308T100000Z', '20200310T090000Z']
+        };
+
+        const from6amTo7amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 8 a.m. to 9 a.m., exclude appointments from series',
+            startDate: new Date('2020-03-01T16:00:00.000Z'),
+            endDate: new Date('2020-03-01T17:00:00.000Z'),
+
+            expectedText: '8:00 AM - 9:00 AM',
+            recurrenceExceptions: ['20200306T160000Z', '20200308T150000Z', '20200310T150000Z']
+        };
+
+        [
+            from1amTo2amRecurrenceExceptionCase,
+            from1amTo3amRecurrenceExceptionCase,
+            from2amTo3amRecurrenceExceptionCase,
+            from6amTo7amRecurrenceExceptionCase
+        ].forEach(testCase => {
+            test(testCase.text, function(assert) {
+                const scheduler = createScheduler({
+                    dataSource: [{
+                        startDate: testCase.startDate,
+                        endDate: testCase.endDate,
+                        text: 'Test',
+                        recurrenceRule: 'FREQ=DAILY',
+                    }],
+                    recurrenceEditMode: 'occurrence',
+                    firstDayOfWeek: 4,
+                    timeZone: timeZones.LosAngeles,
+                    currentDate: new Date(2020, 2, 8)
+                });
+
+                [1, 2, 3].forEach(index => {
+                    scheduler.appointmentList[index].click();
+                    scheduler.tooltip.clickOnDeleteButton();
+                });
+
+                scheduler.appointmentList.forEach((appointment, index) => {
+                    appointment.click();
+                    const tooltipText = scheduler.tooltip.getDateText();
+                    assert.equal(tooltipText, testCase.expectedText, `date text should be right in ${index}'th appointment`);
+                });
+
+                const dataSource = scheduler.option('dataSource');
+                const recurrenceExceptions = dataSource[0].recurrenceException.split(',');
+
+                assert.equal(testCase.recurrenceExceptions[0], recurrenceExceptions[0], 'recurrenceExceptions before DST should be right');
+                assert.equal(testCase.recurrenceExceptions[1], recurrenceExceptions[1], 'recurrenceExceptions in DST should be right');
+                assert.equal(testCase.recurrenceExceptions[2], recurrenceExceptions[2], 'recurrenceExceptions after DST should be right');
+
+                assert.equal(scheduler.appointmentList.length, 4, 'count of rendered appointments should be equal 4');
+            });
+        });
+
         const from1amTo2amCase = {
             text: 'Recurrence start from 1 a.m. to 2 a.m.',
             startDate: new Date('2020-03-01T09:00:00.000Z'),
@@ -493,7 +571,7 @@ module('Not native date DST', moduleConfig, () => {
         };
 
         const from6amTo7amCase = {
-            text: 'Recurrence start from 6 a.m. to 7 a.m.',
+            text: 'Recurrence start from 8 a.m. to 9 a.m.',
             startDate: new Date('2020-03-01T16:00:00.000Z'),
             endDate: new Date('2020-03-01T17:00:00.000Z'),
             expectedTexts: [
@@ -630,6 +708,84 @@ module('Not native date DST', moduleConfig, () => {
     });
 
     module('winter time', () => {
+        const from1amTo2amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 1 a.m. to 2 a.m., exclude appointments from series',
+            startDate: '2020-10-25T08:00:00.000Z',
+            endDate: '2020-10-25T09:00:00.000Z',
+
+            expectedText: '1:00 AM - 2:00 AM',
+            recurrenceExceptions: [ '20201030T080000Z', '20201101T080000Z', '20201103T090000Z' ]
+        };
+
+        const from1amTo3amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 2 a.m. to 3 a.m., exclude appointments from series',
+            startDate: '2020-10-25T09:00:00.000Z',
+            endDate: '2020-10-25T10:00:00.000Z',
+
+            expectedText: '2:00 AM - 3:00 AM',
+            recurrenceExceptions: ['20201030T090000Z', '20201101T100000Z', '20201103T100000Z']
+        };
+
+        const from2amTo3amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 1 a.m. to 3 a.m., exclude appointments from series',
+            startDate: '2020-10-25T08:00:00.000Z',
+            endDate: '2020-10-25T10:00:00.000Z',
+
+            expectedText: '1:00 AM - 3:00 AM',
+            recurrenceExceptions: ['20201030T080000Z', '20201101T080000Z', '20201103T090000Z']
+        };
+
+        const from6amTo7amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 6 a.m. to 7 a.m., exclude appointments from series',
+            startDate: '2020-10-25T13:00:00.000Z',
+            endDate: '2020-10-25T14:00:00.000Z',
+
+            expectedText: '6:00 AM - 7:00 AM',
+            recurrenceExceptions: ['20201030T130000Z', '20201101T140000Z', '20201103T140000Z']
+        };
+
+        [
+            from1amTo2amRecurrenceExceptionCase,
+            from1amTo3amRecurrenceExceptionCase,
+            from2amTo3amRecurrenceExceptionCase,
+            from6amTo7amRecurrenceExceptionCase
+        ].forEach(testCase => {
+            test(testCase.text, function(assert) {
+                const scheduler = createScheduler({
+                    dataSource: [{
+                        startDate: testCase.startDate,
+                        endDate: testCase.endDate,
+                        text: 'Test',
+                        recurrenceRule: 'FREQ=DAILY',
+                    }],
+                    recurrenceEditMode: 'occurrence',
+                    firstDayOfWeek: 4,
+                    timeZone: timeZones.LosAngeles,
+                    currentDate: new Date(2020, 10, 1)
+                });
+
+                [1, 2, 3].forEach(index => {
+                    scheduler.appointmentList[index].click();
+                    scheduler.tooltip.clickOnDeleteButton();
+                });
+
+                scheduler.appointmentList.forEach((appointment, index) => {
+                    appointment.click();
+                    const tooltipText = scheduler.tooltip.getDateText();
+                    assert.equal(tooltipText, testCase.expectedText, `date text should be right in ${index}'th appointment`);
+                });
+
+                const dataSource = scheduler.option('dataSource');
+                const recurrenceExceptions = dataSource[0].recurrenceException.split(',');
+
+                assert.equal(testCase.recurrenceExceptions[0], recurrenceExceptions[0], 'recurrenceExceptions before DST should be right');
+                assert.equal(testCase.recurrenceExceptions[1], recurrenceExceptions[1], 'recurrenceExceptions in DST should be right');
+                assert.equal(testCase.recurrenceExceptions[2], recurrenceExceptions[2], 'recurrenceExceptions after DST should be right');
+
+                assert.equal(scheduler.appointmentList.length, 4, 'count of rendered appointments should be equal 4');
+            });
+        });
+
         const from1amTo2amCase = {
             text: 'Recurrence start from 1 a.m. to 2 a.m.',
             startDate: '2020-10-25T08:00:00.000Z',
