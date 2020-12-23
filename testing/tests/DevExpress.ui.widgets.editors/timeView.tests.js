@@ -440,18 +440,67 @@ QUnit.module('12 hours format', () => {
 });
 
 QUnit.module('format rendering', () => {
-    QUnit.test('minute numberbox should have min/max constraints', function(assert) {
-        const $element = $('#timeView').dxTimeView(); const minuteNumberBox = $element.find('.' + NUMBERBOX_CLASS).eq(1).dxNumberBox('instance');
+    [false, true].forEach((use24HourFormat) => {
+        QUnit.test(`minute numberbox should have min/max constraints, use24HourFormat=${use24HourFormat}`, function(assert) {
+            const $element = $('#timeView').dxTimeView({ use24HourFormat });
+            const minuteNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(1).dxNumberBox('instance');
 
-        assert.equal(minuteNumberBox.option('min'), -1, 'min constraint set');
-        assert.equal(minuteNumberBox.option('max'), 60, 'max constraint set');
-    });
+            assert.equal(minuteNumberBox.option('min'), -1, 'min constraint set');
+            assert.equal(minuteNumberBox.option('max'), 60, 'max constraint set');
+        });
 
-    QUnit.test('hour numberbox should have min/max constraints', function(assert) {
-        const $element = $('#timeView').dxTimeView(); const hourNumberBox = $element.find('.' + NUMBERBOX_CLASS).eq(0).dxNumberBox('instance');
+        QUnit.test(`minute numberbox should have min/max constraints, use24HourFormat changed from ${use24HourFormat} to ${!use24HourFormat}`, function(assert) {
+            const $element = $('#timeView').dxTimeView({ use24HourFormat });
+            const timeView = $element.dxTimeView('instance');
+            const newUse24HourFormatValue = !use24HourFormat;
 
-        assert.equal(hourNumberBox.option('min'), -1, 'min constraint set');
-        assert.equal(hourNumberBox.option('max'), 24, 'max constraint set');
+            timeView.option('use24HourFormat', newUse24HourFormatValue);
+            const minuteNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(1).dxNumberBox('instance');
+
+            assert.equal(minuteNumberBox.option('min'), -1, 'min constraint set');
+            assert.equal(minuteNumberBox.option('max'), 60, 'max constraint set');
+        });
+
+        QUnit.test(`hour numberbox should have min/max constraints, use24HourFormat=${use24HourFormat}`, function(assert) {
+            const $element = $('#timeView').dxTimeView({ use24HourFormat });
+            const hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(0).dxNumberBox('instance');
+            const expectedMaxValue = use24HourFormat ? 24 : 12;
+
+            assert.equal(hourNumberBox.option('min'), -1, 'min constraint set');
+            assert.equal(hourNumberBox.option('max'), expectedMaxValue, 'max constraint set');
+        });
+
+        QUnit.test(`hour numberbox should have min/max constraints, use24HourFormat changed from ${use24HourFormat} to ${!use24HourFormat}`, function(assert) {
+            const $element = $('#timeView').dxTimeView({ use24HourFormat });
+            const timeView = $element.dxTimeView('instance');
+            const newUse24HourFormatValue = !use24HourFormat;
+            const expectedMaxValue = newUse24HourFormatValue ? 24 : 12;
+
+            timeView.option('use24HourFormat', newUse24HourFormatValue);
+            const hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(0).dxNumberBox('instance');
+
+            assert.equal(hourNumberBox.option('min'), -1, 'min constraint set');
+            assert.equal(hourNumberBox.option('max'), expectedMaxValue, 'max constraint set');
+        });
+
+        [
+            new Date(2000, 1, 1, 5, 15),
+            new Date(2000, 1, 1, 15, 15),
+            new Date(2000, 1, 1, 0, 15)
+        ].forEach((value) => {
+            QUnit.test(`hour numberbox should have correct initial value, use24HourFormat=${use24HourFormat}, initial hour value=${value.getHours()}`, function(assert) {
+                const $element = $('#timeView').dxTimeView({ use24HourFormat, value });
+                const hourNumberBox = $element.find(`.${NUMBERBOX_CLASS}`).eq(0).dxNumberBox('instance');
+                const maxHourValue = use24HourFormat ? 24 : 12;
+                let expectedValue = value.getHours() % maxHourValue;
+
+                if(!use24HourFormat && expectedValue === 0) {
+                    expectedValue = 12; // 12AM
+                }
+
+                assert.equal(hourNumberBox.option('value'), expectedValue, 'correct value');
+            });
+        });
     });
 });
 
