@@ -247,20 +247,24 @@ class AppointmentModel {
 
     _createCombinedFilter(filterOptions, timeZoneCalculator) {
         const dataAccessors = this._dataAccessors;
-        const startDayHour = filterOptions.startDayHour;
-        const endDayHour = filterOptions.endDayHour;
         const min = new Date(filterOptions.min);
         const max = new Date(filterOptions.max);
-        const resources = filterOptions.resources;
-        const firstDayOfWeek = filterOptions.firstDayOfWeek;
         const getRecurrenceException = filterOptions.recurrenceException;
+        const {
+            startDayHour,
+            endDayHour,
+            viewStartDayHour,
+            viewEndDayHour,
+            resources,
+            firstDayOfWeek
+        } = filterOptions;
         const that = this;
 
         return [[(appointment) => {
             let result = true;
             const startDate = new Date(dataAccessors.getter.startDate(appointment));
             const endDate = new Date(dataAccessors.getter.endDate(appointment));
-            const appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, startDayHour, endDayHour);
+            const appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
             const appointmentTakesSeveralDays = that.appointmentTakesSeveralDays(appointment);
             const isAllDay = dataAccessors.getter.allDay(appointment);
             const appointmentIsLong = appointmentTakesSeveralDays || appointmentTakesAllDay;
@@ -292,7 +296,10 @@ class AppointmentModel {
             });
 
             if(result && useRecurrence) {
-                const recurrenceException = getRecurrenceException ? getRecurrenceException(appointment) : dataAccessors.getter.recurrenceException(appointment);
+                const recurrenceException = getRecurrenceException
+                    ? getRecurrenceException(appointment)
+                    : dataAccessors.getter.recurrenceException(appointment);
+
                 result = that._filterAppointmentByRRule({
                     startDate: comparableStartDate,
                     endDate: comparableEndDate,

@@ -1,8 +1,8 @@
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
 import dateLocalization from 'localization/date';
 import fx from 'animation/fx';
-import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 import 'ui/scheduler/ui.scheduler';
 
 import 'generic_light.css!';
@@ -543,7 +543,7 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
     });
 
     QUnit.test('Recurrence exception should not be rendered if exception goes after adjusting AEST-> AEDT (T619455)', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-39600000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
         try {
             const scheduler = createWrapper({
                 dataSource: [{

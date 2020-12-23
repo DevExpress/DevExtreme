@@ -14,10 +14,6 @@ import config from 'core/config';
 
 import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
-function getTimezoneDifference(date, timeZone) {
-    return date.getTimezoneOffset() * dateUtils.dateToMilliseconds('minute') + timeZone * dateUtils.dateToMilliseconds('hour');
-}
-
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');
 });
@@ -668,53 +664,6 @@ QUnit.module('Subscribes', {
             endDate: appointment.endDate,
         });
         assert.deepEqual(result, new Date(2015, 2, 3, 18), 'Updated date is correct');
-    });
-
-    QUnit.test('\'convertDateByTimezone\' should return date according to the custom timeZone', function(assert) {
-        const timezoneValue = 5;
-        this.createInstance();
-        this.instance.option({
-            timeZone: timezoneValue
-        });
-
-        const date = new Date(2015, 6, 3, 3);
-        const timezoneDifference = getTimezoneDifference(date, timezoneValue);
-
-        const convertedDate = this.instance.fire('convertDateByTimezone', date);
-
-        assert.deepEqual(convertedDate, new Date(date.getTime() + timezoneDifference), '\'convertDateByTimezone\' works fine');
-    });
-
-    QUnit.test('\'convertDateByTimezone\' should return date according to the custom timeZone as string', function(assert) {
-        const timezone = { id: 'Asia/Ashkhabad', value: 5 };
-        this.createInstance();
-
-        this.instance.option({
-            timeZone: timezone.id
-        });
-
-        const date = new Date(2015, 6, 3, 3);
-        const timezoneDifference = getTimezoneDifference(date, timezone.value);
-
-        const convertedDate = this.instance.fire('convertDateByTimezone', date);
-
-        assert.deepEqual(convertedDate, new Date(date.getTime() + timezoneDifference), '\'convertDateByTimezone\' works fine');
-    });
-
-    QUnit.test('\'convertDateByTimezone\' should return date according to the custom timeZone with non-integer number', function(assert) {
-        const timezone = { id: 'Australia/Broken_Hill', value: 9.5 };
-        this.createInstance();
-
-        this.instance.option({
-            timeZone: timezone.id
-        });
-
-        const date = new Date(2015, 6, 3, 3);
-        const timezoneDifference = getTimezoneDifference(date, timezone.value);
-
-        const convertedDate = this.instance.fire('convertDateByTimezone', date);
-
-        assert.deepEqual(convertedDate, new Date(date.getTime() + timezoneDifference), '\'convertDateByTimezone\' works fine');
     });
 
     QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration', function(assert) {
