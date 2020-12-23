@@ -7,7 +7,10 @@ export const ExportPrintInfoCalculator = {
     _getDefaultOptions: function() {
         return {
             margin: {
-                all: 10
+                top: 10,
+                right: 10,
+                bottom: 10,
+                left: 10
             },
             columnStyles: { },
             cells: []
@@ -26,11 +29,6 @@ export const ExportPrintInfoCalculator = {
             tableWidth,
             columnStyles
         } = options;
-
-        margin.top = margin.top ?? margin.all;
-        margin.right = margin.right ?? margin.all;
-        margin.bottom = margin.bottom ?? margin.all;
-        margin.left = margin.left ?? margin.all;
 
         const x = startX ?? margin.left;
         const y = startY ?? margin.top;
