@@ -2978,6 +2978,28 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
     });
 
+    QUnit.test('Filter should be cleared after tab pressing (T958027)', function(assert) {
+        const items = ['111', '222', '333'];
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchTimeout: 0,
+            items,
+            searchEnabled: true
+        });
+
+        const instance = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        keyboardMock($input)
+            .type('1')
+            .press('tab')
+            .blur();
+
+
+        assert.strictEqual(instance.option('value'), '111', 'item was selected');
+        assert.strictEqual($(instance.content()).find(`.${LIST_ITEM_CLASS}`).length, 3, 'filter was cleared');
+    });
+
     QUnit.testInActiveWindow('Filter should not be canceled after focusout if event target is not in editor\'s overlay (T838753)', function(assert) {
         const items = ['111', '222', '333'];
 

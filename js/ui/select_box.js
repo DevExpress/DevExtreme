@@ -59,6 +59,7 @@ const SelectBox = DropDownList.inherit({
                     this._clearFilter();
                 }
 
+                this._wasTabPressed = true;
                 parent.tab && parent.tab.apply(this, arguments);
             },
             upArrow: function(e) {
@@ -556,9 +557,10 @@ const SelectBox = DropDownList.inherit({
             const shouldCancelSearch = this._wasSearch() &&
                 !this.option('acceptCustomValue') &&
                 this.option('searchEnabled') &&
-                this.option('opened') &&
+                (this.option('opened') || this._wasTabPressed) &&
                 !isOverlayTarget;
 
+            this._wasTabPressed = undefined;
             if(shouldCancelSearch) {
                 this._searchCanceled();
             }
