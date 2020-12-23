@@ -3031,6 +3031,141 @@ QUnit.module('keyboard navigation through tags', {
 });
 
 QUnit.module('searchEnabled', moduleSetup, () => {
+    const searchModuleSetup = {
+        beforeEach: function() {
+            this.items = ['111', '222', '333', '2'];
+            const initConfig = {
+                searchTimeout: 0,
+                items: this.items,
+                searchEnabled: true
+            };
+
+            this.init = (options) => {
+                this.$element = $('#tagBox').dxTagBox(options);
+                this.$input = this.$element.find(`.${TEXTBOX_CLASS}`);
+                this.keyboard = keyboardMock(this.$input);
+                this.instance = this.$element.dxTagBox('instance');
+                this.getListItems = () => {
+                    return $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
+                };
+            };
+            this.reinit = (options) => {
+                this.init($.extend({}, initConfig, options));
+            };
+
+            this.init(initConfig);
+        }
+    };
+
+    QUnit.module('search should be canceled after', searchModuleSetup, () => {
+        QUnit.test('search value clearing (T385456)', function(assert) {
+            keyboardMock(this.$input, true)
+                .type(this.items[0][0])
+                .press('backspace');
+
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+        });
+
+        QUnit.test('focusout', function(assert) {
+            this.keyboard
+                .type('111')
+                .blur();
+
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+        });
+
+        QUnit.test('focusout if popup is closed', function(assert) {
+            this.keyboard.type('111');
+            this.instance.close();
+            this.$input.trigger('focusout');
+
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+        });
+
+        QUnit.test('focusout if acceptCustomValue=true', function(assert) {
+            this.reinit({ acceptCustomValue: true });
+
+            this.keyboard
+                .type('111')
+                .blur();
+
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+        });
+
+        QUnit.test('apply button click', function(assert) {
+            this.instance.option({ applyValueMode: 'useButtons' });
+
+            this.keyboard.type('1');
+            $(`.dx-button.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
+
+            assert.strictEqual(this.$input.val(), '', 'input was cleared');
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+        });
+
+        QUnit.test('apply button click if showSelectionControls=true', function(assert) {
+            this.reinit({
+                showSelectionControls: true,
+                applyValueMode: 'useButtons'
+            });
+
+            this.keyboard.type('1');
+            $(`.dx-button.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
+
+            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+        });
+    });
+
+    QUnit.module('search should not be canceled after', searchModuleSetup, () => {
+        QUnit.test('cancel button click', function(assert) {
+            this.instance.option({ applyValueMode: 'useButtons' });
+
+            this.keyboard.type('1');
+            $('.dx-button.dx-popup-cancel').trigger('dxclick');
+
+            assert.strictEqual(this.$input.val(), '1', 'input was not cleared');
+            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
+
+            this.instance.open();
+            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled on reopening');
+        });
+
+        QUnit.test('popup closing using esc', function(assert) {
+            this.keyboard
+                .type('1')
+                .press('esc');
+
+            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
+        });
+
+        QUnit.test('click on item if showSelectionControls=true', function(assert) {
+            this.reinit('showSelectionControls', true);
+
+            this.keyboard.type('2');
+
+            const $listItems = $(`.${LIST_ITEM_CLASS}`);
+            $listItems.first().trigger('dxclick');
+
+            assert.strictEqual($listItems.length, 2, 'search was not canceled');
+        });
+
+        QUnit.test('click on input if acceptCustomValue=true (T851874)', function(assert) {
+            this.reinit({ acceptCustomValue: true });
+
+            this.keyboard.type('111');
+            this.$input.trigger('dxclick');
+
+            assert.strictEqual(this.$input.val(), '111', 'input was not cleared');
+            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
+        });
+
+        QUnit.test('click on input', function(assert) {
+            this.keyboard.type('111');
+            this.$input.trigger('dxclick');
+
+            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
+        });
+    });
+
     QUnit.test('searchEnabled allows searching', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: ['test', 'custom'],
@@ -3596,27 +3731,6 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.strictEqual(instance.option('selectedItems').length, 2);
     });
 
-    QUnit.test('filter should be reset after the search value clearing (T385456)', function(assert) {
-        const items = ['111', '222', '333'];
-
-        const $element = $('#tagBox').dxTagBox({
-            searchTimeout: 0,
-            items,
-            searchEnabled: true,
-            opened: true
-        });
-
-        const instance = $element.dxTagBox('instance');
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
-
-        keyboardMock($input, true)
-            .type(items[0][0])
-            .press('backspace');
-
-        const $listItems = instance._list.$element().find('.dx-list-item');
-        assert.equal($listItems.length, items.length, 'list items count is correct');
-    });
-
     QUnit.test('filtering operation should pass \'customQueryParams\' to the data source (T683047)', function(assert) {
         const done = assert.async();
 
@@ -3699,79 +3813,6 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $('.dx-list-item').trigger('dxclick');
 
         assert.equal(instance.option('selectedItems').length, 1, 'selected items count');
-    });
-
-    QUnit.testInActiveWindow('Filter should not be canceled after Apply button click', function(assert) {
-        const items = ['111', '222', '333'];
-
-        const $element = $('#tagBox').dxTagBox({
-            searchTimeout: 0,
-            items,
-            searchEnabled: true,
-            showSelectionControls: true,
-            selectAllMode: 'allPages',
-            applyValueMode: 'useButtons'
-        });
-
-        const instance = $element.dxTagBox('instance');
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
-
-        keyboardMock($input).type('1');
-        $('.dx-list-item').trigger('dxclick');
-        $('.dx-button.dx-popup-done').trigger('dxclick');
-
-        assert.equal($(instance.content()).find('.dx-list-item').length, 1, 'filter was not cleared after Apply button click');
-    });
-
-    QUnit.test('filter should not be cleared when no focusout and no item selection happened', function(assert) {
-        const items = ['111', '222', '333'];
-
-        const $element = $('#tagBox').dxTagBox({
-            searchTimeout: 0,
-            items,
-            searchEnabled: true,
-            opened: true,
-            showSelectionControls: true,
-            selectAllMode: 'allPages'
-        });
-
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
-
-        const keyboard = keyboardMock($input);
-        keyboard.type('1');
-        keyboard.press('esc');
-
-        $input.trigger('dxclick');
-
-        assert.equal($('.dx-item').length, 1, 'items count of list');
-        assert.equal($.trim($('.dx-item').first().text()), '111', 'value of first item');
-    });
-
-    QUnit.test('TagBox with selection controls shouldn\'t clear search after click on item', function(assert) {
-        const $tagBox = $('#tagBox').dxTagBox({
-            items: ['test1', 'custom', 'test2'],
-            searchEnabled: true,
-            searchTimeout: 0,
-            showSelectionControls: true,
-            selectAllMode: 'allPages'
-        });
-
-        const instance = $tagBox.dxTagBox('instance');
-
-        this.clock.tick(TIME_TO_WAIT);
-
-        keyboardMock(instance._input()).type('te');
-        this.clock.tick(TIME_TO_WAIT);
-
-        const $listItems = $(`.${LIST_ITEM_CLASS}`);
-
-        $listItems.first().trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT);
-
-        $listItems.last().trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT);
-
-        assert.deepEqual(instance.option('value'), ['test1', 'test2'], 'Correct value');
     });
 
     QUnit.testInActiveWindow('TagBox with selection controls shouldn\'t clear value when searchValue length becomes smaller then minSearchLength (T898390)', function(assert) {
@@ -3917,7 +3958,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $item.trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.strictEqual(loadStub.callCount, 2);
+        assert.strictEqual(loadStub.callCount, 3);
     });
 });
 
@@ -6372,53 +6413,6 @@ QUnit.module('regression', {
 
         $input.blur();
         assert.notOk($tagBox.hasClass(FOCUSED_CLASS), 'focused class was removed');
-    });
-
-    QUnit.test('search filter should not be cleared on close without focusout (T851874)', function(assert) {
-        const $tagBox = $('#tagBox').dxTagBox({
-            items: ['111', '222', '333'],
-            searchTimeout: 0,
-            opened: true,
-            searchEnabled: true
-        });
-
-        const instance = $tagBox.dxTagBox('instance');
-        const $tagContainer = $tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-        const kb = keyboardMock($input);
-
-        kb.type('111');
-        this.clock.tick();
-        assert.equal($(instance.content()).find(`.${LIST_ITEM_CLASS}`).length, 1, 'filter was applied');
-
-        $tagContainer.trigger('dxclick');
-        $tagContainer.trigger('dxclick');
-
-        assert.equal($input.val(), '111', 'input is not cleared');
-        assert.equal($(instance.content()).find(`.${LIST_ITEM_CLASS}`).length, 1, 'filter is not cleared');
-    });
-
-    QUnit.test('search filter should be cleared on focusout', function(assert) {
-        const $tagBox = $('#tagBox').dxTagBox({
-            items: ['111', '222', '333'],
-            searchTimeout: 0,
-            opened: true,
-            searchEnabled: true
-        });
-
-        const instance = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-        const kb = keyboardMock($input);
-
-        kb.type('111');
-        instance.close();
-        $($input).trigger('focusout');
-
-        $($input).trigger('dxclick');
-        this.clock.tick();
-
-        assert.equal($input.val(), '', 'input was cleared');
-        assert.equal($(instance.content()).find(`.${LIST_ITEM_CLASS}`).length, 3, 'filter was cleared');
     });
 
     QUnit.test('Items is not selected when values is set on the onSelectAllValueChanged event', function(assert) {
