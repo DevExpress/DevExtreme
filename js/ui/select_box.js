@@ -55,7 +55,7 @@ const SelectBox = DropDownList.inherit({
                 }
 
                 if(this._wasSearch()) {
-                    this._clearFilter();
+                    this._searchCanceled();
                 }
 
                 parent.tab && parent.tab.apply(this, arguments);
