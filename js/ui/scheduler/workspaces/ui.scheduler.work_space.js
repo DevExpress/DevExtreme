@@ -460,6 +460,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _correctCellForGroup($cell) {
         if(this.isVirtualScrolling()) {
+            const isVirtualCell = $cell.hasClass(VIRTUAL_CELL_CLASS);
+            if(isVirtualCell) {
+                return this._$focusedCell;
+            }
+
             const cellData = this.getCellData($cell);
             const isValidFocusedCell = this.virtualSelectionState.isValidFocusedCell(cellData);
 
@@ -1333,7 +1338,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const focusedCell = this.virtualSelectionState.getFocusedCell(isVerticalGrouping);
         const selectedCells = this.virtualSelectionState.getSelectedCells();
 
-        if(focusedCell) {
+        if(focusedCell?.coordinates) {
             const { coordinates, cellData } = focusedCell;
             const $cell = !isVerticalGrouping && cellData.allDay
                 ? this._dom_getAllDayPanelCell(coordinates.cellIndex)
