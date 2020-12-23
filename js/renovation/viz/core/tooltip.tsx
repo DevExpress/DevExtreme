@@ -10,7 +10,7 @@ import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 import { RootSvgElement } from './renderers/svg_root';
 
 import {
-  Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData,
+  Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
 } from './common/types.d';
 import { Format } from '../common/types.d';
 
@@ -18,6 +18,7 @@ import {
   getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData,
 } from './common/tooltip_utils';
 import { getFormatValue } from '../common/utils';
+import { normalizeEnum } from '../../../viz/core/utils';
 
 export const viewFunction = ({
   textRef,
@@ -32,11 +33,13 @@ export const viewFunction = ({
   setCurrentState,
   pointerEvents,
   props: {
-    x, y, font, shadow, opacity, interactive,
-    contentTemplate: TooltipTemplate, data,
+    x, y, font, shadow, opacity, interactive, zIndex,
+    contentTemplate: TooltipTemplate, data, visible,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
+  if (!visible) { return <div />; }
+
   const correctedCoordinates = recalculateCoordinates({
     canvas, anchorX: x, anchorY: y, size: textSizeWithPaddings, offset, arrowLength,
   });
@@ -56,6 +59,7 @@ export const viewFunction = ({
         pointerEvents: 'none',
         left: cloudSize.x,
         top: cloudSize.y,
+        zIndex,
       }}
     >
       <RootSvgElement
@@ -201,7 +205,17 @@ export class TooltipProps {
 
   @OneWay() interactive = false;
 
+  @OneWay() enabled = true;
+
+  @OneWay() shared = false;
+
+  @OneWay() location: Location = 'center';
+
+  @OneWay() zIndex?: number;
+
   @Template() contentTemplate?: (data: TooltipData) => JSX.Element;
+
+  @OneWay() visible = false;
 }
 
 @Component({
@@ -244,12 +258,14 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @Effect()
   calculateSize(): void {
-    this.textSize = this.textRef ? this.textRef.getBBox() : this.htmlRef.getBoundingClientRect();
+    if (this.props.visible) {
+      this.textSize = this.textRef ? this.textRef.getBBox() : this.htmlRef.getBoundingClientRect();
+    }
   }
 
   @Effect()
   calculateCloudSize(): void {
-    if (this.d) {
+    if (this.d && this.props.visible) {
       const size = this.cloudRef.getBBox();
       this.cloudSize = {
         x: Math.floor(size.x - this.margins.lm),
@@ -264,6 +280,21 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   formatValue(value, specialFormat): string {
     const { format, argumentFormat } = this.props;
     return getFormatValue(value, specialFormat, { format, argumentFormat });
+  }
+
+  @Method()
+  isEnabled(): boolean {
+    return this.props.enabled;
+  }
+
+  @Method()
+  isShared(): boolean {
+    return this.props.shared;
+  }
+
+  @Method()
+  getLocation(): string {
+    return normalizeEnum(this.props.location);
   }
 
   get textSizeWithPaddings(): Size {
