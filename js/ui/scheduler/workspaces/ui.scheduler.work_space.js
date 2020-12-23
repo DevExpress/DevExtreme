@@ -1243,23 +1243,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(this.isVirtualScrolling()) {
-            const {
-                verticalScrollingState,
-                horizontalScrollingState
-            } = this.virtualScrollingDispatcher;
-
-            extend(options, {
-                topVirtualRowHeight: verticalScrollingState.virtualItemSizeBefore,
-                bottomVirtualRowHeight: verticalScrollingState.virtualItemSizeAfter,
-                startRowIndex: verticalScrollingState.startIndex,
-                rowCount: verticalScrollingState.itemCount,
-
-                leftVirtualCellHeight: horizontalScrollingState.virtualItemSizeBefore,
-                rightVirtualCellHeight: horizontalScrollingState.virtualItemSizeAfter,
-                startCellIndex: horizontalScrollingState.startIndex,
-                // TODO - horizontal virtual scrolling
-                // cellCount: horizontalScrollingState.itemCount
-            });
+            extend(
+                options,
+                this.virtualScrollingDispatcher.renderState
+            );
         } else {
             options.rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());
         }
