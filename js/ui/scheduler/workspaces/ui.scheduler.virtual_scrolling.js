@@ -3,8 +3,7 @@ import eventsEngine from '../../../events/core/events_engine';
 import { getWindow } from '../../../core/utils/window';
 import { addNamespace } from '../../../events/utils/index';
 
-const ROW_HEIGHT = 50;
-const CELL_WIDTH = 100;
+const DEFAULT_CELL_HEIGHT = 50;
 const MIN_SCROLL_OFFSET = 10;
 const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
@@ -19,8 +18,8 @@ const DefaultScrollingType = scrollingTypes.vertical;
 export default class VirtualScrollingDispatcher {
     constructor(workspace) {
         this._workspace = workspace;
-        this._rowHeight = ROW_HEIGHT;
-        this._cellWidth = CELL_WIDTH;
+        this._rowHeight = this.getCellHeight();
+        this._cellWidth = this.getCellWidth();
         this._renderer = new Renderer(this.workspace);
 
         this._createVirtualScrolling();
@@ -32,8 +31,6 @@ export default class VirtualScrollingDispatcher {
     get renderer() { return this._renderer; }
 
     get isVirtualScrolling() { return this.workspace.isVirtualScrolling(); }
-
-    get minScrollOffset() { return MIN_SCROLL_OFFSET; }
 
     get verticalVirtualScrolling() { return this._verticalVirtualScrolling; }
     set verticalVirtualScrolling(value) { this._verticalVirtualScrolling = value; }
@@ -83,6 +80,15 @@ export default class VirtualScrollingDispatcher {
     }
     get verticalScrollingState() { return this.scrollingState.vertical; }
     get horizontalScrollingState() { return this.scrollingState.horizontal; }
+
+    getCellHeight() {
+        return this.workspace.getCellHeight(false) || DEFAULT_CELL_HEIGHT;
+    }
+
+    getCellWidth() {
+        const { workspace } = this;
+        return workspace.getCellWidth() || workspace.getCellMinWidth();
+    }
 
     get renderState() {
         const verticalRenderState = this.verticalVirtualScrolling?.getRenderState() || {};
@@ -192,7 +198,7 @@ export default class VirtualScrollingDispatcher {
                 scrollY
             } = window;
 
-            if(scrollX >= this.minScrollOffset || scrollY >= this.minScrollOffset) {
+            if(scrollX >= MIN_SCROLL_OFFSET || scrollY >= MIN_SCROLL_OFFSET) {
                 this._process({
                     left: scrollX,
                     top: scrollY,
@@ -218,8 +224,8 @@ export default class VirtualScrollingDispatcher {
     }
 
     updateDimensions() {
-        const cellHeight = this.workspace.getCellHeight(false);
-        const cellWidth = this.workspace.getCellWidth();
+        const cellHeight = this.getCellHeight(false);
+        const cellWidth = this.getCellWidth();
 
         const needUpdate = cellHeight !== this.rowHeight || cellWidth !== this.cellWidth;
 
