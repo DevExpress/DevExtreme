@@ -47,7 +47,9 @@ export const viewFunction = ({
   },
   restAttributes,
 }: ScrollableNative): JSX.Element => {
-  const { isVertical, isHorizontal } = new ScrollDirection(direction);
+  const targetDirection = direction ?? 'vertical';
+  const isVertical = targetDirection !== 'horizontal';
+  const isHorizontal = targetDirection !== 'vertical';
   return (
     <Widget
       classes={cssClasses}
@@ -205,7 +207,7 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
       [`dx-scrollable dx-scrollable-native dx-scrollable-native-${devices.real().platform} dx-scrollable-renovated`]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
-      [SCROLLABLE_SCROLLBAR_SIMULATED]: useSimulatedScrollbar,
+      [SCROLLABLE_SCROLLBAR_SIMULATED]: showScrollbar && useSimulatedScrollbar,
       [SCROLLABLE_SCROLLBARS_HIDDEN]: !showScrollbar,
       [`${classes}`]: !!classes,
     };

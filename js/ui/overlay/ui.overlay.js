@@ -617,6 +617,7 @@ const Overlay = Widget.inherit({
                         that._renderVisibility(false);
 
                         completeHideAnimation.apply(this, arguments);
+                        that._hideAnimationProcessing = false;
                         that._actions?.onHidden();
 
                         deferred.resolve();
@@ -625,6 +626,7 @@ const Overlay = Widget.inherit({
                     function() {
                         that._$content.css('pointerEvents', 'none');
                         startHideAnimation.apply(this, arguments);
+                        that._hideAnimationProcessing = true;
                     }
                 );
             }

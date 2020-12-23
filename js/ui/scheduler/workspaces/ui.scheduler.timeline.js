@@ -12,6 +12,8 @@ import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
 
 import timeZoneUtils from '../utils.timeZone';
 
+import dxrTimelineDateTableLayout from '../../../renovation/ui/scheduler/workspaces/timeline/date_table/layout.j';
+
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
 
@@ -258,9 +260,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         const groupCellTemplates = this._renderGroupHeader();
         this._renderDateHeader();
 
-        this._renderAllDayPanel();
-        this._renderTimePanel();
-        this._renderDateTable();
+        if(this.isRenovatedRender()) {
+            this.renderRWorkspace();
+        } else {
+            this._renderTimePanel();
+            this._renderDateTable();
+            this._renderAllDayPanel();
+        }
 
         this._shader = new HorizontalShader(this);
 
@@ -598,6 +604,28 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
         return [...(new Array(horizontalGroupCount))]
             .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeCellIndex);
+    }
+
+    renovatedRenderSupported() { return true; }
+
+    isVirtualScrolling() {
+        return false;
+    }
+
+    renderRAllDayPanel() {}
+
+    renderRTimeTable() {}
+
+    renderRDateTable() {
+        this.renderRComponent(
+            this._$dateTable,
+            dxrTimelineDateTableLayout,
+            'renovatedDateTable',
+            {
+                viewData: this.viewDataProvider.viewData,
+                dataCellTemplate: this.option('dataCellTemplate'),
+            }
+        );
     }
 }
 

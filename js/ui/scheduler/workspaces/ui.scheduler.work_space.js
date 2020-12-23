@@ -1224,6 +1224,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const rowCountInGroup = this._getRowCount();
 
         const cellCount = this._getTotalCellCount(groupCount);
+        const groupOrientation = groupCount > 0
+            ? this.option('groupOrientation')
+            : this._getDefaultGroupStrategy();
 
         const options = {
             horizontalGroupCount,
@@ -1234,29 +1237,16 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellDataGetters: [this._getCellData.bind(this)],
             allDayElements,
             startRowIndex: 0,
-            groupOrientation: this.option('groupOrientation'),
+            groupOrientation,
             nonVirtualRowCount: this._getRowCount(),
             groupCount,
         };
 
         if(this.isVirtualScrolling()) {
-            const {
-                verticalScrollingState,
-                horizontalScrollingState
-            } = this.virtualScrollingDispatcher;
-
-            extend(options, {
-                topVirtualRowHeight: verticalScrollingState.virtualItemSizeBefore,
-                bottomVirtualRowHeight: verticalScrollingState.virtualItemSizeAfter,
-                startRowIndex: verticalScrollingState.startIndex,
-                rowCount: verticalScrollingState.itemCount,
-
-                leftVirtualCellHeight: horizontalScrollingState.virtualItemSizeBefore,
-                rightVirtualCellHeight: horizontalScrollingState.virtualItemSizeAfter,
-                startCellIndex: horizontalScrollingState.startIndex,
-                // TODO - horizontal virtual scrolling
-                // cellCount: horizontalScrollingState.itemCount
-            });
+            extend(
+                options,
+                this.virtualScrollingDispatcher.renderState
+            );
         } else {
             options.rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());
         }
@@ -1308,8 +1298,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             }
         );
     }
-
-    renderRDateTable() { }
 
     renderRComponent(parentElement, componentClass, componentName, viewModel) {
         let component = this[componentName];

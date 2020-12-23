@@ -22,11 +22,11 @@ export const viewFunction = ({
       .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
         <Fragment key={getKeyByGroup(groupIndex)}>
           {getIsGroupedAllDayPanel(viewData, groupIndex) && (
-          <AllDayPanelTableBody
-            viewData={allDayPanel}
-            dataCellTemplate={dataCellTemplate}
-            isVerticalGroupOrientation
-          />
+            <AllDayPanelTableBody
+              viewData={allDayPanel}
+              dataCellTemplate={dataCellTemplate}
+              isVerticalGroupOrientation
+            />
           )}
           {dateTable.map((cellsRow) => (
             <DateTableRow
