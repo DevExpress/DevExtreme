@@ -1,5 +1,11 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  OneWay,
+  Slot,
+  Template,
 } from 'devextreme-generator/component_declaration/common';
 import { getGroupCellClasses } from '../utils';
 import { ContentTemplateProps } from '../types.d';
@@ -17,7 +23,7 @@ export const viewFunction = (viewModel: CellBase): JSX.Element => {
       {ContentTemplate && (
         <ContentTemplate
           // eslint-disable-next-line react/jsx-props-no-spreading
-          {...viewModel.props.contentTemplateProps!}
+          {...viewModel.props.contentTemplateProps}
         />
       )}
     </td>
@@ -32,7 +38,7 @@ export class CellBaseProps {
 
   @OneWay() isLastGroupCell? = false;
 
-  @OneWay() startDate?: Date = new Date();
+  @OneWay() startDate: Date = new Date();
 
   @OneWay() endDate?: Date = new Date();
 
@@ -46,11 +52,14 @@ export class CellBaseProps {
 
   @OneWay() index = 0;
 
-  @OneWay() contentTemplateProps?: ContentTemplateProps;
+  @OneWay() contentTemplateProps: ContentTemplateProps = {
+    data: {},
+    index: 0,
+  };
 
-  @Template() contentTemplate?: any;
+  @Template() contentTemplate?: JSXTemplate;
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element;
 }
 
 @Component({

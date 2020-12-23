@@ -27,7 +27,7 @@ export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
 
 @ComponentBindings()
 export class AllDayPanelLayoutProps extends LayoutProps {
-  @OneWay() className? = '';
+  @OneWay() className = '';
 
   @OneWay() visible? = true;
 }
@@ -41,7 +41,7 @@ export class AllDayPanelLayoutProps extends LayoutProps {
 })
 export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {
   get allDayPanelData(): ViewCellData[] | undefined {
-    return this.props.viewData!.groupedData[0].allDayPanel;
+    return this.props.viewData.groupedData[0].allDayPanel;
   }
 
   get emptyTableHeight(): number | undefined {
@@ -54,7 +54,7 @@ export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {
     return combineClasses({
       'dx-scheduler-all-day-panel': true,
       'dx-hidden': !this.props.visible,
-      [this.props.className!]: !!this.props.className,
+      [this.props.className]: !!this.props.className,
     });
   }
 }

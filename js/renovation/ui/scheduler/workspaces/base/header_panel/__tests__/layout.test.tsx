@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { viewFunction as LayoutView, HeaderPanelLayout } from '../layout';
+import { viewFunction as LayoutView, HeaderPanelLayout, HeaderPanelLayoutProps } from '../layout';
 import { Row } from '../../row';
 import * as utilsModule from '../../../utils';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
@@ -9,7 +9,7 @@ const isVerticalGroupOrientation = jest.spyOn(utilsModule, 'isVerticalGroupOrien
 describe('HeaderPanelLayoutBase', () => {
   describe('Render', () => {
     const cellTemplate = () => null;
-    const viewCellsData = [[{
+    const viewCellsData: any = [[{
       startDate: new Date(2020, 6, 9),
       endDate: new Date(2020, 6, 10),
       today: true,
@@ -28,7 +28,12 @@ describe('HeaderPanelLayoutBase', () => {
     }]];
     const render = (viewModel) => shallow(LayoutView({
       ...viewModel,
-      props: { cellTemplate, ...viewModel.props, viewCellsData },
+      props: {
+        ...(new HeaderPanelLayoutProps()),
+        cellTemplate,
+        viewCellsData,
+        ...viewModel.props,
+      },
     }) as any);
 
     it('should combine `className` with predefined classes', () => {
