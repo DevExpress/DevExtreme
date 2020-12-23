@@ -10,7 +10,7 @@ import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 import { RootSvgElement } from './renderers/svg_root';
 
 import {
-  Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData,
+  Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
 } from './common/types.d';
 import { Format } from '../common/types.d';
 
@@ -209,7 +209,7 @@ export class TooltipProps {
 
   @OneWay() shared = false;
 
-  @OneWay() location = 'center';
+  @OneWay() location: Location = 'center';
 
   @OneWay() zIndex?: number;
 
@@ -289,7 +289,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @Method()
   isShared(): boolean {
-    return !!this.props.shared;
+    return this.props.shared;
   }
 
   @Method()

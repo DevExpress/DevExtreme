@@ -274,11 +274,8 @@ describe('Render', () => {
   });
 
   it('should set on the div zIndex', () => {
-    const tooltip = shallow(<TooltipComponent {...{
-      ...props,
-      props: { ...props.props, zIndex: 3 },
-    } as any}
-    />);
+    const customizedProps = { ...props.props, zIndex: 3 };
+    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
 
     expect(tooltip.find('div').at(0).props().style).toMatchObject({
       zIndex: 3,
