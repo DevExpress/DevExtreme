@@ -1,5 +1,11 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  Fragment,
+  Template,
+  JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
@@ -12,6 +18,7 @@ import {
 import { Table } from '../table';
 import { LayoutProps } from '../layout_props';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
+import { DateTimeCellTemplateProps } from '../../types.d';
 
 export const viewFunction = ({
   props,
@@ -85,7 +92,7 @@ export class TimePanelTableLayoutProps extends LayoutProps {
 
   @OneWay() allDayPanelVisible? = false;
 
-  @Template() timeCellTemplate?: any;
+  @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
 @Component({

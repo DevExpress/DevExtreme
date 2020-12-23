@@ -1,7 +1,10 @@
 import {
-  ComponentBindings, OneWay, Template,
+  ComponentBindings,
+  OneWay,
+  Template,
+  JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
-import { GroupedViewData } from '../types.d';
+import { GroupedViewData, DataCellTemplateProps } from '../types.d';
 import { GroupOrientation } from '../../types.d';
 
 @ComponentBindings()
@@ -13,5 +16,5 @@ export class LayoutProps {
 
   @OneWay() groupOrientation?: GroupOrientation;
 
-  @Template() dataCellTemplate?: any;
+  @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }

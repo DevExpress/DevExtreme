@@ -952,8 +952,8 @@ class Scheduler extends Widget {
         this._subscribes = subscribes;
 
         this.timeZoneCalculator = new TimeZoneCalculator({
-            getClientOffset: date => this.fire('getClientTimezoneOffset', date),
-            getCommonOffset: date => this._getTimezoneOffsetByOption(date),
+            getClientOffset: date => timeZoneUtils.getClientTimezoneOffset(date),
+            getCommonOffset: (date, timeZone) => timeZoneUtils.calculateTimezoneByValue(timeZone || this.option('timeZone'), date),
             getAppointmentOffset: (date, appointmentTimezone) => timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date)
         });
     }
@@ -1742,60 +1742,74 @@ class Scheduler extends Widget {
         }).show();
     }
 
-    _getUpdatedData(options) {
-        const target = options.data || options;
-        const cellData = this.getTargetCellData();
-        const targetAllDay = this.fire('getField', 'allDay', target);
-        let targetStartDate = new Date(this.fire('getField', 'startDate', target));
-        let targetEndDate = new Date(this.fire('getField', 'endDate', target));
-        let date = cellData.startDate || targetStartDate;
+    _getUpdatedData(rawAppointment) {
+        const getConvertedFromGrid = date => date ? this.timeZoneCalculator.createDate(date, { path: 'fromGrid' }) : undefined;
+        const isValidDate = date => !isNaN(new Date(date).getTime());
 
-        if(!targetStartDate || isNaN(targetStartDate)) {
-            targetStartDate = date;
-        }
-        const targetStartTime = targetStartDate.getTime();
+        const targetCell = this.getTargetCellData();
+        const appointment = this.createAppointmentAdapter(rawAppointment);
 
-        if(!targetEndDate || isNaN(targetEndDate)) {
-            targetEndDate = cellData.endDate;
-        }
-        const targetEndTime = targetEndDate.getTime() || cellData.endData;
+        const cellStartDate = getConvertedFromGrid(targetCell.startDate);
+        const cellEndDate = getConvertedFromGrid(targetCell.endDate);
 
-        const duration = targetEndTime - targetStartTime;
+        let appointmentStartDate = new Date(appointment.startDate);
+        let appointmentEndDate = new Date(appointment.endDate);
+        let resultedStartDate = cellStartDate || appointmentStartDate;
 
-        if(this._workSpace.keepOriginalHours()) {
-            const diff = targetStartTime - dateUtils.trimTime(targetStartDate).getTime();
-            date = new Date(dateUtils.trimTime(date).getTime() + diff);
+        if(!isValidDate(appointmentStartDate)) {
+            appointmentStartDate = resultedStartDate;
         }
 
-        const updatedData = {};
-        const allDay = cellData.allDay;
-
-        this.fire('setField', 'allDay', updatedData, allDay);
-        this.fire('setField', 'startDate', updatedData, date);
-
-        let endDate = new Date(date.getTime() + duration);
-
-        if(this.appointmentTakesAllDay(target) && !updatedData.allDay && this._workSpace.supportAllDayRow()) {
-            endDate = this._workSpace.calculateEndDate(date);
+        if(!isValidDate(appointmentEndDate)) {
+            appointmentEndDate = cellEndDate;
         }
 
-        if(targetAllDay && !this._workSpace.supportAllDayRow() && !this._workSpace.keepOriginalHours()) {
-            const dateCopy = new Date(date);
+        const duration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
+
+        const isKeepAppointmentHours = this._workSpace.keepOriginalHours()
+            && isValidDate(appointment.startDate)
+            && isValidDate(cellStartDate);
+
+        if(isKeepAppointmentHours) {
+            const { trimTime } = dateUtils;
+
+            const startDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
+            const timeInMs = startDate.getTime() - trimTime(startDate).getTime();
+
+            resultedStartDate = new Date(trimTime(targetCell.startDate).getTime() + timeInMs);
+            resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
+        }
+
+        const result = this.createAppointmentAdapter({});
+        if(targetCell.allDay !== undefined) {
+            result.allDay = targetCell.allDay;
+        }
+        result.startDate = resultedStartDate;
+
+        let resultedEndDate = new Date(resultedStartDate.getTime() + duration);
+
+        if(this.appointmentTakesAllDay(rawAppointment) && !result.allDay && this._workSpace.supportAllDayRow()) {
+            resultedEndDate = this._workSpace.calculateEndDate(resultedStartDate);
+        }
+
+        if(appointment.allDay && !this._workSpace.supportAllDayRow() && !this._workSpace.keepOriginalHours()) {
+            const dateCopy = new Date(resultedStartDate);
             dateCopy.setHours(0);
 
-            endDate = new Date(dateCopy.getTime() + duration);
+            resultedEndDate = new Date(dateCopy.getTime() + duration);
 
-            if(endDate.getHours() !== 0) {
-                endDate.setHours(this._getCurrentViewOption('endDayHour'));
+            if(resultedEndDate.getHours() !== 0) {
+                resultedEndDate.setHours(this._getCurrentViewOption('endDayHour'));
             }
         }
 
-        endDate = new Date(endDate.getTime() - timeZoneUtils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
+        const timeZoneOffset = timeZoneUtils.getTimezoneOffsetChangeInMs(appointmentStartDate, appointmentEndDate, resultedStartDate, resultedEndDate);
+        result.endDate = new Date(resultedEndDate.getTime() - timeZoneOffset);
 
-        this.fire('setField', 'endDate', updatedData, endDate);
-        this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
+        const rawResult = result.source();
+        this._resourcesManager.setResourcesToItem(rawResult, targetCell.groups);
 
-        return updatedData;
+        return rawResult;
     }
 
     getTargetedAppointment(appointment, element) {
@@ -1988,44 +2002,53 @@ class Scheduler extends Widget {
     }
 
     // TODO: use for appointment model
-    _getRecurrenceException(appointmentData) {
-        let recurrenceException = this.fire('getField', 'recurrenceException', appointmentData);
+    _getRecurrenceException(rawAppointment) {
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+        const recurrenceException = appointment.recurrenceException;
 
         if(recurrenceException) {
-            const startDate = this.fire('getField', 'startDate', appointmentData);
             const exceptions = recurrenceException.split(',');
-            const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
 
             for(let i = 0; i < exceptions.length; i++) {
-                exceptions[i] = this._convertRecurrenceException(exceptions[i], startDate, startDateTimeZone);
+                exceptions[i] = this._convertRecurrenceException(exceptions[i], appointment.startDate);
             }
 
-            recurrenceException = exceptions.join();
+            return exceptions.join();
         }
 
         return recurrenceException;
     }
 
-    _convertRecurrenceException(exceptionString, startDate, startDateTimeZone) {
+    _convertRecurrenceException(exceptionString, startDate) {
         exceptionString = exceptionString.replace(/\s/g, '');
 
-        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
-        const convertedStartDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
-        let convertedExceptionDate = this.fire('convertDateByTimezone', exceptionDate, startDateTimeZone);
+        const getConvertedToTimeZone = date => {
+            return this.timeZoneCalculator.createDate(date, {
+                path: 'toGrid'
+            });
+        };
 
-        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'), startDateTimeZone);
+        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
+        const convertedStartDate = getConvertedToTimeZone(startDate);
+        let convertedExceptionDate = getConvertedToTimeZone(exceptionDate);
+
+        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(convertedExceptionDate, convertedStartDate, this.option('timeZone'));
         exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
         return exceptionString;
     }
 
-    dayHasAppointment(day, appointment, trimTime) {
-        let startDate = new Date(this.fire('getField', 'startDate', appointment));
-        let endDate = new Date(this.fire('getField', 'endDate', appointment));
-        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointment);
-        const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointment);
+    dayHasAppointment(day, rawAppointment, trimTime) {
+        const getConvertedToTimeZone = date => {
+            return this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        };
 
-        startDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
-        endDate = this.fire('convertDateByTimezone', endDate, endDateTimeZone);
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+
+        let startDate = new Date(appointment.startDate);
+        let endDate = new Date(appointment.endDate);
+
+        startDate = getConvertedToTimeZone(startDate);
+        endDate = getConvertedToTimeZone(endDate);
 
         if(day.getTime() === endDate.getTime()) {
             return startDate.getTime() === endDate.getTime();

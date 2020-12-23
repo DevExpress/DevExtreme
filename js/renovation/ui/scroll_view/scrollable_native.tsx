@@ -4,11 +4,13 @@ import {
   Method,
   Ref,
   Effect,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import devices from '../../../core/devices';
 
 import {
   ScrollableInternalPropsType,
@@ -27,44 +29,70 @@ import {
   SCROLLABLE_CONTAINER_CLASS,
   SCROLLABLE_CONTENT_CLASS,
   SCROLLABLE_WRAPPER_CLASS,
+  SCROLLVIEW_CONTENT_CLASS,
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
+  SCROLLABLE_DISABLED_CLASS,
+  SCROLLABLE_SCROLLBAR_SIMULATED,
+  SCROLLABLE_SCROLLBARS_HIDDEN,
 } from './scrollable_utils';
+import { Scrollbar } from './scrollbar';
 
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
   props: {
-    disabled, height, width, rtlEnabled, children, forceGeneratePockets,
+    disabled, height, width, rtlEnabled, children,
+    forceGeneratePockets, needScrollViewContentWrapper,
+    showScrollbar, direction, scrollByThumb, useSimulatedScrollbar,
   },
   restAttributes,
-}: ScrollableNative): JSX.Element => (
-  <Widget
-    classes={cssClasses}
-    disabled={disabled}
-    rtlEnabled={rtlEnabled}
-    height={height}
-    width={width}
-    {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
-  >
-    <div className={SCROLLABLE_WRAPPER_CLASS}>
-      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef as any}>
-        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef as any}>
-          {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
-          {children}
-          {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
+}: ScrollableNative): JSX.Element => {
+  const targetDirection = direction ?? 'vertical';
+  const isVertical = targetDirection !== 'horizontal';
+  const isHorizontal = targetDirection !== 'vertical';
+  return (
+    <Widget
+      classes={cssClasses}
+      disabled={disabled}
+      rtlEnabled={rtlEnabled}
+      height={height}
+      width={width}
+      {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+    >
+      <div className={SCROLLABLE_WRAPPER_CLASS}>
+        <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
+          <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
+            {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
+            {needScrollViewContentWrapper && (
+              <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
+            {!needScrollViewContentWrapper && children}
+            {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
+          </div>
         </div>
       </div>
-    </div>
-  </Widget>
-);
+      { showScrollbar && useSimulatedScrollbar && isHorizontal && (
+        <Scrollbar
+          direction="horizontal"
+          expandable={scrollByThumb}
+        />
+      )}
+      { showScrollbar && useSimulatedScrollbar && isVertical && (
+        <Scrollbar
+          direction="vertical"
+          expandable={scrollByThumb}
+        />
+      )}
+    </Widget>
+  );
+};
 
 @Component({
   view: viewFunction,
 })
 export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>() {
-  @Ref() contentRef!: HTMLDivElement;
+  @Ref() contentRef!: RefObject<HTMLDivElement>;
 
-  @Ref() containerRef!: HTMLDivElement;
+  @Ref() containerRef!: RefObject<HTMLDivElement>;
 
   @Method()
   content(): HTMLDivElement {
@@ -171,11 +199,16 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
   }
 
   get cssClasses(): string {
-    const { direction, classes } = this.props;
+    const {
+      direction, classes, disabled, useSimulatedScrollbar, showScrollbar,
+    } = this.props;
 
     const classesMap = {
-      'dx-scrollable dx-scrollable-native dx-scrollable-renovated dx-scrollable-native-generic': true,
+      [`dx-scrollable dx-scrollable-native dx-scrollable-native-${devices.real().platform} dx-scrollable-renovated`]: true,
       [`dx-scrollable-${direction}`]: true,
+      [SCROLLABLE_DISABLED_CLASS]: !!disabled,
+      [SCROLLABLE_SCROLLBAR_SIMULATED]: showScrollbar && useSimulatedScrollbar,
+      [SCROLLABLE_SCROLLBARS_HIDDEN]: !showScrollbar,
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);

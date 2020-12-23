@@ -10,18 +10,19 @@ import {
   ForwardRef,
   Effect,
   Consumer,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
-import { ConfigContextValue, ConfigContext } from '../../../ui/common/config_context';
+import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 export const viewFunction = ({
   svgRef,
   config,
   props: {
-    className, width, height, pointerEvents, filter, children,
+    className, width, height, pointerEvents, filter, children, styles,
   },
 }: RootSvgElement): JSX.Element => (
   <svg
-    ref={svgRef as any}
+    ref={svgRef}
     xmlns="http://www.w3.org/2000/svg"
     version="1.1"
     className={className}
@@ -36,6 +37,7 @@ export const viewFunction = ({
       MozUserSelect: 'none',
       WebkitUserSelect: 'none',
       WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
+      ...styles,
     }}
     width={width}
     height={height}
@@ -49,7 +51,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class RootSvgElementProps {
-  @ForwardRef() rootElementRef?: SVGElement;
+  @ForwardRef() rootElementRef?: RefObject<SVGElement>;
 
   @OneWay() className = '';
 
@@ -61,6 +63,8 @@ export class RootSvgElementProps {
 
   @OneWay() filter?: string;
 
+  @OneWay() styles?: { [key: string]: any };
+
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 }
 
@@ -70,7 +74,7 @@ export class RootSvgElementProps {
   isSVG: true,
 })
 export class RootSvgElement extends JSXComponent(RootSvgElementProps) {
-  @Ref() svgRef!: SVGElement;
+  @Ref() svgRef!: RefObject<SVGSVGElement>;
 
   @Consumer(ConfigContext)
   config?: ConfigContextValue;

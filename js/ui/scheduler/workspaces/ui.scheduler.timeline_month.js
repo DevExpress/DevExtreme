@@ -109,7 +109,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             cellPosition: 0
         };
     }
-
 }
 
 registerComponent('dxSchedulerTimelineMonth', SchedulerTimelineMonth);

@@ -453,6 +453,7 @@ $scheduler-appointment-form-label-padding: 20px;
       }
     }
 
+    .dx-scheduler-virtual-row::before,
     .dx-scheduler-date-table-row::before,
     .dx-scheduler-header-row::before {
       width: $size;
@@ -1073,6 +1074,7 @@ $scheduler-appointment-form-label-padding: 20px;
         margin-left: 0;
       }
 
+      .dx-scheduler-virtual-row::before,
       .dx-scheduler-date-table-row::before {
         display: none;
       }

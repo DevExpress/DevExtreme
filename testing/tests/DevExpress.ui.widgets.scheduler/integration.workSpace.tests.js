@@ -2576,6 +2576,129 @@ QUnit.module('Cell Templates in renovated views', () => {
     });
 
     [{
+        view: 'month',
+        firstCell: {
+            startDate: new Date(2020, 10, 29),
+            endDate: new Date(2020, 10, 30),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 0,
+            text: '29',
+        },
+        secondCell: {
+            startDate: new Date(2020, 11, 19),
+            endDate: new Date(2020, 11, 20),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 20,
+            text: '19',
+        },
+        firstCellIndex: 0,
+        secondCellIndex: 20,
+        templatesNumber: 42,
+    }, {
+        view: 'timelineDay',
+        firstCell: {
+            startDate: new Date(2020, 11, 1, 0, 0),
+            endDate: new Date(2020, 11, 1, 0, 30),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 0,
+            text: '',
+        },
+        secondCell: {
+            startDate: new Date(2020, 11, 1, 23, 30),
+            endDate: new Date(2020, 11, 2, 0, 0),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 47,
+            text: '',
+        },
+        firstCellIndex: 0,
+        secondCellIndex: 47,
+        templatesNumber: 48,
+    }, {
+        view: 'timelineWeek',
+        firstCell: {
+            startDate: new Date(2020, 10, 29, 0, 0),
+            endDate: new Date(2020, 10, 29, 0, 30),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 0,
+            text: '',
+        },
+        secondCell: {
+            startDate: new Date(2020, 11, 5, 23, 30),
+            endDate: new Date(2020, 11, 6, 0, 0),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 335,
+            text: '',
+        },
+        firstCellIndex: 0,
+        secondCellIndex: 335,
+        templatesNumber: 336,
+    }, {
+        view: 'timelineMonth',
+        firstCell: {
+            startDate: new Date(2020, 11, 1),
+            endDate: new Date(2020, 11, 2),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 0,
+            text: '',
+        },
+        secondCell: {
+            startDate: new Date(2020, 11, 31),
+            endDate: new Date(2021, 0, 1),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 30,
+            text: '',
+        },
+        firstCellIndex: 0,
+        secondCellIndex: 30,
+        templatesNumber: 31,
+    }].forEach(({
+        view,
+        firstCell: firstExpectedCell,
+        secondCell: secondExpectedCell,
+        firstCellIndex,
+        secondCellIndex,
+        templatesNumber,
+    }) => {
+        QUnit.test(`dataCellTemplate should have correct options in ${view} view`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [view],
+                currentView: view,
+                currentDate: new Date(2020, 11, 1),
+                renovateRender: true,
+                dataCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+            });
+
+            const firstCell = templateOptions[firstCellIndex];
+            const secondCell = templateOptions[secondCellIndex];
+
+            assert.equal(templateOptions.length, templatesNumber, 'Correct number of templates');
+            assert.deepEqual(firstCell, firstExpectedCell, 'Correct options in the first cell');
+            assert.deepEqual(secondCell, secondExpectedCell, 'Correct options in the second cell');
+        });
+    });
+
+    [{
         viewType: 'day',
         expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
     }, {
@@ -2833,7 +2956,7 @@ QUnit.test('SelectedCellData option should not change when dateTable is scrolled
         height: 300,
         scrolling: { mode: 'virtual' },
     });
-    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
     const $cells = scheduler.workSpace.getCells();
     const $table = scheduler.workSpace.getDateTable();
@@ -2878,7 +3001,7 @@ QUnit.test('"onOptionChanged" should not be called on scroll when virtual scroll
             onOptionChangedCalls += 1;
         },
     });
-    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
     const $cells = scheduler.workSpace.getCells();
     const $table = scheduler.workSpace.getDateTable();
@@ -2921,7 +3044,7 @@ if(devices.real().deviceType === 'desktop') {
         });
 
         const { instance } = scheduler;
-        instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
         const showAppointmentPopupSpy = sinon.spy();
         instance.showAppointmentPopup = showAppointmentPopupSpy;
 
@@ -3234,5 +3357,29 @@ QUnit.module('Cell Templates', () => {
                 scheduler.instance.option('currentView', type);
             });
         });
+    });
+});
+
+QUnit.module('Markup', () => {
+    QUnit.test('Rows should have correct width in Month when virtual scrolling is used', function(assert) {
+        const scheduler = createWrapper({
+            views: [{
+                type: 'month',
+                intervalCount: 30,
+            }],
+            currentView: 'month',
+            dataSource: [],
+            scrolling: { mode: 'virtual' },
+        });
+
+        const firstRow = scheduler.workSpace.getRows(0);
+        const cells = scheduler.workSpace.getCells().slice(0, 7);
+
+        const rowWidth = firstRow.outerWidth();
+        const rowWidthByCells = [...(new Array(7))].reduce((currentWidth, _, index) => {
+            return currentWidth + cells.eq(index).outerWidth();
+        }, 0);
+
+        assert.roughEqual(rowWidth, rowWidthByCells, 3.1, 'Correct row width');
     });
 });

@@ -6,11 +6,11 @@ import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'events/drag';
 import translator from 'animation/translator';
 import { DataSource } from 'data/data_source/data_source';
-import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dateSerialization from 'core/utils/date_serialization';
 import { createWrapper, SchedulerTestWrapper, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 import dateUtils from 'core/utils/date';
 import ArrayStore from 'data/array_store';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -45,7 +45,7 @@ QUnit.testStart(function() {
 
                 const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
                 if(virtualScrollingDispatcher) {
-                    virtualScrollingDispatcher.getRenderTimeout = () => -1;
+                    virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
                 }
 
                 this.scheduler = new SchedulerTestWrapper(this.instance);
@@ -1315,7 +1315,7 @@ QUnit.testStart(function() {
         });
 
         QUnit.test('Recurrence exception should be adjusted by scheduler timezone', function(assert) {
-            const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-39600000);
+            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
             try {
                 this.createInstance({
                     dataSource: [{
@@ -1373,7 +1373,7 @@ QUnit.testStart(function() {
                 return;
             }
 
-            const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
             try {
                 this.createInstance({
                     dataSource: [{

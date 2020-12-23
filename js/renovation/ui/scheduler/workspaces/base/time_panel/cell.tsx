@@ -1,8 +1,12 @@
 import {
-  Component, ComponentBindings, JSXComponent, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  Template,
 } from 'devextreme-generator/component_declaration/common';
 import { CellBase as Cell, CellBaseProps } from '../cell';
-import { ContentTemplateProps } from '../../types.d';
+import { ContentTemplateProps, DateTimeCellTemplateProps } from '../../types.d';
 
 export const viewFunction = (viewModel: TimePanelCell): JSX.Element => (
   <Cell
@@ -22,7 +26,7 @@ export const viewFunction = (viewModel: TimePanelCell): JSX.Element => (
 
 @ComponentBindings()
 export class TimePanelCellProps extends CellBaseProps {
-  @Template() timeCellTemplate?: any;
+  @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
 @Component({

@@ -484,6 +484,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   }
 }
 
+.dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-appointment {
+  border-right: none;
+}
+
 .dx-scheduler-appointment-content {
   padding: $generic-scheduler-appointment-content-padding;
 }

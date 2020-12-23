@@ -678,16 +678,28 @@ QUnit.module('options changing', moduleConfig, () => {
         assert.notOk($clearButton.is(':visible'), 'clear button was hidden');
     });
 
-    QUnit.test('click on clear button should not reset active focus (T241583)', function(assert) {
-        const $element = $('#texteditor').dxTextEditor({ showClearButton: true, value: 'foo' });
-        const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+    ['mouse', 'touch'].forEach((pointerType) => { // T241583, T310102
+        const pointerAction = pointerType === 'mouse' ? 'click' : 'tap';
+        QUnit.test(`${pointerAction} on clear button should not reset active focus and clear the value`, function(assert) {
+            const $element = $('#texteditor').dxTextEditor({ showClearButton: true, value: 'foo' });
+            const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+            const $input = $element.find(`.${INPUT_CLASS}`);
+            const instance = $element.dxTextEditor('instance');
 
-        const dxPointerDown = $.Event('dxpointerdown');
-        dxPointerDown.pointerType = 'mouse';
+            const dxPointerDown = $.Event('dxpointerdown');
+            dxPointerDown.pointerType = pointerType;
 
-        $clearButton.on('dxpointerdown', e => {
-            assert.ok(e.isDefaultPrevented());
-        }).trigger(dxPointerDown);
+            $clearButton.on('dxpointerdown', e => {
+                assert.ok(e.isDefaultPrevented(), 'prevent input blurring');
+            }).trigger(dxPointerDown);
+
+            if(pointerType === 'mouse') {
+                $clearButton.trigger('dxclick');
+            }
+
+            assert.strictEqual($input.val(), '', 'input is empty');
+            assert.strictEqual(instance.option('value'), '', 'value is cleared');
+        });
     });
 
     QUnit.test('click on clear button should raise input event (T521817)', function(assert) {
@@ -707,17 +719,6 @@ QUnit.module('options changing', moduleConfig, () => {
         pointerMock($clearButton).click();
 
         assert.equal(callCount, 1, 'onInput was called once');
-    });
-
-    QUnit.test('tap on clear button should reset value (T310102)', function(assert) {
-        const $element = $('#texteditor').dxTextEditor({ showClearButton: true, value: 'foo' });
-        const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
-
-        const dxPointerDown = $.Event('dxpointerdown');
-        dxPointerDown.pointerType = 'touch';
-        $clearButton.on('dxpointerdown', e => {
-            assert.ok(!e.isDefaultPrevented());
-        }).trigger(dxPointerDown);
     });
 
     QUnit.test('tap on clear button should not raise onValueChange event (T812448)', function(assert) {

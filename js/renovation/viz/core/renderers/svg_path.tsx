@@ -5,6 +5,7 @@ import {
   OneWay,
   Ref,
   Effect,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import {
   PathType,
@@ -23,11 +24,11 @@ export const viewFunction = ({
   pathRef,
   d,
   props: {
-    className, fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity, transform,
+    className, fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity, pointerEvents,
   },
 }: PathSvgElement): JSX.Element => (
   <path
-    ref={pathRef as any}
+    ref={pathRef}
     className={className}
     d={d}
     fill={fill}
@@ -36,7 +37,7 @@ export const viewFunction = ({
     strokeOpacity={strokeOpacity}
     strokeLinecap={strokeLineCap}
     opacity={opacity}
-    transform={transform}
+    pointerEvents={pointerEvents}
   />
 );
 
@@ -50,7 +51,7 @@ export class PathSvgElementProps extends SvgGraphicsProps {
 
   @OneWay() strokeLineCap?: LineCap;
 
-  @OneWay() transform?: string;
+  @OneWay() pointerEvents?: string;
 }
 
 @Component({
@@ -59,7 +60,7 @@ export class PathSvgElementProps extends SvgGraphicsProps {
   isSVG: true,
 })
 export class PathSvgElement extends JSXComponent(PathSvgElementProps) {
-  @Ref() pathRef!: SVGGraphicsElement;
+  @Ref() pathRef!: RefObject<SVGPathElement>;
 
   get d(): string | undefined {
     let path = this.props.d;

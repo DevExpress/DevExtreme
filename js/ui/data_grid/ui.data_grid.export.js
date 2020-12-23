@@ -557,7 +557,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
                 summaryCells = totalItem && totalItem.summaryCells;
 
                 if(isDefined(totalAggregates) && summaryTotalItems) {
-                    summaryCells = dataController._getSummaryCells(summaryTotalItems, totalAggregates);
+                    summaryCells = that._getSummaryCells(summaryTotalItems, totalAggregates);
                 }
 
                 const summaryItems = totalItem && that._getFooterSummaryItems(summaryCells, true);
@@ -571,6 +571,15 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
         }).fail(d.reject);
 
         return d;
+    },
+
+    _getSummaryCells: function(summaryTotalItems, totalAggregates) {
+        const dataController = this.getController('data');
+        const columnsController = dataController._columnsController;
+
+        return dataController._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(null, true), function(summaryItem, column) {
+            return dataController._isDataColumn(column) ? column.index : -1;
+        });
     },
 
     _getSelectedItems: function() {

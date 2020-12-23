@@ -1,8 +1,17 @@
 import {
-  Component, ComponentBindings, ForwardRef, OneWay, JSXComponent, Ref, Method, Effect, Consumer,
+  Component,
+  ComponentBindings,
+  ForwardRef,
+  OneWay,
+  JSXComponent,
+  Ref,
+  Method,
+  Effect,
+  Consumer,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import type DomComponent from '../../../core/dom_component';
-import { ConfigContextValue, ConfigContext } from './config_context';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { EventCallback } from './event_callback.d';
 import { renderTemplate } from '../../utils/render_template';
 
@@ -12,7 +21,7 @@ export const viewFunction = ({
   restAttributes,
 }: DomComponentWrapper): JSX.Element => (
   <div
-    ref={widgetRef as any}
+    ref={widgetRef}
     className={className}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
@@ -23,7 +32,7 @@ interface WidgetInstanceType { option: (properties: Record<string, unknown>) => 
 
 @ComponentBindings()
 export class DomComponentWrapperProps {
-  @ForwardRef() rootElementRef?: HTMLDivElement;
+  @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
   @OneWay() componentType!: typeof DomComponent & {
     getInstance: (widgetRef: HTMLDivElement) => WidgetInstanceType;
@@ -42,7 +51,7 @@ export class DomComponentWrapperProps {
 })
 export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 'componentType' | 'componentProps'>() {
   @Ref()
-  widgetRef!: HTMLDivElement;
+  widgetRef!: RefObject<HTMLDivElement>;
 
   @Ref()
   instance!: DomComponent | null;
