@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import dateLocalization from 'localization/date';
-import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { SchedulerTestWrapper, createWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
@@ -29,6 +29,9 @@ import translator from 'animation/translator';
 import 'ui/scheduler/ui.scheduler';
 
 import { dateToMilliseconds as toMs } from 'core/utils/date';
+
+const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
+const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
 
 QUnit.module('Integration: Work space', {
     beforeEach: function() {
@@ -1963,110 +1966,84 @@ QUnit.test('Workspace view group header cells have same height as table cells (T
 });
 
 if(devices.real().deviceType === 'desktop') {
-    QUnit.module('Integration: Work space: Multiple selection when dragging is not enabled', {
+    QUnit.module('Cells selection', {
         beforeEach: function() {
             fx.off = true;
         },
         afterEach: function() {
             fx.off = false;
-        }
+        },
     }, () => {
-        [{
-            view: 'day',
-            startCell: {
-                index: 0,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 0),
-                    endDate: new Date(2018, 3, 8, 0, 30),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
+        QUnit.module(' Multiple selection when dragging is not enabled', () => {
+            [{
+                view: 'day',
+                startCell: {
+                    index: 0,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 0),
+                        endDate: new Date(2018, 3, 8, 0, 30),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
                 },
-            },
-            endCell: {
-                index: 1,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 30),
-                    endDate: new Date(2018, 3, 8, 1, 0),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
+                endCell: {
+                    index: 1,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 30),
+                        endDate: new Date(2018, 3, 8, 1, 0),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
                 },
-            },
-        }, {
-            view: 'week',
-            startCell: {
-                index: 0,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 0),
-                    endDate: new Date(2018, 3, 8, 0, 30),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
+            }, {
+                view: 'week',
+                startCell: {
+                    index: 0,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 0),
+                        endDate: new Date(2018, 3, 8, 0, 30),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
                 },
-            },
-            endCell: {
-                index: 7,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 30),
-                    endDate: new Date(2018, 3, 8, 1, 0),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
+                endCell: {
+                    index: 7,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 30),
+                        endDate: new Date(2018, 3, 8, 1, 0),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
                 },
-            },
-        }, {
-            view: 'month',
-            startCell: {
-                index: 0,
-                cellData: {
-                    startDate: new Date(2018, 3, 1),
-                    endDate: new Date(2018, 3, 2),
-                    groups: undefined,
-                    groupIndex: 0,
-                    allDay: undefined,
+            }, {
+                view: 'month',
+                startCell: {
+                    index: 0,
+                    cellData: {
+                        startDate: new Date(2018, 3, 1),
+                        endDate: new Date(2018, 3, 2),
+                        groups: undefined,
+                        groupIndex: 0,
+                        allDay: undefined,
+                    },
                 },
-            },
-            endCell: {
-                index: 1,
-                cellData: {
-                    startDate: new Date(2018, 3, 2),
-                    endDate: new Date(2018, 3, 3),
-                    groups: undefined,
-                    groupIndex: 0,
-                    allDay: undefined,
+                endCell: {
+                    index: 1,
+                    cellData: {
+                        startDate: new Date(2018, 3, 2),
+                        endDate: new Date(2018, 3, 3),
+                        groups: undefined,
+                        groupIndex: 0,
+                        allDay: undefined,
+                    },
                 },
-            },
-        }].forEach((config) => {
-            const { view, startCell, endCell } = config;
-            QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled`, function(assert) {
-                const instance = createWrapper({
-                    dataSource: [],
-                    views: [view],
-                    currentView: view,
-                    showAllDayPanel: true,
-                    currentDate: new Date(2018, 3, 8),
-                    height: 600,
-                    editing: { allowDragging: false },
-                });
-
-                const $cells = instance.workSpace.getCells();
-                const $table = instance.workSpace.getDateTable();
-
-                $($table).trigger(
-                    $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
-                );
-                $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
-
-                assert.deepEqual(
-                    instance.option('selectedCellData'),
-                    [
-                        startCell.cellData, endCell.cellData,
-                    ], 'correct cells have been selected');
-            });
-
-            if(view !== 'month') {
-                QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled when scrolling is virtual`, function(assert) {
+            }].forEach((config) => {
+                const { view, startCell, endCell } = config;
+                QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled`, function(assert) {
                     const instance = createWrapper({
                         dataSource: [],
                         views: [view],
@@ -2075,7 +2052,6 @@ if(devices.real().deviceType === 'desktop') {
                         currentDate: new Date(2018, 3, 8),
                         height: 600,
                         editing: { allowDragging: false },
-                        scrolling: { mode: 'virtual' },
                     });
 
                     const $cells = instance.workSpace.getCells();
@@ -2092,7 +2068,92 @@ if(devices.real().deviceType === 'desktop') {
                             startCell.cellData, endCell.cellData,
                         ], 'correct cells have been selected');
                 });
-            }
+
+                if(view !== 'month') {
+                    QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled when scrolling is virtual`, function(assert) {
+                        const instance = createWrapper({
+                            dataSource: [],
+                            views: [view],
+                            currentView: view,
+                            showAllDayPanel: true,
+                            currentDate: new Date(2018, 3, 8),
+                            height: 600,
+                            editing: { allowDragging: false },
+                            scrolling: { mode: 'virtual' },
+                        });
+
+                        const $cells = instance.workSpace.getCells();
+                        const $table = instance.workSpace.getDateTable();
+
+                        $($table).trigger(
+                            $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
+                        );
+                        $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
+
+                        assert.deepEqual(
+                            instance.option('selectedCellData'),
+                            [
+                                startCell.cellData, endCell.cellData,
+                            ], 'correct cells have been selected');
+                    });
+                }
+            });
+        });
+
+        QUnit.test('Correct cells should be selected in Month View in basic case', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: ['month'],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                scrolling: { mode: 'virtual' },
+            });
+
+            scheduler.workSpace.selectCells(0, 5);
+
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+            const firstCell = scheduler.workSpace.getCell(0);
+            const lastCell = scheduler.workSpace.getCell(5);
+
+            assert.equal(selectedCells.length, 6, 'Correct number of cells');
+            assert.ok(firstCell.hasClass(SELECTED_CELL_CLASS), 'Correct first cell');
+            assert.ok(lastCell.hasClass(SELECTED_CELL_CLASS), 'Correct last cell');
+            assert.notOk(firstCell.hasClass(FOCUSED_CELL_CLASS), 'First cell is not focused');
+            assert.ok(lastCell.hasClass(FOCUSED_CELL_CLASS), 'Last cell is focused');
+        });
+
+        QUnit.test('Correct selectedCellData should be generated when selecting cells in Month', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: ['month'],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                scrolling: { mode: 'virtual' },
+            });
+
+            scheduler.workSpace.selectCells(0, 5);
+
+            const selectedCellData = scheduler.option('selectedCellData');
+
+            assert.equal(selectedCellData.length, 6, 'Correct number of cells');
+            assert.deepEqual(selectedCellData[0], {
+                startDate: new Date(2020, 10, 29, 0, 0),
+                endDate: new Date(2020, 10, 30, 0, 0),
+                allDay: undefined,
+                groupIndex: 0,
+                groups: undefined,
+            }, 'Correct first cell');
+            assert.deepEqual(selectedCellData[5], {
+                startDate: new Date(2020, 11, 4, 0, 0),
+                endDate: new Date(2020, 11, 5, 0, 0),
+                allDay: undefined,
+                groupIndex: 0,
+                groups: undefined,
+            }, 'Correct last cell');
         });
     });
 }

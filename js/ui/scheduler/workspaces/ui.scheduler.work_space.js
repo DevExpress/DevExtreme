@@ -2642,7 +2642,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             groups: cellData.groups,
             groupIndex: cellData.groupIndex,
             allDay: cellData.allDay,
-            text: cellData.text,
         } : undefined;
     }
 
