@@ -154,7 +154,8 @@ jest.mock('../../../../core/devices', () => {
               );
 
               const scrollBar = scrollable.find(Scrollbar);
-              const needRenderScrollbars = (showScrollbar && useSimulatedScrollbar) ?? false;
+              const needRenderScrollbars = (showScrollbar ?? false)
+                && (useSimulatedScrollbar ?? false);
 
               expect(scrollBar.exists()).toBe(needRenderScrollbars);
               if (needRenderScrollbars) {
