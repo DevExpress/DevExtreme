@@ -3278,8 +3278,8 @@ QUnit.module('Cell Templates', () => {
     });
 });
 
-module('Markup', () => {
-    test('Rows should have correct width in Month when virtual scrolling is used', function(assert) {
+QUnit.module('Markup', () => {
+    QUnit.test('Rows should have correct width in Month when virtual scrolling is used', function(assert) {
         const scheduler = createWrapper({
             views: [{
                 type: 'month',
