@@ -327,7 +327,7 @@ QUnit.test('simple chart with two panes', function(assert) {
     assert.ok(chart.panes);
     assert.equal(chart.panes.length, 2);
 
-    assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0], chart._argumentAxes[1].setBusinessRange.lastCall.args[0]);
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0], chart._argumentAxes[1].setBusinessRange.lastCall.args[0]);
 });
 
 QUnit.test('Rotated chart with two panes', function(assert) {
@@ -365,7 +365,7 @@ QUnit.test('Rotated chart with two panes', function(assert) {
     assert.ok(chart.panes);
     assert.equal(chart.panes.length, 2);
 
-    assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0], chart._argumentAxes[1].setBusinessRange.lastCall.args[0]);
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0], chart._argumentAxes[1].setBusinessRange.lastCall.args[0]);
 });
 
 QUnit.test('chart with one empty pane', function(assert) {
@@ -393,7 +393,7 @@ QUnit.test('chart with one empty pane', function(assert) {
     assert.ok(chart.panes);
     assert.equal(chart.panes.length, 2);
     // assert
-    assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0], chart._argumentAxes[1].setBusinessRange.lastCall.args[0]);
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0], chart._argumentAxes[1].setBusinessRange.lastCall.args[0]);
 
     assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
     assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
@@ -427,7 +427,7 @@ QUnit.test('Rotated chart with one empty pane', function(assert) {
     assert.ok(chart.panes);
     assert.equal(chart.panes.length, 2);
     // assert
-    assert.strictEqual(chart._argumentAxes[1].setBusinessRange.lastCall.args[0], chart._argumentAxes[0].setBusinessRange.lastCall.args[0], 'all argument axes have same range');
+    assert.deepEqual(chart._argumentAxes[1].setBusinessRange.lastCall.args[0], chart._argumentAxes[0].setBusinessRange.lastCall.args[0], 'all argument axes have same range');
 
     assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
     assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
