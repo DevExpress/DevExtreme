@@ -99,12 +99,12 @@ export default class VirtualScrollingDispatcher {
             DefaultScrollingType;
     }
 
-    get verticalScrollingSupported() {
+    get verticalScrollingAllowed() {
         return this.scrollingType === scrollingTypes.vertical ||
             this.scrollingType === scrollingTypes.both;
     }
 
-    get horizontalScrollingSupported() {
+    get horizontalScrollingAllowed() {
         return this.scrollingType === scrollingTypes.horizontal ||
             this.scrollingType === scrollingTypes.both;
     }
@@ -145,7 +145,7 @@ export default class VirtualScrollingDispatcher {
     }
 
     _createVirtualScrolling() {
-        if(this.verticalScrollingSupported) {
+        if(this.verticalScrollingAllowed) {
             this.verticalVirtualScrolling = new VerticalVirtualScrolling({
                 workspace: this.workspace,
                 viewportHeight: this.viewportHeight,
@@ -153,7 +153,7 @@ export default class VirtualScrollingDispatcher {
             });
         }
 
-        if(this.horizontalScrollingSupported) {
+        if(this.horizontalScrollingAllowed) {
             this.horizontalVirtualScrolling = new HorizontalVirtualScrolling({
                 workspace: this.workspace,
                 viewportWidth: this.viewportWidth,
