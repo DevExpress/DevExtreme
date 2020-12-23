@@ -245,60 +245,65 @@ jest.mock('../../../../core/devices', () => {
 
           it('should subscribe to scrollstart event', () => {
             const e = { ...defaultEvent };
-            const widget = new Scrollable({ direction });
-            // eslint-disable-next-line
-            const handleStart = widget.handleStart = jest.fn();
-            widget.startEffect();
+            const scrollable = new Scrollable({ direction });
+            const handleStart = jest.fn();
+            (scrollable as any).handleStart = handleStart;
 
+            scrollable.startEffect();
             emit('dxscrollstart', e);
+
             expect(handleStart).toHaveBeenCalledTimes(1);
             expect(handleStart).toHaveBeenCalledWith(e);
           });
 
           it('should subscribe to dxscroll event', () => {
             const e = { ...defaultEvent };
-            const widget = new Scrollable({ direction });
-            // eslint-disable-next-line
-            const handleMove = widget.handleMove = jest.fn();
-            widget.moveEffect();
+            const scrollable = new Scrollable({ direction });
+            const handleMove = jest.fn();
+            (scrollable as any).handleMove = handleMove;
 
+            scrollable.moveEffect();
             emit('dxscroll', e);
+
             expect(handleMove).toHaveBeenCalledTimes(1);
             expect(handleMove).toHaveBeenCalledWith(e);
           });
 
           it('should subscribe to scrollend event', () => {
             const e = { ...defaultEvent };
-            const widget = new Scrollable({ direction });
-            // eslint-disable-next-line
-            const handleEnd = widget.handleEnd = jest.fn();
-            widget.endEffect();
+            const scrollable = new Scrollable({ direction });
+            const handleEnd = jest.fn();
+            (scrollable as any).handleEnd = handleEnd;
 
+            scrollable.endEffect();
             emit('dxscrollend', e);
+
             expect(handleEnd).toHaveBeenCalledTimes(1);
             expect(handleEnd).toHaveBeenCalledWith(e);
           });
 
           it('should subscribe to scrollStop event', () => {
             const e = { ...defaultEvent };
-            const widget = new Scrollable({ direction });
-            // eslint-disable-next-line
-            const handleStop = widget.handleStop = jest.fn();
-            widget.stopEffect();
+            const scrollable = new Scrollable({ direction });
+            const handleStop = jest.fn();
+            (scrollable as any).handleStop = handleStop;
 
+            scrollable.stopEffect();
             emit('dxscrollstop', e);
+
             expect(handleStop).toHaveBeenCalledTimes(1);
             expect(handleStop).toHaveBeenCalledWith(e);
           });
 
           it('should subscribe to scrollcancel event', () => {
             const e = { ...defaultEvent };
-            const widget = new Scrollable({ direction });
-            // eslint-disable-next-line
-            const handleCancel = widget.handleCancel = jest.fn();
-            widget.cancelEffect();
+            const scrollable = new Scrollable({ direction });
+            const handleCancel = jest.fn();
+            (scrollable as any).handleCancel = handleCancel;
 
+            scrollable.cancelEffect();
             emit('dxscrollcancel', e);
+
             expect(handleCancel).toHaveBeenCalledTimes(1);
             expect(handleCancel).toHaveBeenCalledWith(e);
           });

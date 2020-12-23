@@ -226,8 +226,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
     const namespace = 'dxScrollable';
 
     dxScrollStop.on(this.wrapperRef,
-      (e: Event) => {
-        this.handleStop(e);
+      (event: Event) => {
+        this.handleStop(event);
       }, { namespace });
 
     return (): void => dxScrollStop.off(this.wrapperRef, { namespace });
@@ -238,33 +238,37 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
     const namespace = 'dxScrollable';
 
     dxScrollCancel.on(this.wrapperRef,
-      (e: Event) => {
-        this.handleCancel(e);
+      (event: Event) => {
+        this.handleCancel(event);
       }, { namespace });
 
     return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
   }
 
+  /* istanbul ignore next */
   // eslint-disable-next-line
-  private handleStart(e: Event):void {
-    // console.log('handleStart', e, this);
+  private handleStart(event: Event): void {
+    // console.log('handleEnd', event, this);
   }
-
+  /* istanbul ignore next */
   // eslint-disable-next-line
-  private handleMove(e: Event): void {
-    // console.log('handleMove', e, this);
+  private handleMove(event: Event): void {
+    // console.log('handleEnd', event, this);
   }
+  /* istanbul ignore next */
   // eslint-disable-next-line
-  private handleEnd(e: Event): void {
-    // console.log('handleEnd', e, this);
+  private handleEnd(event: Event): void {
+    // console.log('handleEnd', event, this);
   }
+  /* istanbul ignore next */
   // eslint-disable-next-line
-  private handleStop(e: Event): void {
-    // console.log('handleStop', e, this);
+  private handleStop(event: Event): void {
+    // console.log('handleStop', event, this);
   }
+  /* istanbul ignore next */
   // eslint-disable-next-line
-  private handleCancel(e: Event): void {
-    // console.log('handleCancel', e, this);
+  private handleCancel(event: Event): void {
+    // console.log('handleCancel', event, this);
   }
 
   get cssClasses(): string {
