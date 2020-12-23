@@ -3298,6 +3298,6 @@ QUnit.module('Markup', () => {
             return currentWidth + cells.eq(index).outerWidth();
         }, 0);
 
-        assert.roughEqual(rowWidth, rowWidthByCells, 1, 'Correct row width');
+        assert.roughEqual(rowWidth, rowWidthByCells, 3.1, 'Correct row width');
     });
 });
