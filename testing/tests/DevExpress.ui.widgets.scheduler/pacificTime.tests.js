@@ -2,6 +2,7 @@ import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.j
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import browser from 'core/utils/browser';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
@@ -250,6 +251,44 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
     });
 
     module('Common', moduleConfig, () => {
+        [{
+            startDate: '2020-05-03T08:00:00.000Z',
+            endDate: '2020-05-03T09:00:00.000Z',
+            text: 'Test',
+            recurrenceRule: 'FREQ=DAILY;UNTIL=20200506T080000Z'
+        }, {
+            startDate: new Date(2020, 2, 3, 1),
+            endDate: new Date(2020, 2, 3, 2),
+            text: 'Test',
+            recurrenceRule: 'FREQ=DAILY;UNTIL=20200506T010000'
+        }].forEach(appointment => {
+            test(`UNTIL property should be apply right in case '${appointment.recurrenceRule}'`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: [appointment],
+                    views: ['week'],
+                    currentView: 'week',
+                    width: 900,
+                    currentDate: new Date(2020, 4, 8)
+                });
+
+                assert.equal(scheduler.appointmentList.length, 4, 'should be render 4 appointments');
+
+                const positions = [100, 214, 328, 442];
+
+                for(let i = 0; i < 4; i++) {
+                    const element = scheduler.appointmentList[i].getElement();
+                    assert.roughEqual(element.position().left, positions[i], 1, `appointment's position left should be equal ${positions[i]}`);
+                }
+
+                assert.expect(5);
+            });
+        });
+
+        test('timeZoneUtils.isEqualLocalTimeZone should be return right value', function(assert) {
+            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Los_Angeles'), 'should be return true');
+            assert.notOk(timeZoneUtils.isEqualLocalTimeZone('America/New_York'), 'should be return false');
+        });
+
         module('Today and current day in calendar', () => {
             const views = ['month', 'week'];
 

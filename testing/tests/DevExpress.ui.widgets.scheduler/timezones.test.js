@@ -447,6 +447,25 @@ module('API', moduleConfig, () => {
 
 module('Not native date DST', moduleConfig, () => {
     module('summer time', () => {
+        test('Exclude appointment from series in case DST start in prev visible view range', function(assert) {
+            const scheduler = createScheduler({
+                dataSource: [{
+                    startDate: new Date('2020-03-01T10:00:00.000Z'),
+                    endDate: new Date('2020-03-01T11:00:00.000Z'),
+                    text: 'Test',
+                    recurrenceRule: 'FREQ=DAILY',
+                }],
+                recurrenceEditMode: 'occurrence',
+                timeZone: timeZones.LosAngeles,
+                currentDate: new Date(2020, 2, 16)
+            });
+
+            scheduler.appointmentList[3].click();
+            scheduler.tooltip.clickOnDeleteButton();
+
+            assert.equal(scheduler.appointmentList.length, 6);
+        });
+
         const from1amTo2amRecurrenceExceptionCase = {
             text: 'Recurrence start from 1 a.m. to 2 a.m., exclude appointments from series',
             startDate: new Date('2020-03-01T09:00:00.000Z'),
