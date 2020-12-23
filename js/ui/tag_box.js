@@ -1363,8 +1363,8 @@ const TagBox = SelectBox.inherit({
     _applyButtonHandler: function() {
         this.option('value', this._getSortedListValues());
         this._clearTextValue();
-        this._clearFilter();
         this.callBase();
+        this._cancelSearchIfNeed();
     },
 
     _getSortedListValues: function() {
