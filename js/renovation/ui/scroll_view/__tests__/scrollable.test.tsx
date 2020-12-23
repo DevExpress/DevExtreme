@@ -159,9 +159,9 @@ jest.mock('../../../../core/devices', () => {
 
               expect(scrollBar.exists()).toBe(needRenderScrollbars);
               if (needRenderScrollbars) {
-                const scrollbarsCount = direction === 'vertical' || direction === 'horizontal'
-                  ? 1
-                  : 2;
+                const scrollbarsCount = direction === 'both'
+                  ? 2
+                  : 1;
                 expect(scrollBar.length).toBe(scrollbarsCount);
               }
             });
