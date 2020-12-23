@@ -3277,3 +3277,27 @@ QUnit.module('Cell Templates', () => {
         });
     });
 });
+
+module('Markup', () => {
+    test('Rows should have correct width in Month when virtual scrolling is used', function(assert) {
+        const scheduler = createWrapper({
+            views: [{
+                type: 'month',
+                intervalCount: 30,
+            }],
+            currentView: 'month',
+            dataSource: [],
+            scrolling: { mode: 'virtual' },
+        });
+
+        const firstRow = scheduler.workSpace.getRows(0);
+        const cells = scheduler.workSpace.getCells().slice(0, 7);
+
+        const rowWidth = firstRow.outerWidth();
+        const rowWidthByCells = [...(new Array(7))].reduce((currentWidth, _, index) => {
+            return currentWidth + cells.eq(index).outerWidth();
+        }, 0);
+
+        assert.roughEqual(rowWidth, rowWidthByCells, 1, 'Correct row width');
+    });
+});
