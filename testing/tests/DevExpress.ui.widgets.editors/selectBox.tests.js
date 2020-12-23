@@ -2992,8 +2992,11 @@ QUnit.module('search', moduleSetup, () => {
 
         keyboardMock($input)
             .type('1')
-            .press('tab');
+            .press('tab')
+            .blur();
 
+
+        assert.strictEqual(instance.option('value'), '111', 'item was selected');
         assert.strictEqual($(instance.content()).find(`.${LIST_ITEM_CLASS}`).length, 3, 'filter was cleared');
     });
 
