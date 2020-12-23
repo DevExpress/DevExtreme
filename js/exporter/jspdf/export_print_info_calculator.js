@@ -48,7 +48,7 @@ export const ExportPrintInfoCalculator = {
 
     _calculateTableWidth: function(jsPDFDocument, leftIndent, rightIndent) {
         const pageSize = jsPDFDocument.internal.pageSize;
-        const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
+        const pageWidth = isDefined(pageSize.width) ? pageSize.width : pageSize.getWidth();
         return pageWidth - (leftIndent + rightIndent);
     },
 
