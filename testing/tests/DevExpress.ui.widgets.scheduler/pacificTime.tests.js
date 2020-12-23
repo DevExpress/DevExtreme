@@ -135,6 +135,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                     }],
                     views: ['week'],
                     currentView: 'week',
+                    recurrenceEditMode: 'occurrence',
                     firstDayOfWeek: 4,
                     currentDate: testCase.currentDate,
                     startDayHour: 0,
@@ -153,7 +154,6 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                 scheduler.appointments.click(lastAppointmentIndex);
 
                 scheduler.tooltip.clickOnDeleteButton(0);
-                scheduler.appointmentPopup.dialog.clickEditAppointment();
 
                 const dataSource = scheduler.option('dataSource');
                 assert.equal(dataSource[0].recurrenceException, testCase.recurrenceException, 'recurrenceException should be valid');

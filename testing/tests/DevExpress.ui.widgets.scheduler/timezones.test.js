@@ -471,7 +471,8 @@ module('Not native date DST', moduleConfig, () => {
             endDate: new Date('2020-03-01T11:00:00.000Z'),
 
             expectedText: '2:00 AM - 3:00 AM',
-            recurrenceExceptions: ['20200306T100000Z', '20200308T100000Z', '20200310T090000Z']
+            recurrenceExceptions: ['20200306T100000Z', '20200308T100000Z', '20200310T090000Z'],
+            skipInNativeLosAngeles: true
         };
 
         const from6amTo7amRecurrenceExceptionCase = {
@@ -489,6 +490,12 @@ module('Not native date DST', moduleConfig, () => {
             from2amTo3amRecurrenceExceptionCase,
             from6amTo7amRecurrenceExceptionCase
         ].forEach(testCase => {
+            const pacificTimezoneOffset = 480; // TODO: Value in ms. Offset (UTC-08:00) Pacific Time (US & Canada)
+            const isNativeLosAngeles = new Date(2020, 2, 7).getTimezoneOffset() === pacificTimezoneOffset;
+            if(isNativeLosAngeles && testCase.skipInNativeLosAngeles) {
+                return;
+            }
+
             test(testCase.text, function(assert) {
                 const scheduler = createScheduler({
                     dataSource: [{
