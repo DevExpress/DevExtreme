@@ -2298,8 +2298,8 @@ module('Virtual scrolling', () => {
     });
 
     module('Customization', () => {
-        supportedViews.forEach(viewName => {
-            module('Vertical orientation (Customization)', () => {
+        module('Vertical orientation', () => {
+            supportedViews.forEach(viewName => {
                 test(`Cell height should be correct in ${viewName} view`, function(assert) {
                     const $style = $('<style>');
                     const styleBefore = $style.text();
@@ -2327,8 +2327,10 @@ module('Virtual scrolling', () => {
                     $style.text(styleBefore);
                 });
             });
+        });
 
-            module('Horizontal orientation', () => {
+        module('Horizontal orientation', () => {
+            supportedViews.forEach(viewName => {
                 test(`Cell width should be correct in ${viewName} view`, function(assert) {
                     const $style = $('<style>');
                     const styleBefore = $style.text();

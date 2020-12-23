@@ -1247,7 +1247,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(this.isVirtualScrolling()) {
             extend(
                 options,
-                this.virtualScrollingDispatcher.renderState
+                this.virtualScrollingDispatcher.getRenderState()
             );
         } else {
             options.rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());

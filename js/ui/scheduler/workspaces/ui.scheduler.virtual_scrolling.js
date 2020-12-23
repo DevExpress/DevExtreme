@@ -13,7 +13,7 @@ const scrollingTypes = {
     horizontal: 'horizontal',
     both: 'both'
 };
-const DefaultScrollingType = scrollingTypes.vertical;
+const DefaultScrollingType = scrollingTypes.both;
 
 export default class VirtualScrollingDispatcher {
     constructor(workspace) {
@@ -81,25 +81,6 @@ export default class VirtualScrollingDispatcher {
     get verticalScrollingState() { return this.scrollingState.vertical; }
     get horizontalScrollingState() { return this.scrollingState.horizontal; }
 
-    getCellHeight() {
-        return this.workspace.getCellHeight(false) || DEFAULT_CELL_HEIGHT;
-    }
-
-    getCellWidth() {
-        const { workspace } = this;
-        return workspace.getCellWidth() || workspace.getCellMinWidth();
-    }
-
-    get renderState() {
-        const verticalRenderState = this.verticalVirtualScrolling?.getRenderState() || {};
-        const horizontalRenderState = this.horizontalVirtualScrolling?.getRenderState() || {};
-
-        return {
-            ...verticalRenderState,
-            ...horizontalRenderState
-        };
-    }
-
     get scrollingType() {
         return this.workspace.option('scrolling.type') ||
             DefaultScrollingType;
@@ -113,6 +94,25 @@ export default class VirtualScrollingDispatcher {
     get horizontalScrollingAllowed() {
         return this.scrollingType === scrollingTypes.horizontal ||
             this.scrollingType === scrollingTypes.both;
+    }
+
+    getRenderState() {
+        const verticalRenderState = this.verticalVirtualScrolling?.getRenderState() || {};
+        const horizontalRenderState = this.horizontalVirtualScrolling?.getRenderState() || {};
+
+        return {
+            ...verticalRenderState,
+            ...horizontalRenderState
+        };
+    }
+
+    getCellHeight() {
+        return this.workspace.getCellHeight(false) || DEFAULT_CELL_HEIGHT;
+    }
+
+    getCellWidth() {
+        const { workspace } = this;
+        return workspace.getCellWidth() || workspace.getCellMinWidth();
     }
 
     calculateCoordinatesByDataAndPosition(cellData, position, date) {
