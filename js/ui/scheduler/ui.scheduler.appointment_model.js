@@ -1,4 +1,5 @@
 import config from '../../core/config';
+import Guid from '../../core/guid';
 import { map, each } from '../../core/utils/iterator';
 import dateSerialization from '../../core/utils/date_serialization';
 import { getRecurrenceProcessor } from './recurrence';
@@ -171,13 +172,17 @@ class AppointmentModel {
 
         const checkAppointmentResourceValues = () => {
             const resourceGetter = this._dataAccessors.getter.resources[resourceName];
-            let resource;
+            let resourceValue;
 
             if(isFunction(resourceGetter)) {
-                resource = resourceGetter(appointment);
+                resourceValue = resourceGetter(appointment);
             }
 
-            const appointmentResourceValues = wrapToArray(resource);
+            if(resourceValue instanceof Guid) {
+                resourceValue = resourceValue.valueOf();
+            }
+
+            const appointmentResourceValues = wrapToArray(resourceValue);
             const resourceData = map(resources[i].items, (item) => { return item.id; });
 
             for(let j = 0, itemDataCount = appointmentResourceValues.length; j < itemDataCount; j++) {

@@ -1,3 +1,5 @@
+import Guid from '../../core/guid';
+import { each } from '../../core/utils/iterator';
 import dateUtils from '../../core/utils/date';
 import { isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -36,6 +38,16 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         const { scheduler } = this;
         const appointment = scheduler.createAppointmentAdapter(rawAppointment);
         const itemResources = scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
+
+        each(itemResources, name => {
+            itemResources[name] = itemResources[name].map(v => {
+                if(v instanceof Guid) {
+                    return v.valueOf();
+                }
+                return v;
+            });
+        });
+
         const isAllDay = this._isAllDayAppointment(rawAppointment);
 
         let appointmentList = this._createAppointments(appointment, itemResources);
