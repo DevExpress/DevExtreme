@@ -47,7 +47,8 @@ export const viewFunction = ({
   },
   restAttributes,
 }: ScrollableNative): JSX.Element => {
-  const { isVertical, isHorizontal } = new ScrollDirection(direction);
+  const isVertical = direction !== 'horizontal';
+  const isHorizontal = direction !== 'vertical';
   return (
     <Widget
       classes={cssClasses}
