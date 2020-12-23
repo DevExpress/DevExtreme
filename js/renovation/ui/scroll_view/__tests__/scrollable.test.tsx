@@ -1154,9 +1154,9 @@ jest.mock('../../../../core/devices', () => {
                     direction,
                   });
 
-                  const needRenderScrollbars = showScrollbar && useSimulatedScrollbar;
+                  const hasSimulatedCssClasses = showScrollbar && useSimulatedScrollbar;
 
-                  expect(instance.cssClasses).toEqual(needRenderScrollbars
+                  expect(instance.cssClasses).toEqual(hasSimulatedCssClasses
                     ? expect.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED)
                     : expect.not.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED));
                 });
