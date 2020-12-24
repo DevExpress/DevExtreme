@@ -13,7 +13,7 @@ const scrollingTypes = {
     horizontal: 'horizontal',
     both: 'both'
 };
-const DefaultScrollingType = scrollingTypes.both;
+const DefaultScrollingType = scrollingTypes.vertical;
 
 export default class VirtualScrollingDispatcher {
     constructor(workspace) {
