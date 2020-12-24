@@ -8,7 +8,6 @@ import pointerMock from '../../../helpers/pointerMock.js';
 
 import 'ui/number_box';
 import 'ui/validator';
-import 'generic_light.css!';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const INVALID_CLASS = 'dx-invalid';
