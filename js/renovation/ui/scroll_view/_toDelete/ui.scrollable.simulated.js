@@ -551,6 +551,7 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     render: function() {
+        this._createScrollers();
         if(this.option('useKeyboard')) {
             this._$container.prop('tabIndex', 0);
         }
