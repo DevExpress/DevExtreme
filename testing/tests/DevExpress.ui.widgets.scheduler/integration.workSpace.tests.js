@@ -1974,6 +1974,16 @@ if(devices.real().deviceType === 'desktop') {
             fx.off = false;
         },
     }, () => {
+        const resources = [
+            {
+                field: 'ownerId',
+                dataSource: [
+                    { id: 1, text: 'John' },
+                    { id: 2, text: 'Mike' }
+                ]
+            }
+        ];
+
         QUnit.module(' Multiple selection when dragging is not enabled', () => {
             [{
                 view: 'day',
@@ -2100,7 +2110,7 @@ if(devices.real().deviceType === 'desktop') {
             });
         });
 
-        QUnit.test('Correct cells should be selected in Month View in basic case', function(assert) {
+        QUnit.test('Correct cells should be selected in Month View in basic case and virtual scrolling is enabled', function(assert) {
             const scheduler = createWrapper({
                 dataSource: [],
                 views: ['month'],
@@ -2114,17 +2124,125 @@ if(devices.real().deviceType === 'desktop') {
             scheduler.workSpace.selectCells(0, 5);
 
             const selectedCells = scheduler.workSpace.getSelectedCells();
-            const firstCell = scheduler.workSpace.getCell(0);
-            const lastCell = scheduler.workSpace.getCell(5);
 
             assert.equal(selectedCells.length, 6, 'Correct number of cells');
-            assert.ok(firstCell.hasClass(SELECTED_CELL_CLASS), 'Correct first cell');
-            assert.ok(lastCell.hasClass(SELECTED_CELL_CLASS), 'Correct last cell');
-            assert.notOk(firstCell.hasClass(FOCUSED_CELL_CLASS), 'First cell is not focused');
-            assert.ok(lastCell.hasClass(FOCUSED_CELL_CLASS), 'Last cell is focused');
+
+            [...(new Array(6))].forEach((_, index) => {
+                const cell = scheduler.workSpace.getCell(index);
+                assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+                assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), index === 5, 'Cell has correct classes');
+            });
         });
 
-        QUnit.test('Correct selectedCellData should be generated when selecting cells in Month', function(assert) {
+        QUnit.test('Correct cells should be selected in Month when horizontal grouping is used and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'horizontal',
+                }],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                scrolling: { mode: 'virtual' },
+                resources,
+                groups: ['ownerId'],
+            });
+
+            scheduler.workSpace.selectCells(7, 9);
+
+            let selectedCells = scheduler.workSpace.getSelectedCells();
+
+            assert.equal(selectedCells.length, 3, 'Correct number of cells');
+
+            [...(new Array(3))].forEach((_, index) => {
+                const cell = scheduler.workSpace.getCell(index + 7);
+                assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+                assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), index === 2, 'Cell has correct classes');
+            });
+
+            scheduler.workSpace.selectCells(6, 7);
+
+            selectedCells = scheduler.workSpace.getSelectedCells();
+            const cell = scheduler.workSpace.getCell(6);
+
+            assert.equal(selectedCells.length, 1, 'Correct number of cells');
+            assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+            assert.ok(cell.hasClass(FOCUSED_CELL_CLASS), 'Cell is focused');
+        });
+
+        QUnit.test('Correct cells should be selected in Month when vertical grouping is used and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'vertical',
+                }],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                scrolling: { mode: 'virtual' },
+                resources,
+                groups: ['ownerId'],
+            });
+
+            scheduler.workSpace.selectCells(0, 5);
+
+            let selectedCells = scheduler.workSpace.getSelectedCells();
+
+            assert.equal(selectedCells.length, 6, 'Correct number of cells');
+
+            [...(new Array(6))].forEach((_, index) => {
+                const cell = scheduler.workSpace.getCell(index);
+                assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+                assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), index === 5, 'Cell has correct classes');
+            });
+
+            scheduler.workSpace.selectCells(6, 58);
+
+            selectedCells = scheduler.workSpace.getSelectedCells();
+            const cell = scheduler.workSpace.getCell(6);
+
+            assert.equal(selectedCells.length, 1, 'Correct number of cells');
+            assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+            assert.ok(cell.hasClass(FOCUSED_CELL_CLASS), 'Cell is focused');
+        });
+
+        QUnit.test('Correct cells should be selected in Month when grouping by date is used and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'horizontal',
+                    groupByDate: true,
+                }],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                scrolling: { mode: 'virtual' },
+                resources,
+                groups: ['ownerId'],
+            });
+
+            scheduler.workSpace.selectCells(0, 2);
+
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+
+            assert.equal(selectedCells.length, 2, 'Correct number of cells');
+
+            [...(new Array(3))].forEach((_, index) => {
+                if(index !== 1) {
+                    const cell = scheduler.workSpace.getCell(index);
+                    assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+                    assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), index === 2, 'Cell has correct classes');
+                }
+            });
+        });
+
+        QUnit.test('Correct selectedCellData should be generated when selecting cells in Month when virtual scrolling is enabled', function(assert) {
             const scheduler = createWrapper({
                 dataSource: [],
                 views: ['month'],
