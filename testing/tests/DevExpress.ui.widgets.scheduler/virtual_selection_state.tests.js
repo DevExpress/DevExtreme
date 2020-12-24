@@ -165,11 +165,7 @@ const horizontalGroupingViewDataProviderMock = {
     getCellData: (rowIndex, columnIndex) => testViewDataMap
         .horizontalGrouping[rowIndex][columnIndex].cellData,
     viewDataMap: testViewDataMap.horizontalGrouping,
-};
-const verticalGroupingViewDataProviderMock = {
-    getCellData: (rowIndex, columnIndex) => testViewDataMap
-        .verticalGrouping[rowIndex][columnIndex].cellData,
-    viewDataMap: testViewDataMap.verticalGrouping,
+    findCellPositionInMap: () => ({ cellIndex: 1, rowIndex: 1 }),
 };
 
 module('Virtual Selection State', () => {
@@ -187,34 +183,17 @@ module('Virtual Selection State', () => {
         );
     });
 
-    test('"getFocusedCell" should work correctly when horizontal groupin is used', function(assert) {
+    test('"getFocusedCell" should work correctly', function(assert) {
         const virtualSelectionState = new VirtualSelectionState(horizontalGroupingViewDataProviderMock);
 
         virtualSelectionState.setFocusedCell(1, 1, false);
 
-        const focusedCell = virtualSelectionState.getFocusedCell(false);
+        const focusedCell = virtualSelectionState.getFocusedCell();
 
         assert.deepEqual(
             focusedCell,
             {
                 cellData: testViewDataMap.horizontalGrouping[1][1].cellData,
-                coordinates: { cellIndex: 1, rowIndex: 1 },
-            },
-            'Correct focused cell',
-        );
-    });
-
-    test('"getFocusedCell" should work correctly when vertical grouping is used', function(assert) {
-        const virtualSelectionState = new VirtualSelectionState(verticalGroupingViewDataProviderMock);
-
-        virtualSelectionState.setFocusedCell(1, 1, false);
-
-        const focusedCell = virtualSelectionState.getFocusedCell(true);
-
-        assert.deepEqual(
-            focusedCell,
-            {
-                cellData: testViewDataMap.verticalGrouping[1][1].cellData,
                 coordinates: { cellIndex: 1, rowIndex: 1 },
             },
             'Correct focused cell',
