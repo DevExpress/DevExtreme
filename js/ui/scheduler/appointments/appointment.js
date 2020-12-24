@@ -1,17 +1,17 @@
-import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
-import { move } from '../../animation/translator';
-import { getRecurrenceProcessor } from './recurrence';
-import { extend } from '../../core/utils/extend';
-import registerComponent from '../../core/component_registrator';
-import { hide, show } from '../tooltip/ui.tooltip';
-import publisherMixin from './ui.scheduler.publisher_mixin';
-import { addNamespace } from '../../events/utils/index';
-import pointerEvents from '../../events/pointer';
-import DOMComponent from '../../core/dom_component';
-import Resizable from '../resizable';
-import messageLocalization from '../../localization/message';
-import dateLocalization from '../../localization/date';
+import $ from '../../../core/renderer';
+import eventsEngine from '../../../events/core/events_engine';
+import { move } from '../../../animation/translator';
+import { getRecurrenceProcessor } from '../recurrence';
+import { extend } from '../../../core/utils/extend';
+import registerComponent from '../../../core/component_registrator';
+import { hide, show } from '../../tooltip/ui.tooltip';
+import publisherMixin from '../ui.scheduler.publisher_mixin';
+import { addNamespace } from '../../../events/utils/index';
+import pointerEvents from '../../../events/pointer';
+import DOMComponent from '../../../core/dom_component';
+import Resizable from '../../resizable';
+import messageLocalization from '../../../localization/message';
+import dateLocalization from '../../../localization/date';
 import {
     EMPTY_APPOINTMENT_CLASS,
     RECURRENCE_APPOINTMENT_CLASS,
@@ -21,7 +21,7 @@ import {
     REDUCED_APPOINTMENT_PARTS_CLASSES,
     DIRECTION_APPOINTMENT_CLASSES,
     APPOINTMENT_DRAG_SOURCE_CLASS,
-} from './constants';
+} from '../constants';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
