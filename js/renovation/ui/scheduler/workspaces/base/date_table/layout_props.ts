@@ -10,6 +10,8 @@ export interface CellTemplateProps extends ViewCellData {
 
 @ComponentBindings()
 export class DateTableLayoutProps extends LayoutProps {
+  @OneWay() isVirtual?: boolean;
+
   @OneWay() leftVirtualCellWidth = 0;
 
   @OneWay() rightVirtualCellWidth = 0;

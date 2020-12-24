@@ -73,21 +73,24 @@ describe('DateTableBody', () => {
       getIsGroupedAllDayPanel.mockClear();
     });
 
-    it('should render rows', () => {
-      const rows = render({}).find(Row);
+    [true, false].forEach((isVirtual) => {
+      it(`should render rows and pass correct props to them if virtual scrolling is ${isVirtual}`, () => {
+        const rows = render({
+          props: { isVirtual },
+        }).find(Row);
 
-      expect(rows)
-        .toHaveLength(3);
+        expect(rows)
+          .toHaveLength(3);
 
-      rows.forEach((row) => {
-        expect(row.hasClass('dx-scheduler-date-table-row'))
-          .toBe(true);
-
-        expect(row.prop('leftVirtualCellWidth'))
-          .toBe(100);
-
-        expect(row.prop('rightVirtualCellWidth'))
-          .toBe(200);
+        rows.forEach((row) => {
+          expect(row.props())
+            .toMatchObject({
+              className: 'dx-scheduler-date-table-row',
+              isVirtual,
+              leftVirtualCellWidth: 100,
+              rightVirtualCellWidth: 200,
+            });
+        });
       });
     });
 

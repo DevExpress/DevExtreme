@@ -98,27 +98,61 @@ describe('RowBase', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('leftVirtualCellWidth', () => {
-        [0, 10].forEach((leftVirtualCellWidth) => {
-          it(`should determine "hasLeftVirtualCell" correctly if leftVirtualCellWidth is ${leftVirtualCellWidth}`, () => {
+        [{
+          isVirtual: true,
+          leftVirtualCellWidth: 0,
+          hasLeftVirtualCell: false,
+        }, {
+          isVirtual: true,
+          leftVirtualCellWidth: 10,
+          hasLeftVirtualCell: true,
+        }, {
+          isVirtual: false,
+          leftVirtualCellWidth: 0,
+          hasLeftVirtualCell: false,
+        }, {
+          isVirtual: false,
+          leftVirtualCellWidth: 10,
+          hasLeftVirtualCell: false,
+        }].forEach((option) => {
+          it(`should determine "hasLeftVirtualCell" correctly if virtual scrolling is ${option.isVirtual} and leftVirtualCellWidth is ${option.leftVirtualCellWidth}`, () => {
             const row = new Row({
-              leftVirtualCellWidth,
+              isVirtual: option.isVirtual,
+              leftVirtualCellWidth: option.leftVirtualCellWidth,
             });
 
-            expect(row.hasLeftVirtualCell)
-              .toBe(!!leftVirtualCellWidth);
+            expect(option.hasLeftVirtualCell)
+              .toBe(row.hasLeftVirtualCell);
           });
         });
       });
 
       describe('rightVirtualCellWidth', () => {
-        [0, 10].forEach((rightVirtualCellWidth) => {
-          it(`should determine "hasLeftVirtualCell" correctly if leftVirtualCellWidth is ${rightVirtualCellWidth}`, () => {
+        [{
+          isVirtual: true,
+          rightVirtualCellWidth: 0,
+          hasRightVirtualCell: false,
+        }, {
+          isVirtual: true,
+          rightVirtualCellWidth: 10,
+          hasRightVirtualCell: true,
+        }, {
+          isVirtual: false,
+          rightVirtualCellWidth: 0,
+          hasRightVirtualCell: false,
+        }, {
+          isVirtual: false,
+          rightVirtualCellWidth: 10,
+          hasRightVirtualCell: false,
+        }].forEach((option) => {
+          it(`should determine "hasRightVirtualCell" correctly if virtual scrolling is ${option.isVirtual} and rightVirtualCellWidth is ${option.rightVirtualCellWidth}`, () => {
             const row = new Row({
-              rightVirtualCellWidth,
+              isVirtual: option.isVirtual,
+              rightVirtualCellWidth: option.rightVirtualCellWidth,
             });
 
-            expect(row.hasRightVirtualCell)
-              .toBe(!!rightVirtualCellWidth);
+            expect(option.hasRightVirtualCell)
+              .toBe(row.hasRightVirtualCell);
           });
         });
       });

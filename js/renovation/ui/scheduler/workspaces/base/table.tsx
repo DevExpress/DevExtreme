@@ -14,6 +14,7 @@ export const viewFunction = ({
     virtualCellsCount,
     className,
     children,
+    isVirtual,
     topVirtualRowHeight,
     bottomVirtualRowHeight,
     leftVirtualCellWidth,
@@ -31,6 +32,7 @@ export const viewFunction = ({
         <VirtualRow
           height={topVirtualRowHeight}
           cellsCount={virtualCellsCount}
+          isVirtual={isVirtual}
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}
         />
@@ -40,6 +42,7 @@ export const viewFunction = ({
         <VirtualRow
           height={bottomVirtualRowHeight}
           cellsCount={virtualCellsCount}
+          isVirtual={isVirtual}
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}
         />

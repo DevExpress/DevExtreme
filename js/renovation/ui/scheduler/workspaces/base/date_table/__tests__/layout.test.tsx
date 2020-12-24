@@ -98,6 +98,7 @@ describe('DateTableLayoutBase', () => {
           viewData: viewDataBase,
           cellTemplate,
           dataCellTemplate,
+          isVirtual: 'isVirtual',
           leftVirtualCellWidth: 300,
           rightVirtualCellWidth: 400,
         });

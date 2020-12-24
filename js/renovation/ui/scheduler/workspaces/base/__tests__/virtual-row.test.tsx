@@ -52,19 +52,25 @@ describe('VirtualRow', () => {
         .toBe('1');
     });
 
-    it('should correctly set virtual cells width', () => {
-      const row = render({
-        props: {
-          leftVirtualCellWidth: 100,
-          rightVirtualCellWidth: 150,
-        },
+    [true, false].forEach((isVirtual) => {
+      it(`should correctly set virtual cells width if virtual scrolling is ${isVirtual}`, () => {
+        const row = render({
+          props: {
+            isVirtual,
+            leftVirtualCellWidth: 100,
+            rightVirtualCellWidth: 150,
+          },
+        });
+
+        expect(row.prop('isVirtual'))
+          .toEqual(isVirtual);
+
+        expect(row.prop('leftVirtualCellWidth'))
+          .toEqual(100);
+
+        expect(row.prop('rightVirtualCellWidth'))
+          .toEqual(150);
       });
-
-      expect(row.prop('leftVirtualCellWidth'))
-        .toEqual(100);
-
-      expect(row.prop('rightVirtualCellWidth'))
-        .toEqual(150);
     });
   });
 

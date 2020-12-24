@@ -35,6 +35,8 @@ export const viewFunction = ({
 export class RowProps {
   @OneWay() className?: string = '';
 
+  @OneWay() isVirtual?: boolean;
+
   @OneWay() leftVirtualCellWidth = 0;
 
   @OneWay() rightVirtualCellWidth = 0;
@@ -48,10 +50,14 @@ export class RowProps {
 })
 export class Row extends JSXComponent(RowProps) {
   get hasLeftVirtualCell(): boolean {
-    return !!this.props.leftVirtualCellWidth;
+    const { isVirtual, leftVirtualCellWidth } = this.props;
+
+    return !!isVirtual && !!leftVirtualCellWidth;
   }
 
   get hasRightVirtualCell(): boolean {
-    return !!this.props.rightVirtualCellWidth;
+    const { isVirtual, rightVirtualCellWidth } = this.props;
+
+    return !!isVirtual && !!rightVirtualCellWidth;
   }
 }

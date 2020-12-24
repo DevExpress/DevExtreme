@@ -35,6 +35,7 @@ export const viewFunction = ({
     className={classes}
   >
     <DateTableBody
+      isVirtual={isVirtual}
       cellTemplate={cellTemplate}
       viewData={viewData}
       dataCellTemplate={dataCellTemplate}
