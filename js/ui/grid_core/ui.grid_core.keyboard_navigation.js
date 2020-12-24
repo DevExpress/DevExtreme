@@ -139,6 +139,23 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     _initViewHandlers: function() {
         const rowsView = this.getView('rowsView');
+        const rowsViewFocusHandler = (event) => {
+            const $element = $(event.target);
+            const isRelatedTargetInRowsView = $(event.relatedTarget).closest(rowsView.element()).length;
+            const isCommandButton = $element.hasClass('dx-link');
+
+            if(isCommandButton && !isRelatedTargetInRowsView) {
+                let $focusedCell = this._getFocusedCell();
+
+                $focusedCell = !isElementDefined($focusedCell) ? rowsView.getCellElements(0).filter('[tabindex]').eq(0) : $focusedCell;
+
+                if(!$element.closest($focusedCell).length) {
+                    event.preventDefault();
+                    eventsEngine.trigger($focusedCell, 'focus');
+                }
+            }
+        };
+
         rowsView.renderCompleted.add((e) => {
             const $rowsView = rowsView.element();
             const isFullUpdate = !e || e.changeType === 'refresh';
@@ -147,6 +164,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
             const $focusedElement = $(':focus');
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
+
+            eventsEngine.off($rowsView, 'focusin', rowsViewFocusHandler);
+            eventsEngine.on($rowsView, 'focusin', rowsViewFocusHandler);
 
             this._initPointerEventHandler();
             this._initKeyDownHandler();
@@ -1004,8 +1024,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     _resetFocusedView: function() {
         const $cell = this._getFocusedCell();
+        this._resetFocusedCell($cell, true);
+        this.setRowFocusType();
         this._focusedView = null;
-        this._resetFocusedCell($cell);
     },
 
     _focusInteractiveElement: function($cell, isLast) {
@@ -1188,7 +1209,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._editorFactory.focus($cell, true);
         }
     },
-    _resetFocusedCell: function($cellElement) {
+    _resetFocusedCell: function($cellElement, preventScroll) {
         const $cell = isElementDefined($cellElement) ? $cellElement : this._getFocusedCell();
         isElementDefined($cell) && $cell.removeAttr('tabindex');
 
@@ -1197,9 +1218,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._focusedCellPosition = {};
         clearTimeout(this._updateFocusTimeout);
 
-        if(this._focusedView && this._focusedView.renderFocusState) {
-            this._focusedView.renderFocusState();
-        }
+        this._focusedView?.renderFocusState(preventScroll);
     },
     restoreFocusableElement: function(rowIndex, $event) {
         const that = this;
@@ -1938,7 +1957,7 @@ export default {
                         }
                     }
                 },
-                renderFocusState: function() {
+                renderFocusState: function(preventScroll) {
                     const keyboardController = this.getController('keyboardNavigation');
                     const $rowsViewElement = this.element();
 
@@ -1953,7 +1972,7 @@ export default {
 
                     const cellElements = this.getCellElements(rowIndex);
                     if(keyboardController.isKeyboardEnabled() && cellElements.length) {
-                        this.updateFocusElementTabIndex(cellElements);
+                        this.updateFocusElementTabIndex(cellElements, preventScroll);
                     }
                 },
                 updateFocusElementTabIndex: function(cellElements) {

@@ -16,6 +16,7 @@ const stubAddDefaultTemplates = sinon.stub();
 const stubGetAppointmentTemplate = sinon.stub().returns('template');
 const stubCheckAndDeleteAppointment = sinon.stub();
 const stubCreateFormattedDateText = sinon.stub().returns('text');
+const stubGetAppointmentDisabled = sinon.stub().returns(false);
 const stubIsAppointmentInAllDayPanel = sinon.stub().returns(true);
 
 const environment = {
@@ -29,6 +30,7 @@ const environment = {
         getAppointmentTemplate: stubGetAppointmentTemplate,
         showAppointmentPopup: stubShowAppointmentPopup,
         createFormattedDateText: stubCreateFormattedDateText,
+        getAppointmentDisabled: stubGetAppointmentDisabled,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
         isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel,
     },
@@ -45,6 +47,7 @@ const environment = {
         stubShowAppointmentPopup.reset();
         stubAddDefaultTemplates.reset();
         stubGetAppointmentTemplate.reset();
+        stubCreateFormattedDateText.reset();
         stubCreateFormattedDateText.reset();
         stubCheckAndDeleteAppointment.reset();
     }

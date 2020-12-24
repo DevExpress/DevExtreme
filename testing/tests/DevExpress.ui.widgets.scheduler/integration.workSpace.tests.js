@@ -4,6 +4,7 @@ import dateLocalization from 'localization/date';
 import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -1494,7 +1495,7 @@ QUnit.test('DateTimeIndicator should show correct time in current time zone', fu
     this.instance.option('timeZone', 'Asia/Yekaterinburg');
 
     const indicatorPositionAfter = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
-    const tzDiff = this.instance.fire('getClientTimezoneOffset', currentDate) / 3600000 + this.instance.fire('getTimezone');
+    const tzDiff = timeZoneUtils.getClientTimezoneOffset(currentDate) / 3600000 + this.instance.fire('getTimezone');
 
     assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * tzDiff, 'indicator has correct position');
 });
@@ -2830,7 +2831,7 @@ QUnit.test('SelectedCellData option should not change when dateTable is scrolled
         height: 300,
         scrolling: { mode: 'virtual' },
     });
-    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
     const $cells = scheduler.workSpace.getCells();
     const $table = scheduler.workSpace.getDateTable();
@@ -2875,7 +2876,7 @@ QUnit.test('"onOptionChanged" should not be called on scroll when virtual scroll
             onOptionChangedCalls += 1;
         },
     });
-    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
     const $cells = scheduler.workSpace.getCells();
     const $table = scheduler.workSpace.getDateTable();
@@ -2918,7 +2919,7 @@ if(devices.real().deviceType === 'desktop') {
         });
 
         const { instance } = scheduler;
-        instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
         const showAppointmentPopupSpy = sinon.spy();
         instance.showAppointmentPopup = showAppointmentPopupSpy;
 

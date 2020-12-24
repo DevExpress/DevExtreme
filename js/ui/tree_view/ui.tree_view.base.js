@@ -582,7 +582,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderScrollableContainer: function() {
         this._scrollableContainer = this._createComponent($('<div>').appendTo(this.$element()), Scrollable, {
             direction: this.option('scrollDirection'),
-            useNative: this.option('scrollableUseNative'),
             useKeyboard: false
         });
     },
@@ -1001,7 +1000,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _normalizeIconState: function($node, hasNewItems) {
-        const $loadIndicator = $node.find('.dx-loadindicator');
+        const $loadIndicator = $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`);
         $loadIndicator.length && LoadIndicator.getInstance($loadIndicator).option('visible', false);
 
         if(hasNewItems) {

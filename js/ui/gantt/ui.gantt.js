@@ -442,7 +442,7 @@ class Gantt extends Widget {
     _createModelChangesListener() {
         return { // IModelChangesListener
             NotifyTaskCreated: (task, callback, errorCallback) => { this._onRecordInserted(GANTT_TASKS, task, callback); },
-            NotifyTaskRemoved: (taskId, errorCallback) => { this._onRecordRemoved(GANTT_TASKS, taskId); },
+            NotifyTaskRemoved: (taskId, errorCallback, task) => { this._onRecordRemoved(GANTT_TASKS, taskId, task); },
             NotifyTaskTitleChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'title', newValue); },
             NotifyTaskDescriptionChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'description', newValue); },
             NotifyTaskStartChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
@@ -450,13 +450,13 @@ class Gantt extends Widget {
             NotifyTaskProgressChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
 
             NotifyDependencyInserted: (dependency, callback, errorCallback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
-            NotifyDependencyRemoved: (dependencyId, errorCallback) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId); },
+            NotifyDependencyRemoved: (dependencyId, errorCallback, dependency) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId, dependency); },
 
             NotifyResourceCreated: (resource, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCES, resource, callback); },
-            NotifyResourceRemoved: (resource, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
+            NotifyResourceRemoved: (resourceId, errorCallback, resource) => { this._onRecordRemoved(GANTT_RESOURCES, resourceId, resource); },
 
             NotifyResourceAssigned: (assignment, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
-            NotifyResourceUnassigned: (assignmentId, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
+            NotifyResourceUnassigned: (assignmentId, errorCallback, assignment) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId, assignment); },
             NotifyParentDataRecalculated: (data) => { this._onParentTasksRecalculated(data); },
 
             NotifyTaskCreating: (args) => { this._raiseInsertingAction(GANTT_TASKS, args); },
@@ -498,16 +498,19 @@ class Gantt extends Widget {
                     this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(insertedId));
                     this._setTreeListOption('focusedRowKey', insertedId);
                 }
+                this._raiseInsertedAction(optionName, data, insertedId);
             });
         }
     }
-    _onRecordRemoved(optionName, key) {
+    _onRecordRemoved(optionName, key, data) {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
             dataOption.remove(key, () => {
                 if(optionName === GANTT_TASKS) {
                     this._updateTreeListDataSource();
                 }
+
+                this._raiseDeletedAction(optionName, key, this._convertCoreToMappedData(optionName, data));
             });
         }
     }
@@ -529,6 +532,8 @@ class Gantt extends Widget {
                     }
                     this._updateTreeListDataSource();
                 }
+
+                this._raiseUpdatedAction(optionName, data, key);
             });
         }
     }
@@ -642,12 +647,30 @@ class Gantt extends Widget {
             }
         }
     }
+    _raiseInsertedAction(optionName, data, key) {
+        const action = this._getInsertedAction(optionName);
+        if(action) {
+            const args = { values: data, key: key };
+            action(args);
+        }
+    }
     _raiseDeletingAction(optionName, coreArgs) {
         const action = this._getDeletingAction(optionName);
         if(action) {
-            const args = { cancel: false, key: coreArgs.key, values: this._convertCoreToMappedData(optionName, coreArgs.values) };
+            const args = {
+                cancel: false,
+                key: coreArgs.key,
+                values: this._convertCoreToMappedData(optionName, coreArgs.values)
+            };
             action(args);
             coreArgs.cancel = args.cancel;
+        }
+    }
+    _raiseDeletedAction(optionName, key, data) {
+        const action = this._getDeletedAction(optionName);
+        if(action) {
+            const args = { key: key, values: data };
+            action(args);
         }
     }
     _raiseUpdatingAction(optionName, coreArgs, action) {
@@ -665,6 +688,13 @@ class Gantt extends Widget {
             if(optionName === GANTT_TASKS) {
                 this._saveCustomFieldsDataToCache(args.key, args.newValues);
             }
+        }
+    }
+    _raiseUpdatedAction(optionName, data, key) {
+        const action = this._getUpdatedAction(optionName);
+        if(action) {
+            const args = { values: data, key: key };
+            action(args);
         }
     }
     _raiseTaskEditDialogShowingAction(coreArgs) {
@@ -721,6 +751,19 @@ class Gantt extends Widget {
         }
         return () => { };
     }
+    _getInsertedAction(optionName) {
+        switch(optionName) {
+            case GANTT_TASKS:
+                return this._getTaskInsertedAction();
+            case GANTT_DEPENDENCIES:
+                return this._getDependencyInsertedAction();
+            case GANTT_RESOURCES:
+                return this._getResourceInsertedAction();
+            case GANTT_RESOURCE_ASSIGNMENTS:
+                return this._getResourceAssignedAction();
+        }
+        return () => { };
+    }
     _getDeletingAction(optionName) {
         switch(optionName) {
             case GANTT_TASKS:
@@ -735,10 +778,31 @@ class Gantt extends Widget {
         }
         return () => { };
     }
+    _getDeletedAction(optionName) {
+        switch(optionName) {
+            case GANTT_TASKS:
+                return this._getTaskDeletedAction();
+            case GANTT_DEPENDENCIES:
+                return this._getDependencyDeletedAction();
+            case GANTT_RESOURCES:
+                return this._getResourceDeletedAction();
+            case GANTT_RESOURCE_ASSIGNMENTS:
+                // eslint-disable-next-line spellcheck/spell-checker
+                return this._getResourceUnassignedAction();
+        }
+        return () => { };
+    }
     _getUpdatingAction(optionName) {
         switch(optionName) {
             case GANTT_TASKS:
                 return this._getTaskUpdatingAction();
+        }
+        return () => { };
+    }
+    _getUpdatedAction(optionName) {
+        switch(optionName) {
+            case GANTT_TASKS:
+                return this._getTaskUpdatedAction();
         }
         return () => { };
     }
@@ -748,17 +812,35 @@ class Gantt extends Widget {
         }
         return this._taskInsertingAction;
     }
+    _getTaskInsertedAction() {
+        if(!this._taskInsertedAction) {
+            this._createTaskInsertedAction();
+        }
+        return this._taskInsertedAction;
+    }
     _getTaskDeletingAction() {
         if(!this._taskDeletingAction) {
             this._createTaskDeletingAction();
         }
         return this._taskDeletingAction;
     }
+    _getTaskDeletedAction() {
+        if(!this._taskDeletedAction) {
+            this._createTaskDeletedAction();
+        }
+        return this._taskDeletedAction;
+    }
     _getTaskUpdatingAction() {
         if(!this._taskUpdatingAction) {
             this._createTaskUpdatingAction();
         }
         return this._taskUpdatingAction;
+    }
+    _getTaskUpdatedAction() {
+        if(!this._taskUpdatedAction) {
+            this._createTaskUpdatedAction();
+        }
+        return this._taskUpdatedAction;
     }
     _getTaskMovingAction() {
         if(!this._taskMovingAction) {
@@ -778,11 +860,23 @@ class Gantt extends Widget {
         }
         return this._dependencyInsertingAction;
     }
+    _getDependencyInsertedAction() {
+        if(!this._dependencyInsertedAction) {
+            this._createDependencyInsertedAction();
+        }
+        return this._dependencyInsertedAction;
+    }
     _getDependencyDeletingAction() {
         if(!this._dependencyDeletingAction) {
             this._createDependencyDeletingAction();
         }
         return this._dependencyDeletingAction;
+    }
+    _getDependencyDeletedAction() {
+        if(!this._dependencyDeletedAction) {
+            this._createDependencyDeletedAction();
+        }
+        return this._dependencyDeletedAction;
     }
     _getResourceInsertingAction() {
         if(!this._resourceInsertingAction) {
@@ -790,17 +884,35 @@ class Gantt extends Widget {
         }
         return this._resourceInsertingAction;
     }
+    _getResourceInsertedAction() {
+        if(!this._resourceInsertedAction) {
+            this._createResourceInsertedAction();
+        }
+        return this._resourceInsertedAction;
+    }
     _getResourceDeletingAction() {
         if(!this._resourceDeletingAction) {
             this._createResourceDeletingAction();
         }
         return this._resourceDeletingAction;
     }
+    _getResourceDeletedAction() {
+        if(!this._resourceDeletedAction) {
+            this._createResourceDeletedAction();
+        }
+        return this._resourceDeletedAction;
+    }
     _getResourceAssigningAction() {
         if(!this._resourceAssigningAction) {
             this._createResourceAssigningAction();
         }
         return this._resourceAssigningAction;
+    }
+    _getResourceAssignedAction() {
+        if(!this._resourceAssignedAction) {
+            this._createResourceAssignedAction();
+        }
+        return this._resourceAssignedAction;
     }
     /* eslint-disable */
     _getResourceUnassigningAction() {
@@ -809,18 +921,37 @@ class Gantt extends Widget {
         }
         return this._resourceUnassigningAction;
     }
+    /* eslint-disable */
+    _getResourceUnassignedAction() {
+        if(!this._resourceUnassignedAction) {
+            this._createResourceUnassignedAction();
+        }
+        return this._resourceUnassignedAction;
+    }
     _createResourceUnassigningAction() {
         this._resourceUnassigningAction = this._createActionByOption('onResourceUnassigning');
+    }
+    _createResourceUnassignedAction() {
+        this._resourceUnassignedAction = this._createActionByOption('onResourceUnassigned');
     }
     /* eslint-enable */
     _createTaskInsertingAction() {
         this._taskInsertingAction = this._createActionByOption('onTaskInserting');
     }
+    _createTaskInsertedAction() {
+        this._taskInsertedAction = this._createActionByOption('onTaskInserted');
+    }
     _createTaskDeletingAction() {
         this._taskDeletingAction = this._createActionByOption('onTaskDeleting');
     }
+    _createTaskDeletedAction() {
+        this._taskDeletedAction = this._createActionByOption('onTaskDeleted');
+    }
     _createTaskUpdatingAction() {
         this._taskUpdatingAction = this._createActionByOption('onTaskUpdating');
+    }
+    _createTaskUpdatedAction() {
+        this._taskUpdatedAction = this._createActionByOption('onTaskUpdated');
     }
     _createTaskMovingAction() {
         this._taskMovingAction = this._createActionByOption('onTaskMoving');
@@ -831,17 +962,32 @@ class Gantt extends Widget {
     _createDependencyInsertingAction() {
         this._dependencyInsertingAction = this._createActionByOption('onDependencyInserting');
     }
+    _createDependencyInsertedAction() {
+        this._dependencyInsertedAction = this._createActionByOption('onDependencyInserted');
+    }
     _createDependencyDeletingAction() {
         this._dependencyDeletingAction = this._createActionByOption('onDependencyDeleting');
+    }
+    _createDependencyDeletedAction() {
+        this._dependencyDeletedAction = this._createActionByOption('onDependencyDeleted');
     }
     _createResourceInsertingAction() {
         this._resourceInsertingAction = this._createActionByOption('onResourceInserting');
     }
+    _createResourceInsertedAction() {
+        this._resourceInsertedAction = this._createActionByOption('onResourceInserted');
+    }
     _createResourceDeletingAction() {
         this._resourceDeletingAction = this._createActionByOption('onResourceDeleting');
     }
+    _createResourceDeletedAction() {
+        this._resourceDeletedAction = this._createActionByOption('onResourceDeleted');
+    }
     _createResourceAssigningAction() {
         this._resourceAssigningAction = this._createActionByOption('onResourceAssigning');
+    }
+    _createResourceAssignedAction() {
+        this._resourceAssignedAction = this._createActionByOption('onResourceAssigned');
     }
     _convertCoreToMappedData(optionName, coreData) {
         return Object.keys(coreData).reduce((previous, f) => {
@@ -1194,17 +1340,27 @@ class Gantt extends Widget {
             onTaskClick: null,
             onTaskDblClick: null,
             onTaskInserting: null,
+            onTaskInserted: null,
             onTaskDeleting: null,
+            onTaskDeleted: null,
             onTaskUpdating: null,
+            onTaskUpdated: null,
             onTaskMoving: null,
             onTaskEditDialogShowing: null,
             onDependencyInserting: null,
+            onDependencyInserted: null,
             onDependencyDeleting: null,
+            onDependencyDeleted: null,
             onResourceInserting: null,
+            onResourceInserted: null,
             onResourceDeleting: null,
+            onResourceDeleted: null,
             onResourceAssigning: null,
+            onResourceAssigned: null,
             // eslint-disable-next-line spellcheck/spell-checker
             onResourceUnassigning: null,
+            // eslint-disable-next-line spellcheck/spell-checker
+            onResourceUnassigned: null,
             onCustomCommand: null,
             onContextMenuPreparing: null,
             allowSelection: true,
@@ -1425,11 +1581,20 @@ class Gantt extends Widget {
             case 'onTaskInserting':
                 this._createTaskInsertingAction();
                 break;
+            case 'onTaskInserted':
+                this._createTaskInsertedAction();
+                break;
             case 'onTaskDeleting':
                 this._createTaskDeletingAction();
                 break;
+            case 'onTaskDeleted':
+                this._createTaskDeletedAction();
+                break;
             case 'onTaskUpdating':
                 this._createTaskUpdatingAction();
+                break;
+            case 'onTaskUpdated':
+                this._createTaskUpdatedAction();
                 break;
             case 'onTaskMoving':
                 this._createTaskMovingAction();
@@ -1440,21 +1605,40 @@ class Gantt extends Widget {
             case 'onDependencyInserting':
                 this._createDependencyInsertingAction();
                 break;
+            case 'onDependencyInserted':
+                this._createDependencyInsertedAction();
+                break;
             case 'onDependencyDeleting':
                 this._createDependencyDeletingAction();
+                break;
+            case 'onDependencyDeleted':
+                this._createDependencyDeletedAction();
                 break;
             case 'onResourceInserting':
                 this._createResourceInsertingAction();
                 break;
+            case 'onResourceInserted':
+                this._createResourceInsertedAction();
+                break;
             case 'onResourceDeleting':
                 this._createResourceDeletingAction();
+                break;
+            case 'onResourceDeleted':
+                this._createResourceDeletedAction();
                 break;
             case 'onResourceAssigning':
                 this._createResourceAssigningAction();
                 break;
+            case 'onResourceAssigned':
+                this._createResourceAssignedAction();
+                break;
             case 'onResourceUnassigning':
                 // eslint-disable-next-line spellcheck/spell-checker
                 this._createResourceUnassigningAction();
+                break;
+            case 'onResourceUnassigned':
+                // eslint-disable-next-line spellcheck/spell-checker
+                this._createResourceUnassignedAction();
                 break;
             case 'onCustomCommand':
                 this._createCustomCommandAction();

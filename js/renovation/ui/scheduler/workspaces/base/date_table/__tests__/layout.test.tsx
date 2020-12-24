@@ -14,10 +14,25 @@ describe('DateTableLayoutBase', () => {
   const viewDataBase = {
     groupedData: [{
       dateTable: [[{
-        startDate: new Date(2020, 6, 9, 0), endDate: new Date(2020, 6, 9, 0, 30), groups: { id: 1 }, text: '', index: 0,
+        startDate: new Date(2020, 6, 9, 0),
+        endDate: new Date(2020, 6, 9, 0, 30),
+        groups: { id: 1 },
+        text: '',
+        index: 0,
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
+        key: '1',
       }], [{
-        startDate: new Date(2020, 6, 9, 0, 30), endDate: new Date(2020, 6, 9, 1), groups: { id: 2 }, text: '', index: 0,
+        startDate: new Date(2020, 6, 9, 0, 30),
+        endDate: new Date(2020, 6, 9, 1),
+        groups: { id: 2 },
+        text: '',
+        index: 0,
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
+        key: '2',
       }]],
+      groupIndex: 1,
     }],
     cellCountInGroupRow: 1,
   };

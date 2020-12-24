@@ -8,7 +8,7 @@ import { extend } from '../../core/utils/extend';
 import { touch } from '../../core/utils/support';
 import { name as clickEventName } from '../../events/click';
 import messageLocalization from '../../localization/message';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
 import holdEvent from '../../events/hold';
 import Selection from '../selection/selection';
 import { Deferred } from '../../core/utils/deferred';
@@ -610,7 +610,10 @@ export default {
                     const $editor = $element && $element.find('.' + SELECT_CHECKBOX_CLASS);
 
                     if($element && $editor.length && that.option('selection.mode') === 'multiple') {
-                        $editor.dxCheckBox('instance').option('value', that.getController('selection').isSelectAll());
+                        $editor.dxCheckBox('instance').option({
+                            visible: !that.getController('data').isEmpty(),
+                            value: that.getController('selection').isSelectAll(),
+                        });
                     }
                 },
                 _handleDataChanged: function(e) {
@@ -623,6 +626,7 @@ export default {
                 _renderSelectAllCheckBox: function($container, column) {
                     const that = this;
                     const selectionController = that.getController('selection');
+                    const isEmptyData = that.getController('data').isEmpty();
 
                     const groupElement = $('<div>')
                         .appendTo($container)
@@ -635,7 +639,7 @@ export default {
                         dataType: 'boolean',
                         value: selectionController.isSelectAll(),
                         editorOptions: {
-                            visible: that.option('selection.allowSelectAll') || selectionController.isSelectAll() !== false
+                            visible: !isEmptyData && (that.option('selection.allowSelectAll') || selectionController.isSelectAll() !== false)
                         },
                         tabIndex: that.option('useLegacyKeyboardNavigation') ? -1 : (that.option('tabIndex') || 0),
                         setValue: function(value, e) {
@@ -805,7 +809,7 @@ export default {
                     if(!that.isClickableElement($(dxEvent.target))) {
                         if(!isSelectionDisabled && (that.option(SELECTION_MODE) !== 'multiple' || that.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
                             if(that.getController('selection').changeItemSelection(e.rowIndex, {
-                                control: dxEvent.ctrlKey || dxEvent.metaKey,
+                                control: isCommandKeyPressed(dxEvent),
                                 shift: dxEvent.shiftKey
                             })) {
                                 dxEvent.preventDefault();

@@ -1,8 +1,14 @@
 import {
-  Component, ComponentBindings, JSXComponent, Template, OneWay,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  Template,
+  OneWay,
+  JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
 import dateLocalization from '../../../../../../localization/date';
 import { CellBaseProps } from '../../base/cell';
+import { DateTimeCellTemplateProps } from '../../types.d';
 
 export const viewFunction = (viewModel: MonthHeaderPanelCell): JSX.Element => {
   const DateCellTemplate = viewModel.props.dateCellTemplate;
@@ -37,7 +43,7 @@ export const viewFunction = (viewModel: MonthHeaderPanelCell): JSX.Element => {
 
 @ComponentBindings()
 export class MonthHeaderPanelCellProps extends CellBaseProps {
-  @Template() dateCellTemplate?: any;
+  @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
   @OneWay() today?: boolean = false;
 }
@@ -50,6 +56,6 @@ export class MonthHeaderPanelCell extends JSXComponent(MonthHeaderPanelCellProps
   get weekDay(): string {
     const { startDate } = this.props;
 
-    return dateLocalization.getDayNames('abbreviated')[startDate!.getDay()];
+    return dateLocalization.getDayNames('abbreviated')[startDate.getDay()];
   }
 }

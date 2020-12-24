@@ -3,6 +3,7 @@ import TextBox from 'ui/text_box';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -110,6 +111,24 @@ QUnit.module('common', {}, () => {
             event = $.Event('keydown', { key: 'z', ctrlKey: true });
             $input.trigger(event);
             assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+        } finally {
+            browser.msie = originalIE;
+        }
+    });
+
+    QUnit.test('"maxLength" option on IE should works correctly with selected range', function(assert) {
+        const originalIE = browser.msie;
+
+        try {
+            browser.msie = true;
+            const $element = $('#textbox').dxTextBox({ maxLength: 1, value: 'b' });
+            const $input = $element.find(`.${INPUT_CLASS}`);
+
+            keyboardMock($input, true)
+                .caret({ start: 0, end: 1 })
+                .type('a');
+
+            assert.strictEqual($input.val(), 'a', 'new text correctly applies');
         } finally {
             browser.msie = originalIE;
         }

@@ -50,6 +50,7 @@ const TagBox = SelectBox.inherit({
     _supportedKeys: function() {
         const parent = this.callBase();
         const sendToList = options => this._list._keyboardHandler(options);
+        const rtlEnabled = this.option('rtlEnabled');
 
         return extend({}, parent, {
             backspace: function(e) {
@@ -123,13 +124,11 @@ const TagBox = SelectBox.inherit({
                 }
             },
             leftArrow: function(e) {
-                if(!this._isCaretAtTheStart()) {
-                    return;
-                }
-
-                const rtlEnabled = this.option('rtlEnabled');
-
-                if(this._isEditable() && rtlEnabled && !this._$focusedTag) {
+                if(
+                    !this._isCaretAtTheStart() ||
+                    this._isEmpty() ||
+                    this._isEditable() && rtlEnabled && !this._$focusedTag
+                ) {
                     return;
                 }
 
@@ -140,13 +139,11 @@ const TagBox = SelectBox.inherit({
                 !this.option('multiline') && this._scrollContainer(direction);
             },
             rightArrow: function(e) {
-                if(!this._isCaretAtTheStart()) {
-                    return;
-                }
-
-                const rtlEnabled = this.option('rtlEnabled');
-
-                if(this._isEditable() && !rtlEnabled && !this._$focusedTag) {
+                if(
+                    !this._isCaretAtTheStart() ||
+                    this._isEmpty() ||
+                    this._isEditable() && !rtlEnabled && !this._$focusedTag
+                ) {
                     return;
                 }
 
@@ -163,6 +160,10 @@ const TagBox = SelectBox.inherit({
         e.preventDefault();
         e.stopPropagation();
         this._saveValueChangeEvent(e);
+    },
+
+    _isEmpty: function() {
+        return this._getValue().length === 0;
     },
 
     _updateTagsContainer: function($element) {
@@ -584,6 +585,7 @@ const TagBox = SelectBox.inherit({
     _clearTextValue: function() {
         this._input().val('');
         this._toggleEmptinessEventHandler();
+        this.option('text', '');
     },
 
     _focusInHandler: function(e) {
@@ -592,6 +594,12 @@ const TagBox = SelectBox.inherit({
         }
 
         this.callBase(e);
+    },
+
+    _renderInputValue: function() {
+        this.option('displayValue', this._searchValue());
+
+        return this.callBase();
     },
 
     _restoreInputText: function(saveEditingValue) {
@@ -1088,7 +1096,7 @@ const TagBox = SelectBox.inherit({
 
     _customItemAddedHandler: function(e) {
         this.callBase(e);
-        this._input().val('');
+        this._clearTextValue();
     },
 
     _removeTagHandler: function(args) {
