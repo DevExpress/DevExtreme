@@ -370,7 +370,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
             const isAllDayCell = this._hasAllDayClass($cell);
             this.virtualSelectionState.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
-            const focusedCell = this.virtualSelectionState.getFocusedCell(this._isVerticalGroupedWorkSpace());
+            const focusedCell = this.virtualSelectionState.getFocusedCell();
             const { cellData, coordinates } = focusedCell;
             const { allDay } = cellData;
 
@@ -460,6 +460,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _correctCellForGroup($cell) {
         if(this.isVirtualScrolling()) {
+            const isVirtualCell = $cell.hasClass(VIRTUAL_CELL_CLASS);
+            if(isVirtualCell) {
+                return this._$focusedCell;
+            }
+
             const cellData = this.getCellData($cell);
             const isValidFocusedCell = this.virtualSelectionState.isValidFocusedCell(cellData);
 
@@ -1317,10 +1322,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     updateRSelection() {
         const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
-        const focusedCell = this.virtualSelectionState.getFocusedCell(isVerticalGrouping);
+        const focusedCell = this.virtualSelectionState.getFocusedCell();
         const selectedCells = this.virtualSelectionState.getSelectedCells();
 
-        if(focusedCell) {
+        if(focusedCell?.coordinates) {
             const { coordinates, cellData } = focusedCell;
             const $cell = !isVerticalGrouping && cellData.allDay
                 ? this._dom_getAllDayPanelCell(coordinates.cellIndex)
@@ -2624,7 +2629,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             groups: cellData.groups,
             groupIndex: cellData.groupIndex,
             allDay: cellData.allDay,
-            text: cellData.text,
         } : undefined;
     }
 

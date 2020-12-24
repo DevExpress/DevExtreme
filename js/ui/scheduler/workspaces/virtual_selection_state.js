@@ -1,5 +1,3 @@
-import dateUtils from '../../../core/utils/date';
-
 export default class VirtualSelectionState {
     constructor(viewDataProvider) {
         this._viewDataProvider = viewDataProvider;
@@ -10,6 +8,10 @@ export default class VirtualSelectionState {
         this._firstSelectedCell = null;
     }
 
+    get viewDataProvider() { return this._viewDataProvider; }
+
+    get focusedCell() { return this._focusedCell; }
+
     setFocusedCell(rowIndex, columnIndex, isAllDay) {
         if(rowIndex >= 0) {
             const cell = this._viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
@@ -17,16 +19,16 @@ export default class VirtualSelectionState {
         }
     }
 
-    getFocusedCell(isVerticalGroupOrientation) {
-        const { _focusedCell } = this;
-        if(!_focusedCell) {
+    getFocusedCell() {
+        const { focusedCell } = this;
+        if(!focusedCell) {
             return undefined;
         }
 
-        const columnIndex = this._getColumnIndexByCellData(_focusedCell, isVerticalGroupOrientation);
-        const rowIndex = this._getRowIndexByColumnAndData(_focusedCell, columnIndex, isVerticalGroupOrientation);
+        const { groupIndex, startDate, allDay } = focusedCell;
+        const cellPosition = this.viewDataProvider.findCellPositionInMap(groupIndex, startDate, allDay);
 
-        return { coordinates: { cellIndex: columnIndex, rowIndex }, cellData: _focusedCell };
+        return { coordinates: cellPosition, cellData: focusedCell };
     }
 
     setSelectedCells(lastCellCoordinates, firstCellCoordinates = undefined) {
@@ -107,48 +109,6 @@ export default class VirtualSelectionState {
         } = nextFocusedCellData;
 
         return groupIndex === nextGroupIndex && allDay === nextAllDay;
-    }
-
-    _getColumnIndexByCellData(cellData, isVerticalGroupOrientation) {
-        const { viewDataMap } = this._viewDataProvider;
-        const { startDate, groupIndex } = cellData;
-        const firstRow = viewDataMap[0];
-        const startTime = dateUtils.trimTime(startDate).getTime();
-
-        for(let columnIndex = 0; columnIndex < firstRow.length; columnIndex += 1) {
-            const {
-                cellData: { startDate: currentStartDate, groupIndex: currentGroupIndex },
-            } = firstRow[columnIndex];
-
-            if(startTime === dateUtils.trimTime(currentStartDate).getTime()
-                && ((groupIndex === currentGroupIndex) || isVerticalGroupOrientation)) {
-                return columnIndex;
-            }
-        }
-    }
-
-    _getRowIndexByColumnAndData(cellData, columnIndex, isVerticalGroupOrientation) {
-        const { viewDataMap } = this._viewDataProvider;
-        const { startDate, groupIndex, allDay } = cellData;
-
-        if(allDay && !isVerticalGroupOrientation) {
-            return 0;
-        }
-
-        for(let rowIndex = 0; rowIndex < viewDataMap.length; rowIndex += 1) {
-            const { cellData: currentCellData } = viewDataMap[rowIndex][columnIndex];
-            const {
-                startDate: currentStartDate,
-                groupIndex: currentGroupIndex,
-                allDay: currentAllDay
-            } = currentCellData;
-
-            if(startDate.getTime() === currentStartDate.getTime()
-                && groupIndex === currentGroupIndex
-                && allDay === currentAllDay) {
-                return rowIndex;
-            }
-        }
     }
 
     _filterCellsByDate(cellsRow, firstDate, lastDate) {
