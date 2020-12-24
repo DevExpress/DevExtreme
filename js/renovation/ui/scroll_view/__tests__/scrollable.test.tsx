@@ -14,7 +14,7 @@ import {
 import {
   ensureLocation,
   SCROLLABLE_DISABLED_CLASS,
-  SCROLLABLE_SCROLLBAR_SIMULATED,
+  SCROLLABLE_SCROLLBAR_SIMULATED, SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, SCROLLABLE_SCROLLBARS_HIDDEN,
 } from '../scrollable_utils';
 
 import {
@@ -143,10 +143,6 @@ jest.mock('../../../../core/devices', () => {
         [true, false, undefined, null].forEach((useSimulatedScrollbar) => {
           ['never', 'always', 'onScroll', 'onHover', true, false, undefined, null].forEach((showScrollbar: any) => {
             it(`Scrollbar should render if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
-              if (Scrollable === ScrollableSimulated) {
-                return; // TODO: skip for simulated strategy
-              }
-
               const scrollable = mount(
                 viewFunction({
                   props: { showScrollbar, useSimulatedScrollbar, direction },
@@ -1147,11 +1143,10 @@ jest.mock('../../../../core/devices', () => {
           ['horizontal', 'vertical', 'both', null, undefined].forEach((direction: any) => {
             [true, false, undefined, null].forEach((useSimulatedScrollbar: any) => {
               ['never', 'always', 'onScroll', 'onHover', true, false, undefined, null].forEach((showScrollbar: any) => {
-                it(`Should have SCROLLABLE_SCROLLBAR_SIMULATED if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
+                it(`Should have correct css classes if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
                   if (Scrollable === ScrollableSimulated) {
-                    return; // TODO: skip for simulated strategy
+                    return; // actual only for native strategy
                   }
-
                   const instance = new Scrollable({
                     showScrollbar,
                     useSimulatedScrollbar,
@@ -1163,6 +1158,29 @@ jest.mock('../../../../core/devices', () => {
                   expect(instance.cssClasses).toEqual(hasSimulatedCssClasses
                     ? expect.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED)
                     : expect.not.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED));
+                });
+
+                it(`Should have correct css classes if simulatedStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
+                  if (Scrollable === ScrollableNative) {
+                    return; // actual only for simulated strategy
+                  }
+                  const instance = new Scrollable({
+                    showScrollbar,
+                    useSimulatedScrollbar,
+                    direction,
+                  });
+
+                  expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+                  const hasScrollbarsAlwaysVisibleClass = showScrollbar === 'always';
+                  const hasScrollbarsHiddenClass = !showScrollbar;
+
+                  expect(instance.cssClasses).toEqual(hasScrollbarsAlwaysVisibleClass
+                    ? expect.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE)
+                    : expect.not.stringMatching(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE));
+
+                  expect(instance.cssClasses).toEqual(hasScrollbarsHiddenClass
+                    ? expect.stringMatching(SCROLLABLE_SCROLLBARS_HIDDEN)
+                    : expect.not.stringMatching(SCROLLABLE_SCROLLBARS_HIDDEN));
                 });
               });
             });
