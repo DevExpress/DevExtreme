@@ -167,6 +167,30 @@ jest.mock('../../../../core/devices', () => {
               }
               expect(scrollBar.length).toBe(expectedScrollbarsCount);
             });
+
+            it(`Should pass correct visibilityMode to Scrollbar. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
+              if (Scrollable === ScrollableNative) {
+                return; // actual only for simulated strategy
+              }
+
+              const props = {
+                props: {
+                  showScrollbar,
+                },
+              } as Partial<any>;
+
+              const scrollable = mount(viewFunction(props as any) as JSX.Element);
+              const scrollbarProps = scrollable.find(Scrollbar).props();
+
+              let expectedVisibilityMode = showScrollbar;
+              if (showScrollbar === true) {
+                expectedVisibilityMode = 'onScroll';
+              } else if (showScrollbar === false) {
+                expectedVisibilityMode = 'never';
+              }
+
+              expect(scrollbarProps.visibilityMode).toBe(expectedVisibilityMode);
+            });
           });
         });
       });
