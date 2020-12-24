@@ -353,7 +353,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return options;
     }
 
-    isVirtualScrolling() {
+    _isDateAndTimeView() {
         return false;
     }
 }

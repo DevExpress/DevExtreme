@@ -510,7 +510,7 @@ export default class ViewDataProvider {
                 } = cellData;
 
                 if(groupIndex === currentGroupIndex
-                    && allDay === currentAllDay
+                    && allDay === !!currentAllDay
                     && this._compareDatesAndAllDay(date, currentStartDate, currentEndDate, allDay)) {
                     return {
                         position: {

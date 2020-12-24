@@ -2498,7 +2498,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const { position, cellData } = cell;
 
         return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
-            cellData, position, currentDate,
+            cellData, position, currentDate, this._isDateAndTimeView(),
         );
     }
 
@@ -3397,6 +3397,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getTimePanelCells() {
         return this.$element().find(`.${TIME_PANEL_CELL_CLASS}`);
+    }
+
+    _isDateAndTimeView() {
+        return true;
     }
 }
 

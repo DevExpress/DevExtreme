@@ -109,6 +109,10 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             cellPosition: 0
         };
     }
+
+    _isDateAndTimeView() {
+        return false;
+    }
 }
 
 registerComponent('dxSchedulerTimelineMonth', SchedulerTimelineMonth);
