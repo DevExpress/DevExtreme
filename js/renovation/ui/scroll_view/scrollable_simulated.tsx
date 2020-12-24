@@ -56,6 +56,8 @@ export const viewFunction = ({
   const targetDirection = direction ?? 'vertical';
   const isVertical = targetDirection !== 'horizontal';
   const isHorizontal = targetDirection !== 'vertical';
+
+  const visibilityMode = visibilityModeNormalize(showScrollbar);
   return (
     <Widget
       classes={cssClasses}
@@ -78,7 +80,7 @@ export const viewFunction = ({
             <Scrollbar
               direction="horizontal"
               visible={scrollByThumb}
-              visibilityMode={visibilityModeNormalize(showScrollbar)}
+              visibilityMode={visibilityMode}
               expandable={scrollByThumb}
             />
           )}
@@ -86,7 +88,7 @@ export const viewFunction = ({
             <Scrollbar
               direction="vertical"
               visible={scrollByThumb}
-              visibilityMode={visibilityModeNormalize(showScrollbar)}
+              visibilityMode={visibilityMode}
               expandable={scrollByThumb}
             />
           )}
