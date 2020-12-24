@@ -1567,8 +1567,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                         ...options,
                         scrolling: { mode: scrollingMode },
                         height: 1000,
-                        renovateRender: scrollingMode === 'virtual'
-                            && workSpaceName !== 'dxSchedulerWorkSpaceMonth', // TODO: selection in month view when virtual scrolling is used
+                        renovateRender: scrollingMode === 'virtual',
                     });
                 };
             },
@@ -2479,8 +2478,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     return $('#scheduler-work-space')[workSpaceName]({
                         ...options,
                         scrolling: { mode: scrollingMode },
-                        renovateRender: scrollingMode === 'virtual'
-                            && workSpaceName !== 'dxSchedulerWorkSpaceMonth', // TODO: selection in month view when virtual scrolling is used,
+                        renovateRender: scrollingMode === 'virtual',
                         height: 1000,
                     });
                 };
@@ -4448,7 +4446,6 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
                     groupIndex: 0,
-                    text: '12:00 AM',
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
@@ -4468,7 +4465,6 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
                     groupIndex: 0,
-                    text: '12:00 AM',
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
@@ -4495,7 +4491,6 @@ QUnit.module('Renovated Render', {
                     startDate: new Date(2020, 6, 29, 0, 0),
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
-                    text: '',
                     groups: { res: 2 },
                     groupIndex: 1,
                 };
@@ -4525,7 +4520,6 @@ QUnit.module('Renovated Render', {
                     startDate: new Date(2020, 6, 29, 0, 30),
                     endDate: new Date(2020, 6, 29, 1, 0),
                     allDay: false,
-                    text: '',
                     groups: { res: 1 },
                     groupIndex: 0,
                 };
