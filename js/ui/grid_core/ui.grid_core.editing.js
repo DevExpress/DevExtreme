@@ -792,7 +792,6 @@ const EditingController = modules.ViewController.inherit((function() {
                     case 'prepend':
                         return insertInfo.pageIndex === beginPageIndex;
                     case 'refresh':
-                        insertInfo.rowIndex = 0;
                         insertInfo.dataRowIndex = 0;
                         insertInfo.pageIndex = 0;
                         break;
@@ -921,24 +920,17 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        _createInsertInfo: function(parentKey) {
+        _createInsertInfo: function(rowIndex, parentKey) {
             const dataController = this._dataController;
             const rows = dataController.items();
 
             const insertInfo = {
                 parentKey,
-                pageIndex: dataController.pageIndex(),
-                rowIndex: this._getInsertRowIndex(parentKey)
+                pageIndex: dataController.pageIndex()
             };
 
-            const row = rows[insertInfo.rowIndex];
-
-            if(row && (!row.isEditing && row.rowType === 'detail' || row.rowType === 'detailAdaptive')) {
-                insertInfo.rowIndex++;
-            }
-
             insertInfo.dataRowIndex = dataController.getRowIndexOffset() + rows.filter(function(row, index) {
-                return index < insertInfo.rowIndex && (row.rowType === 'data' && !row.isNewRow || row.rowType === 'group');
+                return index < rowIndex && (row.rowType === 'data' && !row.isNewRow || row.rowType === 'group');
             }).length;
 
             insertInfo[INSERT_INDEX] = this._getInsertIndex();
@@ -946,22 +938,36 @@ const EditingController = modules.ViewController.inherit((function() {
             return insertInfo;
         },
 
+        _getCorrectedInsertRowIndex: function(parentKey) {
+            let rowIndex = this._getInsertRowIndex(parentKey);
+            const dataController = this._dataController;
+            const rows = dataController.items();
+            const row = rows[rowIndex];
+
+            if(row && (!row.isEditing && row.rowType === 'detail' || row.rowType === 'detailAdaptive')) {
+                rowIndex++;
+            }
+
+            return rowIndex;
+        },
+
         _addInsertInfo: function({ parentKey, key } = {}) {
             let insertInfo;
+            let rowIndex;
 
             if(!isDefined(key)) {
                 key = String(new Guid());
-                insertInfo = this._createInsertInfo(parentKey);
-            } else {
-                insertInfo = this._getInternalData(key)?.insertInfo;
-                if(!isDefined(insertInfo)) {
-                    insertInfo = this._createInsertInfo(parentKey);
-                }
+            }
+
+            insertInfo = this._getInternalData(key)?.insertInfo;
+            if(!isDefined(insertInfo)) {
+                rowIndex = this._getCorrectedInsertRowIndex(parentKey);
+                insertInfo = this._createInsertInfo(rowIndex, parentKey);
             }
 
             this._addInternalData({ insertInfo, key });
 
-            return { insertInfo, key };
+            return { insertInfo, key, rowIndex };
         },
 
         _getInsertRowIndex: function(parentKey) {
@@ -1056,7 +1062,7 @@ const EditingController = modules.ViewController.inherit((function() {
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
             const that = this;
             const oldEditRowIndex = that._getVisibleEditRowIndex();
-            const { insertInfo, key } = that._addInsertInfo({ parentKey });
+            const { key, rowIndex } = that._addInsertInfo({ parentKey });
             const editMode = getEditMode(that);
 
             if(editMode !== EDIT_MODE_BATCH) {
@@ -1067,13 +1073,13 @@ const EditingController = modules.ViewController.inherit((function() {
 
             that._dataController.updateItems({
                 changeType: 'update',
-                rowIndices: [initialOldEditRowIndex, oldEditRowIndex, insertInfo.rowIndex]
+                rowIndices: [initialOldEditRowIndex, oldEditRowIndex, rowIndex]
             });
 
             if(editMode === EDIT_MODE_POPUP) {
-                that._showEditPopup(insertInfo.rowIndex);
+                that._showEditPopup(rowIndex);
             } else {
-                that._focusFirstEditableCellInRow(insertInfo.rowIndex);
+                that._focusFirstEditableCellInRow(rowIndex);
             }
 
             that._afterInsertRow({ key, data });
