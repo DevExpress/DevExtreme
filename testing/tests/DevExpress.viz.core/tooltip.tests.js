@@ -294,6 +294,12 @@ QUnit.test('document.documentElement has width less than body (T960374)', functi
         get: () => 500,
         configurable: true
     });
+    const body = $('body').get(0);
+    Object.defineProperty(body, 'clientWidth', {
+        get: () => 1800,
+        configurable: true
+    });
+
     const tooltip = new Tooltip({ eventTrigger: function() { } });
     tooltip.update(this.options);
     // act
@@ -303,6 +309,7 @@ QUnit.test('document.documentElement has width less than body (T960374)', functi
     assert.equal(tooltip._wrapper.get(0).style.top, '41px');
 
     delete document.documentElement.clientWidth;
+    delete body.clientWidth;
 });
 
 QUnit.test('Set options. customizeTooltip', function(assert) {
