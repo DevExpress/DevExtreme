@@ -1984,6 +1984,22 @@ if(devices.real().deviceType === 'desktop') {
             }
         ];
 
+        const checkSelection = (assert, scheduler, firstCellIndex, lastCellIndex) => {
+            scheduler.workSpace.selectCells(firstCellIndex, lastCellIndex);
+
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+            const cellsNumber = lastCellIndex - firstCellIndex + 1;
+
+            assert.equal(selectedCells.length, cellsNumber, 'Correct number of cells');
+
+            [...(new Array(cellsNumber))].forEach((_, index) => {
+                const currentIndex = index + firstCellIndex;
+                const cell = scheduler.workSpace.getCell(currentIndex);
+                assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+                assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), currentIndex === lastCellIndex, 'Cell has correct classes');
+            });
+        };
+
         QUnit.module(' Multiple selection when dragging is not enabled', () => {
             [{
                 view: 'day',
@@ -2121,17 +2137,7 @@ if(devices.real().deviceType === 'desktop') {
                 scrolling: { mode: 'virtual' },
             });
 
-            scheduler.workSpace.selectCells(0, 5);
-
-            const selectedCells = scheduler.workSpace.getSelectedCells();
-
-            assert.equal(selectedCells.length, 6, 'Correct number of cells');
-
-            [...(new Array(6))].forEach((_, index) => {
-                const cell = scheduler.workSpace.getCell(index);
-                assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
-                assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), index === 5, 'Cell has correct classes');
-            });
+            checkSelection(assert, scheduler, 0, 5);
         });
 
         QUnit.test('Correct cells should be selected in Month when horizontal grouping is used and virtual scrolling is enabled', function(assert) {
@@ -2150,21 +2156,11 @@ if(devices.real().deviceType === 'desktop') {
                 groups: ['ownerId'],
             });
 
-            scheduler.workSpace.selectCells(7, 9);
-
-            let selectedCells = scheduler.workSpace.getSelectedCells();
-
-            assert.equal(selectedCells.length, 3, 'Correct number of cells');
-
-            [...(new Array(3))].forEach((_, index) => {
-                const cell = scheduler.workSpace.getCell(index + 7);
-                assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
-                assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), index === 2, 'Cell has correct classes');
-            });
+            checkSelection(assert, scheduler, 7, 9);
 
             scheduler.workSpace.selectCells(6, 7);
 
-            selectedCells = scheduler.workSpace.getSelectedCells();
+            const selectedCells = scheduler.workSpace.getSelectedCells();
             const cell = scheduler.workSpace.getCell(6);
 
             assert.equal(selectedCells.length, 1, 'Correct number of cells');
@@ -2188,21 +2184,11 @@ if(devices.real().deviceType === 'desktop') {
                 groups: ['ownerId'],
             });
 
-            scheduler.workSpace.selectCells(0, 5);
-
-            let selectedCells = scheduler.workSpace.getSelectedCells();
-
-            assert.equal(selectedCells.length, 6, 'Correct number of cells');
-
-            [...(new Array(6))].forEach((_, index) => {
-                const cell = scheduler.workSpace.getCell(index);
-                assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
-                assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), index === 5, 'Cell has correct classes');
-            });
+            checkSelection(assert, scheduler, 0, 5);
 
             scheduler.workSpace.selectCells(6, 58);
 
-            selectedCells = scheduler.workSpace.getSelectedCells();
+            const selectedCells = scheduler.workSpace.getSelectedCells();
             const cell = scheduler.workSpace.getCell(6);
 
             assert.equal(selectedCells.length, 1, 'Correct number of cells');
