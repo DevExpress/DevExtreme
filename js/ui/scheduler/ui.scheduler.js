@@ -1688,7 +1688,7 @@ class Scheduler extends Widget {
         }
 
         const correctedExceptionDate = exceptionDate;
-        updatedAppointment.recurrenceException = this._createRecurrenceException(correctedExceptionDate, rawAppointment);
+        updatedAppointment.recurrenceException = this._createRecurrenceException(rawAppointment, correctedExceptionDate);
 
         if(isPopupEditing) {
             // TODO: need to refactor - move as parameter to appointment popup
@@ -1704,18 +1704,17 @@ class Scheduler extends Widget {
         }
     }
 
-    _createRecurrenceException(exceptionDate, targetAppointment) {
+    _createRecurrenceException(rawAppointment, exceptionDate) {
         const result = [];
-        const adapter = this.createAppointmentAdapter(targetAppointment);
+        const appointment = this.createAppointmentAdapter(rawAppointment);
 
-        if(adapter.recurrenceException) {
-            result.push(adapter.recurrenceException);
+        if(appointment.recurrenceException) {
+            result.push(appointment.recurrenceException);
         }
-        result.push(this._serializeRecurrenceException(exceptionDate, adapter.startDate, adapter.allDay));
+        result.push(this._serializeRecurrenceException(exceptionDate, appointment.startDate, appointment.allDay));
 
         return result.join();
     }
-
 
     _serializeRecurrenceException(exceptionDate, targetStartDate, isAllDay) {
         isAllDay && exceptionDate.setHours(targetStartDate.getHours(),
