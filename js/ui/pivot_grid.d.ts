@@ -65,6 +65,13 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     dataSource?: Array<any> | PivotGridDataSource | PivotGridDataSourceOptions;
     /**
      * @docid
+     * @default true
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    encodeHtml?: boolean;
+    /**
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */

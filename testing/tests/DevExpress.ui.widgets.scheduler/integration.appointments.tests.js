@@ -168,7 +168,7 @@ QUnit.module('Integration: Appointments', {
         assert.equal(appointmentsItems[0].itemData, dataSourceItems[0], 'Item is correct');
 
         const workspace = this.instance.getWorkSpace();
-        workspace.virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
         workspace.getScrollable().scrollTo({ y: 1000 });
 
         this.clock.restore();
@@ -226,7 +226,7 @@ QUnit.module('Integration: Appointments', {
                     if(scrollingMode === 'virtual') {
                         const virtualScrollingDispatcher = this.instance.getWorkSpace().virtualScrollingDispatcher;
                         if(virtualScrollingDispatcher) {
-                            virtualScrollingDispatcher.getRenderTimeout = () => -1;
+                            virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
                         }
                     }
                 };
@@ -3482,16 +3482,16 @@ QUnit.module('Integration: Appointments', {
                                 { id: 2, text: 'two' }
                             ]
                         }
-                    ]
+                    ],
+                    height: 1500,
                 });
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const { scheduler } = this;
 
-                $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(54).trigger(dragEvents.enter);
-                pointerMock($appointment).start().down().move(10, 10).up();
+                const appointment = scheduler.appointmentList[0];
+                appointment.drag.toCell(54);
 
-                this.clock.tick();
-                const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+                const appointmentData = appointment.data;
 
                 assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 9, 12), 'Start date is correct');
                 assert.deepEqual(appointmentData.endDate, new Date(2018, 2, 9, 12, 30), 'End date is correct');
@@ -3555,21 +3555,19 @@ QUnit.module('Integration: Appointments', {
                                 { id: 2, text: 'two' }
                             ]
                         }
-                    ]
+                    ],
                 });
 
-                const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const cellPosition = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(6).position().left;
+                const { scheduler } = this;
 
-                $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(6).trigger(dragEvents.enter);
-                pointerMock($appointment).start().down().move(10, 10).up();
+                const appointment = scheduler.appointmentList[0];
+                appointment.drag.toCell(6);
 
-                this.clock.tick();
-                const $firstPart = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const $secondPart = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(1);
+                const $secondPart = scheduler.appointmentList[1];
+                const cellPosition = scheduler.workSpace.getCell(6).position();
 
-                assert.roughEqual($firstPart.position().left, cellPosition, 2, 'correct left position');
-                assert.equal($secondPart.position().left, 0, 'correct left position');
+                assert.roughEqual(appointment.position.left, cellPosition.left, 2, 'correct left position');
+                assert.equal($secondPart.position.left, 0, 'correct left position');
             });
 
             QUnit.test('Appointment should be resized correctly to left side in horizontal grouped workspace Month', function(assert) {
@@ -4766,6 +4764,53 @@ QUnit.module('Integration: Appointments', {
             });
 
             assert.equal(scheduler.appointments.getAppointmentPosition(0).top, scheduler.appointments.getAppointmentPosition(1).top, 'Appointment positions are correct');
+        });
+
+        [{
+            disabled: true,
+            result: true,
+            text: 'disabled is true'
+        }, {
+            disabled: false,
+            result: false,
+            text: 'disabled is false'
+        }, {
+            result: false,
+            text: 'disabled is undefined'
+        }, {
+            disabled: () => false,
+            result: false,
+            text: 'disabled is function, return false'
+        }, {
+            disabled: () => true,
+            result: true,
+            text: 'disabled is function, return true'
+        }].forEach(testCase => {
+            QUnit.test(`Appointment tooltip should be consider disabled property of appointment (${testCase.text})`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: [{
+                        text: 'Website Re-Design Plan',
+                        startDate: new Date(2021, 4, 24, 1),
+                        endDate: new Date(2021, 4, 24, 2),
+                        disabled: testCase.disabled
+                    }],
+                    currentDate: new Date(2021, 4, 24),
+                    height: 600
+                });
+
+                const getAppointmentDisabled = sinon.spy(scheduler.instance._appointmentTooltip._options, 'getAppointmentDisabled');
+
+                scheduler.appointments.click();
+
+                const deleteButton = scheduler.tooltip.getDeleteButton();
+                const getAppointmentDisabledResult = getAppointmentDisabled.returnValues[0];
+
+                const isExistDeleteButton = !!deleteButton.length;
+                const isDisabled = testCase.result;
+
+                assert.equal(isExistDeleteButton, !isDisabled, `visibility button should be equal ${!isDisabled}`);
+                assert.equal(getAppointmentDisabledResult, isDisabled, `getAppointmentDisabled should be return ${isDisabled}`);
+            });
         });
 
         QUnit.test('targetedAppointmentData should has valid targeted resource on onAppointmentClick event', function(assert) {

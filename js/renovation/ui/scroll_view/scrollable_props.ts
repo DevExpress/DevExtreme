@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { EventCallback } from '../common/event_callback.d';
 import BaseWidgetProps from '../../utils/base_props';
-import { ScrollableDirection, ScrollEventArgs } from './types.d';
+import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
 
 @ComponentBindings()
 export class ScrollableInternalProps {
@@ -11,9 +11,17 @@ export class ScrollableInternalProps {
 
   @OneWay() direction: ScrollableDirection = 'vertical';
 
+  @OneWay() showScrollbar: ScrollableShowScrollbar = 'onScroll';
+
+  @OneWay() scrollByThumb = false;
+
+  @OneWay() useSimulatedScrollbar = false;
+
   @OneWay() classes?: string;
 
   @OneWay() forceGeneratePockets = false;
+
+  @OneWay() needScrollViewContentWrapper = false;
 
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
 }

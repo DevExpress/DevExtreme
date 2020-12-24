@@ -6,6 +6,8 @@ import dateUtils from '../../../core/utils/date';
 import { getBoundingRect } from '../../../core/utils/position';
 import dateLocalization from '../../../localization/date';
 
+import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
+
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
 const DATE_TABLE_CURRENT_DATE_CLASS = 'dx-scheduler-date-table-current-date';
@@ -309,6 +311,50 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _getRowCountWithAllDayRows() {
         return this._getRowCount();
+    }
+
+    renovatedRenderSupported() { return true; }
+
+    renderRAllDayPanel() {}
+
+    renderRTimeTable() {}
+
+    renderRDateTable() {
+        this.renderRComponent(
+            this._$dateTable,
+            dxrMonthDateTableLayout,
+            'renovatedDateTable',
+            { viewData: this.viewDataProvider.viewData, dataCellTemplate: this.option('dataCellTemplate') }
+        );
+    }
+
+    generateRenderOptions() {
+        const options = super.generateRenderOptions();
+        options.cellDataGetters.push((_, rowIndex, cellIndex) => {
+            return {
+                value: {
+                    text: this._getCellText(rowIndex, cellIndex),
+                },
+            };
+        });
+
+        const getCellMetaData = (_, rowIndex, cellIndex, groupIndex, startDate) => {
+            return {
+                value: {
+                    today: this._isCurrentDate(startDate),
+                    otherMonth: this._isOtherMonth(startDate),
+                    firstDayOfMonth: this._isFirstDayOfMonth(startDate),
+                },
+            };
+        };
+
+        options.cellDataGetters.push(getCellMetaData);
+
+        return options;
+    }
+
+    isVirtualScrolling() {
+        return false;
     }
 }
 

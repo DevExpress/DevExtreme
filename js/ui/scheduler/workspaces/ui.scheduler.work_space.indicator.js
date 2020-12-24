@@ -4,13 +4,13 @@ import registerComponent from '../../../core/component_registrator';
 import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
 import { hasWindow } from '../../../core/utils/window';
+import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS = 'dx-scheduler-date-time-indicator-simple';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
-const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _getTimeZoneCalculator() {
@@ -64,6 +64,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
                 const date = this._getToday();
 
                 this._renderIndicator(date, groupCount);
+                this._setCurrentTimeCells();
             }
         }
     }
@@ -180,29 +181,20 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _refreshDateTimeIndication() {
         this._cleanDateTimeIndicator();
-        this._shader && this._shader.clean();
+        this._cleanCurrentTimeCells();
+
+        this._shader?.clean();
+
         this._renderDateTimeIndication();
     }
 
-    _isCurrentTime(date) {
-        if(this.isIndicationOnView()) {
-            const today = this._getToday();
-            let result = false;
-            date = new Date(date);
-
-            date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
-
-            let startCellDate = new Date(date);
-            let endCellDate = new Date(date);
-
-            if(dateUtils.sameDate(today, date)) {
-                startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration() + 1);
-                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
-
-                result = dateUtils.dateInRange(today, startCellDate, endCellDate);
-            }
-            return result;
-        }
+    _setCurrentTimeCells() {
+        const timePanelCells = this._getTimePanelCells();
+        const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+        currentTimeCellIndices.forEach((timePanelCellIndex) => {
+            timePanelCells.eq(timePanelCellIndex)
+                .addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
+        });
     }
 
     _isCurrentTimeHeaderCell(headerIndex) {
@@ -212,17 +204,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         }
 
         return false;
-    }
-
-    _getTimeCellClass(i) {
-        const startViewDate = this._getTimeCellDate(i);
-        const cellClass = super._getTimeCellClass(i);
-
-        if(this._isCurrentTime(startViewDate)) {
-            return cellClass + ' ' + TIME_PANEL_CURRENT_TIME_CELL_CLASS;
-        }
-
-        return cellClass;
     }
 
     _getHeaderPanelCellClass(i) {
@@ -249,6 +230,12 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _cleanDateTimeIndicator() {
         this.$element().find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
+    }
+
+    _cleanCurrentTimeCells() {
+        this.$element()
+            .find(`.${TIME_PANEL_CURRENT_TIME_CELL_CLASS}`)
+            .removeClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
     }
 
     _cleanWorkSpace() {
@@ -295,6 +282,38 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             indicatorUpdateInterval: 5 * toMs('minute'),
             shadeUntilCurrentTime: true
         });
+    }
+
+    _getCurrentTimePanelCellIndices() {
+        const rowCountPerGroup = this._getTimePanelRowCount();
+        const today = this._getToday();
+        const index = this.getCellIndexByDate(today);
+        const { rowIndex: currentTimeRowIndex } = this._getCellCoordinatesByIndex(index);
+
+        if(currentTimeRowIndex === undefined) {
+            return [];
+        }
+
+        let cellIndices;
+        if(currentTimeRowIndex === 0) {
+            cellIndices = [currentTimeRowIndex];
+        } else {
+            cellIndices = currentTimeRowIndex % 2 === 0
+                ? [currentTimeRowIndex - 1, currentTimeRowIndex]
+                : [currentTimeRowIndex, currentTimeRowIndex + 1];
+        }
+
+        const verticalGroupCount = this._isVerticalGroupedWorkSpace()
+            ? this._getGroupCount()
+            : 1;
+
+        return [...(new Array(verticalGroupCount))]
+            .reduce((currentIndices, _, groupIndex) => {
+                return [
+                    ...currentIndices,
+                    ...cellIndices.map(cellIndex => rowCountPerGroup * groupIndex + cellIndex),
+                ];
+            }, []);
     }
 }
 

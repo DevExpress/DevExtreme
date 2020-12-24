@@ -49,6 +49,9 @@ export const plugin = {
             }
 
             const callback = (result) => {
+                if(result === undefined) {
+                    return;
+                }
                 if(result) {
                     that._moveTooltip(item, coords);
                 } else {

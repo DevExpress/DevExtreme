@@ -1,8 +1,16 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  OneWay,
+  Template,
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
-import { ViewCellData } from '../../types.d';
+import {
+  DateTimeCellTemplateProps,
+  ViewCellData,
+} from '../../types.d';
 import { isVerticalGroupOrientation } from '../../utils';
 import { GroupOrientation } from '../../../types.d';
 
@@ -14,7 +22,7 @@ export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
   >
     <thead>
       <Row>
-        {viewModel.props.viewCellsData![0].map(({
+        {viewModel.props.viewCellsData[0].map(({
           startDate, endDate, today, groups, groupIndex, index, key,
         }) => (
           <viewModel.props.cellTemplate
@@ -39,20 +47,22 @@ export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
 export class HeaderPanelLayoutProps {
   @OneWay() className?: string = '';
 
-  @OneWay() viewCellsData?: ViewCellData[][] = [[]];
+  @OneWay() viewCellsData!: ViewCellData[][];
 
   @OneWay() groupOrientation?: GroupOrientation;
 
-  @Template() cellTemplate?: any;
+  @Template() cellTemplate!: JSXTemplate<ViewCellData>;
 
-  @Template() dateCellTemplate?: any;
+  @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class HeaderPanelLayout extends JSXComponent(HeaderPanelLayoutProps) {
+export class HeaderPanelLayout extends JSXComponent<
+HeaderPanelLayoutProps, 'cellTemplate' | 'viewCellsData'
+>() {
   get isVerticalGroupOrientation(): boolean {
     const { groupOrientation } = this.props;
 

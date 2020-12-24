@@ -11,6 +11,7 @@ describe('PathSvgElement', () => {
         fill: 'red',
         stroke: '#ffaa66',
         opacity: 0.8,
+        pointerEvents: 'pointerEvents',
       };
       const props = {
         points: [1, 2, 3, 4],
@@ -68,6 +69,8 @@ describe('PathSvgElement', () => {
         const path = new PathSvgElement({
           ...rectProps,
           rotate: 25,
+          rotateX: 4,
+          rotateY: 5,
           translateX: 15,
           translateY: -25,
           scaleX: 1.1,
@@ -76,7 +79,7 @@ describe('PathSvgElement', () => {
         path.pathRef = { setAttribute: jest.fn() } as any;
         path.effectUpdateShape();
         expect(path.pathRef.setAttribute).toHaveBeenCalledTimes(1);
-        expect(path.pathRef.setAttribute).toHaveBeenCalledWith('transform', 'translate(15,-25) rotate(25,0,0) scale(1.1,0.8)');
+        expect(path.pathRef.setAttribute).toHaveBeenCalledWith('transform', 'translate(15,-25) rotate(25,4,5) scale(1.1,0.8)');
       });
     });
   });

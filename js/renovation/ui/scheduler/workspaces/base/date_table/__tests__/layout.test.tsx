@@ -14,10 +14,25 @@ describe('DateTableLayoutBase', () => {
   const viewDataBase = {
     groupedData: [{
       dateTable: [[{
-        startDate: new Date(2020, 6, 9, 0), endDate: new Date(2020, 6, 9, 0, 30), groups: { id: 1 }, text: '', index: 0,
+        startDate: new Date(2020, 6, 9, 0),
+        endDate: new Date(2020, 6, 9, 0, 30),
+        groups: { id: 1 },
+        text: '',
+        index: 0,
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
+        key: '1',
       }], [{
-        startDate: new Date(2020, 6, 9, 0, 30), endDate: new Date(2020, 6, 9, 1), groups: { id: 2 }, text: '', index: 0,
+        startDate: new Date(2020, 6, 9, 0, 30),
+        endDate: new Date(2020, 6, 9, 1),
+        groups: { id: 2 },
+        text: '',
+        index: 0,
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
+        key: '2',
       }]],
+      groupIndex: 1,
     }],
     cellCountInGroupRow: 1,
   };
@@ -79,9 +94,8 @@ describe('DateTableLayoutBase', () => {
       expect(tableBody.props())
         .toMatchObject({
           viewData: viewDataBase,
-          // cellTemplate,
+          cellTemplate,
           dataCellTemplate,
-          viewType: 'month',
         });
     });
   });
@@ -89,7 +103,7 @@ describe('DateTableLayoutBase', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       it('classes', () => {
-        const layout = new DateTableLayoutBase({ className: 'some-class' });
+        const layout = new DateTableLayoutBase({ className: 'some-class' } as any);
 
         expect(layout.classes.split(' '))
           .toEqual([
@@ -100,7 +114,9 @@ describe('DateTableLayoutBase', () => {
 
       [true, false].forEach((isVirtual) => {
         it(`should get correct isVirtial flag if isVirtual=${isVirtual}`, () => {
-          const layout = new DateTableLayoutBase({ viewData: { ...viewDataBase, isVirtual } });
+          const layout = new DateTableLayoutBase({
+            viewData: { ...viewDataBase, isVirtual },
+          } as any);
 
           expect(layout.isVirtual)
             .toBe(isVirtual);
@@ -116,7 +132,7 @@ describe('DateTableLayoutBase', () => {
                 topVirtualRowHeight,
                 bottomVirtualRowHeight,
               },
-            });
+            } as any);
 
             let value = topVirtualRowHeight || 0;
             expect(layout.topVirtualRowHeight)
@@ -130,7 +146,7 @@ describe('DateTableLayoutBase', () => {
       });
 
       it('virtualCellsCount', () => {
-        const layout = new DateTableLayoutBase({ viewData: viewDataBase });
+        const layout = new DateTableLayoutBase({ viewData: viewDataBase } as any);
 
         expect(layout.virtualCellsCount)
           .toBe(1);

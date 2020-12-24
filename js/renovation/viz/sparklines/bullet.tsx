@@ -6,13 +6,14 @@ import {
   Ref,
   InternalState,
   Consumer,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
-import { mergeRtlEnabled } from '../core/utils';
+import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 import { BaseWidgetProps } from '../core/base_props';
 import { BaseWidget } from '../core/base_widget';
 import { createAxis } from './utils';
-import { ConfigContextValue, ConfigContext } from '../../ui/common/config_context';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { PathSvgElement } from '../core/renderers/svg_path';
 import { Canvas } from '../core/common/types.d';
 
@@ -90,7 +91,7 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
   const isValidBullet = isValidBulletScale(scaleProps);
   return (
     <BaseWidget
-      ref={viewModel.widgetRef as any}
+      ref={viewModel.widgetRef}
       classes={viewModel.cssClasses}
       className={viewModel.cssClassName}
       size={viewModel.props.size}
@@ -170,7 +171,7 @@ export class BulletProps extends BaseWidgetProps {
   },
 })
 export class Bullet extends JSXComponent(BulletProps) {
-  @Ref() widgetRef!: BaseWidget;
+  @Ref() widgetRef!: RefObject<BaseWidget>;
 
   @InternalState() argumentAxis = createAxis(true);
 
@@ -200,7 +201,7 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   get rtlEnabled(): boolean | undefined {
     const { rtlEnabled } = this.props;
-    return mergeRtlEnabled(rtlEnabled, this.config);
+    return resolveRtlEnabled(rtlEnabled, this.config);
   }
 
   get tooltipEnabled(): boolean {

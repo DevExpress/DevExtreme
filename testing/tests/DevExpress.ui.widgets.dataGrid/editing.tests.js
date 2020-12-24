@@ -8821,13 +8821,9 @@ QUnit.module('Editing with real dataController', {
 
             // assert
             assert.ok($(rowsView.getRowElement(0)).hasClass('dx-edit-row'), 'row is edited');
-            assert.deepEqual(this.option('editing.editRowKey'), {
-                '__DX_INSERT_INDEX__': 1,
-                'dataRowIndex': 0,
-                'pageIndex': 0,
-                'parentKey': undefined,
-                'rowIndex': 0
-            }, 'editRowKey');
+            const firstRow = this.getVisibleRows()[0];
+            assert.equal(this.option('editing.editRowKey'), firstRow.key, 'editRowKey');
+            assert.ok(firstRow.isNewRow, 'isNewRow');
         });
 
         QUnit.test('Multiple editRowKey changes should work correctly', function(assert) {
@@ -9045,7 +9041,7 @@ QUnit.module('Editing with real dataController', {
                 const newRowKey = this.option('editing.editRowKey');
 
                 // assert
-                assert.ok(newRowKey.__DX_INSERT_INDEX__, 'insert index');
+                assert.notOk(newRowKey.__DX_INSERT_INDEX__, 'no insert index');
                 assert.equal(this.option('editing.editColumnName'), 'name', 'editColumnName');
                 assert.ok($(rowsView.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell is edited');
 
@@ -9092,17 +9088,12 @@ QUnit.module('Editing with real dataController', {
             const newChanges = this.option('editing.changes');
             assert.equal(oldChanges.length, 0, 'old changes were not modified');
             assert.equal(newChanges.length, 1, 'new changes');
-            assert.deepEqual(newChanges[0], {
-                'data': {},
-                'key': {
-                    '__DX_INSERT_INDEX__': 1,
-                    'dataRowIndex': 0,
-                    'pageIndex': 0,
-                    'parentKey': undefined,
-                    'rowIndex': 0
-                },
-                'type': 'insert'
-            });
+
+            const firstChange = newChanges[0];
+            assert.deepEqual(firstChange.data, {}, 'empty data');
+            assert.ok(firstChange.key, 'key exists');
+            assert.equal(typeof firstChange.key, 'string', 'key is string');
+            assert.equal(firstChange.type, 'insert', 'type - insert');
         });
 
         QUnit.test('Changes - edit row', function(assert) {
@@ -9308,57 +9299,53 @@ QUnit.module('Editing with real dataController', {
         });
 
         ['row', 'batch', 'popup', 'form', 'cell'].forEach(editMode => {
-            QUnit.test(`Add row via changes option (editMode = ${editMode})`, function(assert) {
-                // arrange
-                const rowsView = this.rowsView;
-                const $testElement = $('#container');
+            ['testkey', undefined].forEach(key => {
+                QUnit.test(`Add row via changes option (editMode = ${editMode}, passKey = ${key})`, function(assert) {
+                    // arrange
+                    const rowsView = this.rowsView;
+                    const $testElement = $('#container');
 
-                $.extend(this.options.editing, {
-                    allowAdding: true,
-                    mode: editMode
+                    $.extend(this.options.editing, {
+                        allowAdding: true,
+                        mode: editMode
+                    });
+                    rowsView.render($testElement);
+
+                    // assert
+                    let visibleRows = this.getVisibleRows();
+                    assert.equal(visibleRows.length, 7, 'row count');
+
+                    // act
+                    this.option('editing.changes', [{
+                        data: { name: 'test' },
+                        key,
+                        type: 'insert'
+                    }]);
+                    this.clock.tick();
+
+                    // assert
+                    visibleRows = this.getVisibleRows();
+                    const $insertedRow = $(this.getRowElement(0));
+                    const $cells = $insertedRow.find('td');
+
+                    assert.equal(visibleRows.length, 8, 'row count');
+                    assert.ok(visibleRows[0].isNewRow, 'inserted row');
+
+                    if(editMode !== 'popup') {
+                        assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                        assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                        assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+                    }
+
+                    // act
+                    this.saveEditData();
+
+                    // assert
+                    visibleRows = this.getVisibleRows();
+
+                    assert.equal(visibleRows.length, 8, 'row count');
+                    assert.deepEqual(visibleRows[7].data.name, 'test', 'inserted row name field');
                 });
-                rowsView.render($testElement);
-
-                // assert
-                let visibleRows = this.getVisibleRows();
-                assert.equal(visibleRows.length, 7, 'row count');
-
-                // act
-                this.option('editing.changes', [{
-                    data: { name: 'test' },
-                    key: {
-                        '__DX_INSERT_INDEX__': 1,
-                        'dataRowIndex': 0,
-                        'pageIndex': 0,
-                        'parentKey': undefined,
-                        'rowIndex': 0
-                    },
-                    type: 'insert'
-                }]);
-                this.clock.tick();
-
-                // assert
-                visibleRows = this.getVisibleRows();
-                const $insertedRow = $(this.getRowElement(0));
-                const $cells = $insertedRow.find('td');
-
-                assert.equal(visibleRows.length, 8, 'row count');
-                assert.ok(visibleRows[0].isNewRow, 'inserted row');
-
-                if(editMode !== 'popup') {
-                    assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
-                    assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
-                    assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
-                }
-
-                // act
-                this.saveEditData();
-
-                // assert
-                visibleRows = this.getVisibleRows();
-
-                assert.equal(visibleRows.length, 8, 'row count');
-                assert.deepEqual(visibleRows[7].data.name, 'test', 'inserted row name field');
             });
 
             QUnit.test(`Remove row via changes option (editMode = ${editMode})`, function(assert) {

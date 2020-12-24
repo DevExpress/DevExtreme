@@ -117,7 +117,7 @@ const isSameAppointmentDates = (startDate, endDate) => {
     return dateUtils.sameDate(startDate, endDate);
 };
 
-const getClientTimezoneOffset = (date) => {
+const getClientTimezoneOffset = (date = new Date()) => {
     return date.getTimezoneOffset() * 60000;
 };
 

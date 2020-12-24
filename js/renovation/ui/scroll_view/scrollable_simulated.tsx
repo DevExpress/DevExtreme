@@ -4,6 +4,7 @@ import {
   Method,
   Ref,
   Effect,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
@@ -27,14 +28,17 @@ import {
   SCROLLABLE_CONTAINER_CLASS,
   SCROLLABLE_CONTENT_CLASS,
   SCROLLABLE_WRAPPER_CLASS,
+  SCROLLVIEW_CONTENT_CLASS,
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
+  SCROLLABLE_DISABLED_CLASS,
 } from './scrollable_utils';
 
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
   props: {
-    disabled, height, width, rtlEnabled, children, forceGeneratePockets,
+    disabled, height, width, rtlEnabled, children,
+    forceGeneratePockets, needScrollViewContentWrapper,
   },
   restAttributes,
 }: ScrollableSimulated): JSX.Element => (
@@ -47,10 +51,12 @@ export const viewFunction = ({
     {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     <div className={SCROLLABLE_WRAPPER_CLASS}>
-      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef as any}>
-        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef as any}>
+      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
+        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
           {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
-          {children}
+          {needScrollViewContentWrapper && (
+            <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
+          {!needScrollViewContentWrapper && children}
           {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
         </div>
       </div>
@@ -62,9 +68,9 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsType>() {
-  @Ref() contentRef!: HTMLDivElement;
+  @Ref() contentRef!: RefObject<HTMLDivElement>;
 
-  @Ref() containerRef!: HTMLDivElement;
+  @Ref() containerRef!: RefObject<HTMLDivElement>;
 
   @Method()
   content(): HTMLDivElement {
@@ -171,11 +177,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   }
 
   get cssClasses(): string {
-    const { direction, classes } = this.props;
+    const { direction, classes, disabled } = this.props;
 
     const classesMap = {
-      'dx-scrollable dx-scrollable-native dx-scrollable-renovated dx-scrollable-native-generic': true,
+      'dx-scrollable dx-scrollable-simulated dx-scrollable-renovated': true,
       [`dx-scrollable-${direction}`]: true,
+      [SCROLLABLE_DISABLED_CLASS]: !!disabled,
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);

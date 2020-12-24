@@ -9,6 +9,7 @@ import {
   Ref,
   Template,
   Slot,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
@@ -53,7 +54,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
 
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
-      ref={viewModel.widgetRef as any}
+      ref={viewModel.widgetRef}
       accessKey={viewModel.props.accessKey}
       activeStateEnabled={viewModel.props.activeStateEnabled}
       aria={viewModel.aria}
@@ -74,7 +75,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
       width={viewModel.props.width}
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
-      <div className="dx-button-content" ref={viewModel.contentRef as any}>
+      <div className="dx-button-content" ref={viewModel.contentRef}>
         {ButtonTemplate && (<ButtonTemplate data={{ icon, text }} />)}
         {!ButtonTemplate && children}
         {isIconLeft && iconComponent}
@@ -86,7 +87,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
                 && (
                 <InkRipple
                   config={viewModel.inkRippleConfig}
-                  ref={viewModel.inkRippleRef as any}
+                  ref={viewModel.inkRippleRef}
                 />
                 )}
       </div>
@@ -148,13 +149,13 @@ export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
 })
 
 export class Button extends JSXComponent(ButtonProps) {
-  @Ref() contentRef!: HTMLDivElement;
+  @Ref() contentRef!: RefObject<HTMLDivElement>;
 
-  @Ref() inkRippleRef!: InkRipple;
+  @Ref() inkRippleRef!: RefObject<InkRipple>;
 
-  @Ref() submitInputRef!: HTMLInputElement;
+  @Ref() submitInputRef!: RefObject<HTMLInputElement>;
 
-  @Ref() widgetRef!: Widget;
+  @Ref() widgetRef!: RefObject<Widget>;
 
   @Effect()
   contentReadyEffect(): EffectReturn {

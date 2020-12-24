@@ -1,8 +1,6 @@
-import getElementComputedStyle from './get_computed_style';
+import getElementComputedStyle from '../../../utils/get_computed_style';
+import { toNumber } from '../../../utils/type_conversion';
 
-function toNumber(attribute: string | undefined): number {
-  return attribute ? Number(attribute.replace('px', '')) : 0;
-}
 export function getElementWidth(element: Element | undefined): number {
   return toNumber(getElementComputedStyle(element)?.width);
 }

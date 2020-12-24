@@ -1,6 +1,7 @@
-@use "../base/mixins" as *;
+@use "./mixins" as *;
 
 // adduse
+
 .dx-radiobutton {
   @include user-select(none);
 }

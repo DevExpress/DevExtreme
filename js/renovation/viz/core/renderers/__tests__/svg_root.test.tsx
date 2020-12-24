@@ -47,6 +47,19 @@ describe('SvgPattern', () => {
 
       expect(root.prop('direction')).toBe('rtl');
     });
+
+    it('should pass styles', () => {
+      const vm = {
+        props: {
+          className: 'dxc dxc-chart',
+          width: 820,
+          height: 440,
+          styles: { styles: true },
+        } as RootSvgElementProps,
+      };
+      const root = shallow(<RootSvgElementComponent {...vm as any} /> as JSX.Element);
+      expect(root.prop('style').styles).toBe(true);
+    });
   });
 
   describe('Behavior', () => {

@@ -7,17 +7,23 @@ import {
   ForwardRef,
   Consumer,
   Fragment,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { isDefined } from '../../../core/utils/type';
 import { combineClasses } from '../../utils/combine_classes';
 import { BaseWidgetProps } from './base_props';
-import globalConfig from '../../../core/config';
-import { ConfigContextValue, ConfigContext } from '../../ui/common/config_context';
-import { ConfigProvider } from '../../ui/common/config_provider';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
+import { ConfigProvider } from '../../common/config_provider';
 import { RootSvgElement } from './renderers/svg_root';
 import { GrayScaleFilter } from './renderers/gray_scale_filter';
 import { Canvas } from './common/types.d';
-import { sizeIsValid, pickPositiveValue, mergeRtlEnabled } from './utils';
+import {
+  sizeIsValid,
+  pickPositiveValue,
+  getElementWidth,
+  getElementHeight,
+} from './utils';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 
 const getCssClasses = (model: Partial<BaseWidgetProps>): string => {
@@ -34,8 +40,8 @@ const calculateCanvas = (model: Partial<BaseWidgetProps> & Partial<BaseWidget>):
   const { height, width } = model.size ?? {};
   const margin = model.margin ?? {};
   const defaultCanvas = model.defaultCanvas ?? {};
-  const elementWidth = !sizeIsValid(width) ? model.containerRef?.clientWidth : 0;
-  const elementHeight = !sizeIsValid(height) ? model.containerRef?.clientHeight : 0;
+  const elementWidth = !sizeIsValid(width) ? getElementWidth(model.containerRef) : 0;
+  const elementHeight = !sizeIsValid(height) ? getElementHeight(model.containerRef) : 0;
   const canvas = {
     width: Number(width) <= 0 ? 0 : Math.floor(pickPositiveValue([
       width,
@@ -64,7 +70,7 @@ export const viewFunction = (viewModel: BaseWidget): JSX.Element => {
   const canvas = viewModel.props.canvas || { };
   const widget = (
     <div
-      ref={viewModel.containerRef as any}
+      ref={viewModel.containerRef}
       className={viewModel.cssClasses}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...viewModel.restAttributes}
@@ -102,9 +108,9 @@ export const viewFunction = (viewModel: BaseWidget): JSX.Element => {
   view: viewFunction,
 })
 export class BaseWidget extends JSXComponent(BaseWidgetProps) {
-  @Ref() containerRef!: HTMLDivElement;
+  @Ref() containerRef!: RefObject<HTMLDivElement>;
 
-  @ForwardRef() svgElementRef!: SVGElement;
+  @ForwardRef() svgElementRef!: RefObject<SVGElement>;
 
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
@@ -124,17 +130,13 @@ export class BaseWidget extends JSXComponent(BaseWidgetProps) {
   }
 
   get shouldRenderConfigProvider(): boolean {
-    const isPropDefined = isDefined(this.props.rtlEnabled);
-    const onlyGlobalDefined = isDefined(globalConfig().rtlEnabled)
-    && !isPropDefined && !isDefined(this.config?.rtlEnabled);
-    return (isPropDefined
-    && (this.props.rtlEnabled !== this.config?.rtlEnabled))
-    || onlyGlobalDefined;
+    const { rtlEnabled } = this.props;
+    return resolveRtlEnabledDefinition(rtlEnabled, this.config);
   }
 
   get rtlEnabled(): boolean | undefined {
     const { rtlEnabled } = this.props;
-    return mergeRtlEnabled(rtlEnabled, this.config);
+    return resolveRtlEnabled(rtlEnabled, this.config);
   }
 
   get pointerEventsState(): string | undefined {

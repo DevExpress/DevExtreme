@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, ComponentBindings, JSXComponent,
-  Effect, Template, InternalState, OneWay, ForwardRef, Ref, JSXTemplate,
+  Effect, Template, InternalState, OneWay, ForwardRef, Ref, JSXTemplate, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
@@ -81,13 +81,13 @@ export class ResizableContainerProps {
   view: viewFunction,
 })
 export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'pagerProps' | 'contentTemplate'>() {
-  @ForwardRef() parentRef!: HTMLDivElement;
+  @ForwardRef() parentRef!: RefObject<HTMLDivElement>;
 
-  @ForwardRef() pageSizesRef?: HTMLDivElement;
+  @ForwardRef() pageSizesRef?: RefObject<HTMLDivElement>;
 
-  @ForwardRef() infoTextRef?: HTMLDivElement;
+  @ForwardRef() infoTextRef?: RefObject<HTMLDivElement>;
 
-  @ForwardRef() pagesRef?: HTMLElement;
+  @ForwardRef() pagesRef?: RefObject<HTMLElement>;
 
   @InternalState() infoTextVisible = true;
 

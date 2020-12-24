@@ -1,9 +1,17 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  OneWay,
+  Template,
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../../row';
 import { AllDayPanelCell as Cell } from './cell';
-import { ViewCellData } from '../../../types.d';
+import {
+  DataCellTemplateProps,
+  ViewCellData,
+} from '../../../types.d';
 
 export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
   <Row
@@ -44,7 +52,7 @@ export class AllDayPanelTableBodyProps {
 
   @OneWay() className?: string = '';
 
-  @Template() dataCellTemplate?: any;
+  @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }
 
 @Component({

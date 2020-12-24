@@ -1,7 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import {
-  viewFunction as CellView, DateTableCellBase,
+  viewFunction as CellView,
+  DateTableCellBase,
+  DateTableCellBaseProps,
 } from '../cell';
 import { CellBase } from '../../cell';
 import * as combineClassesModule from '../../../../../../utils/combine_classes';
@@ -115,10 +117,10 @@ describe('DateTableCellBase', () => {
             endDate: new Date(2020, 7, 27),
             groups: { id: 1 },
             groupIndex: 3,
-            text: 'Test text',
             allDay: true,
           };
           const props = {
+            ...(new DateTableCellBaseProps()),
             index: 0,
             ...data,
           };
@@ -129,7 +131,10 @@ describe('DateTableCellBase', () => {
           expect(templateProps)
             .toEqual({
               index: props.index,
-              data,
+              data: {
+                ...data,
+                text: '',
+              },
             });
         });
 
@@ -139,10 +144,10 @@ describe('DateTableCellBase', () => {
             endDate: new Date(2020, 7, 27),
             groups: { id: 1 },
             groupIndex: 3,
-            text: 'Test text',
             allDay: false,
           };
           const props = {
+            ...(new DateTableCellBaseProps()),
             index: 0,
             ...data,
           };
@@ -156,6 +161,7 @@ describe('DateTableCellBase', () => {
               data: {
                 ...data,
                 allDay: undefined,
+                text: '',
               },
             });
         });
@@ -166,9 +172,9 @@ describe('DateTableCellBase', () => {
             endDate: new Date(2020, 7, 27),
             groups: undefined,
             groupIndex: 3,
-            text: 'Test text',
           };
           const props = {
+            ...(new DateTableCellBaseProps()),
             index: 0,
             ...data,
           };
@@ -182,6 +188,34 @@ describe('DateTableCellBase', () => {
               data: {
                 ...data,
                 groupIndex: undefined,
+                text: '',
+              },
+            });
+        });
+
+        it('should add contentTemplateProps', () => {
+          const data = {
+            startDate: new Date(2020, 7, 26),
+            endDate: new Date(2020, 7, 27),
+          };
+          const props = {
+            contentTemplateProps: {
+              data: { text: 'test text' },
+              index: 0,
+            },
+            index: 0,
+            ...data,
+          };
+          const cell = new DateTableCellBase(props);
+
+          const templateProps = cell.dataCellTemplateProps;
+
+          expect(templateProps)
+            .toEqual({
+              index: props.index,
+              data: {
+                ...data,
+                text: 'test text',
               },
             });
         });

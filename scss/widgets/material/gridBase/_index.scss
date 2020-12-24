@@ -417,6 +417,11 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         margin-top: 0;
       }
 
+      .dx-placeholder::before {
+        padding-right: $material-grid-base-cell-horizontal-padding;
+        padding-left: $material-grid-base-cell-horizontal-padding;
+      }
+
       &.dx-validation-pending {
         .dx-texteditor-input-container {
           .dx-texteditor-input {
