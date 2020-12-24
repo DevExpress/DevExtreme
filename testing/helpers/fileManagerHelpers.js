@@ -635,22 +635,27 @@ export const createTestFileSystem = () => {
         {
             name: 'Folder 1',
             isDirectory: true,
+            hasSubDirectories: true,
             items: [
                 {
                     name: 'Folder 1.1',
                     isDirectory: true,
+                    hasSubDirectories: true,
                     items: [
                         {
                             name: 'Folder 1.1.1',
                             isDirectory: true,
+                            hasSubDirectories: true,
                             items: [
                                 {
                                     name: 'Folder 1.1.1.1',
                                     isDirectory: true,
+                                    hasSubDirectories: true,
                                     items: [
                                         {
                                             name: 'Folder 1.1.1.1.1',
                                             isDirectory: true,
+                                            hasSubDirectories: false,
                                             items: [
                                                 {
                                                     name: 'Special deep file.txt',
@@ -682,7 +687,8 @@ export const createTestFileSystem = () => {
                 },
                 {
                     name: 'Folder 1.2',
-                    isDirectory: true
+                    isDirectory: true,
+                    hasSubDirectories: false
                 },
                 {
                     name: 'File 1-1.txt',
@@ -696,6 +702,7 @@ export const createTestFileSystem = () => {
         {
             name: 'Folder 2',
             isDirectory: true,
+            hasSubDirectories: false,
             items: [
                 {
                     name: 'File 2-1.jpg',
@@ -704,7 +711,8 @@ export const createTestFileSystem = () => {
         },
         {
             name: 'Folder 3',
-            isDirectory: true
+            isDirectory: true,
+            hasSubDirectories: false
         },
         {
             name: 'File 1.txt',
