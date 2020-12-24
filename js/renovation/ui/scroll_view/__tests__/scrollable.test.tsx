@@ -111,7 +111,7 @@ jest.mock('../../../../core/devices', () => {
         } as Partial<any>;
         const scrollable = mount(viewFunction(props as any) as JSX.Element);
 
-        expect(scrollable.find(Widget).props()).toMatchObject({
+        expect(scrollable.find(Widget).at(0).props()).toMatchObject({
           classes: cssClasses,
           ...props.props,
         });
@@ -154,16 +154,20 @@ jest.mock('../../../../core/devices', () => {
               );
 
               const scrollBar = scrollable.find(Scrollbar);
-              const needRenderScrollbars = (showScrollbar ?? false)
+              const needScrollbarsForSimulatedStrategy = Scrollable === ScrollableSimulated;
+              const needScrollbarsForNativeStrategy = (showScrollbar ?? false)
                 && (useSimulatedScrollbar ?? false);
 
-              expect(scrollBar.exists()).toBe(needRenderScrollbars);
+              const needRenderScrollbars = needScrollbarsForSimulatedStrategy
+                || needScrollbarsForNativeStrategy;
+
+              let expectedScrollbarsCount = 0;
               if (needRenderScrollbars) {
-                const scrollbarsCount = direction === 'both'
+                expectedScrollbarsCount = direction === 'both'
                   ? 2
                   : 1;
-                expect(scrollBar.length).toBe(scrollbarsCount);
               }
+              expect(scrollBar.length).toBe(expectedScrollbarsCount);
             });
           });
         });

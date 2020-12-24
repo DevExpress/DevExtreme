@@ -33,6 +33,8 @@ import {
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
   SCROLLABLE_DISABLED_CLASS,
+  SCROLLABLE_SCROLLBARS_HIDDEN,
+  SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
 } from './scrollable_utils';
 
 export const viewFunction = ({
@@ -44,7 +46,9 @@ export const viewFunction = ({
   },
   restAttributes,
 }: ScrollableSimulated): JSX.Element => {
-  const { isVertical, isHorizontal } = new ScrollDirection(direction);
+  const targetDirection = direction ?? 'vertical';
+  const isVertical = targetDirection !== 'horizontal';
+  const isHorizontal = targetDirection !== 'vertical';
   return (
     <Widget
       classes={cssClasses}
@@ -198,12 +202,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   }
 
   get cssClasses(): string {
-    const { direction, classes, disabled } = this.props;
+    const {
+      direction, classes, disabled, showScrollbar,
+    } = this.props;
 
     const classesMap = {
       'dx-scrollable dx-scrollable-simulated dx-scrollable-renovated': true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
+      [SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE]: showScrollbar === 'always',
+      [SCROLLABLE_SCROLLBARS_HIDDEN]: !showScrollbar,
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
