@@ -14,7 +14,9 @@ import {
 import {
   ensureLocation,
   SCROLLABLE_DISABLED_CLASS,
-  SCROLLABLE_SCROLLBAR_SIMULATED, SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, SCROLLABLE_SCROLLBARS_HIDDEN,
+  SCROLLABLE_SCROLLBAR_SIMULATED,
+  SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
+  SCROLLABLE_SCROLLBARS_HIDDEN,
 } from '../scrollable_utils';
 
 import {
@@ -1170,7 +1172,6 @@ jest.mock('../../../../core/devices', () => {
                     direction,
                   });
 
-                  expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
                   const hasScrollbarsAlwaysVisibleClass = showScrollbar === 'always';
                   const hasScrollbarsHiddenClass = !showScrollbar;
 
@@ -1181,6 +1182,8 @@ jest.mock('../../../../core/devices', () => {
                   expect(instance.cssClasses).toEqual(hasScrollbarsHiddenClass
                     ? expect.stringMatching(SCROLLABLE_SCROLLBARS_HIDDEN)
                     : expect.not.stringMatching(SCROLLABLE_SCROLLBARS_HIDDEN));
+
+                  expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
                 });
               });
             });

@@ -104,6 +104,7 @@ export const Scroller = Class.inherit({
     ctor: function(options) {
         this._initOptions(options);
         this._initAnimators();
+        this._initScrollbar();
     },
 
     _initOptions: function(options) {
@@ -123,6 +124,10 @@ export const Scroller = Class.inherit({
     _initAnimators: function() {
         this._inertiaAnimator = new InertiaAnimator(this);
         this._bounceAnimator = new BounceAnimator(this);
+    },
+
+    _initScrollbar: function() {
+        this._$scrollbar = this._scrollbar.$element();
     },
 
     _scrollStep: function(delta) {
