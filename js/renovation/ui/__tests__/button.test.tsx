@@ -2,7 +2,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
-import themes from '../../../ui/themes';
+import * as themes from '../../../ui/themes';
 import {
   clear as clearEventHandlers,
   defaultEvent,

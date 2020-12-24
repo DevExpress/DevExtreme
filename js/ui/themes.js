@@ -428,3 +428,18 @@ export function setDefaultTimeout(timeout) {
     defaultTimeout = timeout;
 }
 
+export default {
+    setDefaultTimeout,
+    initialized,
+    resetTheme,
+    ready: themeReady,
+    waitWebFont,
+    isWebFontLoaded,
+    isDark,
+    isGeneric,
+    isMaterial,
+    detachCssClasses,
+    attachCssClasses,
+    current,
+    waitForThemeLoad,
+};

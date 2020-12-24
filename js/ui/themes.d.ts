@@ -45,3 +45,39 @@ export default class themes {
     static initialized(callback: Function): void;
     static isMaterial(theme: string): boolean;
 }
+
+ /**
+ * @docid ui.themes.current
+ * @publicName current()
+ * @return string
+ * @prevFileNamespace DevExpress.ui
+ * @public
+ */
+export function current(): void;
+/**
+ * @docid ui.themes.current
+ * @publicName current(themeName)
+ * @param1 themeName:string
+ * @static
+ * @prevFileNamespace DevExpress.ui
+ * @public
+ */
+export function current(themeName: string): void;
+/**
+ * @docid ui.themes.ready
+ * @publicName ready(callback)
+ * @param1 callback:function
+ * @static
+ * @prevFileNamespace DevExpress.ui
+ * @public
+ */
+export function ready(callback: Function): void;
+/**
+ * @docid ui.themes.initialized
+ * @publicName initialized(callback)
+ * @param1 callback:function
+ * @static
+ * @prevFileNamespace DevExpress.ui
+ * @public
+ */
+export function initialized(callback: Function): void;

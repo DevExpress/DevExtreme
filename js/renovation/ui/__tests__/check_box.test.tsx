@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
-import themes from '../../../ui/themes';
+import * as themes from '../../../ui/themes';
 import {
   clear as clearEventHandlers,
 } from '../../test_utils/events_mock';
