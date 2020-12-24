@@ -46,7 +46,7 @@ export default class themes {
     static isMaterial(theme: string): boolean;
 }
 
- /**
+/**
  * @docid ui.themes.current
  * @publicName current()
  * @return string
