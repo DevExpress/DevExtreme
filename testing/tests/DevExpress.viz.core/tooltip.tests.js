@@ -289,6 +289,22 @@ QUnit.test('Body has horizontal scroll', function(assert) {
     }
 });
 
+QUnit.test('document.documentElement has width less than body (T960374)', function(assert) {
+    Object.defineProperty(document.documentElement, 'clientWidth', {
+        get: () => 500,
+        configurable: true
+    });
+    const tooltip = new Tooltip({ eventTrigger: function() { } });
+    tooltip.update(this.options);
+    // act
+    tooltip.show({ description: 'some-text' }, { x: 1000, y: 100 });
+    // assert
+    assert.equal(tooltip._wrapper.get(0).style.left, '962px');
+    assert.equal(tooltip._wrapper.get(0).style.top, '41px');
+
+    delete document.documentElement.clientWidth;
+});
+
 QUnit.test('Set options. customizeTooltip', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
