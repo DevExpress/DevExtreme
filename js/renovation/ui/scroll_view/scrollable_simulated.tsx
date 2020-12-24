@@ -17,7 +17,7 @@ import {
 } from './scrollable_props';
 
 import {
-  ScrollableLocation, ScrollOffset,
+  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset,
 } from './types.d';
 
 import {
@@ -36,6 +36,13 @@ import {
   SCROLLABLE_SCROLLBARS_HIDDEN,
   SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
 } from './scrollable_utils';
+
+function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
+  if (mode === true) {
+    return 'onScroll';
+  }
+  return (mode === false) ? 'never' : mode;
+}
 
 export const viewFunction = ({
   cssClasses, contentRef, containerRef,
@@ -71,7 +78,7 @@ export const viewFunction = ({
             <Scrollbar
               direction="horizontal"
               visible={scrollByThumb}
-              visibilityMode={showScrollbar}
+              visibilityMode={visibilityModeNormalize(showScrollbar)}
               expandable={scrollByThumb}
             />
           )}
@@ -79,7 +86,7 @@ export const viewFunction = ({
             <Scrollbar
               direction="vertical"
               visible={scrollByThumb}
-              visibilityMode={showScrollbar}
+              visibilityMode={visibilityModeNormalize(showScrollbar)}
               expandable={scrollByThumb}
             />
           )}

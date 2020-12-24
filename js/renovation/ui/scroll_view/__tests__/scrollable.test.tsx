@@ -150,12 +150,12 @@ jest.mock('../../../../core/devices', () => {
               );
 
               const scrollBar = scrollable.find(Scrollbar);
-              const needScrollbarsForSimulatedStrategy = Scrollable === ScrollableSimulated;
-              const needScrollbarsForNativeStrategy = (showScrollbar ?? false)
+              const isScrollbarsForSimulatedStrategy = Scrollable === ScrollableSimulated;
+              const isScrollbarsForNativeStrategy = (showScrollbar ?? false)
                 && (useSimulatedScrollbar ?? false);
 
-              const needRenderScrollbars = needScrollbarsForSimulatedStrategy
-                || needScrollbarsForNativeStrategy;
+              const needRenderScrollbars = isScrollbarsForSimulatedStrategy
+                || isScrollbarsForNativeStrategy;
 
               let expectedScrollbarsCount = 0;
               if (needRenderScrollbars) {

@@ -125,10 +125,6 @@ export const Scroller = Class.inherit({
         this._bounceAnimator = new BounceAnimator(this);
     },
 
-    _visibilityModeNormalize: function(mode) {
-        return (mode === true) ? 'onScroll' : (mode === false) ? 'never' : mode;
-    },
-
     _scrollStep: function(delta) {
         const prevLocation = this._location;
 
@@ -555,8 +551,6 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     render: function() {
-        // this._$element.addClass(SCROLLABLE_SIMULATED_CLASS);
-        // this._createScrollers();
         if(this.option('useKeyboard')) {
             this._$container.prop('tabIndex', 0);
         }
@@ -566,17 +560,6 @@ export const SimulatedStrategy = Class.inherit({
 
     _createScrollers: function() {
         this._scrollers = {};
-
-        // if(this._isDirection(HORIZONTAL)) {
-        //    this._createScroller(HORIZONTAL);
-        // }
-
-        // if(this._isDirection(VERTICAL)) {
-        //    this._createScroller(VERTICAL);
-        // }
-
-        // this._$element.toggleClass(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, this.option('showScrollbar') === 'always');
-        // this._$element.toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this.option('showScrollbar'));
     },
 
     _createScroller: function(direction) {
@@ -585,14 +568,11 @@ export const SimulatedStrategy = Class.inherit({
 
     _scrollerOptions: function(direction) {
         return {
-            direction: direction,
             $content: this._$content,
             $container: this._$container,
             $wrapper: this._$wrapper,
             $element: this._$element,
             scrollByContent: this.option('scrollByContent'),
-            scrollByThumb: this.option('scrollByThumb'),
-            scrollbarVisible: this.option('showScrollbar'),
             bounceEnabled: this.option('bounceEnabled'),
             inertiaEnabled: this.option('inertiaEnabled'),
             isAnyThumbScrolling: this._isAnyThumbScrolling.bind(this)
