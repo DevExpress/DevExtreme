@@ -491,6 +491,7 @@ const subscribes = {
 
     prerenderFilterVirtual: function() {
         const workspace = this.getWorkSpace();
+        const isCalculateStartAndEndDayHour = workspace._isDateAndTimeView();
         const resourcesManager = this._resourcesManager;
 
         const isAllDaySupported = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();
@@ -505,8 +506,14 @@ const subscribes = {
         groupedDataToRender.forEach(({ groupIndex, allDayPanel }) => {
             const startDate = viewDataProvider.getGroupStartDate(groupIndex);
             const endDate = new Date(Math.min(viewDataProvider.getGroupEndDate(groupIndex), endViewDate));
-            const startDayHour = startDate.getHours();
-            const endDayHour = (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY;
+            const viewStartDayHour = this._getCurrentViewOption('startDayHour');
+            const viewEndDayHour = this._getCurrentViewOption('endDayHour');
+            const startDayHour = isCalculateStartAndEndDayHour
+                ? startDate.getHours()
+                : viewStartDayHour;
+            const endDayHour = isCalculateStartAndEndDayHour
+                ? (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY
+                : viewEndDayHour;
 
             const allDay = (isAllDaySupported !== false) && allDayPanel?.length > 0;
 
@@ -519,8 +526,8 @@ const subscribes = {
                 isVirtualScrolling: true,
                 startDayHour,
                 endDayHour,
-                viewStartDayHour: this._getCurrentViewOption('startDayHour'),
-                viewEndDayHour: this._getCurrentViewOption('endDayHour'),
+                viewStartDayHour,
+                viewEndDayHour,
                 min: startDate,
                 max: endDate,
                 resources: groupResources,
