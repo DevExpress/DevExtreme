@@ -560,6 +560,14 @@ export const SimulatedStrategy = Class.inherit({
 
     _createScrollers: function() {
         this._scrollers = {};
+
+        if(this._isDirection(HORIZONTAL)) {
+            this._createScroller(HORIZONTAL);
+        }
+
+        if(this._isDirection(VERTICAL)) {
+            this._createScroller(VERTICAL);
+        }
     },
 
     _createScroller: function(direction) {
@@ -568,11 +576,14 @@ export const SimulatedStrategy = Class.inherit({
 
     _scrollerOptions: function(direction) {
         return {
+            direction: direction,
             $content: this._$content,
             $container: this._$container,
             $wrapper: this._$wrapper,
             $element: this._$element,
             scrollByContent: this.option('scrollByContent'),
+            scrollByThumb: this.option('scrollByThumb'),
+            scrollbarVisible: this.option('showScrollbar'),
             bounceEnabled: this.option('bounceEnabled'),
             inertiaEnabled: this.option('inertiaEnabled'),
             isAnyThumbScrolling: this._isAnyThumbScrolling.bind(this)
