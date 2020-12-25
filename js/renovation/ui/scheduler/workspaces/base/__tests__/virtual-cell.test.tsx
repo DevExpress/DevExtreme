@@ -1,9 +1,6 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as CellView, VirtualCell } from '../virtual-cell';
-import * as combineClassesModule from '../../../../../utils/combine_classes';
 import { addWidthToStyle } from '../../utils';
-
-const combineClasses = jest.spyOn(combineClassesModule, 'combineClasses');
 
 jest.mock('../../utils', () => ({
   ...jest.requireActual('../../utils'),
@@ -32,21 +29,21 @@ describe('VirtualCell', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('classes', () => {
-        it('should call "combineClasses" with correct parameters', () => {
-          const virtualCell = new VirtualCell({
-            className: 'custom-class',
-          });
-
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          virtualCell.className;
-
-          expect(combineClasses)
-            .toHaveBeenCalledTimes(1);
-          expect(combineClasses)
-            .toHaveBeenCalledWith({
-              'custom-class': true,
-              'dx-scheduler-virtual-cell': true,
+        [{
+          className: 'custom-class',
+          expectedResult: 'dx-scheduler-virtual-cell custom-class',
+        }, {
+          className: '',
+          expectedResult: 'dx-scheduler-virtual-cell',
+        }].forEach(({ className, expectedResult }) => {
+          it(`should return correct parameters if className=${className}`, () => {
+            const virtualCell = new VirtualCell({
+              className,
             });
+
+            expect(virtualCell.classes)
+              .toEqual(expectedResult);
+          });
         });
       });
 
