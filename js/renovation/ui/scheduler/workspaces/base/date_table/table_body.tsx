@@ -29,6 +29,9 @@ export const viewFunction = ({
               viewData={allDayPanel}
               dataCellTemplate={dataCellTemplate}
               isVerticalGroupOrientation
+              isVirtual={isVirtual}
+              leftVirtualCellWidth={viewData.leftVirtualCellWidth}
+              rightVirtualCellWidth={viewData.rightVirtualCellWidth}
             />
           )}
           {dateTable.map((cellsRow) => (

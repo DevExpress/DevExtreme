@@ -12,12 +12,16 @@ import {
   DataCellTemplateProps,
   ViewCellData,
 } from '../../../types.d';
+import { combineClasses } from '../../../../../../utils/combine_classes';
 
 export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
   <Row
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    className={`dx-scheduler-all-day-table-row ${viewModel.props.className}`}
+    isVirtual={viewModel.props.isVirtual}
+    leftVirtualCellWidth={viewModel.props.leftVirtualCellWidth}
+    rightVirtualCellWidth={viewModel.props.rightVirtualCellWidth}
+    className={viewModel.classes}
   >
     {viewModel.props.viewData.map(({
       startDate,
@@ -52,6 +56,12 @@ export class AllDayPanelTableBodyProps {
 
   @OneWay() className?: string = '';
 
+  @OneWay() isVirtual?: boolean;
+
+  @OneWay() leftVirtualCellWidth = 0;
+
+  @OneWay() rightVirtualCellWidth = 0;
+
   @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }
 
@@ -60,4 +70,12 @@ export class AllDayPanelTableBodyProps {
   view: viewFunction,
 })
 export class AllDayPanelTableBody extends JSXComponent(AllDayPanelTableBodyProps) {
+  get classes(): string {
+    const { className = '' } = this.props;
+
+    return combineClasses({
+      'dx-scheduler-all-day-table-row': true,
+      [className]: !!className,
+    });
+  }
 }

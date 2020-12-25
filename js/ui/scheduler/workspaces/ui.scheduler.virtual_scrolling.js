@@ -235,7 +235,7 @@ export default class VirtualScrollingDispatcher {
 
             this._createVirtualScrolling();
 
-            this.renderer._renderDateTable();
+            this.renderer._renderGrid();
         }
     }
 }
@@ -508,11 +508,12 @@ class Renderer {
     get workspace() { return this._workspace; }
 
     updateRender() {
-        this._renderDateTable();
+        this._renderGrid();
         this._renderAppointments();
     }
 
-    _renderDateTable() {
+    _renderGrid() {
+        this.workspace.renderRAllDayPanel();
         this.workspace.renderRWorkspace(false);
     }
 

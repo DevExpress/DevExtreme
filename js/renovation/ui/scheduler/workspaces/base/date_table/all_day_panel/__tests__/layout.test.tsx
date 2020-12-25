@@ -42,41 +42,51 @@ describe('AllDayPanelLayout', () => {
         .toBe('customAttribute');
     });
 
-    it('should render components correctly', () => {
-      const dataCellTemplate = () => null;
-      const layout = render({
-        classes: 'some-class',
-        restAttributes: { style: { height: 500 } },
-        emptyTableHeight: 123,
-        props: {
-          dataCellTemplate,
-        },
-      });
-
-      expect(layout.hasClass('some-class'))
-        .toBe(true);
-
-      const allDayTable = layout.find('.dx-scheduler-all-day-table');
-
-      expect(allDayTable.prop('height'))
-        .toBe(123);
-
-      expect(allDayTable.exists())
-        .toBe(true);
-      expect(allDayTable.hasClass('dx-scheduler-all-day-table'))
-        .toBe(true);
-
-      const tableBody = allDayTable.find(AllDayPanelTableBody);
-
-      expect(tableBody.exists())
-        .toBe(true);
-      expect(tableBody)
-        .toHaveLength(1);
-      expect(tableBody.props())
-        .toMatchObject({
-          viewData: allDayPanelData,
-          dataCellTemplate,
+    [true, false].forEach((isVirtual) => {
+      it(`should render components and pass correct arguments to them if virtual scrolling is ${isVirtual}`, () => {
+        const dataCellTemplate = () => null;
+        const layout = render({
+          classes: 'some-class',
+          restAttributes: { style: { height: 500 } },
+          emptyTableHeight: 123,
+          props: {
+            dataCellTemplate,
+            isVirtual,
+            leftVirtualCellWidth: 100,
+            rightVirtualCellWidth: 200,
+          },
         });
+
+        expect(layout.hasClass('some-class'))
+          .toBe(true);
+
+        const allDayTable = layout.find('.dx-scheduler-all-day-table');
+
+        expect(allDayTable.prop('height'))
+          .toBe(123);
+
+        expect(allDayTable.exists())
+          .toBe(true);
+        expect(allDayTable.hasClass('dx-scheduler-all-day-table'))
+          .toBe(true);
+
+        const tableBody = allDayTable.find(AllDayPanelTableBody);
+
+        expect(tableBody.exists())
+          .toBe(true);
+
+        expect(tableBody)
+          .toHaveLength(1);
+
+        expect(tableBody.props())
+          .toMatchObject({
+            viewData: allDayPanelData,
+            dataCellTemplate,
+            isVirtual,
+            leftVirtualCellWidth: 100,
+            rightVirtualCellWidth: 200,
+          });
+      });
     });
 
     it('should not be rendered if "visible" is false', () => {
