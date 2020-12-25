@@ -1,9 +1,9 @@
 import dateUtils from '../../../core/utils/date';
 import { each } from '../../../core/utils/iterator';
 import { merge } from '../../../core/utils/array';
-import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base';
+import BaseRenderingStrategy from './ui.scheduler.appointments.strategy.base';
 
-class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
+class AgendaRenderingStrategy extends BaseRenderingStrategy {
     getAppointmentMinSize() {
     }
 

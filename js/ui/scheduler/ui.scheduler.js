@@ -39,7 +39,7 @@ import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
 import { hide as hideLoading, show as showLoading } from './ui.loading';
-import SchedulerAppointments from './ui.scheduler.appointments';
+import AppointmentCollection from './appointments/appointmentCollection';
 import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
 import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
 import SchedulerHeader from './ui.scheduler.header';
@@ -1200,7 +1200,7 @@ class Scheduler extends Widget {
 
         this._layoutManager = new SchedulerLayoutManager(this, this._getAppointmentsRenderingStrategy());
 
-        this._appointments = this._createComponent('<div>', SchedulerAppointments, this._appointmentsConfig());
+        this._appointments = this._createComponent('<div>', AppointmentCollection, this._appointmentsConfig());
         this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
 
         this._appointmentTooltip = new (this.option('adaptivityEnabled') ?
