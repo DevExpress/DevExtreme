@@ -1,45 +1,13 @@
 import React from 'react';
 import 'devextreme-react/text-area';
 
-import Form, { Item } from 'devextreme-react/form';
+import Form, { SimpleItem, GroupItem, TabbedItem, TabPanelOptions, Tab } from 'devextreme-react/form';
 import service from './data.js';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.employee = service.getEmployee();
-
-    this.groupedItems = {
-      systemInformation: [
-        'ID', 'FirstName', 'LastName', 'HireDate', 'Position', 'OfficeNo'
-      ],
-      personalData: [
-        'BirthDate',
-        {
-          itemType: 'group',
-          caption: 'Home Address',
-          items: ['Address', 'City', 'State', 'Zipcode']
-        }
-
-      ],
-      contactInformation: [{
-        itemType: 'tabbed',
-        tabPanelOptions: {
-          deferRendering: false
-        },
-        tabs: [{
-          title: 'Phone',
-          items: ['Phone']
-        }, {
-          title: 'Skype',
-          items: ['Skype']
-        }, {
-          title: 'Email',
-          items: ['Email']
-        }]
-      }
-      ]
-    };
   }
 
   render() {
@@ -51,9 +19,37 @@ class App extends React.Component {
             colCount={2}
             id="form"
             formData={this.employee}>
-            <Item itemType="group" caption="System Information" items={this.groupedItems.systemInformation} />
-            <Item itemType="group" caption="Personal Data" items={this.groupedItems.personalData} />
-            <Item itemType="group" caption="Contact Information" items={this.groupedItems.contactInformation} />
+            <GroupItem caption="System Information">
+              <SimpleItem dataField="ID" />
+              <SimpleItem dataField="FirstName" />
+              <SimpleItem dataField="LastName" />
+              <SimpleItem dataField="HireDate" />
+              <SimpleItem dataField="Position" />
+              <SimpleItem dataField="OfficeNo" />
+            </GroupItem>
+            <GroupItem caption="Personal Data">
+              <SimpleItem dataField="BirthDate" />
+              <GroupItem caption='Home Address'>
+                <SimpleItem dataField="Address" />
+                <SimpleItem dataField="City" />
+                <SimpleItem dataField="State" />
+                <SimpleItem dataField="Zipcode" />
+              </GroupItem>
+            </GroupItem>
+            <GroupItem caption="Contact Information">
+              <TabbedItem>
+                <TabPanelOptions deferRendering={false} />
+                <Tab title="Phone">
+                  <SimpleItem dataField="Phone" />
+                </Tab>
+                <Tab title="Skype">
+                  <SimpleItem dataField="Skype" />
+                </Tab>
+                <Tab title="Email">
+                  <SimpleItem dataField="Email" />
+                </Tab>
+              </TabbedItem>
+            </GroupItem>
           </Form>
         </div>
       </React.Fragment>

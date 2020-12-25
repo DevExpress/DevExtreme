@@ -7,70 +7,103 @@
         :col-count="2"
         :form-data="employee"
       >
-        <DxItem
-          :items="groupedItems.systemInformation"
-          item-type="group"
+        <DxGroupItem
           caption="System Information"
-        />
-        <DxItem
-          :items="groupedItems.personalData"
-          item-type="group"
+        >
+          <DxSimpleItem
+            data-field="ID"
+          />
+          <DxSimpleItem
+            data-field="FirstName"
+          />
+          <DxSimpleItem
+            data-field="LastName"
+          />
+          <DxSimpleItem
+            data-field="HireDate"
+          />
+          <DxSimpleItem
+            data-field="Position"
+          />
+          <DxSimpleItem
+            data-field="OfficeNo"
+          />
+        </DxGroupItem>
+        <DxGroupItem
           caption="Personal Data"
-        />
-        <DxItem
-          :items="groupedItems.contactInformation"
-          item-type="group"
+        >
+          <DxSimpleItem
+            data-field="BirthDate"
+          />
+          <DxGroupItem
+            caption="Home Address"
+          >
+            <DxSimpleItem
+              data-field="Address"
+            />
+            <DxSimpleItem
+              data-field="City"
+            />
+            <DxSimpleItem
+              data-field="State"
+            />
+            <DxSimpleItem
+              data-field="Zipcode"
+            />
+          </DxGroupItem>
+        </DxGroupItem>
+        <DxGroupItem
           caption="Contact Information"
-        />
+        >
+          <DxTabbedItem>
+            <DxTabPanelOptions
+              :defer-rendering="false"
+            />
+            <DxTab
+              title="Phone"
+            >
+              <DxSimpleItem
+                data-field="Phone"
+              />
+            </DxTab>
+            <DxTab
+              title="Skype"
+            >
+              <DxSimpleItem
+                data-field="Skype"
+              />
+            </DxTab>
+            <DxTab
+              title="Email"
+            >
+              <DxSimpleItem
+                data-field="Email"
+              />
+            </DxTab>
+          </DxTabbedItem>
+        </DxGroupItem>
       </DxForm>
     </div>
   </div>
 </template>
 <script>
-import { DxForm, DxItem } from 'devextreme-vue/form';
+import { DxForm, DxSimpleItem, DxGroupItem, DxTabbedItem, DxTabPanelOptions, DxTab } from 'devextreme-vue/form';
 import service from './data.js';
 import 'devextreme-vue/text-area';
 
 export default {
   components: {
     DxForm,
-    DxItem
+    DxSimpleItem,
+    DxGroupItem,
+    DxTabbedItem,
+    DxTabPanelOptions,
+    DxTab
   },
   data() {
     const employee = service.getEmployee();
     return {
-      employee,
-      groupedItems: {
-        systemInformation: [
-          'ID', 'FirstName', 'LastName', 'HireDate', 'Position', 'OfficeNo'
-        ],
-        personalData: [
-          'BirthDate',
-          {
-            itemType: 'group',
-            caption: 'Home Address',
-            items: ['Address', 'City', 'State', 'Zipcode']
-          }
-
-        ],
-        contactInformation: [{
-          itemType: 'tabbed',
-          tabPanelOptions: {
-            deferRendering: false
-          },
-          tabs: [{
-            title: 'Phone',
-            items: ['Phone']
-          }, {
-            title: 'Skype',
-            items: ['Skype']
-          }, {
-            title: 'Email',
-            items: ['Email']
-          }]
-        }
-        ]
-      }
+      employee
     };
   }
 };
