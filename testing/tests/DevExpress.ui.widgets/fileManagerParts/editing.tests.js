@@ -1547,6 +1547,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         toggles = this.wrapper.getFolderToggles();
         assert.strictEqual(toggles.length, 2, 'There are 2 node toggles left');
+        // TODO check all of treeView nodes for FOLDERS_TREE_VIEW_NODE_CLASS, not all toggles. Case - on move refreshes both target and source directories
         assert.ok(toggles.eq(0).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Files\' toggle is opened');
         assert.ok(toggles.eq(1).hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS), '\'Folder 1\' toggle is opened');
     });
