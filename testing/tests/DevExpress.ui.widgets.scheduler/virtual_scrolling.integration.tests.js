@@ -131,7 +131,7 @@ module('Vertical virtual scrolling', () => {
                     const styleBefore = $style.text();
 
                     $style
-                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 20px } ')
+                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 80px } ')
                         .appendTo('head');
 
                     const instance = createWrapper({
@@ -147,7 +147,7 @@ module('Vertical virtual scrolling', () => {
 
                     const { virtualScrollingDispatcher } = instance.getWorkSpace();
 
-                    assert.equal(virtualScrollingDispatcher.rowHeight, 20, 'Row height is correct');
+                    assert.equal(virtualScrollingDispatcher.rowHeight, 80, 'Row height is correct');
 
                     $style.text(styleBefore);
                 });
@@ -1001,6 +1001,10 @@ module('Vertical virtual scrolling', () => {
                     test(`A long appointment should be correctly croped if view: ${viewName}, ${groupOrientation} group orientation`, function(assert) {
                         if(!isDesktopEnvironment()) {
                             assert.ok(true, 'This test is for desktop only');
+                            return;
+                        }
+                        if(viewName === 'month') {
+                            assert.ok(true, 'TODO: appointments in virtual month');
                             return;
                         }
 
