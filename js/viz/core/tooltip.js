@@ -365,12 +365,12 @@ Tooltip.prototype = {
         const box = {
             left: left,
             top: top,
-            width: (html.clientWidth + left) || 0,
+            width: mathMax(html.clientWidth, document.body.clientWidth) + left,
             height: mathMax(
                 document.body.scrollHeight, html.scrollHeight,
                 document.body.offsetHeight, html.offsetHeight,
                 document.body.clientHeight, html.clientHeight
-            ) || 0,
+            ),
 
             right: 0,
             bottom: 0

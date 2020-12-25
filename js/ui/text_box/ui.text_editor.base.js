@@ -659,7 +659,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _updateValue: function() {
-        this.option('text', undefined);
+        this._options.silent('text', null);
         this._renderValue();
     },
 
@@ -785,7 +785,7 @@ const TextEditorBase = Editor.inherit({
 
         const defaultOptions = this._getDefaultOptions();
         if(this.option('value') === defaultOptions.value) {
-            this.option('text', '');
+            this._options.silent('text', '');
             this._renderValue();
         } else {
             this.option('value', defaultOptions.value);
