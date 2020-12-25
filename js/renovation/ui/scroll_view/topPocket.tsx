@@ -15,7 +15,6 @@ const SCROLLVIEW_PULLDOWN = 'dx-scrollview-pull-down';
 const SCROLLVIEW_PULLDOWN_IMAGE_CLASS = 'dx-scrollview-pull-down-image';
 const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
 const SCROLLVIEW_PULLDOWN_TEXT_CLASS = 'dx-scrollview-pull-down-text';
-const SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = 'dx-scrollview-pull-down-text-visible';
 
 export const viewFunction = (viewModel: TopPocket): JSX.Element => {
   const {
@@ -28,7 +27,6 @@ export const viewFunction = (viewModel: TopPocket): JSX.Element => {
         <div className={SCROLLVIEW_PULLDOWN_IMAGE_CLASS} />
         <div className={SCROLLVIEW_PULLDOWN_INDICATOR_CLASS} />
         <div className={SCROLLVIEW_PULLDOWN_TEXT_CLASS}>
-          <div className={SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS}>Pull down to refresh...</div>
           <div>Release to refresh...</div>
           <div>Refreshing...</div>
         </div>
