@@ -23,7 +23,9 @@
         	</dxi-item>
         </dxi-item>
         <dxi-item itemType="group" caption="Contact Information">
-            <dxi-item itemType="tabbed" [tabPanelOptions]="{ deferRendering: false }">
+            <dxi-item itemType="tabbed">
+                <dxo-tab-panel-options [deferRendering]="false">
+                </dxo-tab-panel-options>
                 <dxi-tab title="Phone">
                 	<dxi-item dataField="Phone"></dxi-item>
                 </dxi-tab>
