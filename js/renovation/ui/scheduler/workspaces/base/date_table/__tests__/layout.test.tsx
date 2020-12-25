@@ -84,6 +84,8 @@ describe('DateTableLayoutBase', () => {
           isVirtual: 'isVirtual',
           topVirtualRowHeight: 100,
           bottomVirtualRowHeight: 200,
+          leftVirtualCellWidth: 300,
+          rightVirtualCellWidth: 400,
           virtualCellsCount: 3,
         });
       expect(table.hasClass('some-class'))
@@ -107,64 +109,102 @@ describe('DateTableLayoutBase', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      it('classes', () => {
-        const layout = new DateTableLayoutBase({ className: 'some-class' } as any);
+      describe('classes', () => {
+        it('should been set correctly', () => {
+          const layout = new DateTableLayoutBase({ className: 'some-class' } as any);
 
-        expect(layout.classes.split(' '))
-          .toEqual([
-            'dx-scheduler-date-table',
-            'some-class',
-          ]);
-      });
-
-      [true, false].forEach((isVirtual) => {
-        it(`should get correct isVirtial flag if isVirtual=${isVirtual}`, () => {
-          const layout = new DateTableLayoutBase({
-            viewData: { ...viewDataBase, isVirtual },
-          } as any);
-
-          expect(layout.isVirtual)
-            .toBe(isVirtual);
+          expect(layout.classes.split(' '))
+            .toEqual([
+              'dx-scheduler-date-table',
+              'some-class',
+            ]);
         });
       });
 
-      it('should correctly set top and bottom virtual height', () => {
-        const layout = new DateTableLayoutBase({
-          viewData: {
-            ...viewDataBase,
-            topVirtualRowHeight: 100,
-            bottomVirtualRowHeight: 200,
-          },
-        } as any);
+      describe('isVirtual', () => {
+        [true, false].forEach((isVirtual) => {
+          it(`should return correct value if viewData.isVirtual=${isVirtual}`, () => {
+            const layout = new DateTableLayoutBase({
+              viewData: { ...viewDataBase, isVirtual },
+            } as any);
 
-        expect(layout.topVirtualRowHeight)
-          .toEqual(100);
-
-        expect(layout.bottomVirtualRowHeight)
-          .toEqual(200);
+            expect(layout.isVirtual)
+              .toBe(isVirtual);
+          });
+        });
       });
 
-      it('should correctly set left and right virtual width', () => {
-        const layout = new DateTableLayoutBase({
-          viewData: {
-            ...viewDataBase,
-            leftVirtualCellWidth: 100,
-            rightVirtualCellWidth: 200,
-          },
-        } as any);
+      describe('topVirtualRowHeight, bottomVirtualRowHeight', () => {
+        [{
+          top: undefined,
+          bottom: undefined,
+          expectedTop: 0,
+          expectedBottom: 0,
+        }, {
+          top: 100,
+          bottom: 200,
+          expectedTop: 100,
+          expectedBottom: 200,
+        }].forEach(({
+          top, bottom, expectedTop, expectedBottom,
+        }) => {
+          it(`should been set correctly if viewData.topVirtualRowHeight=${top}, viewData.bottomVirtualRowHeight=${bottom}`, () => {
+            const layout = new DateTableLayoutBase({
+              viewData: {
+                ...viewDataBase,
+                topVirtualRowHeight: top,
+                bottomVirtualRowHeight: bottom,
+              },
+            } as any);
 
-        expect(layout.leftVirtualCellWidth)
-          .toEqual(100);
+            expect(layout.topVirtualRowHeight)
+              .toEqual(expectedTop);
 
-        expect(layout.rightVirtualCellWidth)
-          .toEqual(200);
+            expect(layout.bottomVirtualRowHeight)
+              .toEqual(expectedBottom);
+          });
+        });
       });
 
-      it('virtualCellsCount', () => {
-        const layout = new DateTableLayoutBase({ viewData: viewDataBase } as any);
+      describe('leftVirtualCellWidth, rightVirtualCellWidth', () => {
+        [{
+          left: undefined,
+          right: undefined,
+          expectedLeft: 0,
+          expectedRight: 0,
+        }, {
+          left: 100,
+          right: 200,
+          expectedLeft: 100,
+          expectedRight: 200,
+        }].forEach(({
+          left, right, expectedLeft, expectedRight,
+        }) => {
+          it(`should been set correctly if viewData.leftVirtualCellWidth=${left}, viewData.rightVirtualCellWidth=${right}`, () => {
+            const layout = new DateTableLayoutBase({
+              viewData: {
+                ...viewDataBase,
+                leftVirtualCellWidth: left,
+                rightVirtualCellWidth: right,
+              },
+            } as any);
 
-        expect(layout.virtualCellsCount)
-          .toBe(1);
+            expect(layout.leftVirtualCellWidth)
+              .toEqual(expectedLeft);
+
+            expect(layout.rightVirtualCellWidth)
+              .toEqual(expectedRight);
+          });
+        });
+      });
+
+      describe('virtualCellsCount', () => {
+        it('should been set correctly', () => {
+          const layout = new DateTableLayoutBase({ viewData: viewDataBase } as any);
+
+          expect(layout.virtualCellsCount)
+            .toBe(1);
+        });
       });
     });
   });
