@@ -315,4 +315,37 @@ module('basic options changing', {
         assert.strictEqual(this.element.hasClass('dx-editor-underlined'), true, 'right class after option change present');
         assert.strictEqual(this.element.hasClass('dx-editor-outlined'), false, 'old class after option change was removed');
     });
+
+    test('texteditor should trigger "text" option change event once after clear the value', function(assert) {
+        let textChangedCounter = 0;
+        let latestTextValue;
+        this.instance.option('value', 'test');
+        this.instance.on('optionChanged', ({ name, value }) => {
+            if(name === 'text') {
+                textChangedCounter++;
+                latestTextValue = value;
+            }
+        });
+
+        this.instance.reset();
+
+        assert.strictEqual(textChangedCounter, 1, 'text option chanded once');
+        assert.strictEqual(latestTextValue, '', 'text corresponds the value');
+    });
+
+    test('texteditor should trigger "text" option change event once after change the value', function(assert) {
+        let textChangedCounter = 0;
+        let latestTextValue;
+        this.instance.on('optionChanged', ({ name, value }) => {
+            if(name === 'text') {
+                textChangedCounter++;
+                latestTextValue = value;
+            }
+        });
+
+        this.instance.option('value', 'test');
+
+        assert.strictEqual(textChangedCounter, 1, 'text option chanded once');
+        assert.strictEqual(latestTextValue, 'test', 'text corresponds the value');
+    });
 });

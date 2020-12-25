@@ -1,4 +1,6 @@
-import { getCloudPoints, recalculateCoordinates, getCloudAngle } from '../tooltip_utils';
+import {
+  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData,
+} from '../tooltip_utils';
 
 describe('#getCloudAngle', () => {
   it('should return angle=0', () => {
@@ -307,5 +309,44 @@ describe('#getCloudPoints', () => {
 
     expect(getCloudPoints(size, coordinates, getCloudAngle(size, coordinates), options, true))
       .toBe('M35,45a 15 15 0 0 1 15 -15L50,30a 15 15 0 0 1 15 15L65,55a 15 15 0 0 1 -0.8578643762690497 5L64.14213562373095,60,80,70,50,70A 15 15 0 0 1 50 70L50,70a 15 15 0 0 1 -15 -15Z');
+  });
+});
+
+describe('#prepareData', () => {
+  const border = {
+    color: 'color_2', width: 2, dashStyle: 'dashStyle', visible: true,
+  };
+  const font = {
+    color: 'color_3', family: 'family', opacity: 1, size: 10, weight: 200,
+  };
+
+  it('should return value text', () => {
+    expect(prepareData({ valueText: 'value_text' }, 'color_1', border, font)).toEqual({
+      text: 'value_text',
+      color: 'color_1',
+      borderColor: 'color_2',
+      fontColor: 'color_3',
+    });
+  });
+
+  it('should return description', () => {
+    expect(prepareData({ description: 'description' }, 'color_1', border, font)).toEqual({
+      text: 'description',
+      color: 'color_1',
+      borderColor: 'color_2',
+      fontColor: 'color_3',
+    });
+  });
+
+  it('should return object from customizeTooltip', () => {
+    const customizedObject = {
+      text: 'tooltip text',
+      html: 'tooltip html',
+      color: 'customized_color',
+      borderColor: 'customized_border_color',
+      fontColor: 'customized_font_color',
+    };
+    const customizeTooltip = () => customizedObject;
+    expect(prepareData({ description: 'description' }, 'color_1', border, font, customizeTooltip)).toEqual(customizedObject);
   });
 });

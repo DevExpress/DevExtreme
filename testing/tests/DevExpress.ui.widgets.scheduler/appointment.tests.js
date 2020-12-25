@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SchedulerAppointment from 'ui/scheduler/ui.scheduler.appointment';
+import SchedulerAppointment from 'ui/scheduler/appointments/appointment';
 import fx from 'animation/fx';
 
 const APPOINTMENT_DRAG_SOURCE_CLASS = 'dx-scheduler-appointment-drag-source';

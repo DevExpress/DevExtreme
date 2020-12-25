@@ -21,7 +21,10 @@ module('Virtual Scrolling', {
                 height: 300,
                 width: 600,
                 totalRowCount: 100,
-                totalCellCount: 200
+                totalCellCount: 200,
+                scrolling: {
+                    type: 'both'
+                }
             }, settings);
 
             this.workspaceMock = {
@@ -33,9 +36,10 @@ module('Virtual Scrolling', {
                 _options: {
                     dataCellTemplate: noop,
                     groupByDate: false,
+                    'scrolling.type': settings.scrolling.type
                 },
                 getCellWidth: () => { return 150; },
-                option: name => this.worksSpaceMock._options[name],
+                option: name => this.workspaceMock._options[name],
                 _getCellData: noop,
                 _insertAllDayRowsIntoDateTable: noop,
                 _allDayPanels: undefined,
@@ -234,6 +238,41 @@ module('Virtual Scrolling', {
                 assert.notOk(isGroupedAllDayPanelSpy.called, 'isGroupedAllDayPanel was not called');
                 assert.equal(getTotalCellCountSpy.getCall(0).args[0], 0, 'Correct first parameter');
                 assert.equal(getTotalCellCountSpy.getCall(0).args[1], false, 'Correct second parameter');
+            });
+        });
+
+        module('Options', () => {
+            [
+                {
+                    scrollingType: 'vertical',
+                    expectScrolling: {
+                        vertical: true,
+                        horizontal: false
+                    }
+                }, {
+                    scrollingType: 'horizontal',
+                    expectScrolling: {
+                        vertical: false,
+                        horizontal: true
+                    }
+                }, {
+                    scrollingType: 'both',
+                    expectScrolling: {
+                        vertical: true,
+                        horizontal: true
+                    }
+                }
+            ].forEach(option => {
+                test(`Virtual scrolling objects should be created correctly if scrolling.type is ${option.scrollingType} `, function(assert) {
+                    this.prepareInstance({
+                        scrolling: {
+                            type: option.scrollingType
+                        }
+                    });
+
+                    assert.equal(!!this.horizontalVirtualScrolling, option.expectScrolling.horizontal);
+                    assert.equal(!!this.verticalVirtualScrolling, option.expectScrolling.vertical);
+                });
             });
         });
     });

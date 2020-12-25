@@ -370,7 +370,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
             const isAllDayCell = this._hasAllDayClass($cell);
             this.virtualSelectionState.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
-            const focusedCell = this.virtualSelectionState.getFocusedCell(this._isVerticalGroupedWorkSpace());
+            const focusedCell = this.virtualSelectionState.getFocusedCell();
             const { cellData, coordinates } = focusedCell;
             const { allDay } = cellData;
 
@@ -460,6 +460,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _correctCellForGroup($cell) {
         if(this.isVirtualScrolling()) {
+            const isVirtualCell = $cell.hasClass(VIRTUAL_CELL_CLASS);
+            if(isVirtualCell) {
+                return this._$focusedCell;
+            }
+
             const cellData = this.getCellData($cell);
             const isValidFocusedCell = this.virtualSelectionState.isValidFocusedCell(cellData);
 
@@ -1224,6 +1229,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const rowCountInGroup = this._getRowCount();
 
         const cellCount = this._getTotalCellCount(groupCount);
+        const groupOrientation = groupCount > 0
+            ? this.option('groupOrientation')
+            : this._getDefaultGroupStrategy();
 
         const options = {
             horizontalGroupCount,
@@ -1234,29 +1242,16 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellDataGetters: [this._getCellData.bind(this)],
             allDayElements,
             startRowIndex: 0,
-            groupOrientation: this.option('groupOrientation'),
+            groupOrientation,
             nonVirtualRowCount: this._getRowCount(),
             groupCount,
         };
 
         if(this.isVirtualScrolling()) {
-            const {
-                verticalScrollingState,
-                horizontalScrollingState
-            } = this.virtualScrollingDispatcher;
-
-            extend(options, {
-                topVirtualRowHeight: verticalScrollingState.virtualItemSizeBefore,
-                bottomVirtualRowHeight: verticalScrollingState.virtualItemSizeAfter,
-                startRowIndex: verticalScrollingState.startIndex,
-                rowCount: verticalScrollingState.itemCount,
-
-                leftVirtualCellHeight: horizontalScrollingState.virtualItemSizeBefore,
-                rightVirtualCellHeight: horizontalScrollingState.virtualItemSizeAfter,
-                startCellIndex: horizontalScrollingState.startIndex,
-                // TODO - horizontal virtual scrolling
-                // cellCount: horizontalScrollingState.itemCount
-            });
+            extend(
+                options,
+                this.virtualScrollingDispatcher.renderState
+            );
         } else {
             options.rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());
         }
@@ -1309,8 +1304,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         );
     }
 
-    renderRDateTable() { }
-
     renderRComponent(parentElement, componentClass, componentName, viewModel) {
         let component = this[componentName];
         if(!component) {
@@ -1329,10 +1322,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     updateRSelection() {
         const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
-        const focusedCell = this.virtualSelectionState.getFocusedCell(isVerticalGrouping);
+        const focusedCell = this.virtualSelectionState.getFocusedCell();
         const selectedCells = this.virtualSelectionState.getSelectedCells();
 
-        if(focusedCell) {
+        if(focusedCell?.coordinates) {
             const { coordinates, cellData } = focusedCell;
             const $cell = !isVerticalGrouping && cellData.allDay
                 ? this._dom_getAllDayPanelCell(coordinates.cellIndex)
@@ -2636,7 +2629,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             groups: cellData.groups,
             groupIndex: cellData.groupIndex,
             allDay: cellData.allDay,
-            text: cellData.text,
         } : undefined;
     }
 

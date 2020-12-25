@@ -18,7 +18,7 @@ export const viewFunction = ({
   svgRef,
   config,
   props: {
-    className, width, height, pointerEvents, filter, children,
+    className, width, height, pointerEvents, filter, children, styles,
   },
 }: RootSvgElement): JSX.Element => (
   <svg
@@ -37,6 +37,7 @@ export const viewFunction = ({
       MozUserSelect: 'none',
       WebkitUserSelect: 'none',
       WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
+      ...styles,
     }}
     width={width}
     height={height}
@@ -61,6 +62,8 @@ export class RootSvgElementProps {
   @OneWay() pointerEvents?: string;
 
   @OneWay() filter?: string;
+
+  @OneWay() styles?: { [key: string]: any };
 
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 }
