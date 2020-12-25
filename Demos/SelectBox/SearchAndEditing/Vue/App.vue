@@ -15,6 +15,7 @@
               :min-search-length="minSearchLengthOption"
               :show-data-before-search="showDataBeforeSearchOption"
               display-expr="Name"
+              value-expr="ID"
             />
           </div>
         </div>
@@ -25,10 +26,12 @@
           <div class="dx-field-label">Product</div>
           <div class="dx-field-value">
             <DxSelectBox
-              v-model:value="editBoxValue"
+              v-model:selectedItem="editBoxValue"
+              :value="product"
               :accept-custom-value="true"
               :data-source="productsDataSource"
               display-expr="Name"
+              value-expr="ID"
               @customItemCreating="customItemCreating($event)"
             />
           </div>
@@ -44,9 +47,7 @@
           <span
             v-else
             class="current-value"
-          >
-            Not selected
-          </span>
+          > Not selected </span>
         </div>
       </div>
     </div>
@@ -107,38 +108,42 @@ const productsDataSource = new DataSource({
   store: {
     data: simpleProducts,
     type: 'array',
-    key: 'ID'
-  }
+    key: 'ID',
+  },
 });
 
 export default {
   components: {
     DxSelectBox,
     DxNumberBox,
-    DxCheckBox
+    DxCheckBox,
   },
   data() {
     return {
       products,
       productsDataSource,
       editBoxValue: simpleProducts[0],
+      product: simpleProducts[0].ID,
       searchModeOption: 'contains',
       searchExprOption: 'Name',
       searchTimeoutOption: 200,
       minSearchLengthOption: 0,
       showDataBeforeSearchOption: false,
-      searchExprItems: [{
-        name: "'Name'",
-        value: 'Name'
-      }, {
-        name: "['Name', 'Category']",
-        value: ['Name', 'Category']
-      }]
+      searchExprItems: [
+        {
+          name: "'Name'",
+          value: 'Name',
+        },
+        {
+          name: "['Name', 'Category']",
+          value: ['Name', 'Category'],
+        },
+      ],
     };
   },
   methods: {
     customItemCreating(data) {
-      if(!data.text) {
+      if (!data.text) {
         data.customItem = null;
         return;
       }
@@ -149,45 +154,52 @@ export default {
       const incrementedId = Math.max.apply(null, productIds) + 1;
       const newItem = {
         Name: data.text,
-        ID: incrementedId
+        ID: incrementedId,
       };
 
-      productsDataSource.store().insert(newItem);
-      productsDataSource.load();
-      data.customItem = newItem;
-    }
-  }
+      data.customItem = productsDataSource
+        .store()
+        .insert(newItem)
+        .then(() => productsDataSource.load())
+        .then(() => {
+          return newItem;
+        })
+        .catch((error) => {
+          throw error;
+        });
+    },
+  },
 };
 </script>
 <style scoped>
-    .widget-container {
-        margin-right: 320px;
-    }
+.widget-container {
+  margin-right: 320px;
+}
 
-    .current-product {
-        padding-top: 11px;
-    }
+.current-product {
+  padding-top: 11px;
+}
 
-    .current-value {
-        font-weight: bold;
-    }
+.current-value {
+  font-weight: bold;
+}
 
-    .options {
-        padding: 20px;
-        background-color: rgba(191, 191, 191, 0.15);
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        width: 260px;
-    }
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 260px;
+}
 
-    .caption {
-        font-weight: 500;
-        font-size: 18px;
-    }
+.caption {
+  font-weight: 500;
+  font-size: 18px;
+}
 
-    .option {
-        margin-top: 10px;
-    }
+.option {
+  margin-top: 10px;
+}
 </style>

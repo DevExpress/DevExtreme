@@ -27,6 +27,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         searchBoxOptions: {
             dataSource: products,
             displayExpr: "Name",
+            valueExpr: "ID",
             searchEnabled: true,
             bindingOptions: {
                 searchMode: "searchModeOption",
@@ -41,8 +42,10 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             acceptCustomValue: true,
             dataSource: $scope.productsDataSource,
             displayExpr: "Name",
+            valueExpr: "ID",
+            value: simpleProducts[0].ID,
             bindingOptions: {
-                value: "currentProduct",
+                selectedItem: "currentProduct",
             },
             onCustomItemCreating: function(data) {
                 if(!data.text) {
@@ -59,9 +62,14 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                     ID: incrementedId
                 };
 
-                $scope.productsDataSource.store().insert(newItem);
-                $scope.productsDataSource.load();
-                data.customItem = newItem;
+                data.customItem = $scope.productsDataSource.store().insert(newItem)
+                .then(() => $scope.productsDataSource.load())
+                .then(() => {
+                    return newItem;
+                })
+                .catch((error) => {
+                    throw error;
+                });
             }
         }
     };

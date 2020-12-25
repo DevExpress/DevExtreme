@@ -1,7 +1,8 @@
-$(function() {
+$(function () {
     var searchBox = $("#searchBox").dxSelectBox({
         dataSource: products,
         displayExpr: "Name",
+        valueExpr: "ID",
         searchEnabled: true
     }).dxSelectBox("instance");
 
@@ -16,24 +17,26 @@ $(function() {
     $("#editBox").dxSelectBox({
         dataSource: productsDataSource,
         displayExpr: "Name",
-        value: simpleProducts[0],
+        valueExpr: "ID",
+        value: simpleProducts[0].ID,
         acceptCustomValue: true,
-        onValueChanged: function(data) {
+        onValueChanged: function (data) {
             var $result = $(".current-value");
 
-            if(data.value) {
-                $result.text(data.value.Name + " (ID: " + data.value.ID + ")");
+            if (data.value) {
+                var selectedItem = data.component.option('selectedItem');
+                $result.text(selectedItem.Name + " (ID: " + selectedItem.ID + ")");
             } else {
                 $result.text("Not selected");
             }
         },
-        onCustomItemCreating: function(data) {
-            if(!data.text) {
+        onCustomItemCreating: function (data) {
+            if (!data.text) {
                 data.customItem = null;
                 return;
             }
 
-            var productIds = simpleProducts.map(function(item) {
+            var productIds = simpleProducts.map(function (item) {
                 return item.ID;
             });
             var incrementedId = Math.max.apply(null, productIds) + 1;
@@ -41,17 +44,21 @@ $(function() {
                 Name: data.text,
                 ID: incrementedId
             };
-
-            productsDataSource.store().insert(newItem);
-            productsDataSource.load();
-            data.customItem = newItem;
+            data.customItem = productsDataSource.store().insert(newItem)
+                .then(() => productsDataSource.load())
+                .then(() => {
+                    return newItem;
+                })
+                .catch((error) => {
+                    throw error;
+                });
         }
     })
 
     $("#searchModeOption").dxSelectBox({
         items: ["contains", "startswith"],
         value: "contains",
-        onValueChanged: function(e) {
+        onValueChanged: function (e) {
             searchBox.option("searchMode", e.value);
         }
     });
@@ -67,7 +74,7 @@ $(function() {
         displayExpr: "name",
         valueExpr: "value",
         value: "Name",
-        onValueChanged: function(e) {
+        onValueChanged: function (e) {
             searchBox.option("searchExpr", e.value);
         }
     });
@@ -78,7 +85,7 @@ $(function() {
         value: 200,
         showSpinButtons: true,
         step: 100,
-        onValueChanged: function(e) {
+        onValueChanged: function (e) {
             searchBox.option("searchTimeout", e.value);
         }
     });
@@ -88,7 +95,7 @@ $(function() {
         max: 5,
         value: 0,
         showSpinButtons: true,
-        onValueChanged: function(e) {
+        onValueChanged: function (e) {
             searchBox.option("minSearchLength", e.value);
         }
     });
@@ -96,7 +103,7 @@ $(function() {
     $("#showDataBeforeSearchOption").dxCheckBox({
         value: false,
         text: "Show Data Before Search",
-        onValueChanged: function(e) {
+        onValueChanged: function (e) {
             searchBox.option("showDataBeforeSearch", e.value);
         }
     });

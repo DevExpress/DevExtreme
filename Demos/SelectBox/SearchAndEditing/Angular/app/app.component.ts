@@ -21,7 +21,7 @@ export class AppComponent {
     products: Product[];
     simpleProducts: SimpleProduct[];
     productsDataSource: DataSource;
-
+    product: number;
     searchModeOption: string = "contains";
     searchExprOption: any = "Name";
     searchTimeoutOption: number = 200;
@@ -38,6 +38,7 @@ export class AppComponent {
     constructor(service: Service) {
         this.products = service.getProducts();
         this.simpleProducts = service.getSimpleProducts();
+        this.product = this.simpleProducts[0].ID;
         this.productsDataSource = new DataSource({
             store: {
                 data: this.simpleProducts,
@@ -62,9 +63,14 @@ export class AppComponent {
             ID: incrementedId
         };
 
-        this.productsDataSource.store().insert(newItem);
-        this.productsDataSource.load();
-        data.customItem = newItem;
+        data.customItem = this.productsDataSource.store().insert(newItem)
+        .then(() => this.productsDataSource.load())
+        .then(() => {
+            return newItem;
+        })
+        .catch((error) => {
+            throw error;
+        });
     }
 }
 
