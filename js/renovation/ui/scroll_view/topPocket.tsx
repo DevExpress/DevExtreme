@@ -26,10 +26,7 @@ export const viewFunction = (viewModel: TopPocket): JSX.Element => {
       <div className={SCROLLVIEW_PULLDOWN}>
         <div className={SCROLLVIEW_PULLDOWN_IMAGE_CLASS} />
         <div className={SCROLLVIEW_PULLDOWN_INDICATOR_CLASS} />
-        <div className={SCROLLVIEW_PULLDOWN_TEXT_CLASS}>
-          <div>Release to refresh...</div>
-          <div>Refreshing...</div>
-        </div>
+        <div className={SCROLLVIEW_PULLDOWN_TEXT_CLASS} />
       </div>
     </div>
   );

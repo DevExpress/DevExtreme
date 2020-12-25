@@ -24,7 +24,7 @@ export const viewFunction = (viewModel: BottomPocket): JSX.Element => {
     <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} ref={bottomPocketRef}>
       <div className={SCROLLVIEW_REACHBOTTOM_CLASS}>
         <div className={SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS} />
-        <div className={SCROLLVIEW_REACHBOTTOM_TEXT_CLASS}>Updating...</div>
+        <div className={SCROLLVIEW_REACHBOTTOM_TEXT_CLASS} />
       </div>
     </div>
   );
