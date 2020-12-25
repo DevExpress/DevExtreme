@@ -209,8 +209,8 @@ export default class FileItemsController {
             },
             () => {
                 const parentDirectory = this._getActualDirectoryInfo(fileItemInfo.parentDirectory);
-                return this._resetDirectoryState(parentDirectory)
-                    .then(() => this.setCurrentDirectory(parentDirectory));
+                this._resetDirectoryState(parentDirectory);
+                this.setCurrentDirectory(parentDirectory);
             });
     }
 
@@ -220,15 +220,11 @@ export default class FileItemsController {
         return this._processEditAction(actionInfo,
             () => this._fileProvider.moveItems(items, destinationDirectory.fileItem),
             () => {
-                const resetDeferreds = [];
                 destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
-                itemInfos.forEach(itemInfo => resetDeferreds.push(this._resetDirectoryState(itemInfo.parentDirectory, true)));
-                resetDeferreds.push(this._resetDirectoryState(destinationDirectory));
-                return when(...resetDeferreds)
-                    .then(() => {
-                        this.setCurrentDirectory(destinationDirectory);
-                        destinationDirectory.expanded = true;
-                    });
+                itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory, true));
+                this._resetDirectoryState(destinationDirectory);
+                this.setCurrentDirectory(destinationDirectory);
+                destinationDirectory.expanded = true;
             });
     }
 
@@ -239,11 +235,9 @@ export default class FileItemsController {
             () => this._fileProvider.copyItems(items, destinationDirectory.fileItem),
             () => {
                 destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
-                return this._resetDirectoryState(destinationDirectory)
-                    .then(() => {
-                        this.setCurrentDirectory(destinationDirectory);
-                        destinationDirectory.expanded = true;
-                    });
+                this._resetDirectoryState(destinationDirectory);
+                this.setCurrentDirectory(destinationDirectory);
+                destinationDirectory.expanded = true;
             });
     }
 
@@ -254,13 +248,11 @@ export default class FileItemsController {
         return this._processEditAction(actionInfo,
             () => this._fileProvider.deleteItems(items),
             () => {
-                const resetDeferreds = [];
                 itemInfos.forEach(itemInfo => {
                     const parentDir = this._getActualDirectoryInfo(itemInfo.parentDirectory);
-                    resetDeferreds.push(this._resetDirectoryState(parentDir)
-                        .then(() => this.setCurrentDirectory(parentDir)));
+                    this._resetDirectoryState(parentDir);
+                    this.setCurrentDirectory(parentDir);
                 });
-                return when(...resetDeferreds);
             });
     }
 
@@ -310,7 +302,7 @@ export default class FileItemsController {
             fileItem: parentDirectoryInfo.fileItem,
             index: 0
         });
-        this._resetDirectoryState(parentDirectoryInfo, false, true);
+        this._resetDirectoryState(parentDirectoryInfo);
         parentDirectoryInfo.expanded = false;
         if(!skipNavigationOnError) {
             this.setCurrentDirectory(parentDirectoryInfo.parentDirectory);
@@ -344,7 +336,8 @@ export default class FileItemsController {
             info => this._raiseCompleteEditActionItem(actionInfo, info),
             errorInfo => this._raiseEditActionItemError(actionInfo, errorInfo)
         ).then(() => {
-            return completeAction().then(() => this._raiseCompleteEditAction(actionInfo));
+            completeAction();
+            this._raiseCompleteEditAction(actionInfo);
         });
     }
 
@@ -386,7 +379,7 @@ export default class FileItemsController {
         };
         const selectedKeyParts = this._getDirectoryPathKeyParts(this.getCurrentDirectory());
 
-        this._resetDirectoryState(this._rootDirectoryInfo, false, true);
+        this._resetDirectoryState(this._rootDirectoryInfo);
 
         return this._loadItemsRecursive(this._rootDirectoryInfo, cachedRootInfo)
             .then(() => {
@@ -541,24 +534,14 @@ export default class FileItemsController {
         };
     }
 
-    _resetDirectoryState(directoryInfo, isActualDirectoryRequired, suppressDataLoad) {
+    _resetDirectoryState(directoryInfo, isActualDirectoryRequired) {
         if(isActualDirectoryRequired) {
             directoryInfo = this._getActualDirectoryInfo(directoryInfo);
         }
         directoryInfo.itemsLoaded = false;
         directoryInfo.items = [ ];
-        // const h = this._fileProvider.hasSubDirectories(directoryInfo.fileItem);
-        // directoryInfo.fileItem.hasSubDirectories = h;
-
-        // if(directoryInfo.fileItem.dataItem) {
-        //     directoryInfo.fileItem.hasSubDirectories = this._fileProvider._hasSubDirs(directoryInfo.fileItem.dataItem);
-        // }
-
-        if(!suppressDataLoad) {
-            return this._fileProvider.hasSubDirectories(directoryInfo.fileItem)
-                .then(result => directoryInfo.fileItem.hasSubDirectories = result);
-        } else {
-            return new Deferred().resolve().promise();
+        if(directoryInfo.fileItem.dataItem) {
+            directoryInfo.fileItem.hasSubDirectories = this._fileProvider._hasSubDirs(directoryInfo.fileItem.dataItem);
         }
     }
 
