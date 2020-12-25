@@ -869,6 +869,19 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
         assert.equal($items.eq(3).text(), 'test', 'Custom zoomIn button was rendered with custom text');
     });
+    test('add subTask', function(assert) {
+        const items = [ 'addSubTask' ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+        assert.equal($items.first().children().children().attr('aria-label'), 'dx-gantt-i dx-gantt-i-add-sub-task', 'New Subtask item was rendered');
+    });
 });
 
 QUnit.module('DataSources', moduleConfig, () => {
@@ -2207,6 +2220,24 @@ QUnit.module('Context Menu', moduleConfig, () => {
         this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
         const items = getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
         assert.equal(items.eq(items.length - 1).text(), 'My Command', 'custom item was rendered');
+    });
+    test('add subTask', function(assert) {
+        const contextMenuOptions = {
+            contextMenu: { items: [ 'addSubTask' ] }
+        };
+        this.createInstance(extend(tasksOnlyOptions, contextMenuOptions));
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        const getItems = () => {
+            return getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
+        };
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        const items = getItems();
+        assert.equal(items.length, 1, 'there are 1 items');
+        assert.equal(items.eq(0).text(), 'New Subtask', 'undo item was rendered');
     });
 });
 QUnit.module('Strip Lines', moduleConfig, () => {
