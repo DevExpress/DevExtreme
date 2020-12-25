@@ -2,27 +2,16 @@
     [dataSource]="dataSource"
     title="Pizza Shop Complaints"
     palette="Harmony Light"
-    [valueAxis]="[{
-        name: 'frequency',
-        position: 'left',
-        tickInterval: 300
-    }, {
-        name: 'percentage',
-        position: 'right',
-        showZero: true,
-        label: {
-            customizeText: customizeLabelText
-        },
-        constantLines: [{
-            value: 80,
-            color: '#fc3535',
-            dashStyle: 'dash',
-            width: 2,
-            label: { visible: false }
-        }],
-        tickInterval: 20,
-        valueMarginsEnabled: false
-    }]">
+    >
+    <dxi-value-axis name="frequency" position="left" [tickInterval]="300">
+    </dxi-value-axis>
+    <dxi-value-axis name="percentage" position="right" [showZero]="true" [tickInterval]="20"
+        [valueMarginsEnabled]="false">
+        <dxo-label [customizeText]="customizeLabelText"></dxo-label>
+        <dxi-constant-line [value]="80" color="#fc3535" dashStyle="dash" [width]="2">
+            <dxo-label [visible]="false"></dxo-label>
+        </dxi-constant-line>
+    </dxi-value-axis>
     <dxo-argument-axis>
         <dxo-label overlappingBehavior="stagger"></dxo-label>
     </dxo-argument-axis>
