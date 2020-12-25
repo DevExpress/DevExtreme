@@ -526,7 +526,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
             clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick'),
 
-            selectCells: (firstCellIndex, lastCellIndex) => {
+            selectCells: (firstCellIndex, lastCellIndex, isPerformPointerUp = true) => {
                 const firstCell = this.workSpace.getCell(firstCellIndex);
                 const secondCell = this.workSpace.getCell(lastCellIndex);
 
@@ -536,9 +536,9 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 pointerMock(firstCell)
                     .start()
                     .down(firstCellLeft, firstCellTop);
-                pointerMock(secondCell)
-                    .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop)
-                    .up();
+                const pointer = pointerMock(secondCell)
+                    .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop);
+                isPerformPointerUp && pointer.up();
             },
         };
 
