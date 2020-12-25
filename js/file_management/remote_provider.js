@@ -9,9 +9,21 @@ import eventsEngine from '../events/core/events_engine';
 
 import FileSystemProviderBase from './provider_base';
 import { compileGetter } from '../core/utils/data';
+import { isFunction } from '../core/utils/type';
 
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = 'chunk';
+const FILE_SYSTEM_COMMNAD = {
+    GetDirContents: 'GetDirContents',
+    CreateDir: 'CreateDir',
+    Rename: 'Rename',
+    Move: 'Move',
+    Copy: 'Copy',
+    Remove: 'Remove',
+    UploadChunk: 'UploadChunk',
+    AbortUpload: 'AbortUpload',
+    Download: 'Download'
+};
 
 class RemoteFileSystemProvider extends FileSystemProviderBase {
 
@@ -19,17 +31,19 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         options = ensureDefined(options, { });
         super(options);
         this._endpointUrl = options.endpointUrl;
+        this._customizeRequest = options.customizeRequest;
+        this._requestHeaders = options.requestHeaders;
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
     }
 
     getItems(parentDir) {
         const pathInfo = parentDir.getFullPathInfo();
-        return this._getEntriesByPath(pathInfo)
+        return this._executeRequest(FILE_SYSTEM_COMMNAD.GetDirContents, { pathInfo })
             .then(result => this._convertDataObjectsToFileItems(result.result, pathInfo));
     }
 
     renameItem(item, name) {
-        return this._executeRequest('Rename', {
+        return this._executeRequest(FILE_SYSTEM_COMMNAD.Rename, {
             pathInfo: item.getFullPathInfo(),
             isDirectory: item.isDirectory,
             name
@@ -37,7 +51,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     }
 
     createDirectory(parentDir, name) {
-        return this._executeRequest('CreateDir', {
+        return this._executeRequest(FILE_SYSTEM_COMMNAD.CreateDir, {
             pathInfo: parentDir.getFullPathInfo(),
             name
         }).done(() => {
@@ -48,14 +62,14 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     }
 
     deleteItems(items) {
-        return items.map(item => this._executeRequest('Remove', {
+        return items.map(item => this._executeRequest(FILE_SYSTEM_COMMNAD.Remove, {
             pathInfo: item.getFullPathInfo(),
             isDirectory: item.isDirectory
         }));
     }
 
     moveItems(items, destinationDirectory) {
-        return items.map(item => this._executeRequest('Move', {
+        return items.map(item => this._executeRequest(FILE_SYSTEM_COMMNAD.Move, {
             sourcePathInfo: item.getFullPathInfo(),
             sourceIsDirectory: item.isDirectory,
             destinationPathInfo: destinationDirectory.getFullPathInfo()
@@ -63,7 +77,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     }
 
     copyItems(items, destinationFolder) {
-        return items.map(item => this._executeRequest('Copy', {
+        return items.map(item => this._executeRequest(FILE_SYSTEM_COMMNAD.Copy, {
             sourcePathInfo: item.getFullPathInfo(),
             sourceIsDirectory: item.isDirectory,
             destinationPathInfo: destinationFolder.getFullPathInfo()
@@ -89,11 +103,13 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         const formData = new window.FormData();
         formData.append(FILE_CHUNK_BLOB_NAME, chunksInfo.chunkBlob);
         formData.append('arguments', JSON.stringify(args));
-        formData.append('command', 'UploadChunk');
+        formData.append('command', FILE_SYSTEM_COMMNAD.UploadChunk);
 
         const deferred = new Deferred();
         ajax.sendRequest({
             url: this._endpointUrl,
+            headers: this._requestHeaders || {},
+            beforeSend: xhr => this._beforeSend(xhr),
             method: 'POST',
             dataType: 'json',
             data: formData,
@@ -113,7 +129,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     }
 
     abortFileUpload(fileData, chunksInfo, destinationDirectory) {
-        return this._executeRequest('AbortUpload', { uploadId: chunksInfo.customData.uploadId });
+        return this._executeRequest(FILE_SYSTEM_COMMNAD.AbortUpload, { uploadId: chunksInfo.customData.uploadId });
     }
 
     downloadItems(items) {
@@ -150,6 +166,8 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
 
         return ajax.sendRequest({
             url: args.url,
+            headers: this._requestHeaders || {},
+            beforeSend: xhr => this._beforeSend(xhr),
             method: 'POST',
             responseType: 'arraybuffer',
             data: formData,
@@ -169,7 +187,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         return {
             url: this._endpointUrl,
             arguments: argsStr,
-            command: 'Download'
+            command: FILE_SYSTEM_COMMNAD.Download
         };
     }
 
@@ -177,16 +195,14 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         return items.map(it => it.relativeName);
     }
 
-    _getEntriesByPath(pathInfo) {
-        return this._executeRequest('GetDirContents', { pathInfo });
-    }
-
     _executeRequest(command, args) {
-        const method = command === 'GetDirContents' ? 'GET' : 'POST';
+        const method = command === FILE_SYSTEM_COMMNAD.GetDirContents ? 'GET' : 'POST';
 
         const deferred = new Deferred();
         ajax.sendRequest({
             url: this._getEndpointUrl(command, args),
+            headers: this._requestHeaders || {},
+            beforeSend: xhr => this._beforeSend(xhr),
             method,
             dataType: 'json',
             cache: false
@@ -195,6 +211,12 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         },
         e => deferred.reject(e));
         return deferred.promise();
+    }
+
+    _beforeSend(xhr) {
+        if(isFunction(this._customizeRequest)) {
+            this._customizeRequest({ request: xhr });
+        }
     }
 
     _getEndpointUrl(command, args) {
