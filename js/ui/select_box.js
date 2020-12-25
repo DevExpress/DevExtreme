@@ -455,9 +455,10 @@ const SelectBox = DropDownList.inherit({
             if(showDataImmediately && this._dataSource) {
                 if(this._searchTimer) return;
 
-                const searchValue = this._getActualSearchValue();
+                const actualSearchValue = this._getActualSearchValue();
+                const searchValue = (actualSearchValue && actualSearchValue.toString().length) ? actualSearchValue : null;
                 searchValue && this._wasSearch(true);
-                this._filterDataSource(searchValue || null);
+                this._filterDataSource(searchValue);
             } else {
                 this._setListOption('items', []);
             }

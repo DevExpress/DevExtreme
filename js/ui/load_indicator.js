@@ -160,28 +160,6 @@ const LoadIndicator = Widget.inherit({
 
     _renderDimensions: function() {
         this.callBase();
-        this._updateContentSizeForAnimation();
-    },
-
-    _updateContentSizeForAnimation: function() {
-        if(!this._$indicator) {
-            return;
-        }
-
-        let width = this.option('width');
-        let height = this.option('height');
-
-        if(width || height) {
-            width = this.$element().width();
-            height = this.$element().height();
-            const minDimension = Math.min(height, width);
-
-            this._$wrapper.css({
-                height: minDimension,
-                width: minDimension,
-                fontSize: minDimension
-            });
-        }
     },
 
     _clean: function() {
