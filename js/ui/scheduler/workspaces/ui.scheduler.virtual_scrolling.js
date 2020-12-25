@@ -229,7 +229,7 @@ export default class VirtualScrollingDispatcher {
 
             this._createVirtualScrolling();
 
-            this.renderer._renderDateTable();
+            // this.renderer._renderDateTable();
         }
     }
 }
