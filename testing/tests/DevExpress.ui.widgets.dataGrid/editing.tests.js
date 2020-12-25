@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import renderer from 'core/renderer';
 import eventsEngine from 'events/core/events_engine';
+import 'ui/drop_down_button';
 import 'ui/switch';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerEvents from 'events/pointer';
@@ -10073,6 +10074,38 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.equal($cell.find('.dx-overlay').length, 1, 'tooltip is rendered');
+    });
+
+    QUnit.testInActiveWindow('Show tooltip on showing dropdownbutton custom editor with invalid value (T959883)', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = this.rowsView;
+        const $testElement = $('#container .dx-datagrid');
+
+        that.applyOptions({
+            dataSource: [{ id: 1 }],
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: 'test',
+                validationRules: [{ type: 'required' }],
+                editCellTemplate: function() {
+                    return $('<div>').dxDropDownButton();
+                }
+            }]
+        });
+
+        rowsView.render($testElement);
+
+        // act
+        $(this.getCellElement(0, 0)).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal($(this.getCellElement(0, 0)).find('.dx-overlay').length, 2, 'validation and revert tooltips are rendered');
     });
 
     // T183197
