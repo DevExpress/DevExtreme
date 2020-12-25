@@ -1575,35 +1575,33 @@ QUnit.module('Workspace Keyboard Navigation', () => {
             QUnit.test('Month workspace navigation by arrows', function(assert) {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
-                    // height: 300,
+                    intervalCount: 5,
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
-                assert.ok(true, 'hehehe');
-                // debugger;
 
-                // $element.dxSchedulerWorkSpaceMonth('instance');
+                $element.dxSchedulerWorkSpaceMonth('instance');
 
-                // $($element).trigger('focusin');
-                // const cells = $element.find('.' + CELL_CLASS);
-                // assert.equal(cells.find('dx-state-focused').length, 0, 'cells is not focused');
+                $($element).trigger('focusin');
+                const cells = $element.find('.' + CELL_CLASS);
+                assert.equal(cells.find('dx-state-focused').length, 0, 'cells is not focused');
 
-                // keyboard.keyDown('down');
-                // assert.ok(cells.eq(7).hasClass('dx-state-focused'), 'new cell is focused');
-                // assert.equal(cells.eq(7).attr('aria-label'), 'Add appointment', 'focused cell label is right');
+                keyboard.keyDown('down');
+                assert.ok(cells.eq(7).hasClass('dx-state-focused'), 'new cell is focused');
+                assert.equal(cells.eq(7).attr('aria-label'), 'Add appointment', 'focused cell label is right');
 
-                // keyboard.keyDown('up');
-                // assert.ok(!cells.eq(7).hasClass('dx-state-focused'), 'previous cell is not focused');
-                // assert.equal(cells.eq(7).attr('aria-label'), undefined, 'previous cell  label is not exist');
-                // assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'new cell is focused');
-                // assert.equal(cells.eq(0).attr('aria-label'), 'Add appointment', 'focused cell label is right');
+                keyboard.keyDown('up');
+                assert.ok(!cells.eq(7).hasClass('dx-state-focused'), 'previous cell is not focused');
+                assert.equal(cells.eq(7).attr('aria-label'), undefined, 'previous cell  label is not exist');
+                assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'new cell is focused');
+                assert.equal(cells.eq(0).attr('aria-label'), 'Add appointment', 'focused cell label is right');
 
-                // keyboard.keyDown('right');
-                // assert.ok(!cells.eq(0).hasClass('dx-state-focused'), 'previous cell is not focused');
-                // assert.ok(cells.eq(1).hasClass('dx-state-focused'), 'new cell is focused');
+                keyboard.keyDown('right');
+                assert.ok(!cells.eq(0).hasClass('dx-state-focused'), 'previous cell is not focused');
+                assert.ok(cells.eq(1).hasClass('dx-state-focused'), 'new cell is focused');
 
-                // keyboard.keyDown('left');
-                // assert.ok(!cells.eq(1).hasClass('dx-state-focused'), 'previous cell is not focused');
-                // assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'new cell is focused');
+                keyboard.keyDown('left');
+                assert.ok(!cells.eq(1).hasClass('dx-state-focused'), 'previous cell is not focused');
+                assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'new cell is focused');
             });
 
 
