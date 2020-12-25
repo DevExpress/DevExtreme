@@ -1909,35 +1909,6 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 assert.equal(cells.slice(7, 9).filter('.dx-state-focused').length, 1, 'right cells are focused');
             });
 
-            QUnit.test('Focus shouldn\'t disappear when select cells with shift & down/right arrow', function(assert) {
-                const $element = this.createInstance({
-                    focusStateEnabled: true,
-                    firstDayOfWeek: 1,
-                    currentDate: new Date(2015, 3, 1),
-                    height: 400,
-                    intervalCount: 5,
-                }, 'dxSchedulerWorkSpaceMonth');
-                const keyboard = keyboardMock($element);
-
-                const cells = $element.find('.' + CELL_CLASS);
-
-                pointerMock(cells.eq(28)).start().click();
-                keyboard.keyDown('down', { shiftKey: true });
-                keyboard.keyDown('down', { shiftKey: true });
-                assert.equal(cells.filter('.dx-state-focused').length, 8, 'right quantity of focused cells');
-                assert.equal(cells.slice(28, 42).filter('.dx-state-focused').length, 8, 'right cells are focused');
-
-                keyboard.keyDown('down', { shiftKey: true });
-                assert.equal(cells.filter('.dx-state-focused').length, 8, 'right quantity of focused cells');
-                assert.equal(cells.slice(28, 42).filter('.dx-state-focused').length, 8, 'right cells are focused');
-
-                pointerMock(cells.eq(40)).start().click();
-                keyboard.keyDown('right', { shiftKey: true });
-                keyboard.keyDown('right', { shiftKey: true });
-                assert.equal(cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
-                assert.equal(cells.slice(40, 42).filter('.dx-state-focused').length, 2, 'right cells are focused');
-            });
-
             QUnit.test('Workspace Week should allow select/unselect cells with shift & arrows', function(assert) {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
@@ -3139,7 +3110,9 @@ QUnit.module('Workspace Mouse Interaction', () => {
 
             [WORKSPACE_DAY, WORKSPACE_WEEK, WORKSPACE_MONTH].forEach((workSpace) => {
                 QUnit.test(`Cell hover should work correctly in ${workSpace.name}`, function(assert) {
-                    const $element = this.createInstance({}, workSpace.class);
+                    const $element = this.createInstance({
+                        intervalCount: 5,
+                    }, workSpace.class);
 
                     const cells = $element.find(`.${CELL_CLASS}`);
 

@@ -2259,6 +2259,39 @@ if(devices.real().deviceType === 'desktop') {
                 groups: undefined,
             }, 'Correct last cell');
         });
+
+        ['virtual', 'standard'].forEach((scrollingMode) => {
+            QUnit.test(`Selection shouldn't disappear when cells are selected near scheduler's borders when scrolling is ${scrollingMode}`, function(assert) {
+                const scheduler = createWrapper({
+                    currentDate: new Date(2015, 3, 1),
+                    scrolling: { mode: scrollingMode },
+                    views: ['month'],
+                    currentView: 'month',
+
+                });
+
+                const keyboard = keyboardMock(scheduler.workSpace.getWorkSpace());
+
+                const cells = scheduler.workSpace.getCells();
+
+                pointerMock(scheduler.workSpace.getCell(28)).start().click();
+                keyboard.keyDown('down', { shiftKey: true });
+                keyboard.keyDown('down', { shiftKey: true });
+                assert.equal(scheduler.workSpace.getSelectedCells().length, 8, 'right quantity of selected cells');
+                assert.equal(cells.slice(28, 42).filter(CLASSES.selectedCell).length, 8, 'right cells are selected');
+
+                keyboard.keyDown('down', { shiftKey: true });
+                assert.equal(scheduler.workSpace.getSelectedCells().length, 8, 'right quantity of selected cells');
+                assert.equal(cells.slice(28, 42).filter(CLASSES.selectedCell).length, 8, 'right cells are selected');
+
+                pointerMock(cells.eq(40)).start().click();
+                keyboard.keyDown('right', { shiftKey: true });
+                keyboard.keyDown('right', { shiftKey: true });
+                assert.equal(scheduler.workSpace.getSelectedCells().length, 2, 'right quantity of selected cells');
+                assert.equal(cells.slice(40, 42).filter(CLASSES.selectedCell).length, 2, 'right cells are selected');
+            });
+        });
+
     });
 }
 
