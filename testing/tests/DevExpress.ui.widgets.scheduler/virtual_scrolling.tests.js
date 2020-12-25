@@ -45,6 +45,7 @@ module('Virtual Scrolling', {
                 _insertAllDayRowsIntoDateTable: noop,
                 _allDayPanels: undefined,
                 isGroupedAllDayPanel: noop,
+                renderRAllDayPanel: noop,
                 renderRWorkspace: noop,
                 renderRAppointments: noop,
                 _createAction: () => { return () => 'action'; },

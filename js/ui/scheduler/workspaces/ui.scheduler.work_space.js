@@ -1228,20 +1228,24 @@ class SchedulerWorkSpace extends WidgetObserver {
         const allDayElements = this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined;
         const rowCountInGroup = this._getRowCount();
 
-        const totalCellCount = this._getTotalCellCount(groupCount);
+        const cellCount = this._getTotalCellCount(groupCount);
+        const rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());
 
         const options = {
             horizontalGroupCount,
             verticalGroupCount,
             rowCountInGroup,
+            cellCount,
             cellCountInGroupRow: this._getCellCount(),
             cellDataGetters: [this._getCellData.bind(this)],
             allDayElements,
             startRowIndex: 0,
+            startCellIndex: 0,
             groupOrientation: this.option('groupOrientation'),
+            rowCount,
             totalRowCount: this._getRowCount(),
-            totalCellCount,
-            groupCount,
+            totalCellCount: cellCount,
+            groupCount
         };
 
         if(this.isVirtualScrolling()) {
@@ -1249,10 +1253,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 options,
                 this.virtualScrollingDispatcher.getRenderState()
             );
-        } else {
-            options.rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());
-            options.cellCount = totalCellCount;
-
         }
 
         return options;
@@ -1277,11 +1277,28 @@ class SchedulerWorkSpace extends WidgetObserver {
     renderRAllDayPanel() {
         const visible = this._isShowAllDayPanel() && !this.isGroupedAllDayPanel();
         if(visible) {
+            const groupCount = this._getGroupCount();
+            const cellCount = this._getTotalCellCount(groupCount);
+
             const options = {
                 viewData: this.viewDataProvider.viewData,
                 visible,
                 dataCellTemplate: this.option('dataCellTemplate'),
+                startCellIndex: 0,
+                cellCount
             };
+
+            if(this.isVirtualScrolling()) {
+                const { horizontalVirtualScrolling } = this.virtualScrollingDispatcher;
+                const renderState = horizontalVirtualScrolling?.getRenderState();
+                extend(
+                    options,
+                    {
+                        isVirtual: true,
+                        ...renderState
+                    }
+                );
+            }
 
             this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
             this.renderRComponent(this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });

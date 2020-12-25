@@ -49,14 +49,18 @@ class ViewDataGenerator {
 
         return completeViewDataMap
             .slice(correctedStartRowIndex, correctedStartRowIndex + rowCount)
-            .map((cellsRow, rowIndex) => cellsRow
-                .slice(startCellIndex, startCellIndex + cellCount)
-                .map((cellData, cellIndex) => (
-                    {
-                        cellData,
-                        position: { rowIndex, cellIndex },
-                    }
-                ))
+            .map((cellsRow, rowIndex) =>
+                cellsRow
+                    .slice(startCellIndex, startCellIndex + cellCount)
+                    .map((cellData, cellIndex) => (
+                        {
+                            cellData,
+                            position: {
+                                rowIndex,
+                                cellIndex
+                            }
+                        })
+                    )
             );
     }
 
@@ -104,7 +108,13 @@ class ViewDataGenerator {
         const showAllDayPanel = this.workspace.isAllDayPanelVisible;
 
         if(!isVerticalGrouping && showAllDayPanel) {
-            groupedData[0].allDayPanel = completeViewDataMap[0];
+            const {
+                startCellIndex,
+                cellCount
+            } = options;
+
+            groupedData[0].allDayPanel = completeViewDataMap[0]
+                .slice(startCellIndex, cellCount + startCellIndex);
         }
 
         return {
