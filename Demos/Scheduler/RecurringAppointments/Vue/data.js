@@ -29,7 +29,7 @@ export const data = [
     startDate: new Date('2021-02-24T18:00:00.000Z'),
     endDate: new Date('2021-02-24T19:00:00.000Z'),
     recurrenceRule: 'FREQ=YEARLY;BYWEEKNO=14',
-    recurrenceException: '20210411T180000Z'
+    recurrenceException: '20210411T170000Z'
   }, {
     text: 'Final exams',
     roomId: [3],

@@ -49,10 +49,9 @@ export class AppComponent {
                 valueExpr: "id",
                 onValueChanged: function(args) {
                     movieInfo = that.getMovieById(args.value);
-                    form.getEditor("director")
-                        .option("value", movieInfo.director);
-                    form.getEditor("endDate")
-                        .option("value", new Date (startDate.getTime() + 60 * 1000 * movieInfo.duration));
+
+                    form.updateData("director", movieInfo.director);
+                    form.updateData("endDate", new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
                 }.bind(this)
             }
         }, {
@@ -73,8 +72,7 @@ export class AppComponent {
                 type: "datetime",
                 onValueChanged: function(args) {
                     startDate = args.value;
-                    form.getEditor("endDate")
-                        .option("value", new Date (startDate.getTime() + 60 * 1000 * movieInfo.duration));
+                    form.updateData("endDate", new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
                 }
             }
         }, {
