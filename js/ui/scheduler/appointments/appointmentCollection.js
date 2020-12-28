@@ -459,17 +459,20 @@ const SchedulerAppointments = CollectionWidget.inherit({
             this._currentAppointmentSettings = setting;
             const $item = this.callBase(index, itemData, container);
             $item.data(APPOINTMENT_SETTINGS_KEY, setting);
+
+            this._renderAppointment($($item), setting);
+
             $items.push($item);
         }
 
         return $items;
     },
 
-    _getItemContent: function($itemFrame) {
-        $itemFrame.data(APPOINTMENT_SETTINGS_KEY, this._currentAppointmentSettings);
-        const $itemContent = this.callBase($itemFrame);
-        return $itemContent;
-    },
+    // _getItemContent: function($itemFrame) {
+    //     $itemFrame.data(APPOINTMENT_SETTINGS_KEY, this._currentAppointmentSettings);
+    //     const $itemContent = this.callBase($itemFrame);
+    //     return $itemContent;
+    // },
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
         const { itemData, container, index } = renderArgs;
@@ -495,9 +498,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
         return $container;
     },
 
-    _postprocessRenderItem: function(args) {
-        this._renderAppointment(args.itemElement, this._currentAppointmentSettings);
-    },
+    // _postprocessRenderItem: function(args) {
+    //     this._renderAppointment(args.itemElement, this._currentAppointmentSettings);
+    // },
 
     _renderAppointment: function($appointment, settings) {
         $appointment.data(APPOINTMENT_SETTINGS_KEY, settings);
@@ -508,7 +511,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
         const allowDrag = this.option('allowDrag');
         const allDay = settings.allDay;
-        this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
+        this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings || settings, geometry);
 
         const deferredColor = this._getAppointmentColor($appointment, settings.groupIndex);
 
