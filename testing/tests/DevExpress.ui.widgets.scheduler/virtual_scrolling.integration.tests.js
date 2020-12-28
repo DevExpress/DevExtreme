@@ -13,8 +13,7 @@ import {
     asyncWrapper
 } from '../../helpers/scheduler/helpers.js';
 
-const supportedViews = ['day', 'week', 'workWeek']; // TODO: add month view
-const unsupportedViews = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
+const supportedViews = ['day', 'week', 'workWeek']; // TODO: add month view and timelines
 
 const {
     testStart,
@@ -196,78 +195,6 @@ module('Vertical virtual scrolling', () => {
 
                     assert.equal(pageSize, expectedPageSize, 'Page size is correct');
                 });
-            });
-        });
-
-        unsupportedViews.forEach(view => {
-            [{
-                mode: 'standard', result: false,
-            }, {
-                mode: 'virtual', result: true,
-            }].forEach(scrolling => {
-                test(`Virtual Scrolling as the ${view} view option, scrolling.mode: ${scrolling.mode}`, function(assert) {
-                    const instance = createWrapper({
-                        views: unsupportedViews,
-                        currentView: view,
-                        scrolling: {
-                            mode: scrolling.mode,
-                        },
-                        height: 400
-                    }).instance;
-
-                    assert.notOk(instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling not initialized');
-                    assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-                });
-
-                test(`Virtual Scrolling as the ${view} view option, view.scrolling.mode: ${scrolling.mode}`, function(assert) {
-                    const instance = createWrapper({
-                        views: [{
-                            type: view,
-                            scrolling: {
-                                mode: scrolling.mode,
-                            },
-                        }],
-                        currentView: view,
-                        height: 400
-                    }).instance;
-
-                    assert.notOk(instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling not initialized');
-                    assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-                });
-            });
-
-            test(`Virtual scrolling optional if view: ${view}`, function(assert) {
-                const instance = createWrapper({
-                    views: unsupportedViews,
-                    currentView: view,
-                    height: 400
-                }).instance;
-
-                instance.option('scrolling.mode', 'virtual');
-                assert.notOk(instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling not initialized');
-                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-
-                instance.option('scrolling.mode', 'standard');
-                assert.notOk(instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling not initialized');
-                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-            });
-
-            test(`Optional Virtual Scrolling as the ${view} view option`, function(assert) {
-                const instance = createWrapper({
-                    views: [{
-                        type: view,
-                    }],
-                    currentView: view,
-                    height: 400
-                }).instance;
-
-                instance.option('views[0].scrolling.mode', 'virtual');
-                assert.notOk(!!instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling is not initialized');
-                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-
-                instance.option('views[0].scrolling.mode', 'standard');
-                assert.notOk(!!instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling is not initialized');
-                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
         });
     });

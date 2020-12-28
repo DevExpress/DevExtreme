@@ -1,22 +1,17 @@
-import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { isDxMouseWheelEvent } from '../../events/utils/index';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
 import Class from '../../core/class';
-import Scrollbar from './ui.scrollbar';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
-const SCROLLABLE_SCROLLBAR_SIMULATED = 'dx-scrollable-scrollbar-simulated';
-const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
-
 
 const NativeStrategy = Class.inherit({
 
@@ -29,10 +24,6 @@ const NativeStrategy = Class.inherit({
         this._$element = scrollable.$element();
         this._$container = scrollable._$container;
         this._$content = scrollable._$content;
-
-        this._direction = scrollable.option('direction');
-        this._useSimulatedScrollbar = scrollable.option('useSimulatedScrollbar');
-        this._showScrollbar = scrollable.option('showScrollbar');
 
         this.option = scrollable.option.bind(scrollable);
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
@@ -51,12 +42,7 @@ const NativeStrategy = Class.inherit({
         // this._$element
         //     .addClass(SCROLLABLE_NATIVE_CLASS)
         this._$element
-            .addClass(SCROLLABLE_NATIVE_CLASS + '-' + deviceType)
-            .toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this._showScrollbar);
-
-        if(this._showScrollbar && this._useSimulatedScrollbar) {
-            this._renderScrollbars();
-        }
+            .addClass(SCROLLABLE_NATIVE_CLASS + '-' + deviceType);
     },
 
     updateBounds: noop,
@@ -77,22 +63,6 @@ const NativeStrategy = Class.inherit({
     _renderScrollbars: function() {
         this._scrollbars = {};
         this._hideScrollbarTimeout = 0;
-
-        this._$element.addClass(SCROLLABLE_SCROLLBAR_SIMULATED);
-
-        this._renderScrollbar(VERTICAL);
-        this._renderScrollbar(HORIZONTAL);
-    },
-
-    _renderScrollbar: function(direction) {
-        if(!this._isDirection(direction)) {
-            return;
-        }
-
-        this._scrollbars[direction] = new Scrollbar($('<div>').appendTo(this._$element), {
-            direction: direction,
-            expandable: this._component.option('scrollByThumb')
-        });
     },
 
     // handleInit: noop,

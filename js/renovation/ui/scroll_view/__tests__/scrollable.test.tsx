@@ -15,7 +15,11 @@ import {
   viewFunction as viewFunctionNative,
 } from '../scrollable_native';
 
-import { ensureLocation, SCROLLABLE_DISABLED_CLASS } from '../scrollable_utils';
+import {
+  ensureLocation,
+  SCROLLABLE_DISABLED_CLASS,
+  SCROLLABLE_SCROLLBAR_SIMULATED,
+} from '../scrollable_utils';
 
 import {
   ScrollableSimulated,
@@ -33,6 +37,8 @@ import {
   ScrollOffset,
   ScrollableDirection,
 } from '../types.d';
+
+import { Scrollbar } from '../scrollbar';
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
@@ -133,6 +139,38 @@ jest.mock('../../../../core/devices', () => {
         } as any as Partial<any>;
         const scrollable = mount(viewFunction(props as any) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
+      });
+    });
+
+    describe('Scrollbar', () => {
+      ['horizontal', 'vertical', 'both', undefined, null].forEach((direction) => {
+        [true, false, undefined, null].forEach((useSimulatedScrollbar) => {
+          ['never', 'always', 'onScroll', 'onHover', true, false, undefined, null].forEach((showScrollbar: any) => {
+            it(`Scrollbar should render if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
+              if (Scrollable === ScrollableSimulated) {
+                return; // TODO: skip for simulated strategy
+              }
+
+              const scrollable = mount(
+                viewFunction({
+                  props: { showScrollbar, useSimulatedScrollbar, direction },
+                } as any) as JSX.Element,
+              );
+
+              const scrollBar = scrollable.find(Scrollbar);
+              const needRenderScrollbars = (showScrollbar ?? false)
+                && (useSimulatedScrollbar ?? false);
+
+              expect(scrollBar.exists()).toBe(needRenderScrollbars);
+              if (needRenderScrollbars) {
+                const scrollbarsCount = direction === 'both'
+                  ? 2
+                  : 1;
+                expect(scrollBar.length).toBe(scrollbarsCount);
+              }
+            });
+          });
+        });
       });
     });
 
@@ -241,6 +279,16 @@ jest.mock('../../../../core/devices', () => {
               reachedLeft: false,
               reachedRight: false,
             });
+          });
+
+          it('scrollEffect should return unsubscribe callback', () => {
+            const scrollable = new Scrollable({ direction });
+
+            const detach = scrollable.scrollEffect() as DisposeEffectReturn;
+
+            expect(getEventHandlers('scroll').length).toBe(1);
+            detach();
+            expect(getEventHandlers('scroll').length).toBe(0);
           });
 
           it('should subscribe to scrollstart event', () => {
@@ -1218,6 +1266,30 @@ jest.mock('../../../../core/devices', () => {
               expect(instance.cssClasses).toEqual(isDisabled
                 ? expect.stringMatching(SCROLLABLE_DISABLED_CLASS)
                 : expect.not.stringMatching(SCROLLABLE_DISABLED_CLASS));
+            });
+          });
+
+          ['horizontal', 'vertical', 'both', null, undefined].forEach((direction: any) => {
+            [true, false, undefined, null].forEach((useSimulatedScrollbar: any) => {
+              ['never', 'always', 'onScroll', 'onHover', true, false, undefined, null].forEach((showScrollbar: any) => {
+                it(`Should have SCROLLABLE_SCROLLBAR_SIMULATED if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
+                  if (Scrollable === ScrollableSimulated) {
+                    return; // TODO: skip for simulated strategy
+                  }
+
+                  const instance = new Scrollable({
+                    showScrollbar,
+                    useSimulatedScrollbar,
+                    direction,
+                  });
+
+                  const hasSimulatedCssClasses = showScrollbar && useSimulatedScrollbar;
+
+                  expect(instance.cssClasses).toEqual(hasSimulatedCssClasses
+                    ? expect.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED)
+                    : expect.not.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED));
+                });
+              });
             });
           });
         });

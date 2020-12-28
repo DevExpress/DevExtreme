@@ -38,6 +38,8 @@ export const CLASSES = {
     weekHeaderPanelCell: '.dx-scheduler-header-panel-week-cell',
     currentTimeCell: '.dx-scheduler-time-panel-current-time-cell',
     headerPanelCurrentTimeCell: '.dx-scheduler-header-panel-current-time-cell',
+    selectedCell: '.dx-state-focused',
+    focusedCell: '.dx-scheduler-focused-cell',
 
     appointment: '.dx-scheduler-appointment',
     appointmentDate: '.dx-scheduler-appointment-content-date',
@@ -468,8 +470,8 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getRowCount: () => $('.dx-scheduler-date-table-row').length,
             getRows: (index = 0) => $('.dx-scheduler-date-table-row').eq(index),
             getCells: () => $(CLASSES.dateTableCell),
-            getSelectedCells: () => this.workSpace.getCells().filter('.dx-state-focused'),
-            getFocusedCell: () => this.workSpace.getCells().filter('.dx-scheduler-focused-cell'),
+            getSelectedCells: () => this.workSpace.getCells().filter(CLASSES.selectedCell),
+            getFocusedCell: () => this.workSpace.getCells().filter(CLASSES.focusedCell),
             getCell: (rowIndex, cellIndex) => {
                 if(cellIndex !== undefined) {
                     return $('.dx-scheduler-date-table-row').eq(rowIndex).find(CLASSES.dateTableCell).eq(cellIndex);
@@ -522,7 +524,22 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find('.dx-scheduler-group-header'),
                 getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
             },
-            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick')
+            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick'),
+
+            selectCells: (firstCellIndex, lastCellIndex) => {
+                const firstCell = this.workSpace.getCell(firstCellIndex);
+                const secondCell = this.workSpace.getCell(lastCellIndex);
+
+                const { x: firstCellLeft, y: firstCellTop } = firstCell.offset();
+                const { x: secondCellLeft, y: secondCellTop } = secondCell.offset();
+
+                pointerMock(firstCell)
+                    .start()
+                    .down(firstCellLeft, firstCellTop);
+                pointerMock(secondCell)
+                    .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop)
+                    .up();
+            },
         };
 
         this.viewSwitcher = {

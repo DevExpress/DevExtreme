@@ -33,7 +33,10 @@ import {
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
   SCROLLABLE_DISABLED_CLASS,
+  SCROLLABLE_SCROLLBAR_SIMULATED,
+  SCROLLABLE_SCROLLBARS_HIDDEN,
 } from './scrollable_utils';
+import { Scrollbar } from './scrollbar';
 
 import {
   dxScrollStart,
@@ -48,30 +51,48 @@ export const viewFunction = ({
   props: {
     disabled, height, width, rtlEnabled, children,
     forceGeneratePockets, needScrollViewContentWrapper,
+    showScrollbar, direction, scrollByThumb, useSimulatedScrollbar,
   },
   restAttributes,
-}: ScrollableNative): JSX.Element => (
-  <Widget
-    classes={cssClasses}
-    disabled={disabled}
-    rtlEnabled={rtlEnabled}
-    height={height}
-    width={width}
-    {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
-  >
-    <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
-      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
-        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
-          {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
-          {needScrollViewContentWrapper && (
-            <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
-          {!needScrollViewContentWrapper && children}
-          {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
+}: ScrollableNative): JSX.Element => {
+  const targetDirection = direction ?? 'vertical';
+  const isVertical = targetDirection !== 'horizontal';
+  const isHorizontal = targetDirection !== 'vertical';
+  return (
+    <Widget
+      classes={cssClasses}
+      disabled={disabled}
+      rtlEnabled={rtlEnabled}
+      height={height}
+      width={width}
+      {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+    >
+      <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
+        <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
+          <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
+            {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
+            {needScrollViewContentWrapper && (
+              <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
+            {!needScrollViewContentWrapper && children}
+            {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
+          </div>
         </div>
       </div>
-    </div>
-  </Widget>
-);
+      { showScrollbar && useSimulatedScrollbar && isHorizontal && (
+        <Scrollbar
+          direction="horizontal"
+          expandable={scrollByThumb}
+        />
+      )}
+      { showScrollbar && useSimulatedScrollbar && isVertical && (
+        <Scrollbar
+          direction="vertical"
+          expandable={scrollByThumb}
+        />
+      )}
+    </Widget>
+  );
+};
 
 @Component({
   view: viewFunction,
@@ -274,12 +295,16 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
   }
 
   get cssClasses(): string {
-    const { direction, classes, disabled } = this.props;
+    const {
+      direction, classes, disabled, useSimulatedScrollbar, showScrollbar,
+    } = this.props;
 
     const classesMap = {
       [`dx-scrollable dx-scrollable-native dx-scrollable-native-${devices.real().platform} dx-scrollable-renovated`]: true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
+      [SCROLLABLE_SCROLLBAR_SIMULATED]: showScrollbar && useSimulatedScrollbar,
+      [SCROLLABLE_SCROLLBARS_HIDDEN]: !showScrollbar,
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
