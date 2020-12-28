@@ -87,7 +87,7 @@ describe('Workspaces utils', () => {
         });
     });
 
-    it('should spread styles when height is defined in restAttributes', () => {
+    it('should spread styles when width is defined in restAttributes', () => {
       expect(addWidthToStyle(500, { width: '300px', height: '400px' }))
         .toEqual({
           height: '400px',
