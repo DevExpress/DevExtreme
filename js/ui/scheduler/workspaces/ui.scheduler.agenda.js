@@ -4,7 +4,7 @@ import { noop } from '../../../core/utils/common';
 import { each } from '../../../core/utils/iterator';
 import { getPublicElement } from '../../../core/element';
 import registerComponent from '../../../core/component_registrator';
-import SchedulerWorkSpace from './ui.scheduler.work_space';
+import WorkSpace from './ui.scheduler.work_space';
 import { extend } from '../../../core/utils/extend';
 import dateLocalization from '../../../localization/date';
 import tableCreatorModule from '../ui.scheduler.table_creator';
@@ -25,7 +25,7 @@ const LAST_ROW_CLASS = 'dx-scheduler-date-table-last-row';
 const INNER_CELL_MARGIN = 5;
 const OUTER_CELL_MARGIN = 20;
 
-class SchedulerAgenda extends SchedulerWorkSpace {
+class SchedulerAgenda extends WorkSpace {
     get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
 
     _init() {
