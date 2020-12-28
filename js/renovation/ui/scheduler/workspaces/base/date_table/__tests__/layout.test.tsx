@@ -148,7 +148,7 @@ describe('DateTableLayoutBase', () => {
         }].forEach(({
           top, bottom, expectedTop, expectedBottom,
         }) => {
-          it(`should been set correctly if viewData.topVirtualRowHeight=${top}, viewData.bottomVirtualRowHeight=${bottom}`, () => {
+          it(`should be calculated correctly if viewData.topVirtualRowHeight=${top}, viewData.bottomVirtualRowHeight=${bottom}`, () => {
             const layout = new DateTableLayoutBase({
               viewData: {
                 ...viewDataBase,
