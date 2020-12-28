@@ -1569,7 +1569,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                         renovateRender: scrollingMode === 'virtual',
                     });
                 };
-            }
+            },
         }, () => {
             QUnit.test('Month workspace navigation by arrows', function(assert) {
                 const $element = this.createInstance({
@@ -1710,7 +1710,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
                     currentDate: new Date(2015, 3, 1),
-                    onCellClick: updateSpy
+                    onCellClick: updateSpy,
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -1901,7 +1901,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
-                    currentDate: new Date(2015, 3, 1)
+                    currentDate: new Date(2015, 3, 1),
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -2290,7 +2290,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     onContentReady: function(e) {
                         const scrollable = e.component._dateTableScrollable;
                         scrollable.option('scrollByContent', true);
-                    }
+                    },
                 }, 'dxSchedulerWorkSpaceMonth');
                 const workspace = $element.dxSchedulerWorkSpaceMonth('instance');
 
@@ -2388,7 +2388,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     rtlEnabled, key, workSpace,
                 }) => {
                     QUnit.test(`Multiselection with ${key} arrow should work correctly with groupByDate
-                                in ${workSpace.name} when rtlEnabled is equal to ${rtlEnabled}`, function(assert) {
+                        in ${workSpace.name} when rtlEnabled is equal to ${rtlEnabled}`, function(assert) {
                         const $element = this.createInstance({
                             focusStateEnabled: true,
                             intervalCount: 2,
@@ -2435,7 +2435,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     startCell, endCell, focusedCellsCount, rtlEnabled, key, workSpace,
                 }) => {
                     QUnit.test(`Multiselection with ${key} arrow should work correctly with groupByDate
-                                in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${rtlEnabled}`, function(assert) {
+                        in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${rtlEnabled}`, function(assert) {
                         const $element = this.createInstance({
                             focusStateEnabled: true,
                             intervalCount: 2,
@@ -2648,7 +2648,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                         scrollable.option('scrollByContent', false);
                         e.component.initDragBehavior();
                         e.component._attachTablesEvents();
-                    }
+                    },
                 }, 'dxSchedulerWorkSpaceMonth');
                 const instance = $element.dxSchedulerWorkSpaceMonth('instance');
 
