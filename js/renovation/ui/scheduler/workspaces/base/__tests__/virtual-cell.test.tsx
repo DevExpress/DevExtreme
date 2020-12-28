@@ -28,25 +28,6 @@ describe('VirtualCell', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      describe('classes', () => {
-        [{
-          className: 'custom-class',
-          expectedResult: 'dx-scheduler-virtual-cell custom-class',
-        }, {
-          className: '',
-          expectedResult: 'dx-scheduler-virtual-cell',
-        }].forEach(({ className, expectedResult }) => {
-          it(`should return correct parameters if className=${className}`, () => {
-            const virtualCell = new VirtualCell({
-              className,
-            });
-
-            expect(virtualCell.classes)
-              .toEqual(expectedResult);
-          });
-        });
-      });
-
       describe('style', () => {
         it('should call addWidthToStyle with proper parameters', () => {
           const style = { width: '100px', height: '200px' };
