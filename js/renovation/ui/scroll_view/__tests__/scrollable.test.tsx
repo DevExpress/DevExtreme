@@ -3,8 +3,10 @@ import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import devices from '../../../../core/devices';
 import {
-  clear as clearEventHandlers, emit,
+  clear as clearEventHandlers, emit, getEventHandlers,
 } from '../../../test_utils/events_mock';
+
+import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 
 import {
   ScrollableNative,
@@ -275,6 +277,16 @@ jest.mock('../../../../core/devices', () => {
               reachedLeft: false,
               reachedRight: false,
             });
+          });
+
+          it('scrollEffect should return unsubscribe callback', () => {
+            const scrollable = new Scrollable({ direction });
+
+            const detach = scrollable.scrollEffect() as DisposeEffectReturn;
+
+            expect(getEventHandlers('scroll').length).toBe(1);
+            detach();
+            expect(getEventHandlers('scroll').length).toBe(0);
           });
 
           it('ScrollPosition: { top: 0, left: 0 }', () => {
