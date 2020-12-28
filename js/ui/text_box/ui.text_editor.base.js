@@ -359,7 +359,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderInputValue: function(value) {
-        value = value || this.option('value');
+        value = value ?? this.option('value');
 
         let text = this.option('text');
         const displayValue = this.option('displayValue');

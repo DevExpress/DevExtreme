@@ -287,6 +287,19 @@ QUnit.module('Button', function() {
 
             clock.restore();
         });
+
+        QUnit.test('inkRipple should have correct center if text is 0', function(assert) {
+            $('#inkButton').dxButton({
+                useInkRipple: true,
+                onClick(e) {
+                    const $element = $(e.component.$element());
+                    $element.triggerHandler({ type: 'dxremove' });
+                    $element.trigger('dxinactive');
+                    assert.ok(true, 'no exceptions');
+                }
+            });
+            $('#inkButton').trigger('dxclick');
+        });
     });
 
     QUnit.module('widget sizing render', {}, function() {

@@ -580,7 +580,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isNonStubAfter: function(index, text) {
-        text = (text || this._getInputVal()).slice(index);
+        text = (text ?? this._getInputVal()).slice(index);
         return text && !this._isStub(text, true);
     },
 

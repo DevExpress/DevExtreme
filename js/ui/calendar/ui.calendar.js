@@ -538,7 +538,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDateByOffset: function(offset, date) {
-        date = this._getDate(date || this.option('currentDate'));
+        date = this._getDate(date ?? this.option('currentDate'));
 
         const currentDay = date.getDate();
         const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
@@ -1136,7 +1136,7 @@ const Calendar = Editor.inherit({
     },
 
     _updateAriaSelected: function(value, previousValue) {
-        value = value || this._dateOption('value');
+        value = value ?? this._dateOption('value');
 
         const $prevSelectedCell = this._view._getCellByDate(previousValue);
         const $selectedCell = this._view._getCellByDate(value);
@@ -1150,7 +1150,7 @@ const Calendar = Editor.inherit({
     },
 
     _updateAriaId: function(value) {
-        value = value || this.option('currentDate');
+        value = value ?? this.option('currentDate');
 
         const ariaId = 'dx-' + new Guid();
         const $newCell = this._view._getCellByDate(value);

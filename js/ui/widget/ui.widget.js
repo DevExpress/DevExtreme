@@ -128,7 +128,7 @@ const Widget = DOMComponent.inherit({
     _renderHint() {
         const { hint } = this.option();
 
-        this.$element().attr('title', hint || null);
+        this.$element().attr('title', hint ?? null);
     },
 
     _renderContent() {

@@ -482,7 +482,7 @@ const Slider = TrackBar.inherit({
     },
 
     _valueStep: function(step) {
-        if(!step || isNaN(step)) {
+        if(isNaN(step)) {
             step = 1;
         }
 
