@@ -17,7 +17,6 @@ export const viewFunction = ({
     viewData,
     dataCellTemplate,
     cellTemplate: Cell,
-    isVirtual,
   },
 }: DateTableBody): JSX.Element => (
   <Fragment>
@@ -29,7 +28,6 @@ export const viewFunction = ({
               viewData={allDayPanel}
               dataCellTemplate={dataCellTemplate}
               isVerticalGroupOrientation
-              isVirtual={isVirtual}
               leftVirtualCellWidth={viewData.leftVirtualCellWidth}
               rightVirtualCellWidth={viewData.rightVirtualCellWidth}
             />
@@ -38,7 +36,6 @@ export const viewFunction = ({
             <Row
               className="dx-scheduler-date-table-row"
               key={cellsRow[0].key}
-              isVirtual={isVirtual}
               leftVirtualCellWidth={viewData.leftVirtualCellWidth}
               rightVirtualCellWidth={viewData.rightVirtualCellWidth}
             >

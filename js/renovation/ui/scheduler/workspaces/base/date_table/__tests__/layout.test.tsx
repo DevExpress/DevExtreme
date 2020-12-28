@@ -64,7 +64,6 @@ describe('DateTableLayoutBase', () => {
       const layout = render({
         classes: 'some-class',
         props: { dataCellTemplate },
-        isVirtual: 'isVirtual',
         topVirtualRowHeight: 100,
         bottomVirtualRowHeight: 200,
         leftVirtualCellWidth: 300,
@@ -81,7 +80,6 @@ describe('DateTableLayoutBase', () => {
 
       expect(table.props())
         .toMatchObject({
-          isVirtual: 'isVirtual',
           topVirtualRowHeight: 100,
           bottomVirtualRowHeight: 200,
           leftVirtualCellWidth: 300,
@@ -100,7 +98,6 @@ describe('DateTableLayoutBase', () => {
           viewData: viewDataBase,
           cellTemplate,
           dataCellTemplate,
-          isVirtual: 'isVirtual',
           leftVirtualCellWidth: 300,
           rightVirtualCellWidth: 400,
         });
@@ -118,19 +115,6 @@ describe('DateTableLayoutBase', () => {
               'dx-scheduler-date-table',
               'some-class',
             ]);
-        });
-      });
-
-      describe('isVirtual', () => {
-        [true, false].forEach((isVirtual) => {
-          it(`should return correct value if viewData.isVirtual=${isVirtual}`, () => {
-            const layout = new DateTableLayoutBase({
-              viewData: { ...viewDataBase, isVirtual },
-            } as any);
-
-            expect(layout.isVirtual)
-              .toBe(isVirtual);
-          });
         });
       });
 

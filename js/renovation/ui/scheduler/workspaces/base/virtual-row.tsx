@@ -7,7 +7,6 @@ import { VirtualCell } from './virtual-cell';
 
 export const viewFunction = ({
   props: {
-    isVirtual,
     leftVirtualCellWidth,
     rightVirtualCellWidth,
   },
@@ -22,7 +21,6 @@ export const viewFunction = ({
     {...restAttributes}
     style={style}
     className={classes}
-    isVirtual={isVirtual}
     leftVirtualCellWidth={leftVirtualCellWidth}
     rightVirtualCellWidth={rightVirtualCellWidth}
   >

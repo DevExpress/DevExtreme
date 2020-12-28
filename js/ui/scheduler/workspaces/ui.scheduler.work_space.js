@@ -1296,10 +1296,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 const renderState = horizontalVirtualScrolling?.getRenderState();
                 extend(
                     options,
-                    {
-                        isVirtual: true,
-                        ...renderState
-                    }
+                    { ...renderState }
                 );
             }
 

@@ -14,7 +14,6 @@ export const viewFunction = ({
     viewData,
     dataCellTemplate,
   },
-  isVirtual,
   topVirtualRowHeight,
   bottomVirtualRowHeight,
   leftVirtualCellWidth,
@@ -26,7 +25,6 @@ export const viewFunction = ({
   <Table
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
-    isVirtual={isVirtual}
     topVirtualRowHeight={topVirtualRowHeight}
     bottomVirtualRowHeight={bottomVirtualRowHeight}
     leftVirtualCellWidth={leftVirtualCellWidth}
@@ -35,7 +33,6 @@ export const viewFunction = ({
     className={classes}
   >
     <DateTableBody
-      isVirtual={isVirtual}
       cellTemplate={cellTemplate}
       viewData={viewData}
       dataCellTemplate={dataCellTemplate}
@@ -56,11 +53,6 @@ export class DateTableLayoutBaseProps extends DateTableLayoutProps {
 export class DateTableLayoutBase extends JSXComponent<DateTableLayoutBaseProps, 'cellTemplate'>() {
   get classes(): string {
     return `dx-scheduler-date-table ${this.props.className}`;
-  }
-
-  get isVirtual(): boolean {
-    const { viewData } = this.props;
-    return !!viewData.isVirtual;
   }
 
   get topVirtualRowHeight(): number {

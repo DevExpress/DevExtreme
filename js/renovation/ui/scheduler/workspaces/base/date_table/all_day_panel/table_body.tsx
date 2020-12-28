@@ -18,7 +18,6 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
   <Row
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    isVirtual={viewModel.props.isVirtual}
     leftVirtualCellWidth={viewModel.props.leftVirtualCellWidth}
     rightVirtualCellWidth={viewModel.props.rightVirtualCellWidth}
     className={viewModel.classes}
@@ -55,8 +54,6 @@ export class AllDayPanelTableBodyProps {
   @OneWay() isVerticalGroupOrientation?: boolean = false;
 
   @OneWay() className?: string = '';
-
-  @OneWay() isVirtual?: boolean;
 
   @OneWay() leftVirtualCellWidth = 0;
 

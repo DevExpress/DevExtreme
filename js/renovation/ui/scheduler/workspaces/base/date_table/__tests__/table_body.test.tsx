@@ -73,24 +73,20 @@ describe('DateTableBody', () => {
       getIsGroupedAllDayPanel.mockClear();
     });
 
-    [true, false].forEach((isVirtual) => {
-      it(`should render rows and pass correct props to them if virtual scrolling is ${isVirtual}`, () => {
-        const rows = render({
-          props: { isVirtual },
-        }).find(Row);
+    it('should render rows and pass correct props to them', () => {
+      const rows = render({
+      }).find(Row);
 
-        expect(rows)
-          .toHaveLength(3);
+      expect(rows)
+        .toHaveLength(3);
 
-        rows.forEach((row) => {
-          expect(row.props())
-            .toMatchObject({
-              className: 'dx-scheduler-date-table-row',
-              isVirtual,
-              leftVirtualCellWidth: 100,
-              rightVirtualCellWidth: 200,
-            });
-        });
+      rows.forEach((row) => {
+        expect(row.props())
+          .toMatchObject({
+            className: 'dx-scheduler-date-table-row',
+            leftVirtualCellWidth: 100,
+            rightVirtualCellWidth: 200,
+          });
       });
     });
 
@@ -149,37 +145,33 @@ describe('DateTableBody', () => {
       assert(cells, 2);
     });
 
-    [true, false].forEach((isVirtual) => {
-      it(`should render AllDayPanelBody and pass correct arguments to it if virtual scrolling is ${isVirtual}`, () => {
-        const dataCellTemplate = () => null;
-        const tableBody = render({
-          props: {
-            dataCellTemplate,
-            isVirtual,
-          },
+    it('should render AllDayPanelBody and pass correct arguments to it', () => {
+      const dataCellTemplate = () => null;
+      const tableBody = render({
+        props: {
+          dataCellTemplate,
+        },
+      });
+
+      const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
+      expect(allDayPanelTableBody.exists())
+        .toBe(true);
+
+      expect(allDayPanelTableBody.props())
+        .toMatchObject({
+          viewData: viewData.groupedData[0].allDayPanel,
+          dataCellTemplate,
+          isVerticalGroupOrientation: true,
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
         });
 
-        const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
-        expect(allDayPanelTableBody.exists())
-          .toBe(true);
-
-        expect(allDayPanelTableBody.props())
-          .toMatchObject({
-            viewData: viewData.groupedData[0].allDayPanel,
-            dataCellTemplate,
-            isVerticalGroupOrientation: true,
-            isVirtual,
-            leftVirtualCellWidth: 100,
-            rightVirtualCellWidth: 200,
-          });
-
-        expect(allDayPanelTableBody.props())
-          .toMatchObject({
-            viewData: viewData.groupedData[0].allDayPanel,
-            dataCellTemplate,
-            isVerticalGroupOrientation: true,
-          });
-      });
+      expect(allDayPanelTableBody.props())
+        .toMatchObject({
+          viewData: viewData.groupedData[0].allDayPanel,
+          dataCellTemplate,
+          isVerticalGroupOrientation: true,
+        });
     });
 
     [true, false].forEach((shouldRender) => {

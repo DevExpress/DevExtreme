@@ -99,25 +99,14 @@ describe('RowBase', () => {
     describe('Getters', () => {
       describe('leftVirtualCellWidth', () => {
         [{
-          isVirtual: true,
           leftVirtualCellWidth: 0,
           hasLeftVirtualCell: false,
         }, {
-          isVirtual: true,
           leftVirtualCellWidth: 10,
           hasLeftVirtualCell: true,
-        }, {
-          isVirtual: false,
-          leftVirtualCellWidth: 0,
-          hasLeftVirtualCell: false,
-        }, {
-          isVirtual: false,
-          leftVirtualCellWidth: 10,
-          hasLeftVirtualCell: false,
         }].forEach((option) => {
-          it(`should determine "hasLeftVirtualCell" correctly if virtual scrolling is ${option.isVirtual} and leftVirtualCellWidth is ${option.leftVirtualCellWidth}`, () => {
+          it(`should determine "hasLeftVirtualCell" correctly if leftVirtualCellWidth is ${option.leftVirtualCellWidth}`, () => {
             const row = new Row({
-              isVirtual: option.isVirtual,
               leftVirtualCellWidth: option.leftVirtualCellWidth,
             });
 
@@ -129,25 +118,14 @@ describe('RowBase', () => {
 
       describe('rightVirtualCellWidth', () => {
         [{
-          isVirtual: true,
           rightVirtualCellWidth: 0,
           hasRightVirtualCell: false,
         }, {
-          isVirtual: true,
           rightVirtualCellWidth: 10,
           hasRightVirtualCell: true,
-        }, {
-          isVirtual: false,
-          rightVirtualCellWidth: 0,
-          hasRightVirtualCell: false,
-        }, {
-          isVirtual: false,
-          rightVirtualCellWidth: 10,
-          hasRightVirtualCell: false,
         }].forEach((option) => {
-          it(`should determine "hasRightVirtualCell" correctly if virtual scrolling is ${option.isVirtual} and rightVirtualCellWidth is ${option.rightVirtualCellWidth}`, () => {
+          it(`should determine "hasRightVirtualCell" correctly if rightVirtualCellWidth is ${option.rightVirtualCellWidth}`, () => {
             const row = new Row({
-              isVirtual: option.isVirtual,
               rightVirtualCellWidth: option.rightVirtualCellWidth,
             });
 

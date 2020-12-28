@@ -14,7 +14,6 @@ export const viewFunction = ({
     virtualCellsCount,
     className,
     children,
-    isVirtual,
     topVirtualRowHeight,
     bottomVirtualRowHeight,
     leftVirtualCellWidth,
@@ -32,7 +31,6 @@ export const viewFunction = ({
         <VirtualRow
           height={topVirtualRowHeight}
           cellsCount={virtualCellsCount}
-          isVirtual={isVirtual}
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}
         />
@@ -42,7 +40,6 @@ export const viewFunction = ({
         <VirtualRow
           height={bottomVirtualRowHeight}
           cellsCount={virtualCellsCount}
-          isVirtual={isVirtual}
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}
         />
@@ -65,8 +62,6 @@ export class TableProps {
 
   @OneWay() virtualCellsCount = 0;
 
-  @OneWay() isVirtual?: boolean = false;
-
   @OneWay() height?: number;
 
   @Slot() children?: JSX.Element | JSX.Element[];
@@ -85,14 +80,14 @@ export class Table extends JSXComponent(TableProps) {
   }
 
   get hasTopVirtualRow(): boolean {
-    const { isVirtual, topVirtualRowHeight } = this.props;
+    const { topVirtualRowHeight } = this.props;
 
-    return !!isVirtual && !!topVirtualRowHeight;
+    return !!topVirtualRowHeight;
   }
 
   get hasBottomVirtualRow(): boolean {
-    const { isVirtual, bottomVirtualRowHeight } = this.props;
+    const { bottomVirtualRowHeight } = this.props;
 
-    return !!isVirtual && !!bottomVirtualRowHeight;
+    return !!bottomVirtualRowHeight;
   }
 }

@@ -52,63 +52,59 @@ describe('AllDayPanelTableBody', () => {
         .toBe('customAttribute');
     });
 
-    [true, false].forEach((isVirtual) => {
-      it(`should render components and pass correct arguments to them if virtual scrolling is ${isVirtual}`, () => {
-        const tableBody = render({
-          classes: 'some-class',
-          props: {
-            isVirtual,
-            leftVirtualCellWidth: 100,
-            rightVirtualCellWidth: 200,
-          },
+    it('should render components and pass correct arguments to them', () => {
+      const tableBody = render({
+        classes: 'some-class',
+        props: {
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
+        },
+      });
+
+      const row = tableBody.find(Row);
+
+      expect(row)
+        .toHaveLength(1);
+
+      expect(row.props())
+        .toMatchObject({
+          className: 'some-class',
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
         });
 
-        const row = tableBody.find(Row);
+      const cells = tableBody.find(AllDayPanelCell);
 
-        expect(row)
-          .toHaveLength(1);
+      expect(cells)
+        .toHaveLength(2);
 
-        expect(row.props())
-          .toMatchObject({
-            className: 'some-class',
-            isVirtual,
-            leftVirtualCellWidth: 100,
-            rightVirtualCellWidth: 200,
-          });
+      const firstCell = cells.at(0);
+      expect(firstCell.props())
+        .toMatchObject({
+          isFirstGroupCell: true,
+          isLastGroupCell: false,
+          startDate: viewData[0].startDate,
+          endDate: viewData[0].endDate,
+          groups: viewData[0].groups,
+          groupIndex: viewData[0].groupIndex,
+          index: viewData[0].index,
+        });
+      expect(firstCell.key())
+        .toBe(viewData[0].key);
 
-        const cells = tableBody.find(AllDayPanelCell);
-
-        expect(cells)
-          .toHaveLength(2);
-
-        const firstCell = cells.at(0);
-        expect(firstCell.props())
-          .toMatchObject({
-            isFirstGroupCell: true,
-            isLastGroupCell: false,
-            startDate: viewData[0].startDate,
-            endDate: viewData[0].endDate,
-            groups: viewData[0].groups,
-            groupIndex: viewData[0].groupIndex,
-            index: viewData[0].index,
-          });
-        expect(firstCell.key())
-          .toBe(viewData[0].key);
-
-        const secondCell = cells.at(1);
-        expect(secondCell.props())
-          .toMatchObject({
-            isFirstGroupCell: false,
-            isLastGroupCell: true,
-            startDate: viewData[1].startDate,
-            endDate: viewData[1].endDate,
-            groups: viewData[1].groups,
-            groupIndex: viewData[1].groupIndex,
-            index: viewData[1].index,
-          });
-        expect(secondCell.key())
-          .toBe(viewData[1].key);
-      });
+      const secondCell = cells.at(1);
+      expect(secondCell.props())
+        .toMatchObject({
+          isFirstGroupCell: false,
+          isLastGroupCell: true,
+          startDate: viewData[1].startDate,
+          endDate: viewData[1].endDate,
+          groups: viewData[1].groups,
+          groupIndex: viewData[1].groupIndex,
+          index: viewData[1].index,
+        });
+      expect(secondCell.key())
+        .toBe(viewData[1].key);
     });
 
     it('should not pass "isFirstGroupCell" and "isLastGroupCell" when grouped vertically', () => {
