@@ -1838,7 +1838,8 @@ class Diagram extends Widget {
         const eventArgs = {
             operation: this._getModelOperation(operation),
             allowed: args.allowed,
-            updateUI: args.updateUI
+            updateUI: args.updateUI, // obsolete
+            reason: args.updateUI ? 'checkUIElementAvailability' : 'modelModification'
         };
         switch(operation) {
             case DiagramModelOperation.AddShape:
