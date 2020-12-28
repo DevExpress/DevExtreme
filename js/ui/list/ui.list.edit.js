@@ -356,12 +356,9 @@ const ListEdit = ListBase.inherit({
     * @return object
     * @hidden
     */
-    // TODO: rename & rework because method return itemData but named as itemElement
     getItemByIndex(index) {
         return this._editStrategy.getItemDataByIndex(index);
     }
-
-
 });
 
 export default ListEdit;
