@@ -180,7 +180,7 @@ describe('DateTableLayoutBase', () => {
         }].forEach(({
           left, right, expectedLeft, expectedRight,
         }) => {
-          it(`should been set correctly if viewData.leftVirtualCellWidth=${left}, viewData.rightVirtualCellWidth=${right}`, () => {
+          it(`should be calculated correctly if viewData.leftVirtualCellWidth=${left}, viewData.rightVirtualCellWidth=${right}`, () => {
             const layout = new DateTableLayoutBase({
               viewData: {
                 ...viewDataBase,
