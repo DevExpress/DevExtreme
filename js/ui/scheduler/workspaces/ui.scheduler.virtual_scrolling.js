@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-console */
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
 import { getWindow } from '../../../core/utils/window';
@@ -224,20 +222,14 @@ export default class VirtualScrollingDispatcher {
         const cellWidth = this.workspace.getCellWidth();
 
         const needUpdate = cellHeight !== this.rowHeight || cellWidth !== this.cellWidth;
-        console.log('update dimensions');
 
         if(needUpdate) {
-            const assert = this.workspace.option('assert');
-            assert && assert.ok(true, 'update dimensions');
-            assert && assert.ok(true, `Current rowHeight: ${this.rowHeight}`);
-            assert && assert.ok(true, `Real rowHeight: ${cellHeight}`);
             this.rowHeight = cellHeight;
             this.cellWidth = cellWidth;
 
             this._createVirtualScrolling();
 
             this.renderer._renderDateTable();
-            assert && assert.ok(true, 'End update dimensions');
         }
     }
 }
