@@ -1562,7 +1562,6 @@ QUnit.module('Workspace Keyboard Navigation', () => {
     ['standard', 'virtual'].forEach((scrollingMode) => {
         QUnit.module(`${scrollingMode} scrolling`, {
             beforeEach: function() {
-                $('#qunit-fixture').addClass('qunit-fixture-visible');
                 this.createInstance = (options, workSpaceName) => {
                     return $('#scheduler-work-space')[workSpaceName]({
                         ...options,
@@ -1570,9 +1569,6 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                         renovateRender: scrollingMode === 'virtual',
                     });
                 };
-            },
-            afterEach: function() {
-                $('#qunit-fixture').removeClass('qunit-fixture-visible');
             }
         }, () => {
             QUnit.test('Month workspace navigation by arrows', function(assert) {
