@@ -37,6 +37,14 @@ import {
   SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
 } from './scrollable_utils';
 
+import {
+  dxScrollStart,
+  dxScrollMove,
+  dxScrollEnd,
+  dxScrollStop,
+  dxScrollCancel,
+} from '../../../events/short';
+
 function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
   if (mode === true) {
     return 'onScroll';
@@ -45,7 +53,7 @@ function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
 }
 
 export const viewFunction = ({
-  cssClasses, contentRef, containerRef,
+  cssClasses, wrapperRef, contentRef, containerRef,
   props: {
     disabled, height, width, rtlEnabled, children,
     forceGeneratePockets, needScrollViewContentWrapper,
@@ -67,7 +75,7 @@ export const viewFunction = ({
       width={width}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
-      <div className={SCROLLABLE_WRAPPER_CLASS}>
+      <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
         <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
             {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
@@ -102,6 +110,8 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsType>() {
+  @Ref() wrapperRef!: RefObject<HTMLDivElement>;
+
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
@@ -208,6 +218,92 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
         scrollOffset: this.scrollOffset(),
         ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef),
       }));
+  }
+
+  @Effect()
+  startEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollStart.on(this.wrapperRef,
+      (e: Event) => {
+        this.handleStart(e);
+      }, { namespace });
+
+    return (): void => dxScrollStart.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  moveEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollMove.on(this.wrapperRef,
+      (e: Event) => {
+        this.handleMove(e);
+      }, { namespace });
+
+    return (): void => dxScrollMove.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  endEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollEnd.on(this.wrapperRef,
+      (e: Event) => {
+        this.handleEnd(e);
+      }, { namespace });
+
+    return (): void => dxScrollEnd.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  stopEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollStop.on(this.wrapperRef,
+      (event: Event) => {
+        this.handleStop(event);
+      }, { namespace });
+
+    return (): void => dxScrollStop.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  cancelEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollCancel.on(this.wrapperRef,
+      (event: Event) => {
+        this.handleCancel(event);
+      }, { namespace });
+
+    return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
+  }
+
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private handleStart(event: Event): void {
+    // console.log('handleEnd', event, this);
+  }
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private handleMove(event: Event): void {
+    // console.log('handleEnd', event, this);
+  }
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private handleEnd(event: Event): void {
+    // console.log('handleEnd', event, this);
+  }
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private handleStop(event: Event): void {
+    // console.log('handleStop', event, this);
+  }
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private handleCancel(event: Event): void {
+    // console.log('handleCancel', event, this);
   }
 
   get cssClasses(): string {
