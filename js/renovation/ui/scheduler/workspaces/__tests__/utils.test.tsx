@@ -67,7 +67,7 @@ describe('Workspaces utils', () => {
   });
 
   describe('addWidthToStyle', () => {
-    it('should return an empty obbject if height is undefined', () => {
+    it('should return an empty obbject if width is undefined', () => {
       expect(addWidthToStyle(undefined))
         .toEqual({});
     });
