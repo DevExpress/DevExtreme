@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
 import { getWindow } from '../../../core/utils/window';
@@ -222,6 +224,7 @@ export default class VirtualScrollingDispatcher {
         const cellWidth = this.workspace.getCellWidth();
 
         const needUpdate = cellHeight !== this.rowHeight || cellWidth !== this.cellWidth;
+        console.log('update dimensions');
 
         if(needUpdate) {
             this.rowHeight = cellHeight;
