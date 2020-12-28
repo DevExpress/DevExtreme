@@ -318,6 +318,7 @@ const DropDownButton = Widget.inherit({
             dragEnabled: false,
             focusStateEnabled: false,
             deferRendering: this.option('deferRendering'),
+            showCloseButton: false,
             closeOnOutsideClick: (e) => {
                 const $element = this.$element();
                 const $buttonClicked = $(e.target).closest(`.${DROP_DOWN_BUTTON_CLASS}`);
@@ -334,8 +335,8 @@ const DropDownButton = Widget.inherit({
             position: {
                 of: this.$element(),
                 collision: 'flipfit',
-                my: 'top ' + horizontalAlignment,
-                at: 'bottom ' + horizontalAlignment
+                my: horizontalAlignment + ' top',
+                at: horizontalAlignment + ' bottom'
             }
         }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
     },

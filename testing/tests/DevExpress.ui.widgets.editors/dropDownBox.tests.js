@@ -645,7 +645,6 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
 
         keyboard.press('tab');
 
-        assert.equal($(instance.content()).parent('.' + OVERLAY_CONTENT_CLASS).attr('tabindex'), -1, 'popup content should not be tabbable');
         assert.ok(instance.option('opened'), 'popup was not closed after tab key pressed');
         assert.ok($input1.is(':focus'), 'first focusable content element got focused');
     });
