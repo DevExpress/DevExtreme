@@ -227,12 +227,17 @@ export default class VirtualScrollingDispatcher {
         console.log('update dimensions');
 
         if(needUpdate) {
+            const assert = this.workspace.option('assert');
+            assert && assert.ok(true, 'update dimensions');
+            assert && assert.ok(true, `Current rowHeight: ${this.rowHeight}`);
+            assert && assert.ok(true, `Real rowHeight: ${cellHeight}`);
             this.rowHeight = cellHeight;
             this.cellWidth = cellWidth;
 
             this._createVirtualScrolling();
 
             this.renderer._renderDateTable();
+            assert && assert.ok(true, 'End update dimensions');
         }
     }
 }

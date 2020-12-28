@@ -1580,6 +1580,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
                     // intervalCount: 5,
+                    assert,
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
