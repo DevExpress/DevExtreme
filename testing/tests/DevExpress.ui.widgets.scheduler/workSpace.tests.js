@@ -73,7 +73,7 @@ const stubInvokeMethod = function(instance, options) {
 };
 
 QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
+    $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');
 });
 
 (function() {
@@ -1567,7 +1567,6 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     return $('#scheduler-work-space')[workSpaceName]({
                         ...options,
                         scrolling: { mode: scrollingMode },
-                        height: 1000,
                         renovateRender: scrollingMode === 'virtual',
                     });
                 };
@@ -1578,9 +1577,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
         }, () => {
             QUnit.test('Month workspace navigation by arrows', function(assert) {
                 const $element = this.createInstance({
-                    focusStateEnabled: true,
-                    // intervalCount: 5,
-                    assert,
+                    focusStateEnabled: true
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -1613,8 +1610,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
             QUnit.test('Month workspace navigation by arrows, RTL mode', function(assert) {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
-                    rtlEnabled: true,
-                    intervalCount: 5,
+                    rtlEnabled: true
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -1634,8 +1630,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
 
             QUnit.test('Workspace should not lose focused cell after arrow key press', function(assert) {
                 const $element = this.createInstance({
-                    focusStateEnabled: true,
-                    intervalCount: 5,
+                    focusStateEnabled: true
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -1677,8 +1672,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
-                    currentDate: new Date(2015, 3, 1),
-                    intervalCount: 5,
+                    currentDate: new Date(2015, 3, 1)
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
                 const instance = $element.dxSchedulerWorkSpaceMonth('instance');
@@ -1720,8 +1714,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
                     currentDate: new Date(2015, 3, 1),
-                    onCellClick: updateSpy,
-                    intervalCount: 5,
+                    onCellClick: updateSpy
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -1741,8 +1734,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     onCellClick: function(e) {
                         e.cancel = true;
                     },
-                    currentDate: new Date(2015, 3, 1),
-                    intervalCount: 5,
+                    currentDate: new Date(2015, 3, 1)
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
                 const instance = $element.dxSchedulerWorkSpaceMonth('instance');
@@ -1762,8 +1754,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
-                    currentDate: new Date(2015, 3, 1),
-                    intervalCount: 5,
+                    currentDate: new Date(2015, 3, 1)
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -1798,8 +1789,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
-                    currentDate: new Date(2015, 3, 1),
-                    intervalCount: 5,
+                    currentDate: new Date(2015, 3, 1)
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -1818,8 +1808,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
-                    currentDate: new Date(2015, 3, 1),
-                    intervalCount: 5,
+                    currentDate: new Date(2015, 3, 1)
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -1851,8 +1840,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
-                    currentDate: new Date(2015, 3, 1),
-                    intervalCount: 5,
+                    currentDate: new Date(2015, 3, 1)
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -1880,8 +1868,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
-                    currentDate: new Date(2015, 3, 1),
-                    intervalCount: 5,
+                    currentDate: new Date(2015, 3, 1)
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -1978,8 +1965,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
-                    currentDate: new Date(2015, 3, 1),
-                    intervalCount: 5,
+                    currentDate: new Date(2015, 3, 1)
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
                 const instance = $element.dxSchedulerWorkSpaceMonth('instance');
@@ -2013,8 +1999,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
                     currentDate: new Date(2015, 3, 1),
-                    height: 400,
-                    intervalCount: 5,
+                    height: 400
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -2033,8 +2018,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
                     currentDate: new Date(2015, 3, 1),
-                    height: 400,
-                    intervalCount: 5,
+                    height: 400
                 }, 'dxSchedulerWorkSpaceMonth');
                 const instance = $element.dxSchedulerWorkSpaceMonth('instance');
                 const keyboard = keyboardMock($element);
@@ -2068,8 +2052,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     rtlEnabled: true,
                     firstDayOfWeek: 1,
                     currentDate: new Date(2015, 3, 1),
-                    height: 400,
-                    intervalCount: 5,
+                    height: 400
                 }, 'dxSchedulerWorkSpaceMonth');
                 const instance = $element.dxSchedulerWorkSpaceMonth('instance');
                 const keyboard = keyboardMock($element);
@@ -2202,8 +2185,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
                     currentDate: new Date(2015, 3, 1),
-                    height: 400,
-                    intervalCount: 5,
+                    height: 400
                 }, 'dxSchedulerWorkSpaceMonth');
 
                 const keyboard = keyboardMock($element);
@@ -2227,8 +2209,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
                     currentDate: new Date(2015, 3, 1),
-                    height: 400,
-                    intervalCount: 5,
+                    height: 400
                 }, 'dxSchedulerWorkSpaceMonth');
 
                 const cells = $element.find('.' + CELL_CLASS);
@@ -2246,8 +2227,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     firstDayOfWeek: 1,
                     currentDate: new Date(2015, 3, 1),
                     height: 400,
-                    allowMultipleCellSelection: false,
-                    intervalCount: 5,
+                    allowMultipleCellSelection: false
                 }, 'dxSchedulerWorkSpaceMonth');
 
                 const cells = $element.find('.' + CELL_CLASS);
@@ -2264,8 +2244,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     firstDayOfWeek: 1,
                     currentDate: new Date(2015, 3, 1),
                     height: 400,
-                    allowMultipleCellSelection: false,
-                    intervalCount: 5,
+                    allowMultipleCellSelection: false
                 }, 'dxSchedulerWorkSpaceMonth');
 
                 const cells = $element.find('.' + CELL_CLASS);
@@ -2288,8 +2267,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     onContentReady: function(e) {
                         const scrollable = e.component._dateTableScrollable;
                         scrollable.option('scrollByContent', true);
-                    },
-                    intervalCount: 5,
+                    }
                 }, 'dxSchedulerWorkSpaceMonth');
                 const workspace = $element.dxSchedulerWorkSpaceMonth('instance');
 
@@ -2476,7 +2454,6 @@ QUnit.module('Workspace Mouse Interaction', () => {
                         ...options,
                         scrolling: { mode: scrollingMode },
                         renovateRender: scrollingMode === 'virtual',
-                        height: 1000,
                     });
                 };
             },
@@ -2648,8 +2625,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                         scrollable.option('scrollByContent', false);
                         e.component.initDragBehavior();
                         e.component._attachTablesEvents();
-                    },
-                    intervalCount: 5,
+                    }
                 }, 'dxSchedulerWorkSpaceMonth');
                 const instance = $element.dxSchedulerWorkSpaceMonth('instance');
 
@@ -2681,8 +2657,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
 
             QUnit.test('Workspace should handle pointerdown by only left mouse key', function(assert) {
                 const $element = this.createInstance({
-                    focusStateEnabled: true,
-                    intervalCount: 5,
+                    focusStateEnabled: true
                 }, 'dxSchedulerWorkSpaceMonth');
 
                 $element.dxSchedulerWorkSpaceMonth('instance');
@@ -2701,8 +2676,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 assert.expect(2);
 
                 const $element = this.createInstance({
-                    focusStateEnabled: true,
-                    intervalCount: 5,
+                    focusStateEnabled: true
                 }, 'dxSchedulerWorkSpaceMonth');
 
                 $element.dxSchedulerWorkSpaceMonth('instance');
@@ -2737,8 +2711,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                             { startDate: new Date(2015, 8, 27), endDate: new Date(2015, 8, 28), groupIndex: 0 },
                             'correct cell data',
                         );
-                    },
-                    intervalCount: 5,
+                    }
                 }, 'dxSchedulerWorkSpaceMonth');
 
                 const $cell = $element.find('.' + CELL_CLASS).eq(0);
@@ -2749,8 +2722,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 assert.expect(1);
 
                 const $element = this.createInstance({
-                    focusStateEnabled: true,
-                    intervalCount: 5,
+                    focusStateEnabled: true
                 }, 'dxSchedulerWorkSpaceMonth');
                 const instance = $element.dxSchedulerWorkSpaceMonth('instance');
 
@@ -2769,8 +2741,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     focusStateEnabled: true,
                     onCellClick: function(e) {
                         e.cancel = true;
-                    },
-                    intervalCount: 5,
+                    }
                 }, 'dxSchedulerWorkSpaceMonth');
                 const instance = $element.dxSchedulerWorkSpaceMonth('instance');
 
@@ -2798,8 +2769,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                             { startDate: new Date(2018, 1, 26), endDate: new Date(2018, 1, 27), groupIndex: 0, },
                             'cell is correct',
                         );
-                    },
-                    intervalCount: 5,
+                    }
                 }, 'dxSchedulerWorkSpaceMonth');
 
                 const $cell = $element.find('.' + CELL_CLASS).eq(1);
@@ -3034,9 +3004,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
 
             [WORKSPACE_DAY, WORKSPACE_WEEK, WORKSPACE_MONTH].forEach((workSpace) => {
                 QUnit.test(`Cell hover should work correctly in ${workSpace.name}`, function(assert) {
-                    const $element = this.createInstance({
-                        intervalCount: 5,
-                    }, workSpace.class);
+                    const $element = this.createInstance({}, workSpace.class);
 
                     const cells = $element.find(`.${CELL_CLASS}`);
 
