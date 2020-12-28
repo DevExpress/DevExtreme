@@ -126,11 +126,11 @@ class SchedulerAppointments extends CollectionWidget {
         this.option('focusedElement', getPublicElement($(e.target)));
     }
 
-    _focusOutHandler() {
+    _focusOutHandler(e) {
         const $appointment = this._getAppointmentByIndex(0);
 
         this.option('focusedElement', getPublicElement($appointment));
-        super._focusOutHandler();
+        super._focusOutHandler(e);
     }
 
     _eventBindingTarget() {
@@ -429,8 +429,8 @@ class SchedulerAppointments extends CollectionWidget {
         }).bind(this), 300);
     }
 
-    _extendActionArgs() {
-        const args = super._extendActionArgs(arguments);
+    _extendActionArgs($itemElement) {
+        const args = super._extendActionArgs($itemElement);
 
         return this.invoke('mapAppointmentFields', args);
     }
