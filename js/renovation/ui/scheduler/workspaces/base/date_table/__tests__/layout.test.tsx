@@ -199,7 +199,7 @@ describe('DateTableLayoutBase', () => {
       });
 
       describe('virtualCellsCount', () => {
-        it('should been set correctly', () => {
+        it('should be calculated correctly', () => {
           const layout = new DateTableLayoutBase({ viewData: viewDataBase } as any);
 
           expect(layout.virtualCellsCount)
