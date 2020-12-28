@@ -103,8 +103,6 @@ jest.mock('../../../../core/devices', () => {
         expect(pullDownIndicator.exists()).toBe(true);
         const pullDownText = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-image');
         expect(pullDownText.exists()).toBe(true);
-        const pullDownVisibleText = scrollable.find('.dx-scrollview-pull-down-text-visible');
-        expect(pullDownVisibleText.exists()).toBe(true);
       });
 
       it('should render bottom pockets with classes', () => {
