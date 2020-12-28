@@ -72,7 +72,7 @@ describe('Workspaces utils', () => {
         .toEqual({});
     });
 
-    it('should return ucorrect style if height is provided', () => {
+    it('should return ucorrect style if width is provided', () => {
       expect(addWidthToStyle(500))
         .toEqual({
           width: '500px',
