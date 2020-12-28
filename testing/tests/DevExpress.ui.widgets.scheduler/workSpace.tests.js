@@ -1562,6 +1562,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
     ['standard', 'virtual'].forEach((scrollingMode) => {
         QUnit.module(`${scrollingMode} scrolling`, {
             beforeEach: function() {
+                $('#qunit-fixture').addClass('qunit-fixture-visible');
                 this.createInstance = (options, workSpaceName) => {
                     return $('#scheduler-work-space')[workSpaceName]({
                         ...options,
@@ -1571,6 +1572,9 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     });
                 };
             },
+            afterEach: function() {
+                $('#qunit-fixture').removeClass('qunit-fixture-visible');
+            }
         }, () => {
             QUnit.test('Month workspace navigation by arrows', function(assert) {
                 const $element = this.createInstance({
@@ -2477,34 +2481,32 @@ QUnit.module('Workspace Mouse Interaction', () => {
             },
         }, () => {
             QUnit.test('Pointer move propagation should be stopped', function(assert) {
-                QUnit.log(() => {
-                    const $element = this.createInstance({
-                        focusStateEnabled: true,
-                        firstDayOfWeek: 1,
-                        startDayHour: 3,
-                        endDayHour: 7,
-                        hoursInterval: 0.5,
-                        currentDate: new Date(2015, 3, 1),
-                        onContentReady: function(e) {
-                            const scrollable = e.component.getScrollable();
-                            scrollable.option('scrollByContent', false);
-                            e.component.initDragBehavior();
-                            e.component._attachTablesEvents();
-                        }
-                    }, 'dxSchedulerWorkSpaceWeek');
+                const $element = this.createInstance({
+                    focusStateEnabled: true,
+                    firstDayOfWeek: 1,
+                    startDayHour: 3,
+                    endDayHour: 7,
+                    hoursInterval: 0.5,
+                    currentDate: new Date(2015, 3, 1),
+                    onContentReady: function(e) {
+                        const scrollable = e.component.getScrollable();
+                        scrollable.option('scrollByContent', false);
+                        e.component.initDragBehavior();
+                        e.component._attachTablesEvents();
+                    }
+                }, 'dxSchedulerWorkSpaceWeek');
 
-                    const cells = $element.find('.' + CELL_CLASS);
+                const cells = $element.find('.' + CELL_CLASS);
 
-                    pointerMock(cells.eq(15)).start().click();
+                pointerMock(cells.eq(15)).start().click();
 
-                    $element.on('dxpointermove', 'td', function(e) {
-                        assert.ok(e.isDefaultPrevented(), 'default is prevented');
-                        assert.ok(e.isPropagationStopped(), 'propagation is stopped');
-                    });
-
-                    $element.trigger($.Event('dxpointerdown', { target: cells.eq(15).get(0), which: 1, pointerType: 'mouse' }));
-                    $element.trigger($.Event('dxpointermove', { target: cells.eq(16).get(0), which: 1 }));
+                $element.on('dxpointermove', 'td', function(e) {
+                    assert.ok(e.isDefaultPrevented(), 'default is prevented');
+                    assert.ok(e.isPropagationStopped(), 'propagation is stopped');
                 });
+
+                $element.trigger($.Event('dxpointerdown', { target: cells.eq(15).get(0), which: 1, pointerType: 'mouse' }));
+                $element.trigger($.Event('dxpointermove', { target: cells.eq(16).get(0), which: 1 }));
             });
 
             QUnit.test('Workspace should add/remove specific class while mouse selection', function(assert) {
