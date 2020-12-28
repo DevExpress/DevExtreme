@@ -108,6 +108,16 @@ function createAxisStubs() {
     return axisFakes;
 }
 
+function resetAxisStubs(axis) {
+    axis.draw.reset();
+    axis.getMargins.reset();
+    axis.estimateMargins.reset();
+    axis.updateSize.reset();
+    axis.shift.reset();
+    axis.createTicks.reset();
+    axis.drawScaleBreaks.reset();
+}
+
 QUnit.module('Canvas processing', environment);
 
 QUnit.test('Pass canvas to axis\' estimateMargins', function(assert) {
@@ -1751,14 +1761,9 @@ QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas'
     const valAxis = createAxisStubs();
     const scrollBar = this.setupScrollBar();
 
-    argAxis
-        .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
-
-    valAxis
-        .getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
-
-    scrollBar
-        .getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
+    argAxis.getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
+    valAxis.getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+    scrollBar.getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
 
     this.setupAxes([argAxis, valAxis]);
 
@@ -1770,24 +1775,10 @@ QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas'
     });
 
     const argAxisStub = this.axisStub.getCall(0).returnValue;
-
-    argAxisStub.draw.reset();
-    argAxisStub.getMargins.reset();
-    argAxisStub.estimateMargins.reset();
-    argAxisStub.updateSize.reset();
-    argAxisStub.shift.reset();
-    argAxisStub.createTicks.reset();
-    argAxisStub.drawScaleBreaks.reset();
+    resetAxisStubs(argAxisStub);
 
     const valAxisStub = this.axisStub.getCall(1).returnValue;
-
-    valAxisStub.draw.reset();
-    valAxisStub.getMargins.reset();
-    valAxisStub.estimateMargins.reset();
-    valAxisStub.updateSize.reset();
-    valAxisStub.shift.reset();
-    valAxisStub.createTicks.reset();
-    valAxisStub.drawScaleBreaks.reset();
+    resetAxisStubs(valAxisStub);
 
     scrollBar.updateSize.reset();
 
@@ -1837,19 +1828,14 @@ QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas'
     assert.ok(argAxisStub.prepareAnimation.called);
 });
 
-QUnit.test('Recalculate canvas on zooming - draw axes in new canvas', function(assert) {
+QUnit.test('Recalculate canvas on zooming - draw axes in new canvas, resizePanesOnZoom is true', function(assert) {
     const argAxis = createAxisStubs();
     const valAxis = createAxisStubs();
     const scrollBar = this.setupScrollBar();
 
-    argAxis
-        .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
-
-    valAxis
-        .getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
-
-    scrollBar
-        .getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
+    argAxis.getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
+    valAxis.getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+    scrollBar.getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
 
     this.setupAxes([argAxis, valAxis]);
 
@@ -1862,24 +1848,10 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas', function(a
     });
 
     const argAxisStub = this.axisStub.getCall(0).returnValue;
-
-    argAxisStub.draw.reset();
-    argAxisStub.getMargins.reset();
-    argAxisStub.estimateMargins.reset();
-    argAxisStub.updateSize.reset();
-    argAxisStub.shift.reset();
-    argAxisStub.createTicks.reset();
-    argAxisStub.drawScaleBreaks.reset();
+    resetAxisStubs(argAxisStub);
 
     const valAxisStub = this.axisStub.getCall(1).returnValue;
-
-    valAxisStub.draw.reset();
-    valAxisStub.getMargins.reset();
-    valAxisStub.estimateMargins.reset();
-    valAxisStub.updateSize.reset();
-    valAxisStub.shift.reset();
-    valAxisStub.createTicks.reset();
-    valAxisStub.drawScaleBreaks.reset();
+    resetAxisStubs(valAxisStub);
 
     scrollBar.updateSize.reset();
 
@@ -1934,14 +1906,9 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas (support of 
     const valAxis = createAxisStubs();
     const scrollBar = this.setupScrollBar();
 
-    argAxis
-        .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
-
-    valAxis
-        .getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
-
-    scrollBar
-        .getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
+    argAxis.getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
+    valAxis.getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+    scrollBar.getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
 
     this.setupAxes([argAxis, valAxis]);
 
@@ -1954,24 +1921,10 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas (support of 
     });
 
     const argAxisStub = this.axisStub.getCall(0).returnValue;
-
-    argAxisStub.draw.reset();
-    argAxisStub.getMargins.reset();
-    argAxisStub.estimateMargins.reset();
-    argAxisStub.updateSize.reset();
-    argAxisStub.shift.reset();
-    argAxisStub.createTicks.reset();
-    argAxisStub.drawScaleBreaks.reset();
+    resetAxisStubs(argAxisStub);
 
     const valAxisStub = this.axisStub.getCall(1).returnValue;
-
-    valAxisStub.draw.reset();
-    valAxisStub.getMargins.reset();
-    valAxisStub.estimateMargins.reset();
-    valAxisStub.updateSize.reset();
-    valAxisStub.shift.reset();
-    valAxisStub.createTicks.reset();
-    valAxisStub.drawScaleBreaks.reset();
+    resetAxisStubs(valAxisStub);
 
     scrollBar.updateSize.reset();
 
@@ -2026,14 +1979,9 @@ QUnit.test('Draw scale breaks', function(assert) {
     const valAxis = createAxisStubs();
     const scrollBar = this.setupScrollBar();
 
-    argAxis
-        .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
-
-    valAxis
-        .getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
-
-    scrollBar
-        .getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
+    argAxis.getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
+    valAxis.getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+    scrollBar.getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
 
     this.setupAxes([argAxis, valAxis]);
 
@@ -3282,25 +3230,20 @@ QUnit.test('Update axes size and shift with new margins (there is also scrollBar
     }); // T587219
 });
 
-QUnit.test('Do not shrink axis on zooming - only draw axes in old canvas (T624446)', function(assert) {
+QUnit.test('Recalculate canvas on zooming, axis labels hide due to adaptiveLayout (T624446)', function(assert) {
     const argAxis = createAxisStubs();
     const valAxis = createAxisStubs();
     const scrollBar = this.setupScrollBar();
 
-    argAxis
-        .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
-
-    valAxis
-        .getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
-
-    scrollBar
-        .getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
+    argAxis.getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
+    valAxis.getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+    scrollBar.getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
 
     this.setupAxes([argAxis, valAxis]);
 
     const chart = new dxChart(this.container, {
-        size: { width: 220, height: 110 },
-        adaptiveLayout: { width: 200, height: 100 },
+        size: { width: 520, height: 410 },
+        adaptiveLayout: { width: 500, height: 400 },
         scrollBar: { visible: true },
         series: [{}],
         dataSource: [{ arg: 1, val: 10 }],
@@ -3308,24 +3251,10 @@ QUnit.test('Do not shrink axis on zooming - only draw axes in old canvas (T62444
     });
 
     const argAxisStub = this.axisStub.getCall(0).returnValue;
-
-    argAxisStub.draw.reset();
-    argAxisStub.getMargins.reset();
-    argAxisStub.estimateMargins.reset();
-    argAxisStub.updateSize.reset();
-    argAxisStub.shift.reset();
-    argAxisStub.createTicks.reset();
-    argAxisStub.drawScaleBreaks.reset();
+    resetAxisStubs(argAxisStub);
 
     const valAxisStub = this.axisStub.getCall(1).returnValue;
-
-    valAxisStub.draw.reset();
-    valAxisStub.getMargins.reset();
-    valAxisStub.estimateMargins.reset();
-    valAxisStub.updateSize.reset();
-    valAxisStub.shift.reset();
-    valAxisStub.createTicks.reset();
-    valAxisStub.drawScaleBreaks.reset();
+    resetAxisStubs(valAxisStub);
 
     scrollBar.updateSize.reset();
 
@@ -3336,16 +3265,16 @@ QUnit.test('Do not shrink axis on zooming - only draw axes in old canvas (T62444
     assert.equal(valAxisStub.draw.lastCall.args[0], false, 'draw valAxis');
 
     assert.deepEqual(argAxisStub.draw_test_arg, {
-        left: 18,
-        right: 20,
-        top: 27,
-        bottom: 13,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
         originalLeft: 0,
         originalRight: 0,
         originalTop: 0,
         originalBottom: 0,
-        width: 220,
-        height: 110
+        width: 520,
+        height: 410
     }, 'draw argAxis canvas');
 
     assert.equal(argAxisStub.updateSize.called, false);
@@ -3359,26 +3288,109 @@ QUnit.test('Do not shrink axis on zooming - only draw axes in old canvas (T62444
     assert.ok(argAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for argument axis');
 });
 
+QUnit.test('Recalculate panes canvas on reset visual range, axis labels hide due to big bbox (T960173)', function(assert) {
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+
+    argAxis.getMargins.returns({ left: 10, top: 7, right: 20, bottom: 400 });
+    valAxis.getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+
+    this.setupAxes([argAxis, valAxis]);
+
+    const chart = new dxChart(this.container, {
+        size: { width: 520, height: 410 },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    const argAxisStub = this.axisStub.getCall(0).returnValue;
+    resetAxisStubs(argAxisStub);
+
+    const valAxisStub = this.axisStub.getCall(1).returnValue;
+    resetAxisStubs(valAxisStub);
+
+    // act
+    chart.resetVisualRange();
+
+    // assert
+    assert.deepEqual(argAxisStub.draw_test_arg, {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        originalBottom: 0,
+        width: 520,
+        height: 410
+    }, 'draw argAxis canvas');
+});
+
+QUnit.test('Hide legend and title - free space is enought for axis - canvas should be correct', function(assert) {
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+
+    argAxis.getMargins.returns({ left: 10, top: 7, right: 20, bottom: 300 });
+    valAxis.getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+
+    this.setupAxes([argAxis, valAxis]);
+
+    this.title.stub('layoutOptions').returns({
+        horizontalAlignment: 'center',
+        verticalAlignment: 'top'
+    });
+
+    this.title.stub('measure').returns([50, 50]);
+
+    this.legend.stub('layoutOptions').returns({
+        horizontalAlignment: 'right',
+        verticalAlignment: 'top',
+        side: 'vertical'
+    });
+
+    this.legend.stub('measure').returns([50, 100]);
+
+    const chart = new dxChart(this.container, {
+        size: { width: 520, height: 160 },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    const argAxisStub = this.axisStub.getCall(0).returnValue;
+    resetAxisStubs(argAxisStub);
+
+    const valAxisStub = this.axisStub.getCall(1).returnValue;
+    resetAxisStubs(valAxisStub);
+
+    // act
+    chart.resetVisualRange();
+
+    // assert
+    assert.deepEqual(argAxisStub.draw_test_arg, {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        originalBottom: 0,
+        width: 520,
+        height: 160
+    }, 'draw argAxis canvas');
+});
+
 QUnit.test('Hide legend and title - free space is enought for axis - no hide elements', function(assert) {
     const argAxis = createAxisStubs();
     const valAxis_outer = createAxisStubs();
 
-    argAxis.getMargins.onCall(0).returns({ left: 0, top: 0, right: 0, bottom: 15 });
-    argAxis.getMargins.onCall(1).returns({ left: 0, top: 0, right: 0, bottom: 15 });
-    argAxis.getMargins.onCall(2).returns({ left: 0, top: 0, right: 0, bottom: 15 });
-    argAxis.getMargins.onCall(3).returns({ left: 0, top: 0, right: 0, bottom: 15 });
-    argAxis.getMargins.onCall(4).returns({ left: 0, top: 0, right: 0, bottom: 15 });
-    argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 11 });
+    argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 15 });
+    valAxis_outer.getMargins.returns({ left: 16, top: 0, right: 0, bottom: 0 });
 
-    valAxis_outer.getMargins.onCall(0).returns({ left: 16, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.onCall(1).returns({ left: 16, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.onCall(2).returns({ left: 16, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.onCall(3).returns({ left: 16, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.onCall(4).returns({ left: 16, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.returns({ left: 6, top: 0, right: 0, bottom: 0 });
-
-    this.setupAxes([argAxis,
-        valAxis_outer]);
+    this.setupAxes([argAxis, valAxis_outer]);
 
     this.title.stub('layoutOptions').returns({
         horizontalAlignment: 'center',
@@ -3422,26 +3434,14 @@ QUnit.test('Hide legend and title - free space is enought for axis - no hide ele
     assert.ok(this.legend.freeSpace.called);
 });
 
-QUnit.test('Hide legend and title - free space is enought for axis - hide elements', function(assert) {
+QUnit.test('Hide legend and title - free space is not enought for axis - hide elements', function(assert) {
     const argAxis = createAxisStubs();
     const valAxis_outer = createAxisStubs();
 
-    argAxis.getMargins.onCall(0).returns({ left: 0, top: 0, right: 0, bottom: 60 });
-    argAxis.getMargins.onCall(1).returns({ left: 0, top: 0, right: 0, bottom: 60 });
-    argAxis.getMargins.onCall(2).returns({ left: 0, top: 0, right: 0, bottom: 60 });
-    argAxis.getMargins.onCall(3).returns({ left: 0, top: 0, right: 0, bottom: 60 });
-    argAxis.getMargins.onCall(4).returns({ left: 0, top: 0, right: 0, bottom: 60 });
-    argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 11 });
+    argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    valAxis_outer.getMargins.returns({ left: 60, top: 0, right: 0, bottom: 0 });
 
-    valAxis_outer.getMargins.onCall(0).returns({ left: 60, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.onCall(1).returns({ left: 60, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.onCall(2).returns({ left: 60, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.onCall(3).returns({ left: 60, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.onCall(4).returns({ left: 60, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.returns({ left: 6, top: 0, right: 0, bottom: 0 });
-
-    this.setupAxes([argAxis,
-        valAxis_outer]);
+    this.setupAxes([argAxis, valAxis_outer]);
 
     this.title.stub('layoutOptions').returns({
         horizontalAlignment: 'center',
