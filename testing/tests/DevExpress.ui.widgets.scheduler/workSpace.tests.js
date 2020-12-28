@@ -1575,7 +1575,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
             QUnit.test('Month workspace navigation by arrows', function(assert) {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
-                    intervalCount: 5,
+                    // intervalCount: 5,
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
