@@ -2952,7 +2952,6 @@ QUnit.module('Workspace Mouse Interaction', () => {
                             groupOrientation: 'vertical',
                             startDayHour: 0,
                             endDayHour: 2,
-                            height: 500,
                             scrolling: { mode: scrollingMode },
                         }, workSpace.class);
 
