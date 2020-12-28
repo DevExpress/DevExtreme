@@ -2917,6 +2917,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     focusedCellsCount: 4,
                     cellFromAnotherGroup: 10,
                     workSpace: WORKSPACE_DAY,
+                    intervalCount: 2,
                 }, {
                     startCell: 14,
                     endCell: 16,
@@ -2924,15 +2925,17 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     focusedCellsCount: 9,
                     cellFromAnotherGroup: 64,
                     workSpace: WORKSPACE_WEEK,
+                    intervalCount: 2,
                 }, {
                     startCell: 15,
-                    endCell: 44,
-                    intermediateCells: [27, 41],
-                    focusedCellsCount: 30,
-                    cellFromAnotherGroup: 75,
+                    endCell: 34,
+                    intermediateCells: [27],
+                    focusedCellsCount: 20,
+                    cellFromAnotherGroup: 44,
                     workSpace: WORKSPACE_MONTH,
+                    intervalCount: 1,
                 }].forEach(({
-                    startCell, endCell, intermediateCells,
+                    startCell, endCell, intermediateCells, intervalCount,
                     focusedCellsCount, cellFromAnotherGroup, workSpace,
                 }) => {
                     QUnit.test(`Mouse Multiselection should work correctly with ${workSpace.name} when it is grouped vertically`, function(assert) {
@@ -2944,7 +2947,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                                 e.component.initDragBehavior();
                                 e.component._attachTablesEvents();
                             },
-                            intervalCount: 2,
+                            intervalCount,
                             groupOrientation: 'vertical',
                             startDayHour: 0,
                             endDayHour: 2,
