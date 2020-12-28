@@ -30,13 +30,14 @@ import {
   SCROLLABLE_CONTENT_CLASS,
   SCROLLABLE_WRAPPER_CLASS,
   SCROLLVIEW_CONTENT_CLASS,
-  SCROLLVIEW_BOTTOM_POCKET_CLASS,
-  SCROLLVIEW_TOP_POCKET_CLASS,
   SCROLLABLE_DISABLED_CLASS,
   SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_SCROLLBARS_HIDDEN,
 } from './scrollable_utils';
 import { Scrollbar } from './scrollbar';
+
+import { TopPocket } from './topPocket';
+import { BottomPocket } from './bottomPocket';
 
 import {
   dxScrollStart,
@@ -70,11 +71,11 @@ export const viewFunction = ({
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
         <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
-            {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
+            {forceGeneratePockets && <TopPocket />}
             {needScrollViewContentWrapper && (
               <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
             {!needScrollViewContentWrapper && children}
-            {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
+            {forceGeneratePockets && <BottomPocket />}
           </div>
         </div>
       </div>
