@@ -13,7 +13,6 @@ import Animator from './animator';
 import devices from '../../core/devices';
 import { isDxMouseWheelEvent, addNamespace as addEventNamespace, normalizeKeyName } from '../../events/utils/index';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
-import Scrollbar from './ui.scrollbar';
 import { when, Deferred } from '../../core/utils/deferred';
 
 const realDevice = devices.real;
@@ -24,8 +23,6 @@ const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
-const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
-const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
 const VERTICAL = 'vertical';
@@ -130,17 +127,7 @@ export const Scroller = Class.inherit({
     },
 
     _initScrollbar: function() {
-        this._scrollbar = new Scrollbar($('<div>').appendTo(this._$container), {
-            direction: this._direction,
-            visible: this._scrollByThumb,
-            visibilityMode: this._visibilityModeNormalize(this._scrollbarVisible),
-            expandable: this._scrollByThumb
-        });
         this._$scrollbar = this._scrollbar.$element();
-    },
-
-    _visibilityModeNormalize: function(mode) {
-        return (mode === true) ? 'onScroll' : (mode === false) ? 'never' : mode;
     },
 
     _scrollStep: function(delta) {
@@ -569,7 +556,6 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     render: function() {
-        this._$element.addClass(SCROLLABLE_SIMULATED_CLASS);
         this._createScrollers();
         if(this.option('useKeyboard')) {
             this._$container.prop('tabIndex', 0);
@@ -588,9 +574,6 @@ export const SimulatedStrategy = Class.inherit({
         if(this._isDirection(VERTICAL)) {
             this._createScroller(VERTICAL);
         }
-
-        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, this.option('showScrollbar') === 'always');
-        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this.option('showScrollbar'));
     },
 
     _createScroller: function(direction) {
