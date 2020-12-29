@@ -1258,11 +1258,25 @@ class SchedulerWorkSpace extends WidgetObserver {
     renderRAllDayPanel() {
         const visible = this._isShowAllDayPanel() && !this.isGroupedAllDayPanel();
         if(visible) {
+            const groupCount = this._getGroupCount();
+            const cellCount = this._getTotalCellCount(groupCount);
+
             const options = {
                 viewData: this.viewDataProvider.viewData,
                 visible,
                 dataCellTemplate: this.option('dataCellTemplate'),
+                startCellIndex: 0,
+                cellCount
             };
+
+            if(this.isVirtualScrolling()) {
+                const { horizontalVirtualScrolling } = this.virtualScrollingDispatcher;
+                const renderState = horizontalVirtualScrolling?.getRenderState();
+                extend(
+                    options,
+                    { ...renderState }
+                );
+            }
 
             this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
             this.renderRComponent(this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });

@@ -3916,6 +3916,8 @@ QUnit.module('Renovated Render', {
                     bottomVirtualRowHeight: undefined,
                     isVirtual: false,
                     topVirtualRowHeight: undefined,
+                    leftVirtualCellWidth: undefined,
+                    rightVirtualCellWidth: undefined
                 };
                 const expectedViewDataMap = [
                     [{
@@ -4044,6 +4046,8 @@ QUnit.module('Renovated Render', {
                     bottomVirtualRowHeight: undefined,
                     isVirtual: false,
                     topVirtualRowHeight: undefined,
+                    leftVirtualCellWidth: undefined,
+                    rightVirtualCellWidth: undefined
                 };
 
                 const expectedViewDataMap = [[{

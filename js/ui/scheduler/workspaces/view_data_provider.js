@@ -10,19 +10,19 @@ class ViewDataGenerator {
 
     _getCompleteViewDataMap(options) {
         const {
-            nonVirtualRowCount: rowCount,
-            cellCount,
+            totalRowCount,
+            totalCellCount,
             verticalGroupCount,
         } = options;
 
         const viewDataMap = [];
         for(let groupIndex = 0; groupIndex < verticalGroupCount; groupIndex += 1) {
-            const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, rowCount, cellCount);
+            const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, totalRowCount, totalCellCount);
             const viewCellsData = this._generateViewCellsData(
                 options,
-                rowCount,
+                totalRowCount,
                 0,
-                rowCount * groupIndex
+                totalRowCount * groupIndex
             );
 
             allDayPanelData && viewDataMap.push(allDayPanelData);
@@ -43,16 +43,27 @@ class ViewDataGenerator {
 
         return completeViewDataMap
             .slice(correctedStartRowIndex, correctedStartRowIndex + rowCount)
-            .map((cellsRow, rowIndex) => cellsRow.map((cellData, cellIndex) => ({
-                cellData,
-                position: { rowIndex, cellIndex },
-            })));
+            .map((cellsRow, rowIndex) =>
+                cellsRow
+                    .slice(correctedStartRowIndex, correctedStartRowIndex + rowCount)
+                    .map((cellData, cellIndex) => (
+                        {
+                            cellData,
+                            position: {
+                                rowIndex,
+                                cellIndex
+                            }
+                        })
+                    )
+            );
     }
 
     _getViewDataFromMap(viewDataMap, completeViewDataMap, options) {
         const {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
+            leftVirtualCellWidth,
+            rightVirtualCellWidth,
             cellCountInGroupRow,
         } = options;
         const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
@@ -99,13 +110,15 @@ class ViewDataGenerator {
             isVirtual: isVirtualScrolling,
             topVirtualRowHeight,
             bottomVirtualRowHeight,
+            leftVirtualCellWidth,
+            rightVirtualCellWidth,
             cellCountInGroupRow,
         };
     }
 
     _generateViewCellsData(options, renderRowCount, startRowIndex, rowOffset) {
         const {
-            cellCount,
+            totalCellCount,
             cellDataGetters,
             rowCountInGroup,
         } = options;
@@ -116,7 +129,7 @@ class ViewDataGenerator {
 
             const rowIndexInGroup = rowIndex % rowCountInGroup;
             viewCellsData.push(this._generateCellsRow(
-                options, cellDataGetters, rowIndex, cellCount, rowIndexInGroup,
+                options, cellDataGetters, rowIndex, totalCellCount, rowIndexInGroup,
             ));
         }
 

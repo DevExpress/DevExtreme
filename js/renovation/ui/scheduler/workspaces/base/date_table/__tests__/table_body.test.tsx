@@ -43,6 +43,8 @@ describe('DateTableBody', () => {
         }]],
         allDayPanel: [{ startDate: new Date(), key: '1' }],
       }],
+      leftVirtualCellWidth: 100,
+      rightVirtualCellWidth: 200,
     };
     const cellTemplate = () => null;
 
@@ -62,18 +64,21 @@ describe('DateTableBody', () => {
       getIsGroupedAllDayPanel.mockClear();
     });
 
-    it('should render rows', () => {
-      const rows = render({}).find(Row);
+    it('should render rows and pass correct props to them', () => {
+      const rows = render({
+      }).find(Row);
 
       expect(rows)
         .toHaveLength(3);
 
-      expect(rows.at(0).hasClass('dx-scheduler-date-table-row'))
-        .toBe(true);
-      expect(rows.at(1).hasClass('dx-scheduler-date-table-row'))
-        .toBe(true);
-      expect(rows.at(2).hasClass('dx-scheduler-date-table-row'))
-        .toBe(true);
+      rows.forEach((row) => {
+        expect(row.props())
+          .toMatchObject({
+            className: 'dx-scheduler-date-table-row',
+            leftVirtualCellWidth: 100,
+            rightVirtualCellWidth: 200,
+          });
+      });
     });
 
     it('should render cells and pass correct props to them', () => {

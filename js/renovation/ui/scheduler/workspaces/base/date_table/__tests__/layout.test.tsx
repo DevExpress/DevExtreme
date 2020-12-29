@@ -64,9 +64,10 @@ describe('DateTableLayoutBase', () => {
       const layout = render({
         classes: 'some-class',
         props: { dataCellTemplate },
-        isVirtual: 'isVirtual',
         topVirtualRowHeight: 100,
         bottomVirtualRowHeight: 200,
+        leftVirtualCellWidth: 300,
+        rightVirtualCellWidth: 400,
         virtualCellsCount: 3,
       });
 
@@ -79,9 +80,10 @@ describe('DateTableLayoutBase', () => {
 
       expect(table.props())
         .toMatchObject({
-          isVirtual: 'isVirtual',
           topVirtualRowHeight: 100,
           bottomVirtualRowHeight: 200,
+          leftVirtualCellWidth: 300,
+          rightVirtualCellWidth: 400,
           virtualCellsCount: 3,
         });
       expect(table.hasClass('some-class'))
