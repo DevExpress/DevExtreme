@@ -22,8 +22,8 @@ export const viewFunction = ({ cssClasses }: Scrollbar): JSX.Element => (
 );
 
 @Component({
-  view: viewFunction,
   defaultOptionRules: null,
+  view: viewFunction,
 })
 export class Scrollbar extends JSXComponent<ScrollbarProps>() {
   get cssClasses(): string {
