@@ -474,8 +474,6 @@ class SchedulerAppointments extends CollectionWidget {
             const $item = super._renderItem(index, itemData, container);
             $item.data(APPOINTMENT_SETTINGS_KEY, setting);
 
-            this._renderAppointment($($item), setting);
-
             $items.push($item);
         }
 
@@ -525,7 +523,7 @@ class SchedulerAppointments extends CollectionWidget {
         const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
         const allowDrag = this.option('allowDrag');
         const allDay = settings.allDay;
-        this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings || settings, geometry);
+        this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
         const deferredColor = this._getAppointmentColor($appointment, settings.groupIndex);
 
