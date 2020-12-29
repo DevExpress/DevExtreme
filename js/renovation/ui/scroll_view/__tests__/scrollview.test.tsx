@@ -56,7 +56,7 @@ describe('ScrollView', () => {
     afterEach(() => jest.resetAllMocks());
 
     describe('refreshStrategy', () => {
-      it('should have "swipeDown" value if platform is not android', () => {
+      it('should have "swipeDown" value if platform is android', () => {
         (devices.real as Mock).mockImplementation(() => ({ platform: 'android' }));
         expect(getDefaultOptions().refreshStrategy).toBe('swipeDown');
       });
