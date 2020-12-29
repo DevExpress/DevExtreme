@@ -115,19 +115,28 @@ const optionComparer = {
         assert.strictEqual(editor.option('dropDownOptions.title'), '', 'dropDownOptions.title is correct');
         assert.strictEqual(getPopupInstance(editor).option('title'), '', 'popup title is correct');
     },
+    showTitle: function(assert, editor) {
+        if(editor.NAME === 'dxDateBox') {
+            skipTesting(assert);
+            return;
+        }
+
+        assert.strictEqual(editor.option('dropDownOptions.showTitle'), false, 'dropDownOptions.showTitle is correct');
+        assert.strictEqual(getPopupInstance(editor).option('showTitle'), false, 'popup showTitle is correct');
+    },
     deferRendering: skipTesting,
     closeOnOutsideClick: skipTesting,
     width: skipTesting,
     maxHeight: skipTesting
 };
 
-QUnit.module('dropDownOptions value on pure init', () => {
+QUnit.module('dropDownOptions on pure init', () => {
     dropDownEditorsNames.forEach(widgetName => {
         QUnit.module(widgetName, function() {
             dropDownOptionsKeys.forEach(option => {
                 // TODO: fix this cases
                 if(widgetName === 'dxDropDownBox' && (option === 'focusStateEnabled' || option === 'tabIndex')
-                || widgetName === 'dxDropDownButton' && option === 'showCloseButton') {
+                    || widgetName === 'dxDropDownButton' && option === 'showCloseButton') {
                     return;
                 }
                 QUnit.test(`${option} is correct`, function(assert) {
@@ -146,7 +155,7 @@ QUnit.module('dropDownOptions value on pure init', () => {
     });
 });
 
-QUnit.module('dropDownOptions value on init', () => {
+QUnit.module('dropDownOptions on init with custom value', () => {
     dropDownEditorsNames.forEach(widgetName => {
         QUnit.module(widgetName, function() {
             dropDownOptionsKeys.forEach(option => {
@@ -172,7 +181,7 @@ QUnit.module('dropDownOptions value on init', () => {
 });
 
 
-QUnit.module('dropDownOptions value runtime change', () => {
+QUnit.module('dropDownOptions runtime change', () => {
     dropDownEditorsNames.forEach(widgetName => {
         QUnit.module(widgetName, function() {
             dropDownOptionsKeys.forEach(option => {
