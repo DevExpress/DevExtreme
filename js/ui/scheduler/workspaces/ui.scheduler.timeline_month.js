@@ -9,7 +9,7 @@ const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimelineMonth extends SchedulerTimeline {
     get isDateAndTimeView() {
-        return true;
+        return false;
     }
 
     _renderView() {

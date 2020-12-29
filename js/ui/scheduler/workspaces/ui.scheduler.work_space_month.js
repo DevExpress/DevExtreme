@@ -23,7 +23,7 @@ const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     get isDateAndTimeView() {
-        return true;
+        return false;
     }
 
     _toggleFixedScrollableClass() {
