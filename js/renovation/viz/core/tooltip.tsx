@@ -34,7 +34,7 @@ export const viewFunction = ({
   pointerEvents,
   props: {
     x, y, font, shadow, opacity, interactive, zIndex,
-    contentTemplate: TooltipTemplate, data, visible,
+    contentTemplate: TooltipTemplate, data, visible, rtl,
     cornerRadius, arrowWidth, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
@@ -139,6 +139,7 @@ export const viewFunction = ({
               fontWeight: font.weight,
               opacity: font.opacity,
               pointerEvents,
+              direction: rtl ? 'rtl' : 'ltr',
             }}
           >
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -216,6 +217,8 @@ export class TooltipProps {
   @Template() contentTemplate?: (data: TooltipData) => JSX.Element;
 
   @OneWay() visible = false;
+
+  @OneWay() rtl = false;
 }
 
 @Component({
@@ -251,7 +254,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Effect()
   setHtmlText(): void {
     const htmlText = this.customizedOptions.html;
-    if (htmlText) {
+    if (htmlText && this.props.visible) {
       this.htmlRef.innerHTML = htmlText;
     }
   }

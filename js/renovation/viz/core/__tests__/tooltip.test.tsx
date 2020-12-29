@@ -293,6 +293,22 @@ describe('Render', () => {
     expect(tooltip.find('PathSvgElement')).toHaveLength(0);
     expect(tooltip.find('TextSvgElement')).toHaveLength(0);
   });
+
+  it('should apply rtl for html text', () => {
+    const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
+    const customizedProps = { ...props.props, rtl: true, contentTemplate };
+    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+
+    expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'rtl' });
+  });
+
+  it('should apply ltr for html text', () => {
+    const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
+    const customizedProps = { ...props.props, rtl: false, contentTemplate };
+    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+
+    expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'ltr' });
+  });
 });
 
 describe('Effect', () => {
@@ -335,7 +351,7 @@ describe('Effect', () => {
     (prepareData as jest.Mock).mockReturnValue({
       html: 'customized_html_text',
     });
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
     tooltip.htmlRef = {} as any;
     tooltip.setHtmlText();
 
@@ -346,11 +362,22 @@ describe('Effect', () => {
     (prepareData as jest.Mock).mockReturnValue({
       text: 'customized_tooltip_text',
     });
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
     tooltip.htmlRef = {} as any;
     tooltip.setHtmlText();
 
     expect(tooltip.htmlRef.innerHTML).toEqual(undefined);
+  });
+
+  it('should not set html text for invisible tooltip', () => {
+    (prepareData as jest.Mock).mockReturnValue({
+      html: 'customized_html_text',
+    });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
+    tooltip.htmlRef = {} as any;
+    tooltip.setHtmlText();
+
+    expect(tooltip.htmlRef.innerHTML).toBe(undefined);
   });
 
   it('should calculate cloud size', () => {
@@ -372,7 +399,7 @@ describe('Effect', () => {
   });
 
   it('should not calculate cloud size, d is not defined', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
     tooltip.cloudRef = {
       getBBox: jest.fn().mockReturnValue({
         x: 7, y: 9, width: 13, height: 15,
