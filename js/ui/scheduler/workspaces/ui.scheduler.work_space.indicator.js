@@ -4,7 +4,7 @@ import registerComponent from '../../../core/component_registrator';
 import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
 import { hasWindow } from '../../../core/utils/window';
-import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
+import { HEADER_CURRENT_TIME_CELL_CLASS, VIRTUAL_CELL_CLASS } from '../constants';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -78,7 +78,9 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             const $cell = this.getCellByDate(this._getToday(), i);
             if($cell.length) {
                 const $indicator = this._createIndicator($cell, this._isIndicatorSimple(i));
-                this._shiftIndicator(date, $cell, $indicator);
+                if(!$cell.hasClass(VIRTUAL_CELL_CLASS)) {
+                    this._shiftIndicator(date, $cell, $indicator);
+                }
             }
         }
     }

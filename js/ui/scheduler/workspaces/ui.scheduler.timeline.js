@@ -608,10 +608,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     renovatedRenderSupported() { return true; }
 
-    isVirtualScrolling() {
-        return false;
-    }
-
     renderRAllDayPanel() {}
 
     renderRTimeTable() {}
