@@ -130,9 +130,9 @@ const optionComparer = {
     maxHeight: skipTesting
 };
 
-QUnit.module('dropDownOptions on pure init', () => {
-    dropDownEditorsNames.forEach(widgetName => {
-        QUnit.module(widgetName, function() {
+dropDownEditorsNames.forEach(widgetName => {
+    QUnit.module(widgetName, function() {
+        QUnit.module('dropDownOptions on pure init', () => {
             dropDownOptionsKeys.forEach(option => {
                 // TODO: fix this cases
                 if(widgetName === 'dxDropDownBox' && (option === 'focusStateEnabled' || option === 'tabIndex')
@@ -152,12 +152,8 @@ QUnit.module('dropDownOptions on pure init', () => {
                 });
             });
         });
-    });
-});
 
-QUnit.module('dropDownOptions on init with custom value', () => {
-    dropDownEditorsNames.forEach(widgetName => {
-        QUnit.module(widgetName, function() {
+        QUnit.module('dropDownOptions on init with custom value', () => {
             dropDownOptionsKeys.forEach(option => {
                 if(option === 'visible') {
                     // TODO: fix this case
@@ -177,13 +173,8 @@ QUnit.module('dropDownOptions on init with custom value', () => {
                 });
             });
         });
-    });
-});
 
-
-QUnit.module('dropDownOptions runtime change', () => {
-    dropDownEditorsNames.forEach(widgetName => {
-        QUnit.module(widgetName, function() {
+        QUnit.module('dropDownOptions runtime change', () => {
             dropDownOptionsKeys.forEach(option => {
                 if(widgetName === 'dxDropDownButton' && (option === 'visible' || option === 'position')) {
                     // TODO: fix this cases
@@ -199,12 +190,8 @@ QUnit.module('dropDownOptions runtime change', () => {
                 });
             });
         });
-    });
-});
 
-QUnit.module('dropDownOptions 2-way binding', () => {
-    dropDownEditorsNames.forEach(widgetName => {
-        QUnit.module(widgetName, function() {
+        QUnit.module('dropDownOptions 2-way binding', () => {
             dropDownOptionsKeys.forEach(option => {
                 QUnit.test(`dropDownOptions.${option} was updated correctly`, function(assert) {
                     const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false, applyValueMode: 'instantly' });
