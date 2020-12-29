@@ -352,30 +352,6 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
     });
 });
 
-QUnit.module('dropDownOptions', () => {
-    QUnit.test('dropDownOptions should not be cleared after repaint', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            dropDownOptions: {
-                container: '#dropDownEditorLazy'
-            },
-            opened: true
-        }).dxDropDownEditor('instance');
-
-        assert.strictEqual(instance.option('dropDownOptions.container'), '#dropDownEditorLazy', 'option is correct');
-
-        instance.repaint();
-        assert.strictEqual(instance.option('dropDownOptions.container'), '#dropDownEditorLazy', 'option is correct');
-    });
-
-    QUnit.test('dropDownOptions should have dragEnabled = false after popup opened (T946143)', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true
-        }).dxDropDownEditor('instance');
-
-        assert.strictEqual(instance.option('dropDownOptions.dragEnabled'), false);
-    });
-});
-
 QUnit.module('focus policy', () => {
     QUnit.testInActiveWindow('editor should save focus on button clicking', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
