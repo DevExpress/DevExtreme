@@ -2741,6 +2741,7 @@ QUnit.module('Integration: Appointments', {
             QUnit.test('Rival long appointments should have right position on timeline month view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
+                    return;
                 }
                 const data = [{
                     'id': '1',
@@ -2905,6 +2906,7 @@ QUnit.module('Integration: Appointments', {
             QUnit.test('AllDay appointment should have right width on timeline week view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
+                    return;
                 }
                 const appointment = {
                     startDate: new Date(2015, 11, 14),
@@ -2931,6 +2933,7 @@ QUnit.module('Integration: Appointments', {
             QUnit.test('AllDay appointment without allDay field should have right width on timeline day view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
+                    return;
                 }
                 const appointment = {
                     startDate: new Date(2015, 11, 14, 0, 0),
@@ -2956,6 +2959,7 @@ QUnit.module('Integration: Appointments', {
             QUnit.test('Long multiday appointment should have right width on timeline work week view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
+                    return;
                 }
                 const appointment = {
                     startDate: new Date(2015, 2, 2, 9),
@@ -2981,6 +2985,7 @@ QUnit.module('Integration: Appointments', {
             QUnit.test('Long multiday appointment should have right width on timeline week view when set startDayHour > appointment endDate (T533348)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
+                    return;
                 }
                 const appointment = {
                     startDate: new Date(2016, 1, 1, 11, 0),
@@ -3009,6 +3014,7 @@ QUnit.module('Integration: Appointments', {
             QUnit.test('Long multiday appointment should have right position on timeline week view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
+                    return;
                 }
                 const appointment = {
                     startDate: new Date(2015, 2, 2, 9),
@@ -3709,6 +3715,7 @@ QUnit.module('Integration: Appointments', {
                 QUnit.test(`Appointment should have correct dates after resizing ${testCase.text} (T835544)`, function(assert) {
                     if(scrollingMode === 'virtual') {
                         assert.ok(true, 'TODO: timelines appointment virtualization');
+                        return;
                     }
                     this.createInstance({
                         editing: {
@@ -3886,6 +3893,7 @@ QUnit.module('Integration: Appointments', {
             QUnit.test('Multi-day appointment should be rendered when started after endDayHour (T819852)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
+                    return;
                 }
                 const data = [{
                     text: 'Default appt',
