@@ -31,7 +31,8 @@ export default class PreactWrapper extends DOMComponent {
   _propsInfo!: {
     allowNull: string[],
     twoWay: any[],
-    elements: string[]
+    elements: string[],
+    templates: string[]
   };
   _shouldRefresh!: boolean;
   _storedClasses?: string;
@@ -59,7 +60,17 @@ export default class PreactWrapper extends DOMComponent {
           [eventName]: (value) => this.option(name, value),
         }),
         {}
-      )
+      ),
+      this._propsInfo.templates.reduce(
+        (
+          options: { [name: string]: unknown},
+          name
+        ) => ({
+            ...options,
+            [name]: null
+        }),
+        {}
+        )
     );
   }
 
