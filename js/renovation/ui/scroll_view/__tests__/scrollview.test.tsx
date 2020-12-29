@@ -56,12 +56,12 @@ describe('ScrollView', () => {
     afterEach(() => jest.resetAllMocks());
 
     describe('refreshStrategy', () => {
-      it('should have "swipeDown" value if platform is android', () => {
+      it('platform: android', () => {
         (devices.real as Mock).mockImplementation(() => ({ platform: 'android' }));
         expect(getDefaultOptions().refreshStrategy).toBe('swipeDown');
       });
 
-      it('should have "pullDown" value if theme is not material', () => {
+      it('platform: material', () => {
         (devices.real as Mock).mockImplementation(() => ({ platform: 'generic' }));
         expect(getDefaultOptions().refreshStrategy).toBe('pullDown');
       });
