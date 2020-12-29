@@ -108,9 +108,7 @@ const optionComparer = {
     },
     title: function(assert, editor) {
         if(editor.NAME === 'dxDateBox') {
-            const expectedTitle = editor._getPopupTitle();
-            assert.strictEqual(editor.option('dropDownOptions.title'), expectedTitle, 'dropDownOptions.title is correct');
-            assert.strictEqual(getPopupInstance(editor).option('title'), expectedTitle, 'popup title is correct');
+            skipTesting(assert);
             return;
         }
 
