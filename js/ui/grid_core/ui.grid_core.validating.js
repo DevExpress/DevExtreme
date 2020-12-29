@@ -633,13 +633,13 @@ export default {
                     }
                 },
 
-                _needInsertItem: function({ key }) {
+                _needInsertItem: function(change) {
                     let result = this.callBase.apply(this, arguments);
-                    const insertInfo = this._getInternalData(key)?.insertInfo;
+                    const { key, pageIndex } = change;
                     const validationData = this.getController('validating')._getValidationData(key);
 
                     if(result && !validationData?.isValid) {
-                        result = insertInfo.pageIndex === this._pageIndex;
+                        result = pageIndex === this._pageIndex;
                     }
 
                     return result;
@@ -658,7 +658,6 @@ export default {
 
                 processItems: function(items, changeType) {
                     const that = this;
-                    let i;
                     const changes = that.getChanges();
                     const dataController = that.getController('data');
                     const validatingController = this.getController('validating');
@@ -696,14 +695,13 @@ export default {
                     };
 
                     if(that.getEditMode() === EDIT_MODE_BATCH && changeType !== 'prepend' && changeType !== 'append') {
-                        for(i = 0; i < changes.length; i++) {
-                            const key = changes[i].key;
-                            const insertInfo = that.getController('editing')._getInternalData(key)?.insertInfo;
+                        changes.forEach(change => {
+                            const key = change.key;
                             const validationData = validatingController._getValidationData(key);
-                            if(validationData && changes[i].type && validationData.pageIndex === that._pageIndex && insertInfo?.pageIndex !== that._pageIndex) {
-                                addInValidItem(changes[i], validationData);
+                            if(validationData && change.type && validationData.pageIndex === that._pageIndex && change?.pageIndex !== that._pageIndex) {
+                                addInValidItem(change, validationData);
                             }
-                        }
+                        });
                     }
 
                     return items;
