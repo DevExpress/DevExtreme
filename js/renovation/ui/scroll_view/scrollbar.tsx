@@ -11,13 +11,16 @@ const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 const SCROLLBAR_SCROLL_CLASS = 'dx-scrollable-scroll';
 const SCROLLBAR_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 
-export const viewFunction = (viewModel: Scrollbar): JSX.Element => (
-  <div className={viewModel.cssClasses}>
-    <div className={SCROLLBAR_SCROLL_CLASS}>
-      <div className={SCROLLBAR_SCROLL_CONTENT_CLASS} />
+export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
+  const { cssClasses } = viewModel;
+  return (
+    <div className={cssClasses}>
+      <div className={SCROLLBAR_SCROLL_CLASS}>
+        <div className={SCROLLBAR_SCROLL_CONTENT_CLASS} />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 @Component({
   defaultOptionRules: null,
