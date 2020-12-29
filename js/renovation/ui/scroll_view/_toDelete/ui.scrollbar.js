@@ -47,7 +47,6 @@ const Scrollbar = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        // this._renderDirection();
         this._update();
         this._attachPointerDownHandler();
         this.option('hoverStateEnabled', this._isHoverMode());
@@ -62,12 +61,6 @@ const Scrollbar = Widget.inherit({
     // _isHoverMode: function() {
     // const visibilityMode = this.option('visibilityMode');
     // return (visibilityMode === SCROLLBAR_VISIBLE.onHover || visibilityMode === SCROLLBAR_VISIBLE.always) && this.option('expandable');
-    // },
-
-    // _renderDirection: function() {
-    // const direction = this.option('direction');
-    // this._dimension = direction === HORIZONTAL ? 'width' : 'height';
-    // this._prop = direction === HORIZONTAL ? 'left' : 'top';
     // },
 
     _attachPointerDownHandler: function() {
