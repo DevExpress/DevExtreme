@@ -229,7 +229,7 @@ jest.mock('../../../../core/devices', () => {
 
       describe('cssClasses', () => {
         ['horizontal', 'vertical', 'both', undefined, null].forEach((direction) => {
-          it(`should add direction classes. Direction: ${direction}`, () => {
+          it(`should add direction class. Direction: ${direction}`, () => {
             const scrollable = mount(viewFunction({ props: { direction, useSimulatedScrollbar: true, showScrollbar: 'always' } } as any) as JSX.Element);
 
             const horizontalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-horizontal');
