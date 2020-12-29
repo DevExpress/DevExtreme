@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import devices from '../../core/devices';
 import { hasWindow } from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
 import registerComponent from '../../core/component_registrator';
@@ -54,22 +53,11 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
             onPullDown: null,
 
             onReachBottom: null,
-
-            refreshStrategy: 'pullDown'
         });
     },
 
     _defaultOptionsRules: function() {
         return this.callBase().concat([
-            {
-                device: function() {
-                    const realDevice = devices.real();
-                    return realDevice.platform === 'android';
-                },
-                options: {
-                    refreshStrategy: 'swipeDown'
-                }
-            },
             {
                 device: function() {
                     return isMaterial();

@@ -5,7 +5,11 @@ import {
   ComponentBindings,
   Method,
   RefObject,
+  OneWay,
 } from 'devextreme-generator/component_declaration/common';
+
+import { createDefaultOptionRules } from '../../../core/options/utils';
+import devices from '../../../core/devices';
 
 import {
   Scrollable,
@@ -16,7 +20,7 @@ import {
 } from './scrollable_props';
 
 import {
-  ScrollableLocation, ScrollOffset,
+  ScrollableLocation, ScrollOffset, RefreshStrategy,
 } from './types.d';
 
 import BaseWidgetProps from '../../utils/base_props';
@@ -43,14 +47,19 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     />
   );
 };
-
 @ComponentBindings()
 export class ScrollViewProps extends ScrollableProps {
+  @OneWay() refreshStrategy: RefreshStrategy = 'pullDown';
 }
 
 export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
+export const defaultOptionRules = createDefaultOptionRules<ScrollViewProps>([{
+  device: (): boolean => devices.real().platform === 'android',
+  options: { refreshStrategy: 'swipeDown' },
+}]);
 @Component({
+  defaultOptionRules,
   jQuery: { register: true },
   view: viewFunction,
 })
