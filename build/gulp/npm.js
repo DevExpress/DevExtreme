@@ -187,7 +187,7 @@ gulp.task('npm-sass', gulp.series(gulp.parallel(
 ), async() => {
     const unusedImages = getUnusedImages();
     if(unusedImages.length) {
-        throw new Error(`Following files does not use in scss: ${unusedImages.join('\n')}`);
+        throw new Error(`Following files is not used in scss: ${unusedImages.join('\n')}`);
     }
 }));
 
