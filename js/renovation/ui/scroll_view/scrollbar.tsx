@@ -11,8 +11,8 @@ const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 const SCROLLBAR_SCROLL_CLASS = 'dx-scrollable-scroll';
 const SCROLLBAR_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 
-export const viewFunction = ({ cssClasses }: Scrollbar): JSX.Element => (
-  <div className={cssClasses}>
+export const viewFunction = (viewModel: Scrollbar): JSX.Element => (
+  <div className={viewModel.cssClasses}>
     <div className={SCROLLBAR_SCROLL_CLASS}>
       <div className={SCROLLBAR_SCROLL_CONTENT_CLASS} />
     </div>
