@@ -10,6 +10,8 @@ import {
 
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
+import messageLocalization from '../../../localization/message';
+import Themes from '../../../ui/themes';
 
 import {
   Scrollable,
@@ -50,6 +52,14 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
 @ComponentBindings()
 export class ScrollViewProps extends ScrollableProps {
   @OneWay() refreshStrategy: RefreshStrategy = 'pullDown';
+
+  @OneWay() pullingDownText = messageLocalization.format('dxScrollView-pullingDownText');
+
+  @OneWay() pulledDownText = messageLocalization.format('dxScrollView-pulledDownText');
+
+  @OneWay() refreshingText = messageLocalization.format('dxScrollView-refreshingText');
+
+  @OneWay() reachBottomText = messageLocalization.format('dxScrollView-reachBottomText');
 }
 
 export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
@@ -57,6 +67,15 @@ export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEn
 export const defaultOptionRules = createDefaultOptionRules<ScrollViewProps>([{
   device: (): boolean => devices.real().platform === 'android',
   options: { refreshStrategy: 'swipeDown' },
+}, {
+  // eslint-disable-next-line import/no-named-as-default-member
+  device: (): boolean => Themes.isMaterial(Themes.current()),
+  options: {
+    pullingDownText: '',
+    pulledDownText: '',
+    refreshingText: '',
+    reachBottomText: '',
+  },
 }]);
 @Component({
   defaultOptionRules,

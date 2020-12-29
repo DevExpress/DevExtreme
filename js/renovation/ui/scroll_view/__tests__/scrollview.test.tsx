@@ -1,4 +1,5 @@
 import { mount } from 'enzyme';
+import each from 'jest-each';
 
 import {
   ScrollView,
@@ -8,6 +9,8 @@ import {
 } from '../scroll_view';
 
 import devices from '../../../../core/devices';
+import themes from '../../../../ui/themes';
+import messageLocalization from '../../../../localization/message';
 import { convertRulesToOptions } from '../../../../core/options/utils';
 
 type Mock = jest.Mock;
@@ -20,6 +23,11 @@ jest.mock('../../../../core/devices', () => {
 
   return actualDevices;
 });
+
+jest.mock('../../../../ui/themes', () => ({
+  ...jest.requireActual('../../../../ui/themes'),
+  current: jest.fn(() => 'generic'),
+}));
 
 describe('ScrollView', () => {
   describe('Logic', () => {
@@ -51,6 +59,11 @@ describe('ScrollView', () => {
     const getDefaultOptions = (): ScrollViewProps => Object.assign(new ScrollViewProps(),
       convertRulesToOptions(defaultOptionRules));
 
+    beforeEach(() => {
+      (devices.real as Mock).mockImplementation(() => ({ platform: 'generic' }));
+      ((themes as any).current as Mock).mockImplementation(() => 'generic');
+    });
+
     afterEach(() => jest.resetAllMocks());
 
     describe('refreshStrategy', () => {
@@ -59,9 +72,22 @@ describe('ScrollView', () => {
         expect(getDefaultOptions().refreshStrategy).toBe('swipeDown');
       });
 
-      it('platform: material', () => {
-        (devices.real as Mock).mockImplementation(() => ({ platform: 'generic' }));
+      it('platform: generic', () => {
         expect(getDefaultOptions().refreshStrategy).toBe('pullDown');
+      });
+    });
+
+    describe('Texts', () => {
+      each(['pullingDownText', 'pulledDownText', 'refreshingText', 'reachBottomText']).describe('ScrollEffect params. Option: %o', (textOption) => {
+        it('theme: material', () => {
+          ((themes as any).current as Mock).mockImplementation(() => 'material');
+          expect(getDefaultOptions()[textOption]).toBe('');
+        });
+
+        it('theme: generic', () => {
+          ((themes as any).current as Mock).mockImplementation(() => 'generic');
+          expect(getDefaultOptions()[textOption]).toBe(messageLocalization.format(`dxScrollView-${textOption}`));
+        });
       });
     });
   });
