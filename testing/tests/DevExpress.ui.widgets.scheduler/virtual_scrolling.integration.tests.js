@@ -2318,6 +2318,7 @@ module('Vertical virtual scrolling', () => {
                         dataSource: [{ id: 1 }, { id: 2 }]
                     }],
                     height: 500,
+                    showAllDayPanel,
                 });
 
                 const cellHeight = workSpace.getCellHeight();
