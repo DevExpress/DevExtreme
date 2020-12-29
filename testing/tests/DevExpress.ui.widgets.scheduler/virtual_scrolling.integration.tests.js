@@ -2300,4 +2300,34 @@ module('Vertical virtual scrolling', () => {
             });
         });
     });
+
+    module('Markup', () => {
+        [true, false].forEach((showAllDayPanel) => {
+            test(`MonthView's groupPanel and dateTable should have correct height when showAllDayPanel: ${showAllDayPanel} and vertical grouping is used`, function(assert) {
+                const { workSpace } = createWrapper({
+                    views: [{
+                        type: 'month',
+                        groupOrientation: 'vertical',
+                    }],
+                    currentView: 'month',
+                    currentDate: new Date(2020, 11, 29),
+                    groups: ['priorityId'],
+                    resources: [{
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: [{ id: 1 }, { id: 2 }]
+                    }],
+                });
+
+                const cellHeight = workSpace.getCellHeight();
+                const calculatedHeight = 12 * cellHeight;
+
+                const dateTableHeight = workSpace.getDateTable().outerHeight();
+                const groupPanelHeight = workSpace.groups.getVerticalGroupPanel().outerHeight();
+
+                assert.equal(dateTableHeight, calculatedHeight, 'Correct dateTable height');
+                assert.equal(groupPanelHeight, calculatedHeight, 'Correct groupPanel height');
+            });
+        });
+    });
 });
