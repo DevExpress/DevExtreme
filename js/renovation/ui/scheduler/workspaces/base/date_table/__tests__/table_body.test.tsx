@@ -53,6 +53,8 @@ describe('DateTableBody', () => {
         }]],
         allDayPanel: [{ startDate: new Date(), key: '1' }],
       }],
+      leftVirtualCellWidth: 100,
+      rightVirtualCellWidth: 200,
     };
     const cellTemplate = () => null;
 
@@ -71,18 +73,21 @@ describe('DateTableBody', () => {
       getIsGroupedAllDayPanel.mockClear();
     });
 
-    it('should render rows', () => {
-      const rows = render({}).find(Row);
+    it('should render rows and pass correct props to them', () => {
+      const rows = render({
+      }).find(Row);
 
       expect(rows)
         .toHaveLength(3);
 
-      expect(rows.at(0).hasClass('dx-scheduler-date-table-row'))
-        .toBe(true);
-      expect(rows.at(1).hasClass('dx-scheduler-date-table-row'))
-        .toBe(true);
-      expect(rows.at(2).hasClass('dx-scheduler-date-table-row'))
-        .toBe(true);
+      rows.forEach((row) => {
+        expect(row.props())
+          .toMatchObject({
+            className: 'dx-scheduler-date-table-row',
+            leftVirtualCellWidth: 100,
+            rightVirtualCellWidth: 200,
+          });
+      });
     });
 
     it('should render cells and pass correct props to them', () => {
@@ -140,10 +145,12 @@ describe('DateTableBody', () => {
       assert(cells, 2);
     });
 
-    it('should render AllDayPanelBody correctly and call getIsGroupedAllDayPanel', () => {
+    it('should render AllDayPanelBody and pass correct arguments to it', () => {
       const dataCellTemplate = () => null;
       const tableBody = render({
-        props: { dataCellTemplate },
+        props: {
+          dataCellTemplate,
+        },
       });
 
       const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
@@ -155,24 +162,36 @@ describe('DateTableBody', () => {
           viewData: viewData.groupedData[0].allDayPanel,
           dataCellTemplate,
           isVerticalGroupOrientation: true,
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
         });
 
-      expect(getIsGroupedAllDayPanel)
-        .toHaveBeenCalledTimes(1);
-      expect(getIsGroupedAllDayPanel)
-        .toHaveBeenCalledWith(
-          viewData,
-          0,
-        );
+      expect(allDayPanelTableBody.props())
+        .toMatchObject({
+          viewData: viewData.groupedData[0].allDayPanel,
+          dataCellTemplate,
+          isVerticalGroupOrientation: true,
+        });
     });
 
-    it('should not render AllDayPanelBody when getIsGroupedAllDayPanel returns false', () => {
-      (getIsGroupedAllDayPanel as jest.Mock).mockReturnValue(false);
-      const tableBody = render({});
+    [true, false].forEach((shouldRender) => {
+      it('should render AllDayPanelBody depending on getIsGroupedAllDayPanel result', () => {
+        (getIsGroupedAllDayPanel as jest.Mock).mockReturnValue(shouldRender);
+        const tableBody = render({});
 
-      const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
-      expect(allDayPanelTableBody.exists())
-        .toBe(false);
+        const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
+        expect(allDayPanelTableBody.exists())
+          .toBe(shouldRender);
+
+        expect(getIsGroupedAllDayPanel)
+          .toHaveBeenCalledTimes(1);
+
+        expect(getIsGroupedAllDayPanel)
+          .toHaveBeenCalledWith(
+            viewData,
+            0,
+          );
+      });
     });
   });
 });

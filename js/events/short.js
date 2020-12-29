@@ -105,6 +105,47 @@ export const click = {
     }
 };
 
+export const dxScrollStart = {
+    on: ($el, onStart, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('dxscrollstart', namespace), onStart);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('dxscrollstart', namespace));
+    }
+};
+export const dxScrollMove = {
+    on: ($el, onScroll, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('dxscroll', namespace), onScroll);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('dxscroll', namespace));
+    }
+};
+export const dxScrollEnd = {
+    on: ($el, onEnd, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('dxscrollend', namespace), onEnd);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('dxscrollend', namespace));
+    }
+};
+export const dxScrollStop = {
+    on: ($el, onStop, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('dxscrollstop', namespace), onStop);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('dxscrollstop', namespace));
+    }
+};
+export const dxScrollCancel = {
+    on: ($el, onCancel, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace('dxscrollcancel', namespace), onCancel);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace('dxscrollcancel', namespace));
+    }
+};
+
 let index = 0;
 const keyboardProcessors = {};
 const generateListenerId = () => `keyboardProcessorId${index++}`;

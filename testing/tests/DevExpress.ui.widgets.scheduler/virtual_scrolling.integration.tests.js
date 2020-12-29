@@ -23,134 +23,130 @@ const {
 
 testStart(() => initTestMarkup());
 
-module('Vertical virtual scrolling', () => {
+module('Virtual scrolling', () => {
     module('Initialization', () => {
         supportedViews.forEach(viewName => {
-            [{
-                mode: 'standard', result: false,
-            }, {
-                mode: 'virtual', result: true,
-            }].forEach(scrolling => {
-                test(`Component should be correctly created in ${viewName} view if scrolling.mode: ${scrolling.mode}`, function(assert) {
-                    const instance = createWrapper({
-                        views: supportedViews,
-                        currentView: viewName,
-                        dataSource: [],
-                        scrolling: {
-                            mode: scrolling.mode,
-                        },
-                        height: 400
-                    }).instance;
-
-                    assert.equal(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        scrolling.result,
-                        'Virtual scrolling initialization',
-                    );
-                    assert.equal(
-                        instance.getWorkSpace().isRenovatedRender(),
-                        scrolling.result,
-                        'Correct render is used'
-                    );
-                });
-
-                test(`Component should be correctly created in ${viewName} view if view.scrolling.mode: ${scrolling.mode}`, function(assert) {
-                    const instance = createWrapper({
-                        views: [{
-                            type: viewName,
+            module('Vertical orientation', () => {
+                [{
+                    mode: 'standard', result: false,
+                }, {
+                    mode: 'virtual', result: true,
+                }].forEach(scrolling => {
+                    test(`Component should be correctly created in ${viewName} view if scrolling.mode: ${scrolling.mode}`, function(assert) {
+                        const instance = createWrapper({
+                            views: supportedViews,
+                            currentView: viewName,
+                            dataSource: [],
                             scrolling: {
                                 mode: scrolling.mode,
                             },
-                        }],
-                        currentView: viewName,
-                        height: 400
-                    }).instance;
+                            height: 400
+                        }).instance;
 
-                    assert.equal(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        scrolling.result,
-                        'Virtual scrolling initialization',
-                    );
-                    assert.equal(
-                        instance.getWorkSpace().isRenovatedRender(),
-                        scrolling.result,
-                        'Correct render is used'
-                    );
+                        assert.equal(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            scrolling.result,
+                            'Virtual scrolling initialization',
+                        );
+                        assert.equal(
+                            instance.getWorkSpace().isRenovatedRender(),
+                            scrolling.result,
+                            'Correct render is used'
+                        );
+                    });
+
+                    test(`Component should be correctly created in ${viewName} view if view.scrolling.mode: ${scrolling.mode}`, function(assert) {
+                        const instance = createWrapper({
+                            views: [{
+                                type: viewName,
+                                scrolling: {
+                                    mode: scrolling.mode,
+                                },
+                            }],
+                            currentView: viewName,
+                            height: 400
+                        }).instance;
+
+                        assert.equal(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            scrolling.result,
+                            'Virtual scrolling initialization',
+                        );
+                        assert.equal(
+                            instance.getWorkSpace().isRenovatedRender(),
+                            scrolling.result,
+                            'Correct render is used'
+                        );
+                    });
+
+                    test(`Component should be correctly created after change scrolling.mode option to ${scrolling.mode} in ${viewName} view`, function(assert) {
+                        const instance = createWrapper({
+                            views: supportedViews,
+                            currentView: viewName,
+                            height: 400
+                        }).instance;
+
+                        instance.option('scrolling.mode', 'virtual');
+
+                        assert.ok(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            'Virtual scrolling Initialized'
+                        );
+                        assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
+
+                        instance.option('scrolling.mode', 'standard');
+
+                        assert.notOk(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            'Virtual scrolling not initialized'
+                        );
+                        assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
+                    });
+
+                    test(`Component should be correctly created after change view.scrolling.mode option to ${scrolling.mode} in ${viewName} view`, function(assert) {
+                        const instance = createWrapper({
+                            views: [{
+                                type: viewName,
+                            }],
+                            currentView: viewName,
+                            height: 400
+                        }).instance;
+
+                        instance.option('views[0].scrolling.mode', 'virtual');
+                        assert.ok(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            'Virtual scrolling is initialized'
+                        );
+                        assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
+
+                        instance.option('views[0].scrolling.mode', 'standard');
+                        assert.notOk(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            'Virtual scrolling is not initialized'
+                        );
+                        assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
+                    });
                 });
+            });
 
-                test(`Component should be correctly created after change scrolling.mode option to ${scrolling.mode} in ${viewName} view`, function(assert) {
-                    const instance = createWrapper({
-                        views: supportedViews,
-                        currentView: viewName,
-                        height: 400
-                    }).instance;
+            test(`Virtual scrolling should have default cell sizes in ${viewName} view`, function(assert) {
+                const instance = createWrapper({
+                    views: [{
+                        type: viewName,
+                    }],
+                    currentView: viewName,
+                    scrolling: {
+                        mode: 'virtual',
+                        orientation: 'both'
+                    },
+                    height: 400,
+                    width: 600
+                }).instance;
 
-                    instance.option('scrolling.mode', 'virtual');
+                const { virtualScrollingDispatcher } = instance.getWorkSpace();
 
-                    assert.ok(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        'Virtual scrolling Initialized'
-                    );
-                    assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
-
-                    instance.option('scrolling.mode', 'standard');
-
-                    assert.notOk(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        'Virtual scrolling not initialized'
-                    );
-                    assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-                });
-
-                test(`Component should be correctly created after change view.scrolling.mode option to ${scrolling.mode} in ${viewName} view`, function(assert) {
-                    const instance = createWrapper({
-                        views: [{
-                            type: viewName,
-                        }],
-                        currentView: viewName,
-                        height: 400
-                    }).instance;
-
-                    instance.option('views[0].scrolling.mode', 'virtual');
-                    assert.ok(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        'Virtual scrolling is initialized'
-                    );
-                    assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
-
-                    instance.option('views[0].scrolling.mode', 'standard');
-                    assert.notOk(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        'Virtual scrolling is not initialized'
-                    );
-                    assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-                });
-
-                test(`Row height should be correct in ${scrolling.mode} scrollign mode if ${viewName} view`, function(assert) {
-                    const $style = $('<style>');
-                    const styleBefore = $style.text();
-
-                    $style
-                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 80px } ')
-                        .appendTo('head');
-
-                    const instance = createWrapper({
-                        views: [{
-                            type: viewName,
-                        }],
-                        currentView: viewName,
-                        scrolling: {
-                            mode: 'virtual'
-                        },
-                        height: 400
-                    }).instance;
-
-                    const { virtualScrollingDispatcher } = instance.getWorkSpace();
-
-                    assert.equal(virtualScrollingDispatcher.rowHeight, 80, 'Row height is correct');
-
-                    $style.text(styleBefore);
-                });
+                assert.ok(virtualScrollingDispatcher.rowHeight > 0, 'Cell height is present');
+                assert.ok(virtualScrollingDispatcher.cellWidth > 0, 'Cell width is present');
             });
 
             module('Options', () => {
@@ -2301,6 +2297,73 @@ module('Vertical virtual scrolling', () => {
                 });
 
                 assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments rendered correctly');
+            });
+        });
+    });
+
+    module('Customization', () => {
+        module('Vertical orientation', () => {
+            supportedViews.forEach(viewName => {
+                test(`Cell height should be correct in ${viewName} view`, function(assert) {
+                    const $style = $('<style>');
+                    const styleBefore = $style.text();
+
+                    $style
+                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 80px } ')
+                        .appendTo('head');
+
+                    const instance = createWrapper({
+                        views: [{
+                            type: viewName,
+                        }],
+                        currentView: viewName,
+                        scrolling: {
+                            mode: 'virtual',
+                            orientation: 'vertical'
+                        },
+                        height: 400
+                    }).instance;
+
+                    const { virtualScrollingDispatcher } = instance.getWorkSpace();
+
+                    assert.equal(virtualScrollingDispatcher.rowHeight, 80, 'Cell height is correct');
+
+                    $style.text(styleBefore);
+                });
+            });
+        });
+
+        module('Horizontal orientation', () => {
+            supportedViews.forEach(viewName => {
+                test(`Cell width should be correct in ${viewName} view`, function(assert) {
+                    const $style = $('<style>');
+                    const styleBefore = $style.text();
+
+                    $style
+                        .text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 120px } ')
+                        .appendTo('head');
+
+                    const instance = createWrapper({
+                        views: [{
+                            type: viewName,
+                            intervalCount: 10
+                        }],
+                        currentView: viewName,
+                        scrolling: {
+                            mode: 'virtual',
+                            orientation: 'horizontal'
+                        },
+                        crossScrollingEnabled: true,
+                        height: 400,
+                        width: 600
+                    }).instance;
+
+                    const { virtualScrollingDispatcher } = instance.getWorkSpace();
+
+                    assert.equal(virtualScrollingDispatcher.cellWidth, 120, 'Cell width is correct');
+
+                    $style.text(styleBefore);
+                });
             });
         });
     });

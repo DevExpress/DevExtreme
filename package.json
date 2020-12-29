@@ -29,8 +29,8 @@
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@babel/runtime": "^7.12.1",
-    "devexpress-diagram": "2.0.10",
-    "devexpress-gantt": "2.0.18",
+    "devexpress-diagram": "2.1.0",
+    "devexpress-gantt": "2.1.0",
     "devextreme-quill": "~0.9.8",
     "jszip": "^2.0.0 || ^3.0.0",
     "preact": "^10.4.5",

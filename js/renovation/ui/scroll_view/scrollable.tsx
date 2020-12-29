@@ -63,6 +63,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 
 export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   @Ref() scrollableRef!: RefObject<ScrollableNative>;
+  // TODO: we need use native and simulated types
 
   @Method()
   content(): HTMLDivElement {
