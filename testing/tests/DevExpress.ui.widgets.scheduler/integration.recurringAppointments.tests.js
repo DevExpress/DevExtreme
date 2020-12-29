@@ -61,7 +61,7 @@ QUnit.testStart(function() {
         }
     }, function() {
         if(isDesktopEnvironment()) {
-            test('Key property should be removed in excluded appointment from recurrence(T929772)', function(assert) {
+            test('Excluded appointment\'s key property shouldn\'t equal to parent appointment(T929772)', function(assert) {
                 const data = [{
                     id: 1,
                     text: 'Appointment',
@@ -79,27 +79,19 @@ QUnit.testStart(function() {
                     },
                     views: ['week'],
                     currentView: 'week',
+                    recurrenceEditMode: 'occurrence',
                     currentDate: new Date(2017, 4, 22),
                     onAppointmentAdding: e => {
                         assert.equal(e.appointmentData.id, undefined, 'key property \'id\' shouldn\'t exist in appointment on onAppointmentAdding event');
                     },
                     onAppointmentAdded: e => {
-                        assert.equal(e.appointmentData.id, undefined, 'key property \'id\' shouldn\'t exist in appointment on onAppointmentAdded event');
+                        assert.equal(e.appointmentData.id.length, 36, 'key property \'id\' should be equal GUID in appointment on onAppointmentAdded event');
+                        assert.notStrictEqual(data[0].id, e.appointmentData.id, 'Excluded appointment\'s key property shouldn\'t equal to parent appointment');
                     },
                     height: 600
                 });
 
-                const appointment = scheduler.appointments.getAppointment(3);
-                const pointer = pointerMock(appointment).start();
-                const offset = appointment.offset();
-
-                pointer
-                    .down(offset.left, offset.top)
-                    .move(0, 100);
-
-                pointer.up();
-
-                scheduler.appointmentPopup.dialog.clickEditAppointment();
+                scheduler.appointmentList[3].drag.toCell(39);
 
                 const appointments = scheduler.instance.getDataSource().items();
                 const recurrenceAppointment = appointments[0];
@@ -111,7 +103,7 @@ QUnit.testStart(function() {
                 assert.equal(excludedAppointment.startDate.valueOf(), expectedDate.valueOf(), 'appointment should be shifted down');
                 assert.equal(excludedAppointment.id.length, 36, 'id property should be equal GUID');
 
-                assert.expect(4);
+                assert.expect(5);
             });
         }
 

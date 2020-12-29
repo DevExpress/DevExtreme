@@ -1942,7 +1942,8 @@ class Scheduler extends Widget {
         if(storeAppointment instanceof Error) {
             args.error = storeAppointment;
         } else {
-            args.appointmentData = storeAppointment;
+            // store.update promise return array result, but other data method return single object
+            args.appointmentData = storeAppointment[0] || storeAppointment;
             this._appointmentPopup.isVisible() && this._appointmentPopup.hide();
         }
 
