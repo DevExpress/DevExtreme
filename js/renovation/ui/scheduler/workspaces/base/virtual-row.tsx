@@ -5,14 +5,26 @@ import { addHeightToStyle } from '../utils';
 import { RowProps, Row } from './row';
 import { VirtualCell } from './virtual-cell';
 
-export const viewFunction = (viewModel: VirtualRow): JSX.Element => (
+export const viewFunction = ({
+  props: {
+    leftVirtualCellWidth,
+    rightVirtualCellWidth,
+  },
+  classes,
+  style,
+  virtualCells,
+  restAttributes,
+}: VirtualRow): JSX.Element => (
+
   <Row
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    style={viewModel.style}
-    className={viewModel.classes}
+    {...restAttributes}
+    style={style}
+    className={classes}
+    leftVirtualCellWidth={leftVirtualCellWidth}
+    rightVirtualCellWidth={rightVirtualCellWidth}
   >
-    {viewModel.virtualCells.map((_, index) => (
+    {virtualCells.map((_, index) => (
       <VirtualCell key={index.toString()} />
     ))}
   </Row>
@@ -21,6 +33,10 @@ export const viewFunction = (viewModel: VirtualRow): JSX.Element => (
 @ComponentBindings()
 export class VirtualRowProps extends RowProps {
   @OneWay() height?: number;
+
+  @OneWay() leftVirtualCellWidth = 0;
+
+  @OneWay() rightVirtualCellWidth = 0;
 
   @OneWay() cellsCount = 1;
 }
