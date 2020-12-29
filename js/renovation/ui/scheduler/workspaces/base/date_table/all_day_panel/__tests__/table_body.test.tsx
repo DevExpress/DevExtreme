@@ -2,7 +2,10 @@ import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { viewFunction as TableBodyView, AllDayPanelTableBody } from '../table_body';
 import { Row } from '../../../row';
-import { AllDayPanelCell as Cell } from '../cell';
+import { AllDayPanelCell } from '../cell';
+import * as combineClassesModule from '../../../../../../../utils/combine_classes';
+
+const combineClasses = jest.spyOn(combineClassesModule, 'combineClasses');
 
 describe('AllDayPanelTableBody', () => {
   describe('Render', () => {
@@ -49,17 +52,28 @@ describe('AllDayPanelTableBody', () => {
         .toBe('customAttribute');
     });
 
-    it('should render components correctly', () => {
-      const tableBody = render({});
+    it('should render components and pass correct arguments to them', () => {
+      const tableBody = render({
+        classes: 'some-class',
+        props: {
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
+        },
+      });
 
       const row = tableBody.find(Row);
 
       expect(row)
         .toHaveLength(1);
-      expect(row.hasClass('dx-scheduler-all-day-table-row'))
-        .toBe(true);
 
-      const cells = tableBody.find(Cell);
+      expect(row.props())
+        .toMatchObject({
+          className: 'some-class',
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
+        });
+
+      const cells = tableBody.find(AllDayPanelCell);
 
       expect(cells)
         .toHaveLength(2);
@@ -99,7 +113,7 @@ describe('AllDayPanelTableBody', () => {
       expect(tableBody.find(Row))
         .toHaveLength(1);
 
-      const cells = tableBody.find(Cell);
+      const cells = tableBody.find(AllDayPanelCell);
 
       expect(cells)
         .toHaveLength(2);
@@ -113,6 +127,27 @@ describe('AllDayPanelTableBody', () => {
         .toBe(false);
       expect(cells.at(1).prop('isLastGroupCell'))
         .toBe(false);
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('classes', () => {
+        afterEach(jest.resetAllMocks);
+
+        it('should call combineClasses with correct parameters', () => {
+          const tableBody = new AllDayPanelTableBody({ });
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          tableBody.classes;
+
+          expect(combineClasses)
+            .toHaveBeenCalledWith({
+              'dx-scheduler-all-day-table-row': true,
+              '': false,
+            });
+        });
+      });
     });
   });
 });

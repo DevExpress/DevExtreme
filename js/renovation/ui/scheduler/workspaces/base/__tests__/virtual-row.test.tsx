@@ -51,6 +51,21 @@ describe('VirtualRow', () => {
       expect(virtualCells.at(1).key())
         .toBe('1');
     });
+
+    it('should correctly set virtual cells width', () => {
+      const row = render({
+        props: {
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 150,
+        },
+      });
+
+      expect(row.prop('leftVirtualCellWidth'))
+        .toEqual(100);
+
+      expect(row.prop('rightVirtualCellWidth'))
+        .toEqual(150);
+    });
   });
 
   describe('Logic', () => {
@@ -70,7 +85,7 @@ describe('VirtualRow', () => {
       });
 
       describe('classes', () => {
-        it('should correctly combine classes if isVirtual', () => {
+        it('should correctly combine classes', () => {
           const row = new VirtualRow({ className: 'some-class' });
 
           expect(row.classes)
