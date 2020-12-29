@@ -1768,7 +1768,7 @@ QUnit.test('Center-top side of page, Html', function(assert) {
     this.resetTooltipMocks();
 
     this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, width: 60, left: 0, bottom: 40, top: 0 }; });
+    this.tooltip._textHtml.width = sinon.spy(function() { return 60; });
 
     // act
     this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 80, offset: 30 });
@@ -1851,7 +1851,7 @@ QUnit.test('Center-center side of page, Html', function(assert) {
 
     this.tooltip._textGroupHtml.css = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'css');
-    this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, width: 60, left: 0, bottom: 40, top: 0 }; });
+    this.tooltip._textHtml.width = sinon.spy(function() { return 60; });
 
     // act
     this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 300, offset: 30 });
