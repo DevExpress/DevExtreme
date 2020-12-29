@@ -2,6 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState,
   RefObject, Method, Template,
 } from 'devextreme-generator/component_declaration/common';
+import { combineClasses } from '../../utils/combine_classes';
 
 import { PathSvgElement } from './renderers/svg_path';
 import { TextSvgElement } from './renderers/svg_text';
@@ -32,6 +33,7 @@ export const viewFunction = ({
   customizedOptions,
   setCurrentState,
   pointerEvents,
+  cssClassName,
   props: {
     x, y, font, shadow, opacity, interactive, zIndex,
     contentTemplate: TooltipTemplate, data, visible, rtl,
@@ -54,6 +56,7 @@ export const viewFunction = ({
   } : {};
   return (
     <div
+      className={cssClassName}
       style={{
         position: 'absolute',
         pointerEvents: 'none',
@@ -219,6 +222,8 @@ export class TooltipProps {
   @OneWay() visible = false;
 
   @OneWay() rtl = false;
+
+  @OneWay() className?: string;
 }
 
 @Component({
@@ -346,5 +351,14 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   get pointerEvents(): 'auto' | 'none' {
     const { interactive } = this.props;
     return interactive ? 'auto' : 'none';
+  }
+
+  get cssClassName(): string {
+    const { className } = this.props;
+    const classesMap = {
+      [String(className)]: !!className,
+    };
+
+    return combineClasses(classesMap);
   }
 }

@@ -309,6 +309,12 @@ describe('Render', () => {
 
     expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'ltr' });
   });
+
+  it('should apply className to main div', () => {
+    const tooltip = shallow(TooltipComponent({ ...props, cssClassName: 'dx-tooltip' } as any));
+
+    expect(tooltip.find('div').at(0).props().className).toBe('dx-tooltip');
+  });
 });
 
 describe('Effect', () => {
@@ -548,6 +554,12 @@ describe('Getters', () => {
     const tooltip = new Tooltip({ interactive: false });
 
     expect(tooltip.pointerEvents).toEqual('none');
+  });
+
+  it('should return css className', () => {
+    const tooltip = new Tooltip({ className: 'tooltip_test_class_name' });
+
+    expect(tooltip.cssClassName).toEqual('tooltip_test_class_name');
   });
 });
 
