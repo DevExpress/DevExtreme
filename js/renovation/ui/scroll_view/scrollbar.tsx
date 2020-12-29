@@ -1,24 +1,19 @@
 import {
-  Component,
+  Component, Fragment,
   JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
 
-import { Widget } from '../common/widget';
 import { ScrollbarProps } from './scrollbar_props';
 
-export const viewFunction = ({
-  restAttributes,
-}: Scrollbar): JSX.Element => (
-  <Widget
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
-  >
+export const viewFunction = (): JSX.Element => (
+  <Fragment>
     <div />
-  </Widget>
+  </Fragment>
 );
 
 @Component({
   view: viewFunction,
+  defaultOptionRules: null,
 })
 export class Scrollbar extends JSXComponent<ScrollbarProps>() {
 }
