@@ -201,3 +201,19 @@ QUnit.module('dropDownOptions runtime change', () => {
         });
     });
 });
+
+QUnit.module('dropDownOptions 2-way binding', () => {
+    dropDownEditorsNames.forEach(widgetName => {
+        QUnit.module(widgetName, function() {
+            dropDownOptionsKeys.forEach(option => {
+                QUnit.test(`dropDownOptions.${option} was updated correctly`, function(assert) {
+                    const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false, applyValueMode: 'instantly' });
+                    const popup = getPopupInstance(editor);
+                    popup.option(option, optionTestValues[option]);
+
+                    assert.deepEqual(editor.option(`dropDownOptions.${option}`), optionTestValues[option]);
+                });
+            });
+        });
+    });
+});
