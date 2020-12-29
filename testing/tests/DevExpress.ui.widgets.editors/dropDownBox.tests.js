@@ -365,26 +365,6 @@ QUnit.module('popup options', moduleConfig, () => {
         assert.strictEqual(overlayContentElementRect.right, dropDownButtonElementRect.right, 'popup position is correct, rtlEnabled = true');
     });
 
-    QUnit.test('two way binding should work with dropDownOptions', function(assert) {
-        const instance = new DropDownBox(this.$element, { opened: true });
-        const popup = instance._popup;
-
-        assert.ok(instance.option('dropDownOptions.visible'), 'dropDown is visible');
-
-        popup.option('resizeEnabled', true);
-        assert.strictEqual(instance.option('dropDownOptions.resizeEnabled'), true, 'popup option change leads to dropDownOptions change');
-    });
-
-    QUnit.test('popup should not be draggable by default', function(assert) {
-        this.$element.dxDropDownBox({
-            opened: true
-        });
-
-        const popup = this.$element.find('.dx-popup').dxPopup('instance');
-
-        assert.strictEqual(popup.option('dragEnabled'), false, 'dragging is disabled');
-    });
-
     QUnit.test('popup should be flipped when container size is smaller than content size', function(assert) {
         const $dropDownBox = $('<div>').appendTo('body');
         try {
