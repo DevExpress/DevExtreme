@@ -186,7 +186,10 @@ function run_native_components {
 
 function run_test_scss {
     npm i
+    gulp npm-sass
+
     npm run build-themes
+
     cd themebuilder-scss
     npm i && npm run build && npm run test
 }
