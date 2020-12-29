@@ -41,6 +41,8 @@ export const CLASSES = {
     selectedCell: '.dx-state-focused',
     focusedCell: '.dx-scheduler-focused-cell',
 
+    verticalGroupPanel: '.dx-scheduler-work-space-vertical-group-table',
+
     appointment: '.dx-scheduler-appointment',
     appointmentDate: '.dx-scheduler-appointment-content-date',
     appointmentDragSource: '.dx-scheduler-appointment-drag-source',
@@ -523,6 +525,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 getGroup: (index = 0) => $('.dx-scheduler-group-row').eq(index),
                 getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find('.dx-scheduler-group-header'),
                 getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
+                getVerticalGroupPanel: () => $(CLASSES.verticalGroupPanel),
             },
             clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick'),
 
