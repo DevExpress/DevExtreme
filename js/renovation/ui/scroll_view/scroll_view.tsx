@@ -3,7 +3,6 @@ import {
   JSXComponent,
   Ref,
   ComponentBindings,
-  OneWay,
   Method,
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
@@ -47,7 +46,6 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
 
 @ComponentBindings()
 export class ScrollViewProps extends ScrollableProps {
-  @OneWay() someProp?: string;
 }
 
 export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;

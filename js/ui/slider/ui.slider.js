@@ -10,7 +10,6 @@ import eventsEngine from '../../events/core/events_engine';
 import Swipeable from '../../events/gesture/swipeable';
 import pointerEvents from '../../events/pointer';
 import { addNamespace, isMouseEvent, isTouchEvent, eventData } from '../../events/utils/index';
-import { triggerShownEvent } from '../../events/visibility_change';
 import numberLocalization from '../../localization/number';
 import { isMaterial, current as currentTheme } from '../themes';
 import TrackBar from '../track_bar';
@@ -487,7 +486,6 @@ const Slider = TrackBar.inherit({
             step = 1;
         }
 
-        // TODO or exception?
         if(step === 0) {
             step = 0.00001;
         }
@@ -579,7 +577,6 @@ const Slider = TrackBar.inherit({
                 this.callBase(args);
                 this._renderHandle();
                 this._repaintHandle();
-                triggerShownEvent(this.$element()); // TODO: move firing dxshown event to Widget
                 break;
             case 'min':
             case 'max':

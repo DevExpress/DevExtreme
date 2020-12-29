@@ -79,21 +79,49 @@ jest.mock('../../../../core/devices', () => {
 
       it('should not render top & bottom pockets', () => {
         const scrollable = shallow(viewFunction({ props: { } } as any) as JSX.Element);
-        const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-top-pocket');
+        const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
         expect(topPocket.exists()).toBe(false);
-        const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-bottom-pocket');
+        const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
         expect(bottomPocket.exists()).toBe(false);
       });
 
       it('should render top & bottom pockets', () => {
-        const scrollable = shallow(viewFunction({
+        const scrollable = mount(viewFunction({
           props:
           { forceGeneratePockets: true },
         } as any) as JSX.Element);
-        const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-top-pocket');
+        const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
         expect(topPocket.exists()).toBe(true);
-        const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-bottom-pocket');
+        const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
         expect(bottomPocket.exists()).toBe(true);
+      });
+
+      it('should render top pockets with classes', () => {
+        const scrollable = mount(viewFunction({
+          props:
+          { forceGeneratePockets: true },
+        } as any) as JSX.Element);
+        const pullDown = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down');
+        expect(pullDown.exists()).toBe(true);
+        const pullDownImage = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-image');
+        expect(pullDownImage.exists()).toBe(true);
+        const pullDownIndicator = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-indicator');
+        expect(pullDownIndicator.exists()).toBe(true);
+        const pullDownText = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-image');
+        expect(pullDownText.exists()).toBe(true);
+      });
+
+      it('should render bottom pockets with classes', () => {
+        const scrollable = mount(viewFunction({
+          props:
+          { forceGeneratePockets: true },
+        } as any) as JSX.Element);
+        const reachBottom = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom');
+        expect(reachBottom.exists()).toBe(true);
+        const reachBottomIndicator = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom > .dx-scrollview-scrollbottom-indicator');
+        expect(reachBottomIndicator.exists()).toBe(true);
+        const reachBottomText = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom > .dx-scrollview-scrollbottom-text');
+        expect(reachBottomText.exists()).toBe(true);
       });
 
       it('should render slot', () => {
