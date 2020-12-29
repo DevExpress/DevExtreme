@@ -23,7 +23,7 @@ $(function () {
         onValueChanged: function (data) {
             var $result = $(".current-value");
 
-            if (data.value) {
+            if (data.value !== null) {
                 var selectedItem = data.component.option('selectedItem');
                 $result.text(selectedItem.Name + " (ID: " + selectedItem.ID + ")");
             } else {

@@ -24,7 +24,7 @@
                     <dx-select-box #selectBox
                         [dataSource]="productsDataSource"
                         [acceptCustomValue]="true"
-                        displayExpr="Name"
+                        displayExpr="Name"       
                         valueExpr="ID"
                         [value]="product"
                         (onCustomItemCreating)="addCustomItem($event)"></dx-select-box>
@@ -32,7 +32,7 @@
             </div>
             <div class="dx-field current-product">
                 Current product:
-                <span *ngIf="selectBox.value; else emptyValue" class="current-value">
+                <span *ngIf="selectBox.selectedItem; else emptyValue" class="current-value">
                     {{selectBox.selectedItem.Name}} (ID: {{selectBox.selectedItem.ID}})
                 </span>
                 <ng-template #emptyValue>
