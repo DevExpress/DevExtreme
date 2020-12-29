@@ -19,9 +19,6 @@ export const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
 export const SCROLLABLE_SCROLLBAR_SIMULATED = 'dx-scrollable-scrollbar-simulated';
 export const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 export const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
-export const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
-export const SCROLLBAR_SCROLL_CLASS = 'dx-scrollable-scroll';
-export const SCROLLBAR_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 
 export function ensureLocation(
   location: number | Partial<ScrollableLocation>,

@@ -7,11 +7,9 @@ import { combineClasses } from '../../utils/combine_classes';
 
 import { ScrollbarProps } from './scrollbar_props';
 
-import {
-  SCROLLABLE_SCROLLBAR_CLASS,
-  SCROLLBAR_SCROLL_CLASS,
-  SCROLLBAR_SCROLL_CONTENT_CLASS,
-} from './scrollable_utils';
+const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
+const SCROLLBAR_SCROLL_CLASS = 'dx-scrollable-scroll';
+const SCROLLBAR_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 
 export const viewFunction = ({ cssClasses }: Scrollbar): JSX.Element => (
   <div className={cssClasses}>
