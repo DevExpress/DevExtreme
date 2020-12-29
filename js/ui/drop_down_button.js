@@ -318,7 +318,6 @@ const DropDownButton = Widget.inherit({
             dragEnabled: false,
             focusStateEnabled: false,
             deferRendering: this.option('deferRendering'),
-            showCloseButton: false,
             closeOnOutsideClick: (e) => {
                 const $element = this.$element();
                 const $buttonClicked = $(e.target).closest(`.${DROP_DOWN_BUTTON_CLASS}`);

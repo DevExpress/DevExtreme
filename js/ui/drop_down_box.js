@@ -272,8 +272,12 @@ const DropDownBox = DropDownEditor.inherit({
     },
 
     _popupConfig: function() {
+        const { focusStateEnabled } = this.option();
+
         return extend(this.callBase(), {
+            tabIndex: -1,
             dragEnabled: false,
+            focusStateEnabled,
             contentTemplate: ANONYMOUS_TEMPLATE_NAME,
             closeOnTargetScroll: this._shouldCloseOnTargetScroll.bind(this),
             position: extend(this.option('popupPosition'), {

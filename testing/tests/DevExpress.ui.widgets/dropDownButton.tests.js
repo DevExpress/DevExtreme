@@ -633,8 +633,8 @@ QUnit.module('popup integration', {
             position: {
                 of: this.instance.$element(),
                 collision: 'flipfit',
-                my: 'top left',
-                at: 'bottom left'
+                my: 'left top',
+                at: 'left bottom'
             }
         };
 
