@@ -44,9 +44,6 @@ const Scrollbar = Widget.inherit({
         this._isHovered = false;
     },
 
-    // _initMarkup: function() {
-    // this.callBase();
-    // },
     _render: function() {
         this.callBase();
 
