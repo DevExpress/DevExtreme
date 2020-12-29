@@ -74,13 +74,13 @@ const widgetsList = {
 };
 
 const dropDownEditorsList = {
-    Autocomplete: require('ui/autocomplete'),
-    ColorBox: require('ui/color_box'),
-    DateBox: require('ui/date_box'),
-    DropDownBox: require('ui/drop_down_box'),
-    DropDownButton: require('ui/drop_down_button'),
-    SelectBox: require('ui/select_box'),
-    TagBox: require('ui/tag_box'),
+    dxAutocomplete: require('ui/autocomplete'),
+    dxColorBox: require('ui/color_box'),
+    dxDateBox: require('ui/date_box'),
+    dxDropDownBox: require('ui/drop_down_box'),
+    dxDropDownButton: require('ui/drop_down_button'),
+    dxSelectBox: require('ui/select_box'),
+    dxTagBox: require('ui/tag_box'),
 };
 
 exports.widgetsList = widgetsList;

@@ -17,6 +17,64 @@ const expectedPositionCollision = {
     dxTagBox: 'flip',
 };
 
+const optionTestValues = {
+    accessKey: 'custom-accesskey',
+    animation: {
+        hide: {
+            duration: 200,
+            from: 0.2,
+            to: 0.8,
+            type: 'fade'
+        },
+        show: {
+            duration: 100,
+            from: 0.2,
+            to: 0.8,
+            type: 'fade'
+        }
+    },
+    closeOnOutsideClick: true,
+    container: '#container',
+    contentTemplate: 'content template',
+    deferRendering: false,
+    disabled: true,
+    dragEnabled: true,
+    elementAttr: { 'custom-attr': 'value' },
+    focusStateEnabled: true,
+    fullScreen: true,
+    height: 500,
+    hint: 'hint',
+    hoverStateEnabled: true,
+    maxHeight: 600,
+    maxWidth: 400,
+    minHeight: 300,
+    minWidth: 200,
+    onContentReady: () => undefined,
+    onDisposing: () => undefined,
+    onHidden: () => undefined,
+    onHiding: () => undefined,
+    onInitialized: () => undefined,
+    onOptionChanged: () => undefined,
+    onResize: () => undefined,
+    onResizeEnd: () => undefined,
+    onResizeStart: () => undefined,
+    onShowing: () => undefined,
+    onShown: () => undefined,
+    onTitleRendered: () => undefined,
+    position: null,
+    resizeEnabled: true,
+    rtlEnabled: true,
+    shading: true,
+    shadingColor: 'rgb(0,0,0)',
+    showCloseButton: true,
+    showTitle: true,
+    tabIndex: 150,
+    title: 'custom title',
+    titleTemplate: 'custom title',
+    toolbarItems: [{ widget: 'dxButton' }],
+    visible: true,
+    width: 500
+};
 
 const getPopupInstance = (editor) => {
     return editor._popup;
@@ -80,7 +138,7 @@ QUnit.module('dropDownOptions value on pure init', () => {
         QUnit.module(widgetName, function() {
             dropDownOptionsKeys.forEach(option => {
                 QUnit.test(`${option} is correct`, function(assert) {
-                    const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false, applyValueMode: 'instantly', usePopover: false });
+                    const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false, applyValueMode: 'instantly' });
 
                     if(optionComparer[option]) {
                         optionComparer[option](assert, editor);
@@ -89,6 +147,53 @@ QUnit.module('dropDownOptions value on pure init', () => {
 
                     assert.deepEqual(editor.option(`dropDownOptions.${option}`), defaultDropDownOptions[option], `dropDownOptions.${option} is equal to ${defaultDropDownOptions[option]}`);
                     assert.deepEqual(getPopupInstance(editor).option(option), defaultDropDownOptions[option], `popup ${option} is equal to ${defaultDropDownOptions[option]}`);
+                });
+            });
+        });
+    });
+});
+
+QUnit.module('dropDownOptions value on init', () => {
+    dropDownEditorsNames.forEach(widgetName => {
+        QUnit.module(widgetName, function() {
+            dropDownOptionsKeys.forEach(option => {
+                if(option === 'visible') {
+                    // TODO: fix this case
+                    return;
+                }
+                QUnit.test(`${option} is correct`, function(assert) {
+                    const editor = new dropDownEditorsList[widgetName]('#editor', {
+                        deferRendering: false,
+                        applyValueMode: 'instantly',
+                        dropDownOptions: {
+                            [option]: optionTestValues[option]
+                        }
+                    });
+
+                    assert.deepEqual(editor.option(`dropDownOptions.${option}`), optionTestValues[option], `dropDownOptions.${option} is equal to ${optionTestValues[option]}`);
+                    assert.deepEqual(getPopupInstance(editor).option(option), optionTestValues[option], `popup ${option} is equal to ${optionTestValues[option]}`);
+                });
+            });
+        });
+    });
+});
+
+
+QUnit.module('dropDownOptions value runtime change', () => {
+    dropDownEditorsNames.forEach(widgetName => {
+        QUnit.module(widgetName, function() {
+            dropDownOptionsKeys.forEach(option => {
+                if(widgetName === 'dxDropDownButton' && (option === 'visible' || option === 'position')) {
+                    // TODO: fix this cases
+                    return;
+                }
+
+                QUnit.test(`${option} is correct`, function(assert) {
+                    const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false, applyValueMode: 'instantly' });
+                    editor.option(`dropDownOptions.${option}`, optionTestValues[option]);
+
+                    assert.deepEqual(editor.option(`dropDownOptions.${option}`), optionTestValues[option], `dropDownOptions.${option} is equal to ${optionTestValues[option]}`);
+                    assert.deepEqual(getPopupInstance(editor).option(option), optionTestValues[option], `popup ${option} is equal to ${optionTestValues[option]}`);
                 });
             });
         });
