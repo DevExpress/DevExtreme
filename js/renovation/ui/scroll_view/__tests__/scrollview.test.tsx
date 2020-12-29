@@ -14,10 +14,8 @@ type Mock = jest.Mock;
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
-  const isSimulator = actualDevices.isSimulator.bind(actualDevices);
   const real = actualDevices.real.bind(actualDevices);
 
-  actualDevices.isSimulator = jest.fn(isSimulator);
   actualDevices.real = jest.fn(real);
 
   return actualDevices;
