@@ -1686,7 +1686,7 @@ QUnit.module('Movements', {
         if(getComputedStyle) {
             this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(elem) {
                 if(elem === tooltip._textHtml.get(0)) {
-                    return { width: '60px', height: '40px' };
+                    return { width: '60px', height: '40px', getPropertyValue: () => {} };
                 }
                 return getComputedStyle.apply(window, arguments);
             });
@@ -1768,9 +1768,7 @@ QUnit.test('Center-top side of page, Html', function(assert) {
     this.resetTooltipMocks();
 
     this.tooltip._textGroupHtml.css = sinon.spy();
-    if(!this.getComputedStyle) {
-        this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, left: 0, bottom: 40, top: 0 }; });
-    }
+    this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, width: 60, left: 0, bottom: 40, top: 0 }; });
 
     // act
     this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 80, offset: 30 });
@@ -1778,7 +1776,7 @@ QUnit.test('Center-top side of page, Html', function(assert) {
     // assert
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroup move');
     assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 135 }]);
-    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 126 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 60 }]);
 
     assert.equal(this.getContentGroup().stub('move').callCount, 0);
 
@@ -1853,9 +1851,7 @@ QUnit.test('Center-center side of page, Html', function(assert) {
 
     this.tooltip._textGroupHtml.css = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'css');
-    if(!this.getComputedStyle) {
-        this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, left: 0, bottom: 40, top: 0 }; });
-    }
+    this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, width: 60, left: 0, bottom: 40, top: 0 }; });
 
     // act
     this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 300, offset: 30 });
@@ -1863,7 +1859,7 @@ QUnit.test('Center-center side of page, Html', function(assert) {
     // assert
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroup move');
     assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 205 }]);
-    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 126 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 60 }]);
 
     assert.equal(this.getContentGroup().stub('move').callCount, 0);
 
