@@ -1859,9 +1859,9 @@ class Scheduler extends Widget {
         return this._workSpace.getDataByDroppableCell();
     }
 
-    _updateAppointment(target, appointment, onUpdatePrevented, dragEvent) {
+    _updateAppointment(target, rawAppointment, onUpdatePrevented, dragEvent) {
         const updatingOptions = {
-            newData: appointment,
+            newData: rawAppointment,
             oldData: extend({}, target),
             cancel: false
         };
@@ -1886,20 +1886,16 @@ class Scheduler extends Widget {
             let deferred = new Deferred();
 
             if(!canceled) {
-                this._expandAllDayPanel(appointment);
+                this._expandAllDayPanel(rawAppointment);
 
                 try {
                     deferred = this._appointmentModel
-                        .update(target, appointment)
+                        .update(target, rawAppointment)
                         .done(() => {
                             dragEvent && dragEvent.cancel.resolve(false);
                         })
-                        .always((function(e) {
-                            this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentUpdated'], appointment, e);
-                        }).bind(this))
-                        .fail(function() {
-                            performFailAction();
-                        });
+                        .always(storeAppointment => this._onDataPromiseCompleted('onAppointmentUpdated', rawAppointment, storeAppointment))
+                        .fail(() => performFailAction());
                 } catch(err) {
                     performFailAction(err);
                     deferred.resolve();
@@ -1940,17 +1936,17 @@ class Scheduler extends Widget {
         }
     }
 
-    _executeActionWhenOperationIsCompleted(action, appointment, e) {
-        const options = { appointmentData: appointment };
-        const isError = e && e.name === 'Error';
+    _onDataPromiseCompleted(handlerName, appointment, storeAppointment) {
+        const args = { appointmentData: appointment };
 
-        if(isError) {
-            options.error = e;
+        if(storeAppointment instanceof Error) {
+            args.error = storeAppointment;
         } else {
+            args.appointmentData = storeAppointment;
             this._appointmentPopup.isVisible() && this._appointmentPopup.hide();
         }
-        action(options);
 
+        this._actions[handlerName](args);
         this._fireContentReadyAction();
     }
 
@@ -2162,11 +2158,11 @@ class Scheduler extends Widget {
         this._workSpace.scrollTo(date, groups, allDay);
     }
 
-    addAppointment(appointment) {
-        const adapter = this.createAppointmentAdapter(appointment);
-        adapter.text = adapter.text || '';
+    addAppointment(rawAppointment) {
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+        appointment.text = appointment.text || '';
 
-        const serializedAppointment = adapter.source(true);
+        const serializedAppointment = appointment.source(true);
 
         const addingOptions = {
             appointmentData: serializedAppointment,
@@ -2182,8 +2178,9 @@ class Scheduler extends Widget {
 
             this._expandAllDayPanel(serializedAppointment);
 
-            return this._appointmentModel.add(serializedAppointment)
-                .always(e => this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], serializedAppointment, e));
+            return this._appointmentModel
+                .add(serializedAppointment)
+                .always(storeAppointment => this._onDataPromiseCompleted('onAppointmentAdded', serializedAppointment, storeAppointment));
         });
     }
 
@@ -2191,9 +2188,9 @@ class Scheduler extends Widget {
         return this._updateAppointment(target, appointment);
     }
 
-    deleteAppointment(appointment) {
+    deleteAppointment(rawAppointment) {
         const deletingOptions = {
-            appointmentData: appointment,
+            appointmentData: rawAppointment,
             cancel: false
         };
 
@@ -2201,9 +2198,9 @@ class Scheduler extends Widget {
 
         this._processActionResult(deletingOptions, function(canceled) {
             if(!canceled) {
-                this._appointmentModel.remove(appointment).always((function(e) {
-                    this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentDeleted'], appointment, e);
-                }).bind(this));
+                this._appointmentModel
+                    .remove(rawAppointment)
+                    .always(storeAppointment => this._onDataPromiseCompleted('onAppointmentDeleted', rawAppointment, storeAppointment));
             }
         });
     }
