@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import fx from 'animation/fx';
 import { dropDownEditorsList } from '../../helpers/widgetsList.js';
 import { defaultDropDownOptions } from '../../helpers/dropDownOptions.js';
 
@@ -203,24 +204,33 @@ dropDownEditorsNames.forEach(widgetName => {
             });
         });
 
-        QUnit.test('dropDownOptions should not be cleared after repaint', function(assert) {
-            const editor = new dropDownEditorsList[widgetName]('#editor', {
-                dropDownOptions: optionTestValues,
-                opened: true
+        QUnit.module('specific tests', {
+            beforeEach: function() {
+                fx.off = true;
+            },
+            afterEach: function() {
+                fx.off = false;
+            }
+        }, () => {
+            QUnit.test('dropDownOptions should not be cleared after repaint', function(assert) {
+                const editor = new dropDownEditorsList[widgetName]('#editor', {
+                    dropDownOptions: optionTestValues,
+                    opened: true
+                });
+
+                editor.repaint();
+                const popup = getPopupInstance(editor);
+                dropDownOptionsKeys.forEach(option => {
+                    assert.deepEqual(editor.option(`dropDownOptions.${option}`), optionTestValues[option]);
+                    assert.deepEqual(popup.option(option), optionTestValues[option]);
+                });
             });
 
-            editor.repaint();
-            const popup = getPopupInstance(editor);
-            dropDownOptionsKeys.forEach(option => {
-                assert.deepEqual(editor.option(`dropDownOptions.${option}`), optionTestValues[option]);
-                assert.deepEqual(popup.option(option), optionTestValues[option]);
+            QUnit.test('dropDownOptions should have dragEnabled=false after popup opened (T946143)', function(assert) {
+                const editor = new dropDownEditorsList[widgetName]('#editor', { opened: true });
+
+                assert.strictEqual(editor.option('dropDownOptions.dragEnabled'), false);
             });
-        });
-
-        QUnit.test('dropDownOptions should have dragEnabled=false after popup opened (T946143)', function(assert) {
-            const editor = new dropDownEditorsList[widgetName]('#editor', { opened: true });
-
-            assert.strictEqual(editor.option('dropDownOptions.dragEnabled'), false);
         });
     });
 });
