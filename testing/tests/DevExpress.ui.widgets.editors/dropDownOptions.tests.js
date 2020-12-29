@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import fx from 'animation/fx';
 import { dropDownEditorsList } from '../../helpers/widgetsList.js';
 import { defaultDropDownOptions } from '../../helpers/dropDownOptions.js';
 
@@ -204,22 +203,17 @@ dropDownEditorsNames.forEach(widgetName => {
             });
         });
 
-        QUnit.module('specific tests', {
-            beforeEach: function() {
-                fx.off = true;
-            },
-            afterEach: function() {
-                fx.off = false;
-            }
-        }, () => {
+        QUnit.module('specific tests', () => {
             QUnit.test('dropDownOptions should not be cleared after repaint', function(assert) {
                 const editor = new dropDownEditorsList[widgetName]('#editor', {
                     dropDownOptions: optionTestValues,
-                    opened: true
+                    opened: true,
+                    pickerType: 'calendar'
                 });
 
                 editor.repaint();
                 const popup = getPopupInstance(editor);
+
                 dropDownOptionsKeys.forEach(option => {
                     assert.deepEqual(editor.option(`dropDownOptions.${option}`), optionTestValues[option]);
                     assert.deepEqual(popup.option(option), optionTestValues[option]);
@@ -227,7 +221,7 @@ dropDownEditorsNames.forEach(widgetName => {
             });
 
             QUnit.test('dropDownOptions should have dragEnabled=false after popup opened (T946143)', function(assert) {
-                const editor = new dropDownEditorsList[widgetName]('#editor', { opened: true });
+                const editor = new dropDownEditorsList[widgetName]('#editor', { opened: true, pickerType: 'calendar' });
 
                 assert.strictEqual(editor.option('dropDownOptions.dragEnabled'), false);
             });
