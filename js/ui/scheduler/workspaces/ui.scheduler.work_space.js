@@ -167,6 +167,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._isShowAllDayPanel() && this.supportAllDayRow();
     }
 
+    get isDateAndTimeView() {
+        return true;
+    }
+
+    get viewDirection() { return 'vertical'; }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -2497,7 +2503,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         const { position, cellData } = cell;
 
         return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
-            cellData, position, currentDate,
+            cellData,
+            position,
+            currentDate,
+            this.isDateAndTimeView,
+            this.viewDirection === 'vertical',
         );
     }
 
@@ -3216,6 +3226,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const left = coordinates.left - scrollable.scrollLeft() - xShift - offset;
         let top = coordinates.top - scrollable.scrollTop() - yShift;
+        debugger;
         if(isScrollToAllDay && !this._isVerticalGroupedWorkSpace()) {
             top = 0;
         }

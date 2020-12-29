@@ -109,7 +109,7 @@ export default class VirtualScrollingDispatcher {
             this.scrollingType === scrollingTypes.both;
     }
 
-    calculateCoordinatesByDataAndPosition(cellData, position, date) {
+    calculateCoordinatesByDataAndPosition(cellData, position, date, isCalculateTime, isVerticalDirectionView) {
         const { _workspace: workSpace } = this;
         const {
             rowIndex, columnIndex,
@@ -122,14 +122,19 @@ export default class VirtualScrollingDispatcher {
         const cellStartTime = startDate.getTime();
         const cellEndTime = endDate.getTime();
 
-        const scrollInCell = allDay
+        const scrollInCell = allDay || !isCalculateTime
             ? 0
             : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
 
         const cellWidth = workSpace.getCellWidth();
 
-        const top = (rowIndex + scrollInCell) * this.rowHeight;
-        let left = cellWidth * columnIndex;
+        const top = isVerticalDirectionView
+            ? (rowIndex + scrollInCell) * this.rowHeight
+            : rowIndex * this.rowHeight;
+
+        let left = isVerticalDirectionView
+            ? columnIndex * cellWidth
+            : (columnIndex + scrollInCell) * cellWidth;
 
         if(workSpace.option('rtlEnabled')) {
             left = workSpace.getScrollableOuterWidth() - left;
