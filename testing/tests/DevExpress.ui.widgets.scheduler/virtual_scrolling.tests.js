@@ -39,11 +39,13 @@ module('Virtual Scrolling', {
                     'scrolling.type': settings.scrolling.type
                 },
                 getCellWidth: () => { return 150; },
+                getCellHeight: () => { return 50; },
                 option: name => this.workspaceMock._options[name],
                 _getCellData: noop,
                 _insertAllDayRowsIntoDateTable: noop,
                 _allDayPanels: undefined,
                 isGroupedAllDayPanel: noop,
+                renderRAllDayPanel: noop,
                 renderRWorkspace: noop,
                 renderRAppointments: noop,
                 _createAction: () => { return () => 'action'; },
@@ -273,6 +275,56 @@ module('Virtual Scrolling', {
                     assert.equal(!!this.horizontalVirtualScrolling, option.expectScrolling.horizontal);
                     assert.equal(!!this.verticalVirtualScrolling, option.expectScrolling.vertical);
                 });
+            });
+        });
+    });
+
+    module('Dispatcher', () => {
+        [
+            {
+                orientation: 'vertical',
+                expectedRenderState: {
+                    bottomVirtualRowHeight: 4550,
+                    rowCount: 9,
+                    startIndex: 0,
+                    startRowIndex: 0,
+                    topVirtualRowHeight: 0
+                }
+            }, {
+                orientation: 'horizontal',
+                expectedRenderState: {
+                    cellCount: 6,
+                    cellWidth: undefined,
+                    leftVirtualCellWidth: 0,
+                    rightVirtualCellWidth: 29100,
+                    startCellIndex: 0
+                }
+            }, {
+                orientation: 'both',
+                expectedRenderState: {
+                    bottomVirtualRowHeight: 4550,
+                    rowCount: 9,
+                    startIndex: 0,
+                    startRowIndex: 0,
+                    topVirtualRowHeight: 0,
+                    cellCount: 6,
+                    cellWidth: undefined,
+                    leftVirtualCellWidth: 0,
+                    rightVirtualCellWidth: 29100,
+                    startCellIndex: 0
+                }
+            }
+        ].forEach(option => {
+            test(`Should return correct render state if scrolling orientation: ${option.orientation}`, function(assert) {
+                this.prepareInstance({
+                    scrolling: {
+                        type: option.orientation
+                    }
+                });
+
+                const state = this.virtualScrollingDispatcher.getRenderState();
+
+                assert.deepEqual(state, option.expectedRenderState, 'Render state is correct');
             });
         });
     });

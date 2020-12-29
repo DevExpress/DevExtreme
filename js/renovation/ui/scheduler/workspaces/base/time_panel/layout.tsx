@@ -25,7 +25,6 @@ export const viewFunction = ({
   topVirtualRowHeight,
   bottomVirtualRowHeight,
   isVerticalGroupOrientation: isVerticalGrouping,
-  isVirtual,
   restAttributes,
 }: TimePanelTableLayout): JSX.Element => {
   const { viewData, timeCellTemplate } = props;
@@ -34,7 +33,6 @@ export const viewFunction = ({
     <Table
     // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
-      isVirtual={isVirtual}
       topVirtualRowHeight={topVirtualRowHeight}
       bottomVirtualRowHeight={bottomVirtualRowHeight}
       virtualCellsCount={1}
@@ -103,11 +101,6 @@ export class TimePanelTableLayoutProps extends LayoutProps {
   },
 })
 export class TimePanelTableLayout extends JSXComponent(TimePanelTableLayoutProps) {
-  get isVirtual(): boolean {
-    const { viewData } = this.props;
-    return !!viewData.isVirtual;
-  }
-
   get topVirtualRowHeight(): number {
     return this.props.viewData.topVirtualRowHeight || 0;
   }
