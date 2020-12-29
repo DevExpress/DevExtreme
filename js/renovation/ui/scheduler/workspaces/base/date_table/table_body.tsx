@@ -3,7 +3,7 @@ import {
   JSXComponent,
   Fragment,
 } from 'devextreme-generator/component_declaration/common';
-import { Row as DateTableRow } from '../row';
+import { Row } from '../row';
 import { ViewCellData } from '../../types.d';
 import {
   getKeyByGroup,
@@ -14,7 +14,9 @@ import { DateTableLayoutProps } from './layout_props';
 
 export const viewFunction = ({
   props: {
-    viewData, dataCellTemplate, cellTemplate: Cell,
+    viewData,
+    dataCellTemplate,
+    cellTemplate: Cell,
   },
 }: DateTableBody): JSX.Element => (
   <Fragment>
@@ -26,12 +28,16 @@ export const viewFunction = ({
               viewData={allDayPanel}
               dataCellTemplate={dataCellTemplate}
               isVerticalGroupOrientation
+              leftVirtualCellWidth={viewData.leftVirtualCellWidth}
+              rightVirtualCellWidth={viewData.rightVirtualCellWidth}
             />
           )}
           {dateTable.map((cellsRow) => (
-            <DateTableRow
+            <Row
               className="dx-scheduler-date-table-row"
               key={cellsRow[0].key}
+              leftVirtualCellWidth={viewData.leftVirtualCellWidth}
+              rightVirtualCellWidth={viewData.rightVirtualCellWidth}
             >
               {cellsRow.map(({
                 startDate,
@@ -63,7 +69,7 @@ export const viewFunction = ({
                   firstDayOfMonth={firstDayOfMonth}
                 />
               ))}
-            </DateTableRow>
+            </Row>
           ))}
         </Fragment>
       ))}
