@@ -3,7 +3,25 @@ import { mount } from 'enzyme';
 import {
   ScrollView,
   viewFunction,
+  ScrollViewProps,
+  defaultOptionRules,
 } from '../scroll_view';
+
+import devices from '../../../../core/devices';
+import { convertRulesToOptions } from '../../../../core/options/utils';
+
+type Mock = jest.Mock;
+
+jest.mock('../../../../core/devices', () => {
+  const actualDevices = jest.requireActual('../../../../core/devices').default;
+  const isSimulator = actualDevices.isSimulator.bind(actualDevices);
+  const real = actualDevices.real.bind(actualDevices);
+
+  actualDevices.isSimulator = jest.fn(isSimulator);
+  actualDevices.real = jest.fn(real);
+
+  return actualDevices;
+});
 
 describe('ScrollView', () => {
   describe('Logic', () => {
@@ -27,6 +45,25 @@ describe('ScrollView', () => {
           const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
           expect(bottomPocket.exists()).toBe(true);
         });
+      });
+    });
+  });
+
+  describe('Default options', () => {
+    const getDefaultOptions = (): ScrollViewProps => Object.assign(new ScrollViewProps(),
+      convertRulesToOptions(defaultOptionRules));
+
+    afterEach(() => jest.resetAllMocks());
+
+    describe('refreshStrategy', () => {
+      it('should have "swipeDown" value if platform is not android', () => {
+        (devices.real as Mock).mockImplementation(() => ({ platform: 'android' }));
+        expect(getDefaultOptions().refreshStrategy).toBe('swipeDown');
+      });
+
+      it('should have "pullDown" value if theme is not material', () => {
+        (devices.real as Mock).mockImplementation(() => ({ platform: 'generic' }));
+        expect(getDefaultOptions().refreshStrategy).toBe('pullDown');
       });
     });
   });
