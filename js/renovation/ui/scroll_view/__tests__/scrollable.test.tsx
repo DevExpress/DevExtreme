@@ -226,6 +226,23 @@ jest.mock('../../../../core/devices', () => {
           });
         });
       });
+
+      describe('cssClasses', () => {
+        ['horizontal', 'vertical', 'both', undefined, null].forEach((direction) => {
+          it(`should add direction classes. Direction: ${direction}`, () => {
+            const scrollable = mount(viewFunction({ props: { direction, useSimulatedScrollbar: true, showScrollbar: 'always' } } as any) as JSX.Element);
+
+            const horizontalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-horizontal');
+            const verticalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-vertical');
+
+            const isHorizontalScrollbarExists = direction === 'horizontal' || direction === 'both';
+            const isVerticalScrollbarExists = direction === 'vertical' || direction === 'both' || !direction;
+
+            expect(horizontalScrollbar.exists()).toBe(isHorizontalScrollbarExists);
+            expect(verticalScrollbar.exists()).toBe(isVerticalScrollbarExists);
+          });
+        });
+      });
     });
 
     describe('Behavior', () => {
