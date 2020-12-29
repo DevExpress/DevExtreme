@@ -33,7 +33,6 @@ const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-templat
 const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
 const ESC_KEY_CODE = 'Escape';
-const POPUP_CLASS = 'dx-popup';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
@@ -354,53 +353,6 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
 });
 
 QUnit.module('dropDownOptions', () => {
-    QUnit.test('dropDownOptions should work on init', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true,
-            dropDownOptions: { customOption: 'Test' }
-        }).dxDropDownEditor('instance');
-
-        assert.equal(instance._popup.option('customOption'), 'Test', 'Option has been passed to the popup');
-    });
-
-    QUnit.test('dropDownOptions should redefine built-in values', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true,
-            dropDownOptions: { showTitle: true }
-        }).dxDropDownEditor('instance');
-
-        assert.strictEqual(instance._popup.option('showTitle'), true, 'Option has been redefined');
-    });
-
-    QUnit.test('dropDownOptions should be updated when popup option changed', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true
-        }).dxDropDownEditor('instance');
-
-        const popup = instance._popup;
-
-        assert.equal(popup.option('width'), instance.option('dropDownOptions.width'), 'dropDownOptions has been updated on init');
-
-        popup.option('width', 400);
-        assert.equal(instance.option('dropDownOptions.width'), 400, 'dropDownOptions has been updated on popup\'s option changed');
-    });
-
-    QUnit.test('it should be possible to set part of the dropDownOptions without full object changing', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true
-        }).dxDropDownEditor('instance');
-
-        const popup = instance._popup;
-
-        instance.option('dropDownOptions.width', 300);
-        assert.equal(popup.option('width'), 300, 'popup\'s width has been changed');
-
-        instance.option('dropDownOptions', { height: 200 });
-        assert.equal(popup.option('width'), 300, 'popup\'s width has not been changed');
-        assert.equal(popup.option('height'), 200, 'popup\'s height has been changed');
-        assert.equal(instance.option('dropDownOptions.width'), 300, 'dropDownOptions object has not been rewrited');
-    });
-
     QUnit.test('dropDownOptions should not be cleared after repaint', function(assert) {
         const instance = $('#dropDownEditorLazy').dxDropDownEditor({
             dropDownOptions: {
@@ -422,7 +374,6 @@ QUnit.module('dropDownOptions', () => {
 
         assert.strictEqual(instance.option('dropDownOptions.dragEnabled'), false);
     });
-
 });
 
 QUnit.module('focus policy', () => {
@@ -1580,60 +1531,6 @@ QUnit.module('popup integration', () => {
         assert.roughEqual(overlayContentRect.left, editorRect.left, 1.01, 'left position is correct');
     });
 
-    QUnit.test('dropDownOptions.width should be passed to popup', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dropDownOptions: {
-                width: 500
-            },
-            opened: true
-        });
-
-        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
-        assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
-    });
-
-    QUnit.test('popup should have width equal to dropDownOptions.width even after editor input width change', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dropDownOptions: {
-                width: 500
-            },
-            opened: true
-        });
-        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
-
-        dropDownEditor.option('width', 300);
-
-        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
-        assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
-    });
-
-    QUnit.test('dropDownOptions.height should be passed to popup', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dropDownOptions: {
-                height: 500
-            },
-            opened: true
-        });
-
-        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
-        assert.strictEqual(popup.option('height'), 500, 'popup height option value is correct');
-    });
-
-    QUnit.test('popup should have height equal to dropDownOptions.height even after editor height change', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dropDownOptions: {
-                height: 500
-            },
-            opened: true
-        });
-        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
-
-        dropDownEditor.option('height', 300);
-
-        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
-        assert.strictEqual(popup.option('height'), 500, 'popup height option value is correct');
-    });
-
     QUnit.test('onPopupInitialized', function(assert) {
         assert.expect(1);
 
@@ -1699,19 +1596,6 @@ QUnit.module('popup integration', () => {
             });
             $dropDownEditor.remove();
         }
-    });
-
-    QUnit.test('widget should work correctly when popup \'fullScreen\' is true', function(assert) {
-        const $dropDownEditor = $('<div>').dxDropDownEditor({
-            opened: true
-        }).appendTo('body');
-
-        const popup = $dropDownEditor.find('.dx-popup').dxPopup('instance');
-        popup.option('fullScreen', true);
-
-        assert.ok(true, 'Widget works correctly');
-
-        $dropDownEditor.remove();
     });
 });
 
