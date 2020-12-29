@@ -8,6 +8,10 @@ const DAY_IN_MILLISECONDS = 86400000;
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimelineMonth extends SchedulerTimeline {
+    get isDateAndTimeView() {
+        return true;
+    }
+
     _renderView() {
         super._renderView();
 
@@ -108,10 +112,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             left: 0,
             cellPosition: 0
         };
-    }
-
-    _isDateAndTimeView() {
-        return false;
     }
 }
 

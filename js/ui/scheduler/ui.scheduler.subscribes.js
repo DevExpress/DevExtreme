@@ -491,7 +491,7 @@ const subscribes = {
 
     prerenderFilterVirtual: function() {
         const workspace = this.getWorkSpace();
-        const isCalculateStartAndEndDayHour = workspace._isDateAndTimeView();
+        const isCalculateStartAndEndDayHour = workspace.isDateAndTimeView;
         const resourcesManager = this._resourcesManager;
 
         const isAllDaySupported = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();

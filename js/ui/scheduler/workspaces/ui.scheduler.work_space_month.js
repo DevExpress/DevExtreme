@@ -22,6 +22,10 @@ const DAY_IN_MILLISECONDS = 86400000;
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
+    get isDateAndTimeView() {
+        return true;
+    }
+
     _toggleFixedScrollableClass() {
         this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
     }
@@ -351,10 +355,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         options.cellDataGetters.push(getCellMetaData);
 
         return options;
-    }
-
-    _isDateAndTimeView() {
-        return false;
     }
 }
 
