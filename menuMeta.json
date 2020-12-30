@@ -232,7 +232,8 @@
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridCustomEditorsController.cs",
               "/Models/DataGrid/InMemoryTasksDataContext.cs",
-              "/Models/SampleData/CustomEditorsTasks.cs"
+              "/Models/SampleData/CustomEditorsTasks.cs",
+              "/Scripts/data/statuses.js"
             ],
             "DemoType": "Web"
           },
