@@ -34,7 +34,7 @@ const DEBUG_BUNDLES = BUNDLES.concat([ '/bundles/dx.custom.js' ]);
 const DEBUG_BUNDLES_ESM_PACKAGE = DEBUG_BUNDLES.map(file => `/cjs${file}`);
 
 const processBundles = (bundles, pathPrefix) => bundles.map((bundle) => pathPrefix + bundle);
-const muteWebPack = () => undefined;
+const muteWebPack = (err) => { console.log('Webpack error: '); console.log(err); };
 
 const bundleProdPipe = lazyPipe()
     .pipe(named)
