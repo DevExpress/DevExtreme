@@ -92,7 +92,7 @@ export class DataGrid2Props extends BaseWidgetProps {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
+  jQuery: { register: false },
   view: viewFunction,
 })
 export class DataGrid2 extends JSXComponent(DataGrid2Props) {
