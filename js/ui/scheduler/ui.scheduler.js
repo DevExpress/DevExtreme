@@ -115,6 +115,17 @@ const VIEWS_CONFIG = {
     }
 };
 
+const StoreEventNames = {
+    ADDING: 'onAppointmentAdding',
+    ADDED: 'onAppointmentAdded',
+
+    DELETING: 'onAppointmentDeleting',
+    DELETED: 'onAppointmentDeleted',
+
+    UPDATING: 'onAppointmentUpdating',
+    UPDATED: 'onAppointmentUpdated'
+};
+
 class Scheduler extends Widget {
     _getDefaultOptions() {
         const defaultOptions = extend(super._getDefaultOptions(), {
@@ -587,12 +598,12 @@ class Scheduler extends Widget {
 
                 this._postponeDataSourceLoading();
                 break;
-            case 'onAppointmentAdding':
-            case 'onAppointmentAdded':
-            case 'onAppointmentUpdating':
-            case 'onAppointmentUpdated':
-            case 'onAppointmentDeleting':
-            case 'onAppointmentDeleted':
+            case StoreEventNames.ADDING:
+            case StoreEventNames.ADDED:
+            case StoreEventNames.UPDATING:
+            case StoreEventNames.UPDATED:
+            case StoreEventNames.DELETING:
+            case StoreEventNames.DELETED:
             case 'onAppointmentFormOpening':
                 this._actions[name] = this._createActionByOption(name);
                 break;
@@ -1170,13 +1181,14 @@ class Scheduler extends Widget {
     }
 
     _initActions() {
+
         this._actions = {
-            'onAppointmentAdding': this._createActionByOption('onAppointmentAdding'),
-            'onAppointmentAdded': this._createActionByOption('onAppointmentAdded'),
-            'onAppointmentUpdating': this._createActionByOption('onAppointmentUpdating'),
-            'onAppointmentUpdated': this._createActionByOption('onAppointmentUpdated'),
-            'onAppointmentDeleting': this._createActionByOption('onAppointmentDeleting'),
-            'onAppointmentDeleted': this._createActionByOption('onAppointmentDeleted'),
+            'onAppointmentAdding': this._createActionByOption(StoreEventNames.ADDING),
+            'onAppointmentAdded': this._createActionByOption(StoreEventNames.ADDED),
+            'onAppointmentUpdating': this._createActionByOption(StoreEventNames.UPDATING),
+            'onAppointmentUpdated': this._createActionByOption(StoreEventNames.UPDATED),
+            'onAppointmentDeleting': this._createActionByOption(StoreEventNames.DELETING),
+            'onAppointmentDeleted': this._createActionByOption(StoreEventNames.DELETED),
             'onAppointmentFormOpening': this._createActionByOption('onAppointmentFormOpening')
         };
     }
@@ -1876,7 +1888,7 @@ class Scheduler extends Widget {
             }
         }.bind(this);
 
-        this._actions['onAppointmentUpdating'](updatingOptions);
+        this._actions[StoreEventNames.UPDATING](updatingOptions);
 
         if(dragEvent && !isDeferred(dragEvent.cancel)) {
             dragEvent.cancel = new Deferred();
@@ -1894,7 +1906,7 @@ class Scheduler extends Widget {
                         .done(() => {
                             dragEvent && dragEvent.cancel.resolve(false);
                         })
-                        .always(storeAppointment => this._onDataPromiseCompleted('onAppointmentUpdated', rawAppointment, storeAppointment))
+                        .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.UPDATED, rawAppointment, storeAppointment))
                         .fail(() => performFailAction());
                 } catch(err) {
                     performFailAction(err);
@@ -1936,14 +1948,16 @@ class Scheduler extends Widget {
         }
     }
 
-    _onDataPromiseCompleted(handlerName, appointment, storeAppointment) {
+    _onDataPromiseCompleted(handlerName, appointment, storeAppointment, isDeletedOperation = false) {
         const args = { appointmentData: appointment };
 
         if(storeAppointment instanceof Error) {
             args.error = storeAppointment;
         } else {
-            // store.update promise return array result, but other data method return single object
-            args.appointmentData = storeAppointment[0] || storeAppointment;
+            if(!isDeletedOperation) {
+                // store.update promise return array result, but other data method return single object
+                args.appointmentData = storeAppointment[0] || storeAppointment;
+            }
             this._appointmentPopup.isVisible() && this._appointmentPopup.hide();
         }
 
@@ -2170,7 +2184,7 @@ class Scheduler extends Widget {
             cancel: false
         };
 
-        this._actions['onAppointmentAdding'](addingOptions);
+        this._actions[StoreEventNames.ADDING](addingOptions);
 
         return this._processActionResult(addingOptions, canceled => {
             if(canceled) {
@@ -2181,7 +2195,7 @@ class Scheduler extends Widget {
 
             return this._appointmentModel
                 .add(serializedAppointment)
-                .always(storeAppointment => this._onDataPromiseCompleted('onAppointmentAdded', serializedAppointment, storeAppointment));
+                .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.ADDED, serializedAppointment, storeAppointment));
         });
     }
 
@@ -2195,13 +2209,13 @@ class Scheduler extends Widget {
             cancel: false
         };
 
-        this._actions['onAppointmentDeleting'](deletingOptions);
+        this._actions[StoreEventNames.DELETING](deletingOptions);
 
         this._processActionResult(deletingOptions, function(canceled) {
             if(!canceled) {
                 this._appointmentModel
                     .remove(rawAppointment)
-                    .always(storeAppointment => this._onDataPromiseCompleted('onAppointmentDeleted', rawAppointment, storeAppointment));
+                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, rawAppointment, storeAppointment, true));
             }
         });
     }
