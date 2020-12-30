@@ -4,12 +4,13 @@ const replace = require('gulp-replace');
 const path = require('path');
 const fs = require('fs');
 const sass = require('sass');
-const glob = require('glob').sync;
 const dataUriRegex = /data-uri\((?:'(image\/svg\+xml;charset=UTF-8)',\s)?['"]?([^)'"]+)['"]?\)/g;
 const repositoryRoot = path.join(__dirname, '..', '..');
 
-const fullImagesFileList = glob('images/**/*.*').map(fileName => path.resolve(fileName));
-const usedImagesFileList = [];
+const getFilePath = (fileName) => {
+    const relativePath = path.join(repositoryRoot, fileName);
+    return path.resolve(relativePath);
+};
 
 const svg = (buffer, svgEncoding) => {
     const encoding = svgEncoding || 'image/svg+xml;charset=UTF-8';
@@ -23,9 +24,7 @@ const img = (buffer, ext) => {
 };
 
 const handler = (_, svgEncoding, fileName) => {
-    const relativePath = path.join(repositoryRoot, fileName);
-    const filePath = path.resolve(relativePath);
-    usedImagesFileList.push(filePath);
+    const filePath = getFilePath(fileName);
     const ext = filePath.split('.').pop();
     const data = fs.readFileSync(filePath);
     const buffer = Buffer.from(data);
@@ -41,15 +40,21 @@ const sassFunction = (args) => {
     return new sass.types.String(handler(null, encoding, url));
 };
 
-const getUnusedImages = () => {
-    return fullImagesFileList.filter(fileName =>
-        !usedImagesFileList.includes(fileName) &&
-        !/images[/\\]icons/.test(fileName));
+const getImagesFromContent = (content) => {
+    const result = [];
+    let match;
+
+    while((match = dataUriRegex.exec(content)) !== null) {
+        const imagePath = getFilePath(match[2]);
+        result.push(imagePath);
+    }
+
+    return result;
 };
 
 module.exports = {
     gulpPipe: () => replace(dataUriRegex, handler),
-    getUnusedImages,
+    getImagesFromContent,
     resolveDataUri: (content) => content.replace(dataUriRegex, handler),
     sassFunctions: {
         'data-uri($args...)': sassFunction

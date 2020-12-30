@@ -13,7 +13,6 @@ const MODULES = require('./modules_metadata.json');
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
-const getUnusedImages = require('./gulp-data-uri').getUnusedImages;
 const headerPipes = require('./header-pipes.js');
 const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 const renovationPipes = require('./renovation-pipes');
@@ -171,7 +170,7 @@ gulp.task('npm-sources', gulp.series('ts-sources', sources(srcGlobs, packagePath
 
 const scssDir = `${resultPath}/${packageDir}/scss`;
 
-gulp.task('npm-sass', gulp.series(gulp.parallel(
+gulp.task('npm-sass', gulp.parallel(
     () => gulp
         .src('scss/**/*')
         .pipe(dataUri())
@@ -184,11 +183,6 @@ gulp.task('npm-sass', gulp.series(gulp.parallel(
     () => gulp
         .src('icons/**/*', { base: '.' })
         .pipe(gulp.dest(`${scssDir}/widgets/base`)),
-), async() => {
-    const unusedImages = getUnusedImages();
-    if(unusedImages.length) {
-        throw new Error(`Following files is not used in scss: ${unusedImages.join('\n')}`);
-    }
-}));
+));
 
 gulp.task('npm', gulp.series('npm-sources', 'ts-modules-check', 'npm-sass'));
