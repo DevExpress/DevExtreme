@@ -6,7 +6,7 @@ import {
 } from '../topPocket';
 
 describe('TopPocket', () => {
-  describe('cssClasses', () => {
+  describe('Structure', () => {
     each(['pullDown', 'swipeDown', 'simulated', undefined]).describe('RefreshStrategy: %o', (strategy) => {
       it('PullDown text elements', () => {
         const topPocket = mount(viewFunction({
