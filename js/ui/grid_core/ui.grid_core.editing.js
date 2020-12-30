@@ -21,7 +21,7 @@ import devices from '../../core/devices';
 import Form from '../form';
 import holdEvent from '../../events/hold';
 import { when, Deferred, fromPromise } from '../../core/utils/deferred';
-import { deferRender } from '../../core/utils/common';
+import { deferRender, equalByValue } from '../../core/utils/common';
 import * as iconUtils from '../../core/utils/icon';
 import Scrollable from '../scroll_view/ui.scrollable';
 
@@ -302,7 +302,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _getInternalData: function(key) {
-            return this._internalState.filter(item => item.key === key)[0];
+            return this._internalState.filter(item => equalByValue(item.key, key))[0];
         },
 
         _addInternalData: function(params) {
@@ -818,7 +818,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataController = this._dataController;
             const loadedRowIndexOffset = dataController.getRowIndexOffset(true);
             const changes = this.getChanges();
-            const index = change ? changes.filter(editChange => editChange.key === key)[0].index : 0;
+            const index = change ? changes.filter(editChange => equalByValue(editChange.key, key))[0].index : 0;
             let loadedRowIndex = index - loadedRowIndexOffset;
 
             if(change.changeType === 'append') {
