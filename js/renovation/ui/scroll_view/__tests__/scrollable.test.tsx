@@ -28,6 +28,10 @@ import {
   viewFunction as viewFunctionSimulated,
 } from '../scrollable_simulated';
 
+import {
+  TopPocket,
+} from '../topPocket';
+
 import { Widget } from '../../common/widget';
 
 import {
@@ -1294,8 +1298,8 @@ jest.mock('../../../../core/devices', () => {
     describe('Logic', () => {
       describe('Getters', () => {
         describe('cssClasses', () => {
-          ['android', 'ios', 'generic'].forEach((platform: any) => {
-            it(`should add scrolling classes by default. Platform: ${platform}`, () => {
+          each(['android', 'ios', 'generic']).describe('Platform: %o', (platform) => {
+            it('should add scrolling classes by default', () => {
               devices.real = () => ({ platform });
               const instance = new Scrollable({});
               expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
@@ -1305,6 +1309,19 @@ jest.mock('../../../../core/devices', () => {
                 expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${platform}`));
               } else {
                 expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
+              }
+            });
+
+            it('Should assign render strategy', () => {
+              devices.real = () => ({ platform });
+
+              const instance = mount(viewFunction(new Scrollable({}) as any));
+              expect(instance.find(Widget).find(TopPocket).length).toBe(10);
+
+              if (instance instanceof ScrollableNative) {
+                expect(instance.find(TopPocket).props()).toMatchObject({ renderStrategy: platform === 'android' ? 'swipeDown' : 'pullDown' });
+              } else {
+                expect(instance.find(TopPocket).props()).toMatchObject({ renderStrategy: 'simulated' });
               }
             });
           });

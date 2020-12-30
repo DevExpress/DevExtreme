@@ -25,6 +25,9 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     scrollableRef,
     props: {
       useNative,
+      pulledDownText,
+      pullingDownText,
+      refreshingText,
       ...scrollableProps
     },
     restAttributes,
@@ -40,6 +43,9 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
+        pulledDownText={pulledDownText}
+        pullingDownText={pullingDownText}
+        refreshingText={refreshingText}
       />
       )}
       {!useNative && (
@@ -50,6 +56,9 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
+        pulledDownText={pulledDownText}
+        pullingDownText={pullingDownText}
+        refreshingText={refreshingText}
       />
       )}
     </Fragment>

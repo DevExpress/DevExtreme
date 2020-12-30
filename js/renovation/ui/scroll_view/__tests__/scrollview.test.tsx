@@ -1,18 +1,12 @@
 import { mount } from 'enzyme';
-import each from 'jest-each';
 
 import {
   ScrollView,
   viewFunction,
-  defaultOptionRules,
 } from '../scroll_view';
-
-import { ScrollViewProps } from '../scroll_view_props';
 
 import devices from '../../../../core/devices';
 import themes from '../../../../ui/themes';
-import messageLocalization from '../../../../localization/message';
-import { convertRulesToOptions } from '../../../../core/options/utils';
 
 type Mock = jest.Mock;
 
@@ -57,9 +51,6 @@ describe('ScrollView', () => {
   });
 
   describe('Default options', () => {
-    const getDefaultOptions = (): ScrollViewProps => Object.assign(new ScrollViewProps(),
-      convertRulesToOptions(defaultOptionRules));
-
     beforeEach(() => {
       (devices.real as Mock).mockImplementation(() => ({ platform: 'generic' }));
       ((themes as any).current as Mock).mockImplementation(() => 'generic');
@@ -67,28 +58,73 @@ describe('ScrollView', () => {
 
     afterEach(() => jest.resetAllMocks());
 
-    describe('refreshStrategy', () => {
-      it('platform: android', () => {
-        (devices.real as Mock).mockImplementation(() => ({ platform: 'android' }));
-        expect(getDefaultOptions().refreshStrategy).toBe('swipeDown');
-      });
+    // describe('refreshStrategy', () => {
+    //   // it('platform: android', () => {
+    //   //   (devices.real as Mock).mockImplementation(() => ({ platform: 'android' }));
+    //   //   const scrollView = new ScrollView({});
+    //   //   expect(scrollView.refreshStrategy).toBe('swipeDown');
+    //   // });
 
-      it('platform: generic', () => {
-        expect(getDefaultOptions().refreshStrategy).toBe('pullDown');
-      });
-    });
+    //   // it('platform: generic', () => {
+    //   //   expect(getDefaultOptions().refreshStrategy).toBe('pullDown');
+    //   // });
+    // });
 
     describe('Texts', () => {
-      each(['pullingDownText', 'pulledDownText', 'refreshingText', 'reachBottomText']).describe('Option: %o', (textOption) => {
-        it('theme: material', () => {
-          ((themes as any).current as Mock).mockImplementation(() => 'material');
-          expect(getDefaultOptions()[textOption]).toBe('');
-        });
+      it('theme: material, texts options: undefined', () => {
+        ((themes as any).current as Mock).mockImplementation(() => 'material');
 
-        it('theme: generic', () => {
-          ((themes as any).current as Mock).mockImplementation(() => 'generic');
-          expect(getDefaultOptions()[textOption]).toBe(messageLocalization.format(`dxScrollView-${textOption}`));
-        });
+        const scrollView = mount(viewFunction(new ScrollView({})) as JSX.Element);
+        const scrollViewTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
+        expect(scrollViewTexts.length).toBe(3);
+
+        expect(scrollViewTexts.at(0).text()).toBe('');
+        expect(scrollViewTexts.at(1).text()).toBe('');
+        expect(scrollViewTexts.at(2).text()).toBe('');
+      });
+
+      it('theme: material, texts options: "value"', () => {
+        ((themes as any).current as Mock).mockImplementation(() => 'material');
+
+        const scrollView = mount(viewFunction(new ScrollView({
+          pullingDownText: 'value_1',
+          pulledDownText: 'value_2',
+          refreshingText: 'value_3',
+        })) as JSX.Element);
+        const scrollViewTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
+        expect(scrollViewTexts.length).toBe(3);
+
+        expect(scrollViewTexts.at(0).text()).toBe('value_1');
+        expect(scrollViewTexts.at(1).text()).toBe('value_2');
+        expect(scrollViewTexts.at(2).text()).toBe('value_3');
+      });
+
+      it('theme: generic, texts options: "value"', () => {
+        ((themes as any).current as Mock).mockImplementation(() => 'generic');
+
+        const scrollView = mount(viewFunction(new ScrollView({
+          pullingDownText: 'value_1',
+          pulledDownText: 'value_2',
+          refreshingText: 'value_3',
+        })) as JSX.Element);
+        const scrollViewTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
+        expect(scrollViewTexts.length).toBe(3);
+
+        expect(scrollViewTexts.at(0).text()).toBe('value_1');
+        expect(scrollViewTexts.at(1).text()).toBe('value_2');
+        expect(scrollViewTexts.at(2).text()).toBe('value_3');
+      });
+
+      it('theme: generic, texts options: undefined', () => {
+        ((themes as any).current as Mock).mockImplementation(() => 'generic');
+
+        const scrollView = mount(viewFunction(new ScrollView({})) as JSX.Element);
+        const scrollViewTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
+        expect(scrollViewTexts.length).toBe(3);
+
+        expect(scrollViewTexts.at(0).text()).toBe('Pull down to refresh...');
+        expect(scrollViewTexts.at(1).text()).toBe('Release to refresh...');
+        expect(scrollViewTexts.at(2).text()).toBe('Refreshing...');
       });
     });
   });

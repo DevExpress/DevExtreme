@@ -1,11 +1,11 @@
 import {
   JSXComponent,
-  ComponentBindings,
   Component,
   Fragment,
 } from 'devextreme-generator/component_declaration/common';
 
-import { ScrollViewPropsType } from './scroll_view_props';
+import messageLocalization from '../../../localization/message';
+import { TopPocketProps } from './topPocket_props';
 
 const SCROLLVIEW_TOP_POCKET_CLASS = 'dx-scrollview-top-pocket';
 const SCROLLVIEW_PULLDOWN = 'dx-scrollview-pull-down';
@@ -15,9 +15,7 @@ const SCROLLVIEW_PULLDOWN_TEXT_CLASS = 'dx-scrollview-pull-down-text';
 
 export const viewFunction = (viewModel: TopPocket): JSX.Element => {
   const {
-    props: {
-      pullingDownText, pulledDownText, refreshingText, refreshStrategy,
-    },
+    pullingDownText, pulledDownText, refreshingText, refreshStrategy,
   } = viewModel;
 
   return (
@@ -38,16 +36,43 @@ export const viewFunction = (viewModel: TopPocket): JSX.Element => {
     </div>
   );
 };
-
-@ComponentBindings()
-export class TopPocketProps {
-}
-
-type TopPocketPropsType = TopPocketProps & Pick<ScrollViewPropsType, 'refreshStrategy' | 'pullingDownText' | 'pulledDownText' | 'refreshingText'>;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
 
-export class TopPocket extends JSXComponent<TopPocketPropsType>() {
+export class TopPocket extends JSXComponent<TopPocketProps>() {
+  get refreshStrategy(): string {
+    return this.props.refreshStrategy || 'pullDown';
+  }
+
+  get pullingDownText(): string {
+    const { pullingDownText } = this.props;
+
+    if (pullingDownText === undefined || pullingDownText === null) {
+      return messageLocalization.format('dxScrollView-pullingDownText');
+    }
+
+    return pullingDownText;
+  }
+
+  get pulledDownText(): string {
+    const { pulledDownText } = this.props;
+
+    if (pulledDownText === undefined || pulledDownText === null) {
+      return messageLocalization.format('dxScrollView-pulledDownText');
+    }
+
+    return pulledDownText;
+  }
+
+  get refreshingText(): string {
+    const { refreshingText } = this.props;
+
+    if (refreshingText === undefined || refreshingText === null) {
+      return messageLocalization.format('dxScrollView-refreshingText');
+    }
+
+    return refreshingText;
+  }
 }

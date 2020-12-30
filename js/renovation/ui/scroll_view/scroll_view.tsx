@@ -6,9 +6,6 @@ import {
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
-import { createDefaultOptionRules } from '../../../core/options/utils';
-import devices from '../../../core/devices';
-
 import Themes from '../../../ui/themes';
 
 import {
@@ -20,11 +17,14 @@ import {
 } from './types.d';
 
 import { combineClasses } from '../../utils/combine_classes';
-import { ScrollViewProps, ScrollViewPropsType } from './scroll_view_props';
+import { ScrollViewPropsType } from './scroll_view_props';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
     cssClasses,
+    pulledDownText,
+    refreshingText,
+    pullingDownText,
     scrollableRef,
     props,
     restAttributes,
@@ -38,27 +38,16 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       {...props}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
+      pulledDownText={pulledDownText}
+      pullingDownText={pullingDownText}
+      refreshingText={refreshingText}
       forceGeneratePockets
       needScrollViewContentWrapper
     />
   );
 };
-
-export const defaultOptionRules = createDefaultOptionRules<ScrollViewProps>([{
-  device: (): boolean => devices.real().platform === 'android',
-  options: { refreshStrategy: 'swipeDown' },
-}, {
-  // eslint-disable-next-line import/no-named-as-default-member
-  device: (): boolean => Themes.isMaterial(Themes.current()),
-  options: {
-    pullingDownText: '',
-    pulledDownText: '',
-    refreshingText: '',
-    reachBottomText: '',
-  },
-}]);
 @Component({
-  defaultOptionRules,
+  defaultOptionRules: null,
   jQuery: { register: true },
   view: viewFunction,
 })
@@ -126,5 +115,20 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     return combineClasses({
       'dx-scrollview': true,
     });
+  }
+
+  get pullingDownText(): string | undefined {
+    // eslint-disable-next-line import/no-named-as-default-member
+    return this.props.pullingDownText || (Themes.isMaterial(Themes.current()) ? '' : undefined);
+  }
+
+  get pulledDownText(): string | undefined {
+    // eslint-disable-next-line import/no-named-as-default-member
+    return this.props.pulledDownText || (Themes.isMaterial(Themes.current()) ? '' : undefined);
+  }
+
+  get refreshingText(): string | undefined {
+    // eslint-disable-next-line import/no-named-as-default-member
+    return this.props.refreshingText || (Themes.isMaterial(Themes.current()) ? '' : undefined);
   }
 }

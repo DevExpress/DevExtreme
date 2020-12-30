@@ -53,7 +53,8 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
-      showScrollbar, direction, scrollByThumb, useSimulatedScrollbar, ...restProps
+      showScrollbar, direction, scrollByThumb, useSimulatedScrollbar, pullingDownText,
+      pulledDownText, refreshingText,
     },
     restAttributes,
   } = viewModel;
@@ -61,6 +62,9 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const targetDirection = direction ?? 'vertical';
   const isVertical = targetDirection !== 'horizontal';
   const isHorizontal = targetDirection !== 'vertical';
+
+  const refreshStrategy = devices.real().platform === 'android' ? 'swipeDown' : undefined;
+
   return (
     <Widget
       classes={cssClasses}
@@ -75,8 +79,10 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
             {forceGeneratePockets && (
             <TopPocket
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              {...restProps}
+              pullingDownText={pullingDownText}
+              pulledDownText={pulledDownText}
+              refreshingText={refreshingText}
+              refreshStrategy={refreshStrategy}
             />
             )}
             {needScrollViewContentWrapper && (
