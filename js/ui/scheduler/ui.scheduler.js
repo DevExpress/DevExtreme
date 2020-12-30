@@ -2133,10 +2133,17 @@ class Scheduler extends Widget {
         }
     }
 
-    showAppointmentTooltip(appointment, target, targetedAppointment) {
+    showAppointmentTooltip(appointment, element, targetedAppointment) {
         if(appointment) {
-            const info = new AppointmentTooltipInfo(appointment, targetedAppointment, this._appointments._tryGetAppointmentColor(target));
-            this.showAppointmentTooltipCore(target, [info]);
+            const settings = utils.dataAccessors.getAppointmentSettings(element);
+
+            const deferredColor = this.fire('getAppointmentColor', {
+                itemData: targetedAppointment || appointment,
+                groupIndex: settings?.groupIndex,
+            });
+
+            const info = new AppointmentTooltipInfo(appointment, targetedAppointment, deferredColor);
+            this.showAppointmentTooltipCore(element, [info]);
         }
     }
 
