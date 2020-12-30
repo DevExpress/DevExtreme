@@ -5,10 +5,9 @@ const path = require('path');
 const fs = require('fs');
 const sass = require('sass');
 const dataUriRegex = /data-uri\((?:'(image\/svg\+xml;charset=UTF-8)',\s)?['"]?([^)'"]+)['"]?\)/g;
-const repositoryRoot = path.join(__dirname, '..', '..');
 
 const getFilePath = (fileName) => {
-    const relativePath = path.join(repositoryRoot, fileName);
+    const relativePath = path.join(__dirname, '..', '..', fileName);
     return path.resolve(relativePath);
 };
 
