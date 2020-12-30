@@ -20,7 +20,7 @@ import {
 } from './types.d';
 
 import { combineClasses } from '../../utils/combine_classes';
-import { ScrollViewProps, ScrollViewPropsType } from './scrollview_props';
+import { ScrollViewProps, ScrollViewPropsType } from './scroll_view_props';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {

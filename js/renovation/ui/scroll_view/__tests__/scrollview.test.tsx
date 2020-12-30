@@ -4,9 +4,10 @@ import each from 'jest-each';
 import {
   ScrollView,
   viewFunction,
-  ScrollViewProps,
   defaultOptionRules,
 } from '../scroll_view';
+
+import { ScrollViewProps } from '../scroll_view_props';
 
 import devices from '../../../../core/devices';
 import themes from '../../../../ui/themes';
@@ -78,7 +79,7 @@ describe('ScrollView', () => {
     });
 
     describe('Texts', () => {
-      each(['pullingDownText', 'pulledDownText', 'refreshingText', 'reachBottomText']).describe('ScrollEffect params. Option: %o', (textOption) => {
+      each(['pullingDownText', 'pulledDownText', 'refreshingText', 'reachBottomText']).describe('Option: %o', (textOption) => {
         it('theme: material', () => {
           ((themes as any).current as Mock).mockImplementation(() => 'material');
           expect(getDefaultOptions()[textOption]).toBe('');
