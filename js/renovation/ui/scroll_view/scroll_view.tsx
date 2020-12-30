@@ -2,15 +2,13 @@ import {
   Component,
   JSXComponent,
   Ref,
-  ComponentBindings,
   Method,
   RefObject,
-  OneWay,
 } from 'devextreme-generator/component_declaration/common';
 
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
-import messageLocalization from '../../../localization/message';
+
 import Themes from '../../../ui/themes';
 
 import {
@@ -18,15 +16,11 @@ import {
 } from './scrollable';
 
 import {
-  ScrollableProps,
-} from './scrollable_props';
-
-import {
-  ScrollableLocation, ScrollOffset, RefreshStrategy,
+  ScrollableLocation, ScrollOffset,
 } from './types.d';
 
-import BaseWidgetProps from '../../utils/base_props';
 import { combineClasses } from '../../utils/combine_classes';
+import { ScrollViewProps, ScrollViewPropsType } from './scrollview_props';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
@@ -49,20 +43,6 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     />
   );
 };
-@ComponentBindings()
-export class ScrollViewProps extends ScrollableProps {
-  @OneWay() refreshStrategy: RefreshStrategy = 'pullDown';
-
-  @OneWay() pullingDownText = messageLocalization.format('dxScrollView-pullingDownText');
-
-  @OneWay() pulledDownText = messageLocalization.format('dxScrollView-pulledDownText');
-
-  @OneWay() refreshingText = messageLocalization.format('dxScrollView-refreshingText');
-
-  @OneWay() reachBottomText = messageLocalization.format('dxScrollView-reachBottomText');
-}
-
-export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
 export const defaultOptionRules = createDefaultOptionRules<ScrollViewProps>([{
   device: (): boolean => devices.real().platform === 'android',

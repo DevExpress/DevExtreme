@@ -253,10 +253,6 @@ const SimulatedScrollViewStrategy = SimulatedStrategy.inherit({
     _renderPullDown: function() {
         const $loadIndicator = new LoadIndicator($('<div>')).$element();
 
-        this._$pullingDownText = $('<div>').text(this.option('pullingDownText')).appendTo($text);
-        this._$pulledDownText = $('<div>').text(this.option('pulledDownText')).appendTo($text);
-        this._$refreshingText = $('<div>').text(this.option('refreshingText')).appendTo($text);
-
         this._$pullDown
             .empty()
             .append($image)
