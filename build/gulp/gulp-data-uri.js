@@ -22,21 +22,34 @@ const img = (buffer, ext) => {
     return `"data:image/${ext};base64,${buffer.toString('base64')}"`;
 };
 
-const handler = (_, svgEncoding, fileName) => {
-    const filePath = getFilePath(fileName);
-    const ext = filePath.split('.').pop();
-    const data = fs.readFileSync(filePath);
+const processBuffer = (data, ext, svgEncoding) => {
     const buffer = Buffer.from(data);
     const escapedString = ext === 'svg' ? svg(buffer, svgEncoding) : img(buffer, ext);
     return `url(${escapedString})`;
 };
 
-const sassFunction = (args) => {
+const handler = (_, svgEncoding, fileName, callback) => {
+    const filePath = getFilePath(fileName);
+    const ext = filePath.split('.').pop();
+    if(callback instanceof Function) {
+        fs.readFile(filePath, (error, data) => {
+            if(error) throw error;
+            callback(processBuffer(data, ext, svgEncoding));
+        });
+    } else {
+        const data = fs.readFileSync(filePath);
+        return processBuffer(data, ext, svgEncoding);
+    }
+};
+
+const sassFunction = (args, done) => {
     const hasEncoding = args.getLength() === 2;
     const encoding = hasEncoding ? args.getValue(0).getValue() : null;
     const url = hasEncoding ? args.getValue(1).getValue() : args.getValue(0).getValue();
 
-    return new sass.types.String(handler(null, encoding, url));
+    handler(null, encoding, url, (result) => {
+        done(new sass.types.String(result));
+    });
 };
 
 const getImagesFromContent = (content) => {
