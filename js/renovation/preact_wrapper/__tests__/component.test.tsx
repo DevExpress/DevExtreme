@@ -457,6 +457,12 @@ describe('option', () => {
       expect($('#component').dxOptionsCheckWidget('getLastPreactPassedProps').propWithElement).toEqual(15);
     });
   });
+
+  it('should return null for template option if it is not set', () => {
+    const widget = $('#component').dxOptionsCheckWidget({}).dxOptionsCheckWidget('instance');
+
+    expect(widget.option('contentTemplate')).toBe(null);
+  });
 });
 
 describe('templates and slots', () => {

@@ -96,7 +96,6 @@ describe('TimePanelLayout', () => {
 
     it('should render Table and Rows correctly', () => {
       const layout = render({
-        isVirtual: 'isVirtual',
         topVirtualRowHeight: 100,
         bottomVirtualRowHeight: 200,
       });
@@ -107,7 +106,6 @@ describe('TimePanelLayout', () => {
         .toBe(true);
       expect(layout.props())
         .toMatchObject({
-          isVirtual: 'isVirtual',
           topVirtualRowHeight: 100,
           bottomVirtualRowHeight: 200,
           virtualCellsCount: 1,
@@ -332,20 +330,6 @@ describe('TimePanelLayout', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      [true, false].forEach((isVirtual) => {
-        it(`should get correct isVirtial flag if isVirtual=${isVirtual}`, () => {
-          const layout = new TimePanelTableLayout({
-            viewData: {
-              ...viewDataBase,
-              isVirtual,
-            },
-          });
-
-          expect(layout.isVirtual)
-            .toBe(isVirtual);
-        });
-      });
-
       [100, undefined].forEach((topVirtualRowHeight) => {
         [500, undefined].forEach((bottomVirtualRowHeight) => {
           it(`topVirtualRowHeight=${topVirtualRowHeight}, bottomVirtualRowHeight=${bottomVirtualRowHeight}`, () => {

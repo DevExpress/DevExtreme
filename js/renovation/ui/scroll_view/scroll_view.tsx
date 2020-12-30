@@ -5,7 +5,13 @@ import {
   ComponentBindings,
   Method,
   RefObject,
+  OneWay,
 } from 'devextreme-generator/component_declaration/common';
+
+import { createDefaultOptionRules } from '../../../core/options/utils';
+import devices from '../../../core/devices';
+import messageLocalization from '../../../localization/message';
+import Themes from '../../../ui/themes';
 
 import {
   Scrollable,
@@ -16,7 +22,7 @@ import {
 } from './scrollable_props';
 
 import {
-  ScrollableLocation, ScrollOffset,
+  ScrollableLocation, ScrollOffset, RefreshStrategy,
 } from './types.d';
 
 import BaseWidgetProps from '../../utils/base_props';
@@ -43,14 +49,36 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     />
   );
 };
-
 @ComponentBindings()
 export class ScrollViewProps extends ScrollableProps {
+  @OneWay() refreshStrategy: RefreshStrategy = 'pullDown';
+
+  @OneWay() pullingDownText = messageLocalization.format('dxScrollView-pullingDownText');
+
+  @OneWay() pulledDownText = messageLocalization.format('dxScrollView-pulledDownText');
+
+  @OneWay() refreshingText = messageLocalization.format('dxScrollView-refreshingText');
+
+  @OneWay() reachBottomText = messageLocalization.format('dxScrollView-reachBottomText');
 }
 
 export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
+export const defaultOptionRules = createDefaultOptionRules<ScrollViewProps>([{
+  device: (): boolean => devices.real().platform === 'android',
+  options: { refreshStrategy: 'swipeDown' },
+}, {
+  // eslint-disable-next-line import/no-named-as-default-member
+  device: (): boolean => Themes.isMaterial(Themes.current()),
+  options: {
+    pullingDownText: '',
+    pulledDownText: '',
+    refreshingText: '',
+    reachBottomText: '',
+  },
+}]);
 @Component({
+  defaultOptionRules,
   jQuery: { register: true },
   view: viewFunction,
 })

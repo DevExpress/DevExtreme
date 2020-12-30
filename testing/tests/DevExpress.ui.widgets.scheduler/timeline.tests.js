@@ -1199,6 +1199,8 @@ QUnit.module('Renovated Render', {
                 bottomVirtualRowHeight: undefined,
                 isVirtual: false,
                 topVirtualRowHeight: undefined,
+                leftVirtualCellWidth: undefined,
+                rightVirtualCellWidth: undefined
             };
             const expectedViewDataMap = [
                 [{
@@ -1261,6 +1263,8 @@ QUnit.module('Renovated Render', {
                 bottomVirtualRowHeight: undefined,
                 isVirtual: false,
                 topVirtualRowHeight: undefined,
+                leftVirtualCellWidth: undefined,
+                rightVirtualCellWidth: undefined
             };
             const expectedDateTable = expectedViewData.groupedData[0].dateTable[0];
 
@@ -1328,6 +1332,8 @@ QUnit.module('Renovated Render', {
                 cellCountInGroupRow: 2,
                 isVirtual: false,
                 topVirtualRowHeight: undefined,
+                leftVirtualCellWidth: undefined,
+                rightVirtualCellWidth: undefined
             };
 
             const expectedViewDataMap = [

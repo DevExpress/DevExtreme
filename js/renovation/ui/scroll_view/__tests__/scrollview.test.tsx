@@ -1,9 +1,33 @@
 import { mount } from 'enzyme';
+import each from 'jest-each';
 
 import {
   ScrollView,
   viewFunction,
+  ScrollViewProps,
+  defaultOptionRules,
 } from '../scroll_view';
+
+import devices from '../../../../core/devices';
+import themes from '../../../../ui/themes';
+import messageLocalization from '../../../../localization/message';
+import { convertRulesToOptions } from '../../../../core/options/utils';
+
+type Mock = jest.Mock;
+
+jest.mock('../../../../core/devices', () => {
+  const actualDevices = jest.requireActual('../../../../core/devices').default;
+  const real = actualDevices.real.bind(actualDevices);
+
+  actualDevices.real = jest.fn(real);
+
+  return actualDevices;
+});
+
+jest.mock('../../../../ui/themes', () => ({
+  ...jest.requireActual('../../../../ui/themes'),
+  current: jest.fn(() => 'generic'),
+}));
 
 describe('ScrollView', () => {
   describe('Logic', () => {
@@ -26,6 +50,43 @@ describe('ScrollView', () => {
           expect(topPocket.exists()).toBe(true);
           const bottomPocket = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
           expect(bottomPocket.exists()).toBe(true);
+        });
+      });
+    });
+  });
+
+  describe('Default options', () => {
+    const getDefaultOptions = (): ScrollViewProps => Object.assign(new ScrollViewProps(),
+      convertRulesToOptions(defaultOptionRules));
+
+    beforeEach(() => {
+      (devices.real as Mock).mockImplementation(() => ({ platform: 'generic' }));
+      ((themes as any).current as Mock).mockImplementation(() => 'generic');
+    });
+
+    afterEach(() => jest.resetAllMocks());
+
+    describe('refreshStrategy', () => {
+      it('platform: android', () => {
+        (devices.real as Mock).mockImplementation(() => ({ platform: 'android' }));
+        expect(getDefaultOptions().refreshStrategy).toBe('swipeDown');
+      });
+
+      it('platform: generic', () => {
+        expect(getDefaultOptions().refreshStrategy).toBe('pullDown');
+      });
+    });
+
+    describe('Texts', () => {
+      each(['pullingDownText', 'pulledDownText', 'refreshingText', 'reachBottomText']).describe('ScrollEffect params. Option: %o', (textOption) => {
+        it('theme: material', () => {
+          ((themes as any).current as Mock).mockImplementation(() => 'material');
+          expect(getDefaultOptions()[textOption]).toBe('');
+        });
+
+        it('theme: generic', () => {
+          ((themes as any).current as Mock).mockImplementation(() => 'generic');
+          expect(getDefaultOptions()[textOption]).toBe(messageLocalization.format(`dxScrollView-${textOption}`));
         });
       });
     });
