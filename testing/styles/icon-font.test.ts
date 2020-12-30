@@ -2,7 +2,7 @@ import { transfer } from 'font-carrier';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 
-const BASE_PATH = join(__dirname, '..', '..', '..');
+const BASE_PATH = join(__dirname, '..', '..');
 
 describe('Equals svg to font', () => {
   const getCountElementInFont = (pathToFont: string): number => {
