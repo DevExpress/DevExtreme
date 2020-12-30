@@ -96,11 +96,9 @@ export class DataGrid2Props extends BaseWidgetProps {
   view: viewFunction,
 })
 export class DataGrid2 extends JSXComponent(DataGrid2Props) {
-  get aria(): object { // eslint-disable-line class-methods-use-this
-    return {
-      role: 'presentation',
-    };
-  }
+  readonly aria = {
+    role: 'presentation',
+  };
 
   readonly cssClasses = '';
 }
