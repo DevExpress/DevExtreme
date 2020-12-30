@@ -53,7 +53,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
-      showScrollbar, direction, scrollByThumb, useSimulatedScrollbar, ...scrollableProps
+      showScrollbar, direction, scrollByThumb, useSimulatedScrollbar, ...restProps
     },
     restAttributes,
   } = viewModel;
@@ -76,7 +76,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
             {forceGeneratePockets && (
             <TopPocket
               // eslint-disable-next-line react/jsx-props-no-spreading
-              {...scrollableProps}
+              {...restProps}
             />
             )}
             {needScrollViewContentWrapper && (

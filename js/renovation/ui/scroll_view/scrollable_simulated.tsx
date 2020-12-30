@@ -59,7 +59,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
-      showScrollbar, direction, scrollByThumb, ...scrollableProps
+      showScrollbar, direction, scrollByThumb, ...restProps
     },
     restAttributes,
   } = viewModel;
@@ -84,7 +84,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             {forceGeneratePockets && (
             <TopPocket
               // eslint-disable-next-line react/jsx-props-no-spreading
-              {...scrollableProps}
+              {...restProps}
               refreshStrategy="simulated"
             />
             )}
