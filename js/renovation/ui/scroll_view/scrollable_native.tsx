@@ -324,7 +324,7 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
   }
 
   // eslint-disable-next-line class-methods-use-this
-  static refreshStrategy(): RefreshStrategy | undefined {
+  get refreshStrategy(): RefreshStrategy | undefined {
     return devices.real().platform === 'android' ? 'swipeDown' : undefined;
   }
 }
