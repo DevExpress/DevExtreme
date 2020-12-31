@@ -17,6 +17,7 @@ import {
 } from './scrollable_props';
 
 import {
+  RefreshStrategy,
   ScrollableLocation, ScrollOffset,
 } from './types.d';
 
@@ -49,7 +50,7 @@ import {
 
 export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const {
-    cssClasses, wrapperRef, contentRef, containerRef,
+    cssClasses, wrapperRef, contentRef, containerRef, refreshStrategy,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -62,8 +63,6 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const targetDirection = direction ?? 'vertical';
   const isVertical = targetDirection !== 'horizontal';
   const isHorizontal = targetDirection !== 'vertical';
-
-  const refreshStrategy = devices.real().platform === 'android' ? 'swipeDown' : undefined;
 
   return (
     <Widget
@@ -322,5 +321,10 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  static refreshStrategy(): RefreshStrategy | undefined {
+    return devices.real().platform === 'android' ? 'swipeDown' : undefined;
   }
 }

@@ -6,6 +6,7 @@ import {
 } from '../scroll_view';
 
 import devices from '../../../../core/devices';
+// eslint-disable-next-line import/default
 import themes from '../../../../ui/themes';
 
 type Mock = jest.Mock;
@@ -57,18 +58,6 @@ describe('ScrollView', () => {
     });
 
     afterEach(() => jest.resetAllMocks());
-
-    // describe('refreshStrategy', () => {
-    //   // it('platform: android', () => {
-    //   //   (devices.real as Mock).mockImplementation(() => ({ platform: 'android' }));
-    //   //   const scrollView = new ScrollView({});
-    //   //   expect(scrollView.refreshStrategy).toBe('swipeDown');
-    //   // });
-
-    //   // it('platform: generic', () => {
-    //   //   expect(getDefaultOptions().refreshStrategy).toBe('pullDown');
-    //   // });
-    // });
 
     describe('Texts', () => {
       it('theme: material, texts options: undefined', () => {
