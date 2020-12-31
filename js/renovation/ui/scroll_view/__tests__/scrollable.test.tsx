@@ -1307,15 +1307,6 @@ jest.mock('../../../../core/devices', () => {
                 expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
               }
             });
-
-            if (Scrollable === ScrollableNative) {
-              it('Should assign render strategy', () => {
-                devices.real = () => ({ platform });
-
-                const scrollable = new Scrollable({});
-                expect((scrollable as any).refreshStrategy).toEqual(platform === 'android' ? 'swipeDown' : undefined);
-              });
-            }
           });
 
           it('should add vertical direction class', () => {

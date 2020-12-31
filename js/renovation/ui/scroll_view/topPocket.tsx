@@ -3,6 +3,7 @@ import {
   Component,
   Fragment,
 } from 'devextreme-generator/component_declaration/common';
+import devices from '../../../core/devices';
 
 import messageLocalization from '../../../localization/message';
 import { TopPocketProps } from './topPocket_props';
@@ -43,7 +44,7 @@ export const viewFunction = (viewModel: TopPocket): JSX.Element => {
 
 export class TopPocket extends JSXComponent<TopPocketProps>() {
   get refreshStrategy(): string {
-    return this.props.refreshStrategy || 'pullDown';
+    return this.props.refreshStrategy || (devices.real().platform === 'android' ? 'swipeDown' : 'pullDown');
   }
 
   get pullingDownText(): string {

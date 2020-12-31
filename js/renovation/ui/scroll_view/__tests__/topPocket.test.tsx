@@ -1,10 +1,17 @@
 import { mount } from 'enzyme';
 import each from 'jest-each';
+import devices from '../../../../core/devices';
 
 import {
   TopPocket,
   viewFunction,
 } from '../topPocket';
+
+jest.mock('../../../../core/devices', () => {
+  const actualDevices = jest.requireActual('../../../../core/devices').default;
+  actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
+  return actualDevices;
+});
 
 describe('TopPocket', () => {
   describe('Structure', () => {
@@ -20,6 +27,22 @@ describe('TopPocket', () => {
 
         const textElementChildren = textElement.find('.dx-scrollview-pull-down-text > div');
         expect(textElementChildren.length).toBe(expectedCountOfChild);
+      });
+    });
+
+    each(['android', 'ios', 'generic']).describe('Platform: %o', (platform) => {
+      it('Should assign simulated strategy', () => {
+        devices.real = () => ({ platform });
+
+        const topPocket = new TopPocket({ refreshStrategy: 'simulated' });
+        expect((topPocket as any).refreshStrategy).toEqual('simulated');
+      });
+
+      it('Should assign swipeDown, pullDown strategy', () => {
+        devices.real = () => ({ platform });
+
+        const topPocket = new TopPocket({ });
+        expect((topPocket as any).refreshStrategy).toEqual(platform === 'android' ? 'swipeDown' : 'pullDown');
       });
     });
   });
