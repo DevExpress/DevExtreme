@@ -11,7 +11,7 @@ $generic-popup-toolbartop-padding: null !default;
 $generic-popup-toolbarbottom-padding: null !default;
 
 @if $size == "default" {
-  $generic-popup-closebutton-size: 23px !default;
+  $generic-popup-closebutton-size: 35px !default;
   $generic-popup-closebutton-icon-size: 15px !default;
 
   $generic-popup-content-padding: 20px !default;
@@ -23,7 +23,7 @@ $generic-popup-toolbarbottom-padding: null !default;
 }
 
 @else if $size == "compact" {
-  $generic-popup-closebutton-size: 19px !default;
+  $generic-popup-closebutton-size: 26px !default;
   $generic-popup-closebutton-icon-size: 11px !default;
 
   $generic-popup-content-padding: 10px !default;

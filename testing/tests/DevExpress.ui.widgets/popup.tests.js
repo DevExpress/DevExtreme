@@ -1055,9 +1055,20 @@ QUnit.module('options changed callbacks', {
 
         assert.equal($title.find('.dx-button').length, 1, 'title has close button');
         assert.equal($closeButton.length, 1, 'close button element');
+        assert.equal($closeButton.dxButton('instance').option('stylingMode'), 'text', 'close button has correct styling mode');
 
         instance.option('toolbarItems', []);
         assert.equal($title.find('.dx-button').length, 0, 'close button is removed');
+    });
+
+    QUnit.test('buttons close button options', function(assert) {
+        $('#popup').dxPopup({ visible: true, showCloseButton: true });
+        const $closeButton = $(toSelector(POPUP_TITLE_CLOSEBUTTON_CLASS), viewport());
+        const options = $closeButton.dxButton('instance').option();
+
+        assert.equal(options.stylingMode, 'text', 'close button has correct styling mode');
+        assert.equal(options.icon, 'close', 'close button has correct icon');
+        assert.ok(!!options.onClick, 'close button has onclick handler');
     });
 
     QUnit.test('showCloseButton option', function(assert) {

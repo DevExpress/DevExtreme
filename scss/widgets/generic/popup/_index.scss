@@ -67,7 +67,6 @@ $generic-mobile-popup-closebutton-icon-container-size: $generic-mobile-popup-clo
     }
 
     @include dx-button-styling();
-    @include dx-button-styling-clear();
 
     @mixin dx-closebutton-sizing($size, $offset, $icon-size, $icon-container-size) {
       width: $size;
