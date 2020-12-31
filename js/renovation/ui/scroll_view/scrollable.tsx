@@ -22,8 +22,7 @@ import { ScrollableSimulated } from './scrollable_simulated';
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     cssClasses,
-    scrollableNativeRef,
-    scrollableSimulatedRef,
+    scrollableRef,
     props: {
       useNative,
       pulledDownText,
@@ -38,7 +37,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     <Fragment>
       {useNative && (
       <ScrollableNative
-        ref={scrollableNativeRef}
+        ref={scrollableRef}
         classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...scrollableProps}
@@ -51,7 +50,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       )}
       {!useNative && (
       <ScrollableSimulated
-        ref={scrollableSimulatedRef}
+        ref={scrollableRef}
         classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...scrollableProps}
@@ -72,9 +71,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 })
 
 export class Scrollable extends JSXComponent<ScrollablePropsType>() {
-  @Ref() scrollableNativeRef!: RefObject<ScrollableNative>;
-
-  @Ref() scrollableSimulatedRef!: RefObject<ScrollableSimulated>;
+  @Ref() scrollableRef!: RefObject<ScrollableNative>;
 
   @Method()
   content(): HTMLDivElement {
@@ -137,9 +134,5 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return combineClasses({
       [`${classes}`]: !!classes,
     });
-  }
-
-  get scrollableRef(): RefObject<ScrollableNative | ScrollableSimulated> {
-    return this.scrollableNativeRef || this.scrollableSimulatedRef;
   }
 }
