@@ -49,8 +49,7 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this._$pullDown
             .empty()
             .append($image)
-            .append($loadContainer.append($loadIndicator))
-            .append($text);
+            .append($loadContainer.append($loadIndicator));
     },
 
     _releaseState: function() {
