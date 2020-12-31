@@ -47,18 +47,22 @@ import {
   dxScrollCancel,
 } from '../../../events/short';
 
-export const viewFunction = ({
-  cssClasses, wrapperRef, contentRef, containerRef,
-  props: {
-    disabled, height, width, rtlEnabled, children,
-    forceGeneratePockets, needScrollViewContentWrapper,
-    showScrollbar, direction, scrollByThumb, useSimulatedScrollbar,
-  },
-  restAttributes,
-}: ScrollableNative): JSX.Element => {
+export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
+  const {
+    cssClasses, wrapperRef, contentRef, containerRef,
+    props: {
+      disabled, height, width, rtlEnabled, children,
+      forceGeneratePockets, needScrollViewContentWrapper,
+      showScrollbar, direction, scrollByThumb, useSimulatedScrollbar, pullingDownText,
+      pulledDownText, refreshingText, reachBottomText,
+    },
+    restAttributes,
+  } = viewModel;
+
   const targetDirection = direction ?? 'vertical';
   const isVertical = targetDirection !== 'horizontal';
   const isHorizontal = targetDirection !== 'vertical';
+
   return (
     <Widget
       classes={cssClasses}
@@ -71,11 +75,21 @@ export const viewFunction = ({
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
         <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
-            {forceGeneratePockets && <TopPocket />}
+            {forceGeneratePockets && (
+            <TopPocket
+              pullingDownText={pullingDownText}
+              pulledDownText={pulledDownText}
+              refreshingText={refreshingText}
+            />
+            )}
             {needScrollViewContentWrapper && (
               <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
             {!needScrollViewContentWrapper && children}
-            {forceGeneratePockets && <BottomPocket />}
+            {forceGeneratePockets && (
+            <BottomPocket
+              reachBottomText={reachBottomText}
+            />
+            )}
           </div>
         </div>
       </div>
