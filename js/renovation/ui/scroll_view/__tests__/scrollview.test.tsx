@@ -137,6 +137,28 @@ describe('ScrollView', () => {
 
         expect(scrollViewBottomPocketTexts.at(0).text()).toBe('Loading...');
       });
+
+      it('theme: generic, texts options: empty string', () => {
+        ((themes as any).current as Mock).mockImplementation(() => 'generic');
+
+        const scrollView = mount(viewFunction(new ScrollView({
+          pullingDownText: '',
+          pulledDownText: '',
+          refreshingText: '',
+          reachBottomText: '',
+        })) as JSX.Element);
+        const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
+        expect(scrollViewTopPocketTexts.length).toBe(3);
+
+        expect(scrollViewTopPocketTexts.at(0).text()).toBe('');
+        expect(scrollViewTopPocketTexts.at(1).text()).toBe('');
+        expect(scrollViewTopPocketTexts.at(2).text()).toBe('');
+
+        const scrollViewBottomPocketTexts = scrollView.find('.dx-scrollview-scrollbottom-text > div');
+        expect(scrollViewBottomPocketTexts.length).toBe(1);
+
+        expect(scrollViewBottomPocketTexts.at(0).text()).toBe('');
+      });
     });
   });
 });

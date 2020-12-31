@@ -4,6 +4,7 @@ import {
   Fragment,
 } from 'devextreme-generator/component_declaration/common';
 import devices from '../../../core/devices';
+import { isDefined } from '../../../core/utils/type';
 
 import messageLocalization from '../../../localization/message';
 import { TopPocketProps } from './topPocket_props';
@@ -47,33 +48,33 @@ export class TopPocket extends JSXComponent<TopPocketProps>() {
     return this.props.refreshStrategy || (devices.real().platform === 'android' ? 'swipeDown' : 'pullDown');
   }
 
-  get pullingDownText(): string {
+  get pullingDownText(): string | undefined {
     const { pullingDownText } = this.props;
 
-    if (pullingDownText === undefined || pullingDownText === null) {
-      return messageLocalization.format('dxScrollView-pullingDownText');
+    if (isDefined(pullingDownText)) {
+      return pullingDownText;
     }
 
-    return pullingDownText;
+    return messageLocalization.format('dxScrollView-pullingDownText');
   }
 
-  get pulledDownText(): string {
+  get pulledDownText(): string | undefined {
     const { pulledDownText } = this.props;
 
-    if (pulledDownText === undefined || pulledDownText === null) {
-      return messageLocalization.format('dxScrollView-pulledDownText');
+    if (isDefined(pulledDownText)) {
+      return pulledDownText;
     }
 
-    return pulledDownText;
+    return messageLocalization.format('dxScrollView-pulledDownText');
   }
 
-  get refreshingText(): string {
+  get refreshingText(): string | undefined {
     const { refreshingText } = this.props;
 
-    if (refreshingText === undefined || refreshingText === null) {
-      return messageLocalization.format('dxScrollView-refreshingText');
+    if (isDefined(refreshingText)) {
+      return refreshingText;
     }
 
-    return refreshingText;
+    return messageLocalization.format('dxScrollView-refreshingText');
   }
 }

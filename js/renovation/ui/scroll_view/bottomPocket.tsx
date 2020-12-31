@@ -2,6 +2,7 @@ import {
   JSXComponent,
   Component,
 } from 'devextreme-generator/component_declaration/common';
+import { isDefined } from '../../../core/utils/type';
 
 import {
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
@@ -38,13 +39,13 @@ export const viewFunction = (viewModel: BottomPocket): JSX.Element => {
 })
 
 export class BottomPocket extends JSXComponent(BottomPocketProps) {
-  get reachBottomText(): string {
+  get reachBottomText(): string | undefined {
     const { reachBottomText } = this.props;
 
-    if (reachBottomText === undefined || reachBottomText === null) {
-      return messageLocalization.format('dxScrollView-reachBottomText');
+    if (isDefined(reachBottomText)) {
+      return reachBottomText;
     }
 
-    return reachBottomText;
+    return messageLocalization.format('dxScrollView-reachBottomText');
   }
 }

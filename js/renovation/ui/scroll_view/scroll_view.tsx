@@ -8,6 +8,7 @@ import {
 
 // eslint-disable-next-line import/default
 import Themes from '../../../ui/themes';
+import { isDefined } from '../../../core/utils/type';
 
 import {
   Scrollable,
@@ -121,22 +122,46 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   get pullingDownText(): string | undefined {
+    const { pullingDownText } = this.props;
+
+    if (isDefined(pullingDownText)) {
+      return pullingDownText;
+    }
+
     // eslint-disable-next-line import/no-named-as-default-member
-    return this.props.pullingDownText || (Themes.isMaterial(Themes.current()) ? '' : undefined);
+    return Themes.isMaterial(Themes.current()) ? '' : undefined;
   }
 
   get pulledDownText(): string | undefined {
+    const { pulledDownText } = this.props;
+
+    if (isDefined(pulledDownText)) {
+      return pulledDownText;
+    }
+
     // eslint-disable-next-line import/no-named-as-default-member
-    return this.props.pulledDownText || (Themes.isMaterial(Themes.current()) ? '' : undefined);
+    return Themes.isMaterial(Themes.current()) ? '' : undefined;
   }
 
   get refreshingText(): string | undefined {
+    const { refreshingText } = this.props;
+
+    if (isDefined(refreshingText)) {
+      return refreshingText;
+    }
+
     // eslint-disable-next-line import/no-named-as-default-member
-    return this.props.refreshingText || (Themes.isMaterial(Themes.current()) ? '' : undefined);
+    return Themes.isMaterial(Themes.current()) ? '' : undefined;
   }
 
   get reachBottomText(): string | undefined {
+    const { reachBottomText } = this.props;
+
+    if (isDefined(reachBottomText)) {
+      return reachBottomText;
+    }
+
     // eslint-disable-next-line import/no-named-as-default-member
-    return this.props.reachBottomText || (Themes.isMaterial(Themes.current()) ? '' : undefined);
+    return Themes.isMaterial(Themes.current()) ? '' : undefined;
   }
 }
