@@ -139,7 +139,7 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     });
   }
 
-  get scrollableRef(): RefObject<ScrollableNative> | RefObject<ScrollableSimulated> {
+  get scrollableRef(): RefObject<ScrollableNative | ScrollableSimulated> {
     return this.scrollableNativeRef || this.scrollableSimulatedRef;
   }
 }
