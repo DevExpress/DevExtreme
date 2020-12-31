@@ -28,6 +28,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       pulledDownText,
       pullingDownText,
       refreshingText,
+      reachBottomText,
       ...scrollableProps
     },
     restAttributes,
@@ -46,6 +47,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}
+        reachBottomText={reachBottomText}
       />
       )}
       {!useNative && (
@@ -59,6 +61,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}
+        reachBottomText={reachBottomText}
       />
       )}
     </Fragment>

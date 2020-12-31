@@ -6,6 +6,7 @@ import BaseWidgetProps from '../../utils/base_props';
 import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
 
 import { TopPocketProps } from './topPocket_props';
+import { BottomPocketProps } from './bottomPocket_props';
 
 @ComponentBindings()
 export class ScrollableInternalProps {
@@ -37,8 +38,13 @@ export class ScrollableProps extends ScrollableInternalProps {
   @OneWay() pulledDownText?: string;
 
   @OneWay() refreshingText?: string;
+
+  @OneWay() reachBottomText?: string;
 }
 
-export type ScrollableInternalPropsType = ScrollableInternalProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'> & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>;
+export type ScrollableInternalPropsType = ScrollableInternalProps
+& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>
+& Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
+& Pick<BottomPocketProps, 'reachBottomText'>;
 
 export type ScrollablePropsType = ScrollableProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;

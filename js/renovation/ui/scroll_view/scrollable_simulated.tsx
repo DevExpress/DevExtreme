@@ -60,6 +60,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
       showScrollbar, direction, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
+      reachBottomText,
     },
     restAttributes,
   } = viewModel;
@@ -92,7 +93,11 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             {needScrollViewContentWrapper && (
               <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
             {!needScrollViewContentWrapper && children}
-            {forceGeneratePockets && <BottomPocket />}
+            {forceGeneratePockets && (
+            <BottomPocket
+              reachBottomText={reachBottomText}
+            />
+            )}
           </div>
           {isHorizontal && (
             <Scrollbar

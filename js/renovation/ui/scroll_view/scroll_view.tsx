@@ -6,6 +6,7 @@ import {
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
+// eslint-disable-next-line import/default
 import Themes from '../../../ui/themes';
 
 import {
@@ -25,6 +26,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     pulledDownText,
     refreshingText,
     pullingDownText,
+    reachBottomText,
     scrollableRef,
     props,
     restAttributes,
@@ -41,6 +43,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       pulledDownText={pulledDownText}
       pullingDownText={pullingDownText}
       refreshingText={refreshingText}
+      reachBottomText={reachBottomText}
       forceGeneratePockets
       needScrollViewContentWrapper
     />
@@ -130,5 +133,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   get refreshingText(): string | undefined {
     // eslint-disable-next-line import/no-named-as-default-member
     return this.props.refreshingText || (Themes.isMaterial(Themes.current()) ? '' : undefined);
+  }
+
+  get reachBottomText(): string | undefined {
+    // eslint-disable-next-line import/no-named-as-default-member
+    return this.props.reachBottomText || (Themes.isMaterial(Themes.current()) ? '' : undefined);
   }
 }
