@@ -7,6 +7,7 @@ import dataUtils from 'core/element_data';
 import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
+import { isDefined } from '../../../js/core/utils/type.js';
 
 export const TOOLBAR_TOP_LOCATION = 'top';
 export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
@@ -81,7 +82,7 @@ export const asyncWrapper = (assert, callback) => {
         .then(done);
 };
 
-export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout) => {
+export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout, check) => {
     return promise.then(() => {
         return new Promise((resolve, reject) => {
             const execCallback = func => {
@@ -95,16 +96,52 @@ export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout) 
             beforeAsyncCallback && execCallback(beforeAsyncCallback);
 
             setTimeout(() => {
-                execCallback(asyncCallback);
-                resolve();
+
+                if(check && !check()) {
+
+                    reject();
+
+                } else {
+
+                    execCallback(asyncCallback);
+
+                    resolve();
+                }
+
             }, timeout);
         });
     });
 };
 
-export const asyncScrollTest = (promise, beforeAsyncCallback, asyncCallback) => {
+export const asyncScrollTest = (promise, asyncCallback, scrollable, offset) => {
     const scrollTimeout = 20;
-    return execAsync(promise, beforeAsyncCallback, asyncCallback, scrollTimeout);
+    let counter = 4;
+
+    const wrapper = () => execAsync(
+        promise,
+        () => scrollable.scrollTo(offset),
+        asyncCallback,
+        scrollTimeout,
+        () => {
+            const scrollOffset = scrollable.scrollOffset();
+            const {
+                x,
+                y
+            } = offset;
+
+            if(--counter === 0) {
+                return true;
+            }
+
+            return (!isDefined(x) || scrollOffset.left === x) &&
+                (!isDefined(y) || scrollOffset.top === y);
+        })
+        .then(
+            null,
+            () => wrapper(promise, asyncCallback, scrollable, offset)
+        );
+
+    return wrapper();
 };
 
 class ElementWrapper {
