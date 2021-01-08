@@ -61,7 +61,6 @@ import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
 import utils from './utils';
-import DateAdapter from './dateAdapter';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1673,16 +1672,6 @@ class Scheduler extends Widget {
                         this._appointments.moveAppointmentBack(dragEvent);
                     }).bind(this));
         }
-    }
-
-    _getCorrectedExceptionDateByDST(exceptionDate, appointment, targetedAppointment) {
-        const offset = appointment.startDate.getTimezoneOffset() - targetedAppointment.startDate.getTimezoneOffset();
-        if(offset !== 0) {
-            return DateAdapter(exceptionDate)
-                .addTime(offset * dateUtils.dateToMilliseconds('minute'))
-                .result();
-        }
-        return exceptionDate;
     }
 
     _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
