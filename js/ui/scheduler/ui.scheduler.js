@@ -1664,13 +1664,11 @@ class Scheduler extends Widget {
                     dragEvent.cancel = new Deferred();
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
-                    .done((function(result) {
+                    .done(result => {
                         result && callback();
                         !result && this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
-                    }).bind(this))
-                    .fail((function() {
-                        this._appointments.moveAppointmentBack(dragEvent);
-                    }).bind(this));
+                    })
+                    .fail(() => this._appointments.moveAppointmentBack(dragEvent));
         }
     }
 
