@@ -1665,11 +1665,8 @@ class Scheduler extends Widget {
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
                     .done(result => {
-                        if(result) {
-                            callback();
-                        } else {
-                            this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
-                        }
+                        result && callback();
+                        !result && this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
                     })
                     .fail(() => this._appointments.moveAppointmentBack(dragEvent));
         }
