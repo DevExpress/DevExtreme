@@ -1420,4 +1420,16 @@ QUnit.module('Renovated Render', {
             assert.deepEqual(dateTable[30], lastCell, 'Correct last cell');
         });
     });
+
+    [TIMELINE_DAY, TIMELINE_WEEK, TIMELINE_MONTH].forEach(({ class: viewClass, name }) => {
+        QUnit.test(`rtlEnabled should be aplied correctly in ${name}`, function(assert) {
+            this.createInstance({}, viewClass);
+
+            this.instance.option('rtlEnabled', true);
+            const $element = this.instance.$element();
+            const cells = $element.find(`.${CELL_CLASS}`);
+
+            assert.ok(cells.length > 0, 'Cells have been rendered');
+        });
+    });
 });
