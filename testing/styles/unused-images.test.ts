@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { resolve, join } from 'path';
-import { sync } from 'glob';
+import { sync } from 'fast-glob';
 
 const getFilePath = (fileName: string): string => {
   const relativePath = join(__dirname, '..', '..', fileName);
