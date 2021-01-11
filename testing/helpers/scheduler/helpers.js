@@ -512,6 +512,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $('.dx-scheduler-date-time-indicator'),
+            getCurrentTimeIndicatorCount: () => this.workSpace.getCurrentTimeIndicator().length,
             getAllDayPanel: () => $('.dx-scheduler-all-day-panel'),
 
             getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find('.dx-scrollable-container'),

@@ -74,13 +74,11 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _renderIndicator(date, groupCount) {
-        for(let i = 0; i < groupCount; i++) {
-            const $cell = this.getCellByDate(this._getToday(), i);
-            if($cell.length) {
-                const $indicator = this._createIndicator($cell, this._isIndicatorSimple(i));
-                if(!$cell.hasClass(VIRTUAL_CELL_CLASS)) {
-                    this._shiftIndicator(date, $cell, $indicator);
-                }
+        for(let groupIndex = 0; groupIndex < groupCount; groupIndex += 1) {
+            const $cell = this.getCellByDate(this._getToday(), groupIndex);
+            if($cell.length && !$cell.hasClass(VIRTUAL_CELL_CLASS)) {
+                const $indicator = this._createIndicator($cell, this._isIndicatorSimple(groupIndex));
+                this._shiftIndicator(date, $cell, $indicator);
             }
         }
     }
