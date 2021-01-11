@@ -13,7 +13,7 @@ import {
     asyncWrapper
 } from '../../helpers/scheduler/helpers.js';
 
-const supportedViews = ['day', 'week', 'workWeek']; // TODO: add month view and timelines
+const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
 const {
     testStart,
@@ -997,6 +997,10 @@ module('Virtual scrolling', () => {
                     test(`A long appointment should be correctly croped if view: ${viewName}, ${groupOrientation} group orientation`, function(assert) {
                         if(!isDesktopEnvironment()) {
                             assert.ok(true, 'This test is for desktop only');
+                            return;
+                        }
+                        if(viewName === 'month') {
+                            assert.ok(true, 'TODO: appointments in virtual month');
                             return;
                         }
 
@@ -2305,7 +2309,7 @@ module('Virtual scrolling', () => {
                     const styleBefore = $style.text();
 
                     $style
-                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 20px } ')
+                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 80px } ')
                         .appendTo('head');
 
                     const instance = createWrapper({
@@ -2322,7 +2326,7 @@ module('Virtual scrolling', () => {
 
                     const { virtualScrollingDispatcher } = instance.getWorkSpace();
 
-                    assert.equal(virtualScrollingDispatcher.rowHeight, 20, 'Cell height is correct');
+                    assert.equal(virtualScrollingDispatcher.rowHeight, 80, 'Cell height is correct');
 
                     $style.text(styleBefore);
                 });
@@ -2360,6 +2364,38 @@ module('Virtual scrolling', () => {
 
                     $style.text(styleBefore);
                 });
+            });
+        });
+    });
+
+    module('Markup', () => {
+        [true, false].forEach((showAllDayPanel) => {
+            test(`MonthView's groupPanel and dateTable should have correct height when showAllDayPanel: ${showAllDayPanel} and vertical grouping is used`, function(assert) {
+                const { workSpace } = createWrapper({
+                    views: [{
+                        type: 'month',
+                        groupOrientation: 'vertical',
+                    }],
+                    currentView: 'month',
+                    currentDate: new Date(2020, 11, 29),
+                    groups: ['priorityId'],
+                    resources: [{
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: [{ id: 1 }, { id: 2 }]
+                    }],
+                    height: 500,
+                    showAllDayPanel,
+                });
+
+                const cellHeight = workSpace.getCellHeight();
+                const calculatedHeight = 12 * cellHeight;
+
+                const dateTableHeight = workSpace.getDateTable().outerHeight();
+                const groupPanelHeight = workSpace.groups.getVerticalGroupPanel().outerHeight();
+
+                assert.equal(dateTableHeight, calculatedHeight, 'Correct dateTable height');
+                assert.equal(groupPanelHeight, calculatedHeight, 'Correct groupPanel height');
             });
         });
     });

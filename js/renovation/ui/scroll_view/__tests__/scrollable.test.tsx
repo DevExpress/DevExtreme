@@ -1294,8 +1294,8 @@ jest.mock('../../../../core/devices', () => {
     describe('Logic', () => {
       describe('Getters', () => {
         describe('cssClasses', () => {
-          ['android', 'ios', 'generic'].forEach((platform: any) => {
-            it(`should add scrolling classes by default. Platform: ${platform}`, () => {
+          each(['android', 'ios', 'generic']).describe('Platform: %o', (platform) => {
+            it('should add scrolling classes by default', () => {
               devices.real = () => ({ platform });
               const instance = new Scrollable({});
               expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));

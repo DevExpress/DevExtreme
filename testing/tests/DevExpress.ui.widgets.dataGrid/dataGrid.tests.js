@@ -1541,6 +1541,48 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($dataGrid.find('.dx-row').first().find('td').last()[0].getBoundingClientRect().width, 50);
     });
 
+    // T958665
+    QUnit.test('The column width with specified minWidth should be correct after resizing when it is given in percent', function(assert) {
+        // arrange, act
+        $('#container').width(400);
+
+        const $dataGrid = $('#dataGrid').dxDataGrid({
+            height: 200,
+            loadingTimeout: undefined,
+            dataSource: [{}, {}, {}, {}, {}, {}, {}],
+            searchPanel: {
+                visible: true
+            },
+            columns: [
+                { dataField: 'field1', width: '40%', minWidth: 50 },
+                { dataField: 'field2', width: '60%' },
+                { dataField: 'field3', width: 50 },
+                { dataField: 'field4', width: 50 }
+            ]
+        });
+        const dataGrid = $dataGrid.dxDataGrid('instance');
+
+        // assert
+        assert.equal($dataGrid.width(), 400);
+        assert.equal($dataGrid.find('.dx-row').first().find('td').first()[0].getBoundingClientRect().width, 120);
+
+        // act
+        $('#container').width(350);
+        dataGrid.updateDimensions();
+
+        // assert
+        assert.equal($dataGrid.width(), 350);
+        assert.equal($dataGrid.find('.dx-row').first().find('td').first()[0].getBoundingClientRect().width, 100);
+
+        // act
+        $('#container').width(200);
+        dataGrid.updateDimensions();
+
+        // assert
+        assert.equal($dataGrid.width(), 200);
+        assert.equal($dataGrid.find('.dx-row').first().find('td').first()[0].getBoundingClientRect().width, 50);
+    });
+
     // T344125
     QUnit.test('column width does not changed after changing grid\'s width when columnAutoWidth enabled', function(assert) {
         // arrange, act

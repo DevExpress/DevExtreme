@@ -1968,7 +1968,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getTotalRowCount(groupCount, includeAllDayPanelRows) {
         let result = this._groupedStrategy.getTotalRowCount(groupCount);
 
-        if(includeAllDayPanelRows && groupCount > 1 && this._isShowAllDayPanel()) {
+        if(includeAllDayPanelRows && groupCount > 1 && this.isAllDayPanelVisible) {
             result += groupCount;
         }
 

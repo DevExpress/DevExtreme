@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import devices from '../core/devices';
 import { render } from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
-import * as themes from './themes';
+import { isMaterial, current } from './themes';
 import Action from '../core/action';
 import ValidationEngine from './validation_engine';
 import Widget from './widget/ui.widget';
@@ -57,7 +57,7 @@ class Button extends Widget {
                 }
             },
             {
-                device: () => themes.isMaterial(themes.current()),
+                device: () => isMaterial(current()),
                 options: { useInkRipple: true }
             }
         ]);

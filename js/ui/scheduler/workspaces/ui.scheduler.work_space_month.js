@@ -89,9 +89,12 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             const DAYS_IN_WEEK = 7;
 
             let averageWidth = 0;
-            this._getCells().slice(0, DAYS_IN_WEEK).each((index, element) => averageWidth += getBoundingRect(element).width);
+            const cells = this._getCells().slice(0, DAYS_IN_WEEK);
+            cells.each((index, element) => {
+                averageWidth += getBoundingRect(element).width;
+            });
 
-            return averageWidth / DAYS_IN_WEEK;
+            return cells.length === 0 ? undefined : averageWidth / DAYS_IN_WEEK;
         });
     }
 
@@ -355,10 +358,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         options.cellDataGetters.push(getCellMetaData);
 
         return options;
-    }
-
-    isVirtualScrolling() {
-        return false;
     }
 }
 

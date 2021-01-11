@@ -98,6 +98,9 @@ describe('Render', () => {
     htmlRef: {},
     cloudRef: {},
     textSizeWithPaddings: { width: 48, height: 40 },
+    correctedCoordinates: {
+      x: 4, y: 5, anchorX: 11, anchorY: 12,
+    },
     props: tooltipProps,
   };
 
@@ -146,15 +149,6 @@ describe('Render', () => {
       rotate: 180,
       rotateX: 4,
       rotateY: 5,
-    });
-
-    expect(recalculateCoordinates).toBeCalledWith({
-      canvas: tooltipProps.canvas,
-      anchorX: tooltipProps.x,
-      anchorY: tooltipProps.y,
-      arrowLength: tooltipProps.arrowLength,
-      size: { width: 48, height: 40 },
-      offset: tooltipProps.offset,
     });
 
     expect(getCloudAngle).toBeCalledWith({ width: 48, height: 40 }, {
@@ -293,9 +287,50 @@ describe('Render', () => {
     expect(tooltip.find('PathSvgElement')).toHaveLength(0);
     expect(tooltip.find('TextSvgElement')).toHaveLength(0);
   });
+
+  it('should not render anything, correctedCoordinates = false', () => {
+    const tooltip = shallow(TooltipComponent({ ...props, correctedCoordinates: false } as any));
+
+    expect(tooltip.find('div')).toHaveLength(1);
+    expect(tooltip.find('div').props()).toEqual({});
+    expect(tooltip.find('defs')).toHaveLength(0);
+    expect(tooltip.find('ShadowFilter')).toHaveLength(0);
+    expect(tooltip.find('PathSvgElement')).toHaveLength(0);
+    expect(tooltip.find('TextSvgElement')).toHaveLength(0);
+  });
+
+  it('should apply rtl for html text', () => {
+    const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
+    const customizedProps = { ...props.props, rtl: true, contentTemplate };
+    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+
+    expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'rtl' });
+  });
+
+  it('should apply ltr for html text', () => {
+    const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
+    const customizedProps = { ...props.props, rtl: false, contentTemplate };
+    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+
+    expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'ltr' });
+  });
+
+  it('should apply className to main div', () => {
+    const tooltip = shallow(TooltipComponent({ ...props, cssClassName: 'dx-tooltip' } as any));
+
+    expect(tooltip.find('div').at(0).props().className).toBe('dx-tooltip');
+  });
 });
 
 describe('Effect', () => {
+  beforeEach(() => {
+    (recalculateCoordinates as jest.Mock).mockReturnValue({
+      x: 4, y: 5, anchorX: 11, anchorY: 12,
+    });
+  });
+
+  afterEach(() => jest.resetAllMocks);
+
   it('should return size', () => {
     const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
     const box = {
@@ -335,7 +370,7 @@ describe('Effect', () => {
     (prepareData as jest.Mock).mockReturnValue({
       html: 'customized_html_text',
     });
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
     tooltip.htmlRef = {} as any;
     tooltip.setHtmlText();
 
@@ -346,11 +381,22 @@ describe('Effect', () => {
     (prepareData as jest.Mock).mockReturnValue({
       text: 'customized_tooltip_text',
     });
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
     tooltip.htmlRef = {} as any;
     tooltip.setHtmlText();
 
     expect(tooltip.htmlRef.innerHTML).toEqual(undefined);
+  });
+
+  it('should not set html text for invisible tooltip', () => {
+    (prepareData as jest.Mock).mockReturnValue({
+      html: 'customized_html_text',
+    });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
+    tooltip.htmlRef = {} as any;
+    tooltip.setHtmlText();
+
+    expect(tooltip.htmlRef.innerHTML).toBe(undefined);
   });
 
   it('should calculate cloud size', () => {
@@ -372,7 +418,7 @@ describe('Effect', () => {
   });
 
   it('should not calculate cloud size, d is not defined', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
+    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
     tooltip.cloudRef = {
       getBBox: jest.fn().mockReturnValue({
         x: 7, y: 9, width: 13, height: 15,
@@ -399,6 +445,83 @@ describe('Effect', () => {
       width: 0,
       height: 0,
     });
+  });
+
+  it('should trigger onTooltipShown event', () => {
+    const shownTooltip = jest.fn();
+    const tooltip = new Tooltip({
+      visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+    });
+    tooltip.eventsEffect();
+    tooltip.eventsEffect();
+    tooltip.eventsEffect();
+
+    expect(shownTooltip).toBeCalledTimes(1);
+    expect(shownTooltip).toHaveBeenCalledWith({ target: { tag: 'point info' } });
+  });
+
+  it('should not trigger onTooltipShown event, correctedCoordinates is false', () => {
+    (recalculateCoordinates as jest.Mock).mockReturnValue(false);
+
+    const shownTooltip = jest.fn();
+    const tooltip = new Tooltip({
+      visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+    });
+    tooltip.eventsEffect();
+
+    expect(shownTooltip).toBeCalledTimes(0);
+  });
+
+  it('should trigger onTooltipShown event, if target is changed', () => {
+    const shownTooltip = jest.fn();
+    const tooltip = new Tooltip({
+      visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+    });
+    tooltip.eventsEffect();
+
+    tooltip.props.target = { tag: 'new point info' } as any;
+    tooltip.eventsEffect();
+
+    expect(shownTooltip).toBeCalledTimes(2);
+    expect(shownTooltip).toHaveBeenLastCalledWith({ target: { tag: 'new point info' } });
+  });
+
+  it('should not trigger onTooltipHidden event, tooltip have not been shown before', () => {
+    const hiddenTooltip = jest.fn();
+    const tooltip = new Tooltip({
+      visible: false, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
+    });
+    tooltip.eventsEffect();
+
+    expect(hiddenTooltip).toBeCalledTimes(0);
+  });
+
+  it('should trigger onTooltipHidden event', () => {
+    const hiddenTooltip = jest.fn();
+    const tooltip = new Tooltip({
+      visible: true, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
+    });
+    tooltip.eventsEffect();
+    tooltip.props.visible = false;
+    tooltip.eventsEffect();
+    tooltip.eventsEffect();
+
+    expect(hiddenTooltip).toBeCalledTimes(1);
+    expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' } });
+  });
+
+  it('should trigger onTooltipHidden event, if target is changed', () => {
+    const hiddenTooltip = jest.fn();
+    const tooltip = new Tooltip({
+      visible: true, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
+    });
+    tooltip.eventsEffect();
+
+    tooltip.props.target = { tag: 'new point info' } as any;
+    tooltip.eventsEffect();
+
+    expect(hiddenTooltip).toBeCalledTimes(1);
+    expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' } });
   });
 });
 
@@ -521,6 +644,44 @@ describe('Getters', () => {
     const tooltip = new Tooltip({ interactive: false });
 
     expect(tooltip.pointerEvents).toEqual('none');
+  });
+
+  it('should return css className', () => {
+    const tooltip = new Tooltip({ className: 'tooltip_test_class_name' });
+
+    expect(tooltip.cssClassName).toEqual('tooltip_test_class_name');
+  });
+
+  it('should return correctedCoordinates', () => {
+    const tooltip = new Tooltip({
+      paddingLeftRight: 2,
+      paddingTopBottom: 3,
+      canvas: {
+        top: 1, left: 2, right: 3, bottom: 4, width: 10, height: 10,
+      },
+      x: 30,
+      y: 40,
+      offset: 7,
+      arrowLength: 5,
+    });
+
+    expect(tooltip.correctedCoordinates).toEqual({
+      x: 4, y: 5, anchorX: 11, anchorY: 12,
+    });
+
+    expect(recalculateCoordinates).toHaveBeenCalledWith({
+      anchorX: 30,
+      anchorY: 40,
+      canvas: {
+        top: 1, left: 2, right: 3, bottom: 4, width: 10, height: 10,
+      },
+      offset: 7,
+      arrowLength: 5,
+      size: {
+        width: 4,
+        height: 6,
+      },
+    });
   });
 });
 
