@@ -12,13 +12,22 @@ import {
     asyncWrapper
 } from '../../helpers/scheduler/helpers.js';
 
+import browser from 'core/devices';
+
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
 const {
     testStart,
-    test,
     module
 } = QUnit;
+
+const test = (description, callback) => {
+    const testFunc = browser.msie
+        ? QUnit.skip
+        : QUnit.test;
+
+    return testFunc(description, sinon.test(callback));
+};
 
 testStart(() => initTestMarkup());
 
