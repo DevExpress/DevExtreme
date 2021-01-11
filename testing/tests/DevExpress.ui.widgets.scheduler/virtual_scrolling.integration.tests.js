@@ -8,6 +8,7 @@ import 'generic_light.css!';
 import {
     createWrapper,
     initTestMarkup,
+    isDesktopEnvironment,
     asyncScrollTest,
     asyncWrapper
 } from '../../helpers/scheduler/helpers.js';
@@ -274,6 +275,11 @@ module('Virtual scrolling', () => {
                 }
             ].forEach(option => {
                 test(`Long appointment should be rendered correctly if horizontal grouping, and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
                     const data = [{
                         startDate: new Date(2020, 9, 12, 1, 30),
                         endDate: new Date(2020, 9, 13, 0, 30),
@@ -396,6 +402,11 @@ module('Virtual scrolling', () => {
                 }
             ].forEach(option => {
                 test(`Long appointment part should be rendered correctly without render the main part if horizontal grouping and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
                     const data = [{
                         startDate: new Date(2020, 9, 12, 11, 30),
                         endDate: new Date(2020, 9, 13, 10, 30),
@@ -460,6 +471,11 @@ module('Virtual scrolling', () => {
             });
 
             test('Appointment with multiple resources should be rendered correctly if vertical grouping', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 const data = [{
                     startDate: new Date(2020, 9, 12, 1, 30),
                     endDate: new Date(2020, 9, 12, 22, 30),
@@ -551,6 +567,11 @@ module('Virtual scrolling', () => {
             });
 
             test('Appointment with multiple resources should be rendered correctly if horizontal grouping', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 const data = [{
                     startDate: new Date(2020, 9, 12, 1, 30),
                     endDate: new Date(2020, 9, 12, 22, 30),
@@ -693,6 +714,11 @@ module('Virtual scrolling', () => {
                 }
             ].forEach(option => {
                 test(`Long appointment should be rendered correctly vertical grouping and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
                     const data = [{
                         startDate: new Date(2020, 9, 12, 1, 30),
                         endDate: new Date(2020, 9, 13, 0, 30),
@@ -818,6 +844,11 @@ module('Virtual scrolling', () => {
                 }
             ].forEach(option => {
                 test(`Long appointment part should be rendered correctly without render the main part if vertical grouping and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
                     const data = [{
                         startDate: new Date(2020, 9, 12, 11, 30),
                         endDate: new Date(2020, 9, 13, 10, 30),
@@ -984,6 +1015,10 @@ module('Virtual scrolling', () => {
 
                 ['horizontal', 'vertical'].forEach(groupOrientation => {
                     test(`A long appointment should be correctly croped if view: ${viewName}, ${groupOrientation} group orientation`, function(assert) {
+                        if(!isDesktopEnvironment()) {
+                            assert.ok(true, 'This test is for desktop only');
+                            return;
+                        }
                         if(viewName === 'month') {
                             assert.ok(true, 'TODO: appointments in virtual month');
                             return;
@@ -1053,6 +1088,11 @@ module('Virtual scrolling', () => {
         });
 
         test('Recurrent appointment should have correct settings in vertical group orientation', function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
             const data = [{
                 text: 'Test0',
                 priorityId: 1,
@@ -1155,6 +1195,11 @@ module('Virtual scrolling', () => {
         });
 
         test('A vertically grouped long recurrent appointment should not have duplicates', function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
             const data = [{
                 text: 'Website Re-Design Plan',
                 priorityId: [1, 2],
@@ -1297,6 +1342,11 @@ module('Virtual scrolling', () => {
         });
 
         test('Horizontally grouped recurrent appointment should not have duplicates', function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
             const data = [{
                 text: 'Test0',
                 priorityId: [1, 2],
@@ -1778,6 +1828,11 @@ module('Virtual scrolling', () => {
             });
 
             test('Recurrent appointments should be filtered correctly in vertical group orientation', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 const data = [{
                     text: 'Test0',
                     priorityId: 1,
@@ -1919,6 +1974,11 @@ module('Virtual scrolling', () => {
             }
         }, function() {
             test('Scrolling Down if groupOrientation: "vertical"', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 this.createInstance();
 
                 const { instance } = this;
@@ -1956,6 +2016,11 @@ module('Virtual scrolling', () => {
             });
 
             test('Scrolling Up if groupOrientation: "vertical"', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 this.createInstance();
 
                 const { instance } = this;
@@ -1993,6 +2058,11 @@ module('Virtual scrolling', () => {
             });
 
             test('Scrolling Down if groups, resources, groupOrientation: "vertical"', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 this.createInstance({
                     groups: ['resourceId0'],
                     resources: [{
@@ -2045,6 +2115,11 @@ module('Virtual scrolling', () => {
             });
 
             test('Next day appointments should be filtered if "vertical" group orientation', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 this.createInstance({
                     groups: ['resourceId0'],
                     dataSource: [{
@@ -2093,6 +2168,11 @@ module('Virtual scrolling', () => {
             });
 
             test('Long appointment should be rendered correctly on the next page', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
                 const data = [{
                     startDate: new Date(2020, 9, 12, 9, 30),
                     endDate: new Date(2020, 9, 12, 10, 30),
