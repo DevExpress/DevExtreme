@@ -196,7 +196,7 @@ function run_test_scss {
 
 function run_test_styles {
     npm i
-    npm run test-jest -- --config=./testing/styles/jest.config.js --coverage=false
+    npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false
 }
 
 function start_runner_watchdog {
