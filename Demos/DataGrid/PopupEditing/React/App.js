@@ -13,6 +13,8 @@ import 'devextreme-react/text-area';
 import { Item } from 'devextreme-react/form';
 import { employees, states } from './data.js';
 
+const notesEditorOptions = { height: 100 };
+
 class App extends React.Component {
   render() {
     return (
@@ -41,7 +43,7 @@ class App extends React.Component {
                   dataField="Notes"
                   editorType="dxTextArea"
                   colSpan={2}
-                  editorOptions={{ height: 100 }} />
+                  editorOptions={notesEditorOptions} />
               </Item>
 
               <Item itemType="group" caption="Home Address" colCount={2} colSpan={2}>

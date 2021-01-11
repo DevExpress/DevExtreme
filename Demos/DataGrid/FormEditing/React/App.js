@@ -11,6 +11,8 @@ import 'devextreme-react/text-area';
 
 import { employees, states } from './data.js';
 
+const notesEditorOptions = { height: 100 };
+
 class App extends React.Component {
   render() {
     return (
@@ -33,7 +35,7 @@ class App extends React.Component {
           </Column>
           <Column dataField="BirthDate" dataType="date" />
           <Column dataField="Notes" visible={false}>
-            <FormItem colSpan={2} editorType="dxTextArea" editorOptions={{ height: 100 }} />
+            <FormItem colSpan={2} editorType="dxTextArea" editorOptions={notesEditorOptions} />
           </Column>
         </DataGrid>
       </div>
