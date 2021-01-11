@@ -85,16 +85,18 @@ module('Virtual Scrolling', {
                 scrollTo: e => this.scrollableMock.option('onScroll')(e)
             };
 
+            this.scrollTo = scrollOffset => {
+                this.scrollableMock.option('onScroll')(
+                    { scrollOffset }
+                );
+            };
+
             this.scrollVertical = top => {
-                this.scrollableMock.option('onScroll')({
-                    scrollOffset: { top }
-                });
+                this.scrollTo({ top });
             };
 
             this.scrollHorizontal = left => {
-                this.scrollableMock.option('onScroll')({
-                    scrollOffset: { left }
-                });
+                this.scrollTo({ left });
             };
 
             this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this.workspaceMock);
@@ -315,7 +317,7 @@ module('Virtual Scrolling', {
                 }
             }
         ].forEach(option => {
-            test(`Should return correct render state if scrolling orientation: ${option.orientation}`, function(assert) {
+            test(`it should return correct render state if scrolling orientation: ${option.orientation}`, function(assert) {
                 this.prepareInstance({
                     scrolling: {
                         type: option.orientation
@@ -326,6 +328,43 @@ module('Virtual Scrolling', {
 
                 assert.deepEqual(state, option.expectedRenderState, 'Render state is correct');
             });
+        });
+
+        [null, undefined].forEach(offset => {
+            test(`it should not call virtual scrolling instances if scrollOffset is "${offset}"`, function(assert) {
+                this.prepareInstance();
+
+                const spyUpdateVerticalState = this.spy(this.verticalVirtualScrolling, 'updateState');
+                const spyUpdateHorizontalState = this.spy(this.horizontalVirtualScrolling, 'updateState');
+
+                this.scrollTo({
+                    left: offset,
+                    top: offset
+                });
+
+                assert.ok(spyUpdateVerticalState.notCalled, 'Vertical virtual scrolling update state was not called');
+                assert.ok(spyUpdateHorizontalState.notCalled, 'Horizontal virtual scrolling update state was not called');
+            });
+        });
+
+        test('it should not update render if scroll position has not been changed', function(assert) {
+            this.prepareInstance();
+
+            const spy = this.spy(this.virtualScrollingDispatcher.renderer, 'updateRender');
+
+            const scrollOffset = { left: 300, top: 200 };
+
+            this.scrollTo(scrollOffset);
+
+            assert.ok(spy.calledOnce, 'Render was updated');
+            assert.equal(this.verticalVirtualScrolling.position, scrollOffset.top, 'Vertical scroll position is correct');
+            assert.equal(this.horizontalVirtualScrolling.position, scrollOffset.left, 'Horizontal scroll position is correct');
+
+            this.scrollTo(scrollOffset);
+
+            assert.ok(spy.calledOnce, 'Render was not updated');
+            assert.equal(this.verticalVirtualScrolling.position, scrollOffset.top, 'Vertical scroll position is correct');
+            assert.equal(this.horizontalVirtualScrolling.position, scrollOffset.left, 'Horizontal scroll position is correct');
         });
     });
 
@@ -359,7 +398,7 @@ module('Virtual Scrolling', {
             });
 
             test('State should be correct on scrolling Up', function(assert) {
-                this.prepareInstance();
+                this.prepareInstance({ scrolling: { type: 'vertical' } });
 
                 [
                     { top: 4950, stateTop: 4700, topVirtualRowCount: 91, bottomVirtualRowCount: 0, rowCount: 9 },
