@@ -7,7 +7,7 @@ import dataUtils from 'core/element_data';
 import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
-import { isDefined } from '../../../js/core/utils/type.js';
+import { isDefined } from 'core/utils/type';
 
 export const TOOLBAR_TOP_LOCATION = 'top';
 export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
