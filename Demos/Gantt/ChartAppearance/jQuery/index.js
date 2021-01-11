@@ -73,22 +73,32 @@ $(function() {
         text: "Customize Task Tooltip",
         value: true,
         onValueChanged: function (e) {
-            const parentElement = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
-            parentElement.className = 'dx-gantt-task-edit-tooltip';
             e.value ? gantt.option("taskTooltipContentTemplate", getTaskTooltipContentTemplate) 
                     : gantt.option("taskTooltipContentTemplate", undefined);
         }
     });
 
     function getTaskTooltipContentTemplate(task, container) {
-        container[0].innerHTML = "";
-        const parentElement = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
-        parentElement.className = 'dx-gantt-task-edit-tooltip custom-task-edit-tooltip';
-        const timeEstimate = Math.abs(task.start - task.end) / 36e5;
-        const timeLeft = Math.floor((100 - task.progress) / 100 * timeEstimate);
-        return "<div class='custom-tooltip-title'>" + task.title + "</div>"                
-            + "<div class='custom-tooltip-row'>" + "<span> Estimate: </span>" + timeEstimate + "<span> hours </span>" + "</div>"
-            + "<div class='custom-tooltip-row'>" + "<span> Left: </span>" + timeLeft + "<span> hours </span>" + "</div>";
+        var timeEstimate = Math.abs(task.start - task.end) / 36e5;
+        var timeLeft = Math.floor((100 - task.progress) / 100 * timeEstimate);
+
+        var $customTooltip = $(document.createElement("div"))
+            .addClass("custom-task-edit-tooltip");
+
+        $(document.createElement("div"))
+            .addClass("custom-tooltip-title")
+            .text(task.title)
+            .appendTo($customTooltip);
+        $(document.createElement("div"))
+            .addClass("custom-tooltip-row")
+            .text("Estimate: " + timeEstimate + " hours")
+            .appendTo($customTooltip);
+        $(document.createElement("div"))
+            .addClass("custom-tooltip-row")
+            .text("Left: " + timeLeft + "hours")
+            .appendTo($customTooltip);
+
+        return $customTooltip;
     }
 
 });

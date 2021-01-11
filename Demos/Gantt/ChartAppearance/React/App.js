@@ -3,6 +3,7 @@ import Gantt, { Tasks, Dependencies, Resources, ResourceAssignments, Column, Edi
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import { tasks, dependencies, resources, resourceAssignments } from './data.js';
+import TaskTooltipTemplate from './TaskTooltipTemplate.js';
 
 class App extends React.Component {
   constructor() {
@@ -11,12 +12,11 @@ class App extends React.Component {
       scaleType: 'months',
       taskTitlePosition: 'outside',
       showResources: true,
-      taskTooltipContentTemplate: this.getTaskTooltipContentTemplate
+      showCustomTaskTooltip: true
     };
     this.onScaleTypeChanged = this.onScaleTypeChanged.bind(this);
     this.onTaskTitlePositionChanged = this.onTaskTitlePositionChanged.bind(this);
     this.onShowResourcesChanged = this.onShowResourcesChanged.bind(this);
-    this.getTaskTooltipContentTemplate = this.getTaskTooltipContentTemplate.bind(this);
     this.onShowCustomTaskTooltip = this.onShowCustomTaskTooltip.bind(this);
   }
 
@@ -25,7 +25,7 @@ class App extends React.Component {
       scaleType,
       taskTitlePosition,
       showResources,
-      taskTooltipContentTemplate
+      showCustomTaskTooltip
     } = this.state;
     return (
       <div id="form-demo">
@@ -60,7 +60,7 @@ class App extends React.Component {
           <div className="option">
             <CheckBox
               text="Customize Task Tooltip"
-              defaultValue={true}
+              value={showCustomTaskTooltip}
               onValueChanged={this.onShowCustomTaskTooltip}
             />
           </div>
@@ -72,7 +72,7 @@ class App extends React.Component {
             taskTitlePosition={taskTitlePosition}
             scaleType={scaleType}
             showResources={showResources}
-            taskTooltipContentTemplate = {taskTooltipContentTemplate}>
+            taskTooltipContentRender = {showCustomTaskTooltip ? TaskTooltipTemplate : undefined}>
 
             <Tasks dataSource={tasks} />
             <Dependencies dataSource={dependencies} />
@@ -106,22 +106,9 @@ class App extends React.Component {
     });
   }
   onShowCustomTaskTooltip(e) {
-    const parentElement = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
-    parentElement.className = 'dx-gantt-task-edit-tooltip';
     this.setState({
-      taskTooltipContentTemplate: e.value ? this.getTaskTooltipContentTemplate : undefined
+      showCustomTaskTooltip: e.value
     });
-  }
-  getTaskTooltipContentTemplate(model, container) {
-    container.innerHTML = '';
-    const parentElement = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
-    parentElement.className = 'dx-gantt-task-edit-tooltip custom-task-edit-tooltip';
-    const timeEstimate = Math.abs(model.start - model.end) / 36e5;
-    const timeLeft = Math.floor((100 - model.progress) / 100 * timeEstimate);
-
-    return `<div class="custom-tooltip-title"> ${model.title} </div>`
-    + `<div class="custom-tooltip-row"> <span> Estimate: </span> ${timeEstimate} <span> hours </span> </div>`
-    + `<div class="custom-tooltip-row"> <span> Left: </span> ${timeLeft} <span> hours </span> </div>`;
   }
 }
 

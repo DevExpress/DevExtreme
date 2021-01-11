@@ -21,8 +21,7 @@
         <div class="option">
             <dx-check-box
                 text="Customize Task Tooltip"
-                [value]="true"
-                (onValueChanged)="onShowCustomTaskTooltip($event)"></dx-check-box>
+                [(value)]="showCustomTaskTooltip"></dx-check-box>
         </div>
     </div>
     <div class="widget-container">
@@ -32,7 +31,7 @@
             [taskTitlePosition]="titlePosition"
             [scaleType]="scaleType"
             [showResources]="showResources"
-            [taskTooltipContentTemplate]="taskTooltipContentTemplate">
+            [taskTooltipContentTemplate]="showCustomTaskTooltip ? 'taskTooltipContentTemplate' : undefined">
 
             <dxo-tasks [dataSource]="tasks"></dxo-tasks>
             <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
@@ -44,6 +43,11 @@
             <dxi-column dataField="end" caption="End Date" dataType="date"></dxi-column>
 
             <dxo-editing [enabled]="true"></dxo-editing>
+            <div *dxTemplate="let task of 'taskTooltipContentTemplate'" class="custom-task-edit-tooltip">
+                <div class="custom-tooltip-title">{{task.title}}</div>
+                <div class="custom-tooltip-row"><span> Estimate: </span>{{getTimeEstimate(task)}}<span> hours </span></div>
+                <div class="custom-tooltip-row"><span> Left: </span>{{getTimeLeft(task)}}<span> hours </span></div>
+            </div>
         </dx-gantt>
     </div>
 </div>
