@@ -638,7 +638,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'groups':
                 this._cleanView();
-                this._disposeRenovatedComponents();
                 this._removeAllDayElements();
                 this._initGrouping();
                 this.repaint();
@@ -653,7 +652,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'showAllDayPanel':
                 if(this._isVerticalGroupedWorkSpace()) {
                     this._cleanView();
-                    this._disposeRenovatedComponents();
                     this._removeAllDayElements();
                     this._initGrouping();
                     this.repaint();
@@ -701,7 +699,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this.option('renovateRender', this._isVirtualModeOn());
                 break;
             case 'renovateRender':
-                this._disposeRenovatedComponents();
                 this.repaint();
                 break;
             default:
@@ -2228,7 +2225,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _clean() {
         eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
-        this._disposeRenovatedComponents();
+        // this._disposeRenovatedComponents();
 
         super._clean();
     }
