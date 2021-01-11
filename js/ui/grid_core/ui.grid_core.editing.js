@@ -790,10 +790,6 @@ const EditingController = modules.ViewController.inherit((function() {
                         return change.pageIndex === endPageIndex;
                     case 'prepend':
                         return change.pageIndex === beginPageIndex;
-                    case 'refresh':
-                        change.index = 0;
-                        change.pageIndex = 0;
-                        break;
                     default:
                         return change.pageIndex >= beginPageIndex && change.pageIndex <= endPageIndex;
                 }

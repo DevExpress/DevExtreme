@@ -15652,7 +15652,7 @@ QUnit.module('Editing with scrolling', {
     });
 
     // T258714
-    QUnit.test('Change position of the inserted row when virtual scrolling', function(assert) {
+    QUnit.skip('Change position of the inserted row when virtual scrolling', function(assert) {
     // arrange
         const testElement = $('#container');
         let items;
