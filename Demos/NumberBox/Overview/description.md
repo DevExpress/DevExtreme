@@ -1,1 +1,1 @@
-The **NumberBox** is&nbsp;a&nbsp;widget that displays a&nbsp;numeric value and allows a&nbsp;user to&nbsp;modify it&nbsp;by&nbsp;typing in&nbsp;a&nbsp;value, and incrementing or&nbsp;decrementing it&nbsp;using the keyboard or&nbsp;mouse.
+The **NumberBox** is&nbsp;a&nbsp;UI component that displays a&nbsp;numeric value and allows a&nbsp;user to&nbsp;modify it&nbsp;by&nbsp;typing in&nbsp;a&nbsp;value, and incrementing or&nbsp;decrementing it&nbsp;using the keyboard or&nbsp;mouse.

@@ -1,1 +1,1 @@
-This example demonstrates the **List** widget loading data from a Web API service.
+This example demonstrates the **List** UI component loading data from a Web API service.

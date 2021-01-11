@@ -1,1 +1,1 @@
-By&nbsp;default, the **TileView** widget is&nbsp;oriented horizontally, but you can orient it&nbsp;vertically using the **direction** option.
+By&nbsp;default, the **TileView** UI component is&nbsp;oriented horizontally, but you can orient it&nbsp;vertically using the **direction** option.

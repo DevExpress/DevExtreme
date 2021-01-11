@@ -1,1 +1,1 @@
-The **List** widget can display items in&nbsp;groups if&nbsp;they are arranged so&nbsp;in&nbsp;the data source. Groups have captions, which are customized in&nbsp;this demo.
+The **List** UI component can display items in&nbsp;groups if&nbsp;they are arranged so&nbsp;in&nbsp;the data source. Groups have captions, which are customized in&nbsp;this demo.

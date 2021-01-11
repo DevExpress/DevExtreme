@@ -1,1 +1,1 @@
-With the **Chart** widget, you can display charts with multiple axes and combine charts together to&nbsp;help better visualize the similarities or&nbsp;differences in&nbsp;data under investigation.
+With the **Chart** UI component, you can display charts with multiple axes and combine charts together to&nbsp;help better visualize the similarities or&nbsp;differences in&nbsp;data under investigation.

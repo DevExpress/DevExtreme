@@ -1,1 +1,1 @@
-The **Toolbar** is&nbsp;a&nbsp;widget containing items that usually manage screen content. Those items can be&nbsp;plain text or&nbsp;widgets.
+The **Toolbar** is&nbsp;a&nbsp;UI component containing items that usually manage screen content. Those items can be&nbsp;plain text or&nbsp;widgets.

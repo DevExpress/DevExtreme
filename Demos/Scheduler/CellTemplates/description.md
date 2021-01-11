@@ -21,7 +21,7 @@ Before an appointment is created or updated, the **Scheduler** executes the [onA
 The appointment details form includes two calendars that allow users to select an appointment's start and end date/time. You should also disable dates in these calendars. Review the `applyDisableDatesToDateEditors` function to see how this is done. Call this function from **onAppointmentFormOpening**.
 
 1. **Customize the timetable appearance**       
-Use templates to customize the appearance of data cells ([dataCellTemplate][3]), time cells ([timeCellTemplate][4]), and date cells ([dateCellTemplate][5]). In this demo, date cell customization is visible only in the Month view. To switch to this view, use the view switcher in the widget's upper right corner.
+Use templates to customize the appearance of data cells ([dataCellTemplate][3]), time cells ([timeCellTemplate][4]), and date cells ([dateCellTemplate][5]). In this demo, date cell customization is visible only in the Month view. To switch to this view, use the view switcher in the UI component's upper right corner.
 
 [0]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/#onAppointmentAdding
 [1]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/#onAppointmentUpdating

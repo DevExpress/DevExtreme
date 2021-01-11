@@ -1,1 +1,1 @@
-The **Autocomplete** widget is&nbsp;a&nbsp;textbox that provides suggestions while a&nbsp;user types into&nbsp;it.
+The **Autocomplete** UI component is&nbsp;a&nbsp;textbox that provides suggestions while a&nbsp;user types into&nbsp;it.

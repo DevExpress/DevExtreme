@@ -1,1 +1,1 @@
-This demo illustrates the use of&nbsp;multi-series selection within the **Chart** widget.
+This demo illustrates the use of&nbsp;multi-series selection within the **Chart** UI component.

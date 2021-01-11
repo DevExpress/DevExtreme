@@ -1,1 +1,1 @@
-This demo illustrates how you can use custom data in&nbsp;the **VectorMap** widget. Visualized, the custom data constitutes a&nbsp;floor plan.
+This demo illustrates how you can use custom data in&nbsp;the **VectorMap** UI component. Visualized, the custom data constitutes a&nbsp;floor plan.

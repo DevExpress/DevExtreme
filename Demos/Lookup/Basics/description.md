@@ -1,1 +1,1 @@
-The **Lookup** is&nbsp;a&nbsp;widget that allows an&nbsp;end user to&nbsp;search for an&nbsp;item in&nbsp;a&nbsp;collection shown in&nbsp;a&nbsp;drop-down menu. This demo shows how to&nbsp;create a&nbsp;simple and a&nbsp;grouped **Lookup**.
+The **Lookup** is&nbsp;a&nbsp;UI component that allows an&nbsp;end user to&nbsp;search for an&nbsp;item in&nbsp;a&nbsp;collection shown in&nbsp;a&nbsp;drop-down menu. This demo shows how to&nbsp;create a&nbsp;simple and a&nbsp;grouped **Lookup**.

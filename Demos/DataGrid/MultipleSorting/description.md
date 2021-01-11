@@ -1,4 +1,4 @@
-The **DataGrid** widget can sort values by a single or multiple columns. Use the **sorting**.[mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/sorting/#mode) option to specify the sorting mode:
+The **DataGrid** UI component can sort values by a single or multiple columns. Use the **sorting**.[mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/sorting/#mode) option to specify the sorting mode:
 - Single sorting mode. A user can click the column header to sort by this column and click it again to change the sort order (ascending or descending). An arrow icon in the column's header indicates the sort order.
 
 - Multiple sorting mode. A user can hold the **Shift** key and click column headers in the order the user wants to apply sorting. To cancel a column's sorting settings, a user should hold the **Ctrl** key and click the column header.

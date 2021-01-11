@@ -1,1 +1,1 @@
-The **VectorMap** widget allows you to&nbsp;use color and size indicators to&nbsp;better illustrate the values associated with areas/markers. Use map legends to&nbsp;provide additional information on&nbsp;colors and marker size.
+The **VectorMap** UI component allows you to&nbsp;use color and size indicators to&nbsp;better illustrate the values associated with areas/markers. Use map legends to&nbsp;provide additional information on&nbsp;colors and marker size.

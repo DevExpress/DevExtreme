@@ -1,1 +1,1 @@
-This demo illustrates how the **Chart** widget treats points with _null_ value.
+This demo illustrates how the **Chart** UI component treats points with _null_ value.

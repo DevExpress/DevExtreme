@@ -1,1 +1,1 @@
-The **List** is&nbsp;a&nbsp;widget that represents a&nbsp;collection of&nbsp;items in&nbsp;a&nbsp;scrollable list. This demo displays different delete modes and shows how you can handle the **selectionChanged** event.
+The **List** is&nbsp;a&nbsp;UI component that represents a&nbsp;collection of&nbsp;items in&nbsp;a&nbsp;scrollable list. This demo displays different delete modes and shows how you can handle the **selectionChanged** event.

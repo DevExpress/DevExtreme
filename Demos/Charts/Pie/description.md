@@ -1,1 +1,1 @@
-This demo illustrates the **PieChart** widget that is&nbsp;often used when comparing the percentage values of&nbsp;different point arguments within a&nbsp;series.
+This demo illustrates the **PieChart** UI component that is&nbsp;often used when comparing the percentage values of&nbsp;different point arguments within a&nbsp;series.

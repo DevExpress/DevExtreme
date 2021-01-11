@@ -10,6 +10,6 @@ A filter expression that is applied with the following UI elements: [filter row]
 Gets the total filter that includes filters from the UI elements and the filter applied to the **dataSource**. If you specify the `returnDataField` parameter, the returned value contains data field names instead of [getters](/Documentation/Guide/Data_Binding/Data_Layer/#Getters_And_Setters).
 
 - [clearFilter()](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#clearFilter) / [clearFilter(filterName)](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#clearFilterfilterName)       
-Discards all filters applied to the widget. If you specify the `filterName` parameter, this method discards all filters of a specific type.
+Discards all filters applied to the UI component. If you specify the `filterName` parameter, this method discards all filters of a specific type.
 
-In this demo, you can use the [SelectBox](/Documentation/ApiReference/UI_Widgets/dxSelectBox/) widget to filter the grid's **dataSource**. The *"All"* item calls the **clearFilter()** method and the other items call the **filter(filterExpr)** method.
+In this demo, you can use the [SelectBox](/Documentation/ApiReference/UI_Widgets/dxSelectBox/) UI component to filter the grid's **dataSource**. The *"All"* item calls the **clearFilter()** method and the other items call the **filter(filterExpr)** method.

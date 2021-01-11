@@ -1,1 +1,1 @@
-This demo illustrates the collection of&nbsp;timeline views available in&nbsp;the **Scheduler** widget. Appointments are associated with several resources (an&nbsp;appointment color depends on&nbsp;the associated resource) and grouped by&nbsp;one of&nbsp;them.
+This demo illustrates the collection of&nbsp;timeline views available in&nbsp;the **Scheduler** UI component. Appointments are associated with several resources (an&nbsp;appointment color depends on&nbsp;the associated resource) and grouped by&nbsp;one of&nbsp;them.

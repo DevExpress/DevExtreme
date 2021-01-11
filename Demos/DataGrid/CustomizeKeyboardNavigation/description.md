@@ -1,7 +1,7 @@
 The following options customize keyboard navigation:
  
 - [enterKeyAction](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/keyboardNavigation/#enterKeyAction)    
-Specifies the widget's actions when a user presses Enter key: 
+Specifies the UI component's actions when a user presses Enter key: 
  
     - *"moveFocus"* - moves focus in the **enterKeyDirection**
     - *"startEdit"* (default) - switches the cell to the editing state

@@ -1,1 +1,1 @@
-This demo shows the **List** widget with the searching capability enabled. Depending on&nbsp;the search mode, the widget finds entries that contain your search string or&nbsp;entries that only start with&nbsp;it.
+This demo shows the **List** UI component with the searching capability enabled. Depending on&nbsp;the search mode, the UI component finds entries that contain your search string or&nbsp;entries that only start with&nbsp;it.

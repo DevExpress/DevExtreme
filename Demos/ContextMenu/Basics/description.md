@@ -1,1 +1,1 @@
-The **ContextMenu** widget displays a&nbsp;single- or&nbsp;multi-level context menu. An&nbsp;end user invokes this menu by&nbsp;a&nbsp;right click or&nbsp;a&nbsp;long press. This demo illustrates how to&nbsp;create a&nbsp;simple **ContextMenu**.
+The **ContextMenu** UI component displays a&nbsp;single- or&nbsp;multi-level context menu. An&nbsp;end user invokes this menu by&nbsp;a&nbsp;right click or&nbsp;a&nbsp;long press. This demo illustrates how to&nbsp;create a&nbsp;simple **ContextMenu**.

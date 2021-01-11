@@ -1,1 +1,1 @@
-The **Popup** widget is&nbsp;a&nbsp;pop-up window overlaying the current view. Use this widget to&nbsp;display specified content in&nbsp;a&nbsp;popup window. In&nbsp;this demo, the content is&nbsp;specified using a&nbsp;custom template.
+The **Popup** UI component is&nbsp;a&nbsp;pop-up window overlaying the current view. Use this UI component to&nbsp;display specified content in&nbsp;a&nbsp;popup window. In&nbsp;this demo, the content is&nbsp;specified using a&nbsp;custom template.

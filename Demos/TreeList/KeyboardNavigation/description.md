@@ -1,4 +1,4 @@
-In this demo, you can use the following keys and key combinations to interact with the widget:
+In this demo, you can use the following keys and key combinations to interact with the UI component:
 
 - **Tab**
 Navigate between TreeList elements.

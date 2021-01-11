@@ -1,8 +1,8 @@
-This demo illustrates how you can allow end-users to reorder, add, and remove tabs within the DevExtreme [TabPanel](/Documentation/ApiReference/UI_Widgets/dxTabPanel/) widget.     
+This demo illustrates how you can allow end-users to reorder, add, and remove tabs within the DevExtreme [TabPanel](/Documentation/ApiReference/UI_Widgets/dxTabPanel/) UI component.     
 
 **Reorder tabs**       
 
-Wrap the **TabPanel** into the [Sortable](/Documentation/ApiReference/UI_Widgets/dxSortable/) widget and set the following options as needed:
+Wrap the **TabPanel** into the [Sortable](/Documentation/ApiReference/UI_Widgets/dxSortable/) UI component and set the following options as needed:
 
 - [filter](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#filter)         
 Specify a CSS selector to indicate draggable items. This demo sets filter to `.dx-tab`.

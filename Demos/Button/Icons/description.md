@@ -1,1 +1,1 @@
-This demo illustrates how to&nbsp;display an&nbsp;icon within the **Button** widget. You can use a&nbsp;built-in or&nbsp;external font, or&nbsp;use an&nbsp;image as&nbsp;an&nbsp;icon.
+This demo illustrates how to&nbsp;display an&nbsp;icon within the **Button** UI component. You can use a&nbsp;built-in or&nbsp;external font, or&nbsp;use an&nbsp;image as&nbsp;an&nbsp;icon.

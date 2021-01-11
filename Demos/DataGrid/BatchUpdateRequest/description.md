@@ -10,7 +10,7 @@ Set the `e.cancel` field to `true`.
 2. **Send pending changes to the server**              
 Pending changes are contained in the `e.changes` array. Ensure it is not empty and send the changes to the server.
 
-3. **Update data in the widget**            
+3. **Update data in the UI component**            
 Once changes are saved, call the [refresh(changesOnly)](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Methods/#refreshchangesOnly) method.
 
 4. **Reset edit state**           

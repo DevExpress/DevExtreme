@@ -1,1 +1,1 @@
-This demo demonstrates the ability of&nbsp;the **RangeSelector** to&nbsp;show the **Chart** widget with multiple series as&nbsp;a&nbsp;background view.
+This demo demonstrates the ability of&nbsp;the **RangeSelector** to&nbsp;show the **Chart** UI component with multiple series as&nbsp;a&nbsp;background view.

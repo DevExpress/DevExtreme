@@ -1,4 +1,4 @@
-DevExtreme Data Editors provide a&nbsp;powerful and seamless way to&nbsp;perform data validation. In&nbsp;this demo, editors are collected in&nbsp;an&nbsp;HTML&nbsp;form. Each editor is&nbsp;accompanied by&nbsp;the **Validator** widget validating the editor against a&nbsp;set of&nbsp;specified rules. Editors are validated each time their value is&nbsp;changed. All validation errors are displayed in&nbsp;the **ValidationSummary** widget.
+DevExtreme Data Editors provide a&nbsp;powerful and seamless way to&nbsp;perform data validation. In&nbsp;this demo, editors are collected in&nbsp;an&nbsp;HTML&nbsp;form. Each editor is&nbsp;accompanied by&nbsp;the **Validator** UI component validating the editor against a&nbsp;set of&nbsp;specified rules. Editors are validated each time their value is&nbsp;changed. All validation errors are displayed in&nbsp;the **ValidationSummary** UI component.
 
 
 
