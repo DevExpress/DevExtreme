@@ -11,6 +11,7 @@ import Callbacks from '../../core/utils/callbacks';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
+const NEW_SCROLLING_MODE = 'scrolling.newMode';
 
 const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 
@@ -297,21 +298,20 @@ export const VirtualScrollController = Class.inherit((function() {
 
     return {
         ctor: function(component, dataSource, isVirtual) {
-            const that = this;
-            that._dataSource = dataSource;
-            that.component = component;
-            that._pageIndex = that._lastPageIndex = dataSource.pageIndex();
+            this._dataSource = dataSource;
+            this.component = component;
+            this._pageIndex = this._lastPageIndex = dataSource.pageIndex();
 
-            that._viewportSize = 0;
-            that._viewportItemSize = 20;
-            that._viewportItemIndex = -1;
-            that._itemSizes = {};
-            that._sizeRatio = 1;
-            that._items = [];
-            that._cache = [];
-            that._isVirtual = isVirtual;
-            that._loadingPageIndexes = {};
-            that.positionChanged = Callbacks();
+            this._viewportSize = 0;
+            this._viewportItemSize = 20;
+            this._viewportItemIndex = -1;
+            this._itemSizes = {};
+            this._sizeRatio = 1;
+            this._items = [];
+            this._cache = [];
+            this._isVirtual = isVirtual;
+            this._loadingPageIndexes = {};
+            this.positionChanged = Callbacks();
         },
 
         getItemSizes: function() {
@@ -323,18 +323,24 @@ export const VirtualScrollController = Class.inherit((function() {
         },
 
         virtualItemsCount: function() {
-            const that = this;
-            let pageIndex;
-            let itemsCount = 0;
-
-            if(isVirtualMode(that)) {
-                pageIndex = getBeginPageIndex(that);
-                if(pageIndex < 0) {
-                    pageIndex = that._dataSource.pageIndex();
+            if(isVirtualMode(this)) {
+                const totalItemsCount = this._dataSource.totalItemsCount();
+                if(this.option(NEW_SCROLLING_MODE) && totalItemsCount !== -1) {
+                    const loadParams = this.getVisibleItemParams();
+                    const endItemsCount = totalItemsCount - (loadParams.skip + loadParams.take);
+                    return {
+                        begin: loadParams.skip,
+                        end: endItemsCount
+                    };
                 }
-                const beginItemsCount = pageIndex * that._dataSource.pageSize();
-                itemsCount = that._cache.length * that._dataSource.pageSize();
-                const endItemsCount = Math.max(0, that._dataSource.totalItemsCount() - itemsCount - beginItemsCount);
+
+                let pageIndex = getBeginPageIndex(this);
+                if(pageIndex < 0) {
+                    pageIndex = this._dataSource.pageIndex();
+                }
+                const beginItemsCount = pageIndex * this._dataSource.pageSize();
+                const itemsCount = this._cache.length * this._dataSource.pageSize();
+                const endItemsCount = Math.max(0, this._dataSource.totalItemsCount() - itemsCount - beginItemsCount);
                 return {
                     begin: beginItemsCount,
                     end: endItemsCount
@@ -343,22 +349,21 @@ export const VirtualScrollController = Class.inherit((function() {
         },
 
         setViewportPosition: function(position) {
-            const that = this;
             const result = new Deferred();
-            let scrollingTimeout = Math.min(that.option('scrolling.timeout') || 0, that._dataSource.changingDuration());
+            let scrollingTimeout = Math.min(this.option('scrolling.timeout') || 0, this._dataSource.changingDuration());
 
-            if(scrollingTimeout < that.option('scrolling.renderingThreshold')) {
-                scrollingTimeout = that.option('scrolling.minTimeout') || 0;
+            if(scrollingTimeout < this.option('scrolling.renderingThreshold')) {
+                scrollingTimeout = this.option('scrolling.minTimeout') || 0;
             }
 
-            clearTimeout(that._scrollTimeoutID);
+            clearTimeout(this._scrollTimeoutID);
             if(scrollingTimeout > 0) {
-                that._scrollTimeoutID = setTimeout(function() {
-                    that._setViewportPositionCore(position);
+                this._scrollTimeoutID = setTimeout(() => {
+                    this._setViewportPositionCore(position);
                     result.resolve();
                 }, scrollingTimeout);
             } else {
-                that._setViewportPositionCore(position);
+                this._setViewportPositionCore(position);
                 result.resolve();
             }
             return result.promise();
@@ -369,13 +374,12 @@ export const VirtualScrollController = Class.inherit((function() {
         },
 
         getItemIndexByPosition: function() {
-            const that = this;
-            const position = that._position;
-            const defaultItemSize = that.getItemSize();
+            const position = this._position;
+            const defaultItemSize = this.getItemSize();
             let offset = 0;
             let itemOffset = 0;
 
-            const itemOffsetsWithSize = Object.keys(that._itemSizes).concat(-1);
+            const itemOffsetsWithSize = Object.keys(this._itemSizes).concat(-1);
             for(let i = 0; i < itemOffsetsWithSize.length && offset < position; i++) {
                 const itemOffsetWithSize = parseInt(itemOffsetsWithSize[i]);
                 let itemOffsetDiff = (position - offset) / defaultItemSize;
@@ -387,7 +391,7 @@ export const VirtualScrollController = Class.inherit((function() {
                     offset += itemOffsetDiff * defaultItemSize;
                     itemOffset += itemOffsetDiff;
                 }
-                const itemSize = that._itemSizes[itemOffsetWithSize];
+                const itemSize = this._itemSizes[itemOffsetWithSize];
                 offset += itemSize;
                 itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
             }
@@ -404,28 +408,27 @@ export const VirtualScrollController = Class.inherit((function() {
         },
 
         setContentSize: function(size) {
-            const that = this;
             const sizes = Array.isArray(size) && size;
-            const virtualItemsCount = that.virtualItemsCount();
+            const virtualItemsCount = this.virtualItemsCount();
 
             if(sizes) {
                 size = sizes.reduce((a, b) => a + b, 0);
             }
 
-            that._contentSize = size;
+            this._contentSize = size;
 
             if(virtualItemsCount) {
                 if(sizes) {
                     sizes.forEach((size, index) => {
-                        that._itemSizes[virtualItemsCount.begin + index] = size;
+                        this._itemSizes[virtualItemsCount.begin + index] = size;
                     });
                 }
-                const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + that.itemsCount()) * that._viewportItemSize;
+                const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + this.itemsCount()) * this._viewportItemSize;
                 const contentHeightLimit = getContentHeightLimit(browser);
                 if(virtualContentSize > contentHeightLimit) {
-                    that._sizeRatio = contentHeightLimit / virtualContentSize;
+                    this._sizeRatio = contentHeightLimit / virtualContentSize;
                 } else {
-                    that._sizeRatio = 1;
+                    this._sizeRatio = 1;
                 }
             }
         },
@@ -433,24 +436,23 @@ export const VirtualScrollController = Class.inherit((function() {
             return this._viewportItemSize * this._sizeRatio;
         },
         getItemOffset: function(itemIndex, isEnd) {
-            const that = this;
-            const virtualItemsCount = that.virtualItemsCount();
+            const virtualItemsCount = this.virtualItemsCount();
             let itemCount = itemIndex;
 
             if(!virtualItemsCount) return 0;
 
             let offset = 0;
-            const totalItemsCount = that._dataSource.totalItemsCount();
+            const totalItemsCount = this._dataSource.totalItemsCount();
 
-            Object.keys(that._itemSizes).forEach(currentItemIndex => {
+            Object.keys(this._itemSizes).forEach(currentItemIndex => {
                 if(!itemCount) return;
                 if(isEnd ? (currentItemIndex >= totalItemsCount - itemIndex) : (currentItemIndex < itemIndex)) {
-                    offset += that._itemSizes[currentItemIndex];
+                    offset += this._itemSizes[currentItemIndex];
                     itemCount--;
                 }
             });
 
-            return Math.floor(offset + itemCount * that._viewportItemSize * that._sizeRatio);
+            return Math.floor(offset + itemCount * this._viewportItemSize * this._sizeRatio);
         },
         getContentOffset: function(type) {
             const isEnd = type === 'end';
@@ -461,31 +463,32 @@ export const VirtualScrollController = Class.inherit((function() {
             return this.getItemOffset(isEnd ? virtualItemsCount.end : virtualItemsCount.begin, isEnd);
         },
         getVirtualContentSize: function() {
-            const that = this;
-            const virtualItemsCount = that.virtualItemsCount();
+            const virtualItemsCount = this.virtualItemsCount();
 
-            return virtualItemsCount ? that.getContentOffset('begin') + that.getContentOffset('end') + that._contentSize : 0;
+            return virtualItemsCount ? this.getContentOffset('begin') + this.getContentOffset('end') + this._contentSize : 0;
         },
         getViewportItemIndex: function() {
             return this._viewportItemIndex;
         },
         setViewportItemIndex: function(itemIndex) {
-            const that = this;
-            const pageSize = that._dataSource.pageSize();
-            const pageCount = that._dataSource.pageCount();
-            const virtualMode = isVirtualMode(that);
-            const appendMode = isAppendMode(that);
-            const totalItemsCount = that._dataSource.totalItemsCount();
+            this._viewportItemIndex = itemIndex;
+            if(this.option(NEW_SCROLLING_MODE)) {
+                return;
+            }
+
+            const pageSize = this._dataSource.pageSize();
+            const pageCount = this._dataSource.pageCount();
+            const virtualMode = isVirtualMode(this);
+            const appendMode = isAppendMode(this);
+            const totalItemsCount = this._dataSource.totalItemsCount();
             let newPageIndex;
 
-            that._viewportItemIndex = itemIndex;
-
             if(pageSize && (virtualMode || appendMode) && totalItemsCount >= 0) {
-                if(that._viewportSize && (itemIndex + that._viewportSize) >= totalItemsCount && !that._isVirtual) {
-                    if(that._dataSource.hasKnownLastPage()) {
+                if(this._viewportSize && (itemIndex + this._viewportSize) >= totalItemsCount && !this._isVirtual) {
+                    if(this._dataSource.hasKnownLastPage()) {
                         newPageIndex = pageCount - 1;
                         const lastPageSize = totalItemsCount % pageSize;
-                        if(newPageIndex > 0 && lastPageSize > 0 && lastPageSize < that._viewportSize) {
+                        if(newPageIndex > 0 && lastPageSize > 0 && lastPageSize < this._viewportSize) {
                             newPageIndex--;
                         }
                     } else {
@@ -498,8 +501,8 @@ export const VirtualScrollController = Class.inherit((function() {
                     newPageIndex = Math.min(newPageIndex, maxPageIndex);
                 }
 
-                that.pageIndex(newPageIndex);
-                return that.load();
+                this.pageIndex(newPageIndex);
+                return this.load();
             }
         },
         viewportItemSize: function(size) {
@@ -539,19 +542,18 @@ export const VirtualScrollController = Class.inherit((function() {
             return this._dataSource.pageSize();
         },
         load: function() {
-            const that = this;
-            const dataSource = that._dataSource;
+            const dataSource = this._dataSource;
             let result;
 
-            if(isVirtualMode(that) || isAppendMode(that)) {
-                const pageIndexForLoad = getPageIndexForLoad(that);
+            if(isVirtualMode(this) || isAppendMode(this)) {
+                const pageIndexForLoad = getPageIndexForLoad(this);
 
                 if(pageIndexForLoad >= 0) {
-                    const loadResult = loadCore(that, pageIndexForLoad);
+                    const loadResult = loadCore(this, pageIndexForLoad);
                     if(loadResult) {
                         result = new Deferred();
-                        loadResult.done(function() {
-                            const delayDeferred = that._delayDeferred;
+                        loadResult.done(() => {
+                            const delayDeferred = this._delayDeferred;
                             if(delayDeferred) {
                                 delayDeferred.done(result.resolve).fail(result.reject);
                             } else {
@@ -565,8 +567,8 @@ export const VirtualScrollController = Class.inherit((function() {
                 result = dataSource.load();
             }
 
-            if(!result && that._lastPageIndex !== that.pageIndex()) {
-                that._dataSource.onChanged({
+            if(!result && this._lastPageIndex !== this.pageIndex()) {
+                this._dataSource.onChanged({
                     changeType: 'pageIndex'
                 });
             }
@@ -574,14 +576,12 @@ export const VirtualScrollController = Class.inherit((function() {
             return result || new Deferred().resolve();
         },
         loadIfNeed: function() {
-            const that = this;
-
-            if((isVirtualMode(that) || isAppendMode(that)) && !that._dataSource.isLoading() && (!that._isChangedFiring || that._isVirtual)) {
-                const position = that.getViewportPosition();
+            if((isVirtualMode(this) || isAppendMode(this)) && !this._dataSource.isLoading() && (!this._isChangedFiring || this._isVirtual)) {
+                const position = this.getViewportPosition();
                 if(position > 0) {
-                    that._setViewportPositionCore(position);
+                    this._setViewportPositionCore(position);
                 } else {
-                    that.load();
+                    this.load();
                 }
             }
         },
@@ -666,11 +666,9 @@ export const VirtualScrollController = Class.inherit((function() {
         },
 
         subscribeToWindowScrollEvents: function($element) {
-            const that = this;
-
-            that._windowScroll = that._windowScroll || subscribeToExternalScrollers($element, function(scrollTop) {
-                if(that.viewportItemSize()) {
-                    that.setViewportPosition(scrollTop);
+            this._windowScroll = this._windowScroll || subscribeToExternalScrollers($element, (scrollTop) => {
+                if(this.viewportItemSize()) {
+                    this.setViewportPosition(scrollTop);
                 }
             });
         },
@@ -683,6 +681,21 @@ export const VirtualScrollController = Class.inherit((function() {
 
         scrollTo: function(pos) {
             this._windowScroll && this._windowScroll.scrollTo(pos);
-        }
+        },
+
+        // new mode
+        getVisibleItemParams: function() {
+            const skip = Math.floor(this._viewportItemIndex);
+            let take = this._viewportSize + 1;
+            if(isVirtualMode(this)) {
+                const remainedItems = this._dataSource.totalItemsCount() - skip;
+                take = Math.min(take, remainedItems);
+            }
+
+            return {
+                skip,
+                take
+            };
+        },
     };
 })());
