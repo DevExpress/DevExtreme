@@ -168,6 +168,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._isShowAllDayPanel() && this.supportAllDayRow();
     }
 
+    get isDateAndTimeView() {
+        return true;
+    }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -2514,7 +2518,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const { position, cellData } = cell;
 
         return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
-            cellData, position, currentDate,
+            cellData, position, currentDate, this.isDateAndTimeView,
         );
     }
 

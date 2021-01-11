@@ -179,24 +179,23 @@ test('Selection should work correctly while scrolling when appointments are grou
   }],
 }));
 
-// TODO: run this test when virtual scrolling will be available in Month
-// test('Selection should work in month view', async (t) => {
-//   await t
-//     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
+test('Selection should work in month view', async (t) => {
+  await t
+    .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
-//   await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
 
-//   await scrollTo(1500);
-//   await t
-//     .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
-//     .eql(0);
+  await scrollTo(1500);
+  await t
+    .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
+    .eql(0);
 
-//   await scrollTo(0);
-//   await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
-// }).before(() => createScheduler({
-//   views: [{
-//     type: 'month',
-//     intervalCount: 30,
-//   }],
-//   currentView: 'month',
-// }));
+  await scrollTo(0);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
+}).before(() => createScheduler({
+  views: [{
+    type: 'month',
+    intervalCount: 30,
+  }],
+  currentView: 'month',
+}));

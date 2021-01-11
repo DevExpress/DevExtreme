@@ -116,7 +116,7 @@ export default class VirtualScrollingDispatcher {
         return workspace.getCellWidth() || workspace.getCellMinWidth();
     }
 
-    calculateCoordinatesByDataAndPosition(cellData, position, date) {
+    calculateCoordinatesByDataAndPosition(cellData, position, date, isCalculateTime) {
         const { _workspace: workSpace } = this;
         const {
             rowIndex, columnIndex,
@@ -129,7 +129,7 @@ export default class VirtualScrollingDispatcher {
         const cellStartTime = startDate.getTime();
         const cellEndTime = endDate.getTime();
 
-        const scrollInCell = allDay
+        const scrollInCell = allDay || !isCalculateTime
             ? 0
             : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
 

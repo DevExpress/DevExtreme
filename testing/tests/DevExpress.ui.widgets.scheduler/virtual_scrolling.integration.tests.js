@@ -13,7 +13,7 @@ import {
     asyncWrapper
 } from '../../helpers/scheduler/helpers.js';
 
-const supportedViews = ['day', 'week', 'workWeek']; // TODO: add month view and timelines
+const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
 const {
     testStart,
@@ -997,6 +997,10 @@ module('Virtual scrolling', () => {
                     test(`A long appointment should be correctly croped if view: ${viewName}, ${groupOrientation} group orientation`, function(assert) {
                         if(!isDesktopEnvironment()) {
                             assert.ok(true, 'This test is for desktop only');
+                            return;
+                        }
+                        if(viewName === 'month') {
+                            assert.ok(true, 'TODO: appointments in virtual month');
                             return;
                         }
 
@@ -2305,7 +2309,7 @@ module('Virtual scrolling', () => {
                     const styleBefore = $style.text();
 
                     $style
-                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 20px } ')
+                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 80px } ')
                         .appendTo('head');
 
                     const instance = createWrapper({
@@ -2322,7 +2326,7 @@ module('Virtual scrolling', () => {
 
                     const { virtualScrollingDispatcher } = instance.getWorkSpace();
 
-                    assert.equal(virtualScrollingDispatcher.rowHeight, 20, 'Cell height is correct');
+                    assert.equal(virtualScrollingDispatcher.rowHeight, 80, 'Cell height is correct');
 
                     $style.text(styleBefore);
                 });
