@@ -33,16 +33,29 @@ QUnit.test('Show tooltip', function(assert) {
 });
 
 QUnit.test('Show tooltip, async render', function(assert) {
-    this.tooltip.stub('show').returns(false);
+    this.tooltip.stub('show').returns(undefined);
     const root = common.createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     }).getRootNode();
 
     root.getChild(1).showTooltip();
 
-    assert.equal(this.tooltip.hide.callCount, 1);
+    assert.ok(!this.tooltip.hide.called);
     this.tooltip.show.lastCall.args[4](true);
     assert.equal(this.tooltip.move.callCount, 1);
+});
+
+QUnit.test('Hide tooltip if it does not render, async render', function(assert) {
+    this.tooltip.stub('show').returns(undefined);
+    const root = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
+    }).getRootNode();
+
+    root.getChild(1).showTooltip();
+
+    assert.ok(!this.tooltip.hide.called);
+    this.tooltip.show.lastCall.args[4](false);
+    assert.ok(this.tooltip.hide.called);
 });
 
 QUnit.test('Show tooltip / coords', function(assert) {

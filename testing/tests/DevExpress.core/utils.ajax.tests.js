@@ -651,7 +651,8 @@ QUnit.test('special values in data', function(assert) {
         data: {
             a: undefined,
             b: null,
-            c: NaN
+            c: NaN,
+            d: () => 'value',
         }
     });
 
@@ -666,6 +667,9 @@ QUnit.test('special values in data', function(assert) {
 
     // NaN values are kept
     assert.ok(url.indexOf('c=NaN') > -1);
+
+    // functional value should be executed
+    assert.ok(url.indexOf('d=value') > -1);
 });
 
 QUnit.test('empty data', function(assert) {

@@ -7,6 +7,8 @@ import 'common.css!';
 import 'material_blue_light.css!';
 import FormLayoutTestWrapper from '../../helpers/FormLayoutTestWrapper.js';
 
+const FIELD_ITEM_CONTENT_WRAPPER_CLASS = 'dx-field-item-content-wrapper';
+
 function testChromeOnly(name, callback) {
     if(!browser.chrome) {
         return;
@@ -450,5 +452,110 @@ QUnit.module('Left label location scenarios', () => {
 
         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 128, 0, 71, 15);
         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 118, 71, 929, 31);
+    });
+});
+
+QUnit.module('dx-invalid class on dx-field-item-content-wrapper (T949269)', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    const invalidClass = 'dx-invalid';
+    const formData = {
+        field1: ''
+    };
+
+    QUnit.testInActiveWindow('dx-invalid class is added for invalid focused editor (simple item)', function(assert) {
+        const formInstance = $('#form').dxForm({
+            formData,
+            items: [{
+                dataField: 'field1',
+                helpText: 'help',
+                isRequired: true
+            }]
+        }).dxForm('instance');
+
+        formInstance.validate();
+
+        const editorInstance = formInstance.getEditor('field1');
+        const wrapper = $(editorInstance.element()).closest(`.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`);
+
+        assert.notOk(wrapper.hasClass(invalidClass));
+        editorInstance.focus();
+        this.clock.tick();
+        assert.ok(wrapper.hasClass(invalidClass));
+    });
+
+    QUnit.testInActiveWindow('dx-invalid class is added for invalid focused editor (template)', function(assert) {
+        let editorElement;
+        $('#form').dxForm({
+            validationGroup: 'formGroup',
+            formData,
+            items: [
+                {
+                    dataField: 'field1',
+                    helpText: 'help',
+                    template: function(data, itemElement) {
+                        editorElement = $('<div>').dxTextBox({
+                            value: ''
+                        }).dxValidator({
+                            validationGroup: 'formGroup',
+                            validationRules: [{
+                                type: 'required',
+                                message: 'LastName is required'
+                            }]
+                        }).appendTo(itemElement);
+                    }
+                }
+            ]
+        })
+            .dxForm('instance')
+            .validate();
+
+        const wrapper = $(editorElement).closest(`.${FIELD_ITEM_CONTENT_WRAPPER_CLASS}`);
+
+        assert.notOk(wrapper.hasClass(invalidClass));
+        $(editorElement).dxTextBox('instance').focus();
+        this.clock.tick();
+        assert.ok(wrapper.hasClass(invalidClass));
+    });
+});
+
+QUnit.module('check validation message location', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.testInActiveWindow('validation message fix at bottom of drop down editor if form labels have top location (T956436)', function(assert) {
+        $('#form').dxForm({
+            items: [{
+                dataField: 'Country',
+                editorType: 'dxSelectBox',
+                editorOptions: {
+                    dataSource: ['Afghanistan', 'Albania', 'Algeria']
+                },
+                validationRules: [{
+                    type: 'required',
+                    message: 'Country is required'
+                }]
+            }]
+        })
+            .dxForm('instance')
+            .validate();
+
+        const $editorElement = $('.dx-selectbox');
+        const invalidMessage = $editorElement.find('.dx-invalid-message')[0];
+
+        $editorElement.dxSelectBox('instance').focus();
+        this.clock.tick();
+
+        assert.equal($(invalidMessage).find('.dx-overlay-wrapper').css('transform'), 'matrix(1, 0, 0, 1, 0, 0)', 'change validation overlay wrapper style to fix message at bottom');
+        assert.equal($(invalidMessage).find('.dx-overlay-content').css('transform'), 'matrix(1, 0, 0, 1, 0, 0)', 'change validation overlay content style to fix message at bottom');
     });
 });

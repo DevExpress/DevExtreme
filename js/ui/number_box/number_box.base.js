@@ -26,14 +26,18 @@ const NumberBoxBase = TextEditor.inherit({
     _supportedKeys: function() {
         return extend(this.callBase(), {
             upArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._spinUpChangeHandler(e);
+                if(!eventUtils.isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this._spinUpChangeHandler(e);
+                }
             },
             downArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._spinDownChangeHandler(e);
+                if(!eventUtils.isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this._spinDownChangeHandler(e);
+                }
             },
             enter: function() {
             }
@@ -176,7 +180,7 @@ const NumberBoxBase = TextEditor.inherit({
         if(!isInputCharValid) {
             const keyName = eventUtils.normalizeKeyName(e);
             // NOTE: Additional check for Firefox control keys
-            if(e.metaKey || e.ctrlKey || keyName && (inArray(keyName, FIREFOX_CONTROL_KEYS) >= 0)) {
+            if(eventUtils.isCommandKeyPressed(e) || keyName && (inArray(keyName, FIREFOX_CONTROL_KEYS) >= 0)) {
                 return;
             }
 

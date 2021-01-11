@@ -6,7 +6,8 @@ import {
     needSkipEvent,
     addNamespace,
     normalizeKeyName,
-    getChar
+    getChar,
+    isCommandKeyPressed
 } from 'events/utils';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
@@ -415,6 +416,17 @@ QUnit.module('event utils', () => {
         assert.strictEqual(getChar({ which: 50 }), '2');
         assert.strictEqual(getChar({ key: 'z', which: 50 }), 'z', '\'key\' attribute is prior');
 
+    });
+
+    [false, true].forEach((metaKey) => {
+        [false, true].forEach((ctrlKey) => {
+            const expectedResult = metaKey || ctrlKey;
+            const event = { ctrlKey, metaKey };
+
+            test(`"isCommandKeyPressed" should return ${expectedResult} (metaKey=${metaKey}, ctrlKey=${ctrlKey})`, function(assert) {
+                assert.strictEqual(isCommandKeyPressed(event), expectedResult, `command key is ${expectedResult ? '' : 'not'} pressed (metaKey=${metaKey}, ctrlKey=${ctrlKey})`);
+            });
+        });
     });
 });
 

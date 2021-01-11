@@ -4,6 +4,7 @@ const registerComponent = require('../core/component_registrator');
 const extend = require('../core/utils/extend').extend;
 const DropDownList = require('./drop_down_editor/ui.drop_down_list');
 const Deferred = require('../core/utils/deferred').Deferred;
+const isCommandKeyPressed = require('../events/utils').isCommandKeyPressed;
 
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
@@ -18,20 +19,24 @@ const Autocomplete = DropDownList.inherit({
 
         return extend({}, parent, {
             upArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if(item && !this._calcNextItem(-1)) {
-                    this._clearFocusedItem();
-                    return false;
+                if(!isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(item && !this._calcNextItem(-1)) {
+                        this._clearFocusedItem();
+                        return false;
+                    }
                 }
                 return true;
             },
             downArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if(item && !this._calcNextItem(1)) {
-                    this._clearFocusedItem();
-                    return false;
+                if(!isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(item && !this._calcNextItem(1)) {
+                        this._clearFocusedItem();
+                        return false;
+                    }
                 }
                 return true;
             },

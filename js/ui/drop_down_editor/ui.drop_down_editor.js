@@ -14,7 +14,7 @@ import { getDefaultAlignment } from '../../core/utils/position';
 import DropDownButton from './ui.drop_down_button';
 import Widget from '../widget/ui.widget';
 import { format as formatMessage } from '../../localization/message';
-import { addNamespace } from '../../events/utils';
+import { addNamespace, isCommandKeyPressed } from '../../events/utils';
 import TextBox from '../text_box';
 import clickEvent from '../../events/click';
 import devices from '../../core/devices';
@@ -64,20 +64,24 @@ const DropDownEditor = TextBox.inherit({
                 return true;
             },
             upArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if(e.altKey) {
-                    this.close();
-                    return false;
+                if(!isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(e.altKey) {
+                        this.close();
+                        return false;
+                    }
                 }
                 return true;
             },
             downArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if(e.altKey) {
-                    this._validatedOpening();
-                    return false;
+                if(!isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(e.altKey) {
+                        this._validatedOpening();
+                        return false;
+                    }
                 }
                 return true;
             },
@@ -322,6 +326,7 @@ const DropDownEditor = TextBox.inherit({
         const $container = this._$container;
 
         this._detachKeyboardEvents();
+        this._refreshButtonsContainer();
 
         // NOTE: to prevent buttons disposition
         const beforeButtonsContainerParent = this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode;
@@ -351,6 +356,10 @@ const DropDownEditor = TextBox.inherit({
 
         $container.prepend(this._$beforeButtonsContainer);
         $container.append(this._$afterButtonsContainer);
+    },
+
+    _refreshButtonsContainer() {
+        this._$buttonsContainer = this.$element().children().eq(0);
     },
 
     _integrateInput: function() {

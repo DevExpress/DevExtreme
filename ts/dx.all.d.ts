@@ -4962,7 +4962,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxCheckBox.Options.value]
          */
-        value?: boolean;
+        value?: boolean | undefined;
     }
     /**
      * [descr:dxCheckBox]

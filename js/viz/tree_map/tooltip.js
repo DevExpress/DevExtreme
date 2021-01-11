@@ -38,6 +38,9 @@ proto._showTooltip = function(index, coords) {
         return;
     }
     const callback = (result) => {
+        if(result === undefined) {
+            return;
+        }
         if(result) {
             that._moveTooltip(node, coords);
         } else {

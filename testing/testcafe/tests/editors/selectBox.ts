@@ -54,3 +54,35 @@ test('Click on action button after typing should correctly work with SelectBox c
     .expect(selectBox.value)
     .eql('item2');
 });
+
+fixture`SelectBox as Toolbar item`
+  .page(url(__dirname, './pages/t949859.html'));
+
+test('SelectBox should correctly render his buttons when editor rendered as Toolbar item with fieldTemplate(T949859)', async (t) => {
+  const selectBox = new SelectBox('#editor');
+  const actionButton = await selectBox.getButton(0);
+
+  await t
+    .expect(actionButton.getText().innerText)
+    .eql('test');
+});
+
+fixture`SelectBox with action button`
+  .page(url(__dirname, './pages/selectBoxWithActionButton.html'));
+
+test('editor can be focused out after click on action button', async (t) => {
+  const selectBox = new SelectBox('#editor');
+
+  await pureClick(t, selectBox);
+  await t
+    .expect(selectBox.isFocused).ok();
+
+  const actionButton = await selectBox.getButton(0);
+  await pureClick(t, actionButton);
+  await t
+    .expect(selectBox.isFocused).ok();
+
+  await purePressKey(t, 'tab');
+  await t
+    .expect(selectBox.isFocused).notOk();
+});

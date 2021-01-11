@@ -5,7 +5,7 @@ import { isDefined } from '../../core/utils/type';
 import { Deferred, when } from '../../core/utils/deferred';
 
 import holdEvent from '../../events/hold';
-import { addNamespace } from '../../events/utils';
+import { addNamespace, isCommandKeyPressed } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
 
 import { BindableTemplate } from '../../core/templates/bindable_template';
@@ -135,7 +135,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
             },
             A(e) {
                 this._beforeKeyProcessing(e);
-                if(e.ctrlKey || e.metaKey) {
+                if(isCommandKeyPressed(e)) {
                     this.selectAll();
                 }
             }
@@ -250,7 +250,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         let options = {};
         if(this.option('selectionMode') === 'multiple') {
             if(!this._isPreserveSelectionMode) {
-                this._isPreserveSelectionMode = e.ctrlKey || e.metaKey || e.shiftKey;
+                this._isPreserveSelectionMode = isCommandKeyPressed(e) || e.shiftKey;
             }
             options = {
                 control: this._isPreserveSelectionMode,

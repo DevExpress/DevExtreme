@@ -639,6 +639,21 @@ QUnit.module('dxAutocomplete', {
             .keyDown(KEY_UP);
     });
 
+    [
+        { key: KEY_DOWN, ctrlKey: true },
+        { key: KEY_UP, ctrlKey: true },
+        { key: KEY_DOWN, metaKey: true },
+        { key: KEY_UP, metaKey: true }
+    ].forEach((keyDownConfig) => {
+        const commandKey = keyDownConfig.ctrlKey ? 'ctrl' : 'command';
+        QUnit.test(`default behavior of ${keyDownConfig.key} arrow key with ${commandKey} key should not be prevented`, function(assert) {
+            this.keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+
+            assert.notOk(this.keyboard.event.isDefaultPrevented(), 'event is not prevented');
+            assert.notOk(this.keyboard.event.isPropagationStopped(), 'propogation is not stopped');
+        });
+    });
+
     QUnit.testInActiveWindow('enter - prevent default', function(assert) {
         assert.expect(1);
 

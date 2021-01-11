@@ -13,6 +13,9 @@
 @import (once) "./toolbar.material.less";
 @import (once) "./splitter.material.less";
 
+@FILEMANAGER_TOOLBAR_HEIGHT: @MATERIAL_TOOLBAR_HEIGHT + 12px;
+@FILEMANAGER_MOBILE_TOOLBAR_HEIGHT: @MATERIAL_MOBILE_TOOLBAR_HEIGHT + 12px;
+
 .dx-filemanager {
     border-color: @filemanager-border-color;
 
@@ -49,6 +52,11 @@
 
     .dx-filemanager-toolbar {
         background: @base-bg;
+        min-height: @FILEMANAGER_TOOLBAR_HEIGHT;
+
+        .dx-device-mobile & {
+            min-height: @FILEMANAGER_MOBILE_TOOLBAR_HEIGHT;
+        }
 
         &.dx-filemanager-file-toolbar,
         &.dx-filemanager-file-toolbar .dx-toolbar {
