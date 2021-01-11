@@ -11,10 +11,7 @@ import { extend } from '../../core/utils/extend';
 import pointerEvents from '../../events/pointer';
 
 const SCROLLBAR = 'dxScrollbar';
-// const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
-// const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
-// const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
 // const HORIZONTAL = 'horizontal';
 const THUMB_MIN_SIZE = 15;
@@ -47,29 +44,15 @@ const Scrollbar = Widget.inherit({
         this._isHovered = false;
     },
 
-    // _initMarkup: function() {
-    // this._renderThumb();
-
-    // this.callBase();
-    // },
-
     _render: function() {
         this.callBase();
 
-        // this._renderDirection();
         this._update();
         this._attachPointerDownHandler();
         this.option('hoverStateEnabled', this._isHoverMode());
 
         this.$element().toggleClass(HOVER_ENABLED_STATE, this.option('hoverStateEnabled'));
     },
-
-    // _renderThumb: function() {
-    // this._$thumb = $('<div>').addClass(SCROLLABLE_SCROLL_CLASS);
-    // $('<div>').addClass(SCROLLABLE_SCROLL_CONTENT_CLASS).appendTo(this._$thumb);
-
-    // this.$element().addClass(SCROLLABLE_SCROLLBAR_CLASS).append(this._$thumb);
-    // },
 
     isThumb: function($element) {
         return !!this.$element().find($element).length;
@@ -78,13 +61,6 @@ const Scrollbar = Widget.inherit({
     // _isHoverMode: function() {
     // const visibilityMode = this.option('visibilityMode');
     // return (visibilityMode === SCROLLBAR_VISIBLE.onHover || visibilityMode === SCROLLBAR_VISIBLE.always) && this.option('expandable');
-    // },
-
-    // _renderDirection: function() {
-    // const direction = this.option('direction');
-    // this.$element().addClass('dx-scrollbar-' + direction);
-    // this._dimension = direction === HORIZONTAL ? 'width' : 'height';
-    // this._prop = direction === HORIZONTAL ? 'left' : 'top';
     // },
 
     _attachPointerDownHandler: function() {

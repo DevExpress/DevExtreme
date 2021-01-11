@@ -1,7 +1,5 @@
 import $ from '../../core/renderer';
-import devices from '../../core/devices';
 import { hasWindow } from '../../core/utils/window';
-import messageLocalization from '../../localization/message';
 import registerComponent from '../../core/component_registrator';
 import { getPublicElement } from '../../core/element';
 import { extend } from '../../core/utils/extend';
@@ -11,10 +9,7 @@ import SwipeDownStrategy from './ui.scroll_view.native.swipe_down';
 import SimulatedStrategy from './ui.scroll_view.simulated';
 import Scrollable from './ui.scrollable';
 import LoadIndicator from '../load_indicator';
-import { isMaterial } from './../themes';
 import LoadPanel from '../load_panel';
-
-// STYLE scrollView
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 
@@ -43,48 +38,9 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            pullingDownText: messageLocalization.format('dxScrollView-pullingDownText'),
-
-            pulledDownText: messageLocalization.format('dxScrollView-pulledDownText'),
-
-            refreshingText: messageLocalization.format('dxScrollView-refreshingText'),
-
-            reachBottomText: messageLocalization.format('dxScrollView-reachBottomText'),
-
             onPullDown: null,
-
             onReachBottom: null,
-
-            refreshStrategy: 'pullDown'
         });
-    },
-
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: function() {
-                    const realDevice = devices.real();
-                    return realDevice.platform === 'android';
-                },
-                options: {
-                    refreshStrategy: 'swipeDown'
-                }
-            },
-            {
-                device: function() {
-                    return isMaterial();
-                },
-                options: {
-                    pullingDownText: '',
-
-                    pulledDownText: '',
-
-                    refreshingText: '',
-
-                    reachBottomText: ''
-                }
-            }
-        ]);
     },
 
     _init: function() {
@@ -130,8 +86,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _createStrategy: function() {
-        const strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
-
+        // eslint-disable-next-line no-undef
         const strategyClass = refreshStrategies[strategyName];
         if(!strategyClass) {
             throw Error('E1030', this.option('refreshStrategy'));

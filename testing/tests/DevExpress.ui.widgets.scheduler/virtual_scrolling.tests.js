@@ -39,11 +39,13 @@ module('Virtual Scrolling', {
                     'scrolling.type': settings.scrolling.type
                 },
                 getCellWidth: () => { return 150; },
+                getCellHeight: () => { return 50; },
                 option: name => this.workspaceMock._options[name],
                 _getCellData: noop,
                 _insertAllDayRowsIntoDateTable: noop,
                 _allDayPanels: undefined,
                 isGroupedAllDayPanel: noop,
+                renderRAllDayPanel: noop,
                 renderRWorkspace: noop,
                 renderRAppointments: noop,
                 _createAction: () => { return () => 'action'; },
@@ -83,16 +85,18 @@ module('Virtual Scrolling', {
                 scrollTo: e => this.scrollableMock.option('onScroll')(e)
             };
 
+            this.scrollTo = scrollOffset => {
+                this.scrollableMock.option('onScroll')(
+                    { scrollOffset }
+                );
+            };
+
             this.scrollVertical = top => {
-                this.scrollableMock.option('onScroll')({
-                    scrollOffset: { top }
-                });
+                this.scrollTo({ top });
             };
 
             this.scrollHorizontal = left => {
-                this.scrollableMock.option('onScroll')({
-                    scrollOffset: { left }
-                });
+                this.scrollTo({ left });
             };
 
             this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this.workspaceMock);
@@ -277,6 +281,93 @@ module('Virtual Scrolling', {
         });
     });
 
+    module('Dispatcher', () => {
+        [
+            {
+                orientation: 'vertical',
+                expectedRenderState: {
+                    bottomVirtualRowHeight: 4550,
+                    rowCount: 9,
+                    startIndex: 0,
+                    startRowIndex: 0,
+                    topVirtualRowHeight: 0
+                }
+            }, {
+                orientation: 'horizontal',
+                expectedRenderState: {
+                    cellCount: 6,
+                    cellWidth: undefined,
+                    leftVirtualCellWidth: 0,
+                    rightVirtualCellWidth: 29100,
+                    startCellIndex: 0
+                }
+            }, {
+                orientation: 'both',
+                expectedRenderState: {
+                    bottomVirtualRowHeight: 4550,
+                    rowCount: 9,
+                    startIndex: 0,
+                    startRowIndex: 0,
+                    topVirtualRowHeight: 0,
+                    cellCount: 6,
+                    cellWidth: undefined,
+                    leftVirtualCellWidth: 0,
+                    rightVirtualCellWidth: 29100,
+                    startCellIndex: 0
+                }
+            }
+        ].forEach(option => {
+            test(`it should return correct render state if scrolling orientation: ${option.orientation}`, function(assert) {
+                this.prepareInstance({
+                    scrolling: {
+                        type: option.orientation
+                    }
+                });
+
+                const state = this.virtualScrollingDispatcher.getRenderState();
+
+                assert.deepEqual(state, option.expectedRenderState, 'Render state is correct');
+            });
+        });
+
+        [null, undefined].forEach(offset => {
+            test(`it should not call virtual scrolling instances if scrollOffset is "${offset}"`, function(assert) {
+                this.prepareInstance();
+
+                const spyUpdateVerticalState = this.spy(this.verticalVirtualScrolling, 'updateState');
+                const spyUpdateHorizontalState = this.spy(this.horizontalVirtualScrolling, 'updateState');
+
+                this.scrollTo({
+                    left: offset,
+                    top: offset
+                });
+
+                assert.ok(spyUpdateVerticalState.notCalled, 'Vertical virtual scrolling update state was not called');
+                assert.ok(spyUpdateHorizontalState.notCalled, 'Horizontal virtual scrolling update state was not called');
+            });
+        });
+
+        test('it should not update render if scroll position has not been changed', function(assert) {
+            this.prepareInstance();
+
+            const spy = this.spy(this.virtualScrollingDispatcher.renderer, 'updateRender');
+
+            const scrollOffset = { left: 300, top: 200 };
+
+            this.scrollTo(scrollOffset);
+
+            assert.ok(spy.calledOnce, 'Render was updated');
+            assert.equal(this.verticalVirtualScrolling.position, scrollOffset.top, 'Vertical scroll position is correct');
+            assert.equal(this.horizontalVirtualScrolling.position, scrollOffset.left, 'Horizontal scroll position is correct');
+
+            this.scrollTo(scrollOffset);
+
+            assert.ok(spy.calledOnce, 'Render was not updated');
+            assert.equal(this.verticalVirtualScrolling.position, scrollOffset.top, 'Vertical scroll position is correct');
+            assert.equal(this.horizontalVirtualScrolling.position, scrollOffset.left, 'Horizontal scroll position is correct');
+        });
+    });
+
     module('Scrolling', function() {
         module('Vertical', () => {
             test('State should be correct on scrolling Down', function(assert) {
@@ -307,7 +398,7 @@ module('Virtual Scrolling', {
             });
 
             test('State should be correct on scrolling Up', function(assert) {
-                this.prepareInstance();
+                this.prepareInstance({ scrolling: { type: 'vertical' } });
 
                 [
                     { top: 4950, stateTop: 4700, topVirtualRowCount: 91, bottomVirtualRowCount: 0, rowCount: 9 },

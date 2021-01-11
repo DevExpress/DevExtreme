@@ -145,7 +145,7 @@ jest.mock('../../../../core/devices', () => {
         } as Partial<any>;
         const scrollable = mount(viewFunction(props as any) as JSX.Element);
 
-        expect(scrollable.find(Widget).at(0).props()).toMatchObject({
+        expect(scrollable.find(Widget).props()).toMatchObject({
           classes: cssClasses,
           ...props.props,
         });
@@ -223,6 +223,23 @@ jest.mock('../../../../core/devices', () => {
 
               expect(scrollbarProps.visibilityMode).toBe(expectedVisibilityMode);
             });
+          });
+        });
+      });
+
+      describe('cssClasses', () => {
+        ['horizontal', 'vertical', 'both', undefined, null].forEach((direction) => {
+          it(`should add direction class. Direction: ${direction}`, () => {
+            const scrollable = mount(viewFunction({ props: { direction, useSimulatedScrollbar: true, showScrollbar: 'always' } } as any) as JSX.Element);
+
+            const horizontalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-horizontal');
+            const verticalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-vertical');
+
+            const isHorizontalScrollbarExists = direction === 'horizontal' || direction === 'both';
+            const isVerticalScrollbarExists = direction === 'vertical' || direction === 'both' || !direction;
+
+            expect(horizontalScrollbar.exists()).toBe(isHorizontalScrollbarExists);
+            expect(verticalScrollbar.exists()).toBe(isVerticalScrollbarExists);
           });
         });
       });
@@ -1277,8 +1294,8 @@ jest.mock('../../../../core/devices', () => {
     describe('Logic', () => {
       describe('Getters', () => {
         describe('cssClasses', () => {
-          ['android', 'ios', 'generic'].forEach((platform: any) => {
-            it(`should add scrolling classes by default. Platform: ${platform}`, () => {
+          each(['android', 'ios', 'generic']).describe('Platform: %o', (platform) => {
+            it('should add scrolling classes by default', () => {
               devices.real = () => ({ platform });
               const instance = new Scrollable({});
               expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
