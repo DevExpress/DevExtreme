@@ -2225,7 +2225,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _clean() {
         eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
-        // this._disposeRenovatedComponents();
+        this._disposeRenovatedComponents();
 
         super._clean();
     }
