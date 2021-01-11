@@ -178,7 +178,7 @@ module('Events', {
     });
 
     module('Update', () => {
-        test('oldData shouldn\'t has recurrenceException property', function(assert) {
+        isDesktopEnvironment() && test('oldData shouldn\'t has recurrenceException property', function(assert) {
             const appointment = {
                 text: 'Watercolor Landscape',
                 startDate: new Date(2021, 1, 25, 1),
