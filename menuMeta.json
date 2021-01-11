@@ -325,7 +325,7 @@
             "Badge": "New",
             "Modules": "whatwg-fetch,devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
-              "/Controllers/ApiControllers/DataGridWebApiController.cs",
+              "/Controllers/ApiControllers/DataGridBatchUpdateWebApiController.cs",
               "/Models/Northwind/InMemoryNorthwindContext.cs",
               "/Models/DataGrid/DataChange.cs"
             ]
