@@ -14,7 +14,7 @@ import {
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
 import noop from '../utils/noop';
-import Themes from '../../ui/themes';
+import { isMaterial, current } from '../../ui/themes';
 import { click } from '../../events/short';
 import { combineClasses } from '../utils/combine_classes';
 import { getImageSourceType } from '../../core/utils/icon';
@@ -136,7 +136,7 @@ export const defaultOptionRules = createDefaultOptionRules<ButtonProps>([{
   options: { focusStateEnabled: true },
 }, {
   // eslint-disable-next-line import/no-named-as-default-member
-  device: (): boolean => Themes.isMaterial(Themes.current()),
+  device: (): boolean => isMaterial(current()),
   options: { useInkRipple: true },
 }]);
 @Component({
