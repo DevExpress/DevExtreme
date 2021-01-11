@@ -66,11 +66,11 @@ describe('TopPocket', () => {
           refreshingText: 'refreshingText',
         });
         if (testConfig.state) {
-          // eslint-disable-next-line no-underscore-dangle
-          viewModel._state = testConfig.state;
+          viewModel.pocketState = testConfig.state;
         }
         const topPocket = mount(viewFunction(viewModel) as JSX.Element);
         const textElement = topPocket.find('.dx-scrollview-pull-down-text-visible');
+        expect(textElement.length).toBe(1);
         expect(textElement.text()).toBe(testConfig.expectedText);
       });
     });
