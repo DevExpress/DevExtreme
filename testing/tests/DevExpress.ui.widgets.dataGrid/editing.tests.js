@@ -9367,7 +9367,7 @@ QUnit.module('Editing with validation', {
         that.saveEditData();
 
         // assert
-        assert.equal($('.dx-error-message').text(), 'Hidden Group is required, Group is required', 'error text');
+        assert.equal($('.dx-error-message').text(), 'Group is required, Hidden Group is required', 'error text');
     });
 
     // T420231
