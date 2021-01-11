@@ -6,6 +6,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import { setupRenovation } from '../../helpers/renovationHelper.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 import ActionSheet from 'ui/action_sheet';
 
 QUnit.testStart(function() {
