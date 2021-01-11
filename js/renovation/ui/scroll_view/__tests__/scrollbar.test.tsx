@@ -1,7 +1,7 @@
 import each from 'jest-each';
 import {
   Scrollbar,
-} from '../Scrollbar';
+} from '../scrollbar';
 
 const THUMB_MIN_SIZE = 15;
 
