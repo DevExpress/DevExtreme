@@ -196,13 +196,8 @@ const CollectionWidget = Widget.inherit({
     },
 
     _prepareDefaultItemTemplate: function(data, $container) {
-        if(isDefined(data.text)) {
-            $container.text(data.text);
-        }
-
-        if(isDefined(data.html)) {
-            $container.html(data.html);
-        }
+        data.text ?? $container.text(data.text);
+        data.html ?? $container.html(data.html);
     },
 
     _initItemsFromMarkup: function() {

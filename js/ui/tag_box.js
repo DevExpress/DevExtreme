@@ -1249,7 +1249,7 @@ const TagBox = SelectBox.inherit({
     _lastValue: function() {
         const values = this._getValue();
         const lastValue = values[values.length - 1];
-        return isDefined(lastValue) ? lastValue : null;
+        return lastValue ?? null;
     },
 
     _valueChangeEventHandler: noop,
