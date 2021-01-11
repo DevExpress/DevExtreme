@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import { addHeightToStyle } from '../utils';
 import { RowProps, Row } from './row';
@@ -46,7 +46,7 @@ export class VirtualRowProps extends RowProps {
   view: viewFunction,
 })
 export class VirtualRow extends JSXComponent(VirtualRowProps) {
-  get style(): { [key: string]: string | number | undefined } {
+  get style(): CSSAttributes {
     const { height } = this.props;
     const { style } = this.restAttributes;
 

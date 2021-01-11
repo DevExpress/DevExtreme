@@ -1,7 +1,6 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot,
+  Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay, Slot,
 } from 'devextreme-generator/component_declaration/common';
-import { Style } from '../../types.d';
 import { addHeightToStyle } from '../utils';
 import { VirtualRow } from './virtual-row';
 
@@ -72,7 +71,7 @@ export class TableProps {
   view: viewFunction,
 })
 export class Table extends JSXComponent(TableProps) {
-  get style(): Style {
+  get style(): CSSAttributes {
     const { height } = this.props;
     const { style } = this.restAttributes;
 
