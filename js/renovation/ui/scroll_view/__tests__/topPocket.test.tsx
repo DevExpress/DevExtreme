@@ -7,6 +7,10 @@ import {
   viewFunction,
 } from '../topPocket';
 
+import {
+  TopPocketState,
+} from '../topPocket_props';
+
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
   actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
@@ -43,6 +47,31 @@ describe('TopPocket', () => {
 
         const topPocket = new TopPocket({ });
         expect((topPocket as any).refreshStrategy).toEqual(platform === 'android' ? 'swipeDown' : 'pullDown');
+      });
+    });
+  });
+
+  describe('Behavior', () => {
+    each([
+      { state: undefined, expectedText: 'pullingDownText' },
+      { state: TopPocketState.STATE_RELEASED, expectedText: 'pullingDownText' },
+      { state: TopPocketState.STATE_READY, expectedText: 'pulledDownText' },
+      { state: TopPocketState.STATE_REFRESHING, expectedText: 'refreshingText' },
+    ]).describe('State: %o', (testConfig) => {
+      it('Correct text is visible depending of state', () => {
+        const viewModel = new TopPocket({
+          refreshStrategy: 'simulated',
+          pullingDownText: 'pullingDownText',
+          pulledDownText: 'pulledDownText',
+          refreshingText: 'refreshingText',
+        });
+        if (testConfig.state) {
+          // eslint-disable-next-line no-underscore-dangle
+          viewModel._state = testConfig.state;
+        }
+        const topPocket = mount(viewFunction(viewModel) as JSX.Element);
+        const textElement = topPocket.find('.dx-scrollview-pull-down-text-visible');
+        expect(textElement.text()).toBe(testConfig.expectedText);
       });
     });
   });
