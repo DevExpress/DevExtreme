@@ -1307,6 +1307,39 @@ jest.mock('../../../../core/devices', () => {
                 expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
               }
             });
+
+            it('should assign custom pushBackValue = 5', () => {
+              if (Scrollable === ScrollableSimulated) {
+                return; // actual only for native strategy
+              }
+
+              devices.real = () => ({ platform });
+
+              const scrollable = new Scrollable({ pushBackValue: 5 });
+              expect((scrollable as any).pushBackValue).toEqual(5);
+            });
+
+            it('should assign custom pushBackValue = 0', () => {
+              if (Scrollable === ScrollableSimulated) {
+                return; // actual only for native strategy
+              }
+
+              devices.real = () => ({ platform });
+
+              const scrollable = new Scrollable({ pushBackValue: 0 });
+              expect((scrollable as any).pushBackValue).toEqual(0);
+            });
+
+            it('should assign default pushBackValue', () => {
+              if (Scrollable === ScrollableSimulated) {
+                return; // actual only for native strategy
+              }
+
+              devices.real = () => ({ platform });
+
+              const scrollable = new Scrollable({ });
+              expect((scrollable as any).pushBackValue).toEqual(platform === 'ios' ? 1 : 0);
+            });
           });
 
           it('should add vertical direction class', () => {
