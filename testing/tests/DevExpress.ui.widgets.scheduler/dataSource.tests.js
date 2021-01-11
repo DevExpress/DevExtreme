@@ -194,10 +194,7 @@ module('Events', {
                 recurrenceEditMode: 'occurrence',
                 onAppointmentUpdating: function(e) {
                     assert.deepEqual(e.oldData, appointment, 'oldData argument should be equal initial appointment');
-                    assert.deepEqual(e.newData, {
-                        ...appointment,
-                        recurrenceException: '20210324T220000Z'
-                    }, 'newData argument should has new recurrenceException property');
+                    assert.equal(typeof (e.newData.recurrenceException), 'string', 'newData argument should has new recurrenceException property');
                 }
             });
 
