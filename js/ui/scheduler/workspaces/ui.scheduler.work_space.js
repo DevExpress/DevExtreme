@@ -226,7 +226,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         super._dispose();
 
         this.virtualScrollingDispatcher?.dispose();
-        this._disposeRenovatedComponents();
     }
 
     _isRTL() {
@@ -2229,6 +2228,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _clean() {
         eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+        this._disposeRenovatedComponents();
 
         super._clean();
     }
