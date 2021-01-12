@@ -18,7 +18,6 @@ import { addNamespace, isFakeClickEvent } from '../../../events/utils/index';
 import { name as dblclickEvent } from '../../../events/double_click';
 import messageLocalization from '../../../localization/message';
 import CollectionWidget from '../../collection/ui.collection_widget.edit';
-import { Deferred } from '../../../core/utils/deferred';
 import timeZoneUtils from '../utils.timeZone.js';
 import { APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_SETTINGS_KEY } from '../constants';
 
@@ -514,25 +513,29 @@ class SchedulerAppointments extends CollectionWidget {
         this._renderAppointment(args.itemElement, this._currentAppointmentSettings);
     }
 
-    _renderAppointment($appointment, settings) {
-        $appointment.data(APPOINTMENT_SETTINGS_KEY, settings);
+    _renderAppointment(element, settings) {
+        element.data(APPOINTMENT_SETTINGS_KEY, settings);
 
-        this._applyResourceDataAttr($appointment);
-        const data = this._getItemData($appointment);
+        this._applyResourceDataAttr(element);
+        const data = this._getItemData(element);
         const geometry = this.invoke('getAppointmentGeometry', settings);
         const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
         const allowDrag = this.option('allowDrag');
         const allDay = settings.allDay;
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
-        const deferredColor = this._getAppointmentColor($appointment, settings.groupIndex);
+        const deferredColor = this.invoke('getAppointmentColor', {
+            itemData: this._getItemData(element),
+            groupIndex: settings.groupIndex,
+        });
+
 
         if(settings.virtual) {
-            this._processVirtualAppointment(settings, $appointment, data, deferredColor);
+            this._processVirtualAppointment(settings, element, data, deferredColor);
         } else {
             const { info } = settings;
 
-            this._createComponent($appointment, Appointment, {
+            this._createComponent(element, Appointment, {
                 observer: this.option('observer'),
                 data: data,
                 geometry: geometry,
@@ -550,7 +553,7 @@ class SchedulerAppointments extends CollectionWidget {
 
             deferredColor.done(function(color) {
                 if(color) {
-                    $appointment.css('backgroundColor', color);
+                    element.css('backgroundColor', color);
                 }
             });
         }
@@ -732,25 +735,6 @@ class SchedulerAppointments extends CollectionWidget {
             result = firstDay.getTime() - tailOfPrevDays + visibleDayDuration * (daysCount - 1);
         }
         return result;
-    }
-
-    _tryGetAppointmentColor(appointment) {
-        const settings = $(appointment).data(APPOINTMENT_SETTINGS_KEY);
-        if(!settings) {
-            return undefined;
-        }
-        return this._getAppointmentColor(appointment, settings.groupIndex);
-    }
-
-    _getAppointmentColor($appointment, groupIndex) {
-        const res = new Deferred();
-        const response = this.invoke('getAppointmentColor', {
-            itemData: this._getItemData($appointment),
-            groupIndex: groupIndex,
-        });
-        response.done(color => res.resolve(color));
-
-        return res.promise();
     }
 
     _calculateBoundOffset() {

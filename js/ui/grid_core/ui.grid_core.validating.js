@@ -732,36 +732,28 @@ export default {
                     this.callBase.apply(this, arguments);
                 },
 
-                _getInvisibleColumns: function(changes) {
-                    const columnsController = this.getController('columns');
-                    let hasInvisibleRows;
-                    const invisibleColumns = columnsController.getInvisibleColumns();
-
-                    if(this.isCellOrBatchEditMode()) {
-                        hasInvisibleRows = changes.some(change => {
-                            const rowIndex = this._dataController.getRowIndexByKey(change.key);
-
-                            return rowIndex < 0;
-                        });
-                    }
-
-                    return hasInvisibleRows ? columnsController.getColumns() : invisibleColumns;
-                },
-
                 _createInvisibleColumnValidators: function(changes) {
                     const that = this;
                     const validatingController = this.getController('validating');
                     const columnsController = this.getController('columns');
-                    const invisibleColumns = this._getInvisibleColumns(changes).filter((column) => !column.isBand);
+                    const columns = columnsController.getColumns();
+                    const invisibleColumns = columnsController.getInvisibleColumns().filter((column) => !column.isBand);
                     const groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1);
                     const invisibleColumnValidators = [];
+                    const isCellVisible = (column, rowKey) => {
+                        return this._dataController.getRowIndexByKey(rowKey) >= 0 && invisibleColumns.indexOf(column) < 0;
+                    };
 
                     invisibleColumns.push(...groupColumns);
 
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
-                        each(invisibleColumns, function(_, column) {
+                        each(columns, function(_, column) {
                             changes.forEach(function(change) {
                                 let data;
+                                if(isCellVisible(column, change.key)) {
+                                    return;
+                                }
+
                                 if(change.type === EDIT_DATA_INSERT_TYPE) {
                                     data = change.data;
                                 } else if(change.type === 'update') {

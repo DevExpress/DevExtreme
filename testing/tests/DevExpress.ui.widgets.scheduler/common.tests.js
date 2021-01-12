@@ -4288,29 +4288,30 @@ QUnit.module('ScrollTo', () => {
             });
 
             [{
-                view: 'week',
+                view: { type: 'week' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 1,
                 topCellCount: 18,
             }, {
-                view: 'month',
+                view: { type: 'month', intervalCount: 5 },
                 date: new Date(2020, 8, 25),
                 leftCellCount: 5,
                 topCellCount: 3,
             }, {
-                view: 'timelineWeek',
+                view: { type: 'timelineWeek' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 66,
                 topCellCount: 0,
             }, {
-                view: 'timelineMonth',
+                view: { type: 'timelineMonth' },
                 date: new Date(2020, 8, 7),
                 leftCellCount: 6,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work in basic case in ${view} view`, function(assert) {
+                QUnit.test(`ScrollTo should work in basic case in ${view.type} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: view,
+                        views: [view],
+                        currentView: view.type,
                     });
 
                     checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
@@ -4318,29 +4319,30 @@ QUnit.module('ScrollTo', () => {
             });
 
             [{
-                view: 'week',
+                view: { type: 'week' },
                 date: new Date(2020, 8, 7, 9, 15),
                 leftCellCount: 1,
                 topCellCount: 18.5,
             }, {
-                view: 'month',
+                view: { type: 'month', intervalCount: 5 },
                 date: new Date(2020, 8, 25, 12),
                 leftCellCount: 5,
                 topCellCount: 3,
             }, {
-                view: 'timelineWeek',
+                view: { type: 'timelineWeek' },
                 date: new Date(2020, 8, 7, 9, 15),
                 leftCellCount: 66.5,
                 topCellCount: 0,
             }, {
-                view: 'timelineMonth',
+                view: { type: 'timelineMonth' },
                 date: new Date(2020, 8, 7, 12),
                 leftCellCount: 6,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work when date is between a cell's startDate and endDate in ${view} view`, function(assert) {
+                QUnit.test(`ScrollTo should work when date is between a cell's startDate and endDate in ${view.type} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: view,
+                        views: [view],
+                        currentView: view.type,
                     });
 
                     checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
@@ -4348,33 +4350,34 @@ QUnit.module('ScrollTo', () => {
             });
 
             [{
-                view: 'week',
+                view: { type: 'week' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 8,
                 topCellCount: 18,
             }, {
-                view: 'month',
+                view: { type: 'month', intervalCount: 5 },
                 date: new Date(2020, 8, 25, 12),
                 leftCellCount: 12,
                 topCellCount: 3,
             }, {
-                view: 'timelineWeek',
+                view: { type: 'timelineWeek' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 402,
                 topCellCount: 0,
             }, {
-                view: 'timelineMonth',
+                view: { type: 'timelineMonth' },
                 date: new Date(2020, 8, 7, 12),
                 leftCellCount: 36,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work with horizontal grouping in ${view} view`, function(assert) {
+                QUnit.test(`ScrollTo should work with horizontal grouping in ${view.type} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
-                            type: view,
+                        views: [{
+                            ...view,
                             groupOrientation: 'horizontal',
                             groupByDate: false,
-                        },
+                        }],
+                        currentView: view.type,
                         groups: ['ownerId'],
                     });
 
@@ -4383,33 +4386,34 @@ QUnit.module('ScrollTo', () => {
             });
 
             [{
-                view: 'week',
+                view: { type: 'week' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 3,
                 topCellCount: 18,
             }, {
-                view: 'month',
+                view: { type: 'month', intervalCount: 5 },
                 date: new Date(2020, 8, 25, 12),
                 leftCellCount: 11,
                 topCellCount: 3,
             }, {
-                view: 'timelineWeek',
+                view: { type: 'timelineWeek' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 133,
                 topCellCount: 0,
             }, {
-                view: 'timelineMonth',
+                view: { type: 'timelineMonth' },
                 date: new Date(2020, 8, 7, 12),
                 leftCellCount: 13,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work when grouped by date in ${view} view`, function(assert) {
+                QUnit.test(`ScrollTo should work when grouped by date in ${view.type} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
-                            type: view,
+                        views: [{
+                            ...view,
                             groupOrientation: 'horizontal',
                             groupByDate: true,
-                        },
+                        }],
+                        currentView: view.type,
                         groups: ['ownerId'],
                     });
 
@@ -4418,32 +4422,33 @@ QUnit.module('ScrollTo', () => {
             });
 
             [{
-                view: 'week',
+                view: { type: 'week' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 1,
                 topCellCount: 66,
             }, {
-                view: 'month',
+                view: { type: 'month' },
                 date: new Date(2020, 8, 25, 12),
                 leftCellCount: 5,
                 topCellCount: 9,
             }, {
-                view: 'timelineWeek',
+                view: { type: 'timelineWeek' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 66,
                 topCellCount: 1,
             }, {
-                view: 'timelineMonth',
+                view: { type: 'timelineMonth' },
                 date: new Date(2020, 8, 7, 12),
                 leftCellCount: 6,
                 topCellCount: 1,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work with vertical grouping in ${view} view`, function(assert) {
+                QUnit.test(`ScrollTo should work with vertical grouping in ${view.type} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
-                            type: view,
+                        views: [{
+                            ...view,
                             groupOrientation: 'vertical',
-                        },
+                        }],
+                        currentView: view.type,
                         groups: ['ownerId'],
                         showAllDayPanel: false,
                     });
