@@ -103,8 +103,8 @@ export default {
           type: 'odata',
           url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
           beforeSend: function(request) {
-            request.params.startDate = '2018-05-10';
-            request.params.endDate = '2018-05-15';
+            request.params.startDate = '2020-05-10';
+            request.params.endDate = '2020-05-15';
           }
         }
       }),
