@@ -4,12 +4,12 @@ import {
 } from '../../../helpers/screenshort-comparer';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Scheduler: Navigator`
+fixture`Agenda:adaptive`
   .page(url(__dirname, '../container.html'));
 
-test('Navigator can change week when current date interval is more than diff between current date and `max` (T830754)', async (t) => {
+test('Groups', async (t) => {
   await t.resizeWindowToFitDevice('iphone11');
-  await t.expect(await compareScreenshot(t, 'agenda-with-resource-adaptive.png'));
+  await t.expect(await compareScreenshot(t, 'agenda-with-groups-adaptive.png'));
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [{
