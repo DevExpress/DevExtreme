@@ -1055,7 +1055,6 @@ QUnit.module('options changed callbacks', {
 
         assert.equal($title.find('.dx-button').length, 1, 'title has close button');
         assert.equal($closeButton.length, 1, 'close button element');
-        assert.equal($closeButton.dxButton('instance').option('stylingMode'), 'text', 'close button has correct styling mode');
 
         instance.option('toolbarItems', []);
         assert.equal($title.find('.dx-button').length, 0, 'close button is removed');
