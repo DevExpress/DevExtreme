@@ -21,6 +21,8 @@ import CollectionWidget from '../../collection/ui.collection_widget.edit';
 import timeZoneUtils from '../utils.timeZone.js';
 import { APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_SETTINGS_KEY } from '../constants';
 
+// import { AppointmentContent, AgendaAppointmentContent } from './appointmentContent';
+
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 const APPOINTMENT_TITLE_CLASS = 'dx-scheduler-appointment-title';
@@ -517,27 +519,26 @@ class SchedulerAppointments extends CollectionWidget {
         element.data(APPOINTMENT_SETTINGS_KEY, settings);
 
         this._applyResourceDataAttr(element);
-        const data = this._getItemData(element);
+        const itemData = this._getItemData(element);
         const geometry = this.invoke('getAppointmentGeometry', settings);
         const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
         const allowDrag = this.option('allowDrag');
         const allDay = settings.allDay;
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
-        const deferredColor = this.invoke('getAppointmentColor', {
-            itemData: this._getItemData(element),
-            groupIndex: settings.groupIndex,
-        });
-
-
         if(settings.virtual) {
-            this._processVirtualAppointment(settings, element, data, deferredColor);
+            const deferredColor = this.invoke('getAppointmentColor', {
+                itemData,
+                groupIndex: settings.groupIndex,
+            });
+            this._processVirtualAppointment(settings, element, itemData, deferredColor);
         } else {
             const { info } = settings;
 
             this._createComponent(element, Appointment, {
                 observer: this.option('observer'),
-                data: data,
+                data: itemData,
+                groupIndex: settings.groupIndex,
                 geometry: geometry,
                 direction: settings.direction || 'vertical',
                 allowResize: allowResize,
@@ -548,13 +549,7 @@ class SchedulerAppointments extends CollectionWidget {
                 startDate: new Date(info?.appointment.startDate),
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
-                resizableConfig: this._resizableConfig(data, settings)
-            });
-
-            deferredColor.done(function(color) {
-                if(color) {
-                    element.css('backgroundColor', color);
-                }
+                resizableConfig: this._resizableConfig(itemData, settings)
             });
         }
     }
