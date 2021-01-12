@@ -5,12 +5,9 @@ import {
 import url from '../../../helpers/getPageUrl';
 
 fixture`Agenda:adaptive`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
-test('Groups', async (t) => {
-  await t.resizeWindowToFitDevice('iphone11');
-  await t.expect(await compareScreenshot(t, 'agenda-with-groups-adaptive.png'));
-}).before(async () => {
+const createScheduler = async (groups: undefined | string[]) => {
   await createWidget('dxScheduler', {
     dataSource: [{
       text: 'Website Re-Design Plan',
@@ -36,7 +33,7 @@ test('Groups', async (t) => {
     views: ['agenda'],
     currentView: 'agenda',
     currentDate: new Date(2021, 4, 21),
-    groups: ['priorityId'],
+    groups,
     resources: [{
       fieldExpr: 'priorityId',
       allowMultiple: false,
@@ -52,4 +49,17 @@ test('Groups', async (t) => {
       label: 'Priority',
     }],
   });
+};
+
+[{
+  groups: undefined,
+  text: 'without-groups',
+}, {
+  groups: ['priorityId'],
+  text: 'groups',
+}].forEach((testCase) => {
+  test(testCase.text, async (t) => {
+    await t.resizeWindow(400, 600);
+    await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive.png`)).ok();
+  }).before(async () => createScheduler(testCase.groups));
 });
