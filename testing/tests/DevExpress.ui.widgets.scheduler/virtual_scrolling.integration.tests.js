@@ -2394,7 +2394,7 @@ module('Virtual scrolling', () => {
                         currentView: viewName,
                         scrolling: {
                             mode: 'virtual',
-                            orientation: 'horizontal'
+                            type: 'horizontal'
                         },
                         crossScrollingEnabled: true,
                         height: 400,
