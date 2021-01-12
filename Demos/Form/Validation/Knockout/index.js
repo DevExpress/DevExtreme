@@ -95,7 +95,7 @@ window.onload = function() {
                         message: "Date of birth is required"
                     }, {
                         type: "range", 
-                        max: new Date().setYear(new Date().getYear() - 21), 
+                        max: new Date().setFullYear(new Date().getFullYear() - 21), 
                         message: "You must be at least 21 years old"
                     }]
                 }]

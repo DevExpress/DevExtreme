@@ -46,7 +46,7 @@ class App extends React.Component {
       useMaskedValue: true,
       maskInvalidMessage: 'The phone must have a correct USA phone format'
     };
-    this.maxDate = new Date().setYear(new Date().getYear() - 21);
+    this.maxDate = new Date().setFullYear(new Date().getFullYear() - 21);
     this.dateBoxOptions = {
       invalidDateMessage:
         'The date must have the following format: MM/dd/yyyy'

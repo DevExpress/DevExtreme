@@ -199,7 +199,7 @@ export default {
       countryEditorOptions: {
         dataSource: service.getCountries()
       },
-      maxDate: new Date().setYear(new Date().getYear() - 21),
+      maxDate: new Date().setFullYear(new Date().getFullYear() - 21),
       namePattern: /^[^0-9]+$/,
       cityPattern: /^[^0-9]+$/,
       phonePattern:  /^\+\s*1\s*\(\s*[02-9]\d{2}\)\s*\d{3}\s*-\s*\d{4}$/
