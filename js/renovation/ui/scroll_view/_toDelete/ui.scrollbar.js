@@ -167,15 +167,6 @@ const Scrollbar = Widget.inherit({
         this._thumbRatio = (containerSize - thumbSize) / (this.option('scaleRatio') * (contentSize - containerSize));
 
         this.option(this._dimension, thumbSize / this.option('scaleRatio'));
-        this.$element().css('display', this._needScrollbar() ? '' : 'none');
-    },
-
-    _isHidden: function() {
-        return this.option('visibilityMode') === SCROLLBAR_VISIBLE.never;
-    },
-
-    _needScrollbar: function() {
-        return !this._isHidden() && (this._baseContainerToContentRatio < 1);
     },
 
     containerToContentRatio: function() {
