@@ -200,7 +200,8 @@ describe('Render', () => {
 
   it('should render div for html text', () => {
     const customizedOptions = { ...props.customizedOptions, html: 'html text' };
-    const tooltip = shallow(TooltipComponent({ ...props, customizedOptions } as any));
+    const container = document.body;
+    const tooltip = shallow(TooltipComponent({ ...props, customizedOptions, container } as any));
     expect(tooltip.find('div').at(1).props().style).toMatchObject({
       position: 'relative',
       display: 'inline-block',
@@ -216,7 +217,10 @@ describe('Render', () => {
 
   it('should be interactive', () => {
     const customizedProps = { ...props.props, interactive: true };
-    const tooltip = shallow(TooltipComponent({ ...props, pointerEvents: 'auto', props: customizedProps } as any));
+    const container = document.body;
+    const tooltip = shallow(TooltipComponent({
+      ...props, pointerEvents: 'auto', props: customizedProps, container,
+    } as any));
 
     expect(tooltip.find('RootSvgElement').props()).toMatchObject({
       styles: {
@@ -238,8 +242,9 @@ describe('Render', () => {
   it('should be interactive with html text', () => {
     const customizedOptions = { ...props.customizedOptions, html: 'html text' };
     const customizedProps = { ...props.props, interactive: true };
+    const container = document.body;
     const tooltip = shallow(TooltipComponent({
-      ...props, pointerEvents: 'auto', customizedOptions, props: customizedProps,
+      ...props, pointerEvents: 'auto', customizedOptions, props: customizedProps, container,
     } as any));
 
     expect(tooltip.find('RootSvgElement').props()).toMatchObject({
@@ -260,7 +265,8 @@ describe('Render', () => {
   it('should render contentTemplate', () => {
     const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
     const customizedProps = { ...props.props, contentTemplate };
-    const tooltip = mount(TooltipComponent({ ...props, props: customizedProps } as any));
+    const container = document.body;
+    const tooltip = mount(TooltipComponent({ ...props, props: customizedProps, container } as any));
 
     expect(tooltip.find('div').at(1).children()).toHaveLength(1);
     expect(tooltip.find('div').at(1).children().props()).toEqual({ valueText: 'Tooltip value text' });
@@ -269,7 +275,12 @@ describe('Render', () => {
 
   it('should set on the div zIndex', () => {
     const customizedProps = { ...props.props, zIndex: 3 };
-    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+    const container = document.body;
+    const tooltip = shallow(TooltipComponent({
+      ...props,
+      props: customizedProps,
+      container,
+    } as any));
 
     expect(tooltip.find('div').at(0).props().style).toMatchObject({
       zIndex: 3,
@@ -288,6 +299,16 @@ describe('Render', () => {
     expect(tooltip.find('TextSvgElement')).toHaveLength(0);
   });
 
+  it('should be rendered to passed container', () => {
+    const container = document.body.appendChild(document.createElement('div'));
+    container.setAttribute('id', 'some-id');
+
+    const tooltip = shallow(TooltipComponent({ ...props, container } as any));
+    expect(tooltip.find('div').at(0).parent().props().containerInfo.id).toEqual('some-id');
+
+    container.remove();
+  });
+
   it('should not render anything, correctedCoordinates = false', () => {
     const tooltip = shallow(TooltipComponent({ ...props, correctedCoordinates: false } as any));
 
@@ -302,21 +323,34 @@ describe('Render', () => {
   it('should apply rtl for html text', () => {
     const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
     const customizedProps = { ...props.props, rtl: true, contentTemplate };
-    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+    const container = document.body;
+    const tooltip = shallow(TooltipComponent({
+      ...props,
+      props: customizedProps,
+      container,
+    } as any));
 
     expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'rtl' });
   });
 
   it('should apply ltr for html text', () => {
     const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
-    const customizedProps = { ...props.props, rtl: false, contentTemplate };
-    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+    const container = document.body;
+    const customizedProps = {
+      ...props.props, rtl: false, contentTemplate,
+    };
+    const tooltip = shallow(TooltipComponent({
+      ...props,
+      props: customizedProps,
+      container,
+    } as any));
 
     expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'ltr' });
   });
 
   it('should apply className to main div', () => {
-    const tooltip = shallow(TooltipComponent({ ...props, cssClassName: 'dx-tooltip' } as any));
+    const container = document.body;
+    const tooltip = shallow(TooltipComponent({ ...props, cssClassName: 'dx-tooltip', container } as any));
 
     expect(tooltip.find('div').at(0).props().className).toBe('dx-tooltip');
   });
@@ -644,6 +678,35 @@ describe('Getters', () => {
     const tooltip = new Tooltip({ interactive: false });
 
     expect(tooltip.pointerEvents).toEqual('none');
+  });
+
+  it('should return body as container by default', () => {
+    const tooltip = new Tooltip({});
+    expect(tooltip.container).toEqual(document.body);
+  });
+
+  it('should return body as container if container was not found by selector', () => {
+    const tooltip = new Tooltip({ container: '#some-id' });
+    expect(tooltip.container).toEqual(document.body);
+  });
+
+  it('should return passed element as container', () => {
+    const container = document.body.appendChild(document.createElement('div'));
+
+    const tooltip = new Tooltip({ container });
+    expect(tooltip.container).toEqual(container);
+
+    container.remove();
+  });
+
+  it('should return found element as container', () => {
+    const container = document.body.appendChild(document.createElement('div'));
+    container.setAttribute('id', 'some-id');
+
+    const tooltip = new Tooltip({ container: '#some-id' });
+    expect(tooltip.container).toEqual(container);
+
+    container.remove();
   });
 
   it('should return css className', () => {

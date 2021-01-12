@@ -13,6 +13,7 @@ export type CustomizeTooltipFn = (info: any) => {
     text?: string; html?: string; color?: string; borderColor?: string; fontColor?: string;
 };
 export type Location = 'center' | 'edge';
+export type Container = string | HTMLElement;
 export interface TooltipData {
   value?: number | Date | string,
   argument?: number | Date | string,

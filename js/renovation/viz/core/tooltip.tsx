@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState,
+  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState, Portal,
   RefObject, Method, Template, Event,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
@@ -11,8 +11,8 @@ import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 import { RootSvgElement } from './renderers/svg_root';
 
 import {
-  Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
-  TooltipCoordinates,
+  Size, Border, InitialBorder, CustomizedOptions,
+  CustomizeTooltipFn, TooltipData, Location, Container, TooltipCoordinates,
 } from './common/types.d';
 import { Format, Point } from '../common/types.d';
 
@@ -31,6 +31,7 @@ export const viewFunction = ({
   textSizeWithPaddings,
   border,
   filterId,
+  container,
   customizedOptions,
   setCurrentState,
   pointerEvents,
@@ -55,101 +56,103 @@ export const viewFunction = ({
     WebkitUserSelect: 'auto',
   } : {};
   return (
-    <div
-      className={cssClassName}
-      style={{
-        position: 'absolute',
-        pointerEvents: 'none',
-        left: cloudSize.x,
-        top: cloudSize.y,
-        zIndex,
-      }}
-    >
-      <RootSvgElement
-        width={cloudSize.width}
-        height={cloudSize.height}
-        styles={{
+    <Portal container={container}>
+      <div
+        className={cssClassName}
+        style={{
           position: 'absolute',
-          ...styles,
+          pointerEvents: 'none',
+          left: cloudSize.x,
+          top: cloudSize.y,
+          zIndex,
         }}
       >
-        <defs>
-          <ShadowFilter
-            id={filterId}
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
-            blur={shadow.blur}
-            color={shadow.color}
-            offsetX={shadow.offsetX}
-            offsetY={shadow.offsetY}
-            opacity={shadow.opacity}
-          />
-        </defs>
-        <g
-          filter={getFuncIri(filterId)}
-          ref={cloudRef}
-          transform={`translate(${-cloudSize.x}, ${-cloudSize.y})`}
+        <RootSvgElement
+          width={cloudSize.width}
+          height={cloudSize.height}
+          styles={{
+            position: 'absolute',
+            ...styles,
+          }}
         >
-          <PathSvgElement
-            pointerEvents={pointerEvents}
-            d={d}
-            fill={customizedOptions.color}
-            stroke={customizedOptions.borderColor}
-            strokeWidth={border.strokeWidth}
-            strokeOpacity={border.strokeOpacity}
-            dashStyle={border.dashStyle}
-            opacity={opacity}
-            rotate={angle}
-            rotateX={correctedCoordinates.x}
-            rotateY={correctedCoordinates.y}
-          />
-          {(customizedOptions.html || TooltipTemplate) ? null
-            : (
-              <g
-                textAnchor="middle"
-                ref={textRef}
-                transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - textSize.height / 2 - textSize.y})`}
-              >
-                <TextSvgElement
-                  text={customizedOptions.text}
-                  styles={{
-                    fill: customizedOptions.fontColor,
-                    fontFamily: font.family,
-                    fontSize: font.size,
-                    fontWeight: font.weight,
-                    opacity: font.opacity,
-                    pointerEvents,
-                  }}
-                />
-              </g>
-            )}
-        </g>
-      </RootSvgElement>
-      {!(customizedOptions.html || TooltipTemplate) ? null
-        : (
-          <div
-            ref={htmlRef}
-            style={{
-              position: 'relative',
-              display: 'inline-block',
-              left: correctedCoordinates.x - cloudSize.x - textSize.width / 2,
-              top: correctedCoordinates.y - cloudSize.y - textSize.height / 2,
-              fill: customizedOptions.fontColor,
-              fontFamily: font.family,
-              fontSize: font.size,
-              fontWeight: font.weight,
-              opacity: font.opacity,
-              pointerEvents,
-              direction: rtl ? 'rtl' : 'ltr',
-            }}
+          <defs>
+            <ShadowFilter
+              id={filterId}
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+              blur={shadow.blur}
+              color={shadow.color}
+              offsetX={shadow.offsetX}
+              offsetY={shadow.offsetY}
+              opacity={shadow.opacity}
+            />
+          </defs>
+          <g
+            filter={getFuncIri(filterId)}
+            ref={cloudRef}
+            transform={`translate(${-cloudSize.x}, ${-cloudSize.y})`}
           >
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            {TooltipTemplate && (<TooltipTemplate {...data} />)}
-          </div>
-        )}
-    </div>
+            <PathSvgElement
+              pointerEvents={pointerEvents}
+              d={d}
+              fill={customizedOptions.color}
+              stroke={customizedOptions.borderColor}
+              strokeWidth={border.strokeWidth}
+              strokeOpacity={border.strokeOpacity}
+              dashStyle={border.dashStyle}
+              opacity={opacity}
+              rotate={angle}
+              rotateX={correctedCoordinates.x}
+              rotateY={correctedCoordinates.y}
+            />
+            {(customizedOptions.html || TooltipTemplate) ? null
+              : (
+                <g
+                  textAnchor="middle"
+                  ref={textRef}
+                  transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - textSize.height / 2 - textSize.y})`}
+                >
+                  <TextSvgElement
+                    text={customizedOptions.text}
+                    styles={{
+                      fill: customizedOptions.fontColor,
+                      fontFamily: font.family,
+                      fontSize: font.size,
+                      fontWeight: font.weight,
+                      opacity: font.opacity,
+                      pointerEvents,
+                    }}
+                  />
+                </g>
+              )}
+          </g>
+        </RootSvgElement>
+        {!(customizedOptions.html || TooltipTemplate) ? null
+          : (
+            <div
+              ref={htmlRef}
+              style={{
+                position: 'relative',
+                display: 'inline-block',
+                left: correctedCoordinates.x - cloudSize.x - textSize.width / 2,
+                top: correctedCoordinates.y - cloudSize.y - textSize.height / 2,
+                fill: customizedOptions.fontColor,
+                fontFamily: font.family,
+                fontSize: font.size,
+                fontWeight: font.weight,
+                opacity: font.opacity,
+                pointerEvents,
+                direction: rtl ? 'rtl' : 'ltr',
+              }}
+            >
+              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+              {TooltipTemplate && (<TooltipTemplate {...data} />)}
+            </div>
+          )}
+      </div>
+    </Portal>
   );
 };
 
@@ -176,6 +179,8 @@ export class TooltipProps {
   @OneWay() arrowWidth = 20;
 
   @OneWay() arrowLength = 10;
+
+  @OneWay() container?: Container;
 
   @OneWay() offset = 0;
 
@@ -355,6 +360,21 @@ export class Tooltip extends JSXComponent(TooltipProps) {
       };
     }
     return {};
+  }
+
+  get container(): HTMLElement {
+    const propsContainer = this.props.container;
+    if (propsContainer) {
+      if (typeof propsContainer === 'string') {
+        const node = document.querySelector(propsContainer);
+        if (node) {
+          return node as HTMLElement;
+        }
+      } else {
+        return propsContainer;
+      }
+    }
+    return document.body;
   }
 
   get customizedOptions(): CustomizedOptions {
