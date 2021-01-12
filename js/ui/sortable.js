@@ -1,4 +1,5 @@
 import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import Draggable from './draggable';
@@ -37,6 +38,12 @@ const stopAnimation = (element) => {
 };
 
 const Sortable = Draggable.inherit({
+    _init: function() {
+        this.callBase();
+        this._sourceScrollHandler = this._handleSourceScroll.bind(this);
+        this._sourceScrollableInfo = null;
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             clone: true,
@@ -122,8 +129,47 @@ const Sortable = Draggable.inherit({
         const $sourceElement = this._getSourceElement();
 
         this._updateItemPoints();
+        this._subscribeToSourceScroll(e);
         this.option('fromIndex', this._getElementIndex($sourceElement));
         this.option('fromIndexOffset', this.option('offset'));
+    },
+
+    _dragEndHandler: function() {
+        this.callBase.apply(this, arguments);
+        this._unsubscribeFromSourceScroll();
+    },
+
+    _subscribeToSourceScroll: function(e) {
+        const $scrollable = this._getScrollable($(e.target));
+        if($scrollable) {
+            this._sourceScrollableInfo = {
+                element: $scrollable,
+                scrollLeft: $scrollable.scrollLeft(),
+                scrollTop: $scrollable.scrollTop()
+            };
+
+            eventsEngine.on($scrollable, 'scroll', this._sourceScrollHandler);
+        }
+    },
+
+    _unsubscribeFromSourceScroll: function() {
+        if(this._sourceScrollableInfo) {
+            eventsEngine.off(this._sourceScrollableInfo.element, 'scroll', this._sourceScrollHandler);
+            this._sourceScrollableInfo = null;
+        }
+    },
+
+    _handleSourceScroll: function(e) {
+        const sourceScrollableInfo = this._sourceScrollableInfo;
+        if(sourceScrollableInfo) {
+            ['scrollLeft', 'scrollTop'].forEach((scrollProp) => {
+                if(e.target[scrollProp] !== sourceScrollableInfo[scrollProp]) {
+                    const scrollBy = e.target[scrollProp] - sourceScrollableInfo[scrollProp];
+                    this._correctItemPoints(scrollBy);
+                    sourceScrollableInfo[scrollProp] = e.target[scrollProp];
+                }
+            });
+        }
     },
 
     _dragEnterHandler: function() {
@@ -233,14 +279,12 @@ const Sortable = Draggable.inherit({
         return (new Deferred()).resolve();
     },
 
-    dragMove: function(e, scrollBy) {
+    dragMove: function(e) {
         const itemPoints = this.option('itemPoints');
 
         if(!itemPoints) {
             return;
         }
-
-        this._correctItemPoints(scrollBy);
 
         const isVertical = this._isVerticalOrientation();
         const axisName = isVertical ? 'top' : 'left';
