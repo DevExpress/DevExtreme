@@ -1661,7 +1661,7 @@ QUnit.module('correct event should be passed to valueChanged', {
 
         const $listItems = this.getListItems();
         const $firstItem = $listItems.eq(0);
-        $firstItem.click();
+        $firstItem.trigger('dxclick');
 
         const valueChangedEvent = this.valueChangedHandler.getCall(1).args[0].event;
         assert.strictEqual(valueChangedEvent.type, 'dxclick', 'event type is correct');
@@ -1673,7 +1673,7 @@ QUnit.module('correct event should be passed to valueChanged', {
 
         const $listItems = this.getListItems();
         const $firstItem = $listItems.eq(0);
-        $firstItem.click();
+        $firstItem.trigger('dxclick');
 
         this.instance.option('value', '33');
 
