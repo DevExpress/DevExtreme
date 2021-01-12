@@ -7,7 +7,7 @@ import url from '../../../helpers/getPageUrl';
 fixture`Agenda:adaptive`
   .page(url(__dirname, '../../container.html'));
 
-const createScheduler = async (groups: undefined | string[]) => {
+const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean) => {
   await createWidget('dxScheduler', {
     dataSource: [{
       text: 'Website Re-Design Plan',
@@ -33,6 +33,7 @@ const createScheduler = async (groups: undefined | string[]) => {
     views: ['agenda'],
     currentView: 'agenda',
     currentDate: new Date(2021, 4, 21),
+    rtlEnabled,
     groups,
     resources: [{
       fieldExpr: 'priorityId',
@@ -51,15 +52,17 @@ const createScheduler = async (groups: undefined | string[]) => {
   });
 };
 
-[{
-  groups: undefined,
-  text: 'without-groups',
-}, {
-  groups: ['priorityId'],
-  text: 'groups',
-}].forEach((testCase) => {
-  test(testCase.text, async (t) => {
-    await t.resizeWindow(400, 600);
-    await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive.png`)).ok();
-  }).before(async () => createScheduler(testCase.groups));
+[false, true].forEach((rtlEnabled) => {
+  [{
+    groups: undefined,
+    text: 'without-groups',
+  }, {
+    groups: ['priorityId'],
+    text: 'groups',
+  }].forEach((testCase) => {
+    test(testCase.text, async (t) => {
+      await t.resizeWindow(400, 600);
+      await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`)).ok();
+    }).before(async () => createScheduler(testCase.groups, rtlEnabled));
+  });
 });
