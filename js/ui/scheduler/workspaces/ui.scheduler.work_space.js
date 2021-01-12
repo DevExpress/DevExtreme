@@ -1300,6 +1300,9 @@ class SchedulerWorkSpace extends WidgetObserver {
                 'renovatedGroupPanel',
                 options,
             );
+            this._attachGroupCountAttr();
+        } else {
+            this._detachGroupCountAttr();
         }
     }
 
@@ -1640,7 +1643,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         let cellTemplates = [];
         if(groupCount) {
             const groupRows = this._makeGroupRows(this.option('groups'), this.option('groupByDate'));
-            this._attachGroupCountAttr(groupCount, groupRows);
+            this._attachGroupCountAttr();
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
         } else {
@@ -1662,7 +1665,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.$element().removeAttr(groupedAttr.attr);
     }
 
-    _attachGroupCountAttr(groupRowCount, groupRows) {
+    _attachGroupCountAttr() {
         const groupedAttr = this._groupedStrategy.getGroupCountAttr(this.option('groups'));
 
         this.$element().attr(groupedAttr.attr, groupedAttr.count);
