@@ -1,19 +1,12 @@
-// import $ from '../../core/renderer';
-import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import readyCallback from '../../core/utils/ready_callbacks';
 import { move } from '../../animation/translator';
 import Widget from '../widget/ui.widget';
-import { addNamespace } from '../../events/utils/index';
 import { deferRenderer } from '../../core/utils/common';
 import { isPlainObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import pointerEvents from '../../events/pointer';
 
 const SCROLLBAR = 'dxScrollbar';
-const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
 const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
-// const HORIZONTAL = 'horizontal';
 const THUMB_MIN_SIZE = 15;
 
 const SCROLLBAR_VISIBLE = {
@@ -22,8 +15,6 @@ const SCROLLBAR_VISIBLE = {
     always: 'always',
     never: 'never'
 };
-
-let activeScrollbar = null;
 
 const Scrollbar = Widget.inherit({
     _getDefaultOptions: function() {
@@ -62,20 +53,6 @@ const Scrollbar = Widget.inherit({
     // const visibilityMode = this.option('visibilityMode');
     // return (visibilityMode === SCROLLBAR_VISIBLE.onHover || visibilityMode === SCROLLBAR_VISIBLE.always) && this.option('expandable');
     // },
-
-    _attachPointerDownHandler: function() {
-        eventsEngine.on(this._$thumb, addNamespace(pointerEvents.down, SCROLLBAR), this.feedbackOn.bind(this));
-    },
-
-    feedbackOn: function() {
-        this.$element().addClass(SCROLLABLE_SCROLLBAR_ACTIVE_CLASS);
-        activeScrollbar = this;
-    },
-
-    feedbackOff: function() {
-        this.$element().removeClass(SCROLLABLE_SCROLLBAR_ACTIVE_CLASS);
-        activeScrollbar = null;
-    },
 
     cursorEnter: function() {
         this._isHovered = true;
@@ -179,9 +156,6 @@ const Scrollbar = Widget.inherit({
 
     _clean: function() {
         this.callBase();
-        if(this === activeScrollbar) {
-            activeScrollbar = null;
-        }
 
         eventsEngine.off(this._$thumb, '.' + SCROLLBAR);
     },
@@ -216,14 +190,6 @@ const Scrollbar = Widget.inherit({
     update: deferRenderer(function() {
         this._adjustVisibility() && this.option('visible', true);
     })
-});
-
-readyCallback.add(function() {
-    eventsEngine.subscribeGlobal(domAdapter.getDocument(), addNamespace(pointerEvents.up, SCROLLBAR), function() {
-        if(activeScrollbar) {
-            activeScrollbar.feedbackOff();
-        }
-    });
 });
 
 export default Scrollbar;
