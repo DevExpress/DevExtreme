@@ -82,8 +82,10 @@ export const asyncWrapper = (assert, callback) => {
         .then(done);
 };
 
-export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout, check) => {
+export const execAsync = (promise, beforeAssertCallback, assertCallback, timeout, check) => {
     return promise.then(() => {
+        let timerId;
+
         return new Promise((resolve, reject) => {
             const execCallback = func => {
                 try {
@@ -93,9 +95,9 @@ export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout, 
                 }
             };
 
-            beforeAsyncCallback && execCallback(beforeAsyncCallback);
+            beforeAssertCallback && execCallback(beforeAssertCallback);
 
-            setTimeout(() => {
+            timerId = setTimeout(() => {
 
                 if(check && !check()) {
 
@@ -103,45 +105,49 @@ export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout, 
 
                 } else {
 
-                    execCallback(asyncCallback);
+                    execCallback(assertCallback);
 
                     resolve();
                 }
 
             }, timeout);
+        }).catch(() => {
+            clearTimeout(timerId);
         });
     });
 };
 
-export const asyncScrollTest = (promise, asyncCallback, scrollable, offset) => {
+export const asyncScrollTest = (promise, assertCallback, scrollable, offset) => {
     const scrollTimeout = 20;
-    let counter = 4;
+    let scrollAttemptCount = 4;
 
-    const wrapper = () => execAsync(
-        promise,
-        () => scrollable.scrollTo(offset),
-        asyncCallback,
-        scrollTimeout,
-        () => {
-            const scrollOffset = scrollable.scrollOffset();
-            const {
-                x,
-                y
-            } = offset;
+    const wrapper = () => {
+        if(scrollAttemptCount <= 0) {
+            return Promise.reject();
+        }
 
-            counter--;
+        return execAsync(
+            promise,
+            () => scrollable.scrollTo(offset),
+            assertCallback,
+            scrollTimeout,
+            () => {
+                const scrollOffset = scrollable.scrollOffset();
+                const {
+                    x,
+                    y
+                } = offset;
 
-            if(counter === 0) {
-                return true;
-            }
+                scrollAttemptCount--;
 
-            return (!isDefined(x) || scrollOffset.left === x) &&
-                (!isDefined(y) || scrollOffset.top === y);
-        })
-        .then(
-            null,
-            () => wrapper(promise, asyncCallback, scrollable, offset)
-        );
+                return (!isDefined(x) || scrollOffset.left === x) &&
+                    (!isDefined(y) || scrollOffset.top === y);
+            })
+            .then(
+                null,
+                () => wrapper(promise, assertCallback, scrollable, offset)
+            );
+    };
 
     return wrapper();
 };
