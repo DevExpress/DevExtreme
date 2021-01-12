@@ -289,11 +289,6 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         });
     }
 
-    _getGroupIndices(resources) {
-        const workspace = this.scheduler._workSpace;
-        return workspace._getGroupIndexes(resources);
-    }
-
     _cropAppointmentsByStartDayHour(appointments, rawAppointment, isAllDay) {
         return appointments.map(appointment => {
             const startDate = new Date(appointment.startDate);
@@ -373,8 +368,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     _createAppointmentInfos(gridAppointments, resources, allDay, recurrent) {
         const appointments = allDay
             ? gridAppointments
-            : gridAppointments.filter(item => {
-                const { source, startDate, endDate } = item;
+            : gridAppointments.filter(({ source, startDate, endDate }) => {
                 const { groupIndex } = source;
 
                 return this.viewDataProvider.isGroupIntersectDateInterval(groupIndex, startDate, endDate);
@@ -486,9 +480,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     }
 
     _updateGroupIndices(appointments, itemResources) {
-        const groupIndices = this.isVerticalGrouping
-            ? this._getGroupIndices(itemResources)
-            : [0];
+        const groupIndices = this._getGroupIndices(itemResources);
         const result = [];
 
         groupIndices.forEach(groupIndex => {
@@ -508,15 +500,15 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     }
 
     _getGroupIndices(resources) {
-        const groupIndices = super._getGroupIndices(resources);
-        const { viewDataProvider } = this.scheduler.getWorkSpace();
+        const groupIndices = resources
+            ? this.workspace._getGroupIndexes(resources)
+            : [0];
+        const { viewDataProvider } = this.workspace;
         const viewDataGroupIndices = viewDataProvider.getGroupIndices();
 
-        const result = groupIndices.filter(
+        return groupIndices.filter(
             groupIndex => viewDataGroupIndices.indexOf(groupIndex) !== -1
         );
-
-        return result;
     }
 
     _createAppointments(appointment, resources) {

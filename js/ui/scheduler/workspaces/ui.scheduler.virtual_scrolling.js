@@ -73,6 +73,12 @@ export default class VirtualScrollingDispatcher {
             : 0;
     }
 
+    get leftVirtualCellsCount() {
+        return this.horizontalScrollingState?.virtualItemCountBefore > 0
+            ? 1
+            : 0;
+    }
+
     get scrollingState() {
         return {
             vertical: this.verticalVirtualScrolling?.state,

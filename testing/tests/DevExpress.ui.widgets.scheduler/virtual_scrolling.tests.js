@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-identical-names */
 import $ from 'jquery';
 import VirtualScrollingDispatcher from 'ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
 import { getWindow } from 'core/utils/window';
@@ -323,17 +322,51 @@ module('Virtual Scrolling', {
                     startCellIndex: 0
                 }
             }
-        ].forEach(option => {
-            test(`it should return correct render state if scrolling orientation: ${option.orientation}`, function(assert) {
+        ].forEach(({ orientation, expectedRenderState }) => {
+            test(`it should return correct render state if scrolling orientation: ${orientation}`, function(assert) {
                 this.prepareInstance({
                     scrolling: {
-                        type: option.orientation
+                        type: orientation
                     }
                 });
 
                 const state = this.virtualScrollingDispatcher.getRenderState();
 
-                assert.deepEqual(state, option.expectedRenderState, 'Render state is correct');
+                assert.deepEqual(state, expectedRenderState, 'Render state is correct');
+            });
+        });
+
+        [{
+            orientation: 'vertical',
+            verticalAllowed: true,
+            horizontalAllowed: false
+        }, {
+            orientation: 'horizontal',
+            verticalAllowed: false,
+            horizontalAllowed: true
+        }, {
+            orientation: 'both',
+            verticalAllowed: true,
+            horizontalAllowed: true
+        }].forEach(({ orientation, verticalAllowed, horizontalAllowed }) => {
+            test(`it should correctly create virtual scrolling instances if scrolling orientation is ${orientation}`, function(assert) {
+                this.prepareInstance({
+                    scrolling: {
+                        type: orientation
+                    }
+                });
+
+                const {
+                    horizontalVirtualScrolling,
+                    verticalVirtualScrolling,
+                    horizontalScrollingAllowed,
+                    verticalScrollingAllowed
+                } = this.virtualScrollingDispatcher;
+
+                assert.equal(horizontalScrollingAllowed, horizontalAllowed, 'horizontalScrollingAllowed is correct');
+                assert.equal(verticalScrollingAllowed, verticalAllowed, 'verticalScrollingAllowed is correct');
+                assert.equal(!!horizontalVirtualScrolling, horizontalAllowed, 'Horizontal virtual scrolling created correctly');
+                assert.equal(!!verticalVirtualScrolling, verticalAllowed, 'Horizontal virtual scrolling created correctly');
             });
         });
 

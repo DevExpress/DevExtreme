@@ -288,20 +288,6 @@ module('View Data Provider', () => {
             );
         });
 
-        test('getLasGroupCellIndex', function(assert) {
-            assert.deepEqual(
-                this.viewDataProvider.getLasGroupCellPosition(2),
-                { rowIndex: 1, cellIndex: 0 },
-                'Last position for the group 2 is correct'
-            );
-
-            assert.deepEqual(
-                this.viewDataProvider.getLasGroupCellPosition(3),
-                { rowIndex: 3, cellIndex: 0 },
-                'Last position for the group 3 is correct'
-            );
-        });
-
         test('getRowCountInGroup', function(assert) {
             assert.deepEqual(
                 this.viewDataProvider.getRowCountInGroup(2),
