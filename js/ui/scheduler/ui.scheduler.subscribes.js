@@ -497,15 +497,18 @@ const subscribes = {
         const isAllDaySupported = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();
 
         const { viewDataProvider } = workspace;
-        const { groupedData } = viewDataProvider.viewData;
-        const groupedDataToRender = groupedData.filter(({ dateTable }) => dateTable.length > 0);
-        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
         const endViewDate = workspace.getEndViewDateByEndDayHour();
         const filterOptions = [];
 
-        groupedDataToRender.forEach(({ groupIndex, allDayPanel }) => {
-            const startDate = viewDataProvider.getGroupStartDate(groupIndex);
-            const endDate = new Date(Math.min(viewDataProvider.getGroupEndDate(groupIndex), endViewDate));
+        const groupsInfo = viewDataProvider.getGroupsInfo();
+        groupsInfo.forEach((item) => {
+
+            const groupIndex = item.groupIndex;
+            const allDay = item.allDay;
+            const startDate = item.startDate;
+            const endDate = new Date(Math.min(item.endDate, endViewDate));
+
+            const groupEndDate = new Date(Math.min(endDate, endViewDate));
             const viewStartDayHour = this._getCurrentViewOption('startDayHour');
             const viewEndDayHour = this._getCurrentViewOption('endDayHour');
             const startDayHour = isCalculateStartAndEndDayHour
@@ -515,12 +518,10 @@ const subscribes = {
                 ? (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY
                 : viewEndDayHour;
 
-            const allDay = (isAllDaySupported !== false) && allDayPanel?.length > 0;
+            const isAllDay = (isAllDaySupported !== false) && allDay;
 
             const groups = viewDataProvider.getCellsGroup(groupIndex);
-            const groupResources = isVerticalGrouping
-                ? resourcesManager.getResourcesDataByGroups(groups)
-                : resourcesManager.getResourcesData();
+            const groupResources = resourcesManager.getResourcesDataByGroups(groups);
 
             filterOptions.push({
                 isVirtualScrolling: true,
@@ -529,9 +530,9 @@ const subscribes = {
                 viewStartDayHour,
                 viewEndDayHour,
                 min: startDate,
-                max: endDate,
+                max: groupEndDate,
                 resources: groupResources,
-                allDay: allDay,
+                allDay: isAllDay,
                 firstDayOfWeek: this.getFirstDayOfWeek(),
                 recurrenceException: this._getRecurrenceException.bind(this)
             });
