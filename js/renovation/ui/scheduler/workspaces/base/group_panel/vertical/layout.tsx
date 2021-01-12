@@ -55,6 +55,8 @@ export const viewFunction = (viewModel: GroupPanelVerticalLayout): JSX.Element =
 export class GroupPanelVerticalLayoutProps {
   @OneWay() groups: Group[] = [];
 
+  @OneWay() groupByDate = false;
+
   @OneWay() height?: number;
 
   @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
