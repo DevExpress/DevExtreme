@@ -129,7 +129,9 @@ export const asyncScrollTest = (promise, asyncCallback, scrollable, offset) => {
                 y
             } = offset;
 
-            if(--counter === 0) {
+            counter--;
+
+            if(counter === 0) {
                 return true;
             }
 
