@@ -20,8 +20,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '15'
-        architecture: 'x64'
+        node-version: '13'
 
     - name: Restore npm cache
       uses: actions/cache@v2
