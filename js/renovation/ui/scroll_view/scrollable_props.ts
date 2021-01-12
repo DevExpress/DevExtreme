@@ -20,6 +20,8 @@ export class ScrollableInternalProps {
 
   @OneWay() useSimulatedScrollbar = false;
 
+  @OneWay() pushBackValue = 0;
+
   @OneWay() classes?: string;
 
   @OneWay() forceGeneratePockets = false;

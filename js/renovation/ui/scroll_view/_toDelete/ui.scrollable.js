@@ -47,7 +47,6 @@ const Scrollable = DOMComponent.inherit({
             onStop: null,
             useKeyboard: true,
             inertiaEnabled: true,
-            pushBackValue: 0,
             updateManually: false
         });
     },
@@ -60,14 +59,6 @@ const Scrollable = DOMComponent.inherit({
                 },
                 options: {
                     useSimulatedScrollbar: true
-                }
-            },
-            {
-                device: function() {
-                    return devices.real().platform === 'ios';
-                },
-                options: {
-                    pushBackValue: 1
                 }
             }
         ]);

@@ -11,6 +11,7 @@ import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
+import { isDefined } from '../../../core/utils/type';
 
 import {
   ScrollableInternalPropsType,
@@ -219,7 +220,9 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
       (event: Event) => this.props.onScroll?.({
         event,
         scrollOffset: this.scrollOffset(),
-        ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef),
+        ...getBoundaryProps(
+          this.props.direction, this.scrollOffset(), this.containerRef, this.pushBackValue,
+        ),
       }));
   }
 
@@ -323,5 +326,15 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
+  }
+
+  get pushBackValue(): number {
+    const { pushBackValue } = this.props;
+
+    if (isDefined(pushBackValue)) {
+      return pushBackValue;
+    }
+
+    return (devices.real().platform === 'ios' ? 1 : 0);
   }
 }
