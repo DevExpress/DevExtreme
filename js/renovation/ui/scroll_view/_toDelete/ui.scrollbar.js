@@ -6,7 +6,6 @@ import { isPlainObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 
 const SCROLLBAR = 'dxScrollbar';
-const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
 const THUMB_MIN_SIZE = 15;
 
 const SCROLLBAR_VISIBLE = {
@@ -21,11 +20,8 @@ const Scrollbar = Widget.inherit({
         return extend(this.callBase(), {
             direction: null,
             visible: false,
-            activeStateEnabled: false,
-            // visibilityMode: SCROLLBAR_VISIBLE.onScroll,
             containerSize: 0,
             contentSize: 0,
-            // expandable: true,
             scaleRatio: 1
         });
     },
@@ -39,20 +35,11 @@ const Scrollbar = Widget.inherit({
         this.callBase();
 
         this._update();
-        this._attachPointerDownHandler();
-        this.option('hoverStateEnabled', this._isHoverMode());
-
-        this.$element().toggleClass(HOVER_ENABLED_STATE, this.option('hoverStateEnabled'));
     },
 
     isThumb: function($element) {
         return !!this.$element().find($element).length;
     },
-
-    // _isHoverMode: function() {
-    // const visibilityMode = this.option('visibilityMode');
-    // return (visibilityMode === SCROLLBAR_VISIBLE.onHover || visibilityMode === SCROLLBAR_VISIBLE.always) && this.option('expandable');
-    // },
 
     cursorEnter: function() {
         this._isHovered = true;

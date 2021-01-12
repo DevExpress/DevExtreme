@@ -145,7 +145,7 @@ jest.mock('../../../../core/devices', () => {
         } as Partial<any>;
         const scrollable = mount(viewFunction(props as any) as JSX.Element);
 
-        expect(scrollable.find(Widget).props()).toMatchObject({
+        expect(scrollable.find(Widget).at(0).props()).toMatchObject({
           classes: cssClasses,
           ...props.props,
         });
