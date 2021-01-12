@@ -6,12 +6,19 @@ import { noop } from 'core/utils/common';
 import domAdapter from 'core/dom_adapter';
 import eventsEngine from 'events/core/events_engine';
 import { addNamespace } from 'events/utils/index';
+import browser from 'core/devices';
 
 const {
     module
 } = QUnit;
 
-const test = (description, callback) => QUnit.test(description, sinon.test(callback));
+const test = (description, callback) => {
+    const testFunc = browser.msie
+        ? QUnit.skip
+        : QUnit.test;
+
+    return testFunc(description, sinon.test(callback));
+};
 
 module('Virtual Scrolling', {
     beforeEach: function() {

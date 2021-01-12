@@ -13,13 +13,22 @@ import {
     asyncWrapper
 } from '../../helpers/scheduler/helpers.js';
 
+import browser from 'core/devices';
+
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
 const {
     testStart,
-    test,
     module
 } = QUnit;
+
+const test = (description, callback) => {
+    const testFunc = browser.msie
+        ? QUnit.skip
+        : QUnit.test;
+
+    return testFunc(description, sinon.test(callback));
+};
 
 testStart(() => initTestMarkup());
 
@@ -306,7 +315,6 @@ module('Virtual scrolling', () => {
                         option.steps.forEach(step => {
                             promise = asyncScrollTest(
                                 promise,
-                                () => { scrollable.scrollTo({ y: step.y }); },
                                 () => {
                                     assert.equal(
                                         this.scheduler.appointments.getAppointmentCount(),
@@ -324,7 +332,10 @@ module('Virtual scrolling', () => {
                                         assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
                                         assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
                                     });
-                                });
+                                },
+                                scrollable,
+                                { y: step.y }
+                            );
                         });
 
                         return promise;
@@ -431,7 +442,6 @@ module('Virtual scrolling', () => {
                         option.steps.forEach(step => {
                             promise = asyncScrollTest(
                                 promise,
-                                () => { scrollable.scrollTo({ y: step.y }); },
                                 () => {
                                     assert.equal(
                                         this.scheduler.appointments.getAppointmentCount(),
@@ -449,7 +459,10 @@ module('Virtual scrolling', () => {
                                         assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
                                         assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
                                     });
-                                });
+                                },
+                                scrollable,
+                                { y: step.y }
+                            );
                         });
 
                         return promise;
@@ -522,7 +535,6 @@ module('Virtual scrolling', () => {
                     ].forEach(option => {
                         promise = asyncScrollTest(
                             promise,
-                            () => scrollable.scrollTo({ y: option.y }),
                             () => {
                                 assert.equal(
                                     this.scheduler.appointments.getAppointmentCount(),
@@ -544,7 +556,9 @@ module('Virtual scrolling', () => {
                                     `appointment part #${index} rect is correct`
                                     );
                                 });
-                            }
+                            },
+                            scrollable,
+                            { y: option.y }
                         );
                     });
 
@@ -609,7 +623,6 @@ module('Virtual scrolling', () => {
                     ].forEach(option => {
                         promise = asyncScrollTest(
                             promise,
-                            () => { scrollable.scrollTo({ y: option.y }); },
                             () => {
                                 assert.equal(
                                     option.appointmentRects.length,
@@ -627,7 +640,10 @@ module('Virtual scrolling', () => {
                                     assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
                                     assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
                                 });
-                            });
+                            },
+                            scrollable,
+                            { y: option.y }
+                        );
                     });
 
                     return promise;
@@ -741,7 +757,6 @@ module('Virtual scrolling', () => {
                         option.steps.forEach(step => {
                             promise = asyncScrollTest(
                                 promise,
-                                () => { scrollable.scrollTo({ y: step.y }); },
                                 () => {
                                     assert.equal(
                                         this.scheduler.appointments.getAppointmentCount(),
@@ -764,7 +779,10 @@ module('Virtual scrolling', () => {
                                         `appointment part #${index} rect is correct`
                                         );
                                     });
-                                });
+                                },
+                                scrollable,
+                                { y: step.y }
+                            );
                         });
 
                         return promise;
@@ -870,7 +888,6 @@ module('Virtual scrolling', () => {
                         option.steps.forEach(step => {
                             promise = asyncScrollTest(
                                 promise,
-                                () => { scrollable.scrollTo({ y: step.y }); },
                                 () => {
                                     assert.equal(
                                         this.scheduler.appointments.getAppointmentCount(),
@@ -888,7 +905,10 @@ module('Virtual scrolling', () => {
                                         assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
                                         assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
                                     });
-                                });
+                                },
+                                scrollable,
+                                { y: step.y }
+                            );
                         });
 
                         return promise;
@@ -1035,7 +1055,6 @@ module('Virtual scrolling', () => {
                             ].forEach(scrollY => {
                                 promise = asyncScrollTest(
                                     promise,
-                                    () => { scrollable.scrollTo({ y: scrollY }); },
                                     () => {
                                         const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
 
@@ -1055,7 +1074,10 @@ module('Virtual scrolling', () => {
                                             startViewDate,
                                             'start date is correct'
                                         );
-                                    });
+                                    },
+                                    scrollable,
+                                    { y: scrollY }
+                                );
                             });
 
                             return promise;
@@ -1147,7 +1169,6 @@ module('Virtual scrolling', () => {
                 ].forEach(option => {
                     promise = asyncScrollTest(
                         promise,
-                        () => scrollable.scrollTo({ y: option.offsetY }),
                         () => {
                             const filteredItems = instance.getFilteredItems();
 
@@ -1163,7 +1184,10 @@ module('Virtual scrolling', () => {
                                     assert.equal(settings[index].top, top, `Appointment top position ${top} is correct for offsetY: ${option.offsetY}`);
                                 });
                             });
-                        });
+                        },
+                        scrollable,
+                        { y: option.offsetY }
+                    );
                 });
 
                 return promise;
@@ -1287,7 +1311,6 @@ module('Virtual scrolling', () => {
 
                     promise = asyncScrollTest(
                         promise,
-                        () => scrollable.scrollTo({ y: offsetY }),
                         () => {
                             const items = instance._appointments.option('items');
 
@@ -1308,7 +1331,10 @@ module('Virtual scrolling', () => {
                                 assert.equal(setting.top, top, `Settings top ${setting.top} is correct`);
                                 assert.equal(setting.height, height, `Settings height ${setting.height} is correct`);
                             });
-                        });
+                        },
+                        scrollable,
+                        { y: offsetY }
+                    );
                 });
 
                 return promise;
@@ -1518,7 +1544,6 @@ module('Virtual scrolling', () => {
 
                     promise = asyncScrollTest(
                         promise,
-                        () => scrollable.scrollTo({ y: offsetY }),
                         () => {
                             const items = instance._appointments.option('items');
 
@@ -1543,7 +1568,10 @@ module('Virtual scrolling', () => {
                                     assert.equal(setting.height, height, `Settings height ${setting.height} is correct`);
                                 });
                             });
-                        });
+                        },
+                        scrollable,
+                        { y: offsetY }
+                    );
                 });
 
                 return promise;
@@ -1857,7 +1885,6 @@ module('Virtual scrolling', () => {
                     ].forEach(option => {
                         promise = asyncScrollTest(
                             promise,
-                            () => scrollable.scrollTo({ y: option.offsetY }),
                             () => {
                                 const filteredItems = instance.getFilteredItems();
 
@@ -1867,7 +1894,9 @@ module('Virtual scrolling', () => {
                                 expectedDataIndices.forEach((dataIndex, index) => {
                                     assert.deepEqual(filteredItems[index], data[dataIndex], `Filtered item ${index} is correct`);
                                 });
-                            }
+                            },
+                            scrollable,
+                            { y: option.offsetY }
                         );
                     });
 
@@ -1963,10 +1992,10 @@ module('Virtual scrolling', () => {
                         { y: 2400, expectedIndices: [4, 5] }
                     ].forEach(option => {
                         const { expectedIndices } = option;
+                        const scrollable = instance.getWorkSpaceScrollable();
 
                         promise = asyncScrollTest(
                             promise,
-                            () => { instance.getWorkSpaceScrollable().scrollTo({ y: option.y }); },
                             () => {
                                 const filteredItems = instance.getFilteredItems();
 
@@ -1976,7 +2005,10 @@ module('Virtual scrolling', () => {
                                     const expected = this.data[expectedIndices[index]];
                                     assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                                 });
-                            });
+                            },
+                            scrollable,
+                            { y: option.y }
+                        );
                     });
 
                     return promise;
@@ -2002,10 +2034,10 @@ module('Virtual scrolling', () => {
                         { y: 0, expectedIndices: [0, 1, 2] }
                     ].forEach(option => {
                         const { expectedIndices } = option;
+                        const scrollable = instance.getWorkSpaceScrollable();
 
                         promise = asyncScrollTest(
                             promise,
-                            () => { instance.getWorkSpaceScrollable().scrollTo({ y: option.y }); },
                             () => {
                                 const filteredItems = instance.getFilteredItems();
 
@@ -2015,7 +2047,10 @@ module('Virtual scrolling', () => {
                                     const expected = this.data[expectedIndices[index]];
                                     assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                                 });
-                            });
+                            },
+                            scrollable,
+                            { y: option.y }
+                        );
                     });
 
                     return promise;
@@ -2056,10 +2091,10 @@ module('Virtual scrolling', () => {
                         { y: 4300, expectedIndices: [] },
                     ].forEach(option => {
                         const { expectedIndices } = option;
+                        const scrollable = instance.getWorkSpaceScrollable();
 
                         promise = asyncScrollTest(
                             promise,
-                            () => { instance.getWorkSpaceScrollable().scrollTo({ y: option.y }); },
                             () => {
                                 const filteredItems = instance.getFilteredItems();
 
@@ -2069,7 +2104,10 @@ module('Virtual scrolling', () => {
                                     const expected = this.data[expectedIndices[index]];
                                     assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                                 });
-                            });
+                            },
+                            scrollable,
+                            { y: option.y }
+                        );
                     });
 
                     return promise;
@@ -2108,17 +2146,21 @@ module('Virtual scrolling', () => {
                 const { instance } = this;
 
                 return asyncWrapper(assert, promise => {
+                    const scrollable = instance.getWorkSpaceScrollable();
+
                     [0, 300, 900, 1700, 2400, 2700, 3000, 3300, 4300].forEach(scrollY => {
                         promise = asyncScrollTest(
                             promise,
-                            () => { instance.getWorkSpaceScrollable().scrollTo({ y: scrollY }); },
                             () => {
                                 assert.equal(
                                     instance.getFilteredItems().length,
                                     0,
                                     `scrollY: ${scrollY}, filtered items length is correct `
                                 );
-                            });
+                            },
+                            scrollable,
+                            { y: scrollY }
+                        );
                     });
 
                     return promise;
@@ -2164,14 +2206,15 @@ module('Virtual scrolling', () => {
                 return asyncWrapper(assert, promise => {
                     return asyncScrollTest(
                         promise,
-                        () => scrollable.scrollTo({ y: 600 }),
                         () => {
                             const filteredItems = this.instance.getFilteredItems();
 
                             assert.equal(filteredItems.length, 1, 'Filtered items length is correct');
                             assert.deepEqual(filteredItems[0], data[0], 'Filtered item is correct');
-                        });
-
+                        },
+                        scrollable,
+                        { y: 600 }
+                    );
                 });
             });
         });
