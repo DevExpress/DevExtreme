@@ -1709,12 +1709,12 @@ class Scheduler extends Widget {
         if(appointment.recurrenceException) {
             result.push(appointment.recurrenceException);
         }
-        result.push(this._getSerializeDate(exceptionDate, appointment.startDate, appointment.allDay));
+        result.push(this._getSerializedDate(exceptionDate, appointment.startDate, appointment.allDay));
 
         return result.join();
     }
 
-    _getSerializeDate(date, startDate, isAllDay) {
+    _getSerializedDate(date, startDate, isAllDay) {
         isAllDay && date.setHours(startDate.getHours(),
             startDate.getMinutes(),
             startDate.getSeconds(),
