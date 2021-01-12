@@ -1291,6 +1291,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groups: this.option('groups'),
             groupOrientation: this.option('groupOrientation'),
             groupByDate: this.isGroupedByDate(),
+            resourceCellTemplate: this.option('resourceCellTemplate'),
         };
 
         if(this.option('groups').length) {

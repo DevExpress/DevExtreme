@@ -21,13 +21,13 @@ export const viewFunction = ({
     groups,
     groupByDate,
     height,
-    cellTemplate,
+    resourceCellTemplate,
   },
 }: GroupPanel): JSX.Element => (
   <Layout
     groups={groups}
     height={height}
-    cellTemplate={cellTemplate}
+    cellTemplate={resourceCellTemplate}
     groupByDate={groupByDate}
   />
 );
@@ -42,7 +42,7 @@ export class GroupPanelProps {
 
   @OneWay() height?: number;
 
-  @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
+  @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 }
 
 @Component({
