@@ -36,7 +36,7 @@ export default class RemoteFileSystemProvider extends FileSystemProviderBase {
     constructor(options?: RemoteFileSystemProviderOptions)
     /**
      * @docid
-     * @publicName customizeRequest(fileIndex)
+     * @publicName customizeRequest(request)
      * @param1 request: XMLHttpRequest
      * @prevFileNamespace DevExpress.fileManagement
      * @public
