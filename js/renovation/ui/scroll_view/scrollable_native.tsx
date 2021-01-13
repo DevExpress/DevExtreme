@@ -111,6 +111,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
 };
 
 @Component({
+  defaultOptionRules: null,
   view: viewFunction,
 })
 export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>() {
