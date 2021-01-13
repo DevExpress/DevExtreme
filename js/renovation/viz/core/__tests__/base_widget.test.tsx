@@ -13,6 +13,10 @@ import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/r
 jest.mock('../../../utils/resolve_rtl');
 jest.mock('../../../utils/get_computed_style');
 
+const DEFAULT_CANVAS = {
+  left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
+};
+
 describe('BaseWidget', () => {
   describe('View', () => {
     it('should pass size property and defs child element to the svg element (by default)', () => {
@@ -161,10 +165,10 @@ describe('BaseWidget', () => {
 
     describe('setCanvas', () => {
       it('should get empty canvas by default', () => {
-        const widget = new BaseWidget({ canvas: { } });
+        const widget = new BaseWidget({ canvas: DEFAULT_CANVAS });
         widget.setCanvas();
 
-        expect(widget.props.canvas).toEqual({ });
+        expect(widget.props.canvas).toEqual(DEFAULT_CANVAS);
       });
 
       it('should get size from props (props.size)', () => {
@@ -236,7 +240,7 @@ describe('BaseWidget', () => {
         });
         const widget = new BaseWidget({
           size: { width: 600, height: undefined },
-          canvas: { width: 300, height: 100 },
+          canvas: { ...DEFAULT_CANVAS, width: 300, height: 100 },
         });
         widget.setCanvas();
 
@@ -277,6 +281,7 @@ describe('BaseWidget', () => {
 
       it('should get merged size from props (size is not valid, and defaultCanvas)', () => {
         const defaultCanvas: Canvas = {
+          ...DEFAULT_CANVAS,
           width: 500,
           height: 300,
         };
@@ -289,10 +294,7 @@ describe('BaseWidget', () => {
         });
         widget.setCanvas();
 
-        expect(widget.props.canvas).toEqual({
-          width: 500,
-          height: 300,
-        });
+        expect(widget.props.canvas).toEqual(defaultCanvas);
       });
 
       it('should get default canvas from props (if any side is negative)', () => {
