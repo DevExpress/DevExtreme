@@ -265,31 +265,34 @@ module('Virtual scrolling', () => {
                 [
                     {
                         showAllDayPanel: true,
-                        steps: [{
-                            y: 0,
-                            appointmentRects: [
-                                { left: -9835, top: -9689, height: 500 },
-                                { left: -9771, top: -9839, height: 50 },
-                                { left: -9387, top: -9689, height: 500 },
-                                { left: -9323, top: -9839, height: 50 }
-                            ]
-                        }, {
-                            y: 1000,
-                            appointmentRects: [
-                                { left: -9835, top: -10039, height: 850 },
-                                { left: -9771, top: -10839, height: 50 },
-                                { left: -9387, top: -10039, height: 850 },
-                                { left: -9323, top: -10839, height: 50 }
-                            ]
-                        }, {
-                            y: 2200,
-                            appointmentRects: [
-                                { left: -9835, top: -10151, height: 650 },
-                                { left: -9771, top: -11901, height: 50 },
-                                { left: -9387, top: -10151, height: 650 },
-                                { left: -9323, top: -11901, height: 50 }
-                            ]
-                        }]
+                        steps: [
+                            {
+                                y: 0,
+                                appointmentRects: [
+                                    { left: -9835, top: -9689, height: 500 },
+                                    { left: -9771, top: -9839, height: 50 },
+                                    { left: -9387, top: -9689, height: 500 },
+                                    { left: -9323, top: -9839, height: 50 }
+                                ]
+                            },
+                            {
+                                y: 1000,
+                                appointmentRects: [
+                                    { left: -9835, top: -10039, height: 850 },
+                                    { left: -9771, top: -10839, height: 50 },
+                                    { left: -9387, top: -10039, height: 850 },
+                                    { left: -9323, top: -10839, height: 50 }
+                                ]
+                            },
+                            {
+                                y: 2200,
+                                appointmentRects: [
+                                    { left: -9835, top: -10151, height: 650 },
+                                    { left: -9771, top: -11901, height: 50 },
+                                    { left: -9387, top: -10151, height: 650 },
+                                    { left: -9323, top: -11901, height: 50 }
+                                ]
+                            }]
                     },
                     {
                         showAllDayPanel: false,
@@ -355,6 +358,7 @@ module('Virtual scrolling', () => {
                         return asyncWrapper(assert, promise => {
                             option.steps.forEach(step => {
                                 promise = asyncScrollTest(
+                                    assert,
                                     promise,
                                     () => {
                                         assert.equal(
@@ -375,7 +379,7 @@ module('Virtual scrolling', () => {
                                         });
                                     },
                                     scrollable,
-                                    { y: step.y });
+                                    { top: step.y });
                             });
 
                             return promise;
@@ -386,31 +390,33 @@ module('Virtual scrolling', () => {
                 [
                     {
                         showAllDayPanel: true,
-                        steps: [{
-                            y: 0,
-                            appointmentRects: [
-                                { left: -9771, top: -9839, height: 1050 },
-                                { left: -9323, top: -9839, height: 1050 }
-                            ]
-                        },
-                        {
-                            y: 1000,
-                            appointmentRects: [
-                                { left: -9835, top: -9689, height: 500 },
-                                { left: -9771, top: -10839, height: 1050 },
-                                { left: -9387, top: -9689, height: 500 },
-                                { left: -9323, top: -10839, height: 1050 }
-                            ]
-                        },
-                        {
-                            y: 2200,
-                            appointmentRects: [
-                                { left: -9835, top: -10151, height: 650 },
-                                { left: -9771, top: -11901, height: 1050 },
-                                { left: -9387, top: -10151, height: 650 },
-                                { left: -9323, top: -11901, height: 1050 }
-                            ]
-                        }],
+                        steps: [
+                            {
+                                y: 0,
+                                appointmentRects: [
+                                    { left: -9771, top: -9839, height: 1050 },
+                                    { left: -9323, top: -9839, height: 1050 }
+                                ]
+                            },
+                            {
+                                y: 1000,
+                                appointmentRects: [
+                                    { left: -9835, top: -9689, height: 500 },
+                                    { left: -9771, top: -10839, height: 1050 },
+                                    { left: -9387, top: -9689, height: 500 },
+                                    { left: -9323, top: -10839, height: 1050 }
+                                ]
+                            },
+                            {
+                                y: 2200,
+                                appointmentRects: [
+                                    { left: -9835, top: -10151, height: 650 },
+                                    { left: -9771, top: -11901, height: 1050 },
+                                    { left: -9387, top: -10151, height: 650 },
+                                    { left: -9323, top: -11901, height: 1050 }
+                                ]
+                            }
+                        ],
                     }, {
                         showAllDayPanel: false,
                         steps: [{
@@ -476,6 +482,7 @@ module('Virtual scrolling', () => {
                         return asyncWrapper(assert, promise => {
                             option.steps.forEach(step => {
                                 promise = asyncScrollTest(
+                                    assert,
                                     promise,
                                     () => {
                                         assert.equal(
@@ -563,6 +570,7 @@ module('Virtual scrolling', () => {
                             }
                         ].forEach(option => {
                             promise = asyncScrollTest(
+                                assert,
                                 promise,
                                 () => {
                                     assert.equal(
@@ -646,6 +654,7 @@ module('Virtual scrolling', () => {
                             }
                         ].forEach(option => {
                             promise = asyncScrollTest(
+                                assert,
                                 promise,
                                 () => {
                                     assert.equal(
@@ -782,6 +791,7 @@ module('Virtual scrolling', () => {
                         return asyncWrapper(assert, promise => {
                             steps.forEach(({ offset, appointmentRects }) => {
                                 promise = asyncScrollTest(
+                                    assert,
                                     promise,
                                     () => {
                                         const appointmentCount = this.scheduler.appointments.getAppointmentCount();
@@ -911,6 +921,7 @@ module('Virtual scrolling', () => {
                         return asyncWrapper(assert, promise => {
                             option.steps.forEach(step => {
                                 promise = asyncScrollTest(
+                                    assert,
                                     promise,
                                     () => {
                                         assert.equal(
@@ -973,7 +984,7 @@ module('Virtual scrolling', () => {
                         }, {
                             offset: { x: 520, y: 1000 },
                             appointmentRects: [
-                                { left: -9869, top: -10039, height: 850 },
+                                { left: -9869, top: -10038, height: 850 },
                                 { left: -9794, top: -10839, height: 50 },
                             ]
                         }, {
@@ -1063,6 +1074,7 @@ module('Virtual scrolling', () => {
                         return asyncWrapper(assert, promise => {
                             steps.forEach(({ appointmentRects, offset }) => {
                                 promise = asyncScrollTest(
+                                    assert,
                                     promise,
                                     () => {
                                         assert.equal(
@@ -1162,6 +1174,7 @@ module('Virtual scrolling', () => {
                             }
                         ].forEach(({ offset, appointmentRects }) => {
                             promise = asyncScrollTest(
+                                assert,
                                 promise,
                                 () => {
                                     assert.equal(
@@ -1325,6 +1338,7 @@ module('Virtual scrolling', () => {
                                 1000, 1050, 1100, 1200, 1250, 1300, 1350, 1400, 1500, 2000
                             ].forEach(scrollY => {
                                 promise = asyncScrollTest(
+                                    assert,
                                     promise,
                                     () => {
                                         const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
@@ -1439,6 +1453,7 @@ module('Virtual scrolling', () => {
                     },
                 ].forEach(({ offset, expectedSettings }) => {
                     promise = asyncScrollTest(
+                        assert,
                         promise,
                         () => {
                             const filteredItems = instance.getFilteredItems();
@@ -1581,6 +1596,7 @@ module('Virtual scrolling', () => {
                     } = option;
 
                     promise = asyncScrollTest(
+                        assert,
                         promise,
                         () => {
                             const items = instance._appointments.option('items');
@@ -1815,6 +1831,7 @@ module('Virtual scrolling', () => {
                     } = option;
 
                     promise = asyncScrollTest(
+                        assert,
                         promise,
                         () => {
                             const items = instance._appointments.option('items');
@@ -2157,6 +2174,7 @@ module('Virtual scrolling', () => {
                         { offsetY: 4500, expectedDataIndices: [1] },
                     ].forEach(option => {
                         promise = asyncScrollTest(
+                            assert,
                             promise,
                             () => {
                                 const filteredItems = instance.getFilteredItems();
@@ -2178,7 +2196,7 @@ module('Virtual scrolling', () => {
             });
         });
 
-        module('On scrolling', {
+        module('Scrolling', {
             beforeEach: function() {
                 this.data = [
                     {
@@ -2232,7 +2250,8 @@ module('Virtual scrolling', () => {
                         }],
                         currentView: 'day',
                         scrolling: {
-                            mode: 'virtual'
+                            mode: 'virtual',
+                            type: 'both'
                         },
                         height: 400
                     }, options);
@@ -2246,244 +2265,469 @@ module('Virtual scrolling', () => {
                 };
             }
         }, function() {
-            test('Scrolling Down if groupOrientation: "vertical"', function(assert) {
-                if(!isDesktopEnvironment()) {
-                    assert.ok(true, 'This test is for desktop only');
-                    return;
-                }
+            module('Vertical grouping', () => {
+                test('Scroll Down', function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
 
-                this.createInstance();
+                    this.createInstance();
 
-                const { instance } = this;
+                    const { instance } = this;
 
-                return asyncWrapper(assert, promise => {
-                    [
-                        { y: 0, expectedIndices: [0, 1, 2] },
-                        { y: 300, expectedIndices: [1, 2] },
-                        { y: 900, expectedIndices: [3, 5] },
-                        { y: 1700, expectedIndices: [4, 5] },
-                        { y: 2400, expectedIndices: [4, 5] }
-                    ].forEach(option => {
-                        const { expectedIndices } = option;
+                    return asyncWrapper(assert, promise => {
+                        [
+                            { offset: { y: 0 }, expectedIndices: [0, 1, 2] },
+                            { offset: { y: 300 }, expectedIndices: [1, 2] },
+                            { offset: { y: 900 }, expectedIndices: [3, 5] },
+                            { offset: { y: 1700 }, expectedIndices: [4, 5] },
+                            { offset: { y: 2400 }, expectedIndices: [4, 5] }
+                        ].forEach(({ offset, expectedIndices }) => {
+                            const scrollable = instance.getWorkSpaceScrollable();
+
+                            promise = asyncScrollTest(
+                                assert,
+                                promise,
+                                () => {
+                                    const filteredItems = instance.getFilteredItems();
+
+                                    assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
+
+                                    filteredItems.forEach((_, index) => {
+                                        const expected = this.data[expectedIndices[index]];
+                                        assert.deepEqual(filteredItems[index], expected, `Filtered item "${index}" is correct`);
+                                    });
+                                },
+                                scrollable,
+                                offset
+                            );
+                        });
+
+                        return promise;
+                    });
+                });
+
+                test('Scroll Up', function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
+                    this.createInstance();
+
+                    const { instance } = this;
+
+                    return asyncWrapper(assert, promise => {
+                        [
+                            { y: 2400, expectedIndices: [4, 5] },
+                            { y: 1700, expectedIndices: [4, 5] },
+                            { y: 900, expectedIndices: [3, 5] },
+                            { y: 300, expectedIndices: [1, 2] },
+                            { y: 0, expectedIndices: [0, 1, 2] }
+                        ].forEach(option => {
+                            const { expectedIndices } = option;
+                            const scrollable = instance.getWorkSpaceScrollable();
+
+                            promise = asyncScrollTest(
+                                assert,
+                                promise,
+                                () => {
+                                    const filteredItems = instance.getFilteredItems();
+
+                                    assert.equal(filteredItems.length, expectedIndices.length, `Filtered items length is correct if scrollOffset: ${option.y}`);
+
+                                    filteredItems.forEach((_, index) => {
+                                        const expected = this.data[expectedIndices[index]];
+                                        assert.deepEqual(filteredItems[index], expected, `Filtered item "${index}" is correct`);
+                                    });
+                                },
+                                scrollable,
+                                { y: option.y }
+                            );
+                        });
+
+                        return promise;
+                    });
+                });
+
+                test('Scroll Down if groups and resources', function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
+                    this.createInstance({
+                        groups: ['resourceId0'],
+                        resources: [{
+                            fieldExpr: 'resourceId0',
+                            dataSource: [
+                                { text: 'Rc0_0', id: 0, color: '#727bd2' },
+                                { text: 'Rc0_1', id: 1, color: '#32c9ed' },
+                                { text: 'Rc0_2', id: 2, color: '#52c9ed' },
+                            ],
+                            label: 'Resource0'
+                        }]
+                    });
+
+                    const { instance } = this;
+
+                    return asyncWrapper(assert, promise => {
+                        [
+                            { y: 0, expectedIndices: [0, 2] },
+                            { y: 300, expectedIndices: [2] },
+                            { y: 900, expectedIndices: [5] },
+                            { y: 1700, expectedIndices: [4, 5] },
+                            { y: 2400, expectedIndices: [1, 5] },
+                            { y: 2700, expectedIndices: [1] },
+                            { y: 3000, expectedIndices: [] },
+                            { y: 3300, expectedIndices: [3] },
+                            { y: 4300, expectedIndices: [] },
+                        ].forEach(option => {
+                            const { expectedIndices } = option;
+                            const scrollable = instance.getWorkSpaceScrollable();
+
+                            promise = asyncScrollTest(
+                                assert,
+                                promise,
+                                () => {
+                                    const filteredItems = instance.getFilteredItems();
+
+                                    assert.equal(filteredItems.length, expectedIndices.length, `ScrollY: ${option.y}. Filtered items length is correct`);
+
+                                    filteredItems.forEach((_, index) => {
+                                        const expected = this.data[expectedIndices[index]];
+                                        assert.deepEqual(filteredItems[index], expected, `Filtered item "${index}" is correct`);
+                                    });
+                                },
+                                scrollable,
+                                { y: option.y }
+                            );
+                        });
+
+                        return promise;
+                    });
+                });
+
+                test('Next day appointments should be filtered', function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
+                    this.createInstance({
+                        groups: ['resourceId0'],
+                        dataSource: [{
+                            startDate: new Date(2016, 9, 6, 23),
+                            endDate: new Date(2016, 9, 6, 23, 23),
+                            resourceId0: 0,
+                            text: 'test_00'
+                        }, {
+                            startDate: new Date(2016, 9, 6, 23),
+                            endDate: new Date(2016, 9, 6, 23, 23),
+                            resourceId0: 1,
+                            text: 'test_10'
+                        }],
+                        resources: [{
+                            fieldExpr: 'resourceId0',
+                            dataSource: [
+                                { text: 'Rc0_0', id: 0, color: '#727bd2' },
+                                { text: 'Rc0_1', id: 1, color: '#32c9ed' }
+                            ],
+                            label: 'Resource0'
+                        }]
+                    });
+
+                    const { instance } = this;
+
+                    return asyncWrapper(assert, promise => {
                         const scrollable = instance.getWorkSpaceScrollable();
 
-                        promise = asyncScrollTest(
-                            promise,
-                            () => {
-                                const filteredItems = instance.getFilteredItems();
+                        [0, 300, 900, 1700, 2400, 2700, 3000, 3300, 4300].forEach(scrollY => {
+                            promise = asyncScrollTest(
+                                assert,
+                                promise,
+                                () => {
+                                    assert.equal(
+                                        instance.getFilteredItems().length,
+                                        0,
+                                        `scrollY: ${scrollY}, filtered items length is correct `
+                                    );
+                                },
+                                scrollable,
+                                { y: scrollY }
+                            );
+                        });
 
-                                assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
+                        return promise;
+                    });
+                });
 
-                                filteredItems.forEach((_, index) => {
-                                    const expected = this.data[expectedIndices[index]];
-                                    assert.deepEqual(filteredItems[index], expected, `Filtered item "${index}" is correct`);
-                                });
-                            },
-                            scrollable,
-                            { y: option.y }
-                        );
+                test('All day appointment should be rendered correctly on the next page', function(assert) {
+                    const data = [{
+                        startDate: new Date(2020, 9, 12, 9, 30),
+                        endDate: new Date(2020, 9, 12, 10, 30),
+                        allDay: true,
+                        priorityId: 2,
+                    }];
+
+                    this.createInstance({
+                        dataSource: data,
+                        views: [{
+                            type: 'week',
+                            groupOrientation: 'vertical'
+                        }],
+                        currentView: 'week',
+                        currentDate: new Date(2020, 9, 12),
+                        startDayHour: 9,
+                        endDayHour: 16,
+                        groups: ['priorityId'],
+                        resources: [{
+                            fieldExpr: 'priorityId',
+                            allowMultiple: false,
+                            dataSource: [{ id: 1 }, { id: 2 }]
+                        }],
+                        height: 500,
+                        width: 600
                     });
 
-                    return promise;
+                    const scrollable = this.instance.getWorkSpace().getScrollable();
+
+                    return asyncWrapper(assert, promise => {
+                        return asyncScrollTest(
+                            assert,
+                            promise,
+                            () => {
+                                const filteredItems = this.instance.getFilteredItems();
+
+                                assert.equal(filteredItems.length, 1, 'Filtered items length is correct');
+                                assert.deepEqual(filteredItems[0], data[0], 'Filtered item is correct');
+                            },
+                            scrollable,
+                            { y: 600 }
+                        );
+                    });
                 });
             });
 
-            test('Scrolling Up if groupOrientation: "vertical"', function(assert) {
-                if(!isDesktopEnvironment()) {
-                    assert.ok(true, 'This test is for desktop only');
-                    return;
-                }
-
-                this.createInstance();
-
-                const { instance } = this;
-
-                return asyncWrapper(assert, promise => {
-                    [
-                        { y: 2400, expectedIndices: [4, 5] },
-                        { y: 1700, expectedIndices: [4, 5] },
-                        { y: 900, expectedIndices: [3, 5] },
-                        { y: 300, expectedIndices: [1, 2] },
-                        { y: 0, expectedIndices: [0, 1, 2] }
-                    ].forEach(option => {
-                        const { expectedIndices } = option;
-                        const scrollable = instance.getWorkSpaceScrollable();
-
-                        promise = asyncScrollTest(
-                            promise,
-                            () => {
-                                const filteredItems = instance.getFilteredItems();
-
-                                assert.equal(filteredItems.length, expectedIndices.length, `Filtered items length is correct if scrollOffset: ${option.y}`);
-
-                                filteredItems.forEach((_, index) => {
-                                    const expected = this.data[expectedIndices[index]];
-                                    assert.deepEqual(filteredItems[index], expected, `Filtered item "${index}" is correct`);
-                                });
-                            },
-                            scrollable,
-                            { y: option.y }
-                        );
-                    });
-
-                    return promise;
-                });
-            });
-
-            test('Scrolling Down if groups, resources, groupOrientation: "vertical"', function(assert) {
-                if(!isDesktopEnvironment()) {
-                    assert.ok(true, 'This test is for desktop only');
-                    return;
-                }
-
-                this.createInstance({
-                    groups: ['resourceId0'],
-                    resources: [{
-                        fieldExpr: 'resourceId0',
-                        dataSource: [
-                            { text: 'Rc0_0', id: 0, color: '#727bd2' },
-                            { text: 'Rc0_1', id: 1, color: '#32c9ed' },
-                            { text: 'Rc0_2', id: 2, color: '#52c9ed' },
-                        ],
-                        label: 'Resource0'
-                    }],
-                });
-
-                const { instance } = this;
-
-                return asyncWrapper(assert, promise => {
-                    [
-                        { y: 0, expectedIndices: [0, 2] },
-                        { y: 300, expectedIndices: [2] },
-                        { y: 900, expectedIndices: [5] },
-                        { y: 1700, expectedIndices: [4, 5] },
-                        { y: 2400, expectedIndices: [1, 5] },
-                        { y: 2700, expectedIndices: [1] },
-                        { y: 3000, expectedIndices: [] },
-                        { y: 3300, expectedIndices: [3] },
-                        { y: 4300, expectedIndices: [] },
-                    ].forEach(option => {
-                        const { expectedIndices } = option;
-                        const scrollable = instance.getWorkSpaceScrollable();
-
-                        promise = asyncScrollTest(
-                            promise,
-                            () => {
-                                const filteredItems = instance.getFilteredItems();
-
-                                assert.equal(filteredItems.length, expectedIndices.length, `ScrollY: ${option.y}. Filtered items length is correct if `);
-
-                                filteredItems.forEach((_, index) => {
-                                    const expected = this.data[expectedIndices[index]];
-                                    assert.deepEqual(filteredItems[index], expected, `Filtered item "${index}" is correct`);
-                                });
-                            },
-                            scrollable,
-                            { y: option.y }
-                        );
-                    });
-
-                    return promise;
-                });
-            });
-
-            test('Next day appointments should be filtered if "vertical" group orientation', function(assert) {
-                if(!isDesktopEnvironment()) {
-                    assert.ok(true, 'This test is for desktop only');
-                    return;
-                }
-
-                this.createInstance({
-                    groups: ['resourceId0'],
-                    dataSource: [{
-                        startDate: new Date(2016, 9, 6, 23),
-                        endDate: new Date(2016, 9, 6, 23, 23),
-                        resourceId0: 0,
-                        text: 'test_00'
-                    }, {
-                        startDate: new Date(2016, 9, 6, 23),
-                        endDate: new Date(2016, 9, 6, 23, 23),
-                        resourceId0: 1,
-                        text: 'test_10'
-                    }],
-                    resources: [{
-                        fieldExpr: 'resourceId0',
-                        dataSource: [
-                            { text: 'Rc0_0', id: 0, color: '#727bd2' },
-                            { text: 'Rc0_1', id: 1, color: '#32c9ed' }
-                        ],
-                        label: 'Resource0'
-                    }],
-                });
-
-                const { instance } = this;
-
-                return asyncWrapper(assert, promise => {
-                    const scrollable = instance.getWorkSpaceScrollable();
-
-                    [0, 300, 900, 1700, 2400, 2700, 3000, 3300, 4300].forEach(scrollY => {
-                        promise = asyncScrollTest(
-                            promise,
-                            () => {
-                                assert.equal(
-                                    instance.getFilteredItems().length,
-                                    0,
-                                    `scrollY: ${scrollY}, filtered items length is correct `
-                                );
-                            },
-                            scrollable,
-                            { y: scrollY }
-                        );
-                    });
-
-                    return promise;
-                });
-            });
-
-            test('All day appointment should be rendered correctly on the next page', function(assert) {
-                const data = [{
-                    startDate: new Date(2020, 9, 12, 9, 30),
-                    endDate: new Date(2020, 9, 12, 10, 30),
-                    allDay: true,
-                    priorityId: 2,
-                }];
-
-                this.createInstance({
-                    dataSource: data,
-                    views: [{
-                        type: 'week',
-                        groupOrientation: 'vertical'
-                    }],
-                    currentView: 'week',
-                    currentDate: new Date(2020, 9, 12),
-                    startDayHour: 9,
-                    endDayHour: 16,
-                    groups: ['priorityId'],
-                    resources: [{
-                        fieldExpr: 'priorityId',
-                        allowMultiple: false,
-                        dataSource: [{ id: 1 }, { id: 2 }]
-                    }],
-                    scrolling: { mode: 'virtual' },
-                    height: 500,
-                    width: 600
-                });
-
-                const scrollable = this.instance.getWorkSpace().getScrollable();
-
-                return asyncWrapper(assert, promise => {
-                    return asyncScrollTest(
-                        promise,
-                        () => {
-                            const filteredItems = this.instance.getFilteredItems();
-
-                            assert.equal(filteredItems.length, 1, 'Filtered items length is correct');
-                            assert.deepEqual(filteredItems[0], data[0], 'Filtered item is correct');
+            module('Horizontal grouping', {
+                beforeEach: function() {
+                    this.data = [
+                        {
+                            startDate: new Date(2016, 9, 5, 0, 0),
+                            endDate: new Date(2016, 9, 5, 0, 30),
+                            resourceId0: 0,
+                            text: 'test_00'
                         },
-                        scrollable,
-                        { y: 600 }
-                    );
+                        {
+                            startDate: new Date(2016, 9, 5, 11),
+                            endDate: new Date(2016, 9, 5, 12),
+                            resourceId0: 1,
+                            text: 'test_01'
+                        },
+                        {
+                            startDate: new Date(2016, 9, 5, 1, 30),
+                            endDate: new Date(2016, 9, 5, 2, 30),
+                            resourceId0: 2,
+                            text: 'test_02'
+                        },
+                        {
+                            startDate: new Date(2016, 9, 5, 11, 30),
+                            endDate: new Date(2016, 9, 5, 12, 30),
+                            resourceId0: 3,
+                            text: 'test_03'
+                        },
+                        {
+                            startDate: new Date(2016, 9, 5, 18),
+                            endDate: new Date(2016, 9, 5, 20),
+                            resourceId0: 4,
+                            text: 'test_04'
+                        },
+                        {
+                            startDate: new Date(2016, 9, 5, 13),
+                            endDate: new Date(2016, 9, 5, 23),
+                            resourceId0: 5,
+                            text: 'test_05'
+                        },
+                        {
+                            startDate: new Date(2016, 9, 5, 13),
+                            endDate: new Date(2016, 9, 5, 23),
+                            resourceId0: 6,
+                            text: 'test_06'
+                        },
+                        {
+                            startDate: new Date(2016, 9, 5, 13),
+                            endDate: new Date(2016, 9, 5, 23),
+                            resourceId0: 7,
+                            text: 'test_07'
+                        },
+                        {
+                            startDate: new Date(2016, 9, 5, 13),
+                            endDate: new Date(2016, 9, 5, 23),
+                            resourceId0: 8,
+                            text: 'test_08'
+                        },
+                        {
+                            startDate: new Date(2016, 9, 5, 13),
+                            endDate: new Date(2016, 9, 5, 23),
+                            resourceId0: 9,
+                            text: 'test_09'
+                        },
+                        {
+                            startDate: new Date(2016, 9, 5, 13),
+                            endDate: new Date(2016, 9, 5, 23),
+                            resourceId0: 10,
+                            text: 'test_10'
+                        }
+                    ];
+
+                    this.createInstance = function(options) {
+
+                        options = options || {};
+
+                        options = $.extend(false, {
+                            dataSource: this.data,
+                            currentDate: new Date(2016, 9, 5),
+                            views: [{
+                                type: 'day'
+                            }],
+                            currentView: 'day',
+                            scrolling: {
+                                mode: 'virtual',
+                                type: 'both'
+                            },
+                            groups: ['resourceId0'],
+                            resources: [{
+                                fieldExpr: 'resourceId0',
+                                dataSource: [
+                                    { text: 'Rc0_0', id: 0 },
+                                    { text: 'Rc0_1', id: 1 },
+                                    { text: 'Rc0_3', id: 2 },
+                                    { text: 'Rc0_4', id: 3 },
+                                    { text: 'Rc0_5', id: 4 },
+                                    { text: 'Rc0_6', id: 5 },
+                                    { text: 'Rc0_7', id: 6 },
+                                    { text: 'Rc0_8', id: 7 },
+                                    { text: 'Rc0_9', id: 8 },
+                                    { text: 'Rc0_10', id: 9 },
+                                    { text: 'Rc0_11', id: 10 },
+                                ]
+                            }],
+                            height: 400,
+                            width: 600
+                        }, options);
+
+                        this.scheduler = createWrapper(options);
+                        this.instance = this.scheduler.instance;
+
+                        this.instance
+                            .getWorkSpace()
+                            .virtualScrollingDispatcher
+                            .renderer.getRenderTimeout = () => -1;
+                    };
+                }
+            }, () => {
+                test('Scroll Right', function(assert) {
+                    const $style = $('<style>');
+                    const styleBefore = $style.text();
+
+                    $style
+                        .text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 200px } ')
+                        .appendTo('head');
+
+                    this.createInstance();
+
+                    const { instance } = this;
+
+                    return asyncWrapper(assert, promise => {
+                        [
+                            {
+                                offset: { x: 0, y: 0 },
+                                expectedIndices: [0, 2],
+                                appointmentRects: [
+                                    { left: -9899, top: -9878, height: 50 },
+                                    { left: -9499, top: -9728, height: 100 }
+                                ]
+                            },
+                            {
+                                offset: { x: 300, y: 0 },
+                                expectedIndices: [0, 2],
+                                appointmentRects: [
+                                    { left: -10199, top: -9878, height: 50 },
+                                    { left: -9799, top: -9728, height: 100 }
+                                ]
+                            },
+                            {
+                                offset: { x: 900, y: 0 },
+                                expectedIndices: [],
+                                appointmentRects: []
+                            },
+                            {
+                                offset: { x: 0, y: 1100 },
+                                expectedIndices: [1, 3],
+                                appointmentRects: [
+                                    { left: -9699, top: -9878, height: 100 },
+                                    { left: -9299, top: -9828, height: 100 }
+                                ]
+                            },
+                            {
+                                offset: { x: 300, y: 1100 },
+                                expectedIndices: [1, 3],
+                                appointmentRects: [
+                                    { left: -9999, top: -9878, height: 100 },
+                                    { left: -9599, top: -9828, height: 100 }
+                                ]
+                            },
+                            {
+                                offset: { x: 1700, y: 1100 },
+                                expectedIndices: [7, 8, 9, 10],
+                                appointmentRects: [
+                                    { left: -10199, top: -9678, height: 300 },
+                                    { left: -9999, top: -9678, height: 300 },
+                                    { left: -9799, top: -9678, height: 300 },
+                                    { left: -9599, top: -9678, height: 300 }
+                                ]
+                            },
+                        ].forEach(({ offset, expectedIndices, appointmentRects }) => {
+                            const scrollable = instance.getWorkSpaceScrollable();
+
+                            promise = asyncScrollTest(
+                                assert,
+                                promise,
+                                () => {
+
+                                    assert.ok(true, `Scroll to x: ${offset.x}, y: ${offset.y}`);
+
+                                    const filteredItems = instance.getFilteredItems();
+
+                                    assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
+
+                                    filteredItems.forEach((_, index) => {
+                                        const expected = this.data[expectedIndices[index]];
+                                        assert.deepEqual(filteredItems[index], expected, `Filtered item "${index}" is correct`);
+
+                                        const expectedRect = appointmentRects[index];
+                                        const appointmentRect = this.scheduler.appointments
+                                            .getAppointment(index)
+                                            .get(0)
+                                            .getBoundingClientRect();
+
+                                        assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, `appointment part #${index} left is correct`);
+                                        assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, `appointment part #${index} top is correct`);
+                                        assert.roughEqual(appointmentRect.height, expectedRect.height, 2.01, `appointment part #${index} height is correct`);
+                                    });
+                                },
+                                scrollable,
+                                offset
+                            );
+                        });
+
+                        return promise;
+                    }).finally(() => {
+                        $style.text(styleBefore);
+                    });
                 });
+
             });
         });
     });
@@ -2570,49 +2814,53 @@ module('Virtual scrolling', () => {
         });
 
         ['vertical', 'horizontal'].forEach(groupOrientation => {
-            test(`Created appointments should be fully repainted in "${groupOrientation}" group orientation`, function(assert) {
-                this.createInstance({
-                    currentDate: new Date(2015, 2, 2),
-                    dataSource: [],
-                    views: [{
-                        type: 'week',
-                        groupOrientation,
-                        cellDuration: 30,
-                    }],
-                    currentView: 'week',
-                    scrolling: {
-                        mode: 'virtual'
-                    },
-                    groups: ['priorityId'],
-                    resources: [{
-                        fieldExpr: 'priorityId',
-                        dataSource: [
-                            { id: 0 },
-                            { id: 1 },
-                        ],
-                    }],
-                    height: 400
+            ['vertical', 'horizontal', 'both'].forEach(scrollOrientation => {
+                test(`Created appointments should be fully repainted in "${groupOrientation}" group orientation and "${scrollOrientation}" scroll orientation`, function(assert) {
+                    this.createInstance({
+                        currentDate: new Date(2015, 2, 2),
+                        dataSource: [],
+                        views: [{
+                            type: 'week',
+                            groupOrientation,
+                            cellDuration: 30,
+                        }],
+                        currentView: 'week',
+                        scrolling: {
+                            mode: 'virtual',
+                            type: scrollOrientation
+                        },
+                        groups: ['priorityId'],
+                        resources: [{
+                            fieldExpr: 'priorityId',
+                            dataSource: [
+                                { id: 0 },
+                                { id: 1 },
+                            ],
+                        }],
+                        height: 400,
+                        width: 600
+                    });
+
+                    const { instance } = this.scheduler;
+
+                    instance.addAppointment({
+                        startDate: new Date(2015, 2, 2, 1),
+                        endDate: new Date(2015, 2, 2, 1, 30),
+                        priorityId: 0
+                    });
+
+                    instance.addAppointment({
+                        startDate: new Date(2015, 2, 2, 1, 30),
+                        endDate: new Date(2015, 2, 2, 2),
+                        priorityId: 0
+                    });
+
+                    assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments rendered correctly');
                 });
-
-                const { instance } = this.scheduler;
-
-                instance.addAppointment({
-                    startDate: new Date(2015, 2, 2, 1),
-                    endDate: new Date(2015, 2, 2, 1, 30),
-                    priorityId: 0
-                });
-
-                instance.addAppointment({
-                    startDate: new Date(2015, 2, 2, 1, 30),
-                    endDate: new Date(2015, 2, 2, 2),
-                    priorityId: 0
-                });
-
-                assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments rendered correctly');
             });
         });
 
-        QUnit.test('DataSource option should be passed to the appointments collection after wrap by layout manager if virtual scrolling mode', function(assert) {
+        QUnit.test('DataSource items should be passed to the appointments collection after wrap by layout manager', function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -2654,6 +2902,7 @@ module('Virtual scrolling', () => {
             return asyncWrapper(
                 assert,
                 promise => asyncScrollTest(
+                    assert,
                     promise,
                     () => {
                         appointmentsItems = this.instance.getAppointmentsInstance().option('items');
