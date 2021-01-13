@@ -15,6 +15,13 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
      * @public
      */
     hasSubDirectoriesExpr?: string | Function;
+    /**
+     * @docid
+     * @default {}
+     * @prevFileNamespace DevExpress.fileManagement
+     * @public
+     */
+    requestHeaders?: any;
 }
 /**
  * @docid
@@ -27,4 +34,12 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
  */
 export default class RemoteFileSystemProvider extends FileSystemProviderBase {
     constructor(options?: RemoteFileSystemProviderOptions)
+    /**
+     * @docid
+     * @publicName customizeRequest(fileIndex)
+     * @param1 request: XMLHttpRequest
+     * @prevFileNamespace DevExpress.fileManagement
+     * @public
+     */
+    customizeRequest(request: XMLHttpRequest): void;
 }

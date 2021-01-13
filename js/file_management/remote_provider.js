@@ -215,7 +215,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
 
     _beforeSend(xhr) {
         if(isFunction(this._customizeRequest)) {
-            this._customizeRequest({ request: xhr });
+            this._customizeRequest(xhr);
         }
     }
 
