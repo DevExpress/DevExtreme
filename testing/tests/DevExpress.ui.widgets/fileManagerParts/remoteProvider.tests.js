@@ -5,8 +5,9 @@ import RemoteFileSystemProvider from 'file_management/remote_provider';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 import { createSampleFileItems, generateString, createFileObject } from '../../../helpers/fileManagerHelpers.js';
 import { when } from 'core/utils/deferred';
-import { isString } from 'core/utils/type';
+import { isString, isFunction } from 'core/utils/type';
 import browser from 'core/utils/browser';
+import { extend } from 'core/utils/extend';
 
 const { test } = QUnit;
 
@@ -15,17 +16,18 @@ const { filesPathInfo, itemData, fileSystemItems } = createSampleFileItems();
 const moduleConfig = {
 
     beforeEach: function() {
-        this.options = {
-            endpointUrl: '/api/endpoint'
-        };
-
-        this.provider = new RemoteFileSystemProvider(this.options);
+        this.options = { endpointUrl: '/api/endpoint' };
+        createProvider(this, this.options);
     },
 
     afterEach: function() {
         ajaxMock.clear();
     }
 
+};
+
+const createProvider = (context, options) => {
+    context.provider = new RemoteFileSystemProvider(options);
 };
 
 QUnit.module('Remote Provider', moduleConfig, () => {
@@ -232,15 +234,58 @@ QUnit.module('Remote Provider', moduleConfig, () => {
     });
 
     test('generation end point', function(assert) {
-        let provider = new RemoteFileSystemProvider({
-            endpointUrl: 'myEndpoint'
-        });
-        assert.notStrictEqual(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?command=myCommand'), -1);
+        createProvider(this, { endpointUrl: 'myEndpoint' });
+        assert.notStrictEqual(this.provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?command=myCommand'), -1);
 
-        provider = new RemoteFileSystemProvider({
-            endpointUrl: 'myEndpoint?param1=value'
+        createProvider(this, { endpointUrl: 'myEndpoint?param1=value' });
+        assert.notStrictEqual(this.provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?param1=value&command=myCommand'), -1);
+    });
+
+    test('custom request headers API', function(assert) {
+        const done = assert.async();
+        const tokenValue = 'someTokenValue';
+        createProvider(this, extend(this.options, {
+            requestHeaders: {
+                RequestVerificationToken: tokenValue
+            }
+        }));
+
+        ajaxMock.setup({
+            url: this.options.endpointUrl + '?command=GetDirContents&arguments=%7B%22pathInfo%22%3A%5B%7B%22key%22%3A%22Root%22%2C%22name%22%3A%22Root%22%7D%2C%7B%22key%22%3A%22Root%2FFiles%22%2C%22name%22%3A%22Files%22%7D%5D%7D',
+            responseText: {
+                result: itemData,
+                success: true
+            },
+            callback: request => {
+                assert.strictEqual(request.headers.RequestVerificationToken, tokenValue);
+            }
         });
-        assert.notStrictEqual(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?param1=value&command=myCommand'), -1);
+
+        this.provider.getItems(new FileSystemItem('Root/Files', true)).done(done);
+    });
+
+    test('custom request data API', function(assert) {
+        const done = assert.async();
+        createProvider(this, extend(this.options, {
+            customizeRequest: function(e) {
+                e.request.withCredentials = true;
+            }
+        }));
+
+        ajaxMock.setup({
+            url: this.options.endpointUrl + '?command=GetDirContents&arguments=%7B%22pathInfo%22%3A%5B%7B%22key%22%3A%22Root%22%2C%22name%22%3A%22Root%22%7D%2C%7B%22key%22%3A%22Root%2FFiles%22%2C%22name%22%3A%22Files%22%7D%5D%7D',
+            responseText: {
+                result: itemData,
+                success: true
+            },
+            callback: request => {
+                assert.ok(isFunction(this.provider._customizeRequest));
+                this.provider._customizeRequest({ request });
+                assert.ok(request.withCredentials);
+            }
+        });
+
+        this.provider.getItems(new FileSystemItem('Root/Files', true)).done(done);
     });
 
 });
