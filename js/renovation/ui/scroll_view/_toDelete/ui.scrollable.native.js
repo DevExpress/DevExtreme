@@ -2,7 +2,6 @@ import eventsEngine from '../../events/core/events_engine';
 import { isDxMouseWheelEvent } from '../../events/utils/index';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import devices from '../../core/devices';
 import Class from '../../core/class';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
@@ -36,13 +35,6 @@ const NativeStrategy = Class.inherit({
 
     render: function() {
         this._renderPushBackOffset();
-        const device = devices.real();
-        const deviceType = device.platform;
-
-        // this._$element
-        //     .addClass(SCROLLABLE_NATIVE_CLASS)
-        this._$element
-            .addClass(SCROLLABLE_NATIVE_CLASS + '-' + deviceType);
     },
 
     updateBounds: noop,
