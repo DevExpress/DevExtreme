@@ -18,12 +18,11 @@ import { addNamespace, isFakeClickEvent } from '../../../events/utils/index';
 import { name as dblclickEvent } from '../../../events/double_click';
 import CollectionWidget from '../../collection/ui.collection_widget.edit';
 import timeZoneUtils from '../utils.timeZone.js';
-import { APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_SETTINGS_KEY } from '../constants';
+import { APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_SETTINGS_KEY, APPOINTMENT_CONTENT_CLASSES } from '../constants';
 
 import { createAppointmentLayout } from './appointmentLayout';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
-const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
 const DBLCLICK_EVENT_NAME = addNamespace(dblclickEvent, 'dxSchedulerAppointment');
 
@@ -313,7 +312,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _itemClass() {
-        return APPOINTMENT_ITEM_CLASS;
+        return APPOINTMENT_CONTENT_CLASSES.ITEM;
     }
 
     _itemContainer() {
