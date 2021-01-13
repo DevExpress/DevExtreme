@@ -12,6 +12,7 @@ import { isDefined } from '../../../core/utils/type';
 
 import {
   Scrollable,
+  defaultOptionRules,
 } from './scrollable';
 
 import {
@@ -51,7 +52,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   );
 };
 @Component({
-  defaultOptionRules: null,
+  defaultOptionRules,
   jQuery: { register: true },
   view: viewFunction,
 })

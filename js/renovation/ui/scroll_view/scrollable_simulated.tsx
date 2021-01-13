@@ -122,6 +122,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
 };
 
 @Component({
+  defaultOptionRules: null,
   view: viewFunction,
 })
 export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsType>() {
