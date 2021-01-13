@@ -111,10 +111,10 @@ module('Basic markup', () => {
 
     [true, false].forEach(isMac => {
         test(`"placeholder" attribute should be defined for iOS and mac devices (T898735,T964073). IsMac = ${isMac}`, function(assert) {
-            const isRealMac = devices.real().mac;
+            const realDevice = devices.real();
 
             try {
-                devices.real().mac = isMac;
+                devices.real({ ios: realDevice.ios, mac: isMac });
                 const $editor = $('#texteditor').dxTextEditor();
                 const { ios: isIos } = devices.real();
                 const expectedPlaceholder = (isIos || isMac) ? ' ' : '';
@@ -122,7 +122,7 @@ module('Basic markup', () => {
 
                 assert.strictEqual(placeholder, expectedPlaceholder, 'input has placeholder with space at iOS and mac device');
             } finally {
-                devices.real().mac = isRealMac;
+                devices.real(realDevice);
             }
         });
     });
