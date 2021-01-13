@@ -18,6 +18,9 @@ import {
 
 import { ScrollableNative } from './scrollable_native';
 import { ScrollableSimulated } from './scrollable_simulated';
+import { createDefaultOptionRules } from '../../../core/options/utils';
+import devices from '../../../core/devices';
+import { nativeScrolling } from '../../../core/utils/support';
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
@@ -71,7 +74,21 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   );
 };
 
+export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
+  device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
+  options: {
+    scrollByThumb: true,
+    showScrollbar: 'onHover',
+  },
+}, {
+  device: (): boolean => !nativeScrolling,
+  options: {
+    useNative: true,
+  },
+}]);
+
 @Component({
+  defaultOptionRules,
   jQuery: { register: true },
   view: viewFunction,
 })
