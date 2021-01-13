@@ -494,7 +494,8 @@ const subscribes = {
         const isCalculateStartAndEndDayHour = workspace.isDateAndTimeView;
         const resourcesManager = this._resourcesManager;
 
-        const isAllDaySupported = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();
+        const isAllDayWorkspace = !this._workSpace.supportAllDayRow();
+        const showAllDayAppointments = this.option('showAllDayPanel') || isAllDayWorkspace;
 
         const { viewDataProvider } = workspace;
         const endViewDate = workspace.getEndViewDateByEndDayHour();
@@ -502,9 +503,7 @@ const subscribes = {
 
         const groupsInfo = viewDataProvider.getGroupsInfo();
         groupsInfo.forEach((item) => {
-
             const groupIndex = item.groupIndex;
-            const allDay = item.allDay;
             const startDate = item.startDate;
             const endDate = new Date(Math.min(item.endDate, endViewDate));
 
@@ -518,7 +517,9 @@ const subscribes = {
                 ? (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY
                 : viewEndDayHour;
 
-            const isAllDay = (isAllDaySupported !== false) && allDay;
+            const allDayPanel = viewDataProvider.getAllDayPanel(groupIndex);
+            // TODO split by workspace strategies
+            const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && allDayPanel?.length > 0);
 
             const groups = viewDataProvider.getCellsGroup(groupIndex);
             const groupResources = resourcesManager.getResourcesDataByGroups(groups);
@@ -532,7 +533,7 @@ const subscribes = {
                 min: startDate,
                 max: groupEndDate,
                 resources: groupResources,
-                allDay: isAllDay,
+                allDay: supportAllDayAppointment,
                 firstDayOfWeek: this.getFirstDayOfWeek(),
                 recurrenceException: this._getRecurrenceException.bind(this)
             });
