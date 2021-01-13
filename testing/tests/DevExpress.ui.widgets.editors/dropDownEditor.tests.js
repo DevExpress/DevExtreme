@@ -1207,6 +1207,17 @@ QUnit.module('options', () => {
         assert.equal($input.val(), '', 'text is not rendered');
     });
 
+    [false, true].forEach((openOnFieldClick) => {
+        QUnit.test(`appearance with openOnFieldClick = ${openOnFieldClick}`, function(assert) {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ openOnFieldClick });
+            const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            const isPointerCursor = $input.css('cursor') === 'pointer';
+
+            assert.strictEqual($dropDownEditor.hasClass('dx-dropdowneditor-field-clickable'), openOnFieldClick, `special css class is ${openOnFieldClick ? '' : 'not'} attached`);
+            assert.strictEqual(isPointerCursor, openOnFieldClick, `input should ${openOnFieldClick ? '' : 'not'} have the pointer cursor`);
+        });
+    });
+
     QUnit.test('openOnFieldClick', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             openOnFieldClick: true
@@ -1214,8 +1225,6 @@ QUnit.module('options', () => {
 
         const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
         const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
-        assert.ok($dropDownEditor.hasClass('dx-dropdowneditor-field-clickable'), 'special css class attached');
 
         $input.trigger('dxclick');
         assert.equal(dropDownEditor.option('opened'), true, 'opened by field click');
