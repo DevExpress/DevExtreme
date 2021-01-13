@@ -79,6 +79,14 @@ export default class VirtualScrollingDispatcher {
             : 0;
     }
 
+    get virtualRowOffset() {
+        return this.verticalScrollingState?.virtualItemSizeBefore || 0;
+    }
+
+    get virtualCellOffset() {
+        return this.horizontalScrollingState?.virtualItemSizeBefore || 0;
+    }
+
     get scrollingState() {
         return {
             vertical: this.verticalVirtualScrolling?.state,

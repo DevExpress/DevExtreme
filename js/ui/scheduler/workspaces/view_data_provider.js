@@ -8,6 +8,7 @@ class ViewDataGenerator {
 
     get workspace() { return this._workspace; }
     set workspace(value) { this._workspace = value; }
+    get isVerticalWorkspace() { return this.workspace._isVerticalGroupedWorkSpace(); }
 
     _getCompleteViewDataMap(options) {
         const {
@@ -41,7 +42,7 @@ class ViewDataGenerator {
             cellCount
         } = options;
 
-        const isVerticalGrouping = this.workspace._isVerticalGroupedWorkSpace();
+        const isVerticalGrouping = this.isVerticalWorkspace;
         const showAllDayPanel = this.workspace.isAllDayPanelVisible;
 
         const indexDifference = isVerticalGrouping || !showAllDayPanel ? 0 : 1;
@@ -125,6 +126,7 @@ class ViewDataGenerator {
             leftVirtualCellWidth,
             rightVirtualCellWidth,
             cellCountInGroupRow,
+            isGroupedAllDayPanel
         };
     }
 
@@ -499,6 +501,8 @@ export default class ViewDataProvider {
 
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
 
+    get isVerticalWorkspace() { return this._workspace._isVerticalGroupedWorkSpace(); }
+
     update(isGenerateNewViewData) {
         const { viewDataGenerator, _workspace } = this;
         const renderOptions = _workspace.generateRenderOptions();
@@ -560,7 +564,7 @@ export default class ViewDataProvider {
     }
 
     getCellData(rowIndex, cellIndex, isAllDay) {
-        if(isAllDay && !this._workspace._isVerticalGroupedWorkSpace()) {
+        if(isAllDay && !this.isVerticalWorkspace) {
             return this._viewData.groupedData[0].allDayPanel[cellIndex];
         }
 
@@ -572,7 +576,7 @@ export default class ViewDataProvider {
     getCellsByGroupIndexAndAllDay(groupIndex, allDay) {
         const workspace = this._workspace;
         const rowsPerGroup = workspace._getRowCountWithAllDayRows();
-        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
+        const isVerticalGrouping = this.isVerticalWorkspace;
         const isShowAllDayPanel = workspace.isAllDayPanelVisible;
 
         const firstRowInGroup = isVerticalGrouping ? groupIndex * rowsPerGroup : 0;
@@ -591,7 +595,35 @@ export default class ViewDataProvider {
 
     getGroupData(groupIndex) {
         const { groupedData } = this.viewData;
-        return groupedData.filter(item => item.groupIndex === groupIndex)[0];
+
+        if(this.isVerticalWorkspace) {
+            return groupedData.filter(item => item.groupIndex === groupIndex)[0];
+        }
+
+        const filterCells = row => row?.filter(cell => cell.groupIndex === groupIndex);
+
+        const {
+            allDayPanel,
+            dateTable
+        } = groupedData[0];
+        const filteredDateTable = [];
+
+        dateTable.forEach(row => {
+            filteredDateTable.push(
+                filterCells(row)
+            );
+        });
+
+        return {
+            allDayPanel: filterCells(allDayPanel),
+            dateTable: filteredDateTable
+        };
+    }
+
+    getAllDayPanel(groupIndex) {
+        const groupData = this.getGroupData(groupIndex);
+
+        return groupData?.allDayPanel;
     }
 
     isGroupIntersectDateInterval(groupIndex, startDate, endDate) {
@@ -605,7 +637,7 @@ export default class ViewDataProvider {
         const { completeViewDataMap, _workspace: workspace } = this;
 
         const showAllDayPanel = workspace.isAllDayPanelVisible;
-        const isVerticalGroupOrientation = workspace._isVerticalGroupedWorkSpace();
+        const isVerticalGroupOrientation = this.isVerticalWorkspace;
 
         for(let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
             const currentRow = completeViewDataMap[rowIndex];

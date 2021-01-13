@@ -1268,6 +1268,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(this.isVirtualScrolling()) {
+            options.isVerticalGroupOrientation = groupOrientation === 'vertical';
             extend(
                 options,
                 this.virtualScrollingDispatcher.getRenderState()
@@ -2664,15 +2665,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getVirtualRowOffset() {
-        return this.isVirtualScrolling()
-            ? this.virtualScrollingDispatcher.verticalScrollingState.virtualItemSizeBefore
-            : 0;
+        return this.virtualScrollingDispatcher?.virtualRowOffset || 0;
     }
 
     _getVirtualCellOffset() {
-        return this.isVirtualScrolling()
-            ? this.virtualScrollingDispatcher.horizontalScrollingState.virtualItemSizeBefore
-            : 0;
+        return this.virtualScrollingDispatcher?.virtualCellOffset || 0;
     }
 
     _getCellDataInRenovatedView($cell) {
