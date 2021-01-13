@@ -1,4 +1,4 @@
-export type Canvas = { left?: number; top?: number; right?: number; bottom?: number; width?: number; height?: number };
+export type Canvas = { left: number; top: number; right: number; bottom: number; width: number; height: number };
 export type Size = { width?: number; height?: number };
 export type StrictSize = Required<Size>;
 export type RecalculateCoordinates = {
@@ -21,4 +21,12 @@ export interface TooltipData {
   originalArgument?: number | Date | string,
   seriesName?: string,
   description?: string
+}
+export interface Font {
+  color?: string,
+  family?: string,
+  opacity?: number,
+  size?: number,
+  weight?: number,
+  lineSpacing?: number,
 }
