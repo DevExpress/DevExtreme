@@ -5,7 +5,6 @@ import browser from '../../core/utils/browser';
 import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
 import { isPlainObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-// import { getPublicElement } from '../../core/element';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
@@ -14,15 +13,12 @@ import DOMComponent from '../../core/dom_component';
 import { focusable } from '../widget/selectors';
 import { addNamespace } from '../../events/utils/index';
 import scrollEvents from './ui.events.emitter.gesture.scroll';
-// import { SimulatedStrategy } from './ui.scrollable.simulated';
-// import NativeStrategy from './ui.scrollable.native';
 import { deviceDependentOptions } from './ui.scrollable.device';
 import { when } from '../../core/utils/deferred';
 
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_CLASS = 'dx-scrollable';
-const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
@@ -32,20 +28,11 @@ const Scrollable = DOMComponent.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            disabled: false,
-            onScroll: null,
-            direction: VERTICAL,
-            useNative: true,
-            bounceEnabled: true,
-            scrollByContent: true,
             onUpdated: null,
             onStart: null,
             onEnd: null,
             onBounce: null,
             onStop: null,
-            useKeyboard: true,
-            inertiaEnabled: true,
-            updateManually: false
         });
     },
 
@@ -216,8 +203,6 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _renderDisabledState: function() {
-        this.$element().toggleClass(SCROLLABLE_DISABLED_CLASS, this.option('disabled'));
-
         if(this.option('disabled')) {
             this._lock();
         } else {
