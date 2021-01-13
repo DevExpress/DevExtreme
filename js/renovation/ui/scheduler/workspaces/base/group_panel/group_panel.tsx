@@ -53,7 +53,6 @@ export class GroupPanelProps {
 export class GroupPanel extends JSXComponent(GroupPanelProps) {
   get layout(): any {
     const { groupOrientation } = this.props;
-    // console.log('render');
 
     return isVerticalGroupOrientation(groupOrientation)
       ? GroupPanelVerticalLayout
