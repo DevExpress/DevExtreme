@@ -2,43 +2,36 @@ import $ from '../../../core/renderer';
 import domAdapter from '../../../core/dom_adapter';
 import messageLocalization from '../../../localization/message';
 import { isPlainObject } from '../../../core/utils/type';
+import { APPOINTMENT_CONTENT_CLASSES } from '../constants';
 
-const APPOINTMENT_CONTENT_DETAILS_CLASS = 'dx-scheduler-appointment-content-details';
-const RECURRING_ICON_CLASS = 'dx-scheduler-appointment-recurrence-icon';
-const APPOINTMENT_TITLE_CLASS = 'dx-scheduler-appointment-title';
-const APPOINTMENT_DATE_CLASS = 'dx-scheduler-appointment-content-date';
-const ALL_DAY_CONTENT_CLASS = 'dx-scheduler-appointment-content-allday';
+const allDayText = ' ' + messageLocalization.format('dxScheduler-allDay') + ': ';
 
-export const createAppointmentLayout = (formatText, data) => {
+export const createAppointmentLayout = (formatText, rawAppointment) => {
     const result = $(domAdapter.createDocumentFragment());
 
     $('<div>')
         .text(formatText.text)
-        .addClass(APPOINTMENT_TITLE_CLASS)
+        .addClass(APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_TITLE)
         .appendTo(result);
 
-    if(isPlainObject(data)) {
-        if(data.html) {
-            result.html(data.html);
+    if(isPlainObject(rawAppointment)) {
+        if(rawAppointment.html) {
+            result.html(rawAppointment.html);
         }
     }
 
-    const $contentDetails = $('<div>').addClass(APPOINTMENT_CONTENT_DETAILS_CLASS);
+    const $contentDetails = $('<div>').addClass(APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS).appendTo(result);
 
-    $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(formatText.formatDate).appendTo($contentDetails);
+    $('<div>').addClass(APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_DATE).text(formatText.formatDate).appendTo($contentDetails);
 
-    $contentDetails.appendTo(result);
+    rawAppointment.recurrenceRule &&
+        $('<span>').addClass(APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON + ' dx-icon-repeat').appendTo(result);
 
-    if(data.recurrenceRule) {
-        $('<span>').addClass(RECURRING_ICON_CLASS + ' dx-icon-repeat').appendTo(result);
-    }
-
-    if(data.allDay) {
+    rawAppointment.allDay &&
         $('<div>')
-            .text(' ' + messageLocalization.format('dxScheduler-allDay') + ': ')
-            .addClass(ALL_DAY_CONTENT_CLASS)
+            .text(allDayText)
+            .addClass(APPOINTMENT_CONTENT_CLASSES.ALL_DAY_CONTENT)
             .prependTo($contentDetails);
-    }
 
     return result;
 };
