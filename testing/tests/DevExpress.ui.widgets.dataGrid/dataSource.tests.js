@@ -25,7 +25,6 @@ const createDataSource = function(options) {
         options: {
             scrolling: options.scrolling,
             cacheEnabled: options.cacheEnabled,
-            legacyRendering: options.legacyRendering,
             remoteOperations: options.remoteOperations,
             loadingTimeout: options.loadingTimeout !== undefined ? options.loadingTimeout : (options.asyncLoadEnabled ? 0 : undefined)
         }
@@ -6010,25 +6009,6 @@ QUnit.module('Cache', {
 
         // assert
         assert.deepEqual(this.loadingCount, 1, 'one loading');
-    });
-
-    QUnit.test('no caching when all remoteOperations and legacyRendering is true', function(assert) {
-        const dataSource = this.createDataSource({
-            legacyRendering: true,
-            remoteOperations: {
-                filtering: true,
-                sorting: true,
-                paging: true
-            }
-        });
-        dataSource.load();
-
-        // act
-        dataSource.load();
-        dataSource.reload();
-
-        // assert
-        assert.deepEqual(this.loadingCount, 3, 'three loadings');
     });
 
     QUnit.test('caching pages when all remoteOperations', function(assert) {
