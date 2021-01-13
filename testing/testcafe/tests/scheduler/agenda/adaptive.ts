@@ -1,4 +1,4 @@
-import createWidget, { disposeWidgets } from '../../../helpers/createWidget';
+import createWidget from '../../../helpers/createWidget';
 import {
   compareScreenshot,
 } from '../../../helpers/screenshort-comparer';
@@ -64,6 +64,8 @@ const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean
       await t.resizeWindow(400, 600);
       await t.expect(await compareScreenshot(t, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`)).ok();
     }).before(async () => createScheduler(testCase.groups, rtlEnabled))
-      .after(() => disposeWidgets());
+      .after(async (t) => {
+        await t.resizeWindow(1024, 768);
+      });
   });
 });
