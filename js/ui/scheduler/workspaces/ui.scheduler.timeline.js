@@ -29,6 +29,8 @@ const DATE_TABLE_HEADER_MARGIN = 10;
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimeline extends SchedulerWorkSpace {
+    get viewDirection() { return 'horizontal'; }
+
     _init() {
         super._init();
 
@@ -369,6 +371,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         this._$dateTable.height(height);
 
         super._setTableSizes();
+
+        this.virtualScrollingDispatcher?.updateDimensions();
     }
 
     _getWorkSpaceMinHeight() {
@@ -607,10 +611,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     renovatedRenderSupported() { return true; }
-
-    isVirtualScrolling() {
-        return false;
-    }
 
     renderRAllDayPanel() {}
 

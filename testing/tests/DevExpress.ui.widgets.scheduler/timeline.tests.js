@@ -704,176 +704,186 @@ QUnit.test('getEndViewDate should return correct value', function(assert) {
     assert.deepEqual(this.instance.getEndViewDate(), new Date(2018, 3, 30, 17, 59), 'End view date is OK');
 });
 
-QUnit.module('Timeline Keyboard Navigation', {
-    beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
-            currentDate: new Date(2015, 9, 16),
-            focusStateEnabled: true,
-            onContentReady: function(e) {
-                const scrollable = e.component.getScrollable();
-                scrollable.option('scrollByContent', false);
-                e.component.initDragBehavior();
-                e.component._attachTablesEvents();
-            },
-        }).dxSchedulerTimelineMonth('instance');
-        stubInvokeMethod(this.instance);
-    }
-}, () => {
-    QUnit.test('Timeline should select/unselect cells with shift & arrows', function(assert) {
-        this.instance.option({
-            focusStateEnabled: true,
-            width: 1000,
-            height: 800,
-            currentDate: new Date(2015, 3, 1),
-            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }] }]
-        });
+QUnit.module('Timeline Keyboard Navigation', () => {
+    ['standard', 'virtual'].forEach((scrollingMode) => {
+        const moduleDescription = scrollingMode === 'virtual'
+            ? 'Virtual Scrolling'
+            : 'Standard Scrolling';
 
-        const $element = this.instance.$element();
-        const $cells = this.instance.$element().find('.' + CELL_CLASS);
-        const keyboard = keyboardMock($element);
-
-        pointerMock($cells.eq(2)).start().click();
-        keyboard.keyDown('down', { shiftKey: true });
-        assert.equal($cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
-        assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 1, 'right cells are focused');
-
-        keyboard.keyDown('right', { shiftKey: true });
-        assert.equal($cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
-        assert.equal($cells.slice(1, 4).filter('.dx-state-focused').length, 2, 'right cells are focused');
-
-        keyboard.keyDown('left', { shiftKey: true });
-        assert.equal($cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
-        assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 1, 'right cells are focused');
-
-        keyboard.keyDown('left', { shiftKey: true });
-        assert.equal($cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
-        assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 2, 'right cells are focused');
-    });
-
-    QUnit.test('Timeline should select/unselect cells with mouse', function(assert) {
-        this.instance.option({
-            width: 1000,
-            height: 800,
-            currentDate: new Date(2015, 3, 1),
-            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]
-        });
-
-        const $element = this.instance.$element();
-        const cells = $element.find('.' + CELL_CLASS);
-        const $table = $element.find('.dx-scheduler-date-table');
-        pointerMock(cells.eq(3)).start().click();
-
-        let cell = cells.eq(15).get(0);
-
-        $($table).trigger($.Event('dxpointerdown', { target: cells.eq(3).get(0), which: 1, pointerType: 'mouse' }));
-        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
-
-        assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells is correct');
-        assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is focused');
-        assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is focused');
-
-        cell = cells.eq(35).get(0);
-
-        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
-
-        assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells has not changed');
-        assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is still focused');
-        assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is still focused');
-        assert.notOk(cells.eq(35).hasClass('dx-state-focused'), 'cell from another group is not focused');
-
-        $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
-    });
-
-    QUnit.module('Keyboard Multiselection with GroupByDate', () => {
-        [
-            { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: false, key: 'left' },
-            { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: true, key: 'left' },
-            { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: false, key: 'right' },
-            { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: true, key: 'right' },
-        ].forEach((config) => {
-            QUnit.test(`Multiselection with ${config.key} arrow should work correctly with groupByDate
-                in Timeleine when rtlEnabled is equal to ${config.rtlEnabled}`, function(assert) {
-                const {
-                    startCell, endCell, focusedCellsCount, rtlEnabled, key,
-                } = config;
-
+        QUnit.module(moduleDescription, {
+            beforeEach: function() {
+                this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
+                    currentDate: new Date(2015, 9, 16),
+                    focusStateEnabled: true,
+                    onContentReady: function(e) {
+                        const scrollable = e.component.getScrollable();
+                        scrollable.option('scrollByContent', false);
+                        e.component.initDragBehavior();
+                        e.component._attachTablesEvents();
+                    },
+                    renovateRender: scrollingMode === 'virtual',
+                    scrolling: { mode: scrollingMode },
+                }).dxSchedulerTimelineMonth('instance');
+                stubInvokeMethod(this.instance);
+            }
+        }, () => {
+            QUnit.test('Timeline should select/unselect cells with shift & arrows', function(assert) {
                 this.instance.option({
                     focusStateEnabled: true,
-                    groupOrientation: 'horizontal',
-                    groupByDate: true,
-                    rtlEnabled,
-                    groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+                    width: 1000,
+                    height: 800,
+                    currentDate: new Date(2015, 3, 1),
+                    groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }] }]
                 });
 
                 const $element = this.instance.$element();
+                const $cells = this.instance.$element().find('.' + CELL_CLASS);
                 const keyboard = keyboardMock($element);
-                const cells = $element.find('.' + CELL_CLASS);
 
-                pointerMock(cells.eq(startCell)).start().click();
-                keyboard.keyDown(key, { shiftKey: true });
+                pointerMock($cells.eq(2)).start().click();
+                keyboard.keyDown('down', { shiftKey: true });
+                assert.equal($cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
+                assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 1, 'right cells are focused');
 
-                assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'right quantity of focused cells');
-                assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'this first focused cell is correct');
-                assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'this last focused cell is correct');
+                keyboard.keyDown('right', { shiftKey: true });
+                assert.equal($cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
+                assert.equal($cells.slice(1, 4).filter('.dx-state-focused').length, 2, 'right cells are focused');
+
+                keyboard.keyDown('left', { shiftKey: true });
+                assert.equal($cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
+                assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 1, 'right cells are focused');
+
+                keyboard.keyDown('left', { shiftKey: true });
+                assert.equal($cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
+                assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 2, 'right cells are focused');
             });
-        });
-    });
 
-    QUnit.module('Mouse Multiselection with Vertical Grouping and Grouping by Date', () => {
-        [{
-            startCell: 3,
-            endCell: 7,
-            focusedCellsCount: 5,
-            cellFromAnotherGroup: 40,
-            groupOrientation: 'vertical',
-            groupByDate: false,
-            description: 'Mouse Multiselection should work correctly with timeline when it is grouped vertically'
-        }, {
-            startCell: 3,
-            endCell: 7,
-            focusedCellsCount: 3,
-            cellFromAnotherGroup: 8,
-            groupOrientation: 'horizontal',
-            groupByDate: true,
-            description: 'Mouse Multiselection should work correctly with timeline when it is grouped by date',
-        }].forEach(({
-            startCell, endCell, focusedCellsCount, cellFromAnotherGroup,
-            groupOrientation, groupByDate, description,
-        }) => {
-            QUnit.test(description, function(assert) {
+            QUnit.test('Timeline should select/unselect cells with mouse', function(assert) {
                 this.instance.option({
-                    focusStateEnabled: true,
-                    groupOrientation,
-                    groupByDate,
-                    groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
-                    allowMultipleCellSelection: true,
+                    width: 1000,
+                    height: 800,
+                    currentDate: new Date(2015, 3, 1),
+                    groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]
                 });
 
                 const $element = this.instance.$element();
-
                 const cells = $element.find('.' + CELL_CLASS);
                 const $table = $element.find('.dx-scheduler-date-table');
-                pointerMock(cells.eq(startCell)).start().click();
+                pointerMock(cells.eq(3)).start().click();
 
-                let cell = cells.eq(endCell).get(0);
+                let cell = cells.eq(15).get(0);
 
-                $($table).trigger($.Event('dxpointerdown', { target: cells.eq(startCell).get(0), which: 1, pointerType: 'mouse' }));
+                $($table).trigger($.Event('dxpointerdown', { target: cells.eq(3).get(0), which: 1, pointerType: 'mouse' }));
                 $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
 
-                assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells is correct');
-                assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is focused');
-                assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is focused');
+                assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells is correct');
+                assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is focused');
+                assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is focused');
 
-                cell = cells.eq(cellFromAnotherGroup).get(0);
+                cell = cells.eq(35).get(0);
 
                 $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
 
-                assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells has not changed');
-                assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is still focused');
-                assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is still focused');
-                assert.notOk(cells.eq(cellFromAnotherGroup).hasClass('dx-state-focused'), 'cell from another group is not focused');
+                assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells has not changed');
+                assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is still focused');
+                assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is still focused');
+                assert.notOk(cells.eq(35).hasClass('dx-state-focused'), 'cell from another group is not focused');
 
                 $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
+            });
+
+            QUnit.module('Keyboard Multiselection with GroupByDate', () => {
+                [
+                    { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: false, key: 'left' },
+                    { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: true, key: 'left' },
+                    { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: false, key: 'right' },
+                    { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: true, key: 'right' },
+                ].forEach((config) => {
+                    QUnit.test(`Multiselection with ${config.key} arrow should work correctly with groupByDate
+                        in Timeleine when rtlEnabled is equal to ${config.rtlEnabled}`, function(assert) {
+                        const {
+                            startCell, endCell, focusedCellsCount, rtlEnabled, key,
+                        } = config;
+
+                        this.instance.option({
+                            focusStateEnabled: true,
+                            groupOrientation: 'horizontal',
+                            groupByDate: true,
+                            rtlEnabled,
+                            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+                        });
+
+                        const $element = this.instance.$element();
+                        const keyboard = keyboardMock($element);
+                        const cells = $element.find('.' + CELL_CLASS);
+
+                        pointerMock(cells.eq(startCell)).start().click();
+                        keyboard.keyDown(key, { shiftKey: true });
+
+                        assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'right quantity of focused cells');
+                        assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'this first focused cell is correct');
+                        assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'this last focused cell is correct');
+                    });
+                });
+            });
+
+            QUnit.module('Mouse Multiselection with Vertical Grouping and Grouping by Date', () => {
+                [{
+                    startCell: 3,
+                    endCell: 7,
+                    focusedCellsCount: 5,
+                    cellFromAnotherGroup: 40,
+                    groupOrientation: 'vertical',
+                    groupByDate: false,
+                    description: 'Mouse Multiselection should work correctly with timeline when it is grouped vertically'
+                }, {
+                    startCell: 3,
+                    endCell: 7,
+                    focusedCellsCount: 3,
+                    cellFromAnotherGroup: 8,
+                    groupOrientation: 'horizontal',
+                    groupByDate: true,
+                    description: 'Mouse Multiselection should work correctly with timeline when it is grouped by date',
+                }].forEach(({
+                    startCell, endCell, focusedCellsCount, cellFromAnotherGroup,
+                    groupOrientation, groupByDate, description,
+                }) => {
+                    QUnit.test(description, function(assert) {
+                        this.instance.option({
+                            focusStateEnabled: true,
+                            groupOrientation,
+                            groupByDate,
+                            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+                            allowMultipleCellSelection: true,
+                        });
+
+                        const $element = this.instance.$element();
+
+                        const cells = $element.find('.' + CELL_CLASS);
+                        const $table = $element.find('.dx-scheduler-date-table');
+                        pointerMock(cells.eq(startCell)).start().click();
+
+                        let cell = cells.eq(endCell).get(0);
+
+                        $($table).trigger($.Event('dxpointerdown', { target: cells.eq(startCell).get(0), which: 1, pointerType: 'mouse' }));
+                        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+
+                        assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells is correct');
+                        assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is focused');
+                        assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is focused');
+
+                        cell = cells.eq(cellFromAnotherGroup).get(0);
+
+                        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+
+                        assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells has not changed');
+                        assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is still focused');
+                        assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is still focused');
+                        assert.notOk(cells.eq(cellFromAnotherGroup).hasClass('dx-state-focused'), 'cell from another group is not focused');
+
+                        $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
+                    });
+                });
             });
         });
     });
@@ -1408,6 +1418,18 @@ QUnit.module('Renovated Render', {
             assert.equal(dateTable.length, 31, 'Correct number of cells');
             assert.deepEqual(dateTable[0], firstCell, 'Correct first cell');
             assert.deepEqual(dateTable[30], lastCell, 'Correct last cell');
+        });
+    });
+
+    [TIMELINE_DAY, TIMELINE_WEEK, TIMELINE_MONTH].forEach(({ class: viewClass, name }) => {
+        QUnit.test(`rtlEnabled should be aplied correctly in ${name}`, function(assert) {
+            this.createInstance({}, viewClass);
+
+            this.instance.option('rtlEnabled', true);
+            const $element = this.instance.$element();
+            const cells = $element.find(`.${CELL_CLASS}`);
+
+            assert.ok(cells.length > 0, 'Cells have been rendered');
         });
     });
 });
