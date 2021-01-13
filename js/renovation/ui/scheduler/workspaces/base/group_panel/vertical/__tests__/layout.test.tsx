@@ -177,6 +177,31 @@ describe('GroupPanel Vertical Layout', () => {
               key: '1_group 2_2',
             }]]);
         });
+
+        it('should work when data parameter is undefined', () => {
+          const groups = [{
+            name: 'group 1',
+            items: [{
+              text: 'item 1', id: 1, color: 'color 1',
+            }, {
+              text: 'item 2', id: 2, color: 'color 2',
+            }],
+          }];
+          const layout = new Layout({
+            groups,
+          });
+
+          expect(layout.groupsRenderData)
+            .toEqual([[{
+              ...groups[0].items[0],
+              resourceName: groups[0].name,
+              key: '0_group 1_1',
+            }, {
+              ...groups[0].items[1],
+              resourceName: groups[0].name,
+              key: '0_group 1_2',
+            }]]);
+        });
       });
     });
   });
