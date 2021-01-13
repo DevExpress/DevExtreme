@@ -9,6 +9,7 @@ import { TextSvgElement } from './renderers/svg_text';
 import { ShadowFilter } from './renderers/shadow_filter';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 import { RootSvgElement } from './renderers/svg_root';
+import { isDefined } from '../../../core/utils/type';
 
 import {
   Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
@@ -32,7 +33,6 @@ export const viewFunction = ({
   border,
   filterId,
   customizedOptions,
-  setCurrentState,
   pointerEvents,
   cssClassName,
   correctedCoordinates,
@@ -48,7 +48,6 @@ export const viewFunction = ({
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
   const d = getCloudPoints(textSizeWithPaddings, correctedCoordinates, angle,
     { cornerRadius, arrowWidth }, true);
-  setCurrentState(d);
   const styles = interactive ? {
     msUserSelect: 'text',
     MozUserSelect: 'auto',
@@ -252,12 +251,6 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @InternalState() currentTarget?: Point;
 
-  setCurrentState(d: string): void {
-    if (this.d !== d) {
-      this.d = d;
-    }
-  }
-
   @Ref() cloudRef!: RefObject<SVGGElement>;
 
   @Ref() textRef!: RefObject<SVGGElement>;
@@ -281,13 +274,17 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @Effect()
   calculateCloudSize(): void {
-    if (this.d && this.props.visible) {
+    if (isDefined(this.props.x) && isDefined(this.props.y)
+      && this.props.visible && this.cloudRef) {
       const size = this.cloudRef.getBBox();
+      const {
+        lm, tm, rm, bm,
+      } = this.margins;
       this.cloudSize = {
-        x: Math.floor(size.x - this.margins.lm),
-        y: Math.floor(size.y - this.margins.tm),
-        width: size.width + this.margins.lm + this.margins.rm,
-        height: size.height + this.margins.tm + this.margins.bm,
+        x: Math.floor(size.x - lm),
+        y: Math.floor(size.y - tm),
+        width: size.width + lm + rm,
+        height: size.height + tm + bm,
       };
     }
   }

@@ -4,7 +4,6 @@ import {
   JSXComponent,
   OneWay,
   Ref,
-  Effect,
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import {
@@ -17,29 +16,34 @@ import SvgGraphicsProps from './base_graphics_props';
 import {
   combinePathParam,
   buildPathSegments,
-  applyGraphicProps,
+  getGraphicExtraProps,
 } from './utils';
 
 export const viewFunction = ({
   pathRef,
   d,
-  props: {
+  props,
+}: PathSvgElement): JSX.Element => {
+  const {
     className, fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity, pointerEvents,
-  },
-}: PathSvgElement): JSX.Element => (
-  <path
-    ref={pathRef}
-    className={className}
-    d={d}
-    fill={fill}
-    stroke={stroke}
-    strokeWidth={strokeWidth}
-    strokeOpacity={strokeOpacity}
-    strokeLinecap={strokeLineCap}
-    opacity={opacity}
-    pointerEvents={pointerEvents}
-  />
-);
+  } = props;
+  return (
+    <path
+      ref={pathRef}
+      className={className}
+      d={d}
+      fill={fill}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
+      strokeOpacity={strokeOpacity}
+      strokeLinecap={strokeLineCap}
+      opacity={opacity}
+      pointerEvents={pointerEvents}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...getGraphicExtraProps(props)}
+    />
+  );
+};
 
 @ComponentBindings()
 export class PathSvgElementProps extends SvgGraphicsProps {
@@ -72,10 +76,5 @@ export class PathSvgElement extends JSXComponent(PathSvgElementProps) {
     }
 
     return path;
-  }
-
-  @Effect()
-  effectUpdateShape(): void {
-    applyGraphicProps(this.pathRef, this.props);
   }
 }
