@@ -1,4 +1,5 @@
 import each from 'jest-each';
+import { mount } from 'enzyme';
 
 import {
   clear as clearEventHandlers, emit, getEventHandlers,
@@ -6,6 +7,7 @@ import {
 
 import {
   Scrollbar,
+  viewFunction,
 } from '../scrollbar';
 
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
@@ -21,6 +23,30 @@ describe('TopPocket', () => {
           expect((scrollbar as any).styles).toEqual({
             display: visibilityMode === 'never' ? 'none' : '',
             [`${direction === 'horizontal' || direction === 'both' ? 'width' : 'height'}`]: THUMB_MIN_SIZE,
+          });
+        });
+      });
+    });
+  });
+
+  describe('Classes', () => {
+    each(['horizontal', 'vertical', 'both', null, undefined]).describe('Direction: %o', (direction) => {
+      each(['never', 'always', 'onScroll', 'onHover', null, undefined]).describe('ShowScrollbar: %o', (visibilityMode) => {
+        each([true, false]).describe('Expandable: %o', (expandable) => {
+          it('should add scroll hoverable class', () => {
+            const viewModel = new Scrollbar({ direction, expandable, visibilityMode });
+
+            const needHoverableClass = (visibilityMode === 'onHover' || visibilityMode === 'always') && expandable;
+
+            const scroll = mount(viewFunction(viewModel) as JSX.Element);
+
+            if (needHoverableClass) {
+              expect(viewModel.cssClasses).toEqual(expect.stringMatching('dx-scrollbar-hoverable'));
+              expect(scroll.find('.dx-scrollbar-hoverable').length).toBe(1);
+            } else {
+              expect(viewModel.cssClasses).toEqual(expect.not.stringMatching('dx-scrollbar-hoverable'));
+              expect(scroll.find('.dx-scrollbar-hoverable').length).toBe(0);
+            }
           });
         });
       });
