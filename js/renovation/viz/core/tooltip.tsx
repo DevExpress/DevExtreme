@@ -21,6 +21,7 @@ import {
 } from './common/tooltip_utils';
 import { getFormatValue } from '../common/utils';
 import { normalizeEnum } from '../../../viz/core/utils';
+import domAdapter from '../../../core/dom_adapter';
 
 export const viewFunction = ({
   textRef,
@@ -366,7 +367,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     const propsContainer = this.props.container;
     if (propsContainer) {
       if (typeof propsContainer === 'string') {
-        const node = document.querySelector(propsContainer);
+        const node = domAdapter.getDocument().querySelector(propsContainer);
         if (node) {
           return node as HTMLElement;
         }
@@ -374,7 +375,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
         return propsContainer;
       }
     }
-    return document.body;
+    return domAdapter.getBody();
   }
 
   get customizedOptions(): CustomizedOptions {
