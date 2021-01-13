@@ -481,26 +481,25 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     },
 
     getContextMenuItems: function(options) {
-        const that = this;
         const column = options.column;
-        const columnFixingOptions = that.option('columnFixing');
-        let items = that.callBase(options);
+        const columnFixingOptions = this.option('columnFixing');
+        let items = this.callBase(options);
 
         if(options.row && options.row.rowType === 'header') {
-            if(column && column.allowFixing) {
-                const onItemClick = function(params) {
+            if(columnFixingOptions.enabled === true && column && column.allowFixing) {
+                const onItemClick = (params) => {
                     switch(params.itemData.value) {
                         case 'none':
-                            that._columnsController.columnOption(column.index, 'fixed', false);
+                            this._columnsController.columnOption(column.index, 'fixed', false);
                             break;
                         case 'left':
-                            that._columnsController.columnOption(column.index, {
+                            this._columnsController.columnOption(column.index, {
                                 fixed: true,
                                 fixedPosition: 'left'
                             });
                             break;
                         case 'right':
-                            that._columnsController.columnOption(column.index, {
+                            this._columnsController.columnOption(column.index, {
                                 fixed: true,
                                 fixedPosition: 'right'
                             });
