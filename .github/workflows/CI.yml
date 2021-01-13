@@ -33,7 +33,7 @@ jobs:
         DEVEXTREME_TEST_CI: "true"
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
-      run: npx npm-run-all -s build transpile-tests
+      run: npx npm-run-all -p build transpile-tests
 
     - name: Run QUnit tests
       env:
