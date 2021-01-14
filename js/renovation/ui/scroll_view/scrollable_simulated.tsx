@@ -7,7 +7,7 @@ import {
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
-import { Scrollbar } from './scrollbar';
+import { Scroller } from './scroller';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -100,7 +100,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             )}
           </div>
           {isHorizontal && (
-            <Scrollbar
+            <Scroller
               direction="horizontal"
               visible={scrollByThumb}
               visibilityMode={visibilityMode}
@@ -108,7 +108,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             />
           )}
           {isVertical && (
-            <Scrollbar
+            <Scroller
               direction="vertical"
               visible={scrollByThumb}
               visibilityMode={visibilityMode}
