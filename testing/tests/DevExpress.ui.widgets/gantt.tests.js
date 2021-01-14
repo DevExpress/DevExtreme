@@ -2919,6 +2919,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         this.instance.option('height', 200);
+        this.instance.option('taskListWidth', 300);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         assert.ok(this.instance.$element().height() < $(window).height(), '1.normalMode: gantt height < window height');
@@ -2975,6 +2976,9 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
     });
     test('panel sizes are the same', function(assert) {
         this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        this.instance.option('height', 200);
+        this.instance.option('taskListWidth', 300);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         let leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
