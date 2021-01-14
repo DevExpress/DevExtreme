@@ -2979,6 +2979,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
         this.instance.option('height', 200);
+        this.instance.option('width', 600);
         this.instance.option('taskListWidth', 300);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
