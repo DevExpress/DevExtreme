@@ -2944,12 +2944,20 @@ declare module DevExpress.fileManagement {
          * [descr:RemoteFileSystemProvider.Options.hasSubDirectoriesExpr]
          */
         hasSubDirectoriesExpr?: string | Function;
+        /**
+         * [descr:RemoteFileSystemProvider.Options.requestHeaders]
+         */
+        requestHeaders?: any;
     }
     /**
      * [descr:RemoteFileSystemProvider]
      */
     export class RemoteFileSystemProvider extends FileSystemProviderBase {
         constructor(options?: RemoteFileSystemProviderOptions)
+        /**
+         * [descr:RemoteFileSystemProvider.customizeRequest(request)]
+         */
+        customizeRequest(request: XMLHttpRequest): void;
     }
     /**
      * [descr:UploadInfo]
