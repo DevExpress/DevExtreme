@@ -26,12 +26,20 @@ const moduleConfig = {
         }).appendTo(this.$element);
         this.$div = $('<div>').appendTo(this.$element);
 
+        this.selectedRange = { index: 0, length: 0 };
+
         this.quillMock = {
-            root: this.$element.get(0)
+            root: this.$element.get(0),
+            on: () => {},
+            off: () => {},
+            getSelection: () => this.selectedRange,
+            setSelection: (index, length) => { this.selectedRange = { index, length }; }
         };
 
         this.options = {
             editorInstance: {
+                on: () => {},
+                off: () => {},
                 $element: () => this.$element,
                 _createComponent: ($element, widget, options) => new widget($element, options),
                 _getQuillContainer: () => this.$element
@@ -338,5 +346,26 @@ module('Resizing module', moduleConfig, () => {
         assert.notOk($resizeFrame.hasClass(DX_TOUCH_DEVICE_CLASS), 'frame doesn\'t have specific class');
 
         devices.current(currentDevice);
+    });
+
+    test('module should set a default selection in case editor was not focused yet', function(assert) {
+        this.options.enabled = true;
+        this.selectedRange = null;
+        new Resizing(this.quillMock, this.options);
+
+        this.$image.trigger(clickEvent);
+
+        assert.deepEqual(this.selectedRange, { index: 0, length: 0 }, 'editor has an default range');
+    });
+
+    test('module should keep actual range', function(assert) {
+        const actualRange = { index: 5, length: 0 };
+        this.options.enabled = true;
+        this.selectedRange = actualRange;
+        new Resizing(this.quillMock, this.options);
+
+        this.$image.trigger(clickEvent);
+
+        assert.deepEqual(this.selectedRange, actualRange, 'editor has an actual range');
     });
 });
