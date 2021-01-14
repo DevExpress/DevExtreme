@@ -2919,7 +2919,8 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         this.instance.option('height', 200);
-        this.instance.option('taskListWidth', 300);
+        this.instance.option('width', 400);
+        this.instance.option('taskListWidth', 200);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         assert.ok(this.instance.$element().height() < $(window).height(), '1.normalMode: gantt height < window height');
@@ -3045,6 +3046,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
         leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
         fullScreenCommand.execute();
+        this.clock.tick();
         assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'width is not changed in NormalMode after moves in FullScreen');
     });
 });
