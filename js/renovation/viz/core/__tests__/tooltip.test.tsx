@@ -95,9 +95,9 @@ describe('Render', () => {
       strokeOpacity: 0.5,
       dashStyle: 'dash_style_test',
     },
-    textRef: {},
-    htmlRef: {},
-    cloudRef: {},
+    textRef: { current: {} },
+    htmlRef: { current: {} },
+    cloudRef: { current: {} },
     textSizeWithPaddings: { width: 48, height: 40 },
     correctedCoordinates: {
       x: 4, y: 5, anchorX: 11, anchorY: 12,
@@ -134,7 +134,6 @@ describe('Render', () => {
     expect(tooltip.find('g').at(1).props()).toMatchObject({
       textAnchor: 'middle',
       transform: 'translate(4, -12)',
-      ref: {},
     });
   });
 
@@ -372,7 +371,7 @@ describe('Effect', () => {
       html: 'customized_html_text',
     });
     const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    tooltip.htmlRef = {} as any;
+    tooltip.htmlRef = { current: {} } as any;
     tooltip.setHtmlText();
 
     expect(tooltip.htmlRef.innerHTML).toEqual('customized_html_text');
@@ -383,7 +382,7 @@ describe('Effect', () => {
       text: 'customized_tooltip_text',
     });
     const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    tooltip.htmlRef = {} as any;
+    tooltip.htmlRef = { current: {} } as any;
     tooltip.setHtmlText();
 
     expect(tooltip.htmlRef.innerHTML).toEqual(undefined);
@@ -394,7 +393,7 @@ describe('Effect', () => {
       html: 'customized_html_text',
     });
     const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
-    tooltip.htmlRef = {} as any;
+    tooltip.htmlRef = { current: {} } as any;
     tooltip.setHtmlText();
 
     expect(tooltip.htmlRef.innerHTML).toBe(undefined);
