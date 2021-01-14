@@ -1,14 +1,14 @@
 import {
-  Component, ComponentBindings, CSSAttributes, JSXComponent, JSXTemplate, OneWay, Template,
+  Component, CSSAttributes, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
 import {
   Group,
   GroupRenderItem,
   GroupItem,
-  ResourceCellTemplateProps,
 } from '../../../types.d';
 import { Row } from './row';
 import { addHeightToStyle } from '../../../utils';
+import { GroupPanelProps } from '../group_panel_props';
 
 const getGroupsRenderData = (groups: Group[]): GroupRenderItem[][] => {
   let repeatCount = 1;
@@ -51,24 +51,11 @@ export const viewFunction = (viewModel: GroupPanelVerticalLayout): JSX.Element =
   </div>
 );
 
-@ComponentBindings()
-export class GroupPanelVerticalLayoutProps {
-  @OneWay() groups: Group[] = [];
-
-  @OneWay() groupByDate = false;
-
-  @OneWay() height?: number;
-
-  @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
-
-  @OneWay() className?: string = '';
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelVerticalLayoutProps) {
+export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelProps) {
   get style(): CSSAttributes {
     const { height } = this.props;
     const { style } = this.restAttributes;

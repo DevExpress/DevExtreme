@@ -1,19 +1,11 @@
 import {
   Component,
-  ComponentBindings,
   JSXComponent,
   JSXTemplate,
-  OneWay,
-  Template,
 } from 'devextreme-generator/component_declaration/common';
-import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
-import { GroupOrientation } from '../../../types.d';
-import {
-  Group,
-  ResourceCellTemplateProps,
-} from '../../types.d';
 import { isVerticalGroupOrientation } from '../../utils';
-import { GroupPanelVerticalLayout, GroupPanelVerticalLayoutProps } from './vertical/layout';
+import { GroupPanelProps } from './group_panel_props';
+import { GroupPanelVerticalLayout } from './vertical/layout';
 
 export const viewFunction = ({
   layout: Layout,
@@ -34,28 +26,13 @@ export const viewFunction = ({
   />
 );
 
-@ComponentBindings()
-export class GroupPanelProps {
-  @OneWay() groups: Group[] = [];
-
-  @OneWay() groupOrientation: GroupOrientation = VERTICAL_GROUP_ORIENTATION;
-
-  @OneWay() groupByDate = false;
-
-  @OneWay() height?: number;
-
-  @OneWay() className?: string;
-
-  @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
   jQuery: { register: true },
 })
 export class GroupPanel extends JSXComponent(GroupPanelProps) {
-  get layout(): JSXTemplate<GroupPanelVerticalLayoutProps> {
+  get layout(): JSXTemplate<GroupPanelProps> {
     const { groupOrientation } = this.props;
 
     return isVerticalGroupOrientation(groupOrientation)
