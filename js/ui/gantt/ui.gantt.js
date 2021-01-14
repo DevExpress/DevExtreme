@@ -164,7 +164,7 @@ class Gantt extends Widget {
             taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
             onTaskClick: (e) => { this._onTreeListRowClick(e); },
             onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); },
-            onAdjustControl: (adjustSettings) => { this._onAdjustControl(adjustSettings); }
+            onAdjustControl: () => { this._onAdjustControl(); }
         });
         this._fireContentReadyAction();
     }
