@@ -108,7 +108,7 @@ class Gantt extends Widget {
             onContextMenuPreparing: (e) => { this._onTreeListContextMenuPreparing(e); },
             onRowClick: (e) => { this._onTreeListRowClick(e); },
             onRowDblClick: (e) => { this._onTreeListRowDblClick(e); },
-            onAdjustControl: (adjustSettings) => { this._onAdjustControl(adjustSettings); }
+            onAdjustControl: () => { this._onAdjustControl(); }
         });
     }
     _renderSplitter() {
