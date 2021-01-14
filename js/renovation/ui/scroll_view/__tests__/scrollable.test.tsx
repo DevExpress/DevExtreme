@@ -170,6 +170,21 @@ jest.mock('../../../../core/devices', () => {
         const scrollable = mount(viewFunction(props as any) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
       });
+
+      each([true, false]).describe('tabIndex on container. useKeyboard: %o', (useKeyboard) => {
+        it('tabIndex on container, useKeyboard', () => {
+          const viewModel = new Scrollable({ useKeyboard });
+
+          const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+          const scrollableContainerTabIndex = scrollable.find('.dx-scrollable-container').getDOMNode().attributes.getNamedItem('tabindex');
+
+          if (Scrollable === ScrollableSimulated && useKeyboard) {
+            expect((scrollableContainerTabIndex as any).value).toEqual('0');
+          } else {
+            expect(scrollableContainerTabIndex).toEqual(null);
+          }
+        });
+      });
     });
 
     describe('Scrollbar', () => {
