@@ -55,7 +55,7 @@ function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
-    cssClasses, wrapperRef, contentRef, containerRef,
+    cssClasses, wrapperRef, contentRef, containerRef, tabIndex,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -80,7 +80,12 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
-        <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
+        <div
+          className={SCROLLABLE_CONTAINER_CLASS}
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+          tabIndex={tabIndex}
+          ref={containerRef}
+        >
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
             {forceGeneratePockets && (
             <TopPocket
@@ -336,5 +341,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
+  }
+
+  get tabIndex(): number | undefined {
+    return this.props.useKeyboard ? 0 : undefined;
   }
 }
