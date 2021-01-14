@@ -34,7 +34,7 @@ const getGroupsRenderData = (groups: Group[]): GroupRenderItem[][] => {
 
 export const viewFunction = (viewModel: GroupPanelVerticalLayout): JSX.Element => (
   <div
-    className={`dx-scheduler-work-space-vertical-group-table ${viewModel.props.className}`}
+    className={viewModel.props.className}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
     style={viewModel.style}

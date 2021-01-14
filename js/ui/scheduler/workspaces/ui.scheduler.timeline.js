@@ -29,6 +29,8 @@ const DATE_TABLE_HEADER_MARGIN = 10;
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimeline extends SchedulerWorkSpace {
+    get verticalGroupTableClass() { return GROUP_TABLE_CLASS; }
+
     _init() {
         super._init();
 
@@ -257,7 +259,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _renderView() {
         this._setFirstViewDate();
-        const groupCellTemplates = this._renderGroupHeader();
+        let groupCellTemplates;
+        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+            this.renderRGroupPanel();
+        } else {
+            groupCellTemplates = this._renderGroupHeader();
+        }
         this._renderDateHeader();
 
         if(this.isRenovatedRender()) {

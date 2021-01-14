@@ -173,6 +173,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         return true;
     }
 
+    get verticalGroupTableClass() { return WORKSPACE_VERTICAL_GROUP_TABLE_CLASS; }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -1292,11 +1294,12 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupOrientation: this.option('groupOrientation'),
             groupByDate: this.isGroupedByDate(),
             resourceCellTemplate: this.option('resourceCellTemplate'),
+            className: this.verticalGroupTableClass,
         };
 
         if(this.option('groups').length) {
             this.renderRComponent(
-                this._$groupTable,
+                this._getGroupHeaderContainer(),
                 dxrGroupPanel,
                 'renovatedGroupPanel',
                 options,
@@ -1655,7 +1658,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _applyCellTemplates(templates) {
-        templates.forEach(function(template) {
+        templates?.forEach(function(template) {
             template();
         });
     }
