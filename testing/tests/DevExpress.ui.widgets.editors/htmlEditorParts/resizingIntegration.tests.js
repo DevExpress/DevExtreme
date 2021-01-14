@@ -162,7 +162,7 @@ module('Resizing integration', {
         assert.strictEqual(frameTop + BORDER_PADDING_WIDTH, imageTop, 'Frame positioned correctly by the top');
     });
 
-    test('resizing frame should update it position after formatting', function(assert) {
+    test('resizing frame should update its position after formatting', function(assert) {
         this.options.mediaResizing = { enabled: true };
         this.createWidget();
 
