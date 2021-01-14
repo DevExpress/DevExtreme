@@ -1,7 +1,5 @@
 import createWidget from '../../../helpers/createWidget';
-import {
-  compareScreenshot,
-} from '../../../helpers/screenshort-comparer';
+import { compareScreenshot } from '../../../helpers/screenshort-comparer';
 import url from '../../../helpers/getPageUrl';
 
 fixture`Agenda:adaptive`
