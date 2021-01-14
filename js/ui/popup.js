@@ -354,6 +354,7 @@ const Popup = Overlay.inherit({
             this._createComponent($button, Button, {
                 icon: 'close',
                 onClick: this._createToolbarItemAction(undefined),
+                stylingMode: 'text',
                 integrationOptions: {}
             });
             $(container).append($button);
