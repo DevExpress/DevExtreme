@@ -959,10 +959,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that.options.rtlEnabled = !!that.options.rtlEnabled;
 
-        if(that.options.legacyRendering === undefined) {
-            that.options.legacyRendering = false;
-        }
-
         if(that.options.editing?.changes === undefined) {
             if(that.options.editing) {
                 that.options.editing.changes = [];

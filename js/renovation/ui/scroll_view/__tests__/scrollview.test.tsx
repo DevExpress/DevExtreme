@@ -1,21 +1,32 @@
 import { mount } from 'enzyme';
+import each from 'jest-each';
 
 import {
   ScrollView,
   viewFunction,
 } from '../scroll_view';
 
+import {
+  defaultOptionRules,
+} from '../scrollable';
+
 import devices from '../../../../core/devices';
-// eslint-disable-next-line import/default
-import themes from '../../../../ui/themes';
+import { touch } from '../../../../core/utils/support';
+import { convertRulesToOptions } from '../../../../core/options/utils';
+import { current } from '../../../../ui/themes';
+import { ScrollViewProps } from '../scroll_view_props';
 
 type Mock = jest.Mock;
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
   const real = actualDevices.real.bind(actualDevices);
+  const platform = actualDevices.real.bind(actualDevices);
+  const isSimulator = actualDevices.isSimulator.bind(actualDevices);
 
+  actualDevices.isSimulator = jest.fn(isSimulator);
   actualDevices.real = jest.fn(real);
+  actualDevices.current = jest.fn(platform);
 
   return actualDevices;
 });
@@ -54,14 +65,15 @@ describe('ScrollView', () => {
   describe('Default options', () => {
     beforeEach(() => {
       (devices.real as Mock).mockImplementation(() => ({ platform: 'generic' }));
-      ((themes as any).current as Mock).mockImplementation(() => 'generic');
+      (devices as any).isSimulator.mockImplementation(() => false);
+      (current as Mock).mockImplementation(() => 'generic');
     });
 
     afterEach(() => jest.resetAllMocks());
 
     describe('Texts', () => {
       it('theme: material, texts options: undefined', () => {
-        ((themes as any).current as Mock).mockImplementation(() => 'material');
+        (current as Mock).mockImplementation(() => 'material');
 
         const scrollView = mount(viewFunction(new ScrollView({})) as JSX.Element);
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
@@ -78,7 +90,7 @@ describe('ScrollView', () => {
       });
 
       it('theme: material, texts options: "value"', () => {
-        ((themes as any).current as Mock).mockImplementation(() => 'material');
+        (current as Mock).mockImplementation(() => 'material');
 
         const scrollView = mount(viewFunction(new ScrollView({
           pullingDownText: 'value_1',
@@ -100,7 +112,7 @@ describe('ScrollView', () => {
       });
 
       it('theme: generic, texts options: "value"', () => {
-        ((themes as any).current as Mock).mockImplementation(() => 'generic');
+        (current as Mock).mockImplementation(() => 'generic');
 
         const scrollView = mount(viewFunction(new ScrollView({
           pullingDownText: 'value_1',
@@ -122,7 +134,7 @@ describe('ScrollView', () => {
       });
 
       it('theme: generic, texts options: undefined', () => {
-        ((themes as any).current as Mock).mockImplementation(() => 'generic');
+        (current as Mock).mockImplementation(() => 'generic');
 
         const scrollView = mount(viewFunction(new ScrollView({})) as JSX.Element);
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
@@ -139,7 +151,7 @@ describe('ScrollView', () => {
       });
 
       it('theme: generic, texts options: empty string', () => {
-        ((themes as any).current as Mock).mockImplementation(() => 'generic');
+        (current as Mock).mockImplementation(() => 'generic');
 
         const scrollView = mount(viewFunction(new ScrollView({
           pullingDownText: '',
@@ -158,6 +170,35 @@ describe('ScrollView', () => {
         expect(scrollViewBottomPocketTexts.length).toBe(1);
 
         expect(scrollViewBottomPocketTexts.at(0).text()).toBe('');
+      });
+    });
+
+    describe('Options', () => {
+      const getDefaultOptions = (): ScrollViewProps => Object.assign(new ScrollViewProps(),
+        convertRulesToOptions(defaultOptionRules));
+
+      each([false]).describe('isSimulator: %o', (isSimulator) => {
+        each(['desktop']).describe('deviceType: %o', (deviceType) => {
+          each(['generic']).describe('platform: %o', (platform) => {
+            it('scrollByThumb, showScrollbar', () => {
+              (devices as any).isSimulator.mockImplementation(() => isSimulator);
+              (devices.real as Mock).mockImplementation(() => ({ deviceType }));
+              (devices.current as Mock).mockImplementation(() => ({ platform }));
+
+              if (!isSimulator && deviceType === 'desktop' && platform === 'generic') {
+                expect(getDefaultOptions().scrollByThumb).toBe(true);
+                expect(getDefaultOptions().showScrollbar).toBe('onHover');
+                expect(getDefaultOptions().bounceEnabled).toBe(false);
+                expect(getDefaultOptions().scrollByContent).toBe(touch);
+              } else {
+                expect(getDefaultOptions().scrollByThumb).toBe(false);
+                expect(getDefaultOptions().showScrollbar).toBe('onScroll');
+                expect(getDefaultOptions().bounceEnabled).toBe(true);
+                expect(getDefaultOptions().scrollByContent).toBe(true);
+              }
+            });
+          });
+        });
       });
     });
   });

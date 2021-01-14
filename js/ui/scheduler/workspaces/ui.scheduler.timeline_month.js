@@ -12,6 +12,8 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return false;
     }
 
+    get viewDirection() { return 'horizontal'; }
+
     _renderView() {
         super._renderView();
 
