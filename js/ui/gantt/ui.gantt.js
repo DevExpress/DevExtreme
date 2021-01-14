@@ -169,7 +169,7 @@ class Gantt extends Widget {
         this._fireContentReadyAction();
     }
 
-    _onAdjustControl(adjustSettings) {
+    _onAdjustControl() {
         const toolbarHeight = this._$toolbarWrapper.get(0).offsetHeight;
         this._setTreeListOption('height', '100%');
         this._setTreeListOption('height', this._$treeList.height() - toolbarHeight);
