@@ -24,3 +24,5 @@ export const AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS = 'dx-scheduler-last-in-date-
 export const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 
 export const HORIZONTAL_GROUP_ORIENTATION = 'horizontal';
+
+export const VIRTUAL_CELL_CLASS = 'dx-scheduler-virtual-cell';

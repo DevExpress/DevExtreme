@@ -331,7 +331,8 @@ const TextEditorBase = Editor.inherit({
             autocomplete: 'off'
         };
 
-        if(devices.real().ios) {
+        const { ios, mac } = devices.real();
+        if(ios || mac) {
             // WA to fix vAlign (T898735)
             // https://bugs.webkit.org/show_bug.cgi?id=142968
             defaultAttributes.placeholder = ' ';
@@ -359,7 +360,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderInputValue: function(value) {
-        value = value || this.option('value');
+        value = value ?? this.option('value');
 
         let text = this.option('text');
         const displayValue = this.option('displayValue');

@@ -86,8 +86,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _createStrategy: function() {
-        const strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
-
+        // eslint-disable-next-line no-undef
         const strategyClass = refreshStrategies[strategyName];
         if(!strategyClass) {
             throw Error('E1030', this.option('refreshStrategy'));

@@ -11,6 +11,7 @@ import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
+import { isDefined } from '../../../core/utils/type';
 
 import {
   ScrollableInternalPropsType,
@@ -47,18 +48,22 @@ import {
   dxScrollCancel,
 } from '../../../events/short';
 
-export const viewFunction = ({
-  cssClasses, wrapperRef, contentRef, containerRef,
-  props: {
-    disabled, height, width, rtlEnabled, children,
-    forceGeneratePockets, needScrollViewContentWrapper,
-    showScrollbar, direction, scrollByThumb, useSimulatedScrollbar,
-  },
-  restAttributes,
-}: ScrollableNative): JSX.Element => {
+export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
+  const {
+    cssClasses, wrapperRef, contentRef, containerRef,
+    props: {
+      disabled, height, width, rtlEnabled, children,
+      forceGeneratePockets, needScrollViewContentWrapper,
+      showScrollbar, direction, scrollByThumb, useSimulatedScrollbar, pullingDownText,
+      pulledDownText, refreshingText, reachBottomText,
+    },
+    restAttributes,
+  } = viewModel;
+
   const targetDirection = direction ?? 'vertical';
   const isVertical = targetDirection !== 'horizontal';
   const isHorizontal = targetDirection !== 'vertical';
+
   return (
     <Widget
       classes={cssClasses}
@@ -71,11 +76,21 @@ export const viewFunction = ({
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
         <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
-            {forceGeneratePockets && <TopPocket />}
+            {forceGeneratePockets && (
+            <TopPocket
+              pullingDownText={pullingDownText}
+              pulledDownText={pulledDownText}
+              refreshingText={refreshingText}
+            />
+            )}
             {needScrollViewContentWrapper && (
               <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
             {!needScrollViewContentWrapper && children}
-            {forceGeneratePockets && <BottomPocket />}
+            {forceGeneratePockets && (
+            <BottomPocket
+              reachBottomText={reachBottomText}
+            />
+            )}
           </div>
         </div>
       </div>
@@ -96,6 +111,7 @@ export const viewFunction = ({
 };
 
 @Component({
+  defaultOptionRules: null,
   view: viewFunction,
 })
 export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>() {
@@ -205,7 +221,9 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
       (event: Event) => this.props.onScroll?.({
         event,
         scrollOffset: this.scrollOffset(),
-        ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef),
+        ...getBoundaryProps(
+          this.props.direction, this.scrollOffset(), this.containerRef, this.pushBackValue,
+        ),
       }));
   }
 
@@ -309,5 +327,15 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
+  }
+
+  get pushBackValue(): number {
+    const { pushBackValue } = this.props;
+
+    if (isDefined(pushBackValue)) {
+      return pushBackValue;
+    }
+
+    return (devices.real().platform === 'ios' ? 1 : 0);
   }
 }

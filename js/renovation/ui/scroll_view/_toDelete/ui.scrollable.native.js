@@ -2,7 +2,6 @@ import eventsEngine from '../../events/core/events_engine';
 import { isDxMouseWheelEvent } from '../../events/utils/index';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import devices from '../../core/devices';
 import Class from '../../core/class';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
@@ -36,13 +35,6 @@ const NativeStrategy = Class.inherit({
 
     render: function() {
         this._renderPushBackOffset();
-        const device = devices.real();
-        const deviceType = device.platform;
-
-        // this._$element
-        //     .addClass(SCROLLABLE_NATIVE_CLASS)
-        this._$element
-            .addClass(SCROLLABLE_NATIVE_CLASS + '-' + deviceType);
     },
 
     updateBounds: noop,
@@ -98,27 +90,6 @@ const NativeStrategy = Class.inherit({
         this._scrollAction = this._createActionByOption('onScroll');
         this._updateAction = this._createActionByOption('onUpdated');
     },
-
-    _createActionArgs: function() {
-        const { /* left,*/ top } = this.location();
-
-        return {
-            // event: this._eventForUserAction,
-            // scrollOffset: this._getScrollOffset(),
-            // reachedLeft: this._isReachedLeft(left),
-            // reachedRight: this._isReachedRight(left),
-            // reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top - 2 * this.option('pushBackValue') : undefined
-        };
-    },
-
-    // _isReachedLeft: function() {
-    //     return this._isDirection(HORIZONTAL) ? this.location().left >= 0 : undefined;
-    // },
-
-    // _isReachedRight: function() {
-    //     return this._isDirection(HORIZONTAL) ? Math.abs(this.location().left) >= this._getMaxOffset().left : undefined;
-    // },
 
     handleScroll: function(e) {
         this._component._updateRtlConfig();

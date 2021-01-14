@@ -5,6 +5,9 @@ import { EventCallback } from '../common/event_callback.d';
 import BaseWidgetProps from '../../utils/base_props';
 import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
 
+import { TopPocketProps } from './topPocket_props';
+import { BottomPocketProps } from './bottomPocket_props';
+
 @ComponentBindings()
 export class ScrollableInternalProps {
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
@@ -17,6 +20,8 @@ export class ScrollableInternalProps {
 
   @OneWay() useSimulatedScrollbar = false;
 
+  @OneWay() pushBackValue = 0;
+
   @OneWay() classes?: string;
 
   @OneWay() forceGeneratePockets = false;
@@ -26,11 +31,22 @@ export class ScrollableInternalProps {
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
 }
 
-export type ScrollableInternalPropsType = ScrollableInternalProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
-
 @ComponentBindings()
 export class ScrollableProps extends ScrollableInternalProps {
   @OneWay() useNative = false;
+
+  @OneWay() pullingDownText?: string;
+
+  @OneWay() pulledDownText?: string;
+
+  @OneWay() refreshingText?: string;
+
+  @OneWay() reachBottomText?: string;
 }
+
+export type ScrollableInternalPropsType = ScrollableInternalProps
+& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>
+& Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
+& Pick<BottomPocketProps, 'reachBottomText'>;
 
 export type ScrollablePropsType = ScrollableProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;

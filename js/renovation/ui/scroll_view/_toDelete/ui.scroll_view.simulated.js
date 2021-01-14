@@ -10,7 +10,6 @@ import LoadIndicator from '../load_indicator';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
-const SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = 'dx-scrollview-pull-down-text-visible';
 
 const STATE_RELEASED = 0;
 const STATE_READY = 1;
@@ -33,22 +32,6 @@ const ScrollViewScroller = Scroller.inherit({
     },
 
     _refreshPullDownText: function() {
-        const that = this;
-        const pullDownTextItems = [{
-            element: this._$pullingDownText,
-            visibleState: STATE_RELEASED
-        }, {
-            element: this._$pulledDownText,
-            visibleState: STATE_READY
-        }, {
-            element: this._$refreshingText,
-            visibleState: STATE_REFRESHING
-        }];
-
-        each(pullDownTextItems, function(_, item) {
-            const action = that._state === item.visibleState ? 'addClass' : 'removeClass';
-            item.element[action](SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS);
-        });
     },
 
     _initCallbacks: function() {
@@ -253,15 +236,10 @@ const SimulatedScrollViewStrategy = SimulatedStrategy.inherit({
     _renderPullDown: function() {
         const $loadIndicator = new LoadIndicator($('<div>')).$element();
 
-        this._$pullingDownText = $('<div>').text(this.option('pullingDownText')).appendTo($text);
-        this._$pulledDownText = $('<div>').text(this.option('pulledDownText')).appendTo($text);
-        this._$refreshingText = $('<div>').text(this.option('refreshingText')).appendTo($text);
-
         this._$pullDown
             .empty()
             .append($image)
-            .append($loadContainer.append($loadIndicator))
-            .append($text);
+            .append($loadContainer.append($loadIndicator));
     },
 
     pullDownEnable: function(enabled) {

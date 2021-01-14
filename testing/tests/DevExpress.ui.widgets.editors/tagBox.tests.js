@@ -1702,6 +1702,34 @@ QUnit.module('tag template', moduleSetup, () => {
 
         assert.equal($tags.text(), 'item 1', 'text is correct');
     });
+
+    QUnit.test('tag template can use string data', function(assert) {
+        const items = ['first'];
+
+        const $element = $('#tagBox').dxTagBox({
+            items,
+            valueExpr: 'this',
+            value: [items[0]]
+        });
+
+        const $tags = $element.find('.' + TAGBOX_TAG_CLASS);
+        assert.strictEqual($tags.text(), 'first', 'text is correct');
+    });
+
+    QUnit.test('tag template should use empty text if it is defined', function(assert) {
+        const items = [{ id: 1, text: '' }];
+
+        const $element = $('#tagBox').dxTagBox({
+            items,
+            displayExpr: 'text',
+            valueExpr: 'this',
+            value: [items[0]]
+        });
+
+        const $tags = $element.find('.' + TAGBOX_TAG_CLASS);
+        assert.strictEqual($tags.length, 1, 'text is correct');
+        assert.strictEqual($tags.text(), '', 'text is correct');
+    });
 });
 
 QUnit.module('showSelectionControls', moduleSetup, () => {

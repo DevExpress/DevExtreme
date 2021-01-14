@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import { addWidthToStyle } from '../utils';
 
@@ -22,7 +22,7 @@ export class VirtualCellProps {
   view: viewFunction,
 })
 export class VirtualCell extends JSXComponent(VirtualCellProps) {
-  get style(): { [key: string]: string | number | undefined } {
+  get style(): CSSAttributes {
     const { width } = this.props;
     const { style } = this.restAttributes;
 

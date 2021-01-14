@@ -23,8 +23,6 @@ const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_CLASS = 'dx-scrollable';
 const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
-// const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-// const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
@@ -47,7 +45,6 @@ const Scrollable = DOMComponent.inherit({
             onStop: null,
             useKeyboard: true,
             inertiaEnabled: true,
-            pushBackValue: 0,
             updateManually: false
         });
     },
@@ -60,14 +57,6 @@ const Scrollable = DOMComponent.inherit({
                 },
                 options: {
                     useSimulatedScrollbar: true
-                }
-            },
-            {
-                device: function() {
-                    return devices.real().platform === 'ios';
-                },
-                options: {
-                    pushBackValue: 1
                 }
             }
         ]);
@@ -110,11 +99,6 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _initScrollableMarkup: function() {
-        // const $element = this.$element().addClass(SCROLLABLE_CLASS);
-        // const $container = this._$container = $('<div>').addClass(SCROLLABLE_CONTAINER_CLASS);
-        // const $wrapper = this._$wrapper = $('<div>').addClass(SCROLLABLE_WRAPPER_CLASS);
-        // const $content = this._$content = $('<div>').addClass(SCROLLABLE_CONTENT_CLASS);
-
         if(domAdapter.hasDocumentProperty('onbeforeactivate') && browser.msie && browser.version < 12) {
             // eslint-disable-next-line no-undef
             eventsEngine.on($element, addNamespace('beforeactivate', SCROLLABLE), function(e) {
@@ -123,10 +107,6 @@ const Scrollable = DOMComponent.inherit({
                 }
             });
         }
-
-        // $content.append($element.contents()).appendTo($container);
-        // $container.appendTo($wrapper);
-        // $wrapper.appendTo($element);
     },
 
     _dimensionChanged: function() {
@@ -136,7 +116,6 @@ const Scrollable = DOMComponent.inherit({
 
     _initMarkup: function() {
         this.callBase();
-        // this._renderDirection();
     },
 
     _render: function() {
@@ -246,25 +225,10 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    // _renderDirection: function() {
-    // this.$element()
-    // .removeClass('dx-scrollable-' + HORIZONTAL)
-    // .removeClass('dx-scrollable-' + VERTICAL)
-    // .removeClass('dx-scrollable-' + BOTH)
-    // .addClass('dx-scrollable-' + this.option('direction'));
-    // },
-
     _renderStrategy: function() {
-        // this._createStrategy();
         this._strategy.render();
         this.$element().data(SCROLLABLE_STRATEGY, this._strategy);
     },
-
-    // _createStrategy: function() {
-    // this._strategy = (this.option('useNative'))
-    // ? new NativeStrategy(this)
-    // : new SimulatedStrategy(this);
-    // },
 
     _createActions: function() {
         this._strategy && this._strategy.createActions();
@@ -410,44 +374,9 @@ const Scrollable = DOMComponent.inherit({
         return this._$content;
     },
 
-    // content: function() {
-    //     return getPublicElement(this._$content);
-    // },
-
-    // scrollOffset: function() {
-    //     return this._getScrollOffset();
-    // },
-
-    // _getScrollOffset() {
-    //     return {
-    //         top: -this._location().top,
-    //         left: -this._location().left
-    //     };
-    // },
-
-    // scrollTop: function() {
-    //     return this.scrollOffset().top;
-    // },
-
-    // scrollLeft: function() {
-    //     return this.scrollOffset().left;
-    // },
-
-    // clientHeight: function() {
-    //     return this._$container.height();
-    // },
-
     scrollHeight: function() {
         return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
     },
-
-    // clientWidth: function() {
-    //     return this._$container.width();
-    // },
-
-    // scrollWidth: function() {
-    //     return this.$content().outerWidth();
-    // },
 
     update: function() {
         if(!this._strategy) {

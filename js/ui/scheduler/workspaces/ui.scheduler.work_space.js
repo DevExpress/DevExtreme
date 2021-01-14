@@ -29,7 +29,7 @@ import tableCreatorModule from '../ui.scheduler.table_creator';
 const { tableCreator } = tableCreatorModule;
 import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
-import { APPOINTMENT_SETTINGS_KEY, FIXED_CONTAINER_CLASS } from '../constants';
+import { APPOINTMENT_SETTINGS_KEY, FIXED_CONTAINER_CLASS, VIRTUAL_CELL_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
@@ -88,7 +88,6 @@ const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_ROW_CLASS = 'dx-scheduler-date-table-row';
 const DATE_TABLE_FOCUSED_CELL_CLASS = 'dx-scheduler-focused-cell';
 const VIRTUAL_ROW_CLASS = 'dx-scheduler-virtual-row';
-const VIRTUAL_CELL_CLASS = 'dx-scheduler-virtual-cell';
 const WRAPPER_POSTFIX = 'template-wrapper';
 
 const DATE_TABLE_DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -168,6 +167,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._isShowAllDayPanel() && this.supportAllDayRow();
     }
 
+    get isDateAndTimeView() {
+        return true;
+    }
+
+    get viewDirection() { return 'vertical'; }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -221,7 +226,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         super._dispose();
 
         this.virtualScrollingDispatcher?.dispose();
-        this._disposeRenovatedComponents();
     }
 
     _isRTL() {
@@ -634,7 +638,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'groups':
                 this._cleanView();
-                this._disposeRenovatedComponents();
                 this._removeAllDayElements();
                 this._initGrouping();
                 this.repaint();
@@ -649,7 +652,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'showAllDayPanel':
                 if(this._isVerticalGroupedWorkSpace()) {
                     this._cleanView();
-                    this._disposeRenovatedComponents();
                     this._removeAllDayElements();
                     this._initGrouping();
                     this.repaint();
@@ -697,7 +699,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this.option('renovateRender', this._isVirtualModeOn());
                 break;
             case 'renovateRender':
-                this._disposeRenovatedComponents();
                 this.repaint();
                 break;
             default:
@@ -2224,6 +2225,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _clean() {
         eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+        this._disposeRenovatedComponents();
 
         super._clean();
     }
@@ -2514,7 +2516,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         const { position, cellData } = cell;
 
         return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
-            cellData, position, currentDate,
+            cellData,
+            position,
+            currentDate,
+            this.isDateAndTimeView,
+            this.viewDirection === 'vertical',
         );
     }
 
