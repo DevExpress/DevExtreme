@@ -1,5 +1,5 @@
-The **HtmlEditor** allows a user to mention other users in the text. Users that can be mentioned are suggested in a drop-down list that gets its items from the [dataSource](/Documentation/ApiReference/UI_Widgets/dxHtmlEditor/Configuration/mentions/#dataSource).
+Our **HtmlEditor** allows end-users to insert "mentions" and reference others within text or conversation threads as demonstrated in this demo. With this feature, you can introduce functionality that emulates capabilities found in collaboration tools like Microsoft Teams. 
 
-The suggestion list appears when a user enters a specific [marker](/Documentation/ApiReference/UI_Widgets/dxHtmlEditor/Configuration/mentions/#marker). To mention a user, enter `@` in the text field at the bottom and select the user from the list.
+A "mention" is triggered by a marker. You are free to choose a "marker" of your choice (this demo uses the `@` symbol to trigger a "mention").  User names are stored as items in a [dataSource](/Documentation/ApiReference/UI_Widgets/dxHtmlEditor/Configuration/mentions/#dataSource). Data can be retrieved from multiple data sources. When using multiple data sources, you must assign an unique marker to each. 
 
-Data for mentions can be from multiple data sources. In this case, you can assign an individual marker to each of them.
+To "mention" a user, simply enter the `@` symbol and select the desired record from the "Mentions" drop-down user list. Like today's most popular collaboration tools, you can enter additional characters to filter the records displayed within the "Mentions" drop-down user list.
