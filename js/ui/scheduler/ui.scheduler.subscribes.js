@@ -492,7 +492,6 @@ const subscribes = {
     prerenderFilterVirtual: function() {
         const workspace = this.getWorkSpace();
         const isCalculateStartAndEndDayHour = workspace.isDateAndTimeView;
-        const resourcesManager = this._resourcesManager;
 
         const isAllDayWorkspace = !this._workSpace.supportAllDayRow();
         const showAllDayAppointments = this.option('showAllDayPanel') || isAllDayWorkspace;
@@ -500,6 +499,8 @@ const subscribes = {
         const { viewDataProvider } = workspace;
         const endViewDate = workspace.getEndViewDateByEndDayHour();
         const filterOptions = [];
+
+        const resources = this.fire('_getPrerenderFilterResources');
 
         const groupsInfo = viewDataProvider.getGroupsInfo();
         groupsInfo.forEach((item) => {
@@ -521,9 +522,6 @@ const subscribes = {
             // TODO split by workspace strategies
             const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && allDayPanel?.length > 0);
 
-            const groups = viewDataProvider.getCellsGroup(groupIndex);
-            const groupResources = resourcesManager.getResourcesDataByGroups(groups);
-
             filterOptions.push({
                 isVirtualScrolling: true,
                 startDayHour,
@@ -532,8 +530,8 @@ const subscribes = {
                 viewEndDayHour,
                 min: startDate,
                 max: groupEndDate,
-                resources: groupResources,
                 allDay: supportAllDayAppointment,
+                resources,
                 firstDayOfWeek: this.getFirstDayOfWeek(),
                 recurrenceException: this._getRecurrenceException.bind(this)
             });
@@ -544,6 +542,20 @@ const subscribes = {
             this.timeZoneCalculator,
             workspace._getGroupCount()
         );
+
+        return result;
+    },
+    _getPrerenderFilterResources: function() {
+        const cellGroups = [];
+        const { viewDataProvider } = this.getWorkSpace();
+        const groupIndices = viewDataProvider.getGroupIndices();
+
+        groupIndices.forEach(index => {
+            const cellGroup = viewDataProvider.getCellsGroup(index);
+            cellGroup && cellGroups.push(cellGroup);
+        });
+
+        const result = this._resourcesManager.getResourcesDataByGroups(cellGroups);
 
         return result;
     },

@@ -700,7 +700,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'scrolling':
                 this.option('renovateRender', this._isVirtualModeOn());
-                this.option('crossScrollingEnabled', this._isHorizontalVirtualScrolling());
                 break;
             case 'renovateRender':
                 this.repaint();
@@ -1161,19 +1160,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.renovatedRenderSupported() && this.option('renovateRender');
     }
 
-
     _isVirtualModeOn() {
         return this.option('scrolling.mode') === 'virtual';
     }
 
     isVirtualScrolling() {
         return this.isRenovatedRender() && this._isVirtualModeOn();
-    }
-
-    _isHorizontalVirtualScrolling() {
-        const orientation = this.option('scrolling.type');
-        return this._isVirtualModeOn() &&
-            (orientation === 'horizontal' || orientation === 'both');
     }
 
     _initVirtualScrolling() {
@@ -2471,7 +2463,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._$dateTable
             .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
             .eq(position.rowIndex)
-            .find(`td:not(.${VIRTUAL_CELL_CLASS})`)
+            .find('td')
             .eq(position.cellIndex);
     }
 
@@ -2674,15 +2666,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getCellDataInRenovatedView($cell) {
         let rowIndex = $cell.parent().index();
-
         if(this.isVirtualScrolling()) {
             rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
         }
 
-        let columnIndex = $cell.index();
-        if(this.isVirtualScrolling()) {
-            columnIndex -= this.virtualScrollingDispatcher.leftVirtualCellsCount;
-        }
+        const columnIndex = $cell.index();
 
         const { viewDataProvider } = this;
         const isAllDayCell = this._hasAllDayClass($cell);
@@ -2754,7 +2742,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(position) {
             position.top -= this._getVirtualRowOffset();
-            position.left -= this._getVirtualCellOffset();
         }
 
         return position;
@@ -2824,16 +2811,20 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _isSkippedData() { return false; }
 
-    getCoordinatesByDateInGroup(startDate, appointmentResources, inAllDayRow) {
+    getCoordinatesByDateInGroup(startDate, appointmentResources, inAllDayRow, groupIndex) {
         const result = [];
 
         if(this._isSkippedData(startDate)) {
             return result;
         }
 
-        const groupIndices = this._getGroupCount()
-            ? this._getGroupIndexes(appointmentResources)
-            : [0];
+        let groupIndices = [groupIndex];
+
+        if(!isDefined(groupIndex)) {
+            groupIndices = this._getGroupCount()
+                ? this._getGroupIndexes(appointmentResources)
+                : [0];
+        }
 
         groupIndices.forEach(groupIndex => {
             const coordinates = this.getCoordinatesByDate(startDate, groupIndex, inAllDayRow);
@@ -2936,7 +2927,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$dateTable
                 .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
                 .first()
-                .find(`td:not(.${VIRTUAL_CELL_CLASS}):nth-child(${this._getCellCount()}n)`)
+                .find(`td:nth-child(${this._getCellCount()}n)`)
                 .each((function(_, cell) {
 
                     let maxPosition = $(cell).position().left;
@@ -3191,7 +3182,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolledRowCount += 1;
         }
 
-        // TODO horizontal v-scrolling
         const fullScrolledColumnCount = scrollableScrollLeft / cellWidth;
         let scrolledColumnCount = Math.floor(fullScrolledColumnCount);
         if(scrollableScrollLeft % cellWidth !== 0) {
