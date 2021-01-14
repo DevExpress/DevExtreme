@@ -1298,13 +1298,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(this.option('groups').length) {
+            this._attachGroupCountAttr();
             this.renderRComponent(
                 this._getGroupHeaderContainer(),
                 dxrGroupPanel,
                 'renovatedGroupPanel',
                 options,
             );
-            this._attachGroupCountAttr();
         } else {
             this._detachGroupCountAttr();
         }

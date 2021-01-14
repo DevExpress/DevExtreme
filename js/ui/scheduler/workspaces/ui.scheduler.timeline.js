@@ -260,9 +260,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _renderView() {
         this._setFirstViewDate();
         let groupCellTemplates;
-        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
-            this.renderRGroupPanel();
-        } else {
+        if(!(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace())) {
             groupCellTemplates = this._renderGroupHeader();
         }
         this._renderDateHeader();
@@ -277,9 +275,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
         this._shader = new HorizontalShader(this);
 
-        this._updateGroupTableHeight();
-
         this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
+
+        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+            this.renderRGroupPanel();
+        }
+
         this._applyCellTemplates(groupCellTemplates);
     }
 
