@@ -59,6 +59,8 @@ const DOMComponent = Component.inherit({
     _visibilityChanged: abstract,
     _dimensionChanged: abstract,
 
+    _customClass: null,
+
     _init() {
         this.callBase();
         this._attachWindowResizeCallback();
@@ -116,7 +118,10 @@ const DOMComponent = Component.inherit({
 
         this.$element()
             .attr(attributes)
+            .removeClass(this._customClass)
             .addClass(classNames);
+
+        this._customClass = classNames;
     },
 
     _renderVisibilityChange() {
