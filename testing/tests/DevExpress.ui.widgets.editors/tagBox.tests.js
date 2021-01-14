@@ -5301,6 +5301,25 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         assert.roughEqual(this.getFocusedTag().position().left, 0, 1, 'focused tag is visible');
     });
 
+    ['left', 'right'].forEach((directionKey) => {
+        QUnit.test(`empty editor should correctly handle ${directionKey} key (T959418)`, function(assert) {
+            this.reinit({
+                items: this.items,
+                multiline: false,
+                focusStateEnabled: true,
+                searchEnabled: true
+            });
+            try {
+                this.keyboard
+                    .focus()
+                    .press(directionKey);
+                assert.ok(true, `${directionKey} key handled correctly`);
+            } catch(e) {
+                assert.ok(false, `${directionKey} key: error has been raised`);
+            }
+        });
+    });
+
     QUnit.test('the focused tag should be visible during keyboard navigation to the right', function(assert) {
         const containerWidth = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS).outerWidth();
 

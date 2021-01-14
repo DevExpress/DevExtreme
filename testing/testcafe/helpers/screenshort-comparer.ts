@@ -236,8 +236,7 @@ export function createScreenshotsComparer(t: TestController) {
   return {
     takeScreenshot: async (screenshotName: string,
       element: SelectorType = null,
-      comparisonOptions?: Partial<ComparerOptions>,
-    ): Promise<boolean> => {
+      comparisonOptions?: Partial<ComparerOptions>): Promise<boolean> => {
       try {
         const isValid = await compareScreenshot(t, screenshotName, element, comparisonOptions);
         if (!isValid) {

@@ -1,0 +1,44 @@
+// adduse
+
+.dx-toast-content {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+}
+
+.dx-toast-icon {
+  display: inline-flex;
+  background-size: contain;
+  width: 35px;
+  height: 35px;
+  background-position: left center;
+  background-repeat: no-repeat;
+  margin-right: 10px;
+}
+
+.dx-toast-message {
+  display: inline-flex;
+}
+
+.dx-toast-info {
+  background-color: #80b9e4;
+}
+
+.dx-toast-warning {
+  background-color: #ffb277;
+}
+
+.dx-toast-error {
+  background-color: #f77;
+}
+
+.dx-toast-success {
+  background-color: #6ec881;
+}
+
+.dx-rtl {
+  .dx-toast-icon {
+    margin-left: 10px;
+    margin-right: 0;
+  }
+}

@@ -8,13 +8,13 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import dateUtils from 'core/utils/date';
-import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dateLocalization from 'localization/date';
 import translator from 'animation/translator';
 import tooltip from 'ui/tooltip/ui.tooltip';
 import { DataSource } from 'data/data_source/data_source';
 import dataUtils from 'core/element_data';
 import dragEvents from 'events/drag';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
 const { testStart, test, module } = QUnit;
 
@@ -188,7 +188,7 @@ module('Common', moduleConfig, () => {
             cases.forEach(config => {
                 test(`Appointment should have correct size, position and popup content if ${config.caseName}`, function(assert) {
                     if(config.stubClientTimeZone) {
-                        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+                        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
                         try {
                             runTest(config, assert);
                         } finally {
@@ -357,6 +357,110 @@ module('API', moduleConfig, () => {
 
 module('Not native date DST', moduleConfig, () => {
     module('summer time', () => {
+        test('Exclude appointment from series in case DST start in prev visible view range', function(assert) {
+            const scheduler = createScheduler({
+                dataSource: [{
+                    startDate: new Date('2020-03-01T10:00:00.000Z'),
+                    endDate: new Date('2020-03-01T11:00:00.000Z'),
+                    text: 'Test',
+                    recurrenceRule: 'FREQ=DAILY',
+                }],
+                recurrenceEditMode: 'occurrence',
+                timeZone: timeZones.LosAngeles,
+                currentDate: new Date(2020, 2, 16)
+            });
+
+            scheduler.appointmentList[3].click();
+            scheduler.tooltip.clickOnDeleteButton();
+
+            assert.equal(scheduler.appointmentList.length, 6);
+        });
+
+        const from1amTo2amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 1 a.m. to 2 a.m., exclude appointments from series',
+            startDate: new Date('2020-03-01T09:00:00.000Z'),
+            endDate: new Date('2020-03-01T10:00:00.000Z'),
+
+            expectedText: '1:00 AM - 2:00 AM',
+            recurrenceExceptions: ['20200306T090000Z', '20200308T090000Z', '20200310T080000Z']
+        };
+
+        const from1amTo3amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 1 a.m. to 3 a.m., exclude appointments from series',
+            startDate: new Date('2020-03-01T09:00:00.000Z'),
+            endDate: new Date('2020-03-01T11:00:00.000Z'),
+
+            expectedText: '1:00 AM - 3:00 AM',
+            recurrenceExceptions: ['20200306T090000Z', '20200308T090000Z', '20200310T080000Z']
+        };
+
+        const from2amTo3amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 2 a.m. to 3 a.m., exclude appointments from series',
+            startDate: new Date('2020-03-01T10:00:00.000Z'),
+            endDate: new Date('2020-03-01T11:00:00.000Z'),
+
+            expectedText: '2:00 AM - 3:00 AM',
+            recurrenceExceptions: ['20200306T100000Z', '20200308T100000Z', '20200310T090000Z'],
+            skipInNativeLosAngeles: true
+        };
+
+        const from6amTo7amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 8 a.m. to 9 a.m., exclude appointments from series',
+            startDate: new Date('2020-03-01T16:00:00.000Z'),
+            endDate: new Date('2020-03-01T17:00:00.000Z'),
+
+            expectedText: '8:00 AM - 9:00 AM',
+            recurrenceExceptions: ['20200306T160000Z', '20200308T150000Z', '20200310T150000Z']
+        };
+
+        [
+            from1amTo2amRecurrenceExceptionCase,
+            from1amTo3amRecurrenceExceptionCase,
+            from2amTo3amRecurrenceExceptionCase,
+            from6amTo7amRecurrenceExceptionCase
+        ].forEach(testCase => {
+            const pacificTimezoneOffset = 480; // TODO: Value in ms. Offset (UTC-08:00) Pacific Time (US & Canada)
+            const isNativeLosAngeles = new Date(2020, 2, 7).getTimezoneOffset() === pacificTimezoneOffset;
+            if(isNativeLosAngeles && testCase.skipInNativeLosAngeles) {
+                return;
+            }
+
+            test(testCase.text, function(assert) {
+                const scheduler = createScheduler({
+                    dataSource: [{
+                        startDate: testCase.startDate,
+                        endDate: testCase.endDate,
+                        text: 'Test',
+                        recurrenceRule: 'FREQ=DAILY',
+                    }],
+                    recurrenceEditMode: 'occurrence',
+                    firstDayOfWeek: 4,
+                    timeZone: timeZones.LosAngeles,
+                    currentDate: new Date(2020, 2, 8)
+                });
+
+                [1, 2, 3].forEach(index => {
+                    scheduler.appointmentList[index].click();
+                    scheduler.tooltip.clickOnDeleteButton();
+                });
+
+                scheduler.appointmentList.forEach((appointment, index) => {
+                    appointment.click();
+                    const tooltipText = scheduler.tooltip.getDateText();
+                    assert.equal(tooltipText, testCase.expectedText, `date text should be right in ${index}'th appointment`);
+                });
+
+                const dataSource = scheduler.option('dataSource');
+                const recurrenceExceptions = dataSource[0].recurrenceException.split(',');
+
+                assert.equal(testCase.recurrenceExceptions[0], recurrenceExceptions[0], 'recurrenceExceptions before DST should be right');
+                assert.equal(testCase.recurrenceExceptions[1], recurrenceExceptions[1], 'recurrenceExceptions in DST should be right');
+                assert.equal(testCase.recurrenceExceptions[2], recurrenceExceptions[2], 'recurrenceExceptions after DST should be right');
+
+                assert.equal(scheduler.appointmentList.length, 4, 'count of rendered appointments should be equal 4');
+            });
+        });
+
         const from1amTo2amCase = {
             text: 'Recurrence start from 1 a.m. to 2 a.m.',
             startDate: new Date('2020-03-01T09:00:00.000Z'),
@@ -403,7 +507,7 @@ module('Not native date DST', moduleConfig, () => {
         };
 
         const from6amTo7amCase = {
-            text: 'Recurrence start from 6 a.m. to 7 a.m.',
+            text: 'Recurrence start from 8 a.m. to 9 a.m.',
             startDate: new Date('2020-03-01T16:00:00.000Z'),
             endDate: new Date('2020-03-01T17:00:00.000Z'),
             expectedTexts: [
@@ -540,6 +644,84 @@ module('Not native date DST', moduleConfig, () => {
     });
 
     module('winter time', () => {
+        const from1amTo2amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 1 a.m. to 2 a.m., exclude appointments from series',
+            startDate: '2020-10-25T08:00:00.000Z',
+            endDate: '2020-10-25T09:00:00.000Z',
+
+            expectedText: '1:00 AM - 2:00 AM',
+            recurrenceExceptions: [ '20201030T080000Z', '20201101T080000Z', '20201103T090000Z' ]
+        };
+
+        const from1amTo3amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 2 a.m. to 3 a.m., exclude appointments from series',
+            startDate: '2020-10-25T09:00:00.000Z',
+            endDate: '2020-10-25T10:00:00.000Z',
+
+            expectedText: '2:00 AM - 3:00 AM',
+            recurrenceExceptions: ['20201030T090000Z', '20201101T100000Z', '20201103T100000Z']
+        };
+
+        const from2amTo3amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 1 a.m. to 3 a.m., exclude appointments from series',
+            startDate: '2020-10-25T08:00:00.000Z',
+            endDate: '2020-10-25T10:00:00.000Z',
+
+            expectedText: '1:00 AM - 3:00 AM',
+            recurrenceExceptions: ['20201030T080000Z', '20201101T080000Z', '20201103T090000Z']
+        };
+
+        const from6amTo7amRecurrenceExceptionCase = {
+            text: 'Recurrence start from 6 a.m. to 7 a.m., exclude appointments from series',
+            startDate: '2020-10-25T13:00:00.000Z',
+            endDate: '2020-10-25T14:00:00.000Z',
+
+            expectedText: '6:00 AM - 7:00 AM',
+            recurrenceExceptions: ['20201030T130000Z', '20201101T140000Z', '20201103T140000Z']
+        };
+
+        [
+            from1amTo2amRecurrenceExceptionCase,
+            from1amTo3amRecurrenceExceptionCase,
+            from2amTo3amRecurrenceExceptionCase,
+            from6amTo7amRecurrenceExceptionCase
+        ].forEach(testCase => {
+            test(testCase.text, function(assert) {
+                const scheduler = createScheduler({
+                    dataSource: [{
+                        startDate: testCase.startDate,
+                        endDate: testCase.endDate,
+                        text: 'Test',
+                        recurrenceRule: 'FREQ=DAILY',
+                    }],
+                    recurrenceEditMode: 'occurrence',
+                    firstDayOfWeek: 4,
+                    timeZone: timeZones.LosAngeles,
+                    currentDate: new Date(2020, 10, 1)
+                });
+
+                [1, 2, 3].forEach(index => {
+                    scheduler.appointmentList[index].click();
+                    scheduler.tooltip.clickOnDeleteButton();
+                });
+
+                scheduler.appointmentList.forEach((appointment, index) => {
+                    appointment.click();
+                    const tooltipText = scheduler.tooltip.getDateText();
+                    assert.equal(tooltipText, testCase.expectedText, `date text should be right in ${index}'th appointment`);
+                });
+
+                const dataSource = scheduler.option('dataSource');
+                const recurrenceExceptions = dataSource[0].recurrenceException.split(',');
+
+                assert.equal(testCase.recurrenceExceptions[0], recurrenceExceptions[0], 'recurrenceExceptions before DST should be right');
+                assert.equal(testCase.recurrenceExceptions[1], recurrenceExceptions[1], 'recurrenceExceptions in DST should be right');
+                assert.equal(testCase.recurrenceExceptions[2], recurrenceExceptions[2], 'recurrenceExceptions after DST should be right');
+
+                assert.equal(scheduler.appointmentList.length, 4, 'count of rendered appointments should be equal 4');
+            });
+        });
+
         const from1amTo2amCase = {
             text: 'Recurrence start from 1 a.m. to 2 a.m.',
             startDate: '2020-10-25T08:00:00.000Z',
@@ -754,8 +936,123 @@ module('Scheduler grid', moduleConfig, () => {
         });
     });
 
+    if(isDesktopEnvironment()) {
+        [{
+            timeZone: undefined,
+            startDate: new Date(2015, 11, 23, 1),
+            endDate: new Date(2015, 11, 23, 2)
+        }, {
+            timeZone: timeZones.LosAngeles,
+            startDate: '2015-12-23T09:00:00.000Z',
+            endDate: '2015-12-23T10:00:00.000Z'
+        }].forEach(({ timeZone, startDate, endDate }) => {
+            test(`Drag n drop should work right in week view if timezone='${timeZone}'`, function(assert) {
+                const scheduler = createWrapper({
+                    currentDate: new Date(2015, 11, 23),
+                    views: ['week'],
+                    currentView: 'week',
+                    timeZone,
+                    focusStateEnabled: false, // fix for 'Not cleared timer detected.'
+                    dataSource: [{
+                        text: 'a',
+                        startDate,
+                        endDate
+                    }]
+                });
+
+                const appointment = scheduler.appointmentList[0];
+                const initialPosition = appointment.rectangle;
+
+                appointment.drag.toCell(18);
+                assert.equal(appointment.date, '1:00 AM - 2:00 AM', 'time shouldn\'t change after drag to right cell');
+                assert.ok(appointment.rectangle.x > initialPosition.x, 'drag to right: current X position should be larger than initial X');
+                assert.roughEqual(appointment.rectangle.y, initialPosition.y, 1, 'drag to right: current Y position should be equal initial Y');
+
+                appointment.drag.toCell(17);
+                assert.equal(appointment.date, '1:00 AM - 2:00 AM', 'time shouldn\'t change after drag to left cell');
+                assert.roughEqual(appointment.rectangle.x, initialPosition.x, 1, 'drag ro left: current X position should be equal initial X');
+                assert.roughEqual(appointment.rectangle.y, initialPosition.y, 1, 'drag to left: current Y position should be equal initial Y');
+
+                appointment.drag.toCell(10);
+                assert.equal(appointment.date, '12:30 AM - 1:30 AM', 'time should be change after drag to top cell');
+                assert.ok(appointment.rectangle.y < initialPosition.y, 'drag to top: current Y position should be smaller than initial Y');
+                assert.roughEqual(appointment.rectangle.x, initialPosition.x, 1, 'drag to top: current X position should be equal initial X');
+
+                appointment.drag.toCell(17);
+                assert.equal(appointment.date, '1:00 AM - 2:00 AM', 'time shouldn\'t change after drag to bottom cell');
+                assert.roughEqual(appointment.rectangle.y, initialPosition.y, 1, 'drag to bottom: current Y position should be equal initial Y');
+                assert.roughEqual(appointment.rectangle.x, initialPosition.x, 1, 'drag to bottom: current X position should be equal initial X');
+            });
+        });
+
+        [{
+            timeZone: undefined,
+            startDate: new Date(2015, 11, 23, 8),
+            endDate: new Date(2015, 11, 23, 13)
+        }, {
+            timeZone: timeZones.LosAngeles,
+            startDate: '2015-12-23T16:00:00.000Z',
+            endDate: '2015-12-23T21:00:00.000Z'
+        }].forEach(({ timeZone, startDate, endDate }) => {
+            [{
+                startDayHour: 0,
+                endDayHour: 24
+            }, {
+                startDayHour: 8,
+                endDayHour: 15,
+            }].forEach(({ startDayHour, endDayHour }) => {
+                test(`Drag n drop should work right in month view if timezone='${timeZone}' and startDayHour=${startDayHour}, endDayHour=${endDayHour}`, function(assert) {
+                    const scheduler = createWrapper({
+                        currentDate: new Date(2015, 11, 23),
+                        views: ['month'],
+                        currentView: 'month',
+                        timeZone,
+                        startDayHour,
+                        endDayHour,
+                        focusStateEnabled: false, // fix for 'Not cleared timer detected.'
+                        dataSource: [{
+                            text: 'a',
+                            startDate,
+                            endDate
+                        }]
+                    });
+
+                    const appointment = scheduler.appointmentList[0];
+                    const initialPosition = appointment.rectangle;
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right on init');
+
+                    appointment.drag.toCell(25);
+                    assert.ok(appointment.rectangle.x > initialPosition.x, 'drag to left: current X position should be larger than initial X');
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 24 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to right cell');
+
+                    appointment.drag.toCell(24);
+                    assert.equal(appointment.rectangle.x, initialPosition.x, 'drag to right: current X position should be equal initial X');
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to lefy cell');
+
+                    appointment.drag.toCell(17);
+                    assert.ok(appointment.rectangle.y < initialPosition.y, 'drag to top: current Y position should be smaller than initial Y');
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 16 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to top cell');
+
+                    appointment.drag.toCell(24);
+                    assert.equal(appointment.rectangle.y, initialPosition.y, 'drag to bottom: current Y position should be equal initial Y');
+
+                    appointment.click();
+                    assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to bottom cell');
+                });
+            });
+        });
+    }
+
     test('Recurrence appointment with \'Etc/UTC\' tz should be updated correctly via drag(T394991)', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
         try {
             const scheduler = createWrapper({
                 currentDate: new Date(2015, 11, 25),
@@ -844,7 +1141,7 @@ module('Scheduler grid', moduleConfig, () => {
     });
 
     test('Appointment with \'Etc/UTC\' tz should be rendered correctly(T394991)', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
         try {
             const scheduler = createWrapper({
                 currentDate: new Date(2016, 5, 25),
@@ -1141,7 +1438,7 @@ module('Scheduler grid', moduleConfig, () => {
     });
 
     test('Appointment should have a correct template with custom timezone', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
 
         try {
             const scheduler = createWrapper({
@@ -1399,7 +1696,7 @@ module('Appointment popup', moduleConfig, () => {
 module('Fixed client time zone offset', {
     beforeEach() {
         this.clock = sinon.useFakeTimers();
-        this.tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+        this.tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
         fx.off = true;
     },
 

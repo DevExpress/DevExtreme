@@ -363,7 +363,12 @@ const ResizingController = modules.ViewController.inherit({
                     }
                 }
             }
-            if(minWidth && that._getRealColumnWidth(width) < minWidth && !isHiddenColumn) {
+
+            const realColumnWidth = that._getRealColumnWidth(index, resultWidths.map(function(columnWidth, columnIndex) {
+                return index === columnIndex ? width : columnWidth;
+            }));
+
+            if(minWidth && !isHiddenColumn && realColumnWidth < minWidth) {
                 resultWidths[index] = minWidth;
                 isColumnWidthsCorrected = true;
                 i = -1;
@@ -438,14 +443,39 @@ const ResizingController = modules.ViewController.inherit({
         }
     },
 
-    _getRealColumnWidth: function(width, groupWidth) {
+    _getRealColumnWidth: function(columnIndex, columnWidths, groupWidth) {
+        let ratio = 1;
+        const width = columnWidths[columnIndex];
+
         if(!isPercentWidth(width)) {
             return parseFloat(width);
         }
 
+        const percentTotalWidth = columnWidths.reduce((sum, width, index) => {
+            if(!isPercentWidth(width)) {
+                return sum;
+            }
+
+            return sum + parseFloat(width);
+        }, 0);
+        const pixelTotalWidth = columnWidths.reduce((sum, width) => {
+            if(!width || width === HIDDEN_COLUMNS_WIDTH || isPercentWidth(width)) {
+                return sum;
+            }
+
+            return sum + parseFloat(width);
+        }, 0);
+
         groupWidth = groupWidth || this._rowsView.contentWidth();
 
-        return parseFloat(width) * groupWidth / 100;
+        const freeSpace = groupWidth - pixelTotalWidth;
+        const percentTotalWidthInPixel = percentTotalWidth * groupWidth / 100;
+
+        if(pixelTotalWidth > 0 && (percentTotalWidthInPixel + pixelTotalWidth) >= groupWidth) {
+            ratio = percentTotalWidthInPixel > freeSpace ? freeSpace / percentTotalWidthInPixel : 1;
+        }
+
+        return parseFloat(width) * groupWidth * ratio / 100;
     },
 
     _getTotalWidth: function(widths, groupWidth) {
@@ -454,7 +484,7 @@ const ResizingController = modules.ViewController.inherit({
         for(let i = 0; i < widths.length; i++) {
             const width = widths[i];
             if(width && width !== HIDDEN_COLUMNS_WIDTH) {
-                result += this._getRealColumnWidth(width, groupWidth);
+                result += this._getRealColumnWidth(i, widths, groupWidth);
             }
         }
 

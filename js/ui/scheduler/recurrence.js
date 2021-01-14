@@ -202,6 +202,10 @@ class RecurrenceProcessor {
                 .map(rule => this.getDateByAsciiString(rule));
 
             exceptionDates.forEach(date => {
+                if(options.getPostProcessedException) {
+                    date = options.getPostProcessedException(date);
+                }
+
                 const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
                 this.rRuleSet.exdate(utcDate);
             });

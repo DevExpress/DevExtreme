@@ -1,7 +1,12 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template,
+  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
-import { Group, GroupRenderItem, GroupItem } from '../../../types.d';
+import {
+  Group,
+  GroupRenderItem,
+  GroupItem,
+  ResourceCellTemplateProps,
+} from '../../../types.d';
 import { Row } from './row';
 import { addHeightToStyle } from '../../../utils';
 
@@ -27,7 +32,7 @@ const getGroupsRenderData = (groups: Group[]): GroupRenderItem[][] => {
   });
 };
 
-export const viewFunction = (viewModel: GroupPanelVerticalLayout) => (
+export const viewFunction = (viewModel: GroupPanelVerticalLayout): JSX.Element => (
   <div
     className={`dx-scheduler-work-space-vertical-group-table ${viewModel.props.className}`}
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -48,11 +53,11 @@ export const viewFunction = (viewModel: GroupPanelVerticalLayout) => (
 
 @ComponentBindings()
 export class GroupPanelVerticalLayoutProps {
-  @OneWay() groups?: Group[] = [];
+  @OneWay() groups: Group[] = [];
 
   @OneWay() height?: number;
 
-  @Template() cellTemplate?: any;
+  @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 
   @OneWay() className?: string = '';
 }
@@ -72,6 +77,6 @@ export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelVerticalLay
   get groupsRenderData(): GroupRenderItem[][] {
     const { groups } = this.props;
 
-    return getGroupsRenderData(groups!);
+    return getGroupsRenderData(groups);
   }
 }

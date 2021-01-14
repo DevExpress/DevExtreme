@@ -869,6 +869,19 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
         assert.equal($items.eq(3).text(), 'test', 'Custom zoomIn button was rendered with custom text');
     });
+    test('add subTask', function(assert) {
+        const items = [ 'addSubTask' ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+        assert.equal($items.first().children().children().attr('aria-label'), 'dx-gantt-i dx-gantt-i-add-sub-task', 'New Subtask item was rendered');
+    });
 });
 
 QUnit.module('DataSources', moduleConfig, () => {
@@ -1653,6 +1666,60 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.ok(keyExists, 'key created');
         assert.equal(values.text, data.text, 'new task title is right');
     });
+    test('insertResource (T959410)', function(assert) {
+        let assignedValues;
+        let assigningValues;
+        let resKey;
+        let assignmentKey;
+
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceAssigning', (e) => { assigningValues = e.values; });
+        this.instance.option('onResourceInserted', (e) => { resKey = e.key; });
+        this.instance.option('onResourceAssigned', (e) => {
+            assignedValues = e.values;
+            assignmentKey = !!e.key;
+        });
+        this.clock.tick();
+
+        const data = { text: 'My text' };
+        this.instance.insertResource(data, [2]);
+        this.clock.tick();
+
+        assert.ok(assignmentKey, 'key created');
+        assert.equal(assigningValues.taskId, 2, 'assigning task key');
+        assert.equal(assigningValues.resourceId, resKey, 'assigning resource key');
+        assert.equal(assignedValues.taskId, 2, 'assigned task key');
+        assert.equal(assignedValues.resourceId, resKey, 'assigned resource key');
+    });
+    test('insertResource + assignResourceToTask (T959410)', function(assert) {
+        let assignedValues;
+        let assigningValues;
+        let resKey;
+        let assignmentKey;
+
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceAssigning', (e) => { assigningValues = e.values; });
+        this.instance.option('onResourceInserted', (e) => { resKey = e.key; });
+        this.instance.option('onResourceAssigned', (e) => {
+            assignedValues = e.values;
+            assignmentKey = !!e.key;
+        });
+        this.clock.tick();
+
+        const data = { text: 'My text' };
+        this.instance.insertResource(data);
+        this.clock.tick(200);
+        this.instance.assignResourceToTask(resKey, 2);
+        this.clock.tick(200);
+
+        assert.ok(assignmentKey, 'key created');
+        assert.equal(assigningValues.taskId, 2, 'assigning task key');
+        assert.equal(assigningValues.resourceId, resKey, 'assigning resource key');
+        assert.equal(assignedValues.taskId, 2, 'assigned task key');
+        assert.equal(assignedValues.resourceId, resKey, 'assigned resource key');
+    });
     test('deleteResource + onResourceDeleted', function(assert) {
         let key;
         let values;
@@ -2153,6 +2220,24 @@ QUnit.module('Context Menu', moduleConfig, () => {
         this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
         const items = getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
         assert.equal(items.eq(items.length - 1).text(), 'My Command', 'custom item was rendered');
+    });
+    test('add subTask', function(assert) {
+        const contextMenuOptions = {
+            contextMenu: { items: [ 'addSubTask' ] }
+        };
+        this.createInstance(extend(tasksOnlyOptions, contextMenuOptions));
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        const getItems = () => {
+            return getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
+        };
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        const items = getItems();
+        assert.equal(items.length, 1, 'there are 1 items');
+        assert.equal(items.eq(0).text(), 'New Subtask', 'undo item was rendered');
     });
 });
 QUnit.module('Strip Lines', moduleConfig, () => {
@@ -2676,7 +2761,6 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
         const customTooltipFunction = (task, container) => {
-            $(container).empty();
             return customTooltipText;
         };
         this.clock.tick();
@@ -2695,10 +2779,7 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestCustomTooltipJQuery';
         const customTooltipJQuery = $('<div>TestCustomTooltipJQuery</div>');
-        const customTooltipFunction = (task, container) => {
-            $(container).empty();
-            return customTooltipJQuery;
-        };
+        const customTooltipFunction = customTooltipJQuery;
         this.clock.tick();
         this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
         this.clock.tick();
@@ -2715,31 +2796,15 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
         const customTooltipFunction = (task, container) => {
-            if(task.id === 1) {
-                return;
-            }
-            const template = container.innerHTML;
-            $(container).empty();
-            if(task.id === 2) {
-                return;
-            }
             if(task.id === 3 || task.id === 4) {
                 return customTooltipText;
             }
-            return template;
+            return;
         };
         this.clock.tick();
         this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
         this.clock.tick();
         const ganttCore = getGanttViewCore(this.instance);
-        this.clock.tick();
-        ganttCore.taskEditController.show(0);
-        ganttCore.taskEditController.showTaskInfo(0, 0);
-        this.clock.tick();
-        const tooltipTitleText = this.$element.find(TOOLTIP_SELECTOR).text();
-        const taskTitle = tasks[0].title;
-        assert.equal(tooltipTitleText.indexOf(taskTitle), 0, 'Default template works correctly');
-        ganttCore.taskEditController.tooltip.hide();
         this.clock.tick();
         ganttCore.taskEditController.show(1);
         ganttCore.taskEditController.showTaskInfo(0, 0);

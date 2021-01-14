@@ -648,6 +648,22 @@ QUnit.module('keyboard navigation', {
         assert.ok(!this.dropDownEditor.option('opened'), 'overlay is visible on alt+up press');
     });
 
+    [
+        { key: 'ArrowUp', ctrlKey: true },
+        { key: 'ArrowDown', ctrlKey: true },
+        { key: 'ArrowUp', metaKey: true },
+        { key: 'ArrowDown', metaKey: true }
+    ].forEach((keyDownConfig) => {
+        const commandKey = keyDownConfig.ctrlKey ? 'ctrl' : 'command';
+        QUnit.test(`default behavior of ${keyDownConfig.key} arrow key with ${commandKey} key should not be prevented`, function(assert) {
+            this.keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+
+            assert.notOk(this.keyboard.event.isDefaultPrevented(), 'event is not prevented');
+            assert.notOk(this.keyboard.event.isPropagationStopped(), 'propogation is not stopped');
+            assert.notOk(this.dropDownEditor.option('opened'), 'overlay is closed');
+        });
+    });
+
     QUnit.test('space/altDown key press on readOnly drop down doesn\'t toggle popup visibility', function(assert) {
         const altDown = $.Event('keydown', { key: 'ArrowDown', altKey: true });
 
@@ -1192,6 +1208,17 @@ QUnit.module('options', () => {
         assert.equal($input.val(), '', 'text is not rendered');
     });
 
+    [false, true].forEach((openOnFieldClick) => {
+        QUnit.test(`appearance with openOnFieldClick = ${openOnFieldClick}`, function(assert) {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ openOnFieldClick });
+            const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            const isPointerCursor = $input.css('cursor') === 'pointer';
+
+            assert.strictEqual($dropDownEditor.hasClass('dx-dropdowneditor-field-clickable'), openOnFieldClick, `special css class is ${openOnFieldClick ? '' : 'not'} attached`);
+            assert.strictEqual(isPointerCursor, openOnFieldClick, `input should ${openOnFieldClick ? '' : 'not'} have the pointer cursor`);
+        });
+    });
+
     QUnit.test('openOnFieldClick', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             openOnFieldClick: true
@@ -1199,8 +1226,6 @@ QUnit.module('options', () => {
 
         const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
         const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
-        assert.ok($dropDownEditor.hasClass('dx-dropdowneditor-field-clickable'), 'special css class attached');
 
         $input.trigger('dxclick');
         assert.equal(dropDownEditor.option('opened'), true, 'opened by field click');

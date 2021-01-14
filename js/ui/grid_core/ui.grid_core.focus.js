@@ -330,7 +330,7 @@ const FocusController = core.ViewController.inherit((function() {
                 that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
 
                 that._prepareFocusedRow({
-                    changedItem: change.items[focusedRowIndex],
+                    changedItem: change?.items?.[focusedRowIndex],
                     $tableElement: $tableElement,
                     focusedRowIndex: focusedRowIndex,
                     isMainTable: isMainTable
@@ -675,7 +675,13 @@ export default {
                                     filter = [booleanFilter, 'or', filter];
                                 }
                             } else {
-                                filter = [[selector, sortInfo.desc ? '>' : '<', value], 'or', filter];
+                                const filterOperation = sortInfo.desc ? '>' : '<';
+                                let sortFilter = [selector, filterOperation, value];
+                                if(!sortInfo.desc) {
+                                    sortFilter = [sortFilter, 'or', [selector, '=', null]];
+                                }
+
+                                filter = [sortFilter, 'or', filter];
                             }
                         });
                     }

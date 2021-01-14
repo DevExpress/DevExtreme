@@ -41,18 +41,18 @@ export class DateTableLayoutBase extends JSXComponent(DateTableLayoutBaseProps) 
 
   get isVirtual(): boolean {
     const { viewData } = this.props;
-    return !!viewData!.isVirtual;
+    return !!viewData.isVirtual;
   }
 
   get topVirtualRowHeight(): number {
-    return this.props.viewData!.topVirtualRowHeight || 0;
+    return this.props.viewData.topVirtualRowHeight || 0;
   }
 
   get bottomVirtualRowHeight(): number {
-    return this.props.viewData!.bottomVirtualRowHeight || 0;
+    return this.props.viewData.bottomVirtualRowHeight || 0;
   }
 
   get virtualCellsCount(): number {
-    return this.props.viewData!.groupedData[0].dateTable[0].length;
+    return this.props.viewData.groupedData[0].dateTable[0].length;
   }
 }

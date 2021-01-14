@@ -640,6 +640,21 @@ QUnit.module('dxAutocomplete', {
             .keyDown(KEY_UP);
     });
 
+    [
+        { key: KEY_DOWN, ctrlKey: true },
+        { key: KEY_UP, ctrlKey: true },
+        { key: KEY_DOWN, metaKey: true },
+        { key: KEY_UP, metaKey: true }
+    ].forEach((keyDownConfig) => {
+        const commandKey = keyDownConfig.ctrlKey ? 'ctrl' : 'command';
+        QUnit.test(`default behavior of ${keyDownConfig.key} arrow key with ${commandKey} key should not be prevented`, function(assert) {
+            this.keyboard.keyDown(keyDownConfig.key, keyDownConfig);
+
+            assert.notOk(this.keyboard.event.isDefaultPrevented(), 'event is not prevented');
+            assert.notOk(this.keyboard.event.isPropagationStopped(), 'propogation is not stopped');
+        });
+    });
+
     QUnit.testInActiveWindow('enter - prevent default', function(assert) {
         assert.expect(1);
 
@@ -1621,3 +1636,74 @@ QUnit.module('widget sizing render', {
     });
 });
 
+QUnit.module('correct event should be passed to valueChanged', {
+    beforeEach: function() {
+        fx.off = true;
+        this.valueChangedHandler = sinon.spy();
+        this.clock = sinon.useFakeTimers();
+        this.$element = $('#widget').dxAutocomplete({
+            items: ['11', '22'],
+            searchTimeout: 0,
+            onValueChanged: this.valueChangedHandler
+        });
+        this.instance = this.$element.dxAutocomplete('instance');
+        this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+        this.getListItems = () => $(`.${LIST_ITEM_CLASS}`);
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('on item select using click (T963574)', function(assert) {
+        this.keyboard.type('1');
+
+        const $listItems = this.getListItems();
+        const $firstItem = $listItems.eq(0);
+        $firstItem.trigger('dxclick');
+
+        const valueChangedEvent = this.valueChangedHandler.getCall(1).args[0].event;
+        assert.strictEqual(valueChangedEvent.type, 'dxclick', 'event type is correct');
+        assert.strictEqual(valueChangedEvent.target, $firstItem.get(0), 'event target is correct');
+    });
+
+    QUnit.test('on runtime change after item select using click', function(assert) {
+        this.keyboard.type('1');
+
+        const $listItems = this.getListItems();
+        const $firstItem = $listItems.eq(0);
+        $firstItem.trigger('dxclick');
+
+        this.instance.option('value', '33');
+
+        const valueChangedEvent = this.valueChangedHandler.getCall(2).args[0].event;
+        assert.strictEqual(valueChangedEvent, undefined, 'event is undefined');
+    });
+
+    QUnit.test('on item select using enter', function(assert) {
+        this.keyboard
+            .type('1')
+            .press('down')
+            .press('enter');
+
+        const $listItems = this.getListItems();
+        const $firstItem = $listItems.eq(0);
+
+        const valueChangedEvent = this.valueChangedHandler.getCall(1).args[0].event;
+        assert.strictEqual(valueChangedEvent.type, 'keydown', 'event type is correct');
+        assert.strictEqual(valueChangedEvent.target.get(0), $firstItem.get(0), 'event target is correct');
+    });
+
+    QUnit.test('on runtime change after item select using enter', function(assert) {
+        this.keyboard
+            .type('1')
+            .press('down')
+            .press('enter');
+
+        this.instance.option('value', '33');
+
+        const valueChangedEvent = this.valueChangedHandler.getCall(2).args[0].event;
+        assert.strictEqual(valueChangedEvent, undefined, 'event is undefined');
+    });
+});

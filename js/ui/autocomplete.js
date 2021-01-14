@@ -4,6 +4,7 @@ import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import { Deferred } from '../core/utils/deferred';
+import { isCommandKeyPressed } from '../events/utils/index';
 
 // STYLE autocomplete
 
@@ -20,20 +21,24 @@ const Autocomplete = DropDownList.inherit({
 
         return extend({}, parent, {
             upArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if(item && !this._calcNextItem(-1)) {
-                    this._clearFocusedItem();
-                    return false;
+                if(!isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(item && !this._calcNextItem(-1)) {
+                        this._clearFocusedItem();
+                        return false;
+                    }
                 }
                 return true;
             },
             downArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if(item && !this._calcNextItem(1)) {
-                    this._clearFocusedItem();
-                    return false;
+                if(!isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(item && !this._calcNextItem(1)) {
+                        this._clearFocusedItem();
+                        return false;
+                    }
                 }
                 return true;
             },
@@ -133,6 +138,7 @@ const Autocomplete = DropDownList.inherit({
     },
 
     _listItemClickHandler: function(e) {
+        this._saveValueChangeEvent(e.event);
         const value = this._displayGetter(e.itemData);
         this.option('value', value);
         this.close();

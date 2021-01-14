@@ -21,7 +21,10 @@
                         name: "test",
                         options: {
                             icon: "home",
-                            onClick: () => editor.option("value", "item2")
+                            onClick: () => {
+                                editor.option("value", "item2");
+                                editor.focus(); // NOTE: need because of editor input rerendering
+                            }
                         }
                     }]
                 }).dxSelectBox("instance");

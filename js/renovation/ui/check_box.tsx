@@ -15,7 +15,7 @@ import devices from '../../core/devices';
 import Guid from '../../core/guid';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
-import Themes from '../../ui/themes';
+import { isMaterial, current } from '../../ui/themes';
 import BaseComponent from '../preact_wrapper/check_box';
 import BaseWidgetProps from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
@@ -139,7 +139,7 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
   options: { focusStateEnabled: true },
 }, {
   // eslint-disable-next-line import/no-named-as-default-member
-  device: (): boolean => Themes.isMaterial(Themes.current()),
+  device: (): boolean => isMaterial(current()),
   options: { useInkRipple: true },
 }]);
 
