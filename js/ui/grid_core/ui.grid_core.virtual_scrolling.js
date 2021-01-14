@@ -1,11 +1,9 @@
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
-import { deferUpdate, deferRender } from '../../core/utils/common';
 import { VirtualScrollController, subscribeToExternalScrollers } from './ui.grid_core.virtual_scrolling_core';
 import gridCoreUtils from './ui.grid_core.utils';
 import { each } from '../../core/utils/iterator';
 import { Deferred } from '../../core/utils/deferred';
-import { move } from '../../animation/translator';
 import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
@@ -502,48 +500,6 @@ const VirtualScrollingRowsViewExtender = (function() {
                     this._addVirtualRow($(element), isFixed, 'top', top);
                     this._addVirtualRow($(element), isFixed, 'bottom', bottom);
                     this._isFixedTableRendering = false;
-                });
-            } else {
-                deferUpdate(() => {
-                    this._updateContentPositionCore();
-                });
-            }
-        },
-
-        _updateContentPositionCore: function() {
-            const that = this;
-            let contentHeight;
-            let $tables;
-            let $contentTable;
-            const rowHeight = that._rowHeight || 20;
-            const virtualItemsCount = that._dataController.virtualItemsCount();
-
-            if(virtualItemsCount) {
-                const contentElement = that._findContentElement();
-                $tables = contentElement.children();
-                $contentTable = $tables.eq(0);
-                const virtualTable = $tables.eq(1);
-
-                that._contentTableHeight = $contentTable[0].offsetHeight;
-
-                that._dataController.viewportItemSize(rowHeight);
-                that._dataController.setContentSize(that._contentTableHeight);
-
-                contentHeight = that._dataController.getVirtualContentSize();
-                const top = that._dataController.getContentOffset();
-
-                deferRender(function() {
-                    move($contentTable, { left: 0, top: top });
-
-                    // TODO jsdmitry: Separate this functionality on render and resize
-                    const isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
-                        !that._isTableLinesDisplaysCorrect(virtualTable) ||
-                        !that._isColumnElementsEqual($contentTable.find('col'), virtualTable.find('col'));
-
-                    if(isRenderVirtualTableContentRequired) {
-                        that._contentHeight = contentHeight;
-                        that._renderVirtualTableContent(virtualTable, contentHeight);
-                    }
                 });
             }
         },
