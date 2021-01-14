@@ -355,11 +355,9 @@ QUnit.module('general', {}, () => {
 
         actionButton.focus();
         assert.notOk($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is not focused');
-        assert.ok(actionButton.$element().hasClass(STATE_FOCUSED_CLASS), 'inner button is focused');
 
         textEditor.focus();
         assert.ok($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is focused');
-        assert.notOk(actionButton.$element().hasClass(STATE_FOCUSED_CLASS), 'inner button is not focused');
     });
 
     QUnit.test('TextEditor should pass integration options to the nested buttons (T894344)', function(assert) {
