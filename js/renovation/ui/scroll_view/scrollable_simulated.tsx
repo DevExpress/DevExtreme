@@ -39,6 +39,7 @@ import { TopPocket } from './topPocket';
 import { BottomPocket } from './bottomPocket';
 
 import {
+  dxScrollInit,
   dxScrollStart,
   dxScrollMove,
   dxScrollEnd,
@@ -55,7 +56,7 @@ function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
-    cssClasses, wrapperRef, contentRef, containerRef,
+    cssClasses, wrapperRef, contentRef, containerRef, tabIndex,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -80,7 +81,12 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
-        <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
+        <div
+          className={SCROLLABLE_CONTAINER_CLASS}
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+          tabIndex={tabIndex}
+          ref={containerRef}
+        >
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
             {forceGeneratePockets && (
             <TopPocket
@@ -237,6 +243,24 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   }
 
   @Effect()
+  initEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    /* istanbul ignore next */
+    dxScrollInit.on(this.wrapperRef,
+      (e: Event) => {
+        this.initHandler(e);
+      }, {
+        getDirection: (e) => this.getDirection(e),
+        validate: (e) => this.validate(e),
+        isNative: false,
+        scrollTarget: this.containerRef,
+      }, { namespace });
+
+    return (): void => dxScrollInit.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
   startEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollable';
 
@@ -298,6 +322,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
 
   /* istanbul ignore next */
   // eslint-disable-next-line
+  initHandler(event: Event): void {
+    console.log('initHandler', event, this);
+  }
+  /* istanbul ignore next */
+  // eslint-disable-next-line
   private handleStart(event: Event): void {
     // console.log('handleEnd', event, this);
   }
@@ -320,6 +349,18 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   // eslint-disable-next-line
   private handleCancel(event: Event): void {
     // console.log('handleCancel', event, this);
+  }
+
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private getDirection(event: Event): string {
+    return 'vertical'; // TODO
+  }
+
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private validate(event: Event): boolean {
+    return true; // TODO
   }
 
   get cssClasses(): string {
