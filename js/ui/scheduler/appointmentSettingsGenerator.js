@@ -501,12 +501,17 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
 
     _updateGroupIndices(appointments, itemResources) {
         const groupIndices = this._getGroupIndices(itemResources);
-        const result = appointments.map(appointment => extend({ groupIndex: 0 }, appointment));
+        const result = [];
 
         groupIndices.forEach(groupIndex => {
             const groupStartDate = this.viewDataProvider.getGroupStartDate(groupIndex);
             if(groupStartDate) {
-                result.forEach(appointment => appointment.groupIndex = groupIndex);
+                appointments.forEach(appointment => {
+                    const appointmentCopy = extend({}, appointment);
+                    appointmentCopy.groupIndex = groupIndex;
+
+                    result.push(appointmentCopy);
+                });
             }
         });
 
