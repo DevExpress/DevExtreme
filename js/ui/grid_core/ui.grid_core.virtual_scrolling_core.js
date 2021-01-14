@@ -304,7 +304,8 @@ export const VirtualScrollController = Class.inherit((function() {
 
             this._viewportSize = 0;
             this._viewportItemSize = 20;
-            this._viewportItemIndex = -1;
+            this._viewportItemIndex = 0;
+            this._contentSize = 0;
             this._itemSizes = {};
             this._sizeRatio = 1;
             this._items = [];
@@ -407,22 +408,16 @@ export const VirtualScrollController = Class.inherit((function() {
             return result;
         },
 
-        setContentSize: function(size) {
-            const sizes = Array.isArray(size) && size;
+        setContentItemSizes: function(sizes) {
             const virtualItemsCount = this.virtualItemsCount();
 
-            if(sizes) {
-                size = sizes.reduce((a, b) => a + b, 0);
-            }
-
-            this._contentSize = size;
+            this._contentSize = sizes.reduce((a, b) => a + b, 0);
 
             if(virtualItemsCount) {
-                if(sizes) {
-                    sizes.forEach((size, index) => {
-                        this._itemSizes[virtualItemsCount.begin + index] = size;
-                    });
-                }
+                sizes.forEach((size, index) => {
+                    this._itemSizes[virtualItemsCount.begin + index] = size;
+                });
+
                 const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + this.itemsCount()) * this._viewportItemSize;
                 const contentHeightLimit = getContentHeightLimit(browser);
                 if(virtualContentSize > contentHeightLimit) {

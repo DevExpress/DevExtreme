@@ -51,6 +51,16 @@ function resetMock(mock) {
     });
 }
 
+function getContentSizes(size, count) {
+    const items = [];
+
+    for(let i = 0; i < count; i++) {
+        items.push(size);
+    }
+
+    return items;
+}
+
 const moduleConfig = {
     beforeEach: function() {
         mockComponent.option.withArgs('scrolling.mode').returns('virtual');
@@ -184,23 +194,24 @@ QUnit.module('VirtualScrollingController. Virtual scrolling mode', moduleConfig,
         }]);
     });
 
-    QUnit.test('setContentSize. No items', function(assert) {
+    QUnit.test('setContentItemSizes. No items', function(assert) {
         this.scrollController.viewportSize(12);
-        this.scrollController.setContentSize(0);
-
+        this.scrollController.setContentItemSizes([]);
         const virtualContentSize = this.scrollController.getVirtualContentSize();
 
         assert.ok(virtualContentSize);
         assert.strictEqual(virtualContentSize, DEFAULT_TOTAL_ITEMS_COUNT * this.scrollController.viewportItemSize());
     });
 
-    QUnit.test('setContentSize. When items', function(assert) {
+    QUnit.test('setContentItemSizes. When items', function(assert) {
         this.scrollController.viewportSize(12);
         this.scrollController.load();
 
         const contentSize = 200;
 
-        this.scrollController.setContentSize(contentSize);
+        const contentSizes = getContentSizes(20, 10);
+
+        this.scrollController.setContentItemSizes(contentSizes);
 
         assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + contentSize);
         assert.strictEqual(this.scrollController.beginPageIndex(), 0);
@@ -219,7 +230,10 @@ QUnit.module('Virtual scrolling', {
         this.scrollController.viewportSize(12);
         this.scrollController.load();
         this.contentSize = 400;
-        this.scrollController.setContentSize(this.contentSize);
+
+        const contentSizes = getContentSizes(20, 20);
+
+        this.scrollController.setContentItemSizes(contentSizes);
         mockDataSource.load.reset();
         this.externalDataChangedHandler.reset();
     },
@@ -491,9 +505,9 @@ QUnit.module('Virtual scrolling', {
         const realItemSize = 10;
         const realItemSizes = Array.apply(null, Array(20)).map(() => realItemSize);
 
-        this.scrollController.setContentSize(realItemSizes);
+        this.scrollController.setContentItemSizes(realItemSizes);
         this.scrollController.setViewportPosition(1000);
-        this.scrollController.setContentSize(realItemSizes);
+        this.scrollController.setContentItemSizes(realItemSizes);
 
         assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 2 * mockDataSource.pageSize() - realItemSizes.length) * this.scrollController.viewportItemSize() + 2 * realItemSizes.length * realItemSize);
     });
@@ -522,9 +536,11 @@ QUnit.module('Virtual scrolling', {
     QUnit.test('setViewport position. DataSource with too many items', function(assert) {
         mockDataSource.totalItemsCount.returns(100000000000);
 
-        this.scrollController.setContentSize(this.contentSize);
-
+        const contentSizes = getContentSizes(20, 20);
+        this.scrollController.setContentItemSizes(contentSizes);
+        this.scrollController.reset();
         this.scrollController.setViewportPosition(CONTENT_HEIGHT_LIMIT / 2);
+
 
         assert.roughEqual(this.scrollController.getVirtualContentSize(), CONTENT_HEIGHT_LIMIT + this.contentSize, 1.1);
 
@@ -558,7 +574,8 @@ QUnit.module('Subscribe to external scrollable events', {
         this.scrollController.viewportSize(12);
         this.scrollController.load();
         this.contentSize = 400;
-        this.scrollController.setContentSize(this.contentSize);
+        const contentSizes = getContentSizes(20, 20);
+        this.scrollController.setContentItemSizes(contentSizes);
         mockDataSource.load.reset();
         this.externalDataChangedHandler.reset();
         this.clock = sinon.useFakeTimers(),

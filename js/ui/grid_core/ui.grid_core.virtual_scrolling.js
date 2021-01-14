@@ -262,7 +262,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         'virtualItemsCount',
         'getContentOffset',
         'getVirtualContentSize',
-        'setContentSize', 'setViewportPosition',
+        'setContentItemSizes', 'setViewportPosition',
         'getViewportItemIndex', 'setViewportItemIndex', 'getItemIndexByPosition',
         'viewportSize', 'viewportItemSize', 'getItemSize', 'getItemSizes',
         'pageIndex', 'beginPageIndex', 'endPageIndex',
@@ -485,7 +485,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                 if(!isRender) {
                     const rowHeights = this._getRowHeights();
                     const correctedRowHeights = this._correctRowHeights(rowHeights);
-                    dataController.setContentSize(correctedRowHeights);
+                    dataController.setContentItemSizes(correctedRowHeights);
                 }
                 const top = dataController.getContentOffset('begin');
                 const bottom = dataController.getContentOffset('end');
@@ -1009,14 +1009,14 @@ export default {
                             dataSource?.setViewportPosition.apply(dataSource, arguments);
                         }
                     },
-                    setContentSize: function(sizes) {
+                    setContentItemSizes: function(sizes) {
                         const rowsScrollController = this._rowsScrollController;
 
 
-                        rowsScrollController && rowsScrollController.setContentSize(sizes);
+                        rowsScrollController && rowsScrollController.setContentItemSizes(sizes);
 
                         const dataSource = this._dataSource;
-                        return dataSource && dataSource.setContentSize(sizes);
+                        return dataSource && dataSource.setContentItemSizes(sizes);
                     },
                     loadIfNeed: function() {
                         const rowsScrollController = this._rowsScrollController;
