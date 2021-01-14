@@ -524,20 +524,20 @@ class SchedulerAppointments extends CollectionWidget {
         const allDay = settings.allDay;
         this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
-        const deferredColor = this.invoke('getAppointmentColor', {
-            itemData: this._getItemData(element),
-            groupIndex: settings.groupIndex,
-        });
-
-
         if(settings.virtual) {
+            const deferredColor = this.invoke('getAppointmentColor', {
+                itemData: data,
+                groupIndex: settings.groupIndex,
+            });
             this._processVirtualAppointment(settings, element, data, deferredColor);
         } else {
             const { info } = settings;
 
             this._createComponent(element, Appointment, {
+                data,
+                groupIndex: settings.groupIndex,
+
                 observer: this.option('observer'),
-                data: data,
                 geometry: geometry,
                 direction: settings.direction || 'vertical',
                 allowResize: allowResize,
@@ -549,12 +549,6 @@ class SchedulerAppointments extends CollectionWidget {
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(data, settings)
-            });
-
-            deferredColor.done(function(color) {
-                if(color) {
-                    element.css('backgroundColor', color);
-                }
             });
         }
     }
