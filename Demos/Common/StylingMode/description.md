@@ -1,3 +1,3 @@
 This example demonstrates editor styling modes. You can use the **Styling Mode** select box to&nbsp;change the mode.
 
-Note that in&nbsp;frameworks that support property binding (Angular, AngularJS, Vue, and React), each editor&rsquo;s **stylingMode** option is&nbsp;bound to&nbsp;a&nbsp;property you can change using the select box. In&nbsp;jQuery and ASP.NET MVC, the select box changes the global **editorStylingMode** option that applies the styling mode to&nbsp;all the editors on&nbsp;the page.
+Note that in&nbsp;frameworks that support property binding (Angular, AngularJS, Vue, and React), each editor&rsquo;s **stylingMode** property is&nbsp;bound to&nbsp;a&nbsp;property you can change using the select box. In&nbsp;jQuery and ASP.NET MVC, the select box changes the global **editorStylingMode** property that applies the styling mode to&nbsp;all the editors on&nbsp;the page.

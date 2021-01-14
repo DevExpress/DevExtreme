@@ -1,4 +1,4 @@
-When the [adaptivityEnabled](/Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/#adaptivityEnabled) option is set to **true**, Scheduler elements adapt to small screens as follows:
+When the [adaptivityEnabled](/Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/#adaptivityEnabled) property is set to **true**, Scheduler elements adapt to small screens as follows:
 
 * [Cell overflow indicators](/Documentation/Guide/Widgets/Scheduler/Appointments/Cell_Overflow_Indicator/) become larger to accommodate touch gestures.
 * The appointment list **for a chosen date** slides in from the edge of the screen.

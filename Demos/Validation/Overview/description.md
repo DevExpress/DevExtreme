@@ -6,4 +6,4 @@ In&nbsp;the ASP.NET MVC&nbsp;demo, editors extract validation rules from data an
 
 
 
-Note that the _&laquo;Register&raquo;_ button here does not implement a&nbsp;usual **onClick** event handler. Instead, it&nbsp;has the **useSubmitBehavior** option set to _true_. This setting tells the button to&nbsp;validate and submit the HTML form in&nbsp;which it&nbsp;is&nbsp;nested, with no&nbsp;further configuration required.
+Note that the _&laquo;Register&raquo;_ button here does not implement a&nbsp;usual **onClick** event handler. Instead, it&nbsp;has the **useSubmitBehavior** property set to _true_. This setting tells the button to&nbsp;validate and submit the HTML form in&nbsp;which it&nbsp;is&nbsp;nested, with no&nbsp;further configuration required.

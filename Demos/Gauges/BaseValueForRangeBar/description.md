@@ -1,1 +1,1 @@
-By&nbsp;default, the **RangeBar** starts from the beginning of&nbsp;the **LinerGauge** scale. This demo illustrates how to&nbsp;use the **baseValue** option to&nbsp;specify the scale value from which the **RangeBar** should be&nbsp;drawn.
+By&nbsp;default, the **RangeBar** starts from the beginning of&nbsp;the **LinerGauge** scale. This demo illustrates how to&nbsp;use the **baseValue** property to&nbsp;specify the scale value from which the **RangeBar** should be&nbsp;drawn.

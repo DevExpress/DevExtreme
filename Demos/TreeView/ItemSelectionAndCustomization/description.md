@@ -1,6 +1,6 @@
 To select a node, users can click a checkbox next to it. Set the [showCheckBoxesMode](/Documentation/ApiReference/UI_Widgets/dxTreeView/Configuration/#showCheckBoxesMode) to *"normal"* or *"selectAll"* to display node checkboxes. The *"selectAll"* mode also enables a checkbox that selects all nodes simultaneously. If [selectByClick](/Documentation/ApiReference/UI_Widgets/dxTreeView/Configuration/#selectByClick) is enabled, users can click nodes to select them. 
 
-Use the following **TreeView** options to adjust selection:
+Use the following **TreeView** properties to adjust selection:
  
 - [selectionMode](/Documentation/ApiReference/UI_Widgets/dxTreeView/Configuration/#selectionMode)             
 Specifies whether multiple node selection is allowed.

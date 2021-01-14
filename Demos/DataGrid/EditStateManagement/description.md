@@ -1,6 +1,6 @@
 Our **DataGrid** UI component manages its edit state automatically. If your use case requires full control over the editing process, you can use the API members below to manage state manually.
 
-**UI component Options**
+**UI component Properties**
 
 - **editing**.[editRowKey](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#editRowKey)        
 The key for the row being edited.
@@ -11,7 +11,7 @@ The name or data field of the column being edited.
 - **editing**.[changes](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#changes)       
 Pending row changes.
 
-You can get and set these options at runtime to access and change edit state. In this demo, the [onOptionChanged](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onOptionChanged) function gets **editRowKey** and **changes** option values and displays them under the **DataGrid**.
+You can get and set these properties at runtime to access and change edit state. In this demo, the [onOptionChanged](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onOptionChanged) function gets **editRowKey** and **changes** property values and displays them under the **DataGrid**.
 
 **Utility Method**
 
@@ -38,6 +38,6 @@ Pending changes are stored in the `e.changes` array. This array has only a singl
 If the server successfully saves changes, call the **applyChanges** method to save the same changes in a local array.
 
 1. **Update the UI component's data source and reset edit state**         
-Assign the local array to the [dataSource](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#dataSource), **null** to the **editRowKey**, and an empty array to the **changes** option.
+Assign the local array to the [dataSource](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#dataSource), **null** to the **editRowKey**, and an empty array to the **changes** property.
 
 [note] This functionality is available as a <a href="https://www.devexpress.com/aboutus/pre-release.xml" target="_blank">community technology preview (CTP)</a>. Should you have any questions or suggestions prior to its official release, please email your comments to <a href="mailto:support@devexpress.com">support@devexpress.com</a>. You can also share your feedback on <a href="https://github.com/DevExpress/devextreme-product/blob/master/Discussion%20Pages/DataGrid%20and%20TreeList%20-%20Editing%20API%20Enhancements.md" target="_blank">this feature's discussion page</a>.

@@ -2,4 +2,4 @@ The [DevExpress.viz.exportFromMarkup(markup, options)](/Documentation/ApiReferen
  
 The **markup** parameter accepts valid SVG markup (see the `prepareMarkup()` function in the code). To get the markup of a UI component,
 call its [svg()](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Methods/#svg) method.
-The **options** parameter accepts an object whose fields configure export options. In this demo, we specify the `width`, `height`, `format`, and `svgToCanvas` fields.  Refer to the [method description](/Documentation/ApiReference/Common/utils/viz/Methods/#exportFromMarkupmarkup_options) for more information on these and other available fields.
+The **options** parameter accepts an object whose fields configure export properties. In this demo, we specify the `width`, `height`, `format`, and `svgToCanvas` fields.  Refer to the [method description](/Documentation/ApiReference/Common/utils/viz/Methods/#exportFromMarkupmarkup_options) for more information on these and other available fields.

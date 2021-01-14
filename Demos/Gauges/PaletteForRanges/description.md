@@ -1,1 +1,1 @@
-This demo shows how to&nbsp;combine scale values into ranges. The ranges are defined within the array assigned to&nbsp;the **ranges** option of&nbsp;the **rangeContainer** object. The colors for the ranges are taken from the predefined palette specified by&nbsp;the **palette** option.
+This demo shows how to&nbsp;combine scale values into ranges. The ranges are defined within the array assigned to&nbsp;the **ranges** property of&nbsp;the **rangeContainer** object. The colors for the ranges are taken from the predefined palette specified by&nbsp;the **palette** property.

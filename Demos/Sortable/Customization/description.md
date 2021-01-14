@@ -1,4 +1,4 @@
-This demo illustrates some of the options that allow you to customize the [Sortable](/Documentation/ApiReference/UI_Widgets/dxSortable/) UI component's behavior.
+This demo illustrates some of the properties that allow you to customize the [Sortable](/Documentation/ApiReference/UI_Widgets/dxSortable/) UI component's behavior.
 
 - [dropFeedbackMode](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#dropFeedbackMode)    
   Specifies how to highlight the item's drop position.

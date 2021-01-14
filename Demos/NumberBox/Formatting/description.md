@@ -1,1 +1,1 @@
-This demo shows how to&nbsp;specify the currency, accounting, percent and other formats using the [format](/Documentation/ApiReference/UI_Widgets/dxNumberBox/Configuration/#format) option. It&nbsp;makes the **NumberBox** not only format the display value, but also control the user input.
+This demo shows how to&nbsp;specify the currency, accounting, percent and other formats using the [format](/Documentation/ApiReference/UI_Widgets/dxNumberBox/Configuration/#format) property. It&nbsp;makes the **NumberBox** not only format the display value, but also control the user input.

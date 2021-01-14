@@ -1,1 +1,1 @@
-This demo shows how to&nbsp;use markers of&nbsp;the _&laquo;pie&raquo;_ type in&nbsp;the **VectorMap**. Values for pie markers are provided by&nbsp;the data field whose name is&nbsp;assigned to&nbsp;the **dataField** option.
+This demo shows how to&nbsp;use markers of&nbsp;the _&laquo;pie&raquo;_ type in&nbsp;the **VectorMap**. Values for pie markers are provided by&nbsp;the data field whose name is&nbsp;assigned to&nbsp;the **dataField** property.

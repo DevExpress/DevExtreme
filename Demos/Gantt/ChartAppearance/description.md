@@ -5,4 +5,4 @@ This demo illustrates the DevExtreme HTML5 JavaScript **Gantt** UI component's a
 * [showResources](/Documentation/ApiReference/UI_Widgets/dxGantt/Configuration/#showResources) - Allows you to specify resources for tasks.
 * [taskTooltipContentTemplate](/Documentation/ApiReference/UI_Widgets/dxGantt/Configuration/#taskTooltipContentTemplate) - Allows you to specify custom content for the task tooltip.
 
-Use the options in the demo to see how they affect the Gantt's behavior and appearance.
+Use the properties in the demo to see how they affect the Gantt's behavior and appearance.

@@ -1,3 +1,3 @@
-The aggregation algorithm depends on the **aggregateByCategory** option. In this demo, this option is set to **true** and applies the *"sum"* [aggregation method](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/commonSeriesSettings/aggregation/#method) for the groups specified in the **dataSource**. 
+The aggregation algorithm depends on the **aggregateByCategory** property. In this demo, this property is set to **true** and applies the *"sum"* [aggregation method](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/commonSeriesSettings/aggregation/#method) for the groups specified in the **dataSource**. 
 
 If **aggregateByCategory** is **false**, the specified aggregation method is not applied. The first series point is displayed instead.

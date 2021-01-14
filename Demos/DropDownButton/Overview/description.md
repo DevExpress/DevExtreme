@@ -2,11 +2,11 @@ The **DropDownButton** is&nbsp;a&nbsp;button that opens a&nbsp;drop-down menu. T
 
 
 
-Menu items can be&nbsp;specified in&nbsp;the [items](/Documentation/ApiReference/UI_Widgets/dxDropDownButton/Configuration/#items) or&nbsp;[dataSource](/Documentation/ApiReference/UI_Widgets/dxDropDownButton/Configuration/#dataSource) options. Use **dataSource** if&nbsp;data is&nbsp;remote or&nbsp;should be&nbsp;processed. To&nbsp;customize menu items, implement&nbsp;an [itemTemplate](/Documentation/ApiReference/UI_Widgets/dxDropDownButton/Configuration/#itemTemplate).
+Menu items can be&nbsp;specified in&nbsp;the [items](/Documentation/ApiReference/UI_Widgets/dxDropDownButton/Configuration/#items) or&nbsp;[dataSource](/Documentation/ApiReference/UI_Widgets/dxDropDownButton/Configuration/#dataSource) properties. Use **dataSource** if&nbsp;data is&nbsp;remote or&nbsp;should be&nbsp;processed. To&nbsp;customize menu items, implement&nbsp;an [itemTemplate](/Documentation/ApiReference/UI_Widgets/dxDropDownButton/Configuration/#itemTemplate).
 
 
 
-The **DropDownButton** stores the most recent selected menu item if&nbsp;you set the [useSelectMode](/Documentation/ApiReference/UI_Widgets/dxDropDownButton/Configuration/#useSelectMode) option to&nbsp;**true**. In&nbsp;this case, the button uses the selected item&rsquo;s text and icon.
+The **DropDownButton** stores the most recent selected menu item if&nbsp;you set the [useSelectMode](/Documentation/ApiReference/UI_Widgets/dxDropDownButton/Configuration/#useSelectMode) property to&nbsp;**true**. In&nbsp;this case, the button uses the selected item&rsquo;s text and icon.
 
 
 

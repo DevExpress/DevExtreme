@@ -1,4 +1,4 @@
-This example demonstrates the following options:
+This example demonstrates the following properties:
 
 * [showBorders](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#showBorders)      
 Specifies whether the outer borders of the UI component are visible.
@@ -12,4 +12,4 @@ Specifies whether horizontal lines that separate rows are visible.
 * [rowAlternationEnabled](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#rowAlternationEnabled)      
 Specifies whether rows should be in alternate colors.
 
-To toggle these options, select the corresponding checkbox under the **DataGrid**.
+To toggle these properties, select the corresponding checkbox under the **DataGrid**.

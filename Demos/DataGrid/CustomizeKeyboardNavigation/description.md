@@ -1,4 +1,4 @@
-The following options customize keyboard navigation:
+The following properties customize keyboard navigation:
  
 - [enterKeyAction](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/keyboardNavigation/#enterKeyAction)    
 Specifies the UI component's actions when a user presses Enter key: 
@@ -15,4 +15,4 @@ Specifies the direction in which to move focus when a user presses Enter:
 - [editOnKeyPress](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/keyboardNavigation/#editOnKeyPress)    
 Specifies whether to start entering a new cell value on a key press.
 
-In this demo, you can use the controls under the **DataGrid** to change any of these options.
+In this demo, you can use the controls under the **DataGrid** to change any of these properties.

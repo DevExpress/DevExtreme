@@ -1,1 +1,1 @@
-This example illustrates the visualization of&nbsp;periodic data. To&nbsp;notify the UI component that data is&nbsp;periodic, the **period** option of&nbsp;the **argumentAxis** is&nbsp;specified.
+This example illustrates the visualization of&nbsp;periodic data. To&nbsp;notify the UI component that data is&nbsp;periodic, the **period** property of&nbsp;the **argumentAxis** is&nbsp;specified.

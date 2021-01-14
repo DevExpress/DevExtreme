@@ -1,4 +1,4 @@
-Filter and search results depend on the [filterMode](/Documentation/ApiReference/UI_Widgets/dxTreeList/Configuration/#filterMode) option. The **TreeList** supports the following modes:
+Filter and search results depend on the [filterMode](/Documentation/ApiReference/UI_Widgets/dxTreeList/Configuration/#filterMode) property. The **TreeList** supports the following modes:
  
 - *"matchOnly"*    
   The results include only rows that meet the filter condition.

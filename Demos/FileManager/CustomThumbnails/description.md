@@ -1,1 +1,1 @@
-The **FileManager** UI component allows you to provide custom thumbnails. Handle the [customizeThumbnail](/Documentation/ApiReference/UI_Widgets/dxFileManager/Configuration/#customizeThumbnail) option to specify how the UI component presents files in folders.
+The **FileManager** UI component allows you to provide custom thumbnails. Handle the [customizeThumbnail](/Documentation/ApiReference/UI_Widgets/dxFileManager/Configuration/#customizeThumbnail) property to specify how the UI component presents files in folders.

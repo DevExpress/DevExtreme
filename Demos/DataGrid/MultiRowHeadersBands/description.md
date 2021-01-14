@@ -4,6 +4,6 @@ You can drag one of the bands across the grid to reorder all its banded columns 
 
 To create the banded layout, do one of the following:
 
-* Assign a hierarchical structure to the [columns](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/) option. The code in this demo is an example.
+* Assign a hierarchical structure to the [columns](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/) property. The code in this demo is an example.
 
-* Implement a [customizeColumns](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#customizeColumns) function where you should specify the [ownerBand](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#ownerBand) and [isBand](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#isBand) column options. Refer to the **isBand** description for a code sample.
+* Implement a [customizeColumns](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#customizeColumns) function where you should specify the [ownerBand](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#ownerBand) and [isBand](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#isBand) column properties. Refer to the **isBand** description for a code sample.

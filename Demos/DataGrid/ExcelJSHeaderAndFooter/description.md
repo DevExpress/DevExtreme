@@ -4,5 +4,5 @@ Review the [onExporting](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Confi
 
 - <a href="https://github.com/exceljs/exceljs#merged-cells" target="_blank">Merged cells</a>
 - <a href="https://github.com/exceljs/exceljs#value-types" target="_blank">Cell values</a> formatting
-- <a href="https://github.com/exceljs/exceljs#fonts" target="_blank">Font options</a>
+- <a href="https://github.com/exceljs/exceljs#fonts" target="_blank">Font properties</a>
 - Text <a href="https://github.com/exceljs/exceljs#alignment" target="_blank">alignment</a>

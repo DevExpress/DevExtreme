@@ -1,3 +1,3 @@
-In&nbsp;this demo, the **visualRange** option is&nbsp;used to&nbsp;zoom the chart initially. The **zoomAndPan**.**argumentAxis** option allows you to&nbsp;zoom and scroll the argument axis at&nbsp;runtime.
+In&nbsp;this demo, the **visualRange** property is&nbsp;used to&nbsp;zoom the chart initially. The **zoomAndPan**.**argumentAxis** property allows you to&nbsp;zoom and scroll the argument axis at&nbsp;runtime.
 
 Zooming and scrolling are available on&nbsp;mouse-equipped and touch-enable devices: you can use the mouse wheel/spread and pinch gestures to&nbsp;zoom, and the scrollbar/drag gesture to&nbsp;scroll.

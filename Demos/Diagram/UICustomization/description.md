@@ -1,4 +1,4 @@
-The following options allow you to customize the **Diagram** UI component's UI elements:
+The following properties allow you to customize the **Diagram** UI component's UI elements:
 
 * [contextMenu](/Documentation/ApiReference/UI_Widgets/dxDiagram/Configuration/contextMenu/)
 * [contextToolbox](/Documentation/ApiReference/UI_Widgets/dxDiagram/Configuration/contextToolbox/)

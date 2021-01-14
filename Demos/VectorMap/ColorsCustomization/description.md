@@ -1,4 +1,4 @@
-This demo shows how to&nbsp;color different map elements. The map represented here indicates the top ten largest countries in&nbsp;the world by&nbsp;means of&nbsp;colors. These colors are assigned to&nbsp;the map areas using the **customize** callback function of&nbsp;the **layers** object. Moreover, when one of&nbsp;the areas is&nbsp;selected or&nbsp;hovered over, its color changes to&nbsp;those specified by&nbsp;the **selectedColor** and **hoveredColor** options.
+This demo shows how to&nbsp;color different map elements. The map represented here indicates the top ten largest countries in&nbsp;the world by&nbsp;means of&nbsp;colors. These colors are assigned to&nbsp;the map areas using the **customize** callback function of&nbsp;the **layers** object. Moreover, when one of&nbsp;the areas is&nbsp;selected or&nbsp;hovered over, its color changes to&nbsp;those specified by&nbsp;the **selectedColor** and **hoveredColor** properties.
 
 
 

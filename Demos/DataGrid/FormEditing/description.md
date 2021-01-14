@@ -1,6 +1,6 @@
 **DataGrid** can use the [Form](/Documentation/ApiReference/UI_Widgets/dxForm/) UI component to arrange cell editors when users modify a row. Users can edit value in [visible](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/columns/#visible) and hidden columns (see the `Notes` column).
 
-To use the Form as the row editor UI, specify the following options:
+To use the Form as the row editor UI, specify the following properties:
 - **editing**.[mode](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#mode) to *"form"*
 - **editing**.[allowUpdating](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#allowUpdating) to **true**
 

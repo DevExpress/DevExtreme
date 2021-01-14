@@ -1,1 +1,1 @@
-This demo shows how to&nbsp;format the text displayed by&nbsp;the subvalue indicator of&nbsp;the _textCloud_ type. For this purpose, the **text** option of&nbsp;the **subvalueIndicator** configuration object is&nbsp;utilized.
+This demo shows how to&nbsp;format the text displayed by&nbsp;the subvalue indicator of&nbsp;the _textCloud_ type. For this purpose, the **text** property of&nbsp;the **subvalueIndicator** configuration object is&nbsp;utilized.

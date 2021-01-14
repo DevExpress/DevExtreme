@@ -1,3 +1,3 @@
 To set the tooltip's content, specify the [contentTemplate](/Documentation/ApiReference/Data_Visualization_Widgets/dxVectorMap/Configuration/tooltip/#contentTemplate). Inside the template, you can identify the map area or marker for which the tooltip is displayed and thus display information related to that map element.
 
-In this demo, the **contentTemplate** option is used to display the [PieChart](/Documentation/ApiReference/Data_Visualization_Widgets/dxPieChart/) UI component in the tooltip.
+In this demo, the **contentTemplate** property is used to display the [PieChart](/Documentation/ApiReference/Data_Visualization_Widgets/dxPieChart/) UI component in the tooltip.
