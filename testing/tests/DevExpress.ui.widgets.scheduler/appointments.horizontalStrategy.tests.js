@@ -48,8 +48,6 @@ const moduleOptions = {
                         return dataAccessors.setter[field](obj, value);
                     case 'prerenderFilter':
                         return this.instance.option('items');
-                    case 'convertDateByTimezone':
-                        return field;
                     case 'getAppointmentColor':
                         return $.Deferred().resolve('red').promise();
                     case 'getEndDayHour':
