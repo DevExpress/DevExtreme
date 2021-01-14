@@ -2,6 +2,7 @@ import domAdapter from '../core/dom_adapter';
 import eventsEngine from './core/events_engine';
 import KeyboardProcessor from './core/keyboard_processor';
 import { addNamespace as pureAddNamespace } from './utils/index';
+import pointerEvents from './pointer';
 
 function addNamespace(event, namespace) {
     return namespace ? pureAddNamespace(event, namespace) : event;
@@ -145,6 +146,25 @@ export const dxScrollCancel = {
         eventsEngine.off($el, addNamespace('dxscrollcancel', namespace));
     }
 };
+
+export const dxPointerDown = {
+    on: ($el, onPointerDown, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace(pointerEvents.down, namespace), onPointerDown);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace(pointerEvents.down, namespace));
+    }
+};
+
+export const dxPointerUp = {
+    on: ($el, onPointerUp, { namespace } = {}) => {
+        eventsEngine.on($el, addNamespace(pointerEvents.up, namespace), onPointerUp);
+    },
+    off: ($el, { namespace } = {}) => {
+        eventsEngine.off($el, addNamespace(pointerEvents.up, namespace));
+    }
+};
+
 
 let index = 0;
 const keyboardProcessors = {};

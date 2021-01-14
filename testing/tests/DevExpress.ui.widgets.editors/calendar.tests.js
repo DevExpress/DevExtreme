@@ -185,6 +185,59 @@ QUnit.module('Navigator integration', {
         fx.off = false;
     }
 }, () => {
+    QUnit.module('navigator caption should be correct (T962871)', () => {
+        const nextCaption = {
+            'month': 'July 2015',
+            'year': '2016',
+            'decade': '2020-2029',
+            'century': '2100-2199',
+        };
+        const prevCaption = {
+            'month': 'May 2015',
+            'year': '2014',
+            'decade': '2000-2009',
+            'century': '1900-1999',
+        };
+        const zoomLevels = ['month', 'year', 'decade', 'century'];
+
+        QUnit.test('after navigate to next', function(assert) {
+            $.each(zoomLevels, (_, zoomLevel) => {
+                this.calendar.option({ zoomLevel });
+
+                this.$navigatorNext.trigger('dxclick');
+                assert.strictEqual(this.$navigatorCaption.text(), nextCaption[zoomLevel], 'caption is correct');
+            });
+        });
+
+        QUnit.test('after navigate to next in RTL', function(assert) {
+            this.reinit({ rtlEnabled: true, value: new Date(2015, 5, 13) });
+            $.each(zoomLevels, (_, zoomLevel) => {
+                this.calendar.option({ zoomLevel });
+
+                this.$navigatorNext.trigger('dxclick');
+                assert.strictEqual(this.$navigatorCaption.text(), prevCaption[zoomLevel], 'caption is correct');
+            });
+        });
+
+        QUnit.test('after navigate to prev', function(assert) {
+            $.each(zoomLevels, (_, zoomLevel) => {
+                this.calendar.option({ zoomLevel });
+
+                this.$navigatorPrev.trigger('dxclick');
+                assert.strictEqual(this.$navigatorCaption.text(), prevCaption[zoomLevel], 'caption is correct');
+            });
+        });
+
+        QUnit.test('after navigate to prev in RTL', function(assert) {
+            this.reinit({ rtlEnabled: true, value: new Date(2015, 5, 13) });
+            $.each(zoomLevels, (_, zoomLevel) => {
+                this.calendar.option({ zoomLevel });
+
+                this.$navigatorPrev.trigger('dxclick');
+                assert.strictEqual(this.$navigatorCaption.text(), nextCaption[zoomLevel], 'caption is correct');
+            });
+        });
+    });
 
     QUnit.test('calendar must change the current date when navigating to previous and next view', function(assert) {
         const calendar = this.calendar;
@@ -236,29 +289,6 @@ QUnit.module('Navigator integration', {
         assert.expect(0);
         $(this.$navigatorPrev).trigger('dxclick');
         $(this.$navigatorNext).trigger('dxclick');
-    });
-
-    QUnit.test('Navigator caption should be changed after click on prev/next month button', function(assert) {
-        this.reinit({
-            value: new Date(2015, 4, 15)
-        });
-
-        $(this.$navigatorNext).trigger('dxclick');
-
-        const newText = this.$navigatorCaption.text();
-        assert.equal(newText, 'July 2015', 'correct navigation caption');
-    });
-
-    QUnit.test('Navigator caption should be changed after click on prev/next month button in RTL', function(assert) {
-        this.reinit({
-            value: new Date(2015, 4, 15),
-            rtlEnabled: true
-        });
-
-        $(this.$navigatorNext).trigger('dxclick');
-
-        const newText = this.$navigatorCaption.text();
-        assert.equal(newText, 'March 2015', 'correct navigation caption');
     });
 
     QUnit.test('navigator caption should be changed after the \'value\' option change', function(assert) {

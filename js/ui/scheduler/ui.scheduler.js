@@ -61,7 +61,6 @@ import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
 import utils from './utils';
-import DateAdapter from './dateAdapter';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1658,83 +1657,70 @@ class Scheduler extends Widget {
                 callback();
                 break;
             case 'occurrence':
-                this._singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+                this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
                 break;
             default:
                 if(dragEvent) {
                     dragEvent.cancel = new Deferred();
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
-                    .done((function(result) {
+                    .done(result => {
                         result && callback();
-                        !result && this._singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
-                    }).bind(this))
-                    .fail((function() {
-                        this._appointments.moveAppointmentBack(dragEvent);
-                    }).bind(this));
+                        !result && this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+                    })
+                    .fail(() => this._appointments.moveAppointmentBack(dragEvent));
         }
     }
 
-    _getCorrectedExceptionDateByDST(exceptionDate, appointment, targetedAppointment) {
-        const offset = appointment.startDate.getTimezoneOffset() - targetedAppointment.startDate.getTimezoneOffset();
-        if(offset !== 0) {
-            return DateAdapter(exceptionDate)
-                .addTime(offset * dateUtils.dateToMilliseconds('minute'))
-                .result();
-        }
-        return exceptionDate;
-    }
+    _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
+        const appointment = this.createAppointmentAdapter({ ...rawAppointment });
+        const newAppointment = this.createAppointmentAdapter(newRawAppointment);
 
-    _singleAppointmentChangesHandler(rawAppointment, rawTargetedAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        const targetedAppointment = this.createAppointmentAdapter(rawTargetedAppointment);
-        const updatedAppointment = this.createAppointmentAdapter(rawAppointment);
+        newAppointment.recurrenceRule = '';
+        newAppointment.recurrenceException = '';
 
-        targetedAppointment.recurrenceRule = '';
-        targetedAppointment.recurrenceException = '';
-
-        if(!isDeleted && !isPopupEditing) {
+        const canCreateNewAppointment = !isDeleted && !isPopupEditing;
+        if(canCreateNewAppointment) {
             const keyPropertyName = this._appointmentModel.keyName;
-            delete rawTargetedAppointment[keyPropertyName];
+            delete newRawAppointment[keyPropertyName];
 
-            this.addAppointment(rawTargetedAppointment);
+            this.addAppointment(newRawAppointment);
         }
 
-        const correctedExceptionDate = exceptionDate;
-        updatedAppointment.recurrenceException = this._createRecurrenceException(rawAppointment, correctedExceptionDate);
+        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
         if(isPopupEditing) {
             // TODO: need to refactor - move as parameter to appointment popup
-            this._updatedRecAppointment = updatedAppointment.source();
+            this._updatedRecAppointment = appointment.source();
 
-            this._appointmentPopup.show(rawTargetedAppointment, true);
+            this._appointmentPopup.show(newRawAppointment, true);
             this._editAppointmentData = rawAppointment;
 
         } else {
-            this._updateAppointment(rawAppointment, updatedAppointment.source(), () => {
+            this._updateAppointment(rawAppointment, appointment.source(), () => {
                 this._appointments.moveAppointmentBack(dragEvent);
             }, dragEvent);
         }
     }
 
-    _createRecurrenceException(rawAppointment, exceptionDate) {
+    _createRecurrenceException(appointment, exceptionDate) {
         const result = [];
-        const appointment = this.createAppointmentAdapter(rawAppointment);
 
         if(appointment.recurrenceException) {
             result.push(appointment.recurrenceException);
         }
-        result.push(this._serializeRecurrenceException(exceptionDate, appointment.startDate, appointment.allDay));
+        result.push(this._getSerializedDate(exceptionDate, appointment.startDate, appointment.allDay));
 
         return result.join();
     }
 
-    _serializeRecurrenceException(exceptionDate, targetStartDate, isAllDay) {
-        isAllDay && exceptionDate.setHours(targetStartDate.getHours(),
-            targetStartDate.getMinutes(),
-            targetStartDate.getSeconds(),
-            targetStartDate.getMilliseconds());
+    _getSerializedDate(date, startDate, isAllDay) {
+        isAllDay && date.setHours(startDate.getHours(),
+            startDate.getMinutes(),
+            startDate.getSeconds(),
+            startDate.getMilliseconds());
 
-        return dateSerialization.serializeDate(exceptionDate, UTC_FULL_DATE_FORMAT);
+        return dateSerialization.serializeDate(date, UTC_FULL_DATE_FORMAT);
     }
 
     _showRecurrenceChangeConfirm(isDeleted) {

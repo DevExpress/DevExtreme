@@ -31,6 +31,8 @@ const toMs = dateUtils.dateToMilliseconds;
 class SchedulerTimeline extends SchedulerWorkSpace {
     get verticalGroupTableClass() { return GROUP_TABLE_CLASS; }
 
+    get viewDirection() { return 'horizontal'; }
+
     _init() {
         super._init();
 
@@ -377,6 +379,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         this._$dateTable.height(height);
 
         super._setTableSizes();
+
+        this.virtualScrollingDispatcher?.updateDimensions();
     }
 
     _getWorkSpaceMinHeight() {
@@ -615,10 +619,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     renovatedRenderSupported() { return true; }
-
-    isVirtualScrolling() {
-        return false;
-    }
 
     renderRAllDayPanel() {}
 

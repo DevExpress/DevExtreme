@@ -20,6 +20,18 @@ export class ScrollableInternalProps {
 
   @OneWay() useSimulatedScrollbar = false;
 
+  @OneWay() pushBackValue = 0;
+
+  @OneWay() bounceEnabled = true;
+
+  @OneWay() scrollByContent = true;
+
+  @OneWay() inertiaEnabled = true;
+
+  @OneWay() updateManually = false;
+
+  @OneWay() useKeyboard = true;
+
   @OneWay() classes?: string;
 
   @OneWay() forceGeneratePockets = false;
@@ -31,7 +43,7 @@ export class ScrollableInternalProps {
 
 @ComponentBindings()
 export class ScrollableProps extends ScrollableInternalProps {
-  @OneWay() useNative = false;
+  @OneWay() useNative = true;
 
   @OneWay() pullingDownText?: string;
 

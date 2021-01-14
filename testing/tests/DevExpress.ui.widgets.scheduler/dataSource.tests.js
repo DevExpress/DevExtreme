@@ -178,6 +178,30 @@ module('Events', {
     });
 
     module('Update', () => {
+        isDesktopEnvironment() && test('oldData shouldn\'t has recurrenceException property', function(assert) {
+            const appointment = {
+                text: 'Watercolor Landscape',
+                startDate: new Date(2021, 1, 25, 1),
+                endDate: new Date(2021, 1, 25, 2),
+                recurrenceRule: 'FREQ=DAILY'
+            };
+
+            const scheduler = createWrapper({
+                dataSource: [appointment],
+                currentView: 'day',
+                currentDate: new Date(2021, 2, 25),
+                height: 600,
+                recurrenceEditMode: 'occurrence',
+                onAppointmentUpdating: function(e) {
+                    assert.deepEqual(e.oldData, appointment, 'oldData argument should be equal initial appointment');
+                    assert.equal(typeof (e.newData.recurrenceException), 'string', 'newData argument should has new recurrenceException property');
+                }
+            });
+
+            scheduler.appointmentList[0].drag.toCell(5);
+            assert.expect(2);
+        });
+
         test('onAppointmentUpdating', function(assert) {
             const updatingSpy = sinon.spy(noop);
             const oldData = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
