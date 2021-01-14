@@ -2052,7 +2052,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(this.getAppointmentColor(tasks.eq(4)), '#cb7d7b', 'Color is OK');
             });
 
-            QUnit.test('Ungrouped tasks should have a right color(via the \'useColorAsDefault\' field)', function(assert) {
+            QUnit.test('Ungrouped tasks should have a right color (via the "useColorAsDefault" field)', function(assert) {
                 try {
                     const data = new DataSource({
                         store: [
@@ -2220,7 +2220,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointments.length, 0, 'There is one appointment');
             });
 
-            QUnit.test('Multi-day appointments should be filtered correctly if it\'s time less than startDayHour', function(assert) {
+            QUnit.test('Multi-day appointments with startDate less than startDayHour should be rendered ', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 11, 14),
                     currentView: 'week',
