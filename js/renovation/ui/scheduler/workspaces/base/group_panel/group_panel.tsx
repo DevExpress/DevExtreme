@@ -13,7 +13,7 @@ import {
   ResourceCellTemplateProps,
 } from '../../types.d';
 import { isVerticalGroupOrientation } from '../../utils';
-import { GroupPanelVerticalLayout } from './vertical/layout';
+import { GroupPanelVerticalLayout, GroupPanelVerticalLayoutProps } from './vertical/layout';
 
 export const viewFunction = ({
   layout: Layout,
@@ -55,7 +55,7 @@ export class GroupPanelProps {
   jQuery: { register: true },
 })
 export class GroupPanel extends JSXComponent(GroupPanelProps) {
-  get layout(): any {
+  get layout(): JSXTemplate<GroupPanelVerticalLayoutProps> {
     const { groupOrientation } = this.props;
 
     return isVerticalGroupOrientation(groupOrientation)
