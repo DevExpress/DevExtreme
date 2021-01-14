@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template,
+  Component, ComponentBindings, CSSAttributes, JSXComponent, JSXTemplate, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
 import {
   Group,
@@ -67,7 +67,7 @@ export class GroupPanelVerticalLayoutProps {
   view: viewFunction,
 })
 export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelVerticalLayoutProps) {
-  get style(): { [key: string]: string | number | undefined } {
+  get style(): CSSAttributes {
     const { height } = this.props;
     const { style } = this.restAttributes;
 

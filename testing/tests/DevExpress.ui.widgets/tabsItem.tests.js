@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import Tabs from 'ui/tabs';
 
+import 'common.css!';
+import 'generic_light.css!';
+
 QUnit.module('badge builtin', () => {
     const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
     const BADGE_CLASS = 'dx-badge';

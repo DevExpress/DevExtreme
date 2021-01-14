@@ -5,7 +5,7 @@ import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import VerticalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
-import SchedulerAppointments from 'ui/scheduler/ui.scheduler.appointments';
+import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
 import eventsEngine from 'events/core/events_engine';
 import dblclickEvent from 'events/dblclick';
 import translator from 'animation/translator';

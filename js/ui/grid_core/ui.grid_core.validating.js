@@ -633,13 +633,13 @@ export default {
                     }
                 },
 
-                _needInsertItem: function({ key }) {
+                _needInsertItem: function(change) {
                     let result = this.callBase.apply(this, arguments);
-                    const insertInfo = this._getInternalData(key)?.insertInfo;
+                    const { key, pageIndex } = change;
                     const validationData = this.getController('validating')._getValidationData(key);
 
                     if(result && !validationData?.isValid) {
-                        result = insertInfo.pageIndex === this._pageIndex;
+                        result = pageIndex === this._pageIndex;
                     }
 
                     return result;
@@ -658,7 +658,6 @@ export default {
 
                 processItems: function(items, changeType) {
                     const that = this;
-                    let i;
                     const changes = that.getChanges();
                     const dataController = that.getController('data');
                     const validatingController = this.getController('validating');
@@ -696,14 +695,13 @@ export default {
                     };
 
                     if(that.getEditMode() === EDIT_MODE_BATCH && changeType !== 'prepend' && changeType !== 'append') {
-                        for(i = 0; i < changes.length; i++) {
-                            const key = changes[i].key;
-                            const insertInfo = that.getController('editing')._getInternalData(key)?.insertInfo;
+                        changes.forEach(change => {
+                            const key = change.key;
                             const validationData = validatingController._getValidationData(key);
-                            if(validationData && changes[i].type && validationData.pageIndex === that._pageIndex && insertInfo?.pageIndex !== that._pageIndex) {
-                                addInValidItem(changes[i], validationData);
+                            if(validationData && change.type && validationData.pageIndex === that._pageIndex && change?.pageIndex !== that._pageIndex) {
+                                addInValidItem(change, validationData);
                             }
-                        }
+                        });
                     }
 
                     return items;
@@ -732,36 +730,28 @@ export default {
                     this.callBase.apply(this, arguments);
                 },
 
-                _getInvisibleColumns: function(changes) {
-                    const columnsController = this.getController('columns');
-                    let hasInvisibleRows;
-                    const invisibleColumns = columnsController.getInvisibleColumns();
-
-                    if(this.isCellOrBatchEditMode()) {
-                        hasInvisibleRows = changes.some(change => {
-                            const rowIndex = this._dataController.getRowIndexByKey(change.key);
-
-                            return rowIndex < 0;
-                        });
-                    }
-
-                    return hasInvisibleRows ? columnsController.getColumns() : invisibleColumns;
-                },
-
                 _createInvisibleColumnValidators: function(changes) {
                     const that = this;
                     const validatingController = this.getController('validating');
                     const columnsController = this.getController('columns');
-                    const invisibleColumns = this._getInvisibleColumns(changes).filter((column) => !column.isBand);
+                    const columns = columnsController.getColumns();
+                    const invisibleColumns = columnsController.getInvisibleColumns().filter((column) => !column.isBand);
                     const groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1);
                     const invisibleColumnValidators = [];
+                    const isCellVisible = (column, rowKey) => {
+                        return this._dataController.getRowIndexByKey(rowKey) >= 0 && invisibleColumns.indexOf(column) < 0;
+                    };
 
                     invisibleColumns.push(...groupColumns);
 
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
-                        each(invisibleColumns, function(_, column) {
+                        each(columns, function(_, column) {
                             changes.forEach(function(change) {
                                 let data;
+                                if(isCellVisible(column, change.key)) {
+                                    return;
+                                }
+
                                 if(change.type === EDIT_DATA_INSERT_TYPE) {
                                     data = change.data;
                                 } else if(change.type === 'update') {

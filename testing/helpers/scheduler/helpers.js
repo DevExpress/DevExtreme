@@ -7,6 +7,7 @@ import dataUtils from 'core/element_data';
 import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
+import { isDefined } from 'core/utils/type';
 
 export const TOOLBAR_TOP_LOCATION = 'top';
 export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
@@ -38,6 +39,10 @@ export const CLASSES = {
     weekHeaderPanelCell: '.dx-scheduler-header-panel-week-cell',
     currentTimeCell: '.dx-scheduler-time-panel-current-time-cell',
     headerPanelCurrentTimeCell: '.dx-scheduler-header-panel-current-time-cell',
+    selectedCell: '.dx-state-focused',
+    focusedCell: '.dx-scheduler-focused-cell',
+
+    verticalGroupPanel: '.dx-scheduler-work-space-vertical-group-table',
 
     appointment: '.dx-scheduler-appointment',
     appointmentDate: '.dx-scheduler-appointment-content-date',
@@ -77,8 +82,10 @@ export const asyncWrapper = (assert, callback) => {
         .then(done);
 };
 
-export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout) => {
+export const execAsync = (promise, beforeAssertCallback, assertCallback, timeout, check) => {
     return promise.then(() => {
+        let timerId;
+
         return new Promise((resolve, reject) => {
             const execCallback = func => {
                 try {
@@ -88,19 +95,61 @@ export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout) 
                 }
             };
 
-            beforeAsyncCallback && execCallback(beforeAsyncCallback);
+            beforeAssertCallback && execCallback(beforeAssertCallback);
 
-            setTimeout(() => {
-                execCallback(asyncCallback);
-                resolve();
+            timerId = setTimeout(() => {
+
+                if(check && !check()) {
+
+                    reject();
+
+                } else {
+
+                    execCallback(assertCallback);
+
+                    resolve();
+                }
+
             }, timeout);
+        }).catch(() => {
+            clearTimeout(timerId);
         });
     });
 };
 
-export const asyncScrollTest = (promise, beforeAsyncCallback, asyncCallback) => {
+export const asyncScrollTest = (promise, assertCallback, scrollable, offset) => {
     const scrollTimeout = 20;
-    return execAsync(promise, beforeAsyncCallback, asyncCallback, scrollTimeout);
+    let scrollAttemptCount = 4;
+
+    const wrapper = () => {
+        if(scrollAttemptCount <= 0) {
+            return Promise.reject();
+        }
+
+        return execAsync(
+            promise,
+            () => scrollable.scrollTo(offset),
+            assertCallback,
+            scrollTimeout,
+            () => {
+                const scrollOffset = scrollable.scrollOffset();
+                const {
+                    x,
+                    y
+                } = offset;
+
+                scrollAttemptCount--;
+
+                return (!isDefined(x) || scrollOffset.left === x) &&
+                    (!isDefined(y) || scrollOffset.top === y);
+            })
+            .then(
+                null,
+                () => wrapper(promise, assertCallback, scrollable, offset)
+            );
+    };
+
+    return wrapper();
 };
 
 class ElementWrapper {
@@ -468,8 +517,8 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getRowCount: () => $('.dx-scheduler-date-table-row').length,
             getRows: (index = 0) => $('.dx-scheduler-date-table-row').eq(index),
             getCells: () => $(CLASSES.dateTableCell),
-            getSelectedCells: () => this.workSpace.getCells().filter('.dx-state-focused'),
-            getFocusedCell: () => this.workSpace.getCells().filter('.dx-scheduler-focused-cell'),
+            getSelectedCells: () => this.workSpace.getCells().filter(CLASSES.selectedCell),
+            getFocusedCell: () => this.workSpace.getCells().filter(CLASSES.focusedCell),
             getCell: (rowIndex, cellIndex) => {
                 if(cellIndex !== undefined) {
                     return $('.dx-scheduler-date-table-row').eq(rowIndex).find(CLASSES.dateTableCell).eq(cellIndex);
@@ -508,6 +557,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $('.dx-scheduler-date-time-indicator'),
+            getCurrentTimeIndicatorCount: () => this.workSpace.getCurrentTimeIndicator().length,
             getAllDayPanel: () => $('.dx-scheduler-all-day-panel'),
 
             getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find('.dx-scrollable-container'),
@@ -521,8 +571,24 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 getGroup: (index = 0) => $('.dx-scheduler-group-row').eq(index),
                 getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find('.dx-scheduler-group-header'),
                 getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
+                getVerticalGroupPanel: () => $(CLASSES.verticalGroupPanel),
             },
-            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick')
+            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick'),
+
+            selectCells: (firstCellIndex, lastCellIndex) => {
+                const firstCell = this.workSpace.getCell(firstCellIndex);
+                const secondCell = this.workSpace.getCell(lastCellIndex);
+
+                const { x: firstCellLeft, y: firstCellTop } = firstCell.offset();
+                const { x: secondCellLeft, y: secondCellTop } = secondCell.offset();
+
+                pointerMock(firstCell)
+                    .start()
+                    .down(firstCellLeft, firstCellTop);
+                pointerMock(secondCell)
+                    .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop)
+                    .up();
+            },
         };
 
         this.viewSwitcher = {

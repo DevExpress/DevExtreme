@@ -73,7 +73,7 @@ const stubInvokeMethod = function(instance, options) {
 };
 
 QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
+    $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');
 });
 
 (function() {
@@ -1566,9 +1566,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     return $('#scheduler-work-space')[workSpaceName]({
                         ...options,
                         scrolling: { mode: scrollingMode },
-                        height: 1000,
-                        renovateRender: scrollingMode === 'virtual'
-                            && workSpaceName !== 'dxSchedulerWorkSpaceMonth', // TODO: selection in month view when virtual scrolling is used
+                        renovateRender: scrollingMode === 'virtual',
                     });
                 };
             },
@@ -1626,7 +1624,7 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'new cell is focused');
             });
 
-            QUnit.test('Workspace should not loose focused cell after arrow key press', function(assert) {
+            QUnit.test('Workspace should not lose focused cell after arrow key press', function(assert) {
                 const $element = this.createInstance({
                     focusStateEnabled: true
                 }, 'dxSchedulerWorkSpaceMonth');
@@ -1904,7 +1902,6 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
                     currentDate: new Date(2015, 3, 1),
-                    height: 400
                 }, 'dxSchedulerWorkSpaceMonth');
                 const keyboard = keyboardMock($element);
 
@@ -2479,9 +2476,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     return $('#scheduler-work-space')[workSpaceName]({
                         ...options,
                         scrolling: { mode: scrollingMode },
-                        renovateRender: scrollingMode === 'virtual'
-                            && workSpaceName !== 'dxSchedulerWorkSpaceMonth', // TODO: selection in month view when virtual scrolling is used,
-                        height: 1000,
+                        renovateRender: scrollingMode === 'virtual',
                     });
                 };
             },
@@ -2513,7 +2508,6 @@ QUnit.module('Workspace Mouse Interaction', () => {
 
                 $element.trigger($.Event('dxpointerdown', { target: cells.eq(15).get(0), which: 1, pointerType: 'mouse' }));
                 $element.trigger($.Event('dxpointermove', { target: cells.eq(16).get(0), which: 1 }));
-
             });
 
             QUnit.test('Workspace should add/remove specific class while mouse selection', function(assert) {
@@ -2923,6 +2917,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     focusedCellsCount: 4,
                     cellFromAnotherGroup: 10,
                     workSpace: WORKSPACE_DAY,
+                    intervalCount: 2,
                 }, {
                     startCell: 14,
                     endCell: 16,
@@ -2930,15 +2925,17 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     focusedCellsCount: 9,
                     cellFromAnotherGroup: 64,
                     workSpace: WORKSPACE_WEEK,
+                    intervalCount: 2,
                 }, {
                     startCell: 15,
-                    endCell: 44,
-                    intermediateCells: [27, 41],
-                    focusedCellsCount: 30,
-                    cellFromAnotherGroup: 75,
+                    endCell: 34,
+                    intermediateCells: [27],
+                    focusedCellsCount: 20,
+                    cellFromAnotherGroup: 44,
                     workSpace: WORKSPACE_MONTH,
+                    intervalCount: 1,
                 }].forEach(({
-                    startCell, endCell, intermediateCells,
+                    startCell, endCell, intermediateCells, intervalCount,
                     focusedCellsCount, cellFromAnotherGroup, workSpace,
                 }) => {
                     QUnit.test(`Mouse Multiselection should work correctly with ${workSpace.name} when it is grouped vertically`, function(assert) {
@@ -2950,7 +2947,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
                                 e.component.initDragBehavior();
                                 e.component._attachTablesEvents();
                             },
-                            intervalCount: 2,
+                            intervalCount,
                             groupOrientation: 'vertical',
                             startDayHour: 0,
                             endDayHour: 2,
@@ -3963,6 +3960,8 @@ QUnit.module('Renovated Render', {
                     bottomVirtualRowHeight: undefined,
                     isVirtual: false,
                     topVirtualRowHeight: undefined,
+                    leftVirtualCellWidth: undefined,
+                    rightVirtualCellWidth: undefined
                 };
                 const expectedViewDataMap = [
                     [{
@@ -4091,6 +4090,8 @@ QUnit.module('Renovated Render', {
                     bottomVirtualRowHeight: undefined,
                     isVirtual: false,
                     topVirtualRowHeight: undefined,
+                    leftVirtualCellWidth: undefined,
+                    rightVirtualCellWidth: undefined
                 };
 
                 const expectedViewDataMap = [[{
@@ -4448,7 +4449,6 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
                     groupIndex: 0,
-                    text: '12:00 AM',
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
@@ -4468,7 +4468,6 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
                     groupIndex: 0,
-                    text: '12:00 AM',
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
@@ -4495,7 +4494,6 @@ QUnit.module('Renovated Render', {
                     startDate: new Date(2020, 6, 29, 0, 0),
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
-                    text: '',
                     groups: { res: 2 },
                     groupIndex: 1,
                 };
@@ -4525,7 +4523,6 @@ QUnit.module('Renovated Render', {
                     startDate: new Date(2020, 6, 29, 0, 30),
                     endDate: new Date(2020, 6, 29, 1, 0),
                     allDay: false,
-                    text: '',
                     groups: { res: 1 },
                     groupIndex: 0,
                 };

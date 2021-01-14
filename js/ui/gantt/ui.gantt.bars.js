@@ -57,6 +57,7 @@ class Bar {
             case 'expandall': return this._createDefaultItem(COMMANDS.expandAll, messageLocalization.format('dxGantt-expandAll'), this._getIcon('expand'));
             case 'collapseall': return this._createDefaultItem(COMMANDS.collapseAll, messageLocalization.format('dxGantt-collapseAll'), this._getIcon('collapse'));
             case 'addtask': return this._createDefaultItem(COMMANDS.createTask, messageLocalization.format('dxGantt-addNewTask'), this._getIcon('add'));
+            case 'addsubtask': return this._createDefaultItem(COMMANDS.createSubTask, messageLocalization.format('dxGantt-contextMenuNewSubtask'), this._getIcon('add-sub-task'));
             case 'deletetask': return this._createDefaultItem(COMMANDS.removeTask, messageLocalization.format('dxGantt-deleteSelectedTask'), this._getIcon('delete'));
             case 'deletedependency': return this._createDefaultItem(COMMANDS.removeDependency, messageLocalization.format('dxGantt-contextMenuDeleteDependency'), this._getIcon('delete-dependency'));
             case 'zoomin': return this._createDefaultItem(COMMANDS.zoomIn, messageLocalization.format('dxGantt-zoomIn'), this._getIcon('zoom-in'));

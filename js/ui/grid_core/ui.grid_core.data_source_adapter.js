@@ -394,7 +394,7 @@ export default gridCore.Controller.inherit((function() {
             const cachedPagesData = options.cachedPagesData;
             const storeLoadOptions = options.storeLoadOptions;
             const needCache = this.option('cacheEnabled') !== false && storeLoadOptions;
-            const needPageCache = needCache && !options.isCustomLoading && cachedPagesData && (!localPaging || storeLoadOptions.group) && !this.option('legacyRendering');
+            const needPageCache = needCache && !options.isCustomLoading && cachedPagesData && (!localPaging || storeLoadOptions.group);
             const needPagingCache = needCache && localPaging;
             const needStoreCache = needPagingCache && !options.isCustomLoading;
 
@@ -459,7 +459,7 @@ export default gridCore.Controller.inherit((function() {
 
                 if(needPageCache) {
                     cachedPagesData.extra = cachedPagesData.extra || extend({}, options.extra);
-                    when(options.data).done(function(data) {
+                    when(options.data).done((data) => {
                         setPageDataToCache(options, cloneItems(data, groupCount));
                     });
                 }

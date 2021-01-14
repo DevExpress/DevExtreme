@@ -1,0 +1,61 @@
+@use "./mixins" as *;
+
+// adduse
+
+
+$spin-container-width: 22px;
+$touch-friendly-spin-container-width: 64px;
+
+.dx-numberbox {
+  position: relative;
+
+  @include user-select(none);
+
+  input[type=number] {
+    -moz-appearance: textfield; // stylelint-disable-line property-no-vendor-prefix
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none; // stylelint-disable-line property-no-vendor-prefix
+      margin: 0;
+    }
+  }
+}
+
+.dx-numberbox-spin-container {
+  width: $spin-container-width;
+  height: 100%;
+}
+
+.dx-numberbox-spin-down,
+.dx-numberbox-spin-up {
+  position: relative;
+  width: 100%;
+  height: 50%;
+  cursor: pointer;
+}
+
+.dx-numberbox-spin-touch-friendly {
+  .dx-numberbox-spin-container {
+    width: $touch-friendly-spin-container-width;
+  }
+
+  .dx-numberbox-spin-down,
+  .dx-numberbox-spin-up {
+    width: 50%;
+    height: 100%;
+    display: inline-block;
+  }
+}
+
+.dx-numberbox-spin-up-icon,
+.dx-numberbox-spin-down-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.dx-state-disabled {
+  .dx-numberbox-spin-container {
+    opacity: 0.2;
+  }
+}

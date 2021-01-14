@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import dateLocalization from 'localization/date';
-import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { SchedulerTestWrapper, createWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
@@ -29,6 +29,9 @@ import translator from 'animation/translator';
 import 'ui/scheduler/ui.scheduler';
 
 import { dateToMilliseconds as toMs } from 'core/utils/date';
+
+const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
+const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
 
 QUnit.module('Integration: Work space', {
     beforeEach: function() {
@@ -1963,110 +1966,110 @@ QUnit.test('Workspace view group header cells have same height as table cells (T
 });
 
 if(devices.real().deviceType === 'desktop') {
-    QUnit.module('Integration: Work space: Multiple selection when dragging is not enabled', {
+    QUnit.module('Cells selection', {
         beforeEach: function() {
             fx.off = true;
         },
         afterEach: function() {
             fx.off = false;
-        }
+        },
     }, () => {
-        [{
-            view: 'day',
-            startCell: {
-                index: 0,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 0),
-                    endDate: new Date(2018, 3, 8, 0, 30),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
-                },
-            },
-            endCell: {
-                index: 1,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 30),
-                    endDate: new Date(2018, 3, 8, 1, 0),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
-                },
-            },
-        }, {
-            view: 'week',
-            startCell: {
-                index: 0,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 0),
-                    endDate: new Date(2018, 3, 8, 0, 30),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
-                },
-            },
-            endCell: {
-                index: 7,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 30),
-                    endDate: new Date(2018, 3, 8, 1, 0),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
-                },
-            },
-        }, {
-            view: 'month',
-            startCell: {
-                index: 0,
-                cellData: {
-                    startDate: new Date(2018, 3, 1),
-                    endDate: new Date(2018, 3, 2),
-                    groups: undefined,
-                    groupIndex: 0,
-                    allDay: undefined,
-                },
-            },
-            endCell: {
-                index: 1,
-                cellData: {
-                    startDate: new Date(2018, 3, 2),
-                    endDate: new Date(2018, 3, 3),
-                    groups: undefined,
-                    groupIndex: 0,
-                    allDay: undefined,
-                },
-            },
-        }].forEach((config) => {
-            const { view, startCell, endCell } = config;
-            QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled`, function(assert) {
-                const instance = createWrapper({
-                    dataSource: [],
-                    views: [view],
-                    currentView: view,
-                    showAllDayPanel: true,
-                    currentDate: new Date(2018, 3, 8),
-                    height: 600,
-                    editing: { allowDragging: false },
-                });
+        const resources = [
+            {
+                field: 'ownerId',
+                dataSource: [
+                    { id: 1, text: 'John' },
+                    { id: 2, text: 'Mike' }
+                ]
+            }
+        ];
 
-                const $cells = instance.workSpace.getCells();
-                const $table = instance.workSpace.getDateTable();
+        const checkSelection = (assert, scheduler, firstCellIndex, lastCellIndex) => {
+            scheduler.workSpace.selectCells(firstCellIndex, lastCellIndex);
 
-                $($table).trigger(
-                    $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
-                );
-                $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+            const cellsNumber = lastCellIndex - firstCellIndex + 1;
 
-                assert.deepEqual(
-                    instance.option('selectedCellData'),
-                    [
-                        startCell.cellData, endCell.cellData,
-                    ], 'correct cells have been selected');
+            assert.equal(selectedCells.length, cellsNumber, 'Correct number of cells');
+
+            [...(new Array(cellsNumber))].forEach((_, index) => {
+                const currentIndex = index + firstCellIndex;
+                const cell = scheduler.workSpace.getCell(currentIndex);
+                assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+                assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), currentIndex === lastCellIndex, 'Cell has correct classes');
             });
+        };
 
-            if(view !== 'month') {
-                QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled when scrolling is virtual`, function(assert) {
+        QUnit.module(' Multiple selection when dragging is not enabled', () => {
+            [{
+                view: 'day',
+                startCell: {
+                    index: 0,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 0),
+                        endDate: new Date(2018, 3, 8, 0, 30),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
+                },
+                endCell: {
+                    index: 1,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 30),
+                        endDate: new Date(2018, 3, 8, 1, 0),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
+                },
+            }, {
+                view: 'week',
+                startCell: {
+                    index: 0,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 0),
+                        endDate: new Date(2018, 3, 8, 0, 30),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
+                },
+                endCell: {
+                    index: 7,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 30),
+                        endDate: new Date(2018, 3, 8, 1, 0),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
+                },
+            }, {
+                view: 'month',
+                startCell: {
+                    index: 0,
+                    cellData: {
+                        startDate: new Date(2018, 3, 1),
+                        endDate: new Date(2018, 3, 2),
+                        groups: undefined,
+                        groupIndex: 0,
+                        allDay: undefined,
+                    },
+                },
+                endCell: {
+                    index: 1,
+                    cellData: {
+                        startDate: new Date(2018, 3, 2),
+                        endDate: new Date(2018, 3, 3),
+                        groups: undefined,
+                        groupIndex: 0,
+                        allDay: undefined,
+                    },
+                },
+            }].forEach((config) => {
+                const { view, startCell, endCell } = config;
+                QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled`, function(assert) {
                     const instance = createWrapper({
                         dataSource: [],
                         views: [view],
@@ -2075,7 +2078,6 @@ if(devices.real().deviceType === 'desktop') {
                         currentDate: new Date(2018, 3, 8),
                         height: 600,
                         editing: { allowDragging: false },
-                        scrolling: { mode: 'virtual' },
                     });
 
                     const $cells = instance.workSpace.getCells();
@@ -2092,7 +2094,170 @@ if(devices.real().deviceType === 'desktop') {
                             startCell.cellData, endCell.cellData,
                         ], 'correct cells have been selected');
                 });
-            }
+
+                if(view !== 'month') {
+                    QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled when scrolling is virtual`, function(assert) {
+                        const instance = createWrapper({
+                            dataSource: [],
+                            views: [view],
+                            currentView: view,
+                            showAllDayPanel: true,
+                            currentDate: new Date(2018, 3, 8),
+                            height: 600,
+                            editing: { allowDragging: false },
+                            scrolling: { mode: 'virtual' },
+                        });
+
+                        const $cells = instance.workSpace.getCells();
+                        const $table = instance.workSpace.getDateTable();
+
+                        $($table).trigger(
+                            $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
+                        );
+                        $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
+
+                        assert.deepEqual(
+                            instance.option('selectedCellData'),
+                            [
+                                startCell.cellData, endCell.cellData,
+                            ], 'correct cells have been selected');
+                    });
+                }
+            });
+        });
+
+        QUnit.test('Correct cells should be selected in Month View in basic case and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: ['month'],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                scrolling: { mode: 'virtual' },
+            });
+
+            checkSelection(assert, scheduler, 0, 5);
+        });
+
+        QUnit.test('Correct cells should be selected in Month when horizontal grouping is used and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'horizontal',
+                }],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                scrolling: { mode: 'virtual' },
+                resources,
+                groups: ['ownerId'],
+            });
+
+            checkSelection(assert, scheduler, 7, 9);
+
+            scheduler.workSpace.selectCells(6, 7);
+
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+            const cell = scheduler.workSpace.getCell(6);
+
+            assert.equal(selectedCells.length, 1, 'Correct number of cells');
+            assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+            assert.ok(cell.hasClass(FOCUSED_CELL_CLASS), 'Cell is focused');
+        });
+
+        QUnit.test('Correct cells should be selected in Month when vertical grouping is used and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'vertical',
+                }],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                scrolling: { mode: 'virtual' },
+                resources,
+                groups: ['ownerId'],
+            });
+
+            checkSelection(assert, scheduler, 0, 5);
+
+            scheduler.workSpace.selectCells(6, 58);
+
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+            const cell = scheduler.workSpace.getCell(6);
+
+            assert.equal(selectedCells.length, 1, 'Correct number of cells');
+            assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+            assert.ok(cell.hasClass(FOCUSED_CELL_CLASS), 'Cell is focused');
+        });
+
+        QUnit.test('Correct cells should be selected in Month when grouping by date is used and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'horizontal',
+                    groupByDate: true,
+                }],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                scrolling: { mode: 'virtual' },
+                resources,
+                groups: ['ownerId'],
+            });
+
+            scheduler.workSpace.selectCells(0, 2);
+
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+
+            assert.equal(selectedCells.length, 2, 'Correct number of cells');
+
+            [...(new Array(3))].forEach((_, index) => {
+                if(index !== 1) {
+                    const cell = scheduler.workSpace.getCell(index);
+                    assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+                    assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), index === 2, 'Cell has correct classes');
+                }
+            });
+        });
+
+        QUnit.test('Correct selectedCellData should be generated when selecting cells in Month when virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: ['month'],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                scrolling: { mode: 'virtual' },
+            });
+
+            scheduler.workSpace.selectCells(0, 5);
+
+            const selectedCellData = scheduler.option('selectedCellData');
+
+            assert.equal(selectedCellData.length, 6, 'Correct number of cells');
+            assert.deepEqual(selectedCellData[0], {
+                startDate: new Date(2020, 10, 29, 0, 0),
+                endDate: new Date(2020, 10, 30, 0, 0),
+                allDay: undefined,
+                groupIndex: 0,
+                groups: undefined,
+            }, 'Correct first cell');
+            assert.deepEqual(selectedCellData[5], {
+                startDate: new Date(2020, 11, 4, 0, 0),
+                endDate: new Date(2020, 11, 5, 0, 0),
+                allDay: undefined,
+                groupIndex: 0,
+                groups: undefined,
+            }, 'Correct last cell');
         });
     });
 }

@@ -1,22 +1,16 @@
-import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { isDxMouseWheelEvent } from '../../events/utils/index';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import devices from '../../core/devices';
 import Class from '../../core/class';
-import Scrollbar from './ui.scrollbar';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
-const SCROLLABLE_SCROLLBAR_SIMULATED = 'dx-scrollable-scrollbar-simulated';
-const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
-
 
 const NativeStrategy = Class.inherit({
 
@@ -30,10 +24,6 @@ const NativeStrategy = Class.inherit({
         this._$container = scrollable._$container;
         this._$content = scrollable._$content;
 
-        this._direction = scrollable.option('direction');
-        this._useSimulatedScrollbar = scrollable.option('useSimulatedScrollbar');
-        this._showScrollbar = scrollable.option('showScrollbar');
-
         this.option = scrollable.option.bind(scrollable);
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
         this._isLocked = scrollable._isLocked.bind(scrollable);
@@ -45,18 +35,6 @@ const NativeStrategy = Class.inherit({
 
     render: function() {
         this._renderPushBackOffset();
-        const device = devices.real();
-        const deviceType = device.platform;
-
-        // this._$element
-        //     .addClass(SCROLLABLE_NATIVE_CLASS)
-        this._$element
-            .addClass(SCROLLABLE_NATIVE_CLASS + '-' + deviceType)
-            .toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this._showScrollbar);
-
-        if(this._showScrollbar && this._useSimulatedScrollbar) {
-            this._renderScrollbars();
-        }
     },
 
     updateBounds: noop,
@@ -77,25 +55,9 @@ const NativeStrategy = Class.inherit({
     _renderScrollbars: function() {
         this._scrollbars = {};
         this._hideScrollbarTimeout = 0;
-
-        this._$element.addClass(SCROLLABLE_SCROLLBAR_SIMULATED);
-
-        this._renderScrollbar(VERTICAL);
-        this._renderScrollbar(HORIZONTAL);
     },
 
-    _renderScrollbar: function(direction) {
-        if(!this._isDirection(direction)) {
-            return;
-        }
-
-        this._scrollbars[direction] = new Scrollbar($('<div>').appendTo(this._$element), {
-            direction: direction,
-            expandable: this._component.option('scrollByThumb')
-        });
-    },
-
-    handleInit: noop,
+    // handleInit: noop,
     handleStart: function() {
         this._disablePushBack = true;
     },
@@ -114,8 +76,8 @@ const NativeStrategy = Class.inherit({
     handleEnd: function() {
         this._disablePushBack = false;
     },
-    handleCancel: noop,
-    handleStop: noop,
+    // handleCancel: noop,
+    // handleStop: noop,
 
     _eachScrollbar: function(callback) {
         callback = callback.bind(this);
@@ -128,27 +90,6 @@ const NativeStrategy = Class.inherit({
         this._scrollAction = this._createActionByOption('onScroll');
         this._updateAction = this._createActionByOption('onUpdated');
     },
-
-    _createActionArgs: function() {
-        const { left, top } = this.location();
-
-        return {
-            event: this._eventForUserAction,
-            scrollOffset: this._getScrollOffset(),
-            reachedLeft: this._isReachedLeft(left),
-            reachedRight: this._isReachedRight(left),
-            reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top - 2 * this.option('pushBackValue') : undefined
-        };
-    },
-
-    // _isReachedLeft: function() {
-    //     return this._isDirection(HORIZONTAL) ? this.location().left >= 0 : undefined;
-    // },
-
-    // _isReachedRight: function() {
-    //     return this._isDirection(HORIZONTAL) ? Math.abs(this.location().left) >= this._getMaxOffset().left : undefined;
-    // },
 
     handleScroll: function(e) {
         this._component._updateRtlConfig();
@@ -286,7 +227,7 @@ const NativeStrategy = Class.inherit({
 
     // scrollBy: function(distance) {
     //     const location = this.location();
-    //     this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
+    //    this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
     //     this._$container.scrollLeft(Math.round(-location.left - distance.left));
     // },
 

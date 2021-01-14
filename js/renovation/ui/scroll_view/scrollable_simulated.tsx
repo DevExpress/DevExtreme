@@ -7,6 +7,7 @@ import {
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
+import { Scrollbar } from './scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -16,7 +17,7 @@ import {
 } from './scrollable_props';
 
 import {
-  ScrollableLocation, ScrollOffset,
+  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset,
 } from './types.d';
 
 import {
@@ -29,45 +30,104 @@ import {
   SCROLLABLE_CONTENT_CLASS,
   SCROLLABLE_WRAPPER_CLASS,
   SCROLLVIEW_CONTENT_CLASS,
-  SCROLLVIEW_BOTTOM_POCKET_CLASS,
-  SCROLLVIEW_TOP_POCKET_CLASS,
   SCROLLABLE_DISABLED_CLASS,
+  SCROLLABLE_SCROLLBARS_HIDDEN,
+  SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
 } from './scrollable_utils';
 
-export const viewFunction = ({
-  cssClasses, contentRef, containerRef,
-  props: {
-    disabled, height, width, rtlEnabled, children,
-    forceGeneratePockets, needScrollViewContentWrapper,
-  },
-  restAttributes,
-}: ScrollableSimulated): JSX.Element => (
-  <Widget
-    classes={cssClasses}
-    disabled={disabled}
-    rtlEnabled={rtlEnabled}
-    height={height}
-    width={width}
-    {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
-  >
-    <div className={SCROLLABLE_WRAPPER_CLASS}>
-      <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
-        <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
-          {forceGeneratePockets && <div className={SCROLLVIEW_TOP_POCKET_CLASS} />}
-          {needScrollViewContentWrapper && (
-            <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
-          {!needScrollViewContentWrapper && children}
-          {forceGeneratePockets && <div className={SCROLLVIEW_BOTTOM_POCKET_CLASS} />}
+import { TopPocket } from './topPocket';
+import { BottomPocket } from './bottomPocket';
+
+import {
+  dxScrollStart,
+  dxScrollMove,
+  dxScrollEnd,
+  dxScrollStop,
+  dxScrollCancel,
+} from '../../../events/short';
+
+function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
+  if (mode === true) {
+    return 'onScroll';
+  }
+  return (mode === false) ? 'never' : mode;
+}
+
+export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
+  const {
+    cssClasses, wrapperRef, contentRef, containerRef,
+    props: {
+      disabled, height, width, rtlEnabled, children,
+      forceGeneratePockets, needScrollViewContentWrapper,
+      showScrollbar, direction, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
+      reachBottomText,
+    },
+    restAttributes,
+  } = viewModel;
+
+  const targetDirection = direction ?? 'vertical';
+  const isVertical = targetDirection !== 'horizontal';
+  const isHorizontal = targetDirection !== 'vertical';
+
+  const visibilityMode = visibilityModeNormalize(showScrollbar);
+  return (
+    <Widget
+      classes={cssClasses}
+      disabled={disabled}
+      rtlEnabled={rtlEnabled}
+      height={height}
+      width={width}
+      {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+    >
+      <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
+        <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
+          <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
+            {forceGeneratePockets && (
+            <TopPocket
+              pullingDownText={pullingDownText}
+              pulledDownText={pulledDownText}
+              refreshingText={refreshingText}
+              refreshStrategy="simulated"
+            />
+            )}
+            {needScrollViewContentWrapper && (
+              <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
+            {!needScrollViewContentWrapper && children}
+            {forceGeneratePockets && (
+            <BottomPocket
+              reachBottomText={reachBottomText}
+            />
+            )}
+          </div>
+          {isHorizontal && (
+            <Scrollbar
+              direction="horizontal"
+              visible={scrollByThumb}
+              visibilityMode={visibilityMode}
+              expandable={scrollByThumb}
+            />
+          )}
+          {isVertical && (
+            <Scrollbar
+              direction="vertical"
+              visible={scrollByThumb}
+              visibilityMode={visibilityMode}
+              expandable={scrollByThumb}
+            />
+          )}
         </div>
       </div>
-    </div>
-  </Widget>
-);
+    </Widget>
+  );
+};
 
 @Component({
+  defaultOptionRules: null,
   view: viewFunction,
 })
 export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsType>() {
+  @Ref() wrapperRef!: RefObject<HTMLDivElement>;
+
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
@@ -176,13 +236,103 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
       }));
   }
 
+  @Effect()
+  startEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollStart.on(this.wrapperRef,
+      (e: Event) => {
+        this.handleStart(e);
+      }, { namespace });
+
+    return (): void => dxScrollStart.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  moveEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollMove.on(this.wrapperRef,
+      (e: Event) => {
+        this.handleMove(e);
+      }, { namespace });
+
+    return (): void => dxScrollMove.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  endEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollEnd.on(this.wrapperRef,
+      (e: Event) => {
+        this.handleEnd(e);
+      }, { namespace });
+
+    return (): void => dxScrollEnd.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  stopEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollStop.on(this.wrapperRef,
+      (event: Event) => {
+        this.handleStop(event);
+      }, { namespace });
+
+    return (): void => dxScrollStop.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  cancelEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    dxScrollCancel.on(this.wrapperRef,
+      (event: Event) => {
+        this.handleCancel(event);
+      }, { namespace });
+
+    return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
+  }
+
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private handleStart(event: Event): void {
+    // console.log('handleEnd', event, this);
+  }
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private handleMove(event: Event): void {
+    // console.log('handleEnd', event, this);
+  }
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private handleEnd(event: Event): void {
+    // console.log('handleEnd', event, this);
+  }
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private handleStop(event: Event): void {
+    // console.log('handleStop', event, this);
+  }
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private handleCancel(event: Event): void {
+    // console.log('handleCancel', event, this);
+  }
+
   get cssClasses(): string {
-    const { direction, classes, disabled } = this.props;
+    const {
+      direction, classes, disabled, showScrollbar,
+    } = this.props;
 
     const classesMap = {
       'dx-scrollable dx-scrollable-simulated dx-scrollable-renovated': true,
       [`dx-scrollable-${direction}`]: true,
       [SCROLLABLE_DISABLED_CLASS]: !!disabled,
+      [SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE]: showScrollbar === 'always',
+      [SCROLLABLE_SCROLLBARS_HIDDEN]: !showScrollbar,
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);

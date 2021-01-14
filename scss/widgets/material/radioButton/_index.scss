@@ -4,9 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../radioGroup/colors" as *;
+@use "../../base/radioButton";
 
 // adduse
-
 
 $material-radiobutton-border-width: 2px;
 $material-radiobutton-inner-size: $material-radiobutton-size - $material-radiobutton-border-width * 2;

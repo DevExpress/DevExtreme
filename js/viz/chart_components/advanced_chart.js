@@ -654,17 +654,17 @@ export const AdvancedChart = BaseChart.inherit({
 
     _layoutAxes(drawAxes) {
         const that = this;
-        const cleanPanesCanvases = drawAxes();
-
+        drawAxes();
         const needSpace = that.checkForMoreSpaceForPanesCanvas();
 
         if(needSpace) {
-            const size = this._layout.backward(this._rect, this._rect, [needSpace.width, needSpace.height]);
+            const rect = this._rect.slice();
+            const size = this._layout.backward(rect, rect, [needSpace.width, needSpace.height]);
             needSpace.width = Math.max(0, size[0]);
             needSpace.height = Math.max(0, size[1]);
-            this._canvas = this._createCanvasFromRect(this._rect);
+            this._canvas = this._createCanvasFromRect(rect);
 
-            drawAxes(needSpace, cleanPanesCanvases);
+            drawAxes(needSpace);
         }
     },
 

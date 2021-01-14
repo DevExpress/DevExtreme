@@ -292,3 +292,38 @@ module('Current Time Cell Indication Updating', {
         });
     });
 });
+
+module('Integration with Virtual Scrolling', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers(NOW.getTime());
+    },
+    afterEach: function() {
+        this.clock.restore();
+    },
+}, () => {
+    test('Scheduler should display correct number of indicators', function(assert) {
+        const scheduler = createWrapper({
+            currentDate: NOW,
+            views: ['timelineDay', 'timelineWeek', 'timelineMonth'],
+            currentView: 'timelineDay',
+            startDayHour: 11,
+            endDayHour: 13,
+            height: 250,
+            groups: ['resourceId0'],
+            crossScrollingEnabled: true,
+            resources: [{
+                fieldExpr: 'resourceId0',
+                dataSource: [
+                    { id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 },
+                    { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 },
+                ],
+            }],
+            scrolling: { mode: 'virtual' },
+        });
+
+        const expectedNumberOfIndicators = scheduler.workSpace.getRowCount();
+        const actualNumberOfIndicators = scheduler.workSpace.getCurrentTimeIndicatorCount();
+
+        assert.equal(actualNumberOfIndicators, expectedNumberOfIndicators, 'Correct number of indicators');
+    });
+});
