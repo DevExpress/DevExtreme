@@ -66,8 +66,6 @@ describe('GroupPanel Vertical Layout', () => {
         props: { className: 'custom-class' },
       });
 
-      expect(layout.hasClass('dx-scheduler-work-space-vertical-group-table'))
-        .toBe(true);
       expect(layout.hasClass('custom-class'))
         .toBe(true);
       expect(layout.childAt(0).hasClass('dx-scheduler-group-flex-container'))

@@ -38,7 +38,7 @@ describe('GroupPanel Vertical Layout', () => {
     it('should pass correct props to the root component', () => {
       const resourceCellTemplate = () => null;
       const groupPanel = render({
-        props: { resourceCellTemplate },
+        props: { resourceCellTemplate, className: 'custom-class' },
       });
 
       expect(groupPanel.props())
@@ -47,6 +47,7 @@ describe('GroupPanel Vertical Layout', () => {
           height: 500,
           resourceCellTemplate,
           groupByDate: false,
+          className: 'custom-class',
         });
     });
   });
