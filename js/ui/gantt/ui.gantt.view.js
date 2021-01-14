@@ -18,6 +18,7 @@ export class GanttView extends Widget {
         this._collapseAll = this._createActionByOption('onCollapseAll');
         this._taskClick = this._createActionByOption('onTaskClick');
         this._taskDblClick = this._createActionByOption('onTaskDblClick');
+        this._onAdjustControl = this._createActionByOption('onAdjustControl');
     }
     _initMarkup() {
         const GanttView = getGanttViewCore();
@@ -238,7 +239,9 @@ export class GanttView extends Widget {
     getMainElement() {
         return this.option('mainElement').get(0);
     }
-    adjustControl() {}
+    adjustControl() {
+        this._onAdjustControl();
+    }
     getRequireFirstLoadParentAutoCalc() {
         return this.option('validation.autoUpdateParentTasks');
     }

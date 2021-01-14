@@ -107,7 +107,8 @@ class Gantt extends Widget {
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); },
             onContextMenuPreparing: (e) => { this._onTreeListContextMenuPreparing(e); },
             onRowClick: (e) => { this._onTreeListRowClick(e); },
-            onRowDblClick: (e) => { this._onTreeListRowDblClick(e); }
+            onRowDblClick: (e) => { this._onTreeListRowDblClick(e); },
+            onAdjustControl: (adjustSettings) => { this._onAdjustControl(adjustSettings); }
         });
     }
     _renderSplitter() {
@@ -168,12 +169,19 @@ class Gantt extends Widget {
         this._fireContentReadyAction();
     }
 
+    _onAdjustControl(adjustSettings) {
+        const toolbarHeight = this._$toolbarWrapper.get(0).offsetHeight;
+        this._setTreeListOption('height', '100%');
+        this._setTreeListOption('height', this._$treeList.height() - toolbarHeight);
+        this._adjustHeight();
+        this._ganttView?._ganttViewCore.resetAndUpdate();
+        this._splitter.option('initialLeftPanelWidth', this._$treeListWrapper.width());
+    }
     _onApplyPanelSize(e) {
         this._setInnerElementsWidth(e);
         const rowHeight = this._getTreeListRowHeight();
         this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
     }
-
     _onTreeListContentReady(e) {
         if(e.component.getDataSource()) {
             this._initGanttView();
