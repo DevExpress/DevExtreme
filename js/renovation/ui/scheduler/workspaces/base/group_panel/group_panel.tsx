@@ -28,7 +28,7 @@ export const viewFunction = ({
   <Layout
     groups={groups}
     height={height}
-    cellTemplate={resourceCellTemplate}
+    resourceCellTemplate={resourceCellTemplate}
     groupByDate={groupByDate}
     className={className}
   />

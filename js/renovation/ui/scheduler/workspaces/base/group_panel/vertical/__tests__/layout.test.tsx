@@ -75,9 +75,9 @@ describe('GroupPanel Vertical Layout', () => {
     });
 
     it('should render two rows and pass correct props to them', () => {
-      const cellTemplate = jest.fn();
+      const resourceCellTemplate = jest.fn();
       const layout = render({
-        props: { cellTemplate },
+        props: { resourceCellTemplate },
       });
 
       const rows = layout.find(Row);
@@ -87,12 +87,12 @@ describe('GroupPanel Vertical Layout', () => {
       expect(rows.at(0).props())
         .toMatchObject({
           groupItems: groupsRenderData[0],
-          cellTemplate,
+          cellTemplate: resourceCellTemplate,
         });
       expect(rows.at(1).props())
         .toMatchObject({
           groupItems: groupsRenderData[1],
-          cellTemplate,
+          cellTemplate: resourceCellTemplate,
         });
     });
   });

@@ -45,7 +45,7 @@ describe('GroupPanel Vertical Layout', () => {
         .toMatchObject({
           groups,
           height: 500,
-          cellTemplate: resourceCellTemplate,
+          resourceCellTemplate,
           groupByDate: false,
         });
     });

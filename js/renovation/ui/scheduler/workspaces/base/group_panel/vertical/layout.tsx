@@ -43,7 +43,7 @@ export const viewFunction = (viewModel: GroupPanelVerticalLayout): JSX.Element =
       {viewModel.groupsRenderData.map((group: GroupRenderItem[]) => (
         <Row
           groupItems={group}
-          cellTemplate={viewModel.props.cellTemplate}
+          cellTemplate={viewModel.props.resourceCellTemplate}
           key={group[0].key}
         />
       ))}
@@ -59,7 +59,7 @@ export class GroupPanelVerticalLayoutProps {
 
   @OneWay() height?: number;
 
-  @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
+  @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 
   @OneWay() className?: string = '';
 }
