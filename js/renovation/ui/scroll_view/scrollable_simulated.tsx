@@ -10,7 +10,10 @@ import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Scroller } from './scroller';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
+
+import { map } from '../../../core/utils/iterator';
+import { when } from '../../../core/utils/deferred';
 
 import {
   ScrollableInternalPropsType,
@@ -44,6 +47,8 @@ import {
   dxScrollEnd,
   dxScrollStop,
   dxScrollCancel,
+  mouseEnter,
+  mouseLeave,
 } from '../../../events/short';
 
 function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
@@ -55,7 +60,7 @@ function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
-    cssClasses, wrapperRef, contentRef, containerRef,
+    cssClasses, wrapperRef, contentRef, containerRef, horizontalScrollerRef, verticalScrollerRef,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -101,6 +106,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           </div>
           {isHorizontal && (
             <Scroller
+              ref={horizontalScrollerRef}
               direction="horizontal"
               visible={scrollByThumb}
               visibilityMode={visibilityMode}
@@ -109,6 +115,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           )}
           {isVertical && (
             <Scroller
+              ref={verticalScrollerRef}
               direction="vertical"
               visible={scrollByThumb}
               visibilityMode={visibilityMode}
@@ -131,6 +138,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
+
+  @Ref() horizontalScrollerRef!: RefObject<Scroller>;
+
+  @Ref() verticalScrollerRef!: RefObject<Scroller>;
 
   @Method()
   content(): HTMLDivElement {
@@ -296,6 +307,30 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
     return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
   }
 
+  @Effect()
+  mouseEnterEffect(): EffectReturn {
+    const namespace = 'dxSimulatedScrollableCursor';
+
+    mouseEnter.on(this.wrapperRef,
+      (e: Event) => {
+        this.cursorEnterHandler(e);
+      }, { namespace });
+
+    return (): void => mouseEnter.off(this.wrapperRef, { namespace });
+  }
+
+  @Effect()
+  mouseLeaveEffect(): EffectReturn {
+    const namespace = 'dxSimulatedScrollableCursor';
+
+    mouseLeave.on(this.wrapperRef,
+      (e: Event) => {
+        this.cursorLeaveHandler(e);
+      }, { namespace });
+
+    return (): void => mouseLeave.off(this.wrapperRef, { namespace });
+  }
+
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleStart(event: Event): void {
@@ -320,6 +355,33 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   // eslint-disable-next-line
   private handleCancel(event: Event): void {
     // console.log('handleCancel', event, this);
+  }
+
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private cursorEnterHandler(event: Event): void {
+    if (!this.props.disabled && this.isHoverMode()) {
+      this.eventHandler('cursorEnter');
+    }
+  }
+
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private cursorLeaveHandler(event: Event): void {
+    if (!this.props.disabled && this.isHoverMode()) {
+      this.eventHandler('cursorLeave');
+    }
+  }
+
+  private isHoverMode(): boolean {
+    return this.props.showScrollbar === 'onHover';
+  }
+
+  private eventHandler(eventName): any {
+    const deferreds = map([this.horizontalScrollerRef, this.verticalScrollerRef],
+      (scroller) => scroller[`${eventName}Handler`].apply(scroller));
+
+    return when.apply($, deferreds).promise();
   }
 
   get cssClasses(): string {

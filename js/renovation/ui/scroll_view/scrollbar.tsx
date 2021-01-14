@@ -4,7 +4,7 @@ import {
   InternalState,
   RefObject,
   Ref,
-  Effect,
+  Effect, Method,
 } from 'devextreme-generator/component_declaration/common';
 
 import { Widget } from '../common/widget';
@@ -85,6 +85,16 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
       }, { namespace });
 
     return (): void => dxPointerUp.off(this.scrollRef, { namespace });
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  public cursorEnter(): void {
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  public cursorLeave(): void {
   }
 
   private feedbackOn(): void {

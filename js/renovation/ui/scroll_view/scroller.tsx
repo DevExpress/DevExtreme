@@ -2,6 +2,7 @@ import {
   Component,
   JSXComponent,
   Ref,
+  Method,
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { Scrollbar } from './scrollbar';
@@ -33,4 +34,14 @@ export const viewFunction = (viewModel: Scroller): JSX.Element => {
 })
 export class Scroller extends JSXComponent<ScrollbarProps>() {
   @Ref() scrollbarRef!: RefObject<Scrollbar>;
+
+  @Method()
+  public cursorEnterHandler(): void {
+    this.scrollbarRef.cursorEnter();
+  }
+
+  @Method()
+  public cursorLeaveHandler(): void {
+    this.scrollbarRef.cursorLeave();
+  }
 }
