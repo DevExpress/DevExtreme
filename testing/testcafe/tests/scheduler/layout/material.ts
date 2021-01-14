@@ -63,7 +63,7 @@ const createDataSetForScreenShotTests = () => {
   ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
     test(`General layout test in material theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
-        .expect(await compareScreenshot(t, `material:layout-with-groups-${view}-${groupOrientation}.png`)).ok();
+        .expect(await compareScreenshot(t, `material_layout-with-groups-${view}-${groupOrientation}.png`)).ok();
     }).before(() => createScheduler({
       dataSource: createDataSetForScreenShotTests(),
       currentDate: new Date(2020, 6, 15),
@@ -119,7 +119,7 @@ const createDataSetForScreenShotTests = () => {
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
-      await t.expect(await compareScreenshot(t, `material:layout-without-groups-${view}-resource-${!!resourcesValue}.png`)).ok();
+      await t.expect(await compareScreenshot(t, `material_layout-without-groups-${view}-resource-${!!resourcesValue}.png`)).ok();
     }).before(() => createScheduler({
       dataSource: createDataSetForScreenShotTests(),
       currentDate: new Date(2020, 6, 15),
