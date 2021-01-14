@@ -27,6 +27,8 @@ export const HORIZONTAL_GROUP_ORIENTATION = 'horizontal';
 
 export const VIRTUAL_CELL_CLASS = 'dx-scheduler-virtual-cell';
 
+export const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
+
 export const APPOINTMENT_CONTENT_CLASSES = {
     APPOINTMENT_CONTENT_DETAILS: 'dx-scheduler-appointment-content-details',
     RECURRING_ICON: 'dx-scheduler-appointment-recurrence-icon',
