@@ -11,6 +11,7 @@ import {
 } from '../scrollable';
 
 import devices from '../../../../core/devices';
+import { touch } from '../../../../core/utils/support';
 import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
 import { ScrollViewProps } from '../scroll_view_props';
@@ -187,9 +188,13 @@ describe('ScrollView', () => {
               if (!isSimulator && deviceType === 'desktop' && platform === 'generic') {
                 expect(getDefaultOptions().scrollByThumb).toBe(true);
                 expect(getDefaultOptions().showScrollbar).toBe('onHover');
+                expect(getDefaultOptions().bounceEnabled).toBe(false);
+                expect(getDefaultOptions().scrollByContent).toBe(touch);
               } else {
                 expect(getDefaultOptions().scrollByThumb).toBe(false);
                 expect(getDefaultOptions().showScrollbar).toBe('onScroll');
+                expect(getDefaultOptions().bounceEnabled).toBe(true);
+                expect(getDefaultOptions().scrollByContent).toBe(true);
               }
             });
           });
