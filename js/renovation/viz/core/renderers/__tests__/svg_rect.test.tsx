@@ -1,77 +1,40 @@
 import React, { createRef } from 'react';
 import { shallow } from 'enzyme';
 import { RectSvgElement, RectSvgElementProps, viewFunction as RectSvgComponent } from '../svg_rect';
+import * as utilsModule from '../utils';
 
 describe('RectSvgElement', () => {
+  const rectRef = createRef();
+  const parsedProps = {
+    x: 10,
+    y: 20,
+    width: 30,
+    height: 15,
+    strokeWidth: 2,
+    fill: 'red',
+    stroke: '#ffaa66',
+    opacity: 0.8,
+  } as RectSvgElementProps;
+  const viewModel = {
+    rectRef: rectRef as unknown as SVGGraphicsElement,
+    parsedProps,
+  };
+
   describe('View', () => {
     it('should pass parsed props and ref', () => {
-      const rectRef = createRef();
-      const parsedProps = {
-        x: 10,
-        y: 20,
-        width: 30,
-        height: 15,
-        strokeWidth: 2,
-        fill: 'red',
-        stroke: '#ffaa66',
-        opacity: 0.8,
-      } as RectSvgElementProps;
-      const viewModel = {
-        rectRef: rectRef as unknown as SVGGraphicsElement,
-        parsedProps,
-      };
       const rect = shallow(<RectSvgComponent {...viewModel as any} /> as JSX.Element);
 
       expect(rect.props()).toMatchObject({ ...parsedProps });
       expect(rect.instance()).toBe(rectRef.current);
     });
-  });
 
-  describe('Behavior', () => {
-    describe('effectUpdateShape', () => {
-      const rectProps = {
-        height: 50,
-        width: 100,
-        stroke: 'red',
-        strokeWidth: 4,
-      };
+    it('should pass transform and dash style', () => {
+      jest.spyOn(utilsModule, 'getGraphicExtraProps').mockImplementation(() => ({ transform: 'transformation', 'stroke-dasharray': 'dash' }));
+      const rect = shallow(<RectSvgComponent {...viewModel as any} /> as JSX.Element);
 
-      it('should set dash attributes to rect when dashStyle=dash', () => {
-        const rect = new RectSvgElement({
-          ...rectProps,
-          dashStyle: 'dash',
-        });
-        rect.rectRef = { setAttribute: jest.fn() } as any;
-        rect.effectUpdateShape();
-        expect(rect.rectRef.setAttribute).toHaveBeenCalledTimes(1);
-        expect(rect.rectRef.setAttribute).toHaveBeenCalledWith('stroke-dasharray', '16,12');
-      });
-
-      it('should set dash attributes to rect when dashStyle=longdash dot', () => {
-        const rect = new RectSvgElement({
-          ...rectProps,
-          dashStyle: 'longdash dot',
-        });
-        rect.rectRef = { setAttribute: jest.fn() } as any;
-        rect.effectUpdateShape();
-        expect(rect.rectRef.setAttribute).toHaveBeenCalledTimes(1);
-        expect(rect.rectRef.setAttribute).toHaveBeenCalledWith('stroke-dasharray', '32,12,4,12');
-      });
-
-      it('should set transformation attributes to rect', () => {
-        const rect = new RectSvgElement({
-          ...rectProps,
-          rotate: 25,
-          translateX: 15,
-          translateY: -25,
-          scaleX: 1.1,
-          scaleY: 0.8,
-        });
-        rect.rectRef = { setAttribute: jest.fn() } as any;
-        rect.effectUpdateShape();
-        expect(rect.rectRef.setAttribute).toHaveBeenCalledTimes(1);
-        expect(rect.rectRef.setAttribute).toHaveBeenCalledWith('transform', 'translate(15,-25) rotate(25,2,2) scale(1.1,0.8)');
-      });
+      expect(rect.props()).toMatchObject({ transform: 'transformation', 'stroke-dasharray': 'dash' });
+      expect(utilsModule.getGraphicExtraProps)
+        .toHaveBeenCalledWith(parsedProps, parsedProps.x, parsedProps.y);
     });
   });
 

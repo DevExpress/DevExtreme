@@ -10,7 +10,6 @@ import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
 import { focusable } from '../widget/selectors';
 import { addNamespace } from '../../events/utils/index';
-import scrollEvents from './ui.events.emitter.gesture.scroll';
 import { when } from '../../core/utils/deferred';
 
 const SCROLLABLE = 'dxScrollable';
@@ -92,7 +91,6 @@ const Scrollable = DOMComponent.inherit({
     _render: function() {
         this._renderStrategy();
 
-        this._attachEventHandlers();
         this._renderDisabledState();
         this._createActions();
         this.update();
@@ -144,19 +142,6 @@ const Scrollable = DOMComponent.inherit({
 
     _updateBounds: function() {
         this._strategy.updateBounds();
-    },
-
-    _attachEventHandlers: function() {
-        const strategy = this._strategy;
-
-        const initEventData = {
-            getDirection: strategy.getDirection.bind(strategy),
-            validate: this._validate.bind(this),
-            isNative: this.option('useNative'),
-            scrollTarget: this._$container
-        };
-
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.init, SCROLLABLE), initEventData, this._initHandler.bind(this));
     },
 
     _updateRtlConfig: function() {
