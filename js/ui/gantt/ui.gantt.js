@@ -163,17 +163,25 @@ class Gantt extends Widget {
             modelChangesListener: this._createModelChangesListener(),
             taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
             onTaskClick: (e) => { this._onTreeListRowClick(e); },
-            onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); }
+            onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); },
+            onAdjustControl: () => { this._onAdjustControl(); }
         });
         this._fireContentReadyAction();
     }
 
+    _onAdjustControl() {
+        const toolbarHeight = this._$toolbarWrapper.get(0).offsetHeight;
+        this._setTreeListOption('height', '100%');
+        this._setTreeListOption('height', this._$treeList.height() - toolbarHeight);
+        this._adjustHeight();
+        this._ganttView?._ganttViewCore.resetAndUpdate();
+        this._splitter.option('initialLeftPanelWidth', this._$treeListWrapper.width());
+    }
     _onApplyPanelSize(e) {
         this._setInnerElementsWidth(e);
         const rowHeight = this._getTreeListRowHeight();
         this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
     }
-
     _onTreeListContentReady(e) {
         if(e.component.getDataSource()) {
             this._initGanttView();
