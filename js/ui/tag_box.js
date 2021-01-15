@@ -1058,7 +1058,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemModel: function(item, displayValue) {
-        if(isObject(item) && displayValue) {
+        if(isObject(item) && isDefined(displayValue)) {
             return item;
         } else {
             return ensureDefined(displayValue, '');
