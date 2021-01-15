@@ -501,23 +501,31 @@ export default class ResourceManager {
         );
 
         currentResourcesData.forEach(resourceData => {
-            const { items, data, name } = resourceData;
-            const resource = this.getResourceByField(name);
+            const {
+                items,
+                data,
+                name: resourceName
+            } = resourceData;
+
+            const resource = this.getResourceByField(resourceName);
             const valueExpr = getValueExpr(resource);
             const filteredItems = [];
             const filteredData = [];
 
-            groups.forEach(group => {
-                each(group, (_, value) => {
-                    if(!filteredItems.filter(item => item.id === value).length) {
-                        const currentItems = items.filter(item => item.id === value);
-                        const currentData = data.filter(item => item[valueExpr] === value);
+            groups
+                .filter(group => !!group[resourceName])
+                .forEach(group => {
+                    each(group, (name, value) => {
 
-                        filteredItems.push(...currentItems);
-                        filteredData.push(...currentData);
-                    }
+                        if(!filteredItems.filter(item => item.id === value && item[valueExpr] === name).length) {
+                            const currentItems = items.filter(item => item.id === value);
+                            const currentData = data.filter(item => item[valueExpr] === value);
+
+                            filteredItems.push(...currentItems);
+                            filteredData.push(...currentData);
+                        }
+                    });
                 });
-            });
 
             resourceData.items = filteredItems;
             resourceData.data = filteredData;

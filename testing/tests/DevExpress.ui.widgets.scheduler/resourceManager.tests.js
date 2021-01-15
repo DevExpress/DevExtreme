@@ -822,7 +822,9 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
 
 [
     {
-        groups: { roomId: 1 },
+        name: 'Rooms single',
+        loadingGroups: ['roomId'],
+        groups: [{ roomId: 1 }],
         expected: [{
             data: [{ Id: 1, color: '#cb6bb2', text: 'Room1' }],
             items: [{ color: '#cb6bb2', id: 1, text: 'Room1' }],
@@ -830,41 +832,123 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
         }]
     },
     {
-        groups: { roomId: 2 },
+        name: 'Rooms multiple',
+        loadingGroups: ['roomId'],
+        groups: [{ roomId: 1 }, { roomId: 2 }],
+        expected: [
+            {
+                data: [
+                    { Id: 1, color: '#cb6bb2', text: 'Room1' },
+                    { Id: 2, color: '#cb6bb3', text: 'Room2' }
+                ],
+                items: [
+                    { id: 1, color: '#cb6bb2', text: 'Room1' },
+                    { id: 2, color: '#cb6bb3', text: 'Room2' }
+                ],
+                name: 'roomId'
+            }
+        ]
+    },
+    {
+        name: 'Phones single',
+        loadingGroups: ['phoneId'],
+        groups: [{ phoneId: 1 }],
         expected: [{
-            data: [{ Id: 2, color: '#cb6bb3', text: 'Room2' }],
-            items: [{ color: '#cb6bb3', id: 2, text: 'Room2' }],
-            name: 'roomId'
+            data: [{ Id: 1, text: 'Phone1', color: '#cd6bb2' }],
+            items: [{ id: 1, text: 'Phone1', color: '#cd6bb2' }],
+            name: 'phoneId'
         }]
     },
-].forEach(data => {
-    QUnit.test(`getResourcesDataByGroups if groups: '${data.groups.roomId}'`, function(assert) {
-        const roomData =
+    {
+        name: 'Phones multiple',
+        loadingGroups: ['phoneId'],
+        groups: [{ phoneId: 1 }, { phoneId: 3 }],
+        expected: [{
+            data: [
+                { Id: 1, text: 'Phone1', color: '#cd6bb2' },
+                { Id: 3, text: 'Phone3', color: '#cd6bb4' }
+            ],
+            items: [
+                { id: 1, text: 'Phone1', color: '#cd6bb2' },
+                { id: 3, text: 'Phone3', color: '#cd6bb4' }
+            ],
+            name: 'phoneId'
+        }]
+    },
+    {
+        name: 'Rooms, Phones multiple',
+        loadingGroups: ['roomId', 'phoneId'],
+        groups: [
+            { roomId: 2 }, { roomId: 3 },
+            { phoneId: 1 }, { phoneId: 3 }
+        ],
+        expected: [
+            {
+                data: [
+                    { Id: 2, color: '#cb6bb3', text: 'Room2' },
+                    { Id: 3, color: '#cb6bb4', text: 'Room3' }
+                ],
+                items: [
+                    { id: 2, color: '#cb6bb3', text: 'Room2' },
+                    { id: 3, color: '#cb6bb4', text: 'Room3' }
+                ],
+                name: 'roomId'
+            }, {
+                data: [
+                    { Id: 1, text: 'Phone1', color: '#cd6bb2' },
+                    { Id: 3, text: 'Phone3', color: '#cd6bb4' }
+                ],
+                items: [
+                    { id: 1, color: '#cd6bb2', text: 'Phone1' },
+                    { id: 3, color: '#cd6bb4', text: 'Phone3' }
+                ],
+                name: 'phoneId'
+            }
+        ]
+    }
+].forEach(({ name, groups, loadingGroups, expected }) => {
+    QUnit.test(`getResourcesDataByGroups if resources: '${name}'`, function(assert) {
+        const roomData = [
             {
                 field: 'roomId',
-                label: 'Room',
-                allowMultiple: false,
+                label: 'Rooms',
+                allowMultiple: true,
                 valueExpr: 'Id',
-                dataSource: [{
-                    text: 'Room1',
-                    Id: 1,
-                    color: '#cb6bb2'
-                }, {
-                    text: 'Room2',
-                    Id: 2,
-                    color: '#cb6bb3'
-                }]
-            };
-        this.createInstance([roomData]);
+                dataSource: [
+                    { Id: 1, text: 'Room1', color: '#cb6bb2' },
+                    { Id: 2, text: 'Room2', color: '#cb6bb3' },
+                    { Id: 3, text: 'Room3', color: '#cb6bb4' }
+                ]
+            },
+            {
+                field: 'phoneId',
+                label: 'Phones',
+                allowMultiple: true,
+                valueExpr: 'Id',
+                dataSource: [
+                    { Id: 1, text: 'Phone1', color: '#cd6bb2' },
+                    { Id: 2, text: 'Phone2', color: '#cd6bb3' },
+                    { Id: 3, text: 'Phone3', color: '#cd6bb4' }
+                ]
+            }
+        ];
+
+        this.createInstance(roomData);
 
         const done = assert.async();
 
-        this.instance.loadResources(['roomId']).done($.proxy(() => {
-            const resourcesDataByGroups = this.instance.getResourcesDataByGroups(data.groups);
+        this.instance.loadResources(loadingGroups).done($.proxy(() => {
 
-            assert.deepEqual(resourcesDataByGroups, data.expected, 'getResourcesDataByGroups works correctly');
+            const resourcesDataByGroups = this.instance.getResourcesDataByGroups(groups);
+
+            assert.deepEqual(
+                resourcesDataByGroups,
+                expected,
+                'getResourcesDataByGroups works correctly'
+            );
 
             done();
+
         }, this));
     });
 
