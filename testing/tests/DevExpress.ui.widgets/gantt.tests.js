@@ -2987,7 +2987,8 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         fullScreenCommand.execute();
         assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in FullScreen');
         fullScreenCommand.execute();
-        assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in NormalMode');
+        const diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
+        assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
         this.clock.tick();
         fullScreenCommand.execute();
         const splitterWrapper = this.$element.find(SPLITTER_WRAPPER_SELECTOR);
