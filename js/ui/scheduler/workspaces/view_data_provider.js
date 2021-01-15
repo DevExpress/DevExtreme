@@ -11,19 +11,19 @@ class ViewDataGenerator {
 
     _getCompleteViewDataMap(options) {
         const {
-            nonVirtualRowCount: rowCount,
-            cellCount,
+            totalRowCount,
+            totalCellCount,
             verticalGroupCount,
         } = options;
 
         const viewDataMap = [];
         for(let groupIndex = 0; groupIndex < verticalGroupCount; groupIndex += 1) {
-            const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, rowCount, cellCount);
+            const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, totalRowCount, totalCellCount);
             const viewCellsData = this._generateViewCellsData(
                 options,
-                rowCount,
+                totalRowCount,
                 0,
-                rowCount * groupIndex
+                totalRowCount * groupIndex
             );
 
             allDayPanelData && viewDataMap.push(allDayPanelData);
@@ -34,7 +34,12 @@ class ViewDataGenerator {
     }
 
     _generateViewDataMap(completeViewDataMap, options) {
-        const { startRowIndex, rowCount } = options;
+        const {
+            startRowIndex,
+            rowCount,
+            startCellIndex,
+            cellCount
+        } = options;
 
         const isVerticalGrouping = this.workspace._isVerticalGroupedWorkSpace();
         const showAllDayPanel = this.workspace.isAllDayPanelVisible;
@@ -44,16 +49,27 @@ class ViewDataGenerator {
 
         return completeViewDataMap
             .slice(correctedStartRowIndex, correctedStartRowIndex + rowCount)
-            .map((cellsRow, rowIndex) => cellsRow.map((cellData, cellIndex) => ({
-                cellData,
-                position: { rowIndex, cellIndex },
-            })));
+            .map((cellsRow, rowIndex) =>
+                cellsRow
+                    .slice(startCellIndex, startCellIndex + cellCount)
+                    .map((cellData, cellIndex) => (
+                        {
+                            cellData,
+                            position: {
+                                rowIndex,
+                                cellIndex
+                            }
+                        })
+                    )
+            );
     }
 
     _getViewDataFromMap(viewDataMap, completeViewDataMap, options) {
         const {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
+            leftVirtualCellWidth,
+            rightVirtualCellWidth,
             cellCountInGroupRow,
         } = options;
         const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
@@ -92,7 +108,13 @@ class ViewDataGenerator {
         const showAllDayPanel = this.workspace.isAllDayPanelVisible;
 
         if(!isVerticalGrouping && showAllDayPanel) {
-            groupedData[0].allDayPanel = completeViewDataMap[0];
+            const {
+                startCellIndex,
+                cellCount
+            } = options;
+
+            groupedData[0].allDayPanel = completeViewDataMap[0]
+                .slice(startCellIndex, cellCount + startCellIndex);
         }
 
         return {
@@ -100,13 +122,15 @@ class ViewDataGenerator {
             isVirtual: isVirtualScrolling,
             topVirtualRowHeight,
             bottomVirtualRowHeight,
+            leftVirtualCellWidth,
+            rightVirtualCellWidth,
             cellCountInGroupRow,
         };
     }
 
     _generateViewCellsData(options, renderRowCount, startRowIndex, rowOffset) {
         const {
-            cellCount,
+            totalCellCount,
             cellDataGetters,
             rowCountInGroup,
         } = options;
@@ -117,7 +141,7 @@ class ViewDataGenerator {
 
             const rowIndexInGroup = rowIndex % rowCountInGroup;
             viewCellsData.push(this._generateCellsRow(
-                options, cellDataGetters, rowIndex, cellCount, rowIndexInGroup,
+                options, cellDataGetters, rowIndex, totalCellCount, rowIndexInGroup,
             ));
         }
 
@@ -510,7 +534,7 @@ export default class ViewDataProvider {
                 } = cellData;
 
                 if(groupIndex === currentGroupIndex
-                    && allDay === currentAllDay
+                    && allDay === !!currentAllDay
                     && this._compareDatesAndAllDay(date, currentStartDate, currentEndDate, allDay)) {
                     return {
                         position: {

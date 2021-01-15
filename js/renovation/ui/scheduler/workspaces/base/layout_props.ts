@@ -16,5 +16,15 @@ export class LayoutProps {
 
   @OneWay() groupOrientation?: GroupOrientation;
 
+  @OneWay() isVirtual?: boolean;
+
+  @OneWay() leftVirtualCellWidth = 0;
+
+  @OneWay() rightVirtualCellWidth = 0;
+
+  @OneWay() topVirtualRowHeight = 0;
+
+  @OneWay() bottomVirtualRowHeight = 0;
+
   @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }

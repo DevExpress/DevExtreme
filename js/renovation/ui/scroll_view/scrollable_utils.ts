@@ -13,11 +13,11 @@ export const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 export const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
 export const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 export const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
-export const SCROLLVIEW_TOP_POCKET_CLASS = 'dx-scrollview-top-pocket';
 export const SCROLLVIEW_BOTTOM_POCKET_CLASS = 'dx-scrollview-bottom-pocket';
 export const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
 export const SCROLLABLE_SCROLLBAR_SIMULATED = 'dx-scrollable-scrollbar-simulated';
 export const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
+export const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 
 export function ensureLocation(
   location: number | Partial<ScrollableLocation>,
@@ -72,6 +72,7 @@ export function getBoundaryProps(
   direction: ScrollableDirection,
   scrollOffset: ScrollableLocation,
   containerRef: HTMLDivElement,
+  pushBackValue = 0,
 ): Partial<ScrollableBoundary> {
   const { left, top } = scrollOffset;
   const boundaryProps: Partial<ScrollableBoundary> = {};
@@ -83,7 +84,7 @@ export function getBoundaryProps(
   }
   if (isVertical) {
     boundaryProps.reachedTop = top <= 0;
-    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', containerRef);
+    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', containerRef) - 2 * pushBackValue;
   }
   return boundaryProps;
 }

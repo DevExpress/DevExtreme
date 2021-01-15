@@ -1,9 +1,14 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction as CellView } from '../virtual-cell';
+import { viewFunction as CellView, VirtualCell } from '../virtual-cell';
+import { addWidthToStyle } from '../../utils';
 
 jest.mock('../../utils', () => ({
   ...jest.requireActual('../../utils'),
   getGroupCellClasses: jest.fn(),
+}));
+
+jest.mock('../../utils', () => ({
+  addWidthToStyle: jest.fn(() => 'style'),
 }));
 
 describe('VirtualCell', () => {
@@ -19,14 +24,23 @@ describe('VirtualCell', () => {
       expect(cell.prop('customAttribute'))
         .toBe('customAttribute');
     });
+  });
 
-    it('should combine `className` with predefined classes', () => {
-      const cell = render({ props: { className: 'custom-class' } });
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('style', () => {
+        it('should call addWidthToStyle with proper parameters', () => {
+          const style = { width: '100px', height: '200px' };
+          const row = new VirtualCell({ width: 500 });
+          row.restAttributes = { style };
 
-      expect(cell.hasClass('custom-class'))
-        .toBe(true);
-      expect(cell.hasClass('dx-scheduler-virtual-cell'))
-        .toBe(true);
+          expect(row.style)
+            .toBe('style');
+
+          expect(addWidthToStyle)
+            .toHaveBeenCalledWith(500, style);
+        });
+      });
     });
   });
 });

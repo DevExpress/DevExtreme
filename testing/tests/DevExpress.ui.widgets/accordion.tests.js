@@ -1,5 +1,6 @@
 import fx from 'animation/fx';
 import 'common.css!';
+import 'generic_light.css!';
 import config from 'core/config';
 import { deferUpdate, noop } from 'core/utils/common';
 import { extend } from 'core/utils/extend';
@@ -440,7 +441,7 @@ QUnit.module('widget options', moduleSetup, () => {
             assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), 'content is hidden before animation is started');
 
             $($title).trigger('dxclick');
-            assert.roughEqual($item.height(), $title.outerHeight(), 0.1, 'height of the item is equal to the title height');
+            assert.roughEqual($item.outerHeight(), $title.outerHeight(), 0.1, 'height of the item is equal to the title height');
             this.clock.tick(1000);
 
             assert.ok($item.height() > $title.outerHeight(), 'height is not 0 when animation is complete');
@@ -723,7 +724,7 @@ QUnit.module('widget options changed', moduleSetup, () => {
             assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), 'content is hidden before animation is started');
 
             $($title).trigger('dxclick');
-            assert.roughEqual($item.height(), $title.outerHeight(), 0.1, 'height of the item is equal to the title height');
+            assert.roughEqual($item.outerHeight(), $title.outerHeight(), 0.1, 'height of the item is equal to the title height');
             this.clock.tick(1000);
 
             assert.ok($item.height() > $title.outerHeight(), 'height is not 0 when animation is complete');
@@ -1348,7 +1349,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
 
         QUnit.test(config.message + 'item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)', function(assert) {
             const $element = this.$element.dxAccordion(extend(config, {
-                items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ]
+                items: [ { id: 0, title: 'item0', text: 'Any text' }, { id: 1, title: 'item1', text: 'Any text', visible: false } ],
             }));
             const instance = $element.dxAccordion('instance');
             const item1GetterFunc = () => $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
@@ -1359,12 +1360,12 @@ QUnit.module('optionChanged', moduleSetup, () => {
             instance.option('items[1].visible', true);
             item1 = item1GetterFunc();
             assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
-            assert.roughEqual(item1.height(), 21, 1.001, 'item1 has valid height');
+            assert.roughEqual(item1.outerHeight(), 43, 1.001, 'item1 has valid height');
 
             instance.option('items[1].visible', false);
             item1 = item1GetterFunc();
             assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
-            assert.strictEqual(item1.height(), 0, 'item1 has zero height');
+            assert.strictEqual(item1.outerHeight(), 0, 'item1 has zero height');
         });
     });
 });
