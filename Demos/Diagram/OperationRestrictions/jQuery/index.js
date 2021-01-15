@@ -7,20 +7,6 @@ $(function() {
             delayTime: 2000
         });
     }
-    function isParent(shapeToTest, shape) {
-        if(shapeToTest.id === shape.id) return true;
-
-        var diagram = $("#diagram").dxDiagram().dxDiagram("instance");
-        for(var i = 0; i < shapeToTest.attachedConnectorIds.length; i++) {
-            var connector = diagram.getItemById(shapeToTest.attachedConnectorIds[i]);
-            if(connector.fromId === shapeToTest.id && connector.toId) {
-                var childShape = diagram.getItemById(connector.toId);
-                if(childShape.id === shape.id || isParent(childShape, shape))
-                    return true;
-            }
-        }
-        return false;
-    }
     $("#diagram").dxDiagram({
         customShapes: [{
             category: "items",
@@ -103,40 +89,8 @@ $(function() {
                         showToast("The 'Development' shape cannot have an incoming connection.");
                     e.allowed = false;
                 }
-                if(shapeType === "team") {
-                    if(e.args.connectorPosition === "end" && e.args.newShape.attachedConnectorIds.length > 1) {
-                        for(var i = 0; i < e.args.newShape.attachedConnectorIds.length; i++) {
-                            if(e.args.connector && e.args.newShape.attachedConnectorIds[i] != e.args.connector.id) {
-                                var connector = diagram.getItemById(e.args.newShape.attachedConnectorIds[i]);
-                                if(connector.toId === e.args.newShape.id) {
-                                    if(e.reason !== "checkUIElementAvailability")
-                                        showToast("A 'Team' shape can have only one incoming connection.");
-                                    e.allowed = false;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if(e.allowed && e.args.connector && e.args.connector.fromId && e.args.connector.toId) {
-                        var shapeFrom = diagram.getItemById(e.args.connector.fromId);
-                        var shapeTo = diagram.getItemById(e.args.connector.toId);
-                        if(isParent(shapeTo, shapeFrom)) {
-                            if(e.reason !== "checkUIElementAvailability")
-                                showToast("A circular reference is not allowed.");
-                            e.allowed = false;
-                        }
-                    }
-                }
-                if(shapeType === "employee") {
-                    if(e.args.connectorPosition === "start")
-                        e.allowed = false;
-                    
-                    if(e.args.connectorPosition === "end" && e.args.newShape.attachedConnectorIds.length > 1) {
-                        if(e.reason !== "checkUIElementAvailability")
-                            showToast("An 'Employee' shape can have only one incoming connection.");
-                        e.allowed = false;
-                    }                        
-                }
+                if(shapeType === "employee" && e.args.connectorPosition === "start")
+                    e.allowed = false;
             }
             else if(e.operation === "changeConnectorPoints") {
                 if(e.args.newPoints.length > 2) {

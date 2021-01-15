@@ -47,21 +47,6 @@ class App extends React.Component {
       delayTime: 2000
     });
   }
-  isParent(shapeToTest, shape) {
-    if(shapeToTest.id === shape.id) return true;
-
-    var diagram = this.diagramRef.current.instance;
-    for(var i = 0; i < shapeToTest.attachedConnectorIds.length; i++) {
-      var connector = diagram.getItemById(shapeToTest.attachedConnectorIds[i]);
-      if(connector.fromId === shapeToTest.id && connector.toId) {
-        var childShape = diagram.getItemById(connector.toId);
-        if(childShape.id === shape.id || this.isParent(childShape, shape)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
   onRequestLayoutUpdate(e) {
     for(var i = 0; i < e.changes.length; i++) {
       if(e.changes[i].type === 'remove') {
@@ -116,43 +101,8 @@ class App extends React.Component {
         }
         e.allowed = false;
       }
-      if(shapeType === 'team') {
-        if(e.args.connectorPosition === 'end' && e.args.newShape.attachedConnectorIds.length > 1) {
-          for(i = 0; i < e.args.newShape.attachedConnectorIds.length; i++) {
-            if(e.args.connector && e.args.newShape.attachedConnectorIds[i] != e.args.connector.id) {
-              var connector = diagram.getItemById(e.args.newShape.attachedConnectorIds[i]);
-              if(connector.toId === e.args.newShape.id) {
-                if(e.reason !== 'checkUIElementAvailability') {
-                  this.showToast('A \'Team\' shape can have only one incoming connection.');
-                }
-                e.allowed = false;
-                break;
-              }
-            }
-          }
-        }
-        if(e.allowed && e.args.connector && e.args.connector.fromId && e.args.connector.toId) {
-          var shapeFrom = diagram.getItemById(e.args.connector.fromId);
-          var shapeTo = diagram.getItemById(e.args.connector.toId);
-          if(this.isParent(shapeTo, shapeFrom)) {
-            if(e.reason !== 'checkUIElementAvailability') {
-              this.showToast('A circular reference is not allowed.');
-            }
-            e.allowed = false;
-          }
-        }
-      }
-      if(shapeType === 'employee') {
-        if(e.args.connectorPosition === 'start') {
-          e.allowed = false;
-        }
-
-        if(e.args.connectorPosition === 'end' && e.args.newShape.attachedConnectorIds.length > 1) {
-          if(e.reason !== 'checkUIElementAvailability') {
-            this.showToast('An \'Employee\' shape can have only one incoming connection.');
-          }
-          e.allowed = false;
-        }
+      if(shapeType === 'employee' && e.args.connectorPosition === 'start') {
+        e.allowed = false;
       }
     }
     else if(e.operation === 'changeConnectorPoints') {
