@@ -109,7 +109,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           </div>
           {isHorizontal && (
             <Scrollbar
-              ref={horizontalScrollbarRef}
               direction="horizontal"
               visible={viewModel.isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -118,7 +117,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           )}
           {isVertical && (
             <Scrollbar
-              ref={verticalScrollbarRef}
               direction="vertical"
               visible={viewModel.isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -141,10 +139,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
-
-  @Ref() horizontalScrollbarRef!: RefObject<Scrollbar>;
-
-  @Ref() verticalScrollbarRef!: RefObject<Scrollbar>;
 
   @InternalState() isHovered = false;
 
