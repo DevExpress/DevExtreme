@@ -336,15 +336,16 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return dateUtils.roundDateByStartDayHour(resultDate, startDayHour);
     }
 
-    createAppointmentInfos(gridAppointments, resources, allDay, recurrent) {
+    createAppointmentInfos(gridAppointments, resources, isAllDay, recurrent) {
         let result = [];
 
         for(let i = 0; i < gridAppointments.length; i++) {
             const appointment = gridAppointments[i];
+
             const coordinates = this.getCoordinates({
                 appointment,
                 resources,
-                allDay
+                isAllDay
             });
 
             coordinates.forEach(coordinate => {
