@@ -107,13 +107,12 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     }
 
     getVerticalMax(groupIndex) {
-        const isVerticalScrolling = this._workSpace.isVirtualScrolling();
+        const isVirtualScrolling = this._workSpace.isVirtualScrolling();
+        const correctedGroupIndex = isVirtualScrolling
+            ? groupIndex
+            : 0;
 
-        return this._workSpace.getMaxAllowedVerticalPosition(
-            isVerticalScrolling
-                ? groupIndex
-                : 0
-        );
+        return this._workSpace.getMaxAllowedVerticalPosition(correctedGroupIndex);
     }
 
     calculateTimeCellRepeatCount() {
