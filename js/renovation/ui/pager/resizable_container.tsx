@@ -6,7 +6,7 @@ import {
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import PagerProps from './common/pager_props';
-import { getElementWidth } from './utils/get_element_width';
+import { getElementWidth, getElementStyle } from './utils/get_element_width';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { PagerContentProps } from './content';
 
@@ -46,9 +46,9 @@ export function calculateAdaptivityProps({
   parent: parentWidth, pageSizes: pageSizesWidth,
   pages: pagesWidth, info: infoWidth,
 }: AllElementsWidth): ChildElementProps {
-  const minimalWidth = pageSizesWidth + pagesWidth;
+  const minimalWidth = pageSizesWidth + pagesWidth + infoWidth;
   const infoTextVisible = parentWidth - minimalWidth > 0;
-  const isLargeDisplayMode = parentWidth - (pageSizesWidth + (pagesWidth - infoWidth)) > 0;
+  const isLargeDisplayMode = parentWidth - (pageSizesWidth + pagesWidth) > 0;
   return {
     infoTextVisible,
     isLargeDisplayMode,
@@ -65,8 +65,8 @@ function getElementsWidth({
   return {
     parent: parentWidth,
     pageSizes: pageSizesWidth,
-    info: infoWidth,
-    pages: pagesHtmlWidth,
+    info: infoWidth + getElementStyle('marginLeft', info) + getElementStyle('marginRight', info),
+    pages: pagesHtmlWidth - infoWidth,
   };
 }
 
@@ -120,7 +120,28 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
       info: this.infoTextRef,
       pages: this.pagesRef,
     });
-    const current = calculateAdaptivityProps(currentElementsWidth);
+    const isEmpty = this.elementsWidth === undefined;
+    if (isEmpty) {
+      const current = calculateAdaptivityProps(currentElementsWidth);
+      this.updateElementsWidth(currentElementsWidth);
+      this.infoTextVisible = current.infoTextVisible;
+      this.isLargeDisplayMode = current.isLargeDisplayMode;
+    } else {
+      if (this.isLargeDisplayMode) {
+        this.elementsWidth.pageSizes = currentElementsWidth.pageSizes;
+        this.elementsWidth.pages = currentElementsWidth.pages;
+      }
+      if (this.infoTextVisible) {
+        this.elementsWidth.info = currentElementsWidth.info;
+      }
+      const current = calculateAdaptivityProps({
+        parent: currentElementsWidth.parent,
+        ...this.elementsWidth,
+      });
+      this.infoTextVisible = current.infoTextVisible;
+      this.isLargeDisplayMode = current.isLargeDisplayMode;
+    }
+    /* const current = calculateAdaptivityProps(currentElementsWidth);
     const isNotFittedWithCurrentWidths = (!current.infoTextVisible && this.infoTextVisible)
     || (!current.isLargeDisplayMode && this.isLargeDisplayMode);
     const isEmpty = this.elementsWidth === undefined;
@@ -133,11 +154,15 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
         parent: currentElementsWidth.parent,
         ...this.elementsWidth,
       });
-      if (cached.infoTextVisible && cached.isLargeDisplayMode) {
-        this.updateElementsWidth(currentElementsWidth);
+      if (cached.isLargeDisplayMode) {
+        this.elementsWidth.pageSizes = currentElementsWidth.pageSizes;
+        this.elementsWidth.pages = currentElementsWidth.pages;
+      }
+      if (cached.infoTextVisible) {
+        this.elementsWidth.info = currentElementsWidth.info;
       }
       this.infoTextVisible = cached.infoTextVisible;
       this.isLargeDisplayMode = cached.isLargeDisplayMode;
-    }
+    } */
   }
 }
