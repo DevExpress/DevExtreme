@@ -18,6 +18,8 @@ const BORDER_PADDING_WIDTH = 2;
 
 const moduleConfig = {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
         this.$element = $('#htmlEditor').css({ position: 'relative', margin: '10px' });
         this.$image = $('<img>').attr({
             width: IMAGE_SIZE,
@@ -54,6 +56,9 @@ const moduleConfig = {
             this.showFrameSpy = sinon.spy(instance, 'showFrame');
             this.hideFrameSpy = sinon.spy(instance, 'hideFrame');
         };
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 };
 
