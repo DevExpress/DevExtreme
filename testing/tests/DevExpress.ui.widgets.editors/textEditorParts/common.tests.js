@@ -341,6 +341,25 @@ QUnit.module('general', {}, () => {
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
     });
 
+    QUnit.testInActiveWindow('input should be focused even after focus from inner button move (T963822)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            buttons: [{
+                name: 'test',
+                options: {
+                    icon: 'home'
+                }
+            }]
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const actionButton = textEditor.getButton('test');
+
+        actionButton.focus();
+        assert.notOk($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is not focused');
+
+        textEditor.focus();
+        assert.ok($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is focused');
+    });
+
     QUnit.test('TextEditor should pass integration options to the nested buttons (T894344)', function(assert) {
         const text = 'my template';
         const editor = $('#texteditor').dxTextEditor({
