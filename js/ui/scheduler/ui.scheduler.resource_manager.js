@@ -488,15 +488,14 @@ export default class ResourceManager {
             return resourcesData;
         }
 
-        const fieldNames = [];
+        const fieldNames = {};
         const currentResourcesData = [];
+
         groups.forEach(group => {
-            const propertyNames = Object.getOwnPropertyNames(group);
-            propertyNames.forEach(name => {
-                fieldNames.indexOf(name) === -1 && fieldNames.push(name);
-            });
+            each(group, (name, value) => fieldNames[name] = value);
         });
-        const resourceData = resourcesData.filter(({ name }) => fieldNames.indexOf(name) !== -1);
+
+        const resourceData = resourcesData.filter(({ name }) => !!fieldNames[name]);
         resourceData.forEach(
             data => currentResourcesData.push(extend({}, data))
         );
@@ -524,54 +523,6 @@ export default class ResourceManager {
             resourceData.data = filteredData;
         });
 
-        // groups.forEach(group => {
-        //     each(group, (_, value) => {
-        //         currentResourcesData.forEach(resourceData => {
-
-        //             const { items, data, name } = resourceData;
-        //             const resource = this.getResourceByField(name);
-        //             const valueExpr = getValueExpr(resource);
-
-        //             const currentItems = items.filter(item => item.id === value);
-        //             const currentData = data.filter(item => item[valueExpr] === value);
-        //             resourceData.items = currentItems;
-        //             resourceData.data = currentData;
-        //         });
-        //     });
-        // });
-
         return currentResourcesData;
     }
-
-    // getResourcesDataByGroups(groups) {
-    //     const resourcesData = this.getResourcesData();
-
-    //     if(!groups) {
-    //         return resourcesData;
-    //     }
-
-    //     const fieldNames = Object.getOwnPropertyNames(groups);
-    //     const resourceData = resourcesData.filter(item => fieldNames.indexOf(item.name) !== -1);
-    //     const currentResourcesData = [];
-
-    //     resourceData.forEach(
-    //         data => currentResourcesData.push(extend({}, data))
-    //     );
-
-    //     each(groups, (_, value) => {
-    //         currentResourcesData.forEach(resourceData => {
-
-    //             const { items, data, name } = resourceData;
-    //             const resource = this.getResourceByField(name);
-    //             const valueExpr = getValueExpr(resource);
-
-    //             const currentItems = items.filter(item => item.id === value);
-    //             const currentData = data.filter(item => item[valueExpr] === value);
-    //             resourceData.items = currentItems;
-    //             resourceData.data = currentData;
-    //         });
-    //     });
-
-    //     return currentResourcesData;
-    // }
 }
