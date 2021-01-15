@@ -824,25 +824,25 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
     {
         name: 'Rooms single',
         loadingGroups: ['roomId'],
-        groups: [{ roomId: 1 }],
+        groups: [{ roomId: 0 }],
         expected: [{
-            data: [{ Id: 1, color: '#cb6bb2', text: 'Room1' }],
-            items: [{ color: '#cb6bb2', id: 1, text: 'Room1' }],
+            data: [{ Id: 0, color: '#cb6bb2', text: 'Room1' }],
+            items: [{ color: '#cb6bb2', id: 0, text: 'Room1' }],
             name: 'roomId'
         }]
     },
     {
         name: 'Rooms multiple',
         loadingGroups: ['roomId'],
-        groups: [{ roomId: 1 }, { roomId: 2 }],
+        groups: [{ roomId: 0 }, { roomId: 2 }],
         expected: [
             {
                 data: [
-                    { Id: 1, color: '#cb6bb2', text: 'Room1' },
+                    { Id: 0, color: '#cb6bb2', text: 'Room1' },
                     { Id: 2, color: '#cb6bb3', text: 'Room2' }
                 ],
                 items: [
-                    { id: 1, color: '#cb6bb2', text: 'Room1' },
+                    { id: 0, color: '#cb6bb2', text: 'Room1' },
                     { id: 2, color: '#cb6bb3', text: 'Room2' }
                 ],
                 name: 'roomId'
@@ -852,24 +852,24 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
     {
         name: 'Phones single',
         loadingGroups: ['phoneId'],
-        groups: [{ phoneId: 1 }],
+        groups: [{ phoneId: 0 }],
         expected: [{
-            data: [{ Id: 1, text: 'Phone1', color: '#cd6bb2' }],
-            items: [{ id: 1, text: 'Phone1', color: '#cd6bb2' }],
+            data: [{ Id: 0, text: 'Phone1', color: '#cd6bb2' }],
+            items: [{ id: 0, text: 'Phone1', color: '#cd6bb2' }],
             name: 'phoneId'
         }]
     },
     {
         name: 'Phones multiple',
         loadingGroups: ['phoneId'],
-        groups: [{ phoneId: 1 }, { phoneId: 3 }],
+        groups: [{ phoneId: 0 }, { phoneId: 3 }],
         expected: [{
             data: [
-                { Id: 1, text: 'Phone1', color: '#cd6bb2' },
+                { Id: 0, text: 'Phone1', color: '#cd6bb2' },
                 { Id: 3, text: 'Phone3', color: '#cd6bb4' }
             ],
             items: [
-                { id: 1, text: 'Phone1', color: '#cd6bb2' },
+                { id: 0, text: 'Phone1', color: '#cd6bb2' },
                 { id: 3, text: 'Phone3', color: '#cd6bb4' }
             ],
             name: 'phoneId'
@@ -880,7 +880,7 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
         loadingGroups: ['roomId', 'phoneId'],
         groups: [
             { roomId: 2 }, { roomId: 3 },
-            { phoneId: 1 }, { phoneId: 3 }
+            { phoneId: 0 }, { phoneId: 3 }
         ],
         expected: [
             {
@@ -895,11 +895,11 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
                 name: 'roomId'
             }, {
                 data: [
-                    { Id: 1, text: 'Phone1', color: '#cd6bb2' },
+                    { Id: 0, text: 'Phone1', color: '#cd6bb2' },
                     { Id: 3, text: 'Phone3', color: '#cd6bb4' }
                 ],
                 items: [
-                    { id: 1, color: '#cd6bb2', text: 'Phone1' },
+                    { id: 0, color: '#cd6bb2', text: 'Phone1' },
                     { id: 3, color: '#cd6bb4', text: 'Phone3' }
                 ],
                 name: 'phoneId'
@@ -915,7 +915,7 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
                 allowMultiple: true,
                 valueExpr: 'Id',
                 dataSource: [
-                    { Id: 1, text: 'Room1', color: '#cb6bb2' },
+                    { Id: 0, text: 'Room1', color: '#cb6bb2' },
                     { Id: 2, text: 'Room2', color: '#cb6bb3' },
                     { Id: 3, text: 'Room3', color: '#cb6bb4' }
                 ]
@@ -926,7 +926,7 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
                 allowMultiple: true,
                 valueExpr: 'Id',
                 dataSource: [
-                    { Id: 1, text: 'Phone1', color: '#cd6bb2' },
+                    { Id: 0, text: 'Phone1', color: '#cd6bb2' },
                     { Id: 2, text: 'Phone2', color: '#cd6bb3' },
                     { Id: 3, text: 'Phone3', color: '#cd6bb4' }
                 ]
