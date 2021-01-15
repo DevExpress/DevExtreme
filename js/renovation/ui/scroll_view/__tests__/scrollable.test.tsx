@@ -377,6 +377,19 @@ jest.mock('../../../../core/devices', () => {
             expect(getEventHandlers('scroll').length).toBe(0);
           });
 
+          it('should subscribe to scrollinit event', () => {
+            const e = { ...defaultEvent };
+            const scrollable = new Scrollable({ direction });
+            const initHandler = jest.fn();
+            (scrollable as any).initHandler = initHandler;
+
+            scrollable.initEffect();
+            emit('dxscrollinit', e);
+
+            expect(initHandler).toHaveBeenCalledTimes(1);
+            expect(initHandler).toHaveBeenCalledWith(e);
+          });
+
           it('should subscribe to scrollstart event', () => {
             const e = { ...defaultEvent };
             const scrollable = new Scrollable({ direction });
@@ -442,14 +455,17 @@ jest.mock('../../../../core/devices', () => {
             expect(handleCancel).toHaveBeenCalledWith(e);
           });
 
-          it('startEffect should return unsubscribe callback', () => {
-            const scrollable = new Scrollable({ direction });
+          each(['init', 'start', 'end', 'stop', 'cancel']).describe('EventName: %o', (shortEventName) => {
+            it('Effect should return unsubscribe callback', () => {
+              const scrollable = new Scrollable({ direction });
 
-            const detach = scrollable.startEffect() as DisposeEffectReturn;
+              const detach = scrollable[`${shortEventName}Effect`]() as DisposeEffectReturn;
 
-            expect(getEventHandlers('dxscrollstart').length).toBe(1);
-            detach();
-            expect(getEventHandlers('dxscrollstart').length).toBe(0);
+              const eventName = `dxscroll${shortEventName}`;
+              expect(getEventHandlers(eventName).length).toBe(1);
+              detach();
+              expect(getEventHandlers(eventName).length).toBe(0);
+            });
           });
 
           it('moveEffect should return unsubscribe callback', () => {
@@ -460,36 +476,6 @@ jest.mock('../../../../core/devices', () => {
             expect(getEventHandlers('dxscroll').length).toBe(1);
             detach();
             expect(getEventHandlers('dxscroll').length).toBe(0);
-          });
-
-          it('endEffect should return unsubscribe callback', () => {
-            const scrollable = new Scrollable({ direction });
-
-            const detach = scrollable.endEffect() as DisposeEffectReturn;
-
-            expect(getEventHandlers('dxscrollend').length).toBe(1);
-            detach();
-            expect(getEventHandlers('dxscrollend').length).toBe(0);
-          });
-
-          it('stopEffect should return unsubscribe callback', () => {
-            const scrollable = new Scrollable({ direction });
-
-            const detach = scrollable.stopEffect() as DisposeEffectReturn;
-
-            expect(getEventHandlers('dxscrollstop').length).toBe(1);
-            detach();
-            expect(getEventHandlers('dxscrollstop').length).toBe(0);
-          });
-
-          it('cancelEffect should return unsubscribe callback', () => {
-            const scrollable = new Scrollable({ direction });
-
-            const detach = scrollable.cancelEffect() as DisposeEffectReturn;
-
-            expect(getEventHandlers('dxscrollcancel').length).toBe(1);
-            detach();
-            expect(getEventHandlers('dxscrollcancel').length).toBe(0);
           });
 
           it('ScrollPosition: { top: 0, left: 0 }', () => {
