@@ -21,6 +21,7 @@ jest.mock('../../common/utils', () => ({
 jest.mock('../renderers/utils', () => ({
   getNextDefsSvgId: jest.fn().mockReturnValue('id'),
   getFuncIri: jest.fn().mockReturnValue('url(#filterId)'),
+  getGraphicExtraProps: jest.fn(),
 }));
 
 describe('Render', () => {
@@ -94,9 +95,9 @@ describe('Render', () => {
       strokeOpacity: 0.5,
       dashStyle: 'dash_style_test',
     },
-    textRef: {},
-    htmlRef: {},
-    cloudRef: {},
+    textRef: { current: {} },
+    htmlRef: { current: {} },
+    cloudRef: { current: {} },
     textSizeWithPaddings: { width: 48, height: 40 },
     correctedCoordinates: {
       x: 4, y: 5, anchorX: 11, anchorY: 12,
@@ -133,7 +134,6 @@ describe('Render', () => {
     expect(tooltip.find('g').at(1).props()).toMatchObject({
       textAnchor: 'middle',
       transform: 'translate(4, -12)',
-      ref: {},
     });
   });
 
@@ -371,7 +371,7 @@ describe('Effect', () => {
       html: 'customized_html_text',
     });
     const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    tooltip.htmlRef = {} as any;
+    tooltip.htmlRef = { current: {} } as any;
     tooltip.setHtmlText();
 
     expect(tooltip.htmlRef.innerHTML).toEqual('customized_html_text');
@@ -382,7 +382,7 @@ describe('Effect', () => {
       text: 'customized_tooltip_text',
     });
     const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    tooltip.htmlRef = {} as any;
+    tooltip.htmlRef = { current: {} } as any;
     tooltip.setHtmlText();
 
     expect(tooltip.htmlRef.innerHTML).toEqual(undefined);
@@ -393,15 +393,16 @@ describe('Effect', () => {
       html: 'customized_html_text',
     });
     const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
-    tooltip.htmlRef = {} as any;
+    tooltip.htmlRef = { current: {} } as any;
     tooltip.setHtmlText();
 
     expect(tooltip.htmlRef.innerHTML).toBe(undefined);
   });
 
   it('should calculate cloud size', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
-    tooltip.d = 'test_d';
+    const tooltip = new Tooltip({
+      data: { valueText: 'Tooltip value text' } as any, visible: true, x: 1, y: 2, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any,
+    });
     tooltip.cloudRef = {
       getBBox: jest.fn().mockReturnValue({
         x: 7, y: 9, width: 13, height: 15,
@@ -682,17 +683,5 @@ describe('Getters', () => {
         height: 6,
       },
     });
-  });
-});
-
-describe('SetCurrentState', () => {
-  it('should set current d', () => {
-    const tooltip = new Tooltip({ });
-
-    tooltip.setCurrentState('path_1');
-    expect(tooltip.d).toEqual('path_1');
-    tooltip.setCurrentState('path_2');
-    tooltip.setCurrentState('path_2');
-    expect(tooltip.d).toEqual('path_2');
   });
 });
