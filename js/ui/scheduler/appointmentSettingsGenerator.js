@@ -345,7 +345,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             const coordinates = this.getCoordinates({
                 appointment,
                 resources,
-                isAllDay
+                isAllDay,
+                recurrent
             });
 
             coordinates.forEach(coordinate => {
@@ -394,12 +395,19 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     getCoordinates(options) {
         const {
             appointment,
-            isAllDay
+            isAllDay,
+            resources,
+            recurrent
         } = options;
-        const { startDate } = appointment;
-        const { groupIndex } = appointment.source;
 
-        return this.workspace.getCoordinatesByDateInGroup(startDate, null, isAllDay, groupIndex);
+        const { startDate } = appointment;
+        const { workspace } = this;
+
+        const groupIndex = !recurrent
+            ? appointment.source.groupIndex
+            : undefined;
+
+        return workspace.getCoordinatesByDateInGroup(startDate, resources, isAllDay, groupIndex);
     }
 
     _createRecurrentAppointmentInfos(gridAppointments, resources, allDay) {

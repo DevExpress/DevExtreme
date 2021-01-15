@@ -495,17 +495,17 @@ export default class ResourceManager {
             each(group, (name, value) => fieldNames[name] = value);
         });
 
-        const resourceData = resourcesData.filter(({ name }) => !!fieldNames[name]);
+        const resourceData = resourcesData.filter(({ name }) => isDefined(fieldNames[name]));
         resourceData.forEach(
             data => currentResourcesData.push(extend({}, data))
         );
 
-        currentResourcesData.forEach(resourceData => {
+        currentResourcesData.forEach(currentResource => {
             const {
                 items,
                 data,
                 name: resourceName
-            } = resourceData;
+            } = currentResource;
 
             const resource = this.getResourceByField(resourceName);
             const valueExpr = getValueExpr(resource);
@@ -513,7 +513,7 @@ export default class ResourceManager {
             const filteredData = [];
 
             groups
-                .filter(group => !!group[resourceName])
+                .filter(group => isDefined(group[resourceName]))
                 .forEach(group => {
                     each(group, (name, value) => {
 
@@ -527,8 +527,8 @@ export default class ResourceManager {
                     });
                 });
 
-            resourceData.items = filteredItems;
-            resourceData.data = filteredData;
+            currentResource.items = filteredItems;
+            currentResource.data = filteredData;
         });
 
         return currentResourcesData;

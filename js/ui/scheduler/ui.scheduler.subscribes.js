@@ -500,8 +500,6 @@ const subscribes = {
         const endViewDate = workspace.getEndViewDateByEndDayHour();
         const filterOptions = [];
 
-        const resources = this.fire('_getPrerenderFilterResources');
-
         const groupsInfo = viewDataProvider.getGroupsInfo();
         groupsInfo.forEach((item) => {
             const groupIndex = item.groupIndex;
@@ -517,6 +515,8 @@ const subscribes = {
             const endDayHour = isCalculateStartAndEndDayHour
                 ? (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY
                 : viewEndDayHour;
+
+            const resources = this.fire('_getPrerenderFilterResources', groupIndex);
 
             const allDayPanel = viewDataProvider.getAllDayPanel(groupIndex);
             // TODO split by workspace strategies
@@ -545,15 +545,20 @@ const subscribes = {
 
         return result;
     },
-    _getPrerenderFilterResources: function() {
+    _getPrerenderFilterResources: function(groupIndex) {
         const cellGroups = [];
         const { viewDataProvider } = this.getWorkSpace();
-        const groupIndices = viewDataProvider.getGroupIndices();
 
-        groupIndices.forEach(index => {
-            const cellGroup = viewDataProvider.getCellsGroup(index);
-            cellGroup && cellGroups.push(cellGroup);
-        });
+        const cellGroup = viewDataProvider.getCellsGroup(groupIndex);
+
+        cellGroup && cellGroups.push(cellGroup);
+
+        // const groupIndices = viewDataProvider.getGroupIndices();
+
+        // groupIndices.forEach(index => {
+        //     const cellGroup = viewDataProvider.getCellsGroup(index);
+        //     cellGroup && cellGroups.push(cellGroup);
+        // });
 
         const result = this._resourcesManager.getResourcesDataByGroups(cellGroups);
 
