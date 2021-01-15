@@ -2,6 +2,7 @@
 
 // adduse
 
+$generic-popup-closebutton-offset: null !default;
 $generic-popup-content-padding: null !default;
 $generic-popup-button-margin: null !default;
 $generic-popup-toolbar-item-spacing: null !default;
@@ -9,6 +10,7 @@ $generic-popup-toolbartop-padding: null !default;
 $generic-popup-toolbarbottom-padding: null !default;
 
 @if $size == "default" {
+  $generic-popup-closebutton-offset: 10px !default;
   $generic-popup-content-padding: 20px !default;
   $generic-popup-button-margin: 0 10px !default;
 
@@ -18,6 +20,7 @@ $generic-popup-toolbarbottom-padding: null !default;
 }
 
 @else if $size == "compact" {
+  $generic-popup-closebutton-offset: 6px !default;
   $generic-popup-content-padding: 10px !default;
   $generic-popup-button-margin: 0 5px !default;
 
