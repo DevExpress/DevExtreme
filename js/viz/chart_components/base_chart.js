@@ -666,7 +666,7 @@ export const BaseChart = BaseWidget.inherit({
         const layoutTargets = that._getLayoutTargets();
 
         this._layoutAxes((needSpace) => {
-            const axisDrawOptions = needSpace ? extend({}, drawOptions, { animate: false }) : drawOptions;
+            const axisDrawOptions = needSpace ? extend({}, drawOptions, { animate: false, recreateCanvas: true }) : drawOptions;
             const canvas = that._renderAxes(axisDrawOptions, preparedOptions);
             that._shrinkAxes(needSpace, canvas);
         });

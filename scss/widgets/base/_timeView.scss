@@ -1,0 +1,39 @@
+// adduse
+
+.dx-timeview {
+  height: 250px;
+  width: 270px;
+
+  &.dx-state-disabled,
+  .dx-state-disabled {
+    &.dx-widget,
+    .dx-widget {
+      opacity: 1;
+    }
+  }
+}
+
+.dx-timeview-clock {
+  position: relative;
+}
+
+.dx-timeview-hourarrow,
+.dx-timeview-minutearrow {
+  position: absolute;
+  left: 50%;
+  width: 30px;
+  height: 50%;
+  margin-left: -15px;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  transform-origin: 50% 100%;
+  -webkit-backface-visibility: hidden; // stylelint-disable-line property-no-vendor-prefix
+}
+
+.dx-timeview-field .dx-numberbox {
+  width: 70px;
+
+  &.dx-numberbox-spin-touch-friendly {
+    width: 110px;
+  }
+}

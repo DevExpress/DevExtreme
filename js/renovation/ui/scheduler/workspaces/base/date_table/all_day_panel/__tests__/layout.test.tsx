@@ -12,8 +12,12 @@ describe('AllDayPanelLayout', () => {
         endDate: new Date(2020, 6, 10),
         text: '',
         index: 0,
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
+        key: '1',
       }],
       dateTable: [[]],
+      groupIndex: 1,
     }],
     cellCountInGroupRow: 1,
   };
@@ -106,6 +110,7 @@ describe('AllDayPanelLayout', () => {
             groupedData: [{
               dateTable: [[]],
               allDayPanel: undefined,
+              groupIndex: 1,
             }],
             cellCountInGroupRow: 1,
           },

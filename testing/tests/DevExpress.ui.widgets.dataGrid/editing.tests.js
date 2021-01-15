@@ -17,6 +17,7 @@ import 'ui/autocomplete';
 import 'ui/color_box';
 import 'ui/data_grid/ui.data_grid';
 import 'ui/drop_down_box';
+import 'ui/drop_down_button';
 import 'ui/switch';
 import 'ui/validator';
 import errors from 'ui/widget/ui.errors';
@@ -10898,7 +10899,7 @@ QUnit.module('Editing with validation', {
         that.saveEditData();
 
         // assert
-        assert.equal($('.dx-error-message').text(), 'Hidden Group is required, Group is required', 'error text');
+        assert.equal($('.dx-error-message').text(), 'Group is required, Hidden Group is required', 'error text');
     });
 
     // T420231
@@ -11596,6 +11597,38 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.equal($cell.find('.dx-overlay').length, 1, 'tooltip is rendered');
+    });
+
+    QUnit.testInActiveWindow('Show tooltip on showing dropdownbutton custom editor with invalid value (T959883)', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = this.rowsView;
+        const $testElement = $('#container .dx-datagrid');
+
+        that.applyOptions({
+            dataSource: [{ id: 1 }],
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: 'test',
+                validationRules: [{ type: 'required' }],
+                editCellTemplate: function() {
+                    return $('<div>').dxDropDownButton();
+                }
+            }]
+        });
+
+        rowsView.render($testElement);
+
+        // act
+        $(this.getCellElement(0, 0)).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.equal($(this.getCellElement(0, 0)).find('.dx-overlay').length, 2, 'validation and revert tooltips are rendered');
     });
 
     // T183197

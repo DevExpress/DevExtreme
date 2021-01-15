@@ -1,9 +1,13 @@
 import {
-  Component, ComponentBindings, JSXComponent, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  Template,
 } from 'devextreme-generator/component_declaration/common';
 import { CellBase as Cell, CellBaseProps } from '../cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
-import { ContentTemplateProps } from '../../types.d';
+import { ContentTemplateProps, DataCellTemplateProps } from '../../types.d';
 
 export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
   <Cell
@@ -21,7 +25,7 @@ export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
 
 @ComponentBindings()
 export class DateTableCellBaseProps extends CellBaseProps {
-  @Template() dataCellTemplate?: any;
+  @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }
 
 @Component({
