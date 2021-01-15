@@ -64,7 +64,7 @@ describe('GroupPanel Vertical Layout', () => {
             .toBe(GroupPanelVerticalLayout);
         });
 
-        it('should return horizontal layout when groupOrientation is vertical', () => {
+        it('should return horizontal layout when groupOrientation is horizontal', () => {
           const groupPanel = new GroupPanel({
             groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
           });
