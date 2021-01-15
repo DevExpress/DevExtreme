@@ -4,7 +4,7 @@ import {
   InternalState,
   RefObject,
   Ref,
-  Effect, Method,
+  Effect,
 } from 'devextreme-generator/component_declaration/common';
 
 import { Widget } from '../common/widget';
@@ -45,7 +45,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
-      <div className={SCROLLABLE_SCROLL_CLASS} style={styles} ref={scrollRef}>
+      <div className={viewModel.scrollClasses} style={styles} ref={scrollRef}>
         <div className={SCROLLABLE_SCROLL_CONTENT_CLASS} />
       </div>
     </Widget>
@@ -87,16 +87,6 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     return (): void => dxPointerUp.off(this.scrollRef, { namespace });
   }
 
-  @Method()
-  // eslint-disable-next-line class-methods-use-this
-  public cursorEnter(): void {
-  }
-
-  @Method()
-  // eslint-disable-next-line class-methods-use-this
-  public cursorLeave(): void {
-  }
-
   private feedbackOn(): void {
     this.active = true;
   }
@@ -125,6 +115,13 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
       display: this.needScrollbar() ? '' : 'none',
       [`${this.getDimension()}`]: THUMB_MIN_SIZE,
     };
+  }
+
+  get scrollClasses(): string {
+    return combineClasses({
+      [SCROLLABLE_SCROLL_CLASS]: true,
+      'dx-state-invisible': !this.props.visible,
+    });
   }
 
   private isHidden(): boolean {
