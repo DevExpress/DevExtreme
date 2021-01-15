@@ -49,7 +49,7 @@ const createDataSetForScreenShotTests = () => {
   ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
     test(`General layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
-        .expect(await compareScreenshot(t, `generic-layout-with-groups-${view}-${groupOrientation}.png`)).ok();
+        .expect(await compareScreenshot(t, `genericGroups-layout-with-groups-${view}-${groupOrientation}.png`)).ok();
     }).before(() => createScheduler({
       dataSource: createDataSetForScreenShotTests(),
       currentDate: new Date(2020, 6, 15),
