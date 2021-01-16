@@ -1255,6 +1255,33 @@ function() {
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
     });
 
+    // T962160
+    QUnit.test('Show info after pagesizes change', function(assert) {
+        const $pager = $('#container').dxPager({
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 200,
+            infoText: 'Page {0} of {1} ({2} items)',
+        });
+
+        const pager = $pager.dxPager('instance');
+
+        const optimalPagerWidth = pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() + 20;
+        $('#container').width(optimalPagerWidth);
+        pager._dimensionChanged();
+        assert.ok(pager._$info.length === 1 && pager._$info.css('display') !== 'none', 'info element is visible');
+
+        $(pager._pages[4]._$page).trigger('dxclick');
+        pager._dimensionChanged();
+        assert.ok(pager._$info.length === 0 || pager._$info.css('display') === 'none', 'info element is hidden');
+
+        $(pager._pages[0]._$page).trigger('dxclick');
+        pager._dimensionChanged();
+        assert.ok(pager._$info.length === 1 && pager._$info.css('display') !== 'none', 'info element is visible');
+    });
+
     QUnit.test('Apply light mode when pager is first rendered', function(assert) {
         const $pager = $('#container').width(100).dxPager({
             maxPagesCount: 8,
