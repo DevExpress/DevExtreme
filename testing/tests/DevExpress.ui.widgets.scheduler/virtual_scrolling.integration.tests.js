@@ -1037,6 +1037,11 @@ module('Virtual scrolling', () => {
                     }
                 ].forEach(({ showAllDayPanel, steps }) => {
                     test(`Long appointment should be rendered correctly if horizontal grouping, and showAllDayPanel is ${showAllDayPanel}`, function(assert) {
+                        if(!isDesktopEnvironment()) {
+                            assert.ok(true, 'This test is for desktop only');
+                            return;
+                        }
+
                         const data = [{
                             startDate: new Date(2020, 9, 12, 1, 30),
                             endDate: new Date(2020, 9, 13, 0, 30),
