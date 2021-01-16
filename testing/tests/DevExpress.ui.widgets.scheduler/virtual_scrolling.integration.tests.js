@@ -14,7 +14,7 @@ import {
     asyncWrapper
 } from '../../helpers/scheduler/helpers.js';
 
-import browser from 'core/devices';
+import browser from 'core/utils/browser';
 
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
