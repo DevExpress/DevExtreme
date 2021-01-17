@@ -45,7 +45,7 @@ const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
 
 const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
 
-const POPUP_HAS_CLOSE_BUTTON = 'dx-has-close-button';
+const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
@@ -286,7 +286,7 @@ const Popup = Overlay.inherit({
             this._$title = this._renderTemplateByType('titleTemplate', items, $title).addClass(POPUP_TITLE_CLASS);
             this._renderDrag();
             this._executeTitleRenderAction(this._$title);
-            this._$title.toggleClass(POPUP_HAS_CLOSE_BUTTON, this._hasCloseButton());
+            this._$title.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
         } else if(this._$title) {
             this._$title.detach();
         }
