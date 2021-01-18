@@ -21,7 +21,7 @@ import devices from '../../core/devices';
 import Form from '../form';
 import holdEvent from '../../events/hold';
 import { when, Deferred, fromPromise } from '../../core/utils/deferred';
-import { deferRender } from '../../core/utils/common';
+import { deferRender, equalByValue } from '../../core/utils/common';
 import * as iconUtils from '../../core/utils/icon';
 import Scrollable from '../scroll_view/ui.scrollable';
 
