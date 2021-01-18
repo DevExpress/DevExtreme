@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import $ from 'jquery';
 import fx from 'animation/fx';
 import { dropDownEditorsList } from '../../helpers/widgetsList.js';
