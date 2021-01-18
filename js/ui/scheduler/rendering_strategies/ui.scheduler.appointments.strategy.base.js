@@ -541,9 +541,10 @@ class BaseRenderingStrategy {
             coordinates.virtual = {
                 top: coordinates.top,
                 left: coordinates.left,
-                index: coordinates.appointmentReduced === 'tail' ?
-                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex :
-                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex + '-tail',
+                // index: coordinates.appointmentReduced === 'tail' ?
+                //     coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex :
+                //     coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex + '-tail',
+                index: coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex,
                 isAllDay: isAllDay
             };
         }
