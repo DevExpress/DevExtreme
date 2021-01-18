@@ -60,19 +60,6 @@ const Scrollbar = Widget.inherit({
 
     },
 
-    _adjustVisibility: function(visible) {
-        if(this._baseContainerToContentRatio && !this._needScrollbar()) {
-            return false;
-        }
-
-        switch(this.option('visibilityMode')) {
-            case SCROLLBAR_VISIBLE.onScroll:
-                break;
-        }
-
-        return visible;
-    },
-
     moveTo: function(location) {
         if(this._isHidden()) {
             return;

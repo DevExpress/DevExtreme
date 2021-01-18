@@ -568,7 +568,7 @@ jest.mock('../../../../core/devices', () => {
           expect(scrollable.scrollEffect.bind(scrollable)).not.toThrow();
         });
 
-        each(['always', 'onHover', 'never']).describe('HoverEffect params. showScrollbar: %o', (showScrollbarMode) => {
+        each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbarMode) => {
           it('hoverEffect should update invisible class only for onHover mode', () => {
             if (Scrollable === ScrollableNative) {
               return; // actual only for simulated strategy
@@ -587,34 +587,15 @@ jest.mock('../../../../core/devices', () => {
               const scrollbar = scrollableElement.find('.dx-scrollable-scroll');
               return scrollbar.hasClass('dx-state-invisible');
             };
-            let isScrollbarHidden = isScrollbarHasInvisibleClass(scrollable);
-            if (showScrollbarMode === 'never') {
-              expect(isScrollbarHidden).toBe(true);
-            } else if (showScrollbarMode === 'onHover') {
-              expect(isScrollbarHidden).toBe(true);
-            } else {
-              expect(isScrollbarHidden).toBe(false);
-            }
+            expect(isScrollbarHasInvisibleClass(scrollable)).toBe(showScrollbarMode !== 'always');
 
             scrollable.cursorEnterHandler();
-            isScrollbarHidden = isScrollbarHasInvisibleClass(scrollable);
-            if (showScrollbarMode === 'never') {
-              expect(isScrollbarHidden).toBe(true);
-            } else if (showScrollbarMode === 'onHover') {
-              expect(isScrollbarHidden).toBe(false);
-            } else {
-              expect(isScrollbarHidden).toBe(false);
-            }
+            expect(isScrollbarHasInvisibleClass(scrollable)).toBe(
+              showScrollbarMode !== 'always' && showScrollbarMode !== 'onHover',
+            );
 
             scrollable.cursorLeaveHandler();
-            isScrollbarHidden = isScrollbarHasInvisibleClass(scrollable);
-            if (showScrollbarMode === 'never') {
-              expect(isScrollbarHidden).toBe(true);
-            } else if (showScrollbarMode === 'onHover') {
-              expect(isScrollbarHidden).toBe(true);
-            } else {
-              expect(isScrollbarHidden).toBe(false);
-            }
+            expect(isScrollbarHasInvisibleClass(scrollable)).toBe(showScrollbarMode !== 'always');
           });
         });
       });

@@ -57,6 +57,7 @@ export class ScrollableProps extends ScrollableInternalProps {
 export type ScrollableInternalPropsType = ScrollableInternalProps
 & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>
 & Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
-& Pick<BottomPocketProps, 'reachBottomText'>;
+& Pick<BottomPocketProps, 'reachBottomText'>
+& Pick<BaseWidgetProps, 'visible'>;
 
 export type ScrollablePropsType = ScrollableProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
