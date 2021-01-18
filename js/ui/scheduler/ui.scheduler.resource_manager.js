@@ -372,6 +372,39 @@ export default class ResourceManager {
         return false;
     }
 
+    _getPlainResourcesByAppointment(rawAppointment) {
+        const result = [];
+
+        this.getResources().forEach(resource => {
+            const valueGetter = compileGetter(getValueExpr(resource));
+            const displayGetter = compileGetter(getDisplayExpr(resource));
+
+            const resourceFieldName = this.getField(resource);
+            const resourceValue = rawAppointment[resourceFieldName];
+            if(resourceValue !== undefined) {
+                const items = this.getResources().filter(r => {
+                    return r.fieldExpr === resourceFieldName;
+                })[0].dataSource;
+
+                const resultValue = [];
+                wrapToArray(resourceValue).forEach(value => {
+                    items.forEach(item => {
+                        if(valueGetter(item) === value) {
+                            resultValue.push(displayGetter(item));
+                        }
+                    });
+                });
+
+                result.push({
+                    label: resource.label || resourceFieldName,
+                    values: resultValue
+                });
+            }
+        });
+
+        return result;
+    }
+
     _getResourceDataByField(fieldName) {
         const loadedResources = this.getResourcesData();
         let currentResourceData = [];

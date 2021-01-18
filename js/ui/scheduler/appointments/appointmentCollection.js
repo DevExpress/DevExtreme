@@ -5,7 +5,7 @@ import { data as elementData } from '../../../core/element_data';
 import { locate, move } from '../../../animation/translator';
 import dateUtils from '../../../core/utils/date';
 import { normalizeKey } from '../../../core/utils/common';
-import { isDefined, isDeferred, isString } from '../../../core/utils/type';
+import { isDefined, isDeferred, isString, isPlainObject } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 import { deepExtendArraySafe } from '../../../core/utils/object';
 import { merge } from '../../../core/utils/array';
@@ -13,13 +13,14 @@ import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { getRecurrenceProcessor } from '../recurrence';
 import registerComponent from '../../../core/component_registrator';
-import Appointment from './appointment';
+import { Appointment, AgendaAppointment } from './appointment';
 import { addNamespace, isFakeClickEvent } from '../../../events/utils/index';
 import { name as dblclickEvent } from '../../../events/double_click';
 import CollectionWidget from '../../collection/ui.collection_widget.edit';
 import timeZoneUtils from '../utils.timeZone.js';
 import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointmentLayout';
+
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -34,6 +35,10 @@ class SchedulerAppointments extends CollectionWidget {
 
     get isVirtualScrolling() {
         return this.invoke('isVirtualScrolling');
+    }
+
+    get resourceManager() {
+        return this.option('observer')._resourcesManager;
     }
 
     constructor(element, options) {
@@ -357,7 +362,20 @@ class SchedulerAppointments extends CollectionWidget {
         this._preventSingleAppointmentClick = false;
     }
 
-    _renderAppointmentTemplate($container, data, model) {
+    _renderAppointmentTemplate($container, rawAppointment, model) {
+        const scheduler = this.option('observer');
+        const appointment = scheduler.createAppointmentAdapter(rawAppointment);
+
+        const config = {
+            isAllDay: appointment.allDay,
+            isRecurrence: appointment.recurrenceRule,
+
+            // TODO
+            html: isPlainObject(rawAppointment) && rawAppointment.html ?
+                rawAppointment.html :
+                undefined
+        };
+
         const formatText = this.invoke(
             'getTextAndFormatDate',
             model.appointmentData,
@@ -367,8 +385,8 @@ class SchedulerAppointments extends CollectionWidget {
         );
 
         $container.append(this.isAgendaView ?
-            createAgendaAppointmentLayout(formatText, data) :
-            createAppointmentLayout(formatText, data)
+            createAgendaAppointmentLayout(formatText, config) :
+            createAppointmentLayout(formatText, config)
         );
     }
 
@@ -509,10 +527,10 @@ class SchedulerAppointments extends CollectionWidget {
             });
             this._processVirtualAppointment(settings, element, data, deferredColor);
         } else {
-            const { info } = settings;
+            const plainResourceList = this.isAgendaView ? this.resourceManager._getPlainResourcesByAppointment(data) : [];
 
-            this._createComponent(element, Appointment, {
-                data,
+            const config = {
+                data, // TODO rename
                 groupIndex: settings.groupIndex,
 
                 observer: this.option('observer'),
@@ -523,11 +541,18 @@ class SchedulerAppointments extends CollectionWidget {
                 allDay: allDay,
                 reduced: settings.appointmentReduced,
                 isCompact: settings.isCompact,
-                startDate: new Date(info?.appointment.startDate),
+                startDate: new Date(settings.info?.appointment.startDate),
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
-                resizableConfig: this._resizableConfig(data, settings)
-            });
+                resizableConfig: this._resizableConfig(data, settings),
+                plainResourceList
+            };
+
+            this._createComponent(
+                element,
+                this.isAgendaView ? AgendaAppointment : Appointment,
+                config
+            );
         }
     }
 

@@ -35,5 +35,7 @@ export const APPOINTMENT_CONTENT_CLASSES = {
     APPOINTMENT_TITLE: 'dx-scheduler-appointment-title',
     APPOINTMENT_DATE: 'dx-scheduler-appointment-content-date',
     ALL_DAY_CONTENT: 'dx-scheduler-appointment-content-allday',
-    ITEM: 'dx-scheduler-appointment'
+    ITEM: 'dx-scheduler-appointment',
+
+    AGENDA_MARKER: 'dx-scheduler-agenda-appointment-marker'
 };

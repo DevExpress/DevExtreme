@@ -1,3 +1,4 @@
+@use "./mixins" as *;
 @use "../mixins" as *;
 @use "../icons" as *;
 
@@ -17,6 +18,8 @@ $scheduler-appointment-start-color: null !default;
 $scheduler-appointment-dragging-shadow: null !default;
 
 $scheduler-reduced-icon-offset: null !default;
+
+$agenda-appointment-text-color: null !default;
 
 @mixin dx-scheduler-appointment-focused-mixin() {
   &.dx-state-focused,
@@ -161,5 +164,81 @@ $scheduler-reduced-icon-offset: null !default;
     .dx-scheduler-appointment {
       box-shadow: $scheduler-appointment-dragging-shadow, $scheduler-vertical-appointment-resizing-shadow;
     }
+  }
+}
+
+.dx-scheduler-agenda {
+  .dx-scheduler-appointment {
+    background-color: transparent;
+    color: $agenda-appointment-text-color;
+    padding: 10px;
+
+    &.dx-state-focused {
+      color: $agenda-appointment-text-color;
+    }
+
+    // .dx-state-hover {
+
+    //   background-color: $hover-background-color;
+
+    // }
+  }
+
+  .dx-scheduler-agenda-appointment-right-layout {
+    margin-left: 10px;
+  }
+
+  .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content,
+  .dx-scheduler-appointment-content {
+    padding: 0;
+  }
+
+  .dx-scheduler-appointment-content {
+    display: flex;
+    flex-direction: row;
+
+    & > * {
+      overflow: visible;
+    }
+  }
+
+  .dx-scheduler-appointment-content-date {
+    opacity: 1;
+  }
+
+  .dx-scheduler-appointment-title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 18px;
+  }
+
+  .dx-scheduler-appointment-content-details {
+    display: flex;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  .dx-scheduler-appointment-content-allday {
+    display: flex;
+    padding-right: 5px;
+  }
+
+  .dx-scheduler-appointment-resource-list,
+  .dx-scheduler-appointment-resource-item {
+    display: flex;
+  }
+
+  .dx-scheduler-appointment-resource-item {
+    margin-left: 15px;
+  }
+
+  .dx-scheduler-appointment-resource-item-value {
+    margin-left: 3px;
+  }
+
+  .dx-scheduler-agenda-appointment-marker {
+    @include use-colored-marker();
+
+    background-color: $scheduler-appointment-base-color;
   }
 }

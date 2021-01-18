@@ -100,7 +100,6 @@ $scheduler-recurrence-icon-offset: 20px;
 
 $scheduler-agenda-appointment-margin: 5px;
 $scheduler-agenda-last-in-date-appointment-margin: 20px;
-$scheduler-agenda-appointment-font-size: 16px;
 $scheduler-agenda-left-column-width: 70px;
 
 $scheduler-small-size-factor: 0.5;
@@ -135,7 +134,9 @@ $scheduler-appointment-form-label-padding: 20px;
   $scheduler-fill-focused-appointment: $scheduler-fill-focused-appointment,
   $scheduler-appointment-start-color: $scheduler-appointment-start-color,
   $scheduler-appointment-dragging-shadow: $scheduler-appointment-dragging-shadow,
-  $scheduler-reduced-icon-offset: $scheduler-reduced-icon-offset
+  $scheduler-reduced-icon-offset: $scheduler-reduced-icon-offset,
+
+  $agenda-appointment-text-color: $scheduler-tooltip-appointment-text-color,
 );
 
 @mixin dx-scheduler-group-mixin($padding) {
@@ -2140,30 +2141,6 @@ $scheduler-appointment-form-label-padding: 20px;
 
       &.dx-scheduler-last-in-date-agenda-appointment {
         margin-bottom: $scheduler-agenda-last-in-date-appointment-margin;
-      }
-    }
-
-    .dx-scheduler-appointment-content {
-      font-size: $scheduler-agenda-appointment-font-size;
-
-      .dx-scheduler-appointment-content-date,
-      .dx-scheduler-appointment-content-allday {
-        opacity: 1;
-        font-weight: bold;
-        font-size: $scheduler-agenda-appointment-font-size - 3px;
-      }
-    }
-
-    .dx-scheduler-appointment-content-allday {
-      display: inline-block;
-
-      @include dx-overflow();
-
-      padding-right: 5px;
-
-      .dx-rtl & {
-        padding-right: 0;
-        padding-left: 5px;
       }
     }
   }

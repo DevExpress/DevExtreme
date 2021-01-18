@@ -20,6 +20,7 @@ import {
     REDUCED_APPOINTMENT_PARTS_CLASSES,
     DIRECTION_APPOINTMENT_CLASSES,
     APPOINTMENT_DRAG_SOURCE_CLASS,
+    APPOINTMENT_CONTENT_CLASSES
 } from '../constants';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
@@ -28,7 +29,11 @@ const DEFAULT_VERTICAL_HANDLES = 'top bottom';
 const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
 const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
 
-class Appointment extends DOMComponent {
+export class Appointment extends DOMComponent {
+    get coloredElement() {
+        return this.$element();
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             data: {},
@@ -43,6 +48,7 @@ class Appointment extends DOMComponent {
             cellHeight: 0,
             cellWidth: 0,
             isDragSource: false,
+            plainResourceList: []
         });
     }
 
@@ -129,12 +135,16 @@ class Appointment extends DOMComponent {
         this._renderRecurrenceClass();
         this._renderResizable();
 
+        this._setResourceColor();
+    }
+
+    _setResourceColor() {
         const deferredColor = this.invoke('getAppointmentColor', {
             itemData: this.option('data'),
             groupIndex: this.option('groupIndex'),
         });
 
-        deferredColor.done(color => color && this.$element().css('backgroundColor', color));
+        deferredColor.done(color => color && this.coloredElement.css('backgroundColor', color));
     }
 
     _renderAppointmentGeometry() {
@@ -246,4 +256,26 @@ class Appointment extends DOMComponent {
 
 registerComponent('dxSchedulerAppointment', Appointment);
 
-export default Appointment;
+export class AgendaAppointment extends Appointment {
+    get coloredElement() {
+        return this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER}`);
+    }
+
+    _render() {
+        super._render();
+        const list = this.option('plainResourceList');
+
+        const container = $('<div />').addClass('dx-scheduler-appointment-resource-list');
+        container.appendTo(this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`));
+
+        if(list.length > 0) {
+            list.forEach(element => {
+                const itemContainer = $('<div />').addClass('dx-scheduler-appointment-resource-item');
+                itemContainer.appendTo(container);
+
+                $('<div />').text(`${element.label}:`).appendTo(itemContainer);
+                $('<div />').addClass('dx-scheduler-appointment-resource-item-value').text(element.values.join(', ')).appendTo(itemContainer);
+            });
+        }
+    }
+}

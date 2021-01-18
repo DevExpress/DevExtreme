@@ -607,14 +607,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 }
 
 .dx-scheduler-agenda {
-  .dx-scheduler-appointment-content {
-    font-size: $generic-scheduler-agenda-appointment-font-size;
-
-    .dx-scheduler-appointment-content-date {
-      font-size: $generic-scheduler-agenda-appointment-font-size - 3px;
-    }
-  }
-
   .dx-scheduler-group-header {
     font-size: $generic-scheduler-group-header-agenda-font-size;
     width: $generic-scheduler-group-header-table-cell-width;
