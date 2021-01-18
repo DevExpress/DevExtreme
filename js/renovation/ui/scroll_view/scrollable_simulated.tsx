@@ -370,12 +370,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
     return true; // TODO
   }
 
+  @Method()
   cursorEnterHandler(): void {
     if (!this.props.disabled && this.isHoverMode()) {
       this.isHovered = true;
     }
   }
 
+  @Method()
   cursorLeaveHandler(): void {
     if (!this.props.disabled && this.isHoverMode()) {
       this.isHovered = false;

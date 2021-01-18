@@ -567,6 +567,30 @@ jest.mock('../../../../core/devices', () => {
 
           expect(scrollable.scrollEffect.bind(scrollable)).not.toThrow();
         });
+
+        it('hoverEffect', () => {
+          if (Scrollable === ScrollableNative) {
+            return; // actual only for simulated strategy
+          }
+
+          const scrollable = new Scrollable({
+            direction: 'horizontal',
+            showScrollbar: 'onHover',
+          }) as ScrollableSimulated;
+
+          const isScrollbarHasInvisibleClass = (scrollableInstance) => {
+            const scrollableElement = mount(viewFunction(scrollableInstance as any) as JSX.Element);
+            const scrollbar = scrollableElement.find('.dx-scrollable-scroll');
+            return scrollbar.hasClass('dx-state-invisible');
+          };
+          expect(isScrollbarHasInvisibleClass(scrollable)).toBe(true);
+
+          scrollable.cursorEnterHandler();
+          expect(isScrollbarHasInvisibleClass(scrollable)).toBe(false);
+
+          scrollable.cursorLeaveHandler();
+          expect(isScrollbarHasInvisibleClass(scrollable)).toBe(true);
+        });
       });
 
       describe('Methods', () => {
