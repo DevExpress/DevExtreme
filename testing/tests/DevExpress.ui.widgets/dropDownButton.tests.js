@@ -502,10 +502,8 @@ QUnit.module('popup integration', {
 
     QUnit.test('list should be rendered on init when deferRendering is false', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
-        const popup = getPopup(dropDownButton);
 
         assert.strictEqual(getList(dropDownButton).NAME, 'dxList', 'list has been rendered');
-        assert.ok(popup.option('closeOnOutsideClick'), 'popup should be closed on outside click');
     });
 
     QUnit.test('popup should have special classes', function(assert) {
