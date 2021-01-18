@@ -126,10 +126,10 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return getBoundingRect(this._workSpace._$allDayTable.get(0)).height || 0;
     }
 
-    getGroupCountAttr(groupRowCount, groupRows) {
+    getGroupCountAttr(groups) {
         return {
             attr: HORIZONTAL_GROUPED_ATTR,
-            count: groupRows && groupRows.elements.length
+            count: groups?.length
         };
     }
 

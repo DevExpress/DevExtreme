@@ -1,0 +1,55 @@
+@use "./mixins" as *;
+
+// adduse
+.dx-accordion-item-title {
+  font-size: 18px;
+  cursor: pointer;
+  position: relative;
+
+  @include user-select(none);
+
+  .dx-icon {
+    background-size: contain;
+    display: inline-block;
+  }
+
+  &::before {
+    content: '';
+    background-position: center;
+    float: right;
+  }
+}
+
+.dx-accordion-item-body {
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.dx-accordion-item-closed {
+  .dx-accordion-item-body {
+    visibility: hidden;
+  }
+}
+
+
+.dx-accordion-item {
+  overflow: hidden;
+}
+
+.dx-accordion-item-opened .dx-accordion-item-body {
+  visibility: visible;
+}
+
+.dx-state-disabled {
+  .dx-accordion-item-title {
+    cursor: default;
+  }
+}
+
+.dx-rtl {
+  .dx-accordion-item-title {
+    &::before {
+      float: left;
+    }
+  }
+}

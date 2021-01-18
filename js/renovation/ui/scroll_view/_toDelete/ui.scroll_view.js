@@ -1,7 +1,5 @@
 import $ from '../../core/renderer';
-import devices from '../../core/devices';
 import { hasWindow } from '../../core/utils/window';
-import messageLocalization from '../../localization/message';
 import registerComponent from '../../core/component_registrator';
 import { getPublicElement } from '../../core/element';
 import { extend } from '../../core/utils/extend';
@@ -11,20 +9,9 @@ import SwipeDownStrategy from './ui.scroll_view.native.swipe_down';
 import SimulatedStrategy from './ui.scroll_view.simulated';
 import Scrollable from './ui.scrollable';
 import LoadIndicator from '../load_indicator';
-import { isMaterial } from './../themes';
 import LoadPanel from '../load_panel';
 
-// STYLE scrollView
-
 const SCROLLVIEW_CLASS = 'dx-scrollview';
-// const SCROLLVIEW_CONTENT_CLASS = SCROLLVIEW_CLASS + '-content';
-// const SCROLLVIEW_TOP_POCKET_CLASS = SCROLLVIEW_CLASS + '-top-pocket';
-// const SCROLLVIEW_BOTTOM_POCKET_CLASS = SCROLLVIEW_CLASS + '-bottom-pocket';
-// const SCROLLVIEW_PULLDOWN_CLASS = SCROLLVIEW_CLASS + '-pull-down';
-
-// const SCROLLVIEW_REACHBOTTOM_CLASS = SCROLLVIEW_CLASS + '-scrollbottom';
-// const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-indicator';
-// const SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-text';
 
 const SCROLLVIEW_LOADPANEL = SCROLLVIEW_CLASS + '-loadpanel';
 
@@ -51,48 +38,9 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            pullingDownText: messageLocalization.format('dxScrollView-pullingDownText'),
-
-            pulledDownText: messageLocalization.format('dxScrollView-pulledDownText'),
-
-            refreshingText: messageLocalization.format('dxScrollView-refreshingText'),
-
-            reachBottomText: messageLocalization.format('dxScrollView-reachBottomText'),
-
             onPullDown: null,
-
             onReachBottom: null,
-
-            refreshStrategy: 'pullDown'
         });
-    },
-
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: function() {
-                    const realDevice = devices.real();
-                    return realDevice.platform === 'android';
-                },
-                options: {
-                    refreshStrategy: 'swipeDown'
-                }
-            },
-            {
-                device: function() {
-                    return isMaterial();
-                },
-                options: {
-                    pullingDownText: '',
-
-                    pulledDownText: '',
-
-                    refreshingText: '',
-
-                    reachBottomText: ''
-                }
-            }
-        ]);
     },
 
     _init: function() {
@@ -101,33 +49,12 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _initScrollableMarkup: function() {
-        // this.callBase();
-        // this.$element().addClass(SCROLLVIEW_CLASS);
-
-        // this._initContent();
-        // this._initTopPocket();
         this._initBottomPocket();
         this._initLoadPanel();
     },
 
-    // _initContent: function() {
-    // const $content = $('<div>').addClass(SCROLLVIEW_CONTENT_CLASS);
-    // this._$content.wrapInner($content);
-    // },
-
-    // _initTopPocket: function() {
-    // const $topPocket = this._$topPocket = $('<div>').addClass(SCROLLVIEW_TOP_POCKET_CLASS);
-    // const $pullDown = this._$pullDown = $('<div>').addClass(SCROLLVIEW_PULLDOWN_CLASS);
-    // $topPocket.append($pullDown);
-    // this._$content.prepend($topPocket);
-    // },
-
     _initBottomPocket: function() {
-        // const $bottomPocket = this._$bottomPocket = $('<div>').addClass(SCROLLVIEW_BOTTOM_POCKET_CLASS);
-        // const $reachBottom = this._$reachBottom = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_CLASS);
-        // const $loadContainer = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS);
         const $loadIndicator = new LoadIndicator($('<div>')).$element();
-        // const $text = this._$reachBottomText = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
 
         this._updateReachBottomText();
 
@@ -135,10 +62,6 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         $reachBottom
             // eslint-disable-next-line no-undef
             .append($loadContainer.append($loadIndicator));
-        // .append($text);
-
-        // $bottomPocket.append($reachBottom);
-        // this._$content.append($bottomPocket);
     },
 
     _initLoadPanel: function() {
@@ -163,8 +86,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _createStrategy: function() {
-        const strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
-
+        // eslint-disable-next-line no-undef
         const strategyClass = refreshStrategies[strategyName];
         if(!strategyClass) {
             throw Error('E1030', this.option('refreshStrategy'));

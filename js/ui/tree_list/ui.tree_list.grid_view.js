@@ -23,10 +23,9 @@ treeListCore.registerModule('gridView', {
             resizing: {
                 _toggleBestFitMode: function(isBestFit) {
                     this.callBase(isBestFit);
-                    if(!this.option('legacyRendering')) {
-                        const $rowsTable = this._rowsView._getTableElement();
-                        $rowsTable.find('.dx-treelist-cell-expandable').toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
-                    }
+
+                    const $rowsTable = this._rowsView._getTableElement();
+                    $rowsTable.find('.dx-treelist-cell-expandable').toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
                 }
             }
         }

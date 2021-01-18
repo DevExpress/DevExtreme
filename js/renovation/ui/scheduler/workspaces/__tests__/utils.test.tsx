@@ -2,6 +2,7 @@ import {
   getKeyByDateAndGroup,
   getKeyByGroup,
   addHeightToStyle,
+  addWidthToStyle,
   getIsGroupedAllDayPanel,
   getGroupCellClasses,
   isVerticalGroupOrientation,
@@ -61,6 +62,36 @@ describe('Workspaces utils', () => {
         .toEqual({
           height: '500px',
           width: '300px',
+        });
+    });
+  });
+
+  describe('addWidthToStyle', () => {
+    it('should return an empty obbject if width is undefined', () => {
+      expect(addWidthToStyle(undefined))
+        .toEqual({});
+    });
+
+    it('should return ucorrect style if width is provided', () => {
+      expect(addWidthToStyle(500))
+        .toEqual({
+          width: '500px',
+        });
+    });
+
+    it('should spread styles', () => {
+      expect(addWidthToStyle(500, { height: '300px' }))
+        .toEqual({
+          height: '300px',
+          width: '500px',
+        });
+    });
+
+    it('should spread styles when width is defined in restAttributes', () => {
+      expect(addWidthToStyle(500, { width: '300px', height: '400px' }))
+        .toEqual({
+          height: '400px',
+          width: '500px',
         });
     });
   });

@@ -109,7 +109,6 @@ QUnit.module('Fixed columns', {
         this.dispose();
     }
 }, () => {
-
     QUnit.test('Draw fixed table for columnHeadersView', function(assert) {
         // arrange
         const that = this;
@@ -2068,6 +2067,110 @@ QUnit.module('Fixed columns', {
 
         // assert
         assert.ok(!$fixedTable[0].style.transform);
+    });
+
+    QUnit.test('The context menu should not contain items related to fixed columns when columnFixing is not enabled (T964011)', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        this.items = [];
+        this.columns = [
+            {
+                dataField: 'id',
+                allowSorting: true,
+                allowFixing: true
+            }
+        ];
+        this.options.sorting = {
+            mode: 'single'
+        };
+        this.setupDataGrid();
+
+        const columnFixingOptionsTexts = this.option('columnFixing.texts');
+
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const column = this.columnsController.getColumns()[0];
+        const menuItems = this.columnHeadersView.getContextMenuItems({
+            row: {
+                rowType: 'header'
+            },
+            column
+        });
+        const fixedMenuItems = menuItems.filter(item => item.text === columnFixingOptionsTexts.fix || item.text === columnFixingOptionsTexts.unfix);
+
+        // assert
+        assert.equal(fixedMenuItems.length, 0, 'there are no fixed menu items');
+    });
+
+    QUnit.test('The context menu should contain items related to fixed columns when columnFixing is enabled (T964011)', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        this.items = [];
+        this.columns = [
+            {
+                dataField: 'id',
+                allowSorting: true,
+                allowFixing: true
+            }
+        ];
+        this.options.sorting = {
+            mode: 'single'
+        };
+        this.setupDataGrid();
+
+        this.option('columnFixing.enabled', true);
+        const columnFixingOptionsTexts = this.option('columnFixing.texts');
+
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const column = this.columnsController.getColumns()[0];
+        const menuItems = this.columnHeadersView.getContextMenuItems({
+            row: {
+                rowType: 'header'
+            },
+            column
+        });
+        const fixedMenuItems = menuItems.filter(item => item.text === columnFixingOptionsTexts.fix || item.text === columnFixingOptionsTexts.unfix);
+
+        // assert
+        assert.equal(fixedMenuItems.length, 2, 'there are fixed menu items');
+    });
+
+    QUnit.test('The context menu should not contain items related to fixed columns when columnFixing is enabled and allowFixing is disabled (T964011)', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        this.items = [];
+        this.columns = [
+            {
+                dataField: 'id',
+                allowSorting: true,
+                allowFixing: false
+            }
+        ];
+        this.options.sorting = {
+            mode: 'single'
+        };
+        this.setupDataGrid();
+
+        this.option('columnFixing.enabled', true);
+        const columnFixingOptionsTexts = this.option('columnFixing.texts');
+
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const column = this.columnsController.getColumns()[0];
+        const menuItems = this.columnHeadersView.getContextMenuItems({
+            row: {
+                rowType: 'header'
+            },
+            column
+        });
+        const fixedMenuItems = menuItems.filter(item => item.text === columnFixingOptionsTexts.fix || item.text === columnFixingOptionsTexts.unfix);
+
+        // assert
+        assert.equal(fixedMenuItems.length, 0, 'there are no fixed menu items');
     });
 });
 

@@ -134,6 +134,7 @@ const Autocomplete = DropDownList.inherit({
     },
 
     _listItemClickHandler: function(e) {
+        this._saveValueChangeEvent(e.event);
         const value = this._displayGetter(e.itemData);
         this.option('value', value);
         this.close();

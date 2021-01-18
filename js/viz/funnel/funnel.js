@@ -198,17 +198,14 @@ const dxFunnel = baseWidget.inherit({
             }
             return d;
         }, [[], 0]);
-        let items = processedData[0];
-
-        if(!processedData[1]) {
-            items = items.map(function(item) {
-                item.value += 1;
-                return item;
-            });
-        }
+        const items = processedData[0];
 
         if(data.length > 0 && items.length === 0) {
             that._incidentOccurred('E2005', valueField);
+        }
+
+        if(!processedData[1]) {
+            return [];
         }
 
         if(that._getOption('sortData', true)) {

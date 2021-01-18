@@ -5,7 +5,6 @@ import { getRecurrenceProcessor } from '../recurrence';
 import { extend } from '../../../core/utils/extend';
 import registerComponent from '../../../core/component_registrator';
 import { hide, show } from '../../tooltip/ui.tooltip';
-import publisherMixin from '../ui.scheduler.publisher_mixin';
 import { addNamespace } from '../../../events/utils/index';
 import pointerEvents from '../../../events/pointer';
 import DOMComponent from '../../../core/dom_component';
@@ -29,11 +28,11 @@ const DEFAULT_VERTICAL_HANDLES = 'top bottom';
 const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
 const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
 
-const Appointment = DOMComponent.inherit({
-
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+class Appointment extends DOMComponent {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             data: {},
+            groupIndex: -1,
             geometry: { top: 0, left: 0, width: 0, height: 0 },
             allowDrag: true,
             allowResize: true,
@@ -45,12 +44,27 @@ const Appointment = DOMComponent.inherit({
             cellWidth: 0,
             isDragSource: false,
         });
-    },
+    }
 
+    notifyObserver(subject, args) {
+        const observer = this.option('observer');
+        if(observer) {
+            observer.fire(subject, args);
+        }
+    }
 
-    _optionChanged: function(args) {
+    invoke() {
+        const observer = this.option('observer');
+
+        if(observer) {
+            return observer.fire.apply(observer, arguments);
+        }
+    }
+
+    _optionChanged(args) {
         switch(args.name) {
             case 'data':
+            case 'groupIndex':
             case 'geometry':
             case 'allowDrag':
             case 'allowResize':
@@ -67,11 +81,11 @@ const Appointment = DOMComponent.inherit({
                 this._renderDragSourceClass();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
+    }
 
-    _getHorizontalResizingRule: function() {
+    _getHorizontalResizingRule() {
         const reducedHandles = {
             head: this.option('rtlEnabled') ? 'right' : 'left',
             body: '',
@@ -85,9 +99,9 @@ const Appointment = DOMComponent.inherit({
             step: this.invoke('getResizableStep'),
             roundStepValue: false,
         };
-    },
+    }
 
-    _getVerticalResizingRule: function() {
+    _getVerticalResizingRule() {
         const height = this.invoke('getCellHeight');
         return {
             handles: DEFAULT_VERTICAL_HANDLES,
@@ -96,10 +110,10 @@ const Appointment = DOMComponent.inherit({
             step: height,
             roundStepValue: true,
         };
-    },
+    }
 
-    _render: function() {
-        this.callBase();
+    _render() {
+        super._render();
 
         this._renderAppointmentGeometry();
         this._renderEmptyClass();
@@ -114,9 +128,16 @@ const Appointment = DOMComponent.inherit({
 
         this._renderRecurrenceClass();
         this._renderResizable();
-    },
 
-    _renderAppointmentGeometry: function() {
+        const deferredColor = this.invoke('getAppointmentColor', {
+            itemData: this.option('data'),
+            groupIndex: this.option('groupIndex'),
+        });
+
+        deferredColor.done(color => color && this.$element().css('backgroundColor', color));
+    }
+
+    _renderAppointmentGeometry() {
         const geometry = this.option('geometry');
         const $element = this.$element();
         move($element, {
@@ -128,17 +149,17 @@ const Appointment = DOMComponent.inherit({
             width: geometry.width < 0 ? 0 : geometry.width,
             height: geometry.height < 0 ? 0 : geometry.height
         });
-    },
+    }
 
-    _renderEmptyClass: function() {
+    _renderEmptyClass() {
         const geometry = this.option('geometry');
 
         if(geometry.empty || this.option('isCompact')) {
             this.$element().addClass(EMPTY_APPOINTMENT_CLASS);
         }
-    },
+    }
 
-    _renderReducedAppointment: function() {
+    _renderReducedAppointment() {
         const reducedPart = this.option('reduced');
 
         if(!reducedPart) {
@@ -150,9 +171,9 @@ const Appointment = DOMComponent.inherit({
             .toggleClass(REDUCED_APPOINTMENT_PARTS_CLASSES[reducedPart], true);
 
         this._renderAppointmentReducedIcon();
-    },
+    }
 
-    _renderAppointmentReducedIcon: function() {
+    _renderAppointmentReducedIcon() {
         const $icon = $('<div>')
             .addClass(REDUCED_APPOINTMENT_ICON)
             .appendTo(this.$element());
@@ -172,37 +193,37 @@ const Appointment = DOMComponent.inherit({
         eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME, function() {
             hide();
         });
-    },
+    }
 
-    _getEndDate: function() {
+    _getEndDate() {
         const result = this.invoke('getField', 'endDate', this.option('data'));
         if(result) {
             return new Date(result);
         }
         return result;
-    },
+    }
 
-    _renderAllDayClass: function() {
+    _renderAllDayClass() {
         this.$element().toggleClass(ALL_DAY_APPOINTMENT_CLASS, !!this.option('allDay'));
-    },
+    }
 
-    _renderDragSourceClass: function() {
+    _renderDragSourceClass() {
         this.$element().toggleClass(APPOINTMENT_DRAG_SOURCE_CLASS, !!this.option('isDragSource'));
-    },
+    }
 
-    _renderRecurrenceClass: function() {
+    _renderRecurrenceClass() {
         const rule = this.invoke('getField', 'recurrenceRule', this.option('data'));
 
         if(getRecurrenceProcessor().isValidRecurrenceRule(rule)) {
             this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);
         }
-    },
+    }
 
-    _renderDirection: function() {
+    _renderDirection() {
         this.$element().addClass(DIRECTION_APPOINTMENT_CLASSES[this.option('direction')]);
-    },
+    }
 
-    _createResizingConfig: function() {
+    _createResizingConfig() {
         const config = this.option('direction') === 'vertical' ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
 
         if(!this.invoke('isGroupedByDate')) {
@@ -210,19 +231,18 @@ const Appointment = DOMComponent.inherit({
         }
 
         return config;
-    },
+    }
 
-    _renderResizable: function() {
+    _renderResizable() {
         if(this.option('allowResize')) {
             this._createComponent(this.$element(), Resizable, extend(this._createResizingConfig(), this.option('resizableConfig')));
         }
-    },
+    }
 
-    _useTemplates: function() {
+    _useTemplates() {
         return false;
-    },
-
-}).include(publisherMixin);
+    }
+}
 
 registerComponent('dxSchedulerAppointment', Appointment);
 

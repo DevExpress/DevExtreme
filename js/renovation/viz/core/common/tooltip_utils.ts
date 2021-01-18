@@ -193,7 +193,7 @@ export function getCloudPoints(
 
 export function recalculateCoordinates({
   canvas, anchorX, anchorY, size, offset, arrowLength,
-}: RecalculateCoordinates): TooltipCoordinates {
+}: RecalculateCoordinates): TooltipCoordinates | false {
   const bounds = {
     xl: canvas.left,
     xr: canvas.width - canvas.right,
@@ -202,6 +202,10 @@ export function recalculateCoordinates({
     yb: canvas.height - canvas.bottom,
     height: canvas.height - canvas.bottom - canvas.top,
   };
+
+  if (anchorX < bounds.xl || bounds.xr < anchorX || anchorY < bounds.yt || bounds.yb < anchorY) {
+    return false;
+  }
 
   let x;
   let y;

@@ -13,144 +13,149 @@ import {
     asyncWrapper
 } from '../../helpers/scheduler/helpers.js';
 
-const supportedViews = ['day', 'week', 'workWeek']; // TODO: add month view and timelines
+import browser from 'core/devices';
+
+const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
 const {
     testStart,
-    test,
     module
 } = QUnit;
 
+const test = (description, callback) => {
+    const testFunc = browser.msie
+        ? QUnit.skip
+        : QUnit.test;
+
+    return testFunc(description, sinon.test(callback));
+};
+
 testStart(() => initTestMarkup());
 
-module('Vertical virtual scrolling', () => {
+module('Virtual scrolling', () => {
     module('Initialization', () => {
         supportedViews.forEach(viewName => {
-            [{
-                mode: 'standard', result: false,
-            }, {
-                mode: 'virtual', result: true,
-            }].forEach(scrolling => {
-                test(`Component should be correctly created in ${viewName} view if scrolling.mode: ${scrolling.mode}`, function(assert) {
-                    const instance = createWrapper({
-                        views: supportedViews,
-                        currentView: viewName,
-                        dataSource: [],
-                        scrolling: {
-                            mode: scrolling.mode,
-                        },
-                        height: 400
-                    }).instance;
-
-                    assert.equal(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        scrolling.result,
-                        'Virtual scrolling initialization',
-                    );
-                    assert.equal(
-                        instance.getWorkSpace().isRenovatedRender(),
-                        scrolling.result,
-                        'Correct render is used'
-                    );
-                });
-
-                test(`Component should be correctly created in ${viewName} view if view.scrolling.mode: ${scrolling.mode}`, function(assert) {
-                    const instance = createWrapper({
-                        views: [{
-                            type: viewName,
+            module('Vertical orientation', () => {
+                [{
+                    mode: 'standard', result: false,
+                }, {
+                    mode: 'virtual', result: true,
+                }].forEach(scrolling => {
+                    test(`Component should be correctly created in ${viewName} view if scrolling.mode: ${scrolling.mode}`, function(assert) {
+                        const instance = createWrapper({
+                            views: supportedViews,
+                            currentView: viewName,
+                            dataSource: [],
                             scrolling: {
                                 mode: scrolling.mode,
                             },
-                        }],
-                        currentView: viewName,
-                        height: 400
-                    }).instance;
+                            height: 400
+                        }).instance;
 
-                    assert.equal(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        scrolling.result,
-                        'Virtual scrolling initialization',
-                    );
-                    assert.equal(
-                        instance.getWorkSpace().isRenovatedRender(),
-                        scrolling.result,
-                        'Correct render is used'
-                    );
+                        assert.equal(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            scrolling.result,
+                            'Virtual scrolling initialization',
+                        );
+                        assert.equal(
+                            instance.getWorkSpace().isRenovatedRender(),
+                            scrolling.result,
+                            'Correct render is used'
+                        );
+                    });
+
+                    test(`Component should be correctly created in ${viewName} view if view.scrolling.mode: ${scrolling.mode}`, function(assert) {
+                        const instance = createWrapper({
+                            views: [{
+                                type: viewName,
+                                scrolling: {
+                                    mode: scrolling.mode,
+                                },
+                            }],
+                            currentView: viewName,
+                            height: 400
+                        }).instance;
+
+                        assert.equal(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            scrolling.result,
+                            'Virtual scrolling initialization',
+                        );
+                        assert.equal(
+                            instance.getWorkSpace().isRenovatedRender(),
+                            scrolling.result,
+                            'Correct render is used'
+                        );
+                    });
+
+                    test(`Component should be correctly created after change scrolling.mode option to ${scrolling.mode} in ${viewName} view`, function(assert) {
+                        const instance = createWrapper({
+                            views: supportedViews,
+                            currentView: viewName,
+                            height: 400
+                        }).instance;
+
+                        instance.option('scrolling.mode', 'virtual');
+
+                        assert.ok(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            'Virtual scrolling Initialized'
+                        );
+                        assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
+
+                        instance.option('scrolling.mode', 'standard');
+
+                        assert.notOk(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            'Virtual scrolling not initialized'
+                        );
+                        assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
+                    });
+
+                    test(`Component should be correctly created after change view.scrolling.mode option to ${scrolling.mode} in ${viewName} view`, function(assert) {
+                        const instance = createWrapper({
+                            views: [{
+                                type: viewName,
+                            }],
+                            currentView: viewName,
+                            height: 400
+                        }).instance;
+
+                        instance.option('views[0].scrolling.mode', 'virtual');
+                        assert.ok(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            'Virtual scrolling is initialized'
+                        );
+                        assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
+
+                        instance.option('views[0].scrolling.mode', 'standard');
+                        assert.notOk(
+                            !!instance.getWorkSpace().virtualScrollingDispatcher,
+                            'Virtual scrolling is not initialized'
+                        );
+                        assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
+                    });
                 });
+            });
 
-                test(`Component should be correctly created after change scrolling.mode option to ${scrolling.mode} in ${viewName} view`, function(assert) {
-                    const instance = createWrapper({
-                        views: supportedViews,
-                        currentView: viewName,
-                        height: 400
-                    }).instance;
+            test(`Virtual scrolling should have default cell sizes in ${viewName} view`, function(assert) {
+                const instance = createWrapper({
+                    views: [{
+                        type: viewName,
+                    }],
+                    currentView: viewName,
+                    scrolling: {
+                        mode: 'virtual',
+                        orientation: 'both'
+                    },
+                    height: 400,
+                    width: 600
+                }).instance;
 
-                    instance.option('scrolling.mode', 'virtual');
+                const { virtualScrollingDispatcher } = instance.getWorkSpace();
 
-                    assert.ok(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        'Virtual scrolling Initialized'
-                    );
-                    assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
-
-                    instance.option('scrolling.mode', 'standard');
-
-                    assert.notOk(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        'Virtual scrolling not initialized'
-                    );
-                    assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-                });
-
-                test(`Component should be correctly created after change view.scrolling.mode option to ${scrolling.mode} in ${viewName} view`, function(assert) {
-                    const instance = createWrapper({
-                        views: [{
-                            type: viewName,
-                        }],
-                        currentView: viewName,
-                        height: 400
-                    }).instance;
-
-                    instance.option('views[0].scrolling.mode', 'virtual');
-                    assert.ok(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        'Virtual scrolling is initialized'
-                    );
-                    assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
-
-                    instance.option('views[0].scrolling.mode', 'standard');
-                    assert.notOk(
-                        !!instance.getWorkSpace().virtualScrollingDispatcher,
-                        'Virtual scrolling is not initialized'
-                    );
-                    assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-                });
-
-                test(`Row height should be correct in ${scrolling.mode} scrollign mode if ${viewName} view`, function(assert) {
-                    const $style = $('<style>');
-                    const styleBefore = $style.text();
-
-                    $style
-                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 20px } ')
-                        .appendTo('head');
-
-                    const instance = createWrapper({
-                        views: [{
-                            type: viewName,
-                        }],
-                        currentView: viewName,
-                        scrolling: {
-                            mode: 'virtual'
-                        },
-                        height: 400
-                    }).instance;
-
-                    const { virtualScrollingDispatcher } = instance.getWorkSpace();
-
-                    assert.equal(virtualScrollingDispatcher.rowHeight, 20, 'Row height is correct');
-
-                    $style.text(styleBefore);
-                });
+                assert.ok(virtualScrollingDispatcher.rowHeight > 0, 'Cell height is present');
+                assert.ok(virtualScrollingDispatcher.cellWidth > 0, 'Cell width is present');
             });
 
             module('Options', () => {
@@ -310,7 +315,6 @@ module('Vertical virtual scrolling', () => {
                         option.steps.forEach(step => {
                             promise = asyncScrollTest(
                                 promise,
-                                () => { scrollable.scrollTo({ y: step.y }); },
                                 () => {
                                     assert.equal(
                                         this.scheduler.appointments.getAppointmentCount(),
@@ -328,7 +332,10 @@ module('Vertical virtual scrolling', () => {
                                         assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
                                         assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
                                     });
-                                });
+                                },
+                                scrollable,
+                                { y: step.y }
+                            );
                         });
 
                         return promise;
@@ -435,7 +442,6 @@ module('Vertical virtual scrolling', () => {
                         option.steps.forEach(step => {
                             promise = asyncScrollTest(
                                 promise,
-                                () => { scrollable.scrollTo({ y: step.y }); },
                                 () => {
                                     assert.equal(
                                         this.scheduler.appointments.getAppointmentCount(),
@@ -453,7 +459,10 @@ module('Vertical virtual scrolling', () => {
                                         assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
                                         assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
                                     });
-                                });
+                                },
+                                scrollable,
+                                { y: step.y }
+                            );
                         });
 
                         return promise;
@@ -526,7 +535,6 @@ module('Vertical virtual scrolling', () => {
                     ].forEach(option => {
                         promise = asyncScrollTest(
                             promise,
-                            () => scrollable.scrollTo({ y: option.y }),
                             () => {
                                 assert.equal(
                                     this.scheduler.appointments.getAppointmentCount(),
@@ -548,7 +556,9 @@ module('Vertical virtual scrolling', () => {
                                     `appointment part #${index} rect is correct`
                                     );
                                 });
-                            }
+                            },
+                            scrollable,
+                            { y: option.y }
                         );
                     });
 
@@ -613,7 +623,6 @@ module('Vertical virtual scrolling', () => {
                     ].forEach(option => {
                         promise = asyncScrollTest(
                             promise,
-                            () => { scrollable.scrollTo({ y: option.y }); },
                             () => {
                                 assert.equal(
                                     option.appointmentRects.length,
@@ -631,7 +640,10 @@ module('Vertical virtual scrolling', () => {
                                     assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
                                     assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
                                 });
-                            });
+                            },
+                            scrollable,
+                            { y: option.y }
+                        );
                     });
 
                     return promise;
@@ -745,7 +757,6 @@ module('Vertical virtual scrolling', () => {
                         option.steps.forEach(step => {
                             promise = asyncScrollTest(
                                 promise,
-                                () => { scrollable.scrollTo({ y: step.y }); },
                                 () => {
                                     assert.equal(
                                         this.scheduler.appointments.getAppointmentCount(),
@@ -768,7 +779,10 @@ module('Vertical virtual scrolling', () => {
                                         `appointment part #${index} rect is correct`
                                         );
                                     });
-                                });
+                                },
+                                scrollable,
+                                { y: step.y }
+                            );
                         });
 
                         return promise;
@@ -874,7 +888,6 @@ module('Vertical virtual scrolling', () => {
                         option.steps.forEach(step => {
                             promise = asyncScrollTest(
                                 promise,
-                                () => { scrollable.scrollTo({ y: step.y }); },
                                 () => {
                                     assert.equal(
                                         this.scheduler.appointments.getAppointmentCount(),
@@ -892,7 +905,10 @@ module('Vertical virtual scrolling', () => {
                                         assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
                                         assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
                                     });
-                                });
+                                },
+                                scrollable,
+                                { y: step.y }
+                            );
                         });
 
                         return promise;
@@ -1003,6 +1019,10 @@ module('Vertical virtual scrolling', () => {
                             assert.ok(true, 'This test is for desktop only');
                             return;
                         }
+                        if(viewName === 'month') {
+                            assert.ok(true, 'TODO: appointments in virtual month');
+                            return;
+                        }
 
                         const longAppointment = {
                             startDate: new Date(2015, 2, 4, 0, 10),
@@ -1035,7 +1055,6 @@ module('Vertical virtual scrolling', () => {
                             ].forEach(scrollY => {
                                 promise = asyncScrollTest(
                                     promise,
-                                    () => { scrollable.scrollTo({ y: scrollY }); },
                                     () => {
                                         const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
 
@@ -1055,7 +1074,10 @@ module('Vertical virtual scrolling', () => {
                                             startViewDate,
                                             'start date is correct'
                                         );
-                                    });
+                                    },
+                                    scrollable,
+                                    { y: scrollY }
+                                );
                             });
 
                             return promise;
@@ -1147,7 +1169,6 @@ module('Vertical virtual scrolling', () => {
                 ].forEach(option => {
                     promise = asyncScrollTest(
                         promise,
-                        () => scrollable.scrollTo({ y: option.offsetY }),
                         () => {
                             const filteredItems = instance.getFilteredItems();
 
@@ -1163,7 +1184,10 @@ module('Vertical virtual scrolling', () => {
                                     assert.equal(settings[index].top, top, `Appointment top position ${top} is correct for offsetY: ${option.offsetY}`);
                                 });
                             });
-                        });
+                        },
+                        scrollable,
+                        { y: option.offsetY }
+                    );
                 });
 
                 return promise;
@@ -1287,7 +1311,6 @@ module('Vertical virtual scrolling', () => {
 
                     promise = asyncScrollTest(
                         promise,
-                        () => scrollable.scrollTo({ y: offsetY }),
                         () => {
                             const items = instance._appointments.option('items');
 
@@ -1308,7 +1331,10 @@ module('Vertical virtual scrolling', () => {
                                 assert.equal(setting.top, top, `Settings top ${setting.top} is correct`);
                                 assert.equal(setting.height, height, `Settings height ${setting.height} is correct`);
                             });
-                        });
+                        },
+                        scrollable,
+                        { y: offsetY }
+                    );
                 });
 
                 return promise;
@@ -1518,7 +1544,6 @@ module('Vertical virtual scrolling', () => {
 
                     promise = asyncScrollTest(
                         promise,
-                        () => scrollable.scrollTo({ y: offsetY }),
                         () => {
                             const items = instance._appointments.option('items');
 
@@ -1543,7 +1568,10 @@ module('Vertical virtual scrolling', () => {
                                     assert.equal(setting.height, height, `Settings height ${setting.height} is correct`);
                                 });
                             });
-                        });
+                        },
+                        scrollable,
+                        { y: offsetY }
+                    );
                 });
 
                 return promise;
@@ -1857,7 +1885,6 @@ module('Vertical virtual scrolling', () => {
                     ].forEach(option => {
                         promise = asyncScrollTest(
                             promise,
-                            () => scrollable.scrollTo({ y: option.offsetY }),
                             () => {
                                 const filteredItems = instance.getFilteredItems();
 
@@ -1867,7 +1894,9 @@ module('Vertical virtual scrolling', () => {
                                 expectedDataIndices.forEach((dataIndex, index) => {
                                     assert.deepEqual(filteredItems[index], data[dataIndex], `Filtered item ${index} is correct`);
                                 });
-                            }
+                            },
+                            scrollable,
+                            { y: option.offsetY }
                         );
                     });
 
@@ -1963,10 +1992,10 @@ module('Vertical virtual scrolling', () => {
                         { y: 2400, expectedIndices: [4, 5] }
                     ].forEach(option => {
                         const { expectedIndices } = option;
+                        const scrollable = instance.getWorkSpaceScrollable();
 
                         promise = asyncScrollTest(
                             promise,
-                            () => { instance.getWorkSpaceScrollable().scrollTo({ y: option.y }); },
                             () => {
                                 const filteredItems = instance.getFilteredItems();
 
@@ -1976,7 +2005,10 @@ module('Vertical virtual scrolling', () => {
                                     const expected = this.data[expectedIndices[index]];
                                     assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                                 });
-                            });
+                            },
+                            scrollable,
+                            { y: option.y }
+                        );
                     });
 
                     return promise;
@@ -2002,10 +2034,10 @@ module('Vertical virtual scrolling', () => {
                         { y: 0, expectedIndices: [0, 1, 2] }
                     ].forEach(option => {
                         const { expectedIndices } = option;
+                        const scrollable = instance.getWorkSpaceScrollable();
 
                         promise = asyncScrollTest(
                             promise,
-                            () => { instance.getWorkSpaceScrollable().scrollTo({ y: option.y }); },
                             () => {
                                 const filteredItems = instance.getFilteredItems();
 
@@ -2015,7 +2047,10 @@ module('Vertical virtual scrolling', () => {
                                     const expected = this.data[expectedIndices[index]];
                                     assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                                 });
-                            });
+                            },
+                            scrollable,
+                            { y: option.y }
+                        );
                     });
 
                     return promise;
@@ -2056,10 +2091,10 @@ module('Vertical virtual scrolling', () => {
                         { y: 4300, expectedIndices: [] },
                     ].forEach(option => {
                         const { expectedIndices } = option;
+                        const scrollable = instance.getWorkSpaceScrollable();
 
                         promise = asyncScrollTest(
                             promise,
-                            () => { instance.getWorkSpaceScrollable().scrollTo({ y: option.y }); },
                             () => {
                                 const filteredItems = instance.getFilteredItems();
 
@@ -2069,7 +2104,10 @@ module('Vertical virtual scrolling', () => {
                                     const expected = this.data[expectedIndices[index]];
                                     assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                                 });
-                            });
+                            },
+                            scrollable,
+                            { y: option.y }
+                        );
                     });
 
                     return promise;
@@ -2108,17 +2146,21 @@ module('Vertical virtual scrolling', () => {
                 const { instance } = this;
 
                 return asyncWrapper(assert, promise => {
+                    const scrollable = instance.getWorkSpaceScrollable();
+
                     [0, 300, 900, 1700, 2400, 2700, 3000, 3300, 4300].forEach(scrollY => {
                         promise = asyncScrollTest(
                             promise,
-                            () => { instance.getWorkSpaceScrollable().scrollTo({ y: scrollY }); },
                             () => {
                                 assert.equal(
                                     instance.getFilteredItems().length,
                                     0,
                                     `scrollY: ${scrollY}, filtered items length is correct `
                                 );
-                            });
+                            },
+                            scrollable,
+                            { y: scrollY }
+                        );
                     });
 
                     return promise;
@@ -2164,14 +2206,15 @@ module('Vertical virtual scrolling', () => {
                 return asyncWrapper(assert, promise => {
                     return asyncScrollTest(
                         promise,
-                        () => scrollable.scrollTo({ y: 600 }),
                         () => {
                             const filteredItems = this.instance.getFilteredItems();
 
                             assert.equal(filteredItems.length, 1, 'Filtered items length is correct');
                             assert.deepEqual(filteredItems[0], data[0], 'Filtered item is correct');
-                        });
-
+                        },
+                        scrollable,
+                        { y: 600 }
+                    );
                 });
             });
         });
@@ -2297,6 +2340,105 @@ module('Vertical virtual scrolling', () => {
                 });
 
                 assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments rendered correctly');
+            });
+        });
+    });
+
+    module('Customization', () => {
+        module('Vertical orientation', () => {
+            supportedViews.forEach(viewName => {
+                test(`Cell height should be correct in ${viewName} view`, function(assert) {
+                    const $style = $('<style>');
+                    const styleBefore = $style.text();
+
+                    $style
+                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 80px } ')
+                        .appendTo('head');
+
+                    const instance = createWrapper({
+                        views: [{
+                            type: viewName,
+                        }],
+                        currentView: viewName,
+                        scrolling: {
+                            mode: 'virtual',
+                            orientation: 'vertical'
+                        },
+                        height: 400
+                    }).instance;
+
+                    const { virtualScrollingDispatcher } = instance.getWorkSpace();
+
+                    assert.equal(virtualScrollingDispatcher.rowHeight, 80, 'Cell height is correct');
+
+                    $style.text(styleBefore);
+                });
+            });
+        });
+
+        module('Horizontal orientation', () => {
+            supportedViews.forEach(viewName => {
+                test(`Cell width should be correct in ${viewName} view`, function(assert) {
+                    const $style = $('<style>');
+                    const styleBefore = $style.text();
+
+                    $style
+                        .text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 120px } ')
+                        .appendTo('head');
+
+                    const instance = createWrapper({
+                        views: [{
+                            type: viewName,
+                            intervalCount: 10
+                        }],
+                        currentView: viewName,
+                        scrolling: {
+                            mode: 'virtual',
+                            type: 'horizontal'
+                        },
+                        crossScrollingEnabled: true,
+                        height: 400,
+                        width: 600
+                    }).instance;
+
+                    const { virtualScrollingDispatcher } = instance.getWorkSpace();
+
+                    assert.equal(virtualScrollingDispatcher.cellWidth, 120, 'Cell width is correct');
+
+                    $style.text(styleBefore);
+                });
+            });
+        });
+    });
+
+    module('Markup', () => {
+        [true, false].forEach((showAllDayPanel) => {
+            test(`MonthView's groupPanel and dateTable should have correct height when showAllDayPanel: ${showAllDayPanel} and vertical grouping is used`, function(assert) {
+                const { workSpace } = createWrapper({
+                    views: [{
+                        type: 'month',
+                        groupOrientation: 'vertical',
+                    }],
+                    currentView: 'month',
+                    currentDate: new Date(2020, 11, 29),
+                    groups: ['priorityId'],
+                    resources: [{
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: [{ id: 1 }, { id: 2 }]
+                    }],
+                    height: 500,
+                    showAllDayPanel,
+                });
+
+                const cellHeight = workSpace.getCellHeight();
+                const calculatedHeight = 12 * cellHeight;
+
+                const dateTableHeight = workSpace.getDateTable().outerHeight();
+                const groupPanelHeight = workSpace.groups.getVerticalGroupPanel().outerHeight();
+
+                assert.equal(dateTableHeight, calculatedHeight, 'Correct dateTable height');
+                assert.equal(groupPanelHeight, calculatedHeight, 'Correct groupPanel height');
             });
         });
     });

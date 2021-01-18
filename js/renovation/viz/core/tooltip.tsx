@@ -1,18 +1,21 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState,
-  RefObject, Method, Template,
+  RefObject, Method, Template, Event,
 } from 'devextreme-generator/component_declaration/common';
+import { combineClasses } from '../../utils/combine_classes';
 
 import { PathSvgElement } from './renderers/svg_path';
 import { TextSvgElement } from './renderers/svg_text';
 import { ShadowFilter } from './renderers/shadow_filter';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 import { RootSvgElement } from './renderers/svg_root';
+import { isDefined } from '../../../core/utils/type';
 
 import {
   Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
+  TooltipCoordinates,
 } from './common/types.d';
-import { Format } from '../common/types.d';
+import { Format, Point } from '../common/types.d';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData,
@@ -30,23 +33,21 @@ export const viewFunction = ({
   border,
   filterId,
   customizedOptions,
-  setCurrentState,
   pointerEvents,
+  cssClassName,
+  correctedCoordinates,
   props: {
-    x, y, font, shadow, opacity, interactive, zIndex,
-    contentTemplate: TooltipTemplate, data, visible,
-    cornerRadius, arrowWidth, offset, canvas, arrowLength,
+    font, shadow, opacity, interactive, zIndex,
+    contentTemplate: TooltipTemplate, data, visible, rtl,
+    cornerRadius, arrowWidth,
   },
 }: Tooltip): JSX.Element => {
-  if (!visible) { return <div />; }
-
-  const correctedCoordinates = recalculateCoordinates({
-    canvas, anchorX: x, anchorY: y, size: textSizeWithPaddings, offset, arrowLength,
-  });
+  if (!visible || !correctedCoordinates) {
+    return <div />;
+  }
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
   const d = getCloudPoints(textSizeWithPaddings, correctedCoordinates, angle,
     { cornerRadius, arrowWidth }, true);
-  setCurrentState(d);
   const styles = interactive ? {
     msUserSelect: 'text',
     MozUserSelect: 'auto',
@@ -54,6 +55,7 @@ export const viewFunction = ({
   } : {};
   return (
     <div
+      className={cssClassName}
       style={{
         position: 'absolute',
         pointerEvents: 'none',
@@ -139,6 +141,7 @@ export const viewFunction = ({
               fontWeight: font.weight,
               opacity: font.opacity,
               pointerEvents,
+              direction: rtl ? 'rtl' : 'ltr',
             }}
           >
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -216,6 +219,16 @@ export class TooltipProps {
   @Template() contentTemplate?: (data: TooltipData) => JSX.Element;
 
   @OneWay() visible = false;
+
+  @OneWay() rtl = false;
+
+  @OneWay() className?: string;
+
+  @OneWay() target: Point = {} as Point;
+
+  @Event() onTooltipHidden?: (e: {target: Point}) => void;
+
+  @Event() onTooltipShown?: (e: {target: Point}) => void;
 }
 
 @Component({
@@ -236,11 +249,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @InternalState() d?: string;
 
-  setCurrentState(d: string): void {
-    if (this.d !== d) {
-      this.d = d;
-    }
-  }
+  @InternalState() currentTarget?: Point;
 
   @Ref() cloudRef!: RefObject<SVGGElement>;
 
@@ -251,7 +260,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Effect()
   setHtmlText(): void {
     const htmlText = this.customizedOptions.html;
-    if (htmlText) {
+    if (htmlText && this.props.visible) {
       this.htmlRef.innerHTML = htmlText;
     }
   }
@@ -265,14 +274,41 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @Effect()
   calculateCloudSize(): void {
-    if (this.d && this.props.visible) {
+    if (isDefined(this.props.x) && isDefined(this.props.y)
+      && this.props.visible && this.cloudRef) {
       const size = this.cloudRef.getBBox();
+      const {
+        lm, tm, rm, bm,
+      } = this.margins;
       this.cloudSize = {
-        x: Math.floor(size.x - this.margins.lm),
-        y: Math.floor(size.y - this.margins.tm),
-        width: size.width + this.margins.lm + this.margins.rm,
-        height: size.height + this.margins.tm + this.margins.bm,
+        x: Math.floor(size.x - lm),
+        y: Math.floor(size.y - tm),
+        width: size.width + lm + rm,
+        height: size.height + tm + bm,
       };
+    }
+  }
+
+  @Effect()
+  eventsEffect(): void {
+    const {
+      onTooltipShown, onTooltipHidden, target, visible,
+    } = this.props;
+
+    const triggerTooltipHidden = (): void => {
+      if (this.currentTarget && onTooltipHidden) {
+        onTooltipHidden({ target: this.currentTarget });
+      }
+    };
+
+    if (visible && this.correctedCoordinates && this.currentTarget !== target) {
+      triggerTooltipHidden();
+      onTooltipShown?.({ target });
+      this.currentTarget = target;
+    }
+    if (!visible) {
+      triggerTooltipHidden();
+      this.currentTarget = undefined;
     }
   }
 
@@ -343,5 +379,23 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   get pointerEvents(): 'auto' | 'none' {
     const { interactive } = this.props;
     return interactive ? 'auto' : 'none';
+  }
+
+  get cssClassName(): string {
+    const { className } = this.props;
+    const classesMap = {
+      [String(className)]: !!className,
+    };
+
+    return combineClasses(classesMap);
+  }
+
+  get correctedCoordinates(): TooltipCoordinates | false {
+    const {
+      canvas, x, y, offset, arrowLength,
+    } = this.props;
+    return recalculateCoordinates({
+      canvas, anchorX: x, anchorY: y, size: this.textSizeWithPaddings, offset, arrowLength,
+    });
   }
 }

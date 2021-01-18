@@ -134,7 +134,7 @@ class StringLengthRuleValidator extends BaseRuleValidator {
     }
 
     _validate(value, rule) {
-        value = isDefined(value) ? String(value) : '';
+        value = String(value ?? '');
         if(rule.trim || !isDefined(rule.trim)) {
             value = value.trim();
         }
@@ -521,7 +521,6 @@ const ValidationEngine = {
         if(result.length) {
             return result[0];
         }
-        // TODO: consider throwing exception here, as it causes quite strange and hardly diagnostable behaviour
     },
 
     findGroup($element, model) {

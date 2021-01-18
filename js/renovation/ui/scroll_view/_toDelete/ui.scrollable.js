@@ -1,30 +1,20 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import { nativeScrolling } from '../../core/utils/support';
 import browser from '../../core/utils/browser';
 import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
 import { isPlainObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-// import { getPublicElement } from '../../core/element';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
-import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
 import { focusable } from '../widget/selectors';
 import { addNamespace } from '../../events/utils/index';
-import scrollEvents from './ui.events.emitter.gesture.scroll';
-// import { SimulatedStrategy } from './ui.scrollable.simulated';
-// import NativeStrategy from './ui.scrollable.native';
-import { deviceDependentOptions } from './ui.scrollable.device';
 import { when } from '../../core/utils/deferred';
 
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_CLASS = 'dx-scrollable';
-const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
-// const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-// const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
@@ -34,43 +24,12 @@ const Scrollable = DOMComponent.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            disabled: false,
-            onScroll: null,
-            direction: VERTICAL,
-            useNative: true,
-            bounceEnabled: true,
-            scrollByContent: true,
             onUpdated: null,
             onStart: null,
             onEnd: null,
             onBounce: null,
             onStop: null,
-            useKeyboard: true,
-            inertiaEnabled: true,
-            pushBackValue: 0,
-            updateManually: false
         });
-    },
-
-    _defaultOptionsRules: function() {
-        return this.callBase().concat(deviceDependentOptions(), [
-            {
-                device: function() {
-                    return nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
-                },
-                options: {
-                    useSimulatedScrollbar: true
-                }
-            },
-            {
-                device: function() {
-                    return devices.real().platform === 'ios';
-                },
-                options: {
-                    pushBackValue: 1
-                }
-            }
-        ]);
     },
 
     _initOptions: function(options) {
@@ -110,11 +69,6 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _initScrollableMarkup: function() {
-        // const $element = this.$element().addClass(SCROLLABLE_CLASS);
-        // const $container = this._$container = $('<div>').addClass(SCROLLABLE_CONTAINER_CLASS);
-        // const $wrapper = this._$wrapper = $('<div>').addClass(SCROLLABLE_WRAPPER_CLASS);
-        // const $content = this._$content = $('<div>').addClass(SCROLLABLE_CONTENT_CLASS);
-
         if(domAdapter.hasDocumentProperty('onbeforeactivate') && browser.msie && browser.version < 12) {
             // eslint-disable-next-line no-undef
             eventsEngine.on($element, addNamespace('beforeactivate', SCROLLABLE), function(e) {
@@ -123,10 +77,6 @@ const Scrollable = DOMComponent.inherit({
                 }
             });
         }
-
-        // $content.append($element.contents()).appendTo($container);
-        // $container.appendTo($wrapper);
-        // $wrapper.appendTo($element);
     },
 
     _dimensionChanged: function() {
@@ -136,13 +86,11 @@ const Scrollable = DOMComponent.inherit({
 
     _initMarkup: function() {
         this.callBase();
-        // this._renderDirection();
     },
 
     _render: function() {
         this._renderStrategy();
 
-        this._attachEventHandlers();
         this._renderDisabledState();
         this._createActions();
         this.update();
@@ -196,28 +144,6 @@ const Scrollable = DOMComponent.inherit({
         this._strategy.updateBounds();
     },
 
-    _attachEventHandlers: function() {
-        const strategy = this._strategy;
-
-        const initEventData = {
-            getDirection: strategy.getDirection.bind(strategy),
-            validate: this._validate.bind(this),
-            isNative: this.option('useNative'),
-            scrollTarget: this._$container
-        };
-
-        eventsEngine.off(this._$wrapper, '.' + SCROLLABLE);
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.init, SCROLLABLE), initEventData, this._initHandler.bind(this));
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.start, SCROLLABLE), strategy.handleStart.bind(strategy));
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.move, SCROLLABLE), strategy.handleMove.bind(strategy));
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.end, SCROLLABLE), strategy.handleEnd.bind(strategy));
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.cancel, SCROLLABLE), strategy.handleCancel.bind(strategy));
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.stop, SCROLLABLE), strategy.handleStop.bind(strategy));
-
-        eventsEngine.off(this._$container, '.' + SCROLLABLE);
-        eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
-    },
-
     _updateRtlConfig: function() {
         if(this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
             const { clientWidth, scrollLeft } = this._container().get(0);
@@ -246,8 +172,6 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _renderDisabledState: function() {
-        this.$element().toggleClass(SCROLLABLE_DISABLED_CLASS, this.option('disabled'));
-
         if(this.option('disabled')) {
             this._lock();
         } else {
@@ -255,25 +179,10 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    // _renderDirection: function() {
-    // this.$element()
-    // .removeClass('dx-scrollable-' + HORIZONTAL)
-    // .removeClass('dx-scrollable-' + VERTICAL)
-    // .removeClass('dx-scrollable-' + BOTH)
-    // .addClass('dx-scrollable-' + this.option('direction'));
-    // },
-
     _renderStrategy: function() {
-        // this._createStrategy();
         this._strategy.render();
         this.$element().data(SCROLLABLE_STRATEGY, this._strategy);
     },
-
-    // _createStrategy: function() {
-    // this._strategy = (this.option('useNative'))
-    // ? new NativeStrategy(this)
-    // : new SimulatedStrategy(this);
-    // },
 
     _createActions: function() {
         this._strategy && this._strategy.createActions();
@@ -419,44 +328,9 @@ const Scrollable = DOMComponent.inherit({
         return this._$content;
     },
 
-    // content: function() {
-    //     return getPublicElement(this._$content);
-    // },
-
-    // scrollOffset: function() {
-    //     return this._getScrollOffset();
-    // },
-
-    // _getScrollOffset() {
-    //     return {
-    //         top: -this._location().top,
-    //         left: -this._location().left
-    //     };
-    // },
-
-    // scrollTop: function() {
-    //     return this.scrollOffset().top;
-    // },
-
-    // scrollLeft: function() {
-    //     return this.scrollOffset().left;
-    // },
-
-    // clientHeight: function() {
-    //     return this._$container.height();
-    // },
-
     scrollHeight: function() {
         return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
     },
-
-    // clientWidth: function() {
-    //     return this._$container.width();
-    // },
-
-    // scrollWidth: function() {
-    //     return this.$content().outerWidth();
-    // },
 
     update: function() {
         if(!this._strategy) {
