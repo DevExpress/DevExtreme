@@ -1332,11 +1332,15 @@ const EditingController = modules.ViewController.inherit((function() {
         _removeChange: function(index) {
             if(index >= 0) {
                 const changes = [...this.getChanges()];
+                const key = changes[index].key;
 
-                this._removeInternalData(changes[index].key);
+                this._removeInternalData(key);
 
                 changes.splice(index, 1);
                 this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
+                if(equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key)) {
+                    this._resetEditIndices();
+                }
             }
         },
 
