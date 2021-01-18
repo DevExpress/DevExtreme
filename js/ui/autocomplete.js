@@ -112,12 +112,8 @@ const Autocomplete = DropDownList.inherit({
         return this.option('valueExpr');
     },
 
-    _popupConfig: function() {
-        return extend(this.callBase(), {
-            closeOnOutsideClick: (function(e) {
-                return !$(e.target).closest(this.$element()).length;
-            }).bind(this)
-        });
+    _closeOutsideDropDownHandler: function({ target }) {
+        return !$(target).closest(this.$element()).length;
     },
 
     _renderDimensions: function() {
