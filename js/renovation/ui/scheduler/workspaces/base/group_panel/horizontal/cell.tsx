@@ -1,39 +1,45 @@
 import {
   Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template,
 } from 'devextreme-generator/component_declaration/common';
+import { combineClasses } from '../../../../../../utils/combine_classes';
 import { GroupItem, ResourceCellTemplateProps } from '../../../types.d';
 
-export const viewFunction = (viewModel: GroupPanelHorizontalCell): JSX.Element => {
-  const CellTemplate = viewModel.props.cellTemplate;
-
-  return (
-    <th
-      className={`dx-scheduler-group-header ${viewModel.props.className}`}
-      colSpan={viewModel.props.colSpan}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
-    >
-      {!!CellTemplate && (
-        <CellTemplate
-          data={{
-            data: viewModel.props.data,
-            id: viewModel.props.id,
-            color: viewModel.props.color,
-            text: viewModel.props.text,
-          }}
-          index={viewModel.props.index}
-        />
-      )}
-      {!CellTemplate && (
-        <div className="dx-scheduler-group-header-content">
-          <div>
-            {viewModel.props.text}
-          </div>
-        </div>
-      )}
-    </th>
-  );
-};
+export const viewFunction = ({
+  classes,
+  restAttributes,
+  props: {
+    cellTemplate: CellTemplate,
+    colSpan,
+    data,
+    id,
+    color,
+    text,
+    index,
+  },
+}: GroupPanelHorizontalCell): JSX.Element => (
+  <th
+    className={classes}
+    colSpan={colSpan}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...restAttributes}
+  >
+    {!!CellTemplate && (
+    <CellTemplate
+      data={{
+        data, id, color, text,
+      }}
+      index={index}
+    />
+    )}
+    {!CellTemplate && (
+    <div className="dx-scheduler-group-header-content">
+      <div>
+        {text}
+      </div>
+    </div>
+    )}
+  </th>
+);
 
 @ComponentBindings()
 export class GroupPanelHorizontalCellProps {
@@ -49,13 +55,28 @@ export class GroupPanelHorizontalCellProps {
 
   @OneWay() colSpan = 1;
 
+  @OneWay() isFirstGroupCell = false;
+
+  @OneWay() isLastGroupCell = false;
+
   @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 
-  @OneWay() className?: string ='';
+  @OneWay() className = '';
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class GroupPanelHorizontalCell extends JSXComponent(GroupPanelHorizontalCellProps) {}
+export class GroupPanelHorizontalCell extends JSXComponent(GroupPanelHorizontalCellProps) {
+  get classes(): string {
+    const { isFirstGroupCell, isLastGroupCell, className } = this.props;
+
+    return combineClasses({
+      'dx-scheduler-group-header': true,
+      'dx-scheduler-first-group-cell': isFirstGroupCell,
+      'dx-scheduler-last-group-cell': isLastGroupCell,
+      [className]: !!className,
+    });
+  }
+}

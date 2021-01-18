@@ -41,19 +41,19 @@ const getGroupsRenderData = (
 
   if (groupByDate) {
     groupRenderItems = [...(new Array(columnCountPerGroup))]
-      .reduce((currentGroupItems, _, index) => {
-        if (index === 0) {
-          return currentGroupItems;
-        }
+      .reduce((currentGroupItems, _, index) => groupRenderItems.map((groupsRow, rowIndex) => {
+        const currentRow = currentGroupItems[rowIndex] || [];
 
-        return currentGroupItems.map((groupsRow, rowIndex) => [
-          ...groupsRow,
-          ...groupRenderItems[rowIndex].map((item) => ({
+        return [
+          ...currentRow,
+          ...groupsRow.map((item, columnIndex) => ({
             ...item,
             key: `${item.key}_group_by_date_${index}`,
+            isFirstGroupCell: columnIndex === 0,
+            isLastGroupCell: columnIndex === groupsRow.length - 1,
           })),
-        ]);
-      }, groupRenderItems);
+        ];
+      }), []);
   }
 
   return groupRenderItems;

@@ -41,6 +41,8 @@ export interface GroupRenderItem extends GroupItem {
   resourceName: string;
   data: GroupItem;
   colSpan?: number;
+  isFirstGroupCell?: boolean;
+  isLastGroupCell?: boolean;
 }
 
 export interface Group {
