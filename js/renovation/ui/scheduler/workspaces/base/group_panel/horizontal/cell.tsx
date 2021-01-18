@@ -9,6 +9,7 @@ export const viewFunction = (viewModel: GroupPanelHorizontalCell): JSX.Element =
   return (
     <th
       className={`dx-scheduler-group-header ${viewModel.props.className}`}
+      colSpan={viewModel.props.colSpan}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...viewModel.restAttributes}
     >
@@ -45,6 +46,8 @@ export class GroupPanelHorizontalCellProps {
   @OneWay() data: GroupItem = { id: 0 };
 
   @OneWay() index?: number;
+
+  @OneWay() colSpan = 1;
 
   @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 
