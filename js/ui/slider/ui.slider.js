@@ -526,11 +526,6 @@ const Slider = TrackBar.inherit({
             step = 1;
         }
 
-        // TODO or exception?
-        if(step === 0) {
-            step = 0.00001;
-        }
-
         return step;
     },
 
