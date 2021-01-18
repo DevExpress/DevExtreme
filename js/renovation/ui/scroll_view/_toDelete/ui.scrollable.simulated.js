@@ -556,7 +556,6 @@ export const SimulatedStrategy = Class.inherit({
 
     render: function() {
         this._createScrollers();
-        this._attachKeyboardHandler();
         this._attachCursorHandlers();
     },
 
@@ -710,14 +709,6 @@ export const SimulatedStrategy = Class.inherit({
     handleScroll: function() {
         this._component._updateRtlConfig();
         this._scrollAction();
-    },
-
-    _attachKeyboardHandler: function() {
-        eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_KEYBOARD}`);
-
-        if(!this.option('disabled') && this.option('useKeyboard')) {
-            eventsEngine.on(this._$element, addEventNamespace('keydown', SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
-        }
     },
 
     _keyDownHandler: function(e) {
