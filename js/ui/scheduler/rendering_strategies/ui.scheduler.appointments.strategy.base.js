@@ -541,13 +541,21 @@ class BaseRenderingStrategy {
             coordinates.virtual = {
                 top: coordinates.top,
                 left: coordinates.left,
-                // index: coordinates.appointmentReduced === 'tail' ?
-                //     coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex :
-                //     coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex + '-tail',
-                index: coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex,
+                index: this._getVirtualAppointmentIndex(coordinates),
                 isAllDay: isAllDay
             };
         }
+    }
+
+    _getVirtualAppointmentIndex({
+        appointmentReduced,
+        groupIndex,
+        rowIndex,
+        cellIndex,
+    }) {
+        return appointmentReduced === 'tail'
+            ? groupIndex + '-' + rowIndex + '-' + cellIndex
+            : groupIndex + '-' + rowIndex + '-' + cellIndex + '-tail';
     }
 
     _getMaxAppointmentCountPerCellByType(isAllDay) {

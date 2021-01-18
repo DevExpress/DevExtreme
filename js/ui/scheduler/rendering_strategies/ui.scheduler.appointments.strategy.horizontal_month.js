@@ -126,6 +126,14 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     _needHorizontalGroupBounds() {
         return true;
     }
+
+    _getVirtualAppointmentIndex({
+        groupIndex,
+        rowIndex,
+        cellIndex,
+    }) {
+        return groupIndex + '-' + rowIndex + '-' + cellIndex;
+    }
 }
 
 export default HorizontalMonthRenderingStrategy;
