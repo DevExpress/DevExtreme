@@ -643,7 +643,7 @@ export default gridCore.Controller.inherit((function() {
                             d.resolve(data, loadResult.extra);
                         }).fail(d.reject);
                     }).fail(d.reject);
-                }, that.option('loadingTimeout'));
+                }, options.sync ? undefined : that.option('loadingTimeout'));
 
                 return d.fail(function() {
                     that._eventsStrategy.fireEvent('loadError', arguments);

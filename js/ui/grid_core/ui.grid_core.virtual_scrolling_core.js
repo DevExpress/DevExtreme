@@ -540,7 +540,7 @@ export const VirtualScrollController = Class.inherit((function() {
             const dataSource = this._dataSource;
             let result;
 
-            if(isVirtualMode(this) || isAppendMode(this)) {
+            if(!this.option(NEW_SCROLLING_MODE) && (isVirtualMode(this) || isAppendMode(this))) {
                 const pageIndexForLoad = getPageIndexForLoad(this);
 
                 if(pageIndexForLoad >= 0) {
@@ -588,7 +588,7 @@ export const VirtualScrollController = Class.inherit((function() {
 
             if(e && e.changes) {
                 fireChanged(this, callBase, e);
-            } else if(isVirtualMode(this) || isAppendMode(this)) {
+            } else if(!this.option(NEW_SCROLLING_MODE) && (isVirtualMode(this) || isAppendMode(this))) {
                 const beginPageIndex = getBeginPageIndex(this);
                 if(beginPageIndex >= 0) {
                     if(isVirtualMode(this) && beginPageIndex + this._cache.length !== dataSource.pageIndex() && beginPageIndex - 1 !== dataSource.pageIndex()) {
