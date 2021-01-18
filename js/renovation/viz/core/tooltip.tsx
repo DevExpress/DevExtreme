@@ -17,7 +17,7 @@ import {
 import { Format, Point } from '../common/types.d';
 
 import {
-  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData,
+  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, getCanvas,
 } from './common/tooltip_utils';
 import { getFormatValue } from '../common/utils';
 import { normalizeEnum } from '../../../viz/core/utils';
@@ -415,8 +415,9 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   }
 
   get correctedCoordinates(): TooltipCoordinates | false {
+    const canvas = getCanvas(this.container);
     const {
-      canvas, x, y, offset, arrowLength,
+      x, y, offset, arrowLength,
     } = this.props;
     return recalculateCoordinates({
       canvas, anchorX: x, anchorY: y, size: this.textSizeWithPaddings, offset, arrowLength,

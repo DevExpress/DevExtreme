@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Tooltip, viewFunction as TooltipComponent } from '../tooltip';
 import {
-  recalculateCoordinates, getCloudAngle, getCloudPoints, prepareData,
+  recalculateCoordinates, getCloudAngle, getCloudPoints, prepareData, getCanvas,
 } from '../common/tooltip_utils';
 import { getFuncIri } from '../renderers/utils';
 import { getFormatValue } from '../../common/utils';
@@ -13,6 +13,7 @@ jest.mock('../common/tooltip_utils', () => ({
   recalculateCoordinates: jest.fn(),
   getCloudAngle: jest.fn(),
   prepareData: jest.fn(),
+  getCanvas: jest.fn(),
 }));
 
 jest.mock('../../common/utils', () => ({
@@ -60,9 +61,6 @@ describe('Render', () => {
       offsetX: 0,
       offsetY: 4,
       opacity: 0.4,
-    },
-    canvas: {
-      left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 400,
     },
     arrowWidth: 20,
     arrowLength: 25,
@@ -710,13 +708,14 @@ describe('Getters', () => {
     const tooltip = new Tooltip({
       paddingLeftRight: 2,
       paddingTopBottom: 3,
-      canvas: {
-        top: 1, left: 2, right: 3, bottom: 4, width: 10, height: 10,
-      },
       x: 30,
       y: 40,
       offset: 7,
       arrowLength: 5,
+    });
+
+    (getCanvas as jest.Mock).mockReturnValue({
+      top: 1, left: 2, right: 3, bottom: 4, width: 10, height: 10,
     });
 
     expect(tooltip.correctedCoordinates).toEqual({

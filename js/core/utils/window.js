@@ -4,7 +4,7 @@ import domAdapter from '../dom_adapter';
 
 const hasWindow = () => typeof window !== 'undefined';
 
-let windowObject = hasWindow() && window;
+let windowObject = hasWindow() ? window : undefined;
 
 if(!windowObject) {
     windowObject = {};
