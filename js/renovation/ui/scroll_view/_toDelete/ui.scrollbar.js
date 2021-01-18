@@ -18,8 +18,6 @@ const SCROLLBAR_VISIBLE = {
 const Scrollbar = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            direction: null,
-            visible: false,
             containerSize: 0,
             contentSize: 0,
             scaleRatio: 1
