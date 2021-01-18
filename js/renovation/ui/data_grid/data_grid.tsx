@@ -1,376 +1,436 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  Ref, Component, JSXComponent, Method, RefObject,
+  JSXComponent, Component, Method, Ref,
 } from 'devextreme-generator/component_declaration/common';
-import LegacyDataGrid from '../../../ui/data_grid/ui.data_grid';
+import {
+  DataGridProps,
+} from './props';
 
-import { DataGridProps } from './props';
+import '../../../ui/data_grid/ui.data_grid';
 
-import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import gridCore from '../../../ui/data_grid/ui.data_grid.core';
 
-/* eslint-enable import/named */
+import { Widget } from '../common/widget';
+import { DataGridComponent } from './datagrid_component';
+import { DataGridViews } from './data_grid_views';
+import { GridInstance } from './common/types';
+
+gridCore.registerModulesOrder([
+  'stateStoring',
+  'columns',
+  'selection',
+  'editorFactory',
+  'columnChooser',
+  'grouping',
+  'editing',
+  'masterDetail',
+  'validating',
+  'adaptivity',
+  'data',
+  'virtualScrolling',
+  'columnHeaders',
+  'filterRow',
+  'headerPanel',
+  'headerFilter',
+  'sorting',
+  'search',
+  'rows',
+  'pager',
+  'columnsResizingReordering',
+  'contextMenu',
+  'keyboardNavigation',
+  'errorHandling',
+  'summary',
+  'columnFixing',
+  'export',
+  'gridView']);
 
 export const viewFunction = ({
-  domComponentRef, props, restAttributes,
-}: DataGrid): JSX.Element => (
-  <DomComponentWrapper
-    ref={domComponentRef}
-    componentType={LegacyDataGrid as any}
-    componentProps={props}
+  gridInstance,
+  // widgetRef,
+  restAttributes,
+}: DataGrid) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
-  />
+  <Widget {...restAttributes}>
+    <DataGridViews gridInstance={gridInstance} />
+  </Widget>
 );
 
-@Component({
-  defaultOptionRules: null,
-  jQuery: { register: true },
-  view: viewFunction,
-})
+@Component({ defaultOptionRules: null, jQuery: { register: true }, view: viewFunction })
 export class DataGrid extends JSXComponent(DataGridProps) {
-  @Ref()
-  domComponentRef!: RefObject<DomComponentWrapper>;
-
-  get instance(): any {
-    return this.domComponentRef.getInstance();
-  }
+  @Ref() componentInstance!: GridInstance;
 
   @Method()
   beginCustomLoading(messageText: string): void {
-    return this.instance?.beginCustomLoading(messageText);
+    return this.gridInstance?.beginCustomLoading(messageText);
   }
 
   @Method()
   byKey(key: any | string | number): Promise<any> & JQueryPromise<any> {
-    return this.instance?.byKey(key);
+    return this.gridInstance?.byKey(key);
   }
 
   @Method()
   cancelEditData(): void {
-    return this.instance?.cancelEditData();
+    return this.gridInstance?.cancelEditData();
   }
 
   @Method()
-  cellValue(rowIndex: number, dataField: string | number, value: any): any {
-    return this.instance?.cellValue(rowIndex, dataField, value);
+  cellValue(rowIndex: number, dataField: string, value: any): any {
+    return this.gridInstance?.cellValue(rowIndex, dataField, value);
   }
 
   @Method()
   clearFilter(filterName: string): void {
-    return this.instance?.clearFilter(filterName);
+    return this.gridInstance?.clearFilter(filterName);
   }
 
   @Method()
   clearSelection(): void {
-    return this.instance?.clearSelection();
+    return this.gridInstance?.clearSelection();
   }
 
   @Method()
   clearSorting(): void {
-    return this.instance?.clearSorting();
+    return this.gridInstance?.clearSorting();
   }
 
   @Method()
   closeEditCell(): void {
-    return this.instance?.closeEditCell();
+    return this.gridInstance?.closeEditCell();
   }
 
   @Method()
   collapseAdaptiveDetailRow(): void {
-    return this.instance?.collapseAdaptiveDetailRow();
+    return this.gridInstance?.collapseAdaptiveDetailRow();
   }
 
   @Method()
   columnCount(): number {
-    return this.instance?.columnCount();
+    return this.gridInstance?.columnCount();
   }
 
   @Method()
   columnOption(id: number | string, optionName: any, optionValue: any): void {
-    return this.instance?.columnOption(id, optionName, optionValue);
+    return this.gridInstance?.columnOption(id, optionName, optionValue);
   }
 
   @Method()
   deleteColumn(id: number | string): void {
-    return this.instance?.deleteColumn(id);
+    return this.gridInstance?.deleteColumn(id);
   }
 
   @Method()
   deleteRow(rowIndex: number): void {
-    return this.instance?.deleteRow(rowIndex);
+    return this.gridInstance?.deleteRow(rowIndex);
   }
 
   @Method()
   deselectAll(): Promise<void> & JQueryPromise<void> {
-    return this.instance?.deselectAll();
+    return this.gridInstance?.deselectAll();
   }
 
   @Method()
   deselectRows(keys: any[]): Promise<any> & JQueryPromise<any> {
-    return this.instance?.deselectRows(keys);
+    return this.gridInstance?.deselectRows(keys);
   }
 
   @Method()
-  editCell(rowIndex: number, dataField: string | number): void {
-    return this.instance?.editCell(rowIndex, dataField);
+  editCell(rowIndex: number, dataFieldColumnIndex: string | number): void {
+    return this.gridInstance?.editCell(rowIndex, dataFieldColumnIndex as string);
   }
 
   @Method()
   editRow(rowIndex: number): void {
-    return this.instance?.editRow(rowIndex);
+    return this.gridInstance?.editRow(rowIndex);
   }
 
   @Method()
   endCustomLoading(): void {
-    return this.instance?.endCustomLoading();
+    return this.gridInstance?.endCustomLoading();
   }
 
   @Method()
   expandAdaptiveDetailRow(key: any): void {
-    return this.instance?.expandAdaptiveDetailRow(key);
+    return this.gridInstance?.expandAdaptiveDetailRow(key);
   }
 
   @Method()
   filter(filterExpr: any): void {
-    return this.instance?.filter(filterExpr);
+    return this.gridInstance?.filter(filterExpr);
   }
 
   @Method()
-  focus(element: undefined | Element | JQuery): void {
-    return this.instance?.focus(element);
+  focus(element?: Element | JQuery): void {
+    return this.gridInstance?.focus(element as Element);
   }
 
   @Method()
   getCellElement(
     rowIndex: number, dataField: string | number,
   ): any/* dxElement | undefined */ {
-    return this.instance?.getCellElement(rowIndex, dataField);
+    return this.gridInstance?.getCellElement(rowIndex, dataField as string);
   }
 
   @Method()
-  getCombinedFilter(returnDataField: undefined | boolean): any {
-    return this.instance?.getCombinedFilter(returnDataField);
+  getCombinedFilter(returnDataField?: boolean): any {
+    return this.gridInstance?.getCombinedFilter(returnDataField as boolean);
   }
 
   @Method()
   getDataSource(): any /* DataSource */ {
-    return this.instance?.getDataSource();
+    return this.gridInstance?.getDataSource();
   }
 
   @Method()
   getKeyByRowIndex(rowIndex: number): any {
-    return this.instance?.getKeyByRowIndex(rowIndex);
+    return this.gridInstance?.getKeyByRowIndex(rowIndex);
   }
 
   @Method()
   getRowElement(rowIndex: number): Element[] & JQuery | undefined {
-    return this.instance?.getRowElement(rowIndex);
+    return this.gridInstance?.getRowElement(rowIndex);
   }
 
   @Method()
   getRowIndexByKey(key: any | string | number): number {
-    return this.instance?.getRowIndexByKey(key);
+    return this.gridInstance?.getRowIndexByKey(key);
   }
 
   @Method()
   getScrollable(): any /* dxScrollable */ {
-    return this.instance?.getScrollable();
+    return this.gridInstance?.getScrollable();
   }
 
   @Method()
   getVisibleColumnIndex(id: number | string): number {
-    return this.instance?.getVisibleColumnIndex(id);
+    return this.gridInstance?.getVisibleColumnIndex(id);
   }
 
   @Method()
   hasEditData(): boolean {
-    return this.instance?.hasEditData();
+    return this.gridInstance?.hasEditData();
   }
 
   @Method()
   hideColumnChooser(): void {
-    return this.instance?.hideColumnChooser();
+    return this.gridInstance?.hideColumnChooser();
   }
 
   @Method()
   isAdaptiveDetailRowExpanded(key: any): boolean {
-    return this.instance?.isAdaptiveDetailRowExpanded(key);
+    return this.gridInstance?.isAdaptiveDetailRowExpanded(key);
   }
 
   @Method()
   isRowFocused(key: any): boolean {
-    return this.instance?.isRowFocused(key);
+    return this.gridInstance?.isRowFocused(key);
   }
 
   @Method()
   isRowSelected(key: any): boolean {
-    return this.instance?.isRowSelected(key);
+    return this.gridInstance?.isRowSelected(key);
   }
 
   @Method()
   keyOf(obj: any): any {
-    return this.instance?.keyOf(obj);
+    return this.gridInstance?.keyOf(obj);
   }
 
   @Method()
   navigateToRow(key: any): void {
-    return this.instance?.navigateToRow(key);
+    return this.gridInstance?.navigateToRow(key);
   }
 
   @Method()
   pageCount(): number {
-    return this.instance?.pageCount();
+    return this.gridInstance?.pageCount();
   }
 
   @Method()
   pageIndex(
-    newIndex: undefined | number,
+    newIndex?: number,
   ): Promise<void> & JQueryPromise<void> | number {
-    return this.instance?.pageIndex(newIndex);
+    return this.gridInstance?.pageIndex(newIndex as number);
   }
 
   @Method()
   pageSize(value: number): void {
-    return this.instance?.pageSize(value);
+    return this.gridInstance?.pageSize(value);
   }
 
   @Method()
   refresh(
-    changesOnly: undefined | boolean,
+    changesOnly?: boolean,
   ): Promise<void> & JQueryPromise<void> {
-    return this.instance?.refresh(changesOnly);
+    return this.gridInstance?.refresh(changesOnly as boolean);
   }
 
   @Method()
   repaintRows(rowIndexes: number[]): void {
-    return this.instance?.repaintRows(rowIndexes);
+    return this.gridInstance?.repaintRows(rowIndexes);
   }
 
   @Method()
   saveEditData(): Promise<void> & JQueryPromise<void> {
-    return this.instance?.saveEditData();
+    return this.gridInstance?.saveEditData();
   }
 
   @Method()
   searchByText(text: string): void {
-    return this.instance?.searchByText(text);
+    return this.gridInstance?.searchByText(text);
   }
 
   @Method()
   selectAll(): Promise<void> & JQueryPromise<void> {
-    return this.instance?.selectAll();
+    return this.gridInstance?.selectAll();
   }
 
   @Method()
   selectRows(
     keys: any[], preserve: boolean,
   ): Promise<any> & JQueryPromise<any> {
-    return this.instance?.selectRows(keys, preserve);
+    return this.gridInstance?.selectRows(keys, preserve);
   }
 
   @Method()
   selectRowsByIndexes(indexes: number[]): Promise<any> & JQueryPromise<any> {
-    return this.instance?.selectRowsByIndexes(indexes);
+    return this.gridInstance?.selectRowsByIndexes(indexes);
   }
 
   @Method()
   showColumnChooser(): void {
-    return this.instance?.showColumnChooser();
+    return this.gridInstance?.showColumnChooser();
   }
 
   /*
   @Method()
   state(state: any): any {
-    return this.instance?.state();
+    return this.gridInstance?.state();
   } */
 
   @Method()
   undeleteRow(rowIndex: number): void {
-    return this.instance?.undeleteRow(rowIndex);
+    return this.gridInstance?.undeleteRow(rowIndex);
   }
 
   @Method()
   updateDimensions(): void {
-    return this.instance?.updateDimensions();
+    return this.gridInstance?.updateDimensions();
   }
 
   @Method()
   addColumn(columnOptions: any | string): void {
-    return this.instance?.addColumn(columnOptions);
+    return this.gridInstance?.addColumn(columnOptions);
   }
 
   @Method()
   addRow(): Promise<void> & JQueryPromise<void> {
-    return this.instance?.addRow();
+    return this.gridInstance?.addRow();
   }
 
   @Method()
   clearGrouping(): void {
-    return this.instance?.clearGrouping();
+    return this.gridInstance?.clearGrouping();
   }
 
   @Method()
   collapseAll(groupIndex?: number): void {
-    return this.instance?.collapseAll(groupIndex);
+    return this.gridInstance?.collapseAll(groupIndex);
   }
 
   @Method()
   collapseRow(key: any): Promise<void> & JQueryPromise<void> {
-    return this.instance?.collapseRow(key);
+    return this.gridInstance?.collapseRow(key);
   }
 
   @Method()
   expandAll(groupIndex?: number): void {
-    return this.instance?.expandAll(groupIndex);
+    return this.gridInstance?.expandAll(groupIndex);
   }
 
   @Method()
   expandRow(key: any): Promise<void> & JQueryPromise<void> {
-    return this.instance?.expandRow(key);
+    return this.gridInstance?.expandRow(key);
   }
 
   @Method()
   exportToExcel(selectionOnly: boolean): void {
-    return this.instance?.exportToExcel(selectionOnly);
+    return this.gridInstance?.exportToExcel(selectionOnly);
   }
 
   @Method()
   getSelectedRowKeys(): any[] & Promise<any> & JQueryPromise<any> {
-    return this.instance?.getSelectedRowKeys();
+    return this.gridInstance?.getSelectedRowKeys();
   }
 
   @Method()
   getSelectedRowsData(): any[] & Promise<any> & JQueryPromise<any> {
-    return this.instance?.getSelectedRowsData();
+    return this.gridInstance?.getSelectedRowsData();
   }
 
   @Method()
   getTotalSummaryValue(summaryItemName: string): any {
-    return this.instance?.getTotalSummaryValue(summaryItemName);
+    return this.gridInstance?.getTotalSummaryValue(summaryItemName);
   }
 
   @Method()
-  getVisibleColumns(headerLevel: undefined | number): any /* dxDataGridColumn[] */ {
-    return this.instance?.getVisibleColumns(headerLevel);
+  getVisibleColumns(headerLevel?: number): any /* dxDataGridColumn[] */ {
+    return this.gridInstance?.getVisibleColumns(headerLevel as number);
   }
 
   @Method()
   getVisibleRows(): any /* dxDataGridRowObject[] */ {
-    return this.instance?.getVisibleRows();
+    return this.gridInstance?.getVisibleRows();
   }
 
   @Method()
   isRowExpanded(key: any): boolean {
-    return this.instance?.isRowExpanded(key);
+    return this.gridInstance?.isRowExpanded(key);
   }
 
   @Method()
   totalCount(): number {
-    return this.instance?.totalCount();
+    return this.gridInstance?.totalCount();
   }
 
   @Method()
   getController(name: string): any {
-    return this.instance?.getController(name);
+    return this.gridInstance?.getController(name);
+  }
+
+  // It's impossible to define constructor, so it's workaround to lazy creation
+  // of gridInstance within componentHolder by imutable way
+  get gridInstance() {
+    if (!this.componentInstance) {
+      this.componentInstance = this.init();
+    }
+    return this.componentInstance;
+  }
+
+  // TODO without normalization all nested props defaults overwrite by undefined
+  // For example, instance.option('editing') return undefined instead of editing default values
+  // Specifically for React
+  // result[key] = {
+  //   ...props,
+  //   columns: __getNestedColumns(),
+  //   editing: __getNestedEditing()
+  //   ...
+  // }
+  normalizeProps(): {} {
+    const result = {};
+    Object.keys(this.props).forEach((key) => {
+      if (this.props[key] !== undefined) {
+        result[key] = this.props[key];
+      }
+    });
+    return result;
+  }
+
+  // TODO Move to constructor of DataGridComponent
+  init() {
+    const instance: any = new DataGridComponent(this.normalizeProps());
+
+    return instance as GridInstance;
   }
 }
