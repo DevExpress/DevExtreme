@@ -782,28 +782,28 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
 
     QUnit.test('Scheduler should render correct number of collectors and pass correct number of appointments to them (T965267)', function(assert) {
         const dataSource = [{
-            startDate: new Date('2020-12-12T00:00:00Z'),
-            endDate: new Date('2020-12-15T00:00:00Z'),
+            startDate: new Date(2020, 11, 12),
+            endDate: new Date(2020, 11, 15, 3),
             text: '1'
         }, {
-            startDate: new Date('2020-12-12T00:00:00Z'),
-            endDate: new Date('2020-12-15T00:00:00Z'),
+            startDate: new Date(2020, 11, 12),
+            endDate: new Date(2020, 11, 15, 3),
             text: '2'
         }, {
-            startDate: new Date('2020-12-12T00:00:00Z'),
-            endDate: new Date('2020-12-15T00:00:00Z'),
+            startDate: new Date(2020, 11, 12),
+            endDate: new Date(2020, 11, 15, 3),
             text: '3'
         }, {
-            startDate: new Date('2020-12-12T00:00:00Z'),
-            endDate: new Date('2020-12-20T00:00:00Z'),
+            startDate: new Date(2020, 11, 12),
+            endDate: new Date(2020, 11, 20, 3),
             text: '4'
         }, {
-            startDate: new Date('2020-12-12T00:00:00Z'),
-            endDate: new Date('2020-12-20T00:00:00Z'),
+            startDate: new Date(2020, 11, 12),
+            endDate: new Date(2020, 11, 20, 3),
             text: '5'
         }, {
-            startDate: new Date('2020-12-12T00:00:00Z'),
-            endDate: new Date('2020-02-20T00:00:00Z'),
+            startDate: new Date(2020, 11, 12),
+            endDate: new Date(2020, 11, 20, 3),
             text: '6'
         }];
 
@@ -812,19 +812,17 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             views: [{
                 type: 'month',
                 maxAppointmentsPerCell: 1
-            }, 'week'],
-
-            startDayHour: 0,
+            }],
             currentView: 'month',
             currentDate: new Date(2020, 11, 25),
             height: 600,
         });
 
         const collectorsCount = scheduler.appointments.compact.getButtonCount();
-        const buttonText = scheduler.appointments.compact.getButtonText(3);
+        const collectorText = scheduler.appointments.compact.getButtonText(3);
 
         assert.equal(collectorsCount, 9, 'Correct number of appointment collectors');
-        assert.equal(buttonText, '4 more', 'Correct text');
+        assert.equal(collectorText, '5 more', 'Correct text');
     });
 });
 
