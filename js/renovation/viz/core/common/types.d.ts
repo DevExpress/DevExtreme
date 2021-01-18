@@ -8,9 +8,9 @@ export type TooltipCoordinates = { x: number; y: number; anchorX: number; anchor
 export type Margin = { top?: number; left?: number; bottom?: number; right?: number };
 export type InitialBorder = { color: string; width: number; dashStyle: string; opacity?: number; visible: boolean };
 export type Border = { stroke?: string, strokeWidth?: number, strokeOpacity?: number, dashStyle?: string };
-export type CustomizedOptions = { text?: string, html?: string, color?: string, borderColor?: string, fontColor?: string };
+export type CustomizedOptions = { text?: string | null, html?: string | null, color?: string, borderColor?: string, fontColor?: string };
 export type CustomizeTooltipFn = (info: any) => {
-    text?: string; html?: string; color?: string; borderColor?: string; fontColor?: string;
+    text?: string | null; html?: string | null; color?: string; borderColor?: string; fontColor?: string;
 };
 export type Location = 'center' | 'edge';
 export interface TooltipData {
