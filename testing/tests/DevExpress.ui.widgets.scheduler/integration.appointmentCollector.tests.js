@@ -780,6 +780,52 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
         this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
 
+    QUnit.test('Scheduler should render correct number of collectors and pass correct number of appointments to them (T965267)', function(assert) {
+        const dataSource = [{
+            startDate: new Date('2020-12-12T00:00:00Z'),
+            endDate: new Date('2020-12-15T00:00:00Z'),
+            text: '1'
+        }, {
+            startDate: new Date('2020-12-12T00:00:00Z'),
+            endDate: new Date('2020-12-15T00:00:00Z'),
+            text: '2'
+        }, {
+            startDate: new Date('2020-12-12T00:00:00Z'),
+            endDate: new Date('2020-12-15T00:00:00Z'),
+            text: '3'
+        }, {
+            startDate: new Date('2020-12-12T00:00:00Z'),
+            endDate: new Date('2020-12-20T00:00:00Z'),
+            text: '4'
+        }, {
+            startDate: new Date('2020-12-12T00:00:00Z'),
+            endDate: new Date('2020-12-20T00:00:00Z'),
+            text: '5'
+        }, {
+            startDate: new Date('2020-12-12T00:00:00Z'),
+            endDate: new Date('2020-02-20T00:00:00Z'),
+            text: '6'
+        }];
+
+        const scheduler = createWrapper({
+            dataSource,
+            views: [{
+                type: 'month',
+                maxAppointmentsPerCell: 1
+            }, 'week'],
+
+            startDayHour: 0,
+            currentView: 'month',
+            currentDate: new Date(2020, 11, 25),
+            height: 600,
+        });
+
+        const collectorsCount = scheduler.appointments.compact.getButtonCount();
+        const buttonText = scheduler.appointments.compact.getButtonText(3);
+
+        assert.equal(collectorsCount, 9, 'Correct number of appointment collectors');
+        assert.equal(buttonText, '4 more', 'Correct text');
+    });
 });
 
 QUnit.module('Integration: Appointments Collector, adaptivityEnabled = true', {
