@@ -97,7 +97,7 @@ const SelectBox = DropDownList.inherit({
                 const result = parent.escape && parent.escape.apply(this, arguments);
                 this._cancelEditing();
 
-                return isDefined(result) ? result : true;
+                return result ?? true;
             },
             enter: function(e) {
                 const isOpened = this.option('opened');
