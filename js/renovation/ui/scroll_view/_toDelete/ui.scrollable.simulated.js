@@ -3,7 +3,7 @@ import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { titleize } from '../../core/utils/inflector';
 import { extend } from '../../core/utils/extend';
-import { getWindow, hasWindow } from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import { each, map } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { getBoundingRect } from '../../core/utils/position';
@@ -32,7 +32,6 @@ const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const MIN_VELOCITY_LIMIT = 1;
 const FRAME_DURATION = Math.round(1000 / 60);
-const SCROLL_LINE_HEIGHT = 40;
 const VALIDATE_WHEEL_TIMEOUT = 500;
 
 const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
@@ -557,7 +556,6 @@ export const SimulatedStrategy = Class.inherit({
 
     render: function() {
         this._createScrollers();
-        this._attachKeyboardHandler();
         this._attachCursorHandlers();
     },
 
@@ -688,12 +686,6 @@ export const SimulatedStrategy = Class.inherit({
         }
     },
 
-    _tryGetDevicePixelRatio: function() {
-        if(hasWindow()) {
-            return getWindow().devicePixelRatio;
-        }
-    },
-
     handleEnd: function(e) {
         this._resetActive();
         this._refreshCursorState(e.originalEvent && e.originalEvent.target);
@@ -719,14 +711,6 @@ export const SimulatedStrategy = Class.inherit({
         this._scrollAction();
     },
 
-    _attachKeyboardHandler: function() {
-        eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_KEYBOARD}`);
-
-        if(!this.option('disabled') && this.option('useKeyboard')) {
-            eventsEngine.on(this._$element, addEventNamespace('keydown', SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
-        }
-    },
-
     _keyDownHandler: function(e) {
         clearTimeout(this._updateHandlerTimeout);
         this._updateHandlerTimeout = setTimeout(() => {
@@ -740,89 +724,6 @@ export const SimulatedStrategy = Class.inherit({
         if(!this._$container.is(domAdapter.getActiveElement())) {
             return;
         }
-
-        let handled = true;
-
-        switch(normalizeKeyName(e)) {
-            case KEY_CODES.DOWN:
-                this._scrollByLine({ y: 1 });
-                break;
-            case KEY_CODES.UP:
-                this._scrollByLine({ y: -1 });
-                break;
-            case KEY_CODES.RIGHT:
-                this._scrollByLine({ x: 1 });
-                break;
-            case KEY_CODES.LEFT:
-                this._scrollByLine({ x: -1 });
-                break;
-            case KEY_CODES.PAGE_DOWN:
-                this._scrollByPage(1);
-                break;
-            case KEY_CODES.PAGE_UP:
-                this._scrollByPage(-1);
-                break;
-            case KEY_CODES.HOME:
-                this._scrollToHome();
-                break;
-            case KEY_CODES.END:
-                this._scrollToEnd();
-                break;
-            default:
-                handled = false;
-                break;
-        }
-
-        if(handled) {
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    },
-
-    _scrollByLine: function(lines) {
-        const devicePixelRatio = this._tryGetDevicePixelRatio();
-        let scrollOffset = SCROLL_LINE_HEIGHT;
-        if(devicePixelRatio) {
-            scrollOffset = Math.abs(scrollOffset / devicePixelRatio * 100) / 100;
-        }
-        this.scrollBy({
-            top: (lines.y || 0) * -scrollOffset,
-            left: (lines.x || 0) * -scrollOffset
-        });
-    },
-
-    _scrollByPage: function(page) {
-        const prop = this._wheelProp();
-        const dimension = this._dimensionByProp(prop);
-
-        const distance = {};
-        distance[prop] = page * -this._$container[dimension]();
-        this.scrollBy(distance);
-    },
-
-    _dimensionByProp: function(prop) {
-        return (prop === 'left') ? 'width' : 'height';
-    },
-
-    _getPropByDirection: function(direction) {
-        return direction === HORIZONTAL ? 'left' : 'top';
-    },
-
-    _scrollToHome: function() {
-        const prop = this._wheelProp();
-        const distance = {};
-
-        distance[prop] = 0;
-        this._component.scrollTo(distance);
-    },
-
-    _scrollToEnd: function() {
-        const prop = this._wheelProp();
-        const dimension = this._dimensionByProp(prop);
-
-        const distance = {};
-        distance[prop] = this._$content[dimension]() - this._$container[dimension]();
-        this._component.scrollTo(distance);
     },
 
     createActions: function() {
@@ -1042,21 +943,6 @@ export const SimulatedStrategy = Class.inherit({
 
     getDirection: function(e) {
         return isDxMouseWheelEvent(e) ? this._wheelDirection(e) : this._allowedDirection();
-    },
-
-    _wheelProp: function() {
-        return (this._wheelDirection() === HORIZONTAL) ? 'left' : 'top';
-    },
-
-    _wheelDirection: function(e) {
-        switch(this.option('direction')) {
-            case HORIZONTAL:
-                return HORIZONTAL;
-            case VERTICAL:
-                return VERTICAL;
-            default:
-                return e && e.shiftKey ? HORIZONTAL : VERTICAL;
-        }
     },
 
     verticalOffset: function() {
