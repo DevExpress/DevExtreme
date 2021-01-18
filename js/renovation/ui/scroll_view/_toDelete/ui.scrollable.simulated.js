@@ -558,7 +558,6 @@ export const SimulatedStrategy = Class.inherit({
     render: function() {
         this._createScrollers();
         this._attachKeyboardHandler();
-        this._attachCursorHandlers();
     },
 
     _createScrollers: function() {
@@ -889,16 +888,6 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     disabledChanged: function() {
-        this._attachCursorHandlers();
-    },
-
-    _attachCursorHandlers: function() {
-        eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_CURSOR}`);
-
-        if(!this.option('disabled') && this._isHoverMode()) {
-            eventsEngine.on(this._$element, addEventNamespace('mouseenter', SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
-            eventsEngine.on(this._$element, addEventNamespace('mouseleave', SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
-        }
     },
 
     _isHoverMode: function() {

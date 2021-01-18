@@ -28,7 +28,6 @@ const Scrollbar = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this._isHovered = false;
     },
 
     _render: function() {
@@ -42,15 +41,8 @@ const Scrollbar = Widget.inherit({
     },
 
     cursorEnter: function() {
-        this._isHovered = true;
-        if(this._needScrollbar()) {
-            this.option('visible', true);
+        if(this._needScrollbar()) { // use this condition
         }
-    },
-
-    cursorLeave: function() {
-        this._isHovered = false;
-        this.option('visible', false);
     },
 
     _renderDimensions: function() {

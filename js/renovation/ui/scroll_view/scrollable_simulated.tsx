@@ -10,7 +10,7 @@ import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Scrollbar } from './scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
-import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
 
 import {
   ScrollableInternalPropsType,
@@ -45,8 +45,6 @@ import {
   dxScrollEnd,
   dxScrollStop,
   dxScrollCancel,
-  mouseEnter,
-  mouseLeave,
 } from '../../../events/short';
 
 function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
@@ -58,7 +56,8 @@ function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
-    cssClasses, wrapperRef, contentRef, containerRef, tabIndex,
+    cssClasses, wrapperRef, contentRef, containerRef,
+    tabIndex, cursorEnterHandler, cursorLeaveHandler,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -75,11 +74,15 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const visibilityMode = visibilityModeNormalize(showScrollbar);
   return (
     <Widget
+      focusStateEnabled
+      hoverStateEnabled
       classes={cssClasses}
       disabled={disabled}
       rtlEnabled={rtlEnabled}
       height={height}
       width={width}
+      onHoverStart={cursorEnterHandler}
+      onHoverEnd={cursorLeaveHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
@@ -324,30 +327,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
     return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
   }
 
-  @Effect()
-  mouseEnterEffect(): EffectReturn {
-    const namespace = 'dxSimulatedScrollableCursor';
-
-    mouseEnter.on(this.wrapperRef,
-      (e: Event) => {
-        this.cursorEnterHandler(e);
-      }, { namespace });
-
-    return (): void => mouseEnter.off(this.wrapperRef, { namespace });
-  }
-
-  @Effect()
-  mouseLeaveEffect(): EffectReturn {
-    const namespace = 'dxSimulatedScrollableCursor';
-
-    mouseLeave.on(this.wrapperRef,
-      (e: Event) => {
-        this.cursorLeaveHandler(e);
-      }, { namespace });
-
-    return (): void => mouseLeave.off(this.wrapperRef, { namespace });
-  }
-
   /* istanbul ignore next */
   // eslint-disable-next-line
   initHandler(event: Event): void {
@@ -391,17 +370,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
     return true; // TODO
   }
 
-  /* istanbul ignore next */
-  // eslint-disable-next-line
-  private cursorEnterHandler(event: Event): void {
+  cursorEnterHandler(): void {
     if (!this.props.disabled && this.isHoverMode()) {
       this.isHovered = true;
     }
   }
 
-  /* istanbul ignore next */
-  // eslint-disable-next-line
-  private cursorLeaveHandler(event: Event): void {
+  cursorLeaveHandler(): void {
     if (!this.props.disabled && this.isHoverMode()) {
       this.isHovered = false;
     }
