@@ -97,11 +97,6 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         assert.strictEqual(dropDownEditor._$popup.dxPopup('$content').find(content)[0], content[0]);
     });
 
-    QUnit.test('dropdown must close on outside click', function(assert) {
-        this.dropDownEditor.open();
-        assert.ok(this.dropDownEditor._popup.option('closeOnOutsideClick'));
-    });
-
     QUnit.test('widget should have only one input by default', function(assert) {
         const $inputs = this.$dropDownEditor.find('input');
         const $submitElement = this.dropDownEditor._getSubmitElement();
