@@ -162,11 +162,6 @@ QUnit.module('Color Box', {
         assert.equal($alphaChannelLabel.length, 0);
     });
 
-    QUnit.test('Popup should have height=\'auto\'', function(assert) {
-        const popupHeight = showColorBox.call(this).dxColorBox('instance')._popup.option('height');
-        assert.equal(popupHeight, 'auto');
-    });
-
     QUnit.test('Popup content width should be equal to colorBox width when editor width is bigger then colorBox width', function(assert) {
         this.element.dxColorBox({
             width: 1000,

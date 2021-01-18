@@ -32,6 +32,7 @@ class Appointment extends DOMComponent {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             data: {},
+            groupIndex: -1,
             geometry: { top: 0, left: 0, width: 0, height: 0 },
             allowDrag: true,
             allowResize: true,
@@ -63,6 +64,7 @@ class Appointment extends DOMComponent {
     _optionChanged(args) {
         switch(args.name) {
             case 'data':
+            case 'groupIndex':
             case 'geometry':
             case 'allowDrag':
             case 'allowResize':
@@ -126,6 +128,13 @@ class Appointment extends DOMComponent {
 
         this._renderRecurrenceClass();
         this._renderResizable();
+
+        const deferredColor = this.invoke('getAppointmentColor', {
+            itemData: this.option('data'),
+            groupIndex: this.option('groupIndex'),
+        });
+
+        deferredColor.done(color => color && this.$element().css('backgroundColor', color));
     }
 
     _renderAppointmentGeometry() {

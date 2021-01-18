@@ -29,7 +29,7 @@ import tableCreatorModule from '../ui.scheduler.table_creator';
 const { tableCreator } = tableCreatorModule;
 import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
-import { APPOINTMENT_SETTINGS_KEY, FIXED_CONTAINER_CLASS } from '../constants';
+import { APPOINTMENT_SETTINGS_KEY, FIXED_CONTAINER_CLASS, VIRTUAL_CELL_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
@@ -40,6 +40,7 @@ import ViewDataProvider from './view_data_provider';
 import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/layout.j';
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
+import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 import VirtualSelectionState from './virtual_selection_state';
 
 import { cache } from './cache';
@@ -88,7 +89,6 @@ const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_ROW_CLASS = 'dx-scheduler-date-table-row';
 const DATE_TABLE_FOCUSED_CELL_CLASS = 'dx-scheduler-focused-cell';
 const VIRTUAL_ROW_CLASS = 'dx-scheduler-virtual-row';
-const VIRTUAL_CELL_CLASS = 'dx-scheduler-virtual-cell';
 const WRAPPER_POSTFIX = 'template-wrapper';
 
 const DATE_TABLE_DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
@@ -172,6 +172,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         return true;
     }
 
+    get verticalGroupTableClass() { return WORKSPACE_VERTICAL_GROUP_TABLE_CLASS; }
+
+    get viewDirection() { return 'vertical'; }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -225,7 +229,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         super._dispose();
 
         this.virtualScrollingDispatcher?.dispose();
-        this._disposeRenovatedComponents();
     }
 
     _isRTL() {
@@ -638,7 +641,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'groups':
                 this._cleanView();
-                this._disposeRenovatedComponents();
                 this._removeAllDayElements();
                 this._initGrouping();
                 this.repaint();
@@ -653,7 +655,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'showAllDayPanel':
                 if(this._isVerticalGroupedWorkSpace()) {
                     this._cleanView();
-                    this._disposeRenovatedComponents();
                     this._removeAllDayElements();
                     this._initGrouping();
                     this.repaint();
@@ -701,7 +702,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this.option('renovateRender', this._isVirtualModeOn());
                 break;
             case 'renovateRender':
-                this._disposeRenovatedComponents();
                 this.repaint();
                 break;
             default:
@@ -1194,9 +1194,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     _renderView() {
         this._setFirstViewDate();
 
-        this._applyCellTemplates(
-            this._renderGroupHeader()
-        );
+        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+            this.renderRGroupPanel();
+        } else {
+            this._applyCellTemplates(
+                this._renderGroupHeader()
+            );
+        }
 
         this._renderDateHeader();
 
@@ -1279,6 +1283,28 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.updateRSelection();
 
         this.virtualScrollingDispatcher?.updateDimensions();
+    }
+
+    renderRGroupPanel() {
+        const options = {
+            groups: this.option('groups'),
+            groupOrientation: this.option('groupOrientation'),
+            groupByDate: this.isGroupedByDate(),
+            resourceCellTemplate: this.option('resourceCellTemplate'),
+            className: this.verticalGroupTableClass,
+        };
+
+        if(this.option('groups').length) {
+            this._attachGroupCountAttr();
+            this.renderRComponent(
+                this._getGroupHeaderContainer(),
+                dxrGroupPanel,
+                'renovatedGroupPanel',
+                options,
+            );
+        } else {
+            this._detachGroupCountAttr();
+        }
     }
 
     renderRAllDayPanel() {
@@ -1618,7 +1644,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         let cellTemplates = [];
         if(groupCount) {
             const groupRows = this._makeGroupRows(this.option('groups'), this.option('groupByDate'));
-            this._attachGroupCountAttr(groupCount, groupRows);
+            this._attachGroupCountAttr();
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
         } else {
@@ -1629,7 +1655,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _applyCellTemplates(templates) {
-        templates.forEach(function(template) {
+        templates?.forEach(function(template) {
             template();
         });
     }
@@ -1640,8 +1666,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.$element().removeAttr(groupedAttr.attr);
     }
 
-    _attachGroupCountAttr(groupRowCount, groupRows) {
-        const groupedAttr = this._groupedStrategy.getGroupCountAttr(groupRowCount, groupRows);
+    _attachGroupCountAttr() {
+        const groupedAttr = this._groupedStrategy.getGroupCountAttr(this.option('groups'));
 
         this.$element().attr(groupedAttr.attr, groupedAttr.count);
     }
@@ -2228,6 +2254,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _clean() {
         eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+        this._disposeRenovatedComponents();
 
         super._clean();
     }
@@ -2518,7 +2545,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         const { position, cellData } = cell;
 
         return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
-            cellData, position, currentDate, this.isDateAndTimeView,
+            cellData,
+            position,
+            currentDate,
+            this.isDateAndTimeView,
+            this.viewDirection === 'vertical',
         );
     }
 

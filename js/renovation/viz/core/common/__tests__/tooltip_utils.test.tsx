@@ -1,5 +1,5 @@
 import {
-  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData,
+  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, isTextEmpty,
   getCanvas,
 } from '../tooltip_utils';
 import domAdapter from '../../../../../core/dom_adapter';
@@ -388,6 +388,16 @@ describe('#prepareData', () => {
     };
     const customizeTooltip = () => customizedObject;
     expect(prepareData({ description: 'description' }, 'color_1', border, font, customizeTooltip)).toEqual(customizedObject);
+  });
+
+  it('should check if text is empty', () => {
+    expect(isTextEmpty({ text: '' })).toBe(true);
+    expect(isTextEmpty({ text: null })).toBe(true);
+    expect(isTextEmpty({ html: '' })).toBe(true);
+    expect(isTextEmpty({ html: null })).toBe(true);
+
+    expect(isTextEmpty({ text: 'text' })).toBe(false);
+    expect(isTextEmpty({ html: '<p>html tooltip</p>' })).toBe(false);
   });
 });
 

@@ -3,9 +3,9 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/badge";
 
 // adduse
-
 
 .dx-badge {
   background-color: $badge-bg;

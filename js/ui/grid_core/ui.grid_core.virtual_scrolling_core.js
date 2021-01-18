@@ -132,7 +132,7 @@ export const VirtualScrollController = Class.inherit((function() {
 
         let realViewportSize = that._viewportSize;
 
-        if(isVirtualMode(that) && !that.option('legacyRendering') && that.option('scrolling.removeInvisiblePages')) {
+        if(isVirtualMode(that) && that.option('scrolling.removeInvisiblePages')) {
             realViewportSize = 0;
 
             const viewportSize = that._viewportSize * that._viewportItemSize;
@@ -586,63 +586,62 @@ export const VirtualScrollController = Class.inherit((function() {
             }
         },
         handleDataChanged: function(callBase, e) {
-            const that = this;
-            const dataSource = that._dataSource;
-            let lastCacheLength = that._cache.length;
+            const dataSource = this._dataSource;
+            let lastCacheLength = this._cache.length;
             let changeType;
             let removeInvisiblePages;
 
             if(e && e.changes) {
-                fireChanged(that, callBase, e);
-            } else if(isVirtualMode(that) || isAppendMode(that)) {
-                const beginPageIndex = getBeginPageIndex(that);
+                fireChanged(this, callBase, e);
+            } else if(isVirtualMode(this) || isAppendMode(this)) {
+                const beginPageIndex = getBeginPageIndex(this);
                 if(beginPageIndex >= 0) {
-                    if(isVirtualMode(that) && beginPageIndex + that._cache.length !== dataSource.pageIndex() && beginPageIndex - 1 !== dataSource.pageIndex()) {
+                    if(isVirtualMode(this) && beginPageIndex + this._cache.length !== dataSource.pageIndex() && beginPageIndex - 1 !== dataSource.pageIndex()) {
                         lastCacheLength = 0;
-                        that._cache = [];
+                        this._cache = [];
                     }
-                    if(isAppendMode(that)) {
+                    if(isAppendMode(this)) {
                         if(dataSource.pageIndex() === 0) {
-                            that._cache = [];
-                        } else if(dataSource.pageIndex() < getEndPageIndex(that)) {
-                            fireChanged(that, callBase, { changeType: 'append', items: [] });
+                            this._cache = [];
+                        } else if(dataSource.pageIndex() < getEndPageIndex(this)) {
+                            fireChanged(this, callBase, { changeType: 'append', items: [] });
                             return;
                         }
                     }
                 }
 
-                const cacheItem = { pageIndex: dataSource.pageIndex(), itemsLength: dataSource.items(true).length, itemsCount: that.itemsCount(true) };
+                const cacheItem = { pageIndex: dataSource.pageIndex(), itemsLength: dataSource.items(true).length, itemsCount: this.itemsCount(true) };
 
-                if(!that.option('legacyRendering') && that.option('scrolling.removeInvisiblePages') && isVirtualMode(that)) {
-                    removeInvisiblePages = that._cache.length > Math.max(getPreloadPageCount(this) + (that.option('scrolling.preloadEnabled') ? 1 : 0), 2);
+                if(this.option('scrolling.removeInvisiblePages') && isVirtualMode(this)) {
+                    removeInvisiblePages = this._cache.length > Math.max(getPreloadPageCount(this) + (this.option('scrolling.preloadEnabled') ? 1 : 0), 2);
                 } else {
-                    processDelayChanged(that, callBase, { isDelayed: true });
+                    processDelayChanged(this, callBase, { isDelayed: true });
                 }
 
                 let removeCacheItem;
                 if(beginPageIndex === dataSource.pageIndex() + 1) {
                     if(removeInvisiblePages) {
-                        removeCacheItem = that._cache.pop();
+                        removeCacheItem = this._cache.pop();
                     }
                     changeType = 'prepend';
-                    that._cache.unshift(cacheItem);
+                    this._cache.unshift(cacheItem);
                 } else {
                     if(removeInvisiblePages) {
-                        removeCacheItem = that._cache.shift();
+                        removeCacheItem = this._cache.shift();
                     }
                     changeType = 'append';
-                    that._cache.push(cacheItem);
+                    this._cache.push(cacheItem);
                 }
 
-                const isDelayChanged = isVirtualMode(that) && lastCacheLength === 0 && needTwoPagesLoading(that);
-                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, isDelayChanged, removeCacheItem);
-                that._delayDeferred = that.load().done(function() {
-                    if(processDelayChanged(that, callBase)) {
-                        that.load(); // needed for infinite scrolling when height is not defined
+                const isDelayChanged = isVirtualMode(this) && lastCacheLength === 0 && needTwoPagesLoading(this);
+                processChanged(this, callBase, this._cache.length > 1 ? changeType : undefined, isDelayChanged, removeCacheItem);
+                this._delayDeferred = this.load().done(() => {
+                    if(processDelayChanged(this, callBase)) {
+                        this.load(); // needed for infinite scrolling when height is not defined
                     }
                 });
             } else {
-                processChanged(that, callBase, e);
+                processChanged(this, callBase, e);
             }
         },
         itemsCount: function(isBase) {

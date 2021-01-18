@@ -11,6 +11,7 @@ import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
+import { isDefined } from '../../../core/utils/type';
 
 import {
   ScrollableInternalPropsType,
@@ -40,6 +41,7 @@ import { TopPocket } from './topPocket';
 import { BottomPocket } from './bottomPocket';
 
 import {
+  dxScrollInit,
   dxScrollStart,
   dxScrollMove,
   dxScrollEnd,
@@ -110,6 +112,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
 };
 
 @Component({
+  defaultOptionRules: null,
   view: viewFunction,
 })
 export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>() {
@@ -219,8 +222,28 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
       (event: Event) => this.props.onScroll?.({
         event,
         scrollOffset: this.scrollOffset(),
-        ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef),
+        ...getBoundaryProps(
+          this.props.direction, this.scrollOffset(), this.containerRef, this.pushBackValue,
+        ),
       }));
+  }
+
+  @Effect()
+  initEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollable';
+
+    /* istanbul ignore next */
+    dxScrollInit.on(this.wrapperRef,
+      (e: Event) => {
+        this.initHandler(e);
+      }, {
+        getDirection: (e) => this.getDirection(e),
+        validate: (e) => this.validate(e),
+        isNative: true,
+        scrollTarget: this.containerRef,
+      }, { namespace });
+
+    return (): void => dxScrollInit.off(this.wrapperRef, { namespace });
   }
 
   @Effect()
@@ -285,6 +308,11 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
 
   /* istanbul ignore next */
   // eslint-disable-next-line
+  private initHandler(event: Event): void {
+    // console.log('initHandler', event, this);
+  }
+  /* istanbul ignore next */
+  // eslint-disable-next-line
   private handleStart(event: Event): void {
     // console.log('handleEnd', event, this);
   }
@@ -309,6 +337,18 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
     // console.log('handleCancel', event, this);
   }
 
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+  private getDirection(event: Event): string {
+    return 'vertical'; // TODO
+  }
+
+  /* istanbul ignore next */
+  // eslint-disable-next-line
+    private validate(event: Event): boolean {
+    return true; // TODO
+  }
+
   get cssClasses(): string {
     const {
       direction, classes, disabled, useSimulatedScrollbar, showScrollbar,
@@ -323,5 +363,15 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
+  }
+
+  get pushBackValue(): number {
+    const { pushBackValue } = this.props;
+
+    if (isDefined(pushBackValue)) {
+      return pushBackValue;
+    }
+
+    return (devices.real().platform === 'ios' ? 1 : 0);
   }
 }

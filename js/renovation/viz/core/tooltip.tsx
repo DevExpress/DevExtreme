@@ -9,6 +9,7 @@ import { TextSvgElement } from './renderers/svg_text';
 import { ShadowFilter } from './renderers/shadow_filter';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
 import { RootSvgElement } from './renderers/svg_root';
+import { isDefined } from '../../../core/utils/type';
 
 import {
   Size, Border, InitialBorder, CustomizedOptions,
@@ -17,7 +18,7 @@ import {
 import { Format, Point } from '../common/types.d';
 
 import {
-  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, getCanvas,
+  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, getCanvas, isTextEmpty,
 } from './common/tooltip_utils';
 import { getFormatValue } from '../common/utils';
 import { normalizeEnum } from '../../../viz/core/utils';
@@ -34,7 +35,6 @@ export const viewFunction = ({
   filterId,
   container,
   customizedOptions,
-  setCurrentState,
   pointerEvents,
   cssClassName,
   correctedCoordinates,
@@ -44,13 +44,12 @@ export const viewFunction = ({
     cornerRadius, arrowWidth,
   },
 }: Tooltip): JSX.Element => {
-  if (!visible || !correctedCoordinates) {
+  if (!visible || !correctedCoordinates || isTextEmpty(customizedOptions)) {
     return <div />;
   }
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
   const d = getCloudPoints(textSizeWithPaddings, correctedCoordinates, angle,
     { cornerRadius, arrowWidth }, true);
-  setCurrentState(d);
   const styles = interactive ? {
     msUserSelect: 'text',
     MozUserSelect: 'auto',
@@ -241,7 +240,6 @@ export class TooltipProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  isSVG: true,
 })
 export class Tooltip extends JSXComponent(TooltipProps) {
   @InternalState() filterId: string = getNextDefsSvgId();
@@ -254,15 +252,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     x: 0, y: 0, width: 0, height: 0,
   };
 
-  @InternalState() d?: string;
-
   @InternalState() currentTarget?: Point;
-
-  setCurrentState(d: string): void {
-    if (this.d !== d) {
-      this.d = d;
-    }
-  }
 
   @Ref() cloudRef!: RefObject<SVGGElement>;
 
@@ -273,27 +263,31 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Effect()
   setHtmlText(): void {
     const htmlText = this.customizedOptions.html;
-    if (htmlText && this.props.visible) {
+    if (htmlText && this.htmlRef && this.props.visible) {
       this.htmlRef.innerHTML = htmlText;
     }
   }
 
   @Effect()
   calculateSize(): void {
-    if (this.props.visible) {
+    if (this.props.visible && (this.textRef || this.htmlRef)) {
       this.textSize = this.textRef ? this.textRef.getBBox() : this.htmlRef.getBoundingClientRect();
     }
   }
 
   @Effect()
   calculateCloudSize(): void {
-    if (this.d && this.props.visible) {
+    if (isDefined(this.props.x) && isDefined(this.props.y)
+      && this.props.visible && this.cloudRef) {
       const size = this.cloudRef.getBBox();
+      const {
+        lm, tm, rm, bm,
+      } = this.margins;
       this.cloudSize = {
-        x: Math.floor(size.x - this.margins.lm),
-        y: Math.floor(size.y - this.margins.tm),
-        width: size.width + this.margins.lm + this.margins.rm,
-        height: size.height + this.margins.tm + this.margins.bm,
+        x: Math.floor(size.x - lm),
+        y: Math.floor(size.y - tm),
+        width: size.width + lm + rm,
+        height: size.height + tm + bm,
       };
     }
   }
