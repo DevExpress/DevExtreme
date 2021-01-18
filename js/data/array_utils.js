@@ -76,6 +76,7 @@ function getHasKeyCacheValue(array, key) {
 function setDataByKeyMapValue(array, key, data) {
     if(array._dataByKeyMap) {
         array._dataByKeyMap[JSON.stringify(key)] = data;
+        array._dataByKeyMapLength++;
     }
 }
 
