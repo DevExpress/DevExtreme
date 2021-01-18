@@ -887,13 +887,6 @@ export const SimulatedStrategy = Class.inherit({
         return location;
     },
 
-    disabledChanged: function() {
-    },
-
-    _isHoverMode: function() {
-        return this.option('showScrollbar') === 'onHover';
-    },
-
     _cursorEnterHandler: function(e) {
         e = e || {};
         e.originalEvent = e.originalEvent || {};
