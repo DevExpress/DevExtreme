@@ -568,28 +568,54 @@ jest.mock('../../../../core/devices', () => {
           expect(scrollable.scrollEffect.bind(scrollable)).not.toThrow();
         });
 
-        it('hoverEffect', () => {
-          if (Scrollable === ScrollableNative) {
-            return; // actual only for simulated strategy
-          }
+        each(['always', 'onHover', 'never']).describe('HoverEffect params. showScrollbar: %o', (showScrollbarMode) => {
+          it('hoverEffect should update invisible class only for onHover mode', () => {
+            if (Scrollable === ScrollableNative) {
+              return; // actual only for simulated strategy
+            }
 
-          const scrollable = new Scrollable({
-            direction: 'horizontal',
-            showScrollbar: 'onHover',
-          }) as ScrollableSimulated;
+            const scrollable = new Scrollable({
+              direction: 'horizontal',
+              showScrollbar: showScrollbarMode,
+            }) as ScrollableSimulated;
 
-          const isScrollbarHasInvisibleClass = (scrollableInstance) => {
-            const scrollableElement = mount(viewFunction(scrollableInstance as any) as JSX.Element);
-            const scrollbar = scrollableElement.find('.dx-scrollable-scroll');
-            return scrollbar.hasClass('dx-state-invisible');
-          };
-          expect(isScrollbarHasInvisibleClass(scrollable)).toBe(true);
+            const isScrollbarHasInvisibleClass = (scrollableInstance) => {
+              const scrollableElement = mount(
+                viewFunction(scrollableInstance as any) as JSX.Element,
+              );
 
-          scrollable.cursorEnterHandler();
-          expect(isScrollbarHasInvisibleClass(scrollable)).toBe(false);
+              const scrollbar = scrollableElement.find('.dx-scrollable-scroll');
+              return scrollbar.hasClass('dx-state-invisible');
+            };
+            let isScrollbarHidden = isScrollbarHasInvisibleClass(scrollable);
+            if (showScrollbarMode === 'never') {
+              expect(isScrollbarHidden).toBe(true);
+            } else if (showScrollbarMode === 'onHover') {
+              expect(isScrollbarHidden).toBe(true);
+            } else {
+              expect(isScrollbarHidden).toBe(false);
+            }
 
-          scrollable.cursorLeaveHandler();
-          expect(isScrollbarHasInvisibleClass(scrollable)).toBe(true);
+            scrollable.cursorEnterHandler();
+            isScrollbarHidden = isScrollbarHasInvisibleClass(scrollable);
+            if (showScrollbarMode === 'never') {
+              expect(isScrollbarHidden).toBe(true);
+            } else if (showScrollbarMode === 'onHover') {
+              expect(isScrollbarHidden).toBe(false);
+            } else {
+              expect(isScrollbarHidden).toBe(false);
+            }
+
+            scrollable.cursorLeaveHandler();
+            isScrollbarHidden = isScrollbarHasInvisibleClass(scrollable);
+            if (showScrollbarMode === 'never') {
+              expect(isScrollbarHidden).toBe(true);
+            } else if (showScrollbarMode === 'onHover') {
+              expect(isScrollbarHidden).toBe(true);
+            } else {
+              expect(isScrollbarHidden).toBe(false);
+            }
+          });
         });
       });
 

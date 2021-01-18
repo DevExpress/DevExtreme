@@ -58,10 +58,6 @@ const Scrollbar = Widget.inherit({
             this._$thumb.css('opacity');
         }
 
-        visible = this._adjustVisibility(visible);
-
-        this.option().visible = visible;
-        this._$thumb.toggleClass('dx-state-invisible', !visible);
     },
 
     _adjustVisibility: function(visible) {
@@ -71,15 +67,6 @@ const Scrollbar = Widget.inherit({
 
         switch(this.option('visibilityMode')) {
             case SCROLLBAR_VISIBLE.onScroll:
-                break;
-            case SCROLLBAR_VISIBLE.onHover:
-                visible = visible || !!this._isHovered;
-                break;
-            case SCROLLBAR_VISIBLE.never:
-                visible = false;
-                break;
-            case SCROLLBAR_VISIBLE.always:
-                visible = true;
                 break;
         }
 
