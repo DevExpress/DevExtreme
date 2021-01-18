@@ -78,6 +78,10 @@ class Gantt extends Widget {
         this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
     }
 
+    _refresh() {
+        this._isGanttRendered = false;
+        super._refresh();
+    }
     _renderContent() {
         this._isMainElementVisible = this.$element().is(':visible');
         if(this._isMainElementVisible && !this._isGanttRendered) {
@@ -1357,10 +1361,6 @@ class Gantt extends Widget {
     }
     updateDimensions() {
         this._setInnerElementsWidth();
-    }
-    repaint() {
-        this._isGanttRendered = false;
-        super.repaint();
     }
 
     _optionChanged(args) {
