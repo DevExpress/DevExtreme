@@ -57,7 +57,8 @@ function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef,
-    tabIndex,
+    tabIndex, cursorEnterHandler, cursorLeaveHandler,
+    isScrollbarVisible,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -81,8 +82,8 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       rtlEnabled={rtlEnabled}
       height={height}
       width={width}
-      onHoverStart={viewModel.cursorEnterHandler}
-      onHoverEnd={viewModel.cursorLeaveHandler}
+      onHoverStart={cursorEnterHandler}
+      onHoverEnd={cursorLeaveHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
@@ -113,7 +114,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           {isHorizontal && (
             <Scrollbar
               direction="horizontal"
-              visible={viewModel.isScrollbarVisible}
+              visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
               expandable={scrollByThumb}
             />
@@ -121,7 +122,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           {isVertical && (
             <Scrollbar
               direction="vertical"
-              visible={viewModel.isScrollbarVisible}
+              visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
               expandable={scrollByThumb}
             />
@@ -328,13 +329,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   }
 
   cursorEnterHandler(): void {
-    if (!this.props.disabled && this.isHoverMode()) {
+    if (this.isHoverMode()) {
       this.isHovered = true;
     }
   }
 
   cursorLeaveHandler(): void {
-    if (!this.props.disabled && this.isHoverMode()) {
+    if (this.isHoverMode()) {
       this.isHovered = false;
     }
   }

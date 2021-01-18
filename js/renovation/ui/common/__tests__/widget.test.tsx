@@ -416,6 +416,7 @@ describe('Widget', () => {
           emit(EVENT.hoverEnd);
           expect(widget.hovered).toBe(false);
           expect(onHoverEnd).toHaveBeenCalledTimes(1);
+          expect(onHoverStart).toHaveBeenCalledTimes(1);
         });
 
         it('should return unsubscribe callback', () => {
