@@ -1601,6 +1601,19 @@ QUnit.module('tag template', moduleSetup, () => {
         });
     });
 
+    QUnit.test('tag template should receive item object if displayValue is empty string (T965054)', function(assert) {
+        const items = [{ text: '' }];
+
+        $('#tagBox').dxTagBox({
+            items,
+            value: items,
+            displayExpr: 'text',
+            tagTemplate(tagData) {
+                assert.deepEqual(tagData, items[0], 'correct data is passed');
+            }
+        });
+    });
+
     QUnit.test('tag template should get item in arguments even if the \'displayExpr\' option is specified', function(assert) {
         const items = [{ id: 1, text: 'one' }, { id: 2, text: 'two' }];
 
