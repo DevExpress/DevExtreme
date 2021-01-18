@@ -172,16 +172,16 @@ jest.mock('../../../../core/devices', () => {
       });
 
       each([true, false]).describe('tabIndex on container. useKeyboard: %o', (useKeyboard) => {
-        it('tabIndex on container, useKeyboard', () => {
+        it('tabIndex on scrollable, useKeyboard', () => {
           const viewModel = new Scrollable({ useKeyboard });
 
           const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
-          const scrollableContainerTabIndex = scrollable.find('.dx-scrollable-container').getDOMNode().attributes.getNamedItem('tabindex');
+          const scrollableTabIndex = scrollable.getDOMNode().attributes.getNamedItem('tabindex');
 
           if (Scrollable === ScrollableSimulated && useKeyboard) {
-            expect((scrollableContainerTabIndex as any).value).toEqual('0');
+            expect((scrollableTabIndex as any).value).toEqual('0');
           } else {
-            expect(scrollableContainerTabIndex).toEqual(null);
+            expect(scrollableTabIndex).toEqual(null);
           }
         });
       });
@@ -568,6 +568,202 @@ jest.mock('../../../../core/devices', () => {
           expect(scrollable.scrollEffect.bind(scrollable)).not.toThrow();
         });
       });
+
+      if (Scrollable === ScrollableSimulated) {
+        describe('Key down', () => {
+          it('should call onKeyDown callback by Widget key down', () => {
+            const onKeyDown = jest.fn(() => ({ cancel: true }));
+            const options = {};
+            const scrollable = new Scrollable({ onKeyDown });
+            scrollable.onWidgetKeyDown(options);
+            expect(onKeyDown).toHaveBeenCalledTimes(1);
+            expect(onKeyDown).toHaveBeenCalledWith(options);
+          });
+
+          it('should prevent key down event processing if onKeyDown event handler returns event.cancel="true"', () => {
+            const onKeyDown = jest.fn(() => ({ cancel: true }));
+            const options = { keyName: 'down' };
+            const scrollable = new Scrollable({ onKeyDown });
+            scrollable.onWidgetKeyDown(options);
+            expect(onKeyDown).toBeCalled();
+          });
+
+          each(['vertical', 'horizontal', 'both']).describe('Direction: %o', (direction) => {
+            each(['leftArrow', 'upArrow', 'rightArrow', 'downArrow']).describe('Key: %o', (keyName) => {
+              it(`should prevent default key down event by key - ${keyName}`, () => {
+                const scrollFunc = jest.fn();
+                const options = {
+                  originalEvent: {
+                    key: keyName,
+                    preventDefault: jest.fn(),
+                    stopPropagation: jest.fn(),
+                  },
+                };
+                const scrollable = new Scrollable({ });
+                scrollable.scrollByLine = scrollFunc;
+                scrollable.onWidgetKeyDown(options);
+                expect(options.originalEvent.preventDefault).toBeCalled();
+                expect(options.originalEvent.stopPropagation).toBeCalled();
+                expect(scrollFunc).toBeCalledTimes(1);
+                expect(scrollFunc).toBeCalledWith({ [`${(keyName === 'upArrow' || keyName === 'downArrow') ? 'y' : 'x'}`]: (keyName === 'upArrow' || keyName === 'leftArrow') ? -1 : 1 });
+              });
+
+              each([1, 2, undefined]).describe('devicePixelRatio: %o', (devicePixelRatio) => {
+                it(`should call scrollBy by ${keyName} key`, () => {
+                  const scrollByHandler = jest.fn();
+                  const options = {
+                    originalEvent: {
+                      key: keyName,
+                      preventDefault: jest.fn(),
+                      stopPropagation: jest.fn(),
+                    },
+                  };
+                  const scrollable = new Scrollable({ direction });
+                  scrollable.tryGetDevicePixelRatio = () => devicePixelRatio;
+                  scrollable.scrollBy = scrollByHandler;
+                  scrollable.onWidgetKeyDown(options);
+                  expect(scrollByHandler).toBeCalledTimes(1);
+                  const expectedParams = { top: 0, left: 0 };
+                  if (keyName === 'leftArrow') {
+                    expectedParams.left = -40 / (devicePixelRatio || 1);
+                  }
+                  if (keyName === 'rightArrow') {
+                    expectedParams.left = 40 / (devicePixelRatio || 1);
+                  }
+                  if (keyName === 'upArrow') {
+                    expectedParams.top = -40 / (devicePixelRatio || 1);
+                  }
+                  if (keyName === 'downArrow') {
+                    expectedParams.top = 40 / (devicePixelRatio || 1);
+                  }
+                  expect(scrollByHandler).toBeCalledWith(expectedParams);
+                });
+              });
+            });
+
+            each(['pageUp', 'pageDown']).describe('Key: %o', (keyName) => {
+              it(`should prevent default key down event by key - ${keyName}`, () => {
+                const scrollByPageHandler = jest.fn();
+                const options = {
+                  originalEvent: {
+                    key: keyName,
+                    preventDefault: jest.fn(),
+                    stopPropagation: jest.fn(),
+                  },
+                };
+                const scrollable = new Scrollable({ direction });
+                scrollable.scrollByPage = scrollByPageHandler;
+                scrollable.onWidgetKeyDown(options);
+                expect(options.originalEvent.preventDefault).toBeCalled();
+                expect(options.originalEvent.stopPropagation).toBeCalled();
+                expect(scrollByPageHandler).toBeCalledTimes(1);
+                expect(scrollByPageHandler).toBeCalledWith(keyName === 'pageUp' ? -1 : 1);
+              });
+
+              it(`should call scrollBy by ${keyName} key`, () => {
+                const scrollByHandler = jest.fn();
+                const options = {
+                  originalEvent: {
+                    key: keyName,
+                    preventDefault: jest.fn(),
+                    stopPropagation: jest.fn(),
+                  },
+                };
+                const scrollable = new Scrollable({ direction });
+                scrollable.scrollBy = scrollByHandler;
+                scrollable.onWidgetKeyDown(options);
+                expect(scrollByHandler).toBeCalledTimes(1);
+              });
+            });
+
+            it('should prevent default key down event by "home" key', () => {
+              const scrollFunc = jest.fn();
+              const options = {
+                originalEvent: {
+                  key: 'home',
+                  preventDefault: jest.fn(),
+                  stopPropagation: jest.fn(),
+                },
+              };
+              const scrollable = new Scrollable({ direction });
+              scrollable.scrollToHome = scrollFunc;
+              scrollable.onWidgetKeyDown(options);
+              expect(options.originalEvent.preventDefault).toBeCalled();
+              expect(options.originalEvent.stopPropagation).toBeCalled();
+              expect(scrollFunc).toBeCalledTimes(1);
+            });
+
+            it('should scroll to start by "home" key', () => {
+              const scrollFunc = jest.fn();
+              const options = {
+                originalEvent: {
+                  key: 'home',
+                  preventDefault: jest.fn(),
+                  stopPropagation: jest.fn(),
+                },
+              };
+              const scrollable = new Scrollable({ direction });
+              scrollable.scrollTo = scrollFunc;
+              scrollable.onWidgetKeyDown(options);
+              expect(scrollFunc).toBeCalledTimes(1);
+              expect(scrollFunc).toBeCalledWith({ [`${direction === 'horizontal' ? 'left' : 'top'}`]: 0 }); // TODO: returns { top: 0 } when direction is 'both'
+            });
+
+            it('should prevent default key down event by "end" key', () => {
+              const scrollFunc = jest.fn();
+              const options = {
+                originalEvent: {
+                  key: 'end',
+                  preventDefault: jest.fn(),
+                  stopPropagation: jest.fn(),
+                },
+              };
+              const scrollable = new Scrollable({ direction });
+              scrollable.scrollToEnd = scrollFunc;
+              scrollable.onWidgetKeyDown(options);
+              expect(options.originalEvent.preventDefault).toBeCalled();
+              expect(options.originalEvent.stopPropagation).toBeCalled();
+              expect(scrollFunc).toBeCalledTimes(1);
+            });
+
+            it('should scroll to end by "end" key', () => {
+              const scrollToFunc = jest.fn();
+              const options = {
+                originalEvent: {
+                  key: 'end',
+                  preventDefault: jest.fn(),
+                  stopPropagation: jest.fn(),
+                },
+              };
+              const scrollable = new Scrollable({ direction });
+              scrollable.scrollTo = scrollToFunc;
+              scrollable.onWidgetKeyDown(options);
+              expect(scrollToFunc).toBeCalledTimes(1);
+            });
+          });
+
+          it('should prevent default key down event by common keys down', () => {
+            const scrollFunc = jest.fn();
+            const options = {
+              originalEvent: {
+                key: 'A',
+                preventDefault: jest.fn(),
+                stopPropagation: jest.fn(),
+              },
+            };
+            const scrollable = new Scrollable({ });
+            scrollable.scrollToHome = scrollFunc;
+            scrollable.scrollToEnd = scrollFunc;
+            scrollable.scrollByLine = scrollFunc;
+            scrollable.scrollByPage = scrollFunc;
+            scrollable.onWidgetKeyDown(options);
+
+            expect(options.originalEvent.preventDefault).not.toBeCalled();
+            expect(options.originalEvent.stopPropagation).not.toBeCalled();
+            expect(scrollFunc).toBeCalledTimes(0);
+          });
+        });
+      }
 
       describe('Methods', () => {
         describe('Content', () => {

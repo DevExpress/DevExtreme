@@ -345,7 +345,7 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
 
   /* istanbul ignore next */
   // eslint-disable-next-line
-    private validate(event: Event): boolean {
+  private validate(event: Event): boolean {
     return true; // TODO
   }
 
