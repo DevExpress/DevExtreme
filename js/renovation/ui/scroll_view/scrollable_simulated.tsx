@@ -58,7 +58,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef,
     tabIndex, cursorEnterHandler, cursorLeaveHandler,
-    isScrollbarVisible,
+    isScrollbarVisible, baseContainerToContentRatio,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -117,6 +117,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
               expandable={scrollByThumb}
+              baseContainerToContentRatio={baseContainerToContentRatio}
             />
           )}
           {isVertical && (
@@ -125,6 +126,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
               expandable={scrollByThumb}
+              baseContainerToContentRatio={baseContainerToContentRatio}
             />
           )}
         </div>
@@ -145,6 +147,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   @Ref() containerRef!: RefObject<HTMLDivElement>;
 
   @InternalState() isHovered = false;
+
+  @InternalState() baseContainerToContentRatio = 0;
 
   @Method()
   content(): HTMLDivElement {
@@ -345,7 +349,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   initHandler(event: Event): void {
     console.log('initHandler', event, this);
   }
-
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleStart(event: Event): void {

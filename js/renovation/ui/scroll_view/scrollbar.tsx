@@ -57,8 +57,6 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   view: viewFunction,
 })
 export class Scrollbar extends JSXComponent<ScrollbarProps>() {
-  @InternalState() baseContainerToContentRatio = 0;
-
   @InternalState() active = false;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
@@ -124,12 +122,8 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     });
   }
 
-  private isHidden(): boolean {
-    return this.props.visibilityMode === 'never';
-  }
-
   private needScrollbar(): boolean {
-    return !this.isHidden() && (this.baseContainerToContentRatio < 1);
+    return this.props.visibilityMode !== 'never' && ((this.props.baseContainerToContentRatio || 0) < 1);
   }
 
   private getDimension(): string {
