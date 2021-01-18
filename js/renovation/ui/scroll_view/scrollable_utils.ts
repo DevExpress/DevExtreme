@@ -1,10 +1,14 @@
 import { isNumeric } from '../../../core/utils/type';
 import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
 import { camelize } from '../../../core/utils/inflector';
+import getElementComputedStyle from '../../utils/get_computed_style';
+import { toNumber } from '../../utils/type_conversion';
 
 import {
   ScrollableLocation, ScrollOffset, ScrollableBoundary, ScrollableDirection,
 } from './types.d';
+
+export const SCROLL_LINE_HEIGHT = 40;
 
 export const DIRECTION_VERTICAL = 'vertical';
 export const DIRECTION_HORIZONTAL = 'horizontal';
@@ -18,6 +22,14 @@ export const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
 export const SCROLLABLE_SCROLLBAR_SIMULATED = 'dx-scrollable-scrollbar-simulated';
 export const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 export const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
+
+export function getElementWidth(element: Element | undefined): number {
+  return toNumber(getElementComputedStyle(element)?.width);
+}
+
+export function getElementHeight(element: Element | undefined): number {
+  return toNumber(getElementComputedStyle(element)?.height);
+}
 
 export function ensureLocation(
   location: number | Partial<ScrollableLocation>,

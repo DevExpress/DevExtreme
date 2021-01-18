@@ -11,6 +11,8 @@ import { Scrollbar } from './scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { normalizeKeyName } from '../../../events/utils/index';
+import { getWindow, hasWindow } from '../../../core/utils/window';
 
 import {
   ScrollableInternalPropsType,
@@ -24,6 +26,7 @@ import {
   ensureLocation, ScrollDirection, normalizeCoordinate,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
+  getElementWidth, getElementHeight,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
   SCROLLABLE_CONTAINER_CLASS,
@@ -33,6 +36,7 @@ import {
   SCROLLABLE_DISABLED_CLASS,
   SCROLLABLE_SCROLLBARS_HIDDEN,
   SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
+  SCROLL_LINE_HEIGHT,
 } from './scrollable_utils';
 
 import { TopPocket } from './topPocket';
@@ -47,6 +51,18 @@ import {
   dxScrollCancel,
 } from '../../../events/short';
 
+const KEY_CODES = {
+  PAGE_UP: 'pageUp',
+  PAGE_DOWN: 'pageDown',
+  END: 'end',
+  HOME: 'home',
+  LEFT: 'leftArrow',
+  UP: 'upArrow',
+  RIGHT: 'rightArrow',
+  DOWN: 'downArrow',
+  TAB: 'tab',
+};
+
 function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
   if (mode === true) {
     return 'onScroll';
@@ -56,14 +72,14 @@ function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
-    cssClasses, wrapperRef, contentRef, containerRef,
-    tabIndex, cursorEnterHandler, cursorLeaveHandler,
+    cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
+    cursorEnterHandler, cursorLeaveHandler,
     isScrollbarVisible, needScrollbar,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
       showScrollbar, direction, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
-      reachBottomText,
+      reachBottomText, useKeyboard,
     },
     restAttributes,
   } = viewModel;
@@ -75,13 +91,14 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const visibilityMode = visibilityModeNormalize(showScrollbar);
   return (
     <Widget
-      focusStateEnabled
+      focusStateEnabled={useKeyboard}
       hoverStateEnabled
       classes={cssClasses}
       disabled={disabled}
       rtlEnabled={rtlEnabled}
       height={height}
       width={width}
+      onKeyDown={onWidgetKeyDown}
       onHoverStart={cursorEnterHandler}
       onHoverEnd={cursorLeaveHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
@@ -89,8 +106,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
         <div
           className={SCROLLABLE_CONTAINER_CLASS}
-          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-          tabIndex={tabIndex}
           ref={containerRef}
         >
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
@@ -347,7 +362,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   /* istanbul ignore next */
   // eslint-disable-next-line
   initHandler(event: Event): void {
-    console.log('initHandler', event, this);
+    // console.log('initHandler', event, this);
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
@@ -385,6 +400,137 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   // eslint-disable-next-line
   private validate(event: Event): boolean {
     return true; // TODO
+  }
+
+  onWidgetKeyDown(options): Event | undefined {
+    const { onKeyDown } = this.props;
+    const { originalEvent } = options;
+
+    const result = onKeyDown?.(options);
+    if (result?.cancel) {
+      return result;
+    }
+
+    this.keyDownHandler(originalEvent);
+
+    return undefined;
+  }
+
+  private keyDownHandler(e: any): void {
+    let handled = true;
+
+    switch (normalizeKeyName(e)) {
+      case KEY_CODES.DOWN:
+        this.scrollByLine({ y: 1 });
+        break;
+      case KEY_CODES.UP:
+        this.scrollByLine({ y: -1 });
+        break;
+      case KEY_CODES.RIGHT:
+        this.scrollByLine({ x: 1 });
+        break;
+      case KEY_CODES.LEFT:
+        this.scrollByLine({ x: -1 });
+        break;
+      case KEY_CODES.PAGE_DOWN:
+        this.scrollByPage(1);
+        break;
+      case KEY_CODES.PAGE_UP:
+        this.scrollByPage(-1);
+        break;
+      case KEY_CODES.HOME:
+        this.scrollToHome();
+        break;
+      case KEY_CODES.END:
+        this.scrollToEnd();
+        break;
+      default:
+        handled = false;
+        break;
+    }
+
+    if (handled) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }
+
+  scrollByLine(lines): void {
+    const devicePixelRatio = this.tryGetDevicePixelRatio();
+    let scrollOffset = SCROLL_LINE_HEIGHT;
+    if (devicePixelRatio) {
+      // eslint-disable-next-line no-mixed-operators
+      scrollOffset = Math.abs(scrollOffset / devicePixelRatio * 100) / 100;
+    }
+    this.scrollBy({
+      top: (lines.y || 0) * scrollOffset,
+      left: (lines.x || 0) * scrollOffset,
+    });
+  }
+
+  /* istanbul ignore next */
+  // eslint-disable-next-line class-methods-use-this
+  tryGetDevicePixelRatio(): number | undefined {
+    if (hasWindow()) {
+      return (getWindow() as any).devicePixelRatio;
+    }
+    return undefined;
+  }
+
+  scrollByPage(page): void {
+    const prop = this.wheelProp();
+
+    const distance = {};
+
+    if (this.getDimensionByProp(prop) === 'width') {
+      distance[prop] = page * getElementWidth(this.containerRef);
+    } else {
+      distance[prop] = page * getElementHeight(this.containerRef);
+    }
+
+    this.scrollBy(distance);
+  }
+
+  private wheelProp(): string {
+    return (this.wheelDirection() === DIRECTION_HORIZONTAL) ? 'left' : 'top';
+  }
+
+  private wheelDirection(e?: any): string {
+    switch (this.props.direction) {
+      case DIRECTION_HORIZONTAL:
+        return DIRECTION_HORIZONTAL;
+      case DIRECTION_VERTICAL:
+        return DIRECTION_VERTICAL;
+      default:
+        /* istanbul ignore next */
+        return e?.shiftKey ? DIRECTION_HORIZONTAL : DIRECTION_VERTICAL;
+    }
+  }
+
+  scrollToHome(): void {
+    const prop = this.wheelProp();
+    const distance = {};
+
+    distance[prop] = 0;
+    this.scrollTo(distance);
+  }
+
+  scrollToEnd(): void {
+    const prop = this.wheelProp();
+    const distance = {};
+
+    if (this.getDimensionByProp(prop) === 'width') {
+      distance[prop] = getElementWidth(this.contentRef) - getElementWidth(this.containerRef);
+    } else {
+      distance[prop] = getElementHeight(this.contentRef) - getElementHeight(this.containerRef);
+    }
+
+    this.scrollTo(distance);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private getDimensionByProp(prop): string {
+    return (prop === 'left') ? 'width' : 'height';
   }
 
   private isHoverMode(): boolean {
@@ -434,9 +580,5 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
-  }
-
-  get tabIndex(): number | undefined {
-    return this.props.useKeyboard ? 0 : undefined;
   }
 }

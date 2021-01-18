@@ -18,7 +18,7 @@ import {
 import { Format, Point } from '../common/types.d';
 
 import {
-  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData,
+  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, isTextEmpty,
 } from './common/tooltip_utils';
 import { getFormatValue } from '../common/utils';
 import { normalizeEnum } from '../../../viz/core/utils';
@@ -42,7 +42,7 @@ export const viewFunction = ({
     cornerRadius, arrowWidth,
   },
 }: Tooltip): JSX.Element => {
-  if (!visible || !correctedCoordinates) {
+  if (!visible || !correctedCoordinates || isTextEmpty(customizedOptions)) {
     return <div />;
   }
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
@@ -234,7 +234,6 @@ export class TooltipProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  isSVG: true,
 })
 export class Tooltip extends JSXComponent(TooltipProps) {
   @InternalState() filterId: string = getNextDefsSvgId();
@@ -247,8 +246,6 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     x: 0, y: 0, width: 0, height: 0,
   };
 
-  @InternalState() d?: string;
-
   @InternalState() currentTarget?: Point;
 
   @Ref() cloudRef!: RefObject<SVGGElement>;
@@ -260,14 +257,14 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Effect()
   setHtmlText(): void {
     const htmlText = this.customizedOptions.html;
-    if (htmlText && this.props.visible) {
+    if (htmlText && this.htmlRef && this.props.visible) {
       this.htmlRef.innerHTML = htmlText;
     }
   }
 
   @Effect()
   calculateSize(): void {
-    if (this.props.visible) {
+    if (this.props.visible && (this.textRef || this.htmlRef)) {
       this.textSize = this.textRef ? this.textRef.getBBox() : this.htmlRef.getBoundingClientRect();
     }
   }

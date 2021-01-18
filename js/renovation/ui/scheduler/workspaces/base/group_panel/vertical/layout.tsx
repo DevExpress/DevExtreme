@@ -1,14 +1,14 @@
 import {
-  Component, ComponentBindings, CSSAttributes, JSXComponent, JSXTemplate, OneWay, Template,
+  Component, CSSAttributes, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
 import {
   Group,
   GroupRenderItem,
   GroupItem,
-  ResourceCellTemplateProps,
 } from '../../../types.d';
 import { Row } from './row';
 import { addHeightToStyle } from '../../../utils';
+import { GroupPanelProps } from '../group_panel_props';
 
 const getGroupsRenderData = (groups: Group[]): GroupRenderItem[][] => {
   let repeatCount = 1;
@@ -23,7 +23,7 @@ const getGroupsRenderData = (groups: Group[]): GroupRenderItem[][] => {
         color,
         key: `${i}_${resourceName}_${id}`,
         resourceName,
-        data: data[index],
+        data: data?.[index],
       })));
     }
 
@@ -34,8 +34,8 @@ const getGroupsRenderData = (groups: Group[]): GroupRenderItem[][] => {
 
 export const viewFunction = (viewModel: GroupPanelVerticalLayout): JSX.Element => (
   <div
-    className={`dx-scheduler-work-space-vertical-group-table ${viewModel.props.className}`}
-      // eslint-disable-next-line react/jsx-props-no-spreading
+    className={viewModel.props.className}
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
     style={viewModel.style}
   >
@@ -43,7 +43,7 @@ export const viewFunction = (viewModel: GroupPanelVerticalLayout): JSX.Element =
       {viewModel.groupsRenderData.map((group: GroupRenderItem[]) => (
         <Row
           groupItems={group}
-          cellTemplate={viewModel.props.cellTemplate}
+          cellTemplate={viewModel.props.resourceCellTemplate}
           key={group[0].key}
         />
       ))}
@@ -51,22 +51,11 @@ export const viewFunction = (viewModel: GroupPanelVerticalLayout): JSX.Element =
   </div>
 );
 
-@ComponentBindings()
-export class GroupPanelVerticalLayoutProps {
-  @OneWay() groups: Group[] = [];
-
-  @OneWay() height?: number;
-
-  @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
-
-  @OneWay() className?: string = '';
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelVerticalLayoutProps) {
+export class GroupPanelVerticalLayout extends JSXComponent(GroupPanelProps) {
   get style(): CSSAttributes {
     const { height } = this.props;
     const { style } = this.restAttributes;

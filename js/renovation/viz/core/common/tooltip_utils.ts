@@ -312,3 +312,7 @@ export function prepareData(
   customize.fontColor = customize.fontColor || font.color;
   return customize as CustomizedOptions;
 }
+
+export function isTextEmpty({ text, html }: CustomizedOptions): boolean {
+  return text === null || text === '' || html === '' || html === null;
+}

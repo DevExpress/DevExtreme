@@ -90,6 +90,7 @@ const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
 const POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen';
 const POPUP_TITLE_CLASS = 'dx-popup-title';
 const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
+const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
@@ -274,6 +275,20 @@ QUnit.module('basic', () => {
 
         assert.ok($bottomToolbar.hasClass('dx-toolbar'), 'bottom toolbar is present');
         assert.equal($bottomToolbar.text(), 'bottom text', 'bottom toolbar has correct content');
+    });
+
+    QUnit.test(`top toolbar has specific ${POPUP_HAS_CLOSE_BUTTON_CLASS} class`, function(assert) {
+        const $popup = $('#popup').dxPopup({ visible: true, closeButton: true, showTitle: true });
+        const $titleToolbar = $('.' + POPUP_TITLE_CLASS, $popup);
+
+        assert.ok($titleToolbar.hasClass(POPUP_HAS_CLOSE_BUTTON_CLASS));
+    });
+
+    QUnit.test(`top toolbar has no specific ${POPUP_HAS_CLOSE_BUTTON_CLASS} class if popup has no close button`, function(assert) {
+        const $popup = $('#popup').dxPopup({ visible: true, closeButton: true, showTitle: false });
+        const $titleToolbar = $('.' + POPUP_TITLE_CLASS, $popup);
+
+        assert.notOk($titleToolbar.hasClass(POPUP_HAS_CLOSE_BUTTON_CLASS));
     });
 
     QUnit.test('buttons rendering when aliases are specified', function(assert) {
