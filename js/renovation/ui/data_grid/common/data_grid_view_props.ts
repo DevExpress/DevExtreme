@@ -3,5 +3,5 @@ import { GridInstance } from './types';
 
 @ComponentBindings()
 export class DataGridViewProps {
-  @OneWay() gridInstance!: GridInstance;
+  @OneWay() instance!: GridInstance;
 }

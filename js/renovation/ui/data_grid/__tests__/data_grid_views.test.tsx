@@ -31,7 +31,7 @@ describe('DataGridViews', () => {
     describe('Getters', () => {
       it('Get views', () => {
         const props = {
-          gridInstance: {
+          instance: {
             getView: (viewName) => viewName,
           },
         } as any;

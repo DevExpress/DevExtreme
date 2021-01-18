@@ -8,51 +8,19 @@ import {
 
 import '../../../ui/data_grid/ui.data_grid';
 
-import gridCore from '../../../ui/data_grid/ui.data_grid.core';
-
 import { Widget } from '../common/widget';
 import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 
-gridCore.registerModulesOrder([
-  'stateStoring',
-  'columns',
-  'selection',
-  'editorFactory',
-  'columnChooser',
-  'grouping',
-  'editing',
-  'masterDetail',
-  'validating',
-  'adaptivity',
-  'data',
-  'virtualScrolling',
-  'columnHeaders',
-  'filterRow',
-  'headerPanel',
-  'headerFilter',
-  'sorting',
-  'search',
-  'rows',
-  'pager',
-  'columnsResizingReordering',
-  'contextMenu',
-  'keyboardNavigation',
-  'errorHandling',
-  'summary',
-  'columnFixing',
-  'export',
-  'gridView']);
-
 export const viewFunction = ({
-  gridInstance,
+  instance,
   // widgetRef,
   restAttributes,
 }: DataGrid) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <Widget {...restAttributes}>
-    <DataGridViews gridInstance={gridInstance} />
+    <DataGridViews instance={instance} />
   </Widget>
 );
 
@@ -62,346 +30,346 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   @Method()
   beginCustomLoading(messageText: string): void {
-    return this.gridInstance?.beginCustomLoading(messageText);
+    return this.instance?.beginCustomLoading(messageText);
   }
 
   @Method()
   byKey(key: any | string | number): Promise<any> & JQueryPromise<any> {
-    return this.gridInstance?.byKey(key);
+    return this.instance?.byKey(key);
   }
 
   @Method()
   cancelEditData(): void {
-    return this.gridInstance?.cancelEditData();
+    return this.instance?.cancelEditData();
   }
 
   @Method()
-  cellValue(rowIndex: number, dataField: string, value: any): any {
-    return this.gridInstance?.cellValue(rowIndex, dataField, value);
+  cellValue(rowIndex: number, dataField: string | number, value: any): any {
+    return this.instance?.cellValue(rowIndex, dataField as any, value);
   }
 
   @Method()
   clearFilter(filterName: string): void {
-    return this.gridInstance?.clearFilter(filterName);
+    return this.instance?.clearFilter(filterName);
   }
 
   @Method()
   clearSelection(): void {
-    return this.gridInstance?.clearSelection();
+    return this.instance?.clearSelection();
   }
 
   @Method()
   clearSorting(): void {
-    return this.gridInstance?.clearSorting();
+    return this.instance?.clearSorting();
   }
 
   @Method()
   closeEditCell(): void {
-    return this.gridInstance?.closeEditCell();
+    return this.instance?.closeEditCell();
   }
 
   @Method()
   collapseAdaptiveDetailRow(): void {
-    return this.gridInstance?.collapseAdaptiveDetailRow();
+    return this.instance?.collapseAdaptiveDetailRow();
   }
 
   @Method()
   columnCount(): number {
-    return this.gridInstance?.columnCount();
+    return this.instance?.columnCount();
   }
 
   @Method()
   columnOption(id: number | string, optionName: any, optionValue: any): void {
-    return this.gridInstance?.columnOption(id, optionName, optionValue);
+    return this.instance?.columnOption(id, optionName, optionValue);
   }
 
   @Method()
   deleteColumn(id: number | string): void {
-    return this.gridInstance?.deleteColumn(id);
+    return this.instance?.deleteColumn(id);
   }
 
   @Method()
   deleteRow(rowIndex: number): void {
-    return this.gridInstance?.deleteRow(rowIndex);
+    return this.instance?.deleteRow(rowIndex);
   }
 
   @Method()
   deselectAll(): Promise<void> & JQueryPromise<void> {
-    return this.gridInstance?.deselectAll();
+    return this.instance?.deselectAll();
   }
 
   @Method()
   deselectRows(keys: any[]): Promise<any> & JQueryPromise<any> {
-    return this.gridInstance?.deselectRows(keys);
+    return this.instance?.deselectRows(keys);
   }
 
   @Method()
   editCell(rowIndex: number, dataFieldColumnIndex: string | number): void {
-    return this.gridInstance?.editCell(rowIndex, dataFieldColumnIndex as string);
+    return this.instance?.editCell(rowIndex, dataFieldColumnIndex as string);
   }
 
   @Method()
   editRow(rowIndex: number): void {
-    return this.gridInstance?.editRow(rowIndex);
+    return this.instance?.editRow(rowIndex);
   }
 
   @Method()
   endCustomLoading(): void {
-    return this.gridInstance?.endCustomLoading();
+    return this.instance?.endCustomLoading();
   }
 
   @Method()
   expandAdaptiveDetailRow(key: any): void {
-    return this.gridInstance?.expandAdaptiveDetailRow(key);
+    return this.instance?.expandAdaptiveDetailRow(key);
   }
 
   @Method()
   filter(filterExpr: any): void {
-    return this.gridInstance?.filter(filterExpr);
+    return this.instance?.filter(filterExpr);
   }
 
   @Method()
   focus(element?: Element | JQuery): void {
-    return this.gridInstance?.focus(element as Element);
+    return this.instance?.focus(element as Element);
   }
 
   @Method()
   getCellElement(
     rowIndex: number, dataField: string | number,
   ): any/* dxElement | undefined */ {
-    return this.gridInstance?.getCellElement(rowIndex, dataField as string);
+    return this.instance?.getCellElement(rowIndex, dataField as string);
   }
 
   @Method()
   getCombinedFilter(returnDataField?: boolean): any {
-    return this.gridInstance?.getCombinedFilter(returnDataField as boolean);
+    return this.instance?.getCombinedFilter(returnDataField as boolean);
   }
 
   @Method()
   getDataSource(): any /* DataSource */ {
-    return this.gridInstance?.getDataSource();
+    return this.instance?.getDataSource();
   }
 
   @Method()
   getKeyByRowIndex(rowIndex: number): any {
-    return this.gridInstance?.getKeyByRowIndex(rowIndex);
+    return this.instance?.getKeyByRowIndex(rowIndex);
   }
 
   @Method()
   getRowElement(rowIndex: number): Element[] & JQuery | undefined {
-    return this.gridInstance?.getRowElement(rowIndex);
+    return this.instance?.getRowElement(rowIndex);
   }
 
   @Method()
   getRowIndexByKey(key: any | string | number): number {
-    return this.gridInstance?.getRowIndexByKey(key);
+    return this.instance?.getRowIndexByKey(key);
   }
 
   @Method()
   getScrollable(): any /* dxScrollable */ {
-    return this.gridInstance?.getScrollable();
+    return this.instance?.getScrollable();
   }
 
   @Method()
   getVisibleColumnIndex(id: number | string): number {
-    return this.gridInstance?.getVisibleColumnIndex(id);
+    return this.instance?.getVisibleColumnIndex(id);
   }
 
   @Method()
   hasEditData(): boolean {
-    return this.gridInstance?.hasEditData();
+    return this.instance?.hasEditData();
   }
 
   @Method()
   hideColumnChooser(): void {
-    return this.gridInstance?.hideColumnChooser();
+    return this.instance?.hideColumnChooser();
   }
 
   @Method()
   isAdaptiveDetailRowExpanded(key: any): boolean {
-    return this.gridInstance?.isAdaptiveDetailRowExpanded(key);
+    return this.instance?.isAdaptiveDetailRowExpanded(key);
   }
 
   @Method()
   isRowFocused(key: any): boolean {
-    return this.gridInstance?.isRowFocused(key);
+    return this.instance?.isRowFocused(key);
   }
 
   @Method()
   isRowSelected(key: any): boolean {
-    return this.gridInstance?.isRowSelected(key);
+    return this.instance?.isRowSelected(key);
   }
 
   @Method()
   keyOf(obj: any): any {
-    return this.gridInstance?.keyOf(obj);
+    return this.instance?.keyOf(obj);
   }
 
   @Method()
   navigateToRow(key: any): void {
-    return this.gridInstance?.navigateToRow(key);
+    return this.instance?.navigateToRow(key);
   }
 
   @Method()
   pageCount(): number {
-    return this.gridInstance?.pageCount();
+    return this.instance?.pageCount();
   }
 
   @Method()
   pageIndex(
     newIndex?: number,
   ): Promise<void> & JQueryPromise<void> | number {
-    return this.gridInstance?.pageIndex(newIndex as number);
+    return this.instance?.pageIndex(newIndex as number);
   }
 
   @Method()
   pageSize(value: number): void {
-    return this.gridInstance?.pageSize(value);
+    return this.instance?.pageSize(value);
   }
 
   @Method()
   refresh(
     changesOnly?: boolean,
   ): Promise<void> & JQueryPromise<void> {
-    return this.gridInstance?.refresh(changesOnly as boolean);
+    return this.instance?.refresh(changesOnly as boolean);
   }
 
   @Method()
   repaintRows(rowIndexes: number[]): void {
-    return this.gridInstance?.repaintRows(rowIndexes);
+    return this.instance?.repaintRows(rowIndexes);
   }
 
   @Method()
   saveEditData(): Promise<void> & JQueryPromise<void> {
-    return this.gridInstance?.saveEditData();
+    return this.instance?.saveEditData();
   }
 
   @Method()
   searchByText(text: string): void {
-    return this.gridInstance?.searchByText(text);
+    return this.instance?.searchByText(text);
   }
 
   @Method()
   selectAll(): Promise<void> & JQueryPromise<void> {
-    return this.gridInstance?.selectAll();
+    return this.instance?.selectAll();
   }
 
   @Method()
   selectRows(
     keys: any[], preserve: boolean,
   ): Promise<any> & JQueryPromise<any> {
-    return this.gridInstance?.selectRows(keys, preserve);
+    return this.instance?.selectRows(keys, preserve);
   }
 
   @Method()
   selectRowsByIndexes(indexes: number[]): Promise<any> & JQueryPromise<any> {
-    return this.gridInstance?.selectRowsByIndexes(indexes);
+    return this.instance?.selectRowsByIndexes(indexes);
   }
 
   @Method()
   showColumnChooser(): void {
-    return this.gridInstance?.showColumnChooser();
+    return this.instance?.showColumnChooser();
   }
 
   /*
   @Method()
   state(state: any): any {
-    return this.gridInstance?.state();
+    return this.instance?.state();
   } */
 
   @Method()
   undeleteRow(rowIndex: number): void {
-    return this.gridInstance?.undeleteRow(rowIndex);
+    return this.instance?.undeleteRow(rowIndex);
   }
 
   @Method()
   updateDimensions(): void {
-    return this.gridInstance?.updateDimensions();
+    return this.instance?.updateDimensions();
   }
 
   @Method()
   addColumn(columnOptions: any | string): void {
-    return this.gridInstance?.addColumn(columnOptions);
+    return this.instance?.addColumn(columnOptions);
   }
 
   @Method()
   addRow(): Promise<void> & JQueryPromise<void> {
-    return this.gridInstance?.addRow();
+    return this.instance?.addRow();
   }
 
   @Method()
   clearGrouping(): void {
-    return this.gridInstance?.clearGrouping();
+    return this.instance?.clearGrouping();
   }
 
   @Method()
   collapseAll(groupIndex?: number): void {
-    return this.gridInstance?.collapseAll(groupIndex);
+    return this.instance?.collapseAll(groupIndex);
   }
 
   @Method()
   collapseRow(key: any): Promise<void> & JQueryPromise<void> {
-    return this.gridInstance?.collapseRow(key);
+    return this.instance?.collapseRow(key);
   }
 
   @Method()
   expandAll(groupIndex?: number): void {
-    return this.gridInstance?.expandAll(groupIndex);
+    return this.instance?.expandAll(groupIndex);
   }
 
   @Method()
   expandRow(key: any): Promise<void> & JQueryPromise<void> {
-    return this.gridInstance?.expandRow(key);
+    return this.instance?.expandRow(key);
   }
 
   @Method()
   exportToExcel(selectionOnly: boolean): void {
-    return this.gridInstance?.exportToExcel(selectionOnly);
+    return this.instance?.exportToExcel(selectionOnly);
   }
 
   @Method()
   getSelectedRowKeys(): any[] & Promise<any> & JQueryPromise<any> {
-    return this.gridInstance?.getSelectedRowKeys();
+    return this.instance?.getSelectedRowKeys();
   }
 
   @Method()
   getSelectedRowsData(): any[] & Promise<any> & JQueryPromise<any> {
-    return this.gridInstance?.getSelectedRowsData();
+    return this.instance?.getSelectedRowsData();
   }
 
   @Method()
   getTotalSummaryValue(summaryItemName: string): any {
-    return this.gridInstance?.getTotalSummaryValue(summaryItemName);
+    return this.instance?.getTotalSummaryValue(summaryItemName);
   }
 
   @Method()
   getVisibleColumns(headerLevel?: number): any /* dxDataGridColumn[] */ {
-    return this.gridInstance?.getVisibleColumns(headerLevel as number);
+    return this.instance?.getVisibleColumns(headerLevel as number);
   }
 
   @Method()
   getVisibleRows(): any /* dxDataGridRowObject[] */ {
-    return this.gridInstance?.getVisibleRows();
+    return this.instance?.getVisibleRows();
   }
 
   @Method()
   isRowExpanded(key: any): boolean {
-    return this.gridInstance?.isRowExpanded(key);
+    return this.instance?.isRowExpanded(key);
   }
 
   @Method()
   totalCount(): number {
-    return this.gridInstance?.totalCount();
+    return this.instance?.totalCount();
   }
 
   @Method()
   getController(name: string): any {
-    return this.gridInstance?.getController(name);
+    return this.instance?.getController(name);
   }
 
   // It's impossible to define constructor, so it's workaround to lazy creation
-  // of gridInstance within componentHolder by imutable way
-  get gridInstance() {
+  // of instance within componentHolder by imutable way
+  get instance() {
     if (!this.componentInstance) {
       this.componentInstance = this.init();
     }

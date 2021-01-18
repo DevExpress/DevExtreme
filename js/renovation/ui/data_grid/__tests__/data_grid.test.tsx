@@ -19,10 +19,10 @@ jest.mock('../datagrid_component', () => ({
 describe('DataGrid', () => {
   describe('View', () => {
     it('default render', () => {
-      const gridInstance = {} as any;
+      const instance = {} as any;
       const props = {
         restAttributes: { 'rest-attributes': 'true' },
-        gridInstance,
+        instance,
       } as Partial<DataGrid>;
       const tree = mount(<DataGridView {...props as any} /> as any);
 
@@ -30,7 +30,7 @@ describe('DataGrid', () => {
         'rest-attributes': 'true',
       });
       expect(tree.find(DataGridViews).props()).toMatchObject({
-        gridInstance,
+        instance,
       });
     });
   });
@@ -53,13 +53,13 @@ describe('DataGrid', () => {
       component.props = {
         columns: ['test'],
       } as DataGridProps;
-      const { gridInstance } = component;
+      const { instance } = component;
 
-      expect(gridInstance.option()).toMatchObject(component.props);
+      expect(instance.option()).toMatchObject(component.props);
 
-      const gridInstance2 = component.gridInstance;
+      const instance2 = component.instance;
 
-      expect(gridInstance).toBe(gridInstance2);
+      expect(instance).toBe(instance2);
     });
 
     each`

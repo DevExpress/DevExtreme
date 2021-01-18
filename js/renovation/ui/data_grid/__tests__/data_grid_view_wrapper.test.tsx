@@ -33,7 +33,7 @@ describe('DataGridViews', () => {
       expect(component.props.view).toMatchObject({
         _$element: $(widgetRef),
       });
-      expect((component.props.view.render as jest.Mock).mock.calls.length).toBe(1);
+      expect((component.props.view.render)).toHaveBeenCalledTimes(1);
     });
   });
 });
