@@ -4,7 +4,9 @@ import {
 import { DataGridView } from './common/types';
 import { DataGridViewProps } from './common/data_grid_view_props';
 import { DataGridViewWrapper } from './data_grid_view_wrapper';
-import { VIEW_NAMES } from '../../../ui/grid_core/ui.grid_core.grid_view';
+import Modules from '../../../ui/grid_core/ui.grid_core.modules';
+
+const { VIEW_NAMES } = Modules;
 
 const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
 

@@ -439,5 +439,7 @@ export default {
 
     processModules: processModules,
 
-    callModuleItemsMethod: callModuleItemsMethod
+    callModuleItemsMethod: callModuleItemsMethod,
+
+    VIEW_NAMES: ['columnsSeparatorView', 'blockSeparatorView', 'trackerView', 'headerPanel', 'columnHeadersView', 'rowsView', 'footerView', 'columnChooserView', 'filterPanelView', 'pagerView', 'draggingHeaderView', 'contextMenuView', 'errorView', 'headerFilterView', 'filterBuilderView']
 };

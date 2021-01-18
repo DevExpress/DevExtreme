@@ -19,7 +19,7 @@ const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
 
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
 
-export const VIEW_NAMES = ['columnsSeparatorView', 'blockSeparatorView', 'trackerView', 'headerPanel', 'columnHeadersView', 'rowsView', 'footerView', 'columnChooserView', 'filterPanelView', 'pagerView', 'draggingHeaderView', 'contextMenuView', 'errorView', 'headerFilterView', 'filterBuilderView'];
+const { VIEW_NAMES } = modules;
 
 const isPercentWidth = function(width) {
     return isString(width) && width.slice(-1) === '%';
