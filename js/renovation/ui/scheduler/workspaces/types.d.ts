@@ -40,6 +40,7 @@ export interface GroupRenderItem extends GroupItem {
   key: string;
   resourceName: string;
   data: GroupItem;
+  colSpan?: number;
 }
 
 export interface Group {
