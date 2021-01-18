@@ -95,7 +95,7 @@ const optionComparer = {
             assert.strictEqual(getPopupInstance(editor).option('position')[positionProp], expectedPosition[positionProp], `popup position.${positionProp} is correct`);
         });
         assert.strictEqual(editor.option('dropDownOptions.position.of').get(0), expectedPosition.of.get(0), 'dropDownOptions.position.of is correct');
-        assert.strictEqual(getPopupInstance(editor).option('position.of').get(0), expectedPosition.of.get(0), 'dropDownOptions.position.of is correct');
+        assert.strictEqual(getPopupInstance(editor).option('position.of').get(0), expectedPosition.of.get(0), 'popup position.of is correct');
     },
     contentTemplate: function(assert, editor) {
         if(editor.NAME === 'dxDropDownBox' || editor.NAME === 'dxDropDownButton') {
@@ -171,7 +171,7 @@ dropDownEditorsNames.forEach(widgetName => {
             dropDownOptionsKeys.forEach(option => {
                 QUnit.test(`${option} is correct`, function(assert) {
                     if(option === 'visible') {
-                        assert.ok('it is tested in separate module below');
+                        assert.ok('it is tested in separate module below or in widget specific test package');
                         return;
                     }
 
