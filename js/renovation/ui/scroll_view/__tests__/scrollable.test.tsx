@@ -568,34 +568,38 @@ jest.mock('../../../../core/devices', () => {
           expect(scrollable.scrollEffect.bind(scrollable)).not.toThrow();
         });
 
-        each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbarMode) => {
-          it('hoverEffect should update invisible class only for onHover mode', () => {
-            if (Scrollable === ScrollableNative) {
-              return; // actual only for simulated strategy
-            }
+        each([0, 0.5, 1]).describe('baseContainerToContentRatio: %o', (contentRatio) => {
+          each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbarMode) => {
+            it('hoverEffect should update invisible class only for onHover mode', () => {
+              if (Scrollable === ScrollableNative) {
+                return; // actual only for simulated strategy
+              }
 
-            const scrollable = new Scrollable({
-              direction: 'horizontal',
-              showScrollbar: showScrollbarMode,
-            }) as ScrollableSimulated;
+              const scrollable = new Scrollable({
+                direction: 'horizontal',
+                showScrollbar: showScrollbarMode,
+              }) as ScrollableSimulated;
+              scrollable.baseContainerToContentRatio = contentRatio;
 
-            const isScrollbarHasInvisibleClass = (scrollableInstance) => {
-              const scrollableElement = mount(
-                viewFunction(scrollableInstance as any) as JSX.Element,
+              const isScrollbarHasInvisibleClass = (scrollableInstance) => {
+                const scrollableElement = mount(
+                  viewFunction(scrollableInstance as any) as JSX.Element,
+                );
+
+                const scrollbar = scrollableElement.find('.dx-scrollable-scroll');
+                return scrollbar.hasClass('dx-state-invisible');
+              };
+              const isHiddenByRatio = contentRatio >= 1;
+              expect(isScrollbarHasInvisibleClass(scrollable)).toBe(showScrollbarMode !== 'always' || isHiddenByRatio);
+
+              scrollable.cursorEnterHandler();
+              expect(isScrollbarHasInvisibleClass(scrollable)).toBe(
+                (showScrollbarMode !== 'always' && showScrollbarMode !== 'onHover') || isHiddenByRatio,
               );
 
-              const scrollbar = scrollableElement.find('.dx-scrollable-scroll');
-              return scrollbar.hasClass('dx-state-invisible');
-            };
-            expect(isScrollbarHasInvisibleClass(scrollable)).toBe(showScrollbarMode !== 'always');
-
-            scrollable.cursorEnterHandler();
-            expect(isScrollbarHasInvisibleClass(scrollable)).toBe(
-              showScrollbarMode !== 'always' && showScrollbarMode !== 'onHover',
-            );
-
-            scrollable.cursorLeaveHandler();
-            expect(isScrollbarHasInvisibleClass(scrollable)).toBe(showScrollbarMode !== 'always');
+              scrollable.cursorLeaveHandler();
+              expect(isScrollbarHasInvisibleClass(scrollable)).toBe(showScrollbarMode !== 'always' || isHiddenByRatio);
+            });
           });
         });
       });
