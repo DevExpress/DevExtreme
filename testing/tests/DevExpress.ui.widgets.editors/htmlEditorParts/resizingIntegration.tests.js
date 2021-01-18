@@ -3,6 +3,8 @@ import $ from 'jquery';
 import 'ui/html_editor';
 import { name as clickEvent } from 'events/click';
 
+import browser from 'core/utils/browser';
+
 import PointerMock from '../../../helpers/pointerMock.js';
 
 const { test, module } = QUnit;
@@ -200,6 +202,10 @@ module('Resizing integration', {
     test('editor should have initial range after click on image', function(assert) {
         this.options.mediaResizing = { enabled: true };
         this.createWidget();
+
+        if(browser.msie) {
+            this.instance.focus();
+        }
 
         this.$element
             .find('img')

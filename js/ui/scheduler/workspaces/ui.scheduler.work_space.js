@@ -40,6 +40,7 @@ import ViewDataProvider from './view_data_provider';
 import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/layout.j';
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
+import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 import VirtualSelectionState from './virtual_selection_state';
 
 import { cache } from './cache';
@@ -170,6 +171,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     get isDateAndTimeView() {
         return true;
     }
+
+    get verticalGroupTableClass() { return WORKSPACE_VERTICAL_GROUP_TABLE_CLASS; }
 
     get viewDirection() { return 'vertical'; }
 
@@ -1191,9 +1194,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     _renderView() {
         this._setFirstViewDate();
 
-        this._applyCellTemplates(
-            this._renderGroupHeader()
-        );
+        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+            this.renderRGroupPanel();
+        } else {
+            this._applyCellTemplates(
+                this._renderGroupHeader()
+            );
+        }
 
         this._renderDateHeader();
 
@@ -1276,6 +1283,28 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.updateRSelection();
 
         this.virtualScrollingDispatcher?.updateDimensions();
+    }
+
+    renderRGroupPanel() {
+        const options = {
+            groups: this.option('groups'),
+            groupOrientation: this.option('groupOrientation'),
+            groupByDate: this.isGroupedByDate(),
+            resourceCellTemplate: this.option('resourceCellTemplate'),
+            className: this.verticalGroupTableClass,
+        };
+
+        if(this.option('groups').length) {
+            this._attachGroupCountAttr();
+            this.renderRComponent(
+                this._getGroupHeaderContainer(),
+                dxrGroupPanel,
+                'renovatedGroupPanel',
+                options,
+            );
+        } else {
+            this._detachGroupCountAttr();
+        }
     }
 
     renderRAllDayPanel() {
@@ -1615,7 +1644,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         let cellTemplates = [];
         if(groupCount) {
             const groupRows = this._makeGroupRows(this.option('groups'), this.option('groupByDate'));
-            this._attachGroupCountAttr(groupCount, groupRows);
+            this._attachGroupCountAttr();
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
         } else {
@@ -1626,7 +1655,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _applyCellTemplates(templates) {
-        templates.forEach(function(template) {
+        templates?.forEach(function(template) {
             template();
         });
     }
@@ -1637,8 +1666,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.$element().removeAttr(groupedAttr.attr);
     }
 
-    _attachGroupCountAttr(groupRowCount, groupRows) {
-        const groupedAttr = this._groupedStrategy.getGroupCountAttr(groupRowCount, groupRows);
+    _attachGroupCountAttr() {
+        const groupedAttr = this._groupedStrategy.getGroupCountAttr(this.option('groups'));
 
         this.$element().attr(groupedAttr.attr, groupedAttr.count);
     }

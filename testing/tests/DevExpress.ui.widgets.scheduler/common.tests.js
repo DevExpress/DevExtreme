@@ -3736,38 +3736,6 @@ QUnit.module('Scrolling to time', () => {
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 
-    QUnit.test('Scheduler should have specific resourceCellTemplate setting of the view', function(assert) {
-        let countCallTemplate1 = 0;
-        let countCallTemplate2 = 0;
-        const dataSource = [
-            { id: 1, text: 'group1' },
-            { id: 2, text: 'group2' }
-        ];
-
-        this.createInstance({
-            views: [{
-                type: 'week',
-                resourceCellTemplate: function() {
-                    countCallTemplate2++;
-                }
-            }],
-            groups: ['test'],
-            resources: [
-                {
-                    field: 'test',
-                    dataSource: dataSource
-                }
-            ],
-            resourceCellTemplate: function() {
-                countCallTemplate1++;
-            },
-            currentView: 'week'
-        });
-
-        assert.equal(countCallTemplate1, 0, 'count call first template');
-        assert.notEqual(countCallTemplate2, 0, 'count call second template');
-    });
-
     QUnit.test('Scheduler should have specific appointmentTemplate setting of the view', function(assert) {
         let countCallTemplate1 = 0;
         let countCallTemplate2 = 0;
