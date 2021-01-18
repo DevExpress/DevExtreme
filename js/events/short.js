@@ -173,6 +173,7 @@ export const dxPointerUp = {
     }
 };
 
+
 let index = 0;
 const keyboardProcessors = {};
 const generateListenerId = () => `keyboardProcessorId${index++}`;
