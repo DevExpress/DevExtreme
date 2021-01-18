@@ -58,7 +58,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef,
     tabIndex, cursorEnterHandler, cursorLeaveHandler,
-    isScrollbarVisible, baseContainerToContentRatio,
+    isScrollbarVisible, needScrollbar,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -117,7 +117,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
               expandable={scrollByThumb}
-              baseContainerToContentRatio={baseContainerToContentRatio}
+              needScrollbar={needScrollbar}
             />
           )}
           {isVertical && (
@@ -126,7 +126,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
               expandable={scrollByThumb}
-              baseContainerToContentRatio={baseContainerToContentRatio}
+              needScrollbar={needScrollbar}
             />
           )}
         </div>
@@ -396,7 +396,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   }
 
   adjustVisibility(visible?: boolean): boolean {
-    if (this.baseContainerToContentRatio && !this.needScrollbar()) {
+    if (this.baseContainerToContentRatio && !this.needScrollbar) {
       return false;
     }
 
@@ -416,7 +416,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
     return visible || false;
   }
 
-  private needScrollbar(): boolean {
+  get needScrollbar(): boolean {
     return this.props.showScrollbar !== 'never' && (this.baseContainerToContentRatio < 1);
   }
 

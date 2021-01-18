@@ -110,7 +110,7 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
 
     return {
       ...style,
-      display: this.needScrollbar() ? '' : 'none',
+      display: this.props.needScrollbar ? '' : 'none',
       [`${this.getDimension()}`]: THUMB_MIN_SIZE,
     };
   }
@@ -120,10 +120,6 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
       [SCROLLABLE_SCROLL_CLASS]: true,
       'dx-state-invisible': !this.props.visible,
     });
-  }
-
-  private needScrollbar(): boolean {
-    return this.props.visibilityMode !== 'never' && ((this.props.baseContainerToContentRatio || 0) < 1);
   }
 
   private getDimension(): string {

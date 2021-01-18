@@ -40,11 +40,6 @@ const Scrollbar = Widget.inherit({
         return !!this.$element().find($element).length;
     },
 
-    cursorEnter: function() {
-        if(this._needScrollbar()) { // use this condition
-        }
-    },
-
     _renderDimensions: function() {
         this._$thumb.css({
             width: this.option('width'),
