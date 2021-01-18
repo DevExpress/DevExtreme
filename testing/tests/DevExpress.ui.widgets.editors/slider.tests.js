@@ -1702,6 +1702,22 @@ module('validation', () => {
 });
 
 module('small float step', () => {
+    test('real step should be 1 if it is set to zero', function(assert) {
+        const realStep = 1;
+        const $slider = $('#slider').dxSlider({
+            step: 0,
+            min: 0,
+            max: 3,
+            value: 0
+        });
+        const slider = $slider.dxSlider('instance');
+        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
+        const handleX = $handle.offset().left + $handle.outerWidth() / 2;
+
+        pointerMock($handle).start().move(handleX).down().move(realStep / 2).up();
+        assert.strictEqual(slider.option('value'), realStep, 'new value is correct');
+    });
+
     test('handle should move on correct step when step is very small (T945742)', function(assert) {
         const step = 0.0000001;
         const startValue = 0.5;

@@ -193,7 +193,7 @@ export default {
                                         },
                                         editorOptions: {
                                             inputAttr: {
-                                                'aria-label': messageLocalization.format('dxDataGrid-ariaSearchInGrid')
+                                                'aria-label': messageLocalization.format(`${that.component.NAME}-ariaSearchInGrid`)
                                             }
                                         }
                                     });

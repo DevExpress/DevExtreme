@@ -506,9 +506,12 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
 
         // assert
-        assert.equal(treeList.$element().find('.dx-data-row').length, 1, 'one filtered row is rendered');
-        assert.equal(treeList.$element().find('.dx-toolbar .dx-searchbox').length, 1, 'searchPanel is rendered');
-        assert.equal(treeList.$element().find('.dx-toolbar .dx-searchbox').dxTextBox('instance').option('value'), 'Name 1', 'searchPanel text is applied');
+        const $element = treeList.$element();
+        const $searchBox = $element.find('.dx-toolbar .dx-searchbox');
+        assert.equal($element.find('.dx-data-row').length, 1, 'one filtered row is rendered');
+        assert.equal($searchBox.length, 1, 'searchPanel is rendered');
+        assert.equal($searchBox.dxTextBox('instance').option('value'), 'Name 1', 'searchPanel text is applied');
+        assert.equal($searchBox.find('input').attr('aria-label'), 'Search in the tree list', 'aria-label');
     });
 
     QUnit.test('Selectable treeList should have right default options', function(assert) {
