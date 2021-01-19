@@ -42,6 +42,8 @@ const DOMComponent = Component.inherit({
     * @hidden
     */
     ctor(element, options) {
+        this._customClass = null;
+
         this._createElement(element);
         attachInstanceToElement(this._$element, this, this._dispose);
 
@@ -58,8 +60,6 @@ const DOMComponent = Component.inherit({
 
     _visibilityChanged: abstract,
     _dimensionChanged: abstract,
-
-    _customClass: null,
 
     _init() {
         this.callBase();
