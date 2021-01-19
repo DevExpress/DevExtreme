@@ -18,6 +18,7 @@ import {
 } from './scrollable_props';
 
 import {
+  allowedDirection,
   ScrollableLocation, ScrollOffset,
 } from './types.d';
 
@@ -25,6 +26,7 @@ import {
   ensureLocation, ScrollDirection, normalizeCoordinate,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
+  getElementWidth, getElementHeight,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
   SCROLLABLE_CONTAINER_CLASS,
@@ -34,6 +36,7 @@ import {
   SCROLLABLE_DISABLED_CLASS,
   SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_SCROLLBARS_HIDDEN,
+  DIRECTION_BOTH,
 } from './scrollable_utils';
 import { Scrollbar } from './scrollbar';
 
@@ -237,7 +240,7 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
       (e: Event) => {
         this.initHandler(e);
       }, {
-        getDirection: (e) => this.getDirection(e),
+        getDirection: () => this.getDirection(),
         validate: (e) => this.validate(e),
         isNative: true,
         scrollTarget: this.containerRef,
@@ -338,9 +341,37 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
   }
 
   /* istanbul ignore next */
-  // eslint-disable-next-line
-  private getDirection(event: Event): string {
-    return 'vertical'; // TODO
+  private getDirection(): string | undefined {
+    return this.allowedDirection();
+  }
+
+  private allowedDirection(): string | undefined {
+    return this.updateAllowedDirection();
+  }
+
+  private updateAllowedDirection(): string | undefined {
+    const allowedDirections = this.allowedDirections();
+    const { isVertical, isHorizontal, isBoth } = new ScrollDirection(this.props.direction);
+
+    if (isBoth && allowedDirections.vertical && allowedDirections.horizontal) {
+      return DIRECTION_BOTH;
+    } if (isHorizontal && allowedDirections.horizontal) {
+      return DIRECTION_HORIZONTAL;
+    } if (isVertical && allowedDirections.vertical) {
+      return DIRECTION_VERTICAL;
+    }
+    return undefined;
+  }
+
+  private allowedDirections(): allowedDirection {
+    const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
+
+    return {
+      vertical: isVertical
+      && getElementHeight(this.contentRef) > getElementHeight(this.containerRef),
+      horizontal: isHorizontal
+      && getElementWidth(this.contentRef) > getElementWidth(this.containerRef),
+    };
   }
 
   /* istanbul ignore next */

@@ -31,6 +31,13 @@ export function getElementHeight(element: Element | undefined): number {
   return toNumber(getElementComputedStyle(element)?.height);
 }
 
+export function getElementStyle(
+  name: keyof CSSStyleDeclaration, element?: Element,
+): number | string {
+  const computedStyle = getElementComputedStyle(element) || {};
+  return computedStyle[name];
+}
+
 export function ensureLocation(
   location: number | Partial<ScrollableLocation>,
 ): ScrollableLocation {
@@ -73,6 +80,10 @@ export class ScrollDirection {
 
   get isVertical(): boolean {
     return this.direction === DIRECTION_VERTICAL || this.direction === DIRECTION_BOTH;
+  }
+
+  get isBoth(): boolean {
+    return this.direction === DIRECTION_BOTH;
   }
 }
 

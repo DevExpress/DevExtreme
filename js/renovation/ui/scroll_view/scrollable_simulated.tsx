@@ -11,24 +11,27 @@ import { Scrollbar } from './scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
-import { normalizeKeyName } from '../../../events/utils/index';
+import { isDxMouseWheelEvent, normalizeKeyName } from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
+import { getBoundingRect } from '../../../core/utils/position';
+import { titleize } from '../../../core/utils/inflector';
 
 import {
   ScrollableInternalPropsType,
 } from './scrollable_props';
 
 import {
-  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset,
+  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset, allowedDirection,
 } from './types.d';
 
 import {
   ensureLocation, ScrollDirection, normalizeCoordinate,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
-  getElementWidth, getElementHeight,
+  getElementWidth, getElementHeight, getElementStyle,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
+  DIRECTION_BOTH,
   SCROLLABLE_CONTAINER_CLASS,
   SCROLLABLE_CONTENT_CLASS,
   SCROLLABLE_WRAPPER_CLASS,
@@ -344,33 +347,94 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleStart(event: Event): void {
-    // console.log('handleEnd', event, this);
+    console.log('handleEnd', event, this);
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleMove(event: Event): void {
-    // console.log('handleEnd', event, this);
+    console.log('handleEnd', event, this);
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleEnd(event: Event): void {
-    // console.log('handleEnd', event, this);
+    console.log('handleEnd', event, this);
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleStop(event: Event): void {
-    // console.log('handleStop', event, this);
+    console.log('handleStop', event, this);
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleCancel(event: Event): void {
-    // console.log('handleCancel', event, this);
+    console.log('handleCancel', event, this);
   }
 
   /* istanbul ignore next */
-  // eslint-disable-next-line
-  private getDirection(event: Event): string {
-    return 'vertical'; // TODO
+  private getDirection(e: Event): string | undefined {
+    console.log(isDxMouseWheelEvent(e) ? this.wheelDirection(e) : this.allowedDirection());
+    return isDxMouseWheelEvent(e) ? this.wheelDirection(e) : this.allowedDirection();
+  }
+
+  private allowedDirection(): string | undefined {
+    return this.updateAllowedDirection();
+  }
+
+  // common part
+  private updateAllowedDirection(): string | undefined {
+    const allowedDirections = this.allowedDirections();
+    const { isVertical, isHorizontal, isBoth } = new ScrollDirection(this.props.direction);
+
+    if (isBoth && allowedDirections.vertical && allowedDirections.horizontal) {
+      return DIRECTION_BOTH;
+    } if (isHorizontal && allowedDirections.horizontal) {
+      return DIRECTION_HORIZONTAL;
+    } if (isVertical && allowedDirections.vertical) {
+      return DIRECTION_VERTICAL;
+    }
+    return undefined;
+  }
+
+  private allowedDirections(): allowedDirection {
+    const { bounceEnabled, direction } = this.props;
+    const { isVertical, isHorizontal } = new ScrollDirection(direction);
+
+    return {
+      vertical: isVertical && (this.getMinOffset('height') < 0 || bounceEnabled),
+      horizontal: isHorizontal && (this.getMinOffset('width') < 0 || bounceEnabled),
+    };
+  }
+
+  getMinOffset(dimension: string): number {
+    return -Math.max(this.contentSize(dimension, dimension === 'width' ? 'x' : 'y') - this.containerSize(dimension), 0);
+  }
+
+  containerSize(dimension: string): number {
+    return this.getRealDimension(this.containerRef, dimension);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getRealDimension(element, dimension): number {
+    return Math.round(getBoundingRect(element)[dimension]);
+  }
+
+  contentSize(dimension: string, axis: string): number {
+    const overflowStyleName = `overflow${axis.toUpperCase()}`;
+    const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef) === 'hidden';
+    let contentSize = this.getRealDimension(this.contentRef, dimension);
+
+    if (!isOverflowHidden) {
+      const containerScrollSize = this.contentRef[`scroll${titleize(dimension)}`] * this.getScaleRatio();
+
+      contentSize = Math.max(containerScrollSize, contentSize);
+    }
+
+    return contentSize;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getScaleRatio(): number {
+    return 1;
   }
 
   /* istanbul ignore next */
