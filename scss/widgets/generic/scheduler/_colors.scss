@@ -86,6 +86,7 @@ $scheduler-first-month-cell-background-color: null !default;
 $scheduler-time-panel-background-color: null !default;
 
 $scheduler-tooltip-appointment-text-color: null !default;
+$agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
 $scheduler-appointment-overlay-bg: null !default;
 
 @if $color == "carmine" {

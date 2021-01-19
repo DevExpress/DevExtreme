@@ -184,6 +184,11 @@ $agenda-appointment-text-color: null !default;
     // }
   }
 
+  .dx-scheduler-appointment-recurrence-icon {
+    position: static;
+    color: $agenda-appointment-text-color;
+  }
+
   .dx-scheduler-agenda-appointment-right-layout {
     margin-left: 10px;
   }
@@ -238,7 +243,10 @@ $agenda-appointment-text-color: null !default;
 
   .dx-scheduler-agenda-appointment-marker {
     @include use-colored-marker();
+    @include use-flex-center();
 
+    width: 32px;
+    height: 32px;
     background-color: $scheduler-appointment-base-color;
   }
 }

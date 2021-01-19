@@ -49,6 +49,9 @@ export const createAgendaAppointmentLayout = (formatText, config) => {
         .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER)
         .appendTo(leftLayoutContainer);
 
+    config.isRecurrence &&
+        $('<span>').addClass(APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON + ' dx-icon-repeat').appendTo(marker);
+
     // eslint-disable-next-line no-unused-vars
     const text = $('<div>')
         .addClass(APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_TITLE)
@@ -70,9 +73,6 @@ export const createAgendaAppointmentLayout = (formatText, config) => {
             .text(allDayText)
             .addClass(APPOINTMENT_CONTENT_CLASSES.ALL_DAY_CONTENT)
             .prependTo(additionalContainer);
-
-    config.isRecurrence &&
-        $('<span>').addClass(APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON + ' dx-icon-repeat').appendTo(result);
 
     return result;
 };
