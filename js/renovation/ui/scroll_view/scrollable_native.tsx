@@ -27,6 +27,7 @@ import {
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
   getElementWidth, getElementHeight,
+  updateAllowedDirection,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
   SCROLLABLE_CONTAINER_CLASS,
@@ -36,7 +37,6 @@ import {
   SCROLLABLE_DISABLED_CLASS,
   SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_SCROLLBARS_HIDDEN,
-  DIRECTION_BOTH,
 } from './scrollable_utils';
 import { Scrollbar } from './scrollbar';
 
@@ -346,21 +346,7 @@ export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>(
   }
 
   private allowedDirection(): string | undefined {
-    return this.updateAllowedDirection();
-  }
-
-  private updateAllowedDirection(): string | undefined {
-    const allowedDirections = this.allowedDirections();
-    const { isVertical, isHorizontal, isBoth } = new ScrollDirection(this.props.direction);
-
-    if (isBoth && allowedDirections.vertical && allowedDirections.horizontal) {
-      return DIRECTION_BOTH;
-    } if (isHorizontal && allowedDirections.horizontal) {
-      return DIRECTION_HORIZONTAL;
-    } if (isVertical && allowedDirections.vertical) {
-      return DIRECTION_VERTICAL;
-    }
-    return undefined;
+    return updateAllowedDirection(this.allowedDirections(), this.props.direction);
   }
 
   private allowedDirections(): allowedDirection {

@@ -29,9 +29,9 @@ import {
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
   getElementWidth, getElementHeight, getElementStyle,
+  updateAllowedDirection,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
-  DIRECTION_BOTH,
   SCROLLABLE_CONTAINER_CLASS,
   SCROLLABLE_CONTENT_CLASS,
   SCROLLABLE_WRAPPER_CLASS,
@@ -347,52 +347,36 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleStart(event: Event): void {
-    console.log('handleEnd', event, this);
+    // console.log('handleEnd', event, this);
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleMove(event: Event): void {
-    console.log('handleEnd', event, this);
+    // console.log('handleEnd', event, this);
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleEnd(event: Event): void {
-    console.log('handleEnd', event, this);
+    // console.log('handleEnd', event, this);
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleStop(event: Event): void {
-    console.log('handleStop', event, this);
+    // console.log('handleStop', event, this);
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleCancel(event: Event): void {
-    console.log('handleCancel', event, this);
+    // console.log('handleCancel', event, this);
   }
 
   /* istanbul ignore next */
   private getDirection(e: Event): string | undefined {
-    console.log(isDxMouseWheelEvent(e) ? this.wheelDirection(e) : this.allowedDirection());
     return isDxMouseWheelEvent(e) ? this.wheelDirection(e) : this.allowedDirection();
   }
 
   private allowedDirection(): string | undefined {
-    return this.updateAllowedDirection();
-  }
-
-  // common part
-  private updateAllowedDirection(): string | undefined {
-    const allowedDirections = this.allowedDirections();
-    const { isVertical, isHorizontal, isBoth } = new ScrollDirection(this.props.direction);
-
-    if (isBoth && allowedDirections.vertical && allowedDirections.horizontal) {
-      return DIRECTION_BOTH;
-    } if (isHorizontal && allowedDirections.horizontal) {
-      return DIRECTION_HORIZONTAL;
-    } if (isVertical && allowedDirections.vertical) {
-      return DIRECTION_VERTICAL;
-    }
-    return undefined;
+    return updateAllowedDirection(this.allowedDirections(), this.props.direction);
   }
 
   private allowedDirections(): allowedDirection {
@@ -400,8 +384,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
     const { isVertical, isHorizontal } = new ScrollDirection(direction);
 
     return {
-      vertical: isVertical && (this.getMinOffset('height') < 0 || bounceEnabled),
-      horizontal: isHorizontal && (this.getMinOffset('width') < 0 || bounceEnabled),
+      vertical: isVertical && (Math.round(this.getMinOffset('height')) < 0 || bounceEnabled),
+      horizontal: isHorizontal && (Math.round(this.getMinOffset('width')) < 0 || bounceEnabled),
     };
   }
 
@@ -434,7 +418,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
 
   // eslint-disable-next-line class-methods-use-this
   getScaleRatio(): number {
-    return 1;
+    return 1; // TODO
   }
 
   /* istanbul ignore next */

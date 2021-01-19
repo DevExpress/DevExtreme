@@ -866,17 +866,6 @@ export const SimulatedStrategy = Class.inherit({
         }));
     },
 
-    _allowedDirections: function() {
-        const bounceEnabled = this.option('bounceEnabled');
-        const verticalScroller = this._scrollers[VERTICAL];
-        const horizontalScroller = this._scrollers[HORIZONTAL];
-
-        return {
-            vertical: verticalScroller && (verticalScroller._minOffset < 0 || bounceEnabled),
-            horizontal: horizontalScroller && (horizontalScroller._minOffset < 0 || bounceEnabled)
-        };
-    },
-
     updateBounds: function() {
         this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
     },
@@ -939,10 +928,6 @@ export const SimulatedStrategy = Class.inherit({
         }
 
         return this._allowedDirection();
-    },
-
-    getDirection: function(e) {
-        return isDxMouseWheelEvent(e) ? this._wheelDirection(e) : this._allowedDirection();
     },
 
     verticalOffset: function() {

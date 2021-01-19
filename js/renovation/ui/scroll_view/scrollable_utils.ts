@@ -5,7 +5,9 @@ import getElementComputedStyle from '../../utils/get_computed_style';
 import { toNumber } from '../../utils/type_conversion';
 
 import {
-  ScrollableLocation, ScrollOffset, ScrollableBoundary, ScrollableDirection,
+  ScrollableLocation,
+  ScrollOffset, ScrollableBoundary, ScrollableDirection,
+  allowedDirection,
 } from './types.d';
 
 export const SCROLL_LINE_HEIGHT = 40;
@@ -196,4 +198,19 @@ export function getElementLocation(
   );
 
   return getPublicCoordinate(prop, location, containerRef, rtlEnabled);
+}
+
+export function updateAllowedDirection(
+  allowedDirections: allowedDirection, direction: ScrollableDirection,
+): string | undefined {
+  const { isVertical, isHorizontal, isBoth } = new ScrollDirection(direction);
+
+  if (isBoth && allowedDirections.vertical && allowedDirections.horizontal) {
+    return DIRECTION_BOTH;
+  } if (isHorizontal && allowedDirections.horizontal) {
+    return DIRECTION_HORIZONTAL;
+  } if (isVertical && allowedDirections.vertical) {
+    return DIRECTION_VERTICAL;
+  }
+  return undefined;
 }
