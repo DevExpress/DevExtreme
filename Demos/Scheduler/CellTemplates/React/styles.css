@@ -60,3 +60,10 @@ td.dx-scheduler-time-panel-cell .dinner .cafe {
     padding: 0;
     opacity: 1;
 }
+
+@media all and (-ms-high-contrast:none)
+{
+    td.dx-scheduler-time-panel-cell .dinner .cafe {
+      background-color: transparent;
+    }
+}
