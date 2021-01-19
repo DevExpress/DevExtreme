@@ -875,13 +875,21 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if($tableElement) {
             $rows = $tableElement.children('tbody').children();
+            let needBreak = false;
+            for(let i = 0; i < $rows.length; i++) {
+                if($rows.eq(i).is('.dx-data-row')) {
+                    needBreak = true;
+                }
+            }
 
             for(let i = 0; i < $rows.length; i++) {
                 const $row = $rows.eq(i);
                 const isRowVisible = $row.get(0).style.display !== 'none' && !$row.hasClass('dx-state-invisible');
                 if(!$row.is('.' + GROUP_ROW_CLASS) && !$row.is('.' + DETAIL_ROW_CLASS) && isRowVisible) {
                     $cells = $row.children('td');
-                    break;
+                    if(needBreak) {
+                        break;
+                    }
                 }
             }
 
