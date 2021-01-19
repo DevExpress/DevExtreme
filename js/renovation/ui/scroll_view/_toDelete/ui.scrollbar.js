@@ -18,8 +18,6 @@ const SCROLLBAR_VISIBLE = {
 const Scrollbar = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            direction: null,
-            visible: false,
             containerSize: 0,
             contentSize: 0,
             scaleRatio: 1
@@ -28,7 +26,6 @@ const Scrollbar = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this._isHovered = false;
     },
 
     _render: function() {
@@ -39,18 +36,6 @@ const Scrollbar = Widget.inherit({
 
     isThumb: function($element) {
         return !!this.$element().find($element).length;
-    },
-
-    cursorEnter: function() {
-        this._isHovered = true;
-        if(this._needScrollbar()) {
-            this.option('visible', true);
-        }
-    },
-
-    cursorLeave: function() {
-        this._isHovered = false;
-        this.option('visible', false);
     },
 
     _renderDimensions: function() {
@@ -66,32 +51,6 @@ const Scrollbar = Widget.inherit({
             this._$thumb.css('opacity');
         }
 
-        visible = this._adjustVisibility(visible);
-
-        this.option().visible = visible;
-        this._$thumb.toggleClass('dx-state-invisible', !visible);
-    },
-
-    _adjustVisibility: function(visible) {
-        if(this._baseContainerToContentRatio && !this._needScrollbar()) {
-            return false;
-        }
-
-        switch(this.option('visibilityMode')) {
-            case SCROLLBAR_VISIBLE.onScroll:
-                break;
-            case SCROLLBAR_VISIBLE.onHover:
-                visible = visible || !!this._isHovered;
-                break;
-            case SCROLLBAR_VISIBLE.never:
-                visible = false;
-                break;
-            case SCROLLBAR_VISIBLE.always:
-                visible = true;
-                break;
-        }
-
-        return visible;
     },
 
     moveTo: function(location) {

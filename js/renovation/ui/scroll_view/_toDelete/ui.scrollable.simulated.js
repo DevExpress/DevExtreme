@@ -11,7 +11,7 @@ import { resetPosition, move, locate } from '../../animation/translator';
 import Class from '../../core/class';
 import Animator from './animator';
 import devices from '../../core/devices';
-import { isDxMouseWheelEvent, addNamespace as addEventNamespace, normalizeKeyName } from '../../events/utils/index';
+import { isDxMouseWheelEvent, normalizeKeyName } from '../../events/utils/index';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
 import { when, Deferred } from '../../core/utils/deferred';
 
@@ -556,7 +556,6 @@ export const SimulatedStrategy = Class.inherit({
 
     render: function() {
         this._createScrollers();
-        this._attachCursorHandlers();
     },
 
     _createScrollers: function() {
@@ -787,23 +786,6 @@ export const SimulatedStrategy = Class.inherit({
         location.top -= this._$container.scrollTop();
         location.left -= this._$container.scrollLeft();
         return location;
-    },
-
-    disabledChanged: function() {
-        this._attachCursorHandlers();
-    },
-
-    _attachCursorHandlers: function() {
-        eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_CURSOR}`);
-
-        if(!this.option('disabled') && this._isHoverMode()) {
-            eventsEngine.on(this._$element, addEventNamespace('mouseenter', SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
-            eventsEngine.on(this._$element, addEventNamespace('mouseleave', SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
-        }
-    },
-
-    _isHoverMode: function() {
-        return this.option('showScrollbar') === 'onHover';
     },
 
     _cursorEnterHandler: function(e) {

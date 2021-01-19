@@ -118,6 +118,10 @@ export class WidgetProps extends BaseWidgetProps {
   @Event() onFocusIn?: (e: Event) => void;
 
   @Event() onFocusOut?: (e: Event) => void;
+
+  @Event() onHoverStart?: () => void;
+
+  @Event() onHoverEnd?: () => void;
 }
 
 @Component({
@@ -263,14 +267,21 @@ export class Widget extends JSXComponent(WidgetProps) {
   @Effect()
   hoverEffect(): EffectReturn {
     const namespace = 'UIFeedback';
-    const { activeStateUnit, hoverStateEnabled, disabled } = this.props;
+    const {
+      activeStateUnit, hoverStateEnabled, disabled, onHoverStart, onHoverEnd,
+    } = this.props;
     const selector = activeStateUnit;
     const isHoverable = hoverStateEnabled && !disabled;
-
     if (isHoverable) {
       hover.on(this.widgetRef,
-        () => { !this.active && (this.hovered = true); },
-        () => { this.hovered = false; },
+        () => {
+          !this.active && (this.hovered = true);
+          onHoverStart?.();
+        },
+        () => {
+          this.hovered = false;
+          onHoverEnd?.();
+        },
         { selector, namespace });
       return (): void => hover.off(this.widgetRef, { selector, namespace });
     }

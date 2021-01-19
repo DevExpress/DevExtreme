@@ -45,7 +45,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
-      <div className={SCROLLABLE_SCROLL_CLASS} style={styles} ref={scrollRef}>
+      <div className={viewModel.scrollClasses} style={styles} ref={scrollRef}>
         <div className={SCROLLABLE_SCROLL_CONTENT_CLASS} />
       </div>
     </Widget>
@@ -57,8 +57,6 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   view: viewFunction,
 })
 export class Scrollbar extends JSXComponent<ScrollbarProps>() {
-  @InternalState() baseContainerToContentRatio = 0;
-
   @InternalState() active = false;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
@@ -112,17 +110,16 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
 
     return {
       ...style,
-      display: this.needScrollbar() ? '' : 'none',
+      display: this.props.needScrollbar ? '' : 'none',
       [`${this.getDimension()}`]: THUMB_MIN_SIZE,
     };
   }
 
-  private isHidden(): boolean {
-    return this.props.visibilityMode === 'never';
-  }
-
-  private needScrollbar(): boolean {
-    return !this.isHidden() && (this.baseContainerToContentRatio < 1);
+  get scrollClasses(): string {
+    return combineClasses({
+      [SCROLLABLE_SCROLL_CLASS]: true,
+      'dx-state-invisible': !this.props.visible,
+    });
   }
 
   private getDimension(): string {
