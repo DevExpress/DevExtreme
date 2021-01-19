@@ -535,7 +535,7 @@ class BaseRenderingStrategy {
         });
     }
 
-    _markAppointmentAsVirtual(coordinates, isAllDay) {
+    _markAppointmentAsVirtual(coordinates, isAllDay = false) {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
             const {
