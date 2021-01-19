@@ -301,6 +301,17 @@ describe('Render', () => {
     expect(tooltip.find('TextSvgElement')).toHaveLength(0);
   });
 
+  it('should not render anything, isEmptyContainer = true', () => {
+    const tooltip = shallow(TooltipComponent({ ...props, isEmptyContainer: true } as any));
+
+    expect(tooltip.find('div')).toHaveLength(1);
+    expect(tooltip.find('div').props()).toEqual({});
+    expect(tooltip.find('defs')).toHaveLength(0);
+    expect(tooltip.find('ShadowFilter')).toHaveLength(0);
+    expect(tooltip.find('PathSvgElement')).toHaveLength(0);
+    expect(tooltip.find('TextSvgElement')).toHaveLength(0);
+  });
+
   it('should apply rtl for html text', () => {
     const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
     const customizedProps = { ...props.props, rtl: true, contentTemplate };
@@ -562,6 +573,52 @@ describe('Effect', () => {
 
     expect(hiddenTooltip).toBeCalledTimes(1);
     expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' } });
+  });
+
+  it('should not set isEmptyContainer prop, container is not empty', () => {
+    const tooltip = new Tooltip({ visible: true });
+    const box = {
+      x: 1, y: 2, width: 10, height: 20,
+    };
+    tooltip.htmlRef = {
+      getBoundingClientRect: jest.fn().mockReturnValue(box),
+    } as any;
+
+    tooltip.checkContainer();
+    expect(tooltip.isEmptyContainer).toBe(false);
+  });
+
+  it('should not set isEmptyContainer prop, visible is false', () => {
+    const tooltip = new Tooltip({ visible: false });
+    const box = {
+      x: 1, y: 2, width: 0, height: 0,
+    };
+    tooltip.htmlRef = {
+      getBoundingClientRect: jest.fn().mockReturnValue(box),
+    } as any;
+
+    tooltip.checkContainer();
+    expect(tooltip.isEmptyContainer).toBe(false);
+  });
+
+  it('should not set isEmptyContainer prop, htmlRef is not rendered', () => {
+    const tooltip = new Tooltip({ visible: false });
+
+    tooltip.checkContainer();
+    expect(tooltip.isEmptyContainer).toBe(false);
+  });
+
+  it('should set isEmptyContainer prop to true, container is empty', () => {
+    const tooltip = new Tooltip({ visible: true });
+    const box = {
+      x: 1, y: 2, width: 0, height: 0,
+    };
+    tooltip.htmlRef = {
+      getBoundingClientRect: jest.fn().mockReturnValue(box),
+    } as any;
+
+    tooltip.checkContainer();
+    expect(tooltip.isEmptyContainer).toBe(true);
   });
 });
 
