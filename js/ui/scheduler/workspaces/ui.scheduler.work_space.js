@@ -1267,7 +1267,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(this.isVirtualScrolling()) {
-            options.isVerticalGroupOrientation = groupOrientation === 'vertical';
             extend(
                 options,
                 this.virtualScrollingDispatcher.getRenderState()

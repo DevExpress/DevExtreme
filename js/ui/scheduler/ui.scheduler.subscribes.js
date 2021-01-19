@@ -537,32 +537,18 @@ const subscribes = {
             });
         });
 
-        const result = this._appointmentModel.filterLoadedVirtualAppointments(
+        return this._appointmentModel.filterLoadedVirtualAppointments(
             filterOptions,
             this.timeZoneCalculator,
             workspace._getGroupCount()
         );
-
-        return result;
     },
     _getPrerenderFilterResources: function(groupIndex) {
-        const cellGroups = [];
         const { viewDataProvider } = this.getWorkSpace();
 
         const cellGroup = viewDataProvider.getCellsGroup(groupIndex);
 
-        cellGroup && cellGroups.push(cellGroup);
-
-        // const groupIndices = viewDataProvider.getGroupIndices();
-
-        // groupIndices.forEach(index => {
-        //     const cellGroup = viewDataProvider.getCellsGroup(index);
-        //     cellGroup && cellGroups.push(cellGroup);
-        // });
-
-        const result = this._resourcesManager.getResourcesDataByGroups(cellGroups);
-
-        return result;
+        return this._resourcesManager.getResourcesDataByGroups([cellGroup]);
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
