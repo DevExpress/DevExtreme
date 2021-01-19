@@ -36,13 +36,14 @@ export const viewFunction = ({
   pointerEvents,
   cssClassName,
   correctedCoordinates,
+  isEmptyContainer,
   props: {
     font, shadow, opacity, interactive, zIndex,
     contentTemplate: TooltipTemplate, data, visible, rtl,
     cornerRadius, arrowWidth,
   },
 }: Tooltip): JSX.Element => {
-  if (!visible || !correctedCoordinates || isTextEmpty(customizedOptions)) {
+  if (!visible || !correctedCoordinates || isTextEmpty(customizedOptions) || isEmptyContainer) {
     return <div />;
   }
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
@@ -248,6 +249,8 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @InternalState() currentTarget?: Point;
 
+  @InternalState() isEmptyContainer = false;
+
   @Ref() cloudRef!: RefObject<SVGGElement>;
 
   @Ref() textRef!: RefObject<SVGGElement>;
@@ -306,6 +309,16 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     if (!visible) {
       triggerTooltipHidden();
       this.currentTarget = undefined;
+    }
+  }
+
+  @Effect()
+  checkContainer(): void {
+    if (this.htmlRef && this.props.visible) {
+      const htmlTextSize = this.htmlRef.getBoundingClientRect();
+      if (!htmlTextSize.width && !htmlTextSize.height) {
+        this.isEmptyContainer = true;
+      }
     }
   }
 
