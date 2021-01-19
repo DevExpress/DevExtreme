@@ -86,11 +86,6 @@ const NativeStrategy = Class.inherit({
         });
     },
 
-    createActions: function() {
-        this._scrollAction = this._createActionByOption('onScroll');
-        this._updateAction = this._createActionByOption('onUpdated');
-    },
-
     handleScroll: function(e) {
         this._component._updateRtlConfig();
         if(!this._isScrollLocationChanged()) {
