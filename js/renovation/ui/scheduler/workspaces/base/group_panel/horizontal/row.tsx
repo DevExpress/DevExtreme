@@ -4,13 +4,20 @@ import {
 import { GroupPanelHorizontalCell } from './cell';
 import { GroupRenderItem, ResourceCellTemplateProps } from '../../../types.d';
 
-export const viewFunction = (viewModel: Row): JSX.Element => (
+export const viewFunction = ({
+  restAttributes,
+  props: {
+    className,
+    groupItems,
+    cellTemplate,
+  },
+}: Row): JSX.Element => (
   <tr
-    className={`dx-scheduler-group-row ${viewModel.props.className}`}
+    className={`dx-scheduler-group-row ${className}`}
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
+    {...restAttributes}
   >
-    {viewModel.props.groupItems.map(({
+    {groupItems.map(({
       text, id, data, key, color, colSpan, isFirstGroupCell, isLastGroupCell,
     }, index) => (
       <GroupPanelHorizontalCell
@@ -23,7 +30,7 @@ export const viewFunction = (viewModel: Row): JSX.Element => (
         colSpan={colSpan}
         isFirstGroupCell={!!isFirstGroupCell}
         isLastGroupCell={!!isLastGroupCell}
-        cellTemplate={viewModel.props.cellTemplate}
+        cellTemplate={cellTemplate}
       />
     ))}
   </tr>

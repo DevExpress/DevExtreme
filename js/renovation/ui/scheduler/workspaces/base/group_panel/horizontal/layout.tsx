@@ -49,6 +49,7 @@ export class GroupPanelHorizontalLayout extends JSXComponent(GroupPanelLayoutPro
 
     return groupsRenderData.map((groupsRenderRow, index) => {
       const colSpan = colSpans[index];
+
       return groupsRenderRow.map((groupItem) => ({
         ...groupItem,
         colSpan,
