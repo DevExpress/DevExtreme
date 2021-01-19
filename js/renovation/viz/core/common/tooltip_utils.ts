@@ -204,7 +204,7 @@ export function getCanvas(container: HTMLElement): Canvas {
     left,
     top,
     width: max(body.clientWidth, html.clientWidth) + left,
-    height: min(
+    height: max(
       body.scrollHeight, html.scrollHeight,
       body.offsetHeight, html.offsetHeight,
       body.clientHeight, html.clientHeight,

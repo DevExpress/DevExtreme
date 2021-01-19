@@ -428,7 +428,7 @@ describe('#getCanvas', () => {
 
     expect(getCanvas(domAdapter.getBody())).toEqual({
       bottom: 0,
-      height: 4,
+      height: 16,
       left: 1,
       right: 0,
       top: 2,
@@ -456,7 +456,7 @@ describe('#getCanvas', () => {
 
     expect(getCanvas(domAdapter.getBody())).toEqual({
       bottom: 0,
-      height: 4,
+      height: 16,
       left: 1,
       right: 0,
       top: 2,
@@ -466,7 +466,7 @@ describe('#getCanvas', () => {
 
   it('should return valid canvas. tooltip in body. height from the body.scrollHeight', () => {
     setReturnValue('getBody', {
-      scrollHeight: 4,
+      scrollHeight: 20,
       offsetHeight: 15,
       clientHeight: 16,
       clientWidth: 400,
@@ -484,7 +484,7 @@ describe('#getCanvas', () => {
 
     expect(getCanvas(domAdapter.getBody())).toEqual({
       bottom: 0,
-      height: 4,
+      height: 20,
       left: 1,
       right: 0,
       top: 2,
@@ -495,7 +495,7 @@ describe('#getCanvas', () => {
   it('should return valid canvas. tooltip in body. height from the body.offsetHeight', () => {
     setReturnValue('getBody', {
       scrollHeight: 14,
-      offsetHeight: 4,
+      offsetHeight: 20,
       clientHeight: 16,
       clientWidth: 400,
       getBoundingClientRect: () => ({ left: 20 }),
@@ -512,7 +512,7 @@ describe('#getCanvas', () => {
 
     expect(getCanvas(domAdapter.getBody())).toEqual({
       bottom: 0,
-      height: 4,
+      height: 20,
       left: 1,
       right: 0,
       top: 2,
@@ -524,7 +524,7 @@ describe('#getCanvas', () => {
     setReturnValue('getBody', {
       scrollHeight: 14,
       offsetHeight: 15,
-      clientHeight: 4,
+      clientHeight: 20,
       clientWidth: 400,
       getBoundingClientRect: () => ({ left: 20 }),
     });
@@ -540,7 +540,7 @@ describe('#getCanvas', () => {
 
     expect(getCanvas(domAdapter.getBody())).toEqual({
       bottom: 0,
-      height: 4,
+      height: 20,
       left: 1,
       right: 0,
       top: 2,
@@ -561,14 +561,14 @@ describe('#getCanvas', () => {
       scrollLeft: 1,
       scrollTop: 2,
       clientWidth: 300,
-      scrollHeight: 4,
+      scrollHeight: 20,
       offsetHeight: 6,
       clientHeight: 7,
     });
 
     expect(getCanvas(domAdapter.getBody())).toEqual({
       bottom: 0,
-      height: 4,
+      height: 20,
       left: 1,
       right: 0,
       top: 2,
@@ -590,13 +590,13 @@ describe('#getCanvas', () => {
       scrollTop: 2,
       clientWidth: 300,
       scrollHeight: 6,
-      offsetHeight: 4,
+      offsetHeight: 20,
       clientHeight: 7,
     });
 
     expect(getCanvas(domAdapter.getBody())).toEqual({
       bottom: 0,
-      height: 4,
+      height: 20,
       left: 1,
       right: 0,
       top: 2,
@@ -619,12 +619,12 @@ describe('#getCanvas', () => {
       clientWidth: 300,
       scrollHeight: 6,
       offsetHeight: 5,
-      clientHeight: 4,
+      clientHeight: 20,
     });
 
     expect(getCanvas(domAdapter.getBody())).toEqual({
       bottom: 0,
-      height: 4,
+      height: 20,
       left: 1,
       right: 0,
       top: 2,
@@ -660,7 +660,7 @@ describe('#getCanvas', () => {
 
     expect(getCanvas(container)).toEqual({
       bottom: 0,
-      height: 8,
+      height: 14,
       left: 1,
       right: 0,
       top: 2,
@@ -696,7 +696,7 @@ describe('#getCanvas', () => {
 
     expect(getCanvas(container)).toEqual({
       bottom: 0,
-      height: 38,
+      height: 44,
       left: 31,
       right: 0,
       top: 32,
