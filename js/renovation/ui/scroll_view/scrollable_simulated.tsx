@@ -4,8 +4,12 @@ import {
   Method,
   Ref,
   Effect,
-  RefObject, InternalState,
+  RefObject,
+  ComponentBindings,
+  Event,
+  InternalState,
 } from 'devextreme-generator/component_declaration/common';
+import { EventCallback } from '../common/event_callback.d';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Scrollbar } from './scrollbar';
 import { Widget } from '../common/widget';
@@ -13,13 +17,14 @@ import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { normalizeKeyName } from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
-
+import BaseWidgetProps from '../../utils/base_props';
 import {
-  ScrollableInternalPropsType,
+  ScrollableProps,
 } from './scrollable_props';
-
+import { TopPocketProps } from './topPocket_props';
+import { BottomPocketProps } from './bottomPocket_props';
 import {
-  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset,
+  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset, ScrollEventArgs,
 } from './types.d';
 
 import {
@@ -150,11 +155,26 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   );
 };
 
+@ComponentBindings()
+export class ScrollableSimulatedProps extends ScrollableProps {
+  @Event() onStart?: EventCallback<ScrollEventArgs>;
+
+  @Event() onEnd?: EventCallback<ScrollEventArgs>;
+
+  @Event() onBounce?: EventCallback<ScrollEventArgs>;
+
+  @Event() onStop?: EventCallback<ScrollEventArgs>;
+}
+
+type ScrollableSimulatedPropsType = ScrollableSimulatedProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
+& Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
+& Pick<BottomPocketProps, 'reachBottomText'>;
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsType>() {
+export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
 
   @Ref() contentRef!: RefObject<HTMLDivElement>;
@@ -367,6 +387,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleStart(event: Event): void {
+    this.props.onStart?.(event as any);
     // console.log('handleEnd', event, this);
   }
   /* istanbul ignore next */

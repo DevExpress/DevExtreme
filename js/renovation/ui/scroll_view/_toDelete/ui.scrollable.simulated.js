@@ -726,17 +726,10 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     createActions: function() {
-        this._startAction = this._createActionHandler('onStart');
-        this._stopAction = this._createActionHandler('onStop');
-        this._endAction = this._createActionHandler('onEnd');
-        this._updateAction = this._createActionHandler('onUpdated');
-
         this._createScrollerActions();
     },
 
     _createScrollerActions: function() {
-        this._scrollAction = this._createActionHandler('onScroll');
-        this._bounceAction = this._createActionHandler('onBounce');
         this._eventHandler('createActions', {
             scroll: this._scrollAction,
             bounce: this._bounceAction
