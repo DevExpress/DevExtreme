@@ -387,7 +387,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleStart(event: Event): void {
-    this.props.onStart?.(event as any);
     // console.log('handleEnd', event, this);
   }
   /* istanbul ignore next */
