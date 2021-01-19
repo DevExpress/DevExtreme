@@ -2003,7 +2003,7 @@ QUnit.module('live update', {
         assert.deepEqual(this.array[2].text, 'updated');
     });
 
-    QUnit.test('push after adding items via array directly and store.insert', function(assert) {
+    QUnit.test('push after adding items via array directly and via store.insert', function(assert) {
         const store = this.initPlainDataSource().store();
 
         store.push([
@@ -2034,6 +2034,23 @@ QUnit.module('live update', {
 
         assert.strictEqual(this.array[0].text, 'updated 1');
         assert.strictEqual(this.array[1].text, 'updated 2');
+        assert.strictEqual(keyOfSpy.callCount, 0, 'keyOf is not called');
+    });
+
+    QUnit.test('second push with type update should use cache after remove item', function(assert) {
+        const store = this.initPlainDataSource().store();
+
+        store.push([
+            { type: 'remove', key: 1 }
+        ]);
+
+        const keyOfSpy = sinon.spy(store, 'keyOf');
+
+        store.push([
+            { type: 'update', key: 2, data: { text: 'updated 2' } }
+        ]);
+
+        assert.strictEqual(this.array[0].text, 'updated 2');
         assert.strictEqual(keyOfSpy.callCount, 0, 'keyOf is not called');
     });
 
