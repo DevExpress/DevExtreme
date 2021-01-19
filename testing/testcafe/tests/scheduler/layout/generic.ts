@@ -1,13 +1,10 @@
 import { compareScreenshot } from '../../../helpers/screenshort-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import Scheduler from '../../../model/scheduler';
 
 fixture`Scheduler: Generic theme layout`
   .page(url(__dirname, '../../container.html'));
-
-const createScheduler = async (options = {}) => {
-  await createWidget('dxScheduler', options, true);
-};
 
 const createDataSetForScreenShotTests = () => {
   const result: {
@@ -45,40 +42,55 @@ const createDataSetForScreenShotTests = () => {
   return result;
 };
 
-['vertical', 'horizontal'].forEach((groupOrientation) => {
-  ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    test(`General layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
-      await t
-        .expect(await compareScreenshot(t, `generic-layout-with-groups-${view}-${groupOrientation}.png`)).ok();
-    }).before(() => createScheduler({
-      dataSource: createDataSetForScreenShotTests(),
-      currentDate: new Date(2020, 6, 15),
-      startDayHour: 0,
-      endDayHour: 4,
-      views: [{
-        type: view,
-        name: view,
-        groupOrientation,
-      }],
-      currentView: view,
-      crossScrollingEnabled: true,
-      resources: [{
-        fieldExpr: 'priorityId',
-        dataSource: [
-          {
-            text: 'Low Priority',
-            id: 0,
-            color: '#24ff50',
-          }, {
-            text: 'High Priority',
-            id: 1,
-            color: '#ff9747',
-          },
-        ],
-        label: 'Priority',
-      }],
-      groups: ['priorityId'],
-      height: 700,
-    }));
+const createScheduler = async (view: string, resourcesValue?: unknown[]) => {
+  await createWidget('dxScheduler', {
+    dataSource: createDataSetForScreenShotTests(),
+    currentDate: new Date(2020, 6, 15),
+    views: [view],
+    currentView: view,
+    resources: resourcesValue,
+    height: 600,
+  }, true);
+};
+
+const resources = [{
+  fieldExpr: 'priorityId',
+  dataSource: [
+    {
+      text: 'Low Priority',
+      id: 0,
+      color: '#24ff50',
+    }, {
+      text: 'High Priority',
+      id: 1,
+      color: '#ff9747',
+    },
+  ],
+  label: 'Priority',
+}];
+
+[undefined, resources].forEach((resourcesValue) => {
+  ['agenda', 'day', 'week', 'workWeek', 'month'].forEach((view) => {
+    test(`Base views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+      const scheduler = new Scheduler('#container');
+
+      await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
+      await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
+
+      await t.expect(await compareScreenshot(t, `generic-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
+    }).before(() => createScheduler(view, resourcesValue));
+  });
+});
+
+[undefined, resources].forEach((resourcesValue) => {
+  ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
+    test(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+      const scheduler = new Scheduler('#container');
+
+      await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
+      await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
+
+      await t.expect(await compareScreenshot(t, `generic-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
+    }).before(() => createScheduler(view, resourcesValue));
   });
 });
