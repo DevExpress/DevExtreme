@@ -63,7 +63,7 @@ var tasks = [{
     'parentId': 6,
     'title': 'Foundation and Concrete ',
     'start': new Date(year, month - 1, 22),
-    'end': new Date(year, month - 1, 29),
+    'end': new Date(year, month - 1, 28),
     'progress': 0
 }, {
     'id': 10,
@@ -119,7 +119,7 @@ var tasks = [{
     'parentId': 6,
     'title': 'Interior Carpentery (Interior)',
     'start': new Date(year, month + 1, 17),
-    'end': new Date(year, month + 1, 29),
+    'end': new Date(year, month + 1, 28),
     'progress': 0
 }, {
     'id': 18,
@@ -154,6 +154,6 @@ var tasks = [{
     'parentId': 19,
     'title': 'Final Paperwork and Documents',
     'start': new Date(year, month + 2, 24),
-    'end': new Date(year, month + 2, 30),
+    'end': new Date(year, month + 2, 28),
     'progress': 0
 }];
