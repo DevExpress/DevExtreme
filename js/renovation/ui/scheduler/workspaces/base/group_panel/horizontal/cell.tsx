@@ -23,21 +23,21 @@ export const viewFunction = ({
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
-    {!!CellTemplate && (
-    <CellTemplate
-      data={{
-        data, id, color, text,
-      }}
-      index={index}
-    />
-    )}
-    {!CellTemplate && (
-      <div className="dx-scheduler-group-header-content">
+    <div className="dx-scheduler-group-header-content">
+      {!!CellTemplate && (
+        <CellTemplate
+          data={{
+            data, id, color, text,
+          }}
+          index={index}
+        />
+      )}
+      {!CellTemplate && (
         <div>
           {text}
         </div>
-      </div>
-    )}
+      )}
+    </div>
   </th>
 );
 

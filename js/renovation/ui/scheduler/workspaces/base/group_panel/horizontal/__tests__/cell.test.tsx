@@ -67,11 +67,11 @@ describe('GroupPanel Horizontal Cell', () => {
         });
     });
 
-    it('should not render content if template is defined', () => {
+    it('should render content if template is defined', () => {
       const cell = render({ props: { cellTemplate } });
 
       expect(cell.find('.dx-scheduler-group-header-content').exists())
-        .toBe(false);
+        .toBe(true);
     });
   });
 
