@@ -537,11 +537,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
     return this.props.showScrollbar === 'onHover';
   }
 
-  get isScrollbarVisible(): boolean {
-    return this.adjustVisibility(this.props.visible);
+  get isScrollbarVisible(): boolean | undefined {
+    return this.adjustVisibility();
   }
 
-  adjustVisibility(visible?: boolean): boolean {
+  adjustVisibility(visible?: boolean): boolean | undefined {
     if (this.baseContainerToContentRatio && !this.needScrollbar) {
       return false;
     }
@@ -559,7 +559,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
           // do nothing
     }
 
-    return visible || false;
+    return visible;
   }
 
   get needScrollbar(): boolean {
