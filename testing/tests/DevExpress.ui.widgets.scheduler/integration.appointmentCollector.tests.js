@@ -780,8 +780,8 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
         this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
 
-    QUnit.test('Scheduler should render correct number of collectors and pass correct number of appointments to them (T965267)', function(assert) {
-        const dataSource = [{
+    [{
+        dataSource: [{
             startDate: new Date(2020, 11, 12),
             endDate: new Date(2020, 11, 15, 3),
             text: '1'
@@ -805,24 +805,87 @@ QUnit.module('Integration: Appointments Collector, adaptivityEnabled = false', {
             startDate: new Date(2020, 11, 12),
             endDate: new Date(2020, 11, 20, 3),
             text: '6'
-        }];
+        }],
+        view: 'month',
+        expectedNumberOfCollectors: 9,
+        expectedText: '5 more',
+        collectorIndex: 3,
+        description: 'Scheduler should render correct number of collectors and pass correct number of appointments to them in month view (T965267)',
+    }, {
+        dataSource: [{
+            startDate: new Date(2020, 11, 21, 2),
+            endDate: new Date(2020, 11, 22, 1),
+            text: '1'
+        }, {
+            startDate: new Date(2020, 11, 21, 2),
+            endDate: new Date(2020, 11, 22, 1),
+            text: '2'
+        }, {
+            startDate: new Date(2020, 11, 22, 0),
+            endDate: new Date(2020, 11, 22, 0, 30),
+            text: '3'
+        }],
+        view: 'week',
+        expectedNumberOfCollectors: 2,
+        expectedText: '2',
+        collectorIndex: 1,
+        description: 'Scheduler should render correct number of collectors and pass correct number of appointments to them in week view (T965267)',
+    }, {
+        dataSource: [{
+            startDate: new Date(2020, 11, 21, 2),
+            endDate: new Date(2020, 11, 22, 1),
+            text: '1'
+        }, {
+            startDate: new Date(2020, 11, 21, 2),
+            endDate: new Date(2020, 11, 22, 1),
+            text: '2'
+        }, {
+            startDate: new Date(2020, 11, 22, 0),
+            endDate: new Date(2020, 11, 22, 0, 30),
+            text: '3'
+        }, {
+            startDate: new Date(2020, 11, 22, 0),
+            endDate: new Date(2020, 11, 22, 0, 30),
+            text: '4',
+            allDay: true,
+        }, {
+            startDate: new Date(2020, 11, 22, 0),
+            endDate: new Date(2020, 11, 22, 0, 30),
+            text: '5',
+            allDay: true,
+        }],
+        view: 'week',
+        expectedNumberOfCollectors: 3,
+        expectedText: '1 more',
+        collectorIndex: 0,
+        description: 'Scheduler should render correct number of collectors'
+            + 'and pass correct number of appointments to them in week view\'s all-day panel (T965267)',
+    }].forEach(({
+        dataSource,
+        view,
+        expectedNumberOfCollectors,
+        expectedText,
+        collectorIndex,
+        description,
+    }) => {
+        QUnit.test(description, function(assert) {
+            const scheduler = createWrapper({
+                dataSource,
+                views: [{
+                    type: view,
+                    maxAppointmentsPerCell: 1,
+                }],
+                currentView: view,
+                currentDate: new Date(2020, 11, 25),
+                height: 600,
+            });
 
-        const scheduler = createWrapper({
-            dataSource,
-            views: [{
-                type: 'month',
-                maxAppointmentsPerCell: 1
-            }],
-            currentView: 'month',
-            currentDate: new Date(2020, 11, 25),
-            height: 600,
+            const collectorsCount = scheduler.appointments.compact.getButtonCount();
+            const collectorText = scheduler.appointments.compact.getButtonText(collectorIndex);
+
+            assert.equal(collectorsCount, expectedNumberOfCollectors, 'Correct number of appointment collectors');
+            assert.equal(collectorText, expectedText, 'Correct text');
         });
-
-        const collectorsCount = scheduler.appointments.compact.getButtonCount();
-        const collectorText = scheduler.appointments.compact.getButtonText(3);
-
-        assert.equal(collectorsCount, 9, 'Correct number of appointment collectors');
-        assert.equal(collectorText, '5 more', 'Correct text');
     });
 });
 
