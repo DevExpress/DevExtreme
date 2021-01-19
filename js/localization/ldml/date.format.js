@@ -24,7 +24,7 @@ const checkPatternContinue = function(text, patterns, index, isDigit) {
         }
     }
     const isDigitChanged = isDigit && patterns.some(pattern => text[index] !== pattern[index]);
-    return FORMAT_SEPARATORS.indexOf(char) < 0 && (isDigit === checkDigit(char) && (!isDigit || isDigitChanged || true));
+    return FORMAT_SEPARATORS.indexOf(char) < 0 && (isDigit === checkDigit(char) && (!isDigit || isDigitChanged));
 };
 
 const getPatternStartIndex = function(defaultPattern, index) {
