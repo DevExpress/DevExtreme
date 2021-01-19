@@ -10,7 +10,7 @@ jest.mock('../cell', () => ({
   GroupPanelHorizontalCell: (): null => null,
 }));
 
-describe('GroupPanel Vertical Row', () => {
+describe('GroupPanel Horizontal Row', () => {
   describe('Render', () => {
     const groupItems = [{
       text: 'item 1', id: 1, color: 'color 1', resourceName: 'group 1', key: '1',

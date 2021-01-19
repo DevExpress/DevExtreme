@@ -32,11 +32,11 @@ export const viewFunction = ({
     />
     )}
     {!CellTemplate && (
-    <div className="dx-scheduler-group-header-content">
-      <div>
-        {text}
+      <div className="dx-scheduler-group-header-content">
+        <div>
+          {text}
+        </div>
       </div>
-    </div>
     )}
   </th>
 );

@@ -1,9 +1,15 @@
 import { shallow } from 'enzyme';
+import { combineClasses } from '../../../../../../../utils/combine_classes';
 import {
   viewFunction as CellView,
+  GroupPanelHorizontalCell,
 } from '../cell';
 
-describe('GroupPanel Vertical Cell', () => {
+jest.mock('../../../../../../../utils/combine_classes', () => ({
+  combineClasses: jest.fn(() => 'classes'),
+}));
+
+describe('GroupPanel Horizontal Cell', () => {
   describe('Render', () => {
     const cellTemplate = () => null;
     const cellData = {
@@ -18,12 +24,10 @@ describe('GroupPanel Vertical Cell', () => {
       props: { ...viewModel.props },
     }) as any);
 
-    it('should combine default and custom classNames', () => {
-      const cell = render({ props: { className: 'custom-class' } });
+    it('should pass classes', () => {
+      const cell = render({ classes: 'custom-class' });
 
       expect(cell.hasClass('custom-class'))
-        .toBe(true);
-      expect(cell.hasClass('dx-scheduler-group-header'))
         .toBe(true);
     });
 
@@ -68,6 +72,39 @@ describe('GroupPanel Vertical Cell', () => {
 
       expect(cell.find('.dx-scheduler-group-header-content').exists())
         .toBe(false);
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('classes', () => {
+        [true, false].forEach((isFirstGroupCell) => {
+          [true, false].forEach((isLastGroupCell) => {
+            it(
+              'should call combineClasses with proper parameters '
+              + `when isFistGroupCell=${isFirstGroupCell}, isLastGroupCell=${isLastGroupCell}`,
+              () => {
+                const cell = new GroupPanelHorizontalCell({
+                  className: 'custom-class',
+                  isFirstGroupCell,
+                  isLastGroupCell,
+                });
+
+                expect(cell.classes)
+                  .toBe('classes');
+
+                expect(combineClasses)
+                  .toHaveBeenCalledWith({
+                    'dx-scheduler-group-header': true,
+                    'dx-scheduler-first-group-cell': isFirstGroupCell,
+                    'dx-scheduler-last-group-cell': isLastGroupCell,
+                    'custom-class': true,
+                  });
+              },
+            );
+          });
+        });
+      });
     });
   });
 });
