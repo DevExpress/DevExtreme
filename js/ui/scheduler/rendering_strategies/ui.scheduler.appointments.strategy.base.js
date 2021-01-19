@@ -548,14 +548,12 @@ class BaseRenderingStrategy {
     }
 
     _getVirtualAppointmentIndex({
-        appointmentReduced,
         groupIndex,
         rowIndex,
         cellIndex,
+        allDay,
     }) {
-        return appointmentReduced === 'tail'
-            ? groupIndex + '-' + rowIndex + '-' + cellIndex
-            : groupIndex + '-' + rowIndex + '-' + cellIndex + '-tail';
+        return groupIndex + '-' + rowIndex + '-' + cellIndex + '-' + allDay;
     }
 
     _getMaxAppointmentCountPerCellByType(isAllDay) {
