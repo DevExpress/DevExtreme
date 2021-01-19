@@ -10498,7 +10498,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxSchedulerAppointment.endDate]
          */
-        endDate?: Date;
+        endDate?: Date | String;
         /**
          * [descr:dxSchedulerAppointment.endDateTimeZone]
          */
@@ -10518,7 +10518,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxSchedulerAppointment.startDate]
          */
-        startDate?: Date;
+        startDate?: Date | String;
         /**
          * [descr:dxSchedulerAppointment.startDateTimeZone]
          */
