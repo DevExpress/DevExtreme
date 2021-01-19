@@ -538,22 +538,20 @@ class BaseRenderingStrategy {
     _markAppointmentAsVirtual(coordinates, isAllDay) {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
+            const {
+                groupIndex,
+                rowIndex,
+                cellIndex,
+                top,
+                left
+            } = coordinates;
             coordinates.virtual = {
-                top: coordinates.top,
-                left: coordinates.left,
-                index: this._getVirtualAppointmentIndex(coordinates),
-                isAllDay: isAllDay
+                top,
+                left,
+                index: `${groupIndex}-${rowIndex}-${cellIndex}-${isAllDay}`,
+                isAllDay,
             };
         }
-    }
-
-    _getVirtualAppointmentIndex({
-        groupIndex,
-        rowIndex,
-        cellIndex,
-        allDay,
-    }) {
-        return groupIndex + '-' + rowIndex + '-' + cellIndex + '-' + allDay;
     }
 
     _getMaxAppointmentCountPerCellByType(isAllDay) {
