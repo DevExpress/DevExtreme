@@ -278,14 +278,14 @@ QUnit.module('basic', () => {
     });
 
     QUnit.test(`top toolbar has specific ${POPUP_HAS_CLOSE_BUTTON_CLASS} class`, function(assert) {
-        const $popup = $('#popup').dxPopup({ visible: true, closeButton: true, showTitle: true });
+        const $popup = $('#popup').dxPopup({ visible: true, showCloseButton: true, showTitle: true });
         const $titleToolbar = $('.' + POPUP_TITLE_CLASS, $popup);
 
         assert.ok($titleToolbar.hasClass(POPUP_HAS_CLOSE_BUTTON_CLASS));
     });
 
     QUnit.test(`top toolbar has no specific ${POPUP_HAS_CLOSE_BUTTON_CLASS} class if popup has no close button`, function(assert) {
-        const $popup = $('#popup').dxPopup({ visible: true, closeButton: true, showTitle: false });
+        const $popup = $('#popup').dxPopup({ visible: true, showCloseButton: true, showTitle: false });
         const $titleToolbar = $('.' + POPUP_TITLE_CLASS, $popup);
 
         assert.notOk($titleToolbar.hasClass(POPUP_HAS_CLOSE_BUTTON_CLASS));
