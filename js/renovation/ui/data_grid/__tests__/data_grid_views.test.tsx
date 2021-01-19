@@ -39,6 +39,24 @@ describe('DataGridViews', () => {
 
         expect(component.views.length > 0).toBe(true);
       });
+
+      it('Get views when the instance has no views', () => {
+        const props = {
+          instance: {
+            getView: jest.fn(),
+          },
+        } as any;
+        const component = new DataGridViews(props);
+
+        expect(component.views.length).toBe(0);
+      });
+
+      it('Get views when there is not instance', () => {
+        const props = {} as any;
+        const component = new DataGridViews(props);
+
+        expect(component.views.length).toBe(0);
+      });
     });
   });
 });

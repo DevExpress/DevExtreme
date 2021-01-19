@@ -62,6 +62,16 @@ describe('DataGrid', () => {
       expect(instance).toBe(instance2);
     });
 
+    it('Init when property as undefined', () => {
+      const component = new DataGrid({});
+      component.props = {
+        columns: undefined,
+      } as DataGridProps;
+      const { instance } = component;
+
+      expect(Object.prototype.hasOwnProperty.call(instance.option(), 'columns')).toBe(false);
+    });
+
     each`
       methodName
       ${'beginCustomLoading'}
