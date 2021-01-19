@@ -20,7 +20,6 @@ import { Format, Point } from '../common/types.d';
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, isTextEmpty,
 } from './common/tooltip_utils';
-import { getFormatValue } from '../common/utils';
 import { normalizeEnum } from '../../../viz/core/utils';
 
 const DEFAULT_CANVAS = {
@@ -229,9 +228,9 @@ export class TooltipProps {
 
   @OneWay() target?: Point = {} as Point;
 
-  @Event() onTooltipHidden?: (e: {target: Point}) => void;
+  @Event() onTooltipHidden?: (e: {target?: Point}) => void;
 
-  @Event() onTooltipShown?: (e: {target: Point}) => void;
+  @Event() onTooltipShown?: (e: {target?: Point}) => void;
 }
 
 @Component({
@@ -325,22 +324,6 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   }
 
   @Method()
-  formatValue(value: number|Date|string, specialFormat?: string): string {
-    const { format, argumentFormat } = this.props;
-    return getFormatValue(value, specialFormat, { format, argumentFormat });
-  }
-
-  @Method()
-  isEnabled(): boolean | undefined {
-    return this.props.enabled;
-  }
-
-  @Method()
-  isShared(): boolean | undefined {
-    return this.props.shared;
-  }
-
-  @Method()
   getLocation(): string {
     return normalizeEnum(this.props.location);
   }
@@ -410,7 +393,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
       canvas: canvas ?? DEFAULT_CANVAS,
       anchorX: Number(x),
       anchorY: Number(y),
-      size: textSizeWithPaddings,
+      size: this.textSizeWithPaddings,
       offset: Number(offset),
       arrowLength: Number(arrowLength),
     });

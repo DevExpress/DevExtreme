@@ -16,14 +16,11 @@ import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 import getElementOffset from '../../utils/get_element_offset';
 import { BaseWidgetProps } from '../core/base_props';
 import { BaseWidget } from '../core/base_widget';
-import { createAxis } from './utils';
+import { createAxis, SparklineTooltipData, generateCustomizeTooltipCallback } from './utils';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { PathSvgElement } from '../core/renderers/svg_path';
-import {
-  Canvas, TooltipData, CustomizedOptions, CustomizeTooltipFn, Font,
-} from '../core/common/types.d';
+import { Canvas } from '../core/common/types.d';
 import { Tooltip as TooltipComponent, TooltipProps } from '../core/tooltip';
-import { isFunction } from '../../../core/utils/type';
 import { getFormatValue } from '../common/utils';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
@@ -41,8 +38,6 @@ const DEFAULT_CANVAS_WIDTH = 300;
 const DEFAULT_CANVAS_HEIGHT = 30;
 const DEFAULT_HORIZONTAL_MARGIN = 1;
 const DEFAULT_VERTICAL_MARGIN = 2;
-
-const DEFAULT_LINE_SPACING = 2;
 
 const DEFAULT_OFFSET = { top: 0, left: 0 };
 
@@ -70,12 +65,6 @@ interface BulletScaleProps {
   target: number;
   startScaleValue: number;
   endScaleValue: number;
-}
-
-interface BulletTooltipData extends TooltipData {
-  originalTarget?: number;
-  target?: string;
-  valueTexts?: string | (string | undefined)[];
 }
 
 const inCanvas = (canvas: Canvas, x: number, y: number): boolean => {
@@ -126,44 +115,6 @@ const getContainerCssClasses = ({ className }): string => {
   };
 
   return combineClasses(rootClassesMap);
-};
-
-const generateDefaultCustomizeTooltipCallback = (
-  fontOptions?: Font,
-  rtlEnabled?: boolean,
-): CustomizeTooltipFn => {
-  const { lineSpacing, size } = fontOptions ?? { };
-  const lineHeight = (lineSpacing ?? DEFAULT_LINE_SPACING) + (size ?? 0);
-
-  return (customizeObject: BulletTooltipData): CustomizedOptions => {
-    let html = '';
-    const vt = customizeObject.valueTexts || [];
-    for (let i = 0; i < vt.length; i += 2) {
-      html += `<tr><td>${vt[i]}</td><td style='width: 15px'></td><td style='text-align: ${rtlEnabled ? 'left' : 'right'}'>${vt[i + 1]}</td></tr>`;
-    }
-
-    return { html: `<table style='border-spacing:0px; line-height: ${lineHeight}px'>${html}</table>` };
-  };
-};
-
-const generateCustomizeTooltipCallback = (
-  customizeTooltip?: CustomizeTooltipFn,
-  fontOptions?: Font,
-  rtlEnabled?: boolean,
-): CustomizeTooltipFn => {
-  const defaultCustomizeTooltip = generateDefaultCustomizeTooltipCallback(fontOptions, rtlEnabled);
-
-  if (customizeTooltip && isFunction(customizeTooltip)) {
-    return (customizeObject: BulletTooltipData): CustomizedOptions => {
-      let res = customizeTooltip.call(customizeObject, customizeObject) ?? { };
-      if (!('html' in res) && !('text' in res)) {
-        res = { ...res, ...defaultCustomizeTooltip.call(customizeObject, customizeObject) };
-      }
-      return res;
-    };
-  }
-
-  return defaultCustomizeTooltip;
 };
 
 export const viewFunction = (viewModel: Bullet): JSX.Element => {
@@ -225,7 +176,7 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
         />
         )}
       </BaseWidget>
-      {customizedTooltipProps.enabled && viewModel.tooltipVisible
+      {customizedTooltipProps.enabled
       && (
       <TooltipComponent
         ref={viewModel.tooltipRef}
@@ -285,7 +236,7 @@ export class Bullet extends JSXComponent(BulletProps) {
     right: 0,
   };
 
-  @InternalState() offsetState: { top: number; left: number } | null = DEFAULT_OFFSET;
+  @InternalState() offsetState: { top: number; left: number } = DEFAULT_OFFSET;
 
   @InternalState() tooltipVisible = false;
 
@@ -325,14 +276,10 @@ export class Bullet extends JSXComponent(BulletProps) {
     return !(this.props.value === undefined && this.props.target === undefined);
   }
 
-  get tooltipData(): BulletTooltipData {
+  get tooltipData(): SparklineTooltipData {
     const { value, target, tooltip } = this.props;
-    const valueText = getFormatValue(value, undefined, {
-      format: tooltip?.format, argumentFormat: tooltip?.argumentFormat,
-    });
-    const targetText = getFormatValue(target, undefined, {
-      format: tooltip?.format, argumentFormat: tooltip?.argumentFormat,
-    });
+    const valueText = getFormatValue(value, undefined, { format: tooltip?.format });
+    const targetText = getFormatValue(target, undefined, { format: tooltip?.format });
 
     return {
       originalValue: value,
@@ -345,22 +292,31 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   get tooltipCoords(): { x: number; y: number } {
     const canvas = this.canvasState;
-    const rootOffset = this.offsetState ?? DEFAULT_OFFSET;
+    const rootOffset = this.offsetState;
     return {
-      x: ((canvas?.width || 0) / 2) + rootOffset.left,
-      y: ((canvas?.height || 0) / 2) + rootOffset.top,
+      x: (canvas.width / 2) + rootOffset.left,
+      y: (canvas.height / 2) + rootOffset.top,
     };
   }
 
   get customizedTooltipProps(): Partial<TooltipProps> {
     const { tooltip } = this.props;
-    return {
-      ...tooltip,
-      enabled: !!tooltip?.enabled && this.tooltipEnabled,
+    const customProps = {
+      enabled: this.tooltipEnabled,
       customizeTooltip:
         generateCustomizeTooltipCallback(tooltip?.customizeTooltip, tooltip?.font, this.rtlEnabled),
       data: this.tooltipData,
       ...this.tooltipCoords,
+    };
+
+    if (!tooltip) {
+      return customProps;
+    }
+
+    return {
+      ...tooltip,
+      ...customProps,
+      enabled: tooltip.enabled !== false && this.tooltipEnabled,
     };
   }
 
@@ -378,7 +334,7 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   onCanvasChange(canvas: Canvas): void {
     this.canvasState = canvas;
-    this.offsetState = getElementOffset(this.widgetRef.svg());
+    this.offsetState = getElementOffset(this.widgetRef.svg()) ?? DEFAULT_OFFSET;
   }
 
   prepareInternalComponents(): BulletScaleProps {
@@ -524,12 +480,14 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   pointerHandler(): void {
     const { tooltip } = this.props;
-    this.tooltipVisible = tooltip?.visible !== undefined ? tooltip?.visible : true;
-    eventsEngine.on(domAdapter.getDocument(), POINTER_ACTION, this.pointerOutHandler);
+    this.tooltipVisible = tooltip?.visible !== undefined ? tooltip.visible : true;
+    this.tooltipVisible && eventsEngine.on(
+      domAdapter.getDocument(), POINTER_ACTION, this.pointerOutHandler,
+    );
   }
 
   pointerOutHandler({ pageX, pageY }): void {
-    const { left, top } = this.offsetState ?? DEFAULT_OFFSET;
+    const { left, top } = this.offsetState;
     const x = Math.floor(pageX - left);
     const y = Math.floor(pageY - top);
 

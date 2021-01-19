@@ -623,25 +623,6 @@ describe('Effect', () => {
 });
 
 describe('Methods', () => {
-  it('should format value', () => {
-    const tooltip = new Tooltip({ format: 'format', argumentFormat: 'argument_format' });
-
-    expect(tooltip.formatValue('value', 'specialFormat')).toEqual('formated_value');
-    expect(getFormatValue).toBeCalledWith('value', 'specialFormat', { format: 'format', argumentFormat: 'argument_format' });
-  });
-
-  it('should return enabled option', () => {
-    const tooltip = new Tooltip({ enabled: false });
-
-    expect(tooltip.isEnabled()).toBe(false);
-  });
-
-  it('should return shared option', () => {
-    const tooltip = new Tooltip({ shared: true });
-
-    expect(tooltip.isShared()).toBe(true);
-  });
-
   it('should return location option', () => {
     const tooltip = new Tooltip({ location: 'edge' });
 
