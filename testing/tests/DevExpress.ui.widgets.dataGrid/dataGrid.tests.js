@@ -1877,6 +1877,31 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok(dataGrid._disposed, 'DataGrid is disposed');
     });
 
+    // T964493
+    QUnit.test('Band columns with columnAutoWidth and grouping should be shown correctly after updateDimensions if all groups are collapsed', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{}],
+            loadingTimeout: undefined,
+            columnAutoWidth: true,
+            showBorders: true,
+            grouping: {
+                autoExpandAll: false,
+            },
+            columns: [{ caption: 'Band column 1', columns: ['Column1', 'Column2', 'Column3'] }, { dataField: 'City', groupIndex: 0 }]
+        });
+
+        // act
+        dataGrid.updateDimensions();
+        this.clock.tick();
+
+        // assert
+        const $headerRowsCells = dataGrid.$element().find('.dx-header-row').children();
+        for(let i = 0; i < $headerRowsCells.length; i++) {
+            assert.ok($headerRowsCells.eq(i).width() > 0, 'width is more than zero');
+        }
+    });
+
     // T243908
     QUnit.test('onContentReady after hide column', function(assert) {
 
