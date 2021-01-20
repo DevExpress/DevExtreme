@@ -10,6 +10,7 @@ $size: null !default;
 @use "./fieldset";
 @use "./common";
 @use "../base/resizable";
+@use "../base/draggable";
 
 // public widgets
 @use "./box";
