@@ -4885,7 +4885,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                                 mode: editMode
                             },
                             scrolling: {
-                                mode: 'virtual'
+                                mode: 'virtual',
+                                useNative: false
                             }
                         }).dxDataGrid('instance');
 
@@ -4953,7 +4954,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                                 mode: editMode
                             },
                             scrolling: {
-                                mode: 'virtual'
+                                mode: 'virtual',
+                                useNative: false
                             }
                         }).dxDataGrid('instance');
 
