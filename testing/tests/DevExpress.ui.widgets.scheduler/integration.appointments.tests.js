@@ -135,52 +135,6 @@ QUnit.module('Integration: Appointments', {
         });
     });
 
-    QUnit.test('DataSource option should be passed to the appointments collection after wrap by layout manager if virtual scrolling mode', function(assert) {
-        const data = new DataSource({
-            store: [
-                {
-                    text: 'Task 1',
-                    startDate: new Date(2015, 1, 9, 1, 0),
-                    endDate: new Date(2015, 1, 9, 2, 0)
-                },
-                {
-                    text: 'Task 2',
-                    startDate: new Date(2015, 1, 9, 11, 0),
-                    endDate: new Date(2015, 1, 9, 12, 0)
-                }
-            ]
-        });
-
-        this.createInstance({
-            views: ['day', 'week'],
-            currentView: 'day',
-            dataSource: data,
-            currentDate: new Date(2015, 1, 9),
-            scrolling: {
-                mode: 'virtual'
-            }
-        });
-
-        const dataSourceItems = this.instance.option('dataSource').items();
-        let appointmentsItems = this.instance.getAppointmentsInstance().option('items');
-
-        assert.equal(appointmentsItems.length, 1, 'Items length is correct');
-        assert.equal(appointmentsItems[0].itemData, dataSourceItems[0], 'Item is correct');
-
-        const workspace = this.instance.getWorkSpace();
-        workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
-        workspace.getScrollable().scrollTo({ y: 1000 });
-
-        this.clock.restore();
-
-        checkResultByDeviceType(assert, () => {
-            appointmentsItems = this.instance.getAppointmentsInstance().option('items');
-
-            assert.equal(appointmentsItems.length, 2, 'Items length is correct');
-            assert.equal(appointmentsItems[0].itemData, dataSourceItems[1], 'Item is correct');
-        });
-    });
-
     QUnit.test('Short tasks should have a right height (T725948)', function(assert) {
         this.createInstance({
             dataSource: [
@@ -2098,7 +2052,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(this.getAppointmentColor(tasks.eq(4)), '#cb7d7b', 'Color is OK');
             });
 
-            QUnit.test('Ungrouped tasks should have a right color(via the \'useColorAsDefault\' field)', function(assert) {
+            QUnit.test('Ungrouped tasks should have a right color (via the "useColorAsDefault" field)', function(assert) {
                 try {
                     const data = new DataSource({
                         store: [
@@ -2266,7 +2220,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointments.length, 0, 'There is one appointment');
             });
 
-            QUnit.test('Multi-day appointments should be filtered correctly if it\'s time less than startDayHour', function(assert) {
+            QUnit.test('Multi-day appointments with startDate less than startDayHour should be rendered ', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 11, 14),
                     currentView: 'week',

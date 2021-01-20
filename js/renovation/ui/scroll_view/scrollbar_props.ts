@@ -19,4 +19,6 @@ export class ScrollbarProps extends ScrollableInternalProps {
   @OneWay() visibilityMode: ScrollableShowScrollbar = 'onScroll';
 
   @OneWay() direction: ScrollableDirection = 'vertical';
+
+  @OneWay() needScrollbar = false;
 }

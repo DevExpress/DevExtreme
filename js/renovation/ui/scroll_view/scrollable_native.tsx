@@ -5,6 +5,7 @@ import {
   Ref,
   Effect,
   RefObject,
+  ComponentBindings,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
@@ -12,10 +13,12 @@ import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
 import { isDefined } from '../../../core/utils/type';
-
+import BaseWidgetProps from '../../utils/base_props';
 import {
-  ScrollableInternalPropsType,
+  ScrollableProps,
 } from './scrollable_props';
+import { TopPocketProps } from './topPocket_props';
+import { BottomPocketProps } from './bottomPocket_props';
 
 import {
   allowedDirection,
@@ -113,12 +116,20 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     </Widget>
   );
 };
+@ComponentBindings()
+export class ScrollableNativeProps extends ScrollableProps {
+}
+
+type ScrollableNativePropsType = ScrollableNativeProps
+& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
+& Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
+& Pick<BottomPocketProps, 'reachBottomText'>;
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class ScrollableNative extends JSXComponent<ScrollableInternalPropsType>() {
+export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() {
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
 
   @Ref() contentRef!: RefObject<HTMLDivElement>;

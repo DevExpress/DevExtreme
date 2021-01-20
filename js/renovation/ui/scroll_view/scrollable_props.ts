@@ -1,12 +1,8 @@
 import {
-  ComponentBindings, OneWay, Event, Slot,
+  ComponentBindings, OneWay, Slot, Event,
 } from 'devextreme-generator/component_declaration/common';
 import { EventCallback } from '../common/event_callback.d';
-import BaseWidgetProps from '../../utils/base_props';
 import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
-
-import { TopPocketProps } from './topPocket_props';
-import { BottomPocketProps } from './bottomPocket_props';
 
 @ComponentBindings()
 export class ScrollableInternalProps {
@@ -39,6 +35,8 @@ export class ScrollableInternalProps {
   @OneWay() needScrollViewContentWrapper = false;
 
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
+
+  @Event() onUpdated?: EventCallback<ScrollEventArgs>;
 }
 
 @ComponentBindings()
@@ -53,10 +51,3 @@ export class ScrollableProps extends ScrollableInternalProps {
 
   @OneWay() reachBottomText?: string;
 }
-
-export type ScrollableInternalPropsType = ScrollableInternalProps
-& Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' >
-& Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
-& Pick<BottomPocketProps, 'reachBottomText'>;
-
-export type ScrollablePropsType = ScrollableProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;

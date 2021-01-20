@@ -5,6 +5,7 @@ import { validateGroup } from 'ui/validation_engine';
 import 'ui/check_box';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/validator';
 
 QUnit.testStart(function() {

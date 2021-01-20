@@ -5,7 +5,11 @@ import {
   Ref,
   Effect,
   RefObject,
+  ComponentBindings,
+  Event,
+  InternalState,
 } from 'devextreme-generator/component_declaration/common';
+import { EventCallback } from '../common/event_callback.d';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Scrollbar } from './scrollbar';
 import { Widget } from '../common/widget';
@@ -16,12 +20,15 @@ import { getWindow, hasWindow } from '../../../core/utils/window';
 import { getBoundingRect } from '../../../core/utils/position';
 import { titleize } from '../../../core/utils/inflector';
 
+import BaseWidgetProps from '../../utils/base_props';
 import {
-  ScrollableInternalPropsType,
+  ScrollableProps,
 } from './scrollable_props';
-
+import { TopPocketProps } from './topPocket_props';
+import { BottomPocketProps } from './bottomPocket_props';
 import {
-  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset, allowedDirection,
+  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset,
+  allowedDirection, ScrollEventArgs,
 } from './types.d';
 
 import {
@@ -76,6 +83,8 @@ function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
+    cursorEnterHandler, cursorLeaveHandler,
+    isScrollbarVisible, needScrollbar,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -93,12 +102,15 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   return (
     <Widget
       focusStateEnabled={useKeyboard}
+      hoverStateEnabled
       classes={cssClasses}
       disabled={disabled}
       rtlEnabled={rtlEnabled}
       height={height}
       width={width}
       onKeyDown={onWidgetKeyDown}
+      onHoverStart={cursorEnterHandler}
+      onHoverEnd={cursorLeaveHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
@@ -127,17 +139,19 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           {isHorizontal && (
             <Scrollbar
               direction="horizontal"
-              visible={scrollByThumb}
+              visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
               expandable={scrollByThumb}
+              needScrollbar={needScrollbar}
             />
           )}
           {isVertical && (
             <Scrollbar
               direction="vertical"
-              visible={scrollByThumb}
+              visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
               expandable={scrollByThumb}
+              needScrollbar={needScrollbar}
             />
           )}
         </div>
@@ -146,16 +160,35 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   );
 };
 
+@ComponentBindings()
+export class ScrollableSimulatedProps extends ScrollableProps {
+  @Event() onStart?: EventCallback<ScrollEventArgs>;
+
+  @Event() onEnd?: EventCallback<ScrollEventArgs>;
+
+  @Event() onBounce?: EventCallback<ScrollEventArgs>;
+
+  @Event() onStop?: EventCallback<ScrollEventArgs>;
+}
+
+type ScrollableSimulatedPropsType = ScrollableSimulatedProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
+& Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
+& Pick<BottomPocketProps, 'reachBottomText'>;
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsType>() {
+export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
 
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
+
+  @InternalState() isHovered = false;
+
+  @InternalState() baseContainerToContentRatio = 0;
 
   @Method()
   content(): HTMLDivElement {
@@ -337,6 +370,18 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
       }, { namespace });
 
     return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
+  }
+
+  cursorEnterHandler(): void {
+    if (this.isHoverMode()) {
+      this.isHovered = true;
+    }
+  }
+
+  cursorLeaveHandler(): void {
+    if (this.isHoverMode()) {
+      this.isHovered = false;
+    }
   }
 
   /* istanbul ignore next */
@@ -556,6 +601,39 @@ export class ScrollableSimulated extends JSXComponent<ScrollableInternalPropsTyp
   // eslint-disable-next-line class-methods-use-this
   private getDimensionByProp(prop): string {
     return (prop === 'left') ? 'width' : 'height';
+  }
+
+  private isHoverMode(): boolean {
+    return this.props.showScrollbar === 'onHover';
+  }
+
+  get isScrollbarVisible(): boolean | undefined {
+    return this.adjustVisibility();
+  }
+
+  adjustVisibility(visible?: boolean): boolean | undefined {
+    if (this.baseContainerToContentRatio && !this.needScrollbar) {
+      return false;
+    }
+
+    switch (this.props.showScrollbar) {
+      case 'onScroll':
+        break;
+      case 'onHover':
+        return visible || this.isHovered;
+      case 'never':
+        return false;
+      case 'always':
+        return true;
+      default:
+          // do nothing
+    }
+
+    return visible;
+  }
+
+  get needScrollbar(): boolean {
+    return this.props.showScrollbar !== 'never' && (this.baseContainerToContentRatio < 1);
   }
 
   get cssClasses(): string {

@@ -184,6 +184,15 @@ $diagram-toolbox-title-size: 12px;
       font-size: 0.5em;
       min-height: $diagram-toolbox-title-size;
 
+      .dx-closebutton {
+        position: static;
+        left: 0;
+
+        .dx-rtl & {
+          right: 0;
+        }
+      }
+
       .dx-toolbar-items-container {
         height: $diagram-toolbox-title-size;
       }
