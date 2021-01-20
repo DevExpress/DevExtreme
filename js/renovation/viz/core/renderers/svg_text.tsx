@@ -67,7 +67,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class TextSvgElementProps extends SvgGraphicsProps {
-  @OneWay() text = '';
+  @OneWay() text?: string | null = '';
 
   @OneWay() x = 0;
 
