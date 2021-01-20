@@ -22,13 +22,19 @@ import {
     initTestMarkup,
     createWrapper,
     CLASSES,
-    checkResultByDeviceType
+    checkResultByDeviceType,
+    asyncAssert
 } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 import 'common.css!';
 import 'generic_light.css!';
+
+const {
+    module,
+    test
+} = QUnit;
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -38,11 +44,11 @@ const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
 const APPOINTMENT_DEFAULT_TOP_OFFSET = 26;
 
-QUnit.module('T712431', () => {
+module('T712431', () => {
     // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
     const APPOINTMENT_WIDTH = 941;
 
-    QUnit.test(`Appointment width should be not less ${APPOINTMENT_WIDTH}px with width control 1100px`, function(assert) {
+    test(`Appointment width should be not less ${APPOINTMENT_WIDTH}px with width control 1100px`, function(assert) {
         const data = [
             {
                 text: 'Website Re-Design Plan 2',
@@ -66,7 +72,7 @@ QUnit.module('T712431', () => {
     });
 });
 
-QUnit.module('Integration: Appointments', {
+module('Integration: Appointments', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
@@ -104,65 +110,145 @@ QUnit.module('Integration: Appointments', {
         this.clock.restore();
     }
 }, function() {
-    QUnit.test('DataSource option should be passed to the appointments collection after wrap by layout manager', function(assert) {
-        const data = new DataSource({
-            store: [
-                {
-                    text: 'Task 1',
-                    startDate: new Date(2015, 1, 9, 1, 0),
-                    endDate: new Date(2015, 1, 9, 2, 0)
-                },
-                {
-                    text: 'Task 2',
-                    startDate: new Date(2015, 1, 9, 11, 0),
-                    endDate: new Date(2015, 1, 9, 12, 0)
-                }
-            ]
+    module('Scrolling mode standard', () => {
+        test('DataSource option should be passed to the appointments collection after wrap by layout manager', function(assert) {
+            const data = new DataSource({
+                store: [
+                    {
+                        text: 'Task 1',
+                        startDate: new Date(2015, 1, 9, 1, 0),
+                        endDate: new Date(2015, 1, 9, 2, 0)
+                    },
+                    {
+                        text: 'Task 2',
+                        startDate: new Date(2015, 1, 9, 11, 0),
+                        endDate: new Date(2015, 1, 9, 12, 0)
+                    }
+                ]
+            });
+
+            this.createInstance({
+                views: ['day', 'week'],
+                currentView: 'day',
+                dataSource: data,
+                currentDate: new Date(2015, 1, 9)
+            });
+
+            const dataSourceItems = this.instance.option('dataSource').items();
+            const appointmentsItems = this.instance.getAppointmentsInstance().option('items');
+
+            $.each(dataSourceItems, function(index, item) {
+                assert.equal(appointmentsItems[index].itemData, item, 'Item is correct');
+            });
         });
 
-        this.createInstance({
-            views: ['day', 'week'],
-            currentView: 'day',
-            dataSource: data,
-            currentDate: new Date(2015, 1, 9)
+        test('Short tasks should have a right height (T725948)', function(assert) {
+            this.createInstance({
+                dataSource: [
+                    {
+                        endDate: '2019-03-20T12:06:41.000Z',
+                        startDate: '2019-03-20T12:06:40.000Z'
+                    }
+                ],
+                currentView: 'day',
+                views: ['day'],
+                height: 800,
+                currentDate: new Date(2019, 2, 20),
+                firstDayOfWeek: 1,
+                cellDuration: 15
+            });
+
+            this.clock.tick();
+
+            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+
+            assert.roughEqual($appointment.height(), 3, 0.5, 'Task has a right height');
         });
 
-        const dataSourceItems = this.instance.option('dataSource').items();
-        const appointmentsItems = this.instance.getAppointmentsInstance().option('items');
+        test('DblClick on appointment should not affect the related cell start date (T395620)', function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 1, 9),
+                dataSource: [
+                    {
+                        text: 'Task 1',
+                        startDate: new Date(2015, 1, 9, 1, 0),
+                        endDate: new Date(2015, 1, 9, 2, 0)
+                    },
+                    {
+                        text: 'Task 2',
+                        startDate: new Date(2015, 1, 9, 3, 0),
+                        endDate: new Date(2015, 1, 9, 4, 0)
+                    }
+                ],
+                height: 600
+            });
 
-        $.each(dataSourceItems, function(index, item) {
-            assert.equal(appointmentsItems[index].itemData, item, 'Item is correct');
+            sinon.stub(this.instance, 'showAppointmentPopup');
+
+            try {
+                const $appt = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const apptData = dataUtils.data($appt[0], 'dxItemData');
+
+                apptData.startDate = new Date(2015, 1, 9, 2);
+
+                $appt.trigger(dblclickEvent.name);
+
+                const relatedCellData = dataUtils.data($(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).get(2), 'dxCellData').startDate;
+
+                assert.equal(relatedCellData.getTime(), new Date(2015, 1, 9, 1).getTime(), 'Cell start date is OK');
+            } finally {
+                this.instance.showAppointmentPopup.restore();
+            }
         });
-    });
 
-    QUnit.test('Short tasks should have a right height (T725948)', function(assert) {
-        this.createInstance({
-            dataSource: [
-                {
-                    endDate: '2019-03-20T12:06:41.000Z',
-                    startDate: '2019-03-20T12:06:40.000Z'
-                }
-            ],
-            currentView: 'day',
-            views: ['day'],
-            height: 800,
-            currentDate: new Date(2019, 2, 20),
-            firstDayOfWeek: 1,
-            cellDuration: 15
+        test('Appointments should be rendered correctly when resourses store is asynchronous', function(assert) {
+            const appointments = [
+                { startDate: new Date(2015, 2, 4), text: 'a', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+                { startDate: new Date(2015, 2, 4), text: 'b', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
+            ];
+
+            this.createInstance({
+                currentDate: new Date(2015, 2, 4),
+                views: ['month'],
+                dataSource: appointments,
+                width: 840,
+                height: 600,
+                currentView: 'month',
+                firstDayOfWeek: 1,
+                groups: ['roomId'],
+                resources: [
+                    {
+                        field: 'roomId',
+                        allowMultiple: true,
+                        dataSource: new DataSource({
+                            store: new CustomStore({
+                                load: function() {
+                                    const d = $.Deferred();
+                                    setTimeout(function() {
+                                        d.resolve([
+                                            { id: 1, text: 'Room 1', color: '#ff0000' },
+                                            { id: 2, text: 'Room 2', color: '#0000ff' }
+                                        ]);
+                                    }, 300);
+
+                                    return d.promise();
+                                }
+                            })
+                        })
+                    }
+                ]
+            });
+
+            this.clock.tick(300);
+            assert.deepEqual(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2, 'Appointments are rendered');
         });
-
-        this.clock.tick();
-
-        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-
-        assert.roughEqual($appointment.height(), 3, 0.5, 'Task has a right height');
     });
 
     [
         'standard',
         'virtual'
     ].forEach(scrollingMode => {
-        QUnit.module(`${scrollingMode} scrolling mode`, {
+        module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {
                 const createInstance = this.createInstance.bind(this);
                 this.createInstance = options => {
@@ -171,7 +257,9 @@ QUnit.module('Integration: Appointments', {
                         true,
                         options,
                         {
-                            scrolling: { mode: scrollingMode }
+                            scrolling: {
+                                mode: scrollingMode
+                            }
                         }
                     );
 
@@ -187,12 +275,13 @@ QUnit.module('Integration: Appointments', {
 
                 this.scrollTo = args => this.instance.getWorkSpace().getScrollable().scrollTo(args);
             }
-        }, function() {
-            QUnit.test('Removed appointments should render, if appointment appeared after filtering(T903973)', function(assert) {
+        }, () => {
+            test('Removed appointments should render, if appointment appeared after filtering (T903973)', function(assert) {
                 if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
+                    assert.ok('Virtual scrolling not support month view');
                     return;
                 }
+
                 const dataSource = new DataSource({
                     store: [{
                         text: 'A',
@@ -256,7 +345,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(scheduler.appointments.getAppointmentCount(), 3, 'After filtering should be rendered appointments "A", "B", "C"');
             });
 
-            QUnit.test('appointmentTemplate option should be passed to Task module', function(assert) {
+            test('appointmentTemplate option should be passed to Task module', function(assert) {
                 const data = new DataSource({
                     store: [
                         {
@@ -277,13 +366,13 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0).text(), 'Task Template', 'Tasks itemTemplate option is correct');
             });
 
-            QUnit.test('Scheduler tasks should have a right parent', function(assert) {
+            test('Scheduler tasks should have a right parent', function(assert) {
                 this.createInstance();
 
                 assert.equal(this.instance.$element().find('.dx-scheduler-work-space .dx-scrollable-content>.dx-scheduler-scrollable-appointments').length, 1, 'scrollable is parent of dxSchedulerAppointments');
             });
 
-            QUnit.test('Draggable rendering option \'immediate\' should be turned off', function(assert) {
+            test('Draggable rendering option \'immediate\' should be turned off', function(assert) {
                 const tasks = [
                     { text: 'Task', startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
                 ];
@@ -303,12 +392,7 @@ QUnit.module('Integration: Appointments', {
                 assert.notOk(immediate, 'immediate option is false');
             });
 
-            QUnit.test('Tasks should be filtered by date before render', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'Option: currentDate');
-                    return;
-                }
-
+            test('Tasks should be filtered by date before render', function(assert) {
                 const tasks = [
                     { text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 1) },
                     { text: 'Two', startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 1) }
@@ -332,12 +416,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(dataSource.items(), tasks, 'Items are OK');
             });
 
-            QUnit.test('Tasks should be filtered by start day hour before render', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'Option: startDayHour');
-                    return;
-                }
-
+            test('Tasks should be filtered by start day hour before render', function(assert) {
                 const tasks = [
                     { text: 'One', startDate: new Date(2015, 2, 16, 5), endDate: new Date(2015, 2, 16, 5, 30) },
                     { text: 'Two', startDate: new Date(2015, 2, 16, 2), endDate: new Date(2015, 2, 16, 2, 30) },
@@ -368,26 +447,20 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[2], 'Appointment data is OK');
             });
 
-            QUnit.test('Tasks should be filtered by end day hour before render', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'Option: endDayHour');
-                    return;
-                }
-
+            test('Tasks should be filtered by end day hour before render', function(assert) {
                 const tasks = [
                     { text: 'One', startDate: new Date(2015, 2, 16, 7), endDate: new Date(2015, 2, 16, 7, 30) },
                     { text: 'Two', startDate: new Date(2015, 2, 16, 11), endDate: new Date(2015, 2, 16, 11, 30) },
                     { text: 'Three', startDate: new Date(2015, 2, 16, 12), endDate: new Date(2015, 2, 16, 12, 30) },
                     { text: 'Five', startDate: new Date(2015, 2, 10, 15), endDate: new Date(2015, 2, 10, 15, 30) }
                 ];
-                const dataSource = new DataSource({
-                    store: tasks
-                });
+
                 this.createInstance({
                     currentDate: new Date(2015, 2, 16),
-                    dataSource: dataSource,
+                    dataSource: tasks,
                     endDayHour: 10,
-                    currentView: 'week'
+                    currentView: 'week',
+                    height: 600
                 });
 
                 let $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
@@ -396,15 +469,21 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(dataUtils.data($appointments[0], 'dxItemData'), tasks[0], 'Appointment data is OK');
 
                 this.instance.option('endDayHour', 14);
-                $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
 
-                assert.equal($appointments.length, 3, 'There are three appointments');
-                assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[0], 'Appointment data is OK');
-                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'Appointment data is OK');
-                assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[2], 'Appointment data is OK');
+                return asyncAssert(
+                    assert,
+                    () => {
+                        $appointments = this.instance.$element().find(`.${APPOINTMENT_CLASS}`);
+
+                        assert.equal($appointments.length, 3, 'There are three appointments');
+
+                        assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[0], 'Appointment data is OK');
+                        assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'Appointment data is OK');
+                        assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[2], 'Appointment data is OK');
+                    });
             });
 
-            QUnit.test('tasks should be filtered by resources before render', function(assert) {
+            test('tasks should be filtered by resources before render', function(assert) {
                 const tasks = [
                     { text: 'a', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
                     { text: 'b', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
@@ -446,7 +525,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(dataUtils.data($appointments.get(3), 'dxItemData'), tasks[3], 'The second appointment dat is OK');
             });
 
-            QUnit.test('Tasks should be filtered by resources if dataSource is changed', function(assert) {
+            test('Tasks should be filtered by resources if dataSource is changed', function(assert) {
                 const tasks = [
                     { text: 'a', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
                     { text: 'b', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
@@ -489,7 +568,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(dataUtils.data($appointments.get(3), 'dxItemData'), tasks[3], 'The second appointment dat is OK');
             });
 
-            QUnit.test('Tasks should be filtered by resources if resources are changed', function(assert) {
+            test('Tasks should be filtered by resources if resources are changed', function(assert) {
                 const tasks = [
                     { text: 'a', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
                     { text: 'b', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
@@ -532,7 +611,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(dataUtils.data($appointments.get(3), 'dxItemData'), tasks[3], 'The second appointment dat is OK');
             });
 
-            QUnit.test('Tasks should be filtered by resources if groups are changed', function(assert) {
+            test('Tasks should be filtered by resources if groups are changed', function(assert) {
                 const tasks = [
                     { text: 'a', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
                     { text: 'b', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 1 }, // true
@@ -572,7 +651,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'The second appointment data is OK');
             });
 
-            QUnit.test('Scheduler tasks should have a right height', function(assert) {
+            test('Scheduler tasks should have a right height', function(assert) {
                 this.createInstance({ dataSource: this.tasks, currentDate: new Date(2015, 1, 9) });
                 this.clock.tick();
                 const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
@@ -581,7 +660,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0).outerHeight(), resultHeight, 'Task has a right height');
             });
 
-            QUnit.test('Scheduler tasks should have a right dimensions for month view', function(assert) {
+            test('Scheduler tasks should have a right dimensions for month view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual scrolling not support month view');
                     return;
@@ -605,9 +684,9 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(0), cellWidth, 1.001, 'Task has a right width');
             });
 
-            QUnit.test('Scheduler tasks should have a right height when currentView is changed', function(assert) {
+            test('Scheduler tasks should have a right height when currentView is changed', function(assert) {
                 if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
+                    assert.ok('Virtual scrolling not support month view');
                     return;
                 }
                 this.createInstance({
@@ -629,7 +708,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(0), cellWidth, 1.001, 'Task has a right width');
             });
 
-            QUnit.test('Two not rival appointments with fractional coordinates should have correct positions(ie)', function(assert) {
+            test('Two not rival appointments with fractional coordinates should have correct positions(ie)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual scrolling not support month view');
                     return;
@@ -655,34 +734,27 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(translator.locate($appointment.eq(1)).top, translator.locate($appointment.eq(2)).top, 'appointment is rendered in right place');
             });
 
-            QUnit.test('DblClick on appointment should call scheduler.showAppointmentPopup', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('This test is for standard scrolling');
-                    return;
-                }
+            test('DblClick on appointment should call scheduler.showAppointmentPopup', function(assert) {
+                const data = [
+                    {
+                        text: 'Task 1',
+                        startDate: new Date(2015, 1, 9, 1, 0),
+                        endDate: new Date(2015, 1, 9, 2, 0)
+                    },
+                    {
+                        text: 'Task 2',
+                        startDate: new Date(2015, 1, 9, 4, 0),
+                        endDate: new Date(2015, 1, 9, 5, 0)
+                    }
+                ];
 
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
-                    dataSource: new DataSource({
-                        store: [
-                            {
-                                text: 'Task 1',
-                                startDate: new Date(2015, 1, 9, 1, 0),
-                                endDate: new Date(2015, 1, 9, 2, 0)
-                            },
-                            {
-                                text: 'Task 2',
-                                startDate: new Date(2015, 1, 9, 11, 0),
-                                endDate: new Date(2015, 1, 9, 12, 0)
-                            }
-                        ]
-                    })
+                    dataSource: data,
+                    height: 600
                 });
-                this.clock.tick();
 
-                if(scrollingMode === 'virtual') {
-                    this.scrollTo({ y: 2000 });
-                }
+                this.clock.tick();
 
                 const spy = sinon.stub(this.instance, 'showAppointmentPopup');
 
@@ -690,19 +762,17 @@ QUnit.module('Integration: Appointments', {
                     $(this.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(1).trigger(dblclickEvent.name);
 
                     assert.ok(spy.calledOnce, 'Method was called');
-                    assert.deepEqual(spy.getCall(0).args[0],
-                        {
-                            startDate: new Date(2015, 1, 9, 11, 0),
-                            endDate: new Date(2015, 1, 9, 12, 0),
-                            text: 'Task 2'
-                        },
-                        'Method has a right arguments');
+                    assert.deepEqual(
+                        spy.getCall(0).args[0],
+                        data[1],
+                        'Method has a right arguments'
+                    );
                 } finally {
                     this.instance.showAppointmentPopup.restore();
                 }
             });
 
-            QUnit.test('DblClick on appointment should not call scheduler.showAppointmentPopup, disabled mode', function(assert) {
+            test('DblClick on appointment should not call scheduler.showAppointmentPopup, disabled mode', function(assert) {
                 const data = new DataSource({
                     store: this.tasks
                 });
@@ -717,42 +787,7 @@ QUnit.module('Integration: Appointments', {
                 assert.ok(!spy.calledOnce, 'Method was not called');
             });
 
-            QUnit.test('DblClick on appointment should not affect the related cell start date(T395620)', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('This test is for standard scrolling');
-                    return;
-                }
-
-                const data = new DataSource({
-                    store: this.tasks
-                });
-
-                this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
-
-                sinon.stub(this.instance, 'showAppointmentPopup');
-
-                try {
-                    const $appt = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                    const apptData = dataUtils.data($appt[0], 'dxItemData');
-
-                    apptData.startDate = new Date(2015, 1, 9, 2);
-
-                    $appt.trigger(dblclickEvent.name);
-
-                    const relatedCellData = dataUtils.data($(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).get(2), 'dxCellData').startDate;
-
-                    assert.equal(relatedCellData.getTime(), new Date(2015, 1, 9, 1).getTime(), 'Cell start date is OK');
-                } finally {
-                    this.instance.showAppointmentPopup.restore();
-                }
-            });
-
-            QUnit.test('Appointment dates should not be normalized before sending to the details view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('This test is for standard scrolling');
-                    return;
-                }
-
+            test('Appointment dates should not be normalized before sending to the details view', function(assert) {
                 const startDate = 1429776000000;
                 const endDate = 1429794000000;
                 const task = {
@@ -766,7 +801,8 @@ QUnit.module('Integration: Appointments', {
                     dataSource: new DataSource({
                         store: [task]
                     }),
-                    currentDate: new Date(2015, 3, 23)
+                    currentDate: new Date(2015, 3, 23),
+                    height: 900
                 });
 
                 this.clock.tick();
@@ -788,7 +824,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Appointment should be copied before sending to the details view', function(assert) {
+            test('Appointment should be copied before sending to the details view', function(assert) {
                 const task = {
                     text: 'Task 1',
                     startDate: 1429776000000,
@@ -812,7 +848,7 @@ QUnit.module('Integration: Appointments', {
                 assert.notEqual(formData, task, 'Appointment data is copied');
             });
 
-            QUnit.test('Add new appointment', function(assert) {
+            test('Add new appointment', function(assert) {
                 const data = new DataSource({
                     store: this.tasks
                 });
@@ -834,53 +870,8 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Appointments should be rendered correctly when resourses store is asynchronous', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('This test is for standard scrolling');
-                    return;
-                }
 
-                const appointments = [
-                    { startDate: new Date(2015, 2, 4), text: 'a', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-                    { startDate: new Date(2015, 2, 4), text: 'b', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
-                ];
-                this.createInstance({
-                    currentDate: new Date(2015, 2, 4),
-                    views: ['month'],
-                    dataSource: appointments,
-                    width: 840,
-                    height: 600,
-                    currentView: 'month',
-                    firstDayOfWeek: 1,
-                    groups: ['roomId'],
-                    resources: [
-                        {
-                            field: 'roomId',
-                            allowMultiple: true,
-                            dataSource: new DataSource({
-                                store: new CustomStore({
-                                    load: function() {
-                                        const d = $.Deferred();
-                                        setTimeout(function() {
-                                            d.resolve([
-                                                { id: 1, text: 'Room 1', color: '#ff0000' },
-                                                { id: 2, text: 'Room 2', color: '#0000ff' }
-                                            ]);
-                                        }, 300);
-
-                                        return d.promise();
-                                    }
-                                })
-                            })
-                        }
-                    ]
-                });
-
-                this.clock.tick(300);
-                assert.deepEqual(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2, 'Appointments are rendered');
-            });
-
-            QUnit.test('Add new appointment with delay(T381444)', function(assert) {
+            test('Add new appointment with delay(T381444)', function(assert) {
                 const done = assert.async();
                 const data = [];
 
@@ -921,7 +912,7 @@ QUnit.module('Integration: Appointments', {
                 const popup = this.instance.getAppointmentPopup();
             });
 
-            QUnit.test('Add new appointment with delay and an error(T381444)', function(assert) {
+            test('Add new appointment with delay and an error(T381444)', function(assert) {
                 const done = assert.async();
                 const data = [];
 
@@ -958,7 +949,7 @@ QUnit.module('Integration: Appointments', {
                 const popup = this.instance.getAppointmentPopup();
             });
 
-            QUnit.test('Scheduler should not update scroll position if appointment is visible ', function(assert) {
+            test('Scheduler should not update scroll position if appointment is visible ', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -983,7 +974,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Scheduler should update scroll position if appointment was added to invisible bottom area', function(assert) {
+            test('Scheduler should update scroll position if appointment was added to invisible bottom area', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -1007,7 +998,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Scheduler should update scroll position if appointment is not visible, timeline view ', function(assert) {
+            test('Scheduler should update scroll position if appointment is not visible, timeline view ', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -1031,7 +1022,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Scheduler should update scroll position if appointment is not visible, timeline week view ', function(assert) {
+            test('Scheduler should update scroll position if appointment is not visible, timeline week view ', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -1056,7 +1047,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Scheduler should update scroll position if appointment was added to invisible top area', function(assert) {
+            test('Scheduler should update scroll position if appointment was added to invisible top area', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -1082,7 +1073,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Scheduler should update scroll position if appointment was added to invisible top area: minutes case', function(assert) {
+            test('Scheduler should update scroll position if appointment was added to invisible top area: minutes case', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -1108,7 +1099,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Scheduler should update scroll position if appointment was added to invisible bottom area: minutes case', function(assert) {
+            test('Scheduler should update scroll position if appointment was added to invisible bottom area: minutes case', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -1136,7 +1127,7 @@ QUnit.module('Integration: Appointments', {
             });
 
             // TODO: update editors in popup
-            QUnit.test('Update appointment', function(assert) {
+            test('Update appointment', function(assert) {
                 const data = new DataSource({
                     store: this.tasks
                 });
@@ -1164,7 +1155,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('updateAppointment method should be called when task was resized', function(assert) {
+            test('updateAppointment method should be called when task was resized', function(assert) {
                 const data = new DataSource({
                     store: this.tasks
                 });
@@ -1194,12 +1185,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('updateAppointment method should be called with right args when task was resized, timelineMonth view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - Limitation');
-                    return;
-                }
-
+            test('updateAppointment method should be called with right args when task was resized, timelineMonth view', function(assert) {
                 const data = [{
                     text: 'Task 1',
                     startDate: new Date(2015, 1, 2, 1),
@@ -1230,7 +1216,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Non-grid-aligned appointments should be resized correctly', function(assert) {
+            test('Non-grid-aligned appointments should be resized correctly', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     editing: true,
@@ -1249,7 +1235,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 2), 'End date is OK');
             });
 
-            QUnit.test('Non-grid-aligned appointments should be resized correctly, when startDayHour is set', function(assert) {
+            test('Non-grid-aligned appointments should be resized correctly, when startDayHour is set', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     editing: true,
@@ -1269,7 +1255,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(this.instance.option('dataSource')[0].startDate, new Date(2015, 1, 9, 9), 'Start date is OK');
             });
 
-            QUnit.test('Non-grid-aligned appointments should be resized correctly, when endDayHour is set', function(assert) {
+            test('Non-grid-aligned appointments should be resized correctly, when endDayHour is set', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     editing: true,
@@ -1298,7 +1284,7 @@ QUnit.module('Integration: Appointments', {
             });
 
             // TODO: also need test when task is dragging outside the area. updated dates should be equal to old dates
-            QUnit.test('Task dragging', function(assert) {
+            test('Task dragging', function(assert) {
                 const data = new DataSource({
                     store: this.tasks
                 });
@@ -1328,7 +1314,7 @@ QUnit.module('Integration: Appointments', {
             });
 
             [false, true].forEach(function(forceIsoDateParsing) {
-                QUnit.test('Drag task that contains timestamps when forceIsoDateParsing is ' + forceIsoDateParsing, function(assert) {
+                test('Drag task that contains timestamps when forceIsoDateParsing is ' + forceIsoDateParsing, function(assert) {
                     const defaultForceIsoDateParsing = config().forceIsoDateParsing;
 
                     try {
@@ -1378,7 +1364,7 @@ QUnit.module('Integration: Appointments', {
                 });
             });
 
-            QUnit.test('Appointment should be dragged correctly in grouped timeline (T739132)', function(assert) {
+            test('Appointment should be dragged correctly in grouped timeline (T739132)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Timeline');
                     return;
@@ -1445,7 +1431,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
             });
 
-            QUnit.test('Appointment should have correct position while dragging from group', function(assert) {
+            test('Appointment should have correct position while dragging from group', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
@@ -1484,12 +1470,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(appointmentData.ownerId, { id: [2] }, 'Resources is correct');
             });
 
-            QUnit.test('Appointment should have correct position while dragging from group, vertical grouping', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - ViewData Generator');
-                    return;
-                }
-
+            test('Appointment should have correct position while dragging from group, vertical grouping', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
@@ -1527,7 +1508,8 @@ QUnit.module('Integration: Appointments', {
                             ]
                         }
                     ],
-                    width: 800
+                    width: 800,
+                    height: 700
                 });
                 const $appointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).eq(0);
 
@@ -1551,12 +1533,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(appointmentData.ownerId, { id: [1] }, 'Resources is correct');
             });
 
-            QUnit.test('Appointment should have correct position while dragging into allDay panel, vertical grouping', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - ViewData Generator');
-                    return;
-                }
-
+            test('Appointment should have correct position while dragging into allDay panel, vertical grouping', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
@@ -1609,12 +1586,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(appointmentData.ownerId, { id: [2] }, 'Resources is correct');
             });
 
-            QUnit.test('Appointment should be rendered correctly after changing view (T593699)', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - Option currentView');
-                    return;
-                }
-
+            test('Appointment should be rendered correctly after changing view (T593699)', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     views: ['month', 'week'],
@@ -1633,7 +1605,7 @@ QUnit.module('Integration: Appointments', {
                 assert.notOk(this.instance.$element().find('.dx-scheduler-appointment').eq(0).data('dxItemData').settings, 'Item hasn\'t excess settings');
             });
 
-            QUnit.test('Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)', function(assert) {
+            test('Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 4, 25),
                     editing: true,
@@ -1678,12 +1650,7 @@ QUnit.module('Integration: Appointments', {
                 this.clock.tick();
             });
 
-            QUnit.test('Appointment should push correct data to the onAppointmentUpdating event on changing group by drag\'n\'drop ', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - ViewData Generator');
-                    return;
-                }
-
+            test('Appointment should push correct data to the onAppointmentUpdating event on changing group by drag-n-drop', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 4, 25),
                     editing: true,
@@ -1708,7 +1675,8 @@ QUnit.module('Integration: Appointments', {
                         }
                     ],
                     onAppointmentUpdating: function(e) {},
-                    width: 800
+                    width: 800,
+                    height: 1500
                 });
 
                 const stub = sinon.stub(this.instance.option(), 'onAppointmentUpdating');
@@ -1726,7 +1694,7 @@ QUnit.module('Integration: Appointments', {
                 this.clock.tick();
             });
 
-            QUnit.test('Appointment should not be updated if it is dropped to the initial cell (week view)', function(assert) {
+            test('Appointment should not be updated if it is dropped to the initial cell (week view)', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     currentView: 'week',
@@ -1750,7 +1718,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 9, 0, 37), 'End date is correct');
             });
 
-            QUnit.test('Appointment should not be updated if it is dropped to the initial cell (month view)', function(assert) {
+            test('Appointment should not be updated if it is dropped to the initial cell (month view)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Month view');
                     return;
@@ -1781,7 +1749,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 9, 8, 37), 'End date is correct');
             });
 
-            QUnit.test('Appointment should be updated correctly if it is dropped to the neighbor cell (month view)', function(assert) {
+            test('Appointment should be updated correctly if it is dropped to the neighbor cell (month view)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Month view');
                     return;
@@ -1811,7 +1779,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 10, 9, 0), 'End date is correct');
             });
 
-            QUnit.test('Dropping appointment to the neighbor cell (month view) with predefined start & end day hours', function(assert) {
+            test('Dropping appointment to the neighbor cell (month view) with predefined start & end day hours', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Month view');
                     return;
@@ -1843,7 +1811,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 4, 12, 9, 30), 'End date is correct');
             });
 
-            QUnit.test('Dropping appointment should keep predefined hours (month view)', function(assert) {
+            test('Dropping appointment should keep predefined hours (month view)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Month view');
                     return;
@@ -1875,7 +1843,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 4, 12, 17), 'End date is correct');
             });
 
-            QUnit.test('Appointment should be returned back if an error occurs during drag (T453486)', function(assert) {
+            test('Appointment should be returned back if an error occurs during drag (T453486)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Month view');
                     return;
@@ -1922,7 +1890,7 @@ QUnit.module('Integration: Appointments', {
                 }.bind(this));
             });
 
-            QUnit.test('Appointment should be returned back if the \'update\' method rejects deferred during drag (T453486)', function(assert) {
+            test('Appointment should be returned back if the "update" method rejects deferred during drag (T453486)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -1961,7 +1929,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(updatedPosition.left, initialPosition.left, 'Left is OK');
             });
 
-            QUnit.test('Task should be placed in right group', function(assert) {
+            test('Task should be placed in right group', function(assert) {
                 const data = new DataSource({
                     store: [{ text: 'Item 1', ownerId: 2, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30) }]
                 });
@@ -1992,7 +1960,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Tasks should have a right color', function(assert) {
+            test('Tasks should have a right color', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 2, 18),
                     dataSource: [
@@ -2052,7 +2020,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(this.getAppointmentColor(tasks.eq(4)), '#cb7d7b', 'Color is OK');
             });
 
-            QUnit.test('Ungrouped tasks should have a right color (via the "useColorAsDefault" field)', function(assert) {
+            test('Ungrouped tasks should have a right color (via the "useColorAsDefault" field)', function(assert) {
                 try {
                     const data = new DataSource({
                         store: [
@@ -2080,7 +2048,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Grouped recurrence tasks should have a right color', function(assert) {
+            test('Grouped recurrence tasks should have a right color', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -2113,7 +2081,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(this.getAppointmentColor(task.eq(2)), '#0000ff', 'Color is OK');
             });
 
-            QUnit.test('Task with resources should contain a right data attr', function(assert) {
+            test('Task with resources should contain a right data attr', function(assert) {
                 const data = new DataSource({
                     store: [
                         { text: 'Item 1', ownerId: 2, roomId: 1, startDate: new Date(2015, 1, 8), endDate: new Date(2015, 1, 8, 0, 30) },
@@ -2150,7 +2118,7 @@ QUnit.module('Integration: Appointments', {
                 assert.ok(!tasks.eq(2).attr('data-roomid-2'));
             });
 
-            QUnit.test('Task with resources should contain a right data attr if field contains a space', function(assert) {
+            test('Task with resources should contain a right data attr if field contains a space', function(assert) {
                 const data = new DataSource({
                     store: [
                         { text: 'Item 1', 'owner  Id': 2, startDate: new Date(2015, 1, 8), endDate: new Date(2015, 1, 8, 0, 30) },
@@ -2173,7 +2141,7 @@ QUnit.module('Integration: Appointments', {
                 assert.ok(tasks.eq(0).attr('data-owner__32____32__id-2'));
             });
 
-            QUnit.test('Appointment width should depend on cell width', function(assert) {
+            test('Appointment width should depend on cell width', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 2, 18),
                     maxAppointmentsPerCell: 'auto'
@@ -2198,7 +2166,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Appointments should be filtered correctly by end day hour when current date was changed', function(assert) {
+            test('Appointments should be filtered correctly by end day hour when current date was changed', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 4, 6),
                     currentView: 'week',
@@ -2220,7 +2188,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointments.length, 0, 'There is one appointment');
             });
 
-            QUnit.test('Multi-day appointments with startDate less than startDayHour should be rendered ', function(assert) {
+            test('Multi-day appointments with startDate less than startDayHour should be rendered ', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 11, 14),
                     currentView: 'week',
@@ -2241,12 +2209,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointments.length, 1, 'Appointment was rendered');
             });
 
-            QUnit.test('Appointments should be cleared when currentDate option is changed', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - Option currentDate');
-                    return;
-                }
-
+            test('Appointments should be cleared when currentDate option is changed', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 3, 16),
                     firstDayOfWeek: 1,
@@ -2282,12 +2245,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
             });
 
-            QUnit.test('Appointments should be cleared when startDayHour option is changed', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - Option startDayHour');
-                    return;
-                }
-
+            test('Appointments should be cleared when startDayHour option is changed', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 3, 16),
                     firstDayOfWeek: 1,
@@ -2323,12 +2281,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
             });
 
-            QUnit.test('Appointments should be cleared when endDayHour option is changed', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - Option startDayHour');
-                    return;
-                }
-
+            test('Appointments should be cleared when endDayHour option is changed', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 3, 16),
                     firstDayOfWeek: 1,
@@ -2364,7 +2317,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(this.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2);
             });
 
-            QUnit.test('Month appointment inside grouped view should have a right resizable area', function(assert) {
+            test('Month appointment inside grouped view should have a right resizable area', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -2410,7 +2363,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual(area2.right, $cells.eq(13).offset().left + halfOfCellWidth * 3, 1.001);
             });
 
-            QUnit.test('Rival appointments should have correct positions on month view, rtl mode', function(assert) {
+            test('Rival appointments should have correct positions on month view, rtl mode', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -2432,7 +2385,7 @@ QUnit.module('Integration: Appointments', {
                 assert.notEqual($longAppointment.position().top, $shortAppointment.position().top, 'Appointments positions are correct');
             });
 
-            QUnit.test('Recurrence appointment should be rendered correctly when currentDate was changed: month view', function(assert) {
+            test('Recurrence appointment should be rendered correctly when currentDate was changed: month view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -2458,7 +2411,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointment.length, 1, 'Appointment is rendered');
             });
 
-            QUnit.test('Recurrence long appointment should be rendered correctly when currentDate was changed: month view', function(assert) {
+            test('Recurrence long appointment should be rendered correctly when currentDate was changed: month view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -2485,7 +2438,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointment.length, 10, 'Appointments were rendered');
             });
 
-            QUnit.test('Appointment should be rendered correctly with expressions on init', function(assert) {
+            test('Appointment should be rendered correctly with expressions on init', function(assert) {
                 const startDate = new Date(2015, 1, 4, 0);
                 const endDate = new Date(2015, 1, 4, 1);
                 const appointments = [{
@@ -2521,7 +2474,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Repeat icon is rendered');
             });
 
-            QUnit.test('Appointment should be rendered correctly with recurrenceRule expression', function(assert) {
+            test('Appointment should be rendered correctly with recurrenceRule expression', function(assert) {
                 const startDate = new Date(2015, 1, 4, 0);
                 const endDate = new Date(2015, 1, 4, 1);
                 const appointments = [{
@@ -2550,7 +2503,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Recurrence icon is rendered');
             });
 
-            QUnit.test('Appointment should be rendered correctly with expressions on optionChanged', function(assert) {
+            test('Appointment should be rendered correctly with expressions on optionChanged', function(assert) {
                 const oldStartDate = new Date(2015, 1, 4);
                 const startDate = new Date(2015, 1, 4, 1);
                 const endDate = new Date(2015, 1, 4, 2);
@@ -2588,7 +2541,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
             });
 
-            QUnit.test('Appointment should be rendered correctly with expressions on custom template', function(assert) {
+            test('Appointment should be rendered correctly with expressions on custom template', function(assert) {
                 const startDate = new Date(2015, 1, 4, 1);
                 const endDate = new Date(2015, 1, 4, 2);
                 const appointment = {
@@ -2616,7 +2569,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointment.find('.custom-title').text(), 'abc', 'Text is correct on init');
             });
 
-            QUnit.test('dxScheduler should render custom appointment template with render function that returns dom node', function(assert) {
+            test('dxScheduler should render custom appointment template with render function that returns dom node', function(assert) {
                 const startDate = new Date(2015, 1, 4, 1);
                 const endDate = new Date(2015, 1, 4, 2);
                 const appointment = {
@@ -2652,7 +2605,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointment.text(), 'text', 'container is correct');
             });
 
-            QUnit.test('Appointment should have right position, if it\'s startDate time less than startDayHour option value', function(assert) {
+            test('Appointment should have right position, if it\'s startDate time less than startDayHour option value', function(assert) {
                 const appointment = {
                     startDate: new Date(2016, 2, 1, 2),
                     endDate: new Date(2016, 2, 1, 5)
@@ -2673,7 +2626,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.position().left, $targetCell.position().left, 1.001, 'appointment left is correct');
             });
 
-            QUnit.test('Appointment should have right position on timeline month view', function(assert) {
+            test('Appointment should have right position on timeline month view', function(assert) {
                 const appointment = {
                     startDate: new Date(2016, 1, 3, 8, 15),
                     endDate: new Date(2016, 1, 3, 9, 0)
@@ -2693,7 +2646,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual(this.scheduler.appointments.getAppointmentPosition().left, targetCellPosition.left, 1.001, 'appointment left is correct');
             });
 
-            QUnit.test('Rival appointments should have right position on timeline month view', function(assert) {
+            test('Rival appointments should have right position on timeline month view', function(assert) {
                 const data = [{
                     'id': '1',
                     'text': 'Recurrence event',
@@ -2724,7 +2677,7 @@ QUnit.module('Integration: Appointments', {
                 });
             });
 
-            QUnit.test('Rival long appointments should have right position on timeline month view', function(assert) {
+            test('Rival long appointments should have right position on timeline month view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
                     return;
@@ -2757,7 +2710,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(1).top, this.scheduler.appointments.getAppointmentHeight() + APPOINTMENT_DEFAULT_TOP_OFFSET, 1, 'Second appointment top is ok');
             });
 
-            QUnit.test('Long appointment part should not be rendered on timeline month view (T678380)', function(assert) {
+            test('Long appointment part should not be rendered on timeline month view (T678380)', function(assert) {
                 const appointment = {
                     'text': 'Ends april 1st at 7:59 am',
                     'startDate': new Date(2019, 2, 20, 9, 0),
@@ -2779,7 +2732,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'appointment-part was not rendered');
             });
 
-            QUnit.test('Long appointment part should not be rendered on timeline workWeek view (T678380)', function(assert) {
+            test('Long appointment part should not be rendered on timeline workWeek view (T678380)', function(assert) {
                 const appointment = {
                     'text': 'Ends april 1st at 7:59 am',
                     'startDate': new Date(2019, 2, 20, 9, 0),
@@ -2801,7 +2754,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, 'appointment-part was not rendered');
             });
 
-            QUnit.test('Appointment should have right width on timeline week view', function(assert) {
+            test('Appointment should have right width on timeline week view', function(assert) {
                 const appointment = {
                     startDate: new Date(2015, 2, 3, 9, 30),
                     endDate: new Date(2015, 2, 3, 10, 30)
@@ -2821,7 +2774,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, 'Task has a right width');
             });
 
-            QUnit.test('Multiday appointment should have right width on timelineWeek view when set startDayHour > appointment endDate (T533348)', function(assert) {
+            test('Multiday appointment should have right width on timelineWeek view when set startDayHour > appointment endDate (T533348)', function(assert) {
                 const appointment = {
                     startDate: new Date(2016, 1, 1, 11, 0),
                     endDate: new Date(2016, 1, 2, 1, 0)
@@ -2846,7 +2799,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            QUnit.test('Recurrence appointment part should have right width on timeline week view', function(assert) {
+            test('Recurrence appointment part should have right width on timeline week view', function(assert) {
                 const appointment = {
                     startDate: new Date(2015, 4, 25, 21),
                     endDate: new Date(2015, 4, 26, 2),
@@ -2867,7 +2820,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * 4, 1.001, 'Task has a right width');
             });
 
-            QUnit.test('Multiday appointment should have right width on timeline week view', function(assert) {
+            test('Multiday appointment should have right width on timeline week view', function(assert) {
                 const appointment = {
                     startDate: new Date(2015, 2, 2, 19),
                     endDate: new Date(2015, 2, 3, 13)
@@ -2889,7 +2842,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            QUnit.test('AllDay appointment should have right width on timeline week view', function(assert) {
+            test('AllDay appointment should have right width on timeline week view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
                     return;
@@ -2916,7 +2869,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            QUnit.test('AllDay appointment without allDay field should have right width on timeline day view', function(assert) {
+            test('AllDay appointment without allDay field should have right width on timeline day view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
                     return;
@@ -2942,7 +2895,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            QUnit.test('Long multiday appointment should have right width on timeline work week view', function(assert) {
+            test('Long multiday appointment should have right width on timeline work week view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
                     return;
@@ -2968,7 +2921,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            QUnit.test('Long multiday appointment should have right width on timeline week view when set startDayHour > appointment endDate (T533348)', function(assert) {
+            test('Long multiday appointment should have right width on timeline week view when set startDayHour > appointment endDate (T533348)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
                     return;
@@ -2997,7 +2950,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
 
-            QUnit.test('Long multiday appointment should have right position on timeline week view', function(assert) {
+            test('Long multiday appointment should have right position on timeline week view', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
                     return;
@@ -3023,7 +2976,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.position().left, $cell.outerWidth() * cellsToAppointment, 1.001, 'Task has a right width');
             });
 
-            QUnit.test('Appointment with zero-duration should be rendered correctly(T443143)', function(assert) {
+            test('Appointment with zero-duration should be rendered correctly(T443143)', function(assert) {
 
                 this.createInstance({
                     dataSource: [{
@@ -3044,7 +2997,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($element.find('.dx-scheduler-agenda-nodata').length, 0, 'There is no \'No data\' message');
             });
 
-            QUnit.test('Small appointment should have hidden content information but visible content element(T469453)', function(assert) {
+            test('Small appointment should have hidden content information but visible content element(T469453)', function(assert) {
                 this.createInstance({
                     dataSource: [{
                         text: 'Meeting',
@@ -3070,7 +3023,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointmentRecurringIcon.css('display'), 'none', 'Appointment recurring icon isn\'t visible');
             });
 
-            QUnit.test('Recurrence icon position should be correct (T718691)', function(assert) {
+            test('Recurrence icon position should be correct (T718691)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -3100,7 +3053,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointmentRecurringIcon.eq(2).css('right'), '20px', 'Icon position is OK');
             });
 
-            QUnit.test('Appointment startDate should be preprocessed before position calculating', function(assert) {
+            test('Appointment startDate should be preprocessed before position calculating', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -3118,7 +3071,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointment.length, 2, 'appointment is rendered');
             });
 
-            QUnit.test('Appointment startDate and endDate should have correct format in the details view after allDay appoitment opening (T505119)', function(assert) {
+            test('Appointment startDate and endDate should have correct format in the details view after allDay appoitment opening (T505119)', function(assert) {
                 const tasks = [{
                     text: 'AllDay task',
                     start: new Date(2017, 2, 13),
@@ -3151,7 +3104,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(endDateEditor.option('type'), 'datetime', 'end date is correct');
             });
 
-            QUnit.test('Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)', function(assert) {
+            test('Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)', function(assert) {
                 const tasks = [{
                     text: 'Recurrence task',
                     start: new Date(2017, 2, 13),
@@ -3185,7 +3138,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys');
             });
 
-            QUnit.test('Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)', function(assert) {
+            test('Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)', function(assert) {
                 const tasks = [{
                     text: 'Task',
                     start: new Date(2017, 2, 13),
@@ -3230,7 +3183,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence).visible, false, 'Recurrence editor is hidden. Popup is correct');
             });
 
-            QUnit.test('Scheduler appointment popup should correctly update recurrence appointment', function(assert) {
+            test('Scheduler appointment popup should correctly update recurrence appointment', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -3268,7 +3221,7 @@ QUnit.module('Integration: Appointments', {
                 }, 'Appointment was updated correctly');
             });
 
-            QUnit.test('Scheduler shouldn\'t throw error at deferred appointment loading (T518327)', function(assert) {
+            test('Scheduler shouldn\'t throw error at deferred appointment loading (T518327)', function(assert) {
                 const data = [{ text: 'Task 1', startDate: new Date(2017, 4, 22, 16), endDate: new Date(2017, 4, 24, 1) }];
 
                 this.createInstance({
@@ -3293,7 +3246,7 @@ QUnit.module('Integration: Appointments', {
                 errorLogStub.restore();
             });
 
-            QUnit.test('Exception should not be thrown on second details view opening if form items was not found', function(assert) {
+            test('Exception should not be thrown on second details view opening if form items was not found', function(assert) {
                 const task = { text: 'Task', startDate: new Date(2017, 2, 13), endDate: new Date(2017, 2, 13, 0, 30) };
 
                 this.createInstance({
@@ -3317,12 +3270,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('FormData should be reset on saveChanges, dateSerializationFormat is set in initial appointment data (T569673)', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('This test is for standard scrolling');
-                    return;
-                }
-
+            test('FormData should be reset on saveChanges, dateSerializationFormat is set in initial appointment data (T569673)', function(assert) {
                 const task = { text: 'Task', StartDate: '2016-05-25T09:40:00',
                     EndDate: '2016-05-25T10:40:00' };
 
@@ -3362,7 +3310,8 @@ QUnit.module('Integration: Appointments', {
                                 }
                             }
                         ]);
-                    }
+                    },
+                    height: 800
                 });
 
                 this.instance.showAppointmentPopup(task, true);
@@ -3380,7 +3329,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(endDateFormat, 'yyyy-MM-ddTHH:mm:ss', 'Appointment EndDate format is OK');
             });
 
-            QUnit.test('Appointments should be rendered correctly, Month view with intervalCount and startDate', function(assert) {
+            test('Appointments should be rendered correctly, Month view with intervalCount and startDate', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -3412,7 +3361,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($appointments.length, 3, 'Appointments were rendered correctly');
             });
 
-            QUnit.test('Scheduler should add only one appointment at multiple "done" button clicks on appointment form', function(assert) {
+            test('Scheduler should add only one appointment at multiple "done" button clicks on appointment form', function(assert) {
                 const a = { text: 'a', startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 15) };
                 const scheduler = createWrapper({
                     dataSource: [],
@@ -3441,7 +3390,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'right appointment quantity');
             });
 
-            QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Month', function(assert) {
+            test('Appointments should be rendered correctly in vertical grouped workspace Month', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -3489,7 +3438,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointments.eq(1).position().left, cellPosition, 1.5, 'correct left position');
             });
 
-            QUnit.test('Appointment should be dragged correctly between the groups in vertical grouped workspace Month', function(assert) {
+            test('Appointment should be dragged correctly between the groups in vertical grouped workspace Month', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -3533,7 +3482,7 @@ QUnit.module('Integration: Appointments', {
                 assert.deepEqual(appointmentData.id, 2, 'Group is OK');
             });
 
-            QUnit.test('Long appt parts should have correct coordinates if duration > week in vertical grouped workspace Month', function(assert) {
+            test('Long appt parts should have correct coordinates if duration > week in vertical grouped workspace Month', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -3570,7 +3519,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($secondPart.position().left, 0, 1.1, 'correct left position');
             });
 
-            QUnit.test('Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month', function(assert) {
+            test('Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -3613,7 +3562,7 @@ QUnit.module('Integration: Appointments', {
                 assert.equal($secondPart.position.left, 0, 'correct left position');
             });
 
-            QUnit.test('Appointment should be resized correctly to left side in horizontal grouped workspace Month', function(assert) {
+            test('Appointment should be resized correctly to left side in horizontal grouped workspace Month', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -3656,7 +3605,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.position().left, 0, 1.1, 'Left coordinate is correct');
             });
 
-            QUnit.test('A long appointment should not change start date if resized from the bottom', function(assert) {
+            test('A long appointment should not change start date if resized from the bottom', function(assert) {
                 const expectedStartDate = new Date(2018, 4, 21, 0, 30);
                 this.createInstance({
                     views: ['day'],
@@ -3735,7 +3684,7 @@ QUnit.module('Integration: Appointments', {
                 scrollDate: new Date(2019, 2, 7),
                 text: 'in case drag right handle to summer DST'
             }].forEach(testCase => {
-                QUnit.test(`Appointment should have correct dates after resizing ${testCase.text} (T835544)`, function(assert) {
+                test(`Appointment should have correct dates after resizing ${testCase.text} (T835544)`, function(assert) {
                     if(scrollingMode === 'virtual') {
                         assert.ok(true, 'TODO: timelines appointment virtualization');
                         return;
@@ -3780,12 +3729,7 @@ QUnit.module('Integration: Appointments', {
                 });
             });
 
-            QUnit.test('Tail of long appointment should have a right position, groupByDate = true', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - ViewDataGenerator');
-                    return;
-                }
-
+            test('Tail of long appointment should have a right position, groupByDate = true', function(assert) {
                 this.createInstance({
                     dataSource: [
                         { text: 'Task 1', startDate: new Date(2015, 8, 22, 22, 0), endDate: new Date(2015, 8, 23, 21, 0), ownerId: 2 }
@@ -3822,7 +3766,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointmentTail.position().left, $cell.position().left, 1.001, 'Tail has a right position');
             });
 
-            QUnit.test('Appointment should be rendered without compact ones if only one per cell (even with zoom) (T723354)', function(assert) {
+            test('Appointment should be rendered without compact ones if only one per cell (even with zoom) (T723354)', function(assert) {
                 this.createInstance({
                     dataSource: [{
                         text: 'Recruiting students',
@@ -3880,7 +3824,7 @@ QUnit.module('Integration: Appointments', {
                 }
             });
 
-            QUnit.test('Long term appoinment inflict index shift in other appointments (T737780)', function(assert) {
+            test('Long term appoinment inflict index shift in other appointments (T737780)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: appointments in virtual month');
                     return;
@@ -3917,7 +3861,7 @@ QUnit.module('Integration: Appointments', {
                 assert.strictEqual(appointments[2].settings[0].index, 1, 'Appointment next to long term appointment tail has right index');
             });
 
-            QUnit.test('Multi-day appointment should be rendered when started after endDayHour (T819852)', function(assert) {
+            test('Multi-day appointment should be rendered when started after endDayHour (T819852)', function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'TODO: timelines appointment virtualization');
                     return;
@@ -3957,7 +3901,7 @@ QUnit.module('Integration: Appointments', {
                 assert.strictEqual($(this.scheduler.appointments.getAppointment(1)).innerWidth(), $(this.scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with defferent coords have same width');
             });
 
-            QUnit.test('Appointment with equal startDate and endDate should render with 1 minute duration (T817857)', function(assert) {
+            test('Appointment with equal startDate and endDate should render with 1 minute duration (T817857)', function(assert) {
                 this.createInstance({
                     dataSource: [{
                         text: 'Zero minute appointment',
@@ -3981,7 +3925,7 @@ QUnit.module('Integration: Appointments', {
             });
 
             $.each(['month', 'timelineMonth'], (index, value) => {
-                QUnit.test(`Appointment with equal startDate and endDate should render in whole cell on ${value} view (T858496)`, function(assert) {
+                test(`Appointment with equal startDate and endDate should render in whole cell on ${value} view (T858496)`, function(assert) {
                     if(scrollingMode === 'virtual') {
                         assert.ok(true, 'TODO: appointments in virtual month');
                         return;
@@ -4007,12 +3951,7 @@ QUnit.module('Integration: Appointments', {
                 });
             });
 
-            QUnit.test('Multi-day appointment is hidden in compact collectors according to head and tail coordinates (T835541)', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - Limitation long multiday appointment');
-                    return;
-                }
-
+            test('Multi-day appointment is hidden in compact collectors according to head and tail coordinates (T835541)', function(assert) {
                 this.createInstance({
                     dataSource: [{
                         text: 'Appointment 1',
@@ -4040,7 +3979,7 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual(tailCoords.left, 240, 2, 'Appointment left is correct');
             });
 
-            QUnit.module('Scroll after Editing', {
+            module('Scroll after Editing', {
                 beforeEach: function() {
                     this.createScheduler = (options = {}) => {
                         return createWrapper({
@@ -4131,7 +4070,7 @@ QUnit.module('Integration: Appointments', {
                     endDate: new Date('2020-09-01T01:00:00'),
                     groupOrientation: 'vertical',
                 }].forEach(({ view, startDate, endDate, groupOrientation }) => {
-                    QUnit.test(
+                    test(
                         `Scroll position should not be updated if appointment is visible in ${view}, ${groupOrientation} grouping`,
                         function(assert) {
                             const scheduler = this.createScheduler({
@@ -4195,7 +4134,7 @@ QUnit.module('Integration: Appointments', {
                     endDate: new Date('2020-09-08T01:00:00'),
                     groupOrientation: 'vertical',
                 }].forEach(({ view, startDate, endDate, groupOrientation }) => {
-                    QUnit.test(`Scroll position should be updated if appointment is not visible in ${view}, ${groupOrientation} grouping`, function(assert) {
+                    test(`Scroll position should be updated if appointment is not visible in ${view}, ${groupOrientation} grouping`, function(assert) {
                         const scheduler = this.createScheduler({
                             views: [{
                                 type: view,
@@ -4233,7 +4172,7 @@ QUnit.module('Integration: Appointments', {
                     startDate: new Date('2020-09-01T00:00:00'),
                     endDate: new Date('2020-09-01T01:00:00'),
                 }].forEach(({ view, startDate, endDate }) => {
-                    QUnit.test(
+                    test(
                         `Scroll position should not be updated if appointment is visible in ${view}, grouping by date`,
                         function(assert) {
                             const scheduler = this.createScheduler({
@@ -4274,7 +4213,7 @@ QUnit.module('Integration: Appointments', {
                     startDate: new Date('2020-09-11T00:00:00'),
                     endDate: new Date('2020-09-11T01:00:00'),
                 }].forEach(({ view, startDate, endDate }) => {
-                    QUnit.test(
+                    test(
                         `Scroll position should be updated if appointment is not visible in ${view}, grouping by date`,
                         function(assert) {
                             const scheduler = this.createScheduler({
@@ -4298,7 +4237,7 @@ QUnit.module('Integration: Appointments', {
                         });
                 });
 
-                QUnit.test(
+                test(
                     'Scroll position should not be updated if appointment is visible in all-day panel',
                     function(assert) {
                         const scheduler = this.createScheduler({
@@ -4321,7 +4260,7 @@ QUnit.module('Integration: Appointments', {
                         checkThatScrollToWasNotCalled(assert, scheduler, appointment);
                     });
 
-                QUnit.test(
+                test(
                     'Scroll position should be updated if appointment is not visible in all-day panel',
                     function(assert) {
                         const scheduler = this.createScheduler({
@@ -4344,7 +4283,7 @@ QUnit.module('Integration: Appointments', {
                         checkThatScrollToWasCalled(assert, scheduler, appointment);
                     });
 
-                QUnit.test(
+                test(
                     'Scroll position should not be updated if appointment is longer that one day and visible',
                     function(assert) {
                         const scheduler = this.createScheduler({
@@ -4366,7 +4305,7 @@ QUnit.module('Integration: Appointments', {
                         checkThatScrollToWasNotCalled(assert, scheduler, appointment);
                     });
 
-                QUnit.test(
+                test(
                     'Scroll position should be updated if appointment is longer that one day and is not visible',
                     function(assert) {
                         const scheduler = this.createScheduler({
@@ -4413,7 +4352,7 @@ QUnit.module('Integration: Appointments', {
                     scrollLeft: 0,
                     scrollTop: 0,
                 }].forEach(({ position, startDate, endDate, scrollLeft, scrollTop }) => {
-                    QUnit.test(
+                    test(
                         `Scroll position should be updated if an appointment starts in a partially visible cell, ${position} end`,
                         function(assert) {
                             const scheduler = this.createScheduler({
@@ -4436,7 +4375,7 @@ QUnit.module('Integration: Appointments', {
         });
     });
 
-    QUnit.module('Appointments', () => {
+    module('Appointments', () => {
         let eventCallCount = 0;
 
         const createScheduler = (data, options) => {
@@ -4489,6 +4428,7 @@ QUnit.module('Integration: Appointments', {
                 eventCallCount++;
             };
         };
+
         const createTestForHourlyRecurrenceData = (assert, scheduler) => {
             eventCallCount = 0;
 
@@ -4589,22 +4529,22 @@ QUnit.module('Integration: Appointments', {
             recurrenceRule: 'FREQ=HOURLY;COUNT=5'
         }];
 
-        QUnit.module('appointmentTemplate', () => {
-            QUnit.test('model.targetedAppointmentData argument should have current appointment data', function(assert) {
+        module('appointmentTemplate', () => {
+            test('model.targetedAppointmentData argument should have current appointment data', function(assert) {
                 const scheduler = createScheduler(commonData);
                 scheduler.option({ appointmentTemplate: createTestForCommonData(assert) });
 
                 assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
             });
 
-            QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence', function(assert) {
+            test('model.targetedAppointmentData argument should have current appointment data in case recurrence', function(assert) {
                 const scheduler = createScheduler(recurrenceData);
                 scheduler.option({ appointmentTemplate: createTestForRecurrenceData(assert, scheduler) });
 
                 assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
             });
 
-            QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties', function(assert) {
+            test('model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties', function(assert) {
                 const scheduler = createScheduler(recurrenceDataWithCustomNames, {
                     textExpr: 'textCustom',
                     startDateExpr: 'startDateCustom',
@@ -4616,7 +4556,7 @@ QUnit.module('Integration: Appointments', {
             });
         });
 
-        QUnit.module('appointmentTooltipTemplate', () => {
+        module('appointmentTooltipTemplate', () => {
             const cases = [
                 {
                     data: commonData,
@@ -4664,7 +4604,7 @@ QUnit.module('Integration: Appointments', {
             ];
 
             cases.forEach(testCase => {
-                QUnit.test(`model.targetedAppointmentData argument should have current appointment data, ${testCase.name} case`, function(assert) {
+                test(`model.targetedAppointmentData argument should have current appointment data, ${testCase.name} case`, function(assert) {
                     const scheduler = createScheduler(testCase.data, testCase.options);
                     scheduler.option('appointmentTooltipTemplate', testCase.appointmentTooltip(assert, scheduler, true));
 
@@ -4681,7 +4621,7 @@ QUnit.module('Integration: Appointments', {
             });
         });
 
-        QUnit.test('Remote filter should apply after change view type', function(assert) {
+        test('Remote filter should apply after change view type', function(assert) {
             const model = [{
                 text: 'New Brochures',
                 startDate: '2017-05-23T14:30:00',
@@ -4756,7 +4696,7 @@ QUnit.module('Integration: Appointments', {
             assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Month"');
         });
 
-        QUnit.test('Long appointment should have correct parts count(T854740)', function(assert) {
+        test('Long appointment should have correct parts count(T854740)', function(assert) {
             const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
 
             const scheduler = createWrapper({
@@ -4772,7 +4712,7 @@ QUnit.module('Integration: Appointments', {
             assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
         });
 
-        QUnit.test('Long appointment should have correct parts count if widget is zoomed (T854740)', function(assert) {
+        test('Long appointment should have correct parts count if widget is zoomed (T854740)', function(assert) {
             if(!browser.webkit) {
                 assert.ok(true, 'Browser zooming is enabled in webkit');
                 return;
@@ -4795,7 +4735,7 @@ QUnit.module('Integration: Appointments', {
             assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
         });
 
-        QUnit.test('Appointments from neighbor cells should not overlap each other if widget is zoomed (T885595)', function(assert) {
+        test('Appointments from neighbor cells should not overlap each other if widget is zoomed (T885595)', function(assert) {
             if(!browser.webkit) {
                 assert.ok(true, 'Browser zooming is enabled in webkit');
                 return;
@@ -4849,7 +4789,7 @@ QUnit.module('Integration: Appointments', {
             result: true,
             text: 'disabled is function, return true'
         }].forEach(testCase => {
-            QUnit.test(`Appointment tooltip should be consider disabled property of appointment (${testCase.text})`, function(assert) {
+            test(`Appointment tooltip should be consider disabled property of appointment (${testCase.text})`, function(assert) {
                 const scheduler = createWrapper({
                     dataSource: [{
                         text: 'Website Re-Design Plan',
@@ -4876,7 +4816,7 @@ QUnit.module('Integration: Appointments', {
             });
         });
 
-        QUnit.test('targetedAppointmentData should has valid targeted resource on onAppointmentClick event', function(assert) {
+        test('targetedAppointmentData should has valid targeted resource on onAppointmentClick event', function(assert) {
             const data = [{
                 text: 'Website Re-Design Plan',
                 priorityId: [1, 2],
