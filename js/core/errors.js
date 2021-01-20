@@ -246,5 +246,5 @@ export default errorUtils({
     /**
     * @name ErrorsCore.W0017
     */
-    W0017: 'Max filter length exceeded: {0} characters.'
+    W0017: 'Filter query string exceeds maximum length limit of {0} characters.'
 });
