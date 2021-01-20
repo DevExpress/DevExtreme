@@ -265,16 +265,16 @@ export class AgendaAppointment extends Appointment {
         super._render();
         const list = this.option('plainResourceList');
 
-        const container = $('<div />').addClass('dx-scheduler-appointment-resource-list');
+        const container = $('<div>').addClass('dx-scheduler-appointment-resource-list');
         container.appendTo(this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`));
 
         if(list.length > 0) {
             list.forEach(element => {
-                const itemContainer = $('<div />').addClass('dx-scheduler-appointment-resource-item');
+                const itemContainer = $('<div>').addClass('dx-scheduler-appointment-resource-item');
                 itemContainer.appendTo(container);
 
-                $('<div />').text(`${element.label}:`).appendTo(itemContainer);
-                $('<div />').addClass('dx-scheduler-appointment-resource-item-value').text(element.values.join(', ')).appendTo(itemContainer);
+                $('<div>').text(`${element.label}:`).appendTo(itemContainer);
+                $('<div>').addClass('dx-scheduler-appointment-resource-item-value').text(element.values.join(', ')).appendTo(itemContainer);
             });
         }
     }
