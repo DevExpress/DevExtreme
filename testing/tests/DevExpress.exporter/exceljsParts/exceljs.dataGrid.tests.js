@@ -1843,7 +1843,7 @@ const moduleConfig = {
             { format: 'shortDate', expectedFormat: '[$-9]M\\/d\\/yyyy' },
             { format: 'shortTime', expectedFormat: '[$-9]H:mm AM/PM' },
             { format: 'longDateLongTime', expectedFormat: '[$-9]dddd, MMMM d, yyyy, H:mm:ss AM/PM' },
-            { format: 'shotDateShortTime', expectedFormat: '[$-9]ssAM/PMSS\\o\\r\\t\\T\\im\\e' },
+            { format: 'shortDateShortTime', expectedFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM' },
             { format: 'longDate', expectedFormat: '[$-9]dddd, MMMM d, yyyy' },
             { format: 'longTime', expectedFormat: '[$-9]H:mm:ss AM/PM' },
             { format: 'dayOfWeek', expectedFormat: '[$-9]dddd' },
