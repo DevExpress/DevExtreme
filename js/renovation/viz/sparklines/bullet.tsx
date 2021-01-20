@@ -357,8 +357,8 @@ export class Bullet extends JSXComponent(BulletProps) {
     let level;
     const tmpProps: BulletScaleProps = {
       inverted: false,
-      value: this.props.value !== undefined ? Number(this.props.value) : 0,
-      target: this.props.target !== undefined ? Number(this.props.target) : 0,
+      value: this.props.value !== undefined ? this.props.value : 0,
+      target: this.props.target !== undefined ? this.props.target : 0,
       startScaleValue: 0,
       endScaleValue: 0,
     };
