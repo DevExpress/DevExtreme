@@ -1,5 +1,4 @@
 import eventsEngine from '../../events/core/events_engine';
-import { move } from '../../animation/translator';
 import Widget from '../widget/ui.widget';
 import { deferRenderer } from '../../core/utils/common';
 import { isPlainObject } from '../../core/utils/type';
@@ -52,25 +51,6 @@ const Scrollbar = Widget.inherit({
         }
 
     },
-
-    moveTo: function(location) {
-        if(this._isHidden()) {
-            return;
-        }
-
-        if(isPlainObject(location)) {
-            location = location[this._prop] || 0;
-        }
-
-        const scrollBarLocation = {};
-        scrollBarLocation[this._prop] = this._calculateScrollBarPosition(location);
-        move(this._$thumb, scrollBarLocation);
-    },
-
-    _calculateScrollBarPosition: function(location) {
-        return -location * this._thumbRatio;
-    },
-
 
     _update: function() {
         const containerSize = Math.round(this.option('containerSize'));
