@@ -21,6 +21,10 @@ export class GroupPanelProps {
 
   @OneWay() height?: number;
 
+  @OneWay() baseColSpan = 1;
+
+  @OneWay() columnCountPerGroup = 1;
+
   @OneWay() className?: string;
 
   @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;

@@ -1201,7 +1201,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _renderView() {
         this._setFirstViewDate();
 
-        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+        if(this.isRenovatedRender()) {
             this.renderRGroupPanel();
         } else {
             this._applyCellTemplates(
@@ -1299,6 +1299,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupByDate: this.isGroupedByDate(),
             resourceCellTemplate: this.option('resourceCellTemplate'),
             className: this.verticalGroupTableClass,
+            baseColSpan: this.isGroupedByDate()
+                ? 1
+                : this._getCellCount(),
+            columnCountPerGroup: this._getCellCount(),
         };
 
         if(this.option('groups').length) {
