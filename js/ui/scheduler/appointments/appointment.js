@@ -261,21 +261,31 @@ export class AgendaAppointment extends Appointment {
         return this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER}`);
     }
 
+    get resourceList() {
+        return this.option('plainResourceList');
+    }
+
     _render() {
         super._render();
-        const list = this.option('plainResourceList');
 
-        const container = $('<div>').addClass('dx-scheduler-appointment-resource-list');
-        container.appendTo(this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`));
+        const parent = this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`);
+        const container = $('<div>')
+            .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST)
+            .appendTo(parent);
 
-        if(list.length > 0) {
-            list.forEach(element => {
-                const itemContainer = $('<div>').addClass('dx-scheduler-appointment-resource-item');
-                itemContainer.appendTo(container);
+        this.resourceList.forEach(item => {
+            const itemContainer = $('<div>')
+                .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST_ITEM)
+                .appendTo(container);
 
-                $('<div>').text(`${element.label}:`).appendTo(itemContainer);
-                $('<div>').addClass('dx-scheduler-appointment-resource-item-value').text(element.values.join(', ')).appendTo(itemContainer);
-            });
-        }
+            $('<div>')
+                .text(`${item.label}:`)
+                .appendTo(itemContainer);
+
+            $('<div>')
+                .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST_ITEM_VALUE)
+                .text(item.values.join(', '))
+                .appendTo(itemContainer);
+        });
     }
 }

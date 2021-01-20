@@ -37,5 +37,8 @@ export const APPOINTMENT_CONTENT_CLASSES = {
     ALL_DAY_CONTENT: 'dx-scheduler-appointment-content-allday',
     ITEM: 'dx-scheduler-appointment',
 
-    AGENDA_MARKER: 'dx-scheduler-agenda-appointment-marker'
+    AGENDA_MARKER: 'dx-scheduler-agenda-appointment-marker',
+    AGENDA_RESOURCE_LIST: 'dx-scheduler-appointment-resource-list',
+    AGENDA_RESOURCE_LIST_ITEM: 'dx-scheduler-appointment-resource-item',
+    AGENDA_RESOURCE_LIST_ITEM_VALUE: 'dx-scheduler-appointment-resource-item-value'
 };

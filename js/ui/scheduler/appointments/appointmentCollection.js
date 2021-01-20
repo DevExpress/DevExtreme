@@ -527,7 +527,8 @@ class SchedulerAppointments extends CollectionWidget {
             });
             this._processVirtualAppointment(settings, element, data, deferredColor);
         } else {
-            const plainResourceList = this.isAgendaView ? this.resourceManager._getPlainResourcesByAppointment(data) : [];
+            const plainResourceList = this.isAgendaView ?
+                this.resourceManager._getPlainResourcesByAppointment(data) : [];
 
             const config = {
                 data, // TODO rename
