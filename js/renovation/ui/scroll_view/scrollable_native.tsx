@@ -352,7 +352,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   /* istanbul ignore next */
-  private getDirection(): string | undefined {
+  public getDirection(): string | undefined {
     return this.allowedDirection();
   }
 
@@ -373,7 +373,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   /* istanbul ignore next */
   // eslint-disable-next-line
-  private validate(event: Event): boolean {
+  public validate(event: Event): boolean { // TODO make it private
     return true; // TODO
   }
 

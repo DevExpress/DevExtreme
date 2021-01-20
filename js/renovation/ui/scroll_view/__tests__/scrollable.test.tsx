@@ -23,6 +23,8 @@ import {
   SCROLLABLE_SCROLLBARS_HIDDEN,
 } from '../scrollable_utils';
 
+import getElementComputedStyle from '../../../utils/get_computed_style';
+
 import {
   ScrollableSimulated,
   viewFunction as viewFunctionSimulated,
@@ -45,7 +47,7 @@ import { Scrollbar } from '../scrollbar';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
-
+jest.mock('../../../utils/get_computed_style');
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
   actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
@@ -388,6 +390,26 @@ jest.mock('../../../../core/devices', () => {
 
             expect(initHandler).toHaveBeenCalledTimes(1);
             expect(initHandler).toHaveBeenCalledWith(e);
+          });
+
+          each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
+            each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
+              it('scrollinit eventArgs', () => {
+                // debugger;
+                const scrollable = new Scrollable({ direction, bounceEnabled });
+                scrollable.containerRef = createContainerRef({ top: 0, left: 0 }, direction);
+                scrollable.contentRef = createContainerRef({ top: 0, left: 0 }, direction);
+                const e = { ...defaultEvent };
+
+                (getElementComputedStyle as jest.Mock).mockReturnValue({
+                  overflowX: overflow,
+                  overflowY: overflow,
+                });
+
+                scrollable.getDirection(e);
+                scrollable.validate(e);
+              });
+            });
           });
 
           it('should subscribe to scrollstart event', () => {
@@ -1452,7 +1474,7 @@ jest.mock('../../../../core/devices', () => {
                 });
                 const containerRef = createContainerRef({ top: 0, left: -320 }, 'both', undefined, true);
 
-                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
+                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' });
                 scrollable.containerRef = containerRef;
                 scrollable.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);

@@ -416,7 +416,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   /* istanbul ignore next */
-  private getDirection(e: Event): string | undefined {
+  public getDirection(e: Event): string | undefined { // TODO make it private
     return isDxMouseWheelEvent(e) ? this.wheelDirection(e) : this.allowedDirection();
   }
 
@@ -468,7 +468,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   /* istanbul ignore next */
   // eslint-disable-next-line
-  private validate(event: Event): boolean {
+  public validate(event: Event): boolean { // TODO make it private
     return true; // TODO
   }
 
