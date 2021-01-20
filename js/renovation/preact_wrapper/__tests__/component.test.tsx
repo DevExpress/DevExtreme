@@ -1,8 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-
-import { act } from 'preact/test-utils';
 // eslint-disable-next-line import/named
 import renderer, { dxElementWrapper } from '../../../core/renderer';
 import './utils/test_components/empty_test_widget';
@@ -38,35 +36,35 @@ afterEach(() => {
 
 describe('Misc cases', () => {
   it('empty component creation does not fail', () => {
-    expect(() => act(() => $('#component').dxEmptyTestWidget({}))).not.toThrowError();
+    expect(() => $('#component').dxEmptyTestWidget({})).not.toThrowError();
   });
 
   it('on disposing should clean preact effects', () => {
     const subscribeEffect = jest.fn();
     const unsubscribeEffect = jest.fn();
-    act(() => $('#component').dxPreactTestWidget({
+    $('#component').dxPreactTestWidget({
       subscribeEffect,
       unsubscribeEffect,
-    }));
+    });
 
     expect(subscribeEffect).toHaveBeenCalledTimes(1);
     expect(unsubscribeEffect).toHaveBeenCalledTimes(0);
 
-    act(() => { $('#components').empty(); });
+    $('#components').empty();
 
     expect(subscribeEffect).toHaveBeenCalledTimes(1);
     expect(unsubscribeEffect).toHaveBeenCalledTimes(1);
   });
 
   it('should forward API calls to preact component', () => {
-    act(() => $('#component').dxPreactTestWidget({ text: 'check api' }));
+    $('#component').dxPreactTestWidget({ text: 'check api' });
     const apiCallResult = $('#component').dxPreactTestWidget('apiMethodCheck', '1', '2');
 
     expect(apiCallResult).toBe('check api - 1 - 2');
   });
 
   it('setAria throws Error', () => {
-    act(() => $('#component').dxPreactTestWidget({}));
+    $('#component').dxPreactTestWidget({});
 
     expect(() => {
       $('#component').dxPreactTestWidget('setAria');
@@ -78,7 +76,7 @@ describe('Misc cases', () => {
       const element = document.createElement('div');
       const wrapper = $(element);
 
-      act(() => $('#component').dxPreactTestWidget({}));
+      $('#component').dxPreactTestWidget({});
 
       const checkParam = $('#component').dxPreactTestWidget('methodWithElementParam', wrapper);
 
@@ -86,7 +84,7 @@ describe('Misc cases', () => {
     });
 
     it('leave param as is if it is not jQuery wrapper', () => {
-      act(() => $('#component').dxPreactTestWidget({}));
+      $('#component').dxPreactTestWidget({});
 
       const checkParam = $('#component').dxPreactTestWidget('methodWithElementParam', 15);
 
@@ -99,7 +97,7 @@ describe('Misc cases', () => {
 
       const element = document.createElement('div');
 
-      act(() => $('#component').dxPreactTestWidget({}));
+      $('#component').dxPreactTestWidget({});
 
       const checkParam = $('#component').dxPreactTestWidget('methodReturnElement', element);
 
@@ -118,11 +116,11 @@ describe('Widget\'s container manipulations', () => {
     $('#component').addClass('custom-css-class');
 
     const subscribeEffect = jest.fn();
-    act(() => $('#component').dxPreactTestWidget({
+    $('#component').dxPreactTestWidget({
       subscribeEffect,
-    }));
+    });
 
-    act(() => $('#component').dxPreactTestWidget('repaint'));
+    $('#component').dxPreactTestWidget('repaint');
 
     expect(subscribeEffect).toHaveBeenCalledTimes(3);
 
@@ -138,14 +136,14 @@ describe('Widget\'s container manipulations', () => {
   });
 
   it('preact component\'s root replaces widget\'s container', () => {
-    act(() => $('#component').dxPreactTestWidget({}));
+    $('#component').dxPreactTestWidget({});
 
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
   it('preact component\'s root is widget\'s container after repaint', () => {
-    act(() => $('#component').dxPreactTestWidget({}));
-    act(() => $('#component').dxPreactTestWidget('repaint'));
+    $('#component').dxPreactTestWidget({});
+    $('#component').dxPreactTestWidget('repaint');
 
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
@@ -154,11 +152,9 @@ describe('Widget\'s container manipulations', () => {
     const $container = $('#component');
     const parent = $container.parent('');
     $container.remove($container);
-    act(() => $container.dxPreactTestWidget({ text: 'test' }));
+    $container.dxPreactTestWidget({ text: 'test' });
 
-    act(() => {
-      $container.appendTo(parent);
-    });
+    $container.appendTo(parent);
 
     expect($('.dx-test-widget')[0]).not.toBe(undefined);
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
@@ -168,12 +164,10 @@ describe('Widget\'s container manipulations', () => {
     const $container = $('#component');
     const parent = $container.parent('');
     $container.remove($container);
-    act(() => $container.dxPreactTestWidget({ text: 'test' }));
+    $container.dxPreactTestWidget({ text: 'test' });
 
-    act(() => {
-      $container.appendTo(parent);
-      $container.dxPreactTestWidget('repaint');
-    });
+    $container.appendTo(parent);
+    $container.dxPreactTestWidget('repaint');
 
     expect($('.dx-test-widget')[0]).not.toBe(undefined);
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
@@ -183,16 +177,14 @@ describe('Widget\'s container manipulations', () => {
     const $container = $('#component');
     const parent = $container.parent('');
     $container.remove($container);
-    act(() => $container.dxPreactTestWidget({ text: 'test' }));
+    $container.dxPreactTestWidget({ text: 'test' });
 
-    act(() => {
-      $container.appendTo(parent);
-      $container.dxPreactTestWidget('repaint');
-      $container.detach();
-      $container.dxPreactTestWidget('repaint');
-      $container.appendTo(parent);
-      $container.dxPreactTestWidget('repaint');
-    });
+    $container.appendTo(parent);
+    $container.dxPreactTestWidget('repaint');
+    $container.detach();
+    $container.dxPreactTestWidget('repaint');
+    $container.appendTo(parent);
+    $container.dxPreactTestWidget('repaint');
 
     expect($('.dx-test-widget')[0]).not.toBe(undefined);
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
@@ -204,7 +196,7 @@ describe('Widget\'s container manipulations', () => {
     $('#my-id').addClass('dx-custom-css-class');
     $('#my-id').attr('data-custom-attr', 'attr-value');
 
-    act(() => $('#my-id').dxPreactTestWidget({}));
+    $('#my-id').dxPreactTestWidget({});
 
     expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
       id: 'my-id',
@@ -219,9 +211,9 @@ describe('Widget\'s container manipulations', () => {
     $('#my-id').addClass('custom-css-class');
     $('#my-id').addClass('dx-custom-css-class');
     $('#my-id').attr('data-custom-attr', 'attr-value');
-    act(() => $('#my-id').dxPreactTestWidget({}));
+    $('#my-id').dxPreactTestWidget({});
 
-    act(() => $('#my-id').dxPreactTestWidget('repaint'));
+    $('#my-id').dxPreactTestWidget('repaint');
 
     expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
       id: 'my-id',
@@ -235,11 +227,11 @@ describe('Widget\'s container manipulations', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
     $('#my-id').addClass('dx-custom-css-class');
-    act(() => $('#my-id').dxPreactTestWidget({}));
+    $('#my-id').dxPreactTestWidget({});
 
     $('#my-id').addClass('custom-css-class2');
 
-    act(() => $('#my-id').dxPreactTestWidget('repaint'));
+    $('#my-id').dxPreactTestWidget('repaint');
 
     expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
       className: 'custom-css-class custom-css-class2 dx-custom-css-class',
@@ -250,11 +242,11 @@ describe('Widget\'s container manipulations', () => {
   it('should save only initial "dx-" custom classes', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
-    act(() => $('#my-id').dxPreactTestWidget({}));
+    $('#my-id').dxPreactTestWidget({});
 
     $('#my-id').addClass('dx-custom-css-class');
 
-    act(() => $('#my-id').dxPreactTestWidget('repaint'));
+    $('#my-id').dxPreactTestWidget('repaint');
 
     expect($('#my-id').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
       className: 'custom-css-class',
@@ -263,9 +255,9 @@ describe('Widget\'s container manipulations', () => {
   });
 
   it('should pass empty string if no classes present on element', () => {
-    act(() => $('#component').dxPreactTestWidget({}));
+    $('#component').dxPreactTestWidget({});
 
-    act(() => $('#component').dxPreactTestWidget('repaint'));
+    $('#component').dxPreactTestWidget('repaint');
 
     expect($('#component').dxPreactTestWidget('getLastPreactPassedProps')).toMatchObject({
       class: '',
@@ -282,7 +274,7 @@ describe('Widget\'s container manipulations', () => {
   it('widget does not show className option', () => {
     $('#component').addClass('custom-css-class');
 
-    act(() => $('#component').dxPreactTestWidget({}));
+    $('#component').dxPreactTestWidget({});
 
     expect($('#component').dxPreactTestWidget('option')).not.toHaveProperty('className');
   });
@@ -290,7 +282,7 @@ describe('Widget\'s container manipulations', () => {
   it('replace id on container with id from elementAttr option', () => {
     $('#component').attr('id', 'my-id');
 
-    act(() => $('#my-id').dxPreactTestWidget({ elementAttr: { id: 'attr-id' } }));
+    $('#my-id').dxPreactTestWidget({ elementAttr: { id: 'attr-id' } });
 
     expect($('#attr-id').dxPreactTestWidget('getLastPreactReceivedProps').id).toBe('attr-id');
   });
@@ -298,7 +290,7 @@ describe('Widget\'s container manipulations', () => {
   it('merge unique css classes from elementAttr option with container class', () => {
     $('#component').addClass('custom-css-class attr-class');
 
-    act(() => $('#component').dxPreactTestWidget({ elementAttr: { class: 'attr-css-class attr-class' } }));
+    $('#component').dxPreactTestWidget({ elementAttr: { class: 'attr-css-class attr-class' } });
 
     expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps').class).toBe('custom-css-class attr-class attr-css-class');
   });
@@ -307,7 +299,7 @@ describe('Widget\'s container manipulations', () => {
     $('component').addClass('custom-css-class attr-class');
     $('#component').attr('data-custom-attr', 'attr-value');
 
-    act(() => $('#component').dxPreactTestWidget({ elementAttr: { id: 'attr-id', class: 'attr-css-class attr-class' } }));
+    $('#component').dxPreactTestWidget({ elementAttr: { id: 'attr-id', class: 'attr-css-class attr-class' } });
 
     expect($('#attr-id').dxPreactTestWidget('option').elementAttr).toEqual({ id: 'attr-id', class: 'attr-css-class attr-class' });
   });
@@ -316,7 +308,7 @@ describe('Widget\'s container manipulations', () => {
     $('#component').css('width', '123.5px');
     $('#component').css('height', '456.6px');
 
-    act(() => $('#component').dxPreactTestWidget({}));
+    $('#component').dxPreactTestWidget({});
 
     expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps').style).toEqual({
       width: '123.5px',
@@ -328,13 +320,13 @@ describe('Widget\'s container manipulations', () => {
     $('#component').css('width', '123.5px');
     $('#component').css('height', '456.6px');
 
-    act(() => $('#component').dxPreactTestWidget({}));
+    $('#component').dxPreactTestWidget({});
 
     $('#component').css('width', '23.5px');
     $('#component').css('height', '56.6px');
     $('#component').css('display', 'inline');
 
-    act(() => $('#component').dxPreactTestWidget('repaint'));
+    $('#component').dxPreactTestWidget('repaint');
 
     expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps').style).toEqual({
       width: '23.5px',
@@ -346,7 +338,7 @@ describe('Widget\'s container manipulations', () => {
 
 describe('option', () => {
   it('should return default props of preact component', () => {
-    act(() => $('#component').dxOptionsCheckWidget({}));
+    $('#component').dxOptionsCheckWidget({});
 
     expect($('#component').dxOptionsCheckWidget('option').text).toBe('default text');
   });
@@ -359,10 +351,8 @@ describe('option', () => {
       </div>
       `;
 
-    act(() => {
-      $('#component1').dxOptionsCheckWidget({});
-      $('#component2').dxOptionsCheckWidget({});
-    });
+    $('#component1').dxOptionsCheckWidget({});
+    $('#component2').dxOptionsCheckWidget({});
 
     const objectProp1 = $('#component1').dxOptionsCheckWidget('option').objectProp;
     const objectProp2 = $('#component2').dxOptionsCheckWidget('option').objectProp;
@@ -371,13 +361,13 @@ describe('option', () => {
   });
 
   it('should return default value of TwoWay prop', () => {
-    act(() => $('#component').dxOptionsCheckWidget({}));
+    $('#component').dxOptionsCheckWidget({});
 
     expect($('#component').dxOptionsCheckWidget('option').twoWayProp).toBe(1);
   });
 
   it('should return updated value of TwoWay prop', () => {
-    act(() => $('#component').dxOptionsCheckWidget({}));
+    $('#component').dxOptionsCheckWidget({});
 
     $('#component').dxOptionsCheckWidget('updateTwoWayPropCheck');
 
@@ -386,9 +376,9 @@ describe('option', () => {
 
   it('fires optionChanged on TwoWay prop change', () => {
     const optionChanged = jest.fn();
-    act(() => $('#component').dxOptionsCheckWidget({
+    $('#component').dxOptionsCheckWidget({
       onOptionChanged: optionChanged,
-    }));
+    });
 
     $('#component').dxOptionsCheckWidget('updateTwoWayPropCheck');
 
@@ -404,21 +394,21 @@ describe('option', () => {
   });
 
   it('convert `undefined` to `null` or `default value`', () => {
-    act(() => $('#component').dxOptionsCheckWidget({
+    $('#component').dxOptionsCheckWidget({
       oneWayWithValue: 15,
       oneWayWithoutValue: 15,
       oneWayNullWithValue: 15,
       twoWayWithValue: '15',
       twoWayNullWithValue: '15',
-    }));
+    });
 
-    act(() => $('#component').dxOptionsCheckWidget({
+    $('#component').dxOptionsCheckWidget({
       oneWayWithValue: undefined,
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: undefined,
       twoWayWithValue: undefined,
       twoWayNullWithValue: undefined,
-    }));
+    });
 
     expect($('#component').dxOptionsCheckWidget('getLastPreactPassedProps')).toMatchObject({
       oneWayWithValue: 10,
@@ -442,17 +432,17 @@ describe('option', () => {
       const element = document.createElement('div');
       const wrapper = $(element);
 
-      act(() => $('#component').dxOptionsCheckWidget({
+      $('#component').dxOptionsCheckWidget({
         propWithElement: wrapper,
-      }));
+      });
 
       expect($('#component').dxOptionsCheckWidget('getLastPreactPassedProps').propWithElement).toEqual(element);
     });
 
     it('leave option as is if it is not jQuery wrapper', () => {
-      act(() => $('#component').dxOptionsCheckWidget({
+      $('#component').dxOptionsCheckWidget({
         propWithElement: 15,
-      }));
+      });
 
       expect($('#component').dxOptionsCheckWidget('getLastPreactPassedProps').propWithElement).toEqual(15);
     });
@@ -469,7 +459,7 @@ describe('templates and slots', () => {
   it('pass anonymous template content as children', () => {
     $('#component').html('<span>Default slot</span>');
 
-    act(() => $('#component').dxTemplatedTestWidget({}));
+    $('#component').dxTemplatedTestWidget({});
 
     expect(($('#component').children('') as any).length).toBe(1);
     expect($('#component')[0].innerHTML).toBe('<span>Default slot</span>');
@@ -479,7 +469,7 @@ describe('templates and slots', () => {
     const element = $('<span>').html('Default slot');
     $('#component').append(element);
 
-    act(() => $('#component').dxTemplatedTestWidget({}));
+    $('#component').dxTemplatedTestWidget({});
 
     expect($('#component').children('')[0]).toBe(element[0]);
   });
@@ -488,10 +478,10 @@ describe('templates and slots', () => {
     const slotContent = $('<span>').html('Default slot');
     $('#component').append(slotContent);
 
-    act(() => $('#component').dxTemplatedTestWidget({}));
+    $('#component').dxTemplatedTestWidget({});
     slotContent.html('Update slot');
 
-    act(() => $('#component').dxTemplatedTestWidget('repaint'));
+    $('#component').dxTemplatedTestWidget('repaint');
 
     expect($('#component')[0].innerHTML).toBe('<span>Update slot</span>');
   });
@@ -500,9 +490,9 @@ describe('templates and slots', () => {
     it('template without index', () => {
       const template = jest.fn();
 
-      act(() => $('#component').dxTemplatedTestWidget({
+      $('#component').dxTemplatedTestWidget({
         template,
-      }));
+      });
 
       const templateRoot = $('#component').children('.templates-root')[0];
 
@@ -513,9 +503,9 @@ describe('templates and slots', () => {
     it('template with index', () => {
       const template = jest.fn();
 
-      act(() => $('#component').dxTemplatedTestWidget({
+      $('#component').dxTemplatedTestWidget({
         indexedTemplate: template,
-      }));
+      });
 
       const templateRoot = $('#component').children('.templates-root')[0];
 
@@ -531,10 +521,10 @@ describe('templates and slots', () => {
       const param1 = document.createElement('div');
       const param2 = { some: 'object' };
 
-      act(() => $('#component').dxTemplatedTestWidget({
+      $('#component').dxTemplatedTestWidget({
         elementTemplate: template,
         elementTemplatePayload: { nodeParam: param1, nonNodeParam: param2 },
-      }));
+      });
 
       expect(template).toBeCalledTimes(1);
       expect(template.mock.calls[0][0]).toMatchObject({
@@ -553,10 +543,10 @@ describe('templates and slots', () => {
 
       const template = jest.fn();
 
-      act(() => $('#component').dxTemplatedTestWidget({
+      $('#component').dxTemplatedTestWidget({
         elementTemplate: template,
         elementTemplatePayload: { nullParam: null, undefinedParam: undefined },
-      }));
+      });
 
       const templateRoot = $('#component').children('.templates-root')[0];
       expect(template.mock.calls[0]).toEqual([{
@@ -567,11 +557,11 @@ describe('templates and slots', () => {
   });
 
   it('insert template content to templates root', () => {
-    act(() => $('#component').dxTemplatedTestWidget({
+    $('#component').dxTemplatedTestWidget({
       template(data, element) {
         $(element).html('<span>Template content</span>');
       },
-    }));
+    });
 
     const templateRoot = $('#component').children('.templates-root')[0];
 
@@ -579,16 +569,16 @@ describe('templates and slots', () => {
   });
 
   it('remove old template content between renders', () => {
-    act(() => $('#component').dxTemplatedTestWidget({
+    $('#component').dxTemplatedTestWidget({
       template(data, element) {
         $(element).append(`<span>Template - ${data.simpleTemplate}</span>` as any);
       },
-    }));
+    });
     const templateRoot = $('#component').children('.templates-root')[0];
 
-    act(() => $('#component').dxTemplatedTestWidget({
+    $('#component').dxTemplatedTestWidget({
       text: 'new data',
-    }));
+    });
 
     expect(templateRoot.innerHTML).toBe('<span>Template - new data</span>');
   });
@@ -605,24 +595,24 @@ describe('templates and slots', () => {
       div.append('second custom template' as any);
       return div;
     };
-    act(() => $('#component').dxTemplatedTestWidget({
+    $('#component').dxTemplatedTestWidget({
       template,
-    }));
+    });
     const templateRoot = $('#component').children('.templates-root')[0];
 
-    act(() => $('#component').dxTemplatedTestWidget({
+    $('#component').dxTemplatedTestWidget({
       template: templateNew,
-    }));
+    });
 
     expect(templateRoot.innerHTML).toBe('<div>second custom template</div>');
   });
 
   it('replace root with template if it returns .dx-template-wrapper node', () => {
-    act(() => $('#component').dxTemplatedTestWidget({
+    $('#component').dxTemplatedTestWidget({
       template() {
         return '<div class="dx-template-wrapper">Template content</div>';
       },
-    }));
+    });
 
     expect($('#component').children('.dx-template-wrapper')[0])
       .toBe($('#component').children('.templates-root')[0]);
@@ -632,10 +622,10 @@ describe('templates and slots', () => {
 describe('events/actions', () => {
   it('wraps event props with Actions with declared actionConfig', () => {
     const onEventProp = jest.fn();
-    act(() => $('#component').dxPreactTestWidget({
+    $('#component').dxPreactTestWidget({
       onEventProp,
       beforeActionExecute: (_, action, actionConfig) => action(actionConfig),
-    }));
+    });
 
     $('#component').dxPreactTestWidget('eventPropCheck', 'payload');
 
@@ -656,9 +646,9 @@ describe('events/actions', () => {
     const element1 = document.createElement('div');
     const element2 = document.createElement('div');
     const element3 = { some: 'object' };
-    act(() => $('#component').dxPreactTestWidget({
+    $('#component').dxPreactTestWidget({
       onEventProp,
-    }));
+    });
 
     $('#component').dxPreactTestWidget('eventPropCheck', {
       eventElement: element1,
@@ -682,13 +672,13 @@ describe('events/actions', () => {
   it('re-wraps event props if it is changed', () => {
     const onEventProp1 = jest.fn();
     const onEventProp2 = jest.fn();
-    act(() => $('#component').dxPreactTestWidget({
+    $('#component').dxPreactTestWidget({
       onEventProp: onEventProp1,
-    }));
+    });
 
-    act(() => $('#component').dxPreactTestWidget({
+    $('#component').dxPreactTestWidget({
       onEventProp: onEventProp2,
-    }));
+    });
 
     $('#component').dxPreactTestWidget('eventPropCheck', 'payload');
 
@@ -707,9 +697,9 @@ describe('registerKeyHandler', () => {
   it('call custom handler only', () => {
     const customHandler = jest.fn();
     const propHandler = jest.fn();
-    act(() => $('#component').dxPreactTestWidget({
+    $('#component').dxPreactTestWidget({
       onKeyDown: propHandler,
-    }));
+    });
     const instance = $('#component').dxPreactTestWidget('instance');
 
     instance.registerKeyHandler('space', customHandler);
@@ -726,9 +716,9 @@ describe('registerKeyHandler', () => {
   it('call both handlers if custom handler returns something', () => {
     const customHandler = jest.fn(() => true);
     const propHandler = jest.fn();
-    act(() => $('#component').dxPreactTestWidget({
+    $('#component').dxPreactTestWidget({
       onKeyDown: propHandler,
-    }));
+    });
     const instance = $('#component').dxPreactTestWidget('instance');
 
     instance.registerKeyHandler('space', customHandler);
@@ -747,9 +737,9 @@ describe('registerKeyHandler', () => {
   it('do not call custom handler on another keyDown event', () => {
     const customHandler = jest.fn();
     const propHandler = jest.fn();
-    act(() => $('#component').dxPreactTestWidget({
+    $('#component').dxPreactTestWidget({
       onKeyDown: propHandler,
-    }));
+    });
     const instance = $('#component').dxPreactTestWidget('instance');
 
     instance.registerKeyHandler('space', customHandler);

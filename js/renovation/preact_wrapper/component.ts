@@ -1,12 +1,15 @@
 /* eslint-disable */
-import * as Preact from 'preact';
-import { useLayoutEffect, useRef } from 'preact/hooks';
-import $ from '../../core/renderer';
+import { render, createRef, RefObject, Fragment, Component as InfernoComponent } from "inferno";
+import { createElement } from 'inferno-create-element';
+import { hydrate } from 'inferno-hydrate';
+import $, { dxElementWrapper } from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import DOMComponent from '../../core/dom_component';
 import { extend } from '../../core/utils/extend';
 import { wrapElement, removeDifferentElements } from './utils';
 import { getPublicElement } from '../../core/element';
+
+import { InfernoEffectHost } from "devextreme-generator/modules/inferno/effect_host";
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
@@ -15,6 +18,57 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
     options[name] = defaultValueGetter(name);
   }
 };
+class TemplateWrapper extends InfernoComponent
+ // <{ template: any, data: { model: any; index: number } }>
+{
+  dummyDivRef = createRef<any>();
+
+  newChildren: dxElementWrapper | null = null;
+  children: dxElementWrapper | null = null;
+
+  componentDidMount() {
+    const { parentNode } = this.dummyDivRef.current!;
+    parentNode!.removeChild(this.dummyDivRef.current!);
+    const $parent = $(parentNode);
+    const $children = $parent.contents();
+
+    this.children = $children;
+
+    const { data, index } = this.props.data;
+
+    Object.keys(data).forEach((name) => {
+      if (data[name] && domAdapter.isNode(data[name])) {
+        data[name] = getPublicElement($(data[name]));
+      }
+    });
+
+    const $template = $(
+      this.props.template.render({
+        container: getPublicElement($parent),
+        model: data,
+        ...(isFinite(index) ? { index } : {}),
+      })
+    );
+
+    if ($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
+      wrapElement($parent, $template);
+    }
+    this.newChildren = $parent.contents();
+  }
+
+  componentWillUnmount() {
+    // NOTE: order is important
+    removeDifferentElements(this.children, this.newChildren);
+  }
+
+  render() {
+    return createElement(
+      Fragment,
+      {},
+      createElement("div", { style: { display: "none" }, ref: this.dummyDivRef })
+    );
+  }
+}
 
 
 export default class PreactWrapper extends DOMComponent {
@@ -39,7 +93,7 @@ export default class PreactWrapper extends DOMComponent {
   _supportedKeys!: () => {
     [name: string]: Function,
   };
-  _viewRef!: Preact.RefObject<unknown>;
+  _viewRef!: RefObject<unknown>;
   _viewComponent!: any;
 
   get viewRef() {
@@ -50,6 +104,7 @@ export default class PreactWrapper extends DOMComponent {
       true,
       super._getDefaultOptions(),
       this._viewComponent.defaultProps,
+      {contentTemplate: null},
       this._propsInfo.twoWay.reduce(
         (
           options: { [name: string]: unknown },
@@ -91,25 +146,44 @@ export default class PreactWrapper extends DOMComponent {
     this._renderPreact(props);
   }
 
-  _renderPreact(props) {
+  _renderPreact(props): any {
     const containerNode = this.$element()[0];
+    const parentNode = containerNode.parentNode;
 
-    if (!containerNode.parentNode) {
-      this._documentFragment.appendChild(containerNode);
+    if (!this._preactReplaced) {
+      const mountNode = this._documentFragment.appendChild($("<div>").append(containerNode)[0]);
+      InfernoEffectHost.lock();
+      hydrate(
+        createElement(this._viewComponent, props),
+        mountNode
+      );
+      containerNode.$V = mountNode.$V;
+      if (parentNode) {
+        parentNode.appendChild(containerNode);
+      }
+      InfernoEffectHost.callEffects();
+      this._preactReplaced = true;
+    } else {
+      render(
+        createElement(this._viewComponent, props),
+        containerNode
+      );
     }
 
-    Preact.render(
-      Preact.h(this._viewComponent, props),
-      containerNode,
-      this._preactReplaced ? undefined : containerNode,
-    );
-    this._preactReplaced = true;
+    // if (containerNode.parentNode === this._documentFragment) {
+    //   this._documentFragment.removeChild(containerNode);
+    // }
   }
 
   _render() {}
 
   _dispose() {
-    Preact.render(null, this.$element()[0]);
+    const containerNode = this.$element()[0];
+    const parentNode = containerNode.parentNode;
+    parentNode.$V = containerNode.$V;
+    containerNode.$V = null;
+    render(null, this.$element()[0]);
+    delete parentNode.$V;
     super._dispose();
   }
 
@@ -214,7 +288,7 @@ export default class PreactWrapper extends DOMComponent {
       this._addAction(name)
     );
 
-    this._viewRef = Preact.createRef();
+    this._viewRef = createRef();
     this._supportedKeys = () => ({});
   }
 
@@ -262,10 +336,10 @@ export default class PreactWrapper extends DOMComponent {
         }
       };
 
-      return Preact.h(
-        Preact.Fragment,
+      return createElement(
+        Fragment,
         {},
-        Preact.h('div', {
+        createElement('div', {
           style: { display: 'none' },
           ref: dummyDivRefCallback,
         })
@@ -280,47 +354,18 @@ export default class PreactWrapper extends DOMComponent {
     }
 
     const template = this._getTemplate(templateOption);
-    return ({ data, index }) => {
-      const dummyDivRef = useRef<any>(); // TS doesn't allow to use <HTMLElement> ref type in Preact.h, only <SVGElement>
-      useLayoutEffect(
-        () => {
-          const { parentNode } = dummyDivRef.current!;
-          parentNode!.removeChild(dummyDivRef.current!);
-          const $parent = $(parentNode);
-          const $children = $parent.contents();
 
-          Object.keys(data).forEach((name) => {
-            if (data[name] && domAdapter.isNode(data[name])) {
-              data[name] = getPublicElement($(data[name]));
-            }
-          });
-
-          const $template = $(
-            template.render({
-              container: getPublicElement($parent),
-              model: data,
-              ...(isFinite(index) ? { index } : {}),
-            })
-          );
-
-          if ($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-            wrapElement($parent, $template);
-          }
-          const $newChildren = $parent.contents();
-
-          return () => {
-            // NOTE: order is important
-            removeDifferentElements($children, $newChildren);
-          };
-        },
-        Object.keys(props).map((key) => props[key])
-      );
-      return Preact.h(
-        Preact.Fragment,
-        {},
-        Preact.h("div", { style: { display: "none" }, ref: dummyDivRef })
-      );
+    const templateWrapper = (data: any) => {
+      return createElement(
+        TemplateWrapper,
+        {
+          template,
+          data
+        }
+      )
     };
+
+    return templateWrapper
   }
 
   _wrapKeyDownHandler(handler) {
