@@ -32,12 +32,12 @@ export const getGroupsRenderData = (
     const result = [] as GroupRenderItem[];
     const { name: resourceName, items, data } = group;
 
-    for (let i = 0; i < repeatCount; i += 1) {
+    for (let iterator = 0; iterator < repeatCount; iterator += 1) {
       result.push(...items.map(({ id, text, color }: GroupItem, index: number) => ({
         id,
         text,
         color,
-        key: `${i}_${resourceName}_${id}`,
+        key: `${iterator}_${resourceName}_${id}`,
         resourceName,
         data: data?.[index],
       })));

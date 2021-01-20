@@ -31,7 +31,7 @@ export class GroupPanelHorizontalLayout extends JSXComponent(GroupPanelLayoutPro
     const { groupsRenderData, baseColSpan } = this.props;
 
     const colSpans = groupsRenderData.reduceRight((currentColSpans, groupsRow, index) => {
-      const nextColSpans = currentColSpans.slice(0);
+      const nextColSpans = currentColSpans;
       const currentLevelGroupCount = groupsRow.length;
 
       const previousColSpan = index === groupsRenderData.length - 1
