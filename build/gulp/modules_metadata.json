@@ -308,13 +308,6 @@
     }
   },
   {
-    "name": "ui/data_grid/ui.data_grid.base",
-    "isInternal": true,
-    "exports": {
-      "Column": { "path": "ui.GridBaseColumn", "exportAs": "type" }
-    }
-  },
-  {
     "name": "ui/date_box",
     "exports": {
       "default": { "path": "ui.dxDateBox", "isWidget": true }
