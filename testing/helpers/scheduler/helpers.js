@@ -125,6 +125,15 @@ export const asyncScrollTest = (assert, promise, assertCallback, scrollable, off
     return wrapper();
 };
 
+export const asyncAssert = (assert, assertCallback, timeout) => {
+    return asyncWrapper(assert, promise => {
+
+        execAsync(assert, promise, null, assertCallback, timeout);
+
+        return promise;
+    });
+};
+
 class ElementWrapper {
     constructor(selector, parent, index = 0) {
         this.selector = selector;
