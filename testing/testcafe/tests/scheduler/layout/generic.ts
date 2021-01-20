@@ -1,25 +1,10 @@
 import { compareScreenshot } from '../../../helpers/screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
-import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
+import Scheduler from '../../../model/scheduler';
 
-fixture`Scheduler: Material theme layout`
-  .page(url(__dirname, './material.html'));
-
-test('Scheduler should have correct height in month view (T927862)', async (t) => {
-  const scheduler = new Scheduler('#container');
-
-  await t
-    .expect((await scheduler.dateTable.boundingClientRect).bottom)
-    .eql((await scheduler.workspaceScrollable.boundingClientRect).bottom);
-}).before(async () => {
-  await createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['month'],
-    currentView: 'month',
-    height: 800,
-  }, true);
-});
+fixture`Scheduler: Generic theme layout`
+  .page(url(__dirname, '../../container.html'));
 
 const createDataSetForScreenShotTests = () => {
   const result: {
@@ -86,26 +71,26 @@ const resources = [{
 
 [undefined, resources].forEach((resourcesValue) => {
   ['agenda', 'day', 'week', 'workWeek', 'month'].forEach((view) => {
-    test(`Base views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    test(`Base views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
-      await t.expect(await compareScreenshot(t, `material-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
+      await t.expect(await compareScreenshot(t, `generic-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
     }).before(() => createScheduler(view, resourcesValue));
   });
 });
 
 [undefined, resources].forEach((resourcesValue) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    test(`Timeline views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    test(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
       await t.click(scheduler.getAppointment('1 appointment', 0).element, { speed: 0.5 });
       await t.expect(scheduler.appointmentTooltip.isVisible()).ok();
 
-      await t.expect(await compareScreenshot(t, `material-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
+      await t.expect(await compareScreenshot(t, `generic-layout-with-resource(view=${view}-resource=${!!resourcesValue}).png`)).ok();
     }).before(() => createScheduler(view, resourcesValue));
   });
 });
