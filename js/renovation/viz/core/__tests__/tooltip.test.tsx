@@ -76,7 +76,7 @@ describe('Render', () => {
     visible: true,
   };
 
-  const props = {
+  const viewModel = {
     textSize: {
       width: 40, height: 30, x: 1, y: 2,
     },
@@ -108,7 +108,7 @@ describe('Render', () => {
   };
 
   it('should render main div', () => {
-    const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
+    const tooltip = shallow(<TooltipComponent {...viewModel as any} /> as any);
     expect(tooltip.find('div').at(0).props().style).toEqual({
       pointerEvents: 'none',
       left: 3,
@@ -118,7 +118,7 @@ describe('Render', () => {
   });
 
   it('should render root svg', () => {
-    const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
+    const tooltip = shallow(<TooltipComponent {...viewModel as any} /> as any);
     expect(tooltip.find('RootSvgElement').props()).toMatchObject({
       width: 50,
       height: 38,
@@ -127,7 +127,7 @@ describe('Render', () => {
   });
 
   it('should render groups', () => {
-    const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
+    const tooltip = shallow(<TooltipComponent {...viewModel as any} /> as any);
 
     expect(tooltip.find('g').at(0).props()).toMatchObject({
       transform: 'translate(-3, -4)',
@@ -140,7 +140,7 @@ describe('Render', () => {
   });
 
   it('should render path with props', () => {
-    const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
+    const tooltip = shallow(<TooltipComponent {...viewModel as any} /> as any);
 
     expect(tooltip.find('PathSvgElement').props()).toMatchObject({
       d: 'test_cloud_points',
@@ -162,8 +162,26 @@ describe('Render', () => {
     }, 180, { cornerRadius: 0, arrowWidth: 20 }, true);
   });
 
+  it('should render text with default props', () => {
+    const tooltip = shallow(<TooltipComponent {
+      ...{ ...viewModel, props: { ...tooltipProps, font: undefined } } as any
+    }
+    /> as any);
+
+    expect(tooltip.find('TextSvgElement').props()).toMatchObject({
+      text: 'customized_text',
+      styles: {
+        fill: 'customized_font_color',
+        fontFamily: 'Segoe UI',
+        fontSize: 12,
+        fontWeight: 400,
+        opacity: 1,
+      },
+    });
+  });
+
   it('should render text with props', () => {
-    const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
+    const tooltip = shallow(<TooltipComponent {...viewModel as any} /> as any);
 
     expect(tooltip.find('TextSvgElement').props()).toMatchObject({
       text: 'customized_text',
@@ -177,8 +195,34 @@ describe('Render', () => {
     });
   });
 
+  it('should render shadow with default props', () => {
+    const tooltip = shallow(<TooltipComponent {
+      ...{ ...viewModel, props: { ...tooltipProps, shadow: undefined } } as any
+    }
+    /> as any);
+
+    expect(tooltip.find('defs')).toHaveLength(1);
+    expect(tooltip.find('ShadowFilter').props()).toMatchObject({
+      id: 'filterId',
+      x: '-50%',
+      y: '-50%',
+      width: '200%',
+      height: '200%',
+      blur: 2,
+      color: '#000',
+      offsetX: 0,
+      offsetY: 4,
+      opacity: 0.4,
+    });
+    expect(tooltip.find('g').at(0).props()).toMatchObject({
+      filter: 'url(#filterId)',
+    });
+
+    expect(getFuncIri).toBeCalledWith('filterId');
+  });
+
   it('should render shadow', () => {
-    const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
+    const tooltip = shallow(<TooltipComponent {...viewModel as any} /> as any);
 
     expect(tooltip.find('defs')).toHaveLength(1);
     expect(tooltip.find('ShadowFilter').props()).toMatchObject({
@@ -201,8 +245,8 @@ describe('Render', () => {
   });
 
   it('should render div for html text', () => {
-    const customizedOptions = { ...props.customizedOptions, html: 'html text' };
-    const tooltip = shallow(TooltipComponent({ ...props, customizedOptions } as any));
+    const customizedOptions = { ...viewModel.customizedOptions, html: 'html text' };
+    const tooltip = shallow(TooltipComponent({ ...viewModel, customizedOptions } as any));
     expect(tooltip.find('div').at(1).props().style).toMatchObject({
       position: 'relative',
       display: 'inline-block',
@@ -217,8 +261,8 @@ describe('Render', () => {
   });
 
   it('should be interactive', () => {
-    const customizedProps = { ...props.props, interactive: true };
-    const tooltip = shallow(TooltipComponent({ ...props, pointerEvents: 'auto', props: customizedProps } as any));
+    const customizedProps = { ...viewModel.props, interactive: true };
+    const tooltip = shallow(TooltipComponent({ ...viewModel, pointerEvents: 'auto', props: customizedProps } as any));
 
     expect(tooltip.find('RootSvgElement').props()).toMatchObject({
       styles: {
@@ -238,10 +282,10 @@ describe('Render', () => {
   });
 
   it('should be interactive with html text', () => {
-    const customizedOptions = { ...props.customizedOptions, html: 'html text' };
-    const customizedProps = { ...props.props, interactive: true };
+    const customizedOptions = { ...viewModel.customizedOptions, html: 'html text' };
+    const customizedProps = { ...viewModel.props, interactive: true };
     const tooltip = shallow(TooltipComponent({
-      ...props, pointerEvents: 'auto', customizedOptions, props: customizedProps,
+      ...viewModel, pointerEvents: 'auto', customizedOptions, props: customizedProps,
     } as any));
 
     expect(tooltip.find('RootSvgElement').props()).toMatchObject({
@@ -261,8 +305,8 @@ describe('Render', () => {
 
   it('should render contentTemplate', () => {
     const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
-    const customizedProps = { ...props.props, contentTemplate };
-    const tooltip = mount(TooltipComponent({ ...props, props: customizedProps } as any));
+    const customizedProps = { ...viewModel.props, contentTemplate };
+    const tooltip = mount(TooltipComponent({ ...viewModel, props: customizedProps } as any));
 
     expect(tooltip.find('div').at(1).children()).toHaveLength(1);
     expect(tooltip.find('div').at(1).children().props()).toEqual({ valueText: 'Tooltip value text' });
@@ -270,8 +314,8 @@ describe('Render', () => {
   });
 
   it('should set on the div zIndex', () => {
-    const customizedProps = { ...props.props, zIndex: 3 };
-    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+    const customizedProps = { ...viewModel.props, zIndex: 3 };
+    const tooltip = shallow(TooltipComponent({ ...viewModel, props: customizedProps } as any));
 
     expect(tooltip.find('div').at(0).props().style).toMatchObject({
       zIndex: 3,
@@ -279,8 +323,8 @@ describe('Render', () => {
   });
 
   it('should not render anything, visibility = false', () => {
-    const customizedProps = { ...props.props, visible: false };
-    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+    const customizedProps = { ...viewModel.props, visible: false };
+    const tooltip = shallow(TooltipComponent({ ...viewModel, props: customizedProps } as any));
 
     expect(tooltip.find('div')).toHaveLength(1);
     expect(tooltip.find('div').props()).toEqual({});
@@ -291,7 +335,7 @@ describe('Render', () => {
   });
 
   it('should not render anything, correctedCoordinates = false', () => {
-    const tooltip = shallow(TooltipComponent({ ...props, correctedCoordinates: false } as any));
+    const tooltip = shallow(TooltipComponent({ ...viewModel, correctedCoordinates: false } as any));
 
     expect(tooltip.find('div')).toHaveLength(1);
     expect(tooltip.find('div').props()).toEqual({});
@@ -302,7 +346,7 @@ describe('Render', () => {
   });
 
   it('should not render anything, isEmptyContainer = true', () => {
-    const tooltip = shallow(TooltipComponent({ ...props, isEmptyContainer: true } as any));
+    const tooltip = shallow(TooltipComponent({ ...viewModel, isEmptyContainer: true } as any));
 
     expect(tooltip.find('div')).toHaveLength(1);
     expect(tooltip.find('div').props()).toEqual({});
@@ -314,22 +358,22 @@ describe('Render', () => {
 
   it('should apply rtl for html text', () => {
     const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
-    const customizedProps = { ...props.props, rtl: true, contentTemplate };
-    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+    const customizedProps = { ...viewModel.props, rtl: true, contentTemplate };
+    const tooltip = shallow(TooltipComponent({ ...viewModel, props: customizedProps } as any));
 
     expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'rtl' });
   });
 
   it('should apply ltr for html text', () => {
     const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
-    const customizedProps = { ...props.props, rtl: false, contentTemplate };
-    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+    const customizedProps = { ...viewModel.props, rtl: false, contentTemplate };
+    const tooltip = shallow(TooltipComponent({ ...viewModel, props: customizedProps } as any));
 
     expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'ltr' });
   });
 
   it('should apply className to main div', () => {
-    const tooltip = shallow(TooltipComponent({ ...props, cssClassName: 'dx-tooltip' } as any));
+    const tooltip = shallow(TooltipComponent({ ...viewModel, cssClassName: 'dx-tooltip' } as any));
 
     expect(tooltip.find('div').at(0).props().className).toBe('dx-tooltip');
   });
@@ -655,6 +699,18 @@ describe('Getters', () => {
     expect(tooltip.textSizeWithPaddings).toEqual({ width: 8, height: 6 });
   });
 
+  it('should return default border props', () => {
+    const tooltip = new Tooltip({
+      data: { valueText: 'Tooltip value text' } as any,
+    });
+    expect(tooltip.border).toEqual({
+      dashStyle: 'solid',
+      stroke: '#d3d3d3',
+      strokeOpacity: undefined,
+      strokeWidth: 1,
+    });
+  });
+
   it('should return border options', () => {
     const tooltip = new Tooltip({
       data: { valueText: 'Tooltip value text' } as any,
@@ -700,6 +756,16 @@ describe('Getters', () => {
 
     expect(prepareData)
       .toBeCalledWith(props.data, props.color, props.border, props.font, undefined);
+  });
+
+  it('should return default margins props', () => {
+    const tooltip = new Tooltip({ });
+    expect(tooltip.margins).toEqual({
+      lm: 5,
+      tm: 1,
+      rm: 5,
+      bm: 9,
+    });
   });
 
   it('should return margins', () => {

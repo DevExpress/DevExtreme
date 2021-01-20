@@ -26,6 +26,26 @@ const DEFAULT_CANVAS = {
   left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
 };
 
+const DEFAULT_FONT: Font = {
+  color: '#232323',
+  family: 'Segoe UI',
+  opacity: 1,
+  size: 12,
+  weight: 400,
+};
+
+const DEFAULT_SHADOW = {
+  blur: 2,
+  color: '#000',
+  offsetX: 0,
+  offsetY: 4,
+  opacity: 0.4,
+};
+
+const DEFAULT_BORDER: InitialBorder = {
+  color: '#d3d3d3', width: 1, dashStyle: 'solid', visible: true,
+};
+
 export const viewFunction = ({
   textRef,
   cloudRef,
@@ -57,6 +77,8 @@ export const viewFunction = ({
     MozUserSelect: 'auto',
     WebkitUserSelect: 'auto',
   } : {};
+  const textFont = font ?? DEFAULT_FONT;
+  const cloudShadow = shadow ?? DEFAULT_SHADOW;
   return (
     <div
       className={cssClassName}
@@ -83,11 +105,11 @@ export const viewFunction = ({
             y="-50%"
             width="200%"
             height="200%"
-            blur={shadow?.blur}
-            color={shadow?.color}
-            offsetX={shadow?.offsetX}
-            offsetY={shadow?.offsetY}
-            opacity={shadow?.opacity}
+            blur={cloudShadow.blur}
+            color={cloudShadow.color}
+            offsetX={cloudShadow.offsetX}
+            offsetY={cloudShadow.offsetY}
+            opacity={cloudShadow.opacity}
           />
         </defs>
         <g
@@ -119,10 +141,10 @@ export const viewFunction = ({
                   text={customizedOptions.text}
                   styles={{
                     fill: customizedOptions.fontColor,
-                    fontFamily: font?.family,
-                    fontSize: font?.size,
-                    fontWeight: font?.weight,
-                    opacity: font?.opacity,
+                    fontFamily: textFont.family,
+                    fontSize: textFont.size,
+                    fontWeight: textFont.weight,
+                    opacity: textFont.opacity,
                     pointerEvents,
                   }}
                 />
@@ -140,10 +162,10 @@ export const viewFunction = ({
               left: correctedCoordinates.x - cloudSize.x - textSize.width / 2,
               top: correctedCoordinates.y - cloudSize.y - textSize.height / 2,
               fill: customizedOptions.fontColor,
-              fontFamily: font?.family,
-              fontSize: font?.size,
-              fontWeight: font?.weight,
-              opacity: font?.opacity,
+              fontFamily: textFont.family,
+              fontSize: textFont.size,
+              fontWeight: textFont.weight,
+              opacity: textFont.opacity,
               pointerEvents,
               direction: rtl ? 'rtl' : 'ltr',
             }}
@@ -160,9 +182,7 @@ export const viewFunction = ({
 export class TooltipProps {
   @OneWay() color? = '#fff';
 
-  @OneWay() border?: InitialBorder = {
-    color: '#d3d3d3', width: 1, dashStyle: 'solid', visible: true,
-  };
+  @OneWay() border?: InitialBorder = DEFAULT_BORDER;
 
   @OneWay() data?: TooltipData = {};
 
@@ -192,21 +212,9 @@ export class TooltipProps {
 
   @OneWay() canvas? = DEFAULT_CANVAS;
 
-  @OneWay() font?: Font = {
-    color: '#232323',
-    family: 'Segoe UI',
-    opacity: 1,
-    size: 12,
-    weight: 400,
-  };
+  @OneWay() font?: Font = DEFAULT_FONT;
 
-  @OneWay() shadow? = {
-    blur: 2,
-    color: '#000',
-    offsetX: 0,
-    offsetY: 4,
-    opacity: 0.4,
-  };
+  @OneWay() shadow? = DEFAULT_SHADOW;
 
   @OneWay() interactive? = false;
 
@@ -338,12 +346,13 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   get border(): Border {
     const { border } = this.props;
-    if (border?.visible) {
+    const cloudBorder = border ?? DEFAULT_BORDER;
+    if (cloudBorder.visible) {
       return {
-        stroke: border.color,
-        strokeWidth: border.width,
-        strokeOpacity: border.opacity,
-        dashStyle: border.dashStyle,
+        stroke: cloudBorder.color,
+        strokeWidth: cloudBorder.width,
+        strokeOpacity: cloudBorder.opacity,
+        dashStyle: cloudBorder.dashStyle,
       };
     }
     return {};
@@ -360,9 +369,10 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   get margins(): { lm: number; rm: number; tm: number; bm: number } {
     const { max } = Math;
     const { shadow } = this.props;
-    const xOff = shadow?.offsetX ?? 0;
-    const yOff = shadow?.offsetY ?? 0;
-    const blur = (shadow?.blur ?? 2) * 2 + 1;
+    const cloudShadow = shadow ?? DEFAULT_SHADOW;
+    const xOff = cloudShadow.offsetX;
+    const yOff = cloudShadow.offsetY;
+    const blur = cloudShadow.blur * 2 + 1;
     return {
       lm: max(blur - xOff, 0), // left margin
       rm: max(blur + xOff, 0), // right margin
