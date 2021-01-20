@@ -1,4 +1,4 @@
-export type Canvas = { left: number; top: number; right: number; bottom: number; width: number; height: number };
+export type Canvas = ClientRect;
 export type Size = { width?: number; height?: number };
 export type StrictSize = Required<Size>;
 export type RecalculateCoordinates = {

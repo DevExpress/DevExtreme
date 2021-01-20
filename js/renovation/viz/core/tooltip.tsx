@@ -13,7 +13,7 @@ import { isDefined } from '../../../core/utils/type';
 
 import {
   StrictSize, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location, Font,
-  TooltipCoordinates,
+  TooltipCoordinates, Canvas,
 } from './common/types.d';
 import { Format, Point } from '../common/types.d';
 
@@ -22,7 +22,7 @@ import {
 } from './common/tooltip_utils';
 import { normalizeEnum } from '../../../viz/core/utils';
 
-const DEFAULT_CANVAS = {
+const DEFAULT_CANVAS: Canvas = {
   left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
 };
 
@@ -210,7 +210,7 @@ export class TooltipProps {
 
   @OneWay() customizeTooltip?: CustomizeTooltipFn;
 
-  @OneWay() canvas? = DEFAULT_CANVAS;
+  @OneWay() canvas?: Canvas = DEFAULT_CANVAS;
 
   @OneWay() font?: Font = DEFAULT_FONT;
 
