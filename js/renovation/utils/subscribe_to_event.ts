@@ -6,7 +6,7 @@ export function subscribeToEvent(eventName: string) {
   return (element: HTMLElement, handler): DisposeEffectReturn => {
     if (handler) {
       eventsEngine.on(element, eventName, handler);
-      return (): void => eventsEngine.off(element, clickEvent.name, handler);
+      return (): void => eventsEngine.off(element, eventName, handler);
     }
     return undefined;
   };

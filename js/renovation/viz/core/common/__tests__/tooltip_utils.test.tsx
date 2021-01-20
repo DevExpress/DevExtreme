@@ -176,6 +176,39 @@ describe('#recalculateCoordinates', () => {
       x: 100, y: 20, anchorX: 100, anchorY: 20,
     });
   });
+
+  it('should return false, coordinates out of canvas', () => {
+    const options = {
+      canvas: {
+        left: 10, right: 20, top: 25, bottom: 30, width: 400, height: 100,
+      },
+      size: { width: 30, height: 40 },
+      offset: 8,
+      arrowLength: 11,
+    };
+
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 1,
+      anchorY: 50,
+    })).toEqual(false);
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 15,
+      anchorY: 5,
+    })).toEqual(false);
+
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 700,
+      anchorY: 50,
+    })).toEqual(false);
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 50,
+      anchorY: 300,
+    })).toEqual(false);
+  });
 });
 
 describe('#getCloudPoints', () => {

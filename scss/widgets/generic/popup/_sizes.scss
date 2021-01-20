@@ -2,8 +2,6 @@
 
 // adduse
 
-$generic-popup-closebutton-size: null !default;
-$generic-popup-closebutton-icon-size: null !default;
 $generic-popup-content-padding: null !default;
 $generic-popup-button-margin: null !default;
 $generic-popup-toolbar-item-spacing: null !default;
@@ -11,9 +9,6 @@ $generic-popup-toolbartop-padding: null !default;
 $generic-popup-toolbarbottom-padding: null !default;
 
 @if $size == "default" {
-  $generic-popup-closebutton-size: 23px !default;
-  $generic-popup-closebutton-icon-size: 15px !default;
-
   $generic-popup-content-padding: 20px !default;
   $generic-popup-button-margin: 0 10px !default;
 
@@ -23,9 +18,6 @@ $generic-popup-toolbarbottom-padding: null !default;
 }
 
 @else if $size == "compact" {
-  $generic-popup-closebutton-size: 19px !default;
-  $generic-popup-closebutton-icon-size: 11px !default;
-
   $generic-popup-content-padding: 10px !default;
   $generic-popup-button-margin: 0 5px !default;
 

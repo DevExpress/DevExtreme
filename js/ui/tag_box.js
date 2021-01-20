@@ -420,7 +420,7 @@ const TagBox = SelectBox.inherit({
                 const $tagContent = $('<div>').addClass(TAGBOX_TAG_CONTENT_CLASS);
 
                 $('<span>')
-                    .text(data.text || data)
+                    .text(data.text ?? data)
                     .appendTo($tagContent);
 
                 $('<div>')
@@ -487,7 +487,6 @@ const TagBox = SelectBox.inherit({
             .toggleClass(TAGBOX_ONLY_SELECT_CLASS, !(this.option('searchEnabled') || this.option('acceptCustomValue')))
             .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
 
-        // TODO: texteditor render methods order research
         this._initTagTemplate();
 
         this.callBase();
@@ -1250,7 +1249,7 @@ const TagBox = SelectBox.inherit({
     _lastValue: function() {
         const values = this._getValue();
         const lastValue = values[values.length - 1];
-        return isDefined(lastValue) ? lastValue : null;
+        return lastValue ?? null;
     },
 
     _valueChangeEventHandler: noop,

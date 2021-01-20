@@ -4,6 +4,7 @@ import {
   JSXComponent,
   Method,
   OneWay,
+  Template,
   TwoWay,
 } from 'devextreme-generator/component_declaration/common';
 
@@ -33,6 +34,8 @@ export class OptionsCheckWidgetProps {
   @TwoWay() twoWayNullWithValue: string | null = '20';
 
   @OneWay() propWithElement?: HTMLDivElement | number;
+
+  @Template() contentTemplate = (): JSX.Element => <div />;
 }
 
 @Component({

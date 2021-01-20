@@ -1,6 +1,7 @@
 import React, { createRef } from 'react';
 import { shallow } from 'enzyme';
 import { TextSvgElement, viewFunction as TextSvgComponent } from '../svg_text';
+import * as utilsModule from '../utils';
 
 describe('TextSvgElement', () => {
   describe('View', () => {
@@ -95,6 +96,16 @@ describe('TextSvgElement', () => {
       expect(children.at(1).text()).toBe(children.at(3).text());
       expect(children.at(1).hasClass('second-line')).toBe(children.at(3).hasClass('second-line'));
       expect(children.at(1).prop('style')).toStrictEqual(children.at(3).prop('style'));
+    });
+
+    it('should pass transform and dash style', () => {
+      jest.spyOn(utilsModule, 'getGraphicExtraProps').mockImplementation(() => ({ transform: 'transformation', 'stroke-dasharray': 'dash' }));
+      const props = getProps('some text');
+      const rect = shallow(<TextSvgComponent {...{ props } as any} /> as JSX.Element);
+
+      expect(rect.props()).toMatchObject({ transform: 'transformation', 'stroke-dasharray': 'dash' });
+      expect(utilsModule.getGraphicExtraProps)
+        .toHaveBeenCalledWith(props, props.x, props.y);
     });
   });
 
@@ -211,59 +222,6 @@ describe('TextSvgElement', () => {
         expect(text.textRef.children[0].setAttribute).lastCalledWith('y', 100);
         expect(text.textRef.children[1].setAttribute).nthCalledWith(1, 'x', 50);
         expect(text.textRef.children[1].setAttribute).lastCalledWith('dy', 18);
-      });
-
-      it('should set dash attributes to text when dashStyle=dash', () => {
-        const text = new TextSvgElement({
-          text: 'Multiline\ntext',
-          dashStyle: 'dash',
-        });
-        text.textRef = {
-          setAttribute: jest.fn(),
-          children: [
-            {}, {},
-          ],
-        } as any;
-        text.effectUpdateText();
-        expect(text.textRef.setAttribute).toHaveBeenCalledTimes(1);
-        expect(text.textRef.setAttribute).toHaveBeenCalledWith('stroke-dasharray', '4,3');
-      });
-
-      it('should set dash attributes to text when dashStyle=longdash dot', () => {
-        const text = new TextSvgElement({
-          text: 'Multiline\ntext',
-          dashStyle: 'longdash dot',
-          strokeWidth: 4,
-        });
-        text.textRef = {
-          setAttribute: jest.fn(),
-          children: [
-            {}, {},
-          ],
-        } as any;
-        text.effectUpdateText();
-        expect(text.textRef.setAttribute).toHaveBeenCalledTimes(1);
-        expect(text.textRef.setAttribute).toHaveBeenCalledWith('stroke-dasharray', '32,12,4,12');
-      });
-
-      it('should set transformation attributes to text', () => {
-        const text = new TextSvgElement({
-          text: 'Multiline\ntext',
-          rotate: 25,
-          translateX: 15,
-          translateY: -25,
-          scaleX: 1.1,
-          scaleY: 0.8,
-        });
-        text.textRef = {
-          setAttribute: jest.fn(),
-          children: [
-            {}, {},
-          ],
-        } as any;
-        text.effectUpdateText();
-        expect(text.textRef.setAttribute).toHaveBeenCalledTimes(1);
-        expect(text.textRef.setAttribute).toHaveBeenCalledWith('transform', 'translate(15,-25) rotate(25,0,0) scale(1.1,0.8)');
       });
 
       it('should pass stroke to text nodes', () => {

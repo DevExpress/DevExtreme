@@ -18,13 +18,23 @@ import {
 
 import { ScrollableNative } from './scrollable_native';
 import { ScrollableSimulated } from './scrollable_simulated';
+import { createDefaultOptionRules } from '../../../core/options/utils';
+import devices from '../../../core/devices';
+import browser from '../../../core/utils/browser';
+import { nativeScrolling, touch } from '../../../core/utils/support';
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     cssClasses,
-    scrollableRef,
+    scrollableNativeRef,
+    scrollableSimulatedRef,
     props: {
       useNative,
+      pulledDownText,
+      pullingDownText,
+      pushBackValue,
+      refreshingText,
+      reachBottomText,
       ...scrollableProps
     },
     restAttributes,
@@ -34,35 +44,67 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     <Fragment>
       {useNative && (
       <ScrollableNative
-        ref={scrollableRef}
+        ref={scrollableNativeRef}
         classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
+        pushBackValue={pushBackValue}
+        pulledDownText={pulledDownText}
+        pullingDownText={pullingDownText}
+        refreshingText={refreshingText}
+        reachBottomText={reachBottomText}
       />
       )}
       {!useNative && (
       <ScrollableSimulated
-        ref={scrollableRef}
+        ref={scrollableSimulatedRef}
         classes={cssClasses}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
+        pulledDownText={pulledDownText}
+        pullingDownText={pullingDownText}
+        refreshingText={refreshingText}
+        reachBottomText={reachBottomText}
       />
       )}
     </Fragment>
   );
 };
 
+export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
+  device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
+  options: {
+    bounceEnabled: false,
+    scrollByContent: touch,
+    scrollByThumb: true,
+    showScrollbar: 'onHover',
+  },
+}, {
+  device: (): boolean => !nativeScrolling,
+  options: {
+    useNative: true,
+  },
+}, {
+  device: (): boolean => nativeScrolling && devices.real().platform === 'android' && !browser.mozilla,
+  options: {
+    useSimulatedScrollbar: true,
+  },
+}]);
+
 @Component({
+  defaultOptionRules,
   jQuery: { register: true },
   view: viewFunction,
 })
 
 export class Scrollable extends JSXComponent<ScrollablePropsType>() {
-  @Ref() scrollableRef!: RefObject<ScrollableNative>;
+  @Ref() scrollableNativeRef!: RefObject<ScrollableNative>;
+
+  @Ref() scrollableSimulatedRef!: RefObject<ScrollableSimulated>;
 
   @Method()
   content(): HTMLDivElement {
@@ -125,5 +167,10 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return combineClasses({
       [`${classes}`]: !!classes,
     });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get scrollableRef(): any {
+    return this.scrollableNativeRef || this.scrollableSimulatedRef;
   }
 }
