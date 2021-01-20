@@ -14,12 +14,14 @@ export const viewFunction = ({
     color,
     text,
     index,
+    colSpan,
   },
 }: GroupPanelHorizontalCell): JSX.Element => (
   <th
-    className={classes}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
+    className={classes}
+    colSpan={colSpan}
   >
     <div className="dx-scheduler-group-header-content">
       {!!CellTemplate && (
@@ -54,6 +56,8 @@ export class GroupPanelHorizontalCellProps {
   @OneWay() isFirstGroupCell = false;
 
   @OneWay() isLastGroupCell = false;
+
+  @OneWay() colSpan = 1;
 
   @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 

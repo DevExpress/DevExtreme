@@ -22,15 +22,18 @@ describe('GroupPanel Horizontal Cell', () => {
     const render = (viewModel) => shallow(CellView({
       ...viewModel,
       props: {
+        colSpan: 3,
         ...viewModel.props,
       },
     }) as any);
 
-    it('should pass correct className', () => {
+    it('should pass correct props to the root', () => {
       const cell = render({ classes: 'custom-class' });
 
       expect(cell.hasClass('custom-class'))
         .toBe(true);
+      expect(cell.prop('colSpan'))
+        .toBe(3);
     });
 
     it('should spread restAttributes', () => {
