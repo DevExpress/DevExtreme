@@ -929,7 +929,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
         { format: 'shortDate', expectedPdfCellValue: '10/9/2019' },
         { format: 'shortTime', expectedPdfCellValue: '9:09 AM' },
         { format: 'longDateLongTime', expectedPdfCellValue: 'Wednesday, October 9, 2019, 9:09:09 AM' },
-        { format: 'shortDateShortTime', expectedPdfCellValue: '[$-9]M\\/d\\/yyyy, H:mm AM/PM' },
+        { format: 'shortDateShortTime', expectedPdfCellValue: '10/9/2019, 9:09 AM' },
         { format: 'longDate', expectedPdfCellValue: 'Wednesday, October 9, 2019' },
         { format: 'longTime', expectedPdfCellValue: '9:09:09 AM' },
         { format: 'dayOfWeek', expectedPdfCellValue: 'Wednesday' },
