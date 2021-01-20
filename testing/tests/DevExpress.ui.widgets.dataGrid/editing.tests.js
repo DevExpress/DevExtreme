@@ -3355,6 +3355,45 @@ QUnit.module('Editing with real dataController', {
         assert.ok(!testElement.find('tbody > tr').first().hasClass('dx-row-inserted'), 'not has row inserted');
     });
 
+    QUnit.test('Delete inserted row and delete other row in cell edit mode', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        $.extend(this.options.editing, {
+            mode: 'cell',
+            allowAdding: true,
+            allowDeleting: true
+        });
+
+        rowsView.render(testElement);
+
+        // act
+        this.addRow();
+
+        // assert
+        let visibleRows = this.getVisibleRows();
+        assert.equal(visibleRows.length, 8, 'visible rows count');
+        assert.ok(visibleRows[0].isNewRow, 'inserted row');
+        assert.equal(this.option('editing.editRowKey'), visibleRows[0].key, 'inserted row is in editing state');
+
+        // act
+        this.deleteRow(0);
+
+        // assert
+        visibleRows = this.getVisibleRows();
+        assert.equal(visibleRows.length, 7, 'visible rows count');
+        assert.notOk(visibleRows[0].isNewRow, 'not inserted row');
+        assert.equal(this.option('editing.editRowKey'), null, 'no edit row');
+
+        // act
+        this.deleteRow(0);
+
+        // assert
+        visibleRows = this.getVisibleRows();
+        assert.equal(visibleRows.length, 6, 'visible rows count');
+    });
+
     [true, false].forEach((needAddRow) => {
         [true, false].forEach((changePageViaDataSource) => {
             let testName = 'cell should not be edited after ' + (needAddRow ? 'row adding' : 'editing');
