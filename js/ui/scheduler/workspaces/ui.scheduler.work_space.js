@@ -3061,7 +3061,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
 
-        return new Date(endDateOfLastViewCell.getTime() - toMs('minute'));
+        return new Date(endDateOfLastViewCell.getTime() - 1);
     }
 
     getDateOfLastViewCell() {
