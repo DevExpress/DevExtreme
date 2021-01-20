@@ -30,7 +30,7 @@ $scheduler-appointment-overlay-bg: null !default;
       margin-left: 5px;
       background: $scheduler-appointment-base-color;
 
-      @include use-colored-marker();
+      @include use-colored-marker(20);
     }
 
     .dx-tooltip-appointment-item-delete-button .dx-icon {

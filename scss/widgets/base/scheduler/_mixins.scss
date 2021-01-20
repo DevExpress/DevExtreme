@@ -1,6 +1,6 @@
-@mixin use-colored-marker() {
-  width: 20px;
-  height: 20px;
+@mixin use-colored-marker($diameter) {
+  width: $diameter + px;
+  height: $diameter + px;
   border-radius: 50%;
 }
 

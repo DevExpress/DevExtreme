@@ -29,6 +29,11 @@
   $scheduler-appointment-text-color: $scheduler-appointment-text-color,
   $scheduler-fill-focused-appointment: $scheduler-fill-focused-appointment,
   $scheduler-dd-appointment-hover-text-color: $scheduler-dd-appointment-hover-text-color,
+
+  $agenda-appointment-recurrence-icon-color: $agenda-appointment-recurrence-icon-color,
+  $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
+  $agenda-appointment-active-bg: $agenda-appointment-active-bg,
+  $agenda-appointment-active-text-color: $agenda-appointment-active-text-color
 );
 @use "../button/colors" as *;
 @use "../tooltip/colors" as *;
