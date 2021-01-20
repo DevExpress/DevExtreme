@@ -9,7 +9,6 @@ export const viewFunction = ({
   restAttributes,
   props: {
     cellTemplate: CellTemplate,
-    colSpan,
     data,
     id,
     color,
@@ -19,7 +18,6 @@ export const viewFunction = ({
 }: GroupPanelHorizontalCell): JSX.Element => (
   <th
     className={classes}
-    colSpan={colSpan}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
@@ -52,8 +50,6 @@ export class GroupPanelHorizontalCellProps {
   @OneWay() data: GroupItem = { id: 0 };
 
   @OneWay() index?: number;
-
-  @OneWay() colSpan = 1;
 
   @OneWay() isFirstGroupCell = false;
 
