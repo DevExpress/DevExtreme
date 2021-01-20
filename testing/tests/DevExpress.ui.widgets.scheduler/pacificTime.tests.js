@@ -323,6 +323,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                             currentView,
                             views,
                             dataSource: [],
+                            firstDayOfWeek: 1, // TODO test requires the day start from Monday for Week view
                             height: 600
                         });
 
@@ -351,6 +352,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                         views,
                         currentView: 'month',
                         dataSource: [],
+                        firstDayOfWeek: 1, // TODO test requires the day start from Monday for Week view
                         height: 600
                     });
 
