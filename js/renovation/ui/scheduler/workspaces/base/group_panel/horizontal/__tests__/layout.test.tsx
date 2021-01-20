@@ -114,7 +114,7 @@ describe('GroupPanel Vertical Layout', () => {
           data: 'data 7',
         }]] as any;
 
-        it('should transform grouping data into group items', () => {
+        it('should add colspans to group items', () => {
           const layout = new Layout({
             groupsRenderData: groupsRenderDataBase,
             baseColSpan: 20,
