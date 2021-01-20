@@ -2,7 +2,7 @@ import { compareScreenshot } from '../../../helpers/screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import Scheduler from '../../../model/scheduler';
 import url from '../../../helpers/getPageUrl';
-import { createDataSetForScreenShotTests } from './utils';
+import { createDataSetForScreenShotTests, resourceDataSource } from './utils';
 
 fixture`Scheduler: Material theme layout`
   .page(url(__dirname, './material.html'));
@@ -33,23 +33,7 @@ const createScheduler = async (view: string, resourcesValue?: unknown[]) => {
   }, true);
 };
 
-const resources = [{
-  fieldExpr: 'priorityId',
-  dataSource: [
-    {
-      text: 'Low Priority',
-      id: 0,
-      color: '#24ff50',
-    }, {
-      text: 'High Priority',
-      id: 1,
-      color: '#ff9747',
-    },
-  ],
-  label: 'Priority',
-}];
-
-[undefined, resources].forEach((resourcesValue) => {
+[undefined, resourceDataSource].forEach((resourcesValue) => {
   ['agenda', 'day', 'week', 'workWeek', 'month'].forEach((view) => {
     test(`Base views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
@@ -62,7 +46,7 @@ const resources = [{
   });
 });
 
-[undefined, resources].forEach((resourcesValue) => {
+[undefined, resourceDataSource].forEach((resourcesValue) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
     test(`Timeline views layout test in material theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');

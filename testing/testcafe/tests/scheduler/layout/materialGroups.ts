@@ -1,7 +1,7 @@
 import { compareScreenshot } from '../../../helpers/screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { createDataSetForScreenShotTests } from './utils';
+import { createDataSetForScreenShotTests, resourceDataSource } from './utils';
 
 fixture`Scheduler: Material theme layout`
   .page(url(__dirname, './material.html'));
@@ -19,21 +19,7 @@ const createScheduler = async (view: string, groupOrientation: string) => {
     }],
     currentView: view,
     crossScrollingEnabled: true,
-    resources: [{
-      fieldExpr: 'priorityId',
-      dataSource: [
-        {
-          text: 'Low Priority',
-          id: 0,
-          color: '#24ff50',
-        }, {
-          text: 'High Priority',
-          id: 1,
-          color: '#ff9747',
-        },
-      ],
-      label: 'Priority',
-    }],
+    resources: resourceDataSource,
     groups: ['priorityId'],
     height: 700,
   }, true);

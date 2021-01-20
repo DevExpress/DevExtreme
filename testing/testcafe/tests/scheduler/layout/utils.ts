@@ -1,3 +1,19 @@
+export const resourceDataSource = [{
+  fieldExpr: 'priorityId',
+  dataSource: [
+    {
+      text: 'Low Priority',
+      id: 0,
+      color: '#24ff50',
+    }, {
+      text: 'High Priority',
+      id: 1,
+      color: '#ff9747',
+    },
+  ],
+  label: 'Priority',
+}];
+
 export const createDataSetForScreenShotTests = () => {
   const result: {
     text: string;
