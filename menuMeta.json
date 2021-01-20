@@ -5543,7 +5543,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/Widgets/Popup/Overview/",
             "Widget": "Popup",
             "MvcAdditionalFiles": [
               "/Models/DataGrid/Employee.cs",
