@@ -9,7 +9,7 @@ jest.mock('../row', () => ({
   Row: () => null,
 }));
 
-describe('GroupPanel Vertical Layout', () => {
+describe('GroupPanel Horizontal Layout', () => {
   describe('Render', () => {
     const groupsRenderData = [[{
       id: 'testId 1',
