@@ -262,8 +262,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _renderView() {
         this._setFirstViewDate();
         let groupCellTemplates;
-        if(!(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace())) {
+        if(!this.isRenovatedRender()) {
             groupCellTemplates = this._renderGroupHeader();
+        } else {
+            if(!this._isVerticalGroupedWorkSpace()) {
+                this.renderRGroupPanel();
+            }
         }
         this._renderDateHeader();
 
