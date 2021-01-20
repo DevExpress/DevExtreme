@@ -392,22 +392,53 @@ jest.mock('../../../../core/devices', () => {
             expect(initHandler).toHaveBeenCalledWith(e);
           });
 
-          each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
-            each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-              it('scrollinit eventArgs', () => {
-                // debugger;
-                const scrollable = new Scrollable({ direction, bounceEnabled });
-                scrollable.containerRef = createContainerRef({ top: 0, left: 0 }, direction);
-                scrollable.contentRef = createContainerRef({ top: 0, left: 0 }, direction);
-                const e = { ...defaultEvent };
+          each(['100', '200']).describe('ContainerSize: %o', (containerSize) => {
+            each(['100', '200']).describe('ContentSize: %o', (contentSize) => {
+              each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
+                each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
+                  it('scrollinit eventArgs', () => {
+                    const scrollable = new Scrollable({ direction, bounceEnabled });
+                    const createElemRef = (size) => {
+                      const ref = {} as RefObject<HTMLDivElement>;
+                      ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
+                        ref[prop] = size;
+                      });
 
-                (getElementComputedStyle as jest.Mock).mockReturnValue({
-                  overflowX: overflow,
-                  overflowY: overflow,
+                      // eslint-disable-next-line
+                      ref['window'] = ref;
+
+                      return ref;
+                    };
+
+                    scrollable.containerRef = createElemRef(containerSize);
+                    scrollable.contentRef = createElemRef(contentSize);
+
+                    (getElementComputedStyle as jest.Mock).mockImplementation((elem) => {
+                      const isContainer = elem === scrollable.containerRef;
+                      return {
+                        overflowX: overflow,
+                        overflowY: overflow,
+                        width: isContainer ? containerSize : contentSize,
+                        height: isContainer ? containerSize : contentSize,
+                      };
+                    });
+
+                    let expectedDirectionResult;
+                    if (Scrollable === ScrollableSimulated) {
+                      expectedDirectionResult = (containerSize < contentSize || bounceEnabled)
+                        ? direction
+                        : undefined;
+                    } else {
+                      expectedDirectionResult = containerSize < contentSize
+                        ? direction
+                        : undefined;
+                    }
+
+                    const e = { ...defaultEvent };
+                    expect(scrollable.getDirection(e)).toBe(expectedDirectionResult);
+                    expect(scrollable.validate(e)).toBe(true); // TODO actualize this value
+                  });
                 });
-
-                scrollable.getDirection(e);
-                scrollable.validate(e);
               });
             });
           });
