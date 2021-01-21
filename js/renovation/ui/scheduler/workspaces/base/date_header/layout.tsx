@@ -24,7 +24,7 @@ export const viewFunction = ({
   },
 }: DateHeader): JSX.Element => (
   <Fragment>
-    <Row>
+    <Row className="dx-scheduler-header-row">
       {dateHeaderMap[0].map(({
         startDate, endDate, today, groups, groupIndex, index, key, text,
       }) => (
