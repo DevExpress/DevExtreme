@@ -153,6 +153,37 @@ QUnit.module('Markup', moduleConfig, () => {
         this.clock.tick();
         assert.roughEqual(initHeight, this.$element.height(), 1, 'collapsed height');
     });
+    test('invalid start or end dates', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope 0', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 1, 'title': 'Scope 1', 'start': null, 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 4, 'parentId': 2, 'title': 'Scope 2', 'start': new Date('2019-02-21'), 'end': null, 'progress': 50 },
+            { 'id': 5, 'parentId': 2, 'title': 'Scope 3', 'start': null, 'end': null, 'progress': 25 }
+        ];
+        const customDependencies = [
+            { 'id': 0, 'predecessorId': 1, 'successorId': 2, 'type': 0 },
+            { 'id': 1, 'predecessorId': 2, 'successorId': 3, 'type': 0 },
+            { 'id': 2, 'predecessorId': 3, 'successorId': 4, 'type': 0 }
+        ];
+        const options = {
+            tasks: { dataSource: customTasks },
+            dependencies: { dataSource: customDependencies }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_DATA_ROW_SELECTOR);
+        assert.strictEqual(treeListElements.length, 5);
+
+        const taskElements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        assert.equal(taskElements.length, 2);
+
+        const dependenciesElements = this.$element.find(TASK_ARROW_SELECTOR);
+        assert.equal(dependenciesElements.length, 1);
+
+        assert.equal(this.instance.getVisibleTaskKeys().length, 2, 'task keys');
+        assert.equal(this.instance.getVisibleDependencyKeys().length, 1, 'dependencies keys');
+    });
 });
 
 QUnit.module('Options', moduleConfig, () => {
@@ -649,8 +680,30 @@ QUnit.module('Dialogs', moduleConfig, () => {
 
         const testTitle = 'text';
         const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
-        titleTextBox.option('value', testTitle);
+        const startTextBox = $dialog.find('.dx-datebox').eq(0).dxDateBox('instance');
+        const endTextBox = $dialog.find('.dx-datebox').eq(1).dxDateBox('instance');
+
+        titleTextBox.option('value', '');
+        startTextBox.option('value', '');
+        endTextBox.option('value', '');
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        assert.equal($dialog.length, 1, 'dialog is shown');
+        let isValidTitleTextBox = titleTextBox._getValidationErrors() === null;
+        let isValidStartTextBox = startTextBox._getValidationErrors() === null;
+        let isValidEndTextBox = endTextBox._getValidationErrors() === null;
+        assert.notOk(isValidTitleTextBox, 'empty title validation');
+        assert.notOk(isValidStartTextBox, 'empty start validation');
+        assert.notOk(isValidEndTextBox, 'empty end validation');
+        titleTextBox.option('value', testTitle);
+        startTextBox.option('value', '1');
+        endTextBox.option('value', tasks[0].end);
+        isValidTitleTextBox = titleTextBox._getValidationErrors() === null;
+        isValidStartTextBox = startTextBox._getValidationErrors() === null;
+        isValidEndTextBox = endTextBox._getValidationErrors() === null;
+        assert.ok(isValidTitleTextBox, 'not empty title validation');
+        assert.ok(isValidStartTextBox, 'not empty start validation');
+        assert.ok(isValidEndTextBox, 'not empty end validation');
         $okButton.trigger('dxclick');
         this.clock.tick();
         const firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
@@ -2126,7 +2179,6 @@ QUnit.module('Mappings convert', moduleConfig, () => {
     });
 });
 
-
 QUnit.module('Context Menu', moduleConfig, () => {
     test('showing', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -2241,6 +2293,7 @@ QUnit.module('Context Menu', moduleConfig, () => {
         assert.equal(items.eq(0).text(), 'New Subtask', 'undo item was rendered');
     });
 });
+
 QUnit.module('Strip Lines', moduleConfig, () => {
     test('render', function(assert) {
         const stripLines = [
@@ -2285,6 +2338,7 @@ QUnit.module('Strip Lines', moduleConfig, () => {
         assert.equal($stripLines.length, 0, 'gantt has no strip lines');
     });
 });
+
 QUnit.module('Parent auto calculation', moduleConfig, () => {
     test('render', function(assert) {
         const options = {
