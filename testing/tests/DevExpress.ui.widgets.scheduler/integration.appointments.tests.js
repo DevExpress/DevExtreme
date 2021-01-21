@@ -20,7 +20,6 @@ import {
     initTestMarkup,
     createWrapper,
     CLASSES,
-    checkResultByDeviceType,
     asyncAssert
 } from '../../helpers/scheduler/helpers.js';
 
@@ -2443,6 +2442,8 @@ module('Integration: Appointments', {
             });
 
             test('Non-grid-aligned appointments should be resized correctly, when endDayHour is set', function(assert) {
+                this.clock.restore();
+
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     editing: true,
@@ -2454,20 +2455,17 @@ module('Integration: Appointments', {
                     }]
                 });
 
-                if(scrollingMode === 'virtual') {
-                    this.scrollTo({ y: 1000 });
-                }
+                this.scrollTo({ y: 1000 });
 
-                this.clock.restore();
-
-                checkResultByDeviceType(assert, () => {
-                    const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+                return asyncAssert(assert, () => {
+                    const cellHeight = this.instance.$element().find(`.${DATE_TABLE_CELL_CLASS}`).eq(0).outerHeight();
 
                     const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
                     pointer.dragStart().drag(0, cellHeight).dragEnd();
 
                     assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 15), 'End date is OK');
-                });
+
+                }, 10);
             });
 
             test('Task should be placed in right group', function(assert) {
