@@ -239,7 +239,7 @@ describe('BaseWidget', () => {
           paddingBottom: '0px',
         });
         const widget = new BaseWidget({
-          size: { width: 600, height: undefined },
+          size: { width: 600 },
           canvas: { ...DEFAULT_CANVAS, width: 300, height: 100 },
         });
         widget.setCanvas();

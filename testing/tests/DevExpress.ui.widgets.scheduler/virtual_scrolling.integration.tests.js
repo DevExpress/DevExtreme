@@ -1111,6 +1111,11 @@ module('Virtual scrolling', () => {
                 });
 
                 test('Appointment with multiple resources should be rendered correctly if horizontal grouping', function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
                     const data = [{
                         startDate: new Date(2020, 9, 12, 1, 30),
                         endDate: new Date(2020, 9, 12, 22, 30),

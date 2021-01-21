@@ -1,5 +1,5 @@
 import {
-  RecalculateCoordinates, TooltipCoordinates, Size, CustomizedOptions, CustomizeTooltipFn,
+  RecalculateCoordinates, TooltipCoordinates, StrictSize, CustomizedOptions, CustomizeTooltipFn,
   InitialBorder, TooltipData, Font,
 } from './types.d';
 import { isFunction, isPlainObject, isDefined } from '../../../../core/utils/type';
@@ -18,7 +18,7 @@ function getAbsoluteArc(cornerRadius: number, x: number, y: number): string {
   return `A ${cornerRadius} ${cornerRadius} 0 0 1 ${x} ${y}`;
 }
 
-function rotateSize({ width, height }: Size, angle: number): Size {
+function rotateSize({ width, height }: StrictSize, angle: number): StrictSize {
   if (angle % 90 === 0 && angle % 180 !== 0) {
     return { width: height, height: width };
   }
@@ -38,7 +38,7 @@ function rotateY({
 }
 
 export function getCloudPoints(
-  size: Size,
+  size: StrictSize,
   coordinates: TooltipCoordinates,
   rotationAngle: number,
   options: { arrowWidth: number; cornerRadius: number },
@@ -252,7 +252,7 @@ export function recalculateCoordinates({
 }
 
 export function getCloudAngle(
-  { width, height }: Size,
+  { width, height }: StrictSize,
   {
     x, y, anchorX, anchorY,
   }: TooltipCoordinates,
