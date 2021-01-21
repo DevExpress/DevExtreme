@@ -62,6 +62,8 @@ export default {
 <style>
 #chart {
     height: 330px;
+    max-width: 900px;
+    margin: auto;
 }
 
 .options {
