@@ -83,6 +83,7 @@ function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
+    horizontalScrollbarRef, verticalScrollbarRef,
     cursorEnterHandler, cursorLeaveHandler,
     isScrollbarVisible, needScrollbar,
     props: {
@@ -138,6 +139,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           </div>
           {isHorizontal && (
             <Scrollbar
+              ref={horizontalScrollbarRef}
               direction="horizontal"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -147,6 +149,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           )}
           {isVertical && (
             <Scrollbar
+              ref={verticalScrollbarRef}
               direction="vertical"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -185,6 +188,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
+
+  @Ref() verticalScrollbarRef!: RefObject<Scrollbar>;
+
+  @Ref() horizontalScrollbarRef!: RefObject<Scrollbar>;
 
   @InternalState() isHovered = false;
 

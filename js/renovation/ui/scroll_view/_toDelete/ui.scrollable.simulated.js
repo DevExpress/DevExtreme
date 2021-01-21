@@ -496,18 +496,6 @@ export const Scroller = Class.inherit({
         return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
     },
 
-    _isThumb: function($element) {
-        return this._scrollByThumb && this._scrollbar.isThumb($element);
-    },
-
-    _isScrollbar: function($element) {
-        return this._scrollByThumb && $element && $element.is(this._$scrollbar);
-    },
-
-    _isContent: function($element) {
-        return this._scrollByContent && !!$element.closest(this._$element).length;
-    },
-
     _reachedMin: function() {
         return this._location <= this._minOffset;
     },

@@ -36,13 +36,14 @@ const THUMB_MIN_SIZE = 15;
 
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
-    cssClasses, styles, scrollRef, hoverStateEnabled,
+    cssClasses, styles, scrollRef, scrollbarRef, hoverStateEnabled,
     props: { activeStateEnabled },
     restAttributes,
   } = viewModel;
 
   return (
     <Widget
+      rootElementRef={scrollbarRef as any}
       classes={cssClasses}
       activeStateEnabled={activeStateEnabled}
       hoverStateEnabled={hoverStateEnabled}
@@ -62,6 +63,8 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 })
 export class Scrollbar extends JSXComponent<ScrollbarProps>() {
   @InternalState() active = false;
+
+  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
 
@@ -112,6 +115,26 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
       }, { namespace });
 
     return (): void => dxPointerUp.off(this.scrollRef, { namespace });
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  isThumb(element: HTMLDivElement): boolean {
+    return element.classList.contains(SCROLLABLE_SCROLL_CLASS)
+    || element.classList.contains(SCROLLABLE_SCROLL_CONTENT_CLASS);
+  }
+
+  @Method()
+  isScrollbar(element: HTMLDivElement): boolean {
+    return element === this.scrollbarRef;
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  isContent(element: HTMLDivElement): boolean {
+    return element.classList.contains(SCROLLABLE_SCROLLBAR_CLASS)
+    || element.classList.contains(SCROLLABLE_SCROLL_CLASS)
+    || element.classList.contains(SCROLLABLE_SCROLL_CONTENT_CLASS);
   }
 
   private feedbackOn(): void {
