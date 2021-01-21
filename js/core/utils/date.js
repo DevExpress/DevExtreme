@@ -584,8 +584,6 @@ function fixTimezoneGap(oldDate, newDate) {
 const roundToHour = function(date) {
     date.setHours(date.getHours() + 1);
     date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
 
     return date;
 };
