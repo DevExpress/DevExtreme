@@ -11,10 +11,9 @@ import {
     initTestMarkup,
     isDesktopEnvironment,
     asyncScrollTest,
-    asyncWrapper
+    asyncWrapper,
+    isIE11
 } from '../../helpers/scheduler/helpers.js';
-
-import browser from 'core/utils/browser';
 
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
@@ -24,7 +23,6 @@ const {
 } = QUnit;
 
 const test = (description, callback) => {
-    const isIE11 = browser.msie && parseInt(browser.version) <= 11;
     const testFunc = isIE11
         ? QUnit.skip
         : QUnit.test;

@@ -3,6 +3,7 @@ import { locate } from 'animation/translator';
 import devices from 'core/devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import dataUtils from 'core/element_data';
+import browser from 'core/utils/browser';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -52,6 +53,8 @@ export const CLASSES = {
         right: '.dx-resizable-handle-right'
     }
 };
+
+export const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 
