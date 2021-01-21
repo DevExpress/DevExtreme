@@ -403,6 +403,9 @@ jest.mock('../../../../core/devices', () => {
                       ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
                         ref[prop] = size;
                       });
+                      ['overflowX', 'overflowY'].forEach((prop) => {
+                        ref[prop] = overflow;
+                      });
 
                       // eslint-disable-next-line
                       ref['window'] = ref;
@@ -413,26 +416,14 @@ jest.mock('../../../../core/devices', () => {
                     scrollable.containerRef = createElemRef(containerSize);
                     scrollable.contentRef = createElemRef(contentSize);
 
-                    (getElementComputedStyle as jest.Mock).mockImplementation((elem) => {
-                      const isContainer = elem === scrollable.containerRef;
-                      return {
-                        overflowX: overflow,
-                        overflowY: overflow,
-                        width: isContainer ? containerSize : contentSize,
-                        height: isContainer ? containerSize : contentSize,
-                      };
-                    });
+                    (getElementComputedStyle as jest.Mock).mockImplementation((elem) => elem);
 
-                    let expectedDirectionResult;
-                    if (Scrollable === ScrollableSimulated) {
-                      expectedDirectionResult = (containerSize < contentSize || bounceEnabled)
-                        ? direction
-                        : undefined;
-                    } else {
-                      expectedDirectionResult = containerSize < contentSize
-                        ? direction
-                        : undefined;
-                    }
+                    const hasScrollBar = Scrollable === ScrollableSimulated
+                      ? (containerSize < contentSize || bounceEnabled)
+                      : containerSize < contentSize;
+                    const expectedDirectionResult = hasScrollBar
+                      ? direction
+                      : undefined;
 
                     const e = { ...defaultEvent };
                     expect(scrollable.getDirection(e)).toBe(expectedDirectionResult);
