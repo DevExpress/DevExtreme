@@ -1015,64 +1015,16 @@ module('events', () => {
             this.testProgramChange(assert);
         });
 
-        test('on right arrow press', function(assert) {
-            this.keyboard.press('right');
+        ['right', 'left', 'home', 'end', 'pageUp', 'pageDown'].forEach(key => {
+            test(`on ${key} press`, function(assert) {
+                this.keyboard.press(key);
 
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$handle.get(0), 'event target is correct');
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, 'keydown', 'event type is correct');
+                assert.strictEqual(event.target, this.$handle.get(0), 'event target is correct');
 
-            this.testProgramChange(assert);
-        });
-
-        test('on left arrow press', function(assert) {
-            this.keyboard.press('left');
-
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$handle.get(0), 'event target is correct');
-
-            this.testProgramChange(assert);
-        });
-
-        test('on pageUp press', function(assert) {
-            this.keyboard.press('pageUp');
-
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$handle.get(0), 'event target is correct');
-
-            this.testProgramChange(assert);
-        });
-
-        test('on pageDown press', function(assert) {
-            this.keyboard.press('pageDown');
-
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$handle.get(0), 'event target is correct');
-
-            this.testProgramChange(assert);
-        });
-
-        test('on home press', function(assert) {
-            this.keyboard.press('home');
-
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$handle.get(0), 'event target is correct');
-
-            this.testProgramChange(assert);
-        });
-
-        test('on end press', function(assert) {
-            this.keyboard.press('end');
-
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$handle.get(0), 'event target is correct');
-
-            this.testProgramChange(assert);
+                this.testProgramChange(assert);
+            });
         });
     });
 
