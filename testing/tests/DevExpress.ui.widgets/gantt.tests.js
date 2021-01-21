@@ -696,7 +696,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.notOk(isValidStartTextBox, 'empty start validation');
         assert.notOk(isValidEndTextBox, 'empty end validation');
         titleTextBox.option('value', testTitle);
-        startTextBox.option('value', '1');
+        startTextBox.option('value', tasks[0].start);
         endTextBox.option('value', tasks[0].end);
         isValidTitleTextBox = titleTextBox._getValidationErrors() === null;
         isValidStartTextBox = startTextBox._getValidationErrors() === null;
@@ -3032,16 +3032,15 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
     test('panel sizes are the same', function(assert) {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
-        this.instance.option('height', 200);
-        this.instance.option('width', 600);
-        this.instance.option('taskListWidth', 300);
+        this.instance.option('width', 1400);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         let leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
         fullScreenCommand.execute();
         assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in FullScreen');
         fullScreenCommand.execute();
-        const diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
+        this.clock.tick();
+        let diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
         assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
         this.clock.tick();
         fullScreenCommand.execute();
@@ -3102,6 +3101,9 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
         leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
         fullScreenCommand.execute();
+        this.clock.tick();
+        diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
+        assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
     });
 });
 
