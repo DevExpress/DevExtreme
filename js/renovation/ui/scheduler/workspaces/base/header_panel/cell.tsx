@@ -6,44 +6,34 @@ import {
   OneWay,
   JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
-import { CellBaseProps } from '../cell';
+import { CellBase, CellBaseProps } from '../cell';
 import { DateTimeCellTemplateProps } from '../../types.d';
 import { combineClasses } from '../../../../../utils/combine_classes';
 
 export const viewFunction = ({
   restAttributes,
   classes,
+  dateCellTemplateProps,
   props: {
-    startDate,
     text,
-    groups,
-    groupIndex,
-    index,
-    dateCellTemplate: DateCellTemplate,
+    dateCellTemplate,
+    isFirstGroupCell,
+    isLastGroupCell,
   },
 }: HeaderPanelCell): JSX.Element => (
-  <th
+  <CellBase
     className={classes}
+    isFirstGroupCell={isFirstGroupCell}
+    isLastGroupCell={isLastGroupCell}
+    contentTemplate={dateCellTemplate}
+    contentTemplateProps={dateCellTemplateProps}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   >
-    {DateCellTemplate && (
-      <DateCellTemplate
-        data={{
-          date: startDate,
-          text,
-          groups,
-          groupIndex,
-        }}
-        index={index}
-      />
-    )}
-    {!DateCellTemplate && (
-      <div>
-        {text}
-      </div>
-    )}
-  </th>
+    <div>
+      {text}
+    </div>
+  </CellBase>
 );
 
 @ComponentBindings()
@@ -67,5 +57,25 @@ export class HeaderPanelCell extends JSXComponent(HeaderPanelCellProps) {
       'dx-scheduler-header-panel-current-time-cell': today,
       [className]: !!className,
     });
+  }
+
+  get dateCellTemplateProps(): DateTimeCellTemplateProps {
+    const {
+      startDate,
+      text,
+      groups,
+      groupIndex,
+      index,
+    } = this.props;
+
+    return {
+      data: {
+        date: startDate,
+        text,
+        groups,
+        groupIndex,
+      },
+      index,
+    };
   }
 }

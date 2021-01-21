@@ -42,7 +42,16 @@ export const viewFunction = ({
     )}
     <Row className="dx-scheduler-header-row">
       {dateHeaderMap[0].map(({
-        startDate, endDate, today, groups: cellGroups, groupIndex, index, key, text,
+        startDate,
+        endDate,
+        today,
+        groups: cellGroups,
+        groupIndex,
+        isFirstGroupCell,
+        isLastGroupCell,
+        index,
+        key,
+        text,
       }) => (
         <HeaderPanelCell
           startDate={startDate}
@@ -52,6 +61,8 @@ export const viewFunction = ({
           today={today}
           index={index}
           text={text}
+          isFirstGroupCell={isFirstGroupCell}
+          isLastGroupCell={isLastGroupCell}
           dateCellTemplate={dateCellTemplate}
           key={key}
         />
