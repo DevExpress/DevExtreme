@@ -12,8 +12,8 @@ import { RootSvgElement } from './renderers/svg_root';
 import { isDefined } from '../../../core/utils/type';
 
 import {
-  StrictSize, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location, Font,
-  TooltipCoordinates, Canvas,
+  StrictSize, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
+  Font, TooltipCoordinates, Canvas,
 } from './common/types.d';
 import { Format, Point } from '../common/types.d';
 
