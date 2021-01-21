@@ -555,3 +555,85 @@ QUnit.module('keyboard navigation', {
     });
 });
 
+QUnit.module('valueChanged handler should receive correct event parameter', {
+    beforeEach: function() {
+        fx.off = true;
+
+        this.handler = sinon.stub();
+        this.$element = $('#switch').dxSwitch({ onValueChanged: this.handler });
+        this.instance = this.$element.dxSwitch('instance');
+        this.keyboard = keyboardMock(this.$element);
+        this.pointer = pointerMock(this.$element);
+
+        this.testProgramChange = (assert) => {
+            const value = this.instance.option('value');
+            this.instance.option('value', !value);
+
+            const callCount = this.handler.callCount;
+            const event = this.handler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('on runtime change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click', function(assert) {
+        this.$element.trigger('dxclick');
+
+        const event = this.handler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+        assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on swipe', function(assert) {
+        this.pointer.start().swipeStart().swipeEnd(1);
+
+        const event = this.handler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'dxswipeend', 'event type is correct');
+        assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    ['enter', 'space'].forEach(key => {
+        QUnit.test(`on ${key} press`, function(assert) {
+            this.keyboard.press(key);
+
+            const event = this.handler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, 'keydown', 'event type is correct');
+            assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
+
+            this.testProgramChange(assert);
+        });
+    });
+
+    QUnit.test('on right arrow press', function(assert) {
+        this.keyboard.press('right');
+
+        const event = this.handler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'keydown', 'event type is correct');
+        assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on left arrow press', function(assert) {
+        this.instance.option('value', true);
+
+        this.keyboard.press('left');
+
+        const event = this.handler.getCall(1).args[0].event;
+        assert.strictEqual(event.type, 'keydown', 'event type is correct');
+        assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+});
+
