@@ -415,8 +415,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     // console.log('handleCancel', event, this);
   }
 
-  /* istanbul ignore next */
-  public getDirection(e: Event): string | undefined { // TODO make it private
+  private getDirection(e: Event): string | undefined {
     return isDxMouseWheelEvent(e) ? this.wheelDirection(e) : this.allowedDirection();
   }
 
@@ -442,7 +441,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return this.getRealDimension(this.containerRef, dimension);
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line
   getRealDimension(element, dimension): number {
     return Math.round(getBoundingRect(element)[dimension]);
   }
@@ -466,9 +465,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return 1; // TODO
   }
 
-  /* istanbul ignore next */
   // eslint-disable-next-line
-  public validate(event: Event): boolean { // TODO make it private
+  private validate(event: Event): boolean {
     return true; // TODO
   }
 
@@ -572,7 +570,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       case DIRECTION_VERTICAL:
         return DIRECTION_VERTICAL;
       default:
-        /* istanbul ignore next */
         return e?.shiftKey ? DIRECTION_HORIZONTAL : DIRECTION_VERTICAL;
     }
   }
