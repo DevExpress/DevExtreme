@@ -986,7 +986,7 @@ module('events', () => {
             this.testProgramChange(assert);
         });
 
-        test('on handler swipe', function(assert) {
+        test('on handle swipe', function(assert) {
             this.pointer.start().swipeStart().swipe(10);
 
             const event = this.valueChangedHandler.getCall(0).args[0].event;
@@ -996,7 +996,7 @@ module('events', () => {
             this.testProgramChange(assert);
         });
 
-        test('on handler swipeend (correction after swipe on float step)', function(assert) {
+        test('on handle swipeend (correction after swipe on float step)', function(assert) {
             this.pointer.start().swipeStart().swipeEnd(9.666692444513187);
 
             const event = this.valueChangedHandler.getCall(0).args[0].event;
