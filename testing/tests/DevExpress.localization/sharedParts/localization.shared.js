@@ -81,7 +81,7 @@ module.exports = function() {
 
         QUnit.test('getMonthNames', function(assert) {
             assert.deepEqual(dateLocalization.getMonthNames(),
-                ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                ['1월', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                 'Array of month names');
         });
 

@@ -51,7 +51,7 @@ const enCaGregorian = {
                         'months': {
                             'format': {
                                 'abbreviated': {
-                                    '1': 'Jan',
+                                    '1': '1월',
                                     '2': 'Feb',
                                     '3': 'Mar',
                                     '4': 'Apr',
@@ -79,7 +79,7 @@ const enCaGregorian = {
                                     '12': 'D'
                                 },
                                 'wide': {
-                                    '1': 'January',
+                                    '1': '1월',
                                     '2': 'February',
                                     '3': 'March',
                                     '4': 'April',
@@ -95,7 +95,7 @@ const enCaGregorian = {
                             },
                             'stand-alone': {
                                 'abbreviated': {
-                                    '1': 'Jan',
+                                    '1': '1월',
                                     '2': 'Feb',
                                     '3': 'Mar',
                                     '4': 'Apr',
@@ -123,7 +123,7 @@ const enCaGregorian = {
                                     '12': 'D'
                                 },
                                 'wide': {
-                                    '1': 'January',
+                                    '1': '1월',
                                     '2': 'February',
                                     '3': 'March',
                                     '4': 'April',
