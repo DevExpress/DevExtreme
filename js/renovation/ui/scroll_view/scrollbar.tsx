@@ -43,7 +43,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 
   return (
     <Widget
-      rootElementRef={scrollbarRef as any}
+      rootElementRef={scrollbarRef}
       classes={cssClasses}
       activeStateEnabled={activeStateEnabled}
       hoverStateEnabled={hoverStateEnabled}
