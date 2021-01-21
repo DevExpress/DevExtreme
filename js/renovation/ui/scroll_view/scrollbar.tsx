@@ -5,16 +5,20 @@ import {
   RefObject,
   Ref,
   Effect,
+  Method,
 } from 'devextreme-generator/component_declaration/common';
 
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
+import { isPlainObject } from '../../../core/utils/type';
+import { move } from '../../../animation/translator';
 
 import { ScrollbarProps } from './scrollbar_props';
 import {
   ScrollDirection,
+  DIRECTION_HORIZONTAL,
 } from './scrollable_utils';
 
 import {
@@ -60,6 +64,31 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
   @InternalState() active = false;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
+
+  @Method()
+  moveTo(location): void {
+    const { visibilityMode } = this.props;
+
+    if (visibilityMode === 'never') {
+      return;
+    }
+
+    let position = location;
+    const prop = this.props.direction === DIRECTION_HORIZONTAL ? 'left' : 'top';
+
+    if (isPlainObject(location)) {
+      position = location[prop] || 0;
+    }
+
+    const scrollBarLocation = {};
+    scrollBarLocation[prop] = this.calculateScrollBarPosition(position);
+    move(this.scrollRef, scrollBarLocation);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  calculateScrollBarPosition(location): number {
+    return -location * 1; // TODO: * this._thumbRatio;
+  }
 
   @Effect()
   pointerDownEffect(): DisposeEffectReturn {

@@ -1,5 +1,7 @@
+import React from 'react';
 import each from 'jest-each';
 import { mount } from 'enzyme';
+import { isNumeric } from '../../../../core/utils/type';
 
 import {
   clear as clearEventHandlers, emit, getEventHandlers,
@@ -11,6 +13,7 @@ import {
 } from '../scrollbar';
 
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
+import { DIRECTION_HORIZONTAL } from '../scrollable_utils';
 
 const THUMB_MIN_SIZE = 15;
 
@@ -114,6 +117,39 @@ describe('TopPocket', () => {
       expect(getEventHandlers('dxpointerup').length).toBe(1);
       detach();
       expect(getEventHandlers('dxpointerup').length).toBe(0);
+    });
+  });
+});
+
+describe('Methods', () => {
+  each(['horizontal', 'vertical', 'both']).describe('Direction: %o', (direction) => {
+    each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (visibilityMode) => {
+      each([{ top: -100, left: -100 }, { top: -100 }, { left: -100 }, -100]).describe('Location: %o', (location) => {
+        it('moveTo()', () => {
+          const scrollRef = React.createRef();
+          const viewModel = new Scrollbar({ visibilityMode, direction, needScrollbar: true });
+          (viewModel as any).scrollRef = scrollRef;
+
+          mount(viewFunction(viewModel as any) as JSX.Element);
+          (viewModel as any).scrollRef = (viewModel as any).scrollRef.current;
+
+          viewModel.moveTo(location);
+
+          const scrollbarStyle = window.getComputedStyle((viewModel as any).scrollRef);
+          if (visibilityMode === 'never') {
+            expect(scrollbarStyle.transform).toEqual('');
+            return;
+          }
+
+          if (direction === DIRECTION_HORIZONTAL) {
+            // eslint-disable-next-line no-nested-ternary
+            expect(scrollbarStyle.transform).toEqual(`translate(${isNumeric(location) ? 100 : (location.left ? 100 : 0)}px, 0px)`);
+          } else {
+            // eslint-disable-next-line no-nested-ternary
+            expect(scrollbarStyle.transform).toEqual(`translate(0px, ${isNumeric(location) ? 100 : (location.top ? 100 : 0)}px)`);
+          }
+        });
+      });
     });
   });
 });
