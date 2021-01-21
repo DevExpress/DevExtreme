@@ -500,6 +500,9 @@ export class DataGridEditing {
 
   @OneWay()
   useIcons?: boolean;
+
+  @TwoWay()
+  changes?: [];
 }
 
 @ComponentBindings()
