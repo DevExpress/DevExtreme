@@ -393,50 +393,66 @@ jest.mock('../../../../core/devices', () => {
             each([100, 200]).describe('ContentSize: %o', (contentSize) => {
               each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
                 each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-                  it('scrollinit eventArgs', () => {
-                    const containerRef = React.createRef();
-                    const contentRef = React.createRef();
-                    const viewModel = new Scrollable({ direction, bounceEnabled });
+                  each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
+                    each([true, false]).describe('IsShiftKeyPressed: %o', (isShiftKeyPressed) => {
+                      it('scrollinit eventArgs', () => {
+                        const containerRef = React.createRef();
+                        const contentRef = React.createRef();
+                        const viewModel = new Scrollable({ direction, bounceEnabled });
 
-                    const initStyles = (ref, size) => {
-                      ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
-                        // eslint-disable-next-line no-param-reassign
-                        ref.style[prop] = `${size}px`;
+                        const initStyles = (ref, size) => {
+                          ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
+                            // eslint-disable-next-line no-param-reassign
+                            ref.style[prop] = `${size}px`;
+                          });
+                          ['overflowX', 'overflowY'].forEach((prop) => {
+                            // eslint-disable-next-line no-param-reassign
+                            ref.style[prop] = overflow;
+                          });
+                          // eslint-disable-next-line no-param-reassign
+                          ref.getBoundingClientRect = jest.fn(() => ({
+                            width: size,
+                            height: size,
+                          }));
+
+                          return ref;
+                        };
+
+                        (viewModel as any).containerRef = containerRef;
+                        (viewModel as any).contentRef = contentRef;
+
+                        mount(viewFunction(viewModel as any) as JSX.Element);
+
+                        (viewModel as any).containerRef = (viewModel as any).containerRef.current;
+                        (viewModel as any).contentRef = (viewModel as any).contentRef.current;
+
+                        initStyles((viewModel as any).containerRef, containerSize);
+                        initStyles((viewModel as any).contentRef, contentSize);
+
+                        const isSimulatedStrategy = Scrollable === ScrollableSimulated;
+                        const hasScrollBar = isSimulatedStrategy
+                          ? (containerSize < contentSize || bounceEnabled)
+                          : containerSize < contentSize;
+                        let expectedDirectionResult = hasScrollBar
+                          ? direction
+                          : undefined;
+
+                        const e = { ...defaultEvent, shiftKey: isShiftKeyPressed };
+                        if (isDxWheelEvent) {
+                          (e as any).type = 'dxmousewheel';
+                        }
+
+                        if (isSimulatedStrategy && isDxWheelEvent) {
+                          expectedDirectionResult = direction;
+                          if (direction === 'both') {
+                            expectedDirectionResult = isShiftKeyPressed ? 'horizontal' : 'vertical';
+                          }
+                        }
+
+                        expect((viewModel as any).getDirection(e)).toBe(expectedDirectionResult);
+                        expect((viewModel as any).validate(e)).toBe(true); // TODO
                       });
-                      ['overflowX', 'overflowY'].forEach((prop) => {
-                        // eslint-disable-next-line no-param-reassign
-                        ref.style[prop] = overflow;
-                      });
-                      // eslint-disable-next-line no-param-reassign
-                      ref.getBoundingClientRect = jest.fn(() => ({
-                        width: size,
-                        height: size,
-                      }));
-
-                      return ref;
-                    };
-
-                    (viewModel as any).containerRef = containerRef;
-                    (viewModel as any).contentRef = contentRef;
-
-                    mount(viewFunction(viewModel as any) as JSX.Element);
-
-                    (viewModel as any).containerRef = (viewModel as any).containerRef.current;
-                    (viewModel as any).contentRef = (viewModel as any).contentRef.current;
-
-                    initStyles((viewModel as any).containerRef, containerSize);
-                    initStyles((viewModel as any).contentRef, contentSize);
-
-                    const hasScrollBar = Scrollable === ScrollableSimulated
-                      ? (containerSize < contentSize || bounceEnabled)
-                      : containerSize < contentSize;
-                    const expectedDirectionResult = hasScrollBar
-                      ? direction
-                      : undefined;
-
-                    const e = { ...defaultEvent };
-                    expect(viewModel.getDirection(e)).toBe(expectedDirectionResult);
-                    expect(viewModel.validate(e)).toBe(true); // TODO actualize this value
+                    });
                   });
                 });
               });

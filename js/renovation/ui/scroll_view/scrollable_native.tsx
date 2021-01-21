@@ -351,8 +351,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     // console.log('handleCancel', event, this);
   }
 
-  /* istanbul ignore next */
-  public getDirection(): string | undefined {
+  private getDirection(): string | undefined {
     return this.allowedDirection();
   }
 
@@ -371,9 +370,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     };
   }
 
-  /* istanbul ignore next */
   // eslint-disable-next-line
-  public validate(event: Event): boolean { // TODO make it private
+  private validate(event: Event): boolean {
     return true; // TODO
   }
 
