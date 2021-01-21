@@ -3040,7 +3040,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in FullScreen');
         fullScreenCommand.execute();
         this.clock.tick();
-        let diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
+        const diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
         assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
         this.clock.tick();
         fullScreenCommand.execute();
@@ -3101,9 +3101,6 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
         leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
         fullScreenCommand.execute();
-        this.clock.tick();
-        diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
-        assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
     });
 });
 
