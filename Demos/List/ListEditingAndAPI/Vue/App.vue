@@ -24,7 +24,7 @@
         />
       </div>
       <div class="option">
-        <span>Deleting type</span>
+        <span>Item delete mode</span>
         <DxSelectBox
           :disabled="!allowDeleting"
           :items="['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context']"
