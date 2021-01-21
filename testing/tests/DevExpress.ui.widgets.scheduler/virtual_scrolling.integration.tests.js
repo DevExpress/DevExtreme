@@ -2639,6 +2639,11 @@ module('Virtual scrolling', () => {
                 }
             }, () => {
                 test('Scroll Right', function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
                     const $style = $('<style>');
                     const styleBefore = $style.text();
 
@@ -2738,7 +2743,6 @@ module('Virtual scrolling', () => {
                         $style.text(styleBefore);
                     });
                 });
-
             });
         });
     });
