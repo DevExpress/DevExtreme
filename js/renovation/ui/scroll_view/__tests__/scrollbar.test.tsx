@@ -14,6 +14,7 @@ import {
 
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import { DIRECTION_HORIZONTAL } from '../scrollable_utils';
+import { ScrollbarProps } from '../scrollbar_props';
 
 const THUMB_MIN_SIZE = 15;
 
@@ -149,6 +150,82 @@ describe('Methods', () => {
             expect(scrollbarStyle.transform).toEqual(`translate(0px, ${isNumeric(location) ? 100 : (location.top ? 100 : 0)}px)`);
           }
         });
+      });
+
+      it('isScrollbar(element), element is scrollbar element', () => {
+        const scrollbarRef = {} as HTMLDivElement;
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+        (viewModel as any).scrollbarRef = scrollbarRef;
+
+        mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isScrollbar(scrollbarRef)).toBe(true);
+      });
+
+      it('isScrollbar(element), element is not scrollbar element', () => {
+        const scrollbarRef = {} as HTMLDivElement;
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+        (viewModel as any).scrollbarRef = scrollbarRef;
+
+        mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isScrollbar({} as HTMLDivElement)).toBe(false);
+      });
+
+      it('isThumb(element), element is scrollable scroll element', () => {
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+
+        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isThumb(scrollbar.find('.dx-scrollable-scroll').getDOMNode())).toBe(true);
+      });
+
+      it('isThumb(element), element is scrollable content element', () => {
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+
+        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isThumb(scrollbar.find('.dx-scrollable-scroll-content').getDOMNode())).toBe(true);
+      });
+
+      it('isThumb(element), element is scrollbar element', () => {
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+
+        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isThumb(scrollbar.getDOMNode())).toBe(false);
+      });
+
+      it('isContent(element), element is scrollable scroll element', () => {
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+
+        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isContent(scrollbar.find('.dx-scrollable-scroll').getDOMNode())).toBe(true);
+      });
+
+      it('isContent(element), element is scrollable content element', () => {
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+
+        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isContent(scrollbar.find('.dx-scrollable-scroll-content').getDOMNode())).toBe(true);
+      });
+
+      it('isContent(element), element is scrollbar element', () => {
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+
+        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isContent(scrollbar.getDOMNode())).toBe(true);
       });
     });
   });
