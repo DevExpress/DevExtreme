@@ -23,19 +23,13 @@ export const viewFunction = ({
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class DataGridViews extends JSXComponent<DataGridViewProps, 'instance'>() {
   get views(): {name: string; view: DataGridView}[] {
-    const result: {name: string; view: DataGridView}[] = [];
+    const views = VIEW_NAMES.map(
+      (viewName) => this.props.instance?.getView(viewName) as DataGridView,
+    ).filter((view) => view);
 
-    VIEW_NAMES.forEach((viewName) => {
-      const view = this.props.instance?.getView(viewName) as DataGridView;
-
-      if (view) {
-        result.push({
-          name: viewName,
-          view,
-        });
-      }
-    });
-
-    return result;
+    return views.map((view) => ({
+      name: view.name,
+      view,
+    }));
   }
 }
