@@ -45,7 +45,6 @@ import { Scrollbar } from '../scrollbar';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
-
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
   actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
@@ -388,6 +387,60 @@ jest.mock('../../../../core/devices', () => {
 
             expect(initHandler).toHaveBeenCalledTimes(1);
             expect(initHandler).toHaveBeenCalledWith(e);
+          });
+
+          each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
+            each([100, 200]).describe('ContentSize: %o', (contentSize) => {
+              each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
+                each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
+                  it('scrollinit eventArgs', () => {
+                    const containerRef = React.createRef();
+                    const contentRef = React.createRef();
+                    const viewModel = new Scrollable({ direction, bounceEnabled });
+
+                    const initStyles = (ref, size) => {
+                      ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
+                        // eslint-disable-next-line no-param-reassign
+                        ref.style[prop] = `${size}px`;
+                      });
+                      ['overflowX', 'overflowY'].forEach((prop) => {
+                        // eslint-disable-next-line no-param-reassign
+                        ref.style[prop] = overflow;
+                      });
+                      // eslint-disable-next-line no-param-reassign
+                      ref.getBoundingClientRect = jest.fn(() => ({
+                        width: size,
+                        height: size,
+                      }));
+
+                      return ref;
+                    };
+
+                    (viewModel as any).containerRef = containerRef;
+                    (viewModel as any).contentRef = contentRef;
+
+                    mount(viewFunction(viewModel as any) as JSX.Element);
+
+                    (viewModel as any).containerRef = (viewModel as any).containerRef.current;
+                    (viewModel as any).contentRef = (viewModel as any).contentRef.current;
+
+                    initStyles((viewModel as any).containerRef, containerSize);
+                    initStyles((viewModel as any).contentRef, contentSize);
+
+                    const hasScrollBar = Scrollable === ScrollableSimulated
+                      ? (containerSize < contentSize || bounceEnabled)
+                      : containerSize < contentSize;
+                    const expectedDirectionResult = hasScrollBar
+                      ? direction
+                      : undefined;
+
+                    const e = { ...defaultEvent };
+                    expect(viewModel.getDirection(e)).toBe(expectedDirectionResult);
+                    expect(viewModel.validate(e)).toBe(true); // TODO actualize this value
+                  });
+                });
+              });
+            });
           });
 
           it('should subscribe to scrollstart event', () => {
@@ -1452,7 +1505,7 @@ jest.mock('../../../../core/devices', () => {
                 });
                 const containerRef = createContainerRef({ top: 0, left: -320 }, 'both', undefined, true);
 
-                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
+                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' });
                 scrollable.containerRef = containerRef;
                 scrollable.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);

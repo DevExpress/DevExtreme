@@ -5,7 +5,9 @@ import getElementComputedStyle from '../../utils/get_computed_style';
 import { toNumber } from '../../utils/type_conversion';
 
 import {
-  ScrollableLocation, ScrollOffset, ScrollableBoundary, ScrollableDirection,
+  ScrollableLocation,
+  ScrollOffset, ScrollableBoundary, ScrollableDirection,
+  allowedDirection,
 } from './types.d';
 
 export const SCROLL_LINE_HEIGHT = 40;
@@ -29,6 +31,13 @@ export function getElementWidth(element: Element | undefined): number {
 
 export function getElementHeight(element: Element | undefined): number {
   return toNumber(getElementComputedStyle(element)?.height);
+}
+
+export function getElementStyle(
+  name: keyof CSSStyleDeclaration, element?: Element,
+): number | string {
+  const computedStyle = getElementComputedStyle(element) || {};
+  return computedStyle[name];
 }
 
 export function ensureLocation(
@@ -73,6 +82,10 @@ export class ScrollDirection {
 
   get isVertical(): boolean {
     return this.direction === DIRECTION_VERTICAL || this.direction === DIRECTION_BOTH;
+  }
+
+  get isBoth(): boolean {
+    return this.direction === DIRECTION_BOTH;
   }
 }
 
@@ -185,4 +198,19 @@ export function getElementLocation(
   );
 
   return getPublicCoordinate(prop, location, containerRef, rtlEnabled);
+}
+
+export function updateAllowedDirection(
+  allowedDirections: allowedDirection, direction: ScrollableDirection,
+): string | undefined {
+  const { isVertical, isHorizontal, isBoth } = new ScrollDirection(direction);
+
+  if (isBoth && allowedDirections.vertical && allowedDirections.horizontal) {
+    return DIRECTION_BOTH;
+  } if (isHorizontal && allowedDirections.horizontal) {
+    return DIRECTION_HORIZONTAL;
+  } if (isVertical && allowedDirections.vertical) {
+    return DIRECTION_VERTICAL;
+  }
+  return undefined;
 }

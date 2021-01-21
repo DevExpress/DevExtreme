@@ -15,8 +15,11 @@ import { Scrollbar } from './scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
-import { normalizeKeyName } from '../../../events/utils/index';
+import { isDxMouseWheelEvent, normalizeKeyName } from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
+import { getBoundingRect } from '../../../core/utils/position';
+import { titleize } from '../../../core/utils/inflector';
+
 import BaseWidgetProps from '../../utils/base_props';
 import {
   ScrollableProps,
@@ -24,14 +27,16 @@ import {
 import { TopPocketProps } from './topPocket_props';
 import { BottomPocketProps } from './bottomPocket_props';
 import {
-  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset, ScrollEventArgs,
+  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset,
+  allowedDirection, ScrollEventArgs,
 } from './types.d';
 
 import {
   ensureLocation, ScrollDirection, normalizeCoordinate,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
-  getElementWidth, getElementHeight,
+  getElementWidth, getElementHeight, getElementStyle,
+  updateAllowedDirection,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
   SCROLLABLE_CONTAINER_CLASS,
@@ -411,14 +416,59 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   /* istanbul ignore next */
-  // eslint-disable-next-line
-  private getDirection(event: Event): string {
-    return 'vertical'; // TODO
+  public getDirection(e: Event): string | undefined { // TODO make it private
+    return isDxMouseWheelEvent(e) ? this.wheelDirection(e) : this.allowedDirection();
+  }
+
+  private allowedDirection(): string | undefined {
+    return updateAllowedDirection(this.allowedDirections(), this.props.direction);
+  }
+
+  private allowedDirections(): allowedDirection {
+    const { bounceEnabled, direction } = this.props;
+    const { isVertical, isHorizontal } = new ScrollDirection(direction);
+
+    return {
+      vertical: isVertical && (Math.round(this.getMinOffset('height')) < 0 || bounceEnabled),
+      horizontal: isHorizontal && (Math.round(this.getMinOffset('width')) < 0 || bounceEnabled),
+    };
+  }
+
+  getMinOffset(dimension: string): number {
+    return -Math.max(this.contentSize(dimension, dimension === 'width' ? 'x' : 'y') - this.containerSize(dimension), 0);
+  }
+
+  containerSize(dimension: string): number {
+    return this.getRealDimension(this.containerRef, dimension);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getRealDimension(element, dimension): number {
+    return Math.round(getBoundingRect(element)[dimension]);
+  }
+
+  contentSize(dimension: string, axis: string): number {
+    const overflowStyleName = `overflow${axis.toUpperCase()}`;
+    const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef) === 'hidden';
+    let contentSize = this.getRealDimension(this.contentRef, dimension);
+
+    if (!isOverflowHidden) {
+      const containerScrollSize = this.contentRef[`scroll${titleize(dimension)}`] * this.getScaleRatio();
+
+      contentSize = Math.max(containerScrollSize, contentSize);
+    }
+
+    return contentSize;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getScaleRatio(): number {
+    return 1; // TODO
   }
 
   /* istanbul ignore next */
   // eslint-disable-next-line
-  private validate(event: Event): boolean {
+  public validate(event: Event): boolean { // TODO make it private
     return true; // TODO
   }
 
