@@ -407,23 +407,6 @@ module('value', moduleConfig, () => {
         assert.strictEqual(e.value, 1, 'itemData is correct');
     });
 
-    test('onValueChanged option should get jQuery event as a parameter', function(assert) {
-        let jQueryEvent;
-        const $radioGroup = createRadioGroup({
-            items: [1, 2, 3],
-            onValueChanged: function(e) {
-                jQueryEvent = e.event;
-            }
-        });
-        const radioGroup = getInstance($radioGroup);
-
-        $(radioGroup.itemElements()).first().trigger('dxclick');
-        assert.ok(jQueryEvent, 'jQuery event is defined when click used');
-
-        radioGroup.option('value', 2);
-        assert.notOk(jQueryEvent, 'jQuery event is not defined when api used');
-    });
-
     test('widget changes the selection correctly when using the dataSource with the key', function(assert) {
         assert.expect(2);
         const items = [
@@ -448,6 +431,63 @@ module('value', moduleConfig, () => {
         $firstItem.trigger('dxclick');
 
         assert.ok($firstItem.hasClass('dx-item-selected'), 'first item is selected');
+    });
+
+    QUnit.module('valueChanged handler should receive correct event parameter', {
+        beforeEach: function() {
+            this.handler = sinon.stub();
+            this.$element = createRadioGroup({
+                items: [1, 2],
+                onValueChanged: this.handler
+            });
+            this.instance = getInstance(this.$element);
+            this.keyboard = keyboardMock(this.$element);
+
+            this.testProgramChange = (assert) => {
+                this.instance.option('value', 2);
+
+                const callCount = this.handler.callCount - 1;
+                const event = this.handler.getCall(callCount).args[0].event;
+                assert.strictEqual(event, undefined, 'event is undefined');
+            };
+        }
+    }, () => {
+        QUnit.test('after click', function(assert) {
+            const $firstItem = $(this.instance.itemElements().first());
+            $firstItem.trigger('dxclick');
+
+            const event = this.handler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+            assert.strictEqual(event.target, $firstItem.get(0), 'event target is correct');
+
+            this.testProgramChange(assert);
+        });
+
+        QUnit.test('after space press', function(assert) {
+            this.keyboard.press('space');
+
+            const event = this.handler.getCall(0).args[0].event;
+            const firstItemElement = this.instance.itemElements()[0];
+            assert.strictEqual(event.type, 'keydown', 'event type is correct');
+            assert.strictEqual(event.target, firstItemElement, 'event target is correct');
+
+            this.testProgramChange(assert);
+        });
+
+        QUnit.test('after enter press', function(assert) {
+            this.keyboard.press('enter');
+
+            const event = this.handler.getCall(0).args[0].event;
+            const firstItemElement = this.instance.itemElements()[0];
+            assert.strictEqual(event.type, 'keydown', 'event type is correct');
+            assert.strictEqual(event.target, firstItemElement, 'event target is correct');
+
+            this.testProgramChange(assert);
+        });
+
+        QUnit.test('after runtime change', function(assert) {
+            this.testProgramChange(assert);
+        });
     });
 });
 
