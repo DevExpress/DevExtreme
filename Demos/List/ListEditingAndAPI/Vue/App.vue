@@ -2,7 +2,7 @@
   <div id="list-api-demo">
     <div class="widget-container">
       <DxList
-        :items="tasks"
+        :data-source="tasks"
         :height="400"
         :allow-item-deleting="allowDeleting"
         :item-delete-mode="deleteType"

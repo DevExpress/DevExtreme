@@ -16,7 +16,6 @@ $(function(){
             },
             showTitle: true,
             title: "Information",
-            visible: false,
             dragEnabled: false,
             closeOnOutsideClick: true
     };

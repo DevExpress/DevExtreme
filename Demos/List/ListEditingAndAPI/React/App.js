@@ -40,7 +40,7 @@ class App extends React.Component {
       <React.Fragment>
         <div className="widget-container">
           <List
-            items={tasks}
+            dataSource={tasks}
             height={400}
             allowItemDeleting={this.state.allowDeleting}
             itemDeleteMode={this.state.deleteType}
