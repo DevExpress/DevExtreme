@@ -37,6 +37,7 @@ class ViewDataGenerator {
     _getCompleteDateHeaderMap(options, completeViewDataMap) {
         const {
             getDateHeaderText,
+            today,
         } = options;
 
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
@@ -44,6 +45,7 @@ class ViewDataGenerator {
         return [completeViewDataMap[index].map((cellData, index) => ({
             ...cellData,
             text: getDateHeaderText(index),
+            today: dateUtils.sameDate(cellData.startDate, today),
         }))];
     }
 
