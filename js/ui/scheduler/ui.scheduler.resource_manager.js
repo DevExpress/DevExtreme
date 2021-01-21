@@ -382,8 +382,8 @@ export default class ResourceManager {
             const resourceFieldName = this.getField(resource);
             const resourceValue = rawAppointment[resourceFieldName];
             if(resourceValue !== undefined) {
-                const items = this.getResources().filter(r => {
-                    return r.fieldExpr === resourceFieldName;
+                const items = this.getResources().filter(resource => {
+                    return this.getField(resource) === resourceFieldName;
                 })[0].dataSource;
 
                 const resultValue = [];
