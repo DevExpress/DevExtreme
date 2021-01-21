@@ -12,7 +12,7 @@ import { RootSvgElement } from './renderers/svg_root';
 import { isDefined } from '../../../core/utils/type';
 
 import {
-  Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
+  StrictSize, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
   TooltipCoordinates,
 } from './common/types.d';
 import { Format, Point } from '../common/types.d';
@@ -343,7 +343,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     return normalizeEnum(this.props.location);
   }
 
-  get textSizeWithPaddings(): Size {
+  get textSizeWithPaddings(): StrictSize {
     const { paddingLeftRight, paddingTopBottom } = this.props;
     return {
       width: this.textSize.width + paddingLeftRight * 2,
