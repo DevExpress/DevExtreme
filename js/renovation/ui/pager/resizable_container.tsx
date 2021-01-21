@@ -34,11 +34,6 @@ export const viewFunction = ({
 );
 interface ChildElements<T> { pageSizes: T; pages: T; info: T }
 interface AllElements<T> extends ChildElements<T> { parent: T }
-// type ChildElementsName = 'pageSizes' | 'pages' | 'info';
-// type AllElementsName = 'parent' | ChildElementsName;
-// type AllElementsWidth = Record<AllElementsName, number>;
-// type ChildElementsWidth = Record<ChildElementsName, number>;
-// type HTMLRefType = Record<AllElementsName, HTMLElement | undefined>;
 interface ChildElementProps {
   infoTextVisible: boolean;
   isLargeDisplayMode: boolean;
