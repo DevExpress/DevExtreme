@@ -23,8 +23,6 @@ import {
   SCROLLABLE_SCROLLBARS_HIDDEN,
 } from '../scrollable_utils';
 
-import getElementComputedStyle from '../../../utils/get_computed_style';
-
 import {
   ScrollableSimulated,
   viewFunction as viewFunctionSimulated,
@@ -47,7 +45,6 @@ import { Scrollbar } from '../scrollbar';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
-jest.mock('../../../utils/get_computed_style');
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
   actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
@@ -392,31 +389,43 @@ jest.mock('../../../../core/devices', () => {
             expect(initHandler).toHaveBeenCalledWith(e);
           });
 
-          each(['100', '200']).describe('ContainerSize: %o', (containerSize) => {
-            each(['100', '200']).describe('ContentSize: %o', (contentSize) => {
+          each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
+            each([100, 200]).describe('ContentSize: %o', (contentSize) => {
               each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
                 each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
                   it('scrollinit eventArgs', () => {
-                    const scrollable = new Scrollable({ direction, bounceEnabled });
-                    const createElemRef = (size) => {
-                      const ref = {} as RefObject<HTMLDivElement>;
+                    const containerRef = React.createRef();
+                    const contentRef = React.createRef();
+                    const viewModel = new Scrollable({ direction, bounceEnabled });
+
+                    const initStyles = (ref, size) => {
                       ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
-                        ref[prop] = size;
+                        // eslint-disable-next-line no-param-reassign
+                        ref.style[prop] = `${size}px`;
                       });
                       ['overflowX', 'overflowY'].forEach((prop) => {
-                        ref[prop] = overflow;
+                        // eslint-disable-next-line no-param-reassign
+                        ref.style[prop] = overflow;
                       });
-
-                      // eslint-disable-next-line
-                      ref['window'] = ref;
+                      // eslint-disable-next-line no-param-reassign
+                      ref.getBoundingClientRect = jest.fn(() => ({
+                        width: size,
+                        height: size,
+                      }));
 
                       return ref;
                     };
 
-                    scrollable.containerRef = createElemRef(containerSize);
-                    scrollable.contentRef = createElemRef(contentSize);
+                    (viewModel as any).containerRef = containerRef;
+                    (viewModel as any).contentRef = contentRef;
 
-                    (getElementComputedStyle as jest.Mock).mockImplementation((elem) => elem);
+                    mount(viewFunction(viewModel as any) as JSX.Element);
+
+                    (viewModel as any).containerRef = (viewModel as any).containerRef.current;
+                    (viewModel as any).contentRef = (viewModel as any).contentRef.current;
+
+                    initStyles((viewModel as any).containerRef, containerSize);
+                    initStyles((viewModel as any).contentRef, contentSize);
 
                     const hasScrollBar = Scrollable === ScrollableSimulated
                       ? (containerSize < contentSize || bounceEnabled)
@@ -426,8 +435,8 @@ jest.mock('../../../../core/devices', () => {
                       : undefined;
 
                     const e = { ...defaultEvent };
-                    expect(scrollable.getDirection(e)).toBe(expectedDirectionResult);
-                    expect(scrollable.validate(e)).toBe(true); // TODO actualize this value
+                    expect(viewModel.getDirection(e)).toBe(expectedDirectionResult);
+                    expect(viewModel.validate(e)).toBe(true); // TODO actualize this value
                   });
                 });
               });
