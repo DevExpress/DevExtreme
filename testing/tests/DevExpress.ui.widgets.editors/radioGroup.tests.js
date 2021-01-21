@@ -463,26 +463,17 @@ module('value', moduleConfig, () => {
             this.testProgramChange(assert);
         });
 
-        QUnit.test('after space press', function(assert) {
-            this.keyboard.press('space');
+        ['space', 'enter'].forEach(key => {
+            QUnit.test(`after ${key} press`, function(assert) {
+                this.keyboard.press(key);
 
-            const event = this.handler.getCall(0).args[0].event;
-            const firstItemElement = this.instance.itemElements()[0];
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, firstItemElement, 'event target is correct');
+                const event = this.handler.getCall(0).args[0].event;
+                const firstItemElement = this.instance.itemElements()[0];
+                assert.strictEqual(event.type, 'keydown', 'event type is correct');
+                assert.strictEqual(event.target, firstItemElement, 'event target is correct');
 
-            this.testProgramChange(assert);
-        });
-
-        QUnit.test('after enter press', function(assert) {
-            this.keyboard.press('enter');
-
-            const event = this.handler.getCall(0).args[0].event;
-            const firstItemElement = this.instance.itemElements()[0];
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, firstItemElement, 'event target is correct');
-
-            this.testProgramChange(assert);
+                this.testProgramChange(assert);
+            });
         });
 
         QUnit.test('after runtime change', function(assert) {
