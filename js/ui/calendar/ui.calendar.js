@@ -241,8 +241,14 @@ const Calendar = Editor.inherit({
         return dateSerialization.deserializeDate(value);
     },
 
-    _dateValue: function(value, dxEvent) {
-        if(dxEvent) this._saveValueChangeEvent(dxEvent);
+    _dateValue: function(value, event) {
+        if(event) {
+            if(event.type === 'keydown') {
+                const cellElement = this._view._getContouredCell().get(0);
+                event.target = cellElement;
+            }
+            this._saveValueChangeEvent(event);
+        }
         this._dateOption('value', value);
     },
 
