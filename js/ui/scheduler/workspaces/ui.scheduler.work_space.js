@@ -41,7 +41,7 @@ import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/ba
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
-import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/date_header/layout.j';
+import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import VirtualSelectionState from './virtual_selection_state';
 
 import { cache } from './cache';
@@ -1202,7 +1202,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _renderView() {
         this._setFirstViewDate();
 
-        if(this.isRenovatedRender()) {
+        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
             this.renderRGroupPanel();
         } else {
             this._applyCellTemplates(
@@ -1365,6 +1365,12 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     renderRDateHeader() {
+        if(this.option('groups').length) {
+            this._attachGroupCountAttr();
+        } else {
+            this._detachGroupCountAttr();
+        }
+
         this.renderRComponent(
             this._$thead,
             dxrDateHeader,
@@ -1372,6 +1378,15 @@ class SchedulerWorkSpace extends WidgetObserver {
             {
                 dateHeaderMap: this.viewDataProvider.dateHeaderMap,
                 dateCellTemplate: this.option('dateCellTemplate'),
+                groups: this.option('groups'),
+                groupByDate: this.isGroupedByDate(),
+                groupOrientation: this.option('groupOrientation'),
+                resourceCellTemplate: this.option('resourceCellTemplate'),
+                className: this.verticalGroupTableClass,
+                baseColSpan: this.isGroupedByDate()
+                    ? 1
+                    : this._getCellCount(),
+                columnCountPerGroup: this._getCellCount(),
             }
         );
     }
