@@ -963,8 +963,9 @@ module('events', () => {
                 min: 0,
                 value: 100,
                 onValueChanged: this.valueChangedHandler,
-                useInkRipple: false
-            }).css('width', 500);
+                useInkRipple: false,
+                width: 500
+            });
             this.instance = this.$element.dxSlider('instance');
             this.$handle = this.$element.find(`.${SLIDER_HANDLE_CLASS}`);
             this.$wrapper = this.$element.find(`.${SLIDER_WRAPPER_CLASS}`);
