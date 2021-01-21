@@ -981,7 +981,7 @@ module('events', () => {
             };
         }
     }, () => {
-        QUnit.test('on runtime change', function(assert) {
+        test('on runtime change', function(assert) {
             this.testProgramChange(assert);
         });
 
