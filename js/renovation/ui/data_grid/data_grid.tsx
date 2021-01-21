@@ -4,7 +4,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import {
   DataGridProps,
-} from './props';
+} from './common/data_grid_props';
 
 import '../../../ui/data_grid/ui.data_grid';
 

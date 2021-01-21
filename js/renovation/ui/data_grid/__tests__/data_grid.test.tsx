@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import each from 'jest-each';
 import { DataGrid, viewFunction as DataGridView } from '../data_grid';
-import { DataGridProps } from '../props';
+import { DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../common/widget';
 import { DataGridViews } from '../data_grid_views';
 import '../datagrid_component';
