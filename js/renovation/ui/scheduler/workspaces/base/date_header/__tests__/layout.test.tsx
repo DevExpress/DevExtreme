@@ -1,5 +1,9 @@
 import { shallow } from 'enzyme';
-import { viewFunction as LayoutView, HeaderPanelLayout, HeaderPanelLayoutProps } from '../layout';
+import {
+  viewFunction as LayoutView,
+  DateHeader,
+  DateHeaderProps,
+} from '../layout';
 import { Row } from '../../row';
 import * as utilsModule from '../../../utils';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
@@ -29,7 +33,7 @@ describe('HeaderPanelLayoutBase', () => {
     const render = (viewModel) => shallow(LayoutView({
       ...viewModel,
       props: {
-        ...(new HeaderPanelLayoutProps()),
+        ...(new DateHeaderProps()),
         cellTemplate,
         viewCellsData,
         ...viewModel.props,
@@ -133,12 +137,12 @@ describe('HeaderPanelLayoutBase', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       it('should calculate isVerticalGroupOrientation correctly', () => {
-        const layout = new HeaderPanelLayout({
+        const layout = new DateHeader({
           groupOrientation: VERTICAL_GROUP_ORIENTATION,
         });
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        layout.isVerticalGroupOrientation;
+        expect(layout.isVerticalGrouping)
+          .toBe(VERTICAL_GROUP_ORIENTATION);
 
         expect(isVerticalGroupOrientation)
           .toHaveBeenCalledWith(VERTICAL_GROUP_ORIENTATION);

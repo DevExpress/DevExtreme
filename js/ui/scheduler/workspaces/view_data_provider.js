@@ -34,6 +34,19 @@ class ViewDataGenerator {
         return viewDataMap;
     }
 
+    _getCompleteDateHeaderMap(options, completeViewDataMap) {
+        const {
+            getDateHeaderText,
+        } = options;
+
+        const index = completeViewDataMap[0][0].allDay ? 1 : 0;
+
+        return [completeViewDataMap[index].map((cellData, index) => ({
+            ...cellData,
+            text: getDateHeaderText(index),
+        }))];
+    }
+
     _generateViewDataMap(completeViewDataMap, options) {
         const {
             startRowIndex,
@@ -62,6 +75,16 @@ class ViewDataGenerator {
                         })
                     )
             );
+    }
+
+    _generateDateHeaderMap(completeDateHeaderMap, options) {
+        const {
+            startCellIndex,
+            cellCount
+        } = options;
+
+        return [completeDateHeaderMap[0].slice(startCellIndex, startCellIndex + cellCount)
+            .map(cellData => cellData)];
     }
 
     _getViewDataFromMap(viewDataMap, completeViewDataMap, options) {
@@ -477,6 +500,7 @@ export default class ViewDataProvider {
         this._viewDataGenerator = null;
         this._viewData = [];
         this._completeViewDataMap = [];
+        this._completeDateHeaderMap = [];
         this._viewDataMap = [];
         this._groupedDataMapProvider = null;
         this._workspace = workspace;
@@ -492,11 +516,17 @@ export default class ViewDataProvider {
     get completeViewDataMap() { return this._completeViewDataMap; }
     set completeViewDataMap(value) { this._completeViewDataMap = value; }
 
+    get completeDateHeaderMap() { return this._completeDateHeaderMap; }
+    set completeDateHeaderMap(value) { this._completeDateHeaderMap = value; }
+
     get viewData() { return this._viewData; }
     set viewData(value) { this._viewData = value; }
 
     get viewDataMap() { return this._viewDataMap; }
     set viewDataMap(value) { this._viewDataMap = value; }
+
+    get dateHeaderMap() { return this._viewDataMap; }
+    set dateHeaderMap(value) { this._viewDataMap = value; }
 
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
 
@@ -508,11 +538,19 @@ export default class ViewDataProvider {
 
         if(isGenerateNewViewData) {
             this.completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
+            this.completeDateHeaderMap = viewDataGenerator
+                ._getCompleteDateHeaderMap(renderOptions, this.completeViewDataMap);
         }
 
         this.viewDataMap = viewDataGenerator._generateViewDataMap(this.completeViewDataMap, renderOptions);
         this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, this.completeViewDataMap, renderOptions);
-        this._groupedDataMapProvider = new GroupedDataMapProvider(this.viewDataGenerator, this.viewDataMap, this.completeViewDataMap, this._workspace);
+        this._groupedDataMapProvider = new GroupedDataMapProvider(
+            this.viewDataGenerator,
+            this.viewDataMap,
+            this.completeViewDataMap,
+            this._workspace,
+        );
+        this.dateHeaderMap = viewDataGenerator._generateDateHeaderMap(this.completeDateHeaderMap, renderOptions);
     }
 
     getStartDate() {

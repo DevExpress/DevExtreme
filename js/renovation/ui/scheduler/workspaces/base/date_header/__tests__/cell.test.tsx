@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import {
-  MonthHeaderPanelCell as Cell,
+  HeaderPanelCell as Cell,
   viewFunction as CellView,
 } from '../cell';
 import dateLocalization from '../../../../../../../localization/date';

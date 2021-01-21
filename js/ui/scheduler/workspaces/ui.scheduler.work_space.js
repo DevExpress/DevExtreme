@@ -41,6 +41,7 @@ import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/ba
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
+import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/date_header/layout.j';
 import VirtualSelectionState from './virtual_selection_state';
 
 import { cache } from './cache';
@@ -1209,11 +1210,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             );
         }
 
-        this._renderDateHeader();
-
         if(this.isRenovatedRender()) {
             this.renderRWorkspace();
         } else {
+            this._renderDateHeader();
             this._renderTimePanel();
             this._renderGroupAllDayPanel();
             this._renderDateTable();
@@ -1263,7 +1263,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             rowCount,
             totalRowCount: this._getRowCount(),
             totalCellCount: cellCount,
-            groupCount
+            groupCount,
+            getDateHeaderText: this._getHeaderText.bind(this),
         };
 
         if(this.isVirtualScrolling()) {
@@ -1283,6 +1284,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.viewDataProvider.update(isGenerateNewViewData);
 
+        this.renderRDateHeader();
         this.renderRAllDayPanel();
         this.renderRTimeTable();
         this.renderRDateTable();
@@ -1357,6 +1359,18 @@ class SchedulerWorkSpace extends WidgetObserver {
             {
                 viewData: this.viewDataProvider.viewData,
                 timeCellTemplate: this.option('timeCellTemplate'),
+            }
+        );
+    }
+
+    renderRDateHeader() {
+        this.renderRComponent(
+            this._$thead,
+            dxrDateHeader,
+            'renovatedDateHeader',
+            {
+                dateHeaderMap: this.viewDataProvider.dateHeaderMap,
+                dateCellTemplate: this.option('dateCellTemplate'),
             }
         );
     }
