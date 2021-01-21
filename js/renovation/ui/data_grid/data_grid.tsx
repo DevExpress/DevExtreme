@@ -13,13 +13,43 @@ import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 
+const aria = { role: 'presentation' };
+
 export const viewFunction = ({
   instance,
-  // widgetRef,
+  props: {
+    accessKey,
+    activeStateEnabled,
+    disabled,
+    focusStateEnabled,
+    height,
+    hint,
+    hoverStateEnabled,
+    onContentReady,
+    rtlEnabled,
+    tabIndex,
+    visible,
+    width,
+  },
   restAttributes,
 }: DataGrid) => (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  <Widget {...restAttributes}>
+  <Widget // eslint-disable-line jsx-a11y/no-access-key
+    accessKey={accessKey}
+    activeStateEnabled={activeStateEnabled}
+    aria={aria}
+    disabled={disabled}
+    focusStateEnabled={focusStateEnabled}
+    height={height}
+    hint={hint}
+    hoverStateEnabled={hoverStateEnabled}
+    onContentReady={onContentReady}
+    rtlEnabled={rtlEnabled}
+    tabIndex={tabIndex}
+    visible={visible}
+    width={width}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...restAttributes}
+  >
     <DataGridViews instance={instance} />
   </Widget>
 );
