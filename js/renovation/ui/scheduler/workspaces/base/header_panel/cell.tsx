@@ -6,36 +6,46 @@ import {
   OneWay,
   JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
-import { CellBase, CellBaseProps } from '../cell';
+import { CellBaseProps } from '../cell';
 import { DateTimeCellTemplateProps } from '../../types.d';
 import { combineClasses } from '../../../../../utils/combine_classes';
+import { getGroupCellClasses } from '../../utils';
 
 export const viewFunction = ({
   restAttributes,
   classes,
-  dateCellTemplateProps,
   props: {
     text,
-    dateCellTemplate,
-    isFirstGroupCell,
-    isLastGroupCell,
+    dateCellTemplate: DateCellTemplate,
     colSpan,
+    startDate,
+    groups,
+    groupIndex,
+    index,
   },
 }: HeaderPanelCell): JSX.Element => (
-  <CellBase
+  <th
     className={classes}
-    isFirstGroupCell={isFirstGroupCell}
-    isLastGroupCell={isLastGroupCell}
-    contentTemplate={dateCellTemplate}
-    contentTemplateProps={dateCellTemplateProps}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
     colSpan={colSpan}
   >
-    <div>
-      {text}
-    </div>
-  </CellBase>
+    {DateCellTemplate ? (
+      <DateCellTemplate
+        data={{
+          date: startDate,
+          text,
+          groups,
+          groupIndex,
+        }}
+        index={index}
+      />
+    ) : (
+      <div>
+        {text}
+      </div>
+    )}
+  </th>
 );
 
 @ComponentBindings()
@@ -51,33 +61,20 @@ export class HeaderPanelCellProps extends CellBaseProps {
 })
 export class HeaderPanelCell extends JSXComponent(HeaderPanelCellProps) {
   get classes(): string {
-    const { today, className } = this.props;
+    const {
+      today,
+      className,
+      isFirstGroupCell,
+      isLastGroupCell,
+    } = this.props;
 
-    return combineClasses({
+    const cellClasses = combineClasses({
       'dx-scheduler-header-panel-cell': true,
       'dx-scheduler-cell-sizes-horizontal': true,
       'dx-scheduler-header-panel-current-time-cell': today,
       [className]: !!className,
     });
-  }
 
-  get dateCellTemplateProps(): DateTimeCellTemplateProps {
-    const {
-      startDate,
-      text,
-      groups,
-      groupIndex,
-      index,
-    } = this.props;
-
-    return {
-      data: {
-        date: startDate,
-        text,
-        groups,
-        groupIndex,
-      },
-      index,
-    };
+    return getGroupCellClasses(isFirstGroupCell, isLastGroupCell, cellClasses);
   }
 }
