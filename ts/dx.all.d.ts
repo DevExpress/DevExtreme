@@ -2939,7 +2939,7 @@ declare module DevExpress.fileManagement {
         /**
          * [descr:RemoteFileSystemProvider.Options.customizeRequest]
          */
-        customizeRequest?: ((options: { request?: XMLHttpRequest }) => void | Promise<void> | JQueryPromise<void>);
+        customizeRequest?: ((options: { request?: XMLHttpRequest }) => any);
         /**
          * [descr:RemoteFileSystemProvider.Options.endpointUrl]
          */

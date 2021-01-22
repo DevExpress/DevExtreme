@@ -8,11 +8,10 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
      * @publicName customizeRequest(request)
      * @type_function_param1 options: object
      * @type_function_param1_field1 request: XMLHttpRequest
-     * @type_function_return void|Promise<void>
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    customizeRequest?: ((options: { request?: XMLHttpRequest }) => void | Promise<void> | JQueryPromise<void>);
+    customizeRequest?: ((options: { request?: XMLHttpRequest }) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.fileManagement
