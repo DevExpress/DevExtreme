@@ -2309,6 +2309,12 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.renovatedTimePanel?.dispose();
         this.renovatedTimePanel = undefined;
+
+        this.renovatedGroupPanel?.dispose();
+        this.renovatedGroupPanel = undefined;
+
+        this.renovatedDateHeader?.dispose();
+        this.renovatedDateHeader = undefined;
     }
 
     getWorkArea() {

@@ -28,7 +28,7 @@ export const viewFunction = ({
     columnCountPerGroup,
     resourceCellTemplate,
   },
-}: DateHeader): JSX.Element => (
+}: HeaderPanel): JSX.Element => (
   <thead>
     {isHorizontalGrouping && !groupByDate && (
       <GroupPanel
@@ -82,7 +82,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class DateHeaderProps extends GroupPanelProps {
+export class HeaderPanelProps extends GroupPanelProps {
   @OneWay() dateHeaderMap: ViewCellData[][] = [];
 
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
@@ -93,7 +93,7 @@ export class DateHeaderProps extends GroupPanelProps {
   view: viewFunction,
   jQuery: { register: true },
 })
-export class DateHeader extends JSXComponent(DateHeaderProps) {
+export class HeaderPanel extends JSXComponent(HeaderPanelProps) {
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups } = this.props;
 
