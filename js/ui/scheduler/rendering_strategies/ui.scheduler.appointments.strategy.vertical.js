@@ -168,7 +168,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const width = appointmentGeometry.width;
         const result = [];
         let currentPartTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
-        const offset = this.instance.fire('isGroupedByDate') ? this.getDefaultCellWidth() * this.instance.fire('getGroupCount') : this.getDefaultCellWidth();
+        const cellsDiff = this.instance.fire('isGroupedByDate')
+            ? this.instance.fire('getGroupCount')
+            : 1;
+        const offset = this.getDefaultCellWidth() * cellsDiff;
         const left = appointmentSettings.left + offset;
 
         if(tailHeight > 0) {
@@ -186,7 +189,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 height: tailHeight,
                 width: width,
                 appointmentReduced: 'tail',
-                rowIndex: ++appointmentSettings.rowIndex
+                rowIndex: 0,
+                cellIndex: appointmentSettings.cellIndex + cellsDiff,
             }));
         }
 

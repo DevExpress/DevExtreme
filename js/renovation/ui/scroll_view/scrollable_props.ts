@@ -1,8 +1,7 @@
 import {
-  ComponentBindings, OneWay, Event, Slot,
+  ComponentBindings, OneWay, Slot, Event,
 } from 'devextreme-generator/component_declaration/common';
 import { EventCallback } from '../common/event_callback.d';
-import BaseWidgetProps from '../../utils/base_props';
 import { ScrollableDirection, ScrollableShowScrollbar, ScrollEventArgs } from './types.d';
 
 @ComponentBindings()
@@ -17,6 +16,18 @@ export class ScrollableInternalProps {
 
   @OneWay() useSimulatedScrollbar = false;
 
+  @OneWay() pushBackValue = 0;
+
+  @OneWay() bounceEnabled = true;
+
+  @OneWay() scrollByContent = true;
+
+  @OneWay() inertiaEnabled = true;
+
+  @OneWay() updateManually = false;
+
+  @OneWay() useKeyboard = true;
+
   @OneWay() classes?: string;
 
   @OneWay() forceGeneratePockets = false;
@@ -24,13 +35,19 @@ export class ScrollableInternalProps {
   @OneWay() needScrollViewContentWrapper = false;
 
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
-}
 
-export type ScrollableInternalPropsType = ScrollableInternalProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+  @Event() onUpdated?: EventCallback<ScrollEventArgs>;
+}
 
 @ComponentBindings()
 export class ScrollableProps extends ScrollableInternalProps {
-  @OneWay() useNative = false;
-}
+  @OneWay() useNative = true;
 
-export type ScrollablePropsType = ScrollableProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+  @OneWay() pullingDownText?: string;
+
+  @OneWay() pulledDownText?: string;
+
+  @OneWay() refreshingText?: string;
+
+  @OneWay() reachBottomText?: string;
+}

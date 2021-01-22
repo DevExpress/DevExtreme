@@ -76,6 +76,7 @@ function getHasKeyCacheValue(array, key) {
 function setDataByKeyMapValue(array, key, data) {
     if(array._dataByKeyMap) {
         array._dataByKeyMap[JSON.stringify(key)] = data;
+        array._dataByKeyMapLength += (data ? 1 : -1);
     }
 }
 
@@ -203,6 +204,7 @@ function remove(keyInfo, array, key, isBatch, logError) {
     const index = indexByKey(keyInfo, array, key);
     if(index > -1) {
         array.splice(index, 1);
+        setDataByKeyMapValue(array, key, null);
     }
     if(!isBatch) {
         return dataUtils.trivialPromise(key);

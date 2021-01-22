@@ -61,7 +61,6 @@ import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
 import utils from './utils';
-import DateAdapter from './dateAdapter';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -113,6 +112,17 @@ const VIEWS_CONFIG = {
         workSpace: SchedulerAgenda,
         renderingStrategy: 'agenda'
     }
+};
+
+const StoreEventNames = {
+    ADDING: 'onAppointmentAdding',
+    ADDED: 'onAppointmentAdded',
+
+    DELETING: 'onAppointmentDeleting',
+    DELETED: 'onAppointmentDeleted',
+
+    UPDATING: 'onAppointmentUpdating',
+    UPDATED: 'onAppointmentUpdated'
 };
 
 class Scheduler extends Widget {
@@ -361,7 +371,7 @@ class Scheduler extends Widget {
             allowMultipleCellSelection: true,
 
             scrolling: {
-                mode: 'standard',
+                mode: 'standard'
             },
 
             renovateRender: false,
@@ -587,12 +597,12 @@ class Scheduler extends Widget {
 
                 this._postponeDataSourceLoading();
                 break;
-            case 'onAppointmentAdding':
-            case 'onAppointmentAdded':
-            case 'onAppointmentUpdating':
-            case 'onAppointmentUpdated':
-            case 'onAppointmentDeleting':
-            case 'onAppointmentDeleted':
+            case StoreEventNames.ADDING:
+            case StoreEventNames.ADDED:
+            case StoreEventNames.UPDATING:
+            case StoreEventNames.UPDATED:
+            case StoreEventNames.DELETING:
+            case StoreEventNames.DELETED:
             case 'onAppointmentFormOpening':
                 this._actions[name] = this._createActionByOption(name);
                 break;
@@ -1170,13 +1180,14 @@ class Scheduler extends Widget {
     }
 
     _initActions() {
+
         this._actions = {
-            'onAppointmentAdding': this._createActionByOption('onAppointmentAdding'),
-            'onAppointmentAdded': this._createActionByOption('onAppointmentAdded'),
-            'onAppointmentUpdating': this._createActionByOption('onAppointmentUpdating'),
-            'onAppointmentUpdated': this._createActionByOption('onAppointmentUpdated'),
-            'onAppointmentDeleting': this._createActionByOption('onAppointmentDeleting'),
-            'onAppointmentDeleted': this._createActionByOption('onAppointmentDeleted'),
+            'onAppointmentAdding': this._createActionByOption(StoreEventNames.ADDING),
+            'onAppointmentAdded': this._createActionByOption(StoreEventNames.ADDED),
+            'onAppointmentUpdating': this._createActionByOption(StoreEventNames.UPDATING),
+            'onAppointmentUpdated': this._createActionByOption(StoreEventNames.UPDATED),
+            'onAppointmentDeleting': this._createActionByOption(StoreEventNames.DELETING),
+            'onAppointmentDeleted': this._createActionByOption(StoreEventNames.DELETED),
             'onAppointmentFormOpening': this._createActionByOption('onAppointmentFormOpening')
         };
     }
@@ -1458,6 +1469,15 @@ class Scheduler extends Widget {
     _workSpaceConfig(groups, countConfig) {
         const currentViewOptions = this._getCurrentViewOptions();
         const scrolling = this.option('scrolling');
+        const isVirtualScrolling = scrolling.mode === 'virtual' ||
+            currentViewOptions.scrolling?.mode === 'virtual';
+        const isHorizontalVirtualScrollingOrientation = isVirtualScrolling &&
+            ['horizontal', 'both'].filter(item =>
+                scrolling.type === item ||
+                currentViewOptions.scrolling?.type === item
+            ).length > 0;
+        const crossScrollingEnabled = this.option('crossScrollingEnabled') ||
+            isHorizontalVirtualScrollingOrientation;
 
         const result = extend({
             noDataText: this.option('noDataText'),
@@ -1474,7 +1494,7 @@ class Scheduler extends Widget {
             indicatorUpdateInterval: this.option('indicatorUpdateInterval'),
             shadeUntilCurrentTime: this.option('shadeUntilCurrentTime'),
             allDayExpanded: this._appointments.option('items'),
-            crossScrollingEnabled: this.option('crossScrollingEnabled'),
+            crossScrollingEnabled,
             dataCellTemplate: this.option('dataCellTemplate'),
             timeCellTemplate: this.option('timeCellTemplate'),
             resourceCellTemplate: this.option('resourceCellTemplate'),
@@ -1485,10 +1505,8 @@ class Scheduler extends Widget {
                 this.option('selectedCellData', args.selectedCellData);
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
-            scrolling: scrolling,
-            renovateRender: this.option('renovateRender')
-                || scrolling.mode === 'virtual'
-                || currentViewOptions.scrolling?.mode === 'virtual'
+            scrolling,
+            renovateRender: this.option('renovateRender') || isVirtualScrolling
         }, currentViewOptions);
 
         result.observer = this;
@@ -1646,83 +1664,70 @@ class Scheduler extends Widget {
                 callback();
                 break;
             case 'occurrence':
-                this._singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+                this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
                 break;
             default:
                 if(dragEvent) {
                     dragEvent.cancel = new Deferred();
                 }
                 this._showRecurrenceChangeConfirm(isDeleted)
-                    .done((function(result) {
+                    .done(result => {
                         result && callback();
-                        !result && this._singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
-                    }).bind(this))
-                    .fail((function() {
-                        this._appointments.moveAppointmentBack(dragEvent);
-                    }).bind(this));
+                        !result && this._excludeAppointmentFromSeries(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+                    })
+                    .fail(() => this._appointments.moveAppointmentBack(dragEvent));
         }
     }
 
-    _getCorrectedExceptionDateByDST(exceptionDate, appointment, targetedAppointment) {
-        const offset = appointment.startDate.getTimezoneOffset() - targetedAppointment.startDate.getTimezoneOffset();
-        if(offset !== 0) {
-            return DateAdapter(exceptionDate)
-                .addTime(offset * dateUtils.dateToMilliseconds('minute'))
-                .result();
-        }
-        return exceptionDate;
-    }
+    _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
+        const appointment = this.createAppointmentAdapter({ ...rawAppointment });
+        const newAppointment = this.createAppointmentAdapter(newRawAppointment);
 
-    _singleAppointmentChangesHandler(rawAppointment, rawTargetedAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        const targetedAppointment = this.createAppointmentAdapter(rawTargetedAppointment);
-        const updatedAppointment = this.createAppointmentAdapter(rawAppointment);
+        newAppointment.recurrenceRule = '';
+        newAppointment.recurrenceException = '';
 
-        targetedAppointment.recurrenceRule = '';
-        targetedAppointment.recurrenceException = '';
-
-        if(!isDeleted && !isPopupEditing) {
+        const canCreateNewAppointment = !isDeleted && !isPopupEditing;
+        if(canCreateNewAppointment) {
             const keyPropertyName = this._appointmentModel.keyName;
-            delete rawTargetedAppointment[keyPropertyName];
+            delete newRawAppointment[keyPropertyName];
 
-            this.addAppointment(rawTargetedAppointment);
+            this.addAppointment(newRawAppointment);
         }
 
-        const correctedExceptionDate = exceptionDate;
-        updatedAppointment.recurrenceException = this._createRecurrenceException(rawAppointment, correctedExceptionDate);
+        appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
         if(isPopupEditing) {
             // TODO: need to refactor - move as parameter to appointment popup
-            this._updatedRecAppointment = updatedAppointment.source();
+            this._updatedRecAppointment = appointment.source();
 
-            this._appointmentPopup.show(rawTargetedAppointment, true);
+            this._appointmentPopup.show(newRawAppointment, true);
             this._editAppointmentData = rawAppointment;
 
         } else {
-            this._updateAppointment(rawAppointment, updatedAppointment.source(), () => {
+            this._updateAppointment(rawAppointment, appointment.source(), () => {
                 this._appointments.moveAppointmentBack(dragEvent);
             }, dragEvent);
         }
     }
 
-    _createRecurrenceException(rawAppointment, exceptionDate) {
+    _createRecurrenceException(appointment, exceptionDate) {
         const result = [];
-        const appointment = this.createAppointmentAdapter(rawAppointment);
 
         if(appointment.recurrenceException) {
             result.push(appointment.recurrenceException);
         }
-        result.push(this._serializeRecurrenceException(exceptionDate, appointment.startDate, appointment.allDay));
+        result.push(this._getSerializedDate(exceptionDate, appointment.startDate, appointment.allDay));
 
         return result.join();
     }
 
-    _serializeRecurrenceException(exceptionDate, targetStartDate, isAllDay) {
-        isAllDay && exceptionDate.setHours(targetStartDate.getHours(),
-            targetStartDate.getMinutes(),
-            targetStartDate.getSeconds(),
-            targetStartDate.getMilliseconds());
+    _getSerializedDate(date, startDate, isAllDay) {
+        isAllDay && date.setHours(startDate.getHours(),
+            startDate.getMinutes(),
+            startDate.getSeconds(),
+            startDate.getMilliseconds());
 
-        return dateSerialization.serializeDate(exceptionDate, UTC_FULL_DATE_FORMAT);
+        return dateSerialization.serializeDate(date, UTC_FULL_DATE_FORMAT);
     }
 
     _showRecurrenceChangeConfirm(isDeleted) {
@@ -1859,9 +1864,9 @@ class Scheduler extends Widget {
         return this._workSpace.getDataByDroppableCell();
     }
 
-    _updateAppointment(target, appointment, onUpdatePrevented, dragEvent) {
+    _updateAppointment(target, rawAppointment, onUpdatePrevented, dragEvent) {
         const updatingOptions = {
-            newData: appointment,
+            newData: rawAppointment,
             oldData: extend({}, target),
             cancel: false
         };
@@ -1876,7 +1881,7 @@ class Scheduler extends Widget {
             }
         }.bind(this);
 
-        this._actions['onAppointmentUpdating'](updatingOptions);
+        this._actions[StoreEventNames.UPDATING](updatingOptions);
 
         if(dragEvent && !isDeferred(dragEvent.cancel)) {
             dragEvent.cancel = new Deferred();
@@ -1886,20 +1891,16 @@ class Scheduler extends Widget {
             let deferred = new Deferred();
 
             if(!canceled) {
-                this._expandAllDayPanel(appointment);
+                this._expandAllDayPanel(rawAppointment);
 
                 try {
                     deferred = this._appointmentModel
-                        .update(target, appointment)
+                        .update(target, rawAppointment)
                         .done(() => {
                             dragEvent && dragEvent.cancel.resolve(false);
                         })
-                        .always((function(e) {
-                            this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentUpdated'], appointment, e);
-                        }).bind(this))
-                        .fail(function() {
-                            performFailAction();
-                        });
+                        .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.UPDATED, rawAppointment, storeAppointment))
+                        .fail(() => performFailAction());
                 } catch(err) {
                     performFailAction(err);
                     deferred.resolve();
@@ -1940,17 +1941,20 @@ class Scheduler extends Widget {
         }
     }
 
-    _executeActionWhenOperationIsCompleted(action, appointment, e) {
-        const options = { appointmentData: appointment };
-        const isError = e && e.name === 'Error';
+    _onDataPromiseCompleted(handlerName, appointment, storeAppointment, isDeletedOperation = false) {
+        const args = { appointmentData: appointment };
 
-        if(isError) {
-            options.error = e;
+        if(storeAppointment instanceof Error) {
+            args.error = storeAppointment;
         } else {
+            if(!isDeletedOperation) {
+                // store.update promise return array result, but other data method return single object
+                args.appointmentData = storeAppointment[0] || storeAppointment;
+            }
             this._appointmentPopup.isVisible() && this._appointmentPopup.hide();
         }
-        action(options);
 
+        this._actions[handlerName](args);
         this._fireContentReadyAction();
     }
 
@@ -2133,10 +2137,17 @@ class Scheduler extends Widget {
         }
     }
 
-    showAppointmentTooltip(appointment, target, targetedAppointment) {
+    showAppointmentTooltip(appointment, element, targetedAppointment) {
         if(appointment) {
-            const info = new AppointmentTooltipInfo(appointment, targetedAppointment, this._appointments._tryGetAppointmentColor(target));
-            this.showAppointmentTooltipCore(target, [info]);
+            const settings = utils.dataAccessors.getAppointmentSettings(element);
+
+            const deferredColor = this.fire('getAppointmentColor', {
+                itemData: targetedAppointment || appointment,
+                groupIndex: settings?.groupIndex,
+            });
+
+            const info = new AppointmentTooltipInfo(appointment, targetedAppointment, deferredColor);
+            this.showAppointmentTooltipCore(element, [info]);
         }
     }
 
@@ -2162,18 +2173,18 @@ class Scheduler extends Widget {
         this._workSpace.scrollTo(date, groups, allDay);
     }
 
-    addAppointment(appointment) {
-        const adapter = this.createAppointmentAdapter(appointment);
-        adapter.text = adapter.text || '';
+    addAppointment(rawAppointment) {
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+        appointment.text = appointment.text || '';
 
-        const serializedAppointment = adapter.source(true);
+        const serializedAppointment = appointment.source(true);
 
         const addingOptions = {
             appointmentData: serializedAppointment,
             cancel: false
         };
 
-        this._actions['onAppointmentAdding'](addingOptions);
+        this._actions[StoreEventNames.ADDING](addingOptions);
 
         return this._processActionResult(addingOptions, canceled => {
             if(canceled) {
@@ -2182,8 +2193,9 @@ class Scheduler extends Widget {
 
             this._expandAllDayPanel(serializedAppointment);
 
-            return this._appointmentModel.add(serializedAppointment)
-                .always(e => this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentAdded'], serializedAppointment, e));
+            return this._appointmentModel
+                .add(serializedAppointment)
+                .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.ADDED, serializedAppointment, storeAppointment));
         });
     }
 
@@ -2191,19 +2203,19 @@ class Scheduler extends Widget {
         return this._updateAppointment(target, appointment);
     }
 
-    deleteAppointment(appointment) {
+    deleteAppointment(rawAppointment) {
         const deletingOptions = {
-            appointmentData: appointment,
+            appointmentData: rawAppointment,
             cancel: false
         };
 
-        this._actions['onAppointmentDeleting'](deletingOptions);
+        this._actions[StoreEventNames.DELETING](deletingOptions);
 
         this._processActionResult(deletingOptions, function(canceled) {
             if(!canceled) {
-                this._appointmentModel.remove(appointment).always((function(e) {
-                    this._executeActionWhenOperationIsCompleted(this._actions['onAppointmentDeleted'], appointment, e);
-                }).bind(this));
+                this._appointmentModel
+                    .remove(rawAppointment)
+                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, rawAppointment, storeAppointment, true));
             }
         });
     }

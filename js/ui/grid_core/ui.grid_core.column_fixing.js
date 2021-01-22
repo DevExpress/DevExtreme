@@ -195,10 +195,9 @@ const baseFixedColumns = {
     },
 
     _renderCellContent: function($cell, options) {
-        const that = this;
         let isEmptyCell;
         const column = options.column;
-        const isFixedTableRendering = that._isFixedTableRendering;
+        const isFixedTableRendering = this._isFixedTableRendering;
         const isGroupCell = options.rowType === 'group' && isDefined(column.groupIndex);
 
         // T747718, T824508, T821252
@@ -206,28 +205,28 @@ const baseFixedColumns = {
             $cell.css('pointerEvents', 'none');
         }
 
-        if(!isFixedTableRendering && that._isFixedColumns) {
+        if(!isFixedTableRendering && this._isFixedColumns) {
             isEmptyCell = column.fixed || (column.command && column.fixed !== false);
 
             if(isGroupCell) {
                 isEmptyCell = false;
                 if(options.row.summaryCells && options.row.summaryCells.length) {
-                    const columns = that._columnsController.getVisibleColumns();
-                    const alignByFixedColumnCellCount = that._getAlignByColumnCellCount ? that._getAlignByColumnCellCount(column.colspan, {
+                    const columns = this._columnsController.getVisibleColumns();
+                    const alignByFixedColumnCellCount = this._getAlignByColumnCellCount ? this._getAlignByColumnCellCount(column.colspan, {
                         columns: columns,
                         row: options.row,
                         isFixed: true
                     }) : 0;
 
                     if(alignByFixedColumnCellCount > 0) {
-                        const transparentColumnIndex = getTransparentColumnIndex(that._columnsController.getFixedColumns());
+                        const transparentColumnIndex = getTransparentColumnIndex(this._columnsController.getFixedColumns());
                         isEmptyCell = (columns.length - alignByFixedColumnCellCount) < transparentColumnIndex;
                     }
                 }
             }
 
             if(isEmptyCell) {
-                if(that.option('legacyRendering') || (column.command && column.type !== 'buttons' || options.rowType === 'group')) {
+                if(column.command && column.type !== 'buttons' || options.rowType === 'group') {
                     $cell
                         .html('&nbsp;')
                         .addClass(column.cssClass);
@@ -239,7 +238,7 @@ const baseFixedColumns = {
         }
 
         if(column.command !== COMMAND_TRANSPARENT) {
-            that.callBase($cell, options);
+            this.callBase($cell, options);
         }
     },
 
@@ -385,12 +384,8 @@ const baseFixedColumns = {
         this.callBase.apply(this, arguments);
 
         if(this._fixedTableElement) {
-            if(this.option('legacyRendering')) {
-                useVisibleColumns = widths && widths.length && !this.isScrollbarVisible(true);
-            } else {
-                const hasAutoWidth = widths && widths.some(function(width) { return width === 'auto'; });
-                useVisibleColumns = hasAutoWidth && (!isWidthsSynchronized || !this.isScrollbarVisible(true));
-            }
+            const hasAutoWidth = widths && widths.some(function(width) { return width === 'auto'; });
+            useVisibleColumns = hasAutoWidth && (!isWidthsSynchronized || !this.isScrollbarVisible(true));
 
             if(useVisibleColumns) {
                 columns = visibleColumns;
@@ -404,7 +399,7 @@ const baseFixedColumns = {
     },
 
     _createColGroup: function(columns) {
-        if(!this.option('legacyRendering') && this._isFixedTableRendering && !this.option('columnAutoWidth')) {
+        if(this._isFixedTableRendering && !this.option('columnAutoWidth')) {
             const visibleColumns = this._columnsController.getVisibleColumns();
             const useVisibleColumns = visibleColumns.filter(function(column) { return !column.width; }).length;
             if(useVisibleColumns) {
@@ -481,26 +476,25 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     },
 
     getContextMenuItems: function(options) {
-        const that = this;
         const column = options.column;
-        const columnFixingOptions = that.option('columnFixing');
-        let items = that.callBase(options);
+        const columnFixingOptions = this.option('columnFixing');
+        let items = this.callBase(options);
 
         if(options.row && options.row.rowType === 'header') {
-            if(column && column.allowFixing) {
-                const onItemClick = function(params) {
+            if(columnFixingOptions.enabled === true && column && column.allowFixing) {
+                const onItemClick = (params) => {
                     switch(params.itemData.value) {
                         case 'none':
-                            that._columnsController.columnOption(column.index, 'fixed', false);
+                            this._columnsController.columnOption(column.index, 'fixed', false);
                             break;
                         case 'left':
-                            that._columnsController.columnOption(column.index, {
+                            this._columnsController.columnOption(column.index, {
                                 fixed: true,
                                 fixedPosition: 'left'
                             });
                             break;
                         case 'right':
-                            that._columnsController.columnOption(column.index, {
+                            this._columnsController.columnOption(column.index, {
                                 fixed: true,
                                 fixedPosition: 'right'
                             });

@@ -1,1 +1,0 @@
-export { GridBaseColumn as Column} from '../data_grid';

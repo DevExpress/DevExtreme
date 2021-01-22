@@ -1601,6 +1601,19 @@ QUnit.module('tag template', moduleSetup, () => {
         });
     });
 
+    QUnit.test('tag template should receive item object if displayValue is empty string (T965054)', function(assert) {
+        const items = [{ text: '' }];
+
+        $('#tagBox').dxTagBox({
+            items,
+            value: items,
+            displayExpr: 'text',
+            tagTemplate(tagData) {
+                assert.deepEqual(tagData, items[0], 'correct data is passed');
+            }
+        });
+    });
+
     QUnit.test('tag template should get item in arguments even if the \'displayExpr\' option is specified', function(assert) {
         const items = [{ id: 1, text: 'one' }, { id: 2, text: 'two' }];
 
@@ -1701,6 +1714,34 @@ QUnit.module('tag template', moduleSetup, () => {
         const $tags = $element.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tags.text(), 'item 1', 'text is correct');
+    });
+
+    QUnit.test('tag template can use string data', function(assert) {
+        const items = ['first'];
+
+        const $element = $('#tagBox').dxTagBox({
+            items,
+            valueExpr: 'this',
+            value: [items[0]]
+        });
+
+        const $tags = $element.find('.' + TAGBOX_TAG_CLASS);
+        assert.strictEqual($tags.text(), 'first', 'text is correct');
+    });
+
+    QUnit.test('tag template should use empty text if it is defined', function(assert) {
+        const items = [{ id: 1, text: '' }];
+
+        const $element = $('#tagBox').dxTagBox({
+            items,
+            displayExpr: 'text',
+            valueExpr: 'this',
+            value: [items[0]]
+        });
+
+        const $tags = $element.find('.' + TAGBOX_TAG_CLASS);
+        assert.strictEqual($tags.length, 1, 'text is correct');
+        assert.strictEqual($tags.text(), '', 'text is correct');
     });
 });
 
@@ -5893,25 +5934,6 @@ QUnit.module('performance', () => {
         assert.strictEqual(load.getCall(0).args[0].filter, undefined);
     });
 
-    QUnit.test('load filter should be undefined when tagBox has some initial values and "maxFilterLength" was changed at runtime', function(assert) {
-        const load = sinon.stub();
-
-        const instance = $('#tagBox').dxTagBox({
-            dataSource: {
-                load
-            },
-            value: Array.apply(null, { length: 1 }).map(Number.call, Number),
-            valueExpr: 'id',
-            displayExpr: 'text'
-        }).dxTagBox('instance');
-
-        instance.option('maxFilterLength', 0);
-        instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
-
-        assert.ok(load.getCall(0).args[0].filter);
-        assert.strictEqual(load.getCall(load.callCount - 1).args[0].filter, undefined);
-    });
-
     QUnit.test('load filter should be array when tagBox has not a lot of initial values', function(assert) {
         const load = sinon.stub();
 
@@ -6056,6 +6078,83 @@ QUnit.module('performance', () => {
         $item.trigger('dxclick');
 
         assert.equal(loadCallCounter, 1);
+    });
+});
+
+QUnit.module('maxFilterLength', {
+    beforeEach: function() {
+        this.load = sinon.stub();
+        const initialOptions = {
+            dataSource: {
+                load: this.load
+            },
+            value: Array.apply(null, { length: 1 }).map(Number.call, Number),
+            valueExpr: 'id',
+            displayExpr: 'text'
+        };
+
+        this.instance = $('#tagBox')
+            .dxTagBox(initialOptions)
+            .dxTagBox('instance');
+
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.instance = $('#tagBox')
+                .dxTagBox($.extend({}, options, initialOptions))
+                .dxTagBox('instance');
+        };
+
+        this.stubLogger = (assert) => {
+            this.stub = sinon.stub(errors, 'log', (warning) => {
+                assert.strictEqual(warning, 'W0017', 'warning is correct');
+            });
+        };
+    },
+    afterEach: function() {
+        this.stub && this.stub.restore();
+    }
+}, () => {
+    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterLength was changed at runtime', function(assert) {
+        this.instance.option('maxFilterLength', 0);
+        this.instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
+
+        assert.ok(this.load.getCall(0).args[0].filter);
+        assert.strictEqual(this.load.getCall(this.load.callCount - 1).args[0].filter, undefined);
+    });
+
+    QUnit.test('W0017 warning should be logged after maxFilterLength was changed at runtime and exceeded', function(assert) {
+        assert.expect(1);
+
+        this.stubLogger(assert);
+
+        this.instance.option('maxFilterLength', 0);
+        this.instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
+    });
+
+    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterLength is exceeded', function(assert) {
+        this.reinit({ maxFilterLength: 1 });
+
+        assert.strictEqual(this.load.getCall(this.load.callCount - 1).args[0].filter, undefined);
+    });
+
+    QUnit.test('W0017 warning should be logged if maxFilterLength is exceeded', function(assert) {
+        assert.expect(1);
+
+        this.stubLogger(assert);
+
+        this.reinit({ maxFilterLength: 1 });
+    });
+
+    QUnit.test('load filter should be passed to dataSource when tagBox has some initial values and maxFilterLength is not exceeded', function(assert) {
+        assert.ok(this.load.getCall(0).args[0].filter);
+    });
+
+    QUnit.test('no warning should be logged if maxFilterLength is not exceeded', function(assert) {
+        assert.expect(0);
+
+        this.stubLogger(assert);
+
+        this.reinit({});
     });
 });
 

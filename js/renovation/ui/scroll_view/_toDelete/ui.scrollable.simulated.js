@@ -3,7 +3,7 @@ import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { titleize } from '../../core/utils/inflector';
 import { extend } from '../../core/utils/extend';
-import { getWindow, hasWindow } from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import { each, map } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { getBoundingRect } from '../../core/utils/position';
@@ -11,9 +11,8 @@ import { resetPosition, move, locate } from '../../animation/translator';
 import Class from '../../core/class';
 import Animator from './animator';
 import devices from '../../core/devices';
-import { isDxMouseWheelEvent, addNamespace as addEventNamespace, normalizeKeyName } from '../../events/utils/index';
+import { isDxMouseWheelEvent, normalizeKeyName } from '../../events/utils/index';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
-import Scrollbar from './ui.scrollbar';
 import { when, Deferred } from '../../core/utils/deferred';
 
 const realDevice = devices.real;
@@ -24,8 +23,6 @@ const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
-const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
-const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
 const VERTICAL = 'vertical';
@@ -35,7 +32,6 @@ const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const MIN_VELOCITY_LIMIT = 1;
 const FRAME_DURATION = Math.round(1000 / 60);
-const SCROLL_LINE_HEIGHT = 40;
 const VALIDATE_WHEEL_TIMEOUT = 500;
 
 const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
@@ -130,17 +126,7 @@ export const Scroller = Class.inherit({
     },
 
     _initScrollbar: function() {
-        this._scrollbar = new Scrollbar($('<div>').appendTo(this._$container), {
-            direction: this._direction,
-            visible: this._scrollByThumb,
-            visibilityMode: this._visibilityModeNormalize(this._scrollbarVisible),
-            expandable: this._scrollByThumb
-        });
         this._$scrollbar = this._scrollbar.$element();
-    },
-
-    _visibilityModeNormalize: function(mode) {
-        return (mode === true) ? 'onScroll' : (mode === false) ? 'never' : mode;
     },
 
     _scrollStep: function(delta) {
@@ -510,18 +496,6 @@ export const Scroller = Class.inherit({
         return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
     },
 
-    _isThumb: function($element) {
-        return this._scrollByThumb && this._scrollbar.isThumb($element);
-    },
-
-    _isScrollbar: function($element) {
-        return this._scrollByThumb && $element && $element.is(this._$scrollbar);
-    },
-
-    _isContent: function($element) {
-        return this._scrollByContent && !!$element.closest(this._$element).length;
-    },
-
     _reachedMin: function() {
         return this._location <= this._minOffset;
     },
@@ -569,13 +543,7 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     render: function() {
-        this._$element.addClass(SCROLLABLE_SIMULATED_CLASS);
         this._createScrollers();
-        if(this.option('useKeyboard')) {
-            this._$container.prop('tabIndex', 0);
-        }
-        this._attachKeyboardHandler();
-        this._attachCursorHandlers();
     },
 
     _createScrollers: function() {
@@ -588,9 +556,6 @@ export const SimulatedStrategy = Class.inherit({
         if(this._isDirection(VERTICAL)) {
             this._createScroller(VERTICAL);
         }
-
-        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, this.option('showScrollbar') === 'always');
-        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this.option('showScrollbar'));
     },
 
     _createScroller: function(direction) {
@@ -708,12 +673,6 @@ export const SimulatedStrategy = Class.inherit({
         }
     },
 
-    _tryGetDevicePixelRatio: function() {
-        if(hasWindow()) {
-            return getWindow().devicePixelRatio;
-        }
-    },
-
     handleEnd: function(e) {
         this._resetActive();
         this._refreshCursorState(e.originalEvent && e.originalEvent.target);
@@ -739,14 +698,6 @@ export const SimulatedStrategy = Class.inherit({
         this._scrollAction();
     },
 
-    _attachKeyboardHandler: function() {
-        eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_KEYBOARD}`);
-
-        if(!this.option('disabled') && this.option('useKeyboard')) {
-            eventsEngine.on(this._$element, addEventNamespace('keydown', SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
-        }
-    },
-
     _keyDownHandler: function(e) {
         clearTimeout(this._updateHandlerTimeout);
         this._updateHandlerTimeout = setTimeout(() => {
@@ -760,103 +711,13 @@ export const SimulatedStrategy = Class.inherit({
         if(!this._$container.is(domAdapter.getActiveElement())) {
             return;
         }
-
-        let handled = true;
-
-        switch(normalizeKeyName(e)) {
-            case KEY_CODES.DOWN:
-                this._scrollByLine({ y: 1 });
-                break;
-            case KEY_CODES.UP:
-                this._scrollByLine({ y: -1 });
-                break;
-            case KEY_CODES.RIGHT:
-                this._scrollByLine({ x: 1 });
-                break;
-            case KEY_CODES.LEFT:
-                this._scrollByLine({ x: -1 });
-                break;
-            case KEY_CODES.PAGE_DOWN:
-                this._scrollByPage(1);
-                break;
-            case KEY_CODES.PAGE_UP:
-                this._scrollByPage(-1);
-                break;
-            case KEY_CODES.HOME:
-                this._scrollToHome();
-                break;
-            case KEY_CODES.END:
-                this._scrollToEnd();
-                break;
-            default:
-                handled = false;
-                break;
-        }
-
-        if(handled) {
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    },
-
-    _scrollByLine: function(lines) {
-        const devicePixelRatio = this._tryGetDevicePixelRatio();
-        let scrollOffset = SCROLL_LINE_HEIGHT;
-        if(devicePixelRatio) {
-            scrollOffset = Math.abs(scrollOffset / devicePixelRatio * 100) / 100;
-        }
-        this.scrollBy({
-            top: (lines.y || 0) * -scrollOffset,
-            left: (lines.x || 0) * -scrollOffset
-        });
-    },
-
-    _scrollByPage: function(page) {
-        const prop = this._wheelProp();
-        const dimension = this._dimensionByProp(prop);
-
-        const distance = {};
-        distance[prop] = page * -this._$container[dimension]();
-        this.scrollBy(distance);
-    },
-
-    _dimensionByProp: function(prop) {
-        return (prop === 'left') ? 'width' : 'height';
-    },
-
-    _getPropByDirection: function(direction) {
-        return direction === HORIZONTAL ? 'left' : 'top';
-    },
-
-    _scrollToHome: function() {
-        const prop = this._wheelProp();
-        const distance = {};
-
-        distance[prop] = 0;
-        this._component.scrollTo(distance);
-    },
-
-    _scrollToEnd: function() {
-        const prop = this._wheelProp();
-        const dimension = this._dimensionByProp(prop);
-
-        const distance = {};
-        distance[prop] = this._$content[dimension]() - this._$container[dimension]();
-        this._component.scrollTo(distance);
     },
 
     createActions: function() {
-        this._startAction = this._createActionHandler('onStart');
-        this._stopAction = this._createActionHandler('onStop');
-        this._endAction = this._createActionHandler('onEnd');
-        this._updateAction = this._createActionHandler('onUpdated');
-
         this._createScrollerActions();
     },
 
     _createScrollerActions: function() {
-        this._scrollAction = this._createActionHandler('onScroll');
-        this._bounceAction = this._createActionHandler('onBounce');
         this._eventHandler('createActions', {
             scroll: this._scrollAction,
             bounce: this._bounceAction
@@ -906,23 +767,6 @@ export const SimulatedStrategy = Class.inherit({
         location.top -= this._$container.scrollTop();
         location.left -= this._$container.scrollLeft();
         return location;
-    },
-
-    disabledChanged: function() {
-        this._attachCursorHandlers();
-    },
-
-    _attachCursorHandlers: function() {
-        eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_CURSOR}`);
-
-        if(!this.option('disabled') && this._isHoverMode()) {
-            eventsEngine.on(this._$element, addEventNamespace('mouseenter', SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
-            eventsEngine.on(this._$element, addEventNamespace('mouseleave', SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
-        }
-    },
-
-    _isHoverMode: function() {
-        return this.option('showScrollbar') === 'onHover';
     },
 
     _cursorEnterHandler: function(e) {
@@ -983,17 +827,6 @@ export const SimulatedStrategy = Class.inherit({
             });
             return when().promise();
         }));
-    },
-
-    _allowedDirections: function() {
-        const bounceEnabled = this.option('bounceEnabled');
-        const verticalScroller = this._scrollers[VERTICAL];
-        const horizontalScroller = this._scrollers[HORIZONTAL];
-
-        return {
-            vertical: verticalScroller && (verticalScroller._minOffset < 0 || bounceEnabled),
-            horizontal: horizontalScroller && (horizontalScroller._minOffset < 0 || bounceEnabled)
-        };
     },
 
     updateBounds: function() {
@@ -1058,25 +891,6 @@ export const SimulatedStrategy = Class.inherit({
         }
 
         return this._allowedDirection();
-    },
-
-    getDirection: function(e) {
-        return isDxMouseWheelEvent(e) ? this._wheelDirection(e) : this._allowedDirection();
-    },
-
-    _wheelProp: function() {
-        return (this._wheelDirection() === HORIZONTAL) ? 'left' : 'top';
-    },
-
-    _wheelDirection: function(e) {
-        switch(this.option('direction')) {
-            case HORIZONTAL:
-                return HORIZONTAL;
-            case VERTICAL:
-                return VERTICAL;
-            default:
-                return e && e.shiftKey ? HORIZONTAL : VERTICAL;
-        }
     },
 
     verticalOffset: function() {

@@ -1,24 +1,186 @@
 import {
   Component,
   JSXComponent,
+  InternalState,
+  RefObject,
+  Ref,
+  Effect,
+  Method,
 } from 'devextreme-generator/component_declaration/common';
 
 import { Widget } from '../common/widget';
-import { ScrollbarProps } from './scrollbar_props';
+import { combineClasses } from '../../utils/combine_classes';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import domAdapter from '../../../core/dom_adapter';
+import { isPlainObject } from '../../../core/utils/type';
+import { move } from '../../../animation/translator';
 
-export const viewFunction = ({
-  restAttributes,
-}: Scrollbar): JSX.Element => (
-  <Widget
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
-  >
-    <div />
-  </Widget>
-);
+import { ScrollbarProps } from './scrollbar_props';
+import {
+  ScrollDirection,
+  DIRECTION_HORIZONTAL,
+} from './scrollable_utils';
+
+import {
+  dxPointerDown,
+  dxPointerUp,
+} from '../../../events/short';
+
+const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
+const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
+const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
+const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
+const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
+
+const THUMB_MIN_SIZE = 15;
+
+export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
+  const {
+    cssClasses, styles, scrollRef, scrollbarRef, hoverStateEnabled,
+    props: { activeStateEnabled },
+    restAttributes,
+  } = viewModel;
+
+  return (
+    <Widget
+      rootElementRef={scrollbarRef}
+      classes={cssClasses}
+      activeStateEnabled={activeStateEnabled}
+      hoverStateEnabled={hoverStateEnabled}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...restAttributes}
+    >
+      <div className={viewModel.scrollClasses} style={styles} ref={scrollRef}>
+        <div className={SCROLLABLE_SCROLL_CONTENT_CLASS} />
+      </div>
+    </Widget>
+  );
+};
 
 @Component({
+  defaultOptionRules: null,
   view: viewFunction,
 })
 export class Scrollbar extends JSXComponent<ScrollbarProps>() {
+  @InternalState() active = false;
+
+  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
+
+  @Ref() scrollRef!: RefObject<HTMLDivElement>;
+
+  @Method()
+  moveTo(location): void {
+    const { visibilityMode } = this.props;
+
+    if (visibilityMode === 'never') {
+      return;
+    }
+
+    let position = location;
+    const prop = this.props.direction === DIRECTION_HORIZONTAL ? 'left' : 'top';
+
+    if (isPlainObject(location)) {
+      position = location[prop] || 0;
+    }
+
+    const scrollBarLocation = {};
+    scrollBarLocation[prop] = this.calculateScrollBarPosition(position);
+    move(this.scrollRef, scrollBarLocation);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  calculateScrollBarPosition(location): number {
+    return -location * 1; // TODO: * this._thumbRatio;
+  }
+
+  @Effect()
+  pointerDownEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollbar';
+
+    dxPointerDown.on(this.scrollRef,
+      () => {
+        this.feedbackOn();
+      }, { namespace });
+
+    return (): void => dxPointerDown.off(this.scrollRef, { namespace });
+  }
+
+  @Effect()
+  pointerUpEffect(): DisposeEffectReturn {
+    const namespace = 'dxScrollbar';
+
+    dxPointerUp.on(domAdapter.getDocument(),
+      () => {
+        this.feedbackOff();
+      }, { namespace });
+
+    return (): void => dxPointerUp.off(this.scrollRef, { namespace });
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  isThumb(element: HTMLDivElement): boolean {
+    return element.classList.contains(SCROLLABLE_SCROLL_CLASS)
+    || element.classList.contains(SCROLLABLE_SCROLL_CONTENT_CLASS);
+  }
+
+  @Method()
+  isScrollbar(element: HTMLDivElement): boolean {
+    return element === this.scrollbarRef;
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  isContent(element: HTMLDivElement): boolean {
+    return element.classList.contains(SCROLLABLE_SCROLLBAR_CLASS)
+    || element.classList.contains(SCROLLABLE_SCROLL_CLASS)
+    || element.classList.contains(SCROLLABLE_SCROLL_CONTENT_CLASS);
+  }
+
+  private feedbackOn(): void {
+    this.active = true;
+  }
+
+  private feedbackOff(): void {
+    this.active = false;
+  }
+
+  get cssClasses(): string {
+    const { direction } = this.props;
+
+    const classesMap = {
+      [SCROLLABLE_SCROLLBAR_CLASS]: true,
+      [`dx-scrollbar-${direction}`]: true,
+      [SCROLLABLE_SCROLLBAR_ACTIVE_CLASS]: !!this.active,
+      [HOVER_ENABLED_STATE]: !!this.hoverStateEnabled,
+    };
+    return combineClasses(classesMap);
+  }
+
+  get styles(): { [key: string]: string | number } {
+    const style = this.restAttributes.style || {};
+
+    return {
+      ...style,
+      display: this.props.needScrollbar ? '' : 'none',
+      [`${this.getDimension()}`]: THUMB_MIN_SIZE,
+    };
+  }
+
+  get scrollClasses(): string {
+    return combineClasses({
+      [SCROLLABLE_SCROLL_CLASS]: true,
+      'dx-state-invisible': !this.props.visible,
+    });
+  }
+
+  private getDimension(): string {
+    const { isHorizontal } = new ScrollDirection(this.props.direction);
+    return isHorizontal ? 'width' : 'height';
+  }
+
+  get hoverStateEnabled(): boolean {
+    const { visibilityMode, expandable } = this.props;
+    return (visibilityMode === 'onHover' || visibilityMode === 'always') && expandable;
+  }
 }

@@ -23,6 +23,7 @@ import getScrollRtlBehavior from '../core/utils/scroll_rtl_behavior';
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { allowScroll } from './text_box/utils.scroll';
+import errors from '../core/errors';
 
 // STYLE tagBox
 
@@ -420,7 +421,7 @@ const TagBox = SelectBox.inherit({
                 const $tagContent = $('<div>').addClass(TAGBOX_TAG_CONTENT_CLASS);
 
                 $('<span>')
-                    .text(data.text || data)
+                    .text(data.text ?? data)
                     .appendTo($tagContent);
 
                 $('<div>')
@@ -487,7 +488,6 @@ const TagBox = SelectBox.inherit({
             .toggleClass(TAGBOX_ONLY_SELECT_CLASS, !(this.option('searchEnabled') || this.option('acceptCustomValue')))
             .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
 
-        // TODO: texteditor render methods order research
         this._initTagTemplate();
 
         this.callBase();
@@ -755,6 +755,19 @@ const TagBox = SelectBox.inherit({
         return $tag;
     },
 
+    _getFilter: function(creator) {
+        const dataSourceFilter = this._dataSource.filter();
+        const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
+        const filterLength = encodeURI(JSON.stringify(filterExpr)).length;
+        const maxFilterLength = this.option('maxFilterLength');
+
+        if(filterLength <= maxFilterLength) {
+            return filterExpr;
+        }
+
+        errors.log('W0017', maxFilterLength);
+    },
+
     _getFilteredItems: function(values) {
         const creator = new FilterCreator(values);
 
@@ -768,11 +781,8 @@ const TagBox = SelectBox.inherit({
             return d.resolve(filteredItems).promise();
         } else {
             const dataSource = this._dataSource;
-            const dataSourceFilter = dataSource.filter();
-            const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
-            const filterLength = encodeURI(JSON.stringify(filterExpr)).length;
-            const filter = filterLength > this.option('maxFilterLength') ? undefined : filterExpr;
             const { customQueryParams, expand } = dataSource.loadOptions();
+            const filter = this._getFilter(creator);
 
             dataSource
                 .store()
@@ -1059,7 +1069,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemModel: function(item, displayValue) {
-        if(isObject(item) && displayValue) {
+        if(isObject(item) && isDefined(displayValue)) {
             return item;
         } else {
             return ensureDefined(displayValue, '');
@@ -1250,7 +1260,7 @@ const TagBox = SelectBox.inherit({
     _lastValue: function() {
         const values = this._getValue();
         const lastValue = values[values.length - 1];
-        return isDefined(lastValue) ? lastValue : null;
+        return lastValue ?? null;
     },
 
     _valueChangeEventHandler: noop,
