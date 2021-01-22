@@ -41,20 +41,29 @@ class ViewDataGenerator {
             groupByDate,
             horizontalGroupCount,
             cellCountInGroupRow,
+            groupOrientation,
         } = options;
-
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
         const columnCount = completeViewDataMap[index].length;
         const dateHeaderColumnCount = groupByDate
             ? columnCount / horizontalGroupCount
             : columnCount;
         const colSpan = groupByDate ? horizontalGroupCount : 1;
+        const isVerticalGrouping = groupOrientation === 'vertical';
 
-        return [completeViewDataMap[index].slice(0, dateHeaderColumnCount).map((cellData, index) => ({
-            ...cellData,
+        return [completeViewDataMap[index].slice(0, dateHeaderColumnCount).map(({
+            startDate,
+            isFirstGroupCell,
+            isLastGroupCell,
+            ...restProps
+        }, index) => ({
+            ...restProps,
+            startDate,
             text: getDateHeaderText(index % cellCountInGroupRow),
-            today: dateUtils.sameDate(cellData.startDate, today),
+            today: dateUtils.sameDate(startDate, today),
             colSpan,
+            isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
+            isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
         }))];
     }
 
