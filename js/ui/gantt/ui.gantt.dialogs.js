@@ -121,11 +121,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
             editorType: 'dxTextBox',
             label: { text: messageLocalization.format('dxGantt-dialogTitle') },
             editorOptions: { readOnly: readOnly || this._isReadOnlyField('title') },
-            visible: !this._isHiddenField('title'),
-            validationRules: [{
-                type: 'required',
-                message: messageLocalization.format('validation-required-formatted', messageLocalization.format('dxGantt-dialogTitle'))
-            }]
+            visible: !this._isHiddenField('title')
         }, {
             dataField: 'start',
             editorType: 'dxDateBox',

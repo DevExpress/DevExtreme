@@ -677,31 +677,22 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), 'start task text is shown');
         assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), 'end task text is shown');
         assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
-
         const testTitle = 'text';
-        const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
         const startTextBox = $dialog.find('.dx-datebox').eq(0).dxDateBox('instance');
         const endTextBox = $dialog.find('.dx-datebox').eq(1).dxDateBox('instance');
-
-        titleTextBox.option('value', '');
         startTextBox.option('value', '');
         endTextBox.option('value', '');
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
         assert.equal($dialog.length, 1, 'dialog is shown');
-        let isValidTitleTextBox = titleTextBox._getValidationErrors() === null;
         let isValidStartTextBox = startTextBox._getValidationErrors() === null;
         let isValidEndTextBox = endTextBox._getValidationErrors() === null;
-        assert.notOk(isValidTitleTextBox, 'empty title validation');
         assert.notOk(isValidStartTextBox, 'empty start validation');
         assert.notOk(isValidEndTextBox, 'empty end validation');
-        titleTextBox.option('value', testTitle);
         startTextBox.option('value', tasks[0].start);
         endTextBox.option('value', tasks[0].end);
-        isValidTitleTextBox = titleTextBox._getValidationErrors() === null;
         isValidStartTextBox = startTextBox._getValidationErrors() === null;
         isValidEndTextBox = endTextBox._getValidationErrors() === null;
-        assert.ok(isValidTitleTextBox, 'not empty title validation');
         assert.ok(isValidStartTextBox, 'not empty start validation');
         assert.ok(isValidEndTextBox, 'not empty end validation');
         $okButton.trigger('dxclick');
