@@ -531,8 +531,8 @@ export default class ViewDataProvider {
     get viewDataMap() { return this._viewDataMap; }
     set viewDataMap(value) { this._viewDataMap = value; }
 
-    get dateHeaderMap() { return this._viewDataMap; }
-    set dateHeaderMap(value) { this._viewDataMap = value; }
+    get dateHeaderMap() { return this._dateHeaderMap; }
+    set dateHeaderMap(value) { this._dateHeaderMap = value; }
 
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
 
