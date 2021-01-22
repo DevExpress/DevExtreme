@@ -197,8 +197,7 @@ const ColorView = Editor.inherit({
                 }
             },
             enter: function(e) {
-                this._saveValueChangeEvent(e);
-                this._fireEnterKeyPressed();
+                this._fireEnterKeyPressed(e);
             }
         });
     },
@@ -237,10 +236,10 @@ const ColorView = Editor.inherit({
         this._onEnterKeyPressedAction = this._createActionByOption('onEnterKeyPressed');
     },
 
-    _fireEnterKeyPressed: function() {
+    _fireEnterKeyPressed: function(e) {
         if(!this._onEnterKeyPressedAction) return;
         this._onEnterKeyPressedAction({
-            event: this._valueChangeEventInstance
+            event: e
         });
     },
 
