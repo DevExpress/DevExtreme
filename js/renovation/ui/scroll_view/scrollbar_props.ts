@@ -21,4 +21,8 @@ export class ScrollbarProps extends ScrollableInternalProps {
   @OneWay() direction: ScrollableDirection = 'vertical';
 
   @OneWay() needScrollbar = false;
+
+  @OneWay() width?: number;
+
+  @OneWay() height?: number;
 }

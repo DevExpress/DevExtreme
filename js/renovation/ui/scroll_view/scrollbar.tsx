@@ -17,7 +17,6 @@ import { move } from '../../../animation/translator';
 
 import { ScrollbarProps } from './scrollbar_props';
 import {
-  ScrollDirection,
   DIRECTION_HORIZONTAL,
 } from './scrollable_utils';
 
@@ -31,8 +30,6 @@ const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
 const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
 const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
-
-const THUMB_MIN_SIZE = 15;
 
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
@@ -61,6 +58,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   defaultOptionRules: null,
   view: viewFunction,
 })
+
 export class Scrollbar extends JSXComponent<ScrollbarProps>() {
   @InternalState() active = false;
 
@@ -163,7 +161,8 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     return {
       ...style,
       display: this.props.needScrollbar ? '' : 'none',
-      [`${this.getDimension()}`]: THUMB_MIN_SIZE,
+      width: this.props.width,
+      height: this.props.height,
     };
   }
 
@@ -172,11 +171,6 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
       [SCROLLABLE_SCROLL_CLASS]: true,
       'dx-state-invisible': !this.props.visible,
     });
-  }
-
-  private getDimension(): string {
-    const { isHorizontal } = new ScrollDirection(this.props.direction);
-    return isHorizontal ? 'width' : 'height';
   }
 
   get hoverStateEnabled(): boolean {
