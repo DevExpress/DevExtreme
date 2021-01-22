@@ -3305,7 +3305,7 @@ QUnit.module('Resource Cell Template', () => {
                         if(!cellIndex) {
                             assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
                             const $cell = $(cellElement).parent();
-                            assert.roughEqual($cell.outerWidth(), 299, 1.001, 'Resource cell width is OK');
+                            assert.roughEqual($cell.outerWidth(), 299, 2.001, 'Resource cell width is OK');
                             assert.equal($cell.outerHeight(), 30, 'Resource cell height is OK');
                         }
                     }

@@ -1202,8 +1202,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     _renderView() {
         this._setFirstViewDate();
 
-        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
-            this.renderRGroupPanel();
+        if(this.isRenovatedRender()) {
+            if(this._isVerticalGroupedWorkSpace()) {
+                this.renderRGroupPanel();
+            }
         } else {
             this._applyCellTemplates(
                 this._renderGroupHeader()

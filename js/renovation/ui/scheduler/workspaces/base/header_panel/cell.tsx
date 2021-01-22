@@ -41,9 +41,7 @@ export const viewFunction = ({
         index={index}
       />
     ) : (
-      <div>
-        {text}
-      </div>
+      text
     )}
   </th>
 );
