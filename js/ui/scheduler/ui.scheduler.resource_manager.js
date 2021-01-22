@@ -13,26 +13,125 @@ import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 const getValueExpr = resource => resource.valueExpr || 'id';
 const getDisplayExpr = resource => resource.displayExpr || 'text';
 
+const getWrappedDataSource = dataSource => {
+    if(dataSource instanceof DataSource) {
+        return dataSource;
+    }
+    const result = {
+        store: normalizeDataSourceOptions(dataSource).store,
+        pageSize: 0
+    };
+
+    if(!Array.isArray(dataSource)) {
+        result.filter = dataSource.filter;
+    }
+
+    return new DataSource(result);
+};
+class AgendaResourceState {
+    constructor(manager) {
+        this.manager = manager;
+        this.isLoaded = false;
+        this.isLoading = false;
+
+        this.resources = new Map();
+        this.query = new Map();
+    }
+
+    _pushAllResources() {
+        this.query.forEach((deferred, rawAppointment) => {
+            const result = [];
+
+            this.resources.forEach((resource, fieldName) => {
+                const item = {
+                    label: resource.label,
+                    values: []
+                };
+                result.push(item);
+
+                if(fieldName in rawAppointment) {
+                    const values = wrapToArray(rawAppointment[fieldName]);
+                    values.forEach(value => item.values.push(resource.map.get(value)));
+                }
+            });
+
+            deferred.resolve(result);
+        });
+    }
+
+    _onPullResource(fieldName, label, items) {
+        const map = new Map();
+        items.forEach(item => map.set(item.id, item.text));
+
+        this.resources.set(fieldName, { label, map });
+    }
+
+    _hasResourceDeclarations(resources) {
+        if(resources.length === 0) {
+            this.query.forEach(q => q.resolve([]));
+            this.query.clear();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    _tryPullResources(resources, resultAsync) {
+        if(!this.isLoading) {
+            this.isLoading = true;
+            const deferreds = [];
+
+            resources.forEach(resource => {
+                const deferred = new Deferred()
+                    .done(items => this._onPullResource(resource.fieldExpr, resource.label, items));
+                deferreds.push(deferred);
+
+                const dataSource = getWrappedDataSource(resource.dataSource);
+                if(dataSource.isLoaded()) {
+                    deferred.resolve(dataSource.items());
+                } else {
+                    dataSource
+                        .load()
+                        .done(list => deferred.resolve(list))
+                        .fail(() => deferred.reject());
+                }
+            });
+
+            when.apply(null, deferreds)
+                .done(() => {
+                    this.isLoaded = true;
+                    this.isLoading = false;
+
+                    this._pushAllResources();
+                }).fail(() => resultAsync.reject());
+        }
+    }
+
+    createListAsync(rawAppointment) {
+        const resultAsync = new Deferred();
+        const resources = this.manager.getResources();
+
+        this.query.set(rawAppointment, resultAsync);
+
+        if(this._hasResourceDeclarations(resources)) {
+            if(this.isLoaded) {
+                this._pushAllResources();
+            } else {
+                this._tryPullResources(resources, resultAsync);
+            }
+        }
+
+        return resultAsync.promise();
+    }
+}
+
 export default class ResourceManager {
     constructor(resources) {
         this._resourceLoader = {};
         this.setResources(resources);
-    }
 
-    _createWrappedDataSource(dataSource) {
-        if(dataSource instanceof DataSource) {
-            return dataSource;
-        }
-        const result = {
-            store: normalizeDataSourceOptions(dataSource).store,
-            pageSize: 0
-        };
-
-        if(!Array.isArray(dataSource)) {
-            result.filter = dataSource.filter;
-        }
-
-        return new DataSource(result);
+        this.agendaResourceState = new AgendaResourceState(this); // TODO
     }
 
     _mapResourceData(resource, data) {
@@ -118,7 +217,7 @@ export default class ResourceManager {
 
             result.push({
                 editorOptions: {
-                    dataSource: currentResourceItems.length ? currentResourceItems : that._createWrappedDataSource(resource.dataSource),
+                    dataSource: currentResourceItems.length ? currentResourceItems : getWrappedDataSource(resource.dataSource),
                     displayExpr: getDisplayExpr(resource),
                     valueExpr: getValueExpr(resource)
                 },
@@ -138,7 +237,7 @@ export default class ResourceManager {
         each(this.getResources(), function(_, resource) {
             const resourceField = that.getField(resource);
             if(resourceField === field) {
-                const dataSource = that._createWrappedDataSource(resource.dataSource);
+                const dataSource = getWrappedDataSource(resource.dataSource);
                 const valueExpr = getValueExpr(resource);
 
                 if(!that._resourceLoader[field]) {
@@ -222,7 +321,7 @@ export default class ResourceManager {
             const field = that.getField(resource);
             deferreds.push(deferred);
 
-            that._createWrappedDataSource(resource.dataSource)
+            getWrappedDataSource(resource.dataSource)
                 .load()
                 .done(function(data) {
                     deferred.resolve({
@@ -372,37 +471,42 @@ export default class ResourceManager {
         return false;
     }
 
-    _getPlainResourcesByAppointment(rawAppointment) {
-        const result = [];
+    _createPlainResourcesByAppointmentAsync(rawAppointment) {
+        return this.agendaResourceState.createListAsync(rawAppointment);
+        // const resultAsync = new Deferred();
+        // const resources = this.getResources();
+        // const deferreds = [];
 
-        this.getResources().forEach(resource => {
-            const valueGetter = compileGetter(getValueExpr(resource));
-            const displayGetter = compileGetter(getDisplayExpr(resource));
+        // if(resources.length === 0) {
+        //     resultAsync.resolve([]);
+        // }
 
-            const resourceFieldName = this.getField(resource);
-            const resourceValue = rawAppointment[resourceFieldName];
-            if(resourceValue !== undefined) {
-                const items = this.getResources().filter(resource => {
-                    return this.getField(resource) === resourceFieldName;
-                })[0].dataSource;
+        // resources.forEach(resource => {
+        //     const deferred = new Deferred();
+        //     deferreds.push(deferred);
 
-                const resultValue = [];
-                wrapToArray(resourceValue).forEach(value => {
-                    items.forEach(item => {
-                        if(valueGetter(item) === value) {
-                            resultValue.push(displayGetter(item));
-                        }
-                    });
-                });
+        //     this._createWrappedDataSource(resource.dataSource)
+        //         .load()
+        //         .done((data) => {
+        //             // debugger;
+        //             deferred.resolve(data);
+        //         }).fail(() => {
+        //             deferred.reject();
+        //         });
+        // });
 
-                result.push({
-                    label: resource.label || resourceFieldName,
-                    values: resultValue
-                });
-            }
-        });
+        // when.apply(null, deferreds).done(() => {
+        //     // debugger;
+        //     // const data = Array.prototype.slice.call(arguments);
+        //     // const mapFunction = function(obj) {
+        //     //     return { name: obj.name, items: obj.items, data: obj.data };
+        //     // };
 
-        return result;
+        //     // that._resourcesData = data;
+        //     // resultAsync.resolve(data.map(mapFunction));
+        // }).fail(() => resultAsync.reject());
+
+        // return resultAsync.promise();
     }
 
     _getResourceDataByField(fieldName) {
