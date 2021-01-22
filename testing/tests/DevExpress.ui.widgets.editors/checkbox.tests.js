@@ -7,6 +7,7 @@ import dxrCheckBox from 'renovation/ui/check_box.j.js';
 import dxCheckBox from 'ui/check_box';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/validator';
 
 QUnit.testStart(function() {
