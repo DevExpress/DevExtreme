@@ -1,13 +1,12 @@
 import $ from 'jquery';
 import { jsPDF } from 'jspdf';
 
-import { isDefined, isFunction } from 'core/utils/type';
+import { isDefined, isFunction, isObject } from 'core/utils/type';
 
 import 'ui/data_grid/ui.data_grid';
 
 import 'common.css!';
 import 'generic_light.css!';
-import { isObject } from 'angular';
 
 QUnit.testStart(() => {
     const markup = '<div id="dataGrid"></div>';
@@ -151,13 +150,17 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
 
         const dataGrid = createDataGrid({});
 
+        const expectedLog = [
+            'setLineWidth,1', 'rect,10,15,100,20',
+        ];
+
         const onCellExporting = () => {
             assert.fail('onCellExporting should not be called');
         };
 
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 20 }, onCellExporting }).then(() => {
             // doc.save();
-            assert.deepEqual(doc.__log, []);
+            assert.deepEqual(doc.__log, expectedLog);
             done();
         });
     });
