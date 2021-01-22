@@ -18,7 +18,6 @@ const Scrollbar = Widget.inherit({
         return extend(this.callBase(), {
             containerSize: 0,
             contentSize: 0,
-            scaleRatio: 1
         });
     },
 
@@ -52,8 +51,6 @@ const Scrollbar = Widget.inherit({
         }
 
         this._baseContainerToContentRatio = (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
-        this._realContainerToContentRatio = (contentSize ? containerSize / contentSize : containerSize);
-        this._thumbRatio = (containerSize /* - thumbSize */) / (this.option('scaleRatio') * (contentSize - containerSize));
     },
 
     _normalizeSize: function(size) {
