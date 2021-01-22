@@ -1,20 +1,33 @@
 // adduse
 
-.dx-dropdownmenu-popup-wrapper .dx-dropdownmenu-list {
-  min-height: 40px;
-  min-width: 100px;
-  border-radius: 8px;
+.dx-dropdownmenu-popup-wrapper {
+  .dx-dropdownmenu-list {
+    min-height: 40px;
+    min-width: 100px;
+    border-radius: 8px;
 
-  .dx-list-item {
-    display: block;
+    .dx-list-item {
+      display: block;
 
-    &:last-of-type {
-      border-bottom: none;
+      &:last-of-type {
+        border-bottom: none;
+      }
+    }
+
+    .dx-list-item-content {
+      display: block;
     }
   }
 
-  .dx-list-item-content {
+  .dx-overlay-content {
+    .dx-popup-content {
+      padding: 1px;
+    }
+  }
+
+  .dx-list-item {
     display: block;
+    border-top: 0;
   }
 }
 
@@ -23,13 +36,4 @@
     width: 0;
     height: 0;
   }
-
-  .dx-popup-content {
-    padding: 1px;
-  }
-}
-
-.dx-dropdownmenu-popup-wrapper .dx-list-item {
-  display: block;
-  border-top: 0;
 }
