@@ -26,6 +26,7 @@ const setupModule = function() {
         'filterRow',
         'search',
         'editing',
+        'editingFormBased',
         'grouping',
         'headerFilter',
         'masterDetail',

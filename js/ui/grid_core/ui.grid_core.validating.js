@@ -615,22 +615,21 @@ export default {
                 },
 
                 getEditFormOptions: function(detailOptions) {
-                    const editFormOptions = this.callBase.apply(this, arguments);
                     const validatingController = this.getController('validating');
                     const validationData = validatingController._getValidationData(detailOptions.key, true);
 
-                    return extend({}, editFormOptions, {
+                    return {
                         validationGroup: validationData
-                    });
+                    };
                 },
 
-                _updateEditRowCore: function(row, skipCurrentRow, isCustomSetCellValue) {
-                    this.callBase.apply(this, arguments);
-
+                _validateEditFormAfterUpdate: function(row, isCustomSetCellValue) {
                     // T816256, T844143
                     if(isCustomSetCellValue && this._editForm && !row.isNewRow) {
                         this._editForm.validate();
                     }
+
+                    this.callBase.apply(this, arguments);
                 },
 
                 _needInsertItem: function(change) {
