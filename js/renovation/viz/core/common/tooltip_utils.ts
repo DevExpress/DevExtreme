@@ -1,6 +1,6 @@
 import {
   RecalculateCoordinates, TooltipCoordinates, StrictSize, CustomizedOptions, CustomizeTooltipFn,
-  InitialBorder, TooltipData,
+  InitialBorder, TooltipData, Font,
 } from './types.d';
 import { isFunction, isPlainObject, isDefined } from '../../../../core/utils/type';
 
@@ -50,8 +50,8 @@ export function getCloudPoints(
   const anchorX = rotateX(coordinates, radRotationAngle);
   const anchorY = rotateY(coordinates, radRotationAngle);
   const halfArrowWidth = options.arrowWidth / 2;
-  const halfWidth = width / 2;
-  const halfHeight = height / 2;
+  const halfWidth = Number(width) / 2;
+  const halfHeight = Number(height) / 2;
 
   const xr = Math.ceil(x + halfWidth);
   const xl = Math.floor(x - halfWidth);
@@ -79,7 +79,7 @@ export function getCloudPoints(
   const arrowBaseTop = max(arrowY - halfArrowWidth, yt);
   const arrowBaseLeft = max(arrowX - halfArrowWidth, xl);
 
-  const cornerRadius = Math.min(width / 2, height / 2, options.cornerRadius);
+  const cornerRadius = Math.min(halfWidth, halfHeight, options.cornerRadius);
 
   let points;
   let arrowArc;
@@ -207,31 +207,36 @@ export function recalculateCoordinates({
     return false;
   }
 
+  const parsedSize = {
+    width: Number(size.width),
+    height: Number(size.height),
+  };
+
   let x;
   let y;
   let correctedAnchorY = anchorY;
 
-  if (bounds.width < size.width) {
+  if (bounds.width < parsedSize.width) {
     x = round(bounds.xl + bounds.width / 2);
   } else {
     x = min(
-      max(anchorX, ceil(bounds.xl + size.width / 2)),
-      floor(bounds.xr - size.width / 2),
+      max(anchorX, ceil(bounds.xl + parsedSize.width / 2)),
+      floor(bounds.xr - parsedSize.width / 2),
     );
   }
 
-  const halfHeightWithArrow = arrowLength + size.height / 2 + offset;
+  const halfHeightWithArrow = arrowLength + parsedSize.height / 2 + offset;
   const yTop = anchorY - halfHeightWithArrow;
   const yBottom = anchorY + halfHeightWithArrow;
 
-  if (bounds.height < size.height + arrowLength) {
-    y = round(bounds.yt + size.height / 2);
-  } else if (yTop - size.height / 2 < bounds.yt) {
-    if (yBottom + size.height / 2 < bounds.yb) {
+  if (bounds.height < parsedSize.height + arrowLength) {
+    y = round(bounds.yt + parsedSize.height / 2);
+  } else if (yTop - parsedSize.height / 2 < bounds.yt) {
+    if (yBottom + parsedSize.height / 2 < bounds.yb) {
       y = yBottom;
       correctedAnchorY += offset;
     } else {
-      y = round(bounds.yt + size.height / 2);
+      y = round(bounds.yt + parsedSize.height / 2);
     }
   } else {
     y = yTop;
@@ -252,8 +257,8 @@ export function getCloudAngle(
     x, y, anchorX, anchorY,
   }: TooltipCoordinates,
 ): number {
-  const halfWidth = width / 2;
-  const halfHeight = height / 2;
+  const halfWidth = Number(width) / 2;
+  const halfHeight = Number(height) / 2;
 
   const xr = Math.ceil(x + halfWidth);
   const xl = Math.floor(x - halfWidth);
@@ -285,16 +290,14 @@ export function getCloudAngle(
 }
 
 export function prepareData(
-  data: TooltipData, color: string,
-  border: InitialBorder,
-  font: {
-    color: string; family: string; opacity: number; size: number; weight: number;
-  },
+  data?: TooltipData, color?: string,
+  border?: InitialBorder,
+  font?: Font,
   customizeTooltip?: CustomizeTooltipFn,
 ): CustomizedOptions {
   let customize = {} as CustomizedOptions;
 
-  if (isFunction(customizeTooltip)) {
+  if (customizeTooltip && isFunction(customizeTooltip)) {
     customize = customizeTooltip.call(data, data);
     customize = isPlainObject(customize) ? customize : {};
     if ('text' in customize) {
@@ -305,11 +308,11 @@ export function prepareData(
     }
   }
   if (!('text' in customize) && !('html' in customize)) {
-    customize.text = data.valueText || data.description || '';
+    customize.text = data?.valueText || data?.description || '';
   }
   customize.color = customize.color || color;
-  customize.borderColor = customize.borderColor || border.color;
-  customize.fontColor = customize.fontColor || font.color;
+  customize.borderColor = customize.borderColor || border?.color;
+  customize.fontColor = customize.fontColor || font?.color;
   return customize as CustomizedOptions;
 }
 
