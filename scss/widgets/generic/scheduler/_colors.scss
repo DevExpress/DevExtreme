@@ -88,6 +88,12 @@ $scheduler-time-panel-background-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-appointment-overlay-bg: null !default;
 
+// Agenda
+$agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
+$agenda-appointment-hover-bg: $base-hover-bg !default;
+$agenda-appointment-active-bg: $base-accent !default;
+$agenda-appointment-active-text-color: $base-inverted-text-color !default;
+
 @if $color == "carmine" {
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
