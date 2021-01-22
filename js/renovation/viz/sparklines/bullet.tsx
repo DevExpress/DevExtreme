@@ -74,8 +74,8 @@ const inCanvas = (canvas: Canvas, x: number, y: number): boolean => {
   return pointInCanvas({
     left,
     top,
-    right: Number(width) - Number(right),
-    bottom: Number(height) - Number(bottom),
+    right: width - right,
+    bottom: height - bottom,
     width,
     height,
   }, x, y);
@@ -370,11 +370,11 @@ export class Bullet extends JSXComponent(BulletProps) {
       tmpProps.startScaleValue = tmpProps.startScaleValue < 0
         ? tmpProps.startScaleValue : 0;
     } else {
-      tmpProps.startScaleValue = Number(this.props.startScaleValue);
+      tmpProps.startScaleValue = this.props.startScaleValue;
     }
     // eslint-disable-next-line no-nested-ternary
     tmpProps.endScaleValue = this.props.endScaleValue === undefined
-      ? (target > value ? target : value) : Number(this.props.endScaleValue);
+      ? (target > value ? target : value) : this.props.endScaleValue;
 
     const { startScaleValue, endScaleValue } = tmpProps;
 

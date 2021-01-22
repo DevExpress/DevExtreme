@@ -66,7 +66,7 @@ export const generateCustomizeTooltipCallback = (
 ): CustomizeTooltipFn => {
   const defaultCustomizeTooltip = generateDefaultCustomizeTooltipCallback(fontOptions, rtlEnabled);
 
-  if (customizeTooltip && isFunction(customizeTooltip)) {
+  if (isFunction(customizeTooltip)) {
     return (customizeObject: SparklineTooltipData): CustomizedOptions => {
       let res = customizeTooltip.call(customizeObject, customizeObject) ?? { };
       if (!('html' in res) && !('text' in res)) {
