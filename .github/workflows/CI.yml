@@ -6,7 +6,7 @@ jobs:
   test:
     strategy:
       matrix:
-        BROWSER: [ IE, MSEdge ]
+        BROWSER: [ IE ]
         CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
         JQUERY: [ jquery=3, nojquery=true ]
 
