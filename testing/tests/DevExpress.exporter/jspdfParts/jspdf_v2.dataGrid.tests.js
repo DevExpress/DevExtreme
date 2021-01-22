@@ -103,7 +103,10 @@ function drawTable(doc, table) {
 QUnit.module('exportDataGrid', moduleConfig, () => {
 
     function argumentsToString() {
-        const items = Array.from(arguments);
+        const items = [];
+        for(let i = 0; i < arguments.length; i++) { // Array.from(arguments) is not supported in IE
+            items.push(arguments[i]);
+        }
         for(let i = items.length - 1; i >= 0; i--) {
             const item = items[i];
             if(isObject(item)) {
