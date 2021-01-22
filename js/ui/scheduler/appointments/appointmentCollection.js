@@ -362,18 +362,14 @@ class SchedulerAppointments extends CollectionWidget {
         this._preventSingleAppointmentClick = false;
     }
 
-    _renderAppointmentTemplate($container, rawAppointment, model) {
-        const scheduler = this.option('observer');
-        const appointment = scheduler.createAppointmentAdapter(rawAppointment);
-
+    _renderAppointmentTemplate($container, appointment, model) {
         const config = {
             isAllDay: appointment.allDay,
             isRecurrence: appointment.recurrenceRule,
 
             // TODO
-            html: isPlainObject(rawAppointment) && rawAppointment.html ?
-                rawAppointment.html :
-                undefined
+            html: isPlainObject(appointment) && appointment.html ?
+                appointment.html : undefined
         };
 
         const formatText = this.invoke(
