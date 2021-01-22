@@ -11,7 +11,6 @@ import { isObject } from 'angular';
 
 QUnit.testStart(() => {
     const markup = '<div id="dataGrid"></div>';
-
     $('#qunit-fixture').html(markup);
 });
 
@@ -65,16 +64,6 @@ function drawTable(doc, table) {
             throw 'doc is required';
         }
         if(isDefined(rect)) {
-            // TODO
-            // if(!isDefined(style)) {
-            //     throw 'style is required';
-            // }
-            // if(fillColor) {
-            //     doc.setFillColor(fillColor); // TODO: test
-            // }
-            // if(drawColor) {
-            //     doc.setDrawColor(drawColor); // TODO: test
-            // }
             doc.setLineWidth(1);
             doc.rect(rect.x, rect.y, rect.w, rect.h);
         }
@@ -85,15 +74,17 @@ function drawTable(doc, table) {
             throw 'rowCells is required';
         }
         rowCells.forEach(cell => {
-            if(!isDefined(cell.rect)) {
-                throw 'cell.rect is required';
-            }
-            if(isDefined(cell.text)) {
+            if(isDefined(cell.text) && cell.text !== '') {
+                if(!isDefined(cell.rect)) {
+                    throw 'cell.rect is required';
+                }
                 const textY = cell.rect.y + (cell.rect.h / 2); // https://github.com/MrRio/jsPDF/issues/1573
                 doc.text(cell.text, cell.rect.x, textY, { baseline: 'middle' });
             }
-            doc.setLineWidth(1);
-            doc.rect(cell.rect.x, cell.rect.y, cell.rect.w, cell.rect.h);
+            if(isDefined(cell.rect)) {
+                doc.setLineWidth(1);
+                doc.rect(cell.rect.x, cell.rect.y, cell.rect.w, cell.rect.h);
+            }
         });
     }
 
@@ -154,7 +145,24 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         return $('#dataGrid').dxDataGrid(options).dxDataGrid('instance');
     }
 
-    QUnit.test('DataGrid - 1 col', function(assert) {
+    QUnit.test('Empty', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({});
+
+        const onCellExporting = () => {
+            assert.fail('onCellExporting should not be called');
+        };
+
+        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 20 }, onCellExporting }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, []);
+            done();
+        });
+    });
+
+    QUnit.test('1 col', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
 
@@ -179,7 +187,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
-    QUnit.test('DataGrid - 1 col - 1 row', function(assert) {
+    QUnit.test('1 col - 1 row', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
 
@@ -210,7 +218,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
-    QUnit.test('DataGrid - 1 col - 2 rows', function(assert) {
+    QUnit.test('1 col - 2 rows', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
 
@@ -243,7 +251,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
-    QUnit.test('DataGrid - 2 cols', function(assert) {
+    QUnit.test('2 cols', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
 
@@ -273,7 +281,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
-    QUnit.test('DataGrid - 2 cols - 1 row', function(assert) {
+    QUnit.test('2 cols - 1 row', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
 
@@ -307,7 +315,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
-    QUnit.test('DataGrid - 2 cols - 2 rows', function(assert) {
+    QUnit.test('2 cols - 2 rows', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
 
