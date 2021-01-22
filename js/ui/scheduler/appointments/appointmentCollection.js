@@ -509,7 +509,7 @@ class SchedulerAppointments extends CollectionWidget {
         element.data(APPOINTMENT_SETTINGS_KEY, settings);
 
         this._applyResourceDataAttr(element);
-        const rowAppointment = this._getItemData(element);
+        const rawAppointment = this._getItemData(element);
         const geometry = this.invoke('getAppointmentGeometry', settings);
         const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
         const allowDrag = this.option('allowDrag');
@@ -518,16 +518,16 @@ class SchedulerAppointments extends CollectionWidget {
 
         if(settings.virtual) {
             const deferredColor = this.invoke('getAppointmentColor', {
-                itemData: rowAppointment,
+                itemData: rawAppointment,
                 groupIndex: settings.groupIndex,
             });
-            this._processVirtualAppointment(settings, element, rowAppointment, deferredColor);
+            this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
         } else {
             const plainResourceList = this.isAgendaView ?
-                this.resourceManager._getPlainResourcesByAppointment(rowAppointment) : [];
+                this.resourceManager._getPlainResourcesByAppointment(rawAppointment) : [];
 
             const config = {
-                data: rowAppointment,
+                data: rawAppointment,
                 groupIndex: settings.groupIndex,
 
                 observer: this.option('observer'),
@@ -541,7 +541,7 @@ class SchedulerAppointments extends CollectionWidget {
                 startDate: new Date(settings.info?.appointment.startDate),
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
-                resizableConfig: this._resizableConfig(rowAppointment, settings),
+                resizableConfig: this._resizableConfig(rawAppointment, settings),
                 plainResourceList
             };
 
