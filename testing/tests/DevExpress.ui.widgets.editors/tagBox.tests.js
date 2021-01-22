@@ -60,6 +60,75 @@ const getList = (tagBox) => {
     return tagBox._$list;
 };
 
+const getDSWithAsyncSearch = () => {
+    const data = [{
+        'id': 'item 1'
+    }, {
+        'id': 'item 2'
+    }, {
+        'id': 'item 3'
+    }, {
+        'id': 'item 4'
+    }, {
+        'id': 'item 5'
+    }, {
+        'id': 'item for search 1'
+    }, {
+        'id': 'item for search 2'
+    }, {
+        'id': 'item for search 3'
+    }, {
+        'id': 'item for search 4'
+    }];
+
+    return new DataSource({
+        paginate: true,
+        pageSize: 5,
+        store: new CustomStore({
+            key: 'id',
+            load: function(loadOptions) {
+                const deferred = $.Deferred();
+                setTimeout(() => {
+                    if(loadOptions.take && !loadOptions.searchValue) {
+                        deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take));
+                    } else if(loadOptions.filter) {
+                        const result = data.filter((item) => {
+                            if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
+                                return item[2];
+                            } else if(item.id === loadOptions.filter[2].id) {
+                                return item;
+                            } else if(Array.isArray(loadOptions.filter) && loadOptions.filter.length > 2) {
+                                for(let i = 0; i < loadOptions.filter.length; i++) {
+                                    const element = loadOptions.filter[i];
+                                    if(Array.isArray(element) && element[2] === item.id) {
+                                        return item;
+                                    }
+                                }
+                            } else {
+                                deferred.reject();
+                            }
+                        });
+
+                        deferred.resolve(result);
+
+                    } else if(loadOptions.searchValue) {
+                        const result = data.filter((item) => {
+                            if(item.id.indexOf(loadOptions.searchValue) >= 0) {
+                                return item;
+                            }
+                        });
+
+
+                        deferred.resolve(result.splice(loadOptions.skip, loadOptions.take));
+                    }
+                }, TIME_TO_WAIT * 2);
+
+                return deferred.promise();
+            }
+        })
+    });
+};
+
 const moduleSetup = {
     beforeEach: function() {
         TagBox.defaultOptions({ options: { deferRendering: false } });
@@ -3959,6 +4028,75 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         assert.strictEqual(loadStub.callCount, 3);
+    });
+
+    QUnit.test('TagBox should add all clicked items after search if dataSource is async (T958611)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $('#tagBox').dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        $('.dx-list-item').eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $('.dx-list-item').eq(0).trigger('dxclick');
+        $('.dx-list-item').eq(1).trigger('dxclick');
+        $('.dx-list-item').eq(2).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+
+        assert.strictEqual($tagContainer.find('.' + TAGBOX_TAG_CONTENT_CLASS).length, 4, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 2', 'item for search 3'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly add and remove all clicked items after search if dataSource is async (T958611)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $('#tagBox').dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        $('.dx-list-item').eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $('.dx-list-item').eq(0).trigger('dxclick');
+        $('.dx-list-item').eq(1).trigger('dxclick');
+        $('.dx-list-item').eq(2).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        $('.dx-list-item').eq(3).trigger('dxclick');
+        $('.dx-list-item').eq(1).trigger('dxclick');
+        $('.dx-list-item').eq(2).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+
+        assert.strictEqual($tagContainer.find('.' + TAGBOX_TAG_CONTENT_CLASS).length, 3, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
     });
 });
 
