@@ -36,7 +36,7 @@ export class Appointment extends DOMComponent {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            rowAppointment: {},
+            data: {},
             groupIndex: -1,
             geometry: { top: 0, left: 0, width: 0, height: 0 },
             allowDrag: true,
