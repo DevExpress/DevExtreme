@@ -881,9 +881,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 const isRowVisible = $row.get(0).style.display !== 'none' && !$row.hasClass('dx-state-invisible');
                 if(!$row.is('.' + GROUP_ROW_CLASS) && !$row.is('.' + DETAIL_ROW_CLASS) && isRowVisible) {
                     $cells = $row.children('td');
-                    if($row.is('.dx-data-row')) {
-                        break;
-                    }
+                    break;
                 }
             }
 
