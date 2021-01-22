@@ -83,6 +83,7 @@ function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
+    horizontalScrollbarRef, verticalScrollbarRef,
     cursorEnterHandler, cursorLeaveHandler,
     isScrollbarVisible, needScrollbar,
     props: {
@@ -138,6 +139,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           </div>
           {isHorizontal && (
             <Scrollbar
+              ref={horizontalScrollbarRef}
               direction="horizontal"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -147,6 +149,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           )}
           {isVertical && (
             <Scrollbar
+              ref={verticalScrollbarRef}
               direction="vertical"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -185,6 +188,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
+
+  @Ref() verticalScrollbarRef!: RefObject<any>; // TODO: any -> Scrollbar (Generators)
+
+  @Ref() horizontalScrollbarRef!: RefObject<any>; // TODO: any -> Scrollbar (Generators)
 
   @InternalState() isHovered = false;
 
@@ -415,8 +422,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     // console.log('handleCancel', event, this);
   }
 
-  /* istanbul ignore next */
-  public getDirection(e: Event): string | undefined { // TODO make it private
+  private getDirection(e: Event): string | undefined {
     return isDxMouseWheelEvent(e) ? this.wheelDirection(e) : this.allowedDirection();
   }
 
@@ -442,7 +448,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return this.getRealDimension(this.containerRef, dimension);
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line
   getRealDimension(element, dimension): number {
     return Math.round(getBoundingRect(element)[dimension]);
   }
@@ -466,9 +472,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return 1; // TODO
   }
 
-  /* istanbul ignore next */
   // eslint-disable-next-line
-  public validate(event: Event): boolean { // TODO make it private
+  private validate(event: Event): boolean {
     return true; // TODO
   }
 
@@ -572,7 +577,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       case DIRECTION_VERTICAL:
         return DIRECTION_VERTICAL;
       default:
-        /* istanbul ignore next */
         return e?.shiftKey ? DIRECTION_HORIZONTAL : DIRECTION_VERTICAL;
     }
   }
