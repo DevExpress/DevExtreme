@@ -64,7 +64,7 @@ class App extends React.Component {
             </CheckBox>
           </div>
           <div className="option">
-            <span>Item delete mode</span>
+            <span>Item delete mode </span>
             <SelectBox
               disabled={!this.state.allowDeleting}
               items={['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context']}
