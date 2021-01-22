@@ -7,18 +7,18 @@ import {
   Nested,
   Template,
 } from 'devextreme-generator/component_declaration/common';
-import DxDataGrid from '../../../ui/data_grid';
-import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../../ui/data_grid';
-import { WidgetProps } from '../common/widget';
+import DxDataGrid from '../../../../ui/data_grid';
+import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../../../ui/data_grid';
+import { WidgetProps } from '../../common/widget';
 
-import type { dxFilterBuilderOptions } from '../../../ui/filter_builder';
-import type { dxElement } from '../../../core/element';
-import type { template } from '../../../core/templates/template';
-import type { event } from '../../../events/index';
-import DataSource from '../../../data/data_source';
-import type { DataSourceOptions } from '../../../data/data_source';
-import type { dxPopupOptions } from '../../../ui/popup';
-import type { dxToolbarOptions } from '../../../ui/toolbar';
+import type { dxFilterBuilderOptions } from '../../../../ui/filter_builder';
+import type { dxElement } from '../../../../core/element';
+import type { template } from '../../../../core/templates/template';
+import type { event } from '../../../../events/index';
+import DataSource from '../../../../data/data_source';
+import type { DataSourceOptions } from '../../../../data/data_source';
+import type { dxPopupOptions } from '../../../../ui/popup';
+import type { dxToolbarOptions } from '../../../../ui/toolbar';
 import type {
   RequiredRule,
   NumericRule,
@@ -29,14 +29,15 @@ import type {
   CompareRule,
   EmailRule,
   AsyncRule,
-} from '../../../ui/validation_rules.d';
-import type { format } from '../../../ui/widget/ui.widget';
-import type dxSortable from '../../../ui/sortable';
-import type dxDraggable from '../../../ui/draggable';
-import type { dxFormSimpleItem, dxFormOptions } from '../../../ui/form';
-import type Store from '../../../data/abstract_store';
-import type { ExcelDataGridCell } from '../../../excel_exporter';
-import type { ExcelFont } from '../../../exporter/excel/excel.doc_comments';
+// eslint-disable-next-line import/extensions
+} from '../../../../ui/validation_rules';
+import type { format } from '../../../../ui/widget/ui.widget';
+import type dxSortable from '../../../../ui/sortable';
+import type dxDraggable from '../../../../ui/draggable';
+import type { dxFormSimpleItem, dxFormOptions } from '../../../../ui/form';
+import type Store from '../../../../data/abstract_store';
+import type { ExcelDataGridCell } from '../../../../excel_exporter';
+import type { ExcelFont } from '../../../../exporter/excel/excel.doc_comments';
 
 @ComponentBindings()
 export class DataGridColumnButton {
