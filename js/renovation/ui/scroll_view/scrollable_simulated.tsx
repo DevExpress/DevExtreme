@@ -61,6 +61,8 @@ import {
   dxScrollCancel,
 } from '../../../events/short';
 
+const THUMB_MIN_SIZE = 15;
+
 const KEY_CODES = {
   PAGE_UP: 'pageUp',
   PAGE_DOWN: 'pageDown',
@@ -86,6 +88,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     horizontalScrollbarRef, verticalScrollbarRef,
     cursorEnterHandler, cursorLeaveHandler,
     isScrollbarVisible, needScrollbar,
+    thumbWidth, thumbHeight,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -140,6 +143,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           {isHorizontal && (
             <Scrollbar
               ref={horizontalScrollbarRef}
+              width={thumbWidth}
               direction="horizontal"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -150,6 +154,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           {isVertical && (
             <Scrollbar
               ref={verticalScrollbarRef}
+              height={thumbHeight}
               direction="vertical"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -196,6 +201,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @InternalState() isHovered = false;
 
   @InternalState() baseContainerToContentRatio = 0;
+
+  @InternalState() thumbWidth = THUMB_MIN_SIZE;
+
+  @InternalState() thumbHeight = THUMB_MIN_SIZE;
 
   @Method()
   content(): HTMLDivElement {
@@ -441,7 +450,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   getMinOffset(dimension: string): number {
-    return -Math.max(this.contentSize(dimension, dimension === 'width' ? 'x' : 'y') - this.containerSize(dimension), 0);
+    return -Math.max(this.contentSize(dimension) - this.containerSize(dimension), 0);
   }
 
   containerSize(dimension: string): number {
@@ -453,7 +462,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return Math.round(getBoundingRect(element)[dimension]);
   }
 
-  contentSize(dimension: string, axis: string): number {
+  contentSize(dimension: string): number {
+    const axis = dimension === 'width' ? 'x' : 'y';
+
     const overflowStyleName = `overflow${axis.toUpperCase()}`;
     const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef) === 'hidden';
     let contentSize = this.getRealDimension(this.contentRef, dimension);
@@ -634,6 +645,28 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     return visible;
+  }
+
+  @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
+    this.thumbWidth = this.thumbSize('width');
+    this.thumbHeight = this.thumbSize('height');
+  }
+
+  thumbSize(dimension: string): number {
+    const containerSize = this.containerSize(dimension);
+
+    const size = Math.round(
+      Math.max(Math.round(containerSize * this.containerToContentRatio(dimension)), THUMB_MIN_SIZE),
+    );
+
+    return size / this.getScaleRatio();
+  }
+
+  containerToContentRatio(dimension): number {
+    const contentSize = this.contentSize(dimension);
+    const containerSize = this.containerSize(dimension);
+
+    return (contentSize ? containerSize / contentSize : containerSize);
   }
 
   get needScrollbar(): boolean {

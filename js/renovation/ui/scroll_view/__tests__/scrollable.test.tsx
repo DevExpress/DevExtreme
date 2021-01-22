@@ -390,8 +390,93 @@ jest.mock('../../../../core/devices', () => {
           });
 
           each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
-            each([100, 200]).describe('ContentSize: %o', (contentSize) => {
+            each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
               each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
+                const initStyles = (ref, size) => {
+                  const elementRef = ref;
+
+                  ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
+                    elementRef.style[prop] = `${size}px`;
+                  });
+                  ['overflowX', 'overflowY'].forEach((prop) => {
+                    elementRef.style[prop] = overflow;
+                  });
+                  elementRef.getBoundingClientRect = jest.fn(() => ({
+                    width: size,
+                    height: size,
+                  }));
+
+                  return elementRef;
+                };
+
+                if (Scrollable === ScrollableSimulated) {
+                  it('UpdateScrollbarSize(), thumbSize default', () => {
+                    const containerRef = React.createRef();
+                    const contentRef = React.createRef();
+                    const viewModel = new Scrollable({ direction });
+
+                    (viewModel as any).containerRef = containerRef;
+                    (viewModel as any).contentRef = contentRef;
+                    const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+
+                    if (direction !== 'horizontal') {
+                      const styles = scrollable.find('.dx-scrollbar-vertical .dx-scrollable-scroll').getElement().props.style;
+
+                      expect(styles).toEqual({ display: '', height: 15, width: undefined });
+                    }
+                    if (direction !== 'vertical') {
+                      const styles = scrollable.find('.dx-scrollbar-horizontal .dx-scrollable-scroll').getElement().props.style;
+
+                      expect(styles).toEqual({ display: '', height: undefined, width: 15 });
+                    }
+
+                    initStyles((viewModel as any).containerRef.current, containerSize);
+                    initStyles((viewModel as any).contentRef.current, contentSize);
+
+                    (viewModel as any).containerRef = (viewModel as any).containerRef.current;
+                    (viewModel as any).contentRef = (viewModel as any).contentRef.current;
+
+                    (viewModel as any).effectUpdateScrollbarSize();
+
+                    const expectedSize = contentSize
+                      ? containerSize * (containerSize / contentSize)
+                      : containerSize * containerSize;
+
+                    if (direction !== 'horizontal') {
+                      expect(viewModel.thumbHeight).toEqual(expectedSize);
+                      expect(viewModel.thumbWidth).toEqual(expectedSize);
+                    }
+                    if (direction !== 'vertical') {
+                      expect(viewModel.thumbWidth).toEqual(expectedSize);
+                      expect(viewModel.thumbHeight).toEqual(expectedSize);
+                    }
+                  });
+
+                  it('transfer thumbSize to scrollbar', () => {
+                    const containerRef = React.createRef();
+                    const contentRef = React.createRef();
+                    const viewModel = new Scrollable({ direction });
+
+                    (viewModel as any).containerRef = containerRef;
+                    (viewModel as any).contentRef = contentRef;
+                    viewModel.thumbHeight = 30;
+                    viewModel.thumbWidth = 45;
+
+                    const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+
+                    if (direction !== 'horizontal') {
+                      const styles = scrollable.find('.dx-scrollbar-vertical .dx-scrollable-scroll').getElement().props.style;
+
+                      expect(styles).toEqual({ display: '', height: 30, width: undefined });
+                    }
+                    if (direction !== 'vertical') {
+                      const styles = scrollable.find('.dx-scrollbar-horizontal .dx-scrollable-scroll').getElement().props.style;
+
+                      expect(styles).toEqual({ display: '', height: undefined, width: 45 });
+                    }
+                  });
+                }
+
                 each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
                   each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
                     each([true, false]).describe('IsShiftKeyPressed: %o', (isShiftKeyPressed) => {
@@ -399,24 +484,6 @@ jest.mock('../../../../core/devices', () => {
                         const containerRef = React.createRef();
                         const contentRef = React.createRef();
                         const viewModel = new Scrollable({ direction, bounceEnabled });
-
-                        const initStyles = (ref, size) => {
-                          ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
-                            // eslint-disable-next-line no-param-reassign
-                            ref.style[prop] = `${size}px`;
-                          });
-                          ['overflowX', 'overflowY'].forEach((prop) => {
-                            // eslint-disable-next-line no-param-reassign
-                            ref.style[prop] = overflow;
-                          });
-                          // eslint-disable-next-line no-param-reassign
-                          ref.getBoundingClientRect = jest.fn(() => ({
-                            width: size,
-                            height: size,
-                          }));
-
-                          return ref;
-                        };
 
                         (viewModel as any).containerRef = containerRef;
                         (viewModel as any).contentRef = contentRef;
