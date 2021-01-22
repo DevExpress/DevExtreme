@@ -267,7 +267,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
     test('custom request data API', function(assert) {
         const done = assert.async();
         createProvider(this, extend(this.options, {
-            customizeRequest: function(request) {
+            customizeRequest: function({ request }) {
                 request.withCredentials = true;
             }
         }));
@@ -280,7 +280,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             },
             callback: request => {
                 assert.ok(isFunction(this.provider._customizeRequest));
-                this.provider._customizeRequest(request);
+                this.provider._customizeRequest({ request });
                 assert.ok(request.withCredentials);
             }
         });

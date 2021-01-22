@@ -2937,6 +2937,10 @@ declare module DevExpress.fileManagement {
      */
     export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
         /**
+         * [descr:RemoteFileSystemProvider.Options.customizeRequest]
+         */
+        customizeRequest?: ((options: { request?: XMLHttpRequest }) => void | Promise<void> | JQueryPromise<void>);
+        /**
          * [descr:RemoteFileSystemProvider.Options.endpointUrl]
          */
         endpointUrl?: string;
@@ -2954,10 +2958,6 @@ declare module DevExpress.fileManagement {
      */
     export class RemoteFileSystemProvider extends FileSystemProviderBase {
         constructor(options?: RemoteFileSystemProviderOptions)
-        /**
-         * [descr:RemoteFileSystemProvider.customizeRequest(request)]
-         */
-        customizeRequest(request: XMLHttpRequest): void;
     }
     /**
      * [descr:UploadInfo]

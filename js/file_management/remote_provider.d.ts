@@ -5,6 +5,16 @@ import FileSystemProviderBase, {
 export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
     /**
      * @docid
+     * @publicName customizeRequest(request)
+     * @type_function_param1 options: object
+     * @type_function_param1_field1 request: XMLHttpRequest
+     * @type_function_return void|Promise<void>
+     * @prevFileNamespace DevExpress.fileManagement
+     * @public
+     */
+    customizeRequest?: ((options: { request?: XMLHttpRequest }) => void | Promise<void> | JQueryPromise<void>);
+    /**
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -34,12 +44,4 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
  */
 export default class RemoteFileSystemProvider extends FileSystemProviderBase {
     constructor(options?: RemoteFileSystemProviderOptions)
-    /**
-     * @docid
-     * @publicName customizeRequest(request)
-     * @param1 request: XMLHttpRequest
-     * @prevFileNamespace DevExpress.fileManagement
-     * @public
-     */
-    customizeRequest(request: XMLHttpRequest): void;
 }
