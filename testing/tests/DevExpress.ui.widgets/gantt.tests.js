@@ -678,6 +678,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), 'end task text is shown');
         assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
         const testTitle = 'text';
+        const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
         const startTextBox = $dialog.find('.dx-datebox').eq(0).dxDateBox('instance');
         const endTextBox = $dialog.find('.dx-datebox').eq(1).dxDateBox('instance');
         startTextBox.option('value', '');
@@ -689,6 +690,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         let isValidEndTextBox = endTextBox._getValidationErrors() === null;
         assert.notOk(isValidStartTextBox, 'empty start validation');
         assert.notOk(isValidEndTextBox, 'empty end validation');
+        titleTextBox.option('value', testTitle);
         startTextBox.option('value', tasks[0].start);
         endTextBox.option('value', tasks[0].end);
         isValidStartTextBox = startTextBox._getValidationErrors() === null;
