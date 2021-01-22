@@ -327,10 +327,10 @@ export const VirtualScrollController = Class.inherit((function() {
             if(isVirtualMode(this)) {
                 const totalItemsCount = this._dataSource.totalItemsCount();
                 if(this.option(NEW_SCROLLING_MODE) && totalItemsCount !== -1) {
-                    const loadParams = this.getVisibleItemParams();
-                    const endItemsCount = totalItemsCount - (loadParams.skip + loadParams.take);
+                    const viewportParams = this.getViewportParams();
+                    const endItemsCount = totalItemsCount - (viewportParams.skip + viewportParams.take);
                     return {
-                        begin: loadParams.skip,
+                        begin: viewportParams.skip,
                         end: endItemsCount
                     };
                 }
@@ -513,7 +513,7 @@ export const VirtualScrollController = Class.inherit((function() {
             return this._viewportSize;
         },
         pageIndex: function(pageIndex) {
-            if(isVirtualMode(this) || isAppendMode(this)) {
+            if(!this.option(NEW_SCROLLING_MODE) && (isVirtualMode(this) || isAppendMode(this))) {
                 if(pageIndex !== undefined) {
                     this._pageIndex = pageIndex;
                 }
@@ -679,7 +679,7 @@ export const VirtualScrollController = Class.inherit((function() {
         },
 
         // new mode
-        getVisibleItemParams: function() {
+        getViewportParams: function() {
             const skip = Math.floor(this._viewportItemIndex);
             let take = this._viewportSize + 1;
             if(isVirtualMode(this)) {
@@ -691,6 +691,6 @@ export const VirtualScrollController = Class.inherit((function() {
                 skip,
                 take
             };
-        },
+        }
     };
 })());
