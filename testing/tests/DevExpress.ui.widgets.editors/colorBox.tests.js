@@ -28,6 +28,10 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const COLORVIEW_CLASS = 'dx-colorview';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
+const COLORVIEW_HEX_INPUT_SELECTOR = '.dx-colorview-label-hex .dx-texteditor-input';
+const COLORVIEW_APPLY_BUTTON_SELECTOR = '.dx-colorview-apply-button';
+const CLEAR_BUTTON_AREA_SELECTOR = '.dx-clear-button-area';
+
 const move = function($element, position) {
     const parentOffset = $element.parent().offset();
     pointerMock($element)
@@ -817,3 +821,132 @@ QUnit.module('Regressions', {
     });
 });
 
+QUnit.module('valueChanged handler should receive correct event', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#color-box').dxColorBox({
+            onValueChanged: this.valueChangedHandler,
+            onOpened: () => {
+                this.$colorViewHexInput = $(COLORVIEW_HEX_INPUT_SELECTOR);
+                this.$colorViewApplyButton = $(COLORVIEW_APPLY_BUTTON_SELECTOR);
+            }
+        });
+        this.instance = this.$element.dxColorBox('instance');
+        this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', '#704f4f');
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+    },
+    afterEach: function() {
+        fx.off = true;
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('on runtime change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on change', function(assert) {
+        this.keyboard
+            .type('#2510e5')
+            .change();
+
+        const event = this.valueChangedHandler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'change', 'event type is correct');
+        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on input apply using enter', function(assert) {
+        this.keyboard
+            .type('#2510e5')
+            .press('enter');
+
+        const event = this.valueChangedHandler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'keydown', 'event type is correct');
+        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on colorView palette value apply using enter', function(assert) {
+        this.instance.option('value', '#0707b8');
+        this.instance.open();
+
+        this.keyboard
+            .press('up')
+            .press('enter');
+
+        const event = this.valueChangedHandler.getCall(1).args[0].event;
+        assert.strictEqual(event.type, 'keydown', 'event type is correct');
+        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on colorView any text input value apply using enter', function(assert) {
+        this.instance.open();
+
+        keyboardMock(this.$colorViewHexInput)
+            .press('up')
+            .press('enter');
+
+        const event = this.valueChangedHandler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'keydown', 'event type is correct');
+        assert.strictEqual(event.target, this.$colorViewHexInput.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on colorView apply button', function(assert) {
+        this.instance.open();
+
+        this.keyboard.press('up');
+        this.$colorViewApplyButton.trigger('dxclick');
+
+        const event = this.valueChangedHandler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+        assert.strictEqual(event.target, this.$colorViewApplyButton.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on colorView value change when applyValueMode=instantly', function(assert) {
+        // NOTE: if this test fails synchronization with colorView is broken totally
+
+        this.instance.option('applyValueMode', 'instantly');
+        this.instance.open();
+
+        this.keyboard.press('up');
+
+        const event = this.valueChangedHandler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'keydown', 'event type is correct');
+        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on clear button', function(assert) {
+        this.instance.option('showClearButton', true);
+        this.instance.option('value', '#613030');
+
+        const $clearButton = this.$element.find(CLEAR_BUTTON_AREA_SELECTOR);
+        $clearButton.trigger('dxclick');
+
+        const event = this.valueChangedHandler.getCall(1).args[0].event;
+        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+        assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+});
