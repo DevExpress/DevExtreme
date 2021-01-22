@@ -936,9 +936,43 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.testProgramChange(assert);
     });
 
-    QUnit.test('on click on clear button', function(assert) {
+    ['useButtons', 'instantly'].forEach(applyValueMode => {
+        QUnit.test(`on click on clear button when applyValueMode=${applyValueMode}`, function(assert) {
+            this.instance.option({ showClearButton: true, value: '#613030', applyValueMode });
+
+            const $clearButton = this.$element.find(CLEAR_BUTTON_AREA_SELECTOR);
+            $clearButton.trigger('dxclick');
+
+            const event = this.valueChangedHandler.getCall(1).args[0].event;
+            assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+            assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
+
+            this.testProgramChange(assert);
+        });
+    });
+
+    QUnit.test('on click on clear button after value selecting when applyValueMode=useButtons', function(assert) {
         this.instance.option('showClearButton', true);
-        this.instance.option('value', '#613030');
+
+        this.instance.open();
+        this.keyboard.press('up');
+        this.$colorViewApplyButton.trigger('dxclick');
+
+        const $clearButton = this.$element.find(CLEAR_BUTTON_AREA_SELECTOR);
+        $clearButton.trigger('dxclick');
+
+        const event = this.valueChangedHandler.getCall(1).args[0].event;
+        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+        assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on clear button after value selecting when applyValueMode=instantly', function(assert) {
+        this.instance.option({ showClearButton: true, applyValueMode: 'instantly' });
+
+        this.instance.open();
+        this.keyboard.press('up');
 
         const $clearButton = this.$element.find(CLEAR_BUTTON_AREA_SELECTOR);
         $clearButton.trigger('dxclick');

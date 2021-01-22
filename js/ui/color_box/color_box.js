@@ -212,7 +212,7 @@ const ColorBox = DropDownEditor.inherit({
                     return;
                 }
 
-                that._saveValueChangeEvent(args.event);
+                args.event && that._saveValueChangeEvent(args.event);
                 that._applyNewColor(args.value);
             }
         };
