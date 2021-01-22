@@ -8,8 +8,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import {
+  DateHeaderCellData,
   DateTimeCellTemplateProps,
-  ViewCellData,
 } from '../../types.d';
 import { isHorizontalGroupOrientation } from '../../utils';
 import { HeaderPanelCell } from './cell';
@@ -52,6 +52,7 @@ export const viewFunction = ({
         index,
         key,
         text,
+        colSpan,
       }) => (
         <HeaderPanelCell
           startDate={startDate}
@@ -65,6 +66,7 @@ export const viewFunction = ({
           isLastGroupCell={isLastGroupCell}
           dateCellTemplate={dateCellTemplate}
           key={key}
+          colSpan={colSpan}
         />
       ))}
     </Row>
@@ -83,7 +85,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class HeaderPanelProps extends GroupPanelProps {
-  @OneWay() dateHeaderMap: ViewCellData[][] = [];
+  @OneWay() dateHeaderMap: DateHeaderCellData[][] = [];
 
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }

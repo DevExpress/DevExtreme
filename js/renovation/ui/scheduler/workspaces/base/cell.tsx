@@ -10,25 +10,31 @@ import {
 import { getGroupCellClasses } from '../utils';
 import { ContentTemplateProps } from '../types.d';
 
-export const viewFunction = (viewModel: CellBase): JSX.Element => {
-  const ContentTemplate = viewModel.props.contentTemplate;
-
-  return (
-    <td
+export const viewFunction = ({
+  restAttributes,
+  classes,
+  props: {
+    colSpan,
+    children,
+    contentTemplate: ContentTemplate,
+    contentTemplateProps,
+  },
+}: CellBase): JSX.Element => (
+  <td
     // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
-      className={viewModel.classes}
-    >
-      {!ContentTemplate && viewModel.props.children}
-      {ContentTemplate && (
-        <ContentTemplate
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          {...viewModel.props.contentTemplateProps}
-        />
-      )}
-    </td>
-  );
-};
+    {...restAttributes}
+    className={classes}
+    colSpan={colSpan}
+  >
+    {!ContentTemplate && children}
+    {ContentTemplate && (
+      <ContentTemplate
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...contentTemplateProps}
+      />
+    )}
+  </td>
+);
 
 @ComponentBindings()
 export class CellBaseProps {
@@ -51,6 +57,8 @@ export class CellBaseProps {
   @OneWay() text?: string = '';
 
   @OneWay() index = 0;
+
+  @OneWay() colSpan = 1;
 
   @OneWay() contentTemplateProps: ContentTemplateProps = {
     data: {},

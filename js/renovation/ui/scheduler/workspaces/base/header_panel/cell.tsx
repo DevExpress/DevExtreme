@@ -19,6 +19,7 @@ export const viewFunction = ({
     dateCellTemplate,
     isFirstGroupCell,
     isLastGroupCell,
+    colSpan,
   },
 }: HeaderPanelCell): JSX.Element => (
   <CellBase
@@ -29,6 +30,7 @@ export const viewFunction = ({
     contentTemplateProps={dateCellTemplateProps}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
+    colSpan={colSpan}
   >
     <div>
       {text}
@@ -38,9 +40,9 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class HeaderPanelCellProps extends CellBaseProps {
-  @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
-
   @OneWay() today = false;
+
+  @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
 @Component({

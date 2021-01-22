@@ -38,14 +38,22 @@ class ViewDataGenerator {
         const {
             getDateHeaderText,
             today,
+            groupByDate,
+            horizontalGroupCount,
         } = options;
 
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
+        const columnCount = completeViewDataMap[index].length;
+        const dateHeaderColumnCount = groupByDate
+            ? columnCount / horizontalGroupCount
+            : columnCount;
+        const colSpan = groupByDate ? horizontalGroupCount : 1;
 
-        return [completeViewDataMap[index].map((cellData, index) => ({
+        return [completeViewDataMap[index].slice(0, dateHeaderColumnCount).map((cellData, index) => ({
             ...cellData,
             text: getDateHeaderText(index),
             today: dateUtils.sameDate(cellData.startDate, today),
+            colSpan,
         }))];
     }
 
@@ -80,12 +88,7 @@ class ViewDataGenerator {
     }
 
     _generateDateHeaderMap(completeDateHeaderMap, options) {
-        const {
-            startCellIndex,
-            cellCount
-        } = options;
-
-        return [completeDateHeaderMap[0].slice(startCellIndex, startCellIndex + cellCount)
+        return [completeDateHeaderMap[0].slice(0) // TODO: virtualization
             .map(cellData => cellData)];
     }
 

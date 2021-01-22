@@ -1266,6 +1266,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupCount,
             getDateHeaderText: this._getHeaderText.bind(this),
             today: this._getToday?.(),
+            groupByDate: this.isGroupedByDate(),
         };
 
         if(this.isVirtualScrolling()) {
