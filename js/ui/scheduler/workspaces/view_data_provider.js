@@ -40,6 +40,7 @@ class ViewDataGenerator {
             today,
             groupByDate,
             horizontalGroupCount,
+            cellCountInGroupRow,
         } = options;
 
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
@@ -51,7 +52,7 @@ class ViewDataGenerator {
 
         return [completeViewDataMap[index].slice(0, dateHeaderColumnCount).map((cellData, index) => ({
             ...cellData,
-            text: getDateHeaderText(index),
+            text: getDateHeaderText(index % cellCountInGroupRow),
             today: dateUtils.sameDate(cellData.startDate, today),
             colSpan,
         }))];
