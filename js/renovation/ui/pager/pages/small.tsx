@@ -47,10 +47,11 @@ export const viewFunction = ({
     />
   </div>
 );
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PagerSmallProps = Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'>;
+
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesSmall extends JSXComponent<
-Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' >
->() {
+export class PagesSmall extends JSXComponent<PagerSmallProps>() {
   @ForwardRef() pageIndexRef!: RefObject<HTMLDivElement>;
 
   get value(): number {

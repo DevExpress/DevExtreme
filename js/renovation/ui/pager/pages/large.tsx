@@ -90,13 +90,11 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
   );
 }
 
-// type PagesLargePropsType = Pick<PagerProps,
-// 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesLarge extends JSXComponent<
-Pick<PagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>
->() {
+export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
