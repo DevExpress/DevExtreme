@@ -12,3 +12,7 @@ export interface Point {
     originalArgument: Date | string | number,
     originalValue: Date | string | number
 }
+
+export interface Translator {
+    translate: (value: number|string|Date) => number 
+}

@@ -28,6 +28,7 @@ import pointerEvents from '../../../events/pointer';
 import { EffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 import { pointInCanvas } from '../core/utils';
+import { ArgumentAxisRange, ValueAxisRange, BulletScaleProps } from './types.d';
 
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;
@@ -43,29 +44,6 @@ const DEFAULT_OFFSET = { top: 0, left: 0 };
 
 const EVENT_NS = 'sparkline-tooltip';
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
-
-interface ArgumentAxisRange {
-  invert: boolean;
-  min?: number;
-  max?: number;
-  axisType: string;
-  dataType: string;
-}
-
-interface ValueAxisRange {
-  min?: number;
-  max?: number;
-  axisType: string;
-  dataType: string;
-}
-
-interface BulletScaleProps {
-  inverted: boolean;
-  value: number;
-  target: number;
-  startScaleValue: number;
-  endScaleValue: number;
-}
 
 const inCanvas = (canvas: Canvas, x: number, y: number): boolean => {
   const {

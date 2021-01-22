@@ -22,10 +22,10 @@ export declare function isPlainObject<T>(object: T): object is Extract<T, object
 
 export declare function isPrimitive<T>(value: T): value is Exclude<T, Function>&Exclude<T, object>&Exclude<T, any[]>;
 
-export declare function isWindow<T>(object: T): object is Extract<T, object>;
+export declare function isWindow<T>(object: T): object is Extract<T, Window & typeof globalThis>;
 
-export declare function isRenderer<T>(object: T): object is T;
+export declare function isRenderer(object: any): boolean;
 
-export declare function isPromise<T>(object: T): object is Extract<T, object>;
+export declare function isPromise<T>(object: T): object is Extract<T, Promise<any>>;
 
-export declare function isDeferred<T>(object: T): object is Extract<T, object>;
+export declare function isDeferred(object: any): boolean;
