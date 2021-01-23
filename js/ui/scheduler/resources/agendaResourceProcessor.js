@@ -104,7 +104,7 @@ export class AgendaResourceProcessor {
         }
     }
 
-    initializeState(resourceDeclarations) {
+    initializeState(resourceDeclarations = []) {
         this.resourceDeclarations = resourceDeclarations;
     }
 
