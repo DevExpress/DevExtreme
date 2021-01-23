@@ -25,4 +25,6 @@ export class ScrollbarProps extends ScrollableInternalProps {
   @OneWay() width?: number;
 
   @OneWay() height?: number;
+
+  @OneWay() thumbRatio = 1;
 }

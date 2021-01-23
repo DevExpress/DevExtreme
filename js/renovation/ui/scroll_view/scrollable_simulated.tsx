@@ -88,7 +88,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     horizontalScrollbarRef, verticalScrollbarRef,
     cursorEnterHandler, cursorLeaveHandler,
     isScrollbarVisible, needScrollbar,
-    thumbWidth, thumbHeight,
+    thumbWidth, thumbHeight, thumbRatioWidth, thumbRatioHeight,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -144,6 +144,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             <Scrollbar
               ref={horizontalScrollbarRef}
               width={thumbWidth}
+              thumbRatio={thumbRatioWidth}
               direction="horizontal"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -155,6 +156,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             <Scrollbar
               ref={verticalScrollbarRef}
               height={thumbHeight}
+              thumbRatio={thumbRatioHeight}
               direction="vertical"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -205,6 +207,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @InternalState() thumbWidth = THUMB_MIN_SIZE;
 
   @InternalState() thumbHeight = THUMB_MIN_SIZE;
+
+  @InternalState() thumbRatioWidth = 1;
+
+  @InternalState() thumbRatioHeight = 1;
 
   @Method()
   content(): HTMLDivElement {
@@ -648,8 +654,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
-    this.thumbWidth = this.thumbSize('width');
-    this.thumbHeight = this.thumbSize('height');
+    const thumbWidth = this.thumbSize('width');
+    this.thumbWidth = thumbWidth;
+    this.thumbRatioWidth = this.thumbRatio('width', thumbWidth);
+
+    const thumbHeight = this.thumbSize('height');
+    this.thumbHeight = thumbHeight;
+    this.thumbRatioHeight = this.thumbRatio('height', thumbHeight);
   }
 
   thumbSize(dimension: string): number {
@@ -660,6 +671,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     );
 
     return size / this.getScaleRatio();
+  }
+
+  thumbRatio(dimension: string, thumbSize: number): number {
+    const contentSize = this.contentSize(dimension);
+    const containerSize = this.containerSize(dimension);
+
+    return (containerSize - thumbSize) / (this.getScaleRatio() * (contentSize - containerSize));
   }
 
   containerToContentRatio(dimension): number {

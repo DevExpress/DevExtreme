@@ -133,30 +133,35 @@ describe('TopPocket', () => {
 describe('Methods', () => {
   each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
     each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (visibilityMode) => {
-      each([{ top: -100, left: -100 }, { top: -100 }, { left: -100 }, -100]).describe('Location: %o', (location) => {
-        it('moveTo()', () => {
-          const scrollRef = React.createRef();
-          const viewModel = new Scrollbar({ visibilityMode, direction, needScrollbar: true });
-          (viewModel as any).scrollRef = scrollRef;
+      each([0.5, 1, 2]).describe('thumbRatio: %o', (thumbRatio) => {
+        each([{ top: -100, left: -100 }, { top: -100 }, { left: -100 }, -100]).describe('Location: %o', (location) => {
+          it('moveTo()', () => {
+            const scrollRef = React.createRef();
+            const viewModel = new Scrollbar({
+              visibilityMode, direction, thumbRatio, needScrollbar: true,
+            });
+            (viewModel as any).scrollRef = scrollRef;
 
-          mount(viewFunction(viewModel as any) as JSX.Element);
-          (viewModel as any).scrollRef = (viewModel as any).scrollRef.current;
+            mount(viewFunction(viewModel as any) as JSX.Element);
+            (viewModel as any).scrollRef = (viewModel as any).scrollRef.current;
 
-          viewModel.moveTo(location);
+            viewModel.moveTo(location);
 
-          const scrollbarStyle = window.getComputedStyle((viewModel as any).scrollRef);
-          if (visibilityMode === 'never') {
-            expect(scrollbarStyle.transform).toEqual('');
-            return;
-          }
+            const scrollbarStyle = window.getComputedStyle((viewModel as any).scrollRef);
+            if (visibilityMode === 'never') {
+              expect(scrollbarStyle.transform).toEqual('');
+              return;
+            }
 
-          if (direction === DIRECTION_HORIZONTAL) {
-            // eslint-disable-next-line no-nested-ternary
-            expect(scrollbarStyle.transform).toEqual(`translate(${isNumeric(location) ? 100 : (location.left ? 100 : 0)}px, 0px)`);
-          } else {
-            // eslint-disable-next-line no-nested-ternary
-            expect(scrollbarStyle.transform).toEqual(`translate(0px, ${isNumeric(location) ? 100 : (location.top ? 100 : 0)}px)`);
-          }
+            let expectedValue = 0;
+            if (isNumeric(location)) {
+              expectedValue = -location * thumbRatio;
+            } else {
+              expectedValue = -(location[direction === DIRECTION_HORIZONTAL ? 'left' : 'top'] || 0) * thumbRatio;
+            }
+
+            expect(scrollbarStyle).toHaveProperty('transform', direction === DIRECTION_HORIZONTAL ? `translate(${expectedValue}px, 0px)` : `translate(0px, ${expectedValue}px)`);
+          });
         });
       });
 

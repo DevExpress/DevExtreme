@@ -86,9 +86,8 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     move(this.scrollRef, scrollBarLocation);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   calculateScrollBarPosition(location): number {
-    return -location * 1; // TODO: * this._thumbRatio;
+    return -location * this.props.thumbRatio;
   }
 
   @Effect()
