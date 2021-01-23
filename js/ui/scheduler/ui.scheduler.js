@@ -43,7 +43,7 @@ import AppointmentCollection from './appointments/appointmentCollection';
 import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
 import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
 import { Header } from './header/header';
-import SchedulerResourceManager from './ui.scheduler.resource_manager';
+import { ResourceManager } from './resources';
 import subscribes from './ui.scheduler.subscribes';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone';
@@ -945,7 +945,7 @@ class Scheduler extends Widget {
 
         this._initEditing();
 
-        this._resourcesManager = new SchedulerResourceManager(this.option('resources'));
+        this._resourcesManager = new ResourceManager(this.option('resources'));
 
         const combinedDataAccessors = this._combineDataAccessors();
 
