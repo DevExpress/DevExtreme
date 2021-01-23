@@ -132,6 +132,11 @@ describe('TopPocket', () => {
 
 describe('Methods', () => {
   each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
+    it('getDirection()', () => {
+      const viewModel = new Scrollbar({ direction } as ScrollbarProps);
+      expect(viewModel.getDirection()).toBe(direction);
+    });
+
     each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (visibilityMode) => {
       each([0.5, 1, 2]).describe('thumbRatio: %o', (thumbRatio) => {
         each([{ top: -100, left: -100 }, { top: -100 }, { left: -100 }, -100]).describe('Location: %o', (location) => {

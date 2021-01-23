@@ -89,6 +89,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     cursorEnterHandler, cursorLeaveHandler,
     isScrollbarVisible, needScrollbar,
     thumbWidth, thumbHeight, thumbRatioWidth, thumbRatioHeight,
+    scrollableRef,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -105,6 +106,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const visibilityMode = visibilityModeNormalize(showScrollbar);
   return (
     <Widget
+      rootElementRef={scrollableRef}
       focusStateEnabled={useKeyboard}
       hoverStateEnabled
       classes={cssClasses}
@@ -190,6 +192,8 @@ type ScrollableSimulatedPropsType = ScrollableSimulatedProps & Pick<BaseWidgetPr
   view: viewFunction,
 })
 export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
+  @Ref() scrollableRef!: RefObject<HTMLDivElement>;
+
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
 
   @Ref() contentRef!: RefObject<HTMLDivElement>;
@@ -211,6 +215,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @InternalState() thumbRatioWidth = 1;
 
   @InternalState() thumbRatioHeight = 1;
+
+  @InternalState() validDirections = {};
 
   @Method()
   content(): HTMLDivElement {
@@ -323,7 +329,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     /* istanbul ignore next */
     dxScrollInit.on(this.wrapperRef,
       (e: Event) => {
-        this.initHandler(e);
+        this.handleInit(e);
       }, {
         getDirection: (e) => this.getDirection(e),
         validate: (e) => this.validate(e),
@@ -408,7 +414,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   /* istanbul ignore next */
   // eslint-disable-next-line
-  initHandler(event: Event): void {
+  handleInit(e: Event): void {
+    this.suppressDirections(e);
     // console.log('initHandler', event, this);
   }
   /* istanbul ignore next */
@@ -435,6 +442,23 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   // eslint-disable-next-line
   private handleCancel(event: Event): void {
     // console.log('handleCancel', event, this);
+  }
+
+  suppressDirections(e): void {
+    if (isDxMouseWheelEvent(e.originalEvent)) {
+      this.prepareDirections(true);
+      return;
+    }
+
+    this.prepareDirections();
+  }
+
+  prepareDirections(value?: boolean): void {
+    const newValue = value || false;
+    this.validDirections = {
+      [DIRECTION_HORIZONTAL]: newValue,
+      [DIRECTION_VERTICAL]: newValue,
+    };
   }
 
   private getDirection(e: Event): string | undefined {

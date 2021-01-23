@@ -51,14 +51,14 @@ jest.mock('../../../../core/devices', () => {
   return actualDevices;
 });
 
-[{
+each([{
   viewFunction: viewFunctionNative,
   Scrollable: ScrollableNative,
 }, {
   viewFunction: viewFunctionSimulated,
   Scrollable: ScrollableSimulated,
-}].forEach(({ viewFunction, Scrollable }) => {
-  describe('Scrollable', () => {
+}]).describe('Scrollable', ({ viewFunction, Scrollable }) => {
+  describe(`${Scrollable === ScrollableNative ? 'Native' : 'Simulated'}`, () => {
     describe('Render', () => {
       it('should render scrollable content', () => {
         const scrollable = shallow(viewFunction({ props: { } } as any) as JSX.Element);
@@ -379,15 +379,46 @@ jest.mock('../../../../core/devices', () => {
           it('should subscribe to scrollinit event', () => {
             const e = { ...defaultEvent };
             const scrollable = new Scrollable({ direction });
-            const initHandler = jest.fn();
-            (scrollable as any).initHandler = initHandler;
+            const handleInit = jest.fn();
+            (scrollable as any).handleInit = handleInit;
 
             scrollable.initEffect();
             emit('dxscrollinit', e);
 
-            expect(initHandler).toHaveBeenCalledTimes(1);
-            expect(initHandler).toHaveBeenCalledWith(e);
+            expect(handleInit).toHaveBeenCalledTimes(1);
+            expect(handleInit).toHaveBeenCalledWith(e);
           });
+
+          if (Scrollable === ScrollableSimulated) {
+            each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
+              it('should prepare directions on init', () => {
+                const e = { ...defaultEvent };
+                if (isDxWheelEvent) {
+                  (e as any).originalEvent = {};
+                  (e as any).originalEvent.type = 'dxmousewheel';
+                }
+
+                const viewModel = new Scrollable({ direction });
+
+                expect((viewModel as any).validDirections).toEqual({});
+
+                viewModel.initEffect();
+                emit('dxscrollinit', e);
+
+                if (isDxWheelEvent) {
+                  expect((viewModel as any).validDirections).toEqual({
+                    vertical: true,
+                    horizontal: true,
+                  });
+                } else {
+                  expect((viewModel as any).validDirections).toEqual({
+                    vertical: false,
+                    horizontal: false,
+                  });
+                }
+              });
+            });
+          }
 
           each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
             each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {

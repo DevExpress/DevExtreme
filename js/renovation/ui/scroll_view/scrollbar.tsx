@@ -134,6 +134,11 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     || element.classList.contains(SCROLLABLE_SCROLL_CONTENT_CLASS);
   }
 
+  @Method()
+  getDirection(): string {
+    return this.props.direction;
+  }
+
   private feedbackOn(): void {
     this.active = true;
   }
