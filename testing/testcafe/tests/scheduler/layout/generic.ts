@@ -35,7 +35,7 @@ const resources = [{
 }];
 
 [undefined, resources].forEach((resourcesValue) => {
-  ['agenda', 'day', 'week', 'workWeek', 'month'].forEach((view) => {
+  ['day', 'week', 'workWeek', 'month'].forEach((view) => {
     test(`Base views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 

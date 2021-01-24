@@ -26,7 +26,7 @@ const createScheduler = async (view: string, groupOrientation: string) => {
 };
 
 ['vertical', 'horizontal'].forEach((groupOrientation) => {
-  ['agenda', 'day', 'week', 'workWeek', 'month'].forEach((view) => {
+  ['day', 'week', 'workWeek', 'month'].forEach((view) => {
     test(`Base views layout test in generic theme with groups(view='${view}', groupOrientation=${groupOrientation})`, async (t) => {
       await t
         .expect(await compareScreenshot(t, `genericGroups-base-views-layout-with-groups(view=${view}-orientation=${groupOrientation}).png`)).ok();

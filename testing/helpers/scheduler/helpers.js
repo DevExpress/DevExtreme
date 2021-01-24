@@ -4,6 +4,7 @@ import devices from 'core/devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import dataUtils from 'core/element_data';
 import browser from 'core/utils/browser';
+import Color from 'color';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -47,6 +48,10 @@ export const CLASSES = {
     appointment: '.dx-scheduler-appointment',
     appointmentDate: '.dx-scheduler-appointment-content-date',
     appointmentDragSource: '.dx-scheduler-appointment-drag-source',
+
+    appointmentTitle: '.dx-scheduler-appointment-title',
+
+    appointmentMarker: '.dx-scheduler-agenda-appointment-marker',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -158,6 +163,26 @@ class ClickElementWrapper extends ElementWrapper {
     }
 }
 
+class AppointmentTitle extends ElementWrapper {
+    constructor(parent) {
+        super(CLASSES.appointmentTitle, parent, 0);
+    }
+
+    get text() {
+        return this.getElement().text();
+    }
+}
+
+class AppointmentMarker extends ElementWrapper {
+    constructor(parent) {
+        super(CLASSES.appointmentMarker, parent, 0);
+    }
+
+    get color() {
+        return new Color(this.getElement().css('backgroundColor')).toHex();
+    }
+}
+
 class Appointment extends ClickElementWrapper {
     constructor(parent, index) {
         super(CLASSES.appointment, parent, index);
@@ -176,8 +201,20 @@ class Appointment extends ClickElementWrapper {
         return this.getElement().position();
     }
 
-    get date() {
+    get date() { // TODO
         return this.getElement().find(CLASSES.appointmentDate).text();
+    }
+
+    get title() {
+        return new AppointmentTitle(this.getElement());
+    }
+
+    get backgroundColor() {
+        return new Color(this.getElement().css('backgroundColor')).toHex();
+    }
+
+    get marker() {
+        return new AppointmentMarker(this.getElement());
     }
 
     get data() {
@@ -215,6 +252,13 @@ class Appointment extends ClickElementWrapper {
         this.getElement().trigger('dxclick');
         clock.tick(300);
         clock.restore();
+    }
+
+    dbClick() {
+        // const clock = sinon.useFakeTimers();
+        this.getElement().trigger('dxdblclick');
+        // clock.tick(300);
+        // clock.restore();
     }
 }
 

@@ -17,8 +17,8 @@ import BaseWidgetProps from '../../utils/base_props';
 import {
   ScrollableProps,
 } from './scrollable_props';
-import { TopPocketProps } from './topPocket_props';
-import { BottomPocketProps } from './bottomPocket_props';
+import { TopPocketProps } from './top_pocket_props';
+import { BottomPocketProps } from './bottom_pocket_props';
 
 import {
   allowedDirection,
@@ -43,8 +43,8 @@ import {
 } from './scrollable_utils';
 import { Scrollbar } from './scrollbar';
 
-import { TopPocket } from './topPocket';
-import { BottomPocket } from './bottomPocket';
+import { TopPocket } from './top_pocket';
+import { BottomPocket } from './bottom_pocket';
 
 import {
   dxScrollInit,

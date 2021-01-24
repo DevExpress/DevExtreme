@@ -20,14 +20,22 @@ const THUMB_MIN_SIZE = 15;
 
 describe('TopPocket', () => {
   describe('Styles', () => {
-    each(['horizontal', 'vertical', 'both', null, undefined]).describe('Direction: %o', (direction) => {
+    each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
       each([true, false]).describe('needScrollbar: %o', (needScrollbar) => {
         each(['never', 'always', 'onScroll', 'onHover', null, undefined]).describe('ShowScrollbar: %o', (visibilityMode) => {
-          it('Should assign styles', () => {
-            const scrollbar = new Scrollbar({ visibilityMode, direction, needScrollbar });
-            expect((scrollbar as any).styles).toEqual({
-              display: needScrollbar ? '' : 'none',
-              [`${direction === 'horizontal' || direction === 'both' ? 'width' : 'height'}`]: THUMB_MIN_SIZE,
+          each(['width', 'height']).describe('Dimension: %o', (dimension) => {
+            it('Should assign styles', () => {
+              const scrollbar = new Scrollbar({
+                visibilityMode,
+                direction,
+                needScrollbar,
+                [dimension]: THUMB_MIN_SIZE,
+              });
+
+              const { styles } = scrollbar as any;
+              expect(styles).toHaveProperty('display', needScrollbar ? '' : 'none');
+              expect(styles).toHaveProperty(dimension, THUMB_MIN_SIZE);
+              expect(styles).toHaveProperty(dimension === 'width' ? 'height' : 'width', undefined);
             });
           });
         });
@@ -36,7 +44,7 @@ describe('TopPocket', () => {
   });
 
   describe('Classes', () => {
-    each(['horizontal', 'vertical', 'both', null, undefined]).describe('Direction: %o', (direction) => {
+    each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
       each(['never', 'always', 'onScroll', 'onHover', null, undefined]).describe('ShowScrollbar: %o', (visibilityMode) => {
         each([true, false]).describe('Expandable: %o', (expandable) => {
           it('should add scroll hoverable class', () => {
@@ -123,32 +131,37 @@ describe('TopPocket', () => {
 });
 
 describe('Methods', () => {
-  each(['horizontal', 'vertical', 'both']).describe('Direction: %o', (direction) => {
+  each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
     each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (visibilityMode) => {
-      each([{ top: -100, left: -100 }, { top: -100 }, { left: -100 }, -100]).describe('Location: %o', (location) => {
-        it('moveTo()', () => {
-          const scrollRef = React.createRef();
-          const viewModel = new Scrollbar({ visibilityMode, direction, needScrollbar: true });
-          (viewModel as any).scrollRef = scrollRef;
+      each([0.5, 1, 2]).describe('thumbRatio: %o', (thumbRatio) => {
+        each([{ top: -100, left: -100 }, { top: -100 }, { left: -100 }, -100]).describe('Location: %o', (location) => {
+          it('moveTo()', () => {
+            const scrollRef = React.createRef();
+            const viewModel = new Scrollbar({
+              visibilityMode, direction, thumbRatio, needScrollbar: true,
+            });
+            (viewModel as any).scrollRef = scrollRef;
 
-          mount(viewFunction(viewModel as any) as JSX.Element);
-          (viewModel as any).scrollRef = (viewModel as any).scrollRef.current;
+            mount(viewFunction(viewModel as any) as JSX.Element);
+            (viewModel as any).scrollRef = (viewModel as any).scrollRef.current;
 
-          viewModel.moveTo(location);
+            viewModel.moveTo(location);
 
-          const scrollbarStyle = window.getComputedStyle((viewModel as any).scrollRef);
-          if (visibilityMode === 'never') {
-            expect(scrollbarStyle.transform).toEqual('');
-            return;
-          }
+            const scrollbarStyle = window.getComputedStyle((viewModel as any).scrollRef);
+            if (visibilityMode === 'never') {
+              expect(scrollbarStyle.transform).toEqual('');
+              return;
+            }
 
-          if (direction === DIRECTION_HORIZONTAL) {
-            // eslint-disable-next-line no-nested-ternary
-            expect(scrollbarStyle.transform).toEqual(`translate(${isNumeric(location) ? 100 : (location.left ? 100 : 0)}px, 0px)`);
-          } else {
-            // eslint-disable-next-line no-nested-ternary
-            expect(scrollbarStyle.transform).toEqual(`translate(0px, ${isNumeric(location) ? 100 : (location.top ? 100 : 0)}px)`);
-          }
+            let expectedValue = 0;
+            if (isNumeric(location)) {
+              expectedValue = -location * thumbRatio;
+            } else {
+              expectedValue = -(location[direction === DIRECTION_HORIZONTAL ? 'left' : 'top'] || 0) * thumbRatio;
+            }
+
+            expect(scrollbarStyle).toHaveProperty('transform', direction === DIRECTION_HORIZONTAL ? `translate(${expectedValue}px, 0px)` : `translate(0px, ${expectedValue}px)`);
+          });
         });
       });
 

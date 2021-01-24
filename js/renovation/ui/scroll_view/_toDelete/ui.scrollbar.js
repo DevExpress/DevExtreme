@@ -5,7 +5,6 @@ import { isPlainObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 
 const SCROLLBAR = 'dxScrollbar';
-const THUMB_MIN_SIZE = 15;
 
 const SCROLLBAR_VISIBLE = {
     onScroll: 'onScroll',
@@ -19,7 +18,6 @@ const Scrollbar = Widget.inherit({
         return extend(this.callBase(), {
             containerSize: 0,
             contentSize: 0,
-            scaleRatio: 1
         });
     },
 
@@ -33,23 +31,11 @@ const Scrollbar = Widget.inherit({
         this._update();
     },
 
-    isThumb: function($element) {
-        return !!this.$element().find($element).length;
-    },
-
-    _renderDimensions: function() {
-        this._$thumb.css({
-            width: this.option('width'),
-            height: this.option('height')
-        });
-    },
-
     _toggleVisibility: function(visible) {
         if(this.option('visibilityMode') === SCROLLBAR_VISIBLE.onScroll) {
             // NOTE: need to relayout thumb and show it instantly
             this._$thumb.css('opacity');
         }
-
     },
 
     _update: function() {
@@ -65,15 +51,6 @@ const Scrollbar = Widget.inherit({
         }
 
         this._baseContainerToContentRatio = (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
-        this._realContainerToContentRatio = (contentSize ? containerSize / contentSize : containerSize);
-        const thumbSize = Math.round(Math.max(Math.round(containerSize * this._realContainerToContentRatio), THUMB_MIN_SIZE));
-        this._thumbRatio = (containerSize - thumbSize) / (this.option('scaleRatio') * (contentSize - containerSize));
-
-        this.option(this._dimension, thumbSize / this.option('scaleRatio'));
-    },
-
-    containerToContentRatio: function() {
-        return this._realContainerToContentRatio;
     },
 
     _normalizeSize: function(size) {

@@ -24,8 +24,8 @@ import BaseWidgetProps from '../../utils/base_props';
 import {
   ScrollableProps,
 } from './scrollable_props';
-import { TopPocketProps } from './topPocket_props';
-import { BottomPocketProps } from './bottomPocket_props';
+import { TopPocketProps } from './top_pocket_props';
+import { BottomPocketProps } from './bottom_pocket_props';
 import {
   ScrollableLocation, ScrollableShowScrollbar, ScrollOffset,
   allowedDirection, ScrollEventArgs,
@@ -49,8 +49,8 @@ import {
   SCROLL_LINE_HEIGHT,
 } from './scrollable_utils';
 
-import { TopPocket } from './topPocket';
-import { BottomPocket } from './bottomPocket';
+import { TopPocket } from './top_pocket';
+import { BottomPocket } from './bottom_pocket';
 
 import {
   dxScrollInit,
@@ -60,6 +60,8 @@ import {
   dxScrollStop,
   dxScrollCancel,
 } from '../../../events/short';
+
+const THUMB_MIN_SIZE = 15;
 
 const KEY_CODES = {
   PAGE_UP: 'pageUp',
@@ -86,6 +88,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     horizontalScrollbarRef, verticalScrollbarRef,
     cursorEnterHandler, cursorLeaveHandler,
     isScrollbarVisible, needScrollbar,
+    thumbWidth, thumbHeight, thumbRatioWidth, thumbRatioHeight,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -140,6 +143,8 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           {isHorizontal && (
             <Scrollbar
               ref={horizontalScrollbarRef}
+              width={thumbWidth}
+              thumbRatio={thumbRatioWidth}
               direction="horizontal"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -150,6 +155,8 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           {isVertical && (
             <Scrollbar
               ref={verticalScrollbarRef}
+              height={thumbHeight}
+              thumbRatio={thumbRatioHeight}
               direction="vertical"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
@@ -196,6 +203,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @InternalState() isHovered = false;
 
   @InternalState() baseContainerToContentRatio = 0;
+
+  @InternalState() thumbWidth = THUMB_MIN_SIZE;
+
+  @InternalState() thumbHeight = THUMB_MIN_SIZE;
+
+  @InternalState() thumbRatioWidth = 1;
+
+  @InternalState() thumbRatioHeight = 1;
 
   @Method()
   content(): HTMLDivElement {
@@ -441,7 +456,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   getMinOffset(dimension: string): number {
-    return -Math.max(this.contentSize(dimension, dimension === 'width' ? 'x' : 'y') - this.containerSize(dimension), 0);
+    return -Math.max(this.contentSize(dimension) - this.containerSize(dimension), 0);
   }
 
   containerSize(dimension: string): number {
@@ -453,7 +468,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return Math.round(getBoundingRect(element)[dimension]);
   }
 
-  contentSize(dimension: string, axis: string): number {
+  contentSize(dimension: string): number {
+    const axis = dimension === 'width' ? 'x' : 'y';
+
     const overflowStyleName = `overflow${axis.toUpperCase()}`;
     const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef) === 'hidden';
     let contentSize = this.getRealDimension(this.contentRef, dimension);
@@ -634,6 +651,40 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
 
     return visible;
+  }
+
+  @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
+    const thumbWidth = this.thumbSize('width');
+    this.thumbWidth = thumbWidth;
+    this.thumbRatioWidth = this.thumbRatio('width', thumbWidth);
+
+    const thumbHeight = this.thumbSize('height');
+    this.thumbHeight = thumbHeight;
+    this.thumbRatioHeight = this.thumbRatio('height', thumbHeight);
+  }
+
+  thumbSize(dimension: string): number {
+    const containerSize = this.containerSize(dimension);
+
+    const size = Math.round(
+      Math.max(Math.round(containerSize * this.containerToContentRatio(dimension)), THUMB_MIN_SIZE),
+    );
+
+    return size / this.getScaleRatio();
+  }
+
+  thumbRatio(dimension: string, thumbSize: number): number {
+    const contentSize = this.contentSize(dimension);
+    const containerSize = this.containerSize(dimension);
+
+    return (containerSize - thumbSize) / (this.getScaleRatio() * (contentSize - containerSize));
+  }
+
+  containerToContentRatio(dimension): number {
+    const contentSize = this.contentSize(dimension);
+    const containerSize = this.containerSize(dimension);
+
+    return (contentSize ? containerSize / contentSize : containerSize);
   }
 
   get needScrollbar(): boolean {

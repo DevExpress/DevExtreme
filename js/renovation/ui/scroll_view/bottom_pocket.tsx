@@ -10,7 +10,7 @@ import {
 
 import messageLocalization from '../../../localization/message';
 
-import { BottomPocketProps } from './bottomPocket_props';
+import { BottomPocketProps } from './bottom_pocket_props';
 
 const SCROLLVIEW_REACHBOTTOM_CLASS = 'dx-scrollview-scrollbottom';
 const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = 'dx-scrollview-scrollbottom-indicator';

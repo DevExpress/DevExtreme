@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import each from 'jest-each';
 import { DataGrid, viewFunction as DataGridView } from '../data_grid';
-import { DataGridProps } from '../props';
+import { DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../common/widget';
 import { DataGridViews } from '../data_grid_views';
 import '../datagrid_component';
@@ -21,12 +21,32 @@ describe('DataGrid', () => {
     it('default render', () => {
       const instance = {} as any;
       const props = {
+        accessKey: 'accessKey',
+        activeStateEnabled: false,
+        disabled: false,
+        focusStateEnabled: false,
+        height: 400,
+        hint: 'hint',
+        hoverStateEnabled: false,
+        onContentReady: jest.fn(),
+        rtlEnabled: false,
+        tabIndex: 0,
+        visible: true,
+        width: 800,
+      } as Partial<DataGridProps>;
+      const gridProps = {
+        aria: {
+          role: 'presentation',
+        },
         restAttributes: { 'rest-attributes': 'true' },
         instance,
-      } as Partial<DataGrid>;
-      const tree = mount(<DataGridView {...props as any} /> as any);
+        props,
+      } as Partial<DataGridProps>;
+      const tree = mount(<DataGridView {...gridProps as any} /> as any);
 
       expect(tree.find(Widget).props()).toMatchObject({
+        ...props,
+        aria: gridProps.aria,
         'rest-attributes': 'true',
       });
       expect(tree.find(DataGridViews).props()).toMatchObject({
