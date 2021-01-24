@@ -490,12 +490,6 @@ export const Scroller = Class.inherit({
         return contentSize;
     },
 
-    _validateEvent: function(e) {
-        const $target = $(e.originalEvent.target);
-
-        return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
-    },
-
     _reachedMin: function() {
         return this._location <= this._minOffset;
     },
@@ -601,29 +595,8 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleInit: function(e) {
-        this._suppressDirections(e);
         this._eventForUserAction = e;
         this._eventHandler('init', e).done(this._stopAction);
-    },
-
-    _suppressDirections: function(e) {
-        if(isDxMouseWheelEvent(e.originalEvent)) {
-            this._prepareDirections(true);
-            return;
-        }
-
-        this._prepareDirections();
-        this._eachScroller(function(scroller, direction) {
-            const isValid = scroller._validateEvent(e);
-            this._validDirections[direction] = isValid;
-        });
-    },
-
-    _prepareDirections: function(value) {
-        value = value || false;
-        this._validDirections = {};
-        this._validDirections[HORIZONTAL] = value;
-        this._validDirections[VERTICAL] = value;
     },
 
     _eachScroller: function(callback) {

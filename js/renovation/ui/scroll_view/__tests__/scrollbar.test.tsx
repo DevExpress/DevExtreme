@@ -218,33 +218,6 @@ describe('Methods', () => {
         const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
         expect(viewModel.isThumb(scrollbar.getDOMNode())).toBe(false);
       });
-
-      it('isContent(element), element is scrollable scroll element', () => {
-        const viewModel = new Scrollbar({
-          visibilityMode, direction, needScrollbar: true,
-        } as ScrollbarProps);
-
-        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
-        expect(viewModel.isContent(scrollbar.find('.dx-scrollable-scroll').getDOMNode())).toBe(true);
-      });
-
-      it('isContent(element), element is scrollable content element', () => {
-        const viewModel = new Scrollbar({
-          visibilityMode, direction, needScrollbar: true,
-        } as ScrollbarProps);
-
-        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
-        expect(viewModel.isContent(scrollbar.find('.dx-scrollable-scroll-content').getDOMNode())).toBe(true);
-      });
-
-      it('isContent(element), element is scrollbar element', () => {
-        const viewModel = new Scrollbar({
-          visibilityMode, direction, needScrollbar: true,
-        } as ScrollbarProps);
-
-        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
-        expect(viewModel.isContent(scrollbar.getDOMNode())).toBe(true);
-      });
     });
   });
 });
