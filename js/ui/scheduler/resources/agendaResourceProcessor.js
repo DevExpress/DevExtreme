@@ -42,16 +42,20 @@ export class AgendaResourceProcessor {
                     label: resource.label,
                     values: []
                 };
-                result.push(item);
 
                 if(fieldName in rawAppointment) {
                     wrapToArray(rawAppointment[fieldName])
                         .forEach(value => item.values.push(resource.map.get(value)));
                 }
+
+                if(item.values.length) {
+                    result.push(item);
+                }
             });
 
             promise.resolve(result);
         });
+        this.appointmentPromiseQueue = [];
     }
 
     _onPullResource(fieldName, label, items) {
