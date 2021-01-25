@@ -510,7 +510,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private validateMove(event: Event): boolean {
-    if (!this.props.scrollByContent && (event.target as HTMLElement)?.closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`) === null) {
+    if (!this.props.scrollByContent
+      && (event.target as HTMLElement).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`) === null) {
       return false;
     }
 
