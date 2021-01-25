@@ -1367,7 +1367,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         );
     }
 
-    renderRDateHeader() {
+    renderRDateHeader(isRenderDateHeader = true) {
         if(this.option('groups').length) {
             this._attachGroupCountAttr();
         } else {
@@ -1390,6 +1390,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                     ? 1
                     : this._getCellCount(),
                 columnCountPerGroup: this._getCellCount(),
+                isRenderDateHeader,
             }
         );
     }

@@ -25,6 +25,7 @@ export const viewFunction = ({
     groupOrientation,
     baseColSpan,
     columnCountPerGroup,
+    isRenderDateHeader,
     resourceCellTemplate,
   },
 }: HeaderPanel): JSX.Element => (
@@ -39,12 +40,14 @@ export const viewFunction = ({
         resourceCellTemplate={resourceCellTemplate}
       />
     )}
-    <DateHeader
-      dateHeaderMap={dateHeaderMap}
-      dateCellTemplate={dateCellTemplate}
-      groupOrientation={groupOrientation}
-      groups={groups}
-    />
+    {isRenderDateHeader && (
+      <DateHeader
+        dateHeaderMap={dateHeaderMap}
+        dateCellTemplate={dateCellTemplate}
+        groupOrientation={groupOrientation}
+        groups={groups}
+      />
+    )}
     {groupByDate && (
       <GroupPanel
         groups={groups}
@@ -61,6 +64,8 @@ export const viewFunction = ({
 @ComponentBindings()
 export class HeaderPanelProps extends GroupPanelProps {
   @OneWay() dateHeaderMap: DateHeaderCellData[][] = [];
+
+  @OneWay() isRenderDateHeader = true;
 
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }

@@ -47,8 +47,10 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
     }
 
     renderRDateHeader() {
-        if(this.option('intervalCount') !== 1) {
-            super.renderRDateHeader();
+        if(this.option('intervalCount') === 1) {
+            super.renderRDateHeader(false);
+        } else {
+            super.renderRDateHeader(true);
         }
     }
 }

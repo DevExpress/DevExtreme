@@ -48,6 +48,14 @@ describe('HeaderPanelLayoutBase', () => {
         });
     });
 
+    it('should not render DateHeader if "isRenderDateHeader" is false', () => {
+      const layout = render({ props: { isRenderDateHeader: false } });
+
+      const dateHeader = layout.find(DateHeader);
+      expect(dateHeader.exists())
+        .toBe(false);
+    });
+
     it('should render DateHeader after GroupPanel in case of horizontal grouping', () => {
       const layout = render({ isHorizontalGrouping: true });
 
