@@ -1,9 +1,9 @@
 import { shallow } from 'enzyme';
 import {
-  HeaderPanelCell as Cell,
+  DateHeaderCell as Cell,
   viewFunction as CellView,
 } from '../cell';
-import dateLocalization from '../../../../../../../localization/date';
+import dateLocalization from '../../../../../../../../localization/date';
 
 jest.mock('../../../../../../../localization/date', () => ({
   getDayNames: jest.fn(() => [0, 1, 2, 3, 4, 5, 6, 7]),

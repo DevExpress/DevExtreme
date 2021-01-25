@@ -6,15 +6,14 @@ import {
   OneWay,
   Template,
 } from 'devextreme-generator/component_declaration/common';
-import { Row } from '../row';
 import {
   DateHeaderCellData,
   DateTimeCellTemplateProps,
 } from '../../types.d';
 import { isHorizontalGroupOrientation } from '../../utils';
-import { HeaderPanelCell } from './cell';
 import { GroupPanel } from '../group_panel/group_panel';
 import { GroupPanelProps } from '../group_panel/group_panel_props';
+import { DateHeader } from './date_header/layout';
 
 export const viewFunction = ({
   isHorizontalGrouping,
@@ -40,36 +39,12 @@ export const viewFunction = ({
         resourceCellTemplate={resourceCellTemplate}
       />
     )}
-    <Row className="dx-scheduler-header-row">
-      {dateHeaderMap[0].map(({
-        startDate,
-        endDate,
-        today,
-        groups: cellGroups,
-        groupIndex,
-        isFirstGroupCell,
-        isLastGroupCell,
-        index,
-        key,
-        text,
-        colSpan,
-      }) => (
-        <HeaderPanelCell
-          startDate={startDate}
-          endDate={endDate}
-          groups={isHorizontalGrouping ? cellGroups : undefined}
-          groupIndex={isHorizontalGrouping ? groupIndex : undefined}
-          today={today}
-          index={index}
-          text={text}
-          isFirstGroupCell={isFirstGroupCell}
-          isLastGroupCell={isLastGroupCell}
-          dateCellTemplate={dateCellTemplate}
-          key={key}
-          colSpan={colSpan}
-        />
-      ))}
-    </Row>
+    <DateHeader
+      dateHeaderMap={dateHeaderMap}
+      dateCellTemplate={dateCellTemplate}
+      groupOrientation={groupOrientation}
+      groups={groups}
+    />
     {groupByDate && (
       <GroupPanel
         groups={groups}

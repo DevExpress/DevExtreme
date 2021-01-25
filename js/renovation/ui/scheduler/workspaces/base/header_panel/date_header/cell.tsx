@@ -6,10 +6,10 @@ import {
   OneWay,
   JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
-import { CellBaseProps } from '../cell';
-import { DateTimeCellTemplateProps } from '../../types.d';
-import { combineClasses } from '../../../../../utils/combine_classes';
-import { getGroupCellClasses } from '../../utils';
+import { CellBaseProps } from '../../cell';
+import { DateTimeCellTemplateProps } from '../../../types.d';
+import { combineClasses } from '../../../../../../utils/combine_classes';
+import { getGroupCellClasses } from '../../../utils';
 
 export const viewFunction = ({
   restAttributes,
@@ -23,7 +23,7 @@ export const viewFunction = ({
     groupIndex,
     index,
   },
-}: HeaderPanelCell): JSX.Element => (
+}: DateHeaderCell): JSX.Element => (
   <th
     className={classes}
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -47,7 +47,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class HeaderPanelCellProps extends CellBaseProps {
+export class DateHeaderCellProps extends CellBaseProps {
   @OneWay() today = false;
 
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
@@ -57,7 +57,7 @@ export class HeaderPanelCellProps extends CellBaseProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class HeaderPanelCell extends JSXComponent(HeaderPanelCellProps) {
+export class DateHeaderCell extends JSXComponent(DateHeaderCellProps) {
   get classes(): string {
     const {
       today,
