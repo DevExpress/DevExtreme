@@ -143,7 +143,8 @@ export default SelectionStrategy.inherit({
     },
 
     _isMultiSelectEnabled: function() {
-        return this.options.mode === 'all' || this.options.mode === 'multiple';
+        const mode = this.options.mode;
+        return mode === 'all' || mode === 'multiple';
     },
 
     _loadSelectedItems: function(keys, isDeselect, isSelectAll) {
