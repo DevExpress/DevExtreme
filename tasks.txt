@@ -1,0 +1,476 @@
+ Tasks for D:\devextreme\DevExtreme\gulpfile.js
+ ├── clean
+ ├── skippedTask
+ ├── bundler-config
+ ├── bundler-config-dev
+ ├── ts-vendor
+ ├─┬ ts-bundle
+ │ └─┬ <series>
+ │   ├── writeTsBundle
+ │   └── writeAngularHack
+ ├─┬ ts-jquery-check
+ │ └─┬ <series>
+ │   ├─┬ ts-bundle
+ │   │ └─┬ <series>
+ │   │   ├── writeTsBundle
+ │   │   └── writeAngularHack
+ │   └── checkJQueryAugmentations
+ ├── ts-compilation-check
+ ├── ts-modules
+ ├─┬ ts-sources
+ │ └─┬ <series>
+ │   ├── ts-modules
+ │   └─┬ ts-bundle
+ │     └─┬ <series>
+ │       ├── writeTsBundle
+ │       └── writeAngularHack
+ ├─┬ ts-modules-check
+ │ └─┬ <series>
+ │   ├── ts-modules
+ │   └── checkModules
+ ├─┬ ts
+ │ └─┬ <series>
+ │   ├── ts-vendor
+ │   ├─┬ ts-bundle
+ │   │ └─┬ <series>
+ │   │   ├── writeTsBundle
+ │   │   └── writeAngularHack
+ │   ├─┬ ts-jquery-check
+ │   │ └─┬ <series>
+ │   │   ├─┬ ts-bundle
+ │   │   │ └─┬ <series>
+ │   │   │   ├── writeTsBundle
+ │   │   │   └── writeAngularHack
+ │   │   └── checkJQueryAugmentations
+ │   └── ts-compilation-check
+ ├─┬ generate-jquery-components
+ │ └─┬ <series>
+ │   ├── deleteJQueryComponents
+ │   └── generateJQuery
+ ├── generate-jquery-components-watch
+ ├─┬ generate-components
+ │ └─┬ <series>
+ │   ├─┬ generate-jquery-components
+ │   │ └─┬ <series>
+ │   │   ├── deleteJQueryComponents
+ │   │   └── generateJQuery
+ │   ├── generatePreactComponents
+ │   ├── <anonymous>
+ │   ├── <anonymous>
+ │   └── processRenovationMeta
+ ├─┬ generate-components-dev
+ │ └─┬ <series>
+ │   ├─┬ generate-jquery-components
+ │   │ └─┬ <series>
+ │   │   ├── deleteJQueryComponents
+ │   │   └── generateJQuery
+ │   ├── generatePreactComponents
+ │   ├── <anonymous>
+ │   ├── <anonymous>
+ │   └── processRenovationMeta
+ ├── generate-react-declaration-only
+ ├─┬ generate-react
+ │ └─┬ <series>
+ │   ├── cleanFrameworkArtifacts
+ │   ├── generate-react-declaration-only
+ │   ├── <anonymous>
+ │   ├── cleanFrameworkPlayground
+ │   └── copyArtifacts
+ ├─┬ generate-react-watch
+ │ └─┬ <series>
+ │   ├─┬ generate-react
+ │   │ └─┬ <series>
+ │   │   ├── cleanFrameworkArtifacts
+ │   │   ├── generate-react-declaration-only
+ │   │   ├── <anonymous>
+ │   │   ├── cleanFrameworkPlayground
+ │   │   └── copyArtifacts
+ │   └─┬ <parallel>
+ │     ├── <anonymous>
+ │     ├── declarationBuild
+ │     └── copyArtifacts
+ ├── generate-angular-declaration-only
+ ├─┬ generate-angular
+ │ └─┬ <series>
+ │   ├── cleanFrameworkArtifacts
+ │   ├── generate-angular-declaration-only
+ │   └── <anonymous>
+ ├─┬ generate-angular-watch
+ │ └─┬ <series>
+ │   ├─┬ generate-angular
+ │   │ └─┬ <series>
+ │   │   ├── cleanFrameworkArtifacts
+ │   │   ├── generate-angular-declaration-only
+ │   │   └── <anonymous>
+ │   └─┬ <parallel>
+ │     ├── <anonymous>
+ │     └── declarationBuild
+ ├── generate-vue-declaration-only
+ ├─┬ generate-vue
+ │ └─┬ <series>
+ │   ├── cleanFrameworkArtifacts
+ │   ├── generate-vue-declaration-only
+ │   ├── <anonymous>
+ │   ├── cleanFrameworkPlayground
+ │   └── copyArtifacts
+ ├─┬ generate-vue-watch
+ │ └─┬ <series>
+ │   ├─┬ generate-vue
+ │   │ └─┬ <series>
+ │   │   ├── cleanFrameworkArtifacts
+ │   │   ├── generate-vue-declaration-only
+ │   │   ├── <anonymous>
+ │   │   ├── cleanFrameworkPlayground
+ │   │   └── copyArtifacts
+ │   └─┬ <parallel>
+ │     ├── <anonymous>
+ │     ├── declarationBuild
+ │     └── copyArtifacts
+ ├─┬ generate-components-watch
+ │ └─┬ <series>
+ │   ├─┬ generate-components
+ │   │ └─┬ <series>
+ │   │   ├─┬ generate-jquery-components
+ │   │   │ └─┬ <series>
+ │   │   │   ├── deleteJQueryComponents
+ │   │   │   └── generateJQuery
+ │   │   ├── generatePreactComponents
+ │   │   ├── <anonymous>
+ │   │   ├── <anonymous>
+ │   │   └── processRenovationMeta
+ │   └── <anonymous>
+ ├── react-compilation-check
+ ├─┬ transpile
+ │ └─┬ <series>
+ │   ├── bundler-config
+ │   ├─┬ <parallel>
+ │   │ ├── transpile:artifacts/transpiled-npm
+ │   │ ├── transpile:artifacts/transpiled
+ │   │ ├── <anonymous>
+ │   │ └── <anonymous>
+ │   └── <anonymous>
+ ├─┬ version-replace
+ │ └─┬ <series>
+ │   ├─┬ transpile
+ │   │ └─┬ <series>
+ │   │   ├── bundler-config
+ │   │   ├─┬ <parallel>
+ │   │   │ ├── transpile:artifacts/transpiled-npm
+ │   │   │ ├── transpile:artifacts/transpiled
+ │   │   │ ├── <anonymous>
+ │   │   │ └── <anonymous>
+ │   │   └── <anonymous>
+ │   └─┬ <parallel>
+ │     ├── replace-version:artifacts/transpiled
+ │     ├── replace-version:artifacts/transpiled-npm
+ │     ├─┬ <series>
+ │     │ └── skippedTask
+ │     ├─┬ <series>
+ │     │ └── skippedTask
+ │     ├─┬ <series>
+ │     │ └── skippedTask
+ │     └─┬ <series>
+ │       └── skippedTask
+ ├─┬ transpile-watch
+ │ └─┬ <series>
+ │   ├─┬ <parallel>
+ │   │ ├── transpile:artifacts/transpiled
+ │   │ └── transpile:artifacts/transpiled-renovation
+ │   ├─┬ <parallel>
+ │   │ ├── replace-version:artifacts/transpiled
+ │   │ ├── replace-version:artifacts/transpiled-npm
+ │   │ ├─┬ <series>
+ │   │ │ └── skippedTask
+ │   │ ├─┬ <series>
+ │   │ │ └── skippedTask
+ │   │ ├─┬ <series>
+ │   │ │ └── skippedTask
+ │   │ └─┬ <series>
+ │   │   └── skippedTask
+ │   └── <anonymous>
+ ├─┬ transpile-tests
+ │ └─┬ <series>
+ │   ├── bundler-config
+ │   └── <anonymous>
+ ├── js-bundles-prod
+ ├── create-renovation-temp
+ ├── create-renovation-temp-watch
+ ├─┬ js-bundles-debug
+ │ └─┬ <series>
+ │   ├── <anonymous>
+ │   └── <anonymous>
+ ├─┬ js-bundles-dev
+ │ └─┬ <parallel>
+ │   ├── <anonymous>
+ │   └── <anonymous>
+ ├── vectormap-utils
+ ├─┬ vectormap-data
+ │ └─┬ <series>
+ │   ├── vectormap-utils
+ │   └── <anonymous>
+ ├─┬ vectormap
+ │ └─┬ <series>
+ │   ├── vectormap-utils
+ │   └─┬ vectormap-data
+ │     └─┬ <series>
+ │       ├── vectormap-utils
+ │       └── <anonymous>
+ ├─┬ npm-sources
+ │ └─┬ <series>
+ │   ├─┬ ts-sources
+ │   │ └─┬ <series>
+ │   │   ├── ts-modules
+ │   │   └─┬ ts-bundle
+ │   │     └─┬ <series>
+ │   │       ├── writeTsBundle
+ │   │       └── writeAngularHack
+ │   ├── <anonymous>
+ │   └── <anonymous>
+ ├─┬ npm-sass
+ │ └─┬ <parallel>
+ │   ├── <anonymous>
+ │   ├── <anonymous>
+ │   └── <anonymous>
+ ├─┬ npm
+ │ └─┬ <series>
+ │   ├─┬ npm-sources
+ │   │ └─┬ <series>
+ │   │   ├─┬ ts-sources
+ │   │   │ └─┬ <series>
+ │   │   │   ├── ts-modules
+ │   │   │   └─┬ ts-bundle
+ │   │   │     └─┬ <series>
+ │   │   │       ├── writeTsBundle
+ │   │   │       └── writeAngularHack
+ │   │   ├── <anonymous>
+ │   │   └── <anonymous>
+ │   ├─┬ ts-modules-check
+ │   │ └─┬ <series>
+ │   │   ├── ts-modules
+ │   │   └── checkModules
+ │   └─┬ npm-sass
+ │     └─┬ <parallel>
+ │       ├── <anonymous>
+ │       ├── <anonymous>
+ │       └── <anonymous>
+ ├─┬ themebuilder-npm
+ │ └─┬ <series>
+ │   ├── <anonymous>
+ │   └── <anonymous>
+ ├── aspnet
+ ├── vendor-js
+ ├── vendor-css
+ ├─┬ vendor
+ │ └─┬ <parallel>
+ │   ├── vendor-js
+ │   └── vendor-css
+ ├─┬ localization-messages
+ │ └─┬ <parallel>
+ │   ├── dx.messages.cs
+ │   ├── dx.messages.de
+ │   ├── dx.messages.el
+ │   ├── dx.messages.en
+ │   ├── dx.messages.es
+ │   ├── dx.messages.fi
+ │   ├── dx.messages.fr
+ │   ├── dx.messages.hu
+ │   ├── dx.messages.it
+ │   ├── dx.messages.ja
+ │   ├── dx.messages.nl
+ │   ├── dx.messages.pt
+ │   ├── dx.messages.ru
+ │   ├── dx.messages.sl
+ │   ├── dx.messages.sv
+ │   ├── dx.messages.tr
+ │   ├── dx.messages.vi
+ │   └── dx.messages.zh
+ ├─┬ localization-generated-sources
+ │ └─┬ <parallel>
+ │   ├── default_messages.js
+ │   ├── parent_locales.js
+ │   ├── first_day_of_week_data.js
+ │   └── accounting_formats.js
+ ├─┬ localization
+ │ └─┬ <series>
+ │   ├─┬ localization-messages
+ │   │ └─┬ <parallel>
+ │   │   ├── dx.messages.cs
+ │   │   ├── dx.messages.de
+ │   │   ├── dx.messages.el
+ │   │   ├── dx.messages.en
+ │   │   ├── dx.messages.es
+ │   │   ├── dx.messages.fi
+ │   │   ├── dx.messages.fr
+ │   │   ├── dx.messages.hu
+ │   │   ├── dx.messages.it
+ │   │   ├── dx.messages.ja
+ │   │   ├── dx.messages.nl
+ │   │   ├── dx.messages.pt
+ │   │   ├── dx.messages.ru
+ │   │   ├── dx.messages.sl
+ │   │   ├── dx.messages.sv
+ │   │   ├── dx.messages.tr
+ │   │   ├── dx.messages.vi
+ │   │   └── dx.messages.zh
+ │   └─┬ localization-generated-sources
+ │     └─┬ <parallel>
+ │       ├── default_messages.js
+ │       ├── parent_locales.js
+ │       ├── first_day_of_week_data.js
+ │       └── accounting_formats.js
+ ├── copy-fonts-and-icons
+ ├─┬ style-compiler-themes
+ │ └─┬ <parallel>
+ │   ├── <anonymous>
+ │   └── copy-fonts-and-icons
+ ├─┬ style-compiler-themes-ci
+ │ └─┬ <parallel>
+ │   ├── <anonymous>
+ │   └── copy-fonts-and-icons
+ ├── style-compiler-themes-dev
+ ├── check-license-notices
+ ├── create-timezones-data
+ ├── test-timezones-data
+ ├─┬ misc-batch
+ │ └─┬ <parallel>
+ │   ├─┬ vectormap
+ │   │ └─┬ <series>
+ │   │   ├── vectormap-utils
+ │   │   └─┬ vectormap-data
+ │   │     └─┬ <series>
+ │   │       ├── vectormap-utils
+ │   │       └── <anonymous>
+ │   ├─┬ vendor
+ │   │ └─┬ <parallel>
+ │   │   ├── vendor-js
+ │   │   └── vendor-css
+ │   ├── aspnet
+ │   └─┬ ts
+ │     └─┬ <series>
+ │       ├── ts-vendor
+ │       ├─┬ ts-bundle
+ │       │ └─┬ <series>
+ │       │   ├── writeTsBundle
+ │       │   └── writeAngularHack
+ │       ├─┬ ts-jquery-check
+ │       │ └─┬ <series>
+ │       │   ├─┬ ts-bundle
+ │       │   │ └─┬ <series>
+ │       │   │   ├── writeTsBundle
+ │       │   │   └── writeAngularHack
+ │       │   └── checkJQueryAugmentations
+ │       └── ts-compilation-check
+ ├─┬ style-compiler-batch
+ │ └─┬ <series>
+ │   └─┬ style-compiler-themes
+ │     └─┬ <parallel>
+ │       ├── <anonymous>
+ │       └── copy-fonts-and-icons
+ ├─┬ default
+ │ └─┬ <series>
+ │   ├── clean
+ │   ├─┬ localization
+ │   │ └─┬ <series>
+ │   │   ├─┬ localization-messages
+ │   │   │ └─┬ <parallel>
+ │   │   │   ├── dx.messages.cs
+ │   │   │   ├── dx.messages.de
+ │   │   │   ├── dx.messages.el
+ │   │   │   ├── dx.messages.en
+ │   │   │   ├── dx.messages.es
+ │   │   │   ├── dx.messages.fi
+ │   │   │   ├── dx.messages.fr
+ │   │   │   ├── dx.messages.hu
+ │   │   │   ├── dx.messages.it
+ │   │   │   ├── dx.messages.ja
+ │   │   │   ├── dx.messages.nl
+ │   │   │   ├── dx.messages.pt
+ │   │   │   ├── dx.messages.ru
+ │   │   │   ├── dx.messages.sl
+ │   │   │   ├── dx.messages.sv
+ │   │   │   ├── dx.messages.tr
+ │   │   │   ├── dx.messages.vi
+ │   │   │   └── dx.messages.zh
+ │   │   └─┬ localization-generated-sources
+ │   │     └─┬ <parallel>
+ │   │       ├── default_messages.js
+ │   │       ├── parent_locales.js
+ │   │       ├── first_day_of_week_data.js
+ │   │       └── accounting_formats.js
+ │   ├─┬ generate-components
+ │   │ └─┬ <series>
+ │   │   ├─┬ generate-jquery-components
+ │   │   │ └─┬ <series>
+ │   │   │   ├── deleteJQueryComponents
+ │   │   │   └── generateJQuery
+ │   │   ├── generatePreactComponents
+ │   │   ├── <anonymous>
+ │   │   ├── <anonymous>
+ │   │   └── processRenovationMeta
+ │   ├─┬ version-replace
+ │   │ └─┬ <series>
+ │   │   ├─┬ transpile
+ │   │   │ └─┬ <series>
+ │   │   │   ├── bundler-config
+ │   │   │   ├─┬ <parallel>
+ │   │   │   │ ├── transpile:artifacts/transpiled-npm
+ │   │   │   │ ├── transpile:artifacts/transpiled
+ │   │   │   │ ├── <anonymous>
+ │   │   │   │ └── <anonymous>
+ │   │   │   └── <anonymous>
+ │   │   └─┬ <parallel>
+ │   │     ├── replace-version:artifacts/transpiled
+ │   │     ├── replace-version:artifacts/transpiled-npm
+ │   │     ├─┬ <series>
+ │   │     │ └── skippedTask
+ │   │     ├─┬ <series>
+ │   │     │ └── skippedTask
+ │   │     ├─┬ <series>
+ │   │     │ └── skippedTask
+ │   │     └─┬ <series>
+ │   │       └── skippedTask
+ │   ├── <anonymous>
+ │   ├─┬ npm
+ │   │ └─┬ <series>
+ │   │   ├─┬ npm-sources
+ │   │   │ └─┬ <series>
+ │   │   │   ├─┬ ts-sources
+ │   │   │   │ └─┬ <series>
+ │   │   │   │   ├── ts-modules
+ │   │   │   │   └─┬ ts-bundle
+ │   │   │   │     └─┬ <series>
+ │   │   │   │       ├── writeTsBundle
+ │   │   │   │       └── writeAngularHack
+ │   │   │   ├── <anonymous>
+ │   │   │   └── <anonymous>
+ │   │   ├─┬ ts-modules-check
+ │   │   │ └─┬ <series>
+ │   │   │   ├── ts-modules
+ │   │   │   └── checkModules
+ │   │   └─┬ npm-sass
+ │   │     └─┬ <parallel>
+ │   │       ├── <anonymous>
+ │   │       ├── <anonymous>
+ │   │       └── <anonymous>
+ │   ├─┬ themebuilder-npm
+ │   │ └─┬ <series>
+ │   │   ├── <anonymous>
+ │   │   └── <anonymous>
+ │   └── check-license-notices
+ ├─┬ dev
+ │ └─┬ <series>
+ │   ├─┬ generate-jquery-components
+ │   │ └─┬ <series>
+ │   │   ├── deleteJQueryComponents
+ │   │   └── generateJQuery
+ │   ├── create-renovation-temp
+ │   └─┬ <parallel>
+ │     ├── create-renovation-temp-watch
+ │     ├── bundler-config-dev
+ │     ├─┬ js-bundles-dev
+ │     │ └─┬ <parallel>
+ │     │   ├── <anonymous>
+ │     │   └── <anonymous>
+ │     ├── style-compiler-themes-dev
+ │     └── generate-jquery-components-watch
+
