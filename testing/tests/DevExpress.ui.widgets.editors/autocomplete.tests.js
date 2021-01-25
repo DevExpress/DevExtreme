@@ -1709,49 +1709,7 @@ QUnit.module('valueChanged should receive correct event', {
         this.testProgramChange(assert);
     });
 
-    QUnit.test('on change', function(assert) {
-        this.instance.option('valueChangeEvent', 'change');
-
-        this.keyboard
-            .type('a')
-            .change();
-
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'change', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
-        this.testProgramChange(assert);
-    });
-
-    QUnit.test('on focusout', function(assert) {
-        this.instance.option('valueChangeEvent', 'focusout');
-
-        this.keyboard
-            .type('a')
-            .blur();
-
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'focusout', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
-        this.testProgramChange(assert);
-    });
-
-    QUnit.test('on keyup', function(assert) {
-        this.instance.option('valueChangeEvent', 'keyup');
-
-        this.keyboard
-            .type('a')
-            .keyUp('a');
-
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'keyup', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
-        this.testProgramChange(assert);
-    });
-
-    QUnit.test('on clearing using clearButton', function(assert) {
+    QUnit.test('on clearing using clear button', function(assert) {
         this.instance.option({
             value: '11',
             showClearButton: true
