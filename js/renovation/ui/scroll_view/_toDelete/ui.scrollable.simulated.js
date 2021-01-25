@@ -23,7 +23,6 @@ const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
-const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
@@ -850,18 +849,6 @@ export const SimulatedStrategy = Class.inherit({
         this._endAction();
     },
 
-    validate: function(e) {
-        if(this.option('disabled')) {
-            return false;
-        }
-
-        if(this.option('bounceEnabled')) {
-            return true;
-        }
-
-        return isDxMouseWheelEvent(e) ? this._validateWheel(e) : this._validateMove(e);
-    },
-
     _validateWheel: function(e) {
         const scroller = this._scrollers[this._wheelDirection(e)];
         const reachedMin = scroller._reachedMin();
@@ -883,14 +870,6 @@ export const SimulatedStrategy = Class.inherit({
         }
 
         return validated;
-    },
-
-    _validateMove: function(e) {
-        if(!this.option('scrollByContent') && !$(e.target).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`).length) {
-            return false;
-        }
-
-        return this._allowedDirection();
     },
 
     verticalOffset: function() {

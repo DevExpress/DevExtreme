@@ -25,6 +25,8 @@ export const SCROLLABLE_SCROLLBAR_SIMULATED = 'dx-scrollable-scrollbar-simulated
 export const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 export const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 
+export const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
+
 export function getElementWidth(element: Element | undefined): number {
   return toNumber(getElementComputedStyle(element)?.width);
 }

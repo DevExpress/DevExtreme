@@ -17,7 +17,7 @@ import {
 
 import {
   ensureLocation,
-  SCROLLABLE_DISABLED_CLASS,
+  SCROLLABLE_DISABLED_CLASS, SCROLLABLE_SCROLLBAR_CLASS,
   SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
   SCROLLABLE_SCROLLBARS_HIDDEN,
@@ -392,6 +392,17 @@ jest.mock('../../../../core/devices', () => {
           each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
             each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
               each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
+                const initScrollableMarkup = (viewModel) => {
+                  const scrollable = (viewModel as any);
+                  scrollable.containerRef = React.createRef();
+                  scrollable.contentRef = React.createRef();
+
+                  mount(viewFunction(viewModel as any) as JSX.Element);
+
+                  scrollable.containerRef = (viewModel as any).containerRef.current;
+                  scrollable.contentRef = (viewModel as any).contentRef.current;
+                };
+
                 const initStyles = (ref, size) => {
                   const elementRef = ref;
 
@@ -480,19 +491,9 @@ jest.mock('../../../../core/devices', () => {
                 each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
                   each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
                     each([true, false]).describe('IsShiftKeyPressed: %o', (isShiftKeyPressed) => {
-                      it('scrollinit eventArgs', () => {
-                        const containerRef = React.createRef();
-                        const contentRef = React.createRef();
+                      it('getDirection method', () => {
                         const viewModel = new Scrollable({ direction, bounceEnabled });
-
-                        (viewModel as any).containerRef = containerRef;
-                        (viewModel as any).contentRef = contentRef;
-
-                        mount(viewFunction(viewModel as any) as JSX.Element);
-
-                        (viewModel as any).containerRef = (viewModel as any).containerRef.current;
-                        (viewModel as any).contentRef = (viewModel as any).contentRef.current;
-
+                        initScrollableMarkup(viewModel);
                         initStyles((viewModel as any).containerRef, containerSize);
                         initStyles((viewModel as any).contentRef, contentSize);
 
@@ -517,7 +518,51 @@ jest.mock('../../../../core/devices', () => {
                         }
 
                         expect((viewModel as any).getDirection(e)).toBe(expectedDirectionResult);
-                        expect((viewModel as any).validate(e)).toBe(true); // TODO
+                      });
+                    });
+
+                    each([true, false]).describe('Disabled: %o', (disabled) => {
+                      each([true, false]).describe('ScrollByContent: %o', (scrollByContent) => {
+                        each([true, false]).describe('IsScrollbarClicked: %o', (isScrollbarClicked) => {
+                          it('validate method', () => {
+                            const viewModel = new Scrollable({
+                              direction, bounceEnabled, disabled, scrollByContent,
+                            });
+
+                            initScrollableMarkup(viewModel);
+                            initStyles((viewModel as any).containerRef, containerSize);
+                            initStyles((viewModel as any).contentRef, contentSize);
+
+                            if (Scrollable === ScrollableNative) {
+                              expect((viewModel as any).validate(null)).toBe(true);
+                              return; // currently implemented only in SimulatedStrategy
+                            }
+
+                            let expectedValidationResult;
+                            if (disabled) {
+                              expectedValidationResult = false;
+                            } else if (bounceEnabled) {
+                              expectedValidationResult = true;
+                            } else if (isDxWheelEvent) {
+                              expectedValidationResult = true;
+                            } else if (!scrollByContent && !isScrollbarClicked) {
+                              expectedValidationResult = false;
+                            } else {
+                              expectedValidationResult = containerSize < contentSize
+                                || bounceEnabled;
+                            }
+
+                            const target = isScrollbarClicked
+                              ? viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
+                              : viewModel.containerRef;
+                            const e = { ...defaultEvent, target };
+                            if (isDxWheelEvent) {
+                              (e as any).type = 'dxmousewheel';
+                            }
+
+                            expect((viewModel as any).validate(e)).toBe(expectedValidationResult);
+                          });
+                        });
                       });
                     });
                   });
