@@ -16,6 +16,7 @@ describe('HeaderPanelLayoutBase', () => {
     const dateHeaderMap = [[]];
 
     const render = (viewModel) => shallow(LayoutView({
+      isHorizontalGrouping: false,
       ...viewModel,
       props: {
         ...(new HeaderPanelProps()),
@@ -44,6 +45,51 @@ describe('HeaderPanelLayoutBase', () => {
           dateCellTemplate,
           groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
           groups: [],
+        });
+    });
+
+    it('should render DateHeader after GroupPanel in case of horizontal grouping', () => {
+      const layout = render({ isHorizontalGrouping: true });
+
+      expect(layout.children())
+        .toHaveLength(2);
+      expect(layout.childAt(0).is(GroupPanel))
+        .toBe(true);
+      expect(layout.childAt(1).is(DateHeader))
+        .toBe(true);
+    });
+
+    it('should render DateHeader before GroupPanel in case of grouping by date', () => {
+      const layout = render({ isHorizontalGrouping: true, props: { groupByDate: true } });
+
+      expect(layout.children())
+        .toHaveLength(2);
+      expect(layout.childAt(0).is(DateHeader))
+        .toBe(true);
+      expect(layout.childAt(1).is(GroupPanel))
+        .toBe(true);
+    });
+
+    it('should pass correct props to GroupPanel', () => {
+      const resourceCellTemplate = () => null;
+      const groupPanelProps = {
+        baseColSpan: 3,
+        columnCountPerGroup: 3,
+        groupByDate: false,
+        groups: [],
+        resourceCellTemplate,
+      };
+      const layout = render({
+        isHorizontalGrouping: true,
+        props: groupPanelProps,
+      });
+
+      const groupPanel = layout.find(GroupPanel);
+
+      expect(groupPanel.props())
+        .toEqual({
+          ...groupPanelProps,
+          groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
         });
     });
   });
