@@ -1,3 +1,3 @@
 This example shows appointments assigned to&nbsp;different resources. Colors indicate the assignment. For example, appointments whose _&laquo;Owner&raquo;_ resource is _Todd Hoffman_ are dark blue. An&nbsp;appointment may be&nbsp;assigned to&nbsp;many resources, but it&nbsp;derives the color from the resource kind whose color scheme&nbsp;is [set as&nbsp;default][0]. In&nbsp;this demo, you can switch color schemes on&nbsp;the fly using the radio group under the **Scheduler**
 
-[0]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/resources/#useColorAsDefault
+[0]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/resources/#useColorAsDefault

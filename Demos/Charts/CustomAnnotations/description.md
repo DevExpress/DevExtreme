@@ -1,1 +1,1 @@
-To customize an annotation, declare the SVG markup in the annotation [template](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/annotations/#template). Inside the template, you can access the annotation being customized. 
+To customize an annotation, declare the SVG markup in the annotation [template](/Documentation/ApiReference/UI_Components/dxChart/Configuration/annotations/#template). Inside the template, you can access the annotation being customized. 

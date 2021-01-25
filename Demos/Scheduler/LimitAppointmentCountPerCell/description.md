@@ -11,5 +11,5 @@ Appointments are narrowed down without a limit to be fit into a cell.
 - **Number**        
 The number specifies the maximum number of appointments allowed in a single cell. Appointments that exceed this number are hidden, and the cell displays an overflow indicator. Users can click the indicator to display the hidden appointments in a tooltip.
 
-[0]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/views/#maxAppointmentsPerCell
-[1]: /Documentation/Guide/Widgets/Scheduler/Views/View_Types/
+[0]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#maxAppointmentsPerCell
+[1]: /Documentation/Guide/UI_Components/Scheduler/Views/View_Types/

@@ -4,6 +4,6 @@ To implement scrolling in the **Popup** UI component, do the following:
 
 2. Set the [height][1] and [width][2] of the **ScrollView** to `100%` of the popup content area.
 
-[0]: https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/
-[1]: https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxScrollView/Configuration/#height
-[2]: https://js.devexpress.com//Documentation/ApiReference/UI_Widgets/dxScrollView/Configuration/#width
+[0]: https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxScrollView/
+[1]: https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxScrollView/Configuration/#height
+[2]: https://js.devexpress.com//Documentation/ApiReference/UI_Components/dxScrollView/Configuration/#width

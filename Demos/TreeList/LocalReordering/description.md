@@ -17,10 +17,10 @@ Moving a parent node inside its own child node breaks the hierarchy. Prevent thi
 1. **Show or hide drag icons** (optional)       
 Users use the icons as drag handles. To hide them, set the [showDragIcons][6] property to **false**. In this case, the drag handles are the rows themselves. Use the "Show Drag Icons" checkbox under the **TreeList** to try this property.
 
-[0]: /Documentation/ApiReference/UI_Widgets/dxTreeList/Configuration/rowDragging/
-[1]: /Documentation/ApiReference/UI_Widgets/dxTreeList/Configuration/rowDragging/#allowReordering
-[2]: /Documentation/ApiReference/UI_Widgets/dxTreeList/Configuration/rowDragging/#onReorder
-[3]: /Documentation/ApiReference/UI_Widgets/dxTreeList/Configuration/rowDragging/#onDragChange
-[4]: /Documentation/ApiReference/UI_Widgets/dxTreeList/Configuration/rowDragging/#allowDropInsideItem
-[5]: /Documentation/ApiReference/UI_Widgets/dxTreeList/Methods/#refresh
-[6]: /Documentation/ApiReference/UI_Widgets/dxTreeList/Configuration/rowDragging/#showDragIcons
+[0]: /Documentation/ApiReference/UI_Components/dxTreeList/Configuration/rowDragging/
+[1]: /Documentation/ApiReference/UI_Components/dxTreeList/Configuration/rowDragging/#allowReordering
+[2]: /Documentation/ApiReference/UI_Components/dxTreeList/Configuration/rowDragging/#onReorder
+[3]: /Documentation/ApiReference/UI_Components/dxTreeList/Configuration/rowDragging/#onDragChange
+[4]: /Documentation/ApiReference/UI_Components/dxTreeList/Configuration/rowDragging/#allowDropInsideItem
+[5]: /Documentation/ApiReference/UI_Components/dxTreeList/Methods/#refresh
+[6]: /Documentation/ApiReference/UI_Components/dxTreeList/Configuration/rowDragging/#showDragIcons

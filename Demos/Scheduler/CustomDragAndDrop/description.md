@@ -12,12 +12,12 @@ Attach another **Draggable** instance to the list which only serves as the drop 
 4. **Add the controls to the same group**            
 To enable drag and drop operations between the controls, assign the same value to the [group][8] property of the **Scheduler**'s **appointmentDragging** object and both **Draggable** UI components. 
 
-[0]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/appointmentDragging/
-[1]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Methods/#addAppointmentappointment
-[2]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/appointmentDragging/#onAdd
-[3]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Methods/#deleteAppointmentappointment
-[4]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/appointmentDragging/#onRemove
-[5]: /Documentation/ApiReference/UI_Widgets/dxDraggable/
-[6]: /Documentation/ApiReference/UI_Widgets/dxDraggable/Configuration/#data
-[7]: /Documentation/ApiReference/UI_Widgets/dxDraggable/Configuration/#onDragStart
-[8]: /Documentation/ApiReference/UI_Widgets/dxDraggable/Configuration/#group
+[0]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/appointmentDragging/
+[1]: /Documentation/ApiReference/UI_Components/dxScheduler/Methods/#addAppointmentappointment
+[2]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/appointmentDragging/#onAdd
+[3]: /Documentation/ApiReference/UI_Components/dxScheduler/Methods/#deleteAppointmentappointment
+[4]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/appointmentDragging/#onRemove
+[5]: /Documentation/ApiReference/UI_Components/dxDraggable/
+[6]: /Documentation/ApiReference/UI_Components/dxDraggable/Configuration/#data
+[7]: /Documentation/ApiReference/UI_Components/dxDraggable/Configuration/#onDragStart
+[8]: /Documentation/ApiReference/UI_Components/dxDraggable/Configuration/#group

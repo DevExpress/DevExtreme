@@ -5,7 +5,7 @@ The communication between the **CustomStore** and the server is organized as fol
 - The **CustomStore** sends [data processing settings](/Documentation/ApiReference/Data_Layer/CustomStore/LoadOptions/) to the server (see the **load** function in the code below).
 - The server applies these settings to data and returns the processed dataset (you should write the server-side code for this).
 
-Each setting has information about a data operation (sorting, filtering, etc.) and is present only if this operation is declared as remote in the **DataGrid**'s [remoteOperations](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/remoteOperations/) property. If your server does not support a certain operation, do not declare it as remote to perform it on the client.
+Each setting has information about a data operation (sorting, filtering, etc.) and is present only if this operation is declared as remote in the **DataGrid**'s [remoteOperations](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/remoteOperations/) property. If your server does not support a certain operation, do not declare it as remote to perform it on the client.
 
 For more information about the communication between the client and server in DevExtreme, refer to the following help topic: [Server-Side Data Processing](/Documentation/Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/#Load_Data/Server-Side_Data_Processing).
 

@@ -8,11 +8,11 @@ Two to five **SpeedDialAction**s are collected in the FAB's speed dial. The acti
 
 FAB parameters are configured in the [floatingActionButtonConfig][5] object. Use it to change the FAB's [position][6], [maximum number of actions][7], icons in the [open][8] and [close][9] states, and other parameters. In this demo, the drop-down menu under the grid allows you to select the [direction][10] in which the speed dial should be opened. The [repaintFloatingActionButton()][11] method is called to apply the new configuration.
 
-[0]: /Documentation/ApiReference/UI_Widgets/dxSpeedDialAction/
-[1]: /Documentation/ApiReference/UI_Widgets/dxSpeedDialAction/Configuration/#onClick
-[2]: /Documentation/ApiReference/UI_Widgets/dxSpeedDialAction/Configuration/#icon
-[3]: /Documentation/ApiReference/UI_Widgets/dxSpeedDialAction/Configuration/#index
-[4]: /Documentation/ApiReference/UI_Widgets/dxSpeedDialAction/Configuration/#visible
+[0]: /Documentation/ApiReference/UI_Components/dxSpeedDialAction/
+[1]: /Documentation/ApiReference/UI_Components/dxSpeedDialAction/Configuration/#onClick
+[2]: /Documentation/ApiReference/UI_Components/dxSpeedDialAction/Configuration/#icon
+[3]: /Documentation/ApiReference/UI_Components/dxSpeedDialAction/Configuration/#index
+[4]: /Documentation/ApiReference/UI_Components/dxSpeedDialAction/Configuration/#visible
 [5]: /Documentation/ApiReference/Common/Object_Structures/globalConfig/floatingActionButtonConfig/
 [6]: /Documentation/ApiReference/Common/Object_Structures/globalConfig/floatingActionButtonConfig/#position
 [7]: /Documentation/ApiReference/Common/Object_Structures/globalConfig/floatingActionButtonConfig/#maxSpeedDialActionCount

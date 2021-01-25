@@ -23,12 +23,12 @@ Identifiers help distinguish between multiple tree views. Save them in the **Sor
 1. **Combine tree views into one drag and drop group** (for drag and drop between multiple tree views only)    
 Set the **Sortable**'s [group][8] property to the same value for all tree views. This allows users to move nodes between the tree views.  
 
-[0]: /Documentation/ApiReference/UI_Widgets/dxSortable/
-[1]: /Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#allowReordering
-[2]: /Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#allowDropInsideItem
-[3]: /Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#filter
-[4]: /Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#onDragChange
-[5]: /Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#onDragEnd
-[6]: /Documentation/ApiReference/UI_Widgets/dxTreeView/Configuration/items/
-[7]: /Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#data
-[8]: /Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#group
+[0]: /Documentation/ApiReference/UI_Components/dxSortable/
+[1]: /Documentation/ApiReference/UI_Components/dxSortable/Configuration/#allowReordering
+[2]: /Documentation/ApiReference/UI_Components/dxSortable/Configuration/#allowDropInsideItem
+[3]: /Documentation/ApiReference/UI_Components/dxSortable/Configuration/#filter
+[4]: /Documentation/ApiReference/UI_Components/dxSortable/Configuration/#onDragChange
+[5]: /Documentation/ApiReference/UI_Components/dxSortable/Configuration/#onDragEnd
+[6]: /Documentation/ApiReference/UI_Components/dxTreeView/Configuration/items/
+[7]: /Documentation/ApiReference/UI_Components/dxSortable/Configuration/#data
+[8]: /Documentation/ApiReference/UI_Components/dxSortable/Configuration/#group

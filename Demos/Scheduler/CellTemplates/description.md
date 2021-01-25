@@ -23,9 +23,9 @@ The appointment details form includes two calendars that allow users to select a
 1. **Customize the timetable appearance**       
 Use templates to customize the appearance of data cells ([dataCellTemplate][3]), time cells ([timeCellTemplate][4]), and date cells ([dateCellTemplate][5]). In this demo, date cell customization is visible only in the Month view. To switch to this view, use the view switcher in the UI component's upper right corner.
 
-[0]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/#onAppointmentAdding
-[1]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/#onAppointmentUpdating
-[2]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/#onAppointmentFormOpening
-[3]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/#dataCellTemplate
-[4]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/#timeCellTemplate
-[5]: /Documentation/ApiReference/UI_Widgets/dxScheduler/Configuration/#dateCellTemplate
+[0]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentAdding
+[1]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentUpdating
+[2]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentFormOpening
+[3]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#dataCellTemplate
+[4]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#timeCellTemplate
+[5]: /Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#dateCellTemplate

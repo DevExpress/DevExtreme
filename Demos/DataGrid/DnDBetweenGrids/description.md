@@ -17,12 +17,12 @@ Set the **rowDragging**.[group][3] property to the same value for all grids to a
 1. **Update the data field that specifies where the row belongs**         
 Implement the **rowDragging**.[onAdd][4] function. To access the target grid's identifier, use the `toData` function parameter. Call the store's [update][5] method to send this identifier to the server and [push][6] the same changes to the store on the client. The grids are refreshed automatically if you enable [reshapeOnPush][7] in the [dataSource][8].
 
-[0]: /Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/rowDragging/
-[1]: /Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/rowDragging/#data
-[2]: /Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#filterValue
-[3]: /Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/rowDragging/#group
-[4]: /Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/rowDragging/#onAdd
+[0]: /Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/rowDragging/
+[1]: /Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/rowDragging/#data
+[2]: /Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#filterValue
+[3]: /Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/rowDragging/#group
+[4]: /Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/rowDragging/#onAdd
 [5]: /Documentation/ApiReference/Data_Layer/CustomStore/Methods/#updatekey_values
 [6]: /Documentation/ApiReference/Data_Layer/CustomStore/Methods/#pushchanges
 [7]: /Documentation/ApiReference/Data_Layer/DataSource/Configuration/#reshapeOnPush
-[8]: /Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#dataSource
+[8]: /Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#dataSource
