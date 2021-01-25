@@ -17,7 +17,6 @@ import { move } from '../../../animation/translator';
 
 import { ScrollbarProps } from './scrollbar_props';
 import {
-  ScrollDirection,
   DIRECTION_HORIZONTAL,
 } from './scrollable_utils';
 
@@ -32,17 +31,16 @@ const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
 const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
 
-const THUMB_MIN_SIZE = 15;
-
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
-    cssClasses, styles, scrollRef, hoverStateEnabled,
+    cssClasses, styles, scrollRef, scrollbarRef, hoverStateEnabled,
     props: { activeStateEnabled },
     restAttributes,
   } = viewModel;
 
   return (
     <Widget
+      rootElementRef={scrollbarRef}
       classes={cssClasses}
       activeStateEnabled={activeStateEnabled}
       hoverStateEnabled={hoverStateEnabled}
@@ -60,8 +58,11 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   defaultOptionRules: null,
   view: viewFunction,
 })
+
 export class Scrollbar extends JSXComponent<ScrollbarProps>() {
   @InternalState() active = false;
+
+  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
 
@@ -85,9 +86,8 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     move(this.scrollRef, scrollBarLocation);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   calculateScrollBarPosition(location): number {
-    return -location * 1; // TODO: * this._thumbRatio;
+    return -location * this.props.thumbRatio;
   }
 
   @Effect()
@@ -112,6 +112,28 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
       }, { namespace });
 
     return (): void => dxPointerUp.off(this.scrollRef, { namespace });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  isThumb(element: HTMLDivElement): boolean {
+    return element.classList.contains(SCROLLABLE_SCROLL_CLASS)
+    || element.classList.contains(SCROLLABLE_SCROLL_CONTENT_CLASS);
+  }
+
+  isScrollbar(element: HTMLDivElement): boolean {
+    return element === this.scrollbarRef;
+  }
+
+  @Method()
+  validateEvent(event): boolean {
+    const { target } = event.originalEvent;
+
+    return (this.isThumb(target) || this.isScrollbar(target));
+  }
+
+  @Method()
+  getDirection(): string {
+    return this.props.direction;
   }
 
   private feedbackOn(): void {
@@ -140,7 +162,8 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     return {
       ...style,
       display: this.props.needScrollbar ? '' : 'none',
-      [`${this.getDimension()}`]: THUMB_MIN_SIZE,
+      width: this.props.width,
+      height: this.props.height,
     };
   }
 
@@ -149,11 +172,6 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
       [SCROLLABLE_SCROLL_CLASS]: true,
       'dx-state-invisible': !this.props.visible,
     });
-  }
-
-  private getDimension(): string {
-    const { isHorizontal } = new ScrollDirection(this.props.direction);
-    return isHorizontal ? 'width' : 'height';
   }
 
   get hoverStateEnabled(): boolean {

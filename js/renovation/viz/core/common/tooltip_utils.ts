@@ -1,6 +1,6 @@
 import {
   RecalculateCoordinates, TooltipCoordinates, StrictSize, CustomizedOptions, CustomizeTooltipFn,
-  InitialBorder, TooltipData,
+  InitialBorder, TooltipData, Font,
 } from './types.d';
 import { isFunction, isPlainObject, isDefined } from '../../../../core/utils/type';
 
@@ -79,7 +79,7 @@ export function getCloudPoints(
   const arrowBaseTop = max(arrowY - halfArrowWidth, yt);
   const arrowBaseLeft = max(arrowX - halfArrowWidth, xl);
 
-  const cornerRadius = Math.min(width / 2, height / 2, options.cornerRadius);
+  const cornerRadius = Math.min(halfWidth, halfHeight, options.cornerRadius);
 
   let points;
   let arrowArc;
@@ -285,11 +285,9 @@ export function getCloudAngle(
 }
 
 export function prepareData(
-  data: TooltipData, color: string,
-  border: InitialBorder,
-  font: {
-    color: string; family: string; opacity: number; size: number; weight: number;
-  },
+  data?: TooltipData, color?: string,
+  border?: InitialBorder,
+  font?: Font,
   customizeTooltip?: CustomizeTooltipFn,
 ): CustomizedOptions {
   let customize = {} as CustomizedOptions;
@@ -305,11 +303,11 @@ export function prepareData(
     }
   }
   if (!('text' in customize) && !('html' in customize)) {
-    customize.text = data.valueText || data.description || '';
+    customize.text = data?.valueText || data?.description || '';
   }
   customize.color = customize.color || color;
-  customize.borderColor = customize.borderColor || border.color;
-  customize.fontColor = customize.fontColor || font.color;
+  customize.borderColor = customize.borderColor || border?.color;
+  customize.fontColor = customize.fontColor || font?.color;
   return customize as CustomizedOptions;
 }
 

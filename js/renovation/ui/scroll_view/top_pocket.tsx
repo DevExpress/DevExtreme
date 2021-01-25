@@ -7,7 +7,7 @@ import devices from '../../../core/devices';
 import { isDefined } from '../../../core/utils/type';
 
 import messageLocalization from '../../../localization/message';
-import { TopPocketProps, TopPocketState } from './topPocket_props';
+import { TopPocketProps, TopPocketState } from './top_pocket_props';
 
 const SCROLLVIEW_TOP_POCKET_CLASS = 'dx-scrollview-top-pocket';
 const SCROLLVIEW_PULLDOWN = 'dx-scrollview-pull-down';

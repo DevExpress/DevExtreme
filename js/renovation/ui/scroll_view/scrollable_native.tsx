@@ -17,8 +17,8 @@ import BaseWidgetProps from '../../utils/base_props';
 import {
   ScrollableProps,
 } from './scrollable_props';
-import { TopPocketProps } from './topPocket_props';
-import { BottomPocketProps } from './bottomPocket_props';
+import { TopPocketProps } from './top_pocket_props';
+import { BottomPocketProps } from './bottom_pocket_props';
 
 import {
   allowedDirection,
@@ -43,8 +43,8 @@ import {
 } from './scrollable_utils';
 import { Scrollbar } from './scrollbar';
 
-import { TopPocket } from './topPocket';
-import { BottomPocket } from './bottomPocket';
+import { TopPocket } from './top_pocket';
+import { BottomPocket } from './bottom_pocket';
 
 import {
   dxScrollInit,
@@ -249,7 +249,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     /* istanbul ignore next */
     dxScrollInit.on(this.wrapperRef,
       (e: Event) => {
-        this.initHandler(e);
+        this.handleInit(e);
       }, {
         getDirection: () => this.getDirection(),
         validate: (e) => this.validate(e),
@@ -322,7 +322,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   /* istanbul ignore next */
   // eslint-disable-next-line
-  private initHandler(event: Event): void {
+  private handleInit(event: Event): void {
     // console.log('initHandler', event, this);
   }
   /* istanbul ignore next */
@@ -351,8 +351,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     // console.log('handleCancel', event, this);
   }
 
-  /* istanbul ignore next */
-  public getDirection(): string | undefined {
+  private getDirection(): string | undefined {
     return this.allowedDirection();
   }
 
@@ -371,9 +370,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     };
   }
 
-  /* istanbul ignore next */
   // eslint-disable-next-line
-  public validate(event: Event): boolean { // TODO make it private
+  private validate(event: Event): boolean {
     return true; // TODO
   }
 
