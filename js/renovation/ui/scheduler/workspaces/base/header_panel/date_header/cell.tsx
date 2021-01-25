@@ -29,6 +29,7 @@ export const viewFunction = ({
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
     colSpan={colSpan}
+    title={text}
   >
     {DateCellTemplate ? (
       <DateCellTemplate
@@ -49,6 +50,8 @@ export const viewFunction = ({
 @ComponentBindings()
 export class DateHeaderCellProps extends CellBaseProps {
   @OneWay() today = false;
+
+  @OneWay() colSpan = 1;
 
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }

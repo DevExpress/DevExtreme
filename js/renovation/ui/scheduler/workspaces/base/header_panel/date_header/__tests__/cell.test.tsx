@@ -40,11 +40,13 @@ describe('DateHeaderCell', () => {
         .toBe('customAttribute');
     });
 
-    it('should pass colSpan', () => {
-      const cell = render({ props: { colSpan: 3 } });
+    it('should pass correct attributes', () => {
+      const cell = render({ props: { colSpan: 3, text: 'Test' } });
 
       expect(cell.prop('colSpan'))
         .toBe(3);
+      expect(cell.prop('title'))
+        .toBe('Test');
     });
 
     it('should render text', () => {
