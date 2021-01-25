@@ -517,23 +517,6 @@ QUnit.module('tags', moduleSetup, () => {
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'one item is chosen');
     });
 
-    QUnit.test('clear button should save valueChangeEvent', function(assert) {
-        const valueChangedHandler = sinon.spy();
-
-        const $element = $('#tagBox').dxTagBox({
-            items: [1],
-            showClearButton: true,
-            value: [1],
-            onValueChanged: valueChangedHandler
-        });
-
-        const $clearButton = $element.find('.dx-clear-button-area');
-        $clearButton.trigger('dxclick');
-
-        assert.equal(valueChangedHandler.callCount, 1, 'valueChangedHandler has been called');
-        assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
-    });
-
     QUnit.test('clear button should also clear the input value', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: [1],
@@ -638,19 +621,6 @@ QUnit.module('tags', moduleSetup, () => {
 
         const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
         assert.equal($tag.text(), 'updated', 'tag has updated text');
-    });
-
-    QUnit.test('onValueChanged has dxclick event on remove button click', function(assert) {
-        const $element = $('#tagBox').dxTagBox({
-            value: ['123'],
-            onValueChanged: function(e) {
-                assert.equal(e.event.type, 'dxclick', 'correct event type');
-                assert.deepEqual(e.event.target, $removeButton.get(0), 'correct target element');
-            }
-        });
-
-        const $removeButton = $element.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).last();
-        $($removeButton).trigger('dxclick');
     });
 });
 
@@ -1476,28 +1446,6 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         assert.equal($tags.length, 0, 'tags should not be rendered before button click');
         assert.equal($listItems.length, 1, 'list item should be selected after enter press');
         assert.equal(checkbox.option('value'), true, 'checkbox is checked');
-    });
-
-    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', function(assert) {
-        const valueChangedStub = sinon.stub();
-        const $tagBox = $('#tagBox').dxTagBox({
-            acceptCustomValue: true,
-            items: [1, 2, 3],
-            onValueChanged: valueChangedStub,
-            onCustomItemCreating: (e) => {
-                e.customItem = e.text;
-            }
-        });
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-
-        keyboardMock($input)
-            .type('test')
-            .press('enter');
-
-        const event = valueChangedStub.getCall(0).args[0].event;
-        assert.ok(valueChangedStub.calledOnce);
-        assert.ok(!!event);
-        assert.strictEqual(event.type, 'keydown');
     });
 });
 
@@ -6536,36 +6484,43 @@ QUnit.module('regression', {
     });
 });
 
-QUnit.module('event passed to valueChanged (showSelectionControls=true)', {
+QUnit.module('valueChanged should receive correct event parameter', {
     beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
 
+        this.valueChangedHandler = sinon.stub();
+        this._initialOptions = {
+            focusStateEnabled: true,
+            items: [1, 2, 3],
+            onValueChanged: this.valueChangedHandler,
+            opened: true,
+            value: [1, 2],
+        };
         this._init = (options) => {
             this.$element = $('<div>')
                 .appendTo('#qunit-fixture')
                 .dxTagBox(options);
             this.instance = this.$element.dxTagBox('instance');
-            this.$input = this.$element.find('.' + TEXTBOX_CLASS);
+            this.$input = this.$element.find(`.${TEXTBOX_CLASS}`);
             this.keyboard = keyboardMock(this.$input);
+            this.$listItems = $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
+            this.$firstItem = this.$listItems.eq(0);
+        };
+        this._reinit = (options) => {
+            this.instance.dispose();
+            this._init($.extend({}, this._initialOptions, options));
         };
 
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', [3]);
 
-        this.valueChangedHandler = sinon.stub();
-        this._init({
-            focusStateEnabled: true,
-            showSelectionControls: true,
-            items: [1, 2, 3],
-            value: [1, 2],
-            onValueChanged: this.valueChangedHandler,
-            opened: true,
-        });
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
 
-        this.$listItems = $(`.${LIST_ITEM_CLASS}`);
-        this.$firstItem = this.$listItems.eq(0);
-        this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CKECKBOX_CLASS}`);
-        this.$selectAllItem = $(`.${SELECT_ALL_CLASS}`);
-        this.$selectAllItemCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+        this._init(this._initialOptions);
     },
     afterEach: function() {
         this.$element.remove();
@@ -6573,177 +6528,211 @@ QUnit.module('event passed to valueChanged (showSelectionControls=true)', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Correct event should be passed to valueChanged when tag is removed using backspace (T947619)', function(assert) {
-        this.keyboard
-            .focus()
-            .keyDown('backspace');
+    [false, true].forEach(showSelectionControls => {
+        QUnit.module(`when showSelectionControls=${showSelectionControls}`, {
+            beforeEach: function() {
+                if(showSelectionControls) {
+                    this._reinit({ showSelectionControls: true });
+                }
+            }
+        }, () => {
+            QUnit.test('on runtime change', function(assert) {
+                this.testProgramChange(assert);
+            });
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Backspace', 'event key is correct');
+            QUnit.test('on tag removing using backspace (T947619)', function(assert) {
+                this.keyboard
+                    .focus()
+                    .keyDown('backspace');
+
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, 'keydown', 'event type is correct');
+                assert.strictEqual(event.key, 'Backspace', 'event key is correct');
+                assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on tag removing using delete', function(assert) {
+                this.keyboard
+                    .focus()
+                    .press('left')
+                    .keyDown('del');
+
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, 'keydown', 'event type is correct');
+                assert.strictEqual(event.key, 'Delete', 'event key is correct');
+                assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on tag removing using remove button', function(assert) {
+                const $removeButton = this.$element
+                    .find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`)
+                    .first();
+
+                $removeButton.trigger('dxclick');
+
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+                assert.strictEqual(event.target, $removeButton.get(0), 'event target is correct');
+
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on click on item (T947619)', function(assert) {
+                this.$firstItem.trigger('dxclick');
+
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+                assert.strictEqual(event.target, this.$firstItem.get(0), 'event target is correct');
+
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on click on clearButton', function(assert) {
+                this._reinit({ showClearButton: true });
+                const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA}`);
+
+                $clearButton.trigger('dxclick');
+
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+                assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
+
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on item selecting using enter', function(assert) {
+                this._reinit({ value: [] });
+
+                this.keyboard
+                    .focus()
+                    .press('down')
+                    .keyDown('enter');
+
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, 'keydown', 'event type is correct');
+                assert.strictEqual(event.key, 'Enter', 'event key is correct');
+                assert.strictEqual(event.target, this.$firstItem.get(0), 'event target is correct');
+
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on item selecting using space', function(assert) {
+                this._reinit({ value: [] });
+
+                this.keyboard
+                    .focus()
+                    .press('down')
+                    .keyDown('space');
+
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, 'keydown', 'event type is correct');
+                assert.strictEqual(event.key, ' ', 'event key is correct');
+                assert.strictEqual(event.target, this.$firstItem.get(0), 'event target is correct');
+
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on custom item adding', function(assert) {
+                this._reinit({ acceptCustomValue: true });
+
+                this.keyboard
+                    .type('custom')
+                    .press('enter');
+
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, 'keydown', 'event type is correct');
+                assert.strictEqual(event.key, 'Enter', 'event key is correct');
+                assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on click on apply button when applyValueMode=useButtons', function(assert) {
+                this._reinit({ applyValueMode: 'useButtons' });
+                const $applyButton = $('.dx-button.dx-popup-done');
+
+                this.$firstItem.trigger('dxclick');
+                $applyButton.trigger('dxclick');
+
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+                assert.strictEqual(event.target, $applyButton.get(0), 'event target is correct');
+
+                this.testProgramChange(assert);
+            });
+        });
     });
 
-    QUnit.test('Correct event should be passed to valueChanged when tag is removed using delete', function(assert) {
-        this.keyboard
-            .focus()
-            .press('left')
-            .keyDown('del');
+    QUnit.module('when showSelectionControls=true', {
+        beforeEach: function() {
+            this._reinit({ showSelectionControls: true });
+            this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CKECKBOX_CLASS}`);
+            this.$selectAllItem = $(`.${SELECT_ALL_CLASS}`);
+            this.$selectAllItemCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+        }
+    }, () => {
+        QUnit.test('on click on item checkBox (T947619)', function(assert) {
+            this.$firstItemCheckBox.trigger('dxclick');
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Delete', 'event key is correct');
-    });
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+            assert.strictEqual(event.target, this.$firstItemCheckBox.get(0), 'event target is correct');
 
-    QUnit.test('event passed to valueChanged should be undefined when value runtime changes after tag removing', function(assert) {
-        this.keyboard
-            .focus()
-            .press('backspace');
+            this.testProgramChange(assert);
+        });
 
-        this.instance.option('value', [3]);
+        QUnit.test('on click on selectAll item (T947619)', function(assert) {
+            this.$selectAllItem.trigger('dxclick');
 
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+            assert.strictEqual(event.target, this.$selectAllItem.get(0), 'event target is correct');
 
-    QUnit.test('event passed to valueChanged should be correct after click on item (T947619)', function(assert) {
-        this.$firstItem.trigger('dxclick');
+            this.testProgramChange(assert);
+        });
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$firstItem.get(0), 'event target is correct');
-    });
+        QUnit.test('on click on selectAll item checkBox (T947619)', function(assert) {
+            this.$selectAllItemCheckBox.trigger('dxclick');
 
-    QUnit.test('event passed to valueChanged should be correct after click on item checkBox (T947619)', function(assert) {
-        this.$firstItemCheckBox.trigger('dxclick');
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+            assert.strictEqual(event.target, this.$selectAllItemCheckBox.get(0), 'event target is correct');
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$firstItemCheckBox.get(0), 'event target is correct');
-    });
+            this.testProgramChange(assert);
+        });
 
-    QUnit.test('event passed to valueChanged should be correct after click on selectAll item (T947619)', function(assert) {
-        this.$selectAllItem.trigger('dxclick');
+        QUnit.test('on selectAll item selecting using enter', function(assert) {
+            this.keyboard
+                .focus()
+                .press('down')
+                .press('up')
+                .keyDown('enter');
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$selectAllItem.get(0), 'event target is correct');
-    });
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, 'keydown', 'event type is correct');
+            assert.strictEqual(event.key, 'Enter', 'event key is correct');
+            assert.strictEqual(event.target, this.$selectAllItem.get(0), 'event target is correct');
 
-    QUnit.test('event passed to valueChanged should be correct after click on selectAll item checkBox (T947619)', function(assert) {
-        this.$selectAllItemCheckBox.trigger('dxclick');
+            this.testProgramChange(assert);
+        });
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$selectAllItemCheckBox.get(0), 'event target is correct');
-    });
+        QUnit.test('on selectAll item selecting using space', function(assert) {
+            this.keyboard
+                .focus()
+                .press('down')
+                .press('up')
+                .keyDown('space');
 
-    QUnit.test('Correct event should be passed to valueChanged when item is selected using enter', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .keyDown('enter');
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, 'keydown', 'event type is correct');
+            assert.strictEqual(event.key, ' ', 'event key is correct');
+            assert.strictEqual(event.target, this.$selectAllItem.get(0), 'event target is correct');
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Enter', 'event key is correct');
-        assert.strictEqual(data.event.target.get(0), this.$firstItem.get(0), 'target is correct');
-    });
-
-    QUnit.test('Correct event should be passed to valueChanged when item is selected using space', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .keyDown('space');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, ' ', 'event key is correct');
-        assert.strictEqual(data.event.target.get(0), this.$firstItem.get(0), 'target is correct');
-    });
-
-    QUnit.test('Correct event should be passed to valueChanged when selectAll item is selected using enter', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('enter');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Enter', 'event key is correct');
-    });
-
-    QUnit.test('Correct event should be passed to valueChanged when selectAll item is selected using space', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('space');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, ' ', 'event key is correct');
-    });
-
-    QUnit.test('event=undefined should be passed to valueChanged when value changes runtime after selectAll item is selected using enter', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('enter');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event=undefined should be passed to valueChanged when value changes runtime after selectAll item is selected using space', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('space');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on item', function(assert) {
-        this.$firstItem.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on selectAll item', function(assert) {
-        this.$selectAllItem.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on item checkBox', function(assert) {
-        this.$firstItemCheckBox.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on selectAll item checkBox', function(assert) {
-        this.$selectAllItemCheckBox.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
+            this.testProgramChange(assert);
+        });
     });
 });
