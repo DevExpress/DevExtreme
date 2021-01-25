@@ -1,16 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Translator2D } from '../../../viz/translators/translator2d';
 import { noop } from '../../../core/utils/common';
 import { isFunction } from '../../../core/utils/type';
 import {
   Canvas, CustomizeTooltipFn, Font, CustomizedOptions, TooltipData,
 } from '../core/common/types.d';
+import {
+  Translator,
+} from '../common/types.d';
+import { ArgumentAxisRange, ValueAxisRange } from './types.d';
 
 const DEFAULT_LINE_SPACING = 2;
 
 export interface Axis {
-  getTranslator: () => any;
-  update: (range: any, canvas: Canvas, options: any) => void;
+  getTranslator: () => Translator;
+  update: (range: ArgumentAxisRange | ValueAxisRange, canvas: Canvas, options: undefined) => void;
   getVisibleArea: () => [number, number];
   visualRange: () => void;
   calculateInterval: () => void;
@@ -30,7 +33,7 @@ export const createAxis = (isHorizontal: boolean): Axis => {
   });
 
   return {
-    getTranslator: (): any => translator,
+    getTranslator: (): Translator => translator,
     update: (range, canvas, options): void => translator.update(range, canvas, options),
     getVisibleArea: (): [number, number] => {
       const visibleArea = translator.getCanvasVisibleArea();
@@ -66,7 +69,7 @@ export const generateCustomizeTooltipCallback = (
 ): CustomizeTooltipFn => {
   const defaultCustomizeTooltip = generateDefaultCustomizeTooltipCallback(fontOptions, rtlEnabled);
 
-  if (customizeTooltip && isFunction(customizeTooltip)) {
+  if (isFunction(customizeTooltip)) {
     return (customizeObject: SparklineTooltipData): CustomizedOptions => {
       let res = customizeTooltip.call(customizeObject, customizeObject) ?? { };
       if (!('html' in res) && !('text' in res)) {
