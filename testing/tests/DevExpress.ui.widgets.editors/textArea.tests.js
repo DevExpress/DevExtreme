@@ -32,7 +32,7 @@ const TEXTAREA_CLASS = 'dx-textarea';
 const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const AUTO_RESIZE_CLASS = 'dx-texteditor-input-auto-resize';
-
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 
 QUnit.module('rendering', () => {
@@ -239,7 +239,7 @@ QUnit.module('widget sizing render', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const inputHeight = $input.outerHeight();
         const borderHeight = parseInt($element.css('borderTopWidth'));
 
@@ -253,7 +253,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const inputHeight = $input.outerHeight();
         $input.height(0);
@@ -266,7 +266,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $($input).trigger('focus');
         keyboardMock($input).type('\n\n');
@@ -284,7 +284,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         });
 
         const instance = $element.dxTextArea('instance');
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         instance.option('value', '\n\n');
 
@@ -299,7 +299,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input
             .val('\n\n')
@@ -333,7 +333,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             maxHeight: boundaryHeight
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const elementHeight = $element.outerHeight();
         const inputHeight = $input.outerHeight();
 
@@ -387,7 +387,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             minHeight: boundaryHeight
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const elementHeight = $element.outerHeight();
         const inputHeight = $input.outerHeight();
 
@@ -468,7 +468,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             valueChangeEvent: 'keyup'
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $($input).trigger('focus');
         keyboardMock($input).type('\n\n');
@@ -592,5 +592,84 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
         });
     }
+});
+
+
+QUnit.module('valueChanged should receive correct event parameter', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#textarea').dxTextArea({
+            onValueChanged: this.valueChangedHandler
+        });
+        this.instance = this.$element.dxTextArea('instance');
+        this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', 'custom text');
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+    }
+}, () => {
+    QUnit.test('on program change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on change', function(assert) {
+        this.keyboard
+            .type('text')
+            .change();
+
+        const event = this.valueChangedHandler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'change', 'event type is correct');
+        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on input if valueChangeEvent=input', function(assert) {
+        this.instance.option('valueChangeEvent', 'input');
+
+        this.keyboard
+            .type('text')
+            .change();
+
+        const event = this.valueChangedHandler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'input', 'event type is correct');
+        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on focusout if valueChangeEvent=focusout', function(assert) {
+        this.instance.option('valueChangeEvent', 'focusout');
+
+        this.keyboard
+            .type('text')
+            .blur();
+
+        const event = this.valueChangedHandler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'focusout', 'event type is correct');
+        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on keyup if valueChangeEvent=keyup', function(assert) {
+        this.instance.option('valueChangeEvent', 'keyup');
+
+        this.keyboard
+            .type('text')
+            .keyUp();
+
+        const event = this.valueChangedHandler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'keyup', 'event type is correct');
+        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
 });
 
