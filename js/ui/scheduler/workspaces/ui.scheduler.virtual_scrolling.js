@@ -5,6 +5,7 @@ import { addNamespace } from '../../../events/utils/index';
 import { isDefined } from '../../../core/utils/type';
 
 const DEFAULT_CELL_HEIGHT = 50;
+const MIN_CELL_WIDTH = 1;
 const MIN_SCROLL_OFFSET = 10;
 const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
@@ -73,6 +74,20 @@ export default class VirtualScrollingDispatcher {
             : 0;
     }
 
+    get leftVirtualCellsCount() {
+        return this.horizontalScrollingState?.virtualItemCountBefore > 0
+            ? 1
+            : 0;
+    }
+
+    get virtualRowOffset() {
+        return this.verticalScrollingState?.virtualItemSizeBefore || 0;
+    }
+
+    get virtualCellOffset() {
+        return this.horizontalScrollingState?.virtualItemSizeBefore || 0;
+    }
+
     get scrollingState() {
         return {
             vertical: this.verticalVirtualScrolling?.state,
@@ -108,12 +123,20 @@ export default class VirtualScrollingDispatcher {
     }
 
     getCellHeight() {
-        return this.workspace.getCellHeight(false) || DEFAULT_CELL_HEIGHT;
+        const cellHeight = this.workspace.getCellHeight(false);
+
+        return cellHeight > 0
+            ? cellHeight
+            : DEFAULT_CELL_HEIGHT;
     }
 
     getCellWidth() {
-        const { workspace } = this;
-        return workspace.getCellWidth() || workspace.getCellMinWidth();
+        const cellWidth = this.workspace.getCellWidth() ||
+            this.workspace.getCellMinWidth();
+
+        return cellWidth > 0
+            ? cellWidth
+            : MIN_CELL_WIDTH;
     }
 
     calculateCoordinatesByDataAndPosition(cellData, position, date, isCalculateTime, isVerticalDirectionView) {

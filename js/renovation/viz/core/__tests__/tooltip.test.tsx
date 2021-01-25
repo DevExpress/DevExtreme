@@ -162,6 +162,24 @@ describe('Render', () => {
     }, 180, { cornerRadius: 0, arrowWidth: 20 }, true);
   });
 
+  it('should render text with default props', () => {
+    const tooltip = shallow(<TooltipComponent {
+      ...{ ...props, props: { ...tooltipProps, font: undefined } } as any
+    }
+    /> as any);
+
+    expect(tooltip.find('TextSvgElement').props()).toMatchObject({
+      text: 'customized_text',
+      styles: {
+        fill: 'customized_font_color',
+        fontFamily: 'Segoe UI',
+        fontSize: 12,
+        fontWeight: 400,
+        opacity: 1,
+      },
+    });
+  });
+
   it('should render text with props', () => {
     const tooltip = shallow(<TooltipComponent {...props as any} /> as any);
 
@@ -175,6 +193,32 @@ describe('Render', () => {
         fontWeight: 600,
       },
     });
+  });
+
+  it('should render shadow with default props', () => {
+    const tooltip = shallow(<TooltipComponent {
+      ...{ ...props, props: { ...tooltipProps, shadow: undefined } } as any
+    }
+    /> as any);
+
+    expect(tooltip.find('defs')).toHaveLength(1);
+    expect(tooltip.find('ShadowFilter').props()).toMatchObject({
+      id: 'filterId',
+      x: '-50%',
+      y: '-50%',
+      width: '200%',
+      height: '200%',
+      blur: 2,
+      color: '#000',
+      offsetX: 0,
+      offsetY: 4,
+      opacity: 0.4,
+    });
+    expect(tooltip.find('g').at(0).props()).toMatchObject({
+      filter: 'url(#filterId)',
+    });
+
+    expect(getFuncIri).toBeCalledWith('filterId');
   });
 
   it('should render shadow', () => {
@@ -292,6 +336,17 @@ describe('Render', () => {
 
   it('should not render anything, correctedCoordinates = false', () => {
     const tooltip = shallow(TooltipComponent({ ...props, correctedCoordinates: false } as any));
+
+    expect(tooltip.find('div')).toHaveLength(1);
+    expect(tooltip.find('div').props()).toEqual({});
+    expect(tooltip.find('defs')).toHaveLength(0);
+    expect(tooltip.find('ShadowFilter')).toHaveLength(0);
+    expect(tooltip.find('PathSvgElement')).toHaveLength(0);
+    expect(tooltip.find('TextSvgElement')).toHaveLength(0);
+  });
+
+  it('should not render anything, isEmptyContainer = true', () => {
+    const tooltip = shallow(TooltipComponent({ ...props, isEmptyContainer: true } as any));
 
     expect(tooltip.find('div')).toHaveLength(1);
     expect(tooltip.find('div').props()).toEqual({});
@@ -563,28 +618,55 @@ describe('Effect', () => {
     expect(hiddenTooltip).toBeCalledTimes(1);
     expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' } });
   });
+
+  it('should not set isEmptyContainer prop, container is not empty', () => {
+    const tooltip = new Tooltip({ visible: true });
+    const box = {
+      x: 1, y: 2, width: 10, height: 20,
+    };
+    tooltip.htmlRef = {
+      getBoundingClientRect: jest.fn().mockReturnValue(box),
+    } as any;
+
+    tooltip.checkContainer();
+    expect(tooltip.isEmptyContainer).toBe(false);
+  });
+
+  it('should not set isEmptyContainer prop, visible is false', () => {
+    const tooltip = new Tooltip({ visible: false });
+    const box = {
+      x: 1, y: 2, width: 0, height: 0,
+    };
+    tooltip.htmlRef = {
+      getBoundingClientRect: jest.fn().mockReturnValue(box),
+    } as any;
+
+    tooltip.checkContainer();
+    expect(tooltip.isEmptyContainer).toBe(false);
+  });
+
+  it('should not set isEmptyContainer prop, htmlRef is not rendered', () => {
+    const tooltip = new Tooltip({ visible: false });
+
+    tooltip.checkContainer();
+    expect(tooltip.isEmptyContainer).toBe(false);
+  });
+
+  it('should set isEmptyContainer prop to true, container is empty', () => {
+    const tooltip = new Tooltip({ visible: true });
+    const box = {
+      x: 1, y: 2, width: 0, height: 0,
+    };
+    tooltip.htmlRef = {
+      getBoundingClientRect: jest.fn().mockReturnValue(box),
+    } as any;
+
+    tooltip.checkContainer();
+    expect(tooltip.isEmptyContainer).toBe(true);
+  });
 });
 
 describe('Methods', () => {
-  it('should format value', () => {
-    const tooltip = new Tooltip({ format: 'format', argumentFormat: 'argument_format' });
-
-    expect(tooltip.formatValue('value', 'specialFormat')).toEqual('formated_value');
-    expect(getFormatValue).toBeCalledWith('value', 'specialFormat', { format: 'format', argumentFormat: 'argument_format' });
-  });
-
-  it('should return enabled option', () => {
-    const tooltip = new Tooltip({ enabled: false });
-
-    expect(tooltip.isEnabled()).toBe(false);
-  });
-
-  it('should return shared option', () => {
-    const tooltip = new Tooltip({ shared: true });
-
-    expect(tooltip.isShared()).toBe(true);
-  });
-
   it('should return location option', () => {
     const tooltip = new Tooltip({ location: 'edge' });
 
@@ -615,6 +697,18 @@ describe('Getters', () => {
   it('should return text size with paddings of tooltip', () => {
     const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, paddingLeftRight: 4, paddingTopBottom: 3 });
     expect(tooltip.textSizeWithPaddings).toEqual({ width: 8, height: 6 });
+  });
+
+  it('should return default border props', () => {
+    const tooltip = new Tooltip({
+      data: { valueText: 'Tooltip value text' } as any,
+    });
+    expect(tooltip.border).toEqual({
+      dashStyle: 'solid',
+      stroke: '#d3d3d3',
+      strokeOpacity: undefined,
+      strokeWidth: 1,
+    });
   });
 
   it('should return border options', () => {
@@ -662,6 +756,16 @@ describe('Getters', () => {
 
     expect(prepareData)
       .toBeCalledWith(props.data, props.color, props.border, props.font, undefined);
+  });
+
+  it('should return default margins props', () => {
+    const tooltip = new Tooltip({ });
+    expect(tooltip.margins).toEqual({
+      lm: 5,
+      tm: 1,
+      rm: 5,
+      bm: 9,
+    });
   });
 
   it('should return margins', () => {

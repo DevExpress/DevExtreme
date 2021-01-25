@@ -3,7 +3,6 @@ import eventsEngine from '../../events/core/events_engine';
 import browser from '../../core/utils/browser';
 import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
 import { isPlainObject, isDefined } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import registerComponent from '../../core/component_registrator';
@@ -18,20 +17,8 @@ const SCROLLABLE_CLASS = 'dx-scrollable';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
-const BOTH = 'both';
 
 const Scrollable = DOMComponent.inherit({
-
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            onUpdated: null,
-            onStart: null,
-            onEnd: null,
-            onBounce: null,
-            onStop: null,
-        });
-    },
-
     _initOptions: function(options) {
         this.callBase(options);
         if(!('useSimulatedScrollbar' in options)) {
@@ -92,7 +79,6 @@ const Scrollable = DOMComponent.inherit({
         this._renderStrategy();
 
         this._renderDisabledState();
-        this._createActions();
         this.update();
 
         this.callBase();
@@ -182,10 +168,6 @@ const Scrollable = DOMComponent.inherit({
     _renderStrategy: function() {
         this._strategy.render();
         this.$element().data(SCROLLABLE_STRATEGY, this._strategy);
-    },
-
-    _createActions: function() {
-        this._strategy && this._strategy.createActions();
     },
 
     _clean: function() {
@@ -301,24 +283,6 @@ const Scrollable = DOMComponent.inherit({
     //     }
     //     return current === direction;
     // },
-
-    _updateAllowedDirection: function() {
-        const allowedDirections = this._strategy._allowedDirections();
-
-        if(this._isDirection(BOTH) && allowedDirections.vertical && allowedDirections.horizontal) {
-            this._allowedDirectionValue = BOTH;
-        } else if(this._isDirection(HORIZONTAL) && allowedDirections.horizontal) {
-            this._allowedDirectionValue = HORIZONTAL;
-        } else if(this._isDirection(VERTICAL) && allowedDirections.vertical) {
-            this._allowedDirectionValue = VERTICAL;
-        } else {
-            this._allowedDirectionValue = null;
-        }
-    },
-
-    _allowedDirection: function() {
-        return this._allowedDirectionValue;
-    },
 
     _container: function() {
         return this._$container;

@@ -8,7 +8,6 @@ const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
 
 const VERTICAL = 'vertical';
-const HORIZONTAL = 'horizontal';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
 
@@ -28,7 +27,6 @@ const NativeStrategy = Class.inherit({
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
-        this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
         this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
     },
@@ -84,11 +82,6 @@ const NativeStrategy = Class.inherit({
         each(this._scrollbars || {}, function(direction, scrollbar) {
             callback(scrollbar, direction);
         });
-    },
-
-    createActions: function() {
-        this._scrollAction = this._createActionByOption('onScroll');
-        this._updateAction = this._createActionByOption('onUpdated');
     },
 
     handleScroll: function(e) {
@@ -198,13 +191,6 @@ const NativeStrategy = Class.inherit({
         });
     },
 
-    _allowedDirections: function() {
-        return {
-            vertical: this._isDirection(VERTICAL) && this._contentSize.height > this._containerSize.height,
-            horizontal: this._isDirection(HORIZONTAL) && this._contentSize.width > this._containerSize.width
-        };
-    },
-
     dispose: function() {
         const className = this._$element.get(0).className;
         const scrollableNativeRegexp = new RegExp(SCROLLABLE_NATIVE_CLASS + '\\S*', 'g');
@@ -260,10 +246,6 @@ const NativeStrategy = Class.inherit({
         }
 
         return result;
-    },
-
-    getDirection: function() {
-        return this._allowedDirection();
     },
 
     verticalOffset: function() {

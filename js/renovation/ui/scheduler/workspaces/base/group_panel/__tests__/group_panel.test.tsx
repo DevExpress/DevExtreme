@@ -5,6 +5,12 @@ import {
 } from '../group_panel';
 import { GroupPanelVerticalLayout } from '../vertical/layout';
 import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../../../consts';
+import { GroupPanelHorizontalLayout } from '../horizontal/layout';
+import { getGroupsRenderData } from '../utils';
+
+jest.mock('../utils', () => ({
+  getGroupsRenderData: jest.fn(() => 'data'),
+}));
 
 describe('GroupPanel Vertical Layout', () => {
   describe('Render', () => {
@@ -70,7 +76,25 @@ describe('GroupPanel Vertical Layout', () => {
           });
 
           expect(groupPanel.layout)
-            .toBe(GroupPanelVerticalLayout); // TODO
+            .toBe(GroupPanelHorizontalLayout);
+        });
+      });
+
+      describe('groupsRenderedData', () => {
+        it('should call getGroupsRenderedData with correct parameters', () => {
+          const groups = [];
+          const groupPanel = new GroupPanel({
+            groups,
+            groupByDate: true,
+            columnCountPerGroup: 72,
+          });
+
+          expect(groupPanel.groupsRenderData)
+            .toBe('data');
+          expect(getGroupsRenderData)
+            .toBeCalledWith(
+              groups, 72, true,
+            );
         });
       });
     });

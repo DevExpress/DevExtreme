@@ -40,10 +40,10 @@ describe('GroupPanel Vertical Layout', () => {
     const defaultStyle = { color: 'red' };
 
     const render = (viewModel) => mount(LayoutView({
-      groupsRenderData,
       style: defaultStyle,
       ...viewModel,
       props: {
+        groupsRenderData,
         ...viewModel.props,
       },
     }) as any);
@@ -108,97 +108,6 @@ describe('GroupPanel Vertical Layout', () => {
 
           expect(addHeightToStyle)
             .toHaveBeenCalledWith(500, style);
-        });
-      });
-
-      describe('groupsRenderData', () => {
-        it('should transform grouping data into group items', () => {
-          const groups = [{
-            name: 'group 1',
-            items: [{
-              text: 'item 1', id: 1, color: 'color 1',
-            }, {
-              text: 'item 2', id: 2, color: 'color 2',
-            }],
-            data: [{
-              text: 'item 1', id: 1, color: 'color 1',
-            }, {
-              text: 'item 2', id: 2, color: 'color 2',
-            }],
-          }, {
-            name: 'group 2',
-            items: [{
-              text: 'item 3', id: 1, color: 'color 3',
-            }, {
-              text: 'item 4', id: 2, color: 'color 4',
-            }],
-            data: [{
-              text: 'item 3', id: 1, color: 'color 3',
-            }, {
-              text: 'item 4', id: 2, color: 'color 4',
-            }],
-          }];
-          const layout = new Layout({
-            groups,
-          });
-
-          expect(layout.groupsRenderData)
-            .toEqual([[{
-              ...groups[0].items[0],
-              data: groups[0].data[0],
-              resourceName: groups[0].name,
-              key: '0_group 1_1',
-            }, {
-              ...groups[0].items[1],
-              data: groups[0].data[1],
-              resourceName: groups[0].name,
-              key: '0_group 1_2',
-            }], [{
-              ...groups[1].items[0],
-              data: groups[1].data[0],
-              resourceName: groups[1].name,
-              key: '0_group 2_1',
-            }, {
-              ...groups[1].items[1],
-              data: groups[1].data[1],
-              resourceName: groups[1].name,
-              key: '0_group 2_2',
-            }, {
-              ...groups[1].items[0],
-              data: groups[1].data[0],
-              resourceName: groups[1].name,
-              key: '1_group 2_1',
-            }, {
-              ...groups[1].items[1],
-              data: groups[1].data[1],
-              resourceName: groups[1].name,
-              key: '1_group 2_2',
-            }]]);
-        });
-
-        it('should work when data parameter is undefined', () => {
-          const groups = [{
-            name: 'group 1',
-            items: [{
-              text: 'item 1', id: 1, color: 'color 1',
-            }, {
-              text: 'item 2', id: 2, color: 'color 2',
-            }],
-          }];
-          const layout = new Layout({
-            groups,
-          });
-
-          expect(layout.groupsRenderData)
-            .toEqual([[{
-              ...groups[0].items[0],
-              resourceName: groups[0].name,
-              key: '0_group 1_1',
-            }, {
-              ...groups[0].items[1],
-              resourceName: groups[0].name,
-              key: '0_group 1_2',
-            }]]);
         });
       });
     });

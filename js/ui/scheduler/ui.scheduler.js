@@ -371,7 +371,7 @@ class Scheduler extends Widget {
             allowMultipleCellSelection: true,
 
             scrolling: {
-                mode: 'standard',
+                mode: 'standard'
             },
 
             renovateRender: false,
@@ -1469,6 +1469,15 @@ class Scheduler extends Widget {
     _workSpaceConfig(groups, countConfig) {
         const currentViewOptions = this._getCurrentViewOptions();
         const scrolling = this.option('scrolling');
+        const isVirtualScrolling = scrolling.mode === 'virtual' ||
+            currentViewOptions.scrolling?.mode === 'virtual';
+        const isHorizontalVirtualScrollingOrientation = isVirtualScrolling &&
+            ['horizontal', 'both'].filter(item =>
+                scrolling.type === item ||
+                currentViewOptions.scrolling?.type === item
+            ).length > 0;
+        const crossScrollingEnabled = this.option('crossScrollingEnabled') ||
+            isHorizontalVirtualScrollingOrientation;
 
         const result = extend({
             noDataText: this.option('noDataText'),
@@ -1485,7 +1494,7 @@ class Scheduler extends Widget {
             indicatorUpdateInterval: this.option('indicatorUpdateInterval'),
             shadeUntilCurrentTime: this.option('shadeUntilCurrentTime'),
             allDayExpanded: this._appointments.option('items'),
-            crossScrollingEnabled: this.option('crossScrollingEnabled'),
+            crossScrollingEnabled,
             dataCellTemplate: this.option('dataCellTemplate'),
             timeCellTemplate: this.option('timeCellTemplate'),
             resourceCellTemplate: this.option('resourceCellTemplate'),
@@ -1496,10 +1505,8 @@ class Scheduler extends Widget {
                 this.option('selectedCellData', args.selectedCellData);
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
-            scrolling: scrolling,
-            renovateRender: this.option('renovateRender')
-                || scrolling.mode === 'virtual'
-                || currentViewOptions.scrolling?.mode === 'virtual'
+            scrolling,
+            renovateRender: this.option('renovateRender') || isVirtualScrolling
         }, currentViewOptions);
 
         result.observer = this;

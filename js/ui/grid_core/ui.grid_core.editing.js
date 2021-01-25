@@ -780,20 +780,21 @@ const EditingController = modules.ViewController.inherit((function() {
             const pageIndex = dataSource.pageIndex();
             const beginPageIndex = dataSource.beginPageIndex ? dataSource.beginPageIndex() : pageIndex;
             const endPageIndex = dataSource.endPageIndex ? dataSource.endPageIndex() : pageIndex;
+            const needInsertOnLastPosition = !isDefined(change.pageIndex) && change.index === -1;
+            const isLastPage = endPageIndex === dataSource.pageCount() - 1;
 
             if(scrollingMode !== 'standard') {
                 switch(changeType) {
                     case 'append':
-                        return change.pageIndex === endPageIndex;
+                        return change.pageIndex === endPageIndex || needInsertOnLastPosition && isLastPage;
                     case 'prepend':
                         return change.pageIndex === beginPageIndex;
                     default:
-                        return change.pageIndex >= beginPageIndex && change.pageIndex <= endPageIndex
-                        || dataSource.totalCount() === change.index && change.pageIndex === endPageIndex + 1;
+                        return change.pageIndex >= beginPageIndex && change.pageIndex <= endPageIndex || needInsertOnLastPosition && isLastPage;
                 }
             }
 
-            return change.pageIndex === pageIndex;
+            return change.pageIndex === pageIndex || needInsertOnLastPosition && pageIndex === dataSource.pageCount() - 1;
         },
 
         _generateNewItem: function(key) {
@@ -853,8 +854,12 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 const loadedRowIndex = this._getLoadedRowIndex(items, e, key);
                 const item = this._generateNewItem(key);
-                if(loadedRowIndex >= 0 && this._needInsertItem(change, changeType, items, item)) {
-                    items.splice(change.index ? loadedRowIndex : 0, 0, item);
+                if((loadedRowIndex >= 0 || change.index === -1) && this._needInsertItem(change, changeType, items, item)) {
+                    if(change.index !== -1) {
+                        items.splice(change.index ? loadedRowIndex : 0, 0, item);
+                    } else {
+                        items.push(item);
+                    }
                 }
             });
 
@@ -946,7 +951,6 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _addInsertInfo: function(change) {
-            const dataController = this._dataController;
 
             let insertInfo;
             let rowIndex;
@@ -961,19 +965,28 @@ const EditingController = modules.ViewController.inherit((function() {
             if(!isDefined(insertInfo)) {
                 rowIndex = this._getCorrectedInsertRowIndex(change.parentKey);
                 insertInfo = this._createInsertInfo(rowIndex, change);
-
-                change.index = change.index ?? this._calculateIndex(rowIndex);
-
-                if(this.option('scrolling.mode') === 'virtual') {
-                    change.pageIndex = Math.floor(change.index / dataController.pageSize());
-                } else {
-                    change.pageIndex = change.pageIndex ?? dataController.pageIndex();
-                }
+                this._setIndexes(change, rowIndex);
             }
 
             this._addInternalData({ insertInfo, key });
 
             return { insertInfo, key, rowIndex };
+        },
+
+        _setIndexes: function(change, rowIndex) {
+            const dataController = this._dataController;
+
+            change.index = change.index ?? this._calculateIndex(rowIndex);
+
+            if(change.index === -1) {
+                return;
+            }
+
+            if(this.option('scrolling.mode') === 'virtual') {
+                change.pageIndex = Math.min(dataController.pageCount() - 1, Math.floor(change.index / dataController.pageSize()));
+            } else {
+                change.pageIndex = change.pageIndex ?? dataController.pageIndex();
+            }
         },
 
         _getInsertRowIndex: function(parentKey) {
@@ -1389,11 +1402,15 @@ const EditingController = modules.ViewController.inherit((function() {
         _removeChange: function(index) {
             if(index >= 0) {
                 const changes = [...this.getChanges()];
+                const key = changes[index].key;
 
-                this._removeInternalData(changes[index].key);
+                this._removeInternalData(key);
 
                 changes.splice(index, 1);
                 this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
+                if(equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key)) {
+                    this._resetEditIndices();
+                }
             }
         },
 

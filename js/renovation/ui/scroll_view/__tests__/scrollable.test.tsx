@@ -31,7 +31,7 @@ import {
 import { Widget } from '../../common/widget';
 
 import {
-  ScrollablePropsType,
+  ScrollableProps,
 } from '../scrollable_props';
 
 import {
@@ -45,7 +45,6 @@ import { Scrollbar } from '../scrollbar';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const testBehavior = { positive: false };
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
-
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
   actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
@@ -388,6 +387,143 @@ jest.mock('../../../../core/devices', () => {
 
             expect(initHandler).toHaveBeenCalledTimes(1);
             expect(initHandler).toHaveBeenCalledWith(e);
+          });
+
+          each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
+            each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
+              each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
+                const initStyles = (ref, size) => {
+                  const elementRef = ref;
+
+                  ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
+                    elementRef.style[prop] = `${size}px`;
+                  });
+                  ['overflowX', 'overflowY'].forEach((prop) => {
+                    elementRef.style[prop] = overflow;
+                  });
+                  elementRef.getBoundingClientRect = jest.fn(() => ({
+                    width: size,
+                    height: size,
+                  }));
+
+                  return elementRef;
+                };
+
+                if (Scrollable === ScrollableSimulated) {
+                  it('UpdateScrollbarSize(), thumbSize default', () => {
+                    const containerRef = React.createRef();
+                    const contentRef = React.createRef();
+                    const viewModel = new Scrollable({ direction });
+
+                    (viewModel as any).containerRef = containerRef;
+                    (viewModel as any).contentRef = contentRef;
+                    const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+
+                    if (direction !== 'horizontal') {
+                      const styles = scrollable.find('.dx-scrollbar-vertical .dx-scrollable-scroll').getElement().props.style;
+
+                      expect(styles).toEqual({ display: '', height: 15, width: undefined });
+                    }
+                    if (direction !== 'vertical') {
+                      const styles = scrollable.find('.dx-scrollbar-horizontal .dx-scrollable-scroll').getElement().props.style;
+
+                      expect(styles).toEqual({ display: '', height: undefined, width: 15 });
+                    }
+
+                    initStyles((viewModel as any).containerRef.current, containerSize);
+                    initStyles((viewModel as any).contentRef.current, contentSize);
+
+                    (viewModel as any).containerRef = (viewModel as any).containerRef.current;
+                    (viewModel as any).contentRef = (viewModel as any).contentRef.current;
+
+                    (viewModel as any).effectUpdateScrollbarSize();
+
+                    const expectedSize = contentSize
+                      ? containerSize * (containerSize / contentSize)
+                      : containerSize * containerSize;
+
+                    if (direction !== 'horizontal') {
+                      expect(viewModel.thumbHeight).toEqual(expectedSize);
+                      expect(viewModel.thumbWidth).toEqual(expectedSize);
+                    }
+                    if (direction !== 'vertical') {
+                      expect(viewModel.thumbWidth).toEqual(expectedSize);
+                      expect(viewModel.thumbHeight).toEqual(expectedSize);
+                    }
+                  });
+
+                  it('transfer thumbSize to scrollbar', () => {
+                    const containerRef = React.createRef();
+                    const contentRef = React.createRef();
+                    const viewModel = new Scrollable({ direction });
+
+                    (viewModel as any).containerRef = containerRef;
+                    (viewModel as any).contentRef = contentRef;
+                    viewModel.thumbHeight = 30;
+                    viewModel.thumbWidth = 45;
+
+                    const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+
+                    if (direction !== 'horizontal') {
+                      const styles = scrollable.find('.dx-scrollbar-vertical .dx-scrollable-scroll').getElement().props.style;
+
+                      expect(styles).toEqual({ display: '', height: 30, width: undefined });
+                    }
+                    if (direction !== 'vertical') {
+                      const styles = scrollable.find('.dx-scrollbar-horizontal .dx-scrollable-scroll').getElement().props.style;
+
+                      expect(styles).toEqual({ display: '', height: undefined, width: 45 });
+                    }
+                  });
+                }
+
+                each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
+                  each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
+                    each([true, false]).describe('IsShiftKeyPressed: %o', (isShiftKeyPressed) => {
+                      it('scrollinit eventArgs', () => {
+                        const containerRef = React.createRef();
+                        const contentRef = React.createRef();
+                        const viewModel = new Scrollable({ direction, bounceEnabled });
+
+                        (viewModel as any).containerRef = containerRef;
+                        (viewModel as any).contentRef = contentRef;
+
+                        mount(viewFunction(viewModel as any) as JSX.Element);
+
+                        (viewModel as any).containerRef = (viewModel as any).containerRef.current;
+                        (viewModel as any).contentRef = (viewModel as any).contentRef.current;
+
+                        initStyles((viewModel as any).containerRef, containerSize);
+                        initStyles((viewModel as any).contentRef, contentSize);
+
+                        const isSimulatedStrategy = Scrollable === ScrollableSimulated;
+                        const hasScrollBar = isSimulatedStrategy
+                          ? (containerSize < contentSize || bounceEnabled)
+                          : containerSize < contentSize;
+                        let expectedDirectionResult = hasScrollBar
+                          ? direction
+                          : undefined;
+
+                        const e = { ...defaultEvent, shiftKey: isShiftKeyPressed };
+                        if (isDxWheelEvent) {
+                          (e as any).type = 'dxmousewheel';
+                        }
+
+                        if (isSimulatedStrategy && isDxWheelEvent) {
+                          expectedDirectionResult = direction;
+                          if (direction === 'both') {
+                            expectedDirectionResult = isShiftKeyPressed ? 'horizontal' : 'vertical';
+                          }
+                        }
+
+                        expect((viewModel as any).getDirection(e)).toBe(expectedDirectionResult);
+                        expect((viewModel as any).validate(e)).toBe(true); // TODO
+                      });
+                    });
+                  });
+                });
+              });
+            });
           });
 
           it('should subscribe to scrollstart event', () => {
@@ -1074,7 +1210,7 @@ jest.mock('../../../../core/devices', () => {
           each([undefined, null]).describe('scrollbarSize: %o', (fakeElement) => {
             it('should not be exepted when element is not exist', () => {
               const containerRef = createContainerRef({ top: 200, left: 0 }, 'both', 10);
-              const scrollView = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
+              const scrollView = new Scrollable({ direction: 'vertical' } as ScrollableProps);
               scrollView.containerRef = containerRef;
               scrollView.scrollToElement(fakeElement, {});
 
@@ -1090,7 +1226,7 @@ jest.mock('../../../../core/devices', () => {
                   const containerRef = createContainerRef({ top: 200, left: 0 },
                     direction, scrollBarSize);
 
-                  const scrollable = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'vertical' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1103,7 +1239,7 @@ jest.mock('../../../../core/devices', () => {
                   const containerRef = createContainerRef({ top: 100, left: 0 },
                     direction, scrollBarSize);
 
-                  const scrollable = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'vertical' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
 
                   scrollable.scrollToElement(element, offset);
@@ -1121,7 +1257,7 @@ jest.mock('../../../../core/devices', () => {
                   const containerRef = createContainerRef({ left: 200, top: 0 },
                     direction, scrollBarSize);
 
-                  const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
 
                   scrollable.scrollToElement(element, offset);
@@ -1136,7 +1272,7 @@ jest.mock('../../../../core/devices', () => {
                   const containerRef = createContainerRef({ left: 100, top: 0 },
                     direction, scrollBarSize);
 
-                  const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1150,7 +1286,7 @@ jest.mock('../../../../core/devices', () => {
                 it('should scroll to element from left side and top side by both direction', () => {
                   const element = createTargetElement({ location: { left: 20, top: 20 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1161,7 +1297,7 @@ jest.mock('../../../../core/devices', () => {
                 it('should scroll to element from right side and top side by both direction', () => {
                   const element = createTargetElement({ location: { left: 500, top: 20 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1172,7 +1308,7 @@ jest.mock('../../../../core/devices', () => {
                 it('should scroll to element from left side and bottom side by both direction', () => {
                   const element = createTargetElement({ location: { left: 20, top: 500 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1183,7 +1319,7 @@ jest.mock('../../../../core/devices', () => {
                 it('should scroll to element from right side and bottom side by both direction', () => {
                   const element = createTargetElement({ location: { left: 500, top: 500 } });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1194,7 +1330,7 @@ jest.mock('../../../../core/devices', () => {
                 it('should do not scroll to an element when it in the visible area', () => {
                   const element = createTargetElement({ location: { top: 200, left: 200 } });
                   const containerRef = createContainerRef({ top: 100, left: 100 }, 'both', scrollBarSize);
-                  const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1214,7 +1350,7 @@ jest.mock('../../../../core/devices', () => {
                   const containerRef = createContainerRef({ top: 200, left: 0 },
                     direction, scrollBarSize);
 
-                  const scrollable = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'vertical' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1234,7 +1370,7 @@ jest.mock('../../../../core/devices', () => {
                   const containerRef = createContainerRef({ top: 100, left: 0 },
                     direction, scrollBarSize);
 
-                  const scrollable = new Scrollable({ direction: 'vertical' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'vertical' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1251,7 +1387,7 @@ jest.mock('../../../../core/devices', () => {
                   const containerRef = createContainerRef({ left: 200, top: 0 },
                     direction, scrollBarSize);
 
-                  const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1271,7 +1407,7 @@ jest.mock('../../../../core/devices', () => {
                   const containerRef = createContainerRef({ left: 100, top: 0 },
                     direction, scrollBarSize);
 
-                  const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'horizontal' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1286,7 +1422,7 @@ jest.mock('../../../../core/devices', () => {
                     height: 400,
                   });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1301,7 +1437,7 @@ jest.mock('../../../../core/devices', () => {
                     height: 400,
                   });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1316,7 +1452,7 @@ jest.mock('../../../../core/devices', () => {
                     height: 400,
                   });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1331,7 +1467,7 @@ jest.mock('../../../../core/devices', () => {
                     height: 400,
                   });
                   const containerRef = createContainerRef({ left: 100, top: 100 }, 'both', scrollBarSize);
-                  const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1346,7 +1482,7 @@ jest.mock('../../../../core/devices', () => {
                     height: 400,
                   });
                   const containerRef = createContainerRef({ top: 100, left: 100 }, 'both', scrollBarSize);
-                  const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                  const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                   scrollable.containerRef = containerRef;
                   scrollable.scrollToElement(element, offset);
 
@@ -1373,7 +1509,7 @@ jest.mock('../../../../core/devices', () => {
                   isInScrollableContent: true,
                 });
                 const containerRef = createContainerRef({ top: 100, left: 100 }, 'both');
-                const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                 scrollable.containerRef = containerRef;
                 scrollable.scrollToElement(element);
 
@@ -1384,7 +1520,7 @@ jest.mock('../../../../core/devices', () => {
               it('it should not scroll to element when it is not located inside the scrollable content', () => {
                 const element = createElement({ location: { top: 200, left: 200 } });
                 const containerRef = createContainerRef({ top: 100, left: 100 }, 'both', undefined);
-                const scrollable = new Scrollable({ direction: 'both' } as ScrollablePropsType);
+                const scrollable = new Scrollable({ direction: 'both' } as ScrollableProps);
                 scrollable.containerRef = containerRef;
                 scrollable.scrollToElement(element);
 
@@ -1400,7 +1536,7 @@ jest.mock('../../../../core/devices', () => {
                 const element = createTargetElement({ location: { top: 0, left: -320 } });
                 const containerRef = createContainerRef({ top: 0, left: 0 }, 'both', undefined, true);
 
-                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
+                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' });
                 scrollable.containerRef = containerRef;
                 scrollable.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
@@ -1410,7 +1546,7 @@ jest.mock('../../../../core/devices', () => {
                 const element = createTargetElement({ location: { top: 0, left: 0 } });
                 const containerRef = createContainerRef({ top: 0, left: -320 }, 'both', undefined, true);
 
-                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
+                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' });
                 scrollable.containerRef = containerRef;
                 scrollable.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
@@ -1421,7 +1557,7 @@ jest.mock('../../../../core/devices', () => {
                 const element = createTargetElement({ location: { top: 0, left: -320 } });
                 const containerRef = createContainerRef({ top: 0, left: 0 }, 'both', undefined, true);
 
-                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
+                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' });
                 scrollable.containerRef = containerRef;
                 scrollable.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft * -1);
@@ -1438,7 +1574,7 @@ jest.mock('../../../../core/devices', () => {
                 });
                 const containerRef = createContainerRef({ top: 0, left: 0 }, 'both', undefined, true);
 
-                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
+                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' });
                 scrollable.containerRef = containerRef;
                 scrollable.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
@@ -1452,7 +1588,7 @@ jest.mock('../../../../core/devices', () => {
                 });
                 const containerRef = createContainerRef({ top: 0, left: -320 }, 'both', undefined, true);
 
-                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' } as ScrollablePropsType);
+                const scrollable = new Scrollable({ rtlEnabled: true, direction: 'both' });
                 scrollable.containerRef = containerRef;
                 scrollable.scrollToElement(element);
                 expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
