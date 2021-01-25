@@ -1,5 +1,25 @@
-The **DateBox** is&nbsp;a&nbsp;UI component that displays the date and time in&nbsp;one of&nbsp;DevExtreme [predefined formats][0] or&nbsp;a&nbsp;format defined in&nbsp;an&nbsp;external localization library, or&nbsp;a&nbsp;type in&nbsp;the required date/time value. In&nbsp;this demo, the &laquo;Custom format&raquo; **DateBox**&rsquo;es value is&nbsp;formatted [using the Globalize library][1]. Alternatively, you can [use Intl][2].
+The [DateBox](/Documentation/ApiReference/UI_Widgets/dxDateBox/) editor helps users enter or modify date and time values. This demo illustrates the following **DateBox** properties:
 
-[0]: https://js.devexpress.com/Documentation/ApiReference/Common/Object_Structures/format/#type
-[1]: /Documentation/Guide/Common/Localization/#Localize_Dates_Numbers_and_Currencies/Using_Globalize
-[2]: /Documentation/Guide/Common/Localization/#Localize_Dates_Numbers_and_Currencies/Using_Intl
+- [value](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#value)     
+A value the **DateBox** displays.
+
+- [type](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#type)       
+Specifies whether the **DateBox** allows users to select only date, only time, or both.
+
+- [displayFormat](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#displayFormat)        
+A date/time display format. You can use one of the [predefined formats](/Documentation/ApiReference/Common/Object_Structures/format/#type) or specify a [custom format](/Documentation/Guide/Common/Value_Formatting/#Format_Widget_Values/Custom_Format_String). This demo illustrates the latter.
+
+- [pickerType](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#pickerType)        
+Specifies the type of UI used to select date or time. This demo shows how to change calendar to roller date picker. 
+
+- [showClearButton](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#showClearButton)        
+Specifies whether to display the button that clears the **DateBox** **value**.
+
+- [disabled](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#disabled)        
+Specifies whether the DateBox responds to user interaction.
+
+- [disabledDates](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#disabledDates)      
+Dates that are not available for selection.
+
+- [applyValueMode](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#applyValueMode)     
+Defines whether the selected value applies instantly or after a user clicks the **Apply** button.
