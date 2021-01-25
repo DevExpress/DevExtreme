@@ -4975,13 +4975,11 @@
           {
             "Title": "Predefined Types",
             "Name": "PredefinedTypes",
-            "DocUrl": "Guide/Widgets/Button/Customize_the_Appearance/",
             "Widget": "Button"
           },
           {
             "Title": "Icons",
             "Name": "Icons",
-            "DocUrl": "Guide/Widgets/Button/Customize_the_Appearance/",
             "Widget": "Button"
           }
         ]
