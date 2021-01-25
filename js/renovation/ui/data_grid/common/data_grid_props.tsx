@@ -9,7 +9,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import DxDataGrid from '../../../../ui/data_grid';
 import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../../../ui/data_grid';
-import { WidgetProps } from '../../common/widget';
+import BaseWidgetProps from '../../../utils/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../ui/filter_builder';
 import type { dxElement } from '../../../../core/element';
@@ -1176,7 +1176,7 @@ export class DataGridExport {
 }
 
 @ComponentBindings()
-export class DataGridProps extends WidgetProps /* implements Options */ {
+export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Nested() columns?: (DataGridColumn | string)[];
 
   @Nested() editing?: DataGridEditing;
@@ -1302,17 +1302,17 @@ export class DataGridProps extends WidgetProps /* implements Options */ {
 
   @OneWay() wordWrapEnabled?: boolean;
 
-  @TwoWay() filterValue: string | any[] | Function | null = null;
+  @TwoWay() filterValue?: string | any[] | Function | null = null;
 
-  @TwoWay() focusedColumnIndex = -1;
+  @TwoWay() focusedColumnIndex? = -1;
 
-  @TwoWay() focusedRowIndex = -1;
+  @TwoWay() focusedRowIndex? = -1;
 
-  @TwoWay() focusedRowKey: any | null = null;
+  @TwoWay() focusedRowKey?: any | null = null;
 
-  @TwoWay() selectedRowKeys: any[] = [];
+  @TwoWay() selectedRowKeys?: any[] = [];
 
-  @TwoWay() selectionFilter: string | any[] | Function = [];
+  @TwoWay() selectionFilter?: string | any[] | Function = [];
 
   @Event() onCellClick?:
   | string
