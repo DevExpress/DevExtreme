@@ -402,7 +402,7 @@ QUnit.module('Checkbox', function() {
         QUnit.module('valueChanged handler should receive correct event parameter', {
             beforeEach: function() {
                 this.handler = sinon.stub();
-                this.$element = $('#checkbox').dxCheckBox({ onValueChanged: this.handler });
+                this.$element = $('#checkbox').dxCheckBox({ onValueChanged: this.handler, focusStateEnabled: true });
                 this.instance = this.$element.dxCheckBox('instance');
                 this.keyboard = keyboardMock(this.$element);
 

@@ -560,7 +560,7 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
         fx.off = true;
 
         this.handler = sinon.stub();
-        this.$element = $('#switch').dxSwitch({ onValueChanged: this.handler });
+        this.$element = $('#switch').dxSwitch({ onValueChanged: this.handler, focusStateEnabled: true });
         this.instance = this.$element.dxSwitch('instance');
         this.keyboard = keyboardMock(this.$element);
         this.pointer = pointerMock(this.$element);

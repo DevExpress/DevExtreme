@@ -438,7 +438,8 @@ module('value', moduleConfig, () => {
             this.handler = sinon.stub();
             this.$element = createRadioGroup({
                 items: [1, 2],
-                onValueChanged: this.handler
+                onValueChanged: this.handler,
+                focusStateEnabled: true
             });
             this.instance = getInstance(this.$element);
             this.keyboard = keyboardMock(this.$element);

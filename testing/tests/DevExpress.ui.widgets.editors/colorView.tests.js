@@ -1080,7 +1080,8 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.valueChangedHandler = sinon.stub();
         this.$element = $('#color-view').dxColorView({
             onValueChanged: this.valueChangedHandler,
-            editAlphaChannel: true
+            editAlphaChannel: true,
+            focusStateEnabled: true
         });
         this.instance = this.$element.dxColorView('instance');
         this.keyboard = keyboardMock(this.$element);
