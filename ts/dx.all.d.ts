@@ -2937,9 +2937,9 @@ declare module DevExpress.fileManagement {
      */
     export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
         /**
-         * [descr:RemoteFileSystemProvider.Options.customizeRequest]
+         * [descr:RemoteFileSystemProvider.Options.beforeAjaxSend]
          */
-        customizeRequest?: ((options: { request?: XMLHttpRequest }) => any);
+        beforeAjaxSend?: ((options: { headers?: any, xhrFields?: any, formData?: string }) => any);
         /**
          * [descr:RemoteFileSystemProvider.Options.endpointUrl]
          */

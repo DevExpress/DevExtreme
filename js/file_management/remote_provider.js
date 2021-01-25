@@ -9,7 +9,7 @@ import eventsEngine from '../events/core/events_engine';
 
 import FileSystemProviderBase from './provider_base';
 import { compileGetter } from '../core/utils/data';
-import { isFunction } from '../core/utils/type';
+import { isDefined, isEmptyObject, isFunction } from '../core/utils/type';
 
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = 'chunk';
@@ -31,7 +31,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         options = ensureDefined(options, { });
         super(options);
         this._endpointUrl = options.endpointUrl;
-        this._customizeRequest = options.customizeRequest;
+        this._beforeAjaxSend = options.beforeAjaxSend;
         this._requestHeaders = options.requestHeaders;
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
     }
@@ -99,27 +99,28 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
                 FileSize: fileData.size
             })
         };
-
-        const formData = new window.FormData();
-        formData.append(FILE_CHUNK_BLOB_NAME, chunksInfo.chunkBlob);
-        formData.append('arguments', JSON.stringify(args));
-        formData.append('command', FILE_SYSTEM_COMMNAD.UPLOAD_CHUNK);
-
-        const deferred = new Deferred();
-        ajax.sendRequest({
+        const ajaxSettings = {
             url: this._endpointUrl,
             headers: this._requestHeaders || {},
-            beforeSend: xhr => this._beforeSend(xhr),
             method: 'POST',
             dataType: 'json',
-            data: formData,
+            data: {
+                [FILE_CHUNK_BLOB_NAME]: chunksInfo.chunkBlob,
+                arguments: JSON.stringify(args),
+                command: FILE_SYSTEM_COMMNAD.UPLOAD_CHUNK
+            },
             upload: {
                 onprogress: noop,
                 onloadstart: noop,
                 onabort: noop
             },
+            xhrFields: {},
             cache: false
-        })
+        };
+        const deferred = new Deferred();
+
+        this._beforeSend(ajaxSettings);
+        ajax.sendRequest(ajaxSettings)
             .done(result => {
                 !result.success && deferred.reject(result) || deferred.resolve();
             })
@@ -159,25 +160,26 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
 
     getItemsContent(items) {
         const args = this._getDownloadArgs(items);
-
-        const formData = new window.FormData();
-        formData.append('command', args.command);
-        formData.append('arguments', args.arguments);
-
-        return ajax.sendRequest({
+        const ajaxSettings = {
             url: args.url,
             headers: this._requestHeaders || {},
-            beforeSend: xhr => this._beforeSend(xhr),
             method: 'POST',
             responseType: 'arraybuffer',
-            data: formData,
+            data: {
+                command: args.command,
+                arguments: args.arguments
+            },
             upload: {
                 onprogress: noop,
                 onloadstart: noop,
                 onabort: noop
             },
+            xhrFields: {},
             cache: false
-        });
+        };
+
+        this._beforeSend(ajaxSettings);
+        return ajax.sendRequest(ajaxSettings);
     }
 
     _getDownloadArgs(items) {
@@ -197,26 +199,53 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
 
     _executeRequest(command, args) {
         const method = command === FILE_SYSTEM_COMMNAD.GET_DIR_CONTENTS ? 'GET' : 'POST';
-
         const deferred = new Deferred();
-        ajax.sendRequest({
+        const ajaxSettings = {
             url: this._getEndpointUrl(command, args),
             headers: this._requestHeaders || {},
-            beforeSend: xhr => this._beforeSend(xhr),
             method,
             dataType: 'json',
+            data: {},
+            xhrFields: {},
             cache: false
-        }).then(result => {
+        };
+
+        this._beforeSend(ajaxSettings);
+        ajax.sendRequest(ajaxSettings).then(result => {
             !result.success && deferred.reject(result) || deferred.resolve(result);
         },
         e => deferred.reject(e));
         return deferred.promise();
     }
 
-    _beforeSend(xhr) {
-        if(isFunction(this._customizeRequest)) {
-            this._customizeRequest({ request: xhr });
+    _beforeSend(ajaxSettings) {
+        if(isFunction(this._beforeAjaxSend)) {
+            const ajaxArguments = {
+                headers: ajaxSettings.headers,
+                formData: ajaxSettings.data,
+                xhrFields: ajaxSettings.xhrFields
+            };
+
+            this._beforeAjaxSend(ajaxArguments);
+            ajaxSettings.headers = ajaxArguments.headers;
+            ajaxSettings.data = ajaxArguments.formData;
+            ajaxSettings.xhrFields = ajaxArguments.xhrFields;
         }
+        if(!isEmptyObject(ajaxSettings.data)) {
+            ajaxSettings.data = this._createFormData(ajaxSettings.data);
+        } else {
+            delete ajaxSettings.data;
+        }
+    }
+
+    _createFormData(formDataEntries) {
+        const formData = new window.FormData();
+        for(const entryName in formDataEntries) {
+            if(Object.prototype.hasOwnProperty.call(formDataEntries, entryName) && isDefined(formDataEntries[entryName])) {
+                formData.append(entryName, formDataEntries[entryName]);
+            }
+        }
+        return formData;
     }
 
     _getEndpointUrl(command, args) {

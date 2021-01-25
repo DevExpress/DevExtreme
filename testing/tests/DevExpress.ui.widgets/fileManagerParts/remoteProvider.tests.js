@@ -5,7 +5,7 @@ import RemoteFileSystemProvider from 'file_management/remote_provider';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 import { createSampleFileItems, generateString, createFileObject } from '../../../helpers/fileManagerHelpers.js';
 import { when } from 'core/utils/deferred';
-import { isString, isFunction } from 'core/utils/type';
+import { isString } from 'core/utils/type';
 import browser from 'core/utils/browser';
 import { extend } from 'core/utils/extend';
 
@@ -247,6 +247,9 @@ QUnit.module('Remote Provider', moduleConfig, () => {
         createProvider(this, extend(this.options, {
             requestHeaders: {
                 RequestVerificationToken: tokenValue
+            },
+            beforeAjaxSend: function({ headers }) {
+                assert.strictEqual(headers.RequestVerificationToken, tokenValue, 'token value is available from the beforeAjaxSend() callback');
             }
         }));
 
@@ -257,7 +260,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
                 success: true
             },
             callback: request => {
-                assert.strictEqual(request.headers.RequestVerificationToken, tokenValue);
+                assert.strictEqual(request.headers.RequestVerificationToken, tokenValue, 'token value presents');
             }
         });
 
@@ -266,9 +269,13 @@ QUnit.module('Remote Provider', moduleConfig, () => {
 
     test('custom request data API', function(assert) {
         const done = assert.async();
+        const tokenValue = 'someTokenValue';
+        const dataValueText = 'newValue';
         createProvider(this, extend(this.options, {
-            customizeRequest: function({ request }) {
-                request.withCredentials = true;
+            beforeAjaxSend: function({ headers, formData, xhrFields }) {
+                headers.RequestVerificationToken = tokenValue;
+                formData.dataValue = dataValueText;
+                xhrFields.withCredentials = true;
             }
         }));
 
@@ -279,9 +286,9 @@ QUnit.module('Remote Provider', moduleConfig, () => {
                 success: true
             },
             callback: request => {
-                assert.ok(isFunction(this.provider._customizeRequest));
-                this.provider._customizeRequest({ request });
-                assert.ok(request.withCredentials);
+                assert.strictEqual(request.headers.RequestVerificationToken, tokenValue, 'custom header presents');
+                assert.strictEqual(request.data.get('dataValue'), dataValueText, 'custom formData value presents');
+                assert.ok(request.xhrFields.withCredentials, 'custom xhr field presents');
             }
         });
 

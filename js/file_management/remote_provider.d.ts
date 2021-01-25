@@ -5,13 +5,15 @@ import FileSystemProviderBase, {
 export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
     /**
      * @docid
-     * @publicName customizeRequest(request)
+     * @publicName beforeAjaxSend(request)
      * @type_function_param1 options: object
-     * @type_function_param1_field1 request: XMLHttpRequest
+     * @type_function_param1_field1 headers:object
+     * @type_function_param1_field2 xhrFields:object
+     * @type_function_param1_field3 formData:string
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    customizeRequest?: ((options: { request?: XMLHttpRequest }) => any);
+    beforeAjaxSend?: ((options: { headers?: any, xhrFields?: any, formData?: any }) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.fileManagement
