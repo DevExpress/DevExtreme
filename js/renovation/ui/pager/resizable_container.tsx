@@ -90,7 +90,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
 
   @InternalState() isLargeDisplayMode = true;
 
-  @Ref() elementsWidth!: ChildElements<number>;
+  @Ref() elementsWidth!: RefObject<ChildElements<number>>;
 
   @Effect() subscribeToResize(): DisposeEffectReturn {
     const callback = (): void => this.updateChildrenProps();
