@@ -353,7 +353,6 @@
           {
             "Title": "Record Grouping",
             "Name": "RecordGrouping",
-            "DocUrl": "Guide/Widgets/DataGrid/Grouping/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridCustomersController.cs",
