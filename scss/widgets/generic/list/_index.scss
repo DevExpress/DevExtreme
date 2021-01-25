@@ -126,8 +126,6 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
       color: $button-icon-color;
     }
   }
-
-  @include toggle-delete-icon($list-icon-color);
 }
 
 @mixin dx-list-sizing($item-horizontal-padding) {
@@ -201,6 +199,8 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     .dx-icon-toggle-delete {
       background-size: 100%;
     }
+
+    @include toggle-delete-icon($list-icon-color);
 
     &.dx-list-item-ghost-reordering {
       &.dx-state-focused {
