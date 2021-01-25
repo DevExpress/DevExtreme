@@ -73,7 +73,6 @@ export class DateHeaderProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: { register: true },
 })
 export class DateHeader extends JSXComponent(DateHeaderProps) {
   get isHorizontalGrouping(): boolean {
