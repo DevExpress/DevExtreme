@@ -853,24 +853,6 @@ QUnit.test('dataCellTemplate for all-day panel should take cellElement with corr
     });
 });
 
-QUnit.test('dateCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
-    assert.expect(3);
-    this.createInstance({
-        currentView: 'week',
-        views: ['week'],
-        height: 700,
-        width: 700,
-        dataSource: [],
-        dateCellTemplate: function(cellData, cellIndex, cellElement) {
-            if(!cellIndex) {
-                assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
-                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Date cell width is OK');
-                assert.equal($(cellElement).outerHeight(), 40, 'Date cell height is OK');
-            }
-        }
-    });
-});
-
 QUnit.test('timeCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
     assert.expect(3);
 
@@ -970,234 +952,6 @@ QUnit.test('timeCellTemplate should contains the date field of data parameter in
     assert.deepEqual(resultDates[1], new Date(2016, 8, 5, 1), 'date parameter for the second time cell');
     assert.deepEqual(resultDates[2], new Date(2016, 8, 5, 2), 'date parameter for the third time cell');
     assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3), 'date parameter for the fourth time cell');
-});
-
-QUnit.test('dateCellTemplate should work correctly', function(assert) {
-    this.createInstance({
-        views: ['month'],
-        currentView: 'month',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [],
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dateCellTemplate: function(itemData, index, container) {
-            if(index === 0) {
-                $(container).addClass('custom-group-cell-class');
-            }
-        }
-    });
-
-    const $cell1 = this.instance.$element().find('.dx-scheduler-header-panel-cell').eq(0);
-    const $cell2 = this.instance.$element().find('.dx-scheduler-header-panel-cell').eq(1);
-
-    assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
-    assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
-});
-
-QUnit.test('dateCellTemplate should have unique date in data (T732376)', function(assert) {
-    this.createInstance({
-        views: ['timelineWorkWeek'],
-        currentView: 'timelineWorkWeek',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [],
-        firstDayOfWeek: 0,
-        startDayHour: 10,
-        endDayHour: 11,
-        cellDuration: 60,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dateCellTemplate: function(data, index, element) {
-            const d = data;
-            $('<div>').appendTo(element).dxButton({
-                text: 'Test',
-                onClick: function(e) {
-                    const expectedDate = new Date(2016, 8, 7, 10, 0);
-
-                    assert.equal(d.date.getTime(), expectedDate.getTime());
-                }
-            });
-
-            return element;
-        }
-    });
-
-    const $button = this.instance.$element().find('.dx-scheduler-header-panel-cell .dx-button').eq(2);
-
-    $($button).trigger('dxclick');
-});
-
-QUnit.test('dateCellTemplate should work correctly in workWeek view', function(assert) {
-    const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-    this.createInstance({
-        views: ['workWeek'],
-        currentView: 'workWeek',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [],
-        startDayHour: 7,
-        endDayHour: 23,
-        dateCellTemplate: function(cellData, index, container) {
-            $(container).append(
-                $('<div />')
-                    .addClass('name')
-                    .text(dayOfWeekNames[cellData.date.getDay()]),
-                $('<div />')
-                    .addClass('number')
-                    .text(cellData.date.getDate())
-            );
-        },
-    });
-
-    const $headerPanel = this.instance.$element().find('.dx-scheduler-header-panel');
-
-    assert.ok($headerPanel.text(), 'Mon5Tue6Wed7Thu8Fri9');
-});
-
-QUnit.test('dateCellTemplate should work correctly in agenda view', function(assert) {
-    this.createInstance({
-        views: ['agenda'],
-        currentView: 'agenda',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [{
-            text: 'a',
-            ownerId: 1,
-            startDate: new Date(2016, 8, 5, 7),
-            endDate: new Date(2016, 8, 5, 8),
-        },
-        {
-            text: 'b',
-            ownerId: 2,
-            startDate: new Date(2016, 8, 5, 10),
-            endDate: new Date(2016, 8, 5, 11),
-        }],
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dateCellTemplate: function(itemData, index, container) {
-            if(index === 0) {
-                $(container).addClass('custom-group-cell-class');
-            }
-        }
-    });
-
-    const $cell1 = this.instance.$element().find('.dx-scheduler-time-panel-cell').eq(0);
-    const $cell2 = this.instance.$element().find('.dx-scheduler-time-panel-cell').eq(1);
-
-    assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
-    assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
-});
-
-QUnit.test('dateCellTemplate should have correct options', function(assert) {
-    let templateOptions;
-
-    this.createInstance({
-        currentView: 'month',
-        currentDate: new Date(2016, 8, 5),
-        dateCellTemplate: function(itemData, index, $container) {
-            if(index === 0) {
-                templateOptions = itemData;
-            }
-        }
-    });
-
-    assert.equal(templateOptions.text, 'Sun', 'text option is ok');
-    assert.deepEqual(templateOptions.date.getTime(), new Date(2016, 7, 28).getTime(), 'date option is ok');
-});
-
-QUnit.test('dateCellTemplate should have correct options in agenda view', function(assert) {
-    let templateOptions;
-
-    this.createInstance({
-        views: ['agenda'],
-        currentView: 'agenda',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [{
-            text: 'a',
-            ownerId: 1,
-            startDate: new Date(2016, 8, 5, 7),
-            endDate: new Date(2016, 8, 5, 8),
-        },
-        {
-            text: 'b',
-            ownerId: 2,
-            startDate: new Date(2016, 8, 5, 10),
-            endDate: new Date(2016, 8, 5, 11),
-        }],
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dateCellTemplate: function(itemData, index, $container) {
-            if(index === 0) {
-                templateOptions = itemData;
-            }
-        }
-    });
-
-    assert.equal(templateOptions.text, '5 Mon', 'text option is ok');
-    assert.equal(templateOptions.date.getTime(), new Date(2016, 8, 5).getTime(), 'date option is ok');
-    assert.deepEqual(templateOptions.groups, { 'ownerId': 1 }, 'groups option is ok');
-
-});
-
-QUnit.test('WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment', function(assert) {
-    this.createInstance({
-        currentView: 'week',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [{
-            text: 'a',
-            ownerId: 1,
-            startDate: new Date(2016, 8, 5, 7),
-            endDate: new Date(2016, 8, 5, 8),
-            allDay: true
-        }],
-        crossScrollingEnabled: true,
-        dateCellTemplate: function(itemData, index, $container) {
-            return $('<div>').css({ height: '150px' });
-        }
-    });
-
-    const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
-    const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
-    const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
-    const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
-    const allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
-
-    assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
-    assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
-    assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
 });
 
 QUnit.test('Timepanel text should be calculated correctly if DST makes sense (T442904)', function(assert) {
@@ -3577,6 +3331,295 @@ QUnit.module('Resource Cell Template', () => {
 
                 assert.equal(countCallTemplate1, 0, 'count call first template');
                 assert.notEqual(countCallTemplate2, 0, 'count call second template');
+            });
+        });
+    });
+});
+
+QUnit.module('Date Cell Template', () => {
+    [true, false].forEach((isRenovatedRender) => {
+        const description = isRenovatedRender
+            ? 'Renovated Render'
+            : 'Old Render';
+
+        QUnit.module(description, {
+            beforeEach: function() {
+                this.createInstance = (options = {}) => {
+                    this.scheduler = createWrapper({
+                        renovateRender: isRenovatedRender,
+                        ...options,
+                    });
+                    this.instance = this.scheduler.instance;
+                };
+            },
+        }, () => {
+            QUnit.test('Scheduler should have specific dateCellTemplate setting of the view', function(assert) {
+                let countCallTemplate1 = 0;
+                let countCallTemplate2 = 0;
+
+                this.createInstance({
+                    dataSource: [],
+                    views: [{
+                        type: 'week',
+                        dateCellTemplate: function(item, index, container) {
+                            assert.equal(isRenderer(container), !!config().useJQuery, 'element is correct');
+                            countCallTemplate2++;
+                        }
+                    }],
+                    dateCellTemplate: function() {
+                        countCallTemplate1++;
+                    },
+                    currentView: 'week'
+                });
+
+                assert.equal(countCallTemplate1, 0, 'count call first template');
+                assert.notEqual(countCallTemplate2, 0, 'count call second template');
+            });
+
+            QUnit.test('dateCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
+                assert.expect(3);
+                this.createInstance({
+                    currentView: 'week',
+                    views: ['week'],
+                    height: 700,
+                    width: 700,
+                    dataSource: [],
+                    dateCellTemplate: function(cellData, cellIndex, cellElement) {
+                        if(!cellIndex) {
+                            assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
+                            assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Date cell width is OK');
+                            assert.equal($(cellElement).outerHeight(), 40, 'Date cell height is OK');
+                        }
+                    }
+                });
+            });
+
+            QUnit.test('dateCellTemplate should work correctly', function(assert) {
+                this.createInstance({
+                    views: ['month'],
+                    currentView: 'month',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [],
+                    firstDayOfWeek: 0,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            field: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    dateCellTemplate: function(itemData, index, container) {
+                        if(index === 0) {
+                            $(container).addClass('custom-group-cell-class');
+                        }
+                    }
+                });
+
+                const $cell1 = this.instance.$element().find('.dx-scheduler-header-panel-cell').eq(0);
+                const $cell2 = this.instance.$element().find('.dx-scheduler-header-panel-cell').eq(1);
+
+                assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
+                assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
+            });
+
+            QUnit.test('dateCellTemplate should have unique date in data (T732376)', function(assert) {
+                this.createInstance({
+                    views: ['timelineWorkWeek'],
+                    currentView: 'timelineWorkWeek',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [],
+                    firstDayOfWeek: 0,
+                    startDayHour: 10,
+                    endDayHour: 11,
+                    cellDuration: 60,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            field: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    dateCellTemplate: function(data, index, element) {
+                        const d = data;
+                        $('<div>').appendTo(element).dxButton({
+                            text: 'Test',
+                            onClick: function(e) {
+                                const expectedDate = new Date(2016, 8, 7, 10, 0);
+
+                                assert.equal(d.date.getTime(), expectedDate.getTime());
+                            }
+                        });
+
+                        return element;
+                    }
+                });
+
+                const $button = this.instance.$element().find('.dx-scheduler-header-panel-cell .dx-button').eq(2);
+
+                $($button).trigger('dxclick');
+            });
+
+            QUnit.test('dateCellTemplate should work correctly in workWeek view', function(assert) {
+                const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+                this.createInstance({
+                    views: ['workWeek'],
+                    currentView: 'workWeek',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [],
+                    startDayHour: 7,
+                    endDayHour: 23,
+                    dateCellTemplate: function(cellData, index, container) {
+                        $(container).append(
+                            $('<div />')
+                                .addClass('name')
+                                .text(dayOfWeekNames[cellData.date.getDay()]),
+                            $('<div />')
+                                .addClass('number')
+                                .text(cellData.date.getDate())
+                        );
+                    },
+                });
+
+                const $headerPanel = this.instance.$element().find('.dx-scheduler-header-panel');
+
+                assert.ok($headerPanel.text(), 'Mon5Tue6Wed7Thu8Fri9');
+            });
+
+            QUnit.test('dateCellTemplate should work correctly in agenda view', function(assert) {
+                this.createInstance({
+                    views: ['agenda'],
+                    currentView: 'agenda',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [{
+                        text: 'a',
+                        ownerId: 1,
+                        startDate: new Date(2016, 8, 5, 7),
+                        endDate: new Date(2016, 8, 5, 8),
+                    },
+                    {
+                        text: 'b',
+                        ownerId: 2,
+                        startDate: new Date(2016, 8, 5, 10),
+                        endDate: new Date(2016, 8, 5, 11),
+                    }],
+                    firstDayOfWeek: 0,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            field: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    dateCellTemplate: function(itemData, index, container) {
+                        if(index === 0) {
+                            $(container).addClass('custom-group-cell-class');
+                        }
+                    }
+                });
+
+                const $cell1 = this.instance.$element().find('.dx-scheduler-time-panel-cell').eq(0);
+                const $cell2 = this.instance.$element().find('.dx-scheduler-time-panel-cell').eq(1);
+
+                assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
+                assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
+            });
+
+            QUnit.test('dateCellTemplate should have correct options', function(assert) {
+                let templateOptions;
+
+                this.createInstance({
+                    currentView: 'month',
+                    currentDate: new Date(2016, 8, 5),
+                    dateCellTemplate: function(itemData, index, $container) {
+                        if(index === 0) {
+                            templateOptions = itemData;
+                        }
+                    }
+                });
+
+                assert.equal(templateOptions.text, 'Sun', 'text option is ok');
+                assert.deepEqual(templateOptions.date.getTime(), new Date(2016, 7, 28).getTime(), 'date option is ok');
+            });
+
+            QUnit.test('dateCellTemplate should have correct options in agenda view', function(assert) {
+                let templateOptions;
+
+                this.createInstance({
+                    views: ['agenda'],
+                    currentView: 'agenda',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [{
+                        text: 'a',
+                        ownerId: 1,
+                        startDate: new Date(2016, 8, 5, 7),
+                        endDate: new Date(2016, 8, 5, 8),
+                    },
+                    {
+                        text: 'b',
+                        ownerId: 2,
+                        startDate: new Date(2016, 8, 5, 10),
+                        endDate: new Date(2016, 8, 5, 11),
+                    }],
+                    firstDayOfWeek: 0,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            field: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    dateCellTemplate: function(itemData, index, $container) {
+                        if(index === 0) {
+                            templateOptions = itemData;
+                        }
+                    }
+                });
+
+                assert.equal(templateOptions.text, '5 Mon', 'text option is ok');
+                assert.equal(templateOptions.date.getTime(), new Date(2016, 8, 5).getTime(), 'date option is ok');
+                assert.deepEqual(templateOptions.groups, { 'ownerId': 1 }, 'groups option is ok');
+
+            });
+
+            QUnit.test('WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment', function(assert) {
+                this.createInstance({
+                    currentView: 'week',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [{
+                        text: 'a',
+                        ownerId: 1,
+                        startDate: new Date(2016, 8, 5, 7),
+                        endDate: new Date(2016, 8, 5, 8),
+                        allDay: true
+                    }],
+                    crossScrollingEnabled: true,
+                    dateCellTemplate: function(itemData, index, $container) {
+                        return $('<div>').css({ height: '150px' });
+                    }
+                });
+
+                const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
+                const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
+                const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
+                const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
+                const allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
+
+                assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
+                assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
+                assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
             });
         });
     });

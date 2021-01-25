@@ -79,6 +79,7 @@ describe('HeaderPanelLayoutBase', () => {
         groups: [],
         resourceCellTemplate,
       };
+
       const layout = render({
         isHorizontalGrouping: true,
         props: groupPanelProps,
