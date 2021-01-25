@@ -12,7 +12,7 @@ import { DateHeaderCell } from '../cell';
 
 const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
 
-describe('HeaderPanelLayoutBase', () => {
+describe('DateHeaderLayout', () => {
   describe('Render', () => {
     const dateHeaderMap: any = [[{
       startDate: new Date(2020, 6, 9),
@@ -135,18 +135,20 @@ describe('HeaderPanelLayoutBase', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      it('should calculate isVerticalGroupOrientation correctly', () => {
-        const groups = [];
-        const layout = new DateHeader({
-          groupOrientation: VERTICAL_GROUP_ORIENTATION,
-          groups,
+      describe('isHorizontalGrouping', () => {
+        it('should call "isHorizontalGroupOrientation" with correct parameters', () => {
+          const groups = [];
+          const layout = new DateHeader({
+            groupOrientation: VERTICAL_GROUP_ORIENTATION,
+            groups,
+          });
+
+          expect(layout.isHorizontalGrouping)
+            .toBe(false);
+
+          expect(isHorizontalGroupOrientation)
+            .toHaveBeenCalledWith(groups, VERTICAL_GROUP_ORIENTATION);
         });
-
-        expect(layout.isHorizontalGrouping)
-          .toBe(false);
-
-        expect(isHorizontalGroupOrientation)
-          .toHaveBeenCalledWith(groups, VERTICAL_GROUP_ORIENTATION);
       });
     });
   });
