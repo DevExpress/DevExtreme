@@ -454,6 +454,7 @@ each([{
                   ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
                     elementRef.style[prop] = `${size}px`;
                   });
+
                   ['overflowX', 'overflowY'].forEach((prop) => {
                     elementRef.style[prop] = overflow;
                   });
@@ -466,70 +467,58 @@ each([{
                 };
 
                 if (Scrollable === ScrollableSimulated) {
-                  it('UpdateScrollbarSize(), thumbSize default', () => {
-                    const containerRef = React.createRef();
-                    const contentRef = React.createRef();
-                    const viewModel = new Scrollable({ direction });
+                  each([true, false]).describe('ScrollableRef: %o', (isScrollableRef) => {
+                    it('UpdateScrollbarSize(), thumbSize default', () => {
+                      const containerRef = React.createRef();
+                      const contentRef = React.createRef();
+                      const viewModel = new Scrollable({ direction });
 
-                    (viewModel as any).containerRef = containerRef;
-                    (viewModel as any).contentRef = contentRef;
-                    const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+                      (viewModel as any).containerRef = containerRef;
+                      (viewModel as any).contentRef = contentRef;
+                      const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
 
-                    if (direction !== 'horizontal') {
-                      const styles = scrollable.find('.dx-scrollbar-vertical .dx-scrollable-scroll').getElement().props.style;
+                      if (direction !== 'horizontal') {
+                        const styles = scrollable.find('.dx-scrollbar-vertical .dx-scrollable-scroll').getElement().props.style;
 
-                      expect(styles).toEqual({ display: '', height: 15, width: undefined });
-                    }
-                    if (direction !== 'vertical') {
-                      const styles = scrollable.find('.dx-scrollbar-horizontal .dx-scrollable-scroll').getElement().props.style;
+                        expect(styles).toEqual({ display: '', height: 15, width: undefined });
+                      }
+                      if (direction !== 'vertical') {
+                        const styles = scrollable.find('.dx-scrollbar-horizontal .dx-scrollable-scroll').getElement().props.style;
 
-                      expect(styles).toEqual({ display: '', height: undefined, width: 15 });
-                    }
+                        expect(styles).toEqual({ display: '', height: undefined, width: 15 });
+                      }
 
-                    initStyles((viewModel as any).containerRef.current, containerSize);
-                    initStyles((viewModel as any).contentRef.current, contentSize);
+                      initStyles((viewModel as any).containerRef.current, containerSize);
+                      initStyles((viewModel as any).contentRef.current, contentSize);
 
-                    (viewModel as any).containerRef = (viewModel as any).containerRef.current;
-                    (viewModel as any).contentRef = (viewModel as any).contentRef.current;
+                      if (isScrollableRef) {
+                        (viewModel as any).scrollableRef = scrollable.getDOMNode();
+                        initStyles((viewModel as any).scrollableRef, containerSize);
+                        Object.defineProperty((viewModel as any).scrollableRef, 'offsetWidth', { configurable: true, value: containerSize });
+                        Object.defineProperty((viewModel as any).scrollableRef, 'offsetHeight', { configurable: true, value: containerSize });
+                      } else {
+                        viewModel.getScaleRatio = () => 1;
+                      }
 
-                    (viewModel as any).effectUpdateScrollbarSize();
+                      (viewModel as any).containerRef = (viewModel as any).containerRef.current;
+                      (viewModel as any).contentRef = (viewModel as any).contentRef.current;
 
-                    const expectedSize = contentSize
-                      ? containerSize * (containerSize / contentSize)
-                      : containerSize * containerSize;
+                      // TODO: mockwindow
+                      (viewModel as any).effectUpdateScrollbarSize();
 
-                    if (direction !== 'horizontal') {
-                      expect(viewModel.thumbHeight).toEqual(expectedSize);
-                      expect(viewModel.thumbWidth).toEqual(expectedSize);
-                    }
-                    if (direction !== 'vertical') {
-                      expect(viewModel.thumbWidth).toEqual(expectedSize);
-                      expect(viewModel.thumbHeight).toEqual(expectedSize);
-                    }
-                  });
-
-                  it('transfer thumbSize to scrollbar', () => {
-                    const containerRef = React.createRef();
-                    const contentRef = React.createRef();
-                    const viewModel = new Scrollable({ direction });
-
-                    (viewModel as any).containerRef = containerRef;
-                    (viewModel as any).contentRef = contentRef;
-                    viewModel.thumbHeight = 30;
-                    viewModel.thumbWidth = 45;
-
-                    const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
-
-                    if (direction !== 'horizontal') {
-                      const styles = scrollable.find('.dx-scrollbar-vertical .dx-scrollable-scroll').getElement().props.style;
-
-                      expect(styles).toEqual({ display: '', height: 30, width: undefined });
-                    }
-                    if (direction !== 'vertical') {
-                      const styles = scrollable.find('.dx-scrollbar-horizontal .dx-scrollable-scroll').getElement().props.style;
-
-                      expect(styles).toEqual({ display: '', height: undefined, width: 45 });
-                    }
+                      if (direction !== 'horizontal') {
+                        expect(viewModel.scrollableOffsetLeft).toEqual(0);
+                        expect(viewModel.containerWidth).toEqual(containerSize);
+                        expect(viewModel.contentWidth).toEqual(contentSize);
+                        expect(viewModel.scaleRatioWidth).toEqual(1);
+                      }
+                      if (direction !== 'vertical') {
+                        expect(viewModel.scrollableOffsetTop).toEqual(0);
+                        expect(viewModel.containerHeight).toEqual(containerSize);
+                        expect(viewModel.contentHeight).toEqual(contentSize);
+                        expect(viewModel.scaleRatioHeight).toEqual(1);
+                      }
+                    });
                   });
                 }
 
@@ -544,7 +533,7 @@ each([{
                         (viewModel as any).containerRef = containerRef;
                         (viewModel as any).contentRef = contentRef;
 
-                        mount(viewFunction(viewModel as any) as JSX.Element);
+                        const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
 
                         (viewModel as any).containerRef = (viewModel as any).containerRef.current;
                         (viewModel as any).contentRef = (viewModel as any).contentRef.current;
@@ -569,6 +558,26 @@ each([{
                           expectedDirectionResult = direction;
                           if (direction === 'both') {
                             expectedDirectionResult = isShiftKeyPressed ? 'horizontal' : 'vertical';
+                          }
+                        }
+
+                        if (isSimulatedStrategy) {
+                          const scrollbar = scrollable.find(Scrollbar);
+                          if (direction === DIRECTION_VERTICAL) {
+                            (viewModel as any).verticalScrollbarRef = scrollbar.instance();
+                            Object.assign((viewModel as any).verticalScrollbarRef,
+                              { props: { contentSize, containerSize } });
+                          } else if (direction === DIRECTION_HORIZONTAL) {
+                            (viewModel as any).horizontalScrollbarRef = scrollbar.instance();
+                            Object.assign((viewModel as any).horizontalScrollbarRef,
+                              { props: { contentSize, containerSize } });
+                          } else {
+                            (viewModel as any).horizontalScrollbarRef = scrollbar.at(0).instance();
+                            Object.assign((viewModel as any).horizontalScrollbarRef,
+                              { props: { contentSize, containerSize } });
+                            (viewModel as any).verticalScrollbarRef = scrollbar.at(1).instance();
+                            Object.assign((viewModel as any).verticalScrollbarRef,
+                              { props: { contentSize, containerSize } });
                           }
                         }
 

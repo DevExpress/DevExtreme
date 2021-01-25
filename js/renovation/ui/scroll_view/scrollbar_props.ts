@@ -22,9 +22,17 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() needScrollbar = false;
 
-  @OneWay() width?: number;
+  @OneWay() scaleRatio = 1;
 
-  @OneWay() height?: number;
+  @OneWay() containerSize = 0;
 
-  @OneWay() thumbRatio = 1;
+  @OneWay() contentSize = 0;
+
+  @OneWay() scrollableOffset = 0;
+
+  @OneWay() containerRef: any;
+
+  @OneWay() contentRef: any;
+
+  @OneWay() bounceEnabled = true;
 }

@@ -4,7 +4,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { titleize } from '../../core/utils/inflector';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
-import { each, map } from '../../core/utils/iterator';
+import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { getBoundingRect } from '../../core/utils/position';
 import { resetPosition, move, locate } from '../../animation/translator';
@@ -266,10 +266,7 @@ export const Scroller = Class.inherit({
     },
 
     _initHandler: function(e) {
-        this._stopDeferred = new Deferred();
         this._stopScrolling();
-        this._prepareThumbScrolling(e);
-        return this._stopDeferred.promise();
     },
 
     _stopScrolling: deferRenderer(function() {
@@ -279,18 +276,9 @@ export const Scroller = Class.inherit({
     }),
 
     _prepareThumbScrolling: function(e) {
-        if(isDxMouseWheelEvent(e.originalEvent)) {
-            return;
-        }
-
-        const $target = $(e.originalEvent.target);
-        const scrollbarClicked = this._isScrollbar($target);
-
-        if(scrollbarClicked) {
-            this._moveToMouseLocation(e);
-        }
-
+        // eslint-disable-next-line no-undef
         this._thumbScrolling = scrollbarClicked || this._isThumb($target);
+        // eslint-disable-next-line no-undef
         this._crossThumbScrolling = !this._thumbScrolling && this._isAnyThumbScrolling($target);
 
         if(this._thumbScrolling) {
@@ -723,15 +711,6 @@ export const SimulatedStrategy = Class.inherit({
             reachedTop: scrollerY && scrollerY._reachedMax(),
             reachedBottom: scrollerY && scrollerY._reachedMin()
         };
-    },
-
-    _eventHandler: function(eventName) {
-        const args = [].slice.call(arguments).slice(1);
-        const deferreds = map(this._scrollers, (scroller) => {
-            return scroller['_' + eventName + 'Handler'].apply(scroller, args);
-        });
-
-        return when.apply($, deferreds).promise();
     },
 
     location: function() {
