@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import 'ui/file_manager';
 import FileSystemItem from 'file_management/file_system_item';
 
@@ -8,6 +9,7 @@ import { when } from 'core/utils/deferred';
 import { isString } from 'core/utils/type';
 import browser from 'core/utils/browser';
 import { extend } from 'core/utils/extend';
+import { isFunction } from '../../../../js/core/utils/type.js';
 
 const { test } = QUnit;
 
@@ -267,7 +269,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
         this.provider.getItems(new FileSystemItem('Root/Files', true)).done(done);
     });
 
-    test('custom request data API', function(assert) {
+    test('custom request post data API', function(assert) {
         const done = assert.async();
         const tokenValue = 'someTokenValue';
         const dataValueText = 'newValue';
@@ -293,6 +295,35 @@ QUnit.module('Remote Provider', moduleConfig, () => {
         });
 
         this.provider.getItems(new FileSystemItem('Root/Files', true)).done(done);
+    });
+
+    test('custom request submit data API', function(assert) {
+        const dataValueText = 'newValue';
+        const command = 'download';
+        createProvider(this, extend(this.options, {
+            beforeSubmit: function({ formData }) {
+                formData.dataValue = dataValueText;
+            }
+        }));
+
+        const $form = $('<form>');
+
+        const formDataEntries = { command };
+
+        assert.ok(isFunction(this.provider._beforeSubmitInternal), '_beforeSubmitInternal is a function');
+        assert.ok(isFunction(this.provider._appendFormDataInputsToForm), '_appendFormDataInputsToForm is a function');
+
+        this.provider._beforeSubmitInternal(formDataEntries);
+        this.provider._appendFormDataInputsToForm(formDataEntries, $form);
+
+        const $inputs = $form.find('input');
+        assert.strictEqual($inputs.length, 2, 'number of inputs is equal to the number of formData entries');
+        assert.strictEqual($inputs.eq(0).attr('name'), 'command', 'first input has correct name');
+        assert.strictEqual($inputs.eq(0).val(), command, 'first input has correct value');
+        assert.strictEqual($inputs.eq(1).attr('name'), 'dataValue', 'first input has correct name');
+        assert.strictEqual($inputs.eq(1).val(), dataValueText, 'first input has correct value');
+
+        $form.remove();
     });
 
 });

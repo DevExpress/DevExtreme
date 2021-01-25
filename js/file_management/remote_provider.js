@@ -32,6 +32,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         super(options);
         this._endpointUrl = options.endpointUrl;
         this._beforeAjaxSend = options.beforeAjaxSend;
+        this._beforeSubmit = options.beforeSubmit;
         this._requestHeaders = options.requestHeaders;
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
     }
@@ -119,7 +120,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         };
         const deferred = new Deferred();
 
-        this._beforeSend(ajaxSettings);
+        this._beforeSendInternal(ajaxSettings);
         ajax.sendRequest(ajaxSettings)
             .done(result => {
                 !result.success && deferred.reject(result) || deferred.resolve();
@@ -142,14 +143,13 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
                 method: 'post',
                 action: args.url
             });
+        const formDataEntries = {
+            command: args.command,
+            arguments: args.arguments
+        };
 
-        ['command', 'arguments'].forEach(name => {
-            $('<input>').attr({
-                type: 'hidden',
-                name,
-                value: args[name]
-            }).appendTo($form);
-        });
+        this._beforeSubmitInternal(formDataEntries);
+        this._appendFormDataInputsToForm(formDataEntries, $form);
 
         $form.appendTo('body');
 
@@ -178,7 +178,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
             cache: false
         };
 
-        this._beforeSend(ajaxSettings);
+        this._beforeSendInternal(ajaxSettings);
         return ajax.sendRequest(ajaxSettings);
     }
 
@@ -210,7 +210,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
             cache: false
         };
 
-        this._beforeSend(ajaxSettings);
+        this._beforeSendInternal(ajaxSettings);
         ajax.sendRequest(ajaxSettings).then(result => {
             !result.success && deferred.reject(result) || deferred.resolve(result);
         },
@@ -218,7 +218,13 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         return deferred.promise();
     }
 
-    _beforeSend(ajaxSettings) {
+    _beforeSubmitInternal(formDataEntries) {
+        if(isFunction(this._beforeSubmit)) {
+            this._beforeSubmit({ formData: formDataEntries });
+        }
+    }
+
+    _beforeSendInternal(ajaxSettings) {
         if(isFunction(this._beforeAjaxSend)) {
             const ajaxArguments = {
                 headers: ajaxSettings.headers,
@@ -246,6 +252,18 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
             }
         }
         return formData;
+    }
+
+    _appendFormDataInputsToForm(formDataEntries, formElement) {
+        for(const entryName in formDataEntries) {
+            if(Object.prototype.hasOwnProperty.call(formDataEntries, entryName) && isDefined(formDataEntries[entryName])) {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: entryName,
+                    value: formDataEntries[entryName]
+                }).appendTo(formElement);
+            }
+        }
     }
 
     _getEndpointUrl(command, args) {

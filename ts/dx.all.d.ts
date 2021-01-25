@@ -2939,7 +2939,11 @@ declare module DevExpress.fileManagement {
         /**
          * [descr:RemoteFileSystemProvider.Options.beforeAjaxSend]
          */
-        beforeAjaxSend?: ((options: { headers?: any, xhrFields?: any, formData?: string }) => any);
+        beforeAjaxSend?: ((options: { headers?: any, xhrFields?: any, formData?: any }) => any);
+        /**
+         * [descr:RemoteFileSystemProvider.Options.beforeSubmit]
+         */
+        beforeSubmit?: ((options: { formData?: any }) => any);
         /**
          * [descr:RemoteFileSystemProvider.Options.endpointUrl]
          */
