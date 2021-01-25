@@ -21,6 +21,8 @@ import {
   SCROLLABLE_SCROLLBAR_SIMULATED,
   SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
   SCROLLABLE_SCROLLBARS_HIDDEN,
+  DIRECTION_HORIZONTAL,
+  DIRECTION_VERTICAL,
 } from '../scrollable_utils';
 
 import {
@@ -51,14 +53,14 @@ jest.mock('../../../../core/devices', () => {
   return actualDevices;
 });
 
-[{
+each([{
   viewFunction: viewFunctionNative,
   Scrollable: ScrollableNative,
 }, {
   viewFunction: viewFunctionSimulated,
   Scrollable: ScrollableSimulated,
-}].forEach(({ viewFunction, Scrollable }) => {
-  describe('Scrollable', () => {
+}]).describe('Scrollable', ({ viewFunction, Scrollable }) => {
+  describe(`${Scrollable === ScrollableNative ? 'Native' : 'Simulated'}`, () => {
     describe('Render', () => {
       it('should render scrollable content', () => {
         const scrollable = shallow(viewFunction({ props: { } } as any) as JSX.Element);
@@ -379,15 +381,69 @@ jest.mock('../../../../core/devices', () => {
           it('should subscribe to scrollinit event', () => {
             const e = { ...defaultEvent };
             const scrollable = new Scrollable({ direction });
-            const initHandler = jest.fn();
-            (scrollable as any).initHandler = initHandler;
+            const handleInit = jest.fn();
+            (scrollable as any).handleInit = handleInit;
 
             scrollable.initEffect();
             emit('dxscrollinit', e);
 
-            expect(initHandler).toHaveBeenCalledTimes(1);
-            expect(initHandler).toHaveBeenCalledWith(e);
+            expect(handleInit).toHaveBeenCalledTimes(1);
+            expect(handleInit).toHaveBeenCalledWith(e);
           });
+
+          if (Scrollable === ScrollableSimulated) {
+            each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
+              each(['dx-scrollable-scrollbar', 'dx-scrollable-scroll', 'dx-scrollable-scroll-content', 'dx-scrollable-container']).describe('Event target: %o', (targetClass) => {
+                each([true, false]).describe('ScrollByThumb: %o', (scrollByThumb) => {
+                  each([true, false]).describe('ScrollByContent: %o', (scrollByContent) => {
+                    it('should prepare directions on init', () => {
+                      const e = { ...defaultEvent, originalEvent: {} };
+                      if (isDxWheelEvent) {
+                        (e as any).originalEvent.type = 'dxmousewheel';
+                      }
+
+                      const viewModel = new Scrollable({
+                        direction, scrollByThumb, scrollByContent,
+                      });
+                      const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+                      const scrollbar = scrollable.find(Scrollbar);
+
+                      (e.originalEvent as any).target = scrollable.find(`.${targetClass}`).at(0).getDOMNode();
+
+                      if (direction === DIRECTION_VERTICAL) {
+                        (viewModel as any).verticalScrollbarRef = scrollbar.instance();
+                      } else if (direction === DIRECTION_HORIZONTAL) {
+                        (viewModel as any).horizontalScrollbarRef = scrollbar.instance();
+                      } else {
+                        (viewModel as any).horizontalScrollbarRef = scrollbar.at(0).instance();
+                        (viewModel as any).verticalScrollbarRef = scrollbar.at(1).instance();
+                      }
+
+                      expect((viewModel as any).validDirections).toEqual({});
+
+                      viewModel.initEffect();
+                      emit('dxscrollinit', e);
+
+                      if (isDxWheelEvent) {
+                        expect((viewModel as any).validDirections).toEqual({
+                          vertical: true,
+                          horizontal: true,
+                        });
+                      } else {
+                        const isDirectionValid = (scrollByContent || scrollByThumb)
+                        && ((targetClass !== 'dx-scrollable-scrollbar' && targetClass !== 'dx-scrollable-container') || !scrollByThumb || scrollByContent);
+
+                        expect((viewModel as any).validDirections).toEqual({
+                          vertical: direction !== DIRECTION_HORIZONTAL && isDirectionValid,
+                          horizontal: direction !== DIRECTION_VERTICAL && isDirectionValid,
+                        });
+                      }
+                    });
+                  });
+                });
+              });
+            });
+          }
 
           each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
             each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
@@ -1656,6 +1712,31 @@ jest.mock('../../../../core/devices', () => {
             expect(scrollable.clientWidth()).toEqual(120);
           });
         });
+
+        if (Scrollable === ScrollableSimulated) {
+          describe('isContent', () => {
+            it('element is scrollable container', () => {
+              const viewModel = new Scrollable({ direction: 'vertical' });
+
+              const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+              expect(viewModel.isContent(scrollable.find('.dx-scrollable-container').getDOMNode())).toBe(true);
+            });
+
+            it('element is scrollbar', () => {
+              const viewModel = new Scrollable({ direction: 'vertical' });
+
+              const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+              expect(viewModel.isContent(scrollable.find('.dx-scrollable-scrollbar').getDOMNode())).toBe(true);
+            });
+
+            it('element is not inside scrollable', () => {
+              const viewModel = new Scrollable({ direction: 'vertical' });
+
+              mount(viewFunction(viewModel as any) as JSX.Element);
+              expect(viewModel.isContent(mount(<div />).getDOMNode())).toBe(false);
+            });
+          });
+        }
       });
     });
 

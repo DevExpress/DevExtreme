@@ -15,6 +15,7 @@ export const SCROLL_LINE_HEIGHT = 40;
 export const DIRECTION_VERTICAL = 'vertical';
 export const DIRECTION_HORIZONTAL = 'horizontal';
 export const DIRECTION_BOTH = 'both';
+export const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 export const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 export const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
 export const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';

@@ -114,24 +114,26 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     return (): void => dxPointerUp.off(this.scrollRef, { namespace });
   }
 
-  @Method()
   // eslint-disable-next-line class-methods-use-this
   isThumb(element: HTMLDivElement): boolean {
     return element.classList.contains(SCROLLABLE_SCROLL_CLASS)
     || element.classList.contains(SCROLLABLE_SCROLL_CONTENT_CLASS);
   }
 
-  @Method()
   isScrollbar(element: HTMLDivElement): boolean {
     return element === this.scrollbarRef;
   }
 
   @Method()
-  // eslint-disable-next-line class-methods-use-this
-  isContent(element: HTMLDivElement): boolean {
-    return element.classList.contains(SCROLLABLE_SCROLLBAR_CLASS)
-    || element.classList.contains(SCROLLABLE_SCROLL_CLASS)
-    || element.classList.contains(SCROLLABLE_SCROLL_CONTENT_CLASS);
+  validateEvent(event): boolean {
+    const { target } = event.originalEvent;
+
+    return (this.isThumb(target) || this.isScrollbar(target));
+  }
+
+  @Method()
+  getDirection(): string {
+    return this.props.direction;
   }
 
   private feedbackOn(): void {
