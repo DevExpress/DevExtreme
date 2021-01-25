@@ -7,22 +7,37 @@
     :height="600"
     :start-day-hour="9"
     current-view="agenda"
-  />
+  >
+    <DxResource
+      :data-source="owners"
+      :use-color-as-default="true"
+      field-expr="ownerId"
+      label="Owner"
+    />
+    <DxResource
+      :data-source="priorities"
+      field-expr="priorityId"
+      label="Priority"
+    />
+  </DxScheduler>
 </template>
 <script>
-import { DxScheduler } from 'devextreme-vue/scheduler';
+import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
 
-import { data } from './data.js';
+import { data, owners, priorities } from './data.js';
 
 export default {
   components: {
-    DxScheduler
+    DxScheduler,
+    DxResource
   },
   data() {
     return {
       views: ['agenda'],
       currentDate: new Date(2021, 4, 11),
-      dataSource: data
+      dataSource: data,
+      owners: owners,
+      priorities: priorities,
     };
   }
 };

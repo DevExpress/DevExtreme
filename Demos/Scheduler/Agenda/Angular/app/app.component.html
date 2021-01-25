@@ -6,4 +6,17 @@
     [currentDate]="currentDate"
     [startDayHour]="9"
     [height]="600">
+    <dxi-resource
+        fieldExpr="ownerId"
+        label="Owner"
+        [allowMultiple]="true"
+        [dataSource]="owners"
+        [useColorAsDefault]="true">
+    </dxi-resource>
+    <dxi-resource
+        fieldExpr="priorityId"
+        label="Priority"
+        [allowMultiple]="true"
+        [dataSource]="priorities">
+    </dxi-resource>
 </dx-scheduler>
