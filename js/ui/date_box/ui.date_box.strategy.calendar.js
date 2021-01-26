@@ -118,7 +118,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                     onInitialized: function(e) {
                         e.component.registerKeyHandler('escape', this._escapeHandler.bind(this));
                     }.bind(this),
-                    onClick: (function() { this._widget._toTodayView(); }).bind(this),
+                    onClick: (function(args) { this._widget._toTodayView(args); }).bind(this),
                     text: messageLocalization.format('dxCalendar-todayButtonText'),
                     type: 'today'
                 }
