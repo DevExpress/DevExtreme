@@ -511,7 +511,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return isDefined(element.closest('.dx-scrollable-simulated'));
   }
 
-  eventHandler(handler: (scrollbarInstance: RefObject<any>) => dxPromise<void>): dxPromise<void> {
+  eventHandler(handler: (scrollbarInstance: any) => dxPromise<void>): dxPromise<void> {
     const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
     const deferreds: ReturnType<typeof handler>[] = [];
 
