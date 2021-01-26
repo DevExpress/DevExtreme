@@ -269,7 +269,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
         this.provider.getItems(new FileSystemItem('Root/Files', true)).done(done);
     });
 
-    test('custom request post data API', function(assert) {
+    test('custom request get data API', function(assert) {
         const done = assert.async();
         const tokenValue = 'someTokenValue';
         const dataValueText = 'newValue';
@@ -288,6 +288,36 @@ QUnit.module('Remote Provider', moduleConfig, () => {
                 success: true
             },
             callback: request => {
+                assert.strictEqual(request.method, 'GET', 'request method is GET');
+                assert.strictEqual(request.headers.RequestVerificationToken, tokenValue, 'custom header presents');
+                assert.strictEqual(request.data, undefined, 'formData absents in get request');
+                assert.ok(request.xhrFields.withCredentials, 'custom xhr field presents');
+            }
+        });
+
+        this.provider.getItems(new FileSystemItem('Root/Files', true)).done(done);
+    });
+
+    test('custom request post data API', function(assert) {
+        const done = assert.async();
+        const tokenValue = 'someTokenValue';
+        const dataValueText = 'newValue';
+        createProvider(this, extend(this.options, {
+            beforeAjaxSend: function({ headers, formData, xhrFields }) {
+                headers.RequestVerificationToken = tokenValue;
+                formData.dataValue = dataValueText;
+                xhrFields.withCredentials = true;
+            }
+        }));
+
+        ajaxMock.setup({
+            url: this.options.endpointUrl,
+            responseText: {
+                result: itemData,
+                success: true
+            },
+            callback: request => {
+                assert.strictEqual(request.method, 'POST', 'request method is POST');
                 assert.strictEqual(request.headers.RequestVerificationToken, tokenValue, 'custom header presents');
                 if(browser.msie) {
                     assert.ok(true, 'IE does not support FormData.get()');
@@ -298,7 +328,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             }
         });
 
-        this.provider.getItems(new FileSystemItem('Root/Files', true)).done(done);
+        this.provider.getItemsContent([new FileSystemItem(filesPathInfo, 'Article.txt')]).done(done);
     });
 
     test('custom request submit data API', function(assert) {

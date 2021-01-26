@@ -24,6 +24,10 @@ const FILE_SYSTEM_COMMNAD = {
     ABORT_UPLOAD: 'AbortUpload',
     DOWLOAD: 'Download'
 };
+const REQUEST_METHOD = {
+    GET: 'GET',
+    POST: 'POST'
+};
 
 class RemoteFileSystemProvider extends FileSystemProviderBase {
 
@@ -103,7 +107,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         const ajaxSettings = {
             url: this._endpointUrl,
             headers: this._requestHeaders || {},
-            method: 'POST',
+            method: REQUEST_METHOD.POST,
             dataType: 'json',
             data: {
                 [FILE_CHUNK_BLOB_NAME]: chunksInfo.chunkBlob,
@@ -140,7 +144,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         const $form = $('<form>')
             .css({ display: 'none' })
             .attr({
-                method: 'post',
+                method: REQUEST_METHOD.POST,
                 action: args.url
             });
         const formDataEntries = {
@@ -163,7 +167,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         const ajaxSettings = {
             url: args.url,
             headers: this._requestHeaders || {},
-            method: 'POST',
+            method: REQUEST_METHOD.POST,
             responseType: 'arraybuffer',
             data: {
                 command: args.command,
@@ -198,7 +202,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     }
 
     _executeRequest(command, args) {
-        const method = command === FILE_SYSTEM_COMMNAD.GET_DIR_CONTENTS ? 'GET' : 'POST';
+        const method = command === FILE_SYSTEM_COMMNAD.GET_DIR_CONTENTS ? REQUEST_METHOD.GET : REQUEST_METHOD.POST;
         const deferred = new Deferred();
         const ajaxSettings = {
             url: this._getEndpointUrl(command, args),
@@ -237,7 +241,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
             ajaxSettings.data = ajaxArguments.formData;
             ajaxSettings.xhrFields = ajaxArguments.xhrFields;
         }
-        if(!isEmptyObject(ajaxSettings.data)) {
+        if(!isEmptyObject(ajaxSettings.data) && ajaxSettings.method === REQUEST_METHOD.POST) {
             ajaxSettings.data = this._createFormData(ajaxSettings.data);
         } else {
             delete ajaxSettings.data;
