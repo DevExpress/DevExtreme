@@ -585,7 +585,7 @@ function() {
     });
 
     // T966318
-    QUnit.test('Pager does not display duplicated page numbers', function(assert) {
+    QUnit.test('Pager displays duplicated page numbers', function(assert) {
         const $pager = $('#container').dxPager({
             pageSizes: [10, 20, 50],
             pageSize: 50,
