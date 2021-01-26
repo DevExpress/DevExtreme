@@ -1386,7 +1386,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 groupOrientation: this.option('groupOrientation'),
                 resourceCellTemplate: this.option('resourceCellTemplate'),
                 className: this.verticalGroupTableClass,
-                baseColSpan: this.isGroupedByDate()
+                groupPanelCellBaseColSpan: this.isGroupedByDate()
                     ? 1
                     : this._getCellCount(),
                 columnCountPerGroup: this._getCellCount(),
