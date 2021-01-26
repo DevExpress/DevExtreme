@@ -3846,7 +3846,9 @@ QUnit.module('valueChanged handler should receive correct event', {
             const event = this.valueChangedHandler.getCall(0).args[0].event;
             assert.strictEqual(event.type, type, 'event type is correct');
             assert.strictEqual(event.target, target.get(0), 'event target is correct');
-            assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
         };
     },
     afterEach: function() {
