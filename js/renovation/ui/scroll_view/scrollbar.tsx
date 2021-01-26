@@ -30,6 +30,8 @@ import {
   dxPointerUp,
 } from '../../../events/short';
 
+import BaseWidgetProps from '../../utils/base_props';
+
 const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
 const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
 const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
@@ -40,6 +42,7 @@ const THUMB_MIN_SIZE = 15;
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
     cssClasses, styles, scrollRef, scrollbarRef, hoverStateEnabled,
+    isVisible,
     props: { activeStateEnabled },
     restAttributes,
   } = viewModel;
@@ -50,6 +53,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
       classes={cssClasses}
       activeStateEnabled={activeStateEnabled}
       hoverStateEnabled={hoverStateEnabled}
+      visible={isVisible}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
@@ -60,12 +64,13 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   );
 };
 
+type ScrollbarPropsType = ScrollbarProps & Pick<BaseWidgetProps, 'visible'>;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
 
-export class Scrollbar extends JSXComponent<ScrollbarProps>() {
+export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @InternalState() active = false;
 
   @InternalState() cachedVariables = {
@@ -78,9 +83,9 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
 
   @Method()
   moveTo(location): void {
-    const { visibilityMode } = this.props;
+    const { showScrollbar } = this.props;
 
-    if (visibilityMode === 'never') {
+    if (showScrollbar === 'never') {
       return;
     }
 
@@ -339,6 +344,12 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     return (contentSize ? containerSize / contentSize : containerSize);
   }
 
+  baseContainerToContentRatio(): number {
+    const { baseContainerSize, baseContentSize } = this.props;
+
+    return (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
+  }
+
   private getDimension(): string {
     return this.props.direction === DIRECTION_HORIZONTAL ? 'width' : 'height';
   }
@@ -368,7 +379,6 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
 
     return {
       ...style,
-      display: this.props.needScrollbar ? '' : 'none',
       [this.getDimension()]: this.thumbSize() || THUMB_MIN_SIZE,
     };
   }
@@ -376,12 +386,16 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
   get scrollClasses(): string {
     return combineClasses({
       [SCROLLABLE_SCROLL_CLASS]: true,
-      'dx-state-invisible': !this.props.visible,
+      'dx-state-invisible': !(this.props.visible && this.baseContainerToContentRatio() < 1),
     });
   }
 
+  get isVisible(): boolean {
+    return this.props.showScrollbar !== 'never' && this.baseContainerToContentRatio() < 1;
+  }
+
   get hoverStateEnabled(): boolean {
-    const { visibilityMode, expandable } = this.props;
-    return (visibilityMode === 'onHover' || visibilityMode === 'always') && expandable;
+    const { showScrollbar, scrollByThumb } = this.props;
+    return (showScrollbar === 'onHover' || showScrollbar === 'always') && scrollByThumb;
   }
 }

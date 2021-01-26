@@ -14,8 +14,6 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() expandable = true;
 
-  @OneWay() visible = false;
-
   @OneWay() visibilityMode: ScrollableShowScrollbar = 'onScroll';
 
   @OneWay() direction: ScrollableDirection = 'vertical';
@@ -28,6 +26,10 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() contentSize = 0;
 
+  @OneWay() baseContainerSize = 0;
+
+  @OneWay() baseContentSize = 0;
+
   @OneWay() scrollableOffset = 0;
 
   @OneWay() containerRef: any;
@@ -37,4 +39,6 @@ export class ScrollbarProps extends ScrollableInternalProps {
   @OneWay() bounceEnabled = true;
 
   @OneWay() scrollByThumb = false;
+
+  @OneWay() scrollScrollbar: ScrollableShowScrollbar = 'onScroll';
 }

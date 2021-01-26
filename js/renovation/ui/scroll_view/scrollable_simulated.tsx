@@ -31,7 +31,7 @@ import {
 import { TopPocketProps } from './top_pocket_props';
 import { BottomPocketProps } from './bottom_pocket_props';
 import {
-  ScrollableLocation, ScrollableShowScrollbar, ScrollOffset,
+  ScrollableLocation, ScrollOffset,
   allowedDirection, ScrollEventArgs,
 } from './types.d';
 
@@ -79,22 +79,16 @@ const KEY_CODES = {
   TAB: 'tab',
 };
 
-function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
-  if (mode === true) {
-    return 'onScroll';
-  }
-  return (mode === false) ? 'never' : mode;
-}
-
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
     horizontalScrollbarRef, verticalScrollbarRef,
     cursorEnterHandler, cursorLeaveHandler,
+    isScrollbarVisible,
     scaleRatioWidth, scaleRatioHeight,
-    isScrollbarVisible, needScrollbar,
     scrollableOffsetLeft, scrollableOffsetTop,
     contentWidth, containerWidth, contentHeight, containerHeight,
+    baseContentWidth, baseContainerWidth, baseContentHeight, baseContainerHeight,
     scrollableRef,
     props: {
       disabled, height, width, rtlEnabled, children,
@@ -109,7 +103,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const isVertical = targetDirection !== 'horizontal';
   const isHorizontal = targetDirection !== 'vertical';
 
-  const visibilityMode = visibilityModeNormalize(showScrollbar);
   return (
     <Widget
       rootElementRef={scrollableRef}
@@ -157,13 +150,13 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               scrollableOffset={scrollableOffsetLeft}
               contentSize={contentWidth}
               containerSize={containerWidth}
+              baseContentSize={baseContentWidth}
+              baseContainerSize={baseContainerWidth}
               direction="horizontal"
               visible={isScrollbarVisible}
-              visibilityMode={visibilityMode}
               scrollByThumb={scrollByThumb}
-              expandable={scrollByThumb}
               bounceEnabled={bounceEnabled}
-              needScrollbar={needScrollbar}
+              showScrollbar={showScrollbar}
             />
           )}
           {isVertical && (
@@ -175,13 +168,13 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               scrollableOffset={scrollableOffsetTop}
               contentSize={contentHeight}
               containerSize={containerHeight}
+              baseContentSize={baseContentHeight}
+              baseContainerSize={baseContainerHeight}
               direction="vertical"
               visible={isScrollbarVisible}
-              visibilityMode={visibilityMode}
               scrollByThumb={scrollByThumb}
-              expandable={scrollByThumb}
               bounceEnabled={bounceEnabled}
-              needScrollbar={needScrollbar}
+              showScrollbar={showScrollbar}
             />
           )}
         </div>
@@ -224,8 +217,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() isHovered = false;
 
-  @InternalState() baseContainerToContentRatio = 0;
-
   @InternalState() scaleRatioWidth;
 
   @InternalState() scaleRatioHeight;
@@ -241,6 +232,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @InternalState() containerWidth = 0;
 
   @InternalState() containerHeight = 0;
+
+  @InternalState() baseContentWidth = 0;
+
+  @InternalState() baseContentHeight = 0;
+
+  @InternalState() baseContainerWidth = 0;
+
+  @InternalState() baseContainerHeight = 0;
 
   @InternalState() validDirections = {};
 
@@ -759,29 +758,27 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return this.props.showScrollbar === 'onHover';
   }
 
-  get isScrollbarVisible(): boolean | undefined {
+  get isScrollbarVisible(): boolean {
     return this.adjustVisibility();
   }
 
-  adjustVisibility(visible?: boolean): boolean | undefined {
-    if (this.baseContainerToContentRatio && !this.needScrollbar) {
+  adjustVisibility(): boolean {
+    const { showScrollbar } = this.props;
+
+    if (showScrollbar === 'never') {
       return false;
     }
-
-    switch (this.props.showScrollbar) {
-      case 'onScroll':
-        break;
-      case 'onHover':
-        return visible || this.isHovered;
-      case 'never':
-        return false;
-      case 'always':
-        return true;
-      default:
-          // do nothing
+    if (showScrollbar === 'onHover') {
+      return this.isHovered;
+    }
+    if (showScrollbar === 'onScroll') {
+      return true; // TODO
+    }
+    if (showScrollbar === 'always') {
+      return true;
     }
 
-    return visible;
+    return false;
   }
 
   @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
@@ -790,16 +787,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.scaleRatioWidth = this.getScaleRatio('width');
     this.contentWidth = this.contentSize('width');
     this.containerWidth = this.containerSize('width');
+    this.baseContentWidth = Math.round(this.getBaseDimension(this.contentRef, 'width'));
+    this.baseContainerWidth = Math.round(this.getBaseDimension(this.containerRef, 'width'));
     this.scrollableOffsetLeft = scrollableOffset.left;
 
     this.scaleRatioHeight = this.getScaleRatio('height');
     this.contentHeight = this.contentSize('height');
     this.containerHeight = this.containerSize('height');
+    this.baseContentHeight = Math.round(this.getBaseDimension(this.contentRef, 'height'));
+    this.baseContainerHeight = Math.round(this.getBaseDimension(this.containerRef, 'height'));
     this.scrollableOffsetTop = scrollableOffset.top;
-  }
-
-  get needScrollbar(): boolean {
-    return this.props.showScrollbar !== 'never' && (this.baseContainerToContentRatio < 1);
   }
 
   get cssClasses(): string {
