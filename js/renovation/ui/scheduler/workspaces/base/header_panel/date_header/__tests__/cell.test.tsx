@@ -1,15 +1,19 @@
 import { shallow } from 'enzyme';
+import { combineClasses } from '../../../../../../../utils/combine_classes';
+import { getGroupCellClasses } from '../../../../utils';
 import {
-  MonthHeaderPanelCell as Cell,
+  DateHeaderCell,
   viewFunction as CellView,
 } from '../cell';
-import dateLocalization from '../../../../../../../localization/date';
 
-jest.mock('../../../../../../../localization/date', () => ({
-  getDayNames: jest.fn(() => [0, 1, 2, 3, 4, 5, 6, 7]),
+jest.mock('../../../../../../../utils/combine_classes', () => ({
+  combineClasses: jest.fn(() => 'combineClasses'),
+}));
+jest.mock('../../../../utils', () => ({
+  getGroupCellClasses: jest.fn(() => 'getGroupCellClasses'),
 }));
 
-describe('MonthHeaderPanelCell', () => {
+describe('DateHeaderCell', () => {
   describe('Render', () => {
     const startDate = new Date(2020, 6, 9);
     const endDate = new Date(2020, 6, 10);
@@ -22,14 +26,10 @@ describe('MonthHeaderPanelCell', () => {
       },
     }) as any);
 
-    it('should pass correct class', () => {
-      const cell = render({ props: { className: 'test' } });
+    it('should pass classes to the root component', () => {
+      const cell = render({ classes: 'test-class' });
 
-      expect(cell.hasClass('dx-scheduler-header-panel-cell'))
-        .toBe(true);
-      expect(cell.hasClass('dx-scheduler-cell-sizes-horizontal'))
-        .toBe(true);
-      expect(cell.hasClass('test'))
+      expect(cell.hasClass('test-class'))
         .toBe(true);
     });
 
@@ -40,13 +40,22 @@ describe('MonthHeaderPanelCell', () => {
         .toBe('customAttribute');
     });
 
-    it('should render week day correctly', () => {
-      const cell = render({ weekDay: 'week day' });
+    it('should pass correct attributes', () => {
+      const cell = render({ props: { colSpan: 3, text: 'Test' } });
+
+      expect(cell.prop('colSpan'))
+        .toBe(3);
+      expect(cell.prop('title'))
+        .toBe('Test');
+    });
+
+    it('should render text', () => {
+      const cell = render({ props: { text: 'Test text' } });
 
       expect(cell.children())
         .toHaveLength(1);
       expect(cell.childAt(0).text())
-        .toBe('week day');
+        .toBe('Test text');
     });
 
     it('should render template and should not render children', () => {
@@ -92,15 +101,28 @@ describe('MonthHeaderPanelCell', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      describe('weekDay', () => {
-        it('should call getDayNames with correct parameter and choose correct day name', () => {
-          const cell = new Cell({ startDate: new Date(2020, 6, 9), index: 0 });
+      describe('classes', () => {
+        test('should call "combineClasses" and "getGroupCellClasses" with correct parameters', () => {
+          const cell = new DateHeaderCell({
+            isFirstGroupCell: 'isFirstGroupCell',
+            isLastGroupCell: 'isLastGroupCell',
+            today: 'today',
+            className: 'class',
+          } as any);
 
-          const { weekDay } = cell;
-          expect(dateLocalization.getDayNames)
-            .toHaveBeenCalledWith('abbreviated');
-          expect(weekDay)
-            .toBe(4);
+          expect(cell.classes)
+            .toBe('getGroupCellClasses');
+
+          expect(combineClasses)
+            .toHaveBeenCalledWith({
+              'dx-scheduler-header-panel-cell': true,
+              'dx-scheduler-cell-sizes-horizontal': true,
+              'dx-scheduler-header-panel-current-time-cell': 'today',
+              class: true,
+            });
+
+          expect(getGroupCellClasses)
+            .toHaveBeenCalledWith('isFirstGroupCell', 'isLastGroupCell', 'combineClasses');
         });
       });
     });

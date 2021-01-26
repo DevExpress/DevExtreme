@@ -3691,29 +3691,6 @@ QUnit.module('Scrolling to time', () => {
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 
-    QUnit.test('Scheduler should have specific dateCellTemplate setting of the view', function(assert) {
-        let countCallTemplate1 = 0;
-        let countCallTemplate2 = 0;
-
-        this.createInstance({
-            dataSource: [],
-            views: [{
-                type: 'week',
-                dateCellTemplate: function(item, index, container) {
-                    assert.equal(isRenderer(container), !!config().useJQuery, 'element is correct');
-                    countCallTemplate2++;
-                }
-            }],
-            dateCellTemplate: function() {
-                countCallTemplate1++;
-            },
-            currentView: 'week'
-        });
-
-        assert.equal(countCallTemplate1, 0, 'count call first template');
-        assert.notEqual(countCallTemplate2, 0, 'count call second template');
-    });
-
     QUnit.test('Scheduler should have specific timeCellTemplate setting of the view', function(assert) {
         let countCallTemplate1 = 0;
         let countCallTemplate2 = 0;

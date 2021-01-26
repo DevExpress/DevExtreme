@@ -639,6 +639,19 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             }
         );
     }
+
+    // Remove when dateHeader is renovated
+    renderRWorkspace(isGenerateNewViewData = true) {
+        this._cleanAllowedPositions();
+
+        this.viewDataProvider.update(isGenerateNewViewData);
+
+        this.renderRDateTable();
+
+        this.updateRSelection();
+
+        this.virtualScrollingDispatcher?.updateDimensions();
+    }
 }
 
 registerComponent('dxSchedulerTimeline', SchedulerTimeline);
