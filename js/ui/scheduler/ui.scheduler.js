@@ -42,7 +42,7 @@ import { hide as hideLoading, show as showLoading } from './ui.loading';
 import AppointmentCollection from './appointments/appointmentCollection';
 import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
 import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
-import SchedulerHeader from './ui.scheduler.header';
+import { Header } from './header/header';
 import SchedulerResourceManager from './ui.scheduler.resource_manager';
 import subscribes from './ui.scheduler.subscribes';
 import { getRecurrenceProcessor } from './recurrence';
@@ -1308,7 +1308,7 @@ class Scheduler extends Widget {
 
     _renderHeader() {
         const $header = $('<div>').appendTo(this.$element());
-        this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
+        this._header = this._createComponent($header, Header, this._headerConfig());
     }
 
     _headerConfig() {
