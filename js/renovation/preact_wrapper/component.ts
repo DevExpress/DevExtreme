@@ -52,7 +52,6 @@ export default class PreactWrapper extends DOMComponent {
       true,
       super._getDefaultOptions(),
       this._viewComponent.defaultProps,
-      {contentTemplate: null},
       this._propsInfo.twoWay.reduce(
         (
           options: { [name: string]: unknown },
@@ -66,14 +65,14 @@ export default class PreactWrapper extends DOMComponent {
       ),
       this._propsInfo.templates.reduce(
         (
-          options: { [name: string]: unknown},
+          options: { [name: string]: unknown },
           name
         ) => ({
-            ...options,
-            [name]: null
+          ...options,
+          [name]: null
         }),
         {}
-        )
+      )
     );
   }
 
