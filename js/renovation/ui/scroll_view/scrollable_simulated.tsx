@@ -597,7 +597,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return scaleRatio;
   }
 
-  private validate(event: Event): boolean {
+  private validate(e: Event): boolean {
     if (this.props.disabled) {
       return false;
     }
@@ -606,23 +606,23 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return true;
     }
 
-    return isDxMouseWheelEvent(event)
-      ? this.validateWheel(event)
-      : this.validateMove(event);
+    return isDxMouseWheelEvent(e)
+      ? this.validateWheel(e)
+      : this.validateMove(e);
   }
 
   // eslint-disable-next-line
-  private validateWheel(event: Event): boolean {
+  private validateWheel(e: Event): boolean {
     return true; // TODO:
   }
 
-  private validateMove(event: Event): boolean {
+  private validateMove(e: Event): boolean {
     if (!this.props.scrollByContent
-      && (event.target as HTMLElement).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`) === null) {
+      && !isDefined((e.target as HTMLElement).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`))) {
       return false;
     }
 
-    return this.allowedDirection() !== undefined;
+    return isDefined(this.allowedDirection());
   }
 
   onWidgetKeyDown(options): Event | undefined {
