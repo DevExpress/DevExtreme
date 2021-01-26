@@ -372,6 +372,39 @@ export default class ResourceManager {
         return false;
     }
 
+    _getPlainResourcesByAppointment(rawAppointment) {
+        const result = [];
+
+        this.getResources().forEach(resource => {
+            const valueGetter = compileGetter(getValueExpr(resource));
+            const displayGetter = compileGetter(getDisplayExpr(resource));
+
+            const resourceFieldName = this.getField(resource);
+            const resourceValue = rawAppointment[resourceFieldName];
+            if(resourceValue !== undefined) {
+                const items = this.getResources().filter(resource => {
+                    return this.getField(resource) === resourceFieldName;
+                })[0].dataSource;
+
+                const resultValue = [];
+                wrapToArray(resourceValue).forEach(value => {
+                    items.forEach(item => {
+                        if(valueGetter(item) === value) {
+                            resultValue.push(displayGetter(item));
+                        }
+                    });
+                });
+
+                result.push({
+                    label: resource.label || resourceFieldName,
+                    values: resultValue
+                });
+            }
+        });
+
+        return result;
+    }
+
     _getResourceDataByField(fieldName) {
         const loadedResources = this.getResourcesData();
         let currentResourceData = [];
@@ -484,30 +517,51 @@ export default class ResourceManager {
     getResourcesDataByGroups(groups) {
         const resourcesData = this.getResourcesData();
 
-        if(!groups) {
+        if(!groups || !groups.length) {
             return resourcesData;
         }
 
-        const fieldNames = Object.getOwnPropertyNames(groups);
-        const resourceData = resourcesData.filter(item => fieldNames.indexOf(item.name) !== -1);
+        const fieldNames = {};
         const currentResourcesData = [];
 
+        groups.forEach(group => {
+            each(group, (name, value) => fieldNames[name] = value);
+        });
+
+        const resourceData = resourcesData.filter(({ name }) => isDefined(fieldNames[name]));
         resourceData.forEach(
             data => currentResourcesData.push(extend({}, data))
         );
 
-        each(groups, (_, value) => {
-            currentResourcesData.forEach(resourceData => {
+        currentResourcesData.forEach(currentResource => {
+            const {
+                items,
+                data,
+                name: resourceName
+            } = currentResource;
 
-                const { items, data, name } = resourceData;
-                const resource = this.getResourceByField(name);
-                const valueExpr = getValueExpr(resource);
+            const resource = this.getResourceByField(resourceName);
+            const valueExpr = getValueExpr(resource);
+            const filteredItems = [];
+            const filteredData = [];
 
-                const currentItems = items.filter(item => item.id === value);
-                const currentData = data.filter(item => item[valueExpr] === value);
-                resourceData.items = currentItems;
-                resourceData.data = currentData;
-            });
+            groups
+                .filter(group => isDefined(group[resourceName]))
+                .forEach(group => {
+                    each(group, (name, value) => {
+
+                        if(!filteredItems.filter(item => item.id === value && item[valueExpr] === name).length) {
+                            const currentItems = items.filter(item => item.id === value);
+                            const currentData = data.filter(item => item[valueExpr] === value);
+
+                            filteredItems.push(...currentItems);
+                            filteredData.push(...currentData);
+                        }
+                    });
+                });
+
+            currentResource.items = filteredItems;
+            currentResource.data = filteredData;
         });
 
         return currentResourcesData;

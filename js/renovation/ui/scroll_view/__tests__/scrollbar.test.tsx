@@ -1,5 +1,7 @@
+import React from 'react';
 import each from 'jest-each';
 import { mount } from 'enzyme';
+import { isNumeric } from '../../../../core/utils/type';
 
 import {
   clear as clearEventHandlers, emit, getEventHandlers,
@@ -11,18 +13,30 @@ import {
 } from '../scrollbar';
 
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
+import { DIRECTION_HORIZONTAL } from '../scrollable_utils';
+import { ScrollbarProps } from '../scrollbar_props';
 
 const THUMB_MIN_SIZE = 15;
 
 describe('TopPocket', () => {
   describe('Styles', () => {
-    each(['horizontal', 'vertical', 'both', null, undefined]).describe('Direction: %o', (direction) => {
-      each(['never', 'always', 'onScroll', 'onHover', null, undefined]).describe('ShowScrollbar: %o', (visibilityMode) => {
-        it('Should assign styles', () => {
-          const scrollbar = new Scrollbar({ visibilityMode, direction });
-          expect((scrollbar as any).styles).toEqual({
-            display: visibilityMode === 'never' ? 'none' : '',
-            [`${direction === 'horizontal' || direction === 'both' ? 'width' : 'height'}`]: THUMB_MIN_SIZE,
+    each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
+      each([true, false]).describe('needScrollbar: %o', (needScrollbar) => {
+        each(['never', 'always', 'onScroll', 'onHover', null, undefined]).describe('ShowScrollbar: %o', (visibilityMode) => {
+          each(['width', 'height']).describe('Dimension: %o', (dimension) => {
+            it('Should assign styles', () => {
+              const scrollbar = new Scrollbar({
+                visibilityMode,
+                direction,
+                needScrollbar,
+                [dimension]: THUMB_MIN_SIZE,
+              });
+
+              const { styles } = scrollbar as any;
+              expect(styles).toHaveProperty('display', needScrollbar ? '' : 'none');
+              expect(styles).toHaveProperty(dimension, THUMB_MIN_SIZE);
+              expect(styles).toHaveProperty(dimension === 'width' ? 'height' : 'width', undefined);
+            });
           });
         });
       });
@@ -30,7 +44,7 @@ describe('TopPocket', () => {
   });
 
   describe('Classes', () => {
-    each(['horizontal', 'vertical', 'both', null, undefined]).describe('Direction: %o', (direction) => {
+    each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
       each(['never', 'always', 'onScroll', 'onHover', null, undefined]).describe('ShowScrollbar: %o', (visibilityMode) => {
         each([true, false]).describe('Expandable: %o', (expandable) => {
           it('should add scroll hoverable class', () => {
@@ -112,6 +126,98 @@ describe('TopPocket', () => {
       expect(getEventHandlers('dxpointerup').length).toBe(1);
       detach();
       expect(getEventHandlers('dxpointerup').length).toBe(0);
+    });
+  });
+});
+
+describe('Methods', () => {
+  each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
+    it('getDirection()', () => {
+      const viewModel = new Scrollbar({ direction } as ScrollbarProps);
+      expect(viewModel.getDirection()).toBe(direction);
+    });
+
+    each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (visibilityMode) => {
+      each([0.5, 1, 2]).describe('thumbRatio: %o', (thumbRatio) => {
+        each([{ top: -100, left: -100 }, { top: -100 }, { left: -100 }, -100]).describe('Location: %o', (location) => {
+          it('moveTo()', () => {
+            const scrollRef = React.createRef();
+            const viewModel = new Scrollbar({
+              visibilityMode, direction, thumbRatio, needScrollbar: true,
+            });
+            (viewModel as any).scrollRef = scrollRef;
+
+            mount(viewFunction(viewModel as any) as JSX.Element);
+            (viewModel as any).scrollRef = (viewModel as any).scrollRef.current;
+
+            viewModel.moveTo(location);
+
+            const scrollbarStyle = window.getComputedStyle((viewModel as any).scrollRef);
+            if (visibilityMode === 'never') {
+              expect(scrollbarStyle.transform).toEqual('');
+              return;
+            }
+
+            let expectedValue = 0;
+            if (isNumeric(location)) {
+              expectedValue = -location * thumbRatio;
+            } else {
+              expectedValue = -(location[direction === DIRECTION_HORIZONTAL ? 'left' : 'top'] || 0) * thumbRatio;
+            }
+
+            expect(scrollbarStyle).toHaveProperty('transform', direction === DIRECTION_HORIZONTAL ? `translate(${expectedValue}px, 0px)` : `translate(0px, ${expectedValue}px)`);
+          });
+        });
+      });
+
+      it('isScrollbar(element), element is scrollbar element', () => {
+        const scrollbarRef = {} as HTMLDivElement;
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+        (viewModel as any).scrollbarRef = scrollbarRef;
+
+        mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isScrollbar(scrollbarRef)).toBe(true);
+      });
+
+      it('isScrollbar(element), element is not scrollbar element', () => {
+        const scrollbarRef = {} as HTMLDivElement;
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+        (viewModel as any).scrollbarRef = scrollbarRef;
+
+        mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isScrollbar({} as HTMLDivElement)).toBe(false);
+      });
+
+      it('isThumb(element), element is scrollable scroll element', () => {
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+
+        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isThumb(scrollbar.find('.dx-scrollable-scroll').getDOMNode())).toBe(true);
+      });
+
+      it('isThumb(element), element is scrollable content element', () => {
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+
+        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isThumb(scrollbar.find('.dx-scrollable-scroll-content').getDOMNode())).toBe(true);
+      });
+
+      it('isThumb(element), element is scrollbar element', () => {
+        const viewModel = new Scrollbar({
+          visibilityMode, direction, needScrollbar: true,
+        } as ScrollbarProps);
+
+        const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+        expect(viewModel.isThumb(scrollbar.getDOMNode())).toBe(false);
+      });
     });
   });
 });

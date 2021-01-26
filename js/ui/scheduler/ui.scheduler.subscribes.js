@@ -492,20 +492,21 @@ const subscribes = {
     prerenderFilterVirtual: function() {
         const workspace = this.getWorkSpace();
         const isCalculateStartAndEndDayHour = workspace.isDateAndTimeView;
-        const resourcesManager = this._resourcesManager;
 
-        const isAllDaySupported = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();
+        const isAllDayWorkspace = !this._workSpace.supportAllDayRow();
+        const showAllDayAppointments = this.option('showAllDayPanel') || isAllDayWorkspace;
 
         const { viewDataProvider } = workspace;
-        const { groupedData } = viewDataProvider.viewData;
-        const groupedDataToRender = groupedData.filter(({ dateTable }) => dateTable.length > 0);
-        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
         const endViewDate = workspace.getEndViewDateByEndDayHour();
         const filterOptions = [];
 
-        groupedDataToRender.forEach(({ groupIndex, allDayPanel }) => {
-            const startDate = viewDataProvider.getGroupStartDate(groupIndex);
-            const endDate = new Date(Math.min(viewDataProvider.getGroupEndDate(groupIndex), endViewDate));
+        const groupsInfo = viewDataProvider.getGroupsInfo();
+        groupsInfo.forEach((item) => {
+            const groupIndex = item.groupIndex;
+            const startDate = item.startDate;
+            const endDate = new Date(Math.min(item.endDate, endViewDate));
+
+            const groupEndDate = new Date(Math.min(endDate, endViewDate));
             const viewStartDayHour = this._getCurrentViewOption('startDayHour');
             const viewEndDayHour = this._getCurrentViewOption('endDayHour');
             const startDayHour = isCalculateStartAndEndDayHour
@@ -515,12 +516,11 @@ const subscribes = {
                 ? (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY
                 : viewEndDayHour;
 
-            const allDay = (isAllDaySupported !== false) && allDayPanel?.length > 0;
+            const resources = this.fire('_getPrerenderFilterResources', groupIndex);
 
-            const groups = viewDataProvider.getCellsGroup(groupIndex);
-            const groupResources = isVerticalGrouping
-                ? resourcesManager.getResourcesDataByGroups(groups)
-                : resourcesManager.getResourcesData();
+            const allDayPanel = viewDataProvider.getAllDayPanel(groupIndex);
+            // TODO split by workspace strategies
+            const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && allDayPanel?.length > 0);
 
             filterOptions.push({
                 isVirtualScrolling: true,
@@ -529,21 +529,26 @@ const subscribes = {
                 viewStartDayHour,
                 viewEndDayHour,
                 min: startDate,
-                max: endDate,
-                resources: groupResources,
-                allDay: allDay,
+                max: groupEndDate,
+                allDay: supportAllDayAppointment,
+                resources,
                 firstDayOfWeek: this.getFirstDayOfWeek(),
                 recurrenceException: this._getRecurrenceException.bind(this)
             });
         });
 
-        const result = this._appointmentModel.filterLoadedVirtualAppointments(
+        return this._appointmentModel.filterLoadedVirtualAppointments(
             filterOptions,
             this.timeZoneCalculator,
             workspace._getGroupCount()
         );
+    },
+    _getPrerenderFilterResources: function(groupIndex) {
+        const { viewDataProvider } = this.getWorkSpace();
 
-        return result;
+        const cellGroup = viewDataProvider.getCellsGroup(groupIndex);
+
+        return this._resourcesManager.getResourcesDataByGroups([cellGroup]);
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
