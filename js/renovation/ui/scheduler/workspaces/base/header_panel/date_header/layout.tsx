@@ -24,43 +24,45 @@ export const viewFunction = ({
     dateHeaderMap,
     dateCellTemplate,
   },
-}: DateHeader): JSX.Element => (
+}: DateHeaderLayout): JSX.Element => (
   <Fragment>
-    <Row className="dx-scheduler-header-row">
-      {dateHeaderMap[0].map(({
-        startDate,
-        endDate,
-        today,
-        groups: cellGroups,
-        groupIndex,
-        isFirstGroupCell,
-        isLastGroupCell,
-        index,
-        key,
-        text,
-        colSpan,
-      }) => (
-        <DateHeaderCell
-          startDate={startDate}
-          endDate={endDate}
-          groups={isHorizontalGrouping ? cellGroups : undefined}
-          groupIndex={isHorizontalGrouping ? groupIndex : undefined}
-          today={today}
-          index={index}
-          text={text}
-          isFirstGroupCell={isFirstGroupCell}
-          isLastGroupCell={isLastGroupCell}
-          dateCellTemplate={dateCellTemplate}
-          key={key}
-          colSpan={colSpan}
-        />
-      ))}
-    </Row>
+    {dateHeaderMap.map((dateHeaderRow, rowIndex) => (
+      <Row className="dx-scheduler-header-row" key={rowIndex.toString()}>
+        {dateHeaderRow.map(({
+          startDate,
+          endDate,
+          today,
+          groups: cellGroups,
+          groupIndex,
+          isFirstGroupCell,
+          isLastGroupCell,
+          index,
+          key,
+          text,
+          colSpan,
+        }) => (
+          <DateHeaderCell
+            startDate={startDate}
+            endDate={endDate}
+            groups={isHorizontalGrouping ? cellGroups : undefined}
+            groupIndex={isHorizontalGrouping ? groupIndex : undefined}
+            today={today}
+            index={index}
+            text={text}
+            isFirstGroupCell={isFirstGroupCell}
+            isLastGroupCell={isLastGroupCell}
+            dateCellTemplate={dateCellTemplate}
+            key={key}
+            colSpan={colSpan}
+          />
+        ))}
+      </Row>
+    ))}
   </Fragment>
 );
 
 @ComponentBindings()
-export class DateHeaderProps {
+export class DateHeaderLayoutProps {
   @OneWay() groupOrientation: GroupOrientation = HORIZONTAL_GROUP_ORIENTATION;
 
   @OneWay() dateHeaderMap: DateHeaderCellData[][] = [];
@@ -74,7 +76,7 @@ export class DateHeaderProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateHeader extends JSXComponent(DateHeaderProps) {
+export class DateHeaderLayout extends JSXComponent(DateHeaderLayoutProps) {
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups } = this.props;
 

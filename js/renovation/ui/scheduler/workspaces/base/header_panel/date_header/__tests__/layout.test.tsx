@@ -2,8 +2,8 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 import {
   viewFunction as LayoutView,
-  DateHeader,
-  DateHeaderProps,
+  DateHeaderLayout,
+  DateHeaderLayoutProps,
 } from '../layout';
 import { Row } from '../../../row';
 import * as utilsModule from '../../../../utils';
@@ -44,7 +44,7 @@ describe('DateHeaderLayout', () => {
       <LayoutView
         {...viewModel}
         props={{
-          ...(new DateHeaderProps()),
+          ...(new DateHeaderLayoutProps()),
           dateHeaderMap,
           ...viewModel.props,
         }}
@@ -138,7 +138,7 @@ describe('DateHeaderLayout', () => {
       describe('isHorizontalGrouping', () => {
         it('should call "isHorizontalGroupOrientation" with correct parameters', () => {
           const groups = [];
-          const layout = new DateHeader({
+          const layout = new DateHeaderLayout({
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
             groups,
           });

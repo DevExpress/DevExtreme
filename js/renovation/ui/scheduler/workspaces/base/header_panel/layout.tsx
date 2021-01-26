@@ -13,7 +13,7 @@ import {
 import { isHorizontalGroupOrientation } from '../../utils';
 import { GroupPanel } from '../group_panel/group_panel';
 import { GroupPanelProps } from '../group_panel/group_panel_props';
-import { DateHeader } from './date_header/layout';
+import { DateHeaderLayout } from './date_header/layout';
 
 export const viewFunction = ({
   isHorizontalGrouping,
@@ -28,7 +28,7 @@ export const viewFunction = ({
     isRenderDateHeader,
     resourceCellTemplate,
   },
-}: HeaderPanel): JSX.Element => (
+}: HeaderPanelLayout): JSX.Element => (
   <thead>
     {isHorizontalGrouping && !groupByDate && (
       <GroupPanel
@@ -41,7 +41,7 @@ export const viewFunction = ({
       />
     )}
     {isRenderDateHeader && (
-      <DateHeader
+      <DateHeaderLayout
         dateHeaderMap={dateHeaderMap}
         dateCellTemplate={dateCellTemplate}
         groupOrientation={groupOrientation}
@@ -62,7 +62,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class HeaderPanelProps extends GroupPanelProps {
+export class HeaderPanelLayoutProps extends GroupPanelProps {
   @OneWay() dateHeaderMap: DateHeaderCellData[][] = [];
 
   @OneWay() isRenderDateHeader = true;
@@ -75,7 +75,7 @@ export class HeaderPanelProps extends GroupPanelProps {
   view: viewFunction,
   jQuery: { register: true },
 })
-export class HeaderPanel extends JSXComponent(HeaderPanelProps) {
+export class HeaderPanelLayout extends JSXComponent(HeaderPanelLayoutProps) {
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups } = this.props;
 

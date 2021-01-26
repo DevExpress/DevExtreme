@@ -43,6 +43,7 @@ class ViewDataGenerator {
             cellCountInGroupRow,
             groupOrientation,
         } = options;
+
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
         const columnCount = completeViewDataMap[index].length;
         const dateHeaderColumnCount = groupByDate

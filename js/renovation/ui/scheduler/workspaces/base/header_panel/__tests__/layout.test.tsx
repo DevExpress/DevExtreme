@@ -1,17 +1,17 @@
 import { shallow } from 'enzyme';
 import {
   viewFunction as LayoutView,
-  HeaderPanel,
-  HeaderPanelProps,
+  HeaderPanelLayout,
+  HeaderPanelLayoutProps,
 } from '../layout';
 import * as utilsModule from '../../../utils';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 import { GroupPanel } from '../../group_panel/group_panel';
-import { DateHeader } from '../date_header/layout';
+import { DateHeaderLayout } from '../date_header/layout';
 
 const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
 
-describe('HeaderPanelLayoutBase', () => {
+describe('HeaderPanelLayoutLayout', () => {
   describe('Render', () => {
     const dateHeaderMap = [[]];
 
@@ -19,7 +19,7 @@ describe('HeaderPanelLayoutBase', () => {
       isHorizontalGrouping: false,
       ...viewModel,
       props: {
-        ...(new HeaderPanelProps()),
+        ...(new HeaderPanelLayoutProps()),
         dateHeaderMap,
         groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
         groups: [],
@@ -35,7 +35,7 @@ describe('HeaderPanelLayoutBase', () => {
       expect(groupPanel.exists())
         .toBe(false);
 
-      const dateHeader = layout.find(DateHeader);
+      const dateHeader = layout.find(DateHeaderLayout);
       expect(dateHeader.exists())
         .toBe(true);
 
@@ -51,7 +51,7 @@ describe('HeaderPanelLayoutBase', () => {
     it('should not render DateHeader if "isRenderDateHeader" is false', () => {
       const layout = render({ props: { isRenderDateHeader: false } });
 
-      const dateHeader = layout.find(DateHeader);
+      const dateHeader = layout.find(DateHeaderLayout);
       expect(dateHeader.exists())
         .toBe(false);
     });
@@ -63,7 +63,7 @@ describe('HeaderPanelLayoutBase', () => {
         .toHaveLength(2);
       expect(layout.childAt(0).is(GroupPanel))
         .toBe(true);
-      expect(layout.childAt(1).is(DateHeader))
+      expect(layout.childAt(1).is(DateHeaderLayout))
         .toBe(true);
     });
 
@@ -72,7 +72,7 @@ describe('HeaderPanelLayoutBase', () => {
 
       expect(layout.children())
         .toHaveLength(2);
-      expect(layout.childAt(0).is(DateHeader))
+      expect(layout.childAt(0).is(DateHeaderLayout))
         .toBe(true);
       expect(layout.childAt(1).is(GroupPanel))
         .toBe(true);
@@ -108,7 +108,7 @@ describe('HeaderPanelLayoutBase', () => {
       describe('isHorizontalGrouping', () => {
         it('should call "isHorizontalGroupOrientation" with correct parameters', () => {
           const groups = [];
-          const layout = new HeaderPanel({
+          const layout = new HeaderPanelLayout({
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
             groups,
           });
