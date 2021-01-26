@@ -1,7 +1,7 @@
-import { InfernoComponent } from 'devextreme-generator/modules/inferno/inferno_component';
+import { InfernoComponent } from 'devextreme-generator/modules/inferno/base_component';
 import { InfernoEffect } from 'devextreme-generator/modules/inferno/effect';
 import { createElement } from 'inferno-create-element';
-import { createRef, Fragment } from 'inferno';
+import { createRef } from 'inferno';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
@@ -19,9 +19,9 @@ export class TemplateWrapper extends InfernoComponent
 
   dummyDivRef = createRef<any>();
 
-  renderTemplate() {
-    const { parentNode } = this.dummyDivRef.current!;
-    parentNode?.removeChild(this.dummyDivRef.current!);
+  renderTemplate(): () => void {
+    const { parentNode } = this.dummyDivRef.current;
+    parentNode?.removeChild(this.dummyDivRef.current);
     const $parent = $(parentNode);
     const $children = $parent.contents();
 
@@ -37,7 +37,7 @@ export class TemplateWrapper extends InfernoComponent
       this.props.template.render({
         container: getPublicElement($parent),
         model: data,
-        ...(isFinite(index) ? { index } : {}),
+        ...(Number.isFinite(index) ? { index } : {}),
       }),
     );
 
@@ -45,13 +45,16 @@ export class TemplateWrapper extends InfernoComponent
       wrapElement($parent, $template);
     }
 
-    return () => {
+    return (): void => {
       // NOTE: order is important
       removeDifferentElements($children, $parent.contents());
+      parentNode.appendChild(this.dummyDivRef.current);
     };
   }
 
-  createEffects() {
+  component;
+
+  createEffects(): InfernoEffect[] {
     return [
       new InfernoEffect(this.renderTemplate, [
         this.props.template,
@@ -59,15 +62,11 @@ export class TemplateWrapper extends InfernoComponent
     ];
   }
 
-  updateEffects() {
+  updateEffects(): void {
     this._effects[0].update([this.props.template]);
   }
 
-  render() {
-    return createElement(
-      Fragment,
-      {},
-      createElement('div', { style: { display: 'none' }, ref: this.dummyDivRef }),
-    );
+  render(): JSX.Element {
+    return createElement('div', { style: { display: 'none' }, ref: this.dummyDivRef });
   }
 }

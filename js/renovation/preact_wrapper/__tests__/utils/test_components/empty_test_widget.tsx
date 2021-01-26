@@ -5,7 +5,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const view = () => null;
+export const view = () => <div />;
 
 @ComponentBindings()
 export class EmptyTestWidgetProps {}

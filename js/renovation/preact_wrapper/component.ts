@@ -1,74 +1,22 @@
 /* eslint-disable */
-import { render, createRef, RefObject, Fragment, Component as InfernoComponent } from "inferno";
+import { render, createRef, RefObject, Fragment } from "inferno";
 import { createElement } from 'inferno-create-element';
 import { hydrate } from 'inferno-hydrate';
-import $, { dxElementWrapper } from '../../core/renderer';
+import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import DOMComponent from '../../core/dom_component';
 import { extend } from '../../core/utils/extend';
-import { wrapElement, removeDifferentElements } from './utils';
 import { getPublicElement } from '../../core/element';
 
 import { InfernoEffectHost } from "devextreme-generator/modules/inferno/effect_host";
+import { TemplateWrapper } from "./template_wrapper";
 
-const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
   if (options.hasOwnProperty(name) && options[name] === undefined) {
     options[name] = defaultValueGetter(name);
   }
 };
-class TemplateWrapper extends InfernoComponent
- // <{ template: any, data: { model: any; index: number } }>
-{
-  dummyDivRef = createRef<any>();
-
-  newChildren: dxElementWrapper | null = null;
-  children: dxElementWrapper | null = null;
-
-  componentDidMount() {
-    const { parentNode } = this.dummyDivRef.current!;
-    parentNode!.removeChild(this.dummyDivRef.current!);
-    const $parent = $(parentNode);
-    const $children = $parent.contents();
-
-    this.children = $children;
-
-    const { data, index } = this.props.data;
-
-    Object.keys(data).forEach((name) => {
-      if (data[name] && domAdapter.isNode(data[name])) {
-        data[name] = getPublicElement($(data[name]));
-      }
-    });
-
-    const $template = $(
-      this.props.template.render({
-        container: getPublicElement($parent),
-        model: data,
-        ...(isFinite(index) ? { index } : {}),
-      })
-    );
-
-    if ($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-      wrapElement($parent, $template);
-    }
-    this.newChildren = $parent.contents();
-  }
-
-  componentWillUnmount() {
-    // NOTE: order is important
-    removeDifferentElements(this.children, this.newChildren);
-  }
-
-  render() {
-    return createElement(
-      Fragment,
-      {},
-      createElement("div", { style: { display: "none" }, ref: this.dummyDivRef })
-    );
-  }
-}
 
 
 export default class PreactWrapper extends DOMComponent {
@@ -182,7 +130,7 @@ export default class PreactWrapper extends DOMComponent {
     const parentNode = containerNode.parentNode;
     parentNode.$V = containerNode.$V;
     containerNode.$V = null;
-    render(null, this.$element()[0]);
+    render(null, parentNode);
     delete parentNode.$V;
     super._dispose();
   }
