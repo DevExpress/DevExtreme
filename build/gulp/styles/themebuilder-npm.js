@@ -2,7 +2,7 @@
 
 const gulp = require('gulp');
 const exec = require('child_process').exec;
-const context = require('./context.js');
+const context = require('../context.js');
 const packagePath = context.RESULT_NPM_PATH + '/devextreme-themebuilder';
 
 gulp.task('themebuilder-npm', gulp.series(

@@ -305,12 +305,30 @@ describe('Metadata generator - generate files content', () => {
   });
 
   test('getBundleContent', () => {
-    const genericBundleContent = '@use "../widgets/generic" with ( $color: "carmine", $size: "compact");';
-    const materialBundleContent = '@use "../widgets/material" with ( $color: "carmine", $size: "compact", $size: "default");';
+    const genericBundleContent = `
+    @use "../widgets/generic/colors" with ($color: "carmine");
+    @use "../widgets/generic/sizes" with ($size: "compact");
+    @use "../widgets/generic/typography";
+    @use "../widgets/generic";`;
+
+    const materialBundleContent = `
+    @use "../widgets/material/colors" with ($color: "carmine");
+    @use "../widgets/material/sizes" with ($size: "compact");
+    @use "../widgets/material/typography";
+    @use "../widgets/material";`;
     const commonBundleContent = '@use "../widgets/common/ui"';
 
-    const expectedGenericBundleContent = '@use "../widgets/generic/tb_index" with ( $color: "carmine", $size: "compact");';
-    const expectedMaterialBundleContent = '@use "../widgets/material/tb_index" with ( $color: "carmine", $size: "compact", $size: "default");';
+    const expectedGenericBundleContent = `
+    @use "../widgets/generic/colors" with ($color: "carmine");
+    @use "../widgets/generic/sizes" with ($size: "compact");
+    @use "../widgets/generic/typography";
+    @use "../widgets/generic/tb_index";`;
+
+    const expectedMaterialBundleContent = `
+    @use "../widgets/material/colors" with ($color: "carmine");
+    @use "../widgets/material/sizes" with ($size: "compact");
+    @use "../widgets/material/typography";
+    @use "../widgets/material/tb_index";`;
 
     expect(MetadataGenerator.getBundleContent(genericBundleContent))
       .toBe(expectedGenericBundleContent);

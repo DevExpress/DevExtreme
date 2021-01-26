@@ -147,8 +147,9 @@ gulp.task('npm-sources', gulp.series(
         ))
 ));
 
-gulp.task('npm-sass', gulp
-    .parallel(
+gulp.task('npm-sass', gulp.series(
+    'create-scss-bundles',
+    gulp.parallel(
         () => gulp
             .src('scss/**/*')
             .pipe(dataUri())
@@ -164,6 +165,6 @@ gulp.task('npm-sass', gulp
             .src('icons/**/*', { base: '.' })
             .pipe(gulp.dest(`${resultPath}/devextreme/scss/widgets/base`))
             .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/base`))),
-    ));
+    )));
 
 gulp.task('npm', gulp.series('npm-sources', 'ts-modules-check', 'npm-sass'));
