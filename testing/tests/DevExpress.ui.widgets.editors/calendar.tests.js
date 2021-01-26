@@ -14,6 +14,7 @@ import config from 'core/config';
 import browser from 'core/utils/browser';
 import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -3823,12 +3824,12 @@ QUnit.module('valueChanged handler should receive correct event', {
     beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
-        this.handler = sinon.stub();
+        this.valueChangedHandler = sinon.stub();
         this.$element = $('<div>')
             .dxCalendar({
                 focusStateEnabled: true,
                 currentDate: new Date(2010, 10, 10),
-                onValueChanged: this.handler,
+                onValueChanged: this.valueChangedHandler,
             })
             .appendTo('#qunit-fixture');
         this.instance = this.$element.dxCalendar('instance');
@@ -3837,9 +3838,15 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.testProgramChange = (assert) => {
             this.instance.option('value', new Date(1993, 2, 19));
 
-            const callCount = this.handler.callCount;
-            const event = this.handler.getCall(callCount - 1).args[0].event;
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
             assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
         };
     },
     afterEach: function() {
@@ -3858,24 +3865,18 @@ QUnit.module('valueChanged handler should receive correct event', {
             .eq(4);
         $cell.trigger('dxclick');
 
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, $cell.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', $cell);
         this.testProgramChange(assert);
     });
 
-    QUnit.test('after selecting value via the keyboard', function(assert) {
+    QUnit.test('after value selecting via the keyboard', function(assert) {
         this.instance.focus();
         this.keyboard.press('up');
         const $cell = $(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
 
         this.keyboard.press('enter');
 
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'keydown', 'event type is correct');
-        assert.strictEqual(event.target, $cell.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'keydown', $cell, 'enter');
         this.testProgramChange(assert);
     });
 
@@ -3885,10 +3886,7 @@ QUnit.module('valueChanged handler should receive correct event', {
 
         $todayButton.trigger('dxclick');
 
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, $todayButton.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', $todayButton);
         this.testProgramChange(assert);
     });
 });
