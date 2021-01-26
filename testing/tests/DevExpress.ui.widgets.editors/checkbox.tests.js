@@ -3,6 +3,7 @@ import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { validateGroup } from 'ui/validation_engine';
 import 'ui/check_box';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -401,8 +402,8 @@ QUnit.module('Checkbox', function() {
 
         QUnit.module('valueChanged handler should receive correct event parameter', {
             beforeEach: function() {
-                this.handler = sinon.stub();
-                this.$element = $('#checkbox').dxCheckBox({ onValueChanged: this.handler, focusStateEnabled: true });
+                this.valueChangedHandler = sinon.stub();
+                this.$element = $('#checkbox').dxCheckBox({ onValueChanged: this.valueChangedHandler, focusStateEnabled: true });
                 this.instance = this.$element.dxCheckBox('instance');
                 this.keyboard = keyboardMock(this.$element);
 
@@ -410,29 +411,29 @@ QUnit.module('Checkbox', function() {
                     const value = this.instance.option('value');
                     this.instance.option('value', !value);
 
-                    const callCount = this.handler.callCount - 1;
-                    const event = this.handler.getCall(callCount).args[0].event;
+                    const callCount = this.valueChangedHandler.callCount - 1;
+                    const event = this.valueChangedHandler.getCall(callCount).args[0].event;
                     assert.strictEqual(event, undefined, 'event is undefined');
+                };
+                this.checkEvent = (assert, type, target, key) => {
+                    const event = this.valueChangedHandler.getCall(0).args[0].event;
+                    assert.strictEqual(event.type, type, 'event type is correct');
+                    assert.strictEqual(event.target, target.get(0), 'event target is correct');
+                    assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
                 };
             }
         }, () => {
             QUnit.test('after click', function(assert) {
                 this.$element.trigger('dxclick');
 
-                const event = this.handler.getCall(0).args[0].event;
-                assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-                assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
-
+                this.checkEvent(assert, 'dxclick', this.$element);
                 this.testProgramChange(assert);
             });
 
             QUnit.test('after space press', function(assert) {
                 this.keyboard.press('space');
 
-                const event = this.handler.getCall(0).args[0].event;
-                assert.strictEqual(event.type, 'keydown', 'event type is correct');
-                assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
-
+                this.checkEvent(assert, 'keydown', this.$element, 'space');
                 this.testProgramChange(assert);
             });
 
