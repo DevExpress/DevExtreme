@@ -2612,7 +2612,10 @@ class Diagram extends Widget {
 
             position: { x: nativeShape.position.x, y: nativeShape.position.y },
             size: { width: nativeShape.size.width, height: nativeShape.size.height },
-            attachedConnectorIds: nativeShape.attachedConnectorIds
+            attachedConnectorIds: nativeShape.attachedConnectorIds,
+            containerId: nativeShape.containerId,
+            containerChildItemIds: nativeShape.containerChildItemIds,
+            containerExpanded: nativeShape.containerExpanded
         };
     }
     _nativeConnectorToDiagramConnector(nativeConnector) {
