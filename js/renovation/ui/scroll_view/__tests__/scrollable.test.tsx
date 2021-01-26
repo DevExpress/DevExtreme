@@ -24,6 +24,7 @@ import {
   DIRECTION_HORIZONTAL,
   DIRECTION_VERTICAL,
   DIRECTION_BOTH,
+  SCROLLABLE_SCROLLBAR_CLASS,
 } from '../scrollable_utils';
 
 import {
@@ -538,6 +539,38 @@ each([{
           each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
             each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
               each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
+                const initRefs = (model) => {
+                  const viewModel = model as any;
+
+                  viewModel.containerRef = React.createRef();
+                  viewModel.contentRef = React.createRef();
+
+                  const scrollable = mount(viewFunction(model as any) as JSX.Element);
+
+                  viewModel.containerRef = viewModel.containerRef.current;
+                  viewModel.contentRef = viewModel.contentRef.current;
+
+                  if (Scrollable === ScrollableSimulated) {
+                    const scrollbar = scrollable.find(Scrollbar);
+                    if (direction === DIRECTION_VERTICAL) {
+                      viewModel.verticalScrollbarRef = scrollbar.instance();
+                      Object.assign(viewModel.verticalScrollbarRef,
+                        { props: { contentSize, containerSize } });
+                    } else if (direction === DIRECTION_HORIZONTAL) {
+                      viewModel.horizontalScrollbarRef = scrollbar.instance();
+                      Object.assign(viewModel.horizontalScrollbarRef,
+                        { props: { contentSize, containerSize } });
+                    } else {
+                      viewModel.horizontalScrollbarRef = scrollbar.at(0).instance();
+                      Object.assign(viewModel.horizontalScrollbarRef,
+                        { props: { contentSize, containerSize } });
+                      viewModel.verticalScrollbarRef = scrollbar.at(1).instance();
+                      Object.assign(viewModel.verticalScrollbarRef,
+                        { props: { contentSize, containerSize } });
+                    }
+                  }
+                };
+
                 const initStyles = (ref, size) => {
                   const elementRef = ref;
 
@@ -616,17 +649,8 @@ each([{
                   each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
                     each([true, false]).describe('IsShiftKeyPressed: %o', (isShiftKeyPressed) => {
                       it('scrollinit eventArgs', () => {
-                        const containerRef = React.createRef();
-                        const contentRef = React.createRef();
                         const viewModel = new Scrollable({ direction, bounceEnabled }) as any;
-
-                        viewModel.containerRef = containerRef;
-                        viewModel.contentRef = contentRef;
-
-                        const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
-
-                        viewModel.containerRef = viewModel.containerRef.current;
-                        viewModel.contentRef = viewModel.contentRef.current;
+                        initRefs(viewModel);
 
                         initStyles(viewModel.containerRef, containerSize);
                         initStyles(viewModel.contentRef, contentSize);
@@ -651,28 +675,53 @@ each([{
                           }
                         }
 
-                        if (isSimulatedStrategy) {
-                          const scrollbar = scrollable.find(Scrollbar);
-                          if (direction === DIRECTION_VERTICAL) {
-                            viewModel.verticalScrollbarRef = scrollbar.instance();
-                            Object.assign(viewModel.verticalScrollbarRef,
-                              { props: { contentSize, containerSize } });
-                          } else if (direction === DIRECTION_HORIZONTAL) {
-                            viewModel.horizontalScrollbarRef = scrollbar.instance();
-                            Object.assign(viewModel.horizontalScrollbarRef,
-                              { props: { contentSize, containerSize } });
-                          } else {
-                            viewModel.horizontalScrollbarRef = scrollbar.at(0).instance();
-                            Object.assign(viewModel.horizontalScrollbarRef,
-                              { props: { contentSize, containerSize } });
-                            viewModel.verticalScrollbarRef = scrollbar.at(1).instance();
-                            Object.assign(viewModel.verticalScrollbarRef,
-                              { props: { contentSize, containerSize } });
-                          }
-                        }
-
                         expect(viewModel.getDirection(e)).toBe(expectedDirectionResult);
-                        expect(viewModel.validate(e)).toBe(true); // TODO
+                      });
+                    });
+
+                    each([true, false]).describe('Disabled: %o', (disabled) => {
+                      each([true, false]).describe('ScrollByContent: %o', (scrollByContent) => {
+                        each([true, false]).describe('IsScrollbarClicked: %o', (isScrollbarClicked) => {
+                          it('validate method', () => {
+                            const viewModel = new Scrollable({
+                              direction, bounceEnabled, disabled, scrollByContent,
+                            }) as any;
+
+                            initRefs(viewModel);
+
+                            initStyles((viewModel as any).containerRef, containerSize);
+                            initStyles((viewModel as any).contentRef, contentSize);
+
+                            if (Scrollable === ScrollableNative) {
+                              expect((viewModel as any).validate(null)).toBe(true);
+                              return; // currently implemented only in SimulatedStrategy
+                            }
+
+                            let expectedValidationResult;
+                            if (disabled) {
+                              expectedValidationResult = false;
+                            } else if (bounceEnabled) {
+                              expectedValidationResult = true;
+                            } else if (isDxWheelEvent) {
+                              expectedValidationResult = true;
+                            } else if (!scrollByContent && !isScrollbarClicked) {
+                              expectedValidationResult = false;
+                            } else {
+                              expectedValidationResult = containerSize < contentSize
+                                || bounceEnabled;
+                            }
+
+                            const target = isScrollbarClicked
+                              ? viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
+                              : viewModel.containerRef;
+                            const e = { ...defaultEvent, target };
+                            if (isDxWheelEvent) {
+                              (e as any).type = 'dxmousewheel';
+                            }
+
+                            expect((viewModel as any).validate(e)).toBe(expectedValidationResult);
+                          });
+                        });
                       });
                     });
                   });
