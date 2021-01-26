@@ -1941,8 +1941,8 @@ class Scheduler extends Widget {
         }
     }
 
-    _onDataPromiseCompleted(handlerName, storeAppointment) {
-        const args = { appointmentData: storeAppointment };
+    _onDataPromiseCompleted(handlerName, storeAppointment, appointment) {
+        const args = { appointmentData: appointment || storeAppointment };
 
         if(storeAppointment instanceof Error) {
             args.error = storeAppointment;
@@ -2211,7 +2211,7 @@ class Scheduler extends Widget {
             if(!canceled) {
                 this._appointmentModel
                     .remove(rawAppointment)
-                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, storeAppointment));
+                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, storeAppointment, rawAppointment));
             }
         });
     }
