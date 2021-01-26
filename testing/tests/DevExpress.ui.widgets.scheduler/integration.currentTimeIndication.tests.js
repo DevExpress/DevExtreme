@@ -1,4 +1,4 @@
-import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, initTestMarkup } from './helpers.js';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 
 import 'common.css!';
