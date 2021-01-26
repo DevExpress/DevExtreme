@@ -3,11 +3,9 @@ import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { titleize } from '../../core/utils/inflector';
 import { extend } from '../../core/utils/extend';
-import { hasWindow } from '../../core/utils/window';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
-import { getBoundingRect } from '../../core/utils/position';
-import { resetPosition, move, locate } from '../../animation/translator';
+import { locate } from '../../animation/translator';
 import Class from '../../core/class';
 import Animator from './animator';
 import devices from '../../core/devices';
@@ -130,100 +128,12 @@ export const Scroller = Class.inherit({
     },
 
     _scrollStep: function(delta) {
-        const prevLocation = this._location;
-
-        this._location += delta;
-        this._suppressBounce();
-        this._move();
-
+        // eslint-disable-next-line no-undef
         if(Math.abs(prevLocation - this._location) < 1) {
             return;
         }
 
         eventsEngine.triggerHandler(this._$container, { type: 'scroll' });
-    },
-
-    _suppressBounce: function() {
-        if(this._bounceEnabled || this._inBounds(this._location)) {
-            return;
-        }
-
-        this._velocity = 0;
-        this._location = this._boundLocation();
-    },
-
-    _boundLocation: function(location) {
-        location = location !== undefined ? location : this._location;
-        return Math.max(Math.min(location, this._maxOffset), this._minOffset);
-    },
-
-    _move: function(location) {
-        this._location = location !== undefined ? location * this._getScaleRatio() : this._location;
-        this._moveContent();
-        this._moveScrollbar();
-    },
-
-    _moveContent: function() {
-        const location = this._location;
-
-        this._$container[this._scrollProp](-location / this._getScaleRatio());
-        this._moveContentByTranslator(location);
-    },
-
-    _getScaleRatio: function() {
-        if(hasWindow() && !this._scaleRatio) {
-            const element = this._$element.get(0);
-            const realDimension = this._getRealDimension(element, this._dimension);
-            const baseDimension = this._getBaseDimension(element, this._dimension);
-
-            // NOTE: Ratio can be a fractional number, which leads to inaccuracy in the calculation of sizes.
-            //       We should round it to hundredths in order to reduce the inaccuracy and prevent the unexpected appearance of a scrollbar.
-            this._scaleRatio = Math.round((realDimension / baseDimension * 100)) / 100;
-        }
-
-        return this._scaleRatio || 1;
-    },
-
-    _getRealDimension: function(element, dimension) {
-        return Math.round(getBoundingRect(element)[dimension]);
-    },
-
-    _getBaseDimension: function(element, dimension) {
-        const dimensionName = 'offset' + titleize(dimension);
-
-        return element[dimensionName];
-    },
-
-    _moveContentByTranslator: function(location) {
-        let translateOffset;
-        const minOffset = -this._maxScrollPropValue;
-
-        if(location > 0) {
-            translateOffset = location;
-        } else if(location <= minOffset) {
-            translateOffset = location - minOffset;
-        } else {
-            translateOffset = location % 1;
-        }
-
-        if(this._translateOffset === translateOffset) {
-            return;
-        }
-
-        const targetLocation = {};
-        targetLocation[this._prop] = translateOffset;
-        this._translateOffset = translateOffset;
-
-        if(translateOffset === 0) {
-            resetPosition(this._$content);
-            return;
-        }
-
-        move(this._$content, targetLocation);
-    },
-
-    _moveScrollbar: function() {
-        this._scrollbar.moveTo(this._location);
     },
 
     _scrollComplete: function() {
@@ -250,11 +160,6 @@ export const Scroller = Class.inherit({
         const bounceDistance = boundLocation - this._location;
 
         this._velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
-    },
-
-    _inBounds: function(location) {
-        location = location !== undefined ? location : this._location;
-        return this._boundLocation(location) === location;
     },
 
     _crossBoundOnNextStep: function() {
@@ -288,13 +193,6 @@ export const Scroller = Class.inherit({
 
     _isThumbScrollingHandler: function($target) {
         return this._isThumb($target);
-    },
-
-    _moveToMouseLocation: function(e) {
-        const mouseLocation = e['page' + this._axis.toUpperCase()] - this._$element.offset()[this._prop];
-        const location = this._location + mouseLocation / this._containerToContentRatio() - this._$container.height() / 2;
-
-        this._scrollStep(-Math.round(location));
     },
 
     _stopComplete: function() {
@@ -403,15 +301,6 @@ export const Scroller = Class.inherit({
     _updateBounds: function() {
         this._maxOffset = Math.round(this._getMaxOffset());
         this._minOffset = Math.round(this._getMinOffset());
-    },
-
-    _getMaxOffset: function() {
-        return 0;
-    },
-
-    _getMinOffset: function() {
-        this._maxScrollPropValue = Math.max(this._contentSize() - this._containerSize(), 0);
-        return -this._maxScrollPropValue;
     },
 
     _updateScrollbar: deferUpdater(function() {

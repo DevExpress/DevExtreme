@@ -13,14 +13,15 @@ import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 import { isPlainObject } from '../../../core/utils/type';
-import { move } from '../../../animation/translator'; // resetPosition
+import { move, resetPosition } from '../../../animation/translator';
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
 import { Deferred } from '../../../core/utils/deferred';
 import type { dxPromise } from '../../../core/utils/deferred';
+import { titleize } from '../../../core/utils/inflector';
 
 import { ScrollbarProps } from './scrollbar_props';
 import {
-  /* getElementHeight, */
+  getElementHeight,
   DIRECTION_HORIZONTAL,
 } from './scrollable_utils';
 
@@ -153,21 +154,18 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     this.cachedVariables.location = location;
   }
 
-  // @Method()
-  // inBounds(): boolean {
-  //   const location = this.getLocation();
+  inBounds(): boolean {
+    const location = this.getLocation();
 
-  //   return this.boundLocation(location) === location;
-  // }
+    return this.boundLocation(location) === location;
+  }
 
-  // @Method()
-  // boundLocation(location?: number): number {
-  //   const currentLocation = location !== undefined ? location : this.getLocation();
+  boundLocation(location?: number): number {
+    const currentLocation = location !== undefined ? location : this.getLocation();
 
-  //   return Math.max(Math.min(currentLocation, this.getMaxOffset()), this.getMinOffset());
-  // }
+    return Math.max(Math.min(currentLocation, this.getMaxOffset()), this.getMinOffset());
+  }
 
-  @Method()
   // eslint-disable-next-line class-methods-use-this
   getMaxOffset(): number {
     return 0;
@@ -178,14 +176,13 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     return -Math.max(this.props.contentSize - this.props.containerSize, 0);
   }
 
-  @Method()
-  getDirection(): string {
-    return this.props.direction;
+  getAxis(): string {
+    return this.props.direction === DIRECTION_HORIZONTAL ? 'x' : 'y';
   }
 
-  // getAxis(): string {
-  //   return this.props.direction === DIRECTION_HORIZONTAL ? 'x' : 'y';
-  // }
+  getProp(): string {
+    return this.props.direction === DIRECTION_HORIZONTAL ? 'left' : 'top';
+  }
 
   @Method()
   initHandler(e): dxPromise<void> {
@@ -202,13 +199,14 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
     }
 
     const { target } = e.originalEvent;
-    const scrollbarClicked = this.isScrollbar(target);
+    const { scrollByThumb } = this.props;
+    const scrollbarClicked = (scrollByThumb && this.isScrollbar(target));
 
     if (scrollbarClicked) {
       this.moveToMouseLocation(e);
     }
 
-    // const thumbScrolling = scrollbarClicked || this.isThumb(target);
+    // const thumbScrolling = scrollbarClicked || (scrollByThumb && this.isThumb(target));
     // (this.cachedVariables as any).thumbScrolling = thumbScrolling;
     // (this.cachedVariables as any).crossThumbScrolling = !thumbScrolling
     // && this.isAnyThumbScrolling(target);
@@ -220,88 +218,94 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
 
   // eslint-disable-next-line
   moveToMouseLocation(e): void {
-    // const { containerRef, scrollableOffset } = this.props;
+    const { scrollableOffset } = this.props;
 
-    // const mouseLocation = e[`page${this.getAxis().toUpperCase()}`] - scrollableOffset;
-    // const location = this.getLocation() + mouseLocation
-    // / this.containerToContentRatio() - getElementHeight(containerRef.current) / 2;
+    const mouseLocation = e[`page${this.getAxis().toUpperCase()}`] - scrollableOffset;
+    const location = this.getLocation() + mouseLocation
+    / this.containerToContentRatio() - getElementHeight(this.getContainerRef().current) / 2;
 
-    // this.scrollStep(-Math.round(location));
+    this.scrollStep(-Math.round(location));
   }
 
-  // scrollStep(delta): void {
-  //   const prevLocation = this.getLocation();
+  scrollStep(delta): void {
+    const prevLocation = this.getLocation();
 
-  //   this.setLocation(prevLocation + delta);
-  //   this.suppressBounce();
-  //   this.move();
+    this.setLocation(prevLocation + delta);
+    this.suppressBounce();
+    this.move();
 
-  //   if (Math.abs(prevLocation - this.getLocation()) < 1) {
-  //     // eslint-disable-next-line no-useless-return
-  //     return;
-  // }
+    /* istanbul ignore next */
+    if (Math.abs(prevLocation - this.getLocation()) < 1) {
+      // eslint-disable-next-line no-useless-return
+      return;
+    }
 
-  //   // eventsEngine.triggerHandler(this.containerRef, { type: 'scroll' });
-  // }
+    // eventsEngine.triggerHandler(this.containerRef, { type: 'scroll' });
+  }
 
-  // suppressBounce(): void {
-  //   if (this.props.bounceEnabled || this.inBounds()) {
-  //     return;
-  //   }
+  getContainerRef(): any {
+    return this.props.containerRef;
+  }
 
-  //   (this.cachedVariables as any).velocity = 0;
-  //   this.setLocation(this.boundLocation());
-  // }
+  suppressBounce(): void {
+    if (this.props.bounceEnabled || this.inBounds()) {
+      return;
+    }
 
-  // move(location?: number): void {
-  //   const currentLocation = location !== undefined
-  //     ? location * this.props.scaleRatio
-  //     : this.getLocation();
+    /* istanbul ignore next */
+    (this.cachedVariables as any).velocity = 0;
+    const boundLocation = this.boundLocation();
 
-  //   this.setLocation(currentLocation);
+    this.setLocation(boundLocation);
+  }
 
-  //   this.moveContent();
-  //   this.moveTo(this.getLocation());
-  // }
+  move(location?: number): void {
+    const currentLocation = location !== undefined
+      ? location * this.props.scaleRatio
+      : this.getLocation();
 
-  // moveContent(): void {
-  //   const scrollProp = this.getDirection()
-  // === DIRECTION_HORIZONTAL ? 'scrollLeft' : 'scrollTop';
-  //   const location = this.getLocation();
+    this.setLocation(currentLocation);
 
-  //   this.props.containerRef.current[scrollProp] = -location / this.props.scaleRatio;
-  //   this.moveContentByTranslator(location);
-  // }
+    this.moveContent();
+    this.moveTo(this.getLocation());
+  }
 
-  // moveContentByTranslator(location): undefined | void {
-  //   const direction = this.getDirection();
-  //   let translateOffset;
-  //   const prop = direction === DIRECTION_HORIZONTAL ? 'left' : 'top';
-  //   const minOffset = this.getMinOffset();
+  moveContent(): void {
+    const location = this.getLocation();
 
-  //   if (location > 0) {
-  //     translateOffset = location;
-  //   } else if (location <= minOffset) {
-  //     translateOffset = location - minOffset;
-  //   } else {
-  //     translateOffset = location % 1;
-  //   }
+    this.getContainerRef().current[`scroll${titleize(this.getProp())}`] = -location / this.props.scaleRatio;
+    this.moveContentByTranslator(location);
+  }
 
-  //   if ((this.cachedVariables as any).translateOffset === translateOffset) {
-  //     return;
-  //   }
+  moveContentByTranslator(location): undefined | void {
+    let translateOffset;
+    const minOffset = this.getMinOffset();
 
-  //   const targetLocation = {};
-  //   targetLocation[prop] = translateOffset;
-  //   (this.cachedVariables as any).translateOffset = translateOffset;
+    /* istanbul ignore next */
+    if (location > 0) {
+      translateOffset = location;
+    } else if (location <= minOffset) {
+      /* istanbul ignore next */
+      translateOffset = location - minOffset;
+    } else {
+      translateOffset = location % 1;
+    }
 
-  //   if (translateOffset === 0) {
-  //     resetPosition(this.props.contentRef.current);
-  //     return;
-  //   }
+    if ((this.cachedVariables as any).translateOffset === translateOffset) {
+      return;
+    }
 
-  //   move(this.props.contentRef.current, targetLocation);
-  // }
+    const targetLocation = {};
+    targetLocation[this.getProp()] = translateOffset;
+    (this.cachedVariables as any).translateOffset = translateOffset;
+
+    if (translateOffset === 0) {
+      resetPosition(this.getContainerRef().current);
+      return;
+    }
+    /* istanbul ignore next */
+    move(this.getContainerRef().current, targetLocation);
+  }
 
   // eslint-disable-next-line class-methods-use-this
   // isAnyThumbScrolling(target): boolean {

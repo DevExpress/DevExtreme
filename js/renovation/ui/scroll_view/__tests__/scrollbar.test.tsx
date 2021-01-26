@@ -138,11 +138,6 @@ describe('TopPocket', () => {
 
 describe('Methods', () => {
   each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
-    it('getDirection()', () => {
-      const viewModel = new Scrollbar({ direction } as ScrollbarProps);
-      expect(viewModel.getDirection()).toBe(direction);
-    });
-
     each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (visibilityMode) => {
       each([{ top: -100, left: -100 }, { top: -100 }, { left: -100 }, -100]).describe('Location: %o', (location) => {
         it('moveTo()', () => {
@@ -242,6 +237,50 @@ describe('Methods', () => {
 
         expect(viewModel.getLocation()).toBe(100);
       });
+
+      it('getAxis()', () => {
+        const viewModel = new Scrollbar({ direction });
+
+        expect((viewModel as any).getAxis()).toBe(direction === 'horizontal' ? 'x' : 'y');
+      });
+
+      it('getProp()', () => {
+        const viewModel = new Scrollbar({ direction });
+
+        expect((viewModel as any).getProp()).toBe(direction === 'horizontal' ? 'left' : 'top');
+      });
+
+      it('getContainerRef()', () => {
+        const ref = {} as HTMLDivElement;
+
+        const viewModel = new Scrollbar({ containerRef: ref });
+
+        expect((viewModel as any).getContainerRef() === ref).toBe(true);
+      });
+
+      each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
+        it('move()', () => {
+          const viewModel = new Scrollbar({ scaleRatio }) as any;
+          viewModel.cachedVariables.location = 40;
+
+          viewModel.moveContent = jest.fn();
+          viewModel.moveTo = jest.fn();
+          viewModel.move();
+
+          expect(viewModel.getLocation()).toBe(40);
+        });
+
+        it('move(50)', () => {
+          const viewModel = new Scrollbar({ scaleRatio }) as any;
+          viewModel.cachedVariables.location = 40;
+
+          viewModel.moveContent = jest.fn();
+          viewModel.moveTo = jest.fn();
+          viewModel.move(50);
+
+          expect(viewModel.getLocation()).toBe(50 * scaleRatio);
+        });
+      });
     });
   });
 });
@@ -249,35 +288,38 @@ describe('Methods', () => {
 describe('Handlers', () => {
   describe('initHandler', () => {
     each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
-      each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
-        each(['dx-scrollable-scroll', 'dx-scrollable-scrollbar']).describe('Event target: %o', (targetClass) => {
-          it('moveToMouseLocation should be called on init', () => {
-            const e = { ...defaultEvent, originalEvent: {} };
-            if (isDxWheelEvent) {
-              (e as any).originalEvent.type = 'dxmousewheel';
-            }
+      each([true, false]).describe('ScrollByThumb: %o', (scrollByThumb) => {
+        each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
+          each(['dx-scrollable-scroll', 'dx-scrollable-scrollbar']).describe('Event target: %o', (targetClass) => {
+            it('moveToMouseLocation should be called on init', () => {
+              const e = { ...defaultEvent, originalEvent: {} };
+              if (isDxWheelEvent) {
+                (e as any).originalEvent.type = 'dxmousewheel';
+              }
 
-            const viewModel = new Scrollbar({
-              direction,
-              needScrollbar: true,
-            } as ScrollbarProps);
+              const viewModel = new Scrollbar({
+                direction,
+                scrollByThumb,
+                needScrollbar: true,
+              } as ScrollbarProps);
 
-            const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+              const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
 
-            const moveToMouseLocation = jest.fn();
-            viewModel.moveToMouseLocation = moveToMouseLocation;
+              const moveToMouseLocation = jest.fn();
+              viewModel.moveToMouseLocation = moveToMouseLocation;
 
-            (e.originalEvent as any).target = scrollbar.find(`.${targetClass}`).getDOMNode();
-            (viewModel as any).scrollbarRef = scrollbar.getDOMNode();
+              (e.originalEvent as any).target = scrollbar.find(`.${targetClass}`).getDOMNode();
+              (viewModel as any).scrollbarRef = scrollbar.getDOMNode();
 
-            viewModel.initHandler(e);
+              viewModel.initHandler(e);
 
-            if (isDxWheelEvent || targetClass === 'dx-scrollable-scroll') {
-              expect(moveToMouseLocation).toBeCalledTimes(0);
-            } else {
-              expect(moveToMouseLocation).toBeCalledTimes(1);
-              expect(moveToMouseLocation).toHaveBeenCalledWith(e);
-            }
+              if (isDxWheelEvent || targetClass === 'dx-scrollable-scroll' || !scrollByThumb) {
+                expect(moveToMouseLocation).toBeCalledTimes(0);
+              } else {
+                expect(moveToMouseLocation).toBeCalledTimes(1);
+                expect(moveToMouseLocation).toHaveBeenCalledWith(e);
+              }
+            });
           });
         });
       });

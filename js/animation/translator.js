@@ -100,6 +100,8 @@ export const move = function($element, position) {
 };
 
 export const resetPosition = function($element, finishTransition) {
+    $element = $($element);
+
     let originalTransition;
     const stylesConfig = {
         left: 0,

@@ -159,6 +159,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               direction="horizontal"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
+              scrollByThumb={scrollByThumb}
               expandable={scrollByThumb}
               bounceEnabled={bounceEnabled}
               needScrollbar={needScrollbar}
@@ -176,6 +177,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               direction="vertical"
               visible={isScrollbarVisible}
               visibilityMode={visibilityMode}
+              scrollByThumb={scrollByThumb}
               expandable={scrollByThumb}
               bounceEnabled={bounceEnabled}
               needScrollbar={needScrollbar}
