@@ -24,6 +24,7 @@ $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-appointment-overlay-bg: null !default;
 $agenda-appointment-hover-bg: null !default;
 $agenda-appointment-active-bg: null !default;
+$agenda-appointment-text-color: null !default;
 $agenda-appointment-active-text-color: null !default;
 
 // Agenda
@@ -143,7 +144,7 @@ $scheduler-appointment-form-label-padding: 20px;
   $scheduler-appointment-dragging-shadow: $scheduler-appointment-dragging-shadow,
   $scheduler-reduced-icon-offset: $scheduler-reduced-icon-offset,
 
-  $agenda-appointment-text-color: $scheduler-tooltip-appointment-text-color,
+  $agenda-appointment-text-color: $agenda-appointment-text-color,
   $agenda-appointment-recurrence-icon-color: $agenda-appointment-recurrence-icon-color,
   $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
   $agenda-appointment-active-bg: $agenda-appointment-active-bg,

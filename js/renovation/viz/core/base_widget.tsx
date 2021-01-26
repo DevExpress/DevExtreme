@@ -47,12 +47,12 @@ const calculateCanvas = (model: Partial<BaseWidgetProps> & Partial<BaseWidget>):
   const elementWidth = !sizeIsValid(width) ? getElementWidth(model.containerRef) : 0;
   const elementHeight = !sizeIsValid(height) ? getElementHeight(model.containerRef) : 0;
   const canvas = {
-    width: Number(width) <= 0 ? 0 : Math.floor(pickPositiveValue([
+    width: width && width <= 0 ? 0 : Math.floor(pickPositiveValue([
       width,
       elementWidth,
       defaultCanvas.width,
     ])),
-    height: Number(height) <= 0 ? 0 : Math.floor(pickPositiveValue([
+    height: height && height <= 0 ? 0 : Math.floor(pickPositiveValue([
       height,
       elementHeight,
       defaultCanvas.height,

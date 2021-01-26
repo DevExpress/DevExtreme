@@ -1,10 +1,5 @@
-import eventsEngine from '../../events/core/events_engine';
 import Widget from '../widget/ui.widget';
 import { deferRenderer } from '../../core/utils/common';
-import { isPlainObject } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
-
-const SCROLLBAR = 'dxScrollbar';
 
 const SCROLLBAR_VISIBLE = {
     onScroll: 'onScroll',
@@ -14,17 +9,6 @@ const SCROLLBAR_VISIBLE = {
 };
 
 const Scrollbar = Widget.inherit({
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            containerSize: 0,
-            contentSize: 0,
-        });
-    },
-
-    _init: function() {
-        this.callBase();
-    },
-
     _render: function() {
         this.callBase();
 
@@ -53,16 +37,6 @@ const Scrollbar = Widget.inherit({
         this._baseContainerToContentRatio = (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
     },
 
-    _normalizeSize: function(size) {
-        return isPlainObject(size) ? size[this._dimension] || 0 : size;
-    },
-
-    _clean: function() {
-        this.callBase();
-
-        eventsEngine.off(this._$thumb, '.' + SCROLLBAR);
-    },
-
     _optionChanged: function(args) {
         if(this._isHidden()) {
             return;
@@ -71,7 +45,7 @@ const Scrollbar = Widget.inherit({
         switch(args.name) {
             case 'containerSize':
             case 'contentSize':
-                this.option()[args.name] = this._normalizeSize(args.value);
+                this.option(args.name, args.value);
                 this._update();
                 break;
             case 'baseContentSize':
