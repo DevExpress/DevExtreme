@@ -46,11 +46,11 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
         );
     }
 
-    renderRDateHeader() {
+    renderRHeaderPanel() {
         if(this.option('intervalCount') === 1) {
-            super.renderRDateHeader(false);
+            super.renderRHeaderPanel(false);
         } else {
-            super.renderRDateHeader(true);
+            super.renderRHeaderPanel(true);
         }
     }
 }
