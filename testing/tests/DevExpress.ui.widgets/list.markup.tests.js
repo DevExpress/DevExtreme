@@ -371,7 +371,7 @@ QUnit.module('decorators markup', {}, () => {
         assert.ok($deleteToggle.find(toSelector(TOGGLE_DELETE_SWITCH_ICON_CLASS)).length, 'toggle icon generated');
     });
 
-    QUnit.test('list item markup, toggle delete decorator is visible with showSelection mode: true', function(assert) {
+    QUnit.test('list item delete icon is visible when showSelectionControls=true (T966717)', function(assert) {
         const $list = $('#templated-list').dxList({
             items: ['0'],
             allowItemDeleting: true,
