@@ -94,8 +94,21 @@ const compareDateWithStartDayHour = (startDate, endDate, startDayHour, allDay, s
     return result;
 };
 
-const compareDateWithEndDayHour = (startDate, endDate, startDayHour, endDayHour, allDay, severalDays, max, min) => {
-    const hiddenInterval = (24 - endDayHour + startDayHour) * toMs('hour');
+const compareDateWithEndDayHour = (options) => {
+    const {
+        startDate,
+        endDate,
+        startDayHour,
+        endDayHour,
+        viewStartDayHour,
+        viewEndDayHour,
+        allDay,
+        severalDays,
+        min,
+        max
+    } = options;
+
+    const hiddenInterval = (24 - viewEndDayHour + viewStartDayHour) * toMs('hour');
     const apptDuration = endDate.getTime() - startDate.getTime();
     const delta = (hiddenInterval - apptDuration) / toMs('hour');
     const apptStartHour = startDate.getHours();
@@ -107,8 +120,12 @@ const compareDateWithEndDayHour = (startDate, endDate, startDayHour, endDayHour,
 
     result = (apptStartHour < endTime.hours) ||
         (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) ||
-        (allDay && startDate <= max) ||
-        (severalDays && (startDate < max && endDate > min) && (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60));
+        (allDay &&
+            startDate <= max) ||
+        (severalDays &&
+            (startDate < max && endDate > min) &&
+                (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60)
+        );
 
     if(apptDuration < hiddenInterval) {
         if((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
@@ -315,12 +332,23 @@ class AppointmentModel {
                 result = false;
             }
 
-            if(result && startDayHour !== undefined && (!useRecurrence || !filterOptions.isVirtualScrolling)) {
+            if(result && isDefined(startDayHour) && (!useRecurrence || !filterOptions.isVirtualScrolling)) {
                 result = compareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays);
             }
 
-            if(result && endDayHour !== undefined) {
-                result = compareDateWithEndDayHour(comparableStartDate, comparableEndDate, startDayHour, endDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays, max, min);
+            if(result && isDefined(endDayHour)) {
+                result = compareDateWithEndDayHour({
+                    startDate: comparableStartDate,
+                    endDate: comparableEndDate,
+                    startDayHour,
+                    endDayHour,
+                    viewStartDayHour,
+                    viewEndDayHour,
+                    allDay: appointmentTakesAllDay,
+                    severalDays: appointmentTakesSeveralDays,
+                    min,
+                    max
+                });
             }
 
             if(result && useRecurrence && !recurrenceRule) {
