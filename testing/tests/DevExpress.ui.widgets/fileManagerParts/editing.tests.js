@@ -1283,10 +1283,6 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('parent and all of selected folders must be disabled: copy folders in files area via toolbar (T939043)', function(assert) {
-        if(browser.msie && compareVersion($.fn.jquery, [3], 1) === 0) {
-            assert.ok(true, 'This test not for IE + jQuery 3.x');
-            return;
-        }
         this.$element.dxFileManager('option', {
             selectionMode: 'multiple',
             itemView: {
