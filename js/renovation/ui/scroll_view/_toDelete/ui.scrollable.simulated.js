@@ -230,10 +230,6 @@ export const Scroller = Class.inherit({
         this._scrollComplete();
     },
 
-    _containerToContentRatio: function() {
-        return this._scrollbar.containerToContentRatio();
-    },
-
     _endHandler: function(velocity) {
         this._completeDeferred = new Deferred();
         this._velocity = velocity[this._axis];
