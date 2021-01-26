@@ -772,7 +772,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return this.isHovered;
     }
     if (showScrollbar === 'onScroll') {
-      return true; // TODO
+      return false; // TODO
     }
     if (showScrollbar === 'always') {
       return true;
