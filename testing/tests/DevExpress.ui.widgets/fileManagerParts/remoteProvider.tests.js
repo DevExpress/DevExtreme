@@ -289,7 +289,11 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             },
             callback: request => {
                 assert.strictEqual(request.headers.RequestVerificationToken, tokenValue, 'custom header presents');
-                assert.strictEqual(request.data.get('dataValue'), dataValueText, 'custom formData value presents');
+                if(browser.msie) {
+                    assert.ok(true, 'IE does not support FormData.get()');
+                } else {
+                    assert.strictEqual(request.data.get('dataValue'), dataValueText, 'custom formData value presents');
+                }
                 assert.ok(request.xhrFields.withCredentials, 'custom xhr field presents');
             }
         });
