@@ -490,24 +490,6 @@ export const Scroller = Class.inherit({
         return contentSize;
     },
 
-    _validateEvent: function(e) {
-        const $target = $(e.originalEvent.target);
-
-        return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
-    },
-
-    _isThumb: function($element) {
-        return this._scrollByThumb && this._scrollbar.isThumb($element);
-    },
-
-    _isScrollbar: function($element) {
-        return this._scrollByThumb && $element && $element.is(this._$scrollbar);
-    },
-
-    _isContent: function($element) {
-        return this._scrollByContent && !!$element.closest(this._$element).length;
-    },
-
     _reachedMin: function() {
         return this._location <= this._minOffset;
     },
@@ -613,29 +595,8 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleInit: function(e) {
-        this._suppressDirections(e);
         this._eventForUserAction = e;
         this._eventHandler('init', e).done(this._stopAction);
-    },
-
-    _suppressDirections: function(e) {
-        if(isDxMouseWheelEvent(e.originalEvent)) {
-            this._prepareDirections(true);
-            return;
-        }
-
-        this._prepareDirections();
-        this._eachScroller(function(scroller, direction) {
-            const isValid = scroller._validateEvent(e);
-            this._validDirections[direction] = isValid;
-        });
-    },
-
-    _prepareDirections: function(value) {
-        value = value || false;
-        this._validDirections = {};
-        this._validDirections[HORIZONTAL] = value;
-        this._validDirections[VERTICAL] = value;
     },
 
     _eachScroller: function(callback) {
@@ -841,17 +802,6 @@ export const SimulatedStrategy = Class.inherit({
         }));
     },
 
-    _allowedDirections: function() {
-        const bounceEnabled = this.option('bounceEnabled');
-        const verticalScroller = this._scrollers[VERTICAL];
-        const horizontalScroller = this._scrollers[HORIZONTAL];
-
-        return {
-            vertical: verticalScroller && (verticalScroller._minOffset < 0 || bounceEnabled),
-            horizontal: horizontalScroller && (horizontalScroller._minOffset < 0 || bounceEnabled)
-        };
-    },
-
     updateBounds: function() {
         this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
     },
@@ -914,10 +864,6 @@ export const SimulatedStrategy = Class.inherit({
         }
 
         return this._allowedDirection();
-    },
-
-    getDirection: function(e) {
-        return isDxMouseWheelEvent(e) ? this._wheelDirection(e) : this._allowedDirection();
     },
 
     verticalOffset: function() {

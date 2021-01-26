@@ -29,6 +29,12 @@
   $scheduler-appointment-text-color: $scheduler-appointment-text-color,
   $scheduler-fill-focused-appointment: $scheduler-fill-focused-appointment,
   $scheduler-dd-appointment-hover-text-color: $scheduler-dd-appointment-hover-text-color,
+
+  $agenda-appointment-recurrence-icon-color: $agenda-appointment-recurrence-icon-color,
+  $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
+  $agenda-appointment-active-bg: $agenda-appointment-active-bg,
+  $agenda-appointment-text-color: $agenda-appointment-text-color,
+  $agenda-appointment-active-text-color: $agenda-appointment-active-text-color
 );
 @use "../button/colors" as *;
 @use "../tooltip/colors" as *;
@@ -607,14 +613,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 }
 
 .dx-scheduler-agenda {
-  .dx-scheduler-appointment-content {
-    font-size: $generic-scheduler-agenda-appointment-font-size;
-
-    .dx-scheduler-appointment-content-date {
-      font-size: $generic-scheduler-agenda-appointment-font-size - 3px;
-    }
-  }
-
   .dx-scheduler-group-header {
     font-size: $generic-scheduler-group-header-agenda-font-size;
     width: $generic-scheduler-group-header-table-cell-width;

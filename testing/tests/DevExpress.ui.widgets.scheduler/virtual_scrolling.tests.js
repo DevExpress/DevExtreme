@@ -371,6 +371,38 @@ module('Virtual Scrolling', {
             });
         });
 
+
+        [
+            'both',
+            'vertical',
+            'horizontal'
+        ].forEach(orientation => {
+            [
+                0,
+                -1,
+                undefined,
+                NaN,
+                null
+            ].forEach(testValue => {
+                test(`it should get correct cell sizes if virtual scrolling orientation: ${orientation} and testValue: ${testValue}`, function(assert) {
+                    this.prepareInstance({
+                        scrolling: {
+                            type: orientation
+                        }
+                    });
+
+                    this.workspaceMock.getCellWidth = () => testValue;
+                    this.workspaceMock.getCellMinWidth = () => testValue;
+                    this.workspaceMock.getCellHeight = () => testValue;
+
+                    const dispatcher = new VirtualScrollingDispatcher(this.workspaceMock);
+
+                    assert.ok(dispatcher.rowHeight > 0, 'Row height is correct');
+                    assert.ok(dispatcher.cellWidth > 0, 'Cell width is correct');
+                });
+            });
+        });
+
         [null, undefined].forEach(offset => {
             test(`it should not call virtual scrolling instances if scrollOffset is "${offset}"`, function(assert) {
                 this.prepareInstance();

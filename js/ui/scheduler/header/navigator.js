@@ -1,19 +1,19 @@
-import $ from '../../core/renderer';
-import { noop } from '../../core/utils/common';
-import { isNumeric, isDefined, isFunction } from '../../core/utils/type';
-import errors from '../widget/ui.errors';
-import dateUtils from '../../core/utils/date';
-import { extend } from '../../core/utils/extend';
-import registerComponent from '../../core/component_registrator';
-import devices from '../../core/devices';
-import Widget from '../widget/ui.widget';
-import Button from '../button';
-import Calendar from '../calendar';
-import Popover from '../popover';
-import Popup from '../popup';
-import publisherMixin from './ui.scheduler.publisher_mixin';
-import dateLocalization from '../../localization/date';
-import Scrollable from '../scroll_view/ui.scrollable';
+import $ from '../../../core/renderer';
+import { noop } from '../../../core/utils/common';
+import { isNumeric, isDefined, isFunction } from '../../../core/utils/type';
+import errors from '../../widget/ui.errors';
+import dateUtils from '../../../core/utils/date';
+import { extend } from '../../../core/utils/extend';
+import registerComponent from '../../../core/component_registrator';
+import devices from '../../../core/devices';
+import Widget from '../../widget/ui.widget';
+import Button from '../../button';
+import Calendar from '../../calendar';
+import Popover from '../../popover';
+import Popup from '../../popup';
+import publisherMixin from '../ui.scheduler.publisher_mixin';
+import dateLocalization from '../../../localization/date';
+import Scrollable from '../../scroll_view/ui.scrollable';
 
 const ELEMENT_CLASS = 'dx-scheduler-navigator';
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
@@ -230,7 +230,7 @@ const getConfig = function(step) {
     }
 };
 
-const SchedulerNavigator = Widget.inherit({
+export const Navigator = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -511,6 +511,4 @@ const SchedulerNavigator = Widget.inherit({
 
 }).include(publisherMixin);
 
-registerComponent('dxSchedulerNavigator', SchedulerNavigator);
-
-export default SchedulerNavigator;
+registerComponent('dxSchedulerNavigator', Navigator);

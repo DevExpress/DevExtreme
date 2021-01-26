@@ -5,11 +5,11 @@ import devices from '../../../../core/devices';
 import {
   TopPocket,
   viewFunction,
-} from '../topPocket';
+} from '../top_pocket';
 
 import {
   TopPocketState,
-} from '../topPocket_props';
+} from '../top_pocket_props';
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;

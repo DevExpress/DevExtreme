@@ -17,7 +17,6 @@ const SCROLLABLE_CLASS = 'dx-scrollable';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
-const BOTH = 'both';
 
 const Scrollable = DOMComponent.inherit({
     _initOptions: function(options) {
@@ -284,24 +283,6 @@ const Scrollable = DOMComponent.inherit({
     //     }
     //     return current === direction;
     // },
-
-    _updateAllowedDirection: function() {
-        const allowedDirections = this._strategy._allowedDirections();
-
-        if(this._isDirection(BOTH) && allowedDirections.vertical && allowedDirections.horizontal) {
-            this._allowedDirectionValue = BOTH;
-        } else if(this._isDirection(HORIZONTAL) && allowedDirections.horizontal) {
-            this._allowedDirectionValue = HORIZONTAL;
-        } else if(this._isDirection(VERTICAL) && allowedDirections.vertical) {
-            this._allowedDirectionValue = VERTICAL;
-        } else {
-            this._allowedDirectionValue = null;
-        }
-    },
-
-    _allowedDirection: function() {
-        return this._allowedDirectionValue;
-    },
 
     _container: function() {
         return this._$container;

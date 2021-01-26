@@ -27,3 +27,9 @@ export interface ScrollOffset {
   bottom: number;
   right: number;
 }
+
+export type allowedDirection = {
+  vertical: boolean;
+  horizontal: boolean;
+};
+

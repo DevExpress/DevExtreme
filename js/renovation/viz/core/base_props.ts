@@ -7,8 +7,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import {
   Canvas,
-  Size,
   Margin,
+  Size,
 } from './common/types.d';
 
 @ComponentBindings()
