@@ -9,6 +9,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -1625,25 +1626,39 @@ QUnit.module('valueChanged should receive correct event', {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
 
-        this.handler = sinon.stub();
-        this.$element = $('#widget').dxAutocomplete({
+        this.valueChangedHandler = sinon.stub();
+        this.initialOptions = {
             items: ['11', '22'],
             searchTimeout: 0,
-            onValueChanged: this.handler,
+            onValueChanged: this.valueChangedHandler,
             valueChangeEvent: ''
-        });
-        this.instance = this.$element.dxAutocomplete('instance');
-        this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        this.keyboard = keyboardMock(this.$input);
-        this.getListItems = () => $(`.${LIST_ITEM_CLASS}`);
-
+        };
+        this.init = (options) => {
+            this.$element = $('#widget').dxAutocomplete(options);
+            this.instance = this.$element.dxAutocomplete('instance');
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            this.keyboard = keyboardMock(this.$input);
+            this.getListItems = () => $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, this.initialOptions, options));
+        };
         this.testProgramChange = (assert) => {
             this.instance.option('value', 'new value');
 
-            const callCount = this.handler.callCount;
-            const event = this.handler.getCall(callCount - 1).args[0].event;
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
             assert.strictEqual(event, undefined, 'event is undefined');
         };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+        };
+
+        this.init(this.initialOptions);
     },
     afterEach: function() {
         fx.off = false;
@@ -1661,10 +1676,7 @@ QUnit.module('valueChanged should receive correct event', {
         const $firstItem = $listItems.eq(0);
         $firstItem.trigger('dxclick');
 
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, $firstItem.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', $firstItem);
         this.testProgramChange(assert);
     });
 
@@ -1677,10 +1689,7 @@ QUnit.module('valueChanged should receive correct event', {
         const $listItems = this.getListItems();
         const $firstItem = $listItems.eq(0);
 
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'keydown', 'event type is correct');
-        assert.strictEqual(event.target, $firstItem.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'keydown', $firstItem, 'enter');
         this.testProgramChange(assert);
     });
 
@@ -1690,10 +1699,7 @@ QUnit.module('valueChanged should receive correct event', {
             .press('down')
             .press('tab');
 
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'keydown', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'keydown', this.$input, 'tab');
         this.testProgramChange(assert);
     });
 
@@ -1702,15 +1708,12 @@ QUnit.module('valueChanged should receive correct event', {
 
         this.keyboard.type('a');
 
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'input', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'input', this.$input);
         this.testProgramChange(assert);
     });
 
-    QUnit.test('on clearing using clear button', function(assert) {
-        this.instance.option({
+    QUnit.test('on click on clear button', function(assert) {
+        this.reinit({
             value: '11',
             showClearButton: true
         });
@@ -1718,10 +1721,7 @@ QUnit.module('valueChanged should receive correct event', {
         const $clearButton = this.$element.find(CLEAR_BUTTON_AREA_SELECTOR);
         $clearButton.trigger('dxclick');
 
-        const event = this.handler.getCall(1).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', $clearButton);
         this.testProgramChange(assert);
     });
 });
