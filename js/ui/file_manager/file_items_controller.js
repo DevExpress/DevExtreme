@@ -120,7 +120,9 @@ export default class FileItemsController {
     }
 
     getCurrentItems(onlyFiles) {
-        return when(this._dataLoadingDeferred).then(() => this._getCurrentItemsInternal(onlyFiles));
+        return this._dataLoadingDeferred
+            ? this._dataLoadingDeferred.then(() => this._getCurrentItemsInternal(onlyFiles))
+            : this._getCurrentItemsInternal(onlyFiles);
     }
 
     _getCurrentItemsInternal(onlyFiles) {
