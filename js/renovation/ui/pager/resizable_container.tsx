@@ -106,7 +106,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   }
 
   updateElementsWidth({ info, pageSizes, pages }: ChildElements<number>): void {
-    this.elementsWidth = { info, pageSizes, pages };
+    this.elementsWidth = { info, pageSizes, pages } as RefObject<ChildElements<number>>;
   }
 
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
