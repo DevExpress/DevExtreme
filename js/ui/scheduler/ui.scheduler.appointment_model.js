@@ -632,9 +632,9 @@ class AppointmentModel {
         const d = new Deferred();
 
         this._dataSource.store().update(key, data)
-            .done(() => {
+            .done(result => {
                 this._dataSource.load()
-                    .done(d.resolve)
+                    .done(() => d.resolve(result))
                     .fail(d.reject);
             })
             .fail(d.reject);
