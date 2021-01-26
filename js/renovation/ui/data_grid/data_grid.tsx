@@ -404,7 +404,6 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   get instance() {
     if (!this.componentInstance) {
       this.componentInstance = this.init();
-      this.prevProps = this.props;
     }
     return this.componentInstance;
   }
@@ -413,10 +412,12 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   // TODO Vitik to discuss: Some option update can raise updateOptions effect?
   @Effect() updateOptions() {
-    if (this.instance) {
+    if (this.instance && this.prevProps) {
       const currentProps = this.props;
       const updatedOptions = getUpdatedOptions(this.prevProps, currentProps);
       updatedOptions.forEach(({ path, value }) => this.instance.option(path, value));
+      this.prevProps = this.props;
+    } else {
       this.prevProps = this.props;
     }
   }

@@ -7,6 +7,7 @@ import { DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../common/widget';
 import { DataGridViews } from '../data_grid_views';
 import '../datagrid_component';
+import { getUpdatedOptions } from '../utils/get_updated_options';
 
 jest.mock('../data_grid_views', () => ({ DataGridViews: () => null }));
 jest.mock('../../../../ui/data_grid/ui.data_grid', () => jest.fn());
@@ -15,6 +16,7 @@ jest.mock('../datagrid_component', () => ({
     option() { return options; },
   })),
 }));
+jest.mock('../utils/get_updated_options');
 
 describe('DataGrid', () => {
   describe('View', () => {
@@ -182,5 +184,26 @@ describe('DataGrid', () => {
           expect.assertions(0);
         });
       });
+  });
+
+  describe('', () => {
+    it('updateOptions', () => {
+      (getUpdatedOptions as jest.Mock).mockReturnValue([{ path: 'columns', value: ['test', 'test2'] }]);
+      const initialProps = {
+        columns: ['test'],
+      } as DataGridProps;
+      const component = new DataGrid(initialProps);
+      (component.instance as any).option = jest.fn();
+      component.updateOptions();
+      expect(component.prevProps).toBe(initialProps);
+      component.props = {
+        columns: ['test', 'test2'],
+      } as DataGridProps;
+      component.updateOptions();
+      expect(getUpdatedOptions).toBeCalledTimes(1);
+      expect(getUpdatedOptions).toBeCalledWith(initialProps, component.props);
+      expect(component.prevProps).toBe(component.props);
+      expect((component.instance as any).option).toBeCalledWith('columns', ['test', 'test2']);
+    });
   });
 });
