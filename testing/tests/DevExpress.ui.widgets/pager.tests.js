@@ -584,6 +584,28 @@ function() {
         assert.equal(instance._pages[1].value(), 2, 'second page value');
     });
 
+    // T966318
+    QUnit.test('Pager does not display duplicated page numbers', function(assert) {
+        const $pager = $('#container').dxPager({
+            pageSizes: [10, 20, 50],
+            pageSize: 50,
+            pageCount: 2000,
+        });
+        const instance = $pager.dxPager('instance');
+        instance.option('pageIndex', 1999);
+
+        instance.option('pageCount', 10000);
+        instance.option('pageSize', 10);
+
+        instance.option('pageCount', 2000);
+        instance.option('pageSize', 50);
+
+        assert.equal(instance.selectedPage.index, 3, '3 index selected page');
+        assert.equal(instance._pages.length, 5, 'length 5');
+        assert.equal(instance._pages[3].value(), 1999, 'second last page value');
+        assert.equal(instance._pages[4].value(), 2000, 'lastpage page value');
+    });
+
     QUnit.test('Selected page is not reset_B237051', function(assert) {
         const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 15, pageIndex: 1 });
         const instance = $pager.dxPager('instance');
