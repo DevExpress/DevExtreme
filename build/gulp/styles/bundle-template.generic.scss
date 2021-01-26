@@ -1,5 +1,5 @@
-@use "../widgets/generic/colors" with ($color: $COLOR);
-@use "../widgets/generic/sizes" with ($size: $SIZE);
+@use "../widgets/generic/colors" with ($color: "$COLOR");
+@use "../widgets/generic/sizes" with ($size: "$SIZE");
 @use "../widgets/generic/typography";
 @use "../widgets/generic/icons";
 @use "../widgets/generic/widget";

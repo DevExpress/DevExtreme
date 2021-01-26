@@ -1,5 +1,5 @@
-@use "../widgets/material/colors" with ($color: $COLOR, $mode: $MODE);
-@use "../widgets/material/sizes" with ($size: $SIZE);
+@use "../widgets/material/colors" with ($color: "$COLOR", $mode: "$MODE");
+@use "../widgets/material/sizes" with ($size: "$SIZE");
 @use "../widgets/material/typography";
 @use "../widgets/material/icons";
 @use "../widgets/material/widget";
