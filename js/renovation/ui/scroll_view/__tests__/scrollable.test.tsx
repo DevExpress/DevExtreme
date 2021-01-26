@@ -689,11 +689,11 @@ each([{
 
                             initRefs(viewModel);
 
-                            initStyles((viewModel as any).containerRef, containerSize);
-                            initStyles((viewModel as any).contentRef, contentSize);
+                            initStyles((viewModel).containerRef, containerSize);
+                            initStyles((viewModel).contentRef, contentSize);
 
                             if (Scrollable === ScrollableNative) {
-                              expect((viewModel as any).validate(null)).toBe(true);
+                              expect((viewModel).validate(null)).toBe(true);
                               return; // currently implemented only in SimulatedStrategy
                             }
 
@@ -719,7 +719,7 @@ each([{
                               (e as any).type = 'dxmousewheel';
                             }
 
-                            expect((viewModel as any).validate(e)).toBe(expectedValidationResult);
+                            expect((viewModel).validate(e)).toBe(expectedValidationResult);
                           });
                         });
                       });
