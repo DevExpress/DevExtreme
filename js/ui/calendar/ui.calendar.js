@@ -911,8 +911,8 @@ const Calendar = Editor.inherit({
                 Button, {
                     focusStateEnabled: false,
                     text: messageLocalization.format('dxCalendar-todayButtonText'),
-                    onClick: (function() {
-                        this._toTodayView();
+                    onClick: (function(args) {
+                        this._toTodayView(args);
                     }).bind(this),
                     integrationOptions: {}
                 }).$element()
@@ -1013,7 +1013,8 @@ const Calendar = Editor.inherit({
         return result;
     },
 
-    _toTodayView: function() {
+    _toTodayView: function(args) {
+        this._saveValueChangeEvent(args.event);
         const today = new Date();
 
         if(this._isMaxZoomLevel()) {

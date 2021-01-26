@@ -3878,4 +3878,17 @@ QUnit.module('valueChanged handler should receive correct event', {
 
         this.testProgramChange(assert);
     });
+
+    QUnit.test('after click on today button', function(assert) {
+        this.instance.option('showTodayButton', true);
+        const $todayButton = this.$element.find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
+
+        $todayButton.trigger('dxclick');
+
+        const event = this.handler.getCall(0).args[0].event;
+        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+        assert.strictEqual(event.target, $todayButton.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
 });
