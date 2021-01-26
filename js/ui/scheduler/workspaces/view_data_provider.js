@@ -52,7 +52,10 @@ class ViewDataGenerator {
         const colSpan = groupByDate ? horizontalGroupCount : 1;
         const isVerticalGrouping = groupOrientation === 'vertical';
 
-        return [completeViewDataMap[index].slice(0, dateHeaderColumnCount).map(({
+        const result = [];
+        const slicedByColumnsData = completeViewDataMap[index].slice(0, dateHeaderColumnCount);
+
+        const firstRow = slicedByColumnsData.map(({
             startDate,
             isFirstGroupCell,
             isLastGroupCell,
@@ -65,7 +68,11 @@ class ViewDataGenerator {
             colSpan,
             isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
             isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
-        }))];
+        }));
+
+        result.push(firstRow);
+
+        return result;
     }
 
     _generateViewDataMap(completeViewDataMap, options) {
