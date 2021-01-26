@@ -3,11 +3,19 @@ import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import browser from 'core/utils/browser';
+import { DataSource } from 'data/data_source/data_source';
+import translator from 'animation/translator';
+import config from 'core/config';
+import dragEvents from 'events/drag';
+import dataUtils from 'core/element_data';
+import Color from 'color';
 import {
+    SchedulerTestWrapper,
     createWrapper,
     initTestMarkup,
     isDesktopEnvironment,
     CLASSES,
+    isIE11
 } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
@@ -19,6 +27,9 @@ const {
     test,
     module
 } = QUnit;
+
+const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
+const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
 const realSetTimeout = window.setTimeout;
 
@@ -2284,6 +2295,827 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             nextPointer.up();
 
             done();
+        });
+    });
+});
+
+
+[
+    'standard',
+    'virtual'
+].forEach(scrollingMode => {
+    module(`Scrolling mode ${scrollingMode}`, {
+        beforeEach: function() {
+
+            fx.off = true;
+
+            this.createInstance = function(options) {
+                this.instance = $('#scheduler').dxScheduler($.extend(options,
+                    {
+                        height: options && options.height || 600,
+                        scrolling: {
+                            mode: scrollingMode
+                        }
+                    })
+                ).dxScheduler('instance');
+
+                this.clock.tick(300);
+                this.instance.focus();
+
+                this.scheduler = new SchedulerTestWrapper(this.instance);
+
+                if(scrollingMode === 'virtual') {
+                    const virtualScrollingDispatcher = this.instance.getWorkSpace().virtualScrollingDispatcher;
+                    if(virtualScrollingDispatcher) {
+                        virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+                    }
+                }
+            };
+
+            this.getAppointmentColor = function($task, checkedProperty) {
+                checkedProperty = checkedProperty || 'backgroundColor';
+                return new Color($task.css(checkedProperty)).toHex();
+            };
+
+            this.clock = sinon.useFakeTimers();
+
+            this.tasks = [
+                {
+                    text: 'Task 1',
+                    startDate: new Date(2015, 1, 9, 1, 0),
+                    endDate: new Date(2015, 1, 9, 2, 0)
+                },
+                {
+                    text: 'Task 2',
+                    startDate: new Date(2015, 1, 9, 11, 0),
+                    endDate: new Date(2015, 1, 9, 12, 0)
+                }
+            ];
+
+            this.scrollTo = args => this.instance.getWorkSpace().getScrollable().scrollTo(args);
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
+        test('Appointment should be returned back if an error occurs during drag (T453486)', function(assert) {
+            if(scrollingMode === 'virtual') {
+                assert.ok('Virtual Scrolling - Month view');
+                return;
+            }
+
+            this.createInstance({
+                views: ['month'],
+                currentView: 'month',
+                editing: true,
+                currentDate: new Date(2015, 4, 25),
+                firstDayOfWeek: 0,
+                endDayHour: 19,
+                startDayHour: 8,
+                dataSource: {
+                    load: function() {
+                        return [{
+                            text: 'a',
+                            startDate: new Date(2015, 4, 13, 8),
+                            endDate: new Date(2015, 4, 13, 9, 30)
+                        }];
+                    },
+                    update: function() {
+                        throw new Error('An error occured');
+                    }
+                }
+            });
+
+            let $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+            const initialPosition = $appointment.position();
+
+            assert.throws(function() {
+                $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
+                pointerMock($appointment).start().down().move(10, 10).up();
+            }, function(err) {
+                $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+                const updatedPosition = $appointment.position();
+
+                assert.roughEqual(updatedPosition.top, initialPosition.top, 0.5, 'Top is OK');
+                assert.roughEqual(updatedPosition.left, initialPosition.left, 0.5, 'Left is OK');
+                assert.equal(err.message, 'An error occured', 'Error message is OK');
+                assert.notOk($appointment.hasClass('dx-draggable-dragging'), 'appointment hasn\'t \'dx-draggable-dragging\' class');
+
+                return true;
+            }.bind(this));
+        });
+
+        test('Appointment should be returned back if the "update" method rejects deferred during drag (T453486)', function(assert) {
+            if(scrollingMode === 'virtual') {
+                assert.ok(true, 'TODO: appointments in virtual month');
+                return;
+            }
+            this.createInstance({
+                views: ['month'],
+                currentView: 'month',
+                editing: true,
+                currentDate: new Date(2015, 4, 25),
+                firstDayOfWeek: 0,
+                endDayHour: 19,
+                startDayHour: 8,
+                dataSource: {
+                    load: function() {
+                        return [{
+                            text: 'a',
+                            startDate: new Date(2015, 4, 13, 8),
+                            endDate: new Date(2015, 4, 13, 9, 30)
+                        }];
+                    },
+                    update: function() {
+                        return $.Deferred().reject('An error occured');
+                    }
+                }
+            });
+
+            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+            const initialPosition = $appointment.position();
+
+            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
+            pointerMock($appointment).start().down().move(10, 10).up();
+
+            const updatedPosition = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0).position();
+
+            assert.equal(updatedPosition.top, initialPosition.top, 'Top is OK');
+            assert.equal(updatedPosition.left, initialPosition.left, 'Left is OK');
+        });
+
+        test('Appointment should be dragged correctly between the groups in vertical grouped workspace Month', function(assert) {
+            if(scrollingMode === 'virtual') {
+                assert.ok(true, 'TODO: appointments in virtual month');
+                return;
+            }
+            this.createInstance({
+                dataSource: [{
+                    text: 'a',
+                    startDate: new Date(2018, 2, 16, 12),
+                    endDate: new Date(2018, 2, 16, 12, 30),
+                    id: 1
+                }],
+                currentDate: new Date(2018, 2, 1),
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'vertical'
+                }],
+                editing: true,
+                currentView: 'month',
+                groups: ['id'],
+                resources: [
+                    {
+                        field: 'id',
+                        dataSource: [
+                            { id: 1, text: 'one' },
+                            { id: 2, text: 'two' }
+                        ]
+                    }
+                ],
+                height: 1500,
+            });
+
+            const { scheduler } = this;
+
+            const appointment = scheduler.appointmentList[0];
+            appointment.drag.toCell(54);
+
+            const appointmentData = appointment.data;
+
+            assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 9, 12), 'Start date is correct');
+            assert.deepEqual(appointmentData.endDate, new Date(2018, 2, 9, 12, 30), 'End date is correct');
+            assert.deepEqual(appointmentData.id, 2, 'Group is OK');
+        });
+
+        test('Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month', function(assert) {
+            if(scrollingMode === 'virtual') {
+                assert.ok(true, 'TODO: appointments in virtual month');
+                return;
+            }
+
+            this.createInstance({
+                dataSource: [{
+                    text: 'a',
+                    startDate: new Date(2018, 2, 4, 12),
+                    endDate: new Date(2018, 2, 5, 13, 30),
+                    id: 1
+                }],
+                currentDate: new Date(2018, 2, 1),
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'vertical'
+                }],
+                editing: true,
+                currentView: 'month',
+                groups: ['id'],
+                resources: [
+                    {
+                        field: 'id',
+                        dataSource: [
+                            { id: 1, text: 'one' },
+                            { id: 2, text: 'two' }
+                        ]
+                    }
+                ],
+            });
+
+            const { scheduler } = this;
+
+            const appointment = scheduler.appointmentList[0];
+            appointment.drag.toCell(6);
+
+            const $secondPart = scheduler.appointmentList[1];
+            const cellPosition = scheduler.workSpace.getCell(6).position();
+
+            assert.roughEqual(appointment.position.left, cellPosition.left, 2, 'correct left position');
+            assert.equal($secondPart.position.left, 0, 'correct left position');
+        });
+
+        test('Appointment should be dragged correctly in grouped timeline (T739132)', function(assert) {
+            const data = new DataSource({
+                store: [{
+                    'text': 'Google AdWords Strategy',
+                    'ownerId': [2],
+                    'startDate': new Date(2017, 4, 2, 9, 0),
+                    'endDate': new Date(2017, 4, 2, 10, 30),
+                    'priority': 1
+                }]
+            });
+
+            const priorityData = [
+                {
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
+                }
+            ];
+
+            this.createInstance({
+                dataSource: data,
+                views: ['timelineMonth'],
+                currentView: 'timelineMonth',
+                currentDate: new Date(2017, 4, 1),
+                startDayHour: 8,
+                endDayHour: 20,
+                cellDuration: 60,
+                editing: true,
+                groups: ['priority'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority'
+                }]
+            });
+
+            this.clock.tick();
+
+            const updatedItem = {
+                'text': 'Google AdWords Strategy',
+                'ownerId': [2],
+                'startDate': new Date(2017, 4, 1, 8, 0),
+                'endDate': new Date(2017, 4, 1, 9, 30),
+                'priority': 1
+            };
+
+            const pointer = pointerMock(this.scheduler.appointments.getAppointment(0)).start().down().move(-200, 5);
+            this.scheduler.workSpace.getCell(0).trigger(dragEvents.enter);
+            pointer.up();
+
+            const dataSourceItem = this.instance.option('dataSource').items()[0];
+
+            this.clock.tick();
+            assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
+            assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
+        });
+
+        test('Draggable rendering option \'immediate\' should be turned off', function(assert) {
+            const tasks = [
+                { text: 'Task', startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
+            ];
+            const dataSource = new DataSource({
+                store: tasks
+            });
+            this.createInstance({
+                currentView: 'week',
+                currentDate: new Date(2015, 2, 16),
+                dataSource: dataSource,
+                editing: true
+            });
+
+            const $workspace = $(this.instance.$element()).find('.dx-scrollable-content');
+            const immediate = $workspace.dxDraggable('instance').option('immediate');
+
+            assert.notOk(immediate, 'immediate option is false');
+        });
+
+        test('Appointment should not be updated if it is dropped to the initial cell (month view)', function(assert) {
+            if(scrollingMode === 'virtual') {
+                assert.ok('Virtual Scrolling - Month view');
+                return;
+            }
+
+            this.createInstance({
+                currentDate: new Date(2015, 1, 9),
+                views: ['month'],
+                currentView: 'month',
+                firstDayOfWeek: 0,
+                dataSource: [{
+                    text: 'a',
+                    startDate: new Date(2015, 1, 9, 8, 7),
+                    endDate: new Date(2015, 1, 9, 8, 37)
+                }]
+            });
+
+            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+            $appointment.trigger(dragEvents.start);
+            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(8).trigger(dragEvents.enter);
+            $appointment.trigger(dragEvents.end);
+
+            this.clock.tick();
+
+            const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+
+            assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 9, 8, 7), 'Start date is correct');
+            assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 9, 8, 37), 'End date is correct');
+        });
+
+        test('Appointment should be updated correctly if it is dropped to the neighbor cell (month view)', function(assert) {
+            if(scrollingMode === 'virtual') {
+                assert.ok('Virtual Scrolling - Month view');
+                return;
+            }
+
+            this.createInstance({
+                currentDate: new Date(2015, 1, 9),
+                views: ['month'],
+                editing: true,
+                currentView: 'month',
+                firstDayOfWeek: 0,
+                dataSource: [{
+                    text: 'a',
+                    startDate: new Date(2015, 1, 9, 8, 0),
+                    endDate: new Date(2015, 1, 9, 9, 0),
+                }]
+            });
+
+            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(9).trigger(dragEvents.enter);
+            pointerMock($appointment).start().down().move(10, 10).up();
+
+            this.clock.tick();
+            const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+
+            assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 10, 8, 0), 'Start date is correct');
+            assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 10, 9, 0), 'End date is correct');
+        });
+
+        test('Dropping appointment should keep predefined hours (month view)', function(assert) {
+            if(scrollingMode === 'virtual') {
+                assert.ok('Virtual Scrolling - Month view');
+                return;
+            }
+
+            this.createInstance({
+                views: ['month'],
+                currentView: 'month',
+                editing: true,
+                currentDate: new Date(2015, 4, 25),
+                firstDayOfWeek: 0,
+                endDayHour: 19,
+                startDayHour: 8,
+                dataSource: [{
+                    text: 'a',
+                    startDate: new Date(2015, 4, 13, 10),
+                    endDate: new Date(2015, 4, 13, 17)
+                }]
+            });
+
+            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
+            pointerMock($appointment).start().down().move(10, 10).up();
+
+            this.clock.tick();
+            const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+
+            assert.deepEqual(appointmentData.startDate, new Date(2015, 4, 12, 10), 'Start date is correct');
+            assert.deepEqual(appointmentData.endDate, new Date(2015, 4, 12, 17), 'End date is correct');
+        });
+
+        test('Dropping appointment to the neighbor cell (month view) with predefined start & end day hours', function(assert) {
+            if(scrollingMode === 'virtual') {
+                assert.ok('Virtual Scrolling - Month view');
+                return;
+            }
+
+            this.createInstance({
+                views: ['month'],
+                currentView: 'month',
+                editing: true,
+                currentDate: new Date(2015, 4, 25),
+                firstDayOfWeek: 0,
+                endDayHour: 19,
+                startDayHour: 8,
+                dataSource: [{
+                    text: 'a',
+                    startDate: new Date(2015, 4, 13, 8),
+                    endDate: new Date(2015, 4, 13, 9, 30)
+                }]
+            });
+
+            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
+            pointerMock($appointment).start().down().move(10, 10).up();
+
+            this.clock.tick();
+            const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+
+            assert.deepEqual(appointmentData.startDate, new Date(2015, 4, 12, 8), 'Start date is correct');
+            assert.deepEqual(appointmentData.endDate, new Date(2015, 4, 12, 9, 30), 'End date is correct');
+        });
+
+        // TODO: also need test when task is dragging outside the area. updated dates should be equal to old dates
+        test('Task dragging', function(assert) {
+            if(isIE11) {
+                assert.ok('This test is not for IE11');
+                return;
+            }
+
+            const data = new DataSource({
+                store: this.tasks
+            });
+
+            this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
+
+            this.clock.tick();
+
+            const updatedItem = {
+                text: 'Task 1',
+                startDate: new Date(2015, 1, 9, 2, 30),
+                endDate: new Date(2015, 1, 9, 3, 30),
+                allDay: false
+            };
+
+            const pointer = pointerMock($(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0)).start().down().move(10, 10);
+            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(5).trigger(dragEvents.enter);
+            pointer.up();
+
+            const dataSourceItem = this.instance.option('dataSource').items()[0];
+
+            this.clock.tick();
+            assert.equal(dataSourceItem.text, updatedItem.text, 'New data is correct');
+            assert.equal(dataSourceItem.allDay, updatedItem.allDay, 'New data is correct');
+            assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
+            assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
+        });
+
+        [false, true].forEach(function(forceIsoDateParsing) {
+            test('Drag task that contains timestamps when forceIsoDateParsing is ' + forceIsoDateParsing, function(assert) {
+                if(isIE11) {
+                    assert.ok('This test is not for IE11');
+                    return;
+                }
+
+                const defaultForceIsoDateParsing = config().forceIsoDateParsing;
+
+                try {
+                    config().forceIsoDateParsing = forceIsoDateParsing;
+
+                    const data = new DataSource({
+                        store: [
+                            {
+                                text: 'Task 1',
+                                startDate: new Date(2015, 1, 9).getTime(),
+                                endDate: new Date(2015, 1, 9, 1).getTime()
+                            }
+                        ]
+                    });
+
+                    this.createInstance({
+                        currentDate: new Date(2015, 1, 9),
+                        dataSource: data,
+                        editing: true,
+                        allDayExpr: 'AllDay'
+                    });
+
+                    this.clock.tick();
+
+                    const updatedItem = {
+                        text: 'Task 1',
+                        startDate: forceIsoDateParsing ? new Date(2015, 1, 9, 2, 30).getTime() : new Date(2015, 1, 9, 2, 30),
+                        endDate: forceIsoDateParsing ? new Date(2015, 1, 9, 3, 30).getTime() : new Date(2015, 1, 9, 3, 30),
+                        AllDay: false
+                    };
+
+                    const pointer = pointerMock($(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0)).start().down().move(10, 10);
+                    $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(5).trigger(dragEvents.enter);
+                    pointer.up();
+
+                    this.clock.tick();
+
+                    const dataSourceItem = this.instance.option('dataSource').items()[0];
+
+                    assert.equal(dataSourceItem.text, updatedItem.text, 'New data is correct');
+                    assert.equal(dataSourceItem.AllDay, updatedItem.AllDay, 'New data is correct');
+                    assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
+                    assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
+                } finally {
+                    config().forceIsoDateParsing = defaultForceIsoDateParsing;
+                }
+            });
+        });
+
+        test('Appointment should have correct position while dragging from group', function(assert) {
+            if(isIE11) {
+                assert.ok('This test is not for IE11');
+                return;
+            }
+
+            this.createInstance({
+                currentDate: new Date(2015, 6, 10),
+                editing: true,
+                views: ['week'],
+                currentView: 'week',
+                dataSource: [{
+                    text: 'a',
+                    startDate: new Date(2015, 6, 10, 0),
+                    endDate: new Date(2015, 6, 10, 0, 30),
+                    ownerId: { id: 1 }
+                }],
+                groups: ['ownerId.id'],
+                resources: [
+                    {
+                        field: 'ownerId.id',
+                        allowMultiple: false,
+                        dataSource: [
+                            { id: 1, text: 'one' },
+                            { id: 2, text: 'two' }
+                        ]
+                    }
+                ],
+                width: 800
+            });
+            const $appointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).eq(0);
+
+            const pointer = pointerMock($appointment).start().down().move(10, 10);
+            $(this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
+            pointer.up();
+
+            this.clock.tick();
+            const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+
+            assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 0), 'Start date is correct');
+            assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 5, 0, 30), 'End date is correct');
+            assert.deepEqual(appointmentData.ownerId, { id: [2] }, 'Resources is correct');
+        });
+
+        test('Appointment should have correct position while dragging from group, vertical grouping', function(assert) {
+            if(isIE11) {
+                assert.ok('This test is not for IE11');
+                return;
+            }
+
+            this.createInstance({
+                currentDate: new Date(2015, 6, 10),
+                editing: true,
+                views: [{
+                    type: 'week',
+                    name: 'Week',
+                    groupOrientation: 'vertical'
+                }],
+                currentView: 'week',
+                dataSource: [{
+                    text: 'a',
+                    startDate: new Date(2015, 6, 7, 10),
+                    endDate: new Date(2015, 6, 7, 10, 30),
+                    ownerId: { id: 2 },
+                    roomId: { id: 1 }
+                }],
+                startDayHour: 9,
+                endDayHour: 12,
+                groups: ['ownerId.id', 'roomId.id'],
+                resources: [
+                    {
+                        field: 'ownerId.id',
+                        allowMultiple: false,
+                        dataSource: [
+                            { id: 1, text: 'one' },
+                            { id: 2, text: 'two' }
+                        ]
+                    },
+                    {
+                        field: 'roomId.id',
+                        allowMultiple: false,
+                        dataSource: [
+                            { id: 1, text: 'room one' },
+                            { id: 2, text: 'room two' }
+                        ]
+                    }
+                ],
+                width: 800,
+                height: 700
+            });
+            const $appointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).eq(0);
+
+            const startPosition = $appointment.offset();
+
+            const pointer = pointerMock($appointment).start().down().move(10, 10);
+
+            const $draggedAppointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).parent().eq(0);
+
+            assert.roughEqual(translator.locate($draggedAppointment).top, startPosition.top + 10, 1.5, 'Start position is correct');
+            assert.roughEqual(translator.locate($draggedAppointment).left, startPosition.left + 10, 1.5, 'Start position is correct');
+
+            $(this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
+            pointer.up();
+
+            this.clock.tick();
+            const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+
+            assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 9, 30), 'Start date is correct');
+            assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 5, 10, 0), 'End date is correct');
+            assert.deepEqual(appointmentData.ownerId, { id: [1] }, 'Resources is correct');
+        });
+
+        test('Appointment should have correct position while dragging into allDay panel, vertical grouping', function(assert) {
+            if(isIE11) {
+                assert.ok('This test is not for IE11');
+                return;
+            }
+
+            this.createInstance({
+                currentDate: new Date(2015, 6, 10),
+                editing: true,
+                views: [{
+                    type: 'week',
+                    name: 'Week',
+                    groupOrientation: 'vertical'
+                }],
+                currentView: 'week',
+                dataSource: [{
+                    text: 'a',
+                    startDate: new Date(2015, 6, 7, 10),
+                    endDate: new Date(2015, 6, 7, 10, 30),
+                    ownerId: { id: 2 }
+                }],
+                startDayHour: 9,
+                endDayHour: 12,
+                groups: ['ownerId.id'],
+                resources: [
+                    {
+                        field: 'ownerId.id',
+                        allowMultiple: false,
+                        dataSource: [
+                            { id: 1, text: 'one' },
+                            { id: 2, text: 'two' }
+                        ]
+                    }
+                ],
+                width: 800
+            });
+
+            const $appointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).eq(0);
+            const startPosition = $appointment.offset();
+
+            const pointer = pointerMock($appointment).start().down().move(10, 10);
+
+            const $draggedAppointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).parent().eq(0);
+
+            assert.roughEqual(translator.locate($draggedAppointment).top, startPosition.top + 10, 2.1, 'Start position is correct');
+            assert.roughEqual(translator.locate($draggedAppointment).left, startPosition.left + 10, 1.5, 'Start position is correct');
+
+            $(this.instance.$element().find('.dx-scheduler-all-day-table-cell')).eq(11).trigger(dragEvents.enter);
+            pointer.up();
+
+            this.clock.tick();
+            const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+
+            assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 9, 0), 'Start date is correct');
+            assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 9, 0, 30), 'End date is correct');
+            assert.deepEqual(appointmentData.ownerId, { id: [2] }, 'Resources is correct');
+        });
+
+        test('Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)', function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 4, 25),
+                editing: true,
+                views: ['workWeek'],
+                currentView: 'workWeek',
+                dataSource: [{
+                    text: 'Test appointment',
+                    priorityId: 1,
+                    startDate: new Date(2015, 4, 25, 14, 30),
+                    endDate: new Date(2015, 4, 25, 15, 30),
+                    recurrenceRule: 'FREQ=YEARLY'
+                }],
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: [
+                            { text: 'Low Priority', id: 1 },
+                            { text: 'High Priority', id: 2 }
+                        ],
+                        label: 'Priority'
+                    }
+                ],
+                onAppointmentUpdating: function(e) {
+                    e.cancel = true;
+                },
+                width: 800
+            });
+            const $appointment = this.scheduler.appointments.getAppointment(0);
+            const oldAppointmentCoords = translator.locate($appointment);
+            $appointment.trigger(dragEvents.start);
+            this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
+            $appointment.trigger(dragEvents.end);
+
+            this.scheduler.appointmentForm.clickFormDialogButton(1);
+
+            const newAppointmentCoords = translator.locate(this.scheduler.appointments.getAppointment(0));
+
+            assert.deepEqual(oldAppointmentCoords, newAppointmentCoords, 'Appointment has correct coords');
+
+            this.clock.tick();
+        });
+
+        test('Appointment should push correct data to the onAppointmentUpdating event on changing group by dragging', function(assert) {
+            if(isIE11) {
+                assert.ok('This test is not for IE11');
+                return;
+            }
+
+            this.createInstance({
+                currentDate: new Date(2015, 4, 25),
+                editing: true,
+                views: ['workWeek'],
+                currentView: 'workWeek',
+                dataSource: [{
+                    text: 'Test appointment',
+                    priorityId: 1,
+                    startDate: new Date(2015, 4, 25, 14, 30),
+                    endDate: new Date(2015, 4, 25, 15, 30)
+                }],
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: [
+                            { text: 'Low Priority', id: 1 },
+                            { text: 'High Priority', id: 2 }
+                        ],
+                        label: 'Priority'
+                    }
+                ],
+                onAppointmentUpdating: function(e) {},
+                width: 800,
+                height: 1500
+            });
+
+            const stub = sinon.stub(this.instance.option(), 'onAppointmentUpdating');
+            const $appointment = this.scheduler.appointments.getAppointment(0);
+
+            const pointer = pointerMock($appointment).start().down().move(10, 10);
+            this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
+            pointer.up();
+
+            const result = stub.getCall(0).args[0];
+
+            assert.equal(result.oldData.priorityId, 1, 'Appointment was located in the first group');
+            assert.equal(result.newData.priorityId, 2, 'Appointment located in the second group now');
+
+            this.clock.tick();
+        });
+
+        test('Appointment should not be updated if it is dropped to the initial cell (week view)', function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 1, 9),
+                currentView: 'week',
+                firstDayOfWeek: 0,
+                dataSource: [{
+                    text: 'a',
+                    startDate: new Date(2015, 1, 9, 0, 7),
+                    endDate: new Date(2015, 1, 9, 0, 37)
+                }]
+            });
+
+            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(1).trigger(dragEvents.enter);
+            $appointment.trigger(dragEvents.start);
+            $appointment.trigger(dragEvents.end);
+
+            this.clock.tick();
+            const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
+
+            assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 9, 0, 7), 'Start date is correct');
+            assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 9, 0, 37), 'End date is correct');
         });
     });
 });

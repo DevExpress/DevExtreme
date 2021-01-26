@@ -17,10 +17,11 @@ import BaseWidgetProps from '../../utils/base_props';
 import {
   ScrollableProps,
 } from './scrollable_props';
-import { TopPocketProps } from './topPocket_props';
-import { BottomPocketProps } from './bottomPocket_props';
+import { TopPocketProps } from './top_pocket_props';
+import { BottomPocketProps } from './bottom_pocket_props';
 
 import {
+  allowedDirection,
   ScrollableLocation, ScrollOffset,
 } from './types.d';
 
@@ -28,6 +29,8 @@ import {
   ensureLocation, ScrollDirection, normalizeCoordinate,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
+  getElementWidth, getElementHeight,
+  updateAllowedDirection,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
   SCROLLABLE_CONTAINER_CLASS,
@@ -40,8 +43,8 @@ import {
 } from './scrollable_utils';
 import { Scrollbar } from './scrollbar';
 
-import { TopPocket } from './topPocket';
-import { BottomPocket } from './bottomPocket';
+import { TopPocket } from './top_pocket';
+import { BottomPocket } from './bottom_pocket';
 
 import {
   dxScrollInit,
@@ -246,9 +249,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     /* istanbul ignore next */
     dxScrollInit.on(this.wrapperRef,
       (e: Event) => {
-        this.initHandler(e);
+        this.handleInit(e);
       }, {
-        getDirection: (e) => this.getDirection(e),
+        getDirection: () => this.getDirection(),
         validate: (e) => this.validate(e),
         isNative: true,
         scrollTarget: this.containerRef,
@@ -319,7 +322,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   /* istanbul ignore next */
   // eslint-disable-next-line
-  private initHandler(event: Event): void {
+  private handleInit(event: Event): void {
     // console.log('initHandler', event, this);
   }
   /* istanbul ignore next */
@@ -348,13 +351,25 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     // console.log('handleCancel', event, this);
   }
 
-  /* istanbul ignore next */
-  // eslint-disable-next-line
-  private getDirection(event: Event): string {
-    return 'vertical'; // TODO
+  private getDirection(): string | undefined {
+    return this.allowedDirection();
   }
 
-  /* istanbul ignore next */
+  private allowedDirection(): string | undefined {
+    return updateAllowedDirection(this.allowedDirections(), this.props.direction);
+  }
+
+  private allowedDirections(): allowedDirection {
+    const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
+
+    return {
+      vertical: isVertical
+      && getElementHeight(this.contentRef) > getElementHeight(this.containerRef),
+      horizontal: isHorizontal
+      && getElementWidth(this.contentRef) > getElementWidth(this.containerRef),
+    };
+  }
+
   // eslint-disable-next-line
   private validate(event: Event): boolean {
     return true; // TODO

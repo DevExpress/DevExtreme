@@ -10510,7 +10510,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxSchedulerAppointment.endDate]
          */
-        endDate?: Date;
+        endDate?: Date | string;
         /**
          * [descr:dxSchedulerAppointment.endDateTimeZone]
          */
@@ -10530,7 +10530,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxSchedulerAppointment.startDate]
          */
-        startDate?: Date;
+        startDate?: Date | string;
         /**
          * [descr:dxSchedulerAppointment.startDateTimeZone]
          */
@@ -11264,6 +11264,10 @@ declare module DevExpress.ui {
          * [descr:dxTagBox.Options.maxDisplayedTags]
          */
         maxDisplayedTags?: number;
+        /**
+         * [descr:dxTagBox.Options.maxFilterLength]
+         */
+        maxFilterLength?: number;
         /**
          * [descr:dxTagBox.Options.multiline]
          */
@@ -19313,7 +19317,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMap.Options.group]
          */
-        group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
+        group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
         /**
          * [descr:dxTreeMap.Options.hoverEnabled]
          */

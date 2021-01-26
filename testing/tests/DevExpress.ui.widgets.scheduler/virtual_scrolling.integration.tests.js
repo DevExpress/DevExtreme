@@ -11,10 +11,9 @@ import {
     initTestMarkup,
     isDesktopEnvironment,
     asyncScrollTest,
-    asyncWrapper
+    asyncWrapper,
+    isIE11
 } from '../../helpers/scheduler/helpers.js';
-
-import browser from 'core/utils/browser';
 
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
@@ -24,7 +23,6 @@ const {
 } = QUnit;
 
 const test = (description, callback) => {
-    const isIE11 = browser.msie && parseInt(browser.version) <= 11;
     const testFunc = isIE11
         ? QUnit.skip
         : QUnit.test;
@@ -449,6 +447,11 @@ module('Virtual scrolling', () => {
                     }
                 ].forEach(option => {
                     test(`Long appointment part should be rendered correctly without render the main part if horizontal grouping and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                        if(!isDesktopEnvironment()) {
+                            assert.ok(true, 'This test is for desktop only');
+                            return;
+                        }
+
                         const data = [{
                             startDate: new Date(2020, 9, 12, 11, 30),
                             endDate: new Date(2020, 9, 13, 10, 30),
@@ -2639,6 +2642,11 @@ module('Virtual scrolling', () => {
                 }
             }, () => {
                 test('Scroll Right', function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
                     const $style = $('<style>');
                     const styleBefore = $style.text();
 
@@ -2738,7 +2746,6 @@ module('Virtual scrolling', () => {
                         $style.text(styleBefore);
                     });
                 });
-
             });
         });
     });
