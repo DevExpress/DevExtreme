@@ -88,6 +88,13 @@ $scheduler-time-panel-background-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-appointment-overlay-bg: null !default;
 
+// Agenda
+$agenda-appointment-recurrence-icon-color: null !default;
+$agenda-appointment-hover-bg: $base-hover-bg !default;
+$agenda-appointment-active-bg: $base-accent !default;
+$agenda-appointment-active-text-color: $base-inverted-text-color !default;
+$agenda-appointment-text-color: null !default;
+
 @if $color == "carmine" {
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $scheduler-cell-active-bg: color.change(darken($base-bg, 13.3%), $alpha: 0.7) !default;
@@ -121,6 +128,9 @@ $scheduler-appointment-overlay-bg: null !default;
 
   $scheduler-tooltip-appointment-text-color: $base-text-color !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
 }
 
 @if $color == "contrast" {
@@ -156,6 +166,9 @@ $scheduler-appointment-overlay-bg: null !default;
 
   $scheduler-tooltip-appointment-text-color: $base-inverted-text-color !default;
   $scheduler-appointment-overlay-bg: $base-inverted-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
 }
 
 @if $color == "dark" {
@@ -191,6 +204,9 @@ $scheduler-appointment-overlay-bg: null !default;
 
   $scheduler-tooltip-appointment-text-color: $base-text-color !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
 }
 
 @if $color == "darkmoon" {
@@ -228,6 +244,9 @@ $scheduler-appointment-overlay-bg: null !default;
 
   $scheduler-tooltip-appointment-text-color: $base-text-color !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
 }
 
 @if $color == "darkviolet" {
@@ -263,6 +282,9 @@ $scheduler-appointment-overlay-bg: null !default;
 
   $scheduler-tooltip-appointment-text-color: $base-text-color !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
 }
 
 @if $color == "greenmist" {
@@ -299,6 +321,9 @@ $scheduler-appointment-overlay-bg: null !default;
 
   $scheduler-tooltip-appointment-text-color: $base-text-color !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
 }
 
 @if $color == "light" {
@@ -334,6 +359,9 @@ $scheduler-appointment-overlay-bg: null !default;
 
   $scheduler-tooltip-appointment-text-color: $base-text-color !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
 }
 
 @if $color == "softblue" {
@@ -369,5 +397,8 @@ $scheduler-appointment-overlay-bg: null !default;
 
   $scheduler-tooltip-appointment-text-color: $base-text-color !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
 }
 

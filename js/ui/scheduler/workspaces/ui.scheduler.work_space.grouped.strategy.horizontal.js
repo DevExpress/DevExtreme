@@ -107,7 +107,12 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     }
 
     getVerticalMax(groupIndex) {
-        return this._workSpace.getMaxAllowedVerticalPosition(0);
+        const isVirtualScrolling = this._workSpace.isVirtualScrolling();
+        const correctedGroupIndex = isVirtualScrolling
+            ? groupIndex
+            : 0;
+
+        return this._workSpace.getMaxAllowedVerticalPosition(correctedGroupIndex);
     }
 
     calculateTimeCellRepeatCount() {
@@ -126,10 +131,10 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return getBoundingRect(this._workSpace._$allDayTable.get(0)).height || 0;
     }
 
-    getGroupCountAttr(groupRowCount, groupRows) {
+    getGroupCountAttr(groups) {
         return {
             attr: HORIZONTAL_GROUPED_ATTR,
-            count: groupRows && groupRows.elements.length
+            count: groups?.length
         };
     }
 

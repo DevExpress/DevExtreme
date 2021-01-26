@@ -29,6 +29,8 @@ const DATE_TABLE_HEADER_MARGIN = 10;
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimeline extends SchedulerWorkSpace {
+    get verticalGroupTableClass() { return GROUP_TABLE_CLASS; }
+
     get viewDirection() { return 'horizontal'; }
 
     _init() {
@@ -259,7 +261,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _renderView() {
         this._setFirstViewDate();
-        const groupCellTemplates = this._renderGroupHeader();
+        let groupCellTemplates;
+        if(!this.isRenovatedRender()) {
+            groupCellTemplates = this._renderGroupHeader();
+        } else {
+            if(!this._isVerticalGroupedWorkSpace()) {
+                this.renderRGroupPanel();
+            }
+        }
         this._renderDateHeader();
 
         if(this.isRenovatedRender()) {
@@ -272,9 +281,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
         this._shader = new HorizontalShader(this);
 
-        this._updateGroupTableHeight();
-
         this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
+
+        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+            this.renderRGroupPanel();
+        }
+
         this._applyCellTemplates(groupCellTemplates);
     }
 
@@ -626,6 +638,19 @@ class SchedulerTimeline extends SchedulerWorkSpace {
                 dataCellTemplate: this.option('dataCellTemplate'),
             }
         );
+    }
+
+    // Remove when dateHeader is renovated
+    renderRWorkspace(isGenerateNewViewData = true) {
+        this._cleanAllowedPositions();
+
+        this.viewDataProvider.update(isGenerateNewViewData);
+
+        this.renderRDateTable();
+
+        this.updateRSelection();
+
+        this.virtualScrollingDispatcher?.updateDimensions();
     }
 }
 

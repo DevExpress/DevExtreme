@@ -27,3 +27,4 @@ export interface dxDeferred<T> {
 }
 
 export function Deferred<T>(): dxDeferred<T>;
+export function when(...args: dxPromise<any>[]): dxPromise<any>;

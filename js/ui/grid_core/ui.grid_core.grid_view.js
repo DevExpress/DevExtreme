@@ -759,5 +759,7 @@ export default {
     },
     views: {
         gridView: GridView
-    }
+    },
+
+    VIEW_NAMES: VIEW_NAMES
 };
