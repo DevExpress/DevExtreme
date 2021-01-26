@@ -21,8 +21,8 @@ import { titleize } from '../../../core/utils/inflector';
 
 import { ScrollbarProps } from './scrollbar_props';
 import {
+  DIRECTION_HORIZONTAL, SCROLLABLE_SCROLLBAR_CLASS,
   getElementHeight,
-  DIRECTION_HORIZONTAL,
 } from './scrollable_utils';
 
 import {
@@ -30,7 +30,6 @@ import {
   dxPointerUp,
 } from '../../../events/short';
 
-const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
 const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
 const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';

@@ -52,6 +52,7 @@ import {
   SCROLLABLE_SCROLLBARS_HIDDEN,
   SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
   SCROLL_LINE_HEIGHT,
+  SCROLLABLE_SCROLLBAR_CLASS,
 } from './scrollable_utils';
 
 import { TopPocket } from './top_pocket';
@@ -596,9 +597,32 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return scaleRatio;
   }
 
+  private validate(e: Event): boolean {
+    if (this.props.disabled) {
+      return false;
+    }
+
+    if (this.props.bounceEnabled) {
+      return true;
+    }
+
+    return isDxMouseWheelEvent(e)
+      ? this.validateWheel(e)
+      : this.validateMove(e);
+  }
+
   // eslint-disable-next-line
-  private validate(event: Event): boolean {
-    return true; // TODO
+  private validateWheel(e: Event): boolean {
+    return true; // TODO:
+  }
+
+  private validateMove(e: Event): boolean {
+    if (!this.props.scrollByContent
+      && !isDefined((e.target as HTMLElement).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`))) {
+      return false;
+    }
+
+    return isDefined(this.allowedDirection());
   }
 
   onWidgetKeyDown(options): Event | undefined {

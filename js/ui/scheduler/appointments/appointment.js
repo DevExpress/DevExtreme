@@ -22,6 +22,7 @@ import {
     APPOINTMENT_DRAG_SOURCE_CLASS,
     APPOINTMENT_CONTENT_CLASSES
 } from '../constants';
+import { Deferred } from '../../../core/utils/deferred';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
@@ -32,6 +33,10 @@ const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.l
 export class Appointment extends DOMComponent {
     get coloredElement() {
         return this.$element();
+    }
+
+    get rawAppointment() {
+        return this.option('data');
     }
 
     _getDefaultOptions() {
@@ -47,8 +52,7 @@ export class Appointment extends DOMComponent {
             resizableConfig: {},
             cellHeight: 0,
             cellWidth: 0,
-            isDragSource: false,
-            plainResourceList: []
+            isDragSource: false
         });
     }
 
@@ -129,7 +133,7 @@ export class Appointment extends DOMComponent {
         this._renderDirection();
 
         this.$element().data('dxAppointmentStartDate', this.option('startDate'));
-        this.$element().attr('title', this.invoke('getField', 'text', this.option('data')));
+        this.$element().attr('title', this.invoke('getField', 'text', this.rawAppointment));
         this.$element().attr('role', 'button');
 
         this._renderRecurrenceClass();
@@ -140,7 +144,7 @@ export class Appointment extends DOMComponent {
 
     _setResourceColor() {
         const deferredColor = this.invoke('getAppointmentColor', {
-            itemData: this.option('data'),
+            itemData: this.rawAppointment,
             groupIndex: this.option('groupIndex'),
         });
 
@@ -206,7 +210,7 @@ export class Appointment extends DOMComponent {
     }
 
     _getEndDate() {
-        const result = this.invoke('getField', 'endDate', this.option('data'));
+        const result = this.invoke('getField', 'endDate', this.rawAppointment);
         if(result) {
             return new Date(result);
         }
@@ -222,7 +226,7 @@ export class Appointment extends DOMComponent {
     }
 
     _renderRecurrenceClass() {
-        const rule = this.invoke('getField', 'recurrenceRule', this.option('data'));
+        const rule = this.invoke('getField', 'recurrenceRule', this.rawAppointment);
 
         if(getRecurrenceProcessor().isValidRecurrenceRule(rule)) {
             this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);
@@ -261,19 +265,14 @@ export class AgendaAppointment extends Appointment {
         return this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER}`);
     }
 
-    get resourceList() {
-        return this.option('plainResourceList');
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            createPlainResourceListAsync: new Deferred()
+        });
     }
 
-    _render() {
-        super._render();
-
-        const parent = this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`);
-        const container = $('<div>')
-            .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST)
-            .appendTo(parent);
-
-        this.resourceList.forEach(item => {
+    _renderResourceList(container, list) {
+        list.forEach(item => {
             const itemContainer = $('<div>')
                 .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST_ITEM)
                 .appendTo(container);
@@ -286,6 +285,20 @@ export class AgendaAppointment extends Appointment {
                 .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST_ITEM_VALUE)
                 .text(item.values.join(', '))
                 .appendTo(itemContainer);
+        });
+    }
+
+    _render() {
+        super._render();
+
+        const createPlainResourceListAsync = this.option('createPlainResourceListAsync');
+        createPlainResourceListAsync(this.rawAppointment).done(list => {
+            const parent = this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`);
+            const container = $('<div>')
+                .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST)
+                .appendTo(parent);
+
+            this._renderResourceList(container, list);
         });
     }
 }
