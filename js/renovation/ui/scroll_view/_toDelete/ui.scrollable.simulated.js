@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import { titleize } from '../../core/utils/inflector';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
@@ -101,30 +100,16 @@ export const Scroller = Class.inherit({
     ctor: function(options) {
         this._initOptions(options);
         this._initAnimators();
-        this._initScrollbar();
     },
 
     _initOptions: function(options) {
-        this._location = 0;
         this._topReached = false;
         this._bottomReached = false;
-        this._axis = options.direction === HORIZONTAL ? 'x' : 'y';
-        this._prop = options.direction === HORIZONTAL ? 'left' : 'top';
-        this._dimension = options.direction === HORIZONTAL ? 'width' : 'height';
-        this._scrollProp = options.direction === HORIZONTAL ? 'scrollLeft' : 'scrollTop';
-
-        each(options, (optionName, optionValue) => {
-            this['_' + optionName] = optionValue;
-        });
     },
 
     _initAnimators: function() {
         this._inertiaAnimator = new InertiaAnimator(this);
         this._bounceAnimator = new BounceAnimator(this);
-    },
-
-    _initScrollbar: function() {
-        this._$scrollbar = this._scrollbar.$element();
     },
 
     _scrollStep: function(delta) {
@@ -344,23 +329,6 @@ export const Scroller = Class.inherit({
 
     _hideScrollbar: function() {
         this._scrollbar.option('visible', false);
-    },
-
-    _containerSize: function() {
-        return this._getRealDimension(this._$container.get(0), this._dimension);
-    },
-
-    _contentSize: function() {
-        const isOverflowHidden = this._$content.css('overflow' + this._axis.toUpperCase()) === 'hidden';
-        let contentSize = this._getRealDimension(this._$content.get(0), this._dimension);
-
-        if(!isOverflowHidden) {
-            const containerScrollSize = this._$content[0]['scroll' + titleize(this._dimension)] * this._getScaleRatio();
-
-            contentSize = Math.max(containerScrollSize, contentSize);
-        }
-
-        return contentSize;
     },
 
     _reachedMin: function() {
