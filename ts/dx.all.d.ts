@@ -6212,6 +6212,18 @@ declare module DevExpress.ui {
          */
         attachedConnectorIds?: Array<string>;
         /**
+         * [descr:dxDiagramShape.containerChildItemIds]
+         */
+        containerChildItemIds?: Array<string>;
+        /**
+         * [descr:dxDiagramShape.containerExpanded]
+         */
+        containerExpanded?: boolean;
+        /**
+         * [descr:dxDiagramShape.containerId]
+         */
+        containerId?: string;
+        /**
          * [descr:dxDiagramShape.position]
          */
         position?: { x?: number, y?: number };
