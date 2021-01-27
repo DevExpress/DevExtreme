@@ -2,6 +2,7 @@ import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -559,20 +560,40 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
     beforeEach: function() {
         fx.off = true;
 
-        this.handler = sinon.stub();
-        this.$element = $('#switch').dxSwitch({ onValueChanged: this.handler, focusStateEnabled: true });
-        this.instance = this.$element.dxSwitch('instance');
-        this.keyboard = keyboardMock(this.$element);
-        this.pointer = pointerMock(this.$element);
+        this.valueChangedHandler = sinon.stub();
+        const initialOptions = {
+            onValueChanged: this.valueChangedHandler,
+            focusStateEnabled: true
+        };
 
+        this.init = (options) => {
+            this.$element = $('#switch').dxSwitch(options);
+            this.instance = this.$element.dxSwitch('instance');
+            this.keyboard = keyboardMock(this.$element);
+            this.pointer = pointerMock(this.$element);
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, initialOptions, options));
+        };
         this.testProgramChange = (assert) => {
             const value = this.instance.option('value');
             this.instance.option('value', !value);
 
-            const callCount = this.handler.callCount;
-            const event = this.handler.getCall(callCount - 1).args[0].event;
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
             assert.strictEqual(event, undefined, 'event is undefined');
         };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+
+        this.init(initialOptions);
     },
     afterEach: function() {
         fx.off = false;
@@ -585,20 +606,14 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
     QUnit.test('on click', function(assert) {
         this.$element.trigger('dxclick');
 
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', this.$element);
         this.testProgramChange(assert);
     });
 
     QUnit.test('on swipe', function(assert) {
         this.pointer.start().swipeStart().swipeEnd(1);
 
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxswipeend', 'event type is correct');
-        assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxswipeend', this.$element);
         this.testProgramChange(assert);
     });
 
@@ -606,34 +621,20 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
         QUnit.test(`on ${key} press`, function(assert) {
             this.keyboard.press(key);
 
-            const event = this.handler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
-
+            this.checkEvent(assert, 'keydown', this.$element, key);
             this.testProgramChange(assert);
         });
     });
 
-    QUnit.test('on right arrow press', function(assert) {
-        this.keyboard.press('right');
+    ['right', 'left'].forEach(arrow => {
+        QUnit.test(`on ${arrow} arrow press`, function(assert) {
+            this.reinit({ value: arrow === 'left' ? true : false });
 
-        const event = this.handler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'keydown', 'event type is correct');
-        assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
+            this.keyboard.press(arrow);
 
-        this.testProgramChange(assert);
-    });
-
-    QUnit.test('on left arrow press', function(assert) {
-        this.instance.option('value', true);
-
-        this.keyboard.press('left');
-
-        const event = this.handler.getCall(1).args[0].event;
-        assert.strictEqual(event.type, 'keydown', 'event type is correct');
-        assert.strictEqual(event.target, this.$element.get(0), 'event target is correct');
-
-        this.testProgramChange(assert);
+            this.checkEvent(assert, 'keydown', this.$element, arrow);
+            this.testProgramChange(assert);
+        });
     });
 });
 
