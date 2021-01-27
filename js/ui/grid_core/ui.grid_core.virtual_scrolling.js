@@ -145,7 +145,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             });
         },
         _handleLoadingChanged: function(isLoading) {
-            if(!isVirtualMode(this) || this._isLoadingAll/* || this.option(NEW_SCROLLING_MODE)*/) {
+            if(!isVirtualMode(this) || this._isLoadingAll) {
                 this._isLoading = isLoading;
                 this.callBase.apply(this, arguments);
             }
