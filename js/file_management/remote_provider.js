@@ -2,7 +2,6 @@ import $ from '../core/renderer';
 import ajax from '../core/utils/ajax';
 import { ensureDefined, noop } from '../core/utils/common';
 import Guid from '../core/guid';
-import { getWindow } from '../core/utils/window';
 import { each } from '../core/utils/iterator';
 import { Deferred } from '../core/utils/deferred';
 import eventsEngine from '../events/core/events_engine';
@@ -11,7 +10,6 @@ import FileSystemProviderBase from './provider_base';
 import { compileGetter } from '../core/utils/data';
 import { isDefined, isEmptyObject, isFunction } from '../core/utils/type';
 
-const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = 'chunk';
 const FILE_SYSTEM_COMMNAD = {
     GET_DIR_CONTENTS: 'GetDirContents',
@@ -241,21 +239,9 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
             ajaxSettings.data = ajaxArguments.formData;
             ajaxSettings.xhrFields = ajaxArguments.xhrFields;
         }
-        if(!isEmptyObject(ajaxSettings.data) && ajaxSettings.method === REQUEST_METHOD.POST) {
-            ajaxSettings.data = this._createFormData(ajaxSettings.data);
-        } else {
+        if(isEmptyObject(ajaxSettings.data)) {
             delete ajaxSettings.data;
         }
-    }
-
-    _createFormData(formDataEntries) {
-        const formData = new window.FormData();
-        for(const entryName in formDataEntries) {
-            if(Object.prototype.hasOwnProperty.call(formDataEntries, entryName) && isDefined(formDataEntries[entryName])) {
-                formData.append(entryName, formDataEntries[entryName]);
-            }
-        }
-        return formData;
     }
 
     _appendFormDataInputsToForm(formDataEntries, formElement) {
