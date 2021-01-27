@@ -31,24 +31,7 @@ const NativeStrategy = Class.inherit({
         this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
     },
 
-    render: function() {
-        this._renderPushBackOffset();
-    },
-
     updateBounds: noop,
-
-    _renderPushBackOffset: function() {
-        const pushBackValue = this.option('pushBackValue');
-        if(!pushBackValue && !this._component._lastPushBackValue) {
-            return;
-        }
-
-        this._$content.css({
-            paddingTop: pushBackValue,
-            paddingBottom: pushBackValue
-        });
-        this._component._lastPushBackValue = pushBackValue;
-    },
 
     _renderScrollbars: function() {
         this._scrollbars = {};
