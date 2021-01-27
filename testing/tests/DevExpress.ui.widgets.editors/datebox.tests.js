@@ -18,6 +18,7 @@ import typeUtils from 'core/utils/type';
 import uiDateUtils from 'ui/date_box/ui.date_utils';
 import { noop } from 'core/utils/common';
 import { logger } from 'core/utils/console';
+import { normalizeKeyName } from 'events/utils/index';
 
 import '../../helpers/calendarFixtures.js';
 
@@ -5731,7 +5732,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.clock = sinon.useFakeTimers();
 
         this.valueChangedHandler = sinon.stub();
-        const initialOptions = {
+        this.initialOptions = {
             opened: true,
             onValueChanged: this.valueChangedHandler,
             pickerType: 'calendar',
@@ -5752,10 +5753,18 @@ QUnit.module('valueChanged handler should receive correct event', {
         };
         this.reinit = (options) => {
             this.instance.dispose();
-            this.init($.extend({}, initialOptions, options));
+            this.init($.extend({}, this.initialOptions, options));
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
         };
 
-        this.init(initialOptions);
+        this.init(this.initialOptions);
     },
     afterEach: function() {
         fx.off = false;
@@ -5774,10 +5783,7 @@ QUnit.module('valueChanged handler should receive correct event', {
                 .type('10/10/2020')
                 .change();
 
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'change', 'event type is correct');
-            assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+            this.checkEvent(assert, 'change', this.$input);
             this.testProgramChange(assert);
         });
 
@@ -5788,10 +5794,8 @@ QUnit.module('valueChanged handler should receive correct event', {
                 .type('10/10/2020')
                 .press('enter');
 
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
 
+            this.checkEvent(assert, 'keydown', this.$input, 'enter');
             this.testProgramChange(assert);
         });
 
@@ -5803,10 +5807,8 @@ QUnit.module('valueChanged handler should receive correct event', {
                 .press('backspace')
                 .press('enter');
 
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
 
+            this.checkEvent(assert, 'keydown', this.$input, 'enter');
             this.testProgramChange(assert);
         });
     });
@@ -5822,10 +5824,7 @@ QUnit.module('valueChanged handler should receive correct event', {
                 }
                 $applyButton.trigger('dxclick');
 
-                const event = this.valueChangedHandler.getCall(0).args[0].event;
-                assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-                assert.strictEqual(event.target, $applyButton.get(0), 'event target is correct');
-
+                this.checkEvent(assert, 'dxclick', $applyButton);
                 this.testProgramChange(assert);
             });
         });
@@ -5837,10 +5836,7 @@ QUnit.module('valueChanged handler should receive correct event', {
 
         $clearButton.trigger('dxclick');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', $clearButton);
         this.testProgramChange(assert);
     });
 
@@ -5853,10 +5849,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         QUnit.test('on list item click', function(assert) {
             this.$listItem.trigger('dxclick');
 
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-            assert.strictEqual(event.target, this.$listItem.get(0), 'event target is correct');
-
+            this.checkEvent(assert, 'dxclick', this.$listItem);
             this.testProgramChange(assert);
         });
 
@@ -5865,10 +5858,7 @@ QUnit.module('valueChanged handler should receive correct event', {
                 .press('down')
                 .press('enter');
 
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$listItem.get(0), 'event target is correct');
-
+            this.checkEvent(assert, 'keydown', this.$listItem, 'enter');
             this.testProgramChange(assert);
         });
     });
@@ -5879,10 +5869,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         const $calendarCell = $(`.${CALENDAR_CELL_CLASS}`).eq(0);
         $calendarCell.trigger('dxclick');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, $calendarCell.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', $calendarCell);
         this.testProgramChange(assert);
     });
 
@@ -5892,10 +5879,7 @@ QUnit.module('valueChanged handler should receive correct event', {
 
         $todayButton.trigger('dxclick');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, $todayButton.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', $todayButton);
         this.testProgramChange(assert);
     });
 });
