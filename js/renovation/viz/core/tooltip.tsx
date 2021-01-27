@@ -288,7 +288,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
       this.textSize = contentSize;
     }
     if (isUpdatedFlatObject(this.cloudSize, cloudSize)) {
-      this.cloudSize = this.calculateCloudSize();
+      this.cloudSize = cloudSize;
     }
   }
 
