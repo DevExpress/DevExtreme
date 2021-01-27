@@ -17,7 +17,7 @@ jest.mock('../common/tooltip_utils', () => ({
 
 jest.mock('../../common/utils', () => ({
   getFormatValue: jest.fn(),
-  isUpdatedFlatObject: jest.fn().mockReturnValue(true),
+  isUpdatedFlatObject: jest.fn(),
 }));
 
 jest.mock('../renderers/utils', () => ({
@@ -385,7 +385,10 @@ describe('Effects', () => {
     (recalculateCoordinates as jest.Mock).mockReturnValue({
       x: 4, y: 5, anchorX: 11, anchorY: 12,
     });
+    (isUpdatedFlatObject as jest.Mock).mockReturnValue(true);
   });
+
+  afterEach(() => jest.resetAllMocks);
 
   describe('calculateSize', () => {
     it('should not update state of content size if not changed', () => {
@@ -404,6 +407,7 @@ describe('Effects', () => {
     });
 
     it('should not update state of cloud size if not changed', () => {
+      (isUpdatedFlatObject as jest.Mock).mockReturnValue(false);
       const tooltip = new Tooltip({
         data: { valueText: 'Tooltip value text' } as any, visible: true, x: 1, y: 2, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any,
       });
@@ -425,7 +429,6 @@ describe('Effects', () => {
     });
 
     it('should update state of content size', () => {
-      (isUpdatedFlatObject as jest.Mock).mockReturnValue(true);
       const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
       const box = {
         x: 1, y: 2, width: 10, height: 20,
