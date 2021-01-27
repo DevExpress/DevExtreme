@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import 'ui/tile_view';
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
