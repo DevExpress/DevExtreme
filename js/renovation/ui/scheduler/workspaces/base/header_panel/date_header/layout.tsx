@@ -20,46 +20,53 @@ import { HORIZONTAL_GROUP_ORIENTATION } from '../../../../consts';
 
 export const viewFunction = ({
   isHorizontalGrouping,
-  cellTemplates,
-  isWeekDayCell,
   props: {
     dateHeaderMap,
+    timeCellTemplate,
+    dateCellTemplate,
+    useTimeCellTemplate,
   },
 }: DateHeaderLayout): JSX.Element => (
   <Fragment>
-    {dateHeaderMap.map((dateHeaderRow, rowIndex) => (
-      <Row className="dx-scheduler-header-row" key={rowIndex.toString()}>
-        {dateHeaderRow.map(({
-          startDate,
-          endDate,
-          today,
-          groups: cellGroups,
-          groupIndex,
-          isFirstGroupCell,
-          isLastGroupCell,
-          index,
-          key,
-          text,
-          colSpan,
-        }) => (
-          <DateHeaderCell
-            startDate={startDate}
-            endDate={endDate}
-            groups={isHorizontalGrouping ? cellGroups : undefined}
-            groupIndex={isHorizontalGrouping ? groupIndex : undefined}
-            today={today}
-            index={index}
-            text={text}
-            isFirstGroupCell={isFirstGroupCell}
-            isLastGroupCell={isLastGroupCell}
-            isWeekDayCell={isWeekDayCell[rowIndex]}
-            dateCellTemplate={cellTemplates[rowIndex]}
-            key={key}
-            colSpan={colSpan}
-          />
-        ))}
-      </Row>
-    ))}
+    {dateHeaderMap.map((dateHeaderRow, rowIndex) => {
+      const rowsCount = dateHeaderMap.length;
+      const isTimeCellTemplate = rowsCount - 1 === rowIndex && useTimeCellTemplate;
+      const isWeekDayRow = rowsCount > 1 && rowIndex === 0 && useTimeCellTemplate;
+
+      return (
+        <Row className="dx-scheduler-header-row" key={rowIndex.toString()}>
+          {dateHeaderRow.map(({
+            startDate,
+            endDate,
+            today,
+            groups: cellGroups,
+            groupIndex,
+            isFirstGroupCell,
+            isLastGroupCell,
+            index,
+            key,
+            text,
+            colSpan,
+          }) => (
+            <DateHeaderCell
+              startDate={startDate}
+              endDate={endDate}
+              groups={isHorizontalGrouping ? cellGroups : undefined}
+              groupIndex={isHorizontalGrouping ? groupIndex : undefined}
+              today={today}
+              index={index}
+              text={text}
+              isFirstGroupCell={isFirstGroupCell}
+              isLastGroupCell={isLastGroupCell}
+              isWeekDayCell={isWeekDayRow}
+              cellTemplate={isTimeCellTemplate ? timeCellTemplate : dateCellTemplate}
+              key={key}
+              colSpan={colSpan}
+            />
+          ))}
+        </Row>
+      );
+    })}
   </Fragment>
 );
 
@@ -87,28 +94,5 @@ export class DateHeaderLayout extends JSXComponent(DateHeaderLayoutProps) {
     const { groupOrientation, groups } = this.props;
 
     return isHorizontalGroupOrientation(groups, groupOrientation);
-  }
-
-  get cellTemplates(): (JSXTemplate<DateTimeCellTemplateProps> | undefined)[] {
-    const {
-      dateCellTemplate,
-      timeCellTemplate,
-      useTimeCellTemplate,
-      dateHeaderMap,
-    } = this.props;
-    const rowsCount = dateHeaderMap.length;
-
-    return dateHeaderMap.map((_, index) => (rowsCount - 1 === index && useTimeCellTemplate
-      ? timeCellTemplate
-      : dateCellTemplate));
-  }
-
-  get isWeekDayCell(): boolean[] {
-    const {
-      useTimeCellTemplate,
-      dateHeaderMap,
-    } = this.props;
-
-    return dateHeaderMap.map((_, index) => (index === 0 && useTimeCellTemplate));
   }
 }

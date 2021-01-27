@@ -59,32 +59,32 @@ describe('DateHeaderCell', () => {
     });
 
     it('should render template and should not render children', () => {
-      const dateCellTemplate = () => null;
+      const cellTemplate = () => null;
       const cell = render({
         props: {
-          dateCellTemplate,
+          cellTemplate,
         },
       });
 
       expect(cell.children())
         .toHaveLength(1);
-      expect(cell.find(dateCellTemplate).exists())
+      expect(cell.find(cellTemplate).exists())
         .toBe(true);
     });
 
     it('should pass correct props to the template', () => {
-      const dateCellTemplate = () => null;
+      const cellTemplate = () => null;
       const props = {
         groups: { id: 1 },
         groupIndex: 1,
         index: 0,
         text: 'Test text',
-        dateCellTemplate,
+        cellTemplate,
       };
 
       const cell = render({ props });
 
-      const renderedTemplate = cell.find(dateCellTemplate);
+      const renderedTemplate = cell.find(cellTemplate);
 
       expect(renderedTemplate.props())
         .toEqual({
@@ -108,6 +108,7 @@ describe('DateHeaderCell', () => {
             isLastGroupCell: 'isLastGroupCell',
             today: 'today',
             className: 'class',
+            isWeekDayCell: 'isWeekDayCell',
           } as any);
 
           expect(cell.classes)
@@ -118,6 +119,7 @@ describe('DateHeaderCell', () => {
               'dx-scheduler-header-panel-cell': true,
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-header-panel-current-time-cell': 'today',
+              'dx-scheduler-header-panel-week-cell': 'isWeekDayCell',
               class: true,
             });
 

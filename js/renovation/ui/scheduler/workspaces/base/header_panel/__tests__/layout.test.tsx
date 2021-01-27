@@ -29,7 +29,14 @@ describe('HeaderPanelLayoutLayout', () => {
 
     it('should render DateHeader and should not render GroupPanel in basic case', () => {
       const dateCellTemplate = () => null;
-      const layout = render({ props: { dateCellTemplate } });
+      const timeCellTemplate = () => null;
+      const layout = render({
+        props: {
+          dateCellTemplate,
+          timeCellTemplate,
+          useTimeCellTemplate: true,
+        },
+      });
 
       const groupPanel = layout.find(GroupPanel);
       expect(groupPanel.exists())
@@ -43,8 +50,10 @@ describe('HeaderPanelLayoutLayout', () => {
         .toEqual({
           dateHeaderMap,
           dateCellTemplate,
+          timeCellTemplate,
           groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
           groups: [],
+          useTimeCellTemplate: true,
         });
     });
 

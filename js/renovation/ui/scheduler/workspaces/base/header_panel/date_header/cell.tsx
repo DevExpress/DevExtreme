@@ -16,7 +16,7 @@ export const viewFunction = ({
   classes,
   props: {
     text,
-    dateCellTemplate: DateCellTemplate,
+    cellTemplate: CellTemplate,
     colSpan,
     startDate,
     groups,
@@ -31,8 +31,8 @@ export const viewFunction = ({
     colSpan={colSpan}
     title={text}
   >
-    {DateCellTemplate ? (
-      <DateCellTemplate
+    {CellTemplate ? (
+      <CellTemplate
         data={{
           date: startDate,
           text,
@@ -55,7 +55,7 @@ export class DateHeaderCellProps extends CellBaseProps {
 
   @OneWay() isWeekDayCell = false;
 
-  @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
+  @Template() cellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
 @Component({
