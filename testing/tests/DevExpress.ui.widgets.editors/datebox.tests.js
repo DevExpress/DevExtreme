@@ -5862,13 +5862,20 @@ QUnit.module('valueChanged handler should receive correct event', {
         });
     });
 
-    QUnit.test('on inner calendar value change', function(assert) {
-        // NOTE: if this test fails calendar value change event synchronization is broken
-
+    QUnit.test('on calendar cell click', function(assert) {
         const $calendarCell = $(`.${CALENDAR_CELL_CLASS}`).eq(0);
         $calendarCell.trigger('dxclick');
 
         this.checkEvent(assert, 'dxclick', $calendarCell);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.skip('on calendar cell selecting using enter', function(assert) {
+        const $calendarCell = $('.dx-calendar-today');
+
+        this.keyboard.press('enter');
+
+        this.checkEvent(assert, 'keydown', $calendarCell, 'enter');
         this.testProgramChange(assert);
     });
 
