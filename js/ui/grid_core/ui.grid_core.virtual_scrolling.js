@@ -832,7 +832,8 @@ module.exports = {
                             return;
                         }
 
-                        that._rowPageIndex = Math.ceil(that.pageIndex() * that.pageSize() / that.getRowPageSize());
+                        const pageIndex = that.pageIndex() >= that.pageCount() ? that.pageCount() - 1 : that.pageIndex();
+                        that._rowPageIndex = Math.ceil(pageIndex * that.pageSize() / that.getRowPageSize());
 
                         that._visibleItems = [];
 
