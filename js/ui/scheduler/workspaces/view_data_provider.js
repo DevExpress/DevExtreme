@@ -64,11 +64,10 @@ class ViewDataGenerator {
 
         const index = completeViewDataMap[0][0].allDay ? 1 : 0;
         const colSpan = groupByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
-        const daysCount = groupByDate ? daysInView : daysInView * horizontalGroupCount;
 
         const weekDaysRow = [];
 
-        for(let dayIndex = 0; dayIndex < daysCount; dayIndex += 1) {
+        for(let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
             const cell = completeViewDataMap[index][dayIndex * cellCountInDay];
 
             weekDaysRow.push({
