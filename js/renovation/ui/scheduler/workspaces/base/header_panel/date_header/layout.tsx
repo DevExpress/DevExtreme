@@ -21,6 +21,7 @@ import { HORIZONTAL_GROUP_ORIENTATION } from '../../../../consts';
 export const viewFunction = ({
   isHorizontalGrouping,
   cellTemplates,
+  isWeekDayCell,
   props: {
     dateHeaderMap,
   },
@@ -51,6 +52,7 @@ export const viewFunction = ({
             text={text}
             isFirstGroupCell={isFirstGroupCell}
             isLastGroupCell={isLastGroupCell}
+            isWeekDayCell={isWeekDayCell[rowIndex]}
             dateCellTemplate={cellTemplates[rowIndex]}
             key={key}
             colSpan={colSpan}
@@ -99,5 +101,14 @@ export class DateHeaderLayout extends JSXComponent(DateHeaderLayoutProps) {
     return dateHeaderMap.map((_, index) => (rowsCount - 1 === index && useTimeCellTemplate
       ? timeCellTemplate
       : dateCellTemplate));
+  }
+
+  get isWeekDayCell(): boolean[] {
+    const {
+      useTimeCellTemplate,
+      dateHeaderMap,
+    } = this.props;
+
+    return dateHeaderMap.map((_, index) => (index === 0 && useTimeCellTemplate));
   }
 }

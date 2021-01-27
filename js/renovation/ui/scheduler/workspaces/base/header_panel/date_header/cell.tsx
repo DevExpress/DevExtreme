@@ -53,6 +53,8 @@ export class DateHeaderCellProps extends CellBaseProps {
 
   @OneWay() colSpan = 1;
 
+  @OneWay() isWeekDayCell = false;
+
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
@@ -67,12 +69,14 @@ export class DateHeaderCell extends JSXComponent(DateHeaderCellProps) {
       className,
       isFirstGroupCell,
       isLastGroupCell,
+      isWeekDayCell,
     } = this.props;
 
     const cellClasses = combineClasses({
       'dx-scheduler-header-panel-cell': true,
       'dx-scheduler-cell-sizes-horizontal': true,
       'dx-scheduler-header-panel-current-time-cell': today,
+      'dx-scheduler-header-panel-week-cell': isWeekDayCell,
       [className]: !!className,
     });
 
