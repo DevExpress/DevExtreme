@@ -847,3 +847,51 @@ QUnit.module('Subscribe to external scrollable events', {
     });
 });
 
+
+QUnit.module('VirtualScrollingController. New mode', {
+    beforeEach: function() {
+        moduleConfig.beforeEach.call(this);
+        mockComponent.option.withArgs('scrolling.rowRenderingMode').returns('virtual');
+        mockComponent.option.withArgs('scrolling.newMode').returns(true);
+    },
+    afterEach: function() {
+        moduleConfig.afterEach.call(this);
+    }
+}, () => {
+    QUnit.test('Viewport params at the top', function(assert) {
+        const viewportSize = 25;
+        this.scrollController.viewportSize(viewportSize);
+        const viewportParams = this.scrollController.getViewportParams();
+        const virtualItemsCount = this.scrollController.virtualItemsCount();
+
+        // assert
+        assert.deepEqual(virtualItemsCount, { begin: 0, end: DEFAULT_TOTAL_ITEMS_COUNT - 26 }, 'virtual items');
+        assert.deepEqual(viewportParams, { skip: 0, take: viewportSize + 1 }, 'viewport params');
+    });
+
+    QUnit.test('Viewport params at the middle', function(assert) {
+        const viewportSize = 25;
+        this.scrollController.viewportSize(viewportSize);
+        const viewportItemIndex = DEFAULT_TOTAL_ITEMS_COUNT / 2;
+        this.scrollController.setViewportItemIndex(viewportItemIndex);
+        const viewportParams = this.scrollController.getViewportParams();
+        const virtualItemsCount = this.scrollController.virtualItemsCount();
+
+        // assert
+        assert.deepEqual(virtualItemsCount, { begin: Math.floor(viewportItemIndex), end: 9974 }, 'virtual items');
+        assert.deepEqual(viewportParams, { skip: Math.floor(viewportItemIndex), take: viewportSize + 1 }, 'viewport params');
+    });
+
+    QUnit.test('Viewport params at the bottom', function(assert) {
+        const viewportSize = 25;
+        this.scrollController.viewportSize(viewportSize);
+        const viewportItemIndex = 19985;
+        this.scrollController.setViewportItemIndex(19985);
+        const viewportParams = this.scrollController.getViewportParams();
+        const virtualItemsCount = this.scrollController.virtualItemsCount();
+
+        // assert
+        assert.deepEqual(virtualItemsCount, { begin: viewportItemIndex, end: 0 }, 'virtual items');
+        assert.deepEqual(viewportParams, { skip: viewportItemIndex, take: DEFAULT_TOTAL_ITEMS_COUNT - viewportItemIndex }, 'viewport params');
+    });
+});
