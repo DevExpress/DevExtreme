@@ -9,6 +9,7 @@ import PagerProps from './common/pager_props';
 import { getElementWidth, getElementStyle } from './utils/get_element_width';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { PagerContentProps } from './content';
+import { isDefined } from '../../../core/utils/type';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -120,7 +121,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
       info: this.infoTextRef,
       pages: this.pagesRef,
     });
-    const isEmpty = this.elementsWidth === undefined;
+    const isEmpty = isDefined(this.elementsWidth === undefined);
     if (isEmpty) {
       const current = calculateAdaptivityProps(currentElementsWidth);
       this.updateElementsWidth(currentElementsWidth);
