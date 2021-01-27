@@ -1716,7 +1716,8 @@ module('Virtual scrolling', () => {
                                 left: 773,
                                 top: 100,
                                 height: 450
-                            }]
+                            }],
+                            []
                         ]
                     },
                     {
