@@ -34,7 +34,7 @@
   $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
   $agenda-appointment-active-bg: $agenda-appointment-active-bg,
   $agenda-appointment-text-color: $agenda-appointment-text-color,
-  $agenda-appointment-active-text-color: $agenda-appointment-active-text-color
+  $agenda-appointment-title-font-size: $agenda-appointment-title-font-size
 );
 @use "../button/colors" as *;
 @use "../button/mixins" as *;
@@ -47,7 +47,6 @@
 
 $material-scheduler-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 1.5;
 $material-scheduler-collapsed-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 0.5;
-
 
 $material-scheduler-month-date-text-size: 14px;
 
@@ -111,22 +110,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   .dx-scheduler-work-space-all-day-collapsed & {
     height: $material-scheduler-collapsed-all-day-table-cell-height;
     line-height: $material-scheduler-collapsed-all-day-table-cell-height;
-  }
-}
-
-.dx-scheduler-appointment-content {
-  &,
-  .dx-scheduler-agenda & {
-    .dx-scheduler-appointment-title {
-      font-size: $material-scheduler-appointment-title-text-size;
-    }
-
-    .dx-scheduler-appointment-content-date,
-    .dx-scheduler-appointment-content-allday {
-      font-size: $material-scheduler-appointment-date-text-size;
-      font-weight: normal;
-      opacity: 0.7;
-    }
   }
 }
 
