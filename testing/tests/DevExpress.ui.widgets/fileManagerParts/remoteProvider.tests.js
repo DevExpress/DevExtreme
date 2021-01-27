@@ -172,7 +172,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
 
                 const data = request.data;
 
-                const args = JSON.parse(data.arguments);
+                const args = JSON.parse(data.get('arguments'));
 
                 const chunkMetadata = JSON.parse(args.chunkMetadata);
                 const uploadId = chunkMetadata.UploadId;
@@ -189,8 +189,8 @@ QUnit.module('Remote Provider', moduleConfig, () => {
                 const documentsPathInfo = [...filesPathInfo];
                 documentsPathInfo.push({ key: 'Root/Files/Documents', name: 'Documents' });
 
-                assert.ok(data instanceof Object, 'data has type of Object');
-                assert.strictEqual(data.command, 'UploadChunk', 'command type passed to the request');
+                assert.ok(data instanceof FormData, 'data has type of FormData');
+                assert.strictEqual(data.get('command'), 'UploadChunk', 'command type passed to the request');
 
                 assert.deepEqual(args.destinationPathInfo, documentsPathInfo, 'directory pathInfo passed to the request');
                 assert.deepEqual(chunkMetadata, expectedChunkMetadata, 'chunkMetadata passed to the request');
@@ -326,7 +326,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
                 if(browser.msie) {
                     assert.ok(true, 'IE does not support FormData.get()');
                 } else {
-                    assert.strictEqual(request.data.dataValue, dataValueText, 'custom formData value presents');
+                    assert.strictEqual(request.data.get('dataValue'), dataValueText, 'custom formData value presents');
                 }
                 assert.ok(request.xhrFields.withCredentials, 'custom xhr field presents');
             }
