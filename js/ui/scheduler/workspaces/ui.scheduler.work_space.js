@@ -1367,7 +1367,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         );
     }
 
-    renderRHeaderPanel(isRenderDateHeader = true) {
+    renderRHeaderPanel(isRenderDateHeader = true, useTimeCellTemplate = false) {
         if(this.option('groups').length) {
             this._attachGroupCountAttr();
         } else {
@@ -1381,6 +1381,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             {
                 dateHeaderMap: this.viewDataProvider.dateHeaderMap,
                 dateCellTemplate: this.option('dateCellTemplate'),
+                timeCellTemplate: this.option('timeCellTemplate'),
                 groups: this.option('groups'),
                 groupByDate: this.isGroupedByDate(),
                 groupOrientation: this.option('groupOrientation'),
@@ -1391,6 +1392,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                     : this._getCellCount(),
                 columnCountPerGroup: this._getCellCount(),
                 isRenderDateHeader,
+                useTimeCellTemplate,
             }
         );
     }

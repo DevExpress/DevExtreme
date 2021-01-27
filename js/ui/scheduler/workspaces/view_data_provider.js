@@ -36,6 +36,55 @@ class ViewDataGenerator {
 
     _getCompleteDateHeaderMap(options, completeViewDataMap) {
         const {
+            isGenerateWeekDaysHeaderData,
+        } = options;
+
+        const result = [];
+
+        if(isGenerateWeekDaysHeaderData) {
+            const weekDaysRow = this._generateWeekDaysHeaderRowMap(options, completeViewDataMap);
+            result.push(weekDaysRow);
+        }
+
+        const dateRow = this._generateHeaderDateRow(options, completeViewDataMap);
+
+        result.push(dateRow);
+
+        return result;
+    }
+
+    _generateWeekDaysHeaderRowMap(options, completeViewDataMap) {
+        const {
+            groupByDate,
+            horizontalGroupCount,
+            cellCountInDay,
+            getWeekDaysHeaderText,
+            daysInView,
+        } = options;
+
+        const index = completeViewDataMap[0][0].allDay ? 1 : 0;
+        const colSpan = groupByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
+        const daysCount = groupByDate ? daysInView : daysInView * horizontalGroupCount;
+
+        const weekDaysRow = [];
+
+        for(let dayIndex = 0; dayIndex < daysCount; dayIndex += 1) {
+            const cell = completeViewDataMap[index][dayIndex * cellCountInDay];
+
+            weekDaysRow.push({
+                ...cell,
+                colSpan,
+                text: getWeekDaysHeaderText(cell.startDate),
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+            });
+        }
+
+        return weekDaysRow;
+    }
+
+    _generateHeaderDateRow(options, completeViewDataMap) {
+        const {
             getDateHeaderText,
             today,
             groupByDate,
@@ -52,10 +101,9 @@ class ViewDataGenerator {
         const colSpan = groupByDate ? horizontalGroupCount : 1;
         const isVerticalGrouping = groupOrientation === 'vertical';
 
-        const result = [];
         const slicedByColumnsData = completeViewDataMap[index].slice(0, dateHeaderColumnCount);
 
-        const firstRow = slicedByColumnsData.map(({
+        return slicedByColumnsData.map(({
             startDate,
             isFirstGroupCell,
             isLastGroupCell,
@@ -69,10 +117,6 @@ class ViewDataGenerator {
             isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
             isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
         }));
-
-        result.push(firstRow);
-
-        return result;
     }
 
     _generateViewDataMap(completeViewDataMap, options) {
@@ -106,8 +150,7 @@ class ViewDataGenerator {
     }
 
     _generateDateHeaderMap(completeDateHeaderMap, options) {
-        return [completeDateHeaderMap[0].slice(0) // TODO: virtualization
-            .map(cellData => cellData)];
+        return completeDateHeaderMap.map(headerRow => headerRow.slice(0)); // TODO: virtualization
     }
 
     _getViewDataFromMap(viewDataMap, completeViewDataMap, options) {

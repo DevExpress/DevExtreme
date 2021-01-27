@@ -20,9 +20,9 @@ import { HORIZONTAL_GROUP_ORIENTATION } from '../../../../consts';
 
 export const viewFunction = ({
   isHorizontalGrouping,
+  cellTemplates,
   props: {
     dateHeaderMap,
-    dateCellTemplate,
   },
 }: DateHeaderLayout): JSX.Element => (
   <Fragment>
@@ -51,7 +51,7 @@ export const viewFunction = ({
             text={text}
             isFirstGroupCell={isFirstGroupCell}
             isLastGroupCell={isLastGroupCell}
-            dateCellTemplate={dateCellTemplate}
+            dateCellTemplate={cellTemplates[rowIndex]}
             key={key}
             colSpan={colSpan}
           />
@@ -69,7 +69,11 @@ export class DateHeaderLayoutProps {
 
   @OneWay() groups: Group[] = [];
 
+  @OneWay() useTimeCellTemplate = false;
+
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
+
+  @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
 @Component({
@@ -81,5 +85,19 @@ export class DateHeaderLayout extends JSXComponent(DateHeaderLayoutProps) {
     const { groupOrientation, groups } = this.props;
 
     return isHorizontalGroupOrientation(groups, groupOrientation);
+  }
+
+  get cellTemplates(): (JSXTemplate<DateTimeCellTemplateProps> | undefined)[] {
+    const {
+      dateCellTemplate,
+      timeCellTemplate,
+      useTimeCellTemplate,
+      dateHeaderMap,
+    } = this.props;
+    const rowsCount = dateHeaderMap.length;
+
+    return dateHeaderMap.map((_, index) => (rowsCount - 1 === index && useTimeCellTemplate
+      ? timeCellTemplate
+      : dateCellTemplate));
   }
 }

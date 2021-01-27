@@ -264,16 +264,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         let groupCellTemplates;
         if(!this.isRenovatedRender()) {
             groupCellTemplates = this._renderGroupHeader();
-        } else {
-            if(!this._isVerticalGroupedWorkSpace()) {
-                this.renderRGroupPanel();
-            }
         }
-        this._renderDateHeader();
 
         if(this.isRenovatedRender()) {
             this.renderRWorkspace();
         } else {
+            this._renderDateHeader();
             this._renderTimePanel();
             this._renderDateTable();
             this._renderAllDayPanel();
@@ -640,17 +636,28 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         );
     }
 
-    // Remove when dateHeader is renovated
-    renderRWorkspace(isGenerateNewViewData = true) {
-        this._cleanAllowedPositions();
+    generateRenderOptions() {
+        const options = super.generateRenderOptions();
 
-        this.viewDataProvider.update(isGenerateNewViewData);
+        const groupCount = this._getGroupCount();
+        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+            ? groupCount
+            : 1;
 
-        this.renderRDateTable();
+        const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
+        const daysInView = cellsInGroup * horizontalGroupCount;
 
-        this.updateRSelection();
+        return {
+            ...options,
+            isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
+            getWeekDaysHeaderText: this._formatWeekdayAndDay.bind(this),
+            daysInView,
+            cellCountInDay: this._getCellCountInDay(),
+        };
+    }
 
-        this.virtualScrollingDispatcher?.updateDimensions();
+    renderRHeaderPanel() {
+        super.renderRHeaderPanel(true, this.isDateAndTimeView);
     }
 }
 
