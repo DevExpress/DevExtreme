@@ -490,6 +490,7 @@ const subscribes = {
     prerenderFilterVirtual: function() {
         const workspace = this.getWorkSpace();
         const isCalculateStartAndEndDayHour = workspace.isDateAndTimeView;
+        const checkIntersectViewport = workspace.isDateAndTimeView && workspace.viewDirection === 'horizontal';
 
         const isAllDayWorkspace = !this._workSpace.supportAllDayRow();
         const showAllDayAppointments = this.option('showAllDayPanel') || isAllDayWorkspace;
@@ -530,7 +531,8 @@ const subscribes = {
                 allDay: supportAllDayAppointment,
                 resources,
                 firstDayOfWeek: this.getFirstDayOfWeek(),
-                recurrenceException: this._getRecurrenceException.bind(this)
+                recurrenceException: this._getRecurrenceException.bind(this),
+                checkIntersectViewport
             });
         });
 

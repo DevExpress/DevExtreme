@@ -105,7 +105,8 @@ const compareDateWithEndDayHour = (options) => {
         allDay,
         severalDays,
         min,
-        max
+        max,
+        checkIntersectViewport
     } = options;
 
     const hiddenInterval = (24 - viewEndDayHour + viewStartDayHour) * toMs('hour');
@@ -119,15 +120,17 @@ const compareDateWithEndDayHour = (options) => {
     const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
     const apptIntersectViewport = startDate < max && endDate > min;
 
-    result = (apptStartHour < endTime.hours) ||
+    result =
+        (checkIntersectViewport &&
+            apptIntersectViewport) ||
+        (apptStartHour < endTime.hours) ||
         (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) ||
         (allDay &&
             startDate <= max) ||
         (severalDays &&
             apptIntersectViewport &&
                 (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60)
-        ) ||
-        apptIntersectViewport;
+        );
 
     if(apptDuration < hiddenInterval) {
         if((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
@@ -276,7 +279,8 @@ class AppointmentModel {
             viewStartDayHour,
             viewEndDayHour,
             resources,
-            firstDayOfWeek
+            firstDayOfWeek,
+            checkIntersectViewport
         } = filterOptions;
         const that = this;
 
@@ -349,7 +353,8 @@ class AppointmentModel {
                     allDay: appointmentTakesAllDay,
                     severalDays: appointmentTakesSeveralDays,
                     min,
-                    max
+                    max,
+                    checkIntersectViewport
                 });
             }
 
