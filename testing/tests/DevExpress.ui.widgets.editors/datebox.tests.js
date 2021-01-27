@@ -5810,6 +5810,16 @@ QUnit.module('valueChanged handler should receive correct event', {
             this.checkEvent(assert, 'keydown', this.$input, 'enter');
             this.testProgramChange(assert);
         });
+
+        QUnit.skip(`on calendar cell selecting using enter when useMaskBehavior=${useMaskBehavior}`, function(assert) {
+            this.reinit({ useMaskBehavior });
+            const $calendarCell = $('.dx-calendar-today');
+
+            this.keyboard.press('enter');
+
+            this.checkEvent(assert, 'keydown', $calendarCell, 'enter');
+            this.testProgramChange(assert);
+        });
     });
 
     ['calendar', 'rollers'].forEach(pickerType => {
@@ -5867,15 +5877,6 @@ QUnit.module('valueChanged handler should receive correct event', {
         $calendarCell.trigger('dxclick');
 
         this.checkEvent(assert, 'dxclick', $calendarCell);
-        this.testProgramChange(assert);
-    });
-
-    QUnit.skip('on calendar cell selecting using enter', function(assert) {
-        const $calendarCell = $('.dx-calendar-today');
-
-        this.keyboard.press('enter');
-
-        this.checkEvent(assert, 'keydown', $calendarCell, 'enter');
         this.testProgramChange(assert);
     });
 
