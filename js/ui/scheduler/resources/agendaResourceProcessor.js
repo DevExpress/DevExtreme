@@ -1,6 +1,6 @@
 import { wrapToArray } from '../../../core/utils/array';
 import { when, Deferred } from '../../../core/utils/deferred';
-import { getFieldExpr, getWrappedDataSource } from './utils';
+import { getFieldExpr, getDisplayExpr, getValueExpr, getWrappedDataSource } from './utils';
 
 class PromiseItem {
     constructor(rawAppointment, promise) {
@@ -58,9 +58,9 @@ export class AgendaResourceProcessor {
         this.appointmentPromiseQueue = [];
     }
 
-    _onPullResource(fieldName, label, items) {
+    _onPullResource(fieldName, valueName, displayName, label, items) {
         const map = new Map();
-        items.forEach(item => map.set(item.id, item.text));
+        items.forEach(item => map.set(item[valueName], item[displayName]));
 
         this.resourceMap.set(fieldName, { label, map });
     }
@@ -83,7 +83,13 @@ export class AgendaResourceProcessor {
 
             resources.forEach(resource => {
                 const promise = new Deferred()
-                    .done(items => this._onPullResource(getFieldExpr(resource), resource.label, items));
+                    .done(items => this._onPullResource(
+                        getFieldExpr(resource),
+                        getValueExpr(resource),
+                        getDisplayExpr(resource),
+                        resource.label,
+                        items)
+                    );
 
                 promises.push(promise);
 

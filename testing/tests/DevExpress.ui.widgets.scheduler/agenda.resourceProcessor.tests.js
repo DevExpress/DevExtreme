@@ -171,6 +171,35 @@ module('AgendaResourceProcessor', () => {
 
             assert.expect(9);
         });
+
+        test('Field expressions', function(assert) {
+            const processor = new AgendaResourceProcessor();
+            processor.initializeState([{
+                fieldExpr: 'OwnerId',
+                valueExpr: 'Id',
+                displayExpr: 'Text',
+                label: 'Owner',
+                dataSource: [{
+                    Text: 'Samantha Bright',
+                    Id: 1
+                }, {
+                    Text: 'John Heart',
+                    Id: 2
+                }, {
+                    Text: 'Todd Hoffman',
+                    Id: 3
+                }, {
+                    Text: 'Sandra Johnson',
+                    Id: 4
+                }]
+            }]);
+
+            processor.createListAsync({ ...appointment, OwnerId: [1, 3] })
+                .done(list => assert.deepEqual(list, [{
+                    label: 'Owner',
+                    values: ['Samantha Bright', 'Todd Hoffman']
+                }]));
+        });
     });
 
     module('DataSource', () => {
