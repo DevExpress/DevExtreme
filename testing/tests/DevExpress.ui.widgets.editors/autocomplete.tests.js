@@ -1627,7 +1627,7 @@ QUnit.module('valueChanged should receive correct event', {
         this.clock = sinon.useFakeTimers();
 
         this.valueChangedHandler = sinon.stub();
-        this.initialOptions = {
+        const initialOptions = {
             items: ['11', '22'],
             searchTimeout: 0,
             onValueChanged: this.valueChangedHandler,
@@ -1642,7 +1642,7 @@ QUnit.module('valueChanged should receive correct event', {
         };
         this.reinit = (options) => {
             this.instance.dispose();
-            this.init($.extend({}, this.initialOptions, options));
+            this.init($.extend({}, initialOptions, options));
         };
         this.testProgramChange = (assert) => {
             this.instance.option('value', 'new value');
@@ -1660,7 +1660,7 @@ QUnit.module('valueChanged should receive correct event', {
             }
         };
 
-        this.init(this.initialOptions);
+        this.init(initialOptions);
     },
     afterEach: function() {
         fx.off = false;

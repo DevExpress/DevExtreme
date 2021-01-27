@@ -5732,7 +5732,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.clock = sinon.useFakeTimers();
 
         this.valueChangedHandler = sinon.stub();
-        this.initialOptions = {
+        const initialOptions = {
             opened: true,
             onValueChanged: this.valueChangedHandler,
             pickerType: 'calendar',
@@ -5753,7 +5753,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         };
         this.reinit = (options) => {
             this.instance.dispose();
-            this.init($.extend({}, this.initialOptions, options));
+            this.init($.extend({}, initialOptions, options));
         };
         this.checkEvent = (assert, type, target, key) => {
             const event = this.valueChangedHandler.getCall(0).args[0].event;
@@ -5764,7 +5764,7 @@ QUnit.module('valueChanged handler should receive correct event', {
             }
         };
 
-        this.init(this.initialOptions);
+        this.init(initialOptions);
     },
     afterEach: function() {
         fx.off = false;

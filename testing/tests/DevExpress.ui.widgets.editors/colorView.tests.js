@@ -1079,7 +1079,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.clock = sinon.useFakeTimers();
 
         this.valueChangedHandler = sinon.stub();
-        this.initialOptions = {
+        const initialOptions = {
             onValueChanged: this.valueChangedHandler,
             editAlphaChannel: true,
             focusStateEnabled: true
@@ -1094,7 +1094,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         };
         this.reinit = (options) => {
             this.instance.dispose();
-            this.init($.extend({}, this.initialOptions, options));
+            this.init($.extend({}, initialOptions, options));
         };
 
         this.testProgramChange = (assert) => {
@@ -1126,7 +1126,7 @@ QUnit.module('valueChanged handler should receive correct event', {
             }
         };
 
-        this.init(this.initialOptions);
+        this.init(initialOptions);
     },
     afterEach: function() {
         fx.off = true;
