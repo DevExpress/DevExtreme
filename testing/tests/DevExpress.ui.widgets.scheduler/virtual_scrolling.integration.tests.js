@@ -1365,7 +1365,8 @@ module('Virtual scrolling', () => {
 
                                         const startViewDate = viewDataProvider.findGroupCellStartDate(
                                             settings.groupIndex,
-                                            settings.info.appointment.startDate
+                                            settings.info.appointment.startDate,
+                                            settings.info.appointment.endDate
                                         );
 
                                         assert.deepEqual(
