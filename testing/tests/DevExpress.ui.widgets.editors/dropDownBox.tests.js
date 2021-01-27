@@ -7,6 +7,7 @@ import typeUtils, { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -717,7 +718,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.clock = sinon.useFakeTimers();
 
         this.valueChangedHandler = sinon.stub();
-        const initialOptions = {
+        this.initialOptions = {
             items: [1, 2, 3],
             opened: true,
             onValueChanged: this.valueChangedHandler,
@@ -738,10 +739,18 @@ QUnit.module('valueChanged handler should receive correct event', {
         };
         this.reinit = (options) => {
             this.instance.dispose();
-            this.init($.extend({}, options, initialOptions));
+            this.init($.extend({}, this.initialOptions, options));
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
         };
 
-        this.init(initialOptions);
+        this.init(this.initialOptions);
     },
     afterEach: function() {
         fx.off = false;
@@ -759,10 +768,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
         $clearButton.trigger('dxclick');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', $clearButton);
         this.testProgramChange(assert);
     });
 
@@ -773,10 +779,7 @@ QUnit.module('valueChanged handler should receive correct event', {
             .type('custom item')
             .change();
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'change', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'change', this.$input);
         this.testProgramChange(assert);
     });
 });
