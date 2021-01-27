@@ -5,6 +5,7 @@ import devices from 'core/devices';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/number_box';
 import 'ui/validator';
@@ -2098,17 +2099,24 @@ QUnit.module('aria accessibility', {}, () => {
 QUnit.module('valueChanged should receive correct event parameter', {
     beforeEach: function() {
         this.valueChangedHandler = sinon.stub();
-        this.$element = $('#numberbox').dxNumberBox({
+        const initialOptions = {
             onValueChanged: this.valueChangedHandler,
             showSpinButtons: true
-        });
-        this.instance = this.$element.dxNumberBox('instance');
-        this.$input = this.$element.find(`.${INPUT_CLASS}`);
-        this.keyboard = keyboardMock(this.$input);
-        this.mouse = pointerMock(this.$input);
-        this.$spinUp = this.$element.find(`.${SPIN_UP_CLASS}`);
-        this.$spinDown = this.$element.find(`.${SPIN_DOWN_CLASS}`);
+        };
 
+        this.init = (options) => {
+            this.$element = $('#numberbox').dxNumberBox(options);
+            this.instance = this.$element.dxNumberBox('instance');
+            this.$input = this.$element.find(`.${INPUT_CLASS}`);
+            this.keyboard = keyboardMock(this.$input);
+            this.mouse = pointerMock(this.$input);
+            this.$spinUp = this.$element.find(`.${SPIN_UP_CLASS}`);
+            this.$spinDown = this.$element.find(`.${SPIN_DOWN_CLASS}`);
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, initialOptions, options));
+        };
         this.testProgramChange = (assert) => {
             this.instance.option('value', 27);
 
@@ -2116,6 +2124,16 @@ QUnit.module('valueChanged should receive correct event parameter', {
             const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
             assert.strictEqual(event, undefined, 'event is undefined');
         };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+
+        this.init(initialOptions);
     }
 }, () => {
     QUnit.test('on program change', function(assert) {
@@ -2127,25 +2145,19 @@ QUnit.module('valueChanged should receive correct event parameter', {
             .type('1')
             .change();
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'change', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'change', this.$input);
         this.testProgramChange(assert);
     });
 
     QUnit.test('on change when value is not valid', function(assert) {
-        this.instance.option({ valueChangeEvent: 'keyup', value: 1 });
+        this.reinit({ valueChangeEvent: 'keyup', value: 1 });
 
         this.keyboard
             .press('end')
             .press('backspace')
             .keyUp('backspace');
 
-        const event = this.valueChangedHandler.getCall(1).args[0].event;
-        assert.strictEqual(event.type, 'keyup', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'keyup', this.$input);
         this.testProgramChange(assert);
     });
 
@@ -2155,73 +2167,44 @@ QUnit.module('valueChanged should receive correct event parameter', {
         const $clearButton = this.$element.find(`.${CLEAR_BUTTON_CLASS}`);
         $clearButton.trigger('dxclick');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', $clearButton);
         this.testProgramChange(assert);
     });
 
     QUnit.test('on click on up spin button', function(assert) {
         this.$spinUp.trigger('dxpointerdown');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxpointerdown', 'event type is correct');
-        assert.strictEqual(event.target, this.$spinUp.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxpointerdown', this.$spinUp);
         this.testProgramChange(assert);
     });
 
     QUnit.test('on click on down spin button', function(assert) {
         this.$spinDown.trigger('dxpointerdown');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxpointerdown', 'event type is correct');
-        assert.strictEqual(event.target, this.$spinDown.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxpointerdown', this.$spinDown);
         this.testProgramChange(assert);
     });
 
-    QUnit.testInActiveWindow('on mouse wheel up', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'this test is actual only for desktop');
-            return;
-        }
+    [['up', 10], ['down', -10]].forEach(([direction, delta]) => {
+        QUnit.testInActiveWindow(`on mouse wheel ${direction}`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'this test is actual only for desktop');
+                return;
+            }
 
-        this.$input.focus();
-        this.mouse.wheel(10);
+            this.$input.focus();
+            this.mouse.wheel(delta);
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxmousewheel', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
-        this.testProgramChange(assert);
-    });
-
-    QUnit.testInActiveWindow('on mouse wheel down', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'this test is actual only for desktop');
-            return;
-        }
-
-        this.$input.focus();
-        this.mouse.wheel(-10);
-
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxmousewheel', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
-        this.testProgramChange(assert);
+            this.checkEvent(assert, 'dxmousewheel', this.$input);
+            this.testProgramChange(assert);
+        });
     });
 
     ['down', 'up'].forEach(arrow => {
         QUnit.test(`on ${arrow} press`, function(assert) {
             this.keyboard.press(arrow);
 
-            const event = this.valueChangedHandler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'keydown', 'event type is correct');
-            assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+            this.checkEvent(assert, 'keydown', this.$input, arrow);
             this.testProgramChange(assert);
         });
     });
