@@ -5798,18 +5798,18 @@ QUnit.module('valueChanged handler should receive correct event', {
             this.checkEvent(assert, 'keydown', this.$input, 'enter');
             this.testProgramChange(assert);
         });
+    });
 
-        test(`on enter press after clearing when useMaskBehavior=${useMaskBehavior}`, function(assert) {
-            this.reinit({ useMaskBehavior, value: new Date() });
+    test('on enter press after clearing', function(assert) {
+        this.reinit({ value: new Date() });
 
-            this.keyboard
-                .caret({ start: 0, end: 9 })
-                .press('backspace')
-                .press('enter');
+        this.keyboard
+            .caret({ start: 0, end: 9 })
+            .press('backspace')
+            .press('enter');
 
-            this.checkEvent(assert, 'keydown', this.$input, 'enter');
-            this.testProgramChange(assert);
-        });
+        this.checkEvent(assert, 'keydown', this.$input, 'enter');
+        this.testProgramChange(assert);
     });
 
     ['calendar', 'rollers'].forEach(pickerType => {
