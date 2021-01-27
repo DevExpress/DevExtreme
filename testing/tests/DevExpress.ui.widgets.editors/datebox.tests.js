@@ -5803,10 +5803,9 @@ QUnit.module('valueChanged handler should receive correct event', {
             this.reinit({ useMaskBehavior, value: new Date() });
 
             this.keyboard
-                .caret({ start: 0, end: 10 })
+                .caret({ start: 0, end: 9 })
                 .press('backspace')
                 .press('enter');
-
 
             this.checkEvent(assert, 'keydown', this.$input, 'enter');
             this.testProgramChange(assert);
