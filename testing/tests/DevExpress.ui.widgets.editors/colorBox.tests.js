@@ -4,6 +4,7 @@ import Color from 'color';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -827,17 +828,23 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.clock = sinon.useFakeTimers();
 
         this.valueChangedHandler = sinon.stub();
-        this.$element = $('#color-box').dxColorBox({
+        this.initialOptions = {
             onValueChanged: this.valueChangedHandler,
             onOpened: () => {
                 this.$colorViewHexInput = $(COLORVIEW_HEX_INPUT_SELECTOR);
                 this.$colorViewApplyButton = $(COLORVIEW_APPLY_BUTTON_SELECTOR);
             }
-        });
-        this.instance = this.$element.dxColorBox('instance');
-        this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        this.keyboard = keyboardMock(this.$input);
-
+        };
+        this.init = (options) => {
+            this.$element = $('#color-box').dxColorBox(options);
+            this.instance = this.$element.dxColorBox('instance');
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            this.keyboard = keyboardMock(this.$input);
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, this.initialOptions, options));
+        };
         this.testProgramChange = (assert) => {
             this.instance.option('value', '#704f4f');
 
@@ -845,6 +852,16 @@ QUnit.module('valueChanged handler should receive correct event', {
             const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
             assert.strictEqual(event, undefined, 'event is undefined');
         };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+
+        this.init(this.initialOptions);
     },
     afterEach: function() {
         fx.off = true;
@@ -860,10 +877,7 @@ QUnit.module('valueChanged handler should receive correct event', {
             .type('#2510e5')
             .change();
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'change', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'change', this.$input);
         this.testProgramChange(assert);
     });
 
@@ -872,25 +886,19 @@ QUnit.module('valueChanged handler should receive correct event', {
             .type('#2510e5')
             .press('enter');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'keydown', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'keydown', this.$input, 'enter');
         this.testProgramChange(assert);
     });
 
     QUnit.test('on colorView palette value apply using enter', function(assert) {
-        this.instance.option('value', '#0707b8');
+        this.reinit({ value: '#0707b8' });
         this.instance.open();
 
         this.keyboard
             .press('up')
             .press('enter');
 
-        const event = this.valueChangedHandler.getCall(1).args[0].event;
-        assert.strictEqual(event.type, 'keydown', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'keydown', this.$input, 'enter');
         this.testProgramChange(assert);
     });
 
@@ -901,10 +909,7 @@ QUnit.module('valueChanged handler should receive correct event', {
             .press('up')
             .press('enter');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'keydown', 'event type is correct');
-        assert.strictEqual(event.target, this.$colorViewHexInput.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'keydown', this.$colorViewHexInput, 'enter');
         this.testProgramChange(assert);
     });
 
@@ -914,45 +919,36 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.keyboard.press('up');
         this.$colorViewApplyButton.trigger('dxclick');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-        assert.strictEqual(event.target, this.$colorViewApplyButton.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxclick', this.$colorViewApplyButton);
         this.testProgramChange(assert);
     });
 
     QUnit.test('on colorView value change when applyValueMode=instantly', function(assert) {
         // NOTE: if this test fails synchronization with colorView is broken totally
 
-        this.instance.option('applyValueMode', 'instantly');
+        this.reinit({ applyValueMode: 'instantly' });
         this.instance.open();
 
         this.keyboard.press('up');
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'keydown', 'event type is correct');
-        assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'keydown', this.$input, 'up');
         this.testProgramChange(assert);
     });
 
     ['useButtons', 'instantly'].forEach(applyValueMode => {
         QUnit.test(`on click on clear button when applyValueMode=${applyValueMode}`, function(assert) {
-            this.instance.option({ showClearButton: true, value: '#613030', applyValueMode });
+            this.reinit({ showClearButton: true, value: '#613030', applyValueMode });
 
             const $clearButton = this.$element.find(CLEAR_BUTTON_AREA_SELECTOR);
             $clearButton.trigger('dxclick');
 
-            const event = this.valueChangedHandler.getCall(1).args[0].event;
-            assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-            assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
-
+            this.checkEvent(assert, 'dxclick', $clearButton);
             this.testProgramChange(assert);
         });
     });
 
     QUnit.test('on click on clear button after value selecting when applyValueMode=useButtons', function(assert) {
-        this.instance.option('showClearButton', true);
+        this.reinit({ showClearButton: true });
 
         this.instance.open();
         this.keyboard.press('up');
@@ -969,7 +965,7 @@ QUnit.module('valueChanged handler should receive correct event', {
     });
 
     QUnit.test('on click on clear button after value selecting when applyValueMode=instantly', function(assert) {
-        this.instance.option({ showClearButton: true, applyValueMode: 'instantly' });
+        this.reinit({ showClearButton: true, applyValueMode: 'instantly' });
 
         this.instance.open();
         this.keyboard.press('up');
