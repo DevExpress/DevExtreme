@@ -32,7 +32,7 @@ const test = (description, callback) => {
 
 testStart(() => initTestMarkup());
 
-module('Virtual scrolling', () => {
+module('Virtual scrolling integration', () => {
     module('Initialization', () => {
         supportedViews.forEach(viewName => {
             [{

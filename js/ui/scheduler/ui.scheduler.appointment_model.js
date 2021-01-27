@@ -117,15 +117,17 @@ const compareDateWithEndDayHour = (options) => {
 
     const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
     const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
+    const apptIntersectViewport = startDate < max && endDate > min;
 
     result = (apptStartHour < endTime.hours) ||
         (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) ||
         (allDay &&
             startDate <= max) ||
         (severalDays &&
-            (startDate < max && endDate > min) &&
+            apptIntersectViewport &&
                 (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60)
-        );
+        ) ||
+        apptIntersectViewport;
 
     if(apptDuration < hiddenInterval) {
         if((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
