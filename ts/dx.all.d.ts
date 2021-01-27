@@ -2937,6 +2937,14 @@ declare module DevExpress.fileManagement {
      */
     export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
         /**
+         * [descr:RemoteFileSystemProvider.Options.beforeAjaxSend]
+         */
+        beforeAjaxSend?: ((options: { headers?: any, xhrFields?: any, formData?: any }) => any);
+        /**
+         * [descr:RemoteFileSystemProvider.Options.beforeSubmit]
+         */
+        beforeSubmit?: ((options: { formData?: any }) => any);
+        /**
          * [descr:RemoteFileSystemProvider.Options.endpointUrl]
          */
         endpointUrl?: string;
@@ -2944,6 +2952,10 @@ declare module DevExpress.fileManagement {
          * [descr:RemoteFileSystemProvider.Options.hasSubDirectoriesExpr]
          */
         hasSubDirectoriesExpr?: string | Function;
+        /**
+         * [descr:RemoteFileSystemProvider.Options.requestHeaders]
+         */
+        requestHeaders?: any;
     }
     /**
      * [descr:RemoteFileSystemProvider]
