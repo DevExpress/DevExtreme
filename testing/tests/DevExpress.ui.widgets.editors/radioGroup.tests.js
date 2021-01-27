@@ -6,6 +6,7 @@ import { DataSource } from 'data/data_source/data_source';
 import { deferUpdate } from 'core/utils/common';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import errors from 'ui/widget/ui.errors';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/radio_group';
 
@@ -435,32 +436,37 @@ module('value', moduleConfig, () => {
 
     QUnit.module('valueChanged handler should receive correct event parameter', {
         beforeEach: function() {
-            this.handler = sinon.stub();
+            this.valueChangedHandler = sinon.stub();
             this.$element = createRadioGroup({
                 items: [1, 2],
-                onValueChanged: this.handler,
+                onValueChanged: this.valueChangedHandler,
                 focusStateEnabled: true
             });
             this.instance = getInstance(this.$element);
             this.keyboard = keyboardMock(this.$element);
+            this.$firstItem = $(this.instance.itemElements().first());
 
             this.testProgramChange = (assert) => {
                 this.instance.option('value', 2);
 
-                const callCount = this.handler.callCount - 1;
-                const event = this.handler.getCall(callCount).args[0].event;
+                const callCount = this.valueChangedHandler.callCount - 1;
+                const event = this.valueChangedHandler.getCall(callCount).args[0].event;
                 assert.strictEqual(event, undefined, 'event is undefined');
+            };
+            this.checkEvent = (assert, type, target, key) => {
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, type, 'event type is correct');
+                assert.strictEqual(event.target, target.get(0), 'event target is correct');
+                if(type === 'keydown') {
+                    assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+                }
             };
         }
     }, () => {
         QUnit.test('after click', function(assert) {
-            const $firstItem = $(this.instance.itemElements().first());
-            $firstItem.trigger('dxclick');
+            this.$firstItem.trigger('dxclick');
 
-            const event = this.handler.getCall(0).args[0].event;
-            assert.strictEqual(event.type, 'dxclick', 'event type is correct');
-            assert.strictEqual(event.target, $firstItem.get(0), 'event target is correct');
-
+            this.checkEvent(assert, 'dxclick', this.$firstItem);
             this.testProgramChange(assert);
         });
 
@@ -468,11 +474,7 @@ module('value', moduleConfig, () => {
             QUnit.test(`after ${key} press`, function(assert) {
                 this.keyboard.press(key);
 
-                const event = this.handler.getCall(0).args[0].event;
-                const firstItemElement = this.instance.itemElements()[0];
-                assert.strictEqual(event.type, 'keydown', 'event type is correct');
-                assert.strictEqual(event.target, firstItemElement, 'event target is correct');
-
+                this.checkEvent(assert, 'keydown', this.$firstItem, key);
                 this.testProgramChange(assert);
             });
         });
