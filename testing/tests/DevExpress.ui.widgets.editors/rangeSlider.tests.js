@@ -3,6 +3,7 @@ import Tooltip from 'ui/tooltip';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/range_slider';
 import 'ui/number_box/number_box';
@@ -1294,6 +1295,14 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
             const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
             assert.strictEqual(event, undefined, 'event is undefined');
         };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
     },
     afterEach: function() {
         fx.off = false;
@@ -1310,10 +1319,7 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
             .down(this.$wrapper.offset().left + CONTAINER_MARGIN + 50, this.$wrapper.offset().top)
             .move(20);
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxswipe', 'event type is correct');
-        assert.strictEqual(event.target, this.$wrapper.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxswipe', this.$wrapper);
         this.testProgramChange(assert);
     });
 
@@ -1335,10 +1341,7 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
     QUnit.test('on click on slider scale', function(assert) {
         this.pointer.start().move(10 + this.$element.offset().left).down();
 
-        const event = this.valueChangedHandler.getCall(0).args[0].event;
-        assert.strictEqual(event.type, 'dxpointerdown', 'event type is correct');
-        assert.strictEqual(event.target, this.$wrapper.get(0), 'event target is correct');
-
+        this.checkEvent(assert, 'dxpointerdown', this.$wrapper);
         this.testProgramChange(assert);
     });
 
@@ -1353,10 +1356,7 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
                 QUnit.test(`on ${key} press`, function(assert) {
                     this.keyboard.press(key);
 
-                    const event = this.valueChangedHandler.getCall(0).args[0].event;
-                    assert.strictEqual(event.type, 'keydown', 'event type is correct');
-                    assert.strictEqual(event.target, this.$handle.get(0), 'event target is correct');
-
+                    this.checkEvent(assert, 'keydown', this.$handle, key);
                     this.testProgramChange(assert);
                 });
             });
