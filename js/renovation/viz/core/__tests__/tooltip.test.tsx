@@ -27,6 +27,12 @@ jest.mock('../renderers/utils', () => ({
   getGraphicExtraProps: jest.fn(),
 }));
 
+function createElementTest(tagName: string) {
+  return domAdapter.getDocument().createElement(tagName);
+}
+
+const bodyTest = domAdapter.getBody();
+
 describe('Render', () => {
   beforeEach(() => {
     (getCloudPoints as jest.Mock).mockReturnValue('test_cloud_points');
@@ -104,7 +110,8 @@ describe('Render', () => {
       x: 4, y: 5, anchorX: 11, anchorY: 12,
     },
     props: tooltipProps,
-    container: domAdapter.getBody(),
+    container: bodyTest,
+    containerIsReady: true,
   };
 
   it('should render main div', () => {
@@ -340,7 +347,7 @@ describe('Render', () => {
   });
 
   it('should be rendered to passed container', () => {
-    const container = domAdapter.getBody().appendChild(domAdapter.getDocument().createElement('div'));
+    const container = bodyTest.appendChild(createElementTest('div'));
     container.setAttribute('id', 'some-id');
 
     const tooltip = shallow(TooltipComponent({ ...props, container } as any));
@@ -362,6 +369,17 @@ describe('Render', () => {
 
   it('should not render anything, isEmptyContainer = true', () => {
     const tooltip = shallow(TooltipComponent({ ...props, isEmptyContainer: true } as any));
+
+    expect(tooltip.find('div')).toHaveLength(1);
+    expect(tooltip.find('div').props()).toEqual({});
+    expect(tooltip.find('defs')).toHaveLength(0);
+    expect(tooltip.find('ShadowFilter')).toHaveLength(0);
+    expect(tooltip.find('PathSvgElement')).toHaveLength(0);
+    expect(tooltip.find('TextSvgElement')).toHaveLength(0);
+  });
+
+  it('should not render anything, containerIsReady = false', () => {
+    const tooltip = shallow(TooltipComponent({ ...props, containerIsReady: false } as any));
 
     expect(tooltip.find('div')).toHaveLength(1);
     expect(tooltip.find('div').props()).toEqual({});
@@ -687,6 +705,14 @@ describe('Effect', () => {
     tooltip.checkContainer();
     expect(tooltip.isEmptyContainer).toBe(true);
   });
+
+  it('should set containerIsReady state', () => {
+    const tooltip = new Tooltip({});
+
+    tooltip.containerChange();
+
+    expect(tooltip.containerIsReady).toBe(true);
+  });
 });
 
 describe('Methods', () => {
@@ -815,16 +841,16 @@ describe('Getters', () => {
 
   it('should return body as container by default', () => {
     const tooltip = new Tooltip({});
-    expect(tooltip.container).toEqual(domAdapter.getBody());
+    expect(tooltip.container).toEqual(bodyTest);
   });
 
   it('should return body as container if container was not found by selector', () => {
     const tooltip = new Tooltip({ container: '#some-id' });
-    expect(tooltip.container).toEqual(domAdapter.getBody());
+    expect(tooltip.container).toEqual(bodyTest);
   });
 
   it('should return passed element as container', () => {
-    const container = domAdapter.getBody().appendChild(domAdapter.getDocument().createElement('div'));
+    const container = bodyTest.appendChild(createElementTest('div'));
 
     const tooltip = new Tooltip({ container });
     expect(tooltip.container).toEqual(container);
@@ -833,13 +859,32 @@ describe('Getters', () => {
   });
 
   it('should return found element as container', () => {
-    const container = domAdapter.getBody().appendChild(domAdapter.getDocument().createElement('div'));
+    const container = bodyTest.appendChild(createElementTest('div'));
     container.setAttribute('id', 'some-id');
 
     const tooltip = new Tooltip({ container: '#some-id' });
     expect(tooltip.container).toEqual(container);
 
     container.remove();
+  });
+
+  it('should select closest container to rootContainer', () => {
+    const htmlStructRoot = bodyTest.appendChild(createElementTest('div'));
+
+    const container1 = htmlStructRoot.appendChild(createElementTest('div'));
+    container1.setAttribute('class', 'container-class');
+
+    const container2 = htmlStructRoot.appendChild(createElementTest('div'));
+    container2.setAttribute('class', 'container-class');
+
+    const masterDiv = createElementTest('div');
+    container2.appendChild(masterDiv);
+
+    const tooltip = new Tooltip({ container: '.container-class', rootWidget: masterDiv });
+
+    expect(tooltip.container).toEqual(container2);
+
+    htmlStructRoot.remove();
   });
 
   it('should return css className', () => {

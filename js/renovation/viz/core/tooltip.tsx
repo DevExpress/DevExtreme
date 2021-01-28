@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState, Portal,
-  RefObject, Method, Template, Event,
+  RefObject, Method, Template, Event, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
 
@@ -54,6 +54,7 @@ export const viewFunction = ({
   textSize,
   cloudSize,
   textSizeWithPaddings,
+  containerIsReady,
   border,
   filterId,
   container,
@@ -68,7 +69,8 @@ export const viewFunction = ({
     cornerRadius, arrowWidth,
   },
 }: Tooltip): JSX.Element => {
-  if (!visible || !correctedCoordinates || isTextEmpty(customizedOptions) || isEmptyContainer) {
+  if (!visible || !correctedCoordinates || !containerIsReady
+    || isTextEmpty(customizedOptions) || isEmptyContainer) {
     return <div />;
   }
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
@@ -190,6 +192,8 @@ export class TooltipProps {
 
   @OneWay() data?: TooltipData = {};
 
+  @ForwardRef() rootWidget?: RefObject<HTMLDivElement>;
+
   @OneWay() paddingLeftRight? = 18;
 
   @OneWay() paddingTopBottom? = 15;
@@ -215,8 +219,6 @@ export class TooltipProps {
   @OneWay() argumentFormat?: Format;
 
   @OneWay() customizeTooltip?: CustomizeTooltipFn;
-
-  @OneWay() canvas?: Canvas = DEFAULT_CANVAS;
 
   @OneWay() font?: Font = DEFAULT_FONT;
 
@@ -265,6 +267,8 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @InternalState() currentTarget?: Point;
 
   @InternalState() isEmptyContainer = false;
+
+  @InternalState() containerIsReady = false;
 
   @Ref() cloudRef!: RefObject<SVGGElement>;
 
@@ -328,6 +332,11 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   }
 
   @Effect()
+  containerChange(): void {
+    this.containerIsReady = true;
+  }
+
+  @Effect()
   checkContainer(): void {
     if (this.htmlRef && this.props.visible) {
       const htmlTextSize = this.htmlRef.getBoundingClientRect();
@@ -368,7 +377,11 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     const propsContainer = this.props.container;
     if (propsContainer) {
       if (typeof propsContainer === 'string') {
-        const node = domAdapter.getDocument().querySelector(propsContainer);
+        const tmp = this.props.rootWidget;
+        let node = tmp?.closest(propsContainer);
+        if (!node) {
+          node = domAdapter.getDocument().querySelector(propsContainer);
+        }
         if (node) {
           return node as HTMLElement;
         }
