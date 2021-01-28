@@ -121,7 +121,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
       info: this.infoTextRef,
       pages: this.pagesRef,
     });
-    const isEmpty = isDefined(this.elementsWidth === undefined);
+    const isEmpty = !isDefined(this.elementsWidth);
     if (isEmpty) {
       const current = calculateAdaptivityProps(currentElementsWidth);
       this.updateElementsWidth(currentElementsWidth);
