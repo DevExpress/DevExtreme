@@ -54,7 +54,7 @@ const EditStrategy = Class.inherit({
             return this._normalizeItemIndex(value);
         }
 
-        if(domAdapter.isNode(value)) {
+        if(this._isNode(value)) {
             return this._getNormalizedItemIndex(value);
         }
 
@@ -70,7 +70,7 @@ const EditStrategy = Class.inherit({
             return value;
         }
 
-        if(domAdapter.isNode(value)) {
+        if(this._isNode(value)) {
             return this._denormalizeItemIndex(this._getNormalizedItemIndex(value));
         }
 
@@ -86,12 +86,16 @@ const EditStrategy = Class.inherit({
             return this._getItemByNormalizedIndex(this._normalizeItemIndex(value));
         }
 
-        if(domAdapter.isNode(value)) {
+        if(this._isNode(value)) {
             return $(value);
         }
 
         const normalizedItemIndex = this._normalizeItemIndex(this.getIndexByItemData(value));
         return this._getItemByNormalizedIndex(normalizedItemIndex);
+    },
+
+    _isNode: (el) => {
+        return domAdapter.isNode((el && el.get) ? el.get(0) : el);
     },
 
     deleteItemAtIndex: abstract,
