@@ -246,7 +246,7 @@ const baseFixedColumns = {
 
     _getCellElementsCore: function(rowIndex) {
         const that = this;
-        const cellElements = that.callBase(rowIndex);
+        const cellElements = that.callBase.apply(this, arguments);
         const isGroupRow = cellElements.parent().hasClass(GROUP_ROW_CLASS);
         const index = that.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
 

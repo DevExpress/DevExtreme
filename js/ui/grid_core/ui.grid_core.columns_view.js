@@ -873,7 +873,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         $tableElement = $tableElement || that._getTableElement();
 
         if($tableElement) {
-            $rows = $tableElement.children('tbody').children();
+            $rows = $tableElement.children('tbody:not(.dx-header)').children();
 
             for(let i = 0; i < $rows.length; i++) {
                 const $row = $rows.eq(i);
@@ -884,10 +884,18 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 }
             }
 
+            $cells = $cells || this._getHeaderCellElements($tableElement);
+
             result = that._getWidths($cells);
         }
 
         return result;
+    },
+
+    _getHeaderCellElements: function($tableElement) {
+        const columnHeadersView = this.component.getView('columnHeadersView');
+
+        return columnHeadersView.getColumnElements({ $tableElement: $tableElement.children('.dx-header') });
     },
 
     getVisibleColumnIndex: function(columnIndex, rowIndex) {
@@ -949,19 +957,19 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
-    getCellElements: function(rowIndex) {
-        return this._getCellElementsCore(rowIndex);
+    getCellElements: function(rowIndex, $tableElement) {
+        return this._getCellElementsCore(rowIndex, $tableElement);
     },
 
-    _getCellElementsCore: function(rowIndex) {
-        const $row = this._getRowElements().eq(rowIndex);
+    _getCellElementsCore: function(rowIndex, $tableElement) {
+        const $row = this._getRowElements($tableElement).eq(rowIndex);
         return $row.children();
     },
 
-    _getCellElement: function(rowIndex, columnIdentifier) {
+    _getCellElement: function(rowIndex, columnIdentifier, $tableElement) {
         const that = this;
         let $cell;
-        const $cells = that.getCellElements(rowIndex);
+        const $cells = that.getCellElements(rowIndex, $tableElement);
         const columnVisibleIndex = that._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
 
         if($cells.length && columnVisibleIndex >= 0) {
