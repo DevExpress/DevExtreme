@@ -253,8 +253,10 @@ class FileManagerToolbar extends Widget {
             extendAttributes(result, item, [
                 'visible',
                 'location',
-                'locateInMenu'
+                'locateInMenu',
+                'disabled'
             ]);
+            extendAttributes(result.options, item, ['text', 'icon']);
 
             if(item.cssClass) {
                 resultCssClass = `${resultCssClass} ${item.cssClass}`;
@@ -266,11 +268,7 @@ class FileManagerToolbar extends Widget {
 
             if(!isDefined(item.visible)) {
                 result._autoHide = true;
-            } else {
-                extendAttributes(result, item, ['disabled']);
             }
-
-            extendAttributes(result.options, item, ['text', 'icon']);
 
             if(result.widget === 'dxButton') {
                 if(result.showText === 'inMenu' && !isDefined(result.options.hint)) {

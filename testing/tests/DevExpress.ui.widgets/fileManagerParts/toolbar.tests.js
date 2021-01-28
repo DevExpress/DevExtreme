@@ -381,10 +381,18 @@ QUnit.module('Toolbar', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        const $elements = this.wrapper.getToolbarElements();
-        assert.equal($elements.length, 4, 'general toolbar has elements');
+        let $elements = this.wrapper.getAllItemsOfToolbar();
+        assert.equal($elements.length, 8, 'general toolbar has elements');
+        assert.strictEqual($elements.eq(4).text(), 'Move to', 'move is rendered in new position');
+        assert.ok($elements.eq(4).is(`.${Consts.DISABLED_STATE_CLASS}`), 'move button is disabled');
 
-        assert.notStrictEqual($elements.eq(2).text().indexOf('Move'), -1, 'move is rendered in new position');
+        fileManagerInstance.option('toolbar.items[4].visible', undefined);
+        this.clock.tick(400);
+
+        $elements = this.wrapper.getAllItemsOfToolbar();
+        assert.equal($elements.length, 8, 'general toolbar has elements');
+        assert.strictEqual($elements.eq(4).text(), 'Move to', 'move is rendered');
+        assert.ok($elements.eq(4).is(`.${Consts.DISABLED_STATE_CLASS}`), 'move button can be disabled even if its "visible" property manually not set');
 
         const $item = this.wrapper.findDetailsItem('File 1.txt');
         $item.trigger('dxclick');
