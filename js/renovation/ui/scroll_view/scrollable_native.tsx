@@ -404,7 +404,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     return (devices.real().platform === 'ios' ? 1 : 0);
   }
 
-  get styles(): object {
+  get styles(): { [key: string]: any } {
     return {
       paddingTop: this.pushBackValue !== 0 ? this.pushBackValue : undefined,
       paddingBottom: this.pushBackValue !== 0 ? this.pushBackValue : undefined,

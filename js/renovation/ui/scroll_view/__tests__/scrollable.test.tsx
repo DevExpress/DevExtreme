@@ -2036,5 +2036,32 @@ each([{
         });
       });
     });
+
+    describe('Styles', () => {
+      each(['android', 'ios', 'generic']).describe('Platform: %o', (platform) => {
+        each(['5px', '0px', undefined]).describe('Padding: %o', (padding) => {
+          it('should add paddings for scrollable content', () => {
+            if (Scrollable === ScrollableSimulated) {
+              return; // actual only for native strategy
+            }
+
+            devices.real = () => ({ platform });
+
+            const viewModel = new Scrollable({ pushBackValue: padding });
+            const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+            const scrollableContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content');
+            const scrollableContentStyles = window.getComputedStyle(scrollableContent.getDOMNode());
+
+            if (padding) {
+              expect(scrollableContentStyles.paddingTop).toEqual(padding);
+              expect(scrollableContentStyles.paddingBottom).toEqual(padding);
+            } else {
+              expect(scrollableContentStyles.paddingTop).toEqual(platform === 'ios' ? '1px' : '');
+              expect(scrollableContentStyles.paddingBottom).toEqual(platform === 'ios' ? '1px' : '');
+            }
+          });
+        });
+      });
+    });
   });
 });
