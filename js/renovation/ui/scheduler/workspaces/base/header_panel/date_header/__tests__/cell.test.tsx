@@ -184,6 +184,49 @@ describe('DateHeaderCell', () => {
             .toHaveBeenCalledWith('isFirstGroupCell', 'isLastGroupCell', 'combineClasses');
         });
       });
+
+      describe('useTemplate', () => {
+        [true, false].forEach((isTimeCellTemplate) => {
+          [{
+            dateCellTemplate: undefined,
+            timeCellTemplate: undefined,
+            description: `should work correctly if both temlates are undefined and "isTimeCellTemplate" is ${isTimeCellTemplate}`,
+            expectedResult: false,
+          }, {
+            dateCellTemplate: () => null,
+            timeCellTemplate: undefined,
+            description: `should work correctly if timeCellTemplate is undefined and "isTimeCellTemplate" is ${isTimeCellTemplate}`,
+            expectedResult: !isTimeCellTemplate,
+          }, {
+            dateCellTemplate: undefined,
+            timeCellTemplate: () => null,
+            description: `should work correctly if dateCellTemplate is undefined and "isTimeCellTemplate" is ${isTimeCellTemplate}`,
+            expectedResult: isTimeCellTemplate,
+          }, {
+            dateCellTemplate: () => null,
+            timeCellTemplate: () => null,
+            description: `should work correctly if both temlates are defined and "isTimeCellTemplate" is ${isTimeCellTemplate}`,
+            isTimeCellTemplate: false,
+            expectedResult: true,
+          }].forEach(({
+            dateCellTemplate,
+            timeCellTemplate,
+            description,
+            expectedResult,
+          }) => {
+            test(description, () => {
+              const cell = new DateHeaderCell({
+                dateCellTemplate,
+                timeCellTemplate,
+                isTimeCellTemplate,
+              });
+
+              expect(cell.useTemplate)
+                .toBe(expectedResult);
+            });
+          });
+        });
+      });
     });
   });
 });
