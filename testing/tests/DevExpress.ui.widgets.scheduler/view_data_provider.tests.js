@@ -284,7 +284,7 @@ module('View Data Provider', () => {
                 );
             });
 
-            test('getGroupsInfo', function(assert) {
+            test('getCompletedGroupsInfo', function(assert) {
                 const completeViewDataMap = [
                     [
                         {
@@ -394,7 +394,7 @@ module('View Data Provider', () => {
                     completeDateHeaderMap
                 });
 
-                const groupsInfo = viewDataProvider.getGroupsInfo();
+                const groupsInfo = viewDataProvider.getCompletedGroupsInfo();
 
                 assert.deepEqual(
                     groupsInfo,
