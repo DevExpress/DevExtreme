@@ -382,16 +382,16 @@ const ColorView = Editor.inherit({
             boundOffset: (function() {
                 return -this._paletteHandleHeight / 2;
             }).bind(this),
-            onDragMove: (function(args) {
+            onDragMove: ({ event }) => {
                 const paletteHandlePosition = locate(this._$paletteHandle);
                 this._updateByDrag = true;
-                this._saveValueChangeEvent(args.event);
+                this._saveValueChangeEvent(event);
                 this._updateColorFromHsv(
                     this._currentColor.hsv.h,
                     this._calculateColorSaturation(paletteHandlePosition),
                     this._calculateColorValue(paletteHandlePosition)
                 );
-            }).bind(this)
+            }
         });
 
         this._paletteHandleWidth = this._$paletteHandle.width();
@@ -451,11 +451,11 @@ const ColorView = Editor.inherit({
             boundary: this._$hueScaleWrapper,
             allowMoveByClick: true,
             dragDirection: 'vertical',
-            onDragMove: (function(args) {
+            onDragMove: ({ event }) => {
                 this._updateByDrag = true;
-                this._saveValueChangeEvent(args.event);
+                this._saveValueChangeEvent(event);
                 this._updateColorHue(locate(this._$hueScaleHandle).top + this._hueScaleHandleHeight / 2);
-            }).bind(this)
+            }
         });
 
         this._hueScaleHandleHeight = this._$hueScaleHandle.height();
@@ -714,13 +714,13 @@ const ColorView = Editor.inherit({
             boundary: $parent,
             allowMoveByClick: true,
             dragDirection: 'horizontal',
-            onDragMove: (function(args) {
+            onDragMove: ({ event }) => {
                 this._updateByDrag = true;
                 const $alphaChannelHandle = this._$alphaChannelHandle;
                 const alphaChannelHandlePosition = locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
-                this._saveValueChangeEvent(args.event);
+                this._saveValueChangeEvent(event);
                 this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
-            }).bind(this)
+            }
         });
 
         this._alphaChannelHandleWidth = this._$alphaChannelHandle.width();

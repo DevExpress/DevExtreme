@@ -192,17 +192,17 @@ const ColorBox = DropDownEditor.inherit({
             applyValueMode: that.option('applyValueMode'),
             focusStateEnabled: that.option('focusStateEnabled'),
             stylingMode: this.option('stylingMode'),
-            onEnterKeyPressed: function(args) {
+            onEnterKeyPressed: function({ event }) {
                 that._colorViewEnterKeyPressed = true;
                 if(that._colorView.option('value') !== that.option('value')) {
-                    that._saveValueChangeEvent(args.event);
+                    that._saveValueChangeEvent(event);
                     that._applyNewColor(that._colorView.option('value'));
                     that.close();
                 }
             },
 
-            onValueChanged: function(args) {
-                if(colorUtils.makeRgba(args.value) === args.previousValue) {
+            onValueChanged: function({ event, value, previousValue }) {
+                if(colorUtils.makeRgba(value) === previousValue) {
                     return;
                 }
 
@@ -212,8 +212,10 @@ const ColorBox = DropDownEditor.inherit({
                     return;
                 }
 
-                args.event && that._saveValueChangeEvent(args.event);
-                that._applyNewColor(args.value);
+                if(event) {
+                    that._saveValueChangeEvent(event);
+                }
+                that._applyNewColor(value);
             }
         };
     },
