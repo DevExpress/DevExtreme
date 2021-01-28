@@ -40,6 +40,8 @@ const LIST_ITEM_CLASS = 'dx-list-item';
 const BOX_ITEM_CONTENT_CLASS = 'dx-box-item-content';
 
 const BOLD_FORMAT_CLASS = 'dx-bold-format';
+const SIZE_FORMAT_CLASS = 'dx-size-format';
+const HEADER_FORMAT_CLASS = 'dx-header-format';
 const ITALIC_FORMAT_CLASS = 'dx-italic-format';
 const ALIGNCENTER_FORMAT_CLASS = 'dx-aligncenter-format';
 const CODEBLOCK_FORMAT_CLASS = 'dx-codeblock-format';
@@ -580,6 +582,22 @@ testModule('Toolbar module', simpleModuleConfig, () => {
                 format: 'bold',
                 value: false
             }]);
+    });
+
+    test('Size selectBox has custom width', function(assert) {
+        this.options.items = [{
+            formatName: 'size',
+            formatValues: ['8pt', '12pt'] },
+        {
+            formatName: 'header',
+            formatValues: [1, 2, 3, false]
+        }];
+
+        new Toolbar(this.quillMock, this.options);
+        const $sizeEditor = this.$element.find(`.${SIZE_FORMAT_CLASS}`).eq(0);
+        const $headerEditor = this.$element.find(`.${HEADER_FORMAT_CLASS}`).eq(0);
+
+        assert.ok($sizeEditor.width() < $headerEditor.width() * 0.9, 'Size editor has custom width');
     });
 });
 
