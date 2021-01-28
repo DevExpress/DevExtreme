@@ -547,6 +547,15 @@ each([{
                   }
                 };
 
+                const setScrollbarPosition = (scrollbar, position) => {
+                  if (scrollbar
+                    && contentSize > containerSize
+                    && Math.abs(contentSize) > Math.abs(position)) {
+                    // eslint-disable-next-line no-param-reassign
+                    scrollbar.cachedVariables.location = position;
+                  }
+                };
+
                 const initStyles = (ref, size) => {
                   const elementRef = ref;
 
@@ -658,44 +667,60 @@ each([{
                     each([true, false]).describe('Disabled: %o', (disabled) => {
                       each([true, false]).describe('ScrollByContent: %o', (scrollByContent) => {
                         each([true, false]).describe('IsScrollbarClicked: %o', (isScrollbarClicked) => {
-                          it('validate method', () => {
-                            const viewModel = new Scrollable({
-                              direction, bounceEnabled, disabled, scrollByContent,
-                            }) as any;
+                          each([-1, 1]).describe('Wheel delta: %o', (delta) => {
+                            each([-100, 0]).describe('Scrollbar position: %o', (scrollbarPosition) => {
+                              it('validate method', () => {
+                                const viewModel = new Scrollable({
+                                  direction, bounceEnabled, disabled, scrollByContent,
+                                }) as any;
 
-                            initRefs(viewModel);
+                                initRefs(viewModel);
 
-                            initStyles((viewModel).containerRef, containerSize);
-                            initStyles((viewModel).contentRef, contentSize);
+                                initStyles((viewModel).containerRef, containerSize);
+                                initStyles((viewModel).contentRef, contentSize);
 
-                            if (Scrollable === ScrollableNative) {
-                              expect((viewModel).validate(null)).toBe(true);
-                              return; // currently implemented only in SimulatedStrategy
-                            }
+                                if (Scrollable === ScrollableNative) {
+                                  expect((viewModel).validate(null)).toBe(true);
+                                  return; // currently implemented only in SimulatedStrategy
+                                }
 
-                            let expectedValidationResult;
-                            if (disabled) {
-                              expectedValidationResult = false;
-                            } else if (bounceEnabled) {
-                              expectedValidationResult = true;
-                            } else if (isDxWheelEvent) {
-                              expectedValidationResult = true;
-                            } else if (!scrollByContent && !isScrollbarClicked) {
-                              expectedValidationResult = false;
-                            } else {
-                              expectedValidationResult = containerSize < contentSize
-                                  || bounceEnabled;
-                            }
+                                setScrollbarPosition(viewModel.horizontalScrollbarRef,
+                                  scrollbarPosition);
+                                setScrollbarPosition(viewModel.verticalScrollbarRef,
+                                  scrollbarPosition);
 
-                            const target = isScrollbarClicked
-                              ? viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
-                              : viewModel.containerRef;
-                            const e = { ...defaultEvent, target };
-                            if (isDxWheelEvent) {
-                              (e as any).type = 'dxmousewheel';
-                            }
+                                let expectedValidationResult;
+                                if (disabled) {
+                                  expectedValidationResult = false;
+                                } else if (bounceEnabled) {
+                                  expectedValidationResult = true;
+                                } else if (isDxWheelEvent) {
+                                  expectedValidationResult = (contentSize > containerSize)
+                                    && (
+                                      (scrollbarPosition < 0 && delta > 0)
+                                      || (scrollbarPosition >= 0 && delta < 0)
+                                    );
+                                } else if (!scrollByContent && !isScrollbarClicked) {
+                                  expectedValidationResult = false;
+                                } else {
+                                  expectedValidationResult = containerSize < contentSize
+                                    || bounceEnabled;
+                                }
 
-                            expect((viewModel).validate(e)).toBe(expectedValidationResult);
+                                const target = isScrollbarClicked
+                                  ? viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
+                                  : viewModel.containerRef;
+                                const e = { ...defaultEvent, target, delta };
+                                if (isDxWheelEvent) {
+                                  (e as any).type = 'dxmousewheel';
+                                }
+
+                                const actualResult = (viewModel).validate(e);
+                                viewModel.clearValidateWheelTimer();
+
+                                expect(actualResult).toBe(expectedValidationResult);
+                              });
+                            });
                           });
                         });
                       });
