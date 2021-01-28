@@ -56,14 +56,20 @@ export default gridCore.Controller.inherit((function() {
         return { pages: {} };
     }
 
+    function getPageKey(pageIndex, loadPageCount) {
+        return isDefined(loadPageCount) ? `${pageIndex}:${loadPageCount}` : pageIndex;
+    }
+
     function getPageDataFromCache(options) {
-        return options.cachedPagesData.pages[options.pageIndex];
+        const key = getPageKey(options.pageIndex, options.loadPageCount);
+        return options.cachedPagesData.pages[key];
     }
 
     function setPageDataToCache(options, data) {
         const pageIndex = options.pageIndex;
         if(pageIndex !== undefined) {
-            options.cachedPagesData.pages[pageIndex] = data;
+            const key = getPageKey(pageIndex, options.loadPageCount);
+            options.cachedPagesData.pages[key] = data;
         }
     }
 
