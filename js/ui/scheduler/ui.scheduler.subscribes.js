@@ -14,8 +14,6 @@ import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
 import utils from './utils';
 import { getFieldExpr as getResourceFieldExpr } from './resources/utils';
 
-const HOURS_IN_DAY = 24;
-// const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
 const HOUR_MS = toMs('hour');
 
@@ -493,6 +491,7 @@ const subscribes = {
     prerenderFilterVirtual: function() {
         const workspace = this.getWorkSpace();
         const isCalculateStartAndEndDayHour = workspace.isDateAndTimeView;
+        const checkIntersectViewport = workspace.isDateAndTimeView && workspace.viewDirection === 'horizontal';
 
         const isAllDayWorkspace = !this._workSpace.supportAllDayRow();
         const showAllDayAppointments = this.option('showAllDayPanel') || isAllDayWorkspace;
@@ -504,17 +503,16 @@ const subscribes = {
         const groupsInfo = viewDataProvider.getGroupsInfo();
         groupsInfo.forEach((item) => {
             const groupIndex = item.groupIndex;
-            const startDate = item.startDate;
-            const endDate = new Date(Math.min(item.endDate, endViewDate));
+            const groupStartDate = item.startDate;
 
-            const groupEndDate = new Date(Math.min(endDate, endViewDate));
+            const groupEndDate = new Date(Math.min(item.endDate, endViewDate));
             const viewStartDayHour = this._getCurrentViewOption('startDayHour');
             const viewEndDayHour = this._getCurrentViewOption('endDayHour');
             const startDayHour = isCalculateStartAndEndDayHour
-                ? startDate.getHours()
+                ? groupStartDate.getHours()
                 : viewStartDayHour;
             const endDayHour = isCalculateStartAndEndDayHour
-                ? (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY
+                ? (startDayHour + groupStartDate.getMinutes() / 60 + (groupEndDate - groupStartDate) / HOUR_MS)
                 : viewEndDayHour;
 
             const resources = this.fire('_getPrerenderFilterResources', groupIndex);
@@ -529,20 +527,23 @@ const subscribes = {
                 endDayHour,
                 viewStartDayHour,
                 viewEndDayHour,
-                min: startDate,
+                min: groupStartDate,
                 max: groupEndDate,
                 allDay: supportAllDayAppointment,
                 resources,
                 firstDayOfWeek: this.getFirstDayOfWeek(),
-                recurrenceException: this._getRecurrenceException.bind(this)
+                recurrenceException: this._getRecurrenceException.bind(this),
+                checkIntersectViewport
             });
         });
 
-        return this._appointmentModel.filterLoadedVirtualAppointments(
+        const result = this._appointmentModel.filterLoadedVirtualAppointments(
             filterOptions,
             this.timeZoneCalculator,
             workspace._getGroupCount()
         );
+
+        return result;
     },
     _getPrerenderFilterResources: function(groupIndex) {
         const { viewDataProvider } = this.getWorkSpace();

@@ -418,8 +418,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const namespace = 'dxScrollable';
 
     dxScrollStop.on(this.wrapperRef,
-      (event: Event) => {
-        this.handleStop(event);
+      () => {
+        this.handleStop();
       }, { namespace });
 
     return (): void => dxScrollStop.off(this.wrapperRef, { namespace });
@@ -450,39 +450,86 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   /* istanbul ignore next */
-  // eslint-disable-next-line
   handleInit(e: Event): void {
     this.suppressDirections(e);
     // this._eventForUserAction = e;
+
+    const crossThumbScrolling = this.isThumbScrolling(e);
+
     this.eventHandler(
-      (scrollbar) => scrollbar.initHandler(e),
-    ).done(() => {}); // this._stopAction
-    // console.log('initHandler', event, this);
+      (scrollbar) => scrollbar.initHandler(
+        e,
+        this.props.onStop,
+        crossThumbScrolling,
+      ),
+    );
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleStart(event: Event): void {
-    // console.log('handleEnd', event, this);
+    // console.log('handleStart', event, this);
   }
-  /* istanbul ignore next */
-  // eslint-disable-next-line
-  private handleMove(event: Event): void {
-    // console.log('handleEnd', event, this);
+
+  private handleMove(e): void {
+    e.preventDefault && e.preventDefault();
+
+    this.adjustDistance(e, 'delta');
+    // this._eventForUserAction = e;
+
+    this.eventHandler(
+      (scrollbar) => scrollbar.moveHandler(e.delta),
+    );
   }
-  /* istanbul ignore next */
-  // eslint-disable-next-line
-  private handleEnd(event: Event): void {
-    // console.log('handleEnd', event, this);
+
+  private handleEnd(e): void {
+    this.adjustDistance(e, 'velocity');
+
+    this.eventHandler(
+      (scrollbar) => scrollbar.endHandler(e, this.props.onEnd),
+    );
   }
-  /* istanbul ignore next */
-  // eslint-disable-next-line
-  private handleStop(event: Event): void {
-    // console.log('handleStop', event, this);
+
+  private handleStop(): void {
+    this.eventHandler(
+      (scrollbar) => scrollbar.stopHandler(),
+    );
   }
   /* istanbul ignore next */
   // eslint-disable-next-line
   private handleCancel(event: Event): void {
     // console.log('handleCancel', event, this);
+  }
+
+  isThumbScrolling(e): boolean {
+    const { scrollByThumb } = this.props;
+    const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
+    const { target } = e.originalEvent;
+
+    let verticalScrolling;
+    let horizontalScrolling;
+
+    if (isVertical) {
+      verticalScrolling = scrollByThumb && this.verticalScrollbarRef.isThumb(target);
+    }
+
+    if (isHorizontal) {
+      horizontalScrolling = scrollByThumb && this.horizontalScrollbarRef.isThumb(target);
+    }
+
+    return verticalScrolling || horizontalScrolling;
+  }
+
+  adjustDistance(e, property: string): void {
+    const distance = e[property];
+
+    distance.x *= this.validDirections[DIRECTION_HORIZONTAL];
+    distance.y *= this.validDirections[DIRECTION_VERTICAL];
+
+    const devicePixelRatio = this.tryGetDevicePixelRatio();
+    if (devicePixelRatio && isDxMouseWheelEvent(e.originalEvent)) {
+      distance.x = Math.round((distance.x / devicePixelRatio) * 100) / 100;
+      distance.y = Math.round((distance.y / devicePixelRatio) * 100) / 100;
+    }
   }
 
   suppressDirections(e): void {
@@ -516,12 +563,21 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.validDirections[DIRECTION_VERTICAL] = value;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   isContent(element): boolean {
-    return isDefined(element.closest('.dx-scrollable-simulated'));
+    const closest = element.closest('.dx-scrollable-simulated');
+
+    if (isDefined(closest)) {
+      return closest === this.scrollableRef;
+    }
+
+    return false;
   }
 
-  eventHandler(handler: (scrollbarInstance: any) => dxPromise<void>): dxPromise<void> {
+  eventHandler(
+    handler: (
+      scrollbarInstance: any
+    ) => dxPromise<void>,
+  ): dxPromise<void> {
     const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
     const deferreds: ReturnType<typeof handler>[] = [];
 
@@ -593,14 +649,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       const realDimension = this.getRealDimension(this.scrollableRef, dimension);
       const baseDimension = this.getBaseDimension(this.scrollableRef, dimension);
 
-      // NOTE: Ratio can be a fractional number,
-      // which leads to inaccuracy in the calculation of sizes.
-      // We should round it to hundredths in order to reduce
-      // the inaccuracy and prevent the unexpected appearance of a scrollbar.
-      scaleRatio = Math.round(
-        // eslint-disable-next-line no-mixed-operators
-        (realDimension / baseDimension * 100),
-      ) / 100;
+      scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
     }
 
     return scaleRatio;
@@ -729,8 +778,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const devicePixelRatio = this.tryGetDevicePixelRatio();
     let scrollOffset = SCROLL_LINE_HEIGHT;
     if (devicePixelRatio) {
-      // eslint-disable-next-line no-mixed-operators
-      scrollOffset = Math.abs(scrollOffset / devicePixelRatio * 100) / 100;
+      scrollOffset = Math.abs((scrollOffset / devicePixelRatio) * 100) / 100;
     }
     this.scrollBy({
       top: (lines.y || 0) * scrollOffset,
