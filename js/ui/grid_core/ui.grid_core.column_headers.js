@@ -347,7 +347,7 @@ export default {
                     return columnElements && columnElements.eq(index);
                 },
 
-                getColumnElements: function(index, bandColumnIndex) {
+                getColumnElements: function({ index, bandColumnIndex, $tableElement } = {}) {
                     const that = this;
                     let $cellElement;
                     const columnsController = that._columnsController;
@@ -360,13 +360,13 @@ export default {
 
                             each(visibleColumns, function(_, column) {
                                 const rowIndex = isDefined(index) ? index : columnsController.getRowIndex(column.index);
-                                $cellElement = that._getCellElement(rowIndex, columnsController.getVisibleIndex(column.index, rowIndex));
+                                $cellElement = that._getCellElement(rowIndex, columnsController.getVisibleIndex(column.index, rowIndex), $tableElement);
                                 $cellElement && result.push($cellElement.get(0));
                             });
 
                             return $(result);
                         } else if(!index || index < rowCount) {
-                            return that.getCellElements(index || 0);
+                            return that.getCellElements(index || 0, $tableElement);
                         }
                     }
                 },

@@ -1062,7 +1062,7 @@ export default {
                 },
 
                 _getCellElementsCore: function(rowIndex) {
-                    const $cells = this.callBase(rowIndex);
+                    const $cells = this.callBase.apply(this, arguments);
 
                     if($cells) {
                         const groupCellIndex = $cells.filter('.' + GROUP_CELL_CLASS).index();

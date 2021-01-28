@@ -2211,7 +2211,7 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
 
         // act
         const pointsByColumns = that.draggingHeaderController._generatePointsByColumns({
-            columnElements: that.columnHeadersView.getColumnElements(1, 0),
+            columnElements: that.columnHeadersView.getColumnElements({ index: 1, bandColumnIndex: 0 }),
             columns: visibleColumns,
             sourceColumn: visibleColumns[0],
             targetDraggingPanel: that.columnHeadersView,
@@ -2251,7 +2251,7 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
 
         // act
         const pointsByColumns = that.draggingHeaderController._generatePointsByColumns({
-            columnElements: that.columnHeadersView.getColumnElements(1, 4),
+            columnElements: that.columnHeadersView.getColumnElements({ index: 1, bandColumnIndex: 4 }),
             columns: visibleColumns,
             sourceColumn: visibleColumns[2],
             targetDraggingPanel: that.columnHeadersView,
@@ -2292,7 +2292,7 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
 
         // act
         const pointsByColumns = that.draggingHeaderController._generatePointsByColumns({
-            columnElements: that.columnHeadersView.getColumnElements(1, 4),
+            columnElements: that.columnHeadersView.getColumnElements({ index: 1, bandColumnIndex: 4 }),
             columns: visibleColumns,
             sourceColumn: visibleColumns[2],
             targetDraggingPanel: that.columnHeadersView,
