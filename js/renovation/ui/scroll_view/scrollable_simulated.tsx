@@ -25,6 +25,7 @@ import type { dxPromise } from '../../../core/utils/deferred';
 import {
   ScrollableLocation, ScrollOffset,
   allowedDirection,
+  ScrollEventArgs,
 } from './types.d';
 
 import {
@@ -222,7 +223,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() validDirections = {};
 
-  @InternalState() cachedVariables = {};
+  @InternalState() cachedVariables: { [key: string]: any } = {
+    eventForUserAction: null,
+  };
 
   @Method()
   content(): HTMLDivElement {
@@ -321,11 +324,15 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Effect() scrollEffect(): DisposeEffectReturn {
     return subscribeToScrollEvent(this.containerRef,
-      (event: Event) => this.props.onScroll?.({
-        event,
-        scrollOffset: this.scrollOffset(),
-        ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef),
-      }));
+      () => this.props.onScroll?.(this.getEventArgs()));
+  }
+
+  getEventArgs(): ScrollEventArgs {
+    return {
+      event: this.cachedVariables.eventForUserAction,
+      scrollOffset: this.scrollOffset(),
+      ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef),
+    };
   }
 
   @Effect()
@@ -421,7 +428,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   /* istanbul ignore next */
   handleInit(e: Event): void {
     this.suppressDirections(e);
-    // this._eventForUserAction = e;
+    this.cachedVariables.eventForUserAction = e;
 
     const crossThumbScrolling = this.isThumbScrolling(e);
 
@@ -433,17 +440,17 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       ),
     );
   }
+
   /* istanbul ignore next */
-  // eslint-disable-next-line
-  private handleStart(event: Event): void {
-    // console.log('handleStart', event, this);
+  private handleStart(e: Event): void {
+    this.cachedVariables.eventForUserAction = e;
   }
 
   private handleMove(e): void {
     e.preventDefault && e.preventDefault();
 
     this.adjustDistance(e, 'delta');
-    // this._eventForUserAction = e;
+    this.cachedVariables.eventForUserAction = e;
 
     this.eventHandler(
       (scrollbar) => scrollbar.moveHandler(e.delta),
@@ -452,6 +459,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   private handleEnd(e): void {
     this.adjustDistance(e, 'velocity');
+    this.cachedVariables.eventForUserAction = e;
 
     this.eventHandler(
       (scrollbar) => scrollbar.endHandler(e, this.props.onEnd),
@@ -463,10 +471,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       (scrollbar) => scrollbar.stopHandler(),
     );
   }
+
   /* istanbul ignore next */
-  // eslint-disable-next-line
-  private handleCancel(event: Event): void {
-    // console.log('handleCancel', event, this);
+  private handleCancel(e: Event): void {
+    this.cachedVariables.eventForUserAction = e;
   }
 
   isThumbScrolling(e): boolean {
