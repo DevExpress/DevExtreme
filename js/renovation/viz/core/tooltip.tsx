@@ -13,9 +13,9 @@ import { isDefined } from '../../../core/utils/type';
 
 import {
   StrictSize, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
-  Font, TooltipCoordinates, Canvas,
+  Font, TooltipCoordinates, Canvas, EventData,
 } from './common/types.d';
-import { Format, Point } from '../common/types.d';
+import { Format } from '../common/types.d';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, isTextEmpty,
@@ -244,11 +244,11 @@ export class TooltipProps {
 
   @OneWay() className?: string;
 
-  @OneWay() target?: Point = {} as Point;
+  @OneWay() eventData?: EventData;
 
-  @Event() onTooltipHidden?: (e: {target?: Point}) => void;
+  @Event() onTooltipHidden?: (e: EventData) => void;
 
-  @Event() onTooltipShown?: (e: {target?: Point}) => void;
+  @Event() onTooltipShown?: (e: EventData) => void;
 }
 
 @Component({
@@ -262,7 +262,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @InternalState() cloudSize: PinnedSize = DEFAULT_SIZE;
 
-  @InternalState() currentTarget?: Point;
+  @InternalState() currentEventData?: EventData;
 
   @InternalState() isEmptyContainer = false;
 
@@ -295,23 +295,23 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Effect()
   eventsEffect(): void {
     const {
-      onTooltipShown, onTooltipHidden, target, visible,
+      onTooltipShown, onTooltipHidden, visible,
+      eventData = {} as EventData, // TODO: remove {} after fix nested props + test
     } = this.props;
-
-    const triggerTooltipHidden = (): void => {
-      if (this.currentTarget && onTooltipHidden) {
-        onTooltipHidden({ target: this.currentTarget });
+    const isEqual = (object1: EventData | undefined, object2: EventData): boolean => {
+      if (!object1) {
+        return false;
       }
+      return JSON.stringify(object1.target) === JSON.stringify(object2.target);
     };
-
-    if (visible && this.correctedCoordinates && this.currentTarget !== target) {
-      triggerTooltipHidden();
-      onTooltipShown?.({ target });
-      this.currentTarget = target;
+    if (visible && this.correctedCoordinates && !isEqual(this.currentEventData, eventData)) {
+      this.currentEventData && onTooltipHidden?.(this.currentEventData);
+      onTooltipShown?.(eventData);
+      this.currentEventData = eventData;
     }
-    if (!visible) {
-      triggerTooltipHidden();
-      this.currentTarget = undefined;
+    if (!visible && this.currentEventData) {
+      onTooltipHidden?.(this.currentEventData);
+      this.currentEventData = undefined;
     }
   }
 

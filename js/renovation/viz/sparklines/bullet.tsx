@@ -47,13 +47,13 @@ const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EV
 
 const inCanvas = (canvas: Canvas, x: number, y: number): boolean => {
   const {
-    left, right, top, bottom, width, height,
+    width, height,
   } = canvas;
   return pointInCanvas({
-    left,
-    top,
-    right: width - right,
-    bottom: height - bottom,
+    left: 0,
+    top: 0,
+    right: width,
+    bottom: height,
     width,
     height,
   }, x, y);
@@ -224,11 +224,11 @@ export class Bullet extends JSXComponent(BulletProps) {
   @Effect()
   tooltipEffect(): EffectReturn {
     const { disabled } = this.props;
-
     if (!disabled && this.customizedTooltipProps.enabled) {
-      eventsEngine.on(this.widgetRef.svg(), POINTER_ACTION, this.pointerHandler);
+      const svg = this.widgetRef.svg();
+      eventsEngine.on(svg, POINTER_ACTION, this.pointerHandler);
       return (): void => {
-        eventsEngine.off(this.widgetRef.svg(), POINTER_ACTION, this.pointerHandler);
+        eventsEngine.off(svg, POINTER_ACTION, this.pointerHandler);
       };
     }
 
@@ -281,6 +281,7 @@ export class Bullet extends JSXComponent(BulletProps) {
     const { tooltip } = this.props;
     const customProps = {
       enabled: this.tooltipEnabled,
+      eventData: { component: this.widgetRef },
       customizeTooltip:
         generateCustomizeTooltipCallback(tooltip?.customizeTooltip, tooltip?.font, this.rtlEnabled),
       data: this.tooltipData,
@@ -457,9 +458,8 @@ export class Bullet extends JSXComponent(BulletProps) {
   }
 
   pointerHandler(): void {
-    const { tooltip } = this.props;
-    this.tooltipVisible = tooltip?.visible !== undefined ? tooltip.visible : true;
-    this.tooltipVisible && eventsEngine.on(
+    this.tooltipVisible = true;
+    eventsEngine.on(
       domAdapter.getDocument(), POINTER_ACTION, this.pointerOutHandler,
     );
   }
