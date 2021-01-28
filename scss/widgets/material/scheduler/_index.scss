@@ -142,7 +142,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-appointment-content { // stylelint-disable-line no-duplicate-selectors
-  padding: 10px;
+  padding: $material-scheduler-appointment-content-padding;
 }
 
 .dx-scheduler-appointment-title {
