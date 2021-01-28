@@ -254,7 +254,9 @@ class FileManagerToolbar extends Widget {
                 'visible',
                 'location',
                 'locateInMenu',
-                'disabled'
+                'disabled',
+                'showText',
+                'options'
             ]);
             extendAttributes(result.options, item, ['text', 'icon']);
 
@@ -297,12 +299,13 @@ class FileManagerToolbar extends Widget {
 
         result.location = ensureDefined(result.location, 'before');
 
-        if(result.widget === 'dxButton') {
-            extend(true, result, { options: { stylingMode: 'text' } });
-        }
-
-        if(result.widget === 'dxSelectBox') {
-            extend(true, result, { options: { stylingMode: 'filled' } });
+        if(!isDefined(result.options?.stylingMode)) {
+            if(result.widget === 'dxButton') {
+                extend(true, result, { options: { stylingMode: 'text' } });
+            }
+            if(result.widget === 'dxSelectBox') {
+                extend(true, result, { options: { stylingMode: 'filled' } });
+            }
         }
 
         return result;
