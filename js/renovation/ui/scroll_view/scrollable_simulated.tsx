@@ -245,7 +245,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() validDirections = {};
 
-  @InternalState() cachedVariables = {};
+  @InternalState() cachedVariables = {
+    validateWheelTimer: undefined,
+  };
 
   @Method()
   content(): HTMLDivElement {
@@ -340,6 +342,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Method()
   clientWidth(): number {
     return this.containerRef.clientWidth;
+  }
+
+  @Effect({ run: 'once' })
+  disposeWheelTimer(): DisposeEffectReturn {
+    return () => this.clearWheelValidationTimer();
   }
 
   @Effect() scrollEffect(): DisposeEffectReturn {
@@ -635,15 +642,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     if (validated) {
       clearTimeout(cachedVariables.validateWheelTimer);
-      cachedVariables.validateWheelTimer = setTimeout(this.clearValidateWheelTimer,
-        VALIDATE_WHEEL_TIMEOUT);
+      cachedVariables.validateWheelTimer = setTimeout(
+        this.clearWheelValidationTimer, VALIDATE_WHEEL_TIMEOUT,
+      );
     }
 
     return validated;
   }
 
-  private clearValidateWheelTimer(): void {
-    (this.cachedVariables as any).validateWheelTimer = undefined;
+  private clearWheelValidationTimer(): void {
+    clearTimeout(this.cachedVariables.validateWheelTimer);
   }
 
   private validateMove(e: Event): boolean {

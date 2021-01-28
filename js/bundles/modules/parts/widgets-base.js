@@ -71,6 +71,8 @@ ui.dxTrackBar = require('../../../ui/track_bar');
 ui.dxDraggable = require('../../../ui/draggable');
 ui.dxSortable = require('../../../ui/sortable');
 
+ui.dxScrollable = require('../../../renovation/ui/scroll_view/scrollable.j');
+
 /* Validation (dx.module-widgets-base.js) */
 
 DevExpress.validationEngine = require('../../../ui/validation_engine');
