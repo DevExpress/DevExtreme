@@ -25,6 +25,8 @@ import {
   ScrollableLocation, ScrollOffset,
 } from './types.d';
 
+import { isDxMouseWheelEvent } from '../../../events/utils/index';
+
 import {
   ensureLocation, ScrollDirection, normalizeCoordinate,
   getContainerOffsetInternal,
@@ -370,9 +372,31 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     };
   }
 
-  // eslint-disable-next-line
-  private validate(event: Event): boolean {
-    return true; // TODO
+  private validate(e: Event): boolean {
+    if (this.props.disabled) {
+      return false;
+    }
+
+    if (isDxMouseWheelEvent(e) && this.isScrolledInMaxDirection(e)) {
+      return false;
+    }
+
+    return isDefined(this.allowedDirection());
+  }
+
+  private isScrolledInMaxDirection(e: Event): boolean {
+    const { delta, shiftKey } = e as any;
+    const {
+      scrollLeft, scrollTop, scrollWidth, clientWidth, scrollHeight, clientHeight,
+    } = this.containerRef;
+
+    if (delta > 0) {
+      return shiftKey ? !scrollLeft : !scrollTop;
+    }
+
+    return shiftKey
+      ? scrollLeft >= scrollWidth - clientWidth
+      : scrollTop >= scrollHeight - clientHeight;
   }
 
   get cssClasses(): string {

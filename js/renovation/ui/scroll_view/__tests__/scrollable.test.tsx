@@ -669,7 +669,11 @@ each([{
                         each([true, false]).describe('IsScrollbarClicked: %o', (isScrollbarClicked) => {
                           each([-1, 1]).describe('Wheel delta: %o', (delta) => {
                             each([-100, 0]).describe('Scrollbar position: %o', (scrollbarPosition) => {
-                              it('validate method', () => {
+                              it('validate method in simulated strategy', () => {
+                                if (Scrollable === ScrollableNative) {
+                                  return; // this configurations not relevant to the native strategy
+                                }
+
                                 const viewModel = new Scrollable({
                                   direction, bounceEnabled, disabled, scrollByContent,
                                 }) as any;
@@ -678,11 +682,6 @@ each([{
 
                                 initStyles((viewModel).containerRef, containerSize);
                                 initStyles((viewModel).contentRef, contentSize);
-
-                                if (Scrollable === ScrollableNative) {
-                                  expect((viewModel).validate(null)).toBe(true);
-                                  return; // currently implemented only in SimulatedStrategy
-                                }
 
                                 setScrollbarPosition(viewModel.horizontalScrollbarRef,
                                   scrollbarPosition);
@@ -716,10 +715,72 @@ each([{
                                 }
 
                                 const actualResult = (viewModel).validate(e);
-                                viewModel.clearValidateWheelTimer();
+                                viewModel.disposeWheelTimer()();
 
                                 expect(actualResult).toBe(expectedValidationResult);
                               });
+                            });
+                          });
+                        });
+                      });
+                    });
+                  });
+                });
+
+                each([true, false]).describe('Disabled: %o', (disabled) => {
+                  each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
+                    each([true, false]).describe('ShiftKey: %o', (shiftKey) => {
+                      each([-1, 1]).describe('Delta: %o', (delta) => {
+                        each([0, 1]).describe('ScrollLeft: %o', (scrollLeft) => {
+                          each([0, 1]).describe('ScrollTop: %o', (scrollTop) => {
+                            it('validate method in native strategy', () => {
+                              if (Scrollable === ScrollableSimulated) {
+                                return; // this configurations not relevant to the native strategy
+                              }
+
+                              const isScrolledInMaxDirection = (ref) => {
+                                const {
+                                  scrollWidth, clientWidth, scrollHeight, clientHeight,
+                                } = ref;
+
+                                if (delta > 0) {
+                                  return shiftKey ? !scrollLeft : !scrollTop;
+                                }
+
+                                return shiftKey
+                                  ? scrollLeft >= scrollWidth - clientWidth
+                                  : scrollTop >= scrollHeight - clientHeight;
+                              };
+
+                              const viewModel = new Scrollable({
+                                direction, disabled,
+                              }) as any;
+
+                              initRefs(viewModel);
+
+                              initStyles((viewModel).containerRef, containerSize);
+                              initStyles((viewModel).contentRef, contentSize);
+                              viewModel.containerRef.scrollLeft = scrollLeft;
+                              viewModel.containerRef.scrollTop = scrollTop;
+
+                              let expectedValidationResult;
+                              if (disabled) {
+                                expectedValidationResult = false;
+                              } else if (isDxWheelEvent
+                                && isScrolledInMaxDirection(viewModel.containerRef)) {
+                                expectedValidationResult = false;
+                              } else {
+                                expectedValidationResult = containerSize < contentSize;
+                              }
+
+                              const e = { ...defaultEvent, delta, shiftKey };
+                              if (isDxWheelEvent) {
+                                (e as any).type = 'dxmousewheel';
+                              }
+
+                              const actualResult = (viewModel).validate(e);
+
+                              expect(actualResult).toBe(expectedValidationResult);
                             });
                           });
                         });

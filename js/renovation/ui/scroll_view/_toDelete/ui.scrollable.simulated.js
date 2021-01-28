@@ -28,7 +28,6 @@ const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const MIN_VELOCITY_LIMIT = 1;
 const FRAME_DURATION = Math.round(1000 / 60);
-const VALIDATE_WHEEL_TIMEOUT = 500;
 
 const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
 const BOUNCE_DURATION = isSluggishPlatform ? 300 : 400;
@@ -652,29 +651,6 @@ export const SimulatedStrategy = Class.inherit({
         this._startAction();
         this._eventHandler('scrollBy', { x: distance.left, y: distance.top });
         this._endAction();
-    },
-
-    _validateWheel: function(e) {
-        const scroller = this._scrollers[this._wheelDirection(e)];
-        const reachedMin = scroller._reachedMin();
-        const reachedMax = scroller._reachedMax();
-
-        const contentGreaterThanContainer = !reachedMin || !reachedMax;
-        const locatedNotAtBound = !reachedMin && !reachedMax;
-        const scrollFromMin = (reachedMin && e.delta > 0);
-        const scrollFromMax = (reachedMax && e.delta < 0);
-
-        let validated = contentGreaterThanContainer && (locatedNotAtBound || scrollFromMin || scrollFromMax);
-        validated = validated || this._validateWheelTimer !== undefined;
-
-        if(validated) {
-            clearTimeout(this._validateWheelTimer);
-            this._validateWheelTimer = setTimeout(() => {
-                this._validateWheelTimer = undefined;
-            }, VALIDATE_WHEEL_TIMEOUT);
-        }
-
-        return validated;
     },
 
     verticalOffset: function() {
