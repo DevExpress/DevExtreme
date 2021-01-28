@@ -29,21 +29,7 @@ const printOffset = offset => [
 
 testStart(() => initTestMarkup());
 
-module('Virtual scrolling timelines', {
-    beforeEach: function() {
-        this.createInstance = function(options) {
-            this.scheduler = createWrapper(options);
-
-            this.instance = this.scheduler.instance;
-            this.scrollable = this.instance.getWorkSpaceScrollable();
-
-            this.instance
-                .getWorkSpace()
-                .virtualScrollingDispatcher
-                .renderer.getRenderTimeout = () => -1;
-        };
-    }
-}, () => {
+module('Virtual scrolling timelines', () => {
     module('Appointments', () => {
         module('timelineDay', () => {
             test('it should be rendered correctly in timelineDay', function(assert) {
@@ -53,7 +39,7 @@ module('Virtual scrolling timelines', {
                     endDate: new Date(2021, 1, 3, 10, 15)
                 }];
 
-                this.createInstance({
+                const scheduler = createWrapper({
                     dataSource: data,
                     views: [{
                         type: 'timelineDay',
@@ -72,6 +58,8 @@ module('Virtual scrolling timelines', {
                     width: 800,
                     height: 600
                 });
+
+                const scrollable = scheduler.instance.getWorkSpaceScrollable();
 
                 return asyncWrapper(assert, promise => {
                     [
@@ -122,7 +110,7 @@ module('Virtual scrolling timelines', {
                             () => {
                                 assert.ok(true, printOffset(offset));
 
-                                const { appointments } = this.scheduler;
+                                const { appointments } = scheduler;
 
                                 assert.equal(expectedRects.length, appointments.getAppointmentCount(), 'Appointment amount is correct');
 
@@ -137,7 +125,7 @@ module('Virtual scrolling timelines', {
                                     assert.roughEqual(appointmentRect.width, expectedRect.width, 2.01, 'appointment width is correct');
                                 });
                             },
-                            this.scrollable,
+                            scrollable,
                             offset);
                     });
 
@@ -185,7 +173,7 @@ module('Virtual scrolling timelines', {
                         }
                     ];
 
-                    this.createInstance({
+                    const scheduler = createWrapper({
                         dataSource: data,
                         views: [{
                             type: 'timelineDay',
@@ -216,6 +204,8 @@ module('Virtual scrolling timelines', {
                         width: 800,
                         height: 600
                     });
+
+                    const scrollable = scheduler.instance.getWorkSpaceScrollable();
 
                     return asyncWrapper(assert, promise => {
                         [
@@ -438,7 +428,7 @@ module('Virtual scrolling timelines', {
                                 () => {
                                     assert.ok(true, printOffset(offset));
 
-                                    const { appointments } = this.scheduler;
+                                    const { appointments } = scheduler;
 
                                     assert.equal(expectedRects.length, appointments.getAppointmentCount(), 'Appointment amount is correct');
 
@@ -453,7 +443,7 @@ module('Virtual scrolling timelines', {
                                         assert.roughEqual(appointmentRect.width, expectedRect.width, 2.01, `appointment#${index} width is correct`);
                                     });
                                 },
-                                this.scrollable,
+                                scrollable,
                                 offset);
                         });
 
