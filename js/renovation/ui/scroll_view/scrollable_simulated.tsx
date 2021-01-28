@@ -79,6 +79,8 @@ const KEY_CODES = {
   TAB: 'tab',
 };
 
+const VALIDATE_WHEEL_TIMEOUT = 500;
+
 function visibilityModeNormalize(mode: any): ScrollableShowScrollbar {
   if (mode === true) {
     return 'onScroll';
@@ -611,9 +613,38 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       : this.validateMove(e);
   }
 
-  // eslint-disable-next-line
   private validateWheel(e: Event): boolean {
-    return true; // TODO:
+    const scrollbar = this.wheelDirection(e) === 'horizontal'
+      ? this.horizontalScrollbarRef
+      : this.verticalScrollbarRef;
+
+    const reachedMin = scrollbar.reachedMin();
+    const reachedMax = scrollbar.reachedMax();
+
+    const contentGreaterThanContainer = !reachedMin || !reachedMax;
+    const locatedNotAtBound = !reachedMin && !reachedMax;
+
+    const { delta } = e as any;
+    const scrollFromMin = (reachedMin && delta > 0);
+    const scrollFromMax = (reachedMax && delta < 0);
+
+    const cachedVariables = (this.cachedVariables as any);
+    let validated = contentGreaterThanContainer
+      && (locatedNotAtBound || scrollFromMin || scrollFromMax);
+
+    validated = validated || cachedVariables.validateWheelTimer !== undefined;
+
+    if (validated) {
+      clearTimeout(cachedVariables.validateWheelTimer);
+      cachedVariables.validateWheelTimer = setTimeout(this.clearValidateWheelTimer,
+        VALIDATE_WHEEL_TIMEOUT);
+    }
+
+    return validated;
+  }
+
+  private clearValidateWheelTimer(): void {
+    (this.cachedVariables as any).validateWheelTimer = undefined;
   }
 
   private validateMove(e: Event): boolean {

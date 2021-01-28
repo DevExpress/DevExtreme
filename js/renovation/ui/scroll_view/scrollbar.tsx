@@ -143,6 +143,16 @@ export class Scrollbar extends JSXComponent<ScrollbarProps>() {
   }
 
   @Method()
+  reachedMin(): boolean {
+    return this.getLocation() <= this.getMinOffset();
+  }
+
+  @Method()
+  reachedMax(): boolean {
+    return this.getLocation() >= this.getMaxOffset();
+  }
+
+  @Method()
   // eslint-disable-next-line class-methods-use-this
   getLocation(): number {
     return this.cachedVariables.location;
