@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, ComponentBindings, JSXComponent,
-  Effect, Template, InternalState, OneWay, ForwardRef, Ref, JSXTemplate, RefObject,
+  Effect, Template, InternalState, OneWay, ForwardRef, Mutable, JSXTemplate, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
@@ -90,7 +90,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
 
   @InternalState() isLargeDisplayMode = true;
 
-  @Ref() elementsWidth!: RefObject<ChildElements<number>>;
+  @Mutable() elementsWidth!: ChildElements<number>;
 
   @Effect() subscribeToResize(): DisposeEffectReturn {
     const callback = (): void => this.updateChildrenProps();
@@ -106,7 +106,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   }
 
   updateElementsWidth({ info, pageSizes, pages }: ChildElements<number>): void {
-    this.elementsWidth = { info, pageSizes, pages } as RefObject<ChildElements<number>>;
+    this.elementsWidth = { info, pageSizes, pages };
   }
 
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
