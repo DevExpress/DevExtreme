@@ -158,7 +158,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         ]);
 
         if(columnOptions.cssClass) {
-            resultCssClass = resultCssClass ? `${resultCssClass} ${columnOptions.cssClass}` : columnOptions.cssClass;
+            resultCssClass = `${resultCssClass} ${columnOptions.cssClass}`;
         }
 
         if(resultCssClass) {
