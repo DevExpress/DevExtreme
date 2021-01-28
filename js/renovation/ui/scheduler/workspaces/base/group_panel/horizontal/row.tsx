@@ -1,8 +1,8 @@
 import {
-  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template,
+  Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
 import { GroupPanelHorizontalCell } from './cell';
-import { GroupRenderItem, ResourceCellTemplateProps } from '../../../types.d';
+import { GroupPanelRowProps } from '../row_props';
 
 export const viewFunction = ({
   restAttributes,
@@ -36,17 +36,8 @@ export const viewFunction = ({
   </tr>
 );
 
-@ComponentBindings()
-export class RowProps {
-  @OneWay() groupItems: GroupRenderItem[] = [];
-
-  @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
-
-  @OneWay() className?: string = '';
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Row extends JSXComponent(RowProps) {}
+export class Row extends JSXComponent(GroupPanelRowProps) {}
