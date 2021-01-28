@@ -239,8 +239,14 @@ const Calendar = Editor.inherit({
         return dateSerialization.deserializeDate(value);
     },
 
-    _dateValue: function(value, dxEvent) {
-        if(dxEvent) this._saveValueChangeEvent(dxEvent);
+    _dateValue: function(value, event) {
+        if(event) {
+            if(event.type === 'keydown') {
+                const cellElement = this._view._getContouredCell().get(0);
+                event.target = cellElement;
+            }
+            this._saveValueChangeEvent(event);
+        }
         this._dateOption('value', value);
     },
 
@@ -903,8 +909,8 @@ const Calendar = Editor.inherit({
                 Button, {
                     focusStateEnabled: false,
                     text: messageLocalization.format('dxCalendar-todayButtonText'),
-                    onClick: (function() {
-                        this._toTodayView();
+                    onClick: (function(args) {
+                        this._toTodayView(args);
                     }).bind(this),
                     integrationOptions: {}
                 }).$element()
@@ -1005,7 +1011,8 @@ const Calendar = Editor.inherit({
         return result;
     },
 
-    _toTodayView: function() {
+    _toTodayView: function(args) {
+        this._saveValueChangeEvent(args.event);
         const today = new Date();
 
         if(this._isMaxZoomLevel()) {
