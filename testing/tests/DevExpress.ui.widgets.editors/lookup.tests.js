@@ -3971,7 +3971,8 @@ QUnit.module('valueChanged handler should receive correct event', {
             items: [1, 2, 3],
             opened: true,
             onValueChanged: this.valueChangedHandler,
-            searchTimeout: 0
+            searchTimeout: 0,
+            focusStateEnabled: true
         };
         this.init = (options) => {
             this.$element = $('#lookup').dxLookup(options);
@@ -4026,7 +4027,8 @@ QUnit.module('valueChanged handler should receive correct event', {
             });
 
             ['enter', 'space'].forEach(key => {
-                QUnit.test(`on item selecting using ${key}`, function(assert) {
+                QUnit.testInActiveWindow(`on item selecting using ${key}`, function(assert) {
+                    this.$input.trigger('focusin');
                     this.keyboard
                         .press('down')
                         .press(key);
