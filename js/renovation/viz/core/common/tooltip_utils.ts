@@ -50,8 +50,8 @@ export function getCloudPoints(
   const anchorX = rotateX(coordinates, radRotationAngle);
   const anchorY = rotateY(coordinates, radRotationAngle);
   const halfArrowWidth = options.arrowWidth / 2;
-  const halfWidth = Number(width) / 2;
-  const halfHeight = Number(height) / 2;
+  const halfWidth = width / 2;
+  const halfHeight = height / 2;
 
   const xr = Math.ceil(x + halfWidth);
   const xl = Math.floor(x - halfWidth);
@@ -207,36 +207,31 @@ export function recalculateCoordinates({
     return false;
   }
 
-  const parsedSize = {
-    width: Number(size.width),
-    height: Number(size.height),
-  };
-
   let x;
   let y;
   let correctedAnchorY = anchorY;
 
-  if (bounds.width < parsedSize.width) {
+  if (bounds.width < size.width) {
     x = round(bounds.xl + bounds.width / 2);
   } else {
     x = min(
-      max(anchorX, ceil(bounds.xl + parsedSize.width / 2)),
-      floor(bounds.xr - parsedSize.width / 2),
+      max(anchorX, ceil(bounds.xl + size.width / 2)),
+      floor(bounds.xr - size.width / 2),
     );
   }
 
-  const halfHeightWithArrow = arrowLength + parsedSize.height / 2 + offset;
+  const halfHeightWithArrow = arrowLength + size.height / 2 + offset;
   const yTop = anchorY - halfHeightWithArrow;
   const yBottom = anchorY + halfHeightWithArrow;
 
-  if (bounds.height < parsedSize.height + arrowLength) {
-    y = round(bounds.yt + parsedSize.height / 2);
-  } else if (yTop - parsedSize.height / 2 < bounds.yt) {
-    if (yBottom + parsedSize.height / 2 < bounds.yb) {
+  if (bounds.height < size.height + arrowLength) {
+    y = round(bounds.yt + size.height / 2);
+  } else if (yTop - size.height / 2 < bounds.yt) {
+    if (yBottom + size.height / 2 < bounds.yb) {
       y = yBottom;
       correctedAnchorY += offset;
     } else {
-      y = round(bounds.yt + parsedSize.height / 2);
+      y = round(bounds.yt + size.height / 2);
     }
   } else {
     y = yTop;
@@ -257,8 +252,8 @@ export function getCloudAngle(
     x, y, anchorX, anchorY,
   }: TooltipCoordinates,
 ): number {
-  const halfWidth = Number(width) / 2;
-  const halfHeight = Number(height) / 2;
+  const halfWidth = width / 2;
+  const halfHeight = height / 2;
 
   const xr = Math.ceil(x + halfWidth);
   const xl = Math.floor(x - halfWidth);
@@ -297,7 +292,7 @@ export function prepareData(
 ): CustomizedOptions {
   let customize = {} as CustomizedOptions;
 
-  if (customizeTooltip && isFunction(customizeTooltip)) {
+  if (isFunction(customizeTooltip)) {
     customize = customizeTooltip.call(data, data);
     customize = isPlainObject(customize) ? customize : {};
     if ('text' in customize) {

@@ -140,6 +140,11 @@ const testViewDataMap = {
     ]]
 };
 
+const testHeaderDataMap = {
+    horizontalGrouping: [testViewDataMap.horizontalGrouping[0]],
+    verticalGrouping: [testViewDataMap.verticalGrouping[1]],
+};
+
 const verticalWorkSpaceMock = {
     generateRenderOptions: () => ({
         startRowIndex: 0,
@@ -180,9 +185,11 @@ module('View Data Provider', () => {
                 if(groupOrientation === 'vertical') {
                     this.viewDataProvider = new ViewDataProvider(verticalWorkSpaceMock);
                     this.viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+                    this.viewDataProvider.completeDateHeaderMap = testHeaderDataMap.verticalGrouping;
                 } else if(groupOrientation === 'horizontal') {
                     this.viewDataProvider = new ViewDataProvider(horizontalWorkSpaceMock);
                     this.viewDataProvider.completeViewDataMap = testViewDataMap.horizontalGrouping;
+                    this.viewDataProvider.completeDateHeaderMap = testHeaderDataMap.horizontalGrouping;
                 }
 
                 this.viewDataProvider.update(false);
@@ -641,10 +648,48 @@ module('View Data Provider', () => {
 
     module('Data generation', () => {
         module('Standard scrolling', () => {
+            const baseStartDate = new Date(2021, 0, 10);
+            const dataGenerationWorkSpaceMock = {
+                ...horizontalWorkSpaceMock,
+                isAllDayPanelVisible: false,
+                isGroupedByDate: () => false,
+                generateRenderOptions: () => {
+                    return {
+                        ...horizontalWorkSpaceMock.generateRenderOptions(),
+                        totalCellCount: 4,
+                        totalRowCount: 2,
+                        verticalGroupCount: 1,
+                        horizontalGroupCount: 2,
+                        getDateHeaderText: (index) => index,
+                        today: baseStartDate,
+                        groupByDate: false,
+                        cellCountInGroupRow: 2,
+                        rowCountInGroup: 2,
+                        cellDataGetters: [(_, rowIndex, columnIndex) => {
+                            const startDate = (new Date(baseStartDate));
+                            startDate.setDate(10 + columnIndex);
+
+                            const endDate = new Date(startDate);
+                            endDate.setHours(2);
+
+                            return ({
+                                value: {
+                                    startDate,
+                                    endDate,
+                                    groups: { groupId: 1 },
+                                    groupIndex: 1,
+                                },
+                            });
+                        }],
+                    };
+                },
+            };
+
             test('Should generate correct groupedDataMap if vertical group orientation', function(assert) {
                 this.viewDataProvider = new ViewDataProvider(verticalWorkSpaceMock);
 
                 this.viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+                this.viewDataProvider.completeDateHeaderMap = testHeaderDataMap.verticalGrouping;
 
                 this.viewDataProvider.update(false);
 
@@ -730,6 +775,7 @@ module('View Data Provider', () => {
                 this.viewDataProvider = new ViewDataProvider(horizontalWorkSpaceMock);
 
                 this.viewDataProvider.completeViewDataMap = testViewDataMap.horizontalGrouping;
+                this.viewDataProvider.completeDateHeaderMap = testHeaderDataMap.horizontalGrouping;
 
                 this.viewDataProvider.update(false);
 
@@ -777,6 +823,122 @@ module('View Data Provider', () => {
                     expectedGroupedDataMap,
                     'Grouped data is correct'
                 );
+            });
+
+            test('completeDateHeaderMap should be generated correctly', function(assert) {
+                const viewDataProvider = new ViewDataProvider(dataGenerationWorkSpaceMock);
+
+                viewDataProvider.update(true);
+
+                const expectedDateHeaderMap = [[{
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                    text: 0,
+                    today: true,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 11),
+                    endDate: new Date(2021, 0, 11, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 1,
+                    text: 1,
+                    today: false,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 12),
+                    endDate: new Date(2021, 0, 12, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 2,
+                    text: 0,
+                    today: false,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 13),
+                    endDate: new Date(2021, 0, 13, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1, },
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 3,
+                    text: 1,
+                    today: false,
+                }]];
+
+                const completeDateHeaderMap = viewDataProvider.completeDateHeaderMap;
+
+                assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
+            });
+
+            test('completeDateHeaderMap should be generated correctly when groupin by date is used', function(assert) {
+                const workSpaceMock = {
+                    ...dataGenerationWorkSpaceMock,
+                    generateRenderOptions: () => ({
+                        ...dataGenerationWorkSpaceMock.generateRenderOptions(),
+                        groupByDate: true,
+                    }),
+                };
+                const viewDataProvider = new ViewDataProvider(workSpaceMock);
+
+                viewDataProvider.update(true);
+
+                const expectedDateHeaderMap = [[{
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 0,
+                    text: 0,
+                    today: true,
+                }, {
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 11),
+                    endDate: new Date(2021, 0, 11, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 1,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 1,
+                    text: 1,
+                    today: false,
+                }]];
+
+                const completeDateHeaderMap = viewDataProvider.completeDateHeaderMap;
+
+                assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
+            });
+
+            test('dateHeaderMap shoul be generated correctly', function(assert) {
+                const viewDataProvider = new ViewDataProvider(horizontalWorkSpaceMock);
+
+                viewDataProvider.completeViewDataMap = testViewDataMap.horizontalGrouping;
+                viewDataProvider.completeDateHeaderMap = testHeaderDataMap.horizontalGrouping;
+
+                viewDataProvider.update(false);
+
+                const dateHeaderMap = testHeaderDataMap.horizontalGrouping;
+
+                assert.deepEqual(viewDataProvider.dateHeaderMap, dateHeaderMap, 'Correct dateHeaderMap');
             });
         });
 
@@ -861,10 +1023,12 @@ module('View Data Provider', () => {
                     groupIndex: 3
                 },
             ]];
+            const horizontalDateHeaderMap = [horizontalDataMap[1]];
 
             test('Should generate correct viewData in virtual scrolling mode if vertical grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(virtualVerticalWorkSpaceMock);
                 viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+                viewDataProvider.completeDateHeaderMap = testHeaderDataMap.verticalGrouping;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = testViewDataMap.verticalGrouping;
@@ -897,6 +1061,7 @@ module('View Data Provider', () => {
             test('Should generate correct viewDataMap in virtual scrolling mode if vertical grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(virtualVerticalWorkSpaceMock);
                 viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+                viewDataProvider.completeDateHeaderMap = testHeaderDataMap.verticalGrouping;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = testViewDataMap.verticalGrouping;
@@ -927,6 +1092,7 @@ module('View Data Provider', () => {
             test('Should generate correct groupedDataMap in virtual scrolling mode if vertical grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(virtualVerticalWorkSpaceMock);
                 viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+                viewDataProvider.completeDateHeaderMap = testHeaderDataMap.verticalGrouping;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = testViewDataMap.verticalGrouping;
@@ -960,6 +1126,7 @@ module('View Data Provider', () => {
             test('Should generate correct viewData in virtual scrolling mode if horizontal grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(horizontalGroupedWorkspaceMock);
                 viewDataProvider.completeViewDataMap = horizontalDataMap;
+                viewDataProvider.completeDateHeaderMap = horizontalDateHeaderMap;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = horizontalDataMap;
@@ -988,6 +1155,7 @@ module('View Data Provider', () => {
             test('Should generate correct viewDataMap in virtual scrolling mode if horizontal grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(horizontalGroupedWorkspaceMock);
                 viewDataProvider.completeViewDataMap = horizontalDataMap;
+                viewDataProvider.completeDateHeaderMap = horizontalDateHeaderMap;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = horizontalDataMap;
@@ -1012,6 +1180,7 @@ module('View Data Provider', () => {
             test('Should generate correct groupedDataMap in virtual scrolling mode if horizontal grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(horizontalGroupedWorkspaceMock);
                 viewDataProvider.completeViewDataMap = horizontalDataMap;
+                viewDataProvider.completeDateHeaderMap = horizontalDateHeaderMap;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = horizontalDataMap;
@@ -1129,10 +1298,12 @@ module('View Data Provider', () => {
                     groupIndex: 3
                 },
             ]];
+            const horizontalDateHeaderMap = [horizontalDataMap[0]];
 
             test('Should generate correct viewData in virtual scrolling mode if vertical grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(verticalGroupedWorkSpaceMock);
                 viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+                viewDataProvider.completeDateHeaderMap = testHeaderDataMap.verticalGrouping;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = testViewDataMap.verticalGrouping;
@@ -1161,6 +1332,7 @@ module('View Data Provider', () => {
             test('Should generate correct viewDataMap in virtual scrolling mode if vertical grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(verticalGroupedWorkSpaceMock);
                 viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+                viewDataProvider.completeDateHeaderMap = testHeaderDataMap.verticalGrouping;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = testViewDataMap.verticalGrouping;
@@ -1185,6 +1357,7 @@ module('View Data Provider', () => {
             test('Should generate correct groupedDataMap in virtual scrolling mode if vertical grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(verticalGroupedWorkSpaceMock);
                 viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+                viewDataProvider.completeDateHeaderMap = testHeaderDataMap.verticalGrouping;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = testViewDataMap.verticalGrouping;
@@ -1216,6 +1389,7 @@ module('View Data Provider', () => {
             test('Should generate correct viewData in virtual scrolling mode if horizontal grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(horizontalGroupedWorkspaceMock);
                 viewDataProvider.completeViewDataMap = horizontalDataMap;
+                viewDataProvider.completeDateHeaderMap = horizontalDateHeaderMap;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = horizontalDataMap;
@@ -1244,6 +1418,7 @@ module('View Data Provider', () => {
             test('Should generate correct viewDataMap in virtual scrolling mode if horizontal grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(horizontalGroupedWorkspaceMock);
                 viewDataProvider.completeViewDataMap = horizontalDataMap;
+                viewDataProvider.completeDateHeaderMap = horizontalDateHeaderMap;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = horizontalDataMap;
@@ -1266,6 +1441,7 @@ module('View Data Provider', () => {
             test('Should generate correct groupedDataMap in virtual scrolling mode if horizontal grouping is used', function(assert) {
                 const viewDataProvider = new ViewDataProvider(horizontalGroupedWorkspaceMock);
                 viewDataProvider.completeViewDataMap = horizontalDataMap;
+                viewDataProvider.completeDateHeaderMap = horizontalDateHeaderMap;
                 viewDataProvider.update(false);
 
                 const completeViewDataMap = horizontalDataMap;

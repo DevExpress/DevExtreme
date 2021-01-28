@@ -104,13 +104,13 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       { showScrollbar && useSimulatedScrollbar && isHorizontal && (
         <Scrollbar
           direction="horizontal"
-          expandable={scrollByThumb}
+          scrollByThumb={scrollByThumb}
         />
       )}
       { showScrollbar && useSimulatedScrollbar && isVertical && (
         <Scrollbar
           direction="vertical"
-          expandable={scrollByThumb}
+          scrollByThumb={scrollByThumb}
         />
       )}
     </Widget>
@@ -249,7 +249,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     /* istanbul ignore next */
     dxScrollInit.on(this.wrapperRef,
       (e: Event) => {
-        this.initHandler(e);
+        this.handleInit(e);
       }, {
         getDirection: () => this.getDirection(),
         validate: (e) => this.validate(e),
@@ -322,7 +322,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   /* istanbul ignore next */
   // eslint-disable-next-line
-  private initHandler(event: Event): void {
+  private handleInit(event: Event): void {
     // console.log('initHandler', event, this);
   }
   /* istanbul ignore next */

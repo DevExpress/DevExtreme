@@ -14,6 +14,10 @@ export interface ViewCellData {
   firstDayOfMonth?: boolean;
 }
 
+export interface DateHeaderCellData extends ViewCellData {
+  colSpan: number;
+}
+
 interface ViewData {
   dateTable: ViewCellData[][];
   groupIndex: number;

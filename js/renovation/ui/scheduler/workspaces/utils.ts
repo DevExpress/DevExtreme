@@ -1,8 +1,11 @@
 import { CSSAttributes } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../../utils/combine_classes';
-import { GroupedViewData } from './types.d';
+import { Group, GroupedViewData } from './types.d';
 import { GroupOrientation } from '../types.d';
-import { VERTICAL_GROUP_ORIENTATION } from '../consts';
+import {
+  HORIZONTAL_GROUP_ORIENTATION,
+  VERTICAL_GROUP_ORIENTATION,
+} from '../consts';
 
 export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string => {
   const key = date.getTime();
@@ -68,3 +71,7 @@ export const getIsGroupedAllDayPanel = (
 export const isVerticalGroupOrientation = (
   groupOrientation?: GroupOrientation,
 ): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION;
+
+export const isHorizontalGroupOrientation = (
+  groups: Group[], groupOrientation?: GroupOrientation,
+): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;

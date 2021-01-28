@@ -28,6 +28,7 @@ import pointerEvents from '../../../events/pointer';
 import { EffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 import { pointInCanvas } from '../core/utils';
+import { ArgumentAxisRange, ValueAxisRange, BulletScaleProps } from './types.d';
 
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;
@@ -44,29 +45,6 @@ const DEFAULT_OFFSET = { top: 0, left: 0 };
 const EVENT_NS = 'sparkline-tooltip';
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
 
-interface ArgumentAxisRange {
-  invert: boolean;
-  min?: number;
-  max?: number;
-  axisType: string;
-  dataType: string;
-}
-
-interface ValueAxisRange {
-  min?: number;
-  max?: number;
-  axisType: string;
-  dataType: string;
-}
-
-interface BulletScaleProps {
-  inverted: boolean;
-  value: number;
-  target: number;
-  startScaleValue: number;
-  endScaleValue: number;
-}
-
 const inCanvas = (canvas: Canvas, x: number, y: number): boolean => {
   const {
     left, right, top, bottom, width, height,
@@ -74,8 +52,8 @@ const inCanvas = (canvas: Canvas, x: number, y: number): boolean => {
   return pointInCanvas({
     left,
     top,
-    right: Number(width) - Number(right),
-    bottom: Number(height) - Number(bottom),
+    right: width - right,
+    bottom: height - bottom,
     width,
     height,
   }, x, y);
@@ -370,11 +348,11 @@ export class Bullet extends JSXComponent(BulletProps) {
       tmpProps.startScaleValue = tmpProps.startScaleValue < 0
         ? tmpProps.startScaleValue : 0;
     } else {
-      tmpProps.startScaleValue = Number(this.props.startScaleValue);
+      tmpProps.startScaleValue = this.props.startScaleValue;
     }
     // eslint-disable-next-line no-nested-ternary
     tmpProps.endScaleValue = this.props.endScaleValue === undefined
-      ? (target > value ? target : value) : Number(this.props.endScaleValue);
+      ? (target > value ? target : value) : this.props.endScaleValue;
 
     const { startScaleValue, endScaleValue } = tmpProps;
 

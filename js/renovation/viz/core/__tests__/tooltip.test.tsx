@@ -5,7 +5,7 @@ import {
   recalculateCoordinates, getCloudAngle, getCloudPoints, prepareData, isTextEmpty,
 } from '../common/tooltip_utils';
 import { getFuncIri } from '../renderers/utils';
-import { getFormatValue } from '../../common/utils';
+import { getFormatValue, isUpdatedFlatObject } from '../../common/utils';
 
 jest.mock('../common/tooltip_utils', () => ({
   getCloudPoints: jest.fn(),
@@ -17,6 +17,7 @@ jest.mock('../common/tooltip_utils', () => ({
 
 jest.mock('../../common/utils', () => ({
   getFormatValue: jest.fn(),
+  isUpdatedFlatObject: jest.fn(),
 }));
 
 jest.mock('../renderers/utils', () => ({
@@ -379,290 +380,265 @@ describe('Render', () => {
   });
 });
 
-describe('Effect', () => {
+describe('Effects', () => {
   beforeEach(() => {
     (recalculateCoordinates as jest.Mock).mockReturnValue({
       x: 4, y: 5, anchorX: 11, anchorY: 12,
     });
+    (isUpdatedFlatObject as jest.Mock).mockReturnValue(true);
   });
 
   afterEach(() => jest.resetAllMocks);
 
-  it('should return size', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    const box = {
-      x: 1, y: 2, width: 10, height: 20,
-    };
-    tooltip.textRef = {
-      getBBox: jest.fn().mockReturnValue(box),
-    } as any;
-    tooltip.calculateSize();
+  describe('calculateSize', () => {
+    it('should not update state of content size if not changed', () => {
+      (isUpdatedFlatObject as jest.Mock).mockReturnValue(false);
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+      const box = {
+        x: 1, y: 2, width: 10, height: 20,
+      };
+      tooltip.textSize = box;
+      tooltip.textRef = {
+        getBBox: jest.fn().mockReturnValue({ ...box }),
+      } as any;
+      tooltip.calculateSize();
 
-    expect(tooltip.textSize).toBe(box);
-  });
+      expect(tooltip.textSize).toBe(box);
+    });
 
-  it('should return size of html text', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    const box = {
-      x: 1, y: 2, width: 10, height: 20,
-    };
-    tooltip.htmlRef = {
-      getBoundingClientRect: jest.fn().mockReturnValue(box),
-    } as any;
-    tooltip.calculateSize();
+    it('should not update state of cloud size if not changed', () => {
+      (isUpdatedFlatObject as jest.Mock).mockReturnValue(false);
+      const tooltip = new Tooltip({
+        data: { valueText: 'Tooltip value text' } as any, visible: true, x: 1, y: 2, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any,
+      });
+      const cloudSize = {
+        x: 7,
+        y: 9,
+        width: 28.2,
+        height: 32.2,
+      };
+      tooltip.cloudSize = cloudSize;
+      tooltip.cloudRef = {
+        getBBox: jest.fn().mockReturnValue({
+          x: 7, y: 9, width: 13, height: 15,
+        }),
+      } as any;
+      tooltip.calculateSize();
 
-    expect(tooltip.textSize).toBe(box);
-  });
+      expect(tooltip.cloudSize).toBe(cloudSize);
+    });
 
-  it('should not calculate text size for invisible tooltip (visibility of tooltip is false)', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
-    tooltip.htmlRef = { current: {} } as any;
-    tooltip.calculateSize();
+    it('should update state of content size', () => {
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+      const box = {
+        x: 1, y: 2, width: 10, height: 20,
+      };
+      tooltip.textSize = {
+        x: 0, y: 0, width: 5, height: 10,
+      };
+      tooltip.textRef = {
+        getBBox: jest.fn().mockReturnValue(box),
+      } as any;
+      tooltip.calculateSize();
 
-    expect(tooltip.textSize).toEqual({
-      x: 0, y: 0, width: 0, height: 0,
+      expect(tooltip.textSize).toBe(box);
+    });
+
+    it('should update state of cloud size', () => {
+      const tooltip = new Tooltip({
+        data: { valueText: 'Tooltip value text' } as any, visible: true, x: 1, y: 2, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any,
+      });
+      tooltip.cloudSize = {
+        x: 1,
+        y: 5,
+        width: 30,
+        height: 34,
+      };
+      tooltip.cloudRef = {
+        getBBox: jest.fn().mockReturnValue({
+          x: 7, y: 9, width: 13, height: 15,
+        }),
+      } as any;
+      tooltip.calculateSize();
+
+      expect(tooltip.cloudSize).toEqual({
+        x: 7,
+        y: 9,
+        width: 28.2,
+        height: 32.2,
+      });
     });
   });
 
-  it('should not calculate text size for invisible tooltip (textRef and htmlRef is not rendered)', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    tooltip.calculateSize();
+  describe('setHtmlText', () => {
+    it('should set html text', () => {
+      (prepareData as jest.Mock).mockReturnValue({
+        html: 'customized_html_text',
+      });
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+      tooltip.htmlRef = { current: {} } as any;
+      tooltip.setHtmlText();
 
-    expect(tooltip.textSize).toEqual({
-      x: 0, y: 0, width: 0, height: 0,
+      expect(tooltip.htmlRef.innerHTML).toEqual('customized_html_text');
+    });
+
+    it('should not set html text, html option is not set by user', () => {
+      (prepareData as jest.Mock).mockReturnValue({
+        text: 'customized_tooltip_text',
+      });
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+      tooltip.htmlRef = { current: {} } as any;
+      tooltip.setHtmlText();
+
+      expect(tooltip.htmlRef.innerHTML).toEqual(undefined);
+    });
+
+    it('should not set html text for invisible tooltip (visibility is false)', () => {
+      (prepareData as jest.Mock).mockReturnValue({
+        html: 'customized_html_text',
+      });
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
+      tooltip.setHtmlText();
+
+      expect(tooltip.htmlRef).toBe(undefined);
+    });
+
+    it('should not set html text for invisible tooltip (htmlRef is not rendered)', () => {
+      (prepareData as jest.Mock).mockReturnValue({
+        html: 'customized_html_text',
+      });
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+      tooltip.setHtmlText();
+
+      expect(tooltip.htmlRef).toBe(undefined);
     });
   });
 
-  it('should set html text', () => {
-    (prepareData as jest.Mock).mockReturnValue({
-      html: 'customized_html_text',
+  describe('eventsEffect', () => {
+    it('should trigger onTooltipShown event', () => {
+      const shownTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+      });
+      tooltip.eventsEffect();
+      tooltip.eventsEffect();
+      tooltip.eventsEffect();
+
+      expect(shownTooltip).toBeCalledTimes(1);
+      expect(shownTooltip).toHaveBeenCalledWith({ target: { tag: 'point info' } });
     });
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    tooltip.htmlRef = { current: {} } as any;
-    tooltip.setHtmlText();
 
-    expect(tooltip.htmlRef.innerHTML).toEqual('customized_html_text');
-  });
+    it('should not trigger onTooltipShown event, correctedCoordinates is false', () => {
+      (recalculateCoordinates as jest.Mock).mockReturnValue(false);
 
-  it('should not set html text, html option is not set by user', () => {
-    (prepareData as jest.Mock).mockReturnValue({
-      text: 'customized_tooltip_text',
+      const shownTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+      });
+      tooltip.eventsEffect();
+
+      expect(shownTooltip).toBeCalledTimes(0);
     });
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    tooltip.htmlRef = { current: {} } as any;
-    tooltip.setHtmlText();
 
-    expect(tooltip.htmlRef.innerHTML).toEqual(undefined);
-  });
+    it('should trigger onTooltipShown event, if target is changed', () => {
+      const shownTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+      });
+      tooltip.eventsEffect();
 
-  it('should not set html text for invisible tooltip (visibility is false)', () => {
-    (prepareData as jest.Mock).mockReturnValue({
-      html: 'customized_html_text',
+      tooltip.props.target = { tag: 'new point info' } as any;
+      tooltip.eventsEffect();
+
+      expect(shownTooltip).toBeCalledTimes(2);
+      expect(shownTooltip).toHaveBeenLastCalledWith({ target: { tag: 'new point info' } });
     });
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
-    tooltip.setHtmlText();
 
-    expect(tooltip.htmlRef).toBe(undefined);
-  });
+    it('should not trigger onTooltipHidden event, tooltip have not been shown before', () => {
+      const hiddenTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: false, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
+      });
+      tooltip.eventsEffect();
 
-  it('should not set html text for invisible tooltip (htmlRef is not rendered)', () => {
-    (prepareData as jest.Mock).mockReturnValue({
-      html: 'customized_html_text',
+      expect(hiddenTooltip).toBeCalledTimes(0);
     });
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    tooltip.setHtmlText();
 
-    expect(tooltip.htmlRef).toBe(undefined);
-  });
+    it('should trigger onTooltipHidden event', () => {
+      const hiddenTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: true, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
+      });
+      tooltip.eventsEffect();
+      tooltip.props.visible = false;
+      tooltip.eventsEffect();
+      tooltip.eventsEffect();
 
-  it('should calculate cloud size', () => {
-    const tooltip = new Tooltip({
-      data: { valueText: 'Tooltip value text' } as any, visible: true, x: 1, y: 2, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any,
+      expect(hiddenTooltip).toBeCalledTimes(1);
+      expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' } });
     });
-    tooltip.cloudRef = {
-      getBBox: jest.fn().mockReturnValue({
-        x: 7, y: 9, width: 13, height: 15,
-      }),
-    } as any;
-    tooltip.calculateCloudSize();
 
-    expect(tooltip.cloudSize).toEqual({
-      x: 7,
-      y: 9,
-      width: 28.2,
-      height: 32.2,
-    });
-  });
+    it('should trigger onTooltipHidden event, if target is changed', () => {
+      const hiddenTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: true, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
+      });
+      tooltip.eventsEffect();
 
-  it('should not calculate cloud size, x and y is not defined', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
-    tooltip.cloudRef = {
-      getBBox: jest.fn().mockReturnValue({
-        x: 7, y: 9, width: 13, height: 15,
-      }),
-    } as any;
-    tooltip.calculateCloudSize();
+      tooltip.props.target = { tag: 'new point info' } as any;
+      tooltip.eventsEffect();
 
-    expect(tooltip.cloudSize).toEqual({
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
-    });
-  });
-
-  it('should not calculate cloud size, visibility is false', () => {
-    const tooltip = new Tooltip({
-      data: { valueText: 'Tooltip value text' } as any, visible: false, x: 1, y: 2, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any,
-    });
-    tooltip.cloudRef = {
-      getBBox: jest.fn().mockReturnValue({
-        x: 7, y: 9, width: 13, height: 15,
-      }),
-    } as any;
-    tooltip.calculateCloudSize();
-
-    expect(tooltip.cloudSize).toEqual({
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
+      expect(hiddenTooltip).toBeCalledTimes(1);
+      expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' } });
     });
   });
 
-  it('should not calculate cloud size for invisible tooltip (cloudRef is not rendered)', () => {
-    const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-    tooltip.calculateCloudSize();
+  describe('checkContainer', () => {
+    it('should not set isEmptyContainer prop, container is not empty', () => {
+      const tooltip = new Tooltip({ visible: true });
+      const box = {
+        x: 1, y: 2, width: 10, height: 20,
+      };
+      tooltip.htmlRef = {
+        getBoundingClientRect: jest.fn().mockReturnValue(box),
+      } as any;
 
-    expect(tooltip.cloudSize).toEqual({
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
+      tooltip.checkContainer();
+      expect(tooltip.isEmptyContainer).toBe(false);
     });
-  });
 
-  it('should trigger onTooltipShown event', () => {
-    const shownTooltip = jest.fn();
-    const tooltip = new Tooltip({
-      visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+    it('should not set isEmptyContainer prop, visible is false', () => {
+      const tooltip = new Tooltip({ visible: false });
+      const box = {
+        x: 1, y: 2, width: 0, height: 0,
+      };
+      tooltip.htmlRef = {
+        getBoundingClientRect: jest.fn().mockReturnValue(box),
+      } as any;
+
+      tooltip.checkContainer();
+      expect(tooltip.isEmptyContainer).toBe(false);
     });
-    tooltip.eventsEffect();
-    tooltip.eventsEffect();
-    tooltip.eventsEffect();
 
-    expect(shownTooltip).toBeCalledTimes(1);
-    expect(shownTooltip).toHaveBeenCalledWith({ target: { tag: 'point info' } });
-  });
+    it('should not set isEmptyContainer prop, htmlRef is not rendered', () => {
+      const tooltip = new Tooltip({ visible: false });
 
-  it('should not trigger onTooltipShown event, correctedCoordinates is false', () => {
-    (recalculateCoordinates as jest.Mock).mockReturnValue(false);
-
-    const shownTooltip = jest.fn();
-    const tooltip = new Tooltip({
-      visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+      tooltip.checkContainer();
+      expect(tooltip.isEmptyContainer).toBe(false);
     });
-    tooltip.eventsEffect();
 
-    expect(shownTooltip).toBeCalledTimes(0);
-  });
+    it('should set isEmptyContainer prop to true, container is empty', () => {
+      const tooltip = new Tooltip({ visible: true });
+      const box = {
+        x: 1, y: 2, width: 0, height: 0,
+      };
+      tooltip.htmlRef = {
+        getBoundingClientRect: jest.fn().mockReturnValue(box),
+      } as any;
 
-  it('should trigger onTooltipShown event, if target is changed', () => {
-    const shownTooltip = jest.fn();
-    const tooltip = new Tooltip({
-      visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+      tooltip.checkContainer();
+      expect(tooltip.isEmptyContainer).toBe(true);
     });
-    tooltip.eventsEffect();
-
-    tooltip.props.target = { tag: 'new point info' } as any;
-    tooltip.eventsEffect();
-
-    expect(shownTooltip).toBeCalledTimes(2);
-    expect(shownTooltip).toHaveBeenLastCalledWith({ target: { tag: 'new point info' } });
-  });
-
-  it('should not trigger onTooltipHidden event, tooltip have not been shown before', () => {
-    const hiddenTooltip = jest.fn();
-    const tooltip = new Tooltip({
-      visible: false, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
-    });
-    tooltip.eventsEffect();
-
-    expect(hiddenTooltip).toBeCalledTimes(0);
-  });
-
-  it('should trigger onTooltipHidden event', () => {
-    const hiddenTooltip = jest.fn();
-    const tooltip = new Tooltip({
-      visible: true, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
-    });
-    tooltip.eventsEffect();
-    tooltip.props.visible = false;
-    tooltip.eventsEffect();
-    tooltip.eventsEffect();
-
-    expect(hiddenTooltip).toBeCalledTimes(1);
-    expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' } });
-  });
-
-  it('should trigger onTooltipHidden event, if target is changed', () => {
-    const hiddenTooltip = jest.fn();
-    const tooltip = new Tooltip({
-      visible: true, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
-    });
-    tooltip.eventsEffect();
-
-    tooltip.props.target = { tag: 'new point info' } as any;
-    tooltip.eventsEffect();
-
-    expect(hiddenTooltip).toBeCalledTimes(1);
-    expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' } });
-  });
-
-  it('should not set isEmptyContainer prop, container is not empty', () => {
-    const tooltip = new Tooltip({ visible: true });
-    const box = {
-      x: 1, y: 2, width: 10, height: 20,
-    };
-    tooltip.htmlRef = {
-      getBoundingClientRect: jest.fn().mockReturnValue(box),
-    } as any;
-
-    tooltip.checkContainer();
-    expect(tooltip.isEmptyContainer).toBe(false);
-  });
-
-  it('should not set isEmptyContainer prop, visible is false', () => {
-    const tooltip = new Tooltip({ visible: false });
-    const box = {
-      x: 1, y: 2, width: 0, height: 0,
-    };
-    tooltip.htmlRef = {
-      getBoundingClientRect: jest.fn().mockReturnValue(box),
-    } as any;
-
-    tooltip.checkContainer();
-    expect(tooltip.isEmptyContainer).toBe(false);
-  });
-
-  it('should not set isEmptyContainer prop, htmlRef is not rendered', () => {
-    const tooltip = new Tooltip({ visible: false });
-
-    tooltip.checkContainer();
-    expect(tooltip.isEmptyContainer).toBe(false);
-  });
-
-  it('should set isEmptyContainer prop to true, container is empty', () => {
-    const tooltip = new Tooltip({ visible: true });
-    const box = {
-      x: 1, y: 2, width: 0, height: 0,
-    };
-    tooltip.htmlRef = {
-      getBoundingClientRect: jest.fn().mockReturnValue(box),
-    } as any;
-
-    tooltip.checkContainer();
-    expect(tooltip.isEmptyContainer).toBe(true);
   });
 });
 
@@ -671,6 +647,114 @@ describe('Methods', () => {
     const tooltip = new Tooltip({ location: 'edge' });
 
     expect(tooltip.getLocation()).toBe('edge');
+  });
+
+  describe('calculateContentSize', () => {
+    it('should return size', () => {
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+      const box = {
+        x: 1, y: 2, width: 10, height: 20,
+      };
+      tooltip.textRef = {
+        getBBox: jest.fn().mockReturnValue(box),
+      } as any;
+
+      expect(tooltip.calculateContentSize()).toBe(box);
+    });
+
+    it('should return size of html text', () => {
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+      const box = {
+        x: 1, y: 2, width: 10, height: 20,
+      };
+      tooltip.htmlRef = {
+        getBoundingClientRect: jest.fn().mockReturnValue(box),
+      } as any;
+
+      expect(tooltip.calculateContentSize()).toBe(box);
+    });
+
+    it('should not calculate text size for invisible tooltip (visibility of tooltip is false)', () => {
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
+      tooltip.htmlRef = { current: {} } as any;
+
+      expect(tooltip.calculateContentSize()).toEqual({
+        x: 0, y: 0, width: 0, height: 0,
+      });
+    });
+
+    it('should not calculate text size for invisible tooltip (textRef and htmlRef is not rendered)', () => {
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+
+      expect(tooltip.calculateContentSize()).toEqual({
+        x: 0, y: 0, width: 0, height: 0,
+      });
+    });
+  });
+
+  describe('calculateCloudSize', () => {
+    it('should calculate cloud size', () => {
+      const tooltip = new Tooltip({
+        data: { valueText: 'Tooltip value text' } as any, visible: true, x: 1, y: 2, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any,
+      });
+      tooltip.cloudRef = {
+        getBBox: jest.fn().mockReturnValue({
+          x: 7, y: 9, width: 13, height: 15,
+        }),
+      } as any;
+
+      expect(tooltip.calculateCloudSize()).toEqual({
+        x: 7,
+        y: 9,
+        width: 28.2,
+        height: 32.2,
+      });
+    });
+
+    it('should not calculate cloud size, x and y is not defined', () => {
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any });
+      tooltip.cloudRef = {
+        getBBox: jest.fn().mockReturnValue({
+          x: 7, y: 9, width: 13, height: 15,
+        }),
+      } as any;
+
+      expect(tooltip.calculateCloudSize()).toEqual({
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+      });
+    });
+
+    it('should not calculate cloud size, visibility is false', () => {
+      const tooltip = new Tooltip({
+        data: { valueText: 'Tooltip value text' } as any, visible: false, x: 1, y: 2, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any,
+      });
+      tooltip.cloudRef = {
+        getBBox: jest.fn().mockReturnValue({
+          x: 7, y: 9, width: 13, height: 15,
+        }),
+      } as any;
+
+      expect(tooltip.calculateCloudSize()).toEqual({
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+      });
+    });
+
+    it('should not calculate cloud size for invisible tooltip (cloudRef is not rendered)', () => {
+      const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+
+      expect(tooltip.calculateCloudSize()).toEqual({
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+      });
+    });
   });
 });
 

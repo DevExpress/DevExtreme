@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import dxSchedulerResourceManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
+import { getWrappedDataSource } from 'ui/scheduler/resources/utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 
@@ -65,37 +66,32 @@ const resourceDataWithDataSource = [
 QUnit.module('Resource Manager', {
     beforeEach: function() {
         this.createInstance = function(resources) {
-            this.instance = new dxSchedulerResourceManager(resources);
+            this.instance = new ResourceManager(resources);
         };
     }
 });
 
-QUnit.module('_createWrappedDataSource', () => {
-    const createWrappedDataSource = (dataSource) => {
-        const manager = new dxSchedulerResourceManager([]);
-        return manager._createWrappedDataSource(dataSource);
-    };
-
+QUnit.module('getWrappedDataSource', () => {
     QUnit.test('JSON declaration should be wrapped to DataSource object', function(assert) {
         const filterValue = ['id', '=', 'emp1'];
-        const dataSource = createWrappedDataSource({
+        const dataSource = getWrappedDataSource({
             filter: filterValue,
             store: new CustomStore({
                 load: () => {}
             })
         });
 
-        assert.ok(dataSource instanceof DataSource, '_createWrappedDataSource should return DataSource object if JSON is passed');
+        assert.ok(dataSource instanceof DataSource, 'getWrappedDataSource should return DataSource object if JSON is passed');
         assert.deepEqual(dataSource.filter(), filterValue, 'Filter should be passed to the created dataSource');
     });
 
     QUnit.test('Array data should be wrapped to DataSource object', function(assert) {
-        const dataSource = createWrappedDataSource([
+        const dataSource = getWrappedDataSource([
             { id: 0 },
             { id: 1 }
         ]);
 
-        assert.ok(dataSource instanceof DataSource, '_createWrappedDataSource should return DataSource object if array passed');
+        assert.ok(dataSource instanceof DataSource, 'getWrappedDataSource should return DataSource object if array passed');
         assert.equal(dataSource.filter(), undefined, 'Filter shouldn\'t exist in DataSource');
     });
 
@@ -106,16 +102,16 @@ QUnit.module('_createWrappedDataSource', () => {
             })
         });
 
-        const dataSource = createWrappedDataSource(originalDataSource);
+        const dataSource = getWrappedDataSource(originalDataSource);
 
-        assert.equal(dataSource, originalDataSource, 'result of _createWrappedDataSource should be equal originalDataSource');
+        assert.equal(dataSource, originalDataSource, 'result of getWrappedDataSource should be equal originalDataSource');
         assert.equal(dataSource.filter(), undefined, 'Filter shouldn\'t exist in DataSource');
     });
 });
 
 QUnit.test('Init', function(assert) {
     this.createInstance();
-    assert.ok(this.instance instanceof dxSchedulerResourceManager, 'Resource Manager is initialized');
+    assert.ok(this.instance instanceof ResourceManager, 'Resource Manager is initialized');
 });
 
 QUnit.test('Resources should be initialized on ctor', function(assert) {

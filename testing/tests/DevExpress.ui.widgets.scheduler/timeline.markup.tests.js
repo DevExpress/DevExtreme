@@ -8,7 +8,7 @@ import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
 import SchedulerWorkSpaceVerticalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical';
 import SchedulerWorkSpaceHorizontalStrategy from 'ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal';
-import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import 'ui/scheduler/ui.scheduler';
 
 QUnit.testStart(() => {
@@ -49,7 +49,7 @@ const stubInvokeMethod = (instance) => {
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
         if(subscribe === 'createResourcesTree') {
-            return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
+            return new ResourceManager().createResourcesTree(arguments[1]);
         }
         if(subscribe === 'convertDateByTimezone') {
             return arguments[1];

@@ -15,6 +15,7 @@ export const SCROLL_LINE_HEIGHT = 40;
 export const DIRECTION_VERTICAL = 'vertical';
 export const DIRECTION_HORIZONTAL = 'horizontal';
 export const DIRECTION_BOTH = 'both';
+export const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 export const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 export const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
 export const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
@@ -24,6 +25,8 @@ export const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
 export const SCROLLABLE_SCROLLBAR_SIMULATED = 'dx-scrollable-scrollbar-simulated';
 export const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 export const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
+
+export const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
 export function getElementWidth(element: Element | undefined): number {
   return toNumber(getElementComputedStyle(element)?.width);

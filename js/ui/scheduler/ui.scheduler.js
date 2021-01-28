@@ -42,8 +42,8 @@ import { hide as hideLoading, show as showLoading } from './ui.loading';
 import AppointmentCollection from './appointments/appointmentCollection';
 import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
 import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
-import SchedulerHeader from './ui.scheduler.header';
-import SchedulerResourceManager from './ui.scheduler.resource_manager';
+import { Header } from './header/header';
+import { ResourceManager } from './resources/resourceManager';
 import subscribes from './ui.scheduler.subscribes';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone';
@@ -945,7 +945,7 @@ class Scheduler extends Widget {
 
         this._initEditing();
 
-        this._resourcesManager = new SchedulerResourceManager(this.option('resources'));
+        this._resourcesManager = new ResourceManager(this.option('resources'));
 
         const combinedDataAccessors = this._combineDataAccessors();
 
@@ -1308,7 +1308,7 @@ class Scheduler extends Widget {
 
     _renderHeader() {
         const $header = $('<div>').appendTo(this.$element());
-        this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
+        this._header = this._createComponent($header, Header, this._headerConfig());
     }
 
     _headerConfig() {
@@ -1899,7 +1899,7 @@ class Scheduler extends Widget {
                         .done(() => {
                             dragEvent && dragEvent.cancel.resolve(false);
                         })
-                        .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.UPDATED, rawAppointment, storeAppointment))
+                        .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.UPDATED, storeAppointment))
                         .fail(() => performFailAction());
                 } catch(err) {
                     performFailAction(err);
@@ -1941,16 +1941,12 @@ class Scheduler extends Widget {
         }
     }
 
-    _onDataPromiseCompleted(handlerName, appointment, storeAppointment, isDeletedOperation = false) {
-        const args = { appointmentData: appointment };
+    _onDataPromiseCompleted(handlerName, storeAppointment, appointment) {
+        const args = { appointmentData: appointment || storeAppointment };
 
         if(storeAppointment instanceof Error) {
             args.error = storeAppointment;
         } else {
-            if(!isDeletedOperation) {
-                // store.update promise return array result, but other data method return single object
-                args.appointmentData = storeAppointment[0] || storeAppointment;
-            }
             this._appointmentPopup.isVisible() && this._appointmentPopup.hide();
         }
 
@@ -2195,7 +2191,7 @@ class Scheduler extends Widget {
 
             return this._appointmentModel
                 .add(serializedAppointment)
-                .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.ADDED, serializedAppointment, storeAppointment));
+                .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.ADDED, storeAppointment));
         });
     }
 
@@ -2215,7 +2211,7 @@ class Scheduler extends Widget {
             if(!canceled) {
                 this._appointmentModel
                     .remove(rawAppointment)
-                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, rawAppointment, storeAppointment, true));
+                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, storeAppointment, rawAppointment));
             }
         });
     }

@@ -41,6 +41,7 @@ import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/ba
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
+import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import VirtualSelectionState from './virtual_selection_state';
 
 import { cache } from './cache';
@@ -1202,18 +1203,19 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._setFirstViewDate();
 
         if(this.isRenovatedRender()) {
-            this.renderRGroupPanel();
+            if(this._isVerticalGroupedWorkSpace()) {
+                this.renderRGroupPanel();
+            }
         } else {
             this._applyCellTemplates(
                 this._renderGroupHeader()
             );
         }
 
-        this._renderDateHeader();
-
         if(this.isRenovatedRender()) {
             this.renderRWorkspace();
         } else {
+            this._renderDateHeader();
             this._renderTimePanel();
             this._renderGroupAllDayPanel();
             this._renderDateTable();
@@ -1263,7 +1265,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             rowCount,
             totalRowCount: this._getRowCount(),
             totalCellCount: cellCount,
-            groupCount
+            groupCount,
+            getDateHeaderText: this._getHeaderText.bind(this),
+            today: this._getToday?.(),
+            groupByDate: this.isGroupedByDate(),
         };
 
         if(this.isVirtualScrolling()) {
@@ -1283,6 +1288,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.viewDataProvider.update(isGenerateNewViewData);
 
+        this.renderRHeaderPanel();
         this.renderRAllDayPanel();
         this.renderRTimeTable();
         this.renderRDateTable();
@@ -1357,6 +1363,34 @@ class SchedulerWorkSpace extends WidgetObserver {
             {
                 viewData: this.viewDataProvider.viewData,
                 timeCellTemplate: this.option('timeCellTemplate'),
+            }
+        );
+    }
+
+    renderRHeaderPanel(isRenderDateHeader = true) {
+        if(this.option('groups').length) {
+            this._attachGroupCountAttr();
+        } else {
+            this._detachGroupCountAttr();
+        }
+
+        this.renderRComponent(
+            this._$thead,
+            dxrDateHeader,
+            'renovatedHeaderPanel',
+            {
+                dateHeaderMap: this.viewDataProvider.dateHeaderMap,
+                dateCellTemplate: this.option('dateCellTemplate'),
+                groups: this.option('groups'),
+                groupByDate: this.isGroupedByDate(),
+                groupOrientation: this.option('groupOrientation'),
+                resourceCellTemplate: this.option('resourceCellTemplate'),
+                className: this.verticalGroupTableClass,
+                groupPanelCellBaseColSpan: this.isGroupedByDate()
+                    ? 1
+                    : this._getCellCount(),
+                columnCountPerGroup: this._getCellCount(),
+                isRenderDateHeader,
             }
         );
     }
@@ -2279,6 +2313,12 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.renovatedTimePanel?.dispose();
         this.renovatedTimePanel = undefined;
+
+        this.renovatedGroupPanel?.dispose();
+        this.renovatedGroupPanel = undefined;
+
+        this.renovatedHeaderPanel?.dispose();
+        this.renovatedHeaderPanel = undefined;
     }
 
     getWorkArea() {

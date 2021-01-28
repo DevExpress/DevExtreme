@@ -4,7 +4,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
@@ -29,7 +29,7 @@ const stubInvokeMethod = function(instance) {
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
         if(subscribe === 'createResourcesTree') {
-            return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
+            return new ResourceManager().createResourcesTree(arguments[1]);
         }
         if(subscribe === 'convertDateByTimezone') {
             return arguments[1];
