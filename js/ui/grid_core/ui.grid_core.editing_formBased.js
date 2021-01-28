@@ -82,8 +82,10 @@ export default {
                 },
 
                 _isEditColumnVisible: function() {
+                    const result = this.callBase.apply(this, arguments);
                     const editingOptions = this.option('editing');
-                    return this.isFormOrPopupEditMode() ? editingOptions.allowUpdating || editingOptions.allowDeleting : this.callBase.apply(this, arguments);
+
+                    return this.isFormOrPopupEditMode() ? editingOptions.allowUpdating || result : result;
                 },
 
                 _handleDataChanged: function(args) {
@@ -125,7 +127,7 @@ export default {
 
                     if(this.isPopupEditMode()) {
                         if(this.option('repaintChangesOnly')) {
-                            row.update && row.update(row);
+                            row.update?.(row);
                         } else if(editForm) {
                             this._updateEditFormDeferred = new Deferred().done(() => editForm.repaint());
                             if(!this._updateLockCount) {
@@ -164,7 +166,7 @@ export default {
                             eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not('.' + SCROLLABLE_CONTAINER_CLASS).first(), 'focus');
 
                             if(repaintForm) {
-                                that._editForm && that._editForm.repaint();
+                                that._editForm?.repaint();
                             }
                         });
                     }
@@ -296,7 +298,7 @@ export default {
                 },
 
                 getEditFormOptions: function(detailOptions) {
-                    const editFormOptions = this.callBase.apply(this, arguments);
+                    const editFormOptions = this._getValidationGroupsInForm?.(detailOptions);
                     const userCustomizeItem = this.option('editing.form.customizeItem');
                     const editFormItemClass = this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS);
                     let items = this.option('editing.form.items');
@@ -388,8 +390,6 @@ export default {
                     if(this._editingController.isFormEditMode()) {
                         item.rowType = 'detail';
                     }
-
-                    this.callBase.apply(this, arguments);
                 }
             }
         },

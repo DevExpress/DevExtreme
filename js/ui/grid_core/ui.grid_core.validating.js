@@ -614,7 +614,7 @@ export default {
                     });
                 },
 
-                getEditFormOptions: function(detailOptions) {
+                _getValidationGroupsInForm: function(detailOptions) {
                     const validatingController = this.getController('validating');
                     const validationData = validatingController._getValidationData(detailOptions.key, true);
 

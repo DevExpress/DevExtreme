@@ -2307,6 +2307,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
         getEditFormTemplate: function() {},
 
+        getEditFormOptions: function() {},
+
         getColumnTemplate: function(options) {
             const that = this;
             const column = options.column;
@@ -2567,11 +2569,10 @@ export default {
                     const editRowKey = this.option(EDITING_EDITROWKEY_OPTION_NAME);
                     const editRowIndex = gridCoreUtils.getIndexByKey(editRowKey, items);
                     const editItem = items[editRowIndex];
-
-                    editItem && this._updateEditItem(editItem);
-                },
-                _updateEditItem: function(item) {
-                    item.isEditing = true;
+                    if(editItem) {
+                        editItem.isEditing = true;
+                        this._updateEditItem?.(editItem);
+                    }
                 },
                 _updateItemsCore: function(change) {
                     this.callBase(change);
