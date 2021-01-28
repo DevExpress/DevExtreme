@@ -70,8 +70,8 @@ each([{
         expect(scrollableContent.exists()).toBe(true);
       });
 
-      [true, false].forEach((needScrollViewContentWrapper) => {
-        it(`should render scrollView content only if needScrollViewContentWrapper option is enabled. needScrollViewContentWrapper=${needScrollViewContentWrapper}`, () => {
+      each([true, false]).describe('NeedScrollViewContentWrapper: %o', (needScrollViewContentWrapper) => {
+        it('should render scrollView content only if needScrollViewContentWrapper option is enabled', () => {
           const scrollable = mount(
             viewFunction({ props: { needScrollViewContentWrapper } } as any) as JSX.Element,
           );
@@ -91,7 +91,7 @@ each([{
       it('should render top & bottom pockets', () => {
         const scrollable = mount(viewFunction({
           props:
-          { forceGeneratePockets: true },
+            { forceGeneratePockets: true },
         } as any) as JSX.Element);
         const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
         expect(topPocket.exists()).toBe(true);
@@ -102,7 +102,7 @@ each([{
       it('should render top pockets with classes', () => {
         const scrollable = mount(viewFunction({
           props:
-          { forceGeneratePockets: true },
+            { forceGeneratePockets: true },
         } as any) as JSX.Element);
         const pullDown = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down');
         expect(pullDown.exists()).toBe(true);
@@ -117,7 +117,7 @@ each([{
       it('should render bottom pockets with classes', () => {
         const scrollable = mount(viewFunction({
           props:
-          { forceGeneratePockets: true },
+            { forceGeneratePockets: true },
         } as any) as JSX.Element);
         const reachBottom = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom');
         expect(reachBottom.exists()).toBe(true);
@@ -191,10 +191,10 @@ each([{
     });
 
     describe('Scrollbar', () => {
-      ['horizontal', 'vertical', 'both', undefined, null].forEach((direction) => {
-        [true, false, undefined, null].forEach((useSimulatedScrollbar) => {
-          ['never', 'always', 'onScroll', 'onHover', true, false, undefined, null].forEach((showScrollbar: any) => {
-            it(`Scrollbar should render if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
+      each(['horizontal', 'vertical', 'both', undefined, null]).describe('Direction: %o', (direction) => {
+        each([true, false, undefined, null]).describe('UseSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
+          each(['never', 'always', 'onScroll', 'onHover', true, false, undefined, null]).describe('ShowScrollbar: %o', (showScrollbar) => {
+            it('Scrollbar should render if useSimulatedScrollbar is set to true and nativeStrategy is used', () => {
               const scrollable = mount(
                 viewFunction({
                   props: { showScrollbar, useSimulatedScrollbar, direction },
@@ -204,10 +204,10 @@ each([{
               const scrollBar = scrollable.find(Scrollbar);
               const isScrollbarsForSimulatedStrategy = Scrollable === ScrollableSimulated;
               const isScrollbarsForNativeStrategy = (showScrollbar ?? false)
-                && (useSimulatedScrollbar ?? false);
+                  && (useSimulatedScrollbar ?? false);
 
               const needRenderScrollbars = isScrollbarsForSimulatedStrategy
-                || isScrollbarsForNativeStrategy;
+                  || isScrollbarsForNativeStrategy;
 
               let expectedScrollbarsCount = 0;
               if (needRenderScrollbars) {
@@ -217,37 +217,13 @@ each([{
               }
               expect(scrollBar.length).toBe(expectedScrollbarsCount);
             });
-
-            it(`Should pass correct visibilityMode to Scrollbar. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
-              if (Scrollable === ScrollableNative) {
-                return; // actual only for simulated strategy
-              }
-
-              const props = {
-                props: {
-                  showScrollbar,
-                },
-              } as Partial<any>;
-
-              const scrollable = mount(viewFunction(props as any) as JSX.Element);
-              const scrollbarProps = scrollable.find(Scrollbar).props();
-
-              let expectedVisibilityMode = showScrollbar;
-              if (showScrollbar === true) {
-                expectedVisibilityMode = 'onScroll';
-              } else if (showScrollbar === false) {
-                expectedVisibilityMode = 'never';
-              }
-
-              expect(scrollbarProps.visibilityMode).toBe(expectedVisibilityMode);
-            });
           });
         });
       });
 
       describe('cssClasses', () => {
-        ['horizontal', 'vertical', 'both', undefined, null].forEach((direction) => {
-          it(`should add direction class. Direction: ${direction}`, () => {
+        each(['horizontal', 'vertical', 'both', undefined, null]).describe('Direction: %o', (direction) => {
+          it('should add direction class', () => {
             const scrollable = mount(viewFunction({ props: { direction, useSimulatedScrollbar: true, showScrollbar: 'always' } } as any) as JSX.Element);
 
             const horizontalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-horizontal');
@@ -522,7 +498,7 @@ each([{
                         });
                       } else {
                         const isDirectionValid = (scrollByContent || scrollByThumb)
-                        && ((targetClass !== 'dx-scrollable-scrollbar' && targetClass !== 'dx-scrollable-container') || !scrollByThumb || scrollByContent);
+                          && ((targetClass !== 'dx-scrollable-scrollbar' && targetClass !== 'dx-scrollable-container') || !scrollByThumb || scrollByContent);
 
                         expect(viewModel.validDirections).toEqual({
                           vertical: direction !== DIRECTION_HORIZONTAL && isDirectionValid,
@@ -571,15 +547,6 @@ each([{
                   }
                 };
 
-                const setScrollbarPosition = (scrollbar, position) => {
-                  if (scrollbar
-                      && contentSize > containerSize
-                      && Math.abs(contentSize) > Math.abs(position)) {
-                    // eslint-disable-next-line no-param-reassign
-                    scrollbar.cachedVariables.location = position;
-                  }
-                };
-
                 const initStyles = (ref, size) => {
                   const elementRef = ref;
 
@@ -612,12 +579,12 @@ each([{
                       if (direction !== 'horizontal') {
                         const styles = scrollable.find('.dx-scrollbar-vertical .dx-scrollable-scroll').getElement().props.style;
 
-                        expect(styles).toEqual({ display: '', height: 15, width: undefined });
+                        expect(styles).toEqual({ height: 15 });
                       }
                       if (direction !== 'vertical') {
                         const styles = scrollable.find('.dx-scrollbar-horizontal .dx-scrollable-scroll').getElement().props.style;
 
-                        expect(styles).toEqual({ display: '', height: undefined, width: 15 });
+                        expect(styles).toEqual({ width: 15 });
                       }
 
                       initStyles(viewModel.containerRef.current, containerSize);
@@ -691,60 +658,44 @@ each([{
                     each([true, false]).describe('Disabled: %o', (disabled) => {
                       each([true, false]).describe('ScrollByContent: %o', (scrollByContent) => {
                         each([true, false]).describe('IsScrollbarClicked: %o', (isScrollbarClicked) => {
-                          each([-1, 1]).describe('Wheel delta: %o', (delta) => {
-                            each([-100, 0]).describe('Scrollbar position: %o', (scrollbarPosition) => {
-                              it('validate method', () => {
-                                const viewModel = new Scrollable({
-                                  direction, bounceEnabled, disabled, scrollByContent,
-                                }) as any;
+                          it('validate method', () => {
+                            const viewModel = new Scrollable({
+                              direction, bounceEnabled, disabled, scrollByContent,
+                            }) as any;
 
-                                initRefs(viewModel);
+                            initRefs(viewModel);
 
-                                initStyles((viewModel).containerRef, containerSize);
-                                initStyles((viewModel).contentRef, contentSize);
+                            initStyles((viewModel).containerRef, containerSize);
+                            initStyles((viewModel).contentRef, contentSize);
 
-                                if (Scrollable === ScrollableNative) {
-                                  expect((viewModel).validate(null)).toBe(true);
-                                  return; // currently implemented only in SimulatedStrategy
-                                }
+                            if (Scrollable === ScrollableNative) {
+                              expect((viewModel).validate(null)).toBe(true);
+                              return; // currently implemented only in SimulatedStrategy
+                            }
 
-                                setScrollbarPosition(viewModel.horizontalScrollbarRef,
-                                  scrollbarPosition);
-                                setScrollbarPosition(viewModel.verticalScrollbarRef,
-                                  scrollbarPosition);
+                            let expectedValidationResult;
+                            if (disabled) {
+                              expectedValidationResult = false;
+                            } else if (bounceEnabled) {
+                              expectedValidationResult = true;
+                            } else if (isDxWheelEvent) {
+                              expectedValidationResult = true;
+                            } else if (!scrollByContent && !isScrollbarClicked) {
+                              expectedValidationResult = false;
+                            } else {
+                              expectedValidationResult = containerSize < contentSize
+                                  || bounceEnabled;
+                            }
 
-                                let expectedValidationResult;
-                                if (disabled) {
-                                  expectedValidationResult = false;
-                                } else if (bounceEnabled) {
-                                  expectedValidationResult = true;
-                                } else if (isDxWheelEvent) {
-                                  expectedValidationResult = (contentSize > containerSize)
-                                    && (
-                                      (scrollbarPosition < 0 && delta > 0)
-                                      || (scrollbarPosition >= 0 && delta < 0)
-                                    );
-                                } else if (!scrollByContent && !isScrollbarClicked) {
-                                  expectedValidationResult = false;
-                                } else {
-                                  expectedValidationResult = containerSize < contentSize
-                                    || bounceEnabled;
-                                }
+                            const target = isScrollbarClicked
+                              ? viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
+                              : viewModel.containerRef;
+                            const e = { ...defaultEvent, target };
+                            if (isDxWheelEvent) {
+                              (e as any).type = 'dxmousewheel';
+                            }
 
-                                const target = isScrollbarClicked
-                                  ? viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
-                                  : viewModel.containerRef;
-                                const e = { ...defaultEvent, target, delta };
-                                if (isDxWheelEvent) {
-                                  (e as any).type = 'dxmousewheel';
-                                }
-
-                                const actualResult = (viewModel).validate(e);
-                                viewModel.clearValidateWheelTimer();
-
-                                expect(actualResult).toBe(expectedValidationResult);
-                              });
-                            });
+                            expect((viewModel).validate(e)).toBe(expectedValidationResult);
                           });
                         });
                       });
@@ -933,39 +884,32 @@ each([{
           expect(scrollable.scrollEffect.bind(scrollable)).not.toThrow();
         });
 
-        each([0, 0.5, 1]).describe('baseContainerToContentRatio: %o', (contentRatio) => {
-          each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbarMode) => {
+        each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbarMode) => {
+          if (Scrollable === ScrollableSimulated) {
             it('hoverEffect should update invisible class only for onHover mode', () => {
-              if (Scrollable === ScrollableNative) {
-                return; // actual only for simulated strategy
-              }
-
-              const scrollable = new Scrollable({
+              const viewModel = new Scrollable({
                 direction: 'horizontal',
                 showScrollbar: showScrollbarMode,
               }) as ScrollableSimulated;
-              scrollable.baseContainerToContentRatio = contentRatio;
 
-              const isScrollbarHasInvisibleClass = (scrollableInstance) => {
-                const scrollableElement = mount(
-                  viewFunction(scrollableInstance as any) as JSX.Element,
-                );
+              const isScrollbarHasInvisibleClass = (model) => {
+                const scrollable = mount(viewFunction(model) as JSX.Element);
 
-                const scrollbar = scrollableElement.find('.dx-scrollable-scroll');
+                const scrollbar = scrollable.find('.dx-scrollable-scroll');
                 return scrollbar.hasClass('dx-state-invisible');
               };
-              const isHiddenByRatio = contentRatio >= 1;
-              expect(isScrollbarHasInvisibleClass(scrollable)).toBe(showScrollbarMode !== 'always' || isHiddenByRatio);
 
-              scrollable.cursorEnterHandler();
-              expect(isScrollbarHasInvisibleClass(scrollable)).toBe(
-                (showScrollbarMode !== 'always' && showScrollbarMode !== 'onHover') || isHiddenByRatio,
+              expect(isScrollbarHasInvisibleClass(viewModel)).toBe(showScrollbarMode !== 'always');
+
+              viewModel.cursorEnterHandler();
+              expect(isScrollbarHasInvisibleClass(viewModel)).toBe(
+                (showScrollbarMode !== 'always' && showScrollbarMode !== 'onHover'),
               );
 
-              scrollable.cursorLeaveHandler();
-              expect(isScrollbarHasInvisibleClass(scrollable)).toBe(showScrollbarMode !== 'always' || isHiddenByRatio);
+              viewModel.cursorLeaveHandler();
+              expect(isScrollbarHasInvisibleClass(viewModel)).toBe(showScrollbarMode !== 'always');
             });
-          });
+          }
         });
       });
 
@@ -1985,8 +1929,8 @@ each([{
             expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-horizontal'));
           });
 
-          [true, false].forEach((isDisabled) => {
-            it(`Scrollable should have dx-scrollable-disabled if disabled. Disabled: ${isDisabled}`, () => {
+          each([true, false]).describe('Disabled: %o', (isDisabled) => {
+            it('Scrollable should have dx-scrollable-disabled if disabled', () => {
               const instance = new Scrollable({ disabled: isDisabled });
 
               expect(instance.cssClasses).toEqual(isDisabled
@@ -1995,10 +1939,10 @@ each([{
             });
           });
 
-          ['horizontal', 'vertical', 'both', null, undefined].forEach((direction: any) => {
-            [true, false, undefined, null].forEach((useSimulatedScrollbar: any) => {
-              ['never', 'always', 'onScroll', 'onHover', true, false, undefined, null].forEach((showScrollbar: any) => {
-                it(`Should have correct css classes if useSimulatedScrollbar is set to true and nativeStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
+          each(['horizontal', 'vertical', 'both', null, undefined]).describe('Direction: %o', (direction) => {
+            each([true, false, undefined, null]).describe('UseSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
+              each(['never', 'always', 'onScroll', 'onHover', true, false, undefined, null]).describe('ShowScrollbar: %o', (showScrollbar) => {
+                it('Should have correct css classes if useSimulatedScrollbar is set to true and nativeStrategy is used', () => {
                   if (Scrollable === ScrollableSimulated) {
                     return; // actual only for native strategy
                   }
@@ -2015,7 +1959,7 @@ each([{
                     : expect.not.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED));
                 });
 
-                it(`Should have correct css classes if simulatedStrategy is used. ShowScrollbar=${showScrollbar}, useSimulatedScrollbar=${useSimulatedScrollbar}, direction: ${direction}`, () => {
+                it('Should have correct css classes if simulatedStrategy is used', () => {
                   if (Scrollable === ScrollableNative) {
                     return; // actual only for simulated strategy
                   }
