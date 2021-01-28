@@ -1317,6 +1317,11 @@ module('Virtual scrolling', () => {
 
                 ['horizontal', 'vertical'].forEach(groupOrientation => {
                     test(`A long appointment should be correctly croped if view: ${viewName}, "${groupOrientation}" group orientation`, function(assert) {
+                        if(!isDesktopEnvironment()) {
+                            assert.ok(true, 'This test is for desktop only');
+                            return;
+                        }
+
                         if(viewName === 'month') {
                             assert.ok(true, 'TODO: appointments in virtual month');
                             return;
