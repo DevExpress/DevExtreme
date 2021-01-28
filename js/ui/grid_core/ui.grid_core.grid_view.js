@@ -155,9 +155,6 @@ const ResizingController = modules.ViewController.inherit({
 
         $rowsTable.css('tableLayout', isBestFit ? 'auto' : 'fixed');
         $rowsTable.children('colgroup').css('display', isBestFit ? 'none' : '');
-
-        $rowsTable.children('tbody').children('.dx-freespace-row').toggle(isBestFit);
-
         $rowsFixedTable.toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
         this._toggleBestFitModeForView(this._columnHeadersView, 'dx-header', isBestFit);

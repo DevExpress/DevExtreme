@@ -780,7 +780,7 @@ export default {
                     if(item && item.rowType === ADAPTIVE_ROW_TYPE) {
                         return this._adaptiveColumnsController.getItemContentByColumnIndex(columnIdentifier);
                     } else {
-                        return this.callBase(rowIndex, columnIdentifier);
+                        return this.callBase.apply(this, arguments);
                     }
                 },
 
