@@ -178,21 +178,34 @@ const horizontalWorkSpaceMock = {
     isVirtualScrolling: () => false,
 };
 
+const createViewDataProvider = (options) => {
+    const viewDataProvider = new ViewDataProvider(options.workspaceMock);
+
+    viewDataProvider.completeViewDataMap = options.completeViewDataMap;
+    viewDataProvider.completeDateHeaderMap = options.completeDateHeaderMap;
+
+    viewDataProvider.update(false);
+
+    return viewDataProvider;
+};
+
 module('View Data Provider', () => {
     module('API', {
         beforeEach: function() {
             this.init = groupOrientation => {
                 if(groupOrientation === 'vertical') {
-                    this.viewDataProvider = new ViewDataProvider(verticalWorkSpaceMock);
-                    this.viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
-                    this.viewDataProvider.completeDateHeaderMap = testHeaderDataMap.verticalGrouping;
+                    this.viewDataProvider = createViewDataProvider({
+                        workspaceMock: verticalWorkSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping
+                    });
                 } else if(groupOrientation === 'horizontal') {
-                    this.viewDataProvider = new ViewDataProvider(horizontalWorkSpaceMock);
-                    this.viewDataProvider.completeViewDataMap = testViewDataMap.horizontalGrouping;
-                    this.viewDataProvider.completeDateHeaderMap = testHeaderDataMap.horizontalGrouping;
+                    this.viewDataProvider = createViewDataProvider({
+                        workspaceMock: horizontalWorkSpaceMock,
+                        completeViewDataMap: testViewDataMap.horizontalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.horizontalGrouping
+                    });
                 }
-
-                this.viewDataProvider.update(false);
             };
         }
     }, () => {
@@ -272,13 +285,120 @@ module('View Data Provider', () => {
             });
 
             test('getGroupsInfo', function(assert) {
-                const groupsInfo = this.viewDataProvider.getGroupsInfo();
+                const completeViewDataMap = [
+                    [
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 24),
+                            endDate: new Date(2020, 7, 24),
+                            groups: 'group_2',
+                            groupIndex: 2,
+                            index: 0
+                        },
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 25),
+                            endDate: new Date(2020, 7, 25),
+                            groups: 'group_2',
+                            groupIndex: 2,
+                            index: 1
+                        }
+                    ],
+                    [
+                        {
+                            allDay: false,
+                            startDate: new Date(2020, 7, 24, 0, 0),
+                            endDate: new Date(2020, 7, 24, 0, 30),
+                            groups: 'group_2',
+                            groupIndex: 2,
+                            index: 0
+                        },
+                        {
+                            allDay: false,
+                            startDate: new Date(2020, 7, 25, 0, 0),
+                            endDate: new Date(2020, 7, 25, 0, 30),
+                            groups: 'group_2',
+                            groupIndex: 2,
+                            index: 1
+                        }
+                    ],
+                    [
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 24),
+                            endDate: new Date(2020, 7, 24),
+                            groups: 'group_3',
+                            groupIndex: 3,
+                            index: 0
+                        },
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 25),
+                            endDate: new Date(2020, 7, 25),
+                            groups: 'group_3',
+                            groupIndex: 3,
+                            index: 1
+                        }
+                    ],
+                    [
+                        {
+                            allDay: false,
+                            startDate: new Date(2020, 7, 24, 1, 0),
+                            endDate: new Date(2020, 7, 24, 1, 30),
+                            groups: 'group_3',
+                            groupIndex: 3,
+                            index: 0
+                        },
+                        {
+                            allDay: false,
+                            startDate: new Date(2020, 7, 25, 1, 0),
+                            endDate: new Date(2020, 7, 25, 1, 30),
+                            groups: 'group_3',
+                            groupIndex: 3,
+                            index: 1
+                        }
+                    ],
+                    [
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 24),
+                            endDate: new Date(2020, 7, 24),
+                            groups: 'group_4',
+                            groupIndex: 4,
+                            index: 0
+                        },
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 25),
+                            endDate: new Date(2020, 7, 25),
+                            groups: 'group_4',
+                            groupIndex: 4,
+                            index: 1
+                        }
+                    ]
+                ];
+
+                const completeDateHeaderMap = [completeViewDataMap[3]];
+                const workspaceMock = {
+                    ...verticalWorkSpaceMock,
+                    generateRenderOptions: () => {
+                        return {
+                            ...verticalWorkSpaceMock.generateRenderOptions(),
+                            rowCount: 5,
+                        };
+                    }
+                };
+                const viewDataProvider = createViewDataProvider({
+                    workspaceMock,
+                    completeViewDataMap,
+                    completeDateHeaderMap
+                });
+
+                const groupsInfo = viewDataProvider.getGroupsInfo();
 
                 assert.deepEqual(
                     groupsInfo,
                     [
-                        undefined,
-                        undefined,
                         {
                             allDay: true,
                             startDate: testViewDataMap.verticalGrouping[1][0].startDate,
@@ -686,12 +806,11 @@ module('View Data Provider', () => {
             };
 
             test('Should generate correct groupedDataMap if vertical group orientation', function(assert) {
-                this.viewDataProvider = new ViewDataProvider(verticalWorkSpaceMock);
-
-                this.viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
-                this.viewDataProvider.completeDateHeaderMap = testHeaderDataMap.verticalGrouping;
-
-                this.viewDataProvider.update(false);
+                const viewDataProvider = createViewDataProvider({
+                    workspaceMock: verticalWorkSpaceMock,
+                    completeViewDataMap: testViewDataMap.verticalGrouping,
+                    completeDateHeaderMap: testHeaderDataMap.verticalGrouping
+                });
 
                 const viewDataMap = testViewDataMap.verticalGrouping;
 
@@ -765,7 +884,7 @@ module('View Data Provider', () => {
                 ];
 
                 assert.deepEqual(
-                    this.viewDataProvider.groupedDataMap,
+                    viewDataProvider.groupedDataMap,
                     expectedGroupedDataMap,
                     'Grouped data is correct'
                 );
