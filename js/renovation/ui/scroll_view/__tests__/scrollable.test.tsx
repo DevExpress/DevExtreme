@@ -154,6 +154,45 @@ each([{
         });
       });
 
+      if (Scrollable === ScrollableSimulated) {
+        each(['vertical', 'horizontal', 'both']).describe('Direction: %o', (direction) => {
+          each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
+            each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
+              each([true, false]).describe('InertiaEnabled: %o', (inertiaEnabled) => {
+                it('should pass all necessary properties to the nested Scrollbars', () => {
+                  const propertySettings = {
+                    showScrollbar,
+                    bounceEnabled,
+                    inertiaEnabled,
+                    scrollByThumb: true,
+                  };
+
+                  const viewModel = new Scrollable({ direction, ...propertySettings });
+                  const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+
+                  const scrollbars = scrollable.find(Scrollbar);
+                  if (direction === 'both') {
+                    expect(scrollbars.at(0).instance().props).toMatchObject({
+                      direction: 'horizontal',
+                      ...propertySettings,
+                    });
+                    expect(scrollbars.at(1).instance().props).toMatchObject({
+                      direction: 'vertical',
+                      ...propertySettings,
+                    });
+                  } else {
+                    expect(scrollbars.at(0).instance().props).toMatchObject({
+                      direction,
+                      ...propertySettings,
+                    });
+                  }
+                });
+              });
+            });
+          });
+        });
+      }
+
       it('should have ref to scrollable content', () => {
         const contentRef = React.createRef();
         const props = {
@@ -638,7 +677,7 @@ each([{
                         const initSettings = (scrollbarRef, index) => {
                           const scrollbar = scrollbarRef.at(index).instance();
                           scrollbar.scrollbarRef = scrollbarRef.at(index).getDOMNode();
-                          scrollbar.initHandler = () => {};
+                          scrollbar.initHandler = jest.fn();
                           scrollbar.moveHandler = jestMoveHandler;
 
                           return scrollbar;
@@ -794,6 +833,52 @@ each([{
                       });
                     });
 
+                    it('should call endAction on dxscrollend event', () => {
+                      const e = {
+                        ...defaultEvent,
+                        velocity: { x: 5.56, y: 4.5986 },
+                        originalEvent: {
+                          type: isDxWheelEvent ? 'dxmousewheel' : undefined,
+                        },
+                      };
+
+                      const onEndActionHandler = jest.fn();
+                      const viewModel = new Scrollable({
+                        direction,
+                        scrollByThumb,
+                        scrollByContent,
+                        onEnd: onEndActionHandler,
+                      }) as any;
+
+                      const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+                      const scrollbars = scrollable.find(Scrollbar);
+
+                      if (direction === DIRECTION_VERTICAL) {
+                        viewModel.verticalScrollbarRef = scrollbars.at(0).instance();
+                      } else if (direction === DIRECTION_HORIZONTAL) {
+                        viewModel.horizontalScrollbarRef = scrollbars.at(0).instance();
+                      } else {
+                        viewModel.horizontalScrollbarRef = scrollbars.at(0).instance();
+                        viewModel.verticalScrollbarRef = scrollbars.at(1).instance();
+                      }
+
+                      viewModel.adjustDistance = () => {};
+
+                      viewModel.endEffect();
+                      emit('dxscrollend', e);
+
+                      if (direction === 'both') {
+                        expect(onEndActionHandler).toBeCalledTimes(2);
+                        expect(onEndActionHandler)
+                          .toHaveBeenNthCalledWith(1, e);
+                        expect(onEndActionHandler)
+                          .toHaveBeenNthCalledWith(2, e);
+                      } else {
+                        expect(onEndActionHandler).toBeCalledTimes(1);
+                        expect(onEndActionHandler).toHaveBeenCalledWith(e);
+                      }
+                    });
+
                     it('should call stopHandler', () => {
                       const e = {
                         ...defaultEvent,
@@ -817,8 +902,6 @@ each([{
 
                       const initSettings = (scrollbarRef, index) => {
                         const scrollbar = scrollbarRef.at(index).instance();
-                        scrollbar.scrollbarRef = scrollbarRef.at(index).getDOMNode();
-                        scrollbar.initHandler = () => {};
                         scrollbar.stopHandler = jestStopHandler;
 
                         return scrollbar;
@@ -1996,7 +2079,6 @@ each([{
                   expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
                 });
               });
-              /* eslint-enable jest/no-identical-title */
             });
 
             describe('Other scenarios', () => {

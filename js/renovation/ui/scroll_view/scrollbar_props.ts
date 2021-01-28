@@ -34,6 +34,8 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() bounceEnabled = true;
 
+  @OneWay() inertiaEnabled = true;
+
   @OneWay() scrollByThumb = false;
 
   @OneWay() scrollScrollbar: ScrollableShowScrollbar = 'onScroll';

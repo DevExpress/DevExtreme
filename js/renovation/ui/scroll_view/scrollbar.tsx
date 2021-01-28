@@ -226,7 +226,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   endHandler(e, action: EventCallback<Event> | undefined): void {
     this.cachedVariables.velocity = e.velocity[this.getAxis()];
-    // this._inertiaHandler();
+    this.inertiaHandler();
     this.resetThumbScrolling();
     action?.(e);
   }
@@ -234,6 +234,17 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   stopHandler(): void {
     this.resetThumbScrolling();
+  }
+
+  inertiaHandler(): void {
+    this.suppressInertia();
+    // this._inertiaAnimator.start();
+  }
+
+  suppressInertia(): void {
+    if (!this.props.inertiaEnabled || this.cachedVariables.thumbScrolling) {
+      this.cachedVariables.velocity = 0;
+    }
   }
 
   resetThumbScrolling(): void {
