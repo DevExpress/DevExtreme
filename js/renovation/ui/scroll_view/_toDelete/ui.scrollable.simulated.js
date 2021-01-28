@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { locate } from '../../animation/translator';
@@ -177,19 +176,11 @@ export const Scroller = Class.inherit({
 
     _endHandler: function(velocity) {
         this._completeDeferred = new Deferred();
-        this._inertiaHandler();
         return this._completeDeferred.promise();
     },
 
     _inertiaHandler: function() {
-        this._suppressInertia();
         this._inertiaAnimator.start();
-    },
-
-    _suppressInertia: function() {
-        if(!this._inertiaEnabled || this._thumbScrolling) {
-            this._velocity = 0;
-        }
     },
 
     _stopHandler: function() {
@@ -270,11 +261,6 @@ export const Scroller = Class.inherit({
         }
     }))),
 
-    _createActionsHandler: function(actions) {
-        this._scrollAction = actions.scroll;
-        this._bounceAction = actions.bounce;
-    },
-
     _showScrollbar: function() {
         this._scrollbar.option('visible', true);
     },
@@ -327,25 +313,6 @@ export const SimulatedStrategy = Class.inherit({
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
-    },
-
-    _createScroller: function(direction) {
-        this._scrollers[direction] = new Scroller(this._scrollerOptions(direction));
-    },
-
-    _scrollerOptions: function(direction) {
-        return {
-            direction: direction,
-            $content: this._$content,
-            $container: this._$container,
-            $wrapper: this._$wrapper,
-            $element: this._$element,
-            scrollByContent: this.option('scrollByContent'),
-            scrollByThumb: this.option('scrollByThumb'),
-            scrollbarVisible: this.option('showScrollbar'),
-            bounceEnabled: this.option('bounceEnabled'),
-            inertiaEnabled: this.option('inertiaEnabled')
-        };
     },
 
     _applyScaleRatio: function(targetLocation) {
@@ -432,25 +399,6 @@ export const SimulatedStrategy = Class.inherit({
         if(!this._$container.is(domAdapter.getActiveElement())) {
             return;
         }
-    },
-
-    createActions: function() {
-        this._createScrollerActions();
-    },
-
-    _createScrollerActions: function() {
-        this._eventHandler('createActions', {
-            scroll: this._scrollAction,
-            bounce: this._bounceAction
-        });
-    },
-
-    _createActionHandler: function(optionName) {
-        const actionHandler = this._createActionByOption(optionName);
-
-        return () => {
-            actionHandler(extend(this._createActionArgs(), arguments));
-        };
     },
 
     _createActionArgs: function() {
@@ -610,10 +558,9 @@ export const SimulatedStrategy = Class.inherit({
     }
 
 });
-///#DEBUG
+
 export {
     ACCELERATION,
     MIN_VELOCITY_LIMIT,
     FRAME_DURATION
 };
-///#ENDDEBUG
