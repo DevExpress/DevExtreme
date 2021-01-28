@@ -47,7 +47,10 @@ export const Consts = {
     FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
     INACTIVE_AREA_CLASS: 'dx-filemanager-inactive-area',
     CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
-    TOOLBAR_SEPARATOR_ITEM: 'dx-filemanager-toolbar-separator-item',
+    TOOLBAR_SEPARATOR_ITEM_CLASS: 'dx-filemanager-toolbar-separator-item',
+    TOOLBAR_VIEWMODE_ITEM_CLASS: 'dx-filemanager-toolbar-viewmode-item',
+    TOOLBAR_HAS_LARGE_ICON_CLASS: 'dx-filemanager-toolbar-has-large-icon',
+    TOOLBAR_ITEM_CLASS: 'dx-toolbar-item',
     DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
     FOLDER_CHOOSER_DIALOG_CLASS: 'dx-filemanager-dialog-folder-chooser-popup',
@@ -177,6 +180,19 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS}`);
     }
 
+    getGeneralToolbar() {
+        return this.getToolbar().children().first();
+    }
+
+    getFileSelectionToolbar() {
+        return this.getToolbar().children().first().next();
+    }
+
+    getAllItemsOfToolbar(isFileSelection) {
+        const toolbarElement = isFileSelection ? this.getFileSelectionToolbar() : this.getGeneralToolbar();
+        return toolbarElement.find(`.${Consts.TOOLBAR_ITEM_CLASS}`);
+    }
+
     getToolbarElements() {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
@@ -187,13 +203,11 @@ export class FileManagerWrapper {
     }
 
     getGeneralToolbarElements() {
-        const _$generalToolbar = this.getToolbar().children().first();
-        return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return this.getGeneralToolbar().find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getFileSelectionToolbarElements() {
-        const _$fileSelectionToolbar = this.getToolbar().children().first().next();
-        return _$fileSelectionToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return this.getFileSelectionToolbar().find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getToolbarButton(text) {
@@ -201,7 +215,7 @@ export class FileManagerWrapper {
     }
 
     getToolbarSeparators() {
-        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM}:visible`);
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM_CLASS}:visible`);
     }
 
     getToolbarDropDownButton() {

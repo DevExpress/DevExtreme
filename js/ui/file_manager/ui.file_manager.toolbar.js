@@ -249,7 +249,20 @@ class FileManagerToolbar extends Widget {
         if(this._isDefaultItem(commandName)) {
             const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
             extend(true, result, defaultConfig);
-            extendAttributes(result, item, ['visible', 'location', 'locateInMenu']);
+            let resultCssClass = result.cssClass || '';
+            extendAttributes(result, item, [
+                'visible',
+                'location',
+                'locateInMenu'
+            ]);
+
+            if(item.cssClass) {
+                resultCssClass = `${resultCssClass} ${item.cssClass}`;
+            }
+
+            if(resultCssClass) {
+                result.cssClass = resultCssClass;
+            }
 
             if(!isDefined(item.visible)) {
                 result._autoHide = true;
