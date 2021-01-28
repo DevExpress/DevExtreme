@@ -34,6 +34,47 @@ class ViewDataGenerator {
         return viewDataMap;
     }
 
+    _getCompleteDateHeaderMap(options, completeViewDataMap) {
+        const {
+            getDateHeaderText,
+            today,
+            groupByDate,
+            horizontalGroupCount,
+            cellCountInGroupRow,
+            groupOrientation,
+        } = options;
+
+        const index = completeViewDataMap[0][0].allDay ? 1 : 0;
+        const columnCount = completeViewDataMap[index].length;
+        const dateHeaderColumnCount = groupByDate
+            ? columnCount / horizontalGroupCount
+            : columnCount;
+        const colSpan = groupByDate ? horizontalGroupCount : 1;
+        const isVerticalGrouping = groupOrientation === 'vertical';
+
+        const result = [];
+        const slicedByColumnsData = completeViewDataMap[index].slice(0, dateHeaderColumnCount);
+
+        const firstRow = slicedByColumnsData.map(({
+            startDate,
+            isFirstGroupCell,
+            isLastGroupCell,
+            ...restProps
+        }, index) => ({
+            ...restProps,
+            startDate,
+            text: getDateHeaderText(index % cellCountInGroupRow),
+            today: dateUtils.sameDate(startDate, today),
+            colSpan,
+            isFirstGroupCell: groupByDate || (isFirstGroupCell && !isVerticalGrouping),
+            isLastGroupCell: groupByDate || (isLastGroupCell && !isVerticalGrouping),
+        }));
+
+        result.push(firstRow);
+
+        return result;
+    }
+
     _generateViewDataMap(completeViewDataMap, options) {
         const {
             startRowIndex,
@@ -62,6 +103,11 @@ class ViewDataGenerator {
                         })
                     )
             );
+    }
+
+    _generateDateHeaderMap(completeDateHeaderMap, options) {
+        return [completeDateHeaderMap[0].slice(0) // TODO: virtualization
+            .map(cellData => cellData)];
     }
 
     _getViewDataFromMap(viewDataMap, completeViewDataMap, options) {
@@ -333,16 +379,21 @@ class GroupedDataMapProvider {
         const firstRow = this.getFirstGroupRow(groupIndex);
         if(!firstRow) return;
 
+        const groupStartDate = this.getGroupStartDate(groupIndex);
+        const startDateToCompare = dateUtils.trimTime(startDate) < dateUtils.trimTime(groupStartDate) || !endDate
+            ? dateUtils.trimTime(endDate)
+            : startDate;
+
         const lastRow = this.getLastGroupRow(groupIndex);
         for(let i = 0; i < firstRow.length; ++i) {
             let firstRowCell = firstRow[i];
             const cellStartDate = getCellStartDate(firstRowCell);
 
-            if(dateUtils.sameDate(cellStartDate, startDate)) {
+            if(dateUtils.sameDate(cellStartDate, startDateToCompare)) {
                 let lastRowCell = lastRow[i];
 
-                if(getCellEndDate(lastRowCell) <= startDate) {
-                    if(endDate.getDate() > startDate.getDate()) {
+                if(getCellEndDate(lastRowCell) <= startDateToCompare) {
+                    if(endDate.getDate() > startDateToCompare.getDate()) {
                         firstRowCell = firstRow[i + 1];
                         lastRowCell = lastRow[i + 1];
                     }
@@ -477,6 +528,7 @@ export default class ViewDataProvider {
         this._viewDataGenerator = null;
         this._viewData = [];
         this._completeViewDataMap = [];
+        this._completeDateHeaderMap = [];
         this._viewDataMap = [];
         this._groupedDataMapProvider = null;
         this._workspace = workspace;
@@ -492,11 +544,17 @@ export default class ViewDataProvider {
     get completeViewDataMap() { return this._completeViewDataMap; }
     set completeViewDataMap(value) { this._completeViewDataMap = value; }
 
+    get completeDateHeaderMap() { return this._completeDateHeaderMap; }
+    set completeDateHeaderMap(value) { this._completeDateHeaderMap = value; }
+
     get viewData() { return this._viewData; }
     set viewData(value) { this._viewData = value; }
 
     get viewDataMap() { return this._viewDataMap; }
     set viewDataMap(value) { this._viewDataMap = value; }
+
+    get dateHeaderMap() { return this._dateHeaderMap; }
+    set dateHeaderMap(value) { this._dateHeaderMap = value; }
 
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
 
@@ -508,11 +566,19 @@ export default class ViewDataProvider {
 
         if(isGenerateNewViewData) {
             this.completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
+            this.completeDateHeaderMap = viewDataGenerator
+                ._getCompleteDateHeaderMap(renderOptions, this.completeViewDataMap);
         }
 
         this.viewDataMap = viewDataGenerator._generateViewDataMap(this.completeViewDataMap, renderOptions);
         this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, this.completeViewDataMap, renderOptions);
-        this._groupedDataMapProvider = new GroupedDataMapProvider(this.viewDataGenerator, this.viewDataMap, this.completeViewDataMap, this._workspace);
+        this._groupedDataMapProvider = new GroupedDataMapProvider(
+            this.viewDataGenerator,
+            this.viewDataMap,
+            this.completeViewDataMap,
+            this._workspace,
+        );
+        this.dateHeaderMap = viewDataGenerator._generateDateHeaderMap(this.completeDateHeaderMap, renderOptions);
     }
 
     getStartDate() {

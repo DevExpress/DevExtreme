@@ -14,6 +14,8 @@ import LoadIndicator from './load_indicator';
 import Widget from './widget/ui.widget';
 import { getBoundingRect } from '../core/utils/position';
 
+// STYLE deferRendering
+
 const window = getWindow();
 
 const WIDGET_CLASS = 'dx-widget';

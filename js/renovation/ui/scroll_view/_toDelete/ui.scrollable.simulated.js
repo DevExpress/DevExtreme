@@ -1,17 +1,14 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import { titleize } from '../../core/utils/inflector';
 import { extend } from '../../core/utils/extend';
-import { hasWindow } from '../../core/utils/window';
-import { each, map } from '../../core/utils/iterator';
+import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
-import { getBoundingRect } from '../../core/utils/position';
-import { resetPosition, move, locate } from '../../animation/translator';
+import { locate } from '../../animation/translator';
 import Class from '../../core/class';
 import Animator from './animator';
 import devices from '../../core/devices';
-import { isDxMouseWheelEvent, normalizeKeyName } from '../../events/utils/index';
+import { normalizeKeyName } from '../../events/utils/index';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
 import { when, Deferred } from '../../core/utils/deferred';
 
@@ -23,7 +20,6 @@ const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
-const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
@@ -103,21 +99,11 @@ export const Scroller = Class.inherit({
     ctor: function(options) {
         this._initOptions(options);
         this._initAnimators();
-        this._initScrollbar();
     },
 
     _initOptions: function(options) {
-        this._location = 0;
         this._topReached = false;
         this._bottomReached = false;
-        this._axis = options.direction === HORIZONTAL ? 'x' : 'y';
-        this._prop = options.direction === HORIZONTAL ? 'left' : 'top';
-        this._dimension = options.direction === HORIZONTAL ? 'width' : 'height';
-        this._scrollProp = options.direction === HORIZONTAL ? 'scrollLeft' : 'scrollTop';
-
-        each(options, (optionName, optionValue) => {
-            this['_' + optionName] = optionValue;
-        });
     },
 
     _initAnimators: function() {
@@ -125,105 +111,13 @@ export const Scroller = Class.inherit({
         this._bounceAnimator = new BounceAnimator(this);
     },
 
-    _initScrollbar: function() {
-        this._$scrollbar = this._scrollbar.$element();
-    },
-
     _scrollStep: function(delta) {
-        const prevLocation = this._location;
-
-        this._location += delta;
-        this._suppressBounce();
-        this._move();
-
+        // eslint-disable-next-line no-undef
         if(Math.abs(prevLocation - this._location) < 1) {
             return;
         }
 
         eventsEngine.triggerHandler(this._$container, { type: 'scroll' });
-    },
-
-    _suppressBounce: function() {
-        if(this._bounceEnabled || this._inBounds(this._location)) {
-            return;
-        }
-
-        this._velocity = 0;
-        this._location = this._boundLocation();
-    },
-
-    _boundLocation: function(location) {
-        location = location !== undefined ? location : this._location;
-        return Math.max(Math.min(location, this._maxOffset), this._minOffset);
-    },
-
-    _move: function(location) {
-        this._location = location !== undefined ? location * this._getScaleRatio() : this._location;
-        this._moveContent();
-        this._moveScrollbar();
-    },
-
-    _moveContent: function() {
-        const location = this._location;
-
-        this._$container[this._scrollProp](-location / this._getScaleRatio());
-        this._moveContentByTranslator(location);
-    },
-
-    _getScaleRatio: function() {
-        if(hasWindow() && !this._scaleRatio) {
-            const element = this._$element.get(0);
-            const realDimension = this._getRealDimension(element, this._dimension);
-            const baseDimension = this._getBaseDimension(element, this._dimension);
-
-            // NOTE: Ratio can be a fractional number, which leads to inaccuracy in the calculation of sizes.
-            //       We should round it to hundredths in order to reduce the inaccuracy and prevent the unexpected appearance of a scrollbar.
-            this._scaleRatio = Math.round((realDimension / baseDimension * 100)) / 100;
-        }
-
-        return this._scaleRatio || 1;
-    },
-
-    _getRealDimension: function(element, dimension) {
-        return Math.round(getBoundingRect(element)[dimension]);
-    },
-
-    _getBaseDimension: function(element, dimension) {
-        const dimensionName = 'offset' + titleize(dimension);
-
-        return element[dimensionName];
-    },
-
-    _moveContentByTranslator: function(location) {
-        let translateOffset;
-        const minOffset = -this._maxScrollPropValue;
-
-        if(location > 0) {
-            translateOffset = location;
-        } else if(location <= minOffset) {
-            translateOffset = location - minOffset;
-        } else {
-            translateOffset = location % 1;
-        }
-
-        if(this._translateOffset === translateOffset) {
-            return;
-        }
-
-        const targetLocation = {};
-        targetLocation[this._prop] = translateOffset;
-        this._translateOffset = translateOffset;
-
-        if(translateOffset === 0) {
-            resetPosition(this._$content);
-            return;
-        }
-
-        move(this._$content, targetLocation);
-    },
-
-    _moveScrollbar: function() {
-        this._scrollbar.moveTo(this._location);
     },
 
     _scrollComplete: function() {
@@ -252,11 +146,6 @@ export const Scroller = Class.inherit({
         this._velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
     },
 
-    _inBounds: function(location) {
-        location = location !== undefined ? location : this._location;
-        return this._boundLocation(location) === location;
-    },
-
     _crossBoundOnNextStep: function() {
         const location = this._location;
         const nextLocation = location + this._velocity;
@@ -265,49 +154,11 @@ export const Scroller = Class.inherit({
             || (location > this._maxOffset && nextLocation <= this._maxOffset);
     },
 
-    _initHandler: function(e) {
-        this._stopDeferred = new Deferred();
-        this._stopScrolling();
-        this._prepareThumbScrolling(e);
-        return this._stopDeferred.promise();
-    },
-
     _stopScrolling: deferRenderer(function() {
         this._hideScrollbar();
         this._inertiaAnimator.stop();
         this._bounceAnimator.stop();
     }),
-
-    _prepareThumbScrolling: function(e) {
-        if(isDxMouseWheelEvent(e.originalEvent)) {
-            return;
-        }
-
-        const $target = $(e.originalEvent.target);
-        const scrollbarClicked = this._isScrollbar($target);
-
-        if(scrollbarClicked) {
-            this._moveToMouseLocation(e);
-        }
-
-        this._thumbScrolling = scrollbarClicked || this._isThumb($target);
-        this._crossThumbScrolling = !this._thumbScrolling && this._isAnyThumbScrolling($target);
-
-        if(this._thumbScrolling) {
-            this._scrollbar.feedbackOn();
-        }
-    },
-
-    _isThumbScrollingHandler: function($target) {
-        return this._isThumb($target);
-    },
-
-    _moveToMouseLocation: function(e) {
-        const mouseLocation = e['page' + this._axis.toUpperCase()] - this._$element.offset()[this._prop];
-        const location = this._location + mouseLocation / this._containerToContentRatio() - this._$container.height() / 2;
-
-        this._scrollStep(-Math.round(location));
-    },
 
     _stopComplete: function() {
         if(this._stopDeferred) {
@@ -319,40 +170,14 @@ export const Scroller = Class.inherit({
         this._showScrollbar();
     },
 
-    _moveHandler: function(delta) {
-        if(this._crossThumbScrolling) {
-            return;
-        }
-
-        if(this._thumbScrolling) {
-            delta[this._axis] = -Math.round(delta[this._axis] / this._containerToContentRatio());
-        }
-
-        this._scrollBy(delta);
-    },
-
-    _scrollBy: function(delta) {
-        delta = delta[this._axis];
-        if(!this._inBounds()) {
-            delta *= OUT_BOUNDS_ACCELERATION;
-        }
-        this._scrollStep(delta);
-    },
-
     _scrollByHandler: function(delta) {
         this._scrollBy(delta);
         this._scrollComplete();
     },
 
-    _containerToContentRatio: function() {
-        return this._scrollbar.containerToContentRatio();
-    },
-
     _endHandler: function(velocity) {
         this._completeDeferred = new Deferred();
-        this._velocity = velocity[this._axis];
         this._inertiaHandler();
-        this._resetThumbScrolling();
         return this._completeDeferred.promise();
     },
 
@@ -367,16 +192,10 @@ export const Scroller = Class.inherit({
         }
     },
 
-    _resetThumbScrolling: function() {
-        this._thumbScrolling = false;
-        this._crossThumbScrolling = false;
-    },
-
     _stopHandler: function() {
         if(this._thumbScrolling) {
             this._scrollComplete();
         }
-        this._resetThumbScrolling();
         this._scrollToBounds();
     },
 
@@ -415,15 +234,6 @@ export const Scroller = Class.inherit({
     _updateBounds: function() {
         this._maxOffset = Math.round(this._getMaxOffset());
         this._minOffset = Math.round(this._getMinOffset());
-    },
-
-    _getMaxOffset: function() {
-        return 0;
-    },
-
-    _getMinOffset: function() {
-        this._maxScrollPropValue = Math.max(this._contentSize() - this._containerSize(), 0);
-        return -this._maxScrollPropValue;
     },
 
     _updateScrollbar: deferUpdater(function() {
@@ -473,23 +283,6 @@ export const Scroller = Class.inherit({
         this._scrollbar.option('visible', false);
     },
 
-    _containerSize: function() {
-        return this._getRealDimension(this._$container.get(0), this._dimension);
-    },
-
-    _contentSize: function() {
-        const isOverflowHidden = this._$content.css('overflow' + this._axis.toUpperCase()) === 'hidden';
-        let contentSize = this._getRealDimension(this._$content.get(0), this._dimension);
-
-        if(!isOverflowHidden) {
-            const containerScrollSize = this._$content[0]['scroll' + titleize(this._dimension)] * this._getScaleRatio();
-
-            contentSize = Math.max(containerScrollSize, contentSize);
-        }
-
-        return contentSize;
-    },
-
     _reachedMin: function() {
         return this._location <= this._minOffset;
     },
@@ -536,22 +329,6 @@ export const SimulatedStrategy = Class.inherit({
         this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
     },
 
-    render: function() {
-        this._createScrollers();
-    },
-
-    _createScrollers: function() {
-        this._scrollers = {};
-
-        if(this._isDirection(HORIZONTAL)) {
-            this._createScroller(HORIZONTAL);
-        }
-
-        if(this._isDirection(VERTICAL)) {
-            this._createScroller(VERTICAL);
-        }
-    },
-
     _createScroller: function(direction) {
         this._scrollers[direction] = new Scroller(this._scrollerOptions(direction));
     },
@@ -567,8 +344,7 @@ export const SimulatedStrategy = Class.inherit({
             scrollByThumb: this.option('scrollByThumb'),
             scrollbarVisible: this.option('showScrollbar'),
             bounceEnabled: this.option('bounceEnabled'),
-            inertiaEnabled: this.option('inertiaEnabled'),
-            isAnyThumbScrolling: this._isAnyThumbScrolling.bind(this)
+            inertiaEnabled: this.option('inertiaEnabled')
         };
     },
 
@@ -585,18 +361,8 @@ export const SimulatedStrategy = Class.inherit({
         return targetLocation;
     },
 
-    _isAnyThumbScrolling: function($target) {
-        let result = false;
-
-        this._eventHandler('isThumbScrolling', $target).done(function(isThumbScrollingVertical, isThumbScrollingHorizontal) {
-            result = isThumbScrollingVertical || isThumbScrollingHorizontal;
-        });
-        return result;
-    },
-
     handleInit: function(e) {
         this._eventForUserAction = e;
-        this._eventHandler('init', e).done(this._stopAction);
     },
 
     _eachScroller: function(callback) {
@@ -628,31 +394,14 @@ export const SimulatedStrategy = Class.inherit({
             return;
         }
         this._saveActive();
-        e.preventDefault && e.preventDefault();
-
-        this._adjustDistance(e, e.delta);
         this._eventForUserAction = e;
-        this._eventHandler('move', e.delta);
-    },
-
-    _adjustDistance: function(e, distance) {
-        distance.x *= this._validDirections[HORIZONTAL];
-        distance.y *= this._validDirections[VERTICAL];
-
-        const devicePixelRatio = this._tryGetDevicePixelRatio();
-        if(devicePixelRatio && isDxMouseWheelEvent(e.originalEvent)) {
-            distance.x = Math.round(distance.x / devicePixelRatio * 100) / 100;
-            distance.y = Math.round(distance.y / devicePixelRatio * 100) / 100;
-        }
     },
 
     handleEnd: function(e) {
         this._resetActive();
         this._refreshCursorState(e.originalEvent && e.originalEvent.target);
 
-        this._adjustDistance(e, e.velocity);
         this._eventForUserAction = e;
-        return this._eventHandler('end', e.velocity).done(this._endAction);
     },
 
     handleCancel: function(e) {
@@ -663,7 +412,6 @@ export const SimulatedStrategy = Class.inherit({
 
     handleStop: function() {
         this._resetActive();
-        this._eventHandler('stop');
     },
 
     handleScroll: function() {
@@ -723,15 +471,6 @@ export const SimulatedStrategy = Class.inherit({
             reachedTop: scrollerY && scrollerY._reachedMax(),
             reachedBottom: scrollerY && scrollerY._reachedMin()
         };
-    },
-
-    _eventHandler: function(eventName) {
-        const args = [].slice.call(arguments).slice(1);
-        const deferreds = map(this._scrollers, (scroller) => {
-            return scroller['_' + eventName + 'Handler'].apply(scroller, args);
-        });
-
-        return when.apply($, deferreds).promise();
     },
 
     location: function() {
@@ -823,18 +562,6 @@ export const SimulatedStrategy = Class.inherit({
         this._endAction();
     },
 
-    validate: function(e) {
-        if(this.option('disabled')) {
-            return false;
-        }
-
-        if(this.option('bounceEnabled')) {
-            return true;
-        }
-
-        return isDxMouseWheelEvent(e) ? this._validateWheel(e) : this._validateMove(e);
-    },
-
     _validateWheel: function(e) {
         const scroller = this._scrollers[this._wheelDirection(e)];
         const reachedMin = scroller._reachedMin();
@@ -856,14 +583,6 @@ export const SimulatedStrategy = Class.inherit({
         }
 
         return validated;
-    },
-
-    _validateMove: function(e) {
-        if(!this.option('scrollByContent') && !$(e.target).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`).length) {
-            return false;
-        }
-
-        return this._allowedDirection();
     },
 
     verticalOffset: function() {

@@ -32,7 +32,7 @@ const test = (description, callback) => {
 
 testStart(() => initTestMarkup());
 
-module('Virtual scrolling', () => {
+module('Virtual scrolling integration', () => {
     module('Initialization', () => {
         supportedViews.forEach(viewName => {
             [{
@@ -1317,6 +1317,11 @@ module('Virtual scrolling', () => {
 
                 ['horizontal', 'vertical'].forEach(groupOrientation => {
                     test(`A long appointment should be correctly croped if view: ${viewName}, "${groupOrientation}" group orientation`, function(assert) {
+                        if(!isDesktopEnvironment()) {
+                            assert.ok(true, 'This test is for desktop only');
+                            return;
+                        }
+
                         if(viewName === 'month') {
                             assert.ok(true, 'TODO: appointments in virtual month');
                             return;
@@ -1365,7 +1370,8 @@ module('Virtual scrolling', () => {
 
                                         const startViewDate = viewDataProvider.findGroupCellStartDate(
                                             settings.groupIndex,
-                                            settings.info.appointment.startDate
+                                            settings.info.appointment.startDate,
+                                            settings.info.appointment.endDate
                                         );
 
                                         assert.deepEqual(
@@ -1715,7 +1721,8 @@ module('Virtual scrolling', () => {
                                 left: 773,
                                 top: 100,
                                 height: 450
-                            }]
+                            }],
+                            []
                         ]
                     },
                     {

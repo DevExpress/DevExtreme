@@ -523,9 +523,6 @@ class SchedulerAppointments extends CollectionWidget {
             });
             this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
         } else {
-            const plainResourceList = this.isAgendaView ?
-                this.resourceManager._getPlainResourcesByAppointment(rawAppointment) : [];
-
             const config = {
                 data: rawAppointment,
                 groupIndex: settings.groupIndex,
@@ -542,9 +539,11 @@ class SchedulerAppointments extends CollectionWidget {
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(rawAppointment, settings),
-                plainResourceList
             };
 
+            if(this.isAgendaView) {
+                config.createPlainResourceListAsync = rawAppointment => this.resourceManager._createPlainResourcesByAppointmentAsync(rawAppointment);
+            }
             this._createComponent(
                 element,
                 this.isAgendaView ? AgendaAppointment : Appointment,

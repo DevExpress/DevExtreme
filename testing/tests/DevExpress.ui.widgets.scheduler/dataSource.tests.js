@@ -793,6 +793,16 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
         const dataSource = new DataSource({
             store: new ArrayStore({
                 data: [{
+                    id: '08b17a7c-2a07-4fb2-8c34-0635f102d77f',
+                    startDate: new Date(2020, 6, 12, 1),
+                    endDate: new Date(2020, 6, 12, 2),
+                    text: 'Test 2'
+                }, {
+                    id: 'c1d57728-0b83-4f75-854f-09fe103bb9c2',
+                    startDate: new Date(2020, 6, 15, 1),
+                    endDate: new Date(2020, 6, 16, 2),
+                    text: 'Test 3'
+                }, {
                     id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
                     startDate: new Date(2020, 6, 10, 1),
                     endDate: new Date(2020, 6, 10, 2),

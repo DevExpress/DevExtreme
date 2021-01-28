@@ -22,6 +22,12 @@ import {
 } from './common/tooltip_utils';
 import { normalizeEnum } from '../../../viz/core/utils';
 import domAdapter from '../../../core/dom_adapter';
+import { isUpdatedFlatObject } from '../common/utils';
+
+interface PinnedSize extends StrictSize {
+  x: number;
+  y: number;
+}
 
 const DEFAULT_CANVAS: Canvas = {
   left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
@@ -45,6 +51,10 @@ const DEFAULT_SHADOW = {
 
 const DEFAULT_BORDER: InitialBorder = {
   color: '#d3d3d3', width: 1, dashStyle: 'solid', visible: true,
+};
+
+const DEFAULT_SIZE: PinnedSize = {
+  x: 0, y: 0, width: 0, height: 0,
 };
 
 export const viewFunction = ({
@@ -256,13 +266,9 @@ export class TooltipProps {
 export class Tooltip extends JSXComponent(TooltipProps) {
   @InternalState() filterId: string = getNextDefsSvgId();
 
-  @InternalState() textSize = {
-    x: 0, y: 0, width: 0, height: 0,
-  };
+  @InternalState() textSize: PinnedSize = DEFAULT_SIZE;
 
-  @InternalState() cloudSize = {
-    x: 0, y: 0, width: 0, height: 0,
-  };
+  @InternalState() cloudSize: PinnedSize = DEFAULT_SIZE;
 
   @InternalState() currentTarget?: Point;
 
@@ -286,25 +292,13 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @Effect()
   calculateSize(): void {
-    if (this.props.visible && (this.textRef || this.htmlRef)) {
-      this.textSize = this.textRef ? this.textRef.getBBox() : this.htmlRef.getBoundingClientRect();
+    const contentSize = this.calculateContentSize();
+    const cloudSize = this.calculateCloudSize();
+    if (isUpdatedFlatObject(this.textSize, contentSize)) {
+      this.textSize = contentSize;
     }
-  }
-
-  @Effect()
-  calculateCloudSize(): void {
-    if (isDefined(this.props.x) && isDefined(this.props.y)
-      && this.props.visible && this.cloudRef) {
-      const size = this.cloudRef.getBBox();
-      const {
-        lm, tm, rm, bm,
-      } = this.margins;
-      this.cloudSize = {
-        x: Math.floor(size.x - lm),
-        y: Math.floor(size.y - tm),
-        width: size.width + lm + rm,
-        height: size.height + tm + bm,
-      };
+    if (isUpdatedFlatObject(this.cloudSize, cloudSize)) {
+      this.cloudSize = cloudSize;
     }
   }
 
@@ -442,5 +436,33 @@ export class Tooltip extends JSXComponent(TooltipProps) {
       offset: Number(offset),
       arrowLength: Number(arrowLength),
     });
+  }
+
+  calculateContentSize(): PinnedSize {
+    let size = DEFAULT_SIZE;
+    if (this.props.visible && (this.textRef || this.htmlRef)) {
+      size = this.textRef ? this.textRef.getBBox() : this.htmlRef.getBoundingClientRect();
+    }
+
+    return size;
+  }
+
+  calculateCloudSize(): PinnedSize {
+    let cloudSize = DEFAULT_SIZE;
+    if (isDefined(this.props.x) && isDefined(this.props.y)
+      && this.props.visible && this.cloudRef) {
+      const size = this.cloudRef.getBBox();
+      const {
+        lm, tm, rm, bm,
+      } = this.margins;
+
+      cloudSize = {
+        x: Math.floor(size.x - lm),
+        y: Math.floor(size.y - tm),
+        width: size.width + lm + rm,
+        height: size.height + tm + bm,
+      };
+    }
+    return cloudSize;
   }
 }

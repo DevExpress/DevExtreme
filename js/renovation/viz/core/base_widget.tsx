@@ -26,6 +26,7 @@ import {
 } from './utils';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
+import { isUpdatedFlatObject } from '../common/utils';
 
 const DEFAULT_CANVAS = {
   left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
@@ -181,7 +182,7 @@ export class BaseWidget extends JSXComponent(Props) {
     });
 
     if (isDefined(newCanvas.height) && isDefined(newCanvas.width)
-    && Object.keys(newCanvas).some((key) => newCanvas[key] !== canvas?.[key])) {
+    && isUpdatedFlatObject(canvas, newCanvas)) {
       this.props.canvas = newCanvas;
     }
   }

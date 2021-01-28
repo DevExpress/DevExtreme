@@ -1378,6 +1378,27 @@ export interface dxDiagramShape extends dxDiagramItem {
      * @public
      */
     attachedConnectorIds?: Array<String>;
+    /**
+     * @docid dxDiagramShape.containerId
+     * @type String
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    containerId?: string;
+    /**
+     * @docid dxDiagramShape.containerChildItemIds
+     * @type Array<String>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    containerChildItemIds?: Array<String>;
+    /**
+     * @docid dxDiagramShape.containerExpanded
+     * @type Boolean
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    containerExpanded?: boolean;    
 }
 
 /**

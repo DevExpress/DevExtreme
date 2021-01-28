@@ -5,7 +5,7 @@ const fx = require('animation/fx');
 const dateLocalization = require('localization/date');
 const keyboardMock = require('../../helpers/keyboardMock.js');
 
-require('ui/scheduler/ui.scheduler.navigator');
+require('ui/scheduler/header/navigator');
 require('common.css!');
 require('generic_light.css!');
 

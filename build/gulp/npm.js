@@ -170,19 +170,22 @@ gulp.task('npm-sources', gulp.series('ts-sources', sources(srcGlobs, packagePath
 
 const scssDir = `${resultPath}/${packageDir}/scss`;
 
-gulp.task('npm-sass', gulp.parallel(
-    () => gulp
-        .src('scss/**/*')
-        .pipe(dataUri())
-        .pipe(gulp.dest(scssDir)),
+gulp.task('npm-sass', gulp.series(
+    'create-scss-bundles',
+    gulp.parallel(
+        () => gulp
+            .src('scss/**/*')
+            .pipe(dataUri())
+            .pipe(gulp.dest(scssDir)),
 
-    () => gulp
-        .src('fonts/**/*', { base: '.' })
-        .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),
+        () => gulp
+            .src('fonts/**/*', { base: '.' })
+            .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),
 
-    () => gulp
-        .src('icons/**/*', { base: '.' })
-        .pipe(gulp.dest(`${scssDir}/widgets/base`)),
+        () => gulp
+            .src('icons/**/*', { base: '.' })
+            .pipe(gulp.dest(`${scssDir}/widgets/base`)),
+    )
 ));
 
 gulp.task('npm', gulp.series('npm-sources', 'ts-modules-check', 'npm-sass'));

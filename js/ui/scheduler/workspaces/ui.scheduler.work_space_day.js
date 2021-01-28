@@ -45,6 +45,14 @@ class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
             { viewData: this.viewDataProvider.viewData, dataCellTemplate: this.option('dataCellTemplate') }
         );
     }
+
+    renderRHeaderPanel() {
+        if(this.option('intervalCount') === 1) {
+            super.renderRHeaderPanel(false);
+        } else {
+            super.renderRHeaderPanel(true);
+        }
+    }
 }
 
 registerComponent('dxSchedulerWorkSpaceDay', SchedulerWorkSpaceDay);

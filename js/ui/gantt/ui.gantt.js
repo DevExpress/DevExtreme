@@ -326,7 +326,6 @@ class Gantt extends Widget {
         return getBoundingRect(this._treeList._$element.find('.dx-treelist-headers').get(0)).height;
     }
 
-
     _setInnerElementsWidth(widths) {
         if(!hasWindow()) {
             return;
@@ -339,9 +338,8 @@ class Gantt extends Widget {
         const rightPanelWidth = widths.rightPanelWidth;
 
         this._$treeListWrapper.width(leftPanelWidth);
-
         const isPercentage = isString(leftPanelWidth) && leftPanelWidth.slice(-1) === '%';
-        this._$treeList.width(isPercentage ? '100%' : leftPanelWidth);
+        this._setTreeListOption('width', isPercentage ? '100%' : leftPanelWidth);
 
         this._$ganttView.width(rightPanelWidth);
         this._setGanttViewOption('width', this._$ganttView.width());

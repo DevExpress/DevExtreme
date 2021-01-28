@@ -584,6 +584,32 @@ function() {
         assert.equal(instance._pages[1].value(), 2, 'second page value');
     });
 
+    // T966318
+    QUnit.test('Pager does not display duplicated page numbers', function(assert) {
+        const $pager = $('#container').dxPager({
+            pageSizes: [10, 20, 50],
+            pageSize: 50,
+            pageCount: 2000,
+        });
+        const instance = $pager.dxPager('instance');
+        instance.option('pageIndex', 1999);
+
+        instance.option('pageCount', 10000);
+        instance.option('pageSize', 10);
+
+        instance.option('pageCount', 2000);
+        instance.option('pageSize', 50);
+        const pageCount = instance._pages.length;
+        if(!isRenovation) {
+            assert.equal(pageCount, 5, 'length 5');
+        } else {
+            assert.equal(pageCount, 6, 'length 6');
+        }
+        assert.equal(instance.selectedPage.index, pageCount - 2, 'index selected page');
+        assert.equal(instance._pages[pageCount - 2].value(), 1999, 'second last page value');
+        assert.equal(instance._pages[pageCount - 1].value(), 2000, 'lastpage page value');
+    });
+
     QUnit.test('Selected page is not reset_B237051', function(assert) {
         const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 15, pageIndex: 1 });
         const instance = $pager.dxPager('instance');
@@ -1232,7 +1258,7 @@ function() {
     });
 
     QUnit.test('Apply light mode when width equal optimal pager\'s width', function(assert) {
-        const $pager = $('#container').dxPager({
+        const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
             pageSizes: [5, 10, 20],
@@ -1247,7 +1273,8 @@ function() {
 
         const optimalPagerWidth = pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() - pager._pages[pager._pages.length - 1]._$page.width();
 
-        $('#container').width(optimalPagerWidth - pager._$info.outerWidth(true) - 1);
+        $pager.width(optimalPagerWidth - pager._$info.outerWidth(true) - 1);
+
         pager._dimensionChanged();
 
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
@@ -1255,7 +1282,7 @@ function() {
 
     // T962160
     QUnit.test('Show info after pagesizes change', function(assert) {
-        const $pager = $('#container').dxPager({
+        const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
             pageSizes: [5, 10, 20],
@@ -1267,7 +1294,7 @@ function() {
         const pager = $pager.dxPager('instance');
 
         const optimalPagerWidth = pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() + 20;
-        $('#container').width(optimalPagerWidth);
+        $pager.width(optimalPagerWidth);
         pager._dimensionChanged();
         assert.ok(pager._$info.length === 1 && pager._$info.css('display') !== 'none', 'info element is visible');
 

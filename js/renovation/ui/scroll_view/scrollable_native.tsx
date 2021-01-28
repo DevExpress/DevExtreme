@@ -104,13 +104,13 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       { showScrollbar && useSimulatedScrollbar && isHorizontal && (
         <Scrollbar
           direction="horizontal"
-          expandable={scrollByThumb}
+          scrollByThumb={scrollByThumb}
         />
       )}
       { showScrollbar && useSimulatedScrollbar && isVertical && (
         <Scrollbar
           direction="vertical"
-          expandable={scrollByThumb}
+          scrollByThumb={scrollByThumb}
         />
       )}
     </Widget>
