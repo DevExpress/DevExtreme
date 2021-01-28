@@ -379,16 +379,21 @@ class GroupedDataMapProvider {
         const firstRow = this.getFirstGroupRow(groupIndex);
         if(!firstRow) return;
 
+        const groupStartDate = this.getGroupStartDate(groupIndex);
+        const startDateToCompare = dateUtils.trimTime(startDate) < dateUtils.trimTime(groupStartDate) || !endDate
+            ? dateUtils.trimTime(endDate)
+            : startDate;
+
         const lastRow = this.getLastGroupRow(groupIndex);
         for(let i = 0; i < firstRow.length; ++i) {
             let firstRowCell = firstRow[i];
             const cellStartDate = getCellStartDate(firstRowCell);
 
-            if(dateUtils.sameDate(cellStartDate, startDate)) {
+            if(dateUtils.sameDate(cellStartDate, startDateToCompare)) {
                 let lastRowCell = lastRow[i];
 
-                if(getCellEndDate(lastRowCell) <= startDate) {
-                    if(endDate.getDate() > startDate.getDate()) {
+                if(getCellEndDate(lastRowCell) <= startDateToCompare) {
+                    if(endDate.getDate() > startDateToCompare.getDate()) {
                         firstRowCell = firstRow[i + 1];
                         lastRowCell = lastRow[i + 1];
                     }

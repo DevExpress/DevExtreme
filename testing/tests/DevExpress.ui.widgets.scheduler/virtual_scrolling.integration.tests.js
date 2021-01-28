@@ -32,7 +32,7 @@ const test = (description, callback) => {
 
 testStart(() => initTestMarkup());
 
-module('Virtual scrolling', () => {
+module('Virtual scrolling integration', () => {
     module('Initialization', () => {
         supportedViews.forEach(viewName => {
             [{
@@ -1370,7 +1370,8 @@ module('Virtual scrolling', () => {
 
                                         const startViewDate = viewDataProvider.findGroupCellStartDate(
                                             settings.groupIndex,
-                                            settings.info.appointment.startDate
+                                            settings.info.appointment.startDate,
+                                            settings.info.appointment.endDate
                                         );
 
                                         assert.deepEqual(
@@ -1720,7 +1721,8 @@ module('Virtual scrolling', () => {
                                 left: 773,
                                 top: 100,
                                 height: 450
-                            }]
+                            }],
+                            []
                         ]
                     },
                     {
