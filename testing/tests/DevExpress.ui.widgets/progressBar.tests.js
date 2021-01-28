@@ -159,7 +159,7 @@ QUnit.module('options', {
         const data = handler.getCall(0).args[0];
         assert.strictEqual(data.event, undefined, 'event is undefined');
         assert.strictEqual(data.component, progressBar, 'component is correct');
-        assert.strictEqual(data.element, $progressBar.get(0), 'element is correct');
+        assert.strictEqual(data.element, this.$element.get(0), 'element is correct');
         assert.strictEqual(data.value, 20, 'value is correct');
         assert.strictEqual(data.previousValue, 0, 'previousValue is correct');
     });
