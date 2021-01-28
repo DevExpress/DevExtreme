@@ -20,7 +20,9 @@ import {
     REDUCED_APPOINTMENT_PARTS_CLASSES,
     DIRECTION_APPOINTMENT_CLASSES,
     APPOINTMENT_DRAG_SOURCE_CLASS,
+    APPOINTMENT_CONTENT_CLASSES
 } from '../constants';
+import { Deferred } from '../../../core/utils/deferred';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';
@@ -28,10 +30,19 @@ const DEFAULT_VERTICAL_HANDLES = 'top bottom';
 const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
 const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
 
-class Appointment extends DOMComponent {
+export class Appointment extends DOMComponent {
+    get coloredElement() {
+        return this.$element();
+    }
+
+    get rawAppointment() {
+        return this.option('data');
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             data: {},
+            groupIndex: -1,
             geometry: { top: 0, left: 0, width: 0, height: 0 },
             allowDrag: true,
             allowResize: true,
@@ -41,7 +52,7 @@ class Appointment extends DOMComponent {
             resizableConfig: {},
             cellHeight: 0,
             cellWidth: 0,
-            isDragSource: false,
+            isDragSource: false
         });
     }
 
@@ -63,6 +74,7 @@ class Appointment extends DOMComponent {
     _optionChanged(args) {
         switch(args.name) {
             case 'data':
+            case 'groupIndex':
             case 'geometry':
             case 'allowDrag':
             case 'allowResize':
@@ -121,11 +133,22 @@ class Appointment extends DOMComponent {
         this._renderDirection();
 
         this.$element().data('dxAppointmentStartDate', this.option('startDate'));
-        this.$element().attr('title', this.invoke('getField', 'text', this.option('data')));
+        this.$element().attr('title', this.invoke('getField', 'text', this.rawAppointment));
         this.$element().attr('role', 'button');
 
         this._renderRecurrenceClass();
         this._renderResizable();
+
+        this._setResourceColor();
+    }
+
+    _setResourceColor() {
+        const deferredColor = this.invoke('getAppointmentColor', {
+            itemData: this.rawAppointment,
+            groupIndex: this.option('groupIndex'),
+        });
+
+        deferredColor.done(color => color && this.coloredElement.css('backgroundColor', color));
     }
 
     _renderAppointmentGeometry() {
@@ -187,7 +210,7 @@ class Appointment extends DOMComponent {
     }
 
     _getEndDate() {
-        const result = this.invoke('getField', 'endDate', this.option('data'));
+        const result = this.invoke('getField', 'endDate', this.rawAppointment);
         if(result) {
             return new Date(result);
         }
@@ -203,7 +226,7 @@ class Appointment extends DOMComponent {
     }
 
     _renderRecurrenceClass() {
-        const rule = this.invoke('getField', 'recurrenceRule', this.option('data'));
+        const rule = this.invoke('getField', 'recurrenceRule', this.rawAppointment);
 
         if(getRecurrenceProcessor().isValidRecurrenceRule(rule)) {
             this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);
@@ -237,4 +260,45 @@ class Appointment extends DOMComponent {
 
 registerComponent('dxSchedulerAppointment', Appointment);
 
-export default Appointment;
+export class AgendaAppointment extends Appointment {
+    get coloredElement() {
+        return this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER}`);
+    }
+
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            createPlainResourceListAsync: new Deferred()
+        });
+    }
+
+    _renderResourceList(container, list) {
+        list.forEach(item => {
+            const itemContainer = $('<div>')
+                .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST_ITEM)
+                .appendTo(container);
+
+            $('<div>')
+                .text(`${item.label}:`)
+                .appendTo(itemContainer);
+
+            $('<div>')
+                .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST_ITEM_VALUE)
+                .text(item.values.join(', '))
+                .appendTo(itemContainer);
+        });
+    }
+
+    _render() {
+        super._render();
+
+        const createPlainResourceListAsync = this.option('createPlainResourceListAsync');
+        createPlainResourceListAsync(this.rawAppointment).done(list => {
+            const parent = this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`);
+            const container = $('<div>')
+                .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_RESOURCE_LIST)
+                .appendTo(parent);
+
+            this._renderResourceList(container, list);
+        });
+    }
+}

@@ -2937,6 +2937,14 @@ declare module DevExpress.fileManagement {
      */
     export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
         /**
+         * [descr:RemoteFileSystemProvider.Options.beforeAjaxSend]
+         */
+        beforeAjaxSend?: ((options: { headers?: any, xhrFields?: any, formData?: any }) => any);
+        /**
+         * [descr:RemoteFileSystemProvider.Options.beforeSubmit]
+         */
+        beforeSubmit?: ((options: { formData?: any }) => any);
+        /**
          * [descr:RemoteFileSystemProvider.Options.endpointUrl]
          */
         endpointUrl?: string;
@@ -2944,6 +2952,10 @@ declare module DevExpress.fileManagement {
          * [descr:RemoteFileSystemProvider.Options.hasSubDirectoriesExpr]
          */
         hasSubDirectoriesExpr?: string | Function;
+        /**
+         * [descr:RemoteFileSystemProvider.Options.requestHeaders]
+         */
+        requestHeaders?: any;
     }
     /**
      * [descr:RemoteFileSystemProvider]
@@ -6212,6 +6224,18 @@ declare module DevExpress.ui {
          */
         attachedConnectorIds?: Array<string>;
         /**
+         * [descr:dxDiagramShape.containerChildItemIds]
+         */
+        containerChildItemIds?: Array<string>;
+        /**
+         * [descr:dxDiagramShape.containerExpanded]
+         */
+        containerExpanded?: boolean;
+        /**
+         * [descr:dxDiagramShape.containerId]
+         */
+        containerId?: string;
+        /**
          * [descr:dxDiagramShape.position]
          */
         position?: { x?: number, y?: number };
@@ -6350,6 +6374,10 @@ declare module DevExpress.ui {
          */
         contentTemplate?: DevExpress.core.template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
+         * [descr:dxDropDownBox.Options.dataSource]
+         */
+        dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /**
          * [descr:dxDropDownBox.Options.displayValueFormatter]
          */
         displayValueFormatter?: ((value: string | Array<any>) => string);
@@ -6357,6 +6385,10 @@ declare module DevExpress.ui {
          * [descr:dxDropDownBox.Options.fieldTemplate]
          */
         fieldTemplate?: DevExpress.core.template | ((value: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /**
+         * [descr:dxDropDownBox.Options.items]
+         */
+        items?: Array<any>;
         /**
          * [descr:dxDropDownBox.Options.openOnFieldClick]
          */
@@ -10502,7 +10534,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxSchedulerAppointment.endDate]
          */
-        endDate?: Date;
+        endDate?: Date | string;
         /**
          * [descr:dxSchedulerAppointment.endDateTimeZone]
          */
@@ -10522,7 +10554,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxSchedulerAppointment.startDate]
          */
-        startDate?: Date;
+        startDate?: Date | string;
         /**
          * [descr:dxSchedulerAppointment.startDateTimeZone]
          */
@@ -11256,6 +11288,10 @@ declare module DevExpress.ui {
          * [descr:dxTagBox.Options.maxDisplayedTags]
          */
         maxDisplayedTags?: number;
+        /**
+         * [descr:dxTagBox.Options.maxFilterLength]
+         */
+        maxFilterLength?: number;
         /**
          * [descr:dxTagBox.Options.multiline]
          */
@@ -19305,7 +19341,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMap.Options.group]
          */
-        group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
+        group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
         /**
          * [descr:dxTreeMap.Options.hoverEnabled]
          */
@@ -19547,7 +19583,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxVectorMap.Options.layers]
          */
-        layers?: Array<{ borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
+        layers?: Array<{ borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
         /**
          * [descr:dxVectorMap.Options.legends]
          */

@@ -42,6 +42,8 @@ const DOMComponent = Component.inherit({
     * @hidden
     */
     ctor(element, options) {
+        this._customClass = null;
+
         this._createElement(element);
         attachInstanceToElement(this._$element, this, this._dispose);
 
@@ -116,7 +118,10 @@ const DOMComponent = Component.inherit({
 
         this.$element()
             .attr(attributes)
+            .removeClass(this._customClass)
             .addClass(classNames);
+
+        this._customClass = classNames;
     },
 
     _renderVisibilityChange() {

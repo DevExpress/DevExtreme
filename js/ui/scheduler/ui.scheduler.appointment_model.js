@@ -164,12 +164,8 @@ class AppointmentModel {
     }
 
     _filterAppointmentByResources(appointment, resources) {
-        let result = false;
-        let i;
-        let len;
-        let resourceName;
 
-        const checkAppointmentResourceValues = () => {
+        const checkAppointmentResourceValues = (resourceName, resourceIndex) => {
             const resourceGetter = this._dataAccessors.getter.resources[resourceName];
             let resource;
 
@@ -178,9 +174,12 @@ class AppointmentModel {
             }
 
             const appointmentResourceValues = wrapToArray(resource);
-            const resourceData = map(resources[i].items, (item) => { return item.id; });
+            const resourceData = map(
+                resources[resourceIndex].items,
+                (item) => { return item.id; }
+            );
 
-            for(let j = 0, itemDataCount = appointmentResourceValues.length; j < itemDataCount; j++) {
+            for(let j = 0; j < appointmentResourceValues.length; j++) {
                 if(inArray(appointmentResourceValues[j], resourceData) > -1) {
                     return true;
                 }
@@ -189,10 +188,12 @@ class AppointmentModel {
             return false;
         };
 
-        for(i = 0, len = resources.length; i < len; i++) {
-            resourceName = resources[i].name;
+        let result = false;
 
-            result = checkAppointmentResourceValues.call(this);
+        for(let i = 0; i < resources.length; i++) {
+            const resourceName = resources[i].name;
+
+            result = checkAppointmentResourceValues(resourceName, i);
 
             if(!result) {
                 return false;
@@ -620,10 +621,8 @@ class AppointmentModel {
         return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 
-    add(data) {
-        return this._dataSource.store().insert(data).done((() => {
-            this._dataSource.load();
-        }).bind(this));
+    add(rawAppointment) {
+        return this._dataSource.store().insert(rawAppointment).done(() => this._dataSource.load());
     }
 
     update(target, data) {
@@ -631,22 +630,18 @@ class AppointmentModel {
         const d = new Deferred();
 
         this._dataSource.store().update(key, data)
-            .done(() => {
+            .done(result =>
                 this._dataSource.load()
-                    .done(d.resolve)
-                    .fail(d.reject);
-            })
+                    .done(() => d.resolve(result))
+                    .fail(d.reject))
             .fail(d.reject);
 
         return d.promise();
     }
 
-    remove(target) {
-        const key = this._getStoreKey(target);
-
-        return this._dataSource.store().remove(key).done((() => {
-            this._dataSource.load();
-        }).bind(this));
+    remove(rawAppointment) {
+        const key = this._getStoreKey(rawAppointment);
+        return this._dataSource.store().remove(key).done(() => this._dataSource.load());
     }
 }
 

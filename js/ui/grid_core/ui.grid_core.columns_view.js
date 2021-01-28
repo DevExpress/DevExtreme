@@ -178,7 +178,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(column.colspan > 1) {
             $cell.attr('colSpan', column.colspan);
-        } else if(!column.isBand && column.visibleWidth !== 'auto' && !this.option('legacyRendering') && this.option('columnAutoWidth')) {
+        } else if(!column.isBand && column.visibleWidth !== 'auto' && this.option('columnAutoWidth')) {
             if(column.width || column.minWidth) {
                 cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
             }
@@ -844,7 +844,6 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getWidths: function($cellElements) {
         const result = [];
-        const legacyRendering = this.option('legacyRendering');
         let width;
 
         if($cellElements) {
@@ -853,7 +852,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 if(item.getBoundingClientRect) {
                     const clientRect = getBoundingRect(item);
                     if(clientRect.width > width - 1) {
-                        width = legacyRendering ? Math.ceil(clientRect.width) : clientRect.width;
+                        width = clientRect.width;
                     }
                 }
 
@@ -902,7 +901,6 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         let minWidth;
         let columnIndex;
         const columnAutoWidth = this.option('columnAutoWidth');
-        const legacyRendering = this.option('legacyRendering');
 
         $tableElement = $tableElement || this._getTableElement();
 
@@ -913,7 +911,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             columns = columns || this.getColumns(null, $tableElement);
 
             for(let i = 0; i < columns.length; i++) {
-                if(!legacyRendering && columnAutoWidth && !fixed) {
+                if(columnAutoWidth && !fixed) {
                     width = columns[i].width;
 
                     if(width && !columns[i].command) {

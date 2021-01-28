@@ -1,3 +1,4 @@
+import $ from '../core/renderer';
 import { data as elementData, removeData } from '../core/element_data';
 import { type } from '../core/utils/type';
 
@@ -72,6 +73,8 @@ export const getTranslate = function($element) {
 };
 
 export const move = function($element, position) {
+    $element = $($element);
+
     const left = position.left;
     const top = position.top;
     let translate;
@@ -97,6 +100,8 @@ export const move = function($element, position) {
 };
 
 export const resetPosition = function($element, finishTransition) {
+    $element = $($element);
+
     let originalTransition;
     const stylesConfig = {
         left: 0,

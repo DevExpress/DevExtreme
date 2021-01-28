@@ -5,4 +5,14 @@ export type FormatObject = {
     currency?: string;
     percentPrecision?: number
 }
-export type Format = FormatObject | FormatType | string | ((value: number|Date) => string)
+export type Format = FormatObject | FormatType | string | ((value: number|Date) => string);
+export interface Point {
+    size: number,
+    tag: any,
+    originalArgument: Date | string | number,
+    originalValue: Date | string | number
+}
+
+export interface Translator {
+    translate: (value: number|string|Date) => number 
+}

@@ -179,24 +179,63 @@ test('Selection should work correctly while scrolling when appointments are grou
   }],
 }));
 
-// TODO: run this test when virtual scrolling will be available in Month
-// test('Selection should work in month view', async (t) => {
-//   await t
-//     .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
+test('Selection should work in month view', async (t) => {
+  await t
+    .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
-//   await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
 
-//   await scrollTo(1500);
-//   await t
-//     .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
-//     .eql(0);
+  await scrollTo(1500);
+  await t
+    .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
+    .eql(0);
 
-//   await scrollTo(0);
-//   await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
-// }).before(() => createScheduler({
-//   views: [{
-//     type: 'month',
-//     intervalCount: 30,
-//   }],
-//   currentView: 'month',
-// }));
+  await scrollTo(0);
+  await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
+}).before(() => createScheduler({
+  views: [{
+    type: 'month',
+    intervalCount: 30,
+  }],
+  currentView: 'month',
+}));
+
+test('Selection should work in timeline views', async (t) => {
+  const checkSelection = async () => {
+    await t
+      .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
+
+    await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
+
+    await scrollTo(500);
+    await t
+      .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
+      .eql(0);
+
+    await scrollTo(0);
+    await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
+  };
+
+  await checkSelection();
+
+  await scheduler.option('currentView', 'timelineWeek');
+  await checkSelection();
+
+  await scheduler.option('currentView', 'timelineMonth');
+  await checkSelection();
+}).before(() => createScheduler({
+  views: ['timelineDay', 'timelineWeek', 'timelineMonth'],
+  currentView: 'timelineDay',
+  startDayHour: 0,
+  endDayHour: 2,
+  height: 250,
+  groups: ['resourceId0'],
+  crossScrollingEnabled: true,
+  resources: [{
+    fieldExpr: 'resourceId0',
+    dataSource: [
+      { id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 },
+      { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 },
+    ],
+  }],
+}));

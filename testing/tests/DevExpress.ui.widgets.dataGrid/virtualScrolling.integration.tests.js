@@ -247,48 +247,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal($(dataGrid.$element()).find('.dx-datagrid-bottom-load-panel').length, 0);
     });
 
-    // T708072
-    QUnit.test('Expand adaptive detail row after scrolling if scrolling mode is virtual', function(assert) {
-        const array = [];
-
-        for(let i = 0; i < 10; i++) {
-            array.push({ id: i, value: 'text' + i });
-        }
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            width: 200,
-            height: 200,
-            dataSource: array,
-            keyExpr: 'id',
-            columnHidingEnabled: true,
-            paging: {
-                pageSize: 2
-            },
-            scrolling: {
-                mode: 'virtual'
-            },
-            loadingTimeout: undefined,
-            legacyRendering: true,
-            columns: [{
-                dataField: 'value'
-            }, {
-                dataField: 'hidden',
-                width: 10000
-            }],
-        }).dxDataGrid('instance');
-
-        // act
-        dataGrid.expandAdaptiveDetailRow(0);
-        dataGrid.pageIndex(1);
-        dataGrid.getController('data').toggleExpandAdaptiveDetailRow(1);
-
-        // assert
-        assert.strictEqual(dataGrid.getVisibleRows()[1].rowType, 'data', 'row 1 type');
-        assert.strictEqual(dataGrid.getVisibleRows()[1].key, 1, 'row 1 key');
-        assert.strictEqual(dataGrid.getVisibleRows()[2].rowType, 'detailAdaptive', 'row 2 type');
-        assert.strictEqual(dataGrid.getVisibleRows()[2].key, 1, 'row 2 key');
-    });
-
     QUnit.test('Expand/Collapse adaptive detail row after scrolling if scrolling mode and rowRendering are virtual and paging.enabled is false (T815886)', function(assert) {
         const array = [];
         let visibleRows;
@@ -732,43 +690,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // act
         dataGrid.getView('rowsView')._isScrollByEvent = true;
         dataGrid.getScrollable().scrollTo({ y: 2000 });
-
-        // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 2000, 'scrollTop is not reseted');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, 'first visible row key');
-    });
-
-    QUnit.test('scroll position should not be reseted after refresh if virtual scrolling with legacyRendering', function(assert) {
-        // arrange
-        const array = [];
-
-        for(let i = 1; i <= 100; i++) {
-            array.push({ id: i });
-        }
-
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 300,
-            dataSource: array,
-            keyExpr: 'id',
-            paging: { pageSize: 10 },
-            legacyRendering: true,
-            scrolling: {
-                mode: 'virtual',
-                useNative: false
-            },
-            columns: [{
-                dataField: 'id'
-            }]
-        }).dxDataGrid('instance');
-
-        this.clock.tick();
-
-        // act
-        dataGrid.getScrollable().scrollTo({ y: 2000 });
-        this.clock.tick();
-        dataGrid.refresh();
-        this.clock.tick();
 
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), 2000, 'scrollTop is not reseted');
@@ -3044,6 +2965,42 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 assert.deepEqual(dataGrid.getTopVisibleRowData().id, 5, 'top visible row id');
             });
         });
+    });
+
+    QUnit.test('DataGrid should not display virtual rows on data source changing when rowRenderingMode is set to \'virtual\' (T966221)', function(assert) {
+        // arrange
+        const generateDataSource = function(count) {
+            const result = [];
+            for(let i = 0; i < count; ++i) {
+                result.push({ id: i + 1, name: `Name ${i + 1}` });
+            }
+            return result;
+        };
+        const dataSource1 = generateDataSource(40);
+        const dataGrid = createDataGrid({
+            height: 500,
+            dataSource: dataSource1,
+            keyExpr: 'id',
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.pageIndex(1);
+        this.clock.tick();
+        const dataSource2 = generateDataSource(18);
+        dataGrid.option('dataSource', dataSource2);
+        this.clock.tick(300);
+        const $gridElement = $(dataGrid.element());
+        const $virtualRows = $gridElement.find('.dx-datagrid-rowsview .dx-row.dx-virtual-row');
+        const $renderedRows = $gridElement.find('.dx-datagrid-rowsview .dx-row.dx-data-row');
+
+        // assert
+        assert.equal($renderedRows.length, 18, 'rendered data rows');
+        assert.equal($virtualRows.length, 0, 'no virtual rows');
     });
 });
 

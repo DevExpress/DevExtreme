@@ -23,7 +23,7 @@ import {
   getItemLineHeight,
   getLineHeight,
   convertAlignmentToAnchor,
-  applyGraphicProps,
+  getGraphicExtraProps,
 } from './utils';
 import { isDefined } from '../../../../core/utils/type';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
@@ -33,11 +33,12 @@ const KEY_STROKE = 'stroke';
 export const viewFunction = ({
   textRef, textItems,
   styles, textAnchor, isStroked,
-  props: {
-    text, x, y, fill, stroke, strokeWidth, strokeOpacity, opacity,
-  },
+  props,
 }: TextSvgElement): JSX.Element => {
   const texts = textItems || [];
+  const {
+    text, x, y, fill, stroke, strokeWidth, strokeOpacity, opacity,
+  } = props;
   return (
     <text
       ref={textRef}
@@ -50,6 +51,8 @@ export const viewFunction = ({
       strokeWidth={strokeWidth}
       strokeOpacity={strokeOpacity}
       opacity={opacity}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...getGraphicExtraProps(props, x, y)}
     >
       {texts.length ? isStroked && texts.map(({ style, className, value }, index) => (
         <tspan key={index} style={style} className={className}>{value}</tspan>
@@ -64,7 +67,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class TextSvgElementProps extends SvgGraphicsProps {
-  @OneWay() text = '';
+  @OneWay() text?: string | null = '';
 
   @OneWay() x = 0;
 
@@ -134,7 +137,6 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
       const items = this.parseTspanElements(texts);
 
       this.alignTextNodes(items);
-      applyGraphicProps(this.textRef, this.props as SvgGraphicsProps, this.props.x, this.props.y);
       if (this.props.x !== undefined || this.props.y !== undefined) {
         this.locateTextNodes(items);
       }
@@ -186,7 +188,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
     setTextNodeAttribute(item, 'y', y);
     for (let i = 1, ii = items.length; i < ii; ++i) {
       item = items[i];
-      if (item.height >= 0) {
+      if (isDefined(item.height) && item.height >= 0) {
         setTextNodeAttribute(item, 'x', x);
         const height = getItemLineHeight(item, lineHeight);
         setTextNodeAttribute(item, 'dy', height); // T177039

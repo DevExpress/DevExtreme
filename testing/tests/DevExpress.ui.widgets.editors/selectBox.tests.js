@@ -2773,6 +2773,17 @@ QUnit.module('search', moduleSetup, () => {
                 assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
             });
 
+            QUnit.test(`item selecting when minSearchLength is specified and acceptCustomValue=${acceptCustomValue}(T943466)`, function(assert) {
+                this.reinit({ acceptCustomValue, items: [1, 11, 111], minSearchLength: 2 });
+
+                this.keyboard.type('11');
+                const $listItems = this.getListItems();
+                $listItems.eq(0).trigger('dxclick');
+
+                this.instance.open();
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            });
+
             QUnit.test(`click outside of popup if acceptCustomValue=${acceptCustomValue}`, function(assert) {
                 this.reinit({ acceptCustomValue });
 

@@ -14,6 +14,10 @@ export interface ViewCellData {
   firstDayOfMonth?: boolean;
 }
 
+export interface DateHeaderCellData extends ViewCellData {
+  colSpan: number;
+}
+
 interface ViewData {
   dateTable: ViewCellData[][];
   groupIndex: number;
@@ -40,6 +44,9 @@ export interface GroupRenderItem extends GroupItem {
   key: string;
   resourceName: string;
   data: GroupItem;
+  colSpan?: number;
+  isFirstGroupCell?: boolean;
+  isLastGroupCell?: boolean;
 }
 
 export interface Group {

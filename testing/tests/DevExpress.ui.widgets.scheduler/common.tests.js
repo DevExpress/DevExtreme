@@ -1,5 +1,4 @@
 import fx from 'animation/fx';
-import translator from 'animation/translator';
 import Color from 'color';
 import 'common.css!';
 import config from 'core/config';
@@ -10,7 +9,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import CustomStore from 'data/custom_store';
 import { DataSource } from 'data/data_source/data_source';
-import dragEvents from 'events/drag';
+
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
@@ -25,7 +24,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 import { Deferred } from 'core/utils/deferred';
-import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');
@@ -2361,615 +2359,6 @@ QUnit.module('Scrolling to time', () => {
         }
     });
 
-    QUnit.test('onAppointmentAdding', function(assert) {
-        const addingSpy = sinon.spy(noop);
-
-        this.createInstance({
-            onAppointmentAdding: addingSpy,
-            dataSource: []
-        });
-
-        const newAppointment = {
-            startDate: new Date(2015, 1, 9, 16),
-            endDate: new Date(2015, 1, 9, 17),
-            text: 'caption'
-        };
-
-        this.instance.addAppointment(newAppointment);
-        this.clock.tick();
-
-
-        const args = addingSpy.getCall(0).args[0];
-
-        assert.ok(addingSpy.calledOnce, 'onAppointmentAdding was called');
-        assert.equal(args.element, this.instance.element(), 'Element field is OK');
-        assert.equal(args.component, this.instance, 'Component field is OK');
-        assert.strictEqual(args.cancel, false, '\'Cancel\' flag is OK');
-        assert.deepEqual(args.appointmentData, newAppointment, 'Appointment field is OK');
-    });
-
-    QUnit.test('Appointment should not be added to the data source if \'cancel\' flag is defined as true', function(assert) {
-        const dataSource = new DataSource({
-            store: []
-        });
-        this.createInstance({
-            onAppointmentAdding: function(args) {
-                args.cancel = true;
-            },
-            dataSource: dataSource
-        });
-
-        this.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
-        this.clock.tick();
-
-        assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
-    });
-
-    QUnit.test('Appointment should not be added to the data source if \'cancel\' flag is defined as true during async operation', function(assert) {
-        const dataSource = new DataSource({
-            store: []
-        });
-        this.createInstance({
-            onAppointmentAdding: function(args) {
-                args.cancel = $.Deferred();
-                setTimeout(function() {
-                    args.cancel.resolve(true);
-                }, 200);
-            },
-            dataSource: dataSource
-        });
-
-        this.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
-        this.clock.tick(200);
-
-        assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
-    });
-
-    QUnit.test('Appointment should not be added to the data source if \'cancel\' flag is defined as Promise', function(assert) {
-        const promise = new Promise(function(resolve) {
-            setTimeout(function() {
-                resolve(true);
-            }, 200);
-        });
-        const dataSource = new DataSource({
-            store: []
-        });
-        this.createInstance({
-            onAppointmentAdding: function(args) {
-                args.cancel = promise;
-            },
-            dataSource: dataSource
-        });
-
-        this.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
-        this.clock.tick(200);
-
-        promise.then(function() {
-            assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
-        });
-
-        return promise;
-    });
-
-    QUnit.test('onAppointmentAdded', function(assert) {
-        const addedSpy = sinon.spy(noop);
-
-        this.createInstance({
-            onAppointmentAdded: addedSpy,
-            dataSource: []
-        });
-
-        const newAppointment = { startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' };
-
-        this.instance.addAppointment(newAppointment);
-        this.clock.tick();
-
-        const args = addedSpy.getCall(0).args[0];
-
-        assert.ok(addedSpy.calledOnce, 'onAppointmentAdded was called');
-        assert.deepEqual(args.appointmentData, newAppointment, 'Appointment field is OK');
-        assert.equal(args.element, this.instance.element(), 'Element field is OK');
-        assert.equal(args.component, this.instance, 'Component field is OK');
-        assert.strictEqual(args.error, undefined, 'Error field is not defined');
-    });
-
-    QUnit.test('onAppointmentAdded should have error field in args if an error occurs while data inserting', function(assert) {
-        const addedSpy = sinon.spy(noop);
-
-        this.createInstance({
-            onAppointmentAdded: addedSpy,
-            dataSource: new DataSource({
-                store: new CustomStore({
-                    load: noop,
-                    insert: function() {
-                        return $.Deferred().reject(new Error('Unknown error occurred'));
-                    }
-                })
-            })
-        });
-
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' });
-        this.clock.tick();
-
-        const error = addedSpy.getCall(0).args[0].error;
-
-        assert.ok(error instanceof Error, 'Error field is defined');
-        assert.equal(error.message, 'Unknown error occurred', 'Error message is OK');
-    });
-
-
-    QUnit.test('onAppointmentUpdating', function(assert) {
-        const updatingSpy = sinon.spy(noop);
-        const oldData = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
-        const newData = { startDate: new Date(2015, 1, 10, 16), endDate: new Date(2015, 1, 10, 17), text: 'title' };
-
-        this.createInstance({
-            onAppointmentUpdating: updatingSpy,
-            dataSource: new DataSource({ store: oldData })
-        });
-
-        this.instance.updateAppointment($.extend({}, oldData[0]), newData);
-        this.clock.tick();
-
-        const args = updatingSpy.getCall(0).args[0];
-
-        assert.ok(updatingSpy.calledOnce, 'onAppointmentUpdating was called');
-        assert.equal(args.element, this.instance.element(), 'Element field is OK');
-        assert.equal(args.component, this.instance, 'Component field is OK');
-        assert.strictEqual(args.cancel, false, '\'Cancel\' flag is OK');
-        assert.deepEqual(args.newData, newData, 'newData field is OK');
-        assert.deepEqual(args.oldData, oldData[0], 'oldData field is OK');
-    });
-
-    QUnit.test('Appointment should not be updated if \'cancel\' flag is defined as true', function(assert) {
-        const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
-        const dataSource = new DataSource({
-            store: appointments
-        });
-
-        this.createInstance({
-            onAppointmentUpdating: function(args) {
-                args.cancel = true;
-            },
-            dataSource: dataSource,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        this.instance.updateAppointment(appointments[0], { startDate: new Date(), text: 'Appointment 1' });
-        this.clock.tick();
-
-        assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Update operation is canceled');
-    });
-
-    QUnit.test('Appointment form should not be updated if \'cancel\' flag is defined as true (T653358)', function(assert) {
-        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
-
-        try {
-            const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
-            const dataSource = new DataSource({
-                store: appointments
-            });
-
-            this.createInstance({
-                timeZone: 'Etc/UTC',
-                onAppointmentUpdating: function(args) {
-                    args.cancel = true;
-                },
-                dataSource: dataSource,
-                currentDate: new Date(2015, 1, 9)
-            });
-
-            this.instance.showAppointmentPopup(appointments[0]);
-            $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
-
-            this.clock.tick();
-
-            const appointmentForm = this.instance._appointmentPopup._appointmentForm;
-
-            assert.deepEqual(appointmentForm.option('formData').startDate, new Date(2015, 1, 9, 13), 'Form data is correct');
-        } finally {
-            tzOffsetStub.restore();
-        }
-    });
-
-    QUnit.test('Appointment should not be updated if \'cancel\' flag is defined as true during async operation', function(assert) {
-        const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
-        const dataSource = new DataSource({
-            store: appointments
-        });
-
-        this.createInstance({
-            onAppointmentUpdating: function(args) {
-                args.cancel = $.Deferred();
-                setTimeout(function() {
-                    args.cancel.resolve(true);
-                }, 200);
-            },
-            dataSource: dataSource,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        this.instance.updateAppointment(appointments[0], { startDate: new Date(), text: 'Appointment 1' });
-        this.clock.tick(200);
-
-        assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Update operation is canceled');
-    });
-
-    QUnit.test('Appointment should be returned to the initial state if \'cancel\' flag is defined as true during async operation', function(assert) {
-        this.createInstance({
-            onAppointmentUpdating: function(args) {
-                const d = $.Deferred();
-                args.cancel = d.promise();
-                setTimeout(function() {
-                    d.reject();
-                }, 200);
-            },
-            currentView: 'week',
-            dataSource: [{ startDate: new Date(2015, 1, 11), endDate: new Date(2015, 1, 13), text: 'caption' }],
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
-        const initialLeftPosition = translator.locate($appointment).left;
-        const cellWidth = this.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0).outerWidth();
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-left').eq(0)).start();
-
-        pointer.dragStart().drag(-cellWidth * 2, 0).dragEnd();
-        this.clock.tick(200);
-        assert.equal(translator.locate(this.instance.$element().find('.dx-scheduler-appointment').eq(0)).left, initialLeftPosition, 'Left position is OK');
-    });
-
-    QUnit.test('Appointment should have initial position if \'cancel\' flag is defined as true during update operation', function(assert) {
-        const appointments = [{ startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2), text: 'caption' }];
-        const dataSource = new DataSource({
-            store: appointments
-        });
-
-        this.createInstance({
-            onAppointmentUpdating: function(args) {
-                args.cancel = true;
-            },
-            dataSource: dataSource,
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        let $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
-        const initialPosition = translator.locate($appointment);
-
-        $(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(5)).trigger(dragEvents.enter);
-
-        pointerMock($appointment)
-            .start()
-            .down(initialPosition.left + 10, initialPosition.top + 10)
-            .move(initialPosition.left + 10, initialPosition.top + 100)
-            .up();
-
-        $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
-        assert.deepEqual(translator.locate($appointment), initialPosition, 'Appointments position is OK');
-    });
-
-    QUnit.test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (day view)', function(assert) {
-        this.createInstance({
-            onAppointmentUpdating: function(args) {
-                args.cancel = true;
-            },
-            dataSource: [{ startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2), text: 'caption' }],
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
-        const initialHeight = $appointment.outerHeight();
-        const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerHeight();
-
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
-        pointer.dragStart().drag(0, cellHeight * 2).dragEnd();
-
-        assert.equal(this.instance.$element().find('.dx-scheduler-appointment').eq(0).outerHeight(), initialHeight, 'Height is OK');
-    });
-
-    QUnit.test('Appointment should have initial size if "cancel" flag is defined as true during update operation (month view)', function(assert) {
-        this.createInstance({
-            onAppointmentUpdating: function(args) {
-                args.cancel = true;
-            },
-            views: ['month'],
-            currentView: 'month',
-            dataSource: [{ startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2), text: 'caption' }],
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
-        const initialWidth = $appointment.outerWidth();
-        const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
-
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
-        pointer.dragStart().drag(cellWidth * 2, 0).dragEnd();
-
-        assert.roughEqual(this.instance.$element().find('.dx-scheduler-appointment').eq(0).outerWidth(), initialWidth, 0.5, 'Width is OK');
-    });
-
-    QUnit.test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (all day)', function(assert) {
-        this.createInstance({
-            onAppointmentUpdating: function(args) {
-                args.cancel = true;
-            },
-            currentView: 'week',
-            dataSource: [{ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 10), text: 'caption', allDay: true }],
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
-        const initialWidth = $appointment.outerWidth();
-        const cellWidth = this.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0).outerWidth();
-
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
-        pointer.dragStart().drag(cellWidth * 2, 0).dragEnd();
-
-        assert.roughEqual(this.instance.$element().find('.dx-scheduler-appointment').eq(0).outerWidth(), initialWidth, 1, 'Width is OK');
-    });
-
-    QUnit.test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (if appointment takes few days)', function(assert) {
-        this.createInstance({
-            onAppointmentUpdating: function(args) {
-                args.cancel = true;
-            },
-            currentView: 'week',
-            dataSource: [{ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 11), text: 'caption' }],
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
-        const initialWidth = $appointment.outerWidth();
-        const cellWidth = this.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0).outerWidth();
-
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
-        pointer.dragStart().drag(cellWidth * 3, 0).dragEnd();
-
-        assert.roughEqual(this.instance.$element().find('.dx-scheduler-appointment').eq(0).outerWidth(), 1.1, initialWidth, 'Width is OK');
-    });
-
-    QUnit.test('Appointment should have initial left coordinate if \'cancel\' flag is defined as true during resize operation', function(assert) {
-        this.createInstance({
-            onAppointmentUpdating: function(args) {
-                args.cancel = true;
-            },
-            currentView: 'week',
-            dataSource: [{ startDate: new Date(2015, 1, 11), endDate: new Date(2015, 1, 13), text: 'caption' }],
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
-        const initialLeftPosition = translator.locate($appointment).left;
-        const cellWidth = this.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0).outerWidth();
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-left').eq(0)).start();
-
-        pointer.dragStart().drag(-cellWidth * 2, 0).dragEnd();
-
-        assert.equal(translator.locate(this.instance.$element().find('.dx-scheduler-appointment').eq(0)).left, initialLeftPosition, 'Left position is OK');
-    });
-
-    QUnit.test('Appointment should have initial top coordinate if \'cancel\' flag is defined as true during resize operation', function(assert) {
-        this.createInstance({
-            onAppointmentUpdating: function(args) {
-                args.cancel = true;
-            },
-            currentView: 'week',
-            dataSource: [{ startDate: 1423620000000, endDate: 1423627200000, text: 'caption' }],
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').eq(0));
-        const initialTopPosition = translator.locate($appointment).top;
-        const cellHeight = this.instance.$element().find('.dx-scheduler-all-day-table-cell').eq(0).outerHeight();
-        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-top').eq(0)).start();
-
-        pointer.dragStart().drag(0, -cellHeight * 2).dragEnd();
-
-        assert.equal(translator.locate(this.instance.$element().find('.dx-scheduler-appointment').eq(0)).top, initialTopPosition, 'Top position is OK');
-    });
-
-    QUnit.test('onAppointmentUpdated', function(assert) {
-        const updatedSpy = sinon.spy(noop);
-        const oldData = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
-        const newData = { startDate: new Date(2015, 1, 10, 16), endDate: new Date(2015, 1, 10, 17), text: 'title' };
-
-        this.createInstance({
-            onAppointmentUpdated: updatedSpy,
-            dataSource: new DataSource({ store: oldData }),
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        this.instance.updateAppointment(oldData[0], newData);
-        this.clock.tick();
-
-        const args = updatedSpy.getCall(0).args[0];
-
-        assert.ok(updatedSpy.calledOnce, 'onAppointmentUpdated was called');
-        assert.equal(args.element, this.instance.element(), 'Element field is OK');
-        assert.equal(args.component, this.instance, 'Component field is OK');
-        assert.deepEqual(args.appointmentData, newData, 'newData field is OK');
-        assert.strictEqual(args.error, undefined, 'Error field is not defined');
-    });
-
-    QUnit.test('onAppointmentUpdated should have error field in args if an error occurs while data updating', function(assert) {
-        const updatedSpy = sinon.spy(noop);
-        const oldData = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
-        const newData = { startDate: new Date(2015, 1, 10, 16), endDate: new Date(2015, 1, 10, 17), text: 'title' };
-
-        this.createInstance({
-            onAppointmentUpdated: updatedSpy,
-            dataSource: new DataSource({
-                store: new CustomStore({
-                    load: function(options) {
-                        const d = $.Deferred();
-                        d.resolve(oldData);
-                        return d.promise();
-                    },
-                    update: function() {
-                        return $.Deferred().reject(new Error('Unknown error occurred'));
-                    }
-                })
-            })
-        });
-
-        this.instance.updateAppointment(oldData[0], newData);
-        this.clock.tick();
-
-        const error = updatedSpy.getCall(0).args[0].error;
-
-        assert.ok(error instanceof Error, 'Error field is defined');
-        assert.equal(error.message, 'Unknown error occurred', 'Error message is OK');
-    });
-
-    QUnit.test('onAppointmentDeleting', function(assert) {
-        const deletingSpy = sinon.spy(noop);
-        const appointments = [
-            { startDate: new Date(2015, 3, 29, 5), text: 'Appointment 1', endDate: new Date(2015, 3, 29, 6) }
-        ];
-
-        this.createInstance({
-            onAppointmentDeleting: deletingSpy,
-            currentDate: new Date(2015, 3, 29),
-            dataSource: new DataSource({
-                store: appointments
-            })
-        });
-
-        this.instance.deleteAppointment(appointments[0]);
-        this.clock.tick();
-
-        const args = deletingSpy.getCall(0).args[0];
-
-        assert.ok(deletingSpy.calledOnce, 'onAppointmentDeleting was called');
-        assert.equal(args.element, this.instance.element(), 'Element field is OK');
-        assert.equal(args.component, this.instance, 'Component field is OK');
-        assert.deepEqual(args.appointmentData, { startDate: new Date(2015, 3, 29, 5), text: 'Appointment 1', endDate: new Date(2015, 3, 29, 6) }, 'Appointment field is OK');
-        assert.strictEqual(args.cancel, false, '\'Cancel\' flag is OK');
-    });
-
-    QUnit.test('Appointment should not be deleted if \'cancel\' flag is defined as true', function(assert) {
-        const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
-        const dataSource = new DataSource({
-            store: appointments
-        });
-
-        this.createInstance({
-            onAppointmentDeleting: function(args) {
-                args.cancel = true;
-            },
-            dataSource: dataSource,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        this.instance.deleteAppointment(appointments[0]);
-        this.clock.tick();
-
-        assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Delete operation is canceled');
-    });
-
-    QUnit.test('Appointment should not be deleted if \'cancel\' flag is defined as true during async operation', function(assert) {
-        const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
-        const dataSource = new DataSource({
-            store: appointments
-        });
-
-        this.createInstance({
-            onAppointmentDeleting: function(args) {
-                args.cancel = $.Deferred();
-                setTimeout(function() {
-                    args.cancel.resolve(true);
-                }, 200);
-            },
-            dataSource: dataSource,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        this.instance.deleteAppointment(appointments[0]);
-        this.clock.tick(200);
-
-        assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Delete operation is canceled');
-    });
-
-    QUnit.test('Appointment should be deleted correctly if \'cancel\' flag is defined as false during async operation', function(assert) {
-        const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
-        const dataSource = new DataSource({
-            store: appointments
-        });
-
-        this.createInstance({
-            onAppointmentDeleting: function(args) {
-                args.cancel = $.Deferred();
-                setTimeout(function() {
-                    args.cancel.resolve(false);
-                }, 200);
-            },
-            dataSource: dataSource,
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        this.instance.deleteAppointment(appointments[0]);
-        this.clock.tick(200);
-
-        assert.equal(dataSource.items().length, 0, 'Delete operation is completed');
-    });
-
-    QUnit.test('onAppointmentDeleted', function(assert) {
-        const deletedSpy = sinon.spy(noop);
-        const appointments = [
-            { startDate: new Date(2015, 3, 29, 5), text: 'Appointment 1', endDate: new Date(2015, 3, 29, 6) }
-        ];
-
-        this.createInstance({
-            onAppointmentDeleted: deletedSpy,
-            currentDate: new Date(2015, 3, 29),
-            dataSource: new DataSource({
-                store: appointments
-            })
-        });
-
-        this.instance.deleteAppointment(appointments[0]);
-        this.clock.tick();
-
-        const args = deletedSpy.getCall(0).args[0];
-        assert.ok(deletedSpy.calledOnce, 'onAppointmentDeleted was called');
-        assert.equal(args.element, this.instance.element(), 'Element field is OK');
-        assert.equal(args.component, this.instance, 'Component field is OK');
-        assert.deepEqual(args.appointmentData, { startDate: new Date(2015, 3, 29, 5), text: 'Appointment 1', endDate: new Date(2015, 3, 29, 6) }, 'newData field is OK');
-        assert.strictEqual(args.error, undefined, 'Error field is not defined');
-    });
-
-    QUnit.test('onAppointmentDeleted should have error field in args if an error occurs while data deleting', function(assert) {
-        const deletedSpy = sinon.spy(noop);
-
-        this.createInstance({
-            onAppointmentDeleted: deletedSpy,
-            dataSource: new DataSource({
-                store: new CustomStore({
-                    load: noop,
-                    remove: function() {
-                        return $.Deferred().reject(new Error('Unknown error occurred'));
-                    }
-                })
-            })
-        });
-
-        this.instance.deleteAppointment({});
-        this.clock.tick();
-
-        const error = deletedSpy.getCall(0).args[0].error;
-
-        assert.ok(error instanceof Error, 'Error field is defined');
-        assert.equal(error.message, 'Unknown error occurred', 'Error message is OK');
-    });
-
     QUnit.test('onAppointmentRendered', function(assert) {
         const renderedSpy = sinon.spy(noop);
         const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
@@ -4302,29 +3691,6 @@ QUnit.module('Scrolling to time', () => {
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 
-    QUnit.test('Scheduler should have specific dateCellTemplate setting of the view', function(assert) {
-        let countCallTemplate1 = 0;
-        let countCallTemplate2 = 0;
-
-        this.createInstance({
-            dataSource: [],
-            views: [{
-                type: 'week',
-                dateCellTemplate: function(item, index, container) {
-                    assert.equal(isRenderer(container), !!config().useJQuery, 'element is correct');
-                    countCallTemplate2++;
-                }
-            }],
-            dateCellTemplate: function() {
-                countCallTemplate1++;
-            },
-            currentView: 'week'
-        });
-
-        assert.equal(countCallTemplate1, 0, 'count call first template');
-        assert.notEqual(countCallTemplate2, 0, 'count call second template');
-    });
-
     QUnit.test('Scheduler should have specific timeCellTemplate setting of the view', function(assert) {
         let countCallTemplate1 = 0;
         let countCallTemplate2 = 0;
@@ -4338,38 +3704,6 @@ QUnit.module('Scrolling to time', () => {
                 }
             }],
             timeCellTemplate: function() {
-                countCallTemplate1++;
-            },
-            currentView: 'week'
-        });
-
-        assert.equal(countCallTemplate1, 0, 'count call first template');
-        assert.notEqual(countCallTemplate2, 0, 'count call second template');
-    });
-
-    QUnit.test('Scheduler should have specific resourceCellTemplate setting of the view', function(assert) {
-        let countCallTemplate1 = 0;
-        let countCallTemplate2 = 0;
-        const dataSource = [
-            { id: 1, text: 'group1' },
-            { id: 2, text: 'group2' }
-        ];
-
-        this.createInstance({
-            views: [{
-                type: 'week',
-                resourceCellTemplate: function() {
-                    countCallTemplate2++;
-                }
-            }],
-            groups: ['test'],
-            resources: [
-                {
-                    field: 'test',
-                    dataSource: dataSource
-                }
-            ],
-            resourceCellTemplate: function() {
                 countCallTemplate1++;
             },
             currentView: 'week'
@@ -4815,8 +4149,8 @@ QUnit.module('ScrollTo', () => {
 
         const checkScrollTo = (assert, scheduler, topCellCount, leftCellCount, date, groups, allDay) => {
             const $scrollable = scheduler.workSpace.getDateTableScrollable();
-            const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
-            const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+            const scrollableInstance = $scrollable.dxScrollable('instance');
+            const scrollByStub = sinon.stub(scrollableInstance, 'scrollBy');
 
             const rtlInitialPosition = scrollableInstance.option('rtlEnabled')
                 ? scrollableInstance.scrollLeft()
@@ -4830,14 +4164,14 @@ QUnit.module('ScrollTo', () => {
             const cellHeight = $schedulerCell.get(0).getBoundingClientRect().height;
             const cellWidth = $schedulerCell.get(0).getBoundingClientRect().width;
 
-            assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+            assert.ok(scrollByStub.calledOnce, 'ScrollBy was called');
             assert.equal(
-                scrollBy.getCall(0).args[0].top,
+                scrollByStub.getCall(0).args[0].top,
                 topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
                 'Correct top parameter',
             );
             assert.equal(
-                rtlInitialPosition + scrollBy.getCall(0).args[0].left,
+                rtlInitialPosition + scrollByStub.getCall(0).args[0].left,
                 leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
                 'Correct left parameter',
             );
@@ -4899,29 +4233,30 @@ QUnit.module('ScrollTo', () => {
             });
 
             [{
-                view: 'week',
+                view: { type: 'week' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 1,
                 topCellCount: 18,
             }, {
-                view: 'month',
+                view: { type: 'month', intervalCount: 5 },
                 date: new Date(2020, 8, 25),
                 leftCellCount: 5,
                 topCellCount: 3,
             }, {
-                view: 'timelineWeek',
+                view: { type: 'timelineWeek' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 66,
                 topCellCount: 0,
             }, {
-                view: 'timelineMonth',
+                view: { type: 'timelineMonth' },
                 date: new Date(2020, 8, 7),
                 leftCellCount: 6,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work in basic case in ${view} view`, function(assert) {
+                QUnit.test(`ScrollTo should work in basic case in ${view.type} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: view,
+                        views: [view],
+                        currentView: view.type,
                     });
 
                     checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
@@ -4929,29 +4264,30 @@ QUnit.module('ScrollTo', () => {
             });
 
             [{
-                view: 'week',
+                view: { type: 'week' },
                 date: new Date(2020, 8, 7, 9, 15),
                 leftCellCount: 1,
                 topCellCount: 18.5,
             }, {
-                view: 'month',
+                view: { type: 'month', intervalCount: 5 },
                 date: new Date(2020, 8, 25, 12),
                 leftCellCount: 5,
                 topCellCount: 3,
             }, {
-                view: 'timelineWeek',
+                view: { type: 'timelineWeek' },
                 date: new Date(2020, 8, 7, 9, 15),
                 leftCellCount: 66.5,
                 topCellCount: 0,
             }, {
-                view: 'timelineMonth',
+                view: { type: 'timelineMonth' },
                 date: new Date(2020, 8, 7, 12),
                 leftCellCount: 6,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work when date is between a cell's startDate and endDate in ${view} view`, function(assert) {
+                QUnit.test(`ScrollTo should work when date is between a cell's startDate and endDate in ${view.type} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: view,
+                        views: [view],
+                        currentView: view.type,
                     });
 
                     checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
@@ -4959,33 +4295,34 @@ QUnit.module('ScrollTo', () => {
             });
 
             [{
-                view: 'week',
+                view: { type: 'week' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 8,
                 topCellCount: 18,
             }, {
-                view: 'month',
+                view: { type: 'month', intervalCount: 5 },
                 date: new Date(2020, 8, 25, 12),
                 leftCellCount: 12,
                 topCellCount: 3,
             }, {
-                view: 'timelineWeek',
+                view: { type: 'timelineWeek' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 402,
                 topCellCount: 0,
             }, {
-                view: 'timelineMonth',
+                view: { type: 'timelineMonth' },
                 date: new Date(2020, 8, 7, 12),
                 leftCellCount: 36,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work with horizontal grouping in ${view} view`, function(assert) {
+                QUnit.test(`ScrollTo should work with horizontal grouping in ${view.type} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
-                            type: view,
+                        views: [{
+                            ...view,
                             groupOrientation: 'horizontal',
                             groupByDate: false,
-                        },
+                        }],
+                        currentView: view.type,
                         groups: ['ownerId'],
                     });
 
@@ -4994,33 +4331,34 @@ QUnit.module('ScrollTo', () => {
             });
 
             [{
-                view: 'week',
+                view: { type: 'week' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 3,
                 topCellCount: 18,
             }, {
-                view: 'month',
+                view: { type: 'month', intervalCount: 5 },
                 date: new Date(2020, 8, 25, 12),
                 leftCellCount: 11,
                 topCellCount: 3,
             }, {
-                view: 'timelineWeek',
+                view: { type: 'timelineWeek' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 133,
                 topCellCount: 0,
             }, {
-                view: 'timelineMonth',
+                view: { type: 'timelineMonth' },
                 date: new Date(2020, 8, 7, 12),
                 leftCellCount: 13,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work when grouped by date in ${view} view`, function(assert) {
+                QUnit.test(`ScrollTo should work when grouped by date in ${view.type} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
-                            type: view,
+                        views: [{
+                            ...view,
                             groupOrientation: 'horizontal',
                             groupByDate: true,
-                        },
+                        }],
+                        currentView: view.type,
                         groups: ['ownerId'],
                     });
 
@@ -5029,32 +4367,33 @@ QUnit.module('ScrollTo', () => {
             });
 
             [{
-                view: 'week',
+                view: { type: 'week' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 1,
                 topCellCount: 66,
             }, {
-                view: 'month',
+                view: { type: 'month' },
                 date: new Date(2020, 8, 25, 12),
                 leftCellCount: 5,
                 topCellCount: 9,
             }, {
-                view: 'timelineWeek',
+                view: { type: 'timelineWeek' },
                 date: new Date(2020, 8, 7, 9),
                 leftCellCount: 66,
                 topCellCount: 1,
             }, {
-                view: 'timelineMonth',
+                view: { type: 'timelineMonth' },
                 date: new Date(2020, 8, 7, 12),
                 leftCellCount: 6,
                 topCellCount: 1,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work with vertical grouping in ${view} view`, function(assert) {
+                QUnit.test(`ScrollTo should work with vertical grouping in ${view.type} view`, function(assert) {
                     const scheduler = this.createScheduler({
-                        currentView: {
-                            type: view,
+                        views: [{
+                            ...view,
                             groupOrientation: 'vertical',
-                        },
+                        }],
+                        currentView: view.type,
                         groups: ['ownerId'],
                         showAllDayPanel: false,
                     });
@@ -5125,7 +4464,7 @@ QUnit.module('ScrollTo', () => {
 
                     const $scrollable = scheduler.workSpace.getDateTableScrollable();
                     const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
-                    const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+                    const scrollBy = sinon.stub(scrollableInstance, 'scrollBy');
 
                     scheduler.instance.scrollTo(date, undefined, true);
 

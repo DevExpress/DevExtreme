@@ -25,6 +25,11 @@ import {
 } from './utils';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
+import { isUpdatedFlatObject } from '../common/utils';
+
+const DEFAULT_CANVAS = {
+  left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
+};
 
 const getCssClasses = (model: Partial<BaseWidgetProps>): string => {
   const containerClassesMap = {
@@ -39,16 +44,16 @@ const getCssClasses = (model: Partial<BaseWidgetProps>): string => {
 const calculateCanvas = (model: Partial<BaseWidgetProps> & Partial<BaseWidget>): Canvas => {
   const { height, width } = model.size ?? {};
   const margin = model.margin ?? {};
-  const defaultCanvas = model.defaultCanvas ?? {};
+  const defaultCanvas = model.defaultCanvas ?? DEFAULT_CANVAS;
   const elementWidth = !sizeIsValid(width) ? getElementWidth(model.containerRef) : 0;
   const elementHeight = !sizeIsValid(height) ? getElementHeight(model.containerRef) : 0;
   const canvas = {
-    width: Number(width) <= 0 ? 0 : Math.floor(pickPositiveValue([
+    width: width && width <= 0 ? 0 : Math.floor(pickPositiveValue([
       width,
       elementWidth,
       defaultCanvas.width,
     ])),
-    height: Number(height) <= 0 ? 0 : Math.floor(pickPositiveValue([
+    height: height && height <= 0 ? 0 : Math.floor(pickPositiveValue([
       height,
       elementHeight,
       defaultCanvas.height,
@@ -67,7 +72,7 @@ const calculateCanvas = (model: Partial<BaseWidgetProps> & Partial<BaseWidget>):
 
 export const viewFunction = (viewModel: BaseWidget): JSX.Element => {
   const grayFilterId = viewModel.props.disabled ? getNextDefsSvgId() : undefined;
-  const canvas = viewModel.props.canvas || { };
+  const canvas = viewModel.props.canvas ?? DEFAULT_CANVAS;
   const widget = (
     <div
       ref={viewModel.containerRef}
@@ -166,7 +171,7 @@ export class BaseWidget extends JSXComponent(BaseWidgetProps) {
     });
 
     if (isDefined(newCanvas.height) && isDefined(newCanvas.width)
-    && Object.keys(newCanvas).some((key) => newCanvas[key] !== canvas?.[key])) {
+    && isUpdatedFlatObject(canvas, newCanvas)) {
       this.props.canvas = newCanvas;
     }
   }

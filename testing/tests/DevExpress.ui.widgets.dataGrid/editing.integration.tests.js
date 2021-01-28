@@ -2265,6 +2265,61 @@ QUnit.module('Editing', baseModuleConfig, () => {
             });
         });
     });
+
+    QUnit.test('The onRowValidating event handler should not accept redundant broken rules in Batch (T960813)', function(assert) {
+        // arrange
+        const validatedRowKeys = [];
+        const validatedMessages = [];
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'f11', field2: 'f21' },
+                { id: 2, field1: 'f12', field2: 'f22' },
+                { id: 3, field1: 'f13', field2: 'f23' },
+                { id: 4, field1: 'f14', field2: 'f24' }
+            ],
+            keyExpr: 'id',
+            paging: {
+                enabled: true,
+                pageSize: 2
+            },
+            onRowValidating: function(args) {
+                validatedRowKeys.push(args.key);
+
+                const rowBrokenRulesMessages = args.brokenRules.map(br => br.message);
+                validatedMessages.push(...rowBrokenRulesMessages);
+            },
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            columns: ['id', {
+                dataField: 'field1',
+                validationRules: [{ type: 'required' }]
+            }, {
+                dataField: 'field2',
+                validationRules: [{ type: 'required' }]
+            }],
+            loadingTimeout: undefined
+        });
+
+        // act
+        dataGrid.editCell(0, 1);
+        this.clock.tick();
+        dataGrid.cellValue(0, 1, '');
+        this.clock.tick();
+        dataGrid.pageIndex(1);
+        this.clock.tick();
+        dataGrid.editCell(0, 2);
+        this.clock.tick();
+        dataGrid.cellValue(0, 2, '');
+        this.clock.tick();
+        dataGrid.saveEditData();
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(validatedRowKeys, [1, 3], 'validated row keys');
+        assert.deepEqual(validatedMessages, ['Field 1 is required', 'Field 2 is required'], 'broken rules messages');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -4387,7 +4442,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         if(editMode !== 'popup') {
             ['testkey', undefined].forEach(key => {
                 QUnit.test(`change with type = 'insert' in init configuration (editMode = ${editMode}, key = ${key})`, function(assert) {
-                // arrange
+                    // arrange
                     const changes = [{
                         data: { field: 'test' },
                         key,
@@ -4416,11 +4471,10 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
                     assert.equal(data.length, 2, 'row count in datasource');
 
-                    if(editMode !== 'popup') {
-                        assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
-                        assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
-                        assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
-                    }
+                    assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                    assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                    assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+
 
                     // act
                     dataGrid.saveEditData();
@@ -4435,6 +4489,519 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     assert.equal(data.length, 3, 'row count in datasource');
                     assert.equal(data[2].field, 'test', 'field value was posted');
                 });
+
+                QUnit.test(`Add row to the custom index of the current page via changes option (editMode = ${editMode}, key = ${key})`, function(assert) {
+                    // arrange
+                    const changes = [{
+                        data: { field: 'test' },
+                        key,
+                        type: 'insert',
+                        index: 1,
+                        pageIndex: 0
+                    }];
+                    const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
+                    const dataGrid = $('#dataGrid').dxDataGrid({
+                        dataSource: data,
+                        keyExpr: 'id',
+                        paging: {
+                            pageSize: 1
+                        },
+                        editing: {
+                            allowUpdating: true,
+                            mode: editMode
+                        }
+                    }).dxDataGrid('instance');
+
+                    this.clock.tick();
+
+                    // act
+                    dataGrid.option('editing.changes', changes);
+                    this.clock.tick();
+
+                    // assert
+                    let visibleRows = dataGrid.getVisibleRows();
+                    const $insertedRow = $(dataGrid.getRowElement(1));
+                    const $cells = $insertedRow.find('td');
+
+                    assert.equal(visibleRows.length, 2, 'two rows');
+                    assert.ok(visibleRows[1].isNewRow, 'new row');
+                    assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+                    assert.equal(data.length, 2, 'row count in datasource');
+
+                    assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                    assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                    assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+
+
+                    // act
+                    dataGrid.saveEditData();
+                    this.clock.tick();
+
+                    // assert
+                    assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+
+                    visibleRows = dataGrid.getVisibleRows();
+                    assert.equal(visibleRows.length, 1, 'three rows');
+                    assert.notOk(visibleRows[0].isNewRow, 'not new row');
+                    assert.equal(data.length, 3, 'row count in datasource');
+                    assert.equal(data[2].field, 'test', 'field value was posted');
+                    assert.equal(dataGrid.pageCount(), 3, '3 pages');
+                });
+
+                // inserts not on the current page are not supported for row and form edit modes
+                if(editMode !== 'row' && editMode !== 'form') {
+                    QUnit.test(`Add row on the next page via changes option (editMode = ${editMode}, key = ${key})`, function(assert) {
+                        // arrange
+                        const changes = [{
+                            data: { field: 'test' },
+                            key,
+                            type: 'insert',
+                            index: 1,
+                            pageIndex: 1
+                        }];
+                        const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
+                        const dataGrid = $('#dataGrid').dxDataGrid({
+                            dataSource: data,
+                            keyExpr: 'id',
+                            paging: {
+                                pageSize: 1
+                            },
+                            editing: {
+                                allowUpdating: true,
+                                mode: editMode
+                            }
+                        }).dxDataGrid('instance');
+
+                        this.clock.tick();
+
+                        // act
+                        dataGrid.option('editing.changes', changes);
+                        this.clock.tick();
+
+                        // assert
+                        let visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'row is not added on the first page');
+
+                        // act
+                        dataGrid.pageIndex(1);
+                        this.clock.tick();
+
+                        // assert
+                        visibleRows = dataGrid.getVisibleRows();
+                        const $insertedRow = $(dataGrid.getRowElement(1));
+                        const $cells = $insertedRow.find('td');
+
+                        assert.equal(visibleRows.length, 2, 'two rows');
+                        assert.ok(visibleRows[1].isNewRow, 'new row');
+                        assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+                        assert.equal(data.length, 2, 'row count in datasource');
+
+                        assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                        assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                        assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+
+                        // act
+                        dataGrid.saveEditData();
+                        this.clock.tick();
+
+                        // assert
+                        assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+
+                        visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'one row on the page');
+                        assert.notOk(visibleRows[0].isNewRow, 'not new row');
+                        assert.equal(data.length, 3, 'row count in datasource');
+                        assert.equal(data[2].field, 'test', 'field value was posted');
+                        assert.equal(dataGrid.pageCount(), 3, '3 pages');
+                    });
+
+                    QUnit.test(`change on the next page with type = 'insert' in init configuration (editMode = ${editMode}, key = ${key})`, function(assert) {
+                        // arrange
+                        const changes = [{
+                            data: { field: 'test' },
+                            key,
+                            type: 'insert',
+                            index: 1,
+                            pageIndex: 1
+                        }];
+                        const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
+                        const dataGrid = $('#dataGrid').dxDataGrid({
+                            dataSource: data,
+                            keyExpr: 'id',
+                            paging: {
+                                pageSize: 1
+                            },
+                            editing: {
+                                allowUpdating: true,
+                                mode: editMode,
+                                changes
+                            }
+                        }).dxDataGrid('instance');
+
+                        this.clock.tick();
+
+                        // assert
+                        let visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'row is not added on the first page');
+
+                        // act
+                        dataGrid.pageIndex(1);
+                        this.clock.tick();
+
+                        // assert
+                        visibleRows = dataGrid.getVisibleRows();
+                        const $insertedRow = $(dataGrid.getRowElement(1));
+                        const $cells = $insertedRow.find('td');
+
+                        assert.equal(visibleRows.length, 2, 'two rows');
+                        assert.ok(visibleRows[1].isNewRow, 'new row');
+                        assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+                        assert.equal(data.length, 2, 'row count in datasource');
+
+                        assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                        assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                        assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+
+
+                        // act
+                        dataGrid.saveEditData();
+                        this.clock.tick();
+
+                        // assert
+                        assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+
+                        visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'one row on the page');
+                        assert.notOk(visibleRows[0].isNewRow, 'not new row');
+                        assert.equal(data.length, 3, 'row count in datasource');
+                        assert.equal(data[2].field, 'test', 'field value was posted');
+                        assert.equal(dataGrid.pageCount(), 3, '3 pages');
+                    });
+
+                    QUnit.test(`Add row at the end of the current page via changes option (editMode = ${editMode}, key = ${key})`, function(assert) {
+                        // arrange
+                        const changes = [{
+                            data: { field: 'test' },
+                            key,
+                            type: 'insert',
+                            index: -1,
+                            pageIndex: 0
+                        }];
+                        const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
+                        const dataGrid = $('#dataGrid').dxDataGrid({
+                            dataSource: data,
+                            keyExpr: 'id',
+                            paging: {
+                                pageSize: 1
+                            },
+                            editing: {
+                                allowUpdating: true,
+                                mode: editMode
+                            }
+                        }).dxDataGrid('instance');
+
+                        this.clock.tick();
+
+                        // act
+                        dataGrid.option('editing.changes', changes);
+                        this.clock.tick();
+
+                        // assert
+                        let visibleRows = dataGrid.getVisibleRows();
+                        const $insertedRow = $(dataGrid.getRowElement(1));
+                        const $cells = $insertedRow.find('td');
+
+                        assert.equal(visibleRows.length, 2, 'two rows');
+                        assert.ok(visibleRows[1].isNewRow, 'new row');
+                        assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+                        assert.equal(data.length, 2, 'row count in datasource');
+
+                        assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                        assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                        assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+
+                        // act
+                        dataGrid.saveEditData();
+                        this.clock.tick();
+
+                        // assert
+                        assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+
+                        visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'one row on the page');
+                        assert.notOk(visibleRows[0].isNewRow, 'not new row');
+                        assert.equal(data.length, 3, 'row count in datasource');
+                        assert.equal(data[2].field, 'test', 'field value was posted');
+                        assert.equal(dataGrid.pageCount(), 3, '3 pages');
+                    });
+
+                    QUnit.test(`Add row at the end of the custom page via changes option (editMode = ${editMode}, key = ${key})`, function(assert) {
+                        // arrange
+                        const changes = [{
+                            data: { field: 'test' },
+                            key,
+                            type: 'insert',
+                            index: -1,
+                            pageIndex: 1
+                        }];
+                        const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
+                        const dataGrid = $('#dataGrid').dxDataGrid({
+                            dataSource: data,
+                            keyExpr: 'id',
+                            paging: {
+                                pageSize: 1
+                            },
+                            editing: {
+                                allowUpdating: true,
+                                mode: editMode
+                            }
+                        }).dxDataGrid('instance');
+
+                        this.clock.tick();
+
+                        // act
+                        dataGrid.option('editing.changes', changes);
+                        this.clock.tick();
+
+                        // assert
+                        let visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'row is not added on the first page');
+
+                        // act
+                        dataGrid.pageIndex(1);
+                        this.clock.tick();
+
+                        // assert
+                        visibleRows = dataGrid.getVisibleRows();
+                        const $insertedRow = $(dataGrid.getRowElement(1));
+                        const $cells = $insertedRow.find('td');
+
+                        assert.equal(visibleRows.length, 2, 'two rows');
+                        assert.ok(visibleRows[1].isNewRow, 'new row');
+                        assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+                        assert.equal(data.length, 2, 'row count in datasource');
+
+                        assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                        assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                        assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+
+                        // act
+                        dataGrid.saveEditData();
+                        this.clock.tick();
+
+                        // assert
+                        assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+
+                        visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'one row on the page');
+                        assert.notOk(visibleRows[0].isNewRow, 'not new row');
+                        assert.equal(data.length, 3, 'row count in datasource');
+                        assert.equal(data[2].field, 'test', 'field value was posted');
+                        assert.equal(dataGrid.pageCount(), 3, '3 pages');
+                    });
+
+                    QUnit.test(`Add row at the end of the last page via changes option (editMode = ${editMode}, key = ${key})`, function(assert) {
+                        // arrange
+                        const changes = [{
+                            data: { field: 'test' },
+                            key,
+                            type: 'insert',
+                            index: -1
+                        }];
+                        const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
+                        const dataGrid = $('#dataGrid').dxDataGrid({
+                            dataSource: data,
+                            keyExpr: 'id',
+                            paging: {
+                                pageSize: 1
+                            },
+                            editing: {
+                                allowUpdating: true,
+                                mode: editMode
+                            }
+                        }).dxDataGrid('instance');
+
+                        this.clock.tick();
+
+                        // act
+                        dataGrid.option('editing.changes', changes);
+                        this.clock.tick();
+
+                        // assert
+                        let visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'row is not added on the first page');
+
+                        // act
+                        dataGrid.pageIndex(1);
+                        this.clock.tick();
+
+                        // assert
+                        visibleRows = dataGrid.getVisibleRows();
+                        const $insertedRow = $(dataGrid.getRowElement(1));
+                        const $cells = $insertedRow.find('td');
+
+                        assert.equal(visibleRows.length, 2, 'two rows');
+                        assert.ok(visibleRows[1].isNewRow, 'new row');
+                        assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+                        assert.equal(data.length, 2, 'row count in datasource');
+
+                        assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                        assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                        assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+
+                        // act
+                        dataGrid.saveEditData();
+                        this.clock.tick();
+
+                        // assert
+                        assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+
+                        visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'one row on the page');
+                        assert.notOk(visibleRows[0].isNewRow, 'not new row');
+                        assert.equal(data.length, 3, 'row count in datasource');
+                        assert.equal(data[2].field, 'test', 'field value was posted');
+                        assert.equal(dataGrid.pageCount(), 3, '3 pages');
+                    });
+
+                    QUnit.test(`Add row at the end of the custom page via changes option if virtual scrolling (editMode = ${editMode}, key = ${key})`, function(assert) {
+                        // arrange
+                        const changes = [{
+                            data: { field: 'test' },
+                            key,
+                            type: 'insert',
+                            index: 1
+                        }];
+                        const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
+                        const dataGrid = $('#dataGrid').dxDataGrid({
+                            dataSource: data,
+                            keyExpr: 'id',
+                            height: 50,
+                            paging: {
+                                pageSize: 1
+                            },
+                            editing: {
+                                allowUpdating: true,
+                                mode: editMode
+                            },
+                            scrolling: {
+                                mode: 'virtual',
+                                useNative: false
+                            }
+                        }).dxDataGrid('instance');
+
+                        this.clock.tick();
+
+                        // act
+                        dataGrid.option('editing.changes', changes);
+                        this.clock.tick();
+
+                        // assert
+                        let visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'row is not added on the first page');
+
+                        // act
+                        dataGrid.pageIndex(1);
+                        this.clock.tick();
+
+                        // assert
+                        visibleRows = dataGrid.getVisibleRows();
+                        const $insertedRow = $(dataGrid.getRowElement(1));
+                        const $cells = $insertedRow.find('td');
+
+                        assert.equal(visibleRows.length, 3, 'three rows');
+                        assert.ok(visibleRows[1].isNewRow, 'new row');
+                        assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+                        assert.equal(data.length, 2, 'row count in datasource');
+
+                        assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                        assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                        assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+
+                        // act
+                        dataGrid.saveEditData();
+                        this.clock.tick();
+
+                        // assert
+                        assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+
+                        visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 2, 'two rows');
+                        assert.notOk(visibleRows[1].isNewRow, 'not new row');
+                        assert.equal(data.length, 3, 'row count in datasource');
+                        assert.equal(data[2].field, 'test', 'field value was posted');
+                        assert.equal(dataGrid.pageCount(), 3, '3 pages');
+                    });
+
+                    QUnit.test(`Add row at the end of the last page via changes option if virtual scrolling (editMode = ${editMode}, key = ${key})`, function(assert) {
+                        // arrange
+                        const changes = [{
+                            data: { field: 'test' },
+                            key,
+                            type: 'insert',
+                            index: -1
+                        }];
+                        const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
+                        const dataGrid = $('#dataGrid').dxDataGrid({
+                            dataSource: data,
+                            keyExpr: 'id',
+                            height: 50,
+                            paging: {
+                                pageSize: 1
+                            },
+                            editing: {
+                                allowUpdating: true,
+                                mode: editMode
+                            },
+                            scrolling: {
+                                mode: 'virtual',
+                                useNative: false
+                            }
+                        }).dxDataGrid('instance');
+
+                        this.clock.tick();
+
+                        // act
+                        dataGrid.option('editing.changes', changes);
+                        this.clock.tick();
+
+                        // assert
+                        let visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 1, 'row is not added on the first page');
+
+                        // act
+                        dataGrid.pageIndex(1);
+                        this.clock.tick();
+
+                        // assert
+                        visibleRows = dataGrid.getVisibleRows();
+                        const $insertedRow = $(dataGrid.getRowElement(2));
+                        const $cells = $insertedRow.find('td');
+
+                        assert.equal(visibleRows.length, 3, 'three rows');
+                        assert.ok(visibleRows[2].isNewRow, 'new row');
+                        assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+                        assert.equal(data.length, 2, 'row count in datasource');
+
+                        assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                        assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                        assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+
+                        // act
+                        dataGrid.saveEditData();
+                        this.clock.tick();
+
+                        // assert
+                        assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+
+                        visibleRows = dataGrid.getVisibleRows();
+                        assert.equal(visibleRows.length, 2, 'two rows');
+                        assert.notOk(visibleRows[0].isNewRow, 'not new row');
+                        assert.equal(data.length, 3, 'row count in datasource');
+                        assert.equal(data[2].field, 'test', 'field value was posted');
+                        assert.equal(dataGrid.pageCount(), 3, '3 pages');
+                    });
+                }
             });
         }
 

@@ -398,16 +398,25 @@ describe('Widget', () => {
 
       describe('hoverEffect', () => {
         it('should subscribe to hover event', () => {
-          const widget = new Widget({ hoverStateEnabled: true, disabled: false });
+          const onHoverStart = jest.fn();
+          const onHoverEnd = jest.fn();
+
+          const widget = new Widget({
+            hoverStateEnabled: true, disabled: false, onHoverStart, onHoverEnd,
+          });
           widget.widgetRef = {} as any;
           widget.active = false;
           widget.hoverEffect();
 
           emit(EVENT.hoverStart);
           expect(widget.hovered).toBe(true);
+          expect(onHoverStart).toHaveBeenCalledTimes(1);
+          expect(onHoverEnd).toHaveBeenCalledTimes(0);
 
           emit(EVENT.hoverEnd);
           expect(widget.hovered).toBe(false);
+          expect(onHoverEnd).toHaveBeenCalledTimes(1);
+          expect(onHoverStart).toHaveBeenCalledTimes(1);
         });
 
         it('should return unsubscribe callback', () => {

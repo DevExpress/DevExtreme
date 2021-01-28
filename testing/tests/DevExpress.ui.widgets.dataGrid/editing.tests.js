@@ -3355,6 +3355,45 @@ QUnit.module('Editing with real dataController', {
         assert.ok(!testElement.find('tbody > tr').first().hasClass('dx-row-inserted'), 'not has row inserted');
     });
 
+    QUnit.test('Delete inserted row and delete other row in cell edit mode', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        $.extend(this.options.editing, {
+            mode: 'cell',
+            allowAdding: true,
+            allowDeleting: true
+        });
+
+        rowsView.render(testElement);
+
+        // act
+        this.addRow();
+
+        // assert
+        let visibleRows = this.getVisibleRows();
+        assert.equal(visibleRows.length, 8, 'visible rows count');
+        assert.ok(visibleRows[0].isNewRow, 'inserted row');
+        assert.equal(this.option('editing.editRowKey'), visibleRows[0].key, 'inserted row is in editing state');
+
+        // act
+        this.deleteRow(0);
+
+        // assert
+        visibleRows = this.getVisibleRows();
+        assert.equal(visibleRows.length, 7, 'visible rows count');
+        assert.notOk(visibleRows[0].isNewRow, 'not inserted row');
+        assert.equal(this.option('editing.editRowKey'), null, 'no edit row');
+
+        // act
+        this.deleteRow(0);
+
+        // assert
+        visibleRows = this.getVisibleRows();
+        assert.equal(visibleRows.length, 6, 'visible rows count');
+    });
+
     [true, false].forEach((needAddRow) => {
         [true, false].forEach((changePageViaDataSource) => {
             let testName = 'cell should not be edited after ' + (needAddRow ? 'row adding' : 'editing');
@@ -10886,7 +10925,7 @@ QUnit.module('Editing with validation', {
         that.saveEditData();
 
         // assert
-        assert.equal($('.dx-error-message').text(), 'Hidden Group is required, Group is required', 'error text');
+        assert.equal($('.dx-error-message').text(), 'Group is required, Hidden Group is required', 'error text');
     });
 
     // T420231
@@ -15685,7 +15724,7 @@ QUnit.module('Editing with scrolling', {
     });
 
     // T258714
-    QUnit.test('Change position of the inserted row when virtual scrolling', function(assert) {
+    QUnit.skip('Change position of the inserted row when virtual scrolling', function(assert) {
     // arrange
         const testElement = $('#container');
         let items;

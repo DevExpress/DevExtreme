@@ -6,6 +6,7 @@ import {
   getIsGroupedAllDayPanel,
   getGroupCellClasses,
   isVerticalGroupOrientation,
+  isHorizontalGroupOrientation,
 } from '../utils';
 import { GroupedViewData } from '../types.d';
 import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../consts';
@@ -216,6 +217,27 @@ describe('Workspaces utils', () => {
       expect(isVerticalGroupOrientation(HORIZONTAL_GROUP_ORIENTATION))
         .toBe(false);
       expect(isVerticalGroupOrientation())
+        .toBe(false);
+    });
+  });
+
+  describe('isHorizontalGroupOrientation', () => {
+    const testGroups = [{}] as any;
+
+    it('should return true if group orientation is horizontal and groups length is more than 0', () => {
+      expect(isHorizontalGroupOrientation(testGroups, HORIZONTAL_GROUP_ORIENTATION))
+        .toBe(true);
+    });
+
+    it('should return false if group orientation is not horizontal', () => {
+      expect(isHorizontalGroupOrientation(testGroups, VERTICAL_GROUP_ORIENTATION))
+        .toBe(false);
+      expect(isHorizontalGroupOrientation(testGroups))
+        .toBe(false);
+    });
+
+    it('should return false if groups length is 0', () => {
+      expect(isHorizontalGroupOrientation([], HORIZONTAL_GROUP_ORIENTATION))
         .toBe(false);
     });
   });

@@ -1,5 +1,5 @@
 import {
-  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData,
+  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, isTextEmpty,
 } from '../tooltip_utils';
 
 describe('#getCloudAngle', () => {
@@ -176,6 +176,39 @@ describe('#recalculateCoordinates', () => {
       x: 100, y: 20, anchorX: 100, anchorY: 20,
     });
   });
+
+  it('should return false, coordinates out of canvas', () => {
+    const options = {
+      canvas: {
+        left: 10, right: 20, top: 25, bottom: 30, width: 400, height: 100,
+      },
+      size: { width: 30, height: 40 },
+      offset: 8,
+      arrowLength: 11,
+    };
+
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 1,
+      anchorY: 50,
+    })).toEqual(false);
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 15,
+      anchorY: 5,
+    })).toEqual(false);
+
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 700,
+      anchorY: 50,
+    })).toEqual(false);
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 50,
+      anchorY: 300,
+    })).toEqual(false);
+  });
 });
 
 describe('#getCloudPoints', () => {
@@ -348,5 +381,15 @@ describe('#prepareData', () => {
     };
     const customizeTooltip = () => customizedObject;
     expect(prepareData({ description: 'description' }, 'color_1', border, font, customizeTooltip)).toEqual(customizedObject);
+  });
+
+  it('should check if text is empty', () => {
+    expect(isTextEmpty({ text: '' })).toBe(true);
+    expect(isTextEmpty({ text: null })).toBe(true);
+    expect(isTextEmpty({ html: '' })).toBe(true);
+    expect(isTextEmpty({ html: null })).toBe(true);
+
+    expect(isTextEmpty({ text: 'text' })).toBe(false);
+    expect(isTextEmpty({ html: '<p>html tooltip</p>' })).toBe(false);
   });
 });
