@@ -32,7 +32,7 @@ testStart(() => initTestMarkup());
 module('Virtual scrolling timelines', () => {
     module('Appointments', () => {
         module('timelineDay', () => {
-            test('it should be rendered correctly in timelineDay', function(assert) {
+            test('multiday appointment should be rendered correctly', function(assert) {
                 const data = [{
                     text: 'Appt-001',
                     startDate: new Date(2021, 1, 2, 15, 45),
@@ -136,7 +136,7 @@ module('Virtual scrolling timelines', () => {
 
         module('Vertical grouping', () => {
             module('timelineDay', () => {
-                test('it should be rendered correctly', function(assert) {
+                test('appointments should be rendered correctly', function(assert) {
                     if(!isDesktopEnvironment()) {
                         assert.ok(true, 'This test is for desktop only');
                         return;
@@ -441,6 +441,110 @@ module('Virtual scrolling timelines', () => {
                                         assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, `appointment#${index} left is correct`);
                                         assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, `appointment#${index} top is correct`);
                                         assert.roughEqual(appointmentRect.width, expectedRect.width, 2.01, `appointment#${index} width is correct`);
+                                    });
+                                },
+                                scrollable,
+                                offset);
+                        });
+
+                        return promise;
+                    });
+                });
+            });
+
+            module('timelineWeek', () => {
+                test('multiday appointment should be rendered correctly in timelineWeek view with grouping', function(assert) {
+                    const scheduler = createWrapper({
+                        height: 600,
+                        dataSource: [{
+                            startDate: new Date(2021, 8, 5, 9),
+                            endDate: new Date(2021, 8, 11, 10),
+                            resourceId: 1,
+                        }],
+                        views: [{
+                            type: 'timelineWeek',
+                            groupOrientation: 'vertical',
+                            intervalCount: 2
+                        }],
+                        startDayHour: 9,
+                        endDayHour: 18,
+                        currentView: 'timelineWeek',
+                        scrolling: {
+                            mode: 'virtual',
+                            type: 'both',
+                        },
+                        showAllDayPanel: false,
+                        currentDate: new Date(2021, 8, 6),
+                        groups: ['resourceId'],
+                        resources: [{
+                            fieldExpr: 'resourceId',
+                            dataSource: [
+                                { id: 0 },
+                                { id: 1 }
+                            ]
+                        }]
+                    });
+
+                    const scrollable = scheduler.instance.getWorkSpaceScrollable();
+
+                    return asyncWrapper(assert, promise => {
+                        [
+                            {
+                                offset: { x: 0 },
+                                expectedRects: [{
+                                    left: -9899,
+                                    top: -9603,
+                                    width: 22000
+                                }]
+                            },
+                            {
+                                offset: { x: 10000 },
+                                expectedRects: [{
+                                    left: -10899,
+                                    top: -9603,
+                                    width: 14400
+                                }]
+                            },
+                            {
+                                offset: { x: 20000 },
+                                expectedRects: [{
+                                    left: -10899,
+                                    top: -9603,
+                                    width: 3000
+                                }]
+                            },
+                            {
+                                offset: { x: 21700 },
+                                expectedRects: [{
+                                    left: -10999,
+                                    top: -9603,
+                                    width: 1400
+                                }]
+                            },
+                            {
+                                offset: { x: 23000 },
+                                expectedRects: []
+                            }
+                        ].forEach(({ offset, expectedRects }) => {
+                            promise = asyncScrollTest(
+                                assert,
+                                promise,
+                                () => {
+                                    assert.ok(true, printOffset(offset));
+
+                                    const { appointments } = scheduler;
+
+                                    assert.equal(expectedRects.length, appointments.getAppointmentCount(), 'Appointment amount is correct');
+
+                                    expectedRects.forEach((expectedRect, index) => {
+                                        const appointmentRect = appointments
+                                            .getAppointment(index)
+                                            .get(0)
+                                            .getBoundingClientRect();
+
+                                        assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, 'appointment left is correct');
+                                        assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, 'appointment top is correct');
+                                        assert.roughEqual(appointmentRect.width, expectedRect.width, 2.01, 'appointment width is correct');
                                     });
                                 },
                                 scrollable,
