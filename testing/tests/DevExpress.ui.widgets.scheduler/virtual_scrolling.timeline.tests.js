@@ -456,6 +456,7 @@ module('Virtual scrolling timelines', () => {
                 test('multiday appointment should be rendered correctly in timelineWeek view with grouping', function(assert) {
                     const scheduler = createWrapper({
                         height: 600,
+                        width: 800,
                         dataSource: [{
                             startDate: new Date(2021, 8, 5, 9),
                             endDate: new Date(2021, 8, 11, 10),
@@ -500,7 +501,7 @@ module('Virtual scrolling timelines', () => {
                             {
                                 offset: { x: 10000 },
                                 expectedRects: [{
-                                    left: -10899,
+                                    left: -10299,
                                     top: -9603,
                                     width: 14400
                                 }]
@@ -508,17 +509,17 @@ module('Virtual scrolling timelines', () => {
                             {
                                 offset: { x: 20000 },
                                 expectedRects: [{
-                                    left: -10899,
+                                    left: -10299,
                                     top: -9603,
-                                    width: 3000
+                                    width: 2400
                                 }]
                             },
                             {
                                 offset: { x: 21700 },
                                 expectedRects: [{
-                                    left: -10999,
+                                    left: -10399,
                                     top: -9603,
-                                    width: 1400
+                                    width: 800
                                 }]
                             },
                             {
