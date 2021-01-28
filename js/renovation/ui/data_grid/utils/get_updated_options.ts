@@ -1,3 +1,4 @@
+import { type } from '../../../../core/utils/type';
 import { DataGridProps } from '../common/data_grid_props';
 
 interface ResultItem {
@@ -10,18 +11,16 @@ function getDiffItem(key, value): ResultItem {
 }
 
 function compare(resultPaths: ResultItem[], item1, item2, key: string): void {
-  const type1 = Object.prototype.toString.call(item1);
-  const type2 = Object.prototype.toString.call(item2);
+  const type1 = type(item1);
+  const type2 = type(item2);
   if (item1 === item2) return;
-  if (type1 !== '[object Undefined]' && type2 === '[object Undefined]') {
-    resultPaths.push(getDiffItem(key, {}));
-  } else if (type1 !== type2) {
+  if (type1 !== type2) {
     resultPaths.push(getDiffItem(key, item2));
-  } else if (type1 === '[object Object]') {
+  } else if (type1 === 'object') {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const diffPaths = objectDiffs(item1, item2);
     resultPaths.push(...diffPaths.map((item) => ({ path: `${key}.${item.path}`, value: item.value })));
-  } else if (type1 === '[object Array]') {
+  } else if (type1 === 'array') {
     if ((item1 as []).length !== (item2 as []).length) {
       resultPaths.push(getDiffItem(key, item2));
     } else {
@@ -35,7 +34,7 @@ function compare(resultPaths: ResultItem[], item1, item2, key: string): void {
   }
 }
 
-const objectDiffsFn = (propsEnumerator: (string) => string[]) => (oldProps: {}, props: {}):
+const objectDiffsFiltered = (propsEnumerator: (string) => string[]) => (oldProps: {}, props: {}):
 ResultItem[] => {
   if (!props) {
     return [];
@@ -54,9 +53,12 @@ ResultItem[] => {
   return resultPaths;
 };
 
-const objectDiffs = objectDiffsFn((oldProps) => Object.keys(oldProps));
+const objectDiffs = objectDiffsFiltered((oldProps) => Object.keys(oldProps));
 const reactProps = { key: true, ref: true, children: true };
+const objectDiffsWithoutReactProps = objectDiffsFiltered((prop) => Object.keys(prop)
+  .filter((p) => !reactProps[p]));
+
 export function getUpdatedOptions(oldProps: DataGridProps, props: DataGridProps):
 ResultItem[] {
-  return objectDiffsFn((prop) => Object.keys(prop).filter((p) => !reactProps[p]))(oldProps, props);
+  return objectDiffsWithoutReactProps(oldProps, props);
 }

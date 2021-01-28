@@ -59,6 +59,8 @@ export const viewFunction = ({
 export class DataGrid extends JSXComponent(DataGridProps) {
   @Ref() componentInstance!: GridInstance;
 
+  @Ref() prevProps!: DataGridProps;
+
   // #region methods
   @Method()
   beginCustomLoading(messageText: string): void {
@@ -408,18 +410,15 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return this.componentInstance;
   }
 
-  @Ref() prevProps!: DataGridProps;
-
-  // TODO Vitik to discuss: Some option update can raise updateOptions effect?
   @Effect() updateOptions() {
     if (this.instance && this.prevProps) {
       const currentProps = this.props;
       const updatedOptions = getUpdatedOptions(this.prevProps, currentProps);
+      this.instance.beginUpdate();
       updatedOptions.forEach(({ path, value }) => this.instance.option(path, value));
-      this.prevProps = this.props;
-    } else {
-      this.prevProps = this.props;
+      this.instance.endUpdate();
     }
+    this.prevProps = this.props;
   }
 
   // TODO without normalization all nested props defaults overwrite by undefined

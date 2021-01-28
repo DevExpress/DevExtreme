@@ -43,7 +43,7 @@ describe('DataGrid', () => {
         restAttributes: { 'rest-attributes': 'true' },
         instance,
         props,
-      } as Partial<DataGridProps>;
+      } as DataGridProps & {aria: {} };
       const tree = mount(<DataGridView {...gridProps as any} /> as any);
 
       expect(tree.find(Widget).props()).toMatchObject({
@@ -193,7 +193,9 @@ describe('DataGrid', () => {
         columns: ['test'],
       } as DataGridProps;
       const component = new DataGrid(initialProps);
-      (component.instance as any).option = jest.fn();
+      component.instance.option = jest.fn();
+      component.instance.beginUpdate = jest.fn();
+      component.instance.endUpdate = jest.fn();
       component.updateOptions();
       expect(component.prevProps).toBe(initialProps);
       component.props = {
@@ -203,7 +205,9 @@ describe('DataGrid', () => {
       expect(getUpdatedOptions).toBeCalledTimes(1);
       expect(getUpdatedOptions).toBeCalledWith(initialProps, component.props);
       expect(component.prevProps).toBe(component.props);
-      expect((component.instance as any).option).toBeCalledWith('columns', ['test', 'test2']);
+      expect(component.instance.option).toBeCalledWith('columns', ['test', 'test2']);
+      expect(component.instance.beginUpdate).toBeCalledTimes(1);
+      expect(component.instance.endUpdate).toBeCalledTimes(1);
     });
   });
 });

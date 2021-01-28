@@ -50,7 +50,7 @@ describe('get_updated_options', () => {
   it('nested props changed to empty', () => {
     expect(getUpdatedOptions({ visible: true, editing: { allowAdding: true } }, { visible: true }))
       .toEqual([
-        { path: 'editing', value: {} },
+        { path: 'editing', value: undefined },
       ]);
   });
 

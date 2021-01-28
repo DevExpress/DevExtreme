@@ -8,7 +8,7 @@ export declare const isString: GenericTypeChecker<string>;
 
 export declare const isNumeric: GenericTypeChecker<number>;
 
-export declare function type(object: any): string;
+export declare function type(object: any): 'object' | 'array' | 'string' | 'date' | 'null';
 
 export declare function isFunction(object: any): boolean;
 
