@@ -2049,7 +2049,7 @@ each([{
 
     describe('Styles', () => {
       each(['android', 'ios', 'generic']).describe('Platform: %o', (platform) => {
-        each([5, 0, undefined]).describe('pushBackValue: %o', (customPushBackValue) => {
+        each([5, 0, undefined]).describe('PushBackValue: %o', (pushBackValue) => {
           it('should add paddings for scrollable content', () => {
             if (Scrollable === ScrollableSimulated) {
               return; // actual only for native strategy
@@ -2057,16 +2057,14 @@ each([{
 
             devices.real = () => ({ platform });
 
-            const viewModel = new Scrollable({
-              pushBackValue: customPushBackValue,
-            } as ScrollableNativeProps);
+            const viewModel = new Scrollable({ pushBackValue } as ScrollableNativeProps);
             const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
             const scrollableContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content');
             const scrollableContentStyles = window.getComputedStyle(scrollableContent.getDOMNode());
 
             let expectedPadding = platform === 'ios' ? '1px' : '';
-            if (customPushBackValue !== undefined) {
-              expectedPadding = customPushBackValue ? `${customPushBackValue}px` : '';
+            if (pushBackValue !== undefined) {
+              expectedPadding = pushBackValue ? `${pushBackValue}px` : '';
             }
 
             expect(scrollableContentStyles.paddingTop).toEqual(expectedPadding);
