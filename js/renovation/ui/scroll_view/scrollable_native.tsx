@@ -6,6 +6,7 @@ import {
   Effect,
   RefObject,
   ComponentBindings,
+  InternalState,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
@@ -137,6 +138,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
+
+  @InternalState() cachedVariables = {
+    locked: false,
+  };
 
   @Method()
   content(): HTMLDivElement {
@@ -373,6 +378,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   private validate(e: Event): boolean {
+    if (this.isLocked()) {
+      return false;
+    }
+
     if (this.props.disabled) {
       return false;
     }
@@ -382,6 +391,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
 
     return isDefined(this.allowedDirection());
+  }
+
+  private isLocked(): boolean {
+    return this.cachedVariables.locked;
   }
 
   private isScrolledInMaxDirection(e: Event): boolean {

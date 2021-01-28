@@ -247,6 +247,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() cachedVariables = {
     validateWheelTimer: undefined,
+    locked: false,
   };
 
   @Method()
@@ -606,6 +607,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private validate(e: Event): boolean {
+    if (this.isLocked()) {
+      return false;
+    }
+
     if (this.props.disabled) {
       return false;
     }
@@ -617,6 +622,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return isDxMouseWheelEvent(e)
       ? this.validateWheel(e)
       : this.validateMove(e);
+  }
+
+  private isLocked(): boolean {
+    return this.cachedVariables.locked;
   }
 
   private validateWheel(e: Event): boolean {
