@@ -16,7 +16,7 @@ $agenda-appointment-text-color: null !default;
 $agenda-appointment-recurrence-icon-color: null !default;
 $agenda-appointment-hover-bg: null !default;
 $agenda-appointment-active-bg: null !default;
-$agenda-appointment-active-text-color: null !default;
+$agenda-appointment-title-font-size: null !default;
 
 @use "./regular" with (
   $transparent-top-border: $scheduler-transparent-top-border,
@@ -35,9 +35,9 @@ $agenda-appointment-active-text-color: null !default;
 );
 @use "./agenda" with (
   $marker-base-color: $scheduler-appointment-base-color,
+  $title-font-size: $agenda-appointment-title-font-size,
   $text-color: $agenda-appointment-text-color,
   $recurrence-icon-color: $agenda-appointment-recurrence-icon-color,
   $hover-bg: $agenda-appointment-hover-bg,
   $active-bg: $agenda-appointment-active-bg,
-  $active-color: $agenda-appointment-active-text-color
 );

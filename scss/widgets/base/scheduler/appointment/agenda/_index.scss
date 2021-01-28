@@ -6,9 +6,13 @@ $recurrence-icon-color: null !default;
 $hover-bg: null !default;
 $active-bg: null !default;
 $active-color: null !default;
+$title-font-size: null !default;
+
+$title-line-height-offset: 2px;
 
 .dx-scheduler-agenda {
   .dx-scheduler-appointment {
+    box-shadow: none;
     background-color: transparent;
     color: $text-color;
     padding: 10px;
@@ -19,9 +23,13 @@ $active-color: null !default;
     }
 
     &.dx-state-focused {
-      color: $active-color;
+      color: $text-color;
       background-color: $active-bg;
       box-shadow: none;
+
+      &::before {
+        background: transparent;
+      }
     }
   }
 
@@ -57,8 +65,8 @@ $active-color: null !default;
     @include use-text-overflow-ellipsis();
 
     font-weight: 700;
-    font-size: 16px;
-    line-height: 18px;
+    line-height: $title-font-size + $title-line-height-offset;
+    font-size: $title-font-size;
   }
 
   .dx-scheduler-appointment-content-details {
