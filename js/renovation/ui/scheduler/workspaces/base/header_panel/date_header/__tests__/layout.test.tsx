@@ -64,9 +64,11 @@ describe('DateHeaderLayout', () => {
 
     it('should render cells and pass correct props to them in basic case', () => {
       const dateCellTemplate = () => null;
+      const timeCellTemplate = () => null;
       const layout = render({
         props: {
           dateCellTemplate,
+          timeCellTemplate,
         },
         isHorizontalGrouping: true,
       });
@@ -91,7 +93,9 @@ describe('DateHeaderLayout', () => {
           isLastGroupCell: firstCellData.isLastGroupCell,
           colSpan: firstCellData.colSpan,
           isWeekDayCell: false,
-          cellTemplate: dateCellTemplate,
+          dateCellTemplate,
+          timeCellTemplate,
+          isTimeCellTemplate: false,
         });
       expect(firstCell.key())
         .toBe(firstCellData.key);
@@ -112,7 +116,9 @@ describe('DateHeaderLayout', () => {
           isLastGroupCell: secondCellData.isLastGroupCell,
           colSpan: secondCellData.colSpan,
           isWeekDayCell: false,
-          cellTemplate: dateCellTemplate,
+          dateCellTemplate,
+          timeCellTemplate,
+          isTimeCellTemplate: false,
         });
       expect(secondCell.key())
         .toBe(secondCellData.key);
@@ -127,7 +133,7 @@ describe('DateHeaderLayout', () => {
         cellCount: 1,
         expectedCellData: [{
           isWeekDayCell: false,
-          cellTemplate: dateCellTemplate,
+          isTimeCellTemplate: false,
         }],
         useTimeCellTemplate: false,
         description: 'should pass correct props to the cell when there is one row and "useTimeCellTemplate" is false',
@@ -136,10 +142,10 @@ describe('DateHeaderLayout', () => {
         cellCount: 2,
         expectedCellData: [{
           isWeekDayCell: false,
-          cellTemplate: dateCellTemplate,
+          isTimeCellTemplate: false,
         }, {
           isWeekDayCell: false,
-          cellTemplate: dateCellTemplate,
+          isTimeCellTemplate: false,
         }],
         useTimeCellTemplate: false,
         description: 'should pass correct props to the cells when there are 2 rows and "useTimeCellTemplate" is false',
@@ -148,7 +154,7 @@ describe('DateHeaderLayout', () => {
         cellCount: 1,
         expectedCellData: [{
           isWeekDayCell: false,
-          cellTemplate: timeCellTemplate,
+          isTimeCellTemplate: true,
         }],
         useTimeCellTemplate: true,
         description: 'should pass correct props to the cell when there is one row and "useTimeCellTemplate" is true',
@@ -157,10 +163,10 @@ describe('DateHeaderLayout', () => {
         cellCount: 2,
         expectedCellData: [{
           isWeekDayCell: true,
-          cellTemplate: dateCellTemplate,
+          isTimeCellTemplate: false,
         }, {
           isWeekDayCell: false,
-          cellTemplate: timeCellTemplate,
+          isTimeCellTemplate: true,
         }],
         useTimeCellTemplate: true,
         description: 'should pass correct props to the cells when there are 2 rows and "useTimeCellTemplate" is true',

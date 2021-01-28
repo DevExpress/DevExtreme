@@ -58,44 +58,101 @@ describe('DateHeaderCell', () => {
         .toBe('Test text');
     });
 
-    it('should render template and should not render children', () => {
-      const cellTemplate = () => null;
-      const cell = render({
-        props: {
-          cellTemplate,
-        },
+    describe('templates', () => {
+      it('should render date cell template and should not render children', () => {
+        const timeCellTemplate = () => null;
+        const dateCellTemplate = () => null;
+
+        const cell = render({
+          useTemplate: true,
+          props: {
+            dateCellTemplate,
+            timeCellTemplate,
+            isTimeCellTemplate: false,
+          },
+        });
+
+        expect(cell.children())
+          .toHaveLength(1);
+        expect(cell.find(dateCellTemplate).exists())
+          .toBe(true);
+        expect(cell.find(timeCellTemplate).exists())
+          .toBe(false);
       });
 
-      expect(cell.children())
-        .toHaveLength(1);
-      expect(cell.find(cellTemplate).exists())
-        .toBe(true);
-    });
+      it('should render time cell template and should not render children and date cell template', () => {
+        const timeCellTemplate = () => null;
+        const dateCellTemplate = () => null;
 
-    it('should pass correct props to the template', () => {
-      const cellTemplate = () => null;
-      const props = {
-        groups: { id: 1 },
-        groupIndex: 1,
-        index: 0,
-        text: 'Test text',
-        cellTemplate,
-      };
-
-      const cell = render({ props });
-
-      const renderedTemplate = cell.find(cellTemplate);
-
-      expect(renderedTemplate.props())
-        .toEqual({
-          data: {
-            date: startDate,
-            text: props.text,
-            groups: props.groups,
-            groupIndex: props.groupIndex,
+        const cell = render({
+          useTemplate: true,
+          props: {
+            timeCellTemplate,
+            dateCellTemplate,
+            isTimeCellTemplate: true,
           },
-          index: props.index,
         });
+
+        expect(cell.children())
+          .toHaveLength(1);
+        expect(cell.find(timeCellTemplate).exists())
+          .toBe(true);
+        expect(cell.find(dateCellTemplate).exists())
+          .toBe(false);
+      });
+
+      it('should pass correct props to the date cell template', () => {
+        const dateCellTemplate = () => null;
+        const props = {
+          groups: { id: 1 },
+          groupIndex: 1,
+          index: 0,
+          text: 'Test text',
+          dateCellTemplate,
+        };
+
+        const cell = render({ props, useTemplate: true });
+
+        const renderedTemplate = cell.find(dateCellTemplate);
+
+        expect(renderedTemplate.props())
+          .toEqual({
+            data: {
+              date: startDate,
+              text: props.text,
+              groups: props.groups,
+              groupIndex: props.groupIndex,
+            },
+            index: props.index,
+          });
+      });
+
+      it('should pass correct props to the time cell template', () => {
+        const timeCellTemplate = () => null;
+        const props = {
+          groups: { id: 1 },
+          groupIndex: 1,
+          index: 0,
+          text: 'Test text',
+          timeCellTemplate,
+          isTimeCellTemplate: true,
+        };
+
+        const cell = render({ props, useTemplate: true });
+
+        const renderedTemplate = cell.find(timeCellTemplate);
+
+        expect(renderedTemplate.props())
+          .toEqual({
+            data: {
+              date: startDate,
+              text: props.text,
+              groups: props.groups,
+              groupIndex: props.groupIndex,
+            },
+            index: props.index,
+          });
+      });
     });
   });
 

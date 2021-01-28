@@ -59,9 +59,13 @@ export const viewFunction = ({
               isFirstGroupCell={isFirstGroupCell}
               isLastGroupCell={isLastGroupCell}
               isWeekDayCell={isWeekDayRow}
-              cellTemplate={isTimeCellTemplate ? timeCellTemplate : dateCellTemplate}
               key={key}
               colSpan={colSpan}
+
+              // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
+              dateCellTemplate={dateCellTemplate}
+              timeCellTemplate={timeCellTemplate}
+              isTimeCellTemplate={isTimeCellTemplate}
             />
           ))}
         </Row>
