@@ -20,8 +20,6 @@ export class ScrollableInternalProps {
 
   @OneWay() scrollByContent = true;
 
-  @OneWay() inertiaEnabled = true;
-
   @OneWay() updateManually = false;
 
   @OneWay() useKeyboard = true;

@@ -34,7 +34,7 @@
   $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
   $agenda-appointment-active-bg: $agenda-appointment-active-bg,
   $agenda-appointment-text-color: $agenda-appointment-text-color,
-  $agenda-appointment-active-text-color: $agenda-appointment-active-text-color
+  $agenda-appointment-title-font-size: $agenda-appointment-title-font-size
 );
 @use "../button/colors" as *;
 @use "../tooltip/colors" as *;

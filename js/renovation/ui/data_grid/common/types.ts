@@ -1,10 +1,9 @@
 import dxDataGrid from '../../../../ui/data_grid';
-import { DataGridComponent } from '../datagrid_component';
 
-export type GridInstance = (DataGridComponent & dxDataGrid & {
+export interface GridInstance extends dxDataGrid {
   getView: (name: string) => any;
   getController: (name: string) => any;
-});
+}
 
 export interface DataGridView {
   name: string;

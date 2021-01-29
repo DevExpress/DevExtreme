@@ -23,7 +23,16 @@ const screenshotComparerDefault = {
     ignoreCaret: true,
   },
 };
-type ComparerOptions = typeof screenshotComparerDefault;
+interface ComparerOptions {
+  highlightColor: {
+    r: number;
+    g: number;
+    b: number;
+  };
+  attempts: number;
+  attemptTimeout: number;
+  looksSameComparisonOptions: Parameters<typeof LooksSame.createDiff>[0];
+}
 
 function ensureArtifactsPath(): void {
   if (!fs.existsSync(artifactsPath)) {
@@ -119,10 +128,10 @@ async function getDiff({
   const highlightColor = colorToString(options.highlightColor);
   return new Promise((resolve, reject) => {
     const diffOptions = {
+      ...options.looksSameComparisonOptions,
       reference: etalonFileName,
       current: screenshotBuffer,
       highlightColor,
-      ...options.looksSameComparisonOptions,
     };
     LooksSame.createDiff(diffOptions, (error, buffer) => {
       if (error) {
@@ -206,7 +215,7 @@ export async function compareScreenshot(
   const options = {
     ...screenshotComparerDefault,
     ...(comparisonOptions || {}),
-  } as typeof screenshotComparerDefault;
+  } as ComparerOptions;
   try {
     ensureArtifactsPath();
     const { equal, screenshotBuffer } = await tryGetValidScreenshot({

@@ -16,7 +16,7 @@ import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
 import { ScrollViewProps } from '../scroll_view_props';
 
-type Mock = jest.Mock;
+interface Mock extends jest.Mock {}
 
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;

@@ -6,7 +6,7 @@ import {
   Effect,
   RefObject,
   ComponentBindings,
-  OneWay,
+  InternalState,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
@@ -25,6 +25,8 @@ import {
   allowedDirection,
   ScrollableLocation, ScrollOffset,
 } from './types.d';
+
+import { isDxMouseWheelEvent } from '../../../events/utils/index';
 
 import {
   ensureLocation, ScrollDirection, normalizeCoordinate,
@@ -106,13 +108,13 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       { showScrollbar && useSimulatedScrollbar && isHorizontal && (
         <Scrollbar
           direction="horizontal"
-          expandable={scrollByThumb}
+          scrollByThumb={scrollByThumb}
         />
       )}
       { showScrollbar && useSimulatedScrollbar && isVertical && (
         <Scrollbar
           direction="vertical"
-          expandable={scrollByThumb}
+          scrollByThumb={scrollByThumb}
         />
       )}
     </Widget>
@@ -138,6 +140,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
+
+  @InternalState() cachedVariables = {
+    locked: false,
+  };
 
   @Method()
   content(): HTMLDivElement {
@@ -373,9 +379,39 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     };
   }
 
-  // eslint-disable-next-line
-  private validate(event: Event): boolean {
-    return true; // TODO
+  private validate(e: Event): boolean {
+    if (this.isLocked()) {
+      return false;
+    }
+
+    if (this.props.disabled) {
+      return false;
+    }
+
+    if (isDxMouseWheelEvent(e) && this.isScrolledInMaxDirection(e)) {
+      return false;
+    }
+
+    return isDefined(this.allowedDirection());
+  }
+
+  private isLocked(): boolean {
+    return this.cachedVariables.locked;
+  }
+
+  private isScrolledInMaxDirection(e: Event): boolean {
+    const { delta, shiftKey } = e as any;
+    const {
+      scrollLeft, scrollTop, scrollWidth, clientWidth, scrollHeight, clientHeight,
+    } = this.containerRef;
+
+    if (delta > 0) {
+      return shiftKey ? !scrollLeft : !scrollTop;
+    }
+
+    return shiftKey
+      ? scrollLeft >= scrollWidth - clientWidth
+      : scrollTop >= scrollHeight - clientHeight;
   }
 
   get cssClasses(): string {
