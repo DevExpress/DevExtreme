@@ -858,6 +858,58 @@ QUnit.module('VirtualScrollingController. New mode', {
         moduleConfig.afterEach.call(this);
     }
 }, () => {
+    QUnit.test('virtualItemsCount does not call data source methods', function(assert) {
+        // arrange
+        const pageIndex = sinon.stub(mockDataSource, 'pageIndex');
+
+        // act
+        this.scrollController.virtualItemsCount();
+
+        // assert
+        assert.notOk(pageIndex.called, 'pageIndex not called');
+        assert.notOk(mockDataSource.pageSize.called, 'pageSize not called');
+
+        pageIndex.restore();
+    });
+
+    QUnit.test('setViewportItemIndex does not call data source and virtual scrolling controller methods', function(assert) {
+        // arrange
+        const pageCount = sinon.stub(mockDataSource, 'pageCount');
+        const load = sinon.stub(this.scrollController, 'load');
+
+        // act
+        this.scrollController.setViewportItemIndex(1);
+
+        // assert
+        assert.notOk(pageCount.called, 'pageCount not called');
+        assert.notOk(mockDataSource.pageSize.called, 'pageSize not called');
+        assert.notOk(load.called, 'load is not called');
+
+        pageCount.restore();
+        load.restore();
+    });
+
+    QUnit.test('pageIndex calls pageIndex of the data source', function(assert) {
+        // arrange
+        const pageIndex = sinon.stub(mockDataSource, 'pageIndex');
+
+        // act
+        this.scrollController.pageIndex(1);
+
+        // assert
+        assert.ok(pageIndex.called, 'pageIndex is called');
+
+        pageIndex.restore();
+    });
+
+    QUnit.test('load does set loading page indexes', function(assert) {
+        // act
+        this.scrollController.load();
+
+        // assert
+        assert.deepEqual(this.scrollController._loadingPageIndexes, {}, '_loadingPageIndexes is empty');
+    });
+
     QUnit.test('Viewport params at the top', function(assert) {
         const viewportSize = 25;
         this.scrollController.viewportSize(viewportSize);
