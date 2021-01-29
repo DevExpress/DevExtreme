@@ -55,23 +55,33 @@ export const DataSource = Class.inherit({
         * @type Enums.DataSourceStoreType
         */
 
-        const onPushHandler = options.pushAggregationTimeout !== 0
-            ? dataUtils.throttleChanges(this._onPush, () =>
-                options.pushAggregationTimeout === undefined
-                    ? this._changedTime * 5
-                    : options.pushAggregationTimeout
-            )
-            : this._onPush;
-
+        this._store = options.store;
         this._changedTime = 0;
 
-        this._onPushHandler = (changes) => {
-            this._aggregationTimeoutId = onPushHandler.call(this, changes);
-        };
+        const needThrottling = options.pushAggregationTimeout !== 0;
 
-        this._store = options.store;
-        this._store.on('push', this._onPushHandler);
+        if(needThrottling) {
+            const throttlingTimeout = options.pushAggregationTimeout === undefined
+                ? () => this._changedTime * 5
+                : options.pushAggregationTimeout;
 
+            const pushDeferred = new Deferred();
+
+            const throttlingPushHandler = dataUtils.throttleChanges((changes) => {
+                pushDeferred.resolve();
+                this._onPush(changes);
+            }, throttlingTimeout);
+
+            this._onPushHandler = (args) => {
+                this._aggregationTimeoutId = throttlingPushHandler(args.changes);
+
+                args.waitFor.push(pushDeferred.promise());
+            };
+            this._store.on('beforePush', this._onPushHandler);
+        } else {
+            this._onPushHandler = (changes) => this._onPush(changes);
+            this._store.on('push', this._onPushHandler);
+        }
 
         this._storeLoadOptions = this._extractLoadOptions(options);
 
@@ -131,6 +141,7 @@ export const DataSource = Class.inherit({
     },
 
     dispose() {
+        this._store.off('beforePush', this._onPushHandler);
         this._store.off('push', this._onPushHandler);
         this._eventsStrategy.dispose();
         clearTimeout(this._aggregationTimeoutId);
