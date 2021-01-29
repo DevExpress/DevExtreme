@@ -1089,77 +1089,73 @@ each([{
                           each([true, false]).describe('IsScrollbarClicked: %o', (isScrollbarClicked) => {
                             each([-1, 1]).describe('Wheel delta: %o', (delta) => {
                               each([-100, 0]).describe('Scrollbar position: %o', (scrollbarPosition) => {
-                                each([1, 2]).describe('Call count: %o', (callCount) => {
-                                  it('validate method in simulated strategy', () => {
-                                    if (Scrollable === ScrollableNative) {
-                                      return; // this config is not relevant to the native strategy
-                                    }
+                                it('validate method in simulated strategy', () => {
+                                  if (Scrollable === ScrollableNative) {
+                                    return; // this config is not relevant to the native strategy
+                                  }
 
-                                    const viewModel = new Scrollable({
-                                      direction, bounceEnabled, disabled, scrollByContent,
-                                    }) as any;
+                                  const viewModel = new Scrollable({
+                                    direction, bounceEnabled, disabled, scrollByContent,
+                                  }) as any;
 
-                                    initRefs(viewModel);
+                                  initRefs(viewModel);
 
-                                    initStyles((viewModel).containerRef, containerSize);
-                                    initStyles((viewModel).contentRef, contentSize);
+                                  initStyles((viewModel).containerRef, containerSize);
+                                  initStyles((viewModel).contentRef, contentSize);
 
-                                    setScrollbarPosition(viewModel.horizontalScrollbarRef,
-                                      scrollbarPosition);
-                                    setScrollbarPosition(viewModel.verticalScrollbarRef,
-                                      scrollbarPosition);
+                                  setScrollbarPosition(viewModel.horizontalScrollbarRef,
+                                    scrollbarPosition);
+                                  setScrollbarPosition(viewModel.verticalScrollbarRef,
+                                    scrollbarPosition);
 
-                                    viewModel.cachedVariables.locked = locked;
+                                  viewModel.cachedVariables.locked = locked;
 
-                                    let expectedValidationResult;
-                                    if (disabled || locked) {
-                                      expectedValidationResult = false;
-                                    } else if (bounceEnabled) {
-                                      expectedValidationResult = true;
-                                    } else if (isDxWheelEvent) {
-                                      expectedValidationResult = (contentSize > containerSize)
-                                        && (
-                                          (scrollbarPosition < 0 && delta > 0)
-                                          || (scrollbarPosition >= 0 && delta < 0)
-                                        );
-                                    } else if (!scrollByContent && !isScrollbarClicked) {
-                                      expectedValidationResult = false;
-                                    } else {
-                                      expectedValidationResult = containerSize < contentSize
-                                        || bounceEnabled;
-                                    }
+                                  let expectedValidationResult;
+                                  if (disabled || locked) {
+                                    expectedValidationResult = false;
+                                  } else if (bounceEnabled) {
+                                    expectedValidationResult = true;
+                                  } else if (isDxWheelEvent) {
+                                    expectedValidationResult = (contentSize > containerSize)
+                                      && (
+                                        (scrollbarPosition < 0 && delta > 0)
+                                        || (scrollbarPosition >= 0 && delta < 0)
+                                      );
+                                  } else if (!scrollByContent && !isScrollbarClicked) {
+                                    expectedValidationResult = false;
+                                  } else {
+                                    expectedValidationResult = containerSize < contentSize
+                                      || bounceEnabled;
+                                  }
 
-                                    const target = isScrollbarClicked
-                                      ? viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
-                                      : viewModel.containerRef;
-                                    const e = { ...defaultEvent, target, delta };
-                                    if (isDxWheelEvent) {
-                                      (e as any).type = 'dxmousewheel';
-                                    }
+                                  const target = isScrollbarClicked
+                                    ? viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
+                                    : viewModel.containerRef;
+                                  const e = { ...defaultEvent, target, delta };
+                                  if (isDxWheelEvent) {
+                                    (e as any).type = 'dxmousewheel';
+                                  }
 
+                                  expect(viewModel.cachedVariables.validateWheelTimer)
+                                    .toBe(undefined);
+
+                                  const actualResult = (viewModel).validate(e);
+                                  expect(actualResult).toBe(expectedValidationResult);
+
+                                  const isCheckedByTimeout = isDxWheelEvent
+                                    && expectedValidationResult && !bounceEnabled;
+
+                                  if (isCheckedByTimeout) {
                                     expect(viewModel.cachedVariables.validateWheelTimer)
-                                      .toBe(undefined);
+                                      .not.toBe(undefined);
 
-                                    const actualResult = (viewModel).validate(e);
-                                    expect(actualResult).toBe(expectedValidationResult);
+                                    e.delta = 0;
+                                    expect((viewModel).validate(e)).toBe(true);
+                                  }
 
-                                    const isCheckedByTimeout = isDxWheelEvent
-                                      && expectedValidationResult && !bounceEnabled;
-
-                                    if (isCheckedByTimeout) {
-                                      expect(viewModel.cachedVariables.validateWheelTimer)
-                                        .not.toBe(undefined);
-                                    }
-
-                                    if (isCheckedByTimeout && (callCount === 2)) {
-                                      e.delta = 0;
-                                      expect((viewModel).validate(e)).toBe(true);
-                                    }
-
-                                    viewModel.disposeWheelTimer()();
-                                    expect(viewModel.cachedVariables.validateWheelTimer)
-                                      .toBe(undefined);
-                                  });
+                                  viewModel.disposeWheelTimer()();
+                                  expect(viewModel.cachedVariables.validateWheelTimer)
+                                    .toBe(undefined);
                                 });
                               });
                             });
