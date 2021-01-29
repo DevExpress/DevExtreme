@@ -16,8 +16,6 @@ export class ScrollableInternalProps {
 
   @OneWay() useSimulatedScrollbar = false;
 
-  @OneWay() pushBackValue = 0;
-
   @OneWay() bounceEnabled = true;
 
   @OneWay() scrollByContent = true;

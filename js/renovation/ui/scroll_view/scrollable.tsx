@@ -33,7 +33,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       useNative,
       pulledDownText,
       pullingDownText,
-      pushBackValue,
       refreshingText,
       reachBottomText,
       ...scrollableProps
@@ -51,7 +50,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
-        pushBackValue={pushBackValue}
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}

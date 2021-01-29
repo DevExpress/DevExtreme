@@ -12,6 +12,7 @@ import {
 
 import {
   ScrollableNative,
+  ScrollableNativeProps,
   viewFunction as viewFunctionNative,
 } from '../scrollable_native';
 
@@ -2413,6 +2414,7 @@ each([{
 
               const scrollable = new Scrollable({ pushBackValue: 5 });
               expect((scrollable as any).pushBackValue).toEqual(5);
+              expect((scrollable as any).styles).toEqual({ paddingTop: 5, paddingBottom: 5 });
             });
 
             it('should assign custom pushBackValue = 0', () => {
@@ -2424,6 +2426,10 @@ each([{
 
               const scrollable = new Scrollable({ pushBackValue: 0 });
               expect((scrollable as any).pushBackValue).toEqual(0);
+              expect((scrollable as any).styles).toEqual({
+                paddingTop: undefined,
+                paddingBottom: undefined,
+              });
             });
 
             it('should assign default pushBackValue', () => {
@@ -2435,6 +2441,10 @@ each([{
 
               const scrollable = new Scrollable({ });
               expect((scrollable as any).pushBackValue).toEqual(platform === 'ios' ? 1 : 0);
+              expect((scrollable as any).styles).toEqual({
+                paddingTop: platform === 'ios' ? 1 : undefined,
+                paddingBottom: platform === 'ios' ? 1 : undefined,
+              });
             });
           });
 
@@ -2532,6 +2542,33 @@ each([{
           expect(ensureLocation({ top: 100 })).toMatchObject({ top: 100, left: 0 });
           expect(ensureLocation({ left: 100 })).toMatchObject({ left: 100, top: 0 });
           expect(ensureLocation({})).toMatchObject({ top: 0, left: 0 });
+        });
+      });
+    });
+
+    describe('Styles', () => {
+      each(['android', 'ios', 'generic']).describe('Platform: %o', (platform) => {
+        each([5, 0, undefined]).describe('PushBackValue: %o', (pushBackValue) => {
+          it('should add paddings for scrollable content', () => {
+            if (Scrollable === ScrollableSimulated) {
+              return; // actual only for native strategy
+            }
+
+            devices.real = () => ({ platform });
+
+            const viewModel = new Scrollable({ pushBackValue } as ScrollableNativeProps);
+            const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+            const scrollableContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content');
+            const scrollableContentStyles = window.getComputedStyle(scrollableContent.getDOMNode());
+
+            let expectedPadding = platform === 'ios' ? '1px' : '';
+            if (pushBackValue !== undefined) {
+              expectedPadding = pushBackValue ? `${pushBackValue}px` : '';
+            }
+
+            expect(scrollableContentStyles.paddingTop).toEqual(expectedPadding);
+            expect(scrollableContentStyles.paddingBottom).toEqual(expectedPadding);
+          });
         });
       });
     });

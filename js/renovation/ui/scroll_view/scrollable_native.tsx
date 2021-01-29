@@ -6,6 +6,7 @@ import {
   Effect,
   RefObject,
   ComponentBindings,
+  OneWay,
   InternalState,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
@@ -61,6 +62,7 @@ import {
 export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef,
+    styles,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -85,7 +87,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
         <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
-          <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
+          <div className={SCROLLABLE_CONTENT_CLASS} style={styles} ref={contentRef}>
             {forceGeneratePockets && (
             <TopPocket
               pullingDownText={pullingDownText}
@@ -121,6 +123,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
 };
 @ComponentBindings()
 export class ScrollableNativeProps extends ScrollableProps {
+  @OneWay() pushBackValue?: number;
 }
 
 type ScrollableNativePropsType = ScrollableNativeProps
@@ -436,5 +439,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
 
     return (devices.real().platform === 'ios' ? 1 : 0);
+  }
+
+  get styles(): { [key: string]: any } {
+    return {
+      paddingTop: this.pushBackValue !== 0 ? this.pushBackValue : undefined,
+      paddingBottom: this.pushBackValue !== 0 ? this.pushBackValue : undefined,
+    };
   }
 }
