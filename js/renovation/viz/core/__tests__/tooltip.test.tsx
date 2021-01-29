@@ -518,7 +518,7 @@ describe('Effects', () => {
     it('should trigger onTooltipShown event', () => {
       const shownTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} }, onTooltipShown: shownTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipShown: shownTooltip,
       });
       tooltip.eventsEffect();
       tooltip.eventsEffect();
@@ -533,7 +533,7 @@ describe('Effects', () => {
 
       const shownTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} }, onTooltipShown: shownTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipShown: shownTooltip,
       });
       tooltip.eventsEffect();
 
@@ -543,11 +543,11 @@ describe('Effects', () => {
     it('should trigger onTooltipShown event, if target is changed', () => {
       const shownTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} }, onTooltipShown: shownTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipShown: shownTooltip,
       });
       tooltip.eventsEffect();
 
-      tooltip.props.eventData = { target: { tag: 'new point info' } as any, component: {} };
+      tooltip.props.eventData = { target: { tag: 'new point info' } as any, component: {} as any };
       tooltip.eventsEffect();
 
       expect(shownTooltip).toBeCalledTimes(2);
@@ -557,7 +557,7 @@ describe('Effects', () => {
     it('should work properly after hide tooltip withow onTooltipHidden event', () => {
       const shownTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} }, onTooltipShown: shownTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipShown: shownTooltip,
       });
       tooltip.eventsEffect();
 
@@ -583,7 +583,7 @@ describe('Effects', () => {
     it('should not trigger onTooltipHidden event, tooltip have not been shown before', () => {
       const hiddenTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: false, eventData: { target: { tag: 'point info' } as any, component: {} }, onTooltipHidden: hiddenTooltip,
+        visible: false, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipHidden: hiddenTooltip,
       });
       tooltip.eventsEffect();
 
@@ -593,7 +593,7 @@ describe('Effects', () => {
     it('should trigger onTooltipHidden event', () => {
       const hiddenTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} }, onTooltipHidden: hiddenTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipHidden: hiddenTooltip,
       });
       tooltip.eventsEffect();
       tooltip.props.visible = false;
@@ -607,11 +607,11 @@ describe('Effects', () => {
     it('should trigger onTooltipHidden event, if target is changed', () => {
       const hiddenTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} }, onTooltipHidden: hiddenTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipHidden: hiddenTooltip,
       });
       tooltip.eventsEffect();
 
-      tooltip.props.eventData = { target: { tag: 'new point info' } as any, component: {} };
+      tooltip.props.eventData = { target: { tag: 'new point info' } as any, component: {} as any };
       tooltip.eventsEffect();
 
       expect(hiddenTooltip).toBeCalledTimes(1);
@@ -621,7 +621,7 @@ describe('Effects', () => {
     it('should trigger onTooltipShown event, target is not define', () => {
       const shownTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, eventData: { component: {} }, onTooltipShown: shownTooltip,
+        visible: true, eventData: { component: {} as any }, onTooltipShown: shownTooltip,
       });
       tooltip.eventsEffect();
       tooltip.eventsEffect();
@@ -634,7 +634,7 @@ describe('Effects', () => {
     it('should not trigger onTooltipHidden event, tooltip have not been shown before, target is not define', () => {
       const hiddenTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: false, eventData: { component: {} }, onTooltipHidden: hiddenTooltip,
+        visible: false, eventData: { component: {} as any }, onTooltipHidden: hiddenTooltip,
       });
       tooltip.eventsEffect();
 
@@ -644,7 +644,7 @@ describe('Effects', () => {
     it('should trigger onTooltipHidden event, target is not define', () => {
       const hiddenTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, eventData: { component: {} }, onTooltipHidden: hiddenTooltip,
+        visible: true, eventData: { component: {} as any }, onTooltipHidden: hiddenTooltip,
       });
       tooltip.eventsEffect();
       tooltip.props.visible = false;

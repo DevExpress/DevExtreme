@@ -13,9 +13,11 @@ import { isDefined } from '../../../core/utils/type';
 
 import {
   StrictSize, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
-  Font, TooltipCoordinates, Canvas, EventData,
+  Font, TooltipCoordinates, Canvas,
 } from './common/types.d';
-import { Format } from '../common/types.d';
+import {
+  Format, EventData, OnTooltipHiddenFn, OnTooltipShownFn,
+} from '../common/types.d';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, isTextEmpty,
@@ -244,11 +246,11 @@ export class TooltipProps {
 
   @OneWay() className?: string;
 
-  @OneWay() eventData?: EventData;
+  @OneWay() eventData?: EventData<never>;
 
-  @Event() onTooltipHidden?: (e: EventData) => void;
+  @Event() onTooltipHidden?: OnTooltipHiddenFn<never>;
 
-  @Event() onTooltipShown?: (e: EventData) => void;
+  @Event() onTooltipShown?: OnTooltipShownFn<never>;
 }
 
 @Component({
@@ -262,7 +264,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @InternalState() cloudSize: PinnedSize = DEFAULT_SIZE;
 
-  @InternalState() currentEventData?: EventData;
+  @InternalState() currentEventData?: EventData<never>;
 
   @InternalState() isEmptyContainer = false;
 
@@ -296,9 +298,10 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   eventsEffect(): void {
     const {
       onTooltipShown, onTooltipHidden, visible,
-      eventData = {} as EventData, // TODO: remove {} after fix nested props + test
+      eventData = {} as EventData<never>, // TODO: remove {} after fix nested props + test
     } = this.props;
-    const isEqual = (object1: EventData | undefined, object2: EventData): boolean => {
+    const isEqual = (object1: EventData<never> | undefined,
+      object2: EventData<never>): boolean => {
       if (!object1) {
         return false;
       }

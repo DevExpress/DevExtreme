@@ -16,3 +16,11 @@ export interface Point {
 export interface Translator {
     translate: (value: number|string|Date) => number 
 }
+
+export interface EventData<T> {
+    readonly component: any, //TODO: after improve refs use ref of the widget
+    readonly target?: T,
+}
+
+export type OnTooltipShownFn<T> = (e: EventData<T>) => void;
+export type OnTooltipHiddenFn<T> = (e: EventData<T>) => void;

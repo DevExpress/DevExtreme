@@ -592,6 +592,29 @@ describe('Bullet', () => {
             y: 250,
           });
         });
+
+        it('should return customized tooltip props with onTooltipShown/onTooltipHidden events', () => {
+          (generateCustomizeTooltipCallback as jest.Mock).mockReturnValue(customizeTooltipFn);
+          const onTooltipShown = jest.fn();
+          const onTooltipHidden = jest.fn();
+          const bullet = new Bullet({
+            value, target, onTooltipShown, onTooltipHidden,
+          });
+          bullet.canvasState = { width: 200, height: 100 } as Canvas;
+          bullet.offsetState = { left: 100, top: 200 };
+          bullet.widgetRef = {} as any;
+
+          expect(bullet.customizedTooltipProps).toEqual({
+            enabled: true,
+            data,
+            eventData: { component: {} },
+            onTooltipShown,
+            onTooltipHidden,
+            customizeTooltip: customizeTooltipFn,
+            x: 200,
+            y: 250,
+          });
+        });
       });
 
       describe('defaultCanvas', () => {
@@ -712,7 +735,7 @@ describe('Bullet', () => {
       });
 
       describe('Shapes', () => {
-        let getTranslator = () => ({ translate: (x: number) => x * 10 });
+        let getTranslator = () => ({ translate: (x: number) => x * 10 }) as any;
 
         describe('getBarValueShape', () => {
           describe('value > 0', () => {

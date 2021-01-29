@@ -10,6 +10,7 @@ import {
   Nested,
   Fragment,
   Effect,
+  Event,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
@@ -28,7 +29,10 @@ import pointerEvents from '../../../events/pointer';
 import { EffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 import { pointInCanvas } from '../core/utils';
-import { ArgumentAxisRange, ValueAxisRange, BulletScaleProps } from './types.d';
+import {
+  ArgumentAxisRange, ValueAxisRange, BulletScaleProps,
+} from './types.d';
+import { OnTooltipHiddenFn, OnTooltipShownFn } from '../common/types.d';
 
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;
@@ -187,6 +191,10 @@ export class BulletProps extends BaseWidgetProps {
   @OneWay() endScaleValue?: number;
 
   @Nested() tooltip?: TooltipProps;
+
+  @Event() onTooltipHidden?: OnTooltipHiddenFn<undefined>;
+
+  @Event() onTooltipShown?: OnTooltipShownFn<undefined>;
 }
 
 @Component({
@@ -278,10 +286,12 @@ export class Bullet extends JSXComponent(BulletProps) {
   }
 
   get customizedTooltipProps(): Partial<TooltipProps> {
-    const { tooltip } = this.props;
+    const { tooltip, onTooltipHidden, onTooltipShown } = this.props;
     const customProps = {
       enabled: this.tooltipEnabled,
       eventData: { component: this.widgetRef },
+      onTooltipHidden,
+      onTooltipShown,
       customizeTooltip:
         generateCustomizeTooltipCallback(tooltip?.customizeTooltip, tooltip?.font, this.rtlEnabled),
       data: this.tooltipData,

@@ -1,5 +1,3 @@
-import { Point } from '../../common/types.d';
-
 export type Canvas = ClientRect;
 export type Size = { width?: number; height?: number };
 export type StrictSize = Required<Size>;
@@ -31,9 +29,4 @@ export interface Font {
   size?: number,
   weight?: number,
   lineSpacing?: number,
-}
-
-export type EventData = {
-  target?: Point,
-  component: any
 }
