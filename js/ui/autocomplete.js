@@ -42,12 +42,15 @@ const Autocomplete = DropDownList.inherit({
                 }
                 return true;
             },
-            enter: function() {
+            enter: function(e) {
                 if(!item) {
                     this.close();
                 }
-                parent.enter.apply(this, arguments);
-                return this.option('opened');
+                const opened = this.option('opened');
+                if(opened) {
+                    e.preventDefault();
+                }
+                return opened;
             }
         });
     },

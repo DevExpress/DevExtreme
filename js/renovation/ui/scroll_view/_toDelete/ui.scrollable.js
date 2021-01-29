@@ -142,11 +142,6 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    _initHandler: function() {
-        const strategy = this._strategy;
-        strategy.handleInit.apply(strategy, arguments);
-    },
-
     _renderDisabledState: function() {
         if(this.option('disabled')) {
             this._lock();

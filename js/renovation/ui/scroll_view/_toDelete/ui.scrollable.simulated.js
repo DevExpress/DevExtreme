@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { locate } from '../../animation/translator';
@@ -33,18 +32,6 @@ const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
 const BOUNCE_DURATION = isSluggishPlatform ? 300 : 400;
 const BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION;
 const BOUNCE_ACCELERATION_SUM = (1 - Math.pow(ACCELERATION, BOUNCE_FRAMES)) / (1 - ACCELERATION);
-
-const KEY_CODES = {
-    PAGE_UP: 'pageUp',
-    PAGE_DOWN: 'pageDown',
-    END: 'end',
-    HOME: 'home',
-    LEFT: 'leftArrow',
-    UP: 'upArrow',
-    RIGHT: 'rightArrow',
-    DOWN: 'downArrow',
-    TAB: 'tab'
-};
 
 const InertiaAnimator = Animator.inherit({
     ctor: function(scroller) {
@@ -176,19 +163,11 @@ export const Scroller = Class.inherit({
 
     _endHandler: function(velocity) {
         this._completeDeferred = new Deferred();
-        this._inertiaHandler();
         return this._completeDeferred.promise();
     },
 
     _inertiaHandler: function() {
-        this._suppressInertia();
         this._inertiaAnimator.start();
-    },
-
-    _suppressInertia: function() {
-        if(!this._inertiaEnabled || this._thumbScrolling) {
-            this._velocity = 0;
-        }
     },
 
     _stopHandler: function() {
@@ -269,11 +248,6 @@ export const Scroller = Class.inherit({
         }
     }))),
 
-    _createActionsHandler: function(actions) {
-        this._scrollAction = actions.scroll;
-        this._bounceAction = actions.bounce;
-    },
-
     _showScrollbar: function() {
         this._scrollbar.option('visible', true);
     },
@@ -328,25 +302,6 @@ export const SimulatedStrategy = Class.inherit({
         this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
     },
 
-    _createScroller: function(direction) {
-        this._scrollers[direction] = new Scroller(this._scrollerOptions(direction));
-    },
-
-    _scrollerOptions: function(direction) {
-        return {
-            direction: direction,
-            $content: this._$content,
-            $container: this._$container,
-            $wrapper: this._$wrapper,
-            $element: this._$element,
-            scrollByContent: this.option('scrollByContent'),
-            scrollByThumb: this.option('scrollByThumb'),
-            scrollbarVisible: this.option('showScrollbar'),
-            bounceEnabled: this.option('bounceEnabled'),
-            inertiaEnabled: this.option('inertiaEnabled')
-        };
-    },
-
     _applyScaleRatio: function(targetLocation) {
         for(const direction in this._scrollers) {
             const prop = this._getPropByDirection(direction);
@@ -360,10 +315,6 @@ export const SimulatedStrategy = Class.inherit({
         return targetLocation;
     },
 
-    handleInit: function(e) {
-        this._eventForUserAction = e;
-    },
-
     _eachScroller: function(callback) {
         callback = callback.bind(this);
         each(this._scrollers, function(direction, scroller) {
@@ -372,7 +323,6 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleStart: function(e) {
-        this._eventForUserAction = e;
         this._eventHandler('start').done(this._startAction);
     },
 
@@ -393,19 +343,15 @@ export const SimulatedStrategy = Class.inherit({
             return;
         }
         this._saveActive();
-        this._eventForUserAction = e;
     },
 
     handleEnd: function(e) {
         this._resetActive();
         this._refreshCursorState(e.originalEvent && e.originalEvent.target);
-
-        this._eventForUserAction = e;
     },
 
     handleCancel: function(e) {
         this._resetActive();
-        this._eventForUserAction = e;
         return this._eventHandler('end', { x: 0, y: 0 });
     },
 
@@ -421,7 +367,7 @@ export const SimulatedStrategy = Class.inherit({
     _keyDownHandler: function(e) {
         clearTimeout(this._updateHandlerTimeout);
         this._updateHandlerTimeout = setTimeout(() => {
-            if(normalizeKeyName(e) === KEY_CODES.TAB) {
+            if(normalizeKeyName(e) === 'tab') {
                 this._eachScroller((scroller) => {
                     scroller._updateHandler();
                 });
@@ -431,45 +377,6 @@ export const SimulatedStrategy = Class.inherit({
         if(!this._$container.is(domAdapter.getActiveElement())) {
             return;
         }
-    },
-
-    createActions: function() {
-        this._createScrollerActions();
-    },
-
-    _createScrollerActions: function() {
-        this._eventHandler('createActions', {
-            scroll: this._scrollAction,
-            bounce: this._bounceAction
-        });
-    },
-
-    _createActionHandler: function(optionName) {
-        const actionHandler = this._createActionByOption(optionName);
-
-        return () => {
-            actionHandler(extend(this._createActionArgs(), arguments));
-        };
-    },
-
-    _createActionArgs: function() {
-        const { horizontal: scrollerX, vertical: scrollerY } = this._scrollers;
-
-        const offset = this._getScrollOffset();
-
-        this._scrollOffset = {
-            top: scrollerY && offset.top,
-            left: scrollerX && offset.left
-        };
-
-        return {
-            event: this._eventForUserAction,
-            scrollOffset: this._scrollOffset,
-            reachedLeft: scrollerX && scrollerX._reachedMax(),
-            reachedRight: scrollerX && scrollerX._reachedMin(),
-            reachedTop: scrollerY && scrollerY._reachedMax(),
-            reachedBottom: scrollerY && scrollerY._reachedMin()
-        };
     },
 
     location: function() {
@@ -586,10 +493,9 @@ export const SimulatedStrategy = Class.inherit({
     }
 
 });
-///#DEBUG
+
 export {
     ACCELERATION,
     MIN_VELOCITY_LIMIT,
     FRAME_DURATION
 };
-///#ENDDEBUG
