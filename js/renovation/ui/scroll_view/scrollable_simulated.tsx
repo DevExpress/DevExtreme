@@ -692,17 +692,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const scrollFromMin = (reachedMin && delta > 0);
     const scrollFromMax = (reachedMax && delta < 0);
 
-    const cachedVariables = (this.cachedVariables as any);
     let validated = contentGreaterThanContainer
       && (locatedNotAtBound || scrollFromMin || scrollFromMax);
 
-    validated = validated || cachedVariables.validateWheelTimer !== undefined;
+    validated = validated || this.cachedVariables.validateWheelTimer !== undefined;
 
     if (validated) {
-      clearTimeout(cachedVariables.validateWheelTimer);
-      cachedVariables.validateWheelTimer = setTimeout(
+      this.clearWheelValidationTimer();
+      this.cachedVariables.validateWheelTimer = setTimeout(
         this.clearWheelValidationTimer, VALIDATE_WHEEL_TIMEOUT,
-      );
+      ) as any;
     }
 
     return validated;
@@ -710,6 +709,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   private clearWheelValidationTimer(): void {
     clearTimeout(this.cachedVariables.validateWheelTimer);
+    this.cachedVariables.validateWheelTimer = undefined;
   }
 
   private validateMove(e: Event): boolean {
