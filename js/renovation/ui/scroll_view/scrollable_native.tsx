@@ -6,6 +6,7 @@ import {
   Effect,
   RefObject,
   ComponentBindings,
+  OneWay,
   InternalState,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
