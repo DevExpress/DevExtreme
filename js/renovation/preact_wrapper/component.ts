@@ -93,7 +93,7 @@ export default class PreactWrapper extends DOMComponent {
     this._renderPreact(props);
   }
 
-  _renderPreact(props): any {
+  _renderPreact(props): void {
     const containerNode = this.$element()[0];
     const parentNode = containerNode.parentNode;
 
@@ -116,10 +116,6 @@ export default class PreactWrapper extends DOMComponent {
         containerNode
       );
     }
-
-    // if (containerNode.parentNode === this._documentFragment) {
-    //   this._documentFragment.removeChild(containerNode);
-    // }
   }
 
   _render() {}

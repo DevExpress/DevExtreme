@@ -292,7 +292,9 @@ describe('Widget\'s container manipulations', () => {
 
     $('#component').dxPreactTestWidget({ elementAttr: { class: 'attr-css-class attr-class' } });
 
-    expect($('#component').dxPreactTestWidget('getLastPreactReceivedProps').class).toBe('custom-css-class attr-class attr-css-class');
+    const { className } = $('#component').dxPreactTestWidget('getLastPreactReceivedProps');
+
+    expect(className).toBe('custom-css-class attr-class attr-css-class');
   });
 
   it('keep elementAttr option untouched', () => {
