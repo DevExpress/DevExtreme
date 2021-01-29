@@ -132,6 +132,7 @@ export default class AppointmentPopup {
                 e.cancel = true;
             } else {
                 this.updatePopupFullScreenMode();
+                this._updateForm();
             }
         });
     }
@@ -143,8 +144,15 @@ export default class AppointmentPopup {
     }
 
     _createAppointmentFormData(rawAppointment) {
-        const appointment = this._createAppointmentAdapter(rawAppointment);
-        const result = extend(true, { repeat: !!appointment.recurrenceRule }, rawAppointment);
+        // const appointment = this._createAppointmentAdapter(rawAppointment);
+        const formData = this._appointmentForm?.option('formData') || {};
+        const recurrenceRule = formData[this.scheduler._dataAccessors.expr.recurrenceRuleExpr];
+
+        // const result = extend(true, { repeat: !!appointment.recurrenceRule }, rawAppointment);
+        const result = extend(true, {
+            repeat: !!recurrenceRule,
+            [this.scheduler._dataAccessors.expr.recurrenceRuleExpr]: recurrenceRule,
+        }, rawAppointment);
         each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;

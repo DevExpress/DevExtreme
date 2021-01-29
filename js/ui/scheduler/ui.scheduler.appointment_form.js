@@ -288,6 +288,13 @@ const SchedulerAppointmentForm = {
             editorOptions: {
                 readOnly: readOnly,
                 firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
+                // onValueChanged: ({ value }) => {
+                //     const form = this._appointmentForm;
+                //     const repeatEditor = form.getEditor('repeat');
+                //     // debugger;
+
+                //     repeatEditor.option('value', !!value);
+                // },
             },
             label: {
                 text: ' ',
