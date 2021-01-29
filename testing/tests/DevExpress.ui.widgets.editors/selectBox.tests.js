@@ -5743,7 +5743,6 @@ if(devices.real().deviceType === 'desktop') {
                     'aria-expanded': 'true',
                     'aria-haspopup': 'listbox',
                     tabindex: '0',
-                    placeholder: ' '
                 };
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
@@ -5783,8 +5782,7 @@ if(devices.real().deviceType === 'desktop') {
                     spellcheck: 'false',
                     'aria-expanded': 'false',
                     'aria-haspopup': 'listbox',
-                    tabindex: '0',
-                    placeholder: ' '
+                    tabindex: '0'
                 };
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
