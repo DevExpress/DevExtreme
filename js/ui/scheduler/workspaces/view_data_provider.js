@@ -480,7 +480,7 @@ class GroupedDataMapProvider {
         }
     }
 
-    getGroupsInfo() {
+    getCompletedGroupsInfo() {
         return this.groupedDataMap.map(groupData => {
             const firstCell = groupData[0][0];
             const {
@@ -494,12 +494,11 @@ class GroupedDataMapProvider {
                 startDate: this.getGroupStartDate(groupIndex),
                 endDate: this.getGroupEndDate(groupIndex)
             };
-        });
+        }).filter(({ startDate }) => !!startDate);
     }
 
     getGroupIndices() {
-        return this.getGroupsInfo()
-            .filter(item => !!item)
+        return this.getCompletedGroupsInfo()
             .map(({ groupIndex }) => groupIndex);
     }
 
@@ -630,8 +629,8 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getCellsGroup(groupIndex);
     }
 
-    getGroupsInfo() {
-        return this._groupedDataMapProvider.getGroupsInfo();
+    getCompletedGroupsInfo() {
+        return this._groupedDataMapProvider.getCompletedGroupsInfo();
     }
 
     getGroupIndices() {
