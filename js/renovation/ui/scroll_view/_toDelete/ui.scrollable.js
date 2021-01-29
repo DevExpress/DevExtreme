@@ -142,16 +142,6 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    _validate: function(e) {
-        if(this._isLocked()) {
-            return false;
-        }
-
-        this._updateIfNeed();
-
-        return this._strategy.validate(e);
-    },
-
     _renderDisabledState: function() {
         if(this.option('disabled')) {
             this._lock();

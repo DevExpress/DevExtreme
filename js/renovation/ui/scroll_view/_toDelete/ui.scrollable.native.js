@@ -1,5 +1,4 @@
 import eventsEngine from '../../events/core/events_engine';
-import { isDxMouseWheelEvent } from '../../events/utils/index';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import Class from '../../core/class';
@@ -216,37 +215,6 @@ const NativeStrategy = Class.inherit({
     //    this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
     //     this._$container.scrollLeft(Math.round(-location.left - distance.left));
     // },
-
-    validate: function(e) {
-        if(this.option('disabled')) {
-            return false;
-        }
-
-        if(isDxMouseWheelEvent(e) && this._isScrolledInMaxDirection(e)) {
-            return false;
-        }
-
-        return !!this._allowedDirection();
-    },
-
-    // TODO: rtl
-    // TODO: horizontal scroll when shift is pressed
-    _isScrolledInMaxDirection(e) {
-        const container = this._$container.get(0);
-        let result;
-
-        if(e.delta > 0) {
-            result = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
-        } else {
-            if(e.shiftKey) {
-                result = container.scrollLeft >= this._getMaxOffset().left;
-            } else {
-                result = container.scrollTop >= this._getMaxOffset().top;
-            }
-        }
-
-        return result;
-    },
 
     verticalOffset: function() {
         return this.option('pushBackValue');

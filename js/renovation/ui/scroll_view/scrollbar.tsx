@@ -155,6 +155,16 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
+  reachedMin(): boolean {
+    return this.getLocation() <= this.getMinOffset();
+  }
+
+  @Method()
+  reachedMax(): boolean {
+    return this.getLocation() >= this.getMaxOffset();
+  }
+
+  @Method()
   getLocation(): number {
     return this.cachedVariables.location;
   }

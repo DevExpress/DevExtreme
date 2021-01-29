@@ -72,6 +72,8 @@ const KEY_CODES = {
   TAB: 'tab',
 };
 
+const VALIDATE_WHEEL_TIMEOUT = 500;
+
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
@@ -223,7 +225,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() validDirections = {};
 
-  @InternalState() cachedVariables: { [key: string]: any } = {
+  @InternalState() cachedVariables = {
+    validateWheelTimer: undefined,
+    locked: false,
     eventForUserAction: null,
   };
 
@@ -320,6 +324,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Method()
   clientWidth(): number {
     return this.containerRef.clientWidth;
+  }
+
+  @Effect({ run: 'once' })
+  disposeWheelTimer(): DisposeEffectReturn {
+    return () => this.clearWheelValidationTimer();
   }
 
   @Effect() scrollEffect(): DisposeEffectReturn {
@@ -633,6 +642,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private validate(e: Event): boolean {
+    if (this.isLocked()) {
+      return false;
+    }
+
     if (this.props.disabled) {
       return false;
     }
@@ -646,9 +659,43 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       : this.validateMove(e);
   }
 
-  // eslint-disable-next-line
+  private isLocked(): boolean {
+    return this.cachedVariables.locked;
+  }
+
   private validateWheel(e: Event): boolean {
-    return true; // TODO:
+    const scrollbar = this.wheelDirection(e) === 'horizontal'
+      ? this.horizontalScrollbarRef
+      : this.verticalScrollbarRef;
+
+    const reachedMin = scrollbar.reachedMin();
+    const reachedMax = scrollbar.reachedMax();
+
+    const contentGreaterThanContainer = !reachedMin || !reachedMax;
+    const locatedNotAtBound = !reachedMin && !reachedMax;
+
+    const { delta } = e as any;
+    const scrollFromMin = (reachedMin && delta > 0);
+    const scrollFromMax = (reachedMax && delta < 0);
+
+    let validated = contentGreaterThanContainer
+      && (locatedNotAtBound || scrollFromMin || scrollFromMax);
+
+    validated = validated || this.cachedVariables.validateWheelTimer !== undefined;
+
+    if (validated) {
+      this.clearWheelValidationTimer();
+      this.cachedVariables.validateWheelTimer = setTimeout(
+        this.clearWheelValidationTimer, VALIDATE_WHEEL_TIMEOUT,
+      ) as any;
+    }
+
+    return validated;
+  }
+
+  private clearWheelValidationTimer(): void {
+    clearTimeout(this.cachedVariables.validateWheelTimer);
+    this.cachedVariables.validateWheelTimer = undefined;
   }
 
   private validateMove(e: Event): boolean {
