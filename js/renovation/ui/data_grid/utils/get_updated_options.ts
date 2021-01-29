@@ -1,5 +1,4 @@
 import { type } from '../../../../core/utils/type';
-import { DataGridProps } from '../common/data_grid_props';
 
 interface ResultItem {
   path: string;
@@ -58,7 +57,7 @@ const reactProps = { key: true, ref: true, children: true };
 const objectDiffsWithoutReactProps = objectDiffsFiltered((prop) => Object.keys(prop)
   .filter((p) => !reactProps[p]));
 
-export function getUpdatedOptions(oldProps: DataGridProps, props: DataGridProps):
+export function getUpdatedOptions(oldProps: {}, props: {}):
 ResultItem[] {
   return objectDiffsWithoutReactProps(oldProps, props);
 }

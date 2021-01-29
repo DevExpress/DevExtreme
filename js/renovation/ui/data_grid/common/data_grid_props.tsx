@@ -1302,17 +1302,17 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() wordWrapEnabled?: boolean;
 
-  @TwoWay() filterValue?: string | any[] | Function | null = null;
+  @TwoWay() filterValue: string | any[] | Function | null = null;
 
-  @TwoWay() focusedColumnIndex? = -1;
+  @TwoWay() focusedColumnIndex = -1;
 
-  @TwoWay() focusedRowIndex? = -1;
+  @TwoWay() focusedRowIndex = -1;
 
-  @TwoWay() focusedRowKey?: any | null = null;
+  @TwoWay() focusedRowKey: any | null = null;
 
-  @TwoWay() selectedRowKeys?: any[] = [];
+  @TwoWay() selectedRowKeys: any[] = [];
 
-  @TwoWay() selectionFilter?: string | any[] | Function = [];
+  @TwoWay() selectionFilter: string | any[] | Function = [];
 
   @Event() onCellClick?:
   | string
