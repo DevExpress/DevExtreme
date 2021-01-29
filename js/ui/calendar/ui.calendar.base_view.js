@@ -251,11 +251,15 @@ const BaseView = Widget.inherit({
 
         contouredDate = contouredDate || this.option('contouredDate');
 
-        const $oldContouredCell = this._$table.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
+        const $oldContouredCell = this._getContouredCell();
         const $newContouredCell = this._getCellByDate(contouredDate);
 
         $oldContouredCell.removeClass(CALENDAR_CONTOURED_DATE_CLASS);
         $newContouredCell.addClass(CALENDAR_CONTOURED_DATE_CLASS);
+    },
+
+    _getContouredCell: function() {
+        return this._$table.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
     },
 
     _changeValue: function(cellDate) {
