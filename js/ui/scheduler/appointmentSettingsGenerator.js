@@ -216,8 +216,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         });
     }
 
-    _createExtremeRecurrenceDates(rawAppointment) {
-        const dateRange = this.workspace.getDateRange();
+    _createExtremeRecurrenceDates(rawAppointment, groupIndex) {
+        const dateRange = this.scheduler._workSpace.getDateRange();
 
         const startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment)
             ? dateUtils.trimTime(dateRange[0])
@@ -225,13 +225,13 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         const commonTimeZone = this.scheduler.option('timeZone');
 
-        const minRecurrenceDate = commonTimeZone ?
-            this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' }) :
-            startViewDate;
+        const minRecurrenceDate = commonTimeZone
+            ? this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' })
+            : startViewDate;
 
-        const maxRecurrenceDate = commonTimeZone ?
-            this.timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' }) :
-            dateRange[1];
+        const maxRecurrenceDate = commonTimeZone
+            ? this.timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' })
+            : dateRange[1];
 
         return [
             minRecurrenceDate,
@@ -386,7 +386,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
                 return this.viewDataProvider.isGroupIntersectDateInterval(groupIndex, startDate, endDate);
             });
 
-        if(recurrent && this.isVerticalGrouping) {
+        if(recurrent) {
             return this._createRecurrentAppointmentInfos(appointments, resources, allDay);
         }
 
@@ -464,7 +464,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     _createRecurrenceAppointments(appointment, resources) {
         const { duration } = appointment;
         const result = [];
-        const groupIndices = this.isVerticalGrouping && this.workspace._getGroupCount()
+        const groupIndices = this.workspace._getGroupCount()
             ? this._getGroupIndices(resources)
             : [0];
 
