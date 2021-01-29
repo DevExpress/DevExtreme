@@ -59,7 +59,7 @@ describe('DateHeaderCell', () => {
     });
 
     describe('templates', () => {
-      it('should render date cell template and should not render children', () => {
+      it('should render date cell template and should not render default markup', () => {
         const timeCellTemplate = () => null;
         const dateCellTemplate = () => null;
 
@@ -80,7 +80,7 @@ describe('DateHeaderCell', () => {
           .toBe(false);
       });
 
-      it('should render time cell template and should not render children and date cell template', () => {
+      it('should render time cell template and should not render default markup and date cell template', () => {
         const timeCellTemplate = () => null;
         const dateCellTemplate = () => null;
 
