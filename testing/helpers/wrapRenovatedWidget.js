@@ -1,37 +1,26 @@
-import { act } from 'preact/test-utils';
+import { rerender as reRender } from 'inferno';
+
+function callMethod() {
+    const result = this.callBase.apply(this, arguments);
+    reRender();
+    return result;
+}
 
 export function wrapRenovatedWidget(renovatedWidget) {
     const result = renovatedWidget.inherit({
         ctor: function() {
-            let res;
-            act(() => {
-                res = this.callBase.apply(this, arguments);
-            });
-            return res;
+            return callMethod.apply(this, arguments);
         },
         option: function() {
-            let res;
-            act(() => {
-                res = this.callBase.apply(this, arguments);
-            });
-            return res;
+            return callMethod.apply(this, arguments);
         },
         focus: function() {
-            let res;
-            act(() => {
-                res = this.callBase.apply(this, arguments);
-            });
-            return res;
+            return callMethod.apply(this, arguments);
         },
         repaint: function() {
-            let res;
-            act(() => {
-                res = this.callBase.apply(this, arguments);
-            });
-            return res;
+            return callMethod.apply(this, arguments);
         },
-    }
-    );
+    });
     result.getInstance = renovatedWidget.getInstance;
     result.IS_RENOVATED_WIDGET = true;
     return result;
