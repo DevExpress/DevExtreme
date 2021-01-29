@@ -24,6 +24,7 @@ const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const SEARCHBOX_CLASS = 'dx-searchbox';
 const SEARCH_ICON_CLASS = 'dx-icon-search';
+const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 
 QUnit.module('common', {}, () => {
     QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
@@ -165,23 +166,7 @@ QUnit.module('common', {}, () => {
         const instance = $element.dxTextBox('instance');
 
         assert.ok(!instance.option('showClearButton'), 'the \'showClearButton\' options is correct');
-        assert.equal($('.dx-clear-button-area').length, 0, 'clear button is not rendered');
-    });
-
-    QUnit.test('clear button should save valueChangeEvent', function(assert) {
-        const valueChangedHandler = sinon.spy();
-
-        const $element = $('#textbox').dxTextBox({
-            showClearButton: true,
-            value: '123',
-            onValueChanged: valueChangedHandler
-        });
-
-        const $clearButton = $element.find('.dx-clear-button-area');
-        $clearButton.trigger('dxclick');
-
-        assert.equal(valueChangedHandler.callCount, 1, 'valueChangedHandler has been called');
-        assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
+        assert.equal($(`.${CLEAR_BUTTON_AREA_CLASS}`).length, 0, 'clear button is not rendered');
     });
 
     QUnit.test('T810808 - should be possible to type characters in IE in TextBox with maxLength and mask', function(assert) {
@@ -427,5 +412,36 @@ QUnit.module('widget sizing render', {}, () => {
         instance.option('width', customWidth);
 
         assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
+    });
+});
+
+QUnit.module('valueChanged should receive correct event parameter', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#textbox').dxTextBox({
+            onValueChanged: this.valueChangedHandler
+        });
+        this.instance = this.$element.dxTextBox('instance');
+
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', 'custom text');
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+    }
+}, () => {
+    QUnit.test('on click on clear button', function(assert) {
+        this.instance.option({ showClearButton: true, value: 'text' });
+
+        const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
+        $clearButton.trigger('dxclick');
+
+        const event = this.valueChangedHandler.getCall(1).args[0].event;
+        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+        assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
     });
 });

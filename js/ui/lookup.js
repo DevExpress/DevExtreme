@@ -811,7 +811,10 @@ const Lookup = DropDownList.inherit({
         } : null;
     },
 
-    _applyButtonHandler: function() {
+    _applyButtonHandler: function(args) {
+        if(args) {
+            this._saveValueChangeEvent(args.event);
+        }
         this.option('value', this._valueGetter(this._currentSelectedItem()));
         this.callBase();
     },
@@ -896,6 +899,7 @@ const Lookup = DropDownList.inherit({
         }
 
         e.preventDefault();
+        e.target = $itemElement.get(0);
         this._saveValueChangeEvent(e);
         this._selectListItem(e.itemData, $itemElement);
     },

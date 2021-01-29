@@ -487,7 +487,7 @@ const Slider = TrackBar.inherit({
 
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
         delete this._needPreventAnimation;
-        this._saveValueChangeEvent(e);
+        this._saveValueChangeEvent(e.event);
         this._changeValueOnSwipe(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
         delete this._startOffset;
         this._renderValue();
@@ -498,7 +498,7 @@ const Slider = TrackBar.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        this._saveValueChangeEvent(e);
+        this._saveValueChangeEvent(e.event);
         this._updateHandlePosition(e);
     },
 
