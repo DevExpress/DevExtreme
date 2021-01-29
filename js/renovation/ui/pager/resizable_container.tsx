@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, ComponentBindings, JSXComponent,
-  Effect, Template, InternalState, OneWay, ForwardRef, Ref, JSXTemplate, RefObject,
+  Effect, Template, InternalState, OneWay, ForwardRef, Mutable, JSXTemplate, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
@@ -33,11 +33,8 @@ export const viewFunction = ({
     {...{ ...pagerProps, ...restAttributes }}
   />
 );
-type ChildElementsName = 'pageSizes' | 'pages' | 'info';
-type AllElementsName = 'parent' | ChildElementsName;
-type AllElementsWidth = Record<AllElementsName, number>;
-type ChildElementsWidth = Record<ChildElementsName, number>;
-type HTMLRefType = Record<AllElementsName, HTMLElement | undefined>;
+interface ChildElements<T> { pageSizes: T; pages: T; info: T }
+interface AllElements<T> extends ChildElements<T> { parent: T }
 interface ChildElementProps {
   infoTextVisible: boolean;
   isLargeDisplayMode: boolean;
@@ -46,7 +43,7 @@ interface ChildElementProps {
 export function calculateAdaptivityProps({
   parent: parentWidth, pageSizes: pageSizesWidth,
   pages: pagesWidth, info: infoWidth,
-}: AllElementsWidth): ChildElementProps {
+}: AllElements<number>): ChildElementProps {
   const minimalWidth = pageSizesWidth + pagesWidth + infoWidth;
   const infoTextVisible = parentWidth - minimalWidth > 0;
   const isLargeDisplayMode = parentWidth - (pageSizesWidth + pagesWidth) > 0;
@@ -58,7 +55,7 @@ export function calculateAdaptivityProps({
 
 function getElementsWidth({
   parent, pageSizes, pages, info,
-}: HTMLRefType): AllElementsWidth {
+}: AllElements<HTMLElement | undefined>): AllElements<number> {
   const parentWidth = getElementWidth(parent);
   const pageSizesWidth = getElementWidth(pageSizes);
   const infoWidth = getElementWidth(info);
@@ -94,7 +91,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
 
   @InternalState() isLargeDisplayMode = true;
 
-  @Ref() elementsWidth!: ChildElementsWidth;
+  @Mutable() elementsWidth!: ChildElements<number>;
 
   @Effect() subscribeToResize(): DisposeEffectReturn {
     const callback = (): void => this.updateChildrenProps();
@@ -109,7 +106,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
     }
   }
 
-  updateElementsWidth({ info, pageSizes, pages }: ChildElementsWidth): void {
+  updateElementsWidth({ info, pageSizes, pages }: ChildElements<number>): void {
     this.elementsWidth = { info, pageSizes, pages };
   }
 
@@ -142,28 +139,5 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
       this.infoTextVisible = current.infoTextVisible;
       this.isLargeDisplayMode = current.isLargeDisplayMode;
     }
-    /* const current = calculateAdaptivityProps(currentElementsWidth);
-    const isNotFittedWithCurrentWidths = (!current.infoTextVisible && this.infoTextVisible)
-    || (!current.isLargeDisplayMode && this.isLargeDisplayMode);
-    const isEmpty = this.elementsWidth === undefined;
-    if (isEmpty || isNotFittedWithCurrentWidths) {
-      this.updateElementsWidth(currentElementsWidth);
-      this.infoTextVisible = current.infoTextVisible;
-      this.isLargeDisplayMode = current.isLargeDisplayMode;
-    } else {
-      const cached = calculateAdaptivityProps({
-        parent: currentElementsWidth.parent,
-        ...this.elementsWidth,
-      });
-      if (cached.isLargeDisplayMode) {
-        this.elementsWidth.pageSizes = currentElementsWidth.pageSizes;
-        this.elementsWidth.pages = currentElementsWidth.pages;
-      }
-      if (cached.infoTextVisible) {
-        this.elementsWidth.info = currentElementsWidth.info;
-      }
-      this.infoTextVisible = cached.infoTextVisible;
-      this.isLargeDisplayMode = cached.isLargeDisplayMode;
-    } */
   }
 }
