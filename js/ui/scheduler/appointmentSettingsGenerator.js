@@ -216,7 +216,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         });
     }
 
-    _createExtremeRecurrenceDates(rawAppointment, groupIndex) {
+    _createExtremeRecurrenceDates(rawAppointment) {
         const dateRange = this.scheduler._workSpace.getDateRange();
 
         const startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment)
