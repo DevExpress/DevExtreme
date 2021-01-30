@@ -31,9 +31,10 @@ function exportDataGrid(doc, dataGrid, options) {
         dataProvider.ready().done(() => {
             const table = {
                 rect: options.rect,
-                borderLineWidth: 1
+                drawTableBorder: options.drawTableBorder,
+                rows: []
             };
-            table.rows = [];
+
             const columns = dataProvider.getColumns();
             const dataRowsCount = dataProvider.getRowsCount();
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
@@ -51,23 +52,23 @@ function exportDataGrid(doc, dataGrid, options) {
 
                     row.push(pdfCell);
 
-                    if(pdfCell.showLeftBorder === false) {
+                    if(pdfCell.drawLeftBorder === false) {
                         if(row.length > 1) {
-                            row[row.length - 2].showRightBorder = 0;
+                            row[row.length - 2].drawRightBorder = 0;
                         }
-                    } else if(!isDefined(pdfCell.showLeftBorder)) {
-                        if(row.length > 1 && row[row.length - 2].showRightBorder === false) {
-                            pdfCell.showLeftBorder = false;
+                    } else if(!isDefined(pdfCell.drawLeftBorder)) {
+                        if(row.length > 1 && row[row.length - 2].drawRightBorder === false) {
+                            pdfCell.drawLeftBorder = false;
                         }
                     }
 
-                    if(pdfCell.showTopBorder === false) {
+                    if(pdfCell.drawTopBorder === false) {
                         if(table.rows.length > 1) {
-                            table.rows[table.rows.length - 2][row.length - 1].showBottomBorder = false;
+                            table.rows[table.rows.length - 2][row.length - 1].drawBottomBorder = false;
                         }
-                    } else if(!isDefined(pdfCell.showTopBorder)) {
-                        if(table.rows.length > 1 && table.rows[table.rows.length - 2][row.length - 1].showBottomBorder === false) {
-                            pdfCell.showTopBorder = false;
+                    } else if(!isDefined(pdfCell.drawTopBorder)) {
+                        if(table.rows.length > 1 && table.rows[table.rows.length - 2][row.length - 1].drawBottomBorder === false) {
+                            pdfCell.drawTopBorder = false;
                         }
                     }
                 }
@@ -86,32 +87,32 @@ function drawTable(doc, table) {
         throw 'doc is required';
     }
 
-    function drawBorder(rect, showLeftBorder = true, showRightBorder = true, showTopBorder = true, showBottomBorder = true) {
+    function drawBorder(rect, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true) {
         if(!isDefined(rect)) {
             throw 'rect is required';
         }
 
-        if(!showLeftBorder && !showRightBorder && !showTopBorder && !showBottomBorder) {
+        if(!drawLeftBorder && !drawRightBorder && !drawTopBorder && !drawBottomBorder) {
             return;
-        } else if(showLeftBorder && showRightBorder && showTopBorder && showBottomBorder) {
+        } else if(drawLeftBorder && drawRightBorder && drawTopBorder && drawBottomBorder) {
             doc.setLineWidth(defaultBorderLineWidth);
             doc.rect(rect.x, rect.y, rect.w, rect.h);
         } else {
             doc.setLineWidth(defaultBorderLineWidth);
 
-            if(showTopBorder) {
+            if(drawTopBorder) {
                 doc.line(rect.x, rect.y, rect.x + rect.w, rect.y); // top
             }
 
-            if(showLeftBorder) {
+            if(drawLeftBorder) {
                 doc.line(rect.x, rect.y, rect.x, rect.y + rect.h); // left
             }
 
-            if(showRightBorder) {
+            if(drawRightBorder) {
                 doc.line(rect.x + rect.w, rect.y, rect.x + rect.w, rect.y + rect.h); // right
             }
 
-            if(showBottomBorder) {
+            if(drawBottomBorder) {
                 doc.line(rect.x, rect.y + rect.h, rect.x + rect.w, rect.y + rect.h); // bottom
             }
         }
@@ -132,7 +133,7 @@ function drawTable(doc, table) {
                 const textY = cell.rect.y + (cell.rect.h / 2); // https://github.com/MrRio/jsPDF/issues/1573
                 doc.text(cell.text, cell.rect.x, textY, { baseline: 'middle' });
             }
-            drawBorder(cell.rect, cell.showLeftBorder, cell.showRightBorder, cell.showTopBorder, cell.showBottomBorder);
+            drawBorder(cell.rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
         });
     }
 
@@ -149,7 +150,9 @@ function drawTable(doc, table) {
         }
     }
 
-    drawBorder(table.rect);
+    if(isDefined(table.drawTableBorder) ? table.drawTableBorder : true) {
+        drawBorder(table.rect);
+    }
 }
 
 QUnit.module('exportDataGrid', moduleConfig, () => {
@@ -250,6 +253,34 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
 
         exportDataGrid(doc, dataGrid, { rect, onCellExporting }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - hide all borders', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const rect = { x: 10, y: 15, w: 100, h: 20 };
+        const onCellExporting = ({ pdfCell }) => {
+            pdfCell.rect = rect;
+            pdfCell.drawLeftBorder = false;
+            pdfCell.drawRightBorder = false;
+            pdfCell.drawTopBorder = false;
+            pdfCell.drawBottomBorder = false;
+        };
+
+        const expectedLog = [
+            'text,f1,10,25,{baseline:middle}'
+        ];
+
+        exportDataGrid(doc, dataGrid, { rect, onCellExporting, drawTableBorder: false }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -439,7 +470,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
         const onCellExporting = ({ gridCell, pdfCell }) => {
             if(gridCell.value === 'v2_1') {
-                pdfCell.showLeftBorder = false;
+                pdfCell.drawLeftBorder = false;
             }
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
@@ -481,7 +512,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
         const onCellExporting = ({ gridCell, pdfCell }) => {
             if(gridCell.value === 'v2_1') {
-                pdfCell.showRightBorder = false;
+                pdfCell.drawRightBorder = false;
             }
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
@@ -522,7 +553,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
         const onCellExporting = ({ gridCell, pdfCell }) => {
             if(gridCell.value === 'v2_1') {
-                pdfCell.showTopBorder = false;
+                pdfCell.drawTopBorder = false;
             }
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
@@ -563,7 +594,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
         const onCellExporting = ({ gridCell, pdfCell }) => {
             if(gridCell.value === 'v2_1') {
-                pdfCell.showBottomBorder = false;
+                pdfCell.drawBottomBorder = false;
             }
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
@@ -604,10 +635,10 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
         const onCellExporting = ({ gridCell, pdfCell }) => {
             if(gridCell.value === 'v2_1') {
-                pdfCell.showLeftBorder = false;
-                pdfCell.showRightBorder = false;
-                pdfCell.showTopBorder = false;
-                pdfCell.showBottomBorder = false;
+                pdfCell.drawLeftBorder = false;
+                pdfCell.drawRightBorder = false;
+                pdfCell.drawTopBorder = false;
+                pdfCell.drawBottomBorder = false;
             }
             pdfCell.rect = pdfCellRects[cellIndex];
             cellIndex++;
