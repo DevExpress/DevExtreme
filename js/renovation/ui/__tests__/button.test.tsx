@@ -17,7 +17,7 @@ import { Widget } from '../common/widget';
 import { Icon } from '../common/icon';
 import { InkRipple } from '../common/ink_ripple';
 
-type Mock = jest.Mock;
+interface Mock extends jest.Mock {}
 
 jest.mock('../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../core/devices').default;

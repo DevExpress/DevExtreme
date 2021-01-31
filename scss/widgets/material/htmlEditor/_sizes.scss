@@ -2,3 +2,12 @@
 
 // adduse
 
+$material-toolbar-size-editor-width: null !default;
+
+@if $size == "default" {
+  $material-toolbar-size-editor-width: 120px !default;
+}
+
+@else if $size == "compact" {
+  $material-toolbar-size-editor-width: 90px !default;
+}

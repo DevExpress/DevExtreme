@@ -1196,6 +1196,24 @@ module('keyboard navigation', {
         assert.equal(itemClicked, 2, 'press space on item call item click action');
     }),
 
+    test('enter press should replace event target and currentTarget properties with item native element', function(assert) {
+        const handler = sinon.stub();
+        const $element = $('#cmp');
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ['0'],
+            onItemClick: handler
+        });
+
+        const $item = $element.find('.item').eq(0);
+        const keyboard = keyboardMock($element);
+
+        keyboard.press('enter');
+        const event = handler.getCall(0).args[0].event;
+        assert.strictEqual(event.target, $item.get(0), 'event target is correct');
+        assert.strictEqual(event.currentTarget, $item.get(0), 'event target is correct');
+    }),
+
     test('default page scroll should be prevented for space key', function(assert) {
         assert.expect(1);
 

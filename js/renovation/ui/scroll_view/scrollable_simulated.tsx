@@ -5,11 +5,8 @@ import {
   Ref,
   Effect,
   RefObject,
-  ComponentBindings,
-  Event,
   InternalState,
 } from 'devextreme-generator/component_declaration/common';
-import { EventCallback } from '../common/event_callback.d';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Scrollbar } from './scrollbar';
 import { Widget } from '../common/widget';
@@ -20,19 +17,15 @@ import { getWindow, hasWindow } from '../../../core/utils/window';
 import { getBoundingRect } from '../../../core/utils/position';
 import { titleize } from '../../../core/utils/inflector';
 import { isDefined } from '../../../core/utils/type';
-/* eslint-disable-next-line import/named */
-import { dxPromise, when } from '../../../core/utils/deferred';
+import { when } from '../../../core/utils/deferred';
+import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
 import $ from '../../../core/renderer';
 
-import BaseWidgetProps from '../../utils/base_props';
-import {
-  ScrollableProps,
-} from './scrollable_props';
-import { TopPocketProps } from './top_pocket_props';
-import { BottomPocketProps } from './bottom_pocket_props';
+import type { dxPromise } from '../../../core/utils/deferred';
 import {
   ScrollableLocation, ScrollOffset,
-  allowedDirection, ScrollEventArgs,
+  allowedDirection,
+  ScrollEventArgs,
 } from './types.d';
 
 import {
@@ -79,6 +72,8 @@ const KEY_CODES = {
   TAB: 'tab',
 };
 
+const VALIDATE_WHEEL_TIMEOUT = 500;
+
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
@@ -94,7 +89,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
       showScrollbar, direction, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
-      reachBottomText, useKeyboard, bounceEnabled,
+      reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled,
     },
     restAttributes,
   } = viewModel;
@@ -143,6 +138,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           </div>
           {isHorizontal && (
             <Scrollbar
+              direction="horizontal"
               ref={horizontalScrollbarRef}
               containerRef={containerRef}
               contentRef={contentRef}
@@ -152,15 +148,16 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               containerSize={containerWidth}
               baseContentSize={baseContentWidth}
               baseContainerSize={baseContainerWidth}
-              direction="horizontal"
               visible={isScrollbarVisible}
               scrollByThumb={scrollByThumb}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
+              inertiaEnabled={inertiaEnabled}
             />
           )}
           {isVertical && (
             <Scrollbar
+              direction="vertical"
               ref={verticalScrollbarRef}
               containerRef={containerRef}
               contentRef={contentRef}
@@ -170,11 +167,11 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               containerSize={containerHeight}
               baseContentSize={baseContentHeight}
               baseContainerSize={baseContainerHeight}
-              direction="vertical"
               visible={isScrollbarVisible}
               scrollByThumb={scrollByThumb}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
+              inertiaEnabled={inertiaEnabled}
             />
           )}
         </div>
@@ -182,21 +179,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     </Widget>
   );
 };
-
-@ComponentBindings()
-export class ScrollableSimulatedProps extends ScrollableProps {
-  @Event() onStart?: EventCallback<ScrollEventArgs>;
-
-  @Event() onEnd?: EventCallback<ScrollEventArgs>;
-
-  @Event() onBounce?: EventCallback<ScrollEventArgs>;
-
-  @Event() onStop?: EventCallback<ScrollEventArgs>;
-}
-
-type ScrollableSimulatedPropsType = ScrollableSimulatedProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >
-& Pick<TopPocketProps, 'pullingDownText' | 'pulledDownText' | 'refreshingText'>
-& Pick<BottomPocketProps, 'reachBottomText'>;
 
 @Component({
   defaultOptionRules: null,
@@ -243,7 +225,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() validDirections = {};
 
-  @InternalState() cachedVariables = {};
+  @InternalState() cachedVariables = {
+    validateWheelTimer: undefined,
+    locked: false,
+    eventForUserAction: null,
+  };
 
   @Method()
   content(): HTMLDivElement {
@@ -340,13 +326,22 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return this.containerRef.clientWidth;
   }
 
+  @Effect({ run: 'once' })
+  disposeWheelTimer(): DisposeEffectReturn {
+    return () => this.clearWheelValidationTimer();
+  }
+
   @Effect() scrollEffect(): DisposeEffectReturn {
     return subscribeToScrollEvent(this.containerRef,
-      (event: Event) => this.props.onScroll?.({
-        event,
-        scrollOffset: this.scrollOffset(),
-        ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef),
-      }));
+      () => this.props.onScroll?.(this.getEventArgs()));
+  }
+
+  getEventArgs(): ScrollEventArgs {
+    return {
+      event: this.cachedVariables.eventForUserAction,
+      scrollOffset: this.scrollOffset(),
+      ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef),
+    };
   }
 
   @Effect()
@@ -442,7 +437,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   /* istanbul ignore next */
   handleInit(e: Event): void {
     this.suppressDirections(e);
-    // this._eventForUserAction = e;
+    this.cachedVariables.eventForUserAction = e;
 
     const crossThumbScrolling = this.isThumbScrolling(e);
 
@@ -454,17 +449,17 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       ),
     );
   }
+
   /* istanbul ignore next */
-  // eslint-disable-next-line
-  private handleStart(event: Event): void {
-    // console.log('handleStart', event, this);
+  private handleStart(e: Event): void {
+    this.cachedVariables.eventForUserAction = e;
   }
 
   private handleMove(e): void {
     e.preventDefault && e.preventDefault();
 
     this.adjustDistance(e, 'delta');
-    // this._eventForUserAction = e;
+    this.cachedVariables.eventForUserAction = e;
 
     this.eventHandler(
       (scrollbar) => scrollbar.moveHandler(e.delta),
@@ -473,6 +468,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   private handleEnd(e): void {
     this.adjustDistance(e, 'velocity');
+    this.cachedVariables.eventForUserAction = e;
 
     this.eventHandler(
       (scrollbar) => scrollbar.endHandler(e, this.props.onEnd),
@@ -484,10 +480,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       (scrollbar) => scrollbar.stopHandler(),
     );
   }
+
   /* istanbul ignore next */
-  // eslint-disable-next-line
-  private handleCancel(event: Event): void {
-    // console.log('handleCancel', event, this);
+  private handleCancel(e: Event): void {
+    this.cachedVariables.eventForUserAction = e;
   }
 
   isThumbScrolling(e): boolean {
@@ -646,6 +642,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private validate(e: Event): boolean {
+    if (this.isLocked()) {
+      return false;
+    }
+
     if (this.props.disabled) {
       return false;
     }
@@ -659,9 +659,43 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       : this.validateMove(e);
   }
 
-  // eslint-disable-next-line
+  private isLocked(): boolean {
+    return this.cachedVariables.locked;
+  }
+
   private validateWheel(e: Event): boolean {
-    return true; // TODO:
+    const scrollbar = this.wheelDirection(e) === 'horizontal'
+      ? this.horizontalScrollbarRef
+      : this.verticalScrollbarRef;
+
+    const reachedMin = scrollbar.reachedMin();
+    const reachedMax = scrollbar.reachedMax();
+
+    const contentGreaterThanContainer = !reachedMin || !reachedMax;
+    const locatedNotAtBound = !reachedMin && !reachedMax;
+
+    const { delta } = e as any;
+    const scrollFromMin = (reachedMin && delta > 0);
+    const scrollFromMax = (reachedMax && delta < 0);
+
+    let validated = contentGreaterThanContainer
+      && (locatedNotAtBound || scrollFromMin || scrollFromMax);
+
+    validated = validated || this.cachedVariables.validateWheelTimer !== undefined;
+
+    if (validated) {
+      this.clearWheelValidationTimer();
+      this.cachedVariables.validateWheelTimer = setTimeout(
+        this.clearWheelValidationTimer, VALIDATE_WHEEL_TIMEOUT,
+      ) as any;
+    }
+
+    return validated;
+  }
+
+  private clearWheelValidationTimer(): void {
+    clearTimeout(this.cachedVariables.validateWheelTimer);
+    this.cachedVariables.validateWheelTimer = undefined;
   }
 
   private validateMove(e: Event): boolean {
@@ -687,7 +721,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return undefined;
   }
 
-  private keyDownHandler(e: any): void {
+  private keyDownHandler(e): void {
     let handled = true;
 
     switch (normalizeKeyName(e)) {
