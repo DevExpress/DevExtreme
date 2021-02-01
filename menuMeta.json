@@ -1696,6 +1696,7 @@
           {
             "Title": "Agenda",
             "Name": "Agenda",
+            "Badge": "Updated",
             "DocUrl": "Guide/UI_Components/Scheduler/Views/View_Types/#Agenda_View",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
@@ -1725,7 +1726,6 @@
           {
             "Title": "Time Zone Support",
             "Name": "TimeZonesSupport",
-            "Badge": "Updated",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Models/Event.cs",
