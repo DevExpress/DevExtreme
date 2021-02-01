@@ -43,7 +43,7 @@ function exportDataGrid(doc, dataGrid, options) {
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
                     const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
                     const pdfCell = {
-                        text: cellData.value,
+                        text: cellData.value
                     };
 
                     if(options.onCellExporting) {
@@ -80,8 +80,6 @@ function exportDataGrid(doc, dataGrid, options) {
     });
 }
 
-const defaultBorderLineWidth = 1;
-
 function drawTable(doc, table) {
     if(!isDefined(doc)) {
         throw 'doc is required';
@@ -92,6 +90,7 @@ function drawTable(doc, table) {
             throw 'rect is required';
         }
 
+        const defaultBorderLineWidth = 1;
         if(!drawLeftBorder && !drawRightBorder && !drawTopBorder && !drawBottomBorder) {
             return;
         } else if(drawLeftBorder && drawRightBorder && drawTopBorder && drawBottomBorder) {
@@ -130,8 +129,8 @@ function drawTable(doc, table) {
                 throw 'cell.rect is required';
             }
             if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-                const textY = cell.rect.y + (cell.rect.h / 2); // https://github.com/MrRio/jsPDF/issues/1573
-                doc.text(cell.text, cell.rect.x, textY, { baseline: 'middle' });
+                const textY = cell.rect.y + (cell.rect.h / 2);
+                doc.text(cell.text, cell.rect.x, textY, { baseline: 'middle' }); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
             }
             drawBorder(cell.rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
         });
