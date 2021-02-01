@@ -518,14 +518,14 @@ describe('Effects', () => {
     it('should trigger onTooltipShown event', () => {
       const shownTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipShown: shownTooltip,
       });
       tooltip.eventsEffect();
       tooltip.eventsEffect();
       tooltip.eventsEffect();
 
       expect(shownTooltip).toBeCalledTimes(1);
-      expect(shownTooltip).toHaveBeenCalledWith({ target: { tag: 'point info' } });
+      expect(shownTooltip).toHaveBeenCalledWith({ target: { tag: 'point info' }, component: {} });
     });
 
     it('should not trigger onTooltipShown event, correctedCoordinates is false', () => {
@@ -533,7 +533,7 @@ describe('Effects', () => {
 
       const shownTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipShown: shownTooltip,
       });
       tooltip.eventsEffect();
 
@@ -543,21 +543,47 @@ describe('Effects', () => {
     it('should trigger onTooltipShown event, if target is changed', () => {
       const shownTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, target: { tag: 'point info' } as any, onTooltipShown: shownTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipShown: shownTooltip,
       });
       tooltip.eventsEffect();
 
-      tooltip.props.target = { tag: 'new point info' } as any;
+      tooltip.props.eventData = { target: { tag: 'new point info' } as any, component: {} as any };
       tooltip.eventsEffect();
 
       expect(shownTooltip).toBeCalledTimes(2);
-      expect(shownTooltip).toHaveBeenLastCalledWith({ target: { tag: 'new point info' } });
+      expect(shownTooltip).toHaveBeenLastCalledWith({ target: { tag: 'new point info' }, component: {} });
+    });
+
+    it('should work properly after hide tooltip withow onTooltipHidden event', () => {
+      const shownTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipShown: shownTooltip,
+      });
+      tooltip.eventsEffect();
+
+      tooltip.props.visible = false;
+      tooltip.eventsEffect();
+
+      expect(shownTooltip).toBeCalledTimes(1);
+    });
+
+    it('should trigger onTooltipShown event, eventData is not define', () => {
+      const shownTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: true, eventData: undefined, onTooltipShown: shownTooltip,
+      });
+      tooltip.eventsEffect();
+      tooltip.eventsEffect();
+      tooltip.eventsEffect();
+
+      expect(shownTooltip).toBeCalledTimes(1);
+      expect(shownTooltip).toHaveBeenCalledWith({});
     });
 
     it('should not trigger onTooltipHidden event, tooltip have not been shown before', () => {
       const hiddenTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: false, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
+        visible: false, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipHidden: hiddenTooltip,
       });
       tooltip.eventsEffect();
 
@@ -567,7 +593,7 @@ describe('Effects', () => {
     it('should trigger onTooltipHidden event', () => {
       const hiddenTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipHidden: hiddenTooltip,
       });
       tooltip.eventsEffect();
       tooltip.props.visible = false;
@@ -575,21 +601,58 @@ describe('Effects', () => {
       tooltip.eventsEffect();
 
       expect(hiddenTooltip).toBeCalledTimes(1);
-      expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' } });
+      expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' }, component: {} });
     });
 
     it('should trigger onTooltipHidden event, if target is changed', () => {
       const hiddenTooltip = jest.fn();
       const tooltip = new Tooltip({
-        visible: true, target: { tag: 'point info' } as any, onTooltipHidden: hiddenTooltip,
+        visible: true, eventData: { target: { tag: 'point info' } as any, component: {} as any }, onTooltipHidden: hiddenTooltip,
       });
       tooltip.eventsEffect();
 
-      tooltip.props.target = { tag: 'new point info' } as any;
+      tooltip.props.eventData = { target: { tag: 'new point info' } as any, component: {} as any };
       tooltip.eventsEffect();
 
       expect(hiddenTooltip).toBeCalledTimes(1);
-      expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' } });
+      expect(hiddenTooltip).toHaveBeenLastCalledWith({ target: { tag: 'point info' }, component: {} });
+    });
+
+    it('should trigger onTooltipShown event, target is not define', () => {
+      const shownTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: true, eventData: { component: {} as any }, onTooltipShown: shownTooltip,
+      });
+      tooltip.eventsEffect();
+      tooltip.eventsEffect();
+      tooltip.eventsEffect();
+
+      expect(shownTooltip).toBeCalledTimes(1);
+      expect(shownTooltip).toHaveBeenCalledWith({ component: {} });
+    });
+
+    it('should not trigger onTooltipHidden event, tooltip have not been shown before, target is not define', () => {
+      const hiddenTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: false, eventData: { component: {} as any }, onTooltipHidden: hiddenTooltip,
+      });
+      tooltip.eventsEffect();
+
+      expect(hiddenTooltip).toBeCalledTimes(0);
+    });
+
+    it('should trigger onTooltipHidden event, target is not define', () => {
+      const hiddenTooltip = jest.fn();
+      const tooltip = new Tooltip({
+        visible: true, eventData: { component: {} as any }, onTooltipHidden: hiddenTooltip,
+      });
+      tooltip.eventsEffect();
+      tooltip.props.visible = false;
+      tooltip.eventsEffect();
+      tooltip.eventsEffect();
+
+      expect(hiddenTooltip).toBeCalledTimes(1);
+      expect(hiddenTooltip).toHaveBeenLastCalledWith({ component: {} });
     });
   });
 

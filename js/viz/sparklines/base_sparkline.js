@@ -17,12 +17,12 @@ const _extend = extend;
 const _floor = Math.floor;
 import { noop as _noop } from '../../core/utils/common';
 
-function inCanvas({ left, top, bottom, right, width, height }, x, y) {
+function inCanvas({ width, height }, x, y) {
     return pointInCanvas({
-        left,
-        top,
-        right: width - right,
-        bottom: height - bottom,
+        left: 0,
+        top: 0,
+        right: width,
+        bottom: height,
         width,
         height
     }, x, y);
@@ -211,6 +211,7 @@ const BaseSparkline = BaseWidget.inherit({
             const { left, top } = that._renderer.getRootOffset();
             const x = _floor(pageX - left);
             const y = _floor(pageY - top);
+
             if(!inCanvas(that._canvas, x, y)) {
                 that._hideTooltip();
                 that._disableOutHandler();
