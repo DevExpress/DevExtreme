@@ -3,6 +3,7 @@ import $ from 'jquery';
 import 'ui/html_editor';
 import 'ui/html_editor/converters/markdown';
 import { deferUpdate } from 'core/utils/common';
+import { Event as dxEvent } from 'events/index';
 
 import keyboardMock from '../../../helpers/keyboardMock.js';
 
@@ -187,6 +188,7 @@ testModule('drop and paste events', createModuleConfig({
             const done = assert.async();
             this.createEditor({
                 onValueChanged: ({ event }) => {
+                    assert.ok(event instanceof dxEvent, 'event is instance of the dxEvent');
                     assert.strictEqual(event.type, eventType, 'value changed after "paste" event dispatched');
                     done();
                 },
@@ -204,6 +206,7 @@ testModule('drop and paste events', createModuleConfig({
         const done = assert.async();
         this.createEditor({
             onValueChanged: ({ event }) => {
+                assert.ok(event instanceof dxEvent, 'event is instance of the dxEvent');
                 assert.strictEqual(event.type, 'paste', 'value changed after "paste" event dispatched');
                 done();
             },
@@ -224,6 +227,7 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
         const done = assert.async();
         this.createEditor({
             onValueChanged: ({ event }) => {
+                assert.ok(event instanceof dxEvent, 'event is instance of the dxEvent');
                 assert.strictEqual(event.type, 'keydown', 'value changed after "keydown" event dispatched');
                 done();
             },
@@ -252,13 +256,14 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
 
     ].forEach((toolbarOperation) => {
         test(`${toolbarOperation} toolbar item - click on toolbar button should raise valueChanged event with the relevant event`, function(assert) {
-            assert.expect(1);
+            assert.expect(2);
             const done = assert.async();
             this.createEditor({
                 value: 'test',
                 toolbar: { items: [toolbarOperation] },
                 onValueChanged: ({ event }) => {
                     if(event) {
+                        assert.ok(event instanceof dxEvent, 'event is instance of the dxEvent');
                         assert.strictEqual(
                             event.type,
                             'dxclick',
@@ -293,13 +298,14 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
         const { formatName } = listFormat;
 
         test(`${formatName} toolbar item - click on toolbar button should raise valueChanged event with the relevant event`, function(assert) {
-            assert.expect(1);
+            assert.expect(2);
             const done = assert.async();
             this.createEditor({
                 value: 'test',
                 toolbar: { items: [listFormat] },
                 onValueChanged: ({ event }) => {
                     if(event) {
+                        assert.ok(event instanceof dxEvent, 'event is instance of the dxEvent');
                         assert.strictEqual(
                             event.type,
                             'dxclick',
@@ -325,13 +331,14 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
         'background'
     ].forEach((colorDialog) => {
         test(`${colorDialog} toolbar item - click on toolbar button should raise valueChanged event with the relevant event`, function(assert) {
-            assert.expect(1);
+            assert.expect(2);
             const done = assert.async();
             this.createEditor({
                 value: 'test',
                 toolbar: { items: [colorDialog] },
                 onValueChanged: ({ event }) => {
                     if(event) {
+                        assert.ok(event instanceof dxEvent, 'event is instance of the dxEvent');
                         assert.strictEqual(
                             event.type,
                             'dxclick',
@@ -358,7 +365,7 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
     });
 
     test('link toolbar item - click on toolbar button should raise valueChanged event with the relevant event', function(assert) {
-        assert.expect(1);
+        assert.expect(2);
         const done = assert.async();
         const operationName = 'link';
         this.createEditor({
@@ -366,6 +373,7 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
             toolbar: { items: [operationName] },
             onValueChanged: ({ event }) => {
                 if(event) {
+                    assert.ok(event instanceof dxEvent, 'event is instance of the dxEvent');
                     assert.strictEqual(
                         event.type,
                         'dxclick',
@@ -391,7 +399,7 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
     });
 
     test('image toolbar item - click on toolbar button should raise valueChanged event with the relevant event', function(assert) {
-        assert.expect(1);
+        assert.expect(2);
         const done = assert.async();
         const operationName = 'image';
         this.createEditor({
@@ -399,6 +407,7 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
             toolbar: { items: [operationName] },
             onValueChanged: ({ event }) => {
                 if(event) {
+                    assert.ok(event instanceof dxEvent, 'event is instance of the dxEvent');
                     assert.strictEqual(
                         event.type,
                         'dxclick',
@@ -421,5 +430,30 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
         $('.dx-formdialog .dx-button')
             .first()
             .trigger('dxclick');
+    });
+
+    test('clear formatting - click on toolbar button should raise valueChanged event with the relevant event', function(assert) {
+        assert.expect(2);
+        const done = assert.async();
+        this.createEditor({
+            value: '<b>test</b>',
+            toolbar: { items: ['clear'] },
+            onValueChanged: ({ event }) => {
+                if(event) {
+                    assert.ok(event instanceof dxEvent, 'event is instance of the dxEvent');
+                    assert.strictEqual(
+                        event.type,
+                        'dxclick',
+                        'clear toolbar item - value changed after "dxclick" event dispatched'
+                    );
+                    done();
+                }
+            },
+        });
+        this.instance.focus();
+        this.clock.tick(TIME_TO_WAIT);
+        this.instance.setSelection(0, 3);
+
+        $('.dx-htmleditor-toolbar .dx-button').trigger('dxclick');
     });
 });
