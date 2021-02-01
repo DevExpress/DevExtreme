@@ -441,7 +441,7 @@ QUnit.module('Grid DataSource', {
     });
 
     QUnit.test('groupingHelper when remoteOperations is auto and ArrayStore', function(assert) {
-    // act
+        // act
         const dataSource = createDataSource({
             store: TEN_NUMBERS,
             remoteOperations: 'auto'
@@ -452,7 +452,7 @@ QUnit.module('Grid DataSource', {
     });
 
     QUnit.test('groupingHelper when remoteOperations is auto and CustomStore', function(assert) {
-    // act
+        // act
         const dataSource = createDataSource({
             load: function() { },
             remoteOperations: 'auto'
@@ -463,7 +463,7 @@ QUnit.module('Grid DataSource', {
     });
 
     QUnit.test('groupingHelper when remoteOperations is auto and ODataStore', function(assert) {
-    // act
+        // act
         const dataSource = createDataSource({
             store: {
                 type: 'odata',
@@ -536,7 +536,7 @@ QUnit.module('Grid DataSource', {
 
     // T474591
     QUnit.test('No error when store returned non-array', function(assert) {
-    // arrange
+        // arrange
         const source = createDataSource({
             load: function() {
                 return $.Deferred().resolve({ /* no data property */ });
@@ -551,7 +551,7 @@ QUnit.module('Grid DataSource', {
     });
 
     QUnit.test('createOffsetFilter should generate filters with =/<> filter operations for boolean values', function(assert) {
-    // arrange
+        // arrange
 
         const booleanValues = [null, false, true];
         const descValues = [false, true];
@@ -579,7 +579,7 @@ QUnit.module('Grid DataSource', {
     });
 
     QUnit.test('Custom store with remote paging and with local filtering', function(assert) {
-    // arrange
+        // arrange
         let loadArgs = [];
         const source = createDataSource({
             remoteOperations: { paging: true },
@@ -615,7 +615,7 @@ QUnit.module('Grid DataSource', {
 
     // T748688
     QUnit.test('Custom store with remote paging and with local sorting', function(assert) {
-    // arrange
+        // arrange
         let loadArgs = [];
         const source = createDataSource({
             remoteOperations: { paging: true },
@@ -1119,7 +1119,7 @@ QUnit.module('Grouping with basic remoteOperations', {
         // act
         source.load();
         source.changed.add(function() {
-        // assert
+            // assert
             assert.equal(source.itemsCount(), 3);
             assert.deepEqual(source.items(), [{
                 key: 1, items: null,
@@ -1956,7 +1956,7 @@ QUnit.module('Grouping with basic remoteOperations', {
 
     // T545211
     QUnit.test('Ungrouping with custom store - there are no exceptions when remote paging', function(assert) {
-    // arrange
+        // arrange
         const that = this;
         const dataSource = createDataSource({
             load: function() {
@@ -1974,14 +1974,14 @@ QUnit.module('Grouping with basic remoteOperations', {
         dataSource.load();
 
         try {
-        // act
+            // act
             dataSource.group(null);
             dataSource.load();
 
             // assert
             assert.ok(true, 'There are no exceptions');
         } catch(error) {
-        // assert
+            // assert
             assert.ok(false, 'exception was threw:' + error);
         }
     });
@@ -2556,7 +2556,7 @@ QUnit.module('Grouping with basic remoteOperations. Second level', {
 
     // T307341
     QUnit.test('Update group offset for expanded grouped row of the first level when change sortOrder of the first level group field', function(assert) {
-    // arrange
+        // arrange
         this.array = [
             { field1: 1, field2: 2, field3: 3 },
             { field1: 1, field2: 2, field3: 4 },
@@ -2813,20 +2813,26 @@ QUnit.module('Remote group paging', {
             pageSize: 3
         });
 
-        loadStub.onCall(0).returns($.Deferred().resolve({ data: [
-            { key: 'test1', items: null, count: 3 },
-            { key: 'test2', items: null, count: 3 },
-            { key: 'test3', items: null, count: 3 }
-        ], totalCount: 9, groupCount: 3 }));
+        loadStub.onCall(0).returns($.Deferred().resolve({
+            data: [
+                { key: 'test1', items: null, count: 3 },
+                { key: 'test2', items: null, count: 3 },
+                { key: 'test3', items: null, count: 3 }
+            ], totalCount: 9, groupCount: 3
+        }));
 
-        loadStub.onCall(1).returns($.Deferred().resolve({ data: [
-            { key: 'test1', items: null, count: 3 }
-        ], totalCount: 9, groupCount: 3 }));
+        loadStub.onCall(1).returns($.Deferred().resolve({
+            data: [
+                { key: 'test1', items: null, count: 3 }
+            ], totalCount: 9, groupCount: 3
+        }));
 
-        loadStub.onCall(2).returns($.Deferred().resolve({ data: [
-            { name: 'test1', id: 1 },
-            { name: 'test1 ', id: 2 }
-        ] }));
+        loadStub.onCall(2).returns($.Deferred().resolve({
+            data: [
+                { name: 'test1', id: 1 },
+                { name: 'test1 ', id: 2 }
+            ]
+        }));
 
         dataSource.load();
 
@@ -2861,10 +2867,12 @@ QUnit.module('Remote group paging', {
     QUnit.test('Expand group if group key is object', function(assert) {
         const dataSource = this.createDataSource({
             load: function() {
-                return $.Deferred().resolve({ data: [
-                    { key: { groupId: 1, groupName: 'test 1' }, items: [{ id: 1 }] },
-                    { key: { groupId: 2, groupName: 'test 2' }, items: [{ id: 2 }] }
-                ], totalCount: 2, groupCount: 2 });
+                return $.Deferred().resolve({
+                    data: [
+                        { key: { groupId: 1, groupName: 'test 1' }, items: [{ id: 1 }] },
+                        { key: { groupId: 2, groupName: 'test 2' }, items: [{ id: 2 }] }
+                    ], totalCount: 2, groupCount: 2
+                });
             },
             group: 'group'
         });
@@ -3258,9 +3266,9 @@ QUnit.module('Remote group paging', {
 
     QUnit.test('Expand third level group', function(assert) {
         const array = [
-        /* 1 */
-        /* 2 */
-        /* 3 */
+            /* 1 */
+            /* 2 */
+            /* 3 */
             { field1: 1, field2: 2, field3: 3, id: 1 },
             { field1: 1, field2: 2, field3: 3, id: 2 },
             /* 2 */ { field1: 2, field2: 2, field3: 4, id: 3 },
@@ -3500,7 +3508,7 @@ QUnit.module('Remote group paging', {
 
     // T850299
     QUnit.test('Remote group paging should work correctly after sorting if grouping by 2 columns', function(assert) {
-    // arrange
+        // arrange
         let items;
         let subgroups;
 
@@ -3644,7 +3652,7 @@ QUnit.module('Remote group paging', {
 
     // T454240
     QUnit.test('Error when store not returned groupCount', function(assert) {
-    // arrange
+        // arrange
         assert.expect(1);
 
         const dataSource = this.createDataSource({
@@ -3654,18 +3662,18 @@ QUnit.module('Remote group paging', {
         // act
         dataSource.load()
             .done(() => {
-            // assert
+                // assert
                 assert.ok(false, 'exception should be rised');
             })
             .fail((e) => {
-            // assert
+                // assert
                 assert.ok(e.message.indexOf('E4022') >= 0, 'name of error');
             });
     });
 
     // T477410
     QUnit.test('Error when store not returned groupCount during expand not last level group', function(assert) {
-    // arrange
+        // arrange
         assert.expect(1);
 
         const brokeOptions = {};
@@ -3680,18 +3688,18 @@ QUnit.module('Remote group paging', {
 
         dataSource.changeRowExpand([1])
             .done(() => {
-            // assert
+                // assert
                 assert.ok(false, 'exception should be rised');
             })
             .fail((e) => {
-            // assert
+                // assert
                 assert.ok(e.message.indexOf('E4022') >= 0, 'name of error');
             });
     });
 
     // T477410
     QUnit.test('Exception when store not returned totalCount after full reload', function(assert) {
-    // arrange
+        // arrange
         const brokeOptions = {};
         const dataSource = this.createDataSource({
             group: ['field1']
@@ -3713,7 +3721,7 @@ QUnit.module('Remote group paging', {
 
     // T754708
     QUnit.test('The collapseAll method should work after expanding group row', function(assert) {
-    // arrange
+        // arrange
         const dataSource = this.createDataSource({
             group: 'field2',
             pageSize: 2
@@ -3760,7 +3768,7 @@ QUnit.module('Remote group paging', {
 
     // T754708
     QUnit.test('The expandAll method  should work after collapsing group row', function(assert) {
-    // arrange
+        // arrange
         const dataSource = this.createDataSource({
             group: 'field2',
             pageSize: 2
@@ -4507,7 +4515,7 @@ QUnit.module('Remote group paging', {
 
                 // T112478
                 QUnit.test('collapseAll for remote data', function(assert) {
-                // arrange
+                    // arrange
                     const source = this.createDataSource({
                         load: function() { return [{ group: 'group 1', text: 'text 1' }, { group: 'group 1', text: 'text 2' }, { group: 'group 2', text: 'text 3' }]; },
                         totalCount: function() { return -1; },
@@ -5054,13 +5062,13 @@ QUnit.module('Remote group paging', {
                 assert.equal(source.totalItemsCount(), 15);
                 assert.deepEqual(this.processItems(source.items()), [{
                     key: 1, isContinuationOnNextPage: true, items:
-                [
-                    {
-                        key: 2,
-                        isContinuationOnNextPage: true,
-                        items: [{ field1: 1, field2: 2, field3: 3 }]
-                    }
-                ]
+                        [
+                            {
+                                key: 2,
+                                isContinuationOnNextPage: true,
+                                items: [{ field1: 1, field2: 2, field3: 3 }]
+                            }
+                        ]
                 }]);
             });
 
@@ -5133,10 +5141,10 @@ QUnit.module('Remote group paging', {
                 assert.equal(source.totalItemsCount(), 4);
                 assert.deepEqual(this.processItems(source.items()), [{
                     key: 1, items:
-                [
-                    { key: 2, items: null },
-                    { key: 3, items: null }
-                ]
+                        [
+                            { key: 2, items: null },
+                            { key: 3, items: null }
+                        ]
                 }]);
             });
 
@@ -5158,10 +5166,10 @@ QUnit.module('Remote group paging', {
                 assert.equal(source.totalItemsCount(), 5);
                 assert.deepEqual(this.processItems(source.items()), [{
                     key: 1, items:
-                [
-                    { key: 2, items: null },
-                    { key: 3, items: null }
-                ]
+                        [
+                            { key: 2, items: null },
+                            { key: 3, items: null }
+                        ]
                 }]);
             });
 
@@ -5177,10 +5185,10 @@ QUnit.module('Remote group paging', {
                 assert.equal(source.totalItemsCount(), 5);
                 assert.deepEqual(this.processItems(source.items()), [{
                     key: 1, items:
-                [
-                    { key: 2, items: null },
-                    { key: 3, items: null }
-                ]
+                        [
+                            { key: 2, items: null },
+                            { key: 3, items: null }
+                        ]
                 }]);
             });
 
@@ -5247,10 +5255,10 @@ QUnit.module('Remote group paging', {
                 assert.equal(source.totalItemsCount(), 4);
                 assert.deepEqual(this.processItems(source.items()), [{
                     key: 1, items:
-                [
-                    { key: 3, items: null },
-                    { key: 2, items: null }
-                ]
+                        [
+                            { key: 3, items: null },
+                            { key: 2, items: null }
+                        ]
                 }]);
             });
 
@@ -6897,5 +6905,62 @@ QUnit.module('Custom Load', {
         assert.deepEqual(dataSource.items(), [1, 1, 2, 2, 3], 'items on page');
         assert.deepEqual(dataSource.totalCount(), 10, 'totalCount');
         assert.deepEqual(loadingCount, 2, 'loading count');
+    });
+});
+
+
+QUnit.module('New virtual scrolling mode', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.createDataSource = function(options) {
+            return createDataSource($.extend({
+                store: TEN_NUMBERS,
+                paginate: true,
+                scrolling: {
+                    newMode: true,
+                    mode: 'virtual',
+                    rowRenderingMode: 'virtual'
+                },
+                remoteOperations: { filtering: true, sorting: true, paging: true }
+            }, options));
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('loadPageCount affects the take parameter', function(assert) {
+        // arrange
+        const dataSource = this.createDataSource({
+            pageSize: 3
+        });
+        const dataLoadingHandler = dataSource._dataLoadingHandler;
+        const takeValues = [];
+
+        dataSource._dataLoadingHandler = function(options) {
+            dataLoadingHandler.apply(dataSource, arguments);
+            takeValues.push(options.storeLoadOptions.take);
+        };
+        dataSource._dataSource.off('customizeStoreLoadOptions', dataLoadingHandler);
+        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
+
+        try {
+            // act
+            dataSource.loadPageCount(2);
+            dataSource.load();
+
+            // assert
+            assert.strictEqual(takeValues[0], 6, 'first take value');
+
+            // act
+            dataSource.loadPageCount(3);
+            dataSource.load();
+
+            // assert
+            assert.strictEqual(takeValues[1], 9, 'second take value');
+        } finally {
+            dataSource._dataSource.off('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
+            dataSource._dataSource.on('customizeStoreLoadOptions', dataLoadingHandler);
+        }
     });
 });

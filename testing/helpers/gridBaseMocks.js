@@ -153,7 +153,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             viewportItemSize: function() {},
 
-            setContentSize: function() {},
+            setContentItemSizes: function() {},
 
             setViewportItemIndex: function(index) {
                 options.viewportItemIndex = index;
