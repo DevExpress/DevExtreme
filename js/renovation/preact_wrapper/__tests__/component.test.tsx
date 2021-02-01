@@ -336,6 +336,14 @@ describe('Widget\'s container manipulations', () => {
       display: 'inline',
     });
   });
+
+  it('component container should not change its position in parent container', () => {
+    $('#components').append($('<div>')).prepend($('<div>'));
+
+    $('#component').dxPreactTestWidget({});
+
+    expect($('#components').children().get(1)).toBe($('#component').get(0));
+  });
 });
 
 describe('option', () => {

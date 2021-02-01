@@ -18,6 +18,18 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
   }
 };
 
+const getContainerIndex = (parentNode: Element, element: Element): number => {
+  return $(parentNode).children().index($(element));
+}
+
+const insertContainer = (parentNode: Element, element: Element, index: number): void => {
+  const $parent = $(parentNode);
+  if (index >= $parent.children().length) {
+    $parent.append(element);
+  } else {
+    $(element).insertBefore($parent.children().eq(index));
+  }
+}
 
 export default class PreactWrapper extends DOMComponent {
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
@@ -98,6 +110,11 @@ export default class PreactWrapper extends DOMComponent {
     const parentNode = containerNode.parentNode;
 
     if (!this._preactReplaced) {
+      let containerPosition = 0;
+      if (parentNode) {
+        containerPosition = getContainerIndex(parentNode, containerNode);
+      }
+
       const mountNode = this._documentFragment.appendChild($("<div>").append(containerNode)[0]);
       InfernoEffectHost.lock();
       hydrate(
@@ -106,7 +123,7 @@ export default class PreactWrapper extends DOMComponent {
       );
       containerNode.$V = mountNode.$V;
       if (parentNode) {
-        parentNode.appendChild(containerNode);
+        insertContainer(parentNode, containerNode, containerPosition);
       }
       InfernoEffectHost.callEffects();
       this._preactReplaced = true;
