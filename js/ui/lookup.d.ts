@@ -377,8 +377,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid dxLookupOptions.useNativeScrolling
      * @type boolean
      * @default true
-     * @default false [for](desktop)
-     * @default true [for](Mac)
+     * @default false [for](desktop except Mac)
      * @prevFileNamespace DevExpress.ui
      * @public
      */

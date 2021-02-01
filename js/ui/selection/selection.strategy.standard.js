@@ -1,6 +1,8 @@
 const commonUtils = require('../../core/utils/common');
 const typeUtils = require('../../core/utils/type');
 const isDefined = typeUtils.isDefined;
+const arrayUtils = require('../../core/utils/array');
+const isKeysEqual = require('../../core/utils/array_compare').isKeysEqual;
 const getKeyHash = commonUtils.getKeyHash;
 const dataQuery = require('../../data/query');
 const deferredUtils = require('../../core/utils/deferred');
@@ -144,12 +146,49 @@ module.exports = SelectionStrategy.inherit({
         }
     },
 
+    _isMultiSelectEnabled: function() {
+        const mode = this.options.mode;
+        return mode === 'all' || mode === 'multiple';
+    },
+
     _loadSelectedItems: function(keys, isDeselect, isSelectAll) {
         const that = this;
         const deferred = new Deferred();
+        const isMultiSelectEnabled = this._isMultiSelectEnabled();
+
+        let oldAddedItems = [];
+        let oldRemovedItems = [];
+
+        if(isMultiSelectEnabled) {
+            if(that._lastLoadDeferred?.state() === 'pending' && !isKeysEqual(keys, this.options.selectedItemKeys)) {
+                oldAddedItems = this._lastRequestData.addedItems;
+                oldRemovedItems = this._lastRequestData.removedItems;
+
+                if(!isDeselect) {
+                    that._lastLoadDeferred.reject();
+                }
+            } else {
+                this._lastRequestData = {};
+            }
+
+            const deselectedItems = isDeselect ? keys : [];
+
+            this._lastRequestData = {
+                addedItems: oldAddedItems.concat(arrayUtils.removeDuplicates(keys, this.options.selectedItemKeys)),
+                removedItems: oldRemovedItems.concat(deselectedItems),
+                keys: keys
+            };
+        }
 
         when(that._lastLoadDeferred).always(function() {
-            that._loadSelectedItemsCore(keys, isDeselect, isSelectAll)
+            let currentKeys = keys;
+
+            if(isMultiSelectEnabled && !isDeselect) {
+                currentKeys = arrayUtils.removeDuplicates(keys.concat(that._lastRequestData?.addedItems), that._lastRequestData?.removedItems);
+                currentKeys = arrayUtils.uniqueValues(currentKeys);
+            }
+
+            that._loadSelectedItemsCore(currentKeys, isDeselect, isSelectAll)
                 .done(deferred.resolve)
                 .fail(deferred.reject);
         });

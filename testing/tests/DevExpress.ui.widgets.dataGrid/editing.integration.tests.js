@@ -2060,6 +2060,61 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell should be invalid');
         });
     });
+
+    QUnit.test('The onRowValidating event handler should not accept redundant broken rules in Batch (T960813)', function(assert) {
+        // arrange
+        const validatedRowKeys = [];
+        const validatedMessages = [];
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field1: 'f11', field2: 'f21' },
+                { id: 2, field1: 'f12', field2: 'f22' },
+                { id: 3, field1: 'f13', field2: 'f23' },
+                { id: 4, field1: 'f14', field2: 'f24' }
+            ],
+            keyExpr: 'id',
+            paging: {
+                enabled: true,
+                pageSize: 2
+            },
+            onRowValidating: function(args) {
+                validatedRowKeys.push(args.key);
+
+                const rowBrokenRulesMessages = args.brokenRules.map(br => br.message);
+                validatedMessages.push(...rowBrokenRulesMessages);
+            },
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            columns: ['id', {
+                dataField: 'field1',
+                validationRules: [{ type: 'required' }]
+            }, {
+                dataField: 'field2',
+                validationRules: [{ type: 'required' }]
+            }],
+            loadingTimeout: undefined
+        });
+
+        // act
+        dataGrid.editCell(0, 1);
+        this.clock.tick();
+        dataGrid.cellValue(0, 1, '');
+        this.clock.tick();
+        dataGrid.pageIndex(1);
+        this.clock.tick();
+        dataGrid.editCell(0, 2);
+        this.clock.tick();
+        dataGrid.cellValue(0, 2, '');
+        this.clock.tick();
+        dataGrid.saveEditData();
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(validatedRowKeys, [1, 3], 'validated row keys');
+        assert.deepEqual(validatedMessages, ['Field 1 is required', 'Field 2 is required'], 'broken rules messages');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {

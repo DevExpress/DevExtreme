@@ -239,8 +239,14 @@ const Calendar = Editor.inherit({
         return dateSerialization.deserializeDate(value);
     },
 
-    _dateValue: function(value, dxEvent) {
-        if(dxEvent) this._saveValueChangeEvent(dxEvent);
+    _dateValue: function(value, event) {
+        if(event) {
+            if(event.type === 'keydown') {
+                const cellElement = this._view._getContouredCell().get(0);
+                event.target = cellElement;
+            }
+            this._saveValueChangeEvent(event);
+        }
         this._dateOption('value', value);
     },
 
@@ -536,7 +542,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDateByOffset: function(offset, date) {
-        date = this._getDate(date || this.option('currentDate'));
+        date = this._getDate(date ?? this.option('currentDate'));
 
         const currentDay = date.getDate();
         const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
@@ -769,7 +775,6 @@ const Calendar = Editor.inherit({
         const currentDate = this._getDateByOffset(e.direction, this.option('currentDate'));
 
         this._moveToClosestAvailableDate(currentDate);
-        this._updateNavigatorCaption(-e.direction * this._getRtlCorrection());
     },
 
     _navigateUp: function() {
@@ -904,8 +909,8 @@ const Calendar = Editor.inherit({
                 Button, {
                     focusStateEnabled: false,
                     text: messageLocalization.format('dxCalendar-todayButtonText'),
-                    onClick: (function() {
-                        this._toTodayView();
+                    onClick: (function(args) {
+                        this._toTodayView(args);
                     }).bind(this),
                     integrationOptions: {}
                 }).$element()
@@ -1006,7 +1011,8 @@ const Calendar = Editor.inherit({
         return result;
     },
 
-    _toTodayView: function() {
+    _toTodayView: function(args) {
+        this._saveValueChangeEvent(args.event);
         const today = new Date();
 
         if(this._isMaxZoomLevel()) {
@@ -1134,7 +1140,7 @@ const Calendar = Editor.inherit({
     },
 
     _updateAriaSelected: function(value, previousValue) {
-        value = value || this._dateOption('value');
+        value = value ?? this._dateOption('value');
 
         const $prevSelectedCell = this._view._getCellByDate(previousValue);
         const $selectedCell = this._view._getCellByDate(value);
@@ -1148,7 +1154,7 @@ const Calendar = Editor.inherit({
     },
 
     _updateAriaId: function(value) {
-        value = value || this.option('currentDate');
+        value = value ?? this.option('currentDate');
 
         const ariaId = 'dx-' + new Guid();
         const $newCell = this._view._getCellByDate(value);

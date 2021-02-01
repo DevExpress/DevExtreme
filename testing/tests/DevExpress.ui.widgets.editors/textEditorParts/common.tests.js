@@ -9,6 +9,7 @@ import themes from 'ui/themes';
 import config from 'core/config';
 import { noop } from 'core/utils/common';
 import consoleUtils from 'core/utils/console';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/text_box/ui.text_editor';
 
@@ -339,6 +340,25 @@ QUnit.module('general', {}, () => {
         assert.ok($textEditor.hasClass('dx-state-focused'), 'input is still focused');
         assert.strictEqual(focusStub.callCount, 1, 'new FocusIn event has not been triggered');
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
+    });
+
+    QUnit.testInActiveWindow('input should be focused even after focus from inner button move (T963822)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            buttons: [{
+                name: 'test',
+                options: {
+                    icon: 'home'
+                }
+            }]
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const actionButton = textEditor.getButton('test');
+
+        actionButton.focus();
+        assert.notOk($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is not focused');
+
+        textEditor.focus();
+        assert.ok($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is focused');
     });
 
     QUnit.test('TextEditor should pass integration options to the nested buttons (T894344)', function(assert) {
@@ -1122,5 +1142,80 @@ QUnit.module('regressions', moduleConfig, () => {
         const $placeholder = $textEditor.find('.' + PLACEHOLDER_CLASS);
 
         assert.equal($placeholder.hasClass('dx-state-invisible'), true, 'display none was attached as inline style');
+    });
+});
+
+QUnit.module('valueChanged should receive correct event parameter', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#texteditor').dxTextEditor({
+            onValueChanged: this.valueChangedHandler
+        });
+        this.instance = this.$element.dxTextEditor('instance');
+        this.$input = this.$element.find(`.${INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', 'custom text');
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+    }
+}, () => {
+    QUnit.test('on program change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on change', function(assert) {
+        this.keyboard
+            .type('text')
+            .change();
+
+        this.checkEvent(assert, 'change', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on input if valueChangeEvent=input', function(assert) {
+        this.instance.option('valueChangeEvent', 'input');
+
+        this.keyboard
+            .type('text')
+            .change();
+
+        this.checkEvent(assert, 'input', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on focusout if valueChangeEvent=focusout', function(assert) {
+        this.instance.option('valueChangeEvent', 'focusout');
+
+        this.keyboard
+            .type('text')
+            .blur();
+
+        this.checkEvent(assert, 'focusout', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on keyup if valueChangeEvent=keyup', function(assert) {
+        this.instance.option('valueChangeEvent', 'keyup');
+
+        this.keyboard
+            .type('text')
+            .keyUp();
+
+
+        this.checkEvent(assert, 'keyup', this.$input);
+        this.testProgramChange(assert);
     });
 });

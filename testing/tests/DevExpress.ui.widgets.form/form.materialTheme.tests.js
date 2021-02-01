@@ -523,3 +523,39 @@ QUnit.module('dx-invalid class on dx-field-item-content-wrapper (T949269)', {
         assert.ok(wrapper.hasClass(invalidClass));
     });
 });
+
+QUnit.module('check validation message location', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.testInActiveWindow('validation message fix at bottom of drop down editor if form labels have top location (T956436)', function(assert) {
+        $('#form').dxForm({
+            items: [{
+                dataField: 'Country',
+                editorType: 'dxSelectBox',
+                editorOptions: {
+                    dataSource: ['Afghanistan', 'Albania', 'Algeria']
+                },
+                validationRules: [{
+                    type: 'required',
+                    message: 'Country is required'
+                }]
+            }]
+        })
+            .dxForm('instance')
+            .validate();
+
+        const $editorElement = $('.dx-selectbox');
+        const invalidMessage = $editorElement.find('.dx-invalid-message')[0];
+
+        $editorElement.dxSelectBox('instance').focus();
+        this.clock.tick();
+
+        assert.equal($(invalidMessage).find('.dx-overlay-wrapper').css('transform'), 'matrix(1, 0, 0, 1, 0, 0)', 'change validation overlay wrapper style to fix message at bottom');
+        assert.equal($(invalidMessage).find('.dx-overlay-content').css('transform'), 'matrix(1, 0, 0, 1, 0, 0)', 'change validation overlay content style to fix message at bottom');
+    });
+});
