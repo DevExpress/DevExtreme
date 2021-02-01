@@ -2,7 +2,9 @@
 
 import domAdapter from '../dom_adapter';
 
-const hasWindow = () => typeof window !== 'undefined';
+let hasWindowValue = typeof window !== 'undefined';
+
+const hasWindow = () => hasWindowValue;
 
 let windowObject = hasWindow() && window;
 
@@ -12,6 +14,15 @@ if(!windowObject) {
 }
 
 const getWindow = () => windowObject;
+
+const setWindow = (newWindowObject, hasWindow) => {
+    if(hasWindow === undefined) {
+        hasWindowValue = typeof window !== 'undefined' && window === newWindowObject;
+    } else {
+        hasWindowValue = hasWindow;
+    }
+    windowObject = newWindowObject;
+};
 
 const hasProperty = (prop) => hasWindow() && prop in windowObject;
 
@@ -39,6 +50,7 @@ const getNavigator = () => hasWindow() ? windowObject.navigator : { userAgent: '
 export {
     hasWindow,
     getWindow,
+    setWindow,
     hasProperty,
     defaultScreenFactorFunc,
     getCurrentScreenFactor,
