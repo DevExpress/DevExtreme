@@ -8,6 +8,7 @@ import * as utilsModule from '../../../utils';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 import { GroupPanel } from '../../group_panel/group_panel';
 import { DateHeaderLayout } from '../date_header/layout';
+import { TimelineDateHeaderLayout } from '../../../timeline/header_panel/date_header/layout';
 
 const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
 
@@ -34,7 +35,6 @@ describe('HeaderPanelLayoutLayout', () => {
         props: {
           dateCellTemplate,
           timeCellTemplate,
-          useTimeCellTemplate: true,
         },
       });
 
@@ -53,7 +53,6 @@ describe('HeaderPanelLayoutLayout', () => {
           timeCellTemplate,
           groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
           groups: [],
-          useTimeCellTemplate: true,
         });
     });
 
@@ -113,6 +112,13 @@ describe('HeaderPanelLayoutLayout', () => {
           resourceCellTemplate,
           groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
         });
+    });
+
+    it('should render correct Date Header', () => {
+      const layout = render({ props: { dateHeaderTemplate: TimelineDateHeaderLayout } });
+
+      expect(layout.find(TimelineDateHeaderLayout).exists())
+        .toBe(true);
     });
   });
 

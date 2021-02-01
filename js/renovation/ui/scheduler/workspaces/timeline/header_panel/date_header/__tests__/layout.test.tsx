@@ -11,7 +11,7 @@ import { DateHeaderCell } from '../../../../base/header_panel/date_header/cell';
 
 const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
 
-describe('DateHeaderLayout', () => {
+describe('TimelineDateHeaderLayout', () => {
   describe('Render', () => {
     const dateHeaderMap: any = [[{
       startDate: new Date(2020, 6, 9),
@@ -133,7 +133,7 @@ describe('DateHeaderLayout', () => {
           isWeekDayCell: false,
           isTimeCellTemplate: true,
         }],
-        description: 'should pass correct props to the cell when there is one row and "useTimeCellTemplate" is true',
+        description: 'should pass correct props to the cell when there is one row',
       }, {
         testDateHeaderMap: [[dateHeaderMap[0][0]], [dateHeaderMap[0][1]]],
         cellCount: 2,
@@ -144,7 +144,7 @@ describe('DateHeaderLayout', () => {
           isWeekDayCell: false,
           isTimeCellTemplate: true,
         }],
-        description: 'should pass correct props to the cells when there are 2 rows and "useTimeCellTemplate" is true',
+        description: 'should pass correct props to the cells when there are 2 rows',
       }].forEach(({
         testDateHeaderMap,
         cellCount,

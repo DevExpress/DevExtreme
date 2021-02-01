@@ -94,7 +94,6 @@ describe('DateHeaderLayout', () => {
           colSpan: firstCellData.colSpan,
           isWeekDayCell: false,
           dateCellTemplate,
-          timeCellTemplate,
           isTimeCellTemplate: false,
         });
       expect(firstCell.key())
@@ -117,87 +116,10 @@ describe('DateHeaderLayout', () => {
           colSpan: secondCellData.colSpan,
           isWeekDayCell: false,
           dateCellTemplate,
-          timeCellTemplate,
           isTimeCellTemplate: false,
         });
       expect(secondCell.key())
         .toBe(secondCellData.key);
-    });
-
-    describe('templates', () => {
-      const dateCellTemplate = () => null;
-      const timeCellTemplate = () => null;
-
-      [{
-        testDateHeaderMap: [[dateHeaderMap[0][0]]],
-        cellCount: 1,
-        expectedCellData: [{
-          isWeekDayCell: false,
-          isTimeCellTemplate: false,
-        }],
-        useTimeCellTemplate: false,
-        description: 'should pass correct props to the cell when there is one row and "useTimeCellTemplate" is false',
-      }, {
-        testDateHeaderMap: [[dateHeaderMap[0][0]], [dateHeaderMap[0][1]]],
-        cellCount: 2,
-        expectedCellData: [{
-          isWeekDayCell: false,
-          isTimeCellTemplate: false,
-        }, {
-          isWeekDayCell: false,
-          isTimeCellTemplate: false,
-        }],
-        useTimeCellTemplate: false,
-        description: 'should pass correct props to the cells when there are 2 rows and "useTimeCellTemplate" is false',
-      }, {
-        testDateHeaderMap: [[dateHeaderMap[0][0]]],
-        cellCount: 1,
-        expectedCellData: [{
-          isWeekDayCell: false,
-          isTimeCellTemplate: true,
-        }],
-        useTimeCellTemplate: true,
-        description: 'should pass correct props to the cell when there is one row and "useTimeCellTemplate" is true',
-      }, {
-        testDateHeaderMap: [[dateHeaderMap[0][0]], [dateHeaderMap[0][1]]],
-        cellCount: 2,
-        expectedCellData: [{
-          isWeekDayCell: true,
-          isTimeCellTemplate: false,
-        }, {
-          isWeekDayCell: false,
-          isTimeCellTemplate: true,
-        }],
-        useTimeCellTemplate: true,
-        description: 'should pass correct props to the cells when there are 2 rows and "useTimeCellTemplate" is true',
-      }].forEach(({
-        testDateHeaderMap,
-        cellCount,
-        expectedCellData,
-        useTimeCellTemplate,
-        description,
-      }) => {
-        it(description, () => {
-          const layout = render({
-            isHorizontalGrouping: true,
-            props: {
-              dateHeaderMap: testDateHeaderMap,
-              useTimeCellTemplate,
-              dateCellTemplate,
-              timeCellTemplate,
-            },
-          });
-
-          const cells = layout.find(DateHeaderCell);
-          expect(cells)
-            .toHaveLength(cellCount);
-
-          cells.forEach((cell, index) => {
-            expect(cell.props())
-              .toMatchObject(expectedCellData[index]);
-          });
-        });
-      });
     });
 
     it('should not pass groups and groupInex to cells in case of Vertical Gruping', () => {
