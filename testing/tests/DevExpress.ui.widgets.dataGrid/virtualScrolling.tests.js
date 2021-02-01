@@ -902,14 +902,6 @@ QUnit.module('VirtualScrollingController. New mode', {
         pageIndex.restore();
     });
 
-    QUnit.test('load does set loading page indexes', function(assert) {
-        // act
-        this.scrollController.load();
-
-        // assert
-        assert.deepEqual(this.scrollController._loadingPageIndexes, {}, '_loadingPageIndexes is empty');
-    });
-
     QUnit.test('Viewport params at the top', function(assert) {
         const viewportSize = 25;
         this.scrollController.viewportSize(viewportSize);
