@@ -40,9 +40,7 @@ export default class SlowFileProvider extends CustomFileSystemProvider {
             try {
                 const actionResult = action();
                 if(actionResult.then) {
-                    actionResult.then(function(result) {
-                        promise.resolve(result);
-                    });
+                    actionResult.then(result => promise.resolve(result));
                 } else {
                     promise.resolve(actionResult);
                 }
