@@ -177,6 +177,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     get viewDirection() { return 'vertical'; }
 
+    get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -1376,7 +1378,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.renderRComponent(
             this._$thead,
-            this.getRenovatedHeaderPanelComponent(),
+            this.renovatedHeaderPanelComponent,
             'renovatedHeaderPanel',
             {
                 dateHeaderMap: this.viewDataProvider.dateHeaderMap,
@@ -1394,10 +1396,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 isRenderDateHeader,
             }
         );
-    }
-
-    getRenovatedHeaderPanelComponent() {
-        return dxrDateHeader;
     }
 
     renderRComponent(parentElement, componentClass, componentName, viewModel) {

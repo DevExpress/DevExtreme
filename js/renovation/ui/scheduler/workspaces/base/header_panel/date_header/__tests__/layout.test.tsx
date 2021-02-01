@@ -64,14 +64,7 @@ describe('DateHeaderLayout', () => {
 
     it('should render cells and pass correct props to them in basic case', () => {
       const dateCellTemplate = () => null;
-      const timeCellTemplate = () => null;
-      const layout = render({
-        props: {
-          dateCellTemplate,
-          timeCellTemplate,
-        },
-        isHorizontalGrouping: true,
-      });
+      const layout = render({ props: { dateCellTemplate }, isHorizontalGrouping: true });
 
       const cells = layout.find(DateHeaderCell);
       expect(cells)

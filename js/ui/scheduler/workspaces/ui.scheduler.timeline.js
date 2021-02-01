@@ -34,6 +34,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     get viewDirection() { return 'horizontal'; }
 
+    get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
+
     _init() {
         super._init();
 
@@ -655,10 +657,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             daysInView,
             cellCountInDay: this._getCellCountInDay(),
         };
-    }
-
-    getRenovatedHeaderPanelComponent() {
-        return dxrTimelineDateHeader;
     }
 }
 

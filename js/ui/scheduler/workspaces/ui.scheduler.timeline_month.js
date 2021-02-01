@@ -16,6 +16,8 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
 
     get viewDirection() { return 'horizontal'; }
 
+    get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+
     _renderView() {
         super._renderView();
 
@@ -116,10 +118,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             left: 0,
             cellPosition: 0
         };
-    }
-
-    getRenovatedHeaderPanelComponent() {
-        return dxrDateHeader;
     }
 }
 
