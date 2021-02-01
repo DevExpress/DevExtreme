@@ -49,7 +49,7 @@ const nativeDOMAdapterStrategy = {
     },
 
     isNode(element) {
-        return typeof element === 'object' && 'nodeType' in element;
+        return element && typeof element === 'object' && 'nodeType' in element && 'nodeName' in element;
     },
 
     isElementNode(element) {

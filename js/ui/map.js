@@ -26,6 +26,7 @@ const PROVIDERS = {
     bing
 };
 
+// STYLE map
 
 const MAP_CLASS = 'dx-map';
 const MAP_CONTAINER_CLASS = 'dx-map-container';
