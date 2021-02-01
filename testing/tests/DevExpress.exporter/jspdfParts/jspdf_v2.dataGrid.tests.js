@@ -150,7 +150,7 @@ function drawTable(doc, table) {
         }
     }
 
-    if(isDefined(table.drawTableBorder) ? table.drawTableBorder : true) {
+    if(isDefined(table.drawTableBorder) ? table.drawTableBorder : (isDefined(table.rows) && table.rows.length === 0)) {
         drawBorder(table.rect);
     }
 }
@@ -249,7 +249,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
 
         const expectedLog = [
             'text,f1,10,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20',
-            'setLineWidth,1', 'rect,10,15,100,20',
         ];
 
         exportDataGrid(doc, dataGrid, { rect, onCellExporting }).then(() => {
@@ -308,7 +307,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         const expectedLog = [
             'text,F1,10,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20',
             'text,v1,10,47,{baseline:middle}', 'setLineWidth,1', 'rect,10,35,100,24',
-            'setLineWidth,1', 'rect,10,15,100,44',
         ];
 
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 44 }, onCellExporting }).then(() => {
@@ -341,7 +339,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,16',
             'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,100,20',
             'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
-            'setLineWidth,1', 'rect,10,15,100,60',
         ];
 
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 60 }, onCellExporting }).then(() => {
@@ -372,7 +369,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         const expectedLog = [
             'text,f1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
             'text,f2,50,23,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,16',
-            'setLineWidth,1', 'rect,10,15,100,16'
         ];
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 16 }, onCellExporting }).then(() => {
             // doc.save();
@@ -406,7 +402,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,F2,50,23,{baseline:middle}', 'setLineWidth,1', 'rect,50,15,60,16',
             'text,v1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
             'text,v2,50,41,{baseline:middle}', 'setLineWidth,1', 'rect,50,31,60,20',
-            'setLineWidth,1', 'rect,10,15,100,36'
         ];
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 36 }, onCellExporting }).then(() => {
             // doc.save();
@@ -444,7 +439,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,v2_1,50,41,{baseline:middle}', 'setLineWidth,1', 'rect,50,31,60,20',
             'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,60,24',
-            'setLineWidth,1', 'rect,10,15,100,60'
         ];
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 60 }, onCellExporting }).then(() => {
             // doc.save();
@@ -486,7 +480,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
             'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
-            'setLineWidth,1', 'rect,10,15,150,60'
         ];
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, onCellExporting }).then(() => {
             // doc.save();
@@ -528,7 +521,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
             'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
-            'setLineWidth,1', 'rect,10,15,150,60'
         ];
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, onCellExporting }).then(() => {
             // doc.save();
@@ -569,7 +561,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'rect,50,51,50,24',
             'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
-            'setLineWidth,1', 'rect,10,15,150,60'
         ];
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, onCellExporting }).then(() => {
             // doc.save();
@@ -610,7 +601,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'line,50,51,50,75', 'line,100,51,100,75', 'line,50,75,100,75',
             'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
-            'setLineWidth,1', 'rect,10,15,150,60'
         ];
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, onCellExporting }).then(() => {
             // doc.save();
@@ -654,7 +644,47 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,v1_2,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,40,24',
             'text,v2_2,50,63,{baseline:middle}', 'setLineWidth,1', 'line,50,51,50,75', 'line,100,51,100,75', 'line,50,75,100,75',
             'text,v3_2,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,60,24',
-            'setLineWidth,1', 'rect,10,15,150,60'
+        ];
+        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, onCellExporting }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('3 cols - 2 rows - hide all borders', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ f1: 'v1_1', f2: 'v2_1', f3: 'v3_1' }, { f1: 'v1_2', f2: 'v2_2', f3: 'v3_2' }]
+        });
+
+        let cellIndex = 0;
+        const pdfCellRects = [
+            { x: 10, y: 15, w: 40, h: 16 }, { x: 50, y: 15, w: 50, h: 16 }, { x: 100, y: 15, w: 60, h: 16 },
+            { x: 10, y: 31, w: 40, h: 20 }, { x: 50, y: 31, w: 50, h: 20 }, { x: 100, y: 31, w: 60, h: 20 },
+            { x: 10, y: 51, w: 40, h: 24 }, { x: 50, y: 51, w: 50, h: 24 }, { x: 100, y: 51, w: 60, h: 24 }
+        ];
+        const onCellExporting = ({ gridCell, pdfCell }) => {
+            pdfCell.drawLeftBorder = false;
+            pdfCell.drawRightBorder = false;
+            pdfCell.drawTopBorder = false;
+            pdfCell.drawBottomBorder = false;
+            pdfCell.rect = pdfCellRects[cellIndex];
+            cellIndex++;
+        };
+
+        const expectedLog = [
+            'text,F1,10,23,{baseline:middle}',
+            'text,F2,50,23,{baseline:middle}',
+            'text,F3,100,23,{baseline:middle}',
+            'text,v1_1,10,41,{baseline:middle}',
+            'text,v2_1,50,41,{baseline:middle}',
+            'text,v3_1,100,41,{baseline:middle}',
+            'text,v1_2,10,63,{baseline:middle}',
+            'text,v2_2,50,63,{baseline:middle}',
+            'text,v3_2,100,63,{baseline:middle}',
         ];
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 150, h: 60 }, onCellExporting }).then(() => {
             // doc.save();
@@ -694,7 +724,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,Band1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,16',
             'text,F1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,100,20',
             'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,100,24',
-            'setLineWidth,1', 'rect,10,15,100,60',
         ];
 
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 100, h: 60 }, onCellExporting }).then(() => {
@@ -745,7 +774,6 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
             'text,f1_1,10,63,{baseline:middle}', 'setLineWidth,1', 'rect,10,51,90,24',
             'text,f2_1,100,63,{baseline:middle}', 'setLineWidth,1', 'rect,100,51,50,24',
             'text,f3_1,150,63,{baseline:middle}', 'setLineWidth,1', 'rect,150,51,60,24',
-            'setLineWidth,1', 'rect,10,15,200,60'
         ];
 
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 200, h: 60 }, onCellExporting }).then(() => {
