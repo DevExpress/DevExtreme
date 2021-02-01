@@ -50,6 +50,7 @@ const TagBox = SelectBox.inherit({
     _supportedKeys: function() {
         const parent = this.callBase();
         const sendToList = options => this._list._keyboardHandler(options);
+        const rtlEnabled = this.option('rtlEnabled');
 
         return extend({}, parent, {
             backspace: function(e) {
@@ -123,13 +124,11 @@ const TagBox = SelectBox.inherit({
                 }
             },
             leftArrow: function(e) {
-                if(!this._isCaretAtTheStart()) {
-                    return;
-                }
-
-                const rtlEnabled = this.option('rtlEnabled');
-
-                if(this._isEditable() && rtlEnabled && !this._$focusedTag) {
+                if(
+                    !this._isCaretAtTheStart() ||
+                    this._isEmpty() ||
+                    this._isEditable() && rtlEnabled && !this._$focusedTag
+                ) {
                     return;
                 }
 
@@ -140,13 +139,11 @@ const TagBox = SelectBox.inherit({
                 !this.option('multiline') && this._scrollContainer(direction);
             },
             rightArrow: function(e) {
-                if(!this._isCaretAtTheStart()) {
-                    return;
-                }
-
-                const rtlEnabled = this.option('rtlEnabled');
-
-                if(this._isEditable() && !rtlEnabled && !this._$focusedTag) {
+                if(
+                    !this._isCaretAtTheStart() ||
+                    this._isEmpty() ||
+                    this._isEditable() && !rtlEnabled && !this._$focusedTag
+                ) {
                     return;
                 }
 
@@ -163,6 +160,10 @@ const TagBox = SelectBox.inherit({
         e.preventDefault();
         e.stopPropagation();
         this._saveValueChangeEvent(e);
+    },
+
+    _isEmpty: function() {
+        return this._getValue().length === 0;
     },
 
     _updateTagsContainer: function($element) {
@@ -419,7 +420,7 @@ const TagBox = SelectBox.inherit({
                 const $tagContent = $('<div>').addClass(TAGBOX_TAG_CONTENT_CLASS);
 
                 $('<span>')
-                    .text(data.text || data)
+                    .text(data.text ?? data)
                     .appendTo($tagContent);
 
                 $('<div>')
@@ -1058,7 +1059,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemModel: function(item, displayValue) {
-        if(isObject(item) && displayValue) {
+        if(isObject(item) && isDefined(displayValue)) {
             return item;
         } else {
             return ensureDefined(displayValue, '');
@@ -1249,7 +1250,7 @@ const TagBox = SelectBox.inherit({
     _lastValue: function() {
         const values = this._getValue();
         const lastValue = values[values.length - 1];
-        return isDefined(lastValue) ? lastValue : null;
+        return lastValue ?? null;
     },
 
     _valueChangeEventHandler: noop,
@@ -1361,11 +1362,12 @@ const TagBox = SelectBox.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    _applyButtonHandler: function() {
+    _applyButtonHandler: function(args) {
+        this._saveValueChangeEvent(args.event);
         this.option('value', this._getSortedListValues());
         this._clearTextValue();
-        this._clearFilter();
         this.callBase();
+        this._cancelSearchIfNeed();
     },
 
     _getSortedListValues: function() {

@@ -4,7 +4,7 @@ import {
 import messageLocalization from '../../../../../../../localization/message';
 import { combineClasses } from '../../../../../../utils/combine_classes';
 
-export const viewFunction = (viewModel: AllDayPanelTitle) => (
+export const viewFunction = (viewModel: AllDayPanelTitle): JSX.Element => (
   <div
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
@@ -16,7 +16,7 @@ export const viewFunction = (viewModel: AllDayPanelTitle) => (
 
 @ComponentBindings()
 export class AllDayPanelTitleProps {
-  @OneWay() className? = '';
+  @OneWay() className = '';
 
   @OneWay() visible? = true;
 }
@@ -38,7 +38,7 @@ export class AllDayPanelTitle extends JSXComponent(AllDayPanelTitleProps) {
     return combineClasses({
       'dx-scheduler-all-day-title': true,
       'dx-scheduler-all-day-title-hidden': !this.props.visible,
-      [this.props.className!]: !!this.props.className,
+      [this.props.className]: !!this.props.className,
     });
   }
 }

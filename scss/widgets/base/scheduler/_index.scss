@@ -177,17 +177,9 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-scrollable-appointments {
     padding-left: $offset + $scheduler-agenda-left-column-width;
 
-    .dx-scheduler-small & {
-      padding-left: $offset * $scheduler-small-size-factor + $scheduler-agenda-left-column-width * $scheduler-small-size-factor;
-    }
-
     .dx-rtl & {
       padding-left: 0;
       padding-right: $offset + $scheduler-agenda-left-column-width;
-
-      .dx-scheduler-small & {
-        padding-right: $offset * $scheduler-small-size-factor + $scheduler-agenda-left-column-width * $scheduler-small-size-factor;
-      }
     }
   }
 }
@@ -2232,10 +2224,6 @@ $scheduler-appointment-form-label-padding: 20px;
     .dx-scheduler-group-header-content {
       width: $scheduler-group-header-table-cell-width;
       overflow: hidden;
-
-      .dx-scheduler-small & {
-        width: $scheduler-group-header-table-cell-width * $scheduler-small-size-factor - 2px;
-      }
 
       div {
         white-space: normal;

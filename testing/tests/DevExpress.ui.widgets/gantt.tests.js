@@ -153,6 +153,37 @@ QUnit.module('Markup', moduleConfig, () => {
         this.clock.tick();
         assert.roughEqual(initHeight, this.$element.height(), 1, 'collapsed height');
     });
+    test('invalid start or end dates', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope 0', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 1, 'title': 'Scope 1', 'start': null, 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 4, 'parentId': 2, 'title': 'Scope 2', 'start': new Date('2019-02-21'), 'end': null, 'progress': 50 },
+            { 'id': 5, 'parentId': 2, 'title': 'Scope 3', 'start': null, 'end': null, 'progress': 25 }
+        ];
+        const customDependencies = [
+            { 'id': 0, 'predecessorId': 1, 'successorId': 2, 'type': 0 },
+            { 'id': 1, 'predecessorId': 2, 'successorId': 3, 'type': 0 },
+            { 'id': 2, 'predecessorId': 3, 'successorId': 4, 'type': 0 }
+        ];
+        const options = {
+            tasks: { dataSource: customTasks },
+            dependencies: { dataSource: customDependencies }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_DATA_ROW_SELECTOR);
+        assert.strictEqual(treeListElements.length, 5);
+
+        const taskElements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        assert.equal(taskElements.length, 2);
+
+        const dependenciesElements = this.$element.find(TASK_ARROW_SELECTOR);
+        assert.equal(dependenciesElements.length, 1);
+
+        assert.equal(this.instance.getVisibleTaskKeys().length, 2, 'task keys');
+        assert.equal(this.instance.getVisibleDependencyKeys().length, 1, 'dependencies keys');
+    });
 });
 
 QUnit.module('Options', moduleConfig, () => {
@@ -646,11 +677,26 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), 'start task text is shown');
         assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), 'end task text is shown');
         assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
-
         const testTitle = 'text';
         const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
-        titleTextBox.option('value', testTitle);
+        const startTextBox = $dialog.find('.dx-datebox').eq(0).dxDateBox('instance');
+        const endTextBox = $dialog.find('.dx-datebox').eq(1).dxDateBox('instance');
+        startTextBox.option('value', '');
+        endTextBox.option('value', '');
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        assert.equal($dialog.length, 1, 'dialog is shown');
+        let isValidStartTextBox = startTextBox._getValidationErrors() === null;
+        let isValidEndTextBox = endTextBox._getValidationErrors() === null;
+        assert.notOk(isValidStartTextBox, 'empty start validation');
+        assert.notOk(isValidEndTextBox, 'empty end validation');
+        titleTextBox.option('value', testTitle);
+        startTextBox.option('value', tasks[0].start);
+        endTextBox.option('value', tasks[0].end);
+        isValidStartTextBox = startTextBox._getValidationErrors() === null;
+        isValidEndTextBox = endTextBox._getValidationErrors() === null;
+        assert.ok(isValidStartTextBox, 'not empty start validation');
+        assert.ok(isValidEndTextBox, 'not empty end validation');
         $okButton.trigger('dxclick');
         this.clock.tick();
         const firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
@@ -868,6 +914,20 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($items.find(TOOLBAR_SEPARATOR_SELECTOR).length, 2, 'Both separators were rendered');
         assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
         assert.equal($items.eq(3).text(), 'test', 'Custom zoomIn button was rendered with custom text');
+    });
+    test('add subTask', function(assert) {
+        const items = [ 'addSubTask' ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+        assert.equal($items.first().children().children().attr('aria-label'), 'dx-gantt-i dx-gantt-i-add-sub-task', 'New Subtask item was rendered');
     });
 });
 
@@ -1653,6 +1713,60 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.ok(keyExists, 'key created');
         assert.equal(values.text, data.text, 'new task title is right');
     });
+    test('insertResource (T959410)', function(assert) {
+        let assignedValues;
+        let assigningValues;
+        let resKey;
+        let assignmentKey;
+
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceAssigning', (e) => { assigningValues = e.values; });
+        this.instance.option('onResourceInserted', (e) => { resKey = e.key; });
+        this.instance.option('onResourceAssigned', (e) => {
+            assignedValues = e.values;
+            assignmentKey = !!e.key;
+        });
+        this.clock.tick();
+
+        const data = { text: 'My text' };
+        this.instance.insertResource(data, [2]);
+        this.clock.tick();
+
+        assert.ok(assignmentKey, 'key created');
+        assert.equal(assigningValues.taskId, 2, 'assigning task key');
+        assert.equal(assigningValues.resourceId, resKey, 'assigning resource key');
+        assert.equal(assignedValues.taskId, 2, 'assigned task key');
+        assert.equal(assignedValues.resourceId, resKey, 'assigned resource key');
+    });
+    test('insertResource + assignResourceToTask (T959410)', function(assert) {
+        let assignedValues;
+        let assigningValues;
+        let resKey;
+        let assignmentKey;
+
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceAssigning', (e) => { assigningValues = e.values; });
+        this.instance.option('onResourceInserted', (e) => { resKey = e.key; });
+        this.instance.option('onResourceAssigned', (e) => {
+            assignedValues = e.values;
+            assignmentKey = !!e.key;
+        });
+        this.clock.tick();
+
+        const data = { text: 'My text' };
+        this.instance.insertResource(data);
+        this.clock.tick(200);
+        this.instance.assignResourceToTask(resKey, 2);
+        this.clock.tick(200);
+
+        assert.ok(assignmentKey, 'key created');
+        assert.equal(assigningValues.taskId, 2, 'assigning task key');
+        assert.equal(assigningValues.resourceId, resKey, 'assigning resource key');
+        assert.equal(assignedValues.taskId, 2, 'assigned task key');
+        assert.equal(assignedValues.resourceId, resKey, 'assigned resource key');
+    });
     test('deleteResource + onResourceDeleted', function(assert) {
         let key;
         let values;
@@ -2058,7 +2172,6 @@ QUnit.module('Mappings convert', moduleConfig, () => {
     });
 });
 
-
 QUnit.module('Context Menu', moduleConfig, () => {
     test('showing', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -2154,7 +2267,26 @@ QUnit.module('Context Menu', moduleConfig, () => {
         const items = getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
         assert.equal(items.eq(items.length - 1).text(), 'My Command', 'custom item was rendered');
     });
+    test('add subTask', function(assert) {
+        const contextMenuOptions = {
+            contextMenu: { items: [ 'addSubTask' ] }
+        };
+        this.createInstance(extend(tasksOnlyOptions, contextMenuOptions));
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        const getItems = () => {
+            return getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
+        };
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        const items = getItems();
+        assert.equal(items.length, 1, 'there are 1 items');
+        assert.equal(items.eq(0).text(), 'New Subtask', 'undo item was rendered');
+    });
 });
+
 QUnit.module('Strip Lines', moduleConfig, () => {
     test('render', function(assert) {
         const stripLines = [
@@ -2199,6 +2331,7 @@ QUnit.module('Strip Lines', moduleConfig, () => {
         assert.equal($stripLines.length, 0, 'gantt has no strip lines');
     });
 });
+
 QUnit.module('Parent auto calculation', moduleConfig, () => {
     test('render', function(assert) {
         const options = {
@@ -2809,5 +2942,206 @@ QUnit.module('Root Value', moduleConfig, () => {
         this.clock.tick();
         const treeListElements = this.$element.find(TREELIST_DATA_ROW_SELECTOR);
         assert.strictEqual(treeListElements.length, 3);
+    });
+});
+
+QUnit.module('FullScreen Mode', moduleConfig, () => {
+    test('FullScreen is switching', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        this.instance.option('height', 200);
+        this.clock.tick();
+        const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
+
+        assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, false, 'Normal mode is enabled');
+        this.clock.tick();
+        fullScreenCommand.executeInternal();
+        this.clock.tick();
+        assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, true, 'FullScreen mode is enabled');
+        fullScreenCommand.execute();
+        assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, false, 'Normal mode is enabled after FullScreen mode');
+
+    });
+    test('is taking up entire screen', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        this.instance.option('height', 200);
+        this.instance.option('width', 400);
+        this.instance.option('taskListWidth', 200);
+        this.clock.tick();
+        const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
+        assert.ok(this.instance.$element().height() < $(window).height(), '1.normalMode: gantt height < window height');
+        assert.ok(this.instance.$element().width() < $(window).width(), '1.normalMode: gantt width < window width');
+        fullScreenCommand.execute();
+        assert.equal(this.instance.$element().height(), $(window).height(), '1.fullScreenMode: gantt height == window height');
+        assert.equal(this.instance.$element().width(), $(window).width(), '1.fullScreenMode: gantt width == window width');
+        fullScreenCommand.execute();
+        this.clock.tick();
+        assert.ok(this.instance.$element().height() < $(window).height(), '2.normalMode: gantt height < window height');
+        assert.ok(this.instance.$element().width() < $(window).width(), '2.normalMode: gantt width < window width');
+        fullScreenCommand.execute();
+        assert.equal(this.instance.$element().height(), $(window).height(), '2.fullScreenMode: gantt height == window height');
+        assert.equal(this.instance.$element().width(), $(window).width(), '2.fullScreenMode: gantt width == window width');
+        fullScreenCommand.execute();
+    });
+
+    test('task editng is possible', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
+        this.instance.option('height', 200);
+        this.clock.tick();
+        const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
+        fullScreenCommand.execute();
+        assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, true, 'FullScreen mode is enabled');
+        showTaskEditDialog(this.instance);
+        this.clock.tick();
+        let $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+
+        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_SELECTOR);
+        assert.equal($inputs.eq(0).val(), tasks[0].title, 'title text is shown');
+        assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), 'start task text is shown');
+        assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), 'end task text is shown');
+        assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
+
+        const testTitle = 'text';
+        const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
+        titleTextBox.option('value', testTitle);
+        const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        this.clock.tick();
+        const firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
+        assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
+
+        this.instance.option('editing.enabled', false);
+        showTaskEditDialog(this.instance);
+        assert.equal($dialog.find('.dx-popup-bottom').find('.dx-button').length, 1, 'only cancel button in toolbar');
+        $dialog = $('body').find(POPUP_SELECTOR);
+        const inputs = $dialog.find('.dx-texteditor-input');
+        assert.equal(inputs.attr('readOnly'), 'readonly', 'all inputs is readOnly');
+        fullScreenCommand.execute();
+    });
+    test('panel sizes are the same', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        this.instance.option('width', 1400);
+        this.clock.tick();
+        const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
+        let leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
+        fullScreenCommand.execute();
+        assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in FullScreen');
+        fullScreenCommand.execute();
+        this.clock.tick();
+        const diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
+        assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
+        this.clock.tick();
+        fullScreenCommand.execute();
+        const splitterWrapper = this.$element.find(SPLITTER_WRAPPER_SELECTOR);
+        const splitter = this.$element.find(SPLITTER_SELECTOR);
+
+        const treeListWrapperElement = this.$element.find(TREELIST_WRAPPER_SELECTOR);
+        const treeListWrapperLeftOffset = treeListWrapperElement.offset().left;
+        const treeListWrapperTopOffset = treeListWrapperElement.offset().top;
+
+        const ganttView = this.$element.find(GANTT_VIEW_SELECTOR);
+
+        const splitterContainerWrapperWidth = $(treeListWrapperElement).parent().width();
+
+        assert.ok(splitterWrapper, 'Splitter wrapper has been found');
+        assert.ok(splitter, 'Splitter has been found');
+
+        splitter.trigger($.Event('dxpointerdown', { pointerType: 'mouse' }));
+        splitter.trigger($.Event('dxpointermove', {
+            pointerType: 'mouse',
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 100,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
+
+        assert.equal(treeListWrapperElement.width(), 100);
+        assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, 'Splitter has been moved by mouse');
+
+        splitter.trigger($.Event('dxpointerdown', { pointerType: 'touch' }));
+        splitter.trigger($.Event('dxpointermove', {
+            pointerType: 'touch',
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 300,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup', { pointerType: 'touch' }));
+
+        assert.equal(treeListWrapperElement.width(), 300);
+        assert.equal(ganttView.width(), splitterContainerWrapperWidth - 300);
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 300, 'Splitter has been moved by touch');
+
+        splitter.trigger($.Event('dxpointerdown'));
+        splitter.trigger($.Event('dxpointermove', {
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) - 10,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup'));
+
+        assert.equal(treeListWrapperElement.width(), 0);
+        assert.equal(ganttView.width(), splitterContainerWrapperWidth);
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 0, 'Splitter has not cross the left side');
+
+        splitter.trigger($.Event('dxpointerdown'));
+        splitter.trigger($.Event('dxpointermove', {
+            pageX: splitterContainerWrapperWidth - parseFloat(splitter.css('margin-left')) + 10,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup'));
+
+        assert.equal(treeListWrapperElement.width(), splitterContainerWrapperWidth - splitter.width());
+        assert.equal(ganttView.width(), splitter.width());
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
+        leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
+        fullScreenCommand.execute();
+    });
+});
+
+QUnit.module('Repaint', moduleConfig, () => {
+    test('should render treeList after repaint()', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        this.instance.repaint();
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_SELECTOR);
+        assert.strictEqual(treeListElements.length, 1);
+    });
+    test('should render task wrapper for each task after repaint()', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        this.instance.repaint();
+        this.clock.tick();
+        const elements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        assert.equal(elements.length, tasks.length - 1);
+    });
+    test('should store task changes after repaint() ', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
+        this.clock.tick();
+        showTaskEditDialog(this.instance);
+        this.clock.tick();
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+
+        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_SELECTOR);
+        assert.equal($inputs.eq(0).val(), tasks[0].title, 'title text is shown');
+        assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), 'start task text is shown');
+        assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), 'end task text is shown');
+        assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
+
+        const testTitle = 'text';
+        const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
+        titleTextBox.option('value', testTitle);
+        const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        this.clock.tick();
+        let firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
+        assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
+
+        this.instance.repaint();
+        this.clock.tick();
+        firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
+        assert.equal(firstTreeListTitleText, testTitle, 'title text is the same after repaint()');
     });
 });

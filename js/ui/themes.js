@@ -428,3 +428,22 @@ export function setDefaultTimeout(timeout) {
     defaultTimeout = timeout;
 }
 
+/**
+ * Added default export according to our documentation
+ * https://js.devexpress.com/Documentation/ApiReference/Common/Utils/ui/themes/
+ * */
+export default {
+    setDefaultTimeout,
+    initialized,
+    resetTheme,
+    ready: themeReady,
+    waitWebFont,
+    isWebFontLoaded,
+    isDark,
+    isGeneric,
+    isMaterial,
+    detachCssClasses,
+    attachCssClasses,
+    current,
+    waitForThemeLoad,
+};

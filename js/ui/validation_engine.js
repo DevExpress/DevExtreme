@@ -134,7 +134,7 @@ class StringLengthRuleValidator extends BaseRuleValidator {
     }
 
     _validate(value, rule) {
-        value = isDefined(value) ? String(value) : '';
+        value = String(value ?? '');
         if(rule.trim || !isDefined(rule.trim)) {
             value = value.trim();
         }

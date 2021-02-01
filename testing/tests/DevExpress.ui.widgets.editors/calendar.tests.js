@@ -14,6 +14,7 @@ import config from 'core/config';
 import browser from 'core/utils/browser';
 import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -185,6 +186,59 @@ QUnit.module('Navigator integration', {
         fx.off = false;
     }
 }, () => {
+    QUnit.module('navigator caption should be correct (T962871)', () => {
+        const nextCaption = {
+            'month': 'July 2015',
+            'year': '2016',
+            'decade': '2020-2029',
+            'century': '2100-2199',
+        };
+        const prevCaption = {
+            'month': 'May 2015',
+            'year': '2014',
+            'decade': '2000-2009',
+            'century': '1900-1999',
+        };
+        const zoomLevels = ['month', 'year', 'decade', 'century'];
+
+        QUnit.test('after navigate to next', function(assert) {
+            $.each(zoomLevels, (_, zoomLevel) => {
+                this.calendar.option({ zoomLevel });
+
+                this.$navigatorNext.trigger('dxclick');
+                assert.strictEqual(this.$navigatorCaption.text(), nextCaption[zoomLevel], 'caption is correct');
+            });
+        });
+
+        QUnit.test('after navigate to next in RTL', function(assert) {
+            this.reinit({ rtlEnabled: true, value: new Date(2015, 5, 13) });
+            $.each(zoomLevels, (_, zoomLevel) => {
+                this.calendar.option({ zoomLevel });
+
+                this.$navigatorNext.trigger('dxclick');
+                assert.strictEqual(this.$navigatorCaption.text(), prevCaption[zoomLevel], 'caption is correct');
+            });
+        });
+
+        QUnit.test('after navigate to prev', function(assert) {
+            $.each(zoomLevels, (_, zoomLevel) => {
+                this.calendar.option({ zoomLevel });
+
+                this.$navigatorPrev.trigger('dxclick');
+                assert.strictEqual(this.$navigatorCaption.text(), prevCaption[zoomLevel], 'caption is correct');
+            });
+        });
+
+        QUnit.test('after navigate to prev in RTL', function(assert) {
+            this.reinit({ rtlEnabled: true, value: new Date(2015, 5, 13) });
+            $.each(zoomLevels, (_, zoomLevel) => {
+                this.calendar.option({ zoomLevel });
+
+                this.$navigatorPrev.trigger('dxclick');
+                assert.strictEqual(this.$navigatorCaption.text(), nextCaption[zoomLevel], 'caption is correct');
+            });
+        });
+    });
 
     QUnit.test('calendar must change the current date when navigating to previous and next view', function(assert) {
         const calendar = this.calendar;
@@ -236,29 +290,6 @@ QUnit.module('Navigator integration', {
         assert.expect(0);
         $(this.$navigatorPrev).trigger('dxclick');
         $(this.$navigatorNext).trigger('dxclick');
-    });
-
-    QUnit.test('Navigator caption should be changed after click on prev/next month button', function(assert) {
-        this.reinit({
-            value: new Date(2015, 4, 15)
-        });
-
-        $(this.$navigatorNext).trigger('dxclick');
-
-        const newText = this.$navigatorCaption.text();
-        assert.equal(newText, 'July 2015', 'correct navigation caption');
-    });
-
-    QUnit.test('Navigator caption should be changed after click on prev/next month button in RTL', function(assert) {
-        this.reinit({
-            value: new Date(2015, 4, 15),
-            rtlEnabled: true
-        });
-
-        $(this.$navigatorNext).trigger('dxclick');
-
-        const newText = this.$navigatorCaption.text();
-        assert.equal(newText, 'March 2015', 'correct navigation caption');
     });
 
     QUnit.test('navigator caption should be changed after the \'value\' option change', function(assert) {
@@ -864,23 +895,6 @@ QUnit.module('Keyboard navigation', {
             keyboard.press('enter');
             assert.deepEqual(calendar.option('value'), calendar.option('currentDate'), 'value is changed');
         });
-    });
-
-    QUnit.test('Event should be passed to the valueChanged action after selecting a cell via the keyboard', function(assert) {
-        const keyboard = keyboardMock(this.$element);
-        const valueChangedHandler = sinon.stub();
-
-        this.calendar.option({
-            onValueChanged: valueChangedHandler,
-            value: null
-        });
-
-        keyboard.press('enter');
-
-        const params = valueChangedHandler.getCall(1).args[0];
-        assert.ok(params.event, 'Event should be passed');
-        assert.ok(params.component, 'Component should be passed');
-        assert.ok(params.element, 'Element should be passed');
     });
 
     QUnit.test('pressing ctrl+arrows or pageup/pagedown keys must change view correctly', function(assert) {
@@ -1565,24 +1579,6 @@ QUnit.module('Options', {
 
         const params = clickHandler.getCall(0).args[0];
         assert.ok(params, 'Event params should be passed');
-        assert.ok(params.event, 'Event should be passed');
-        assert.ok(params.component, 'Component should be passed');
-        assert.ok(params.element, 'Element should be passed');
-    });
-
-    QUnit.test('Event should be passed to the valueChanged action after click on a cell', function(assert) {
-        const valueChangedHandler = sinon.stub();
-
-        this.reinit({
-            currentDate: new Date(2010, 10, 10),
-            focusStateEnabled: true,
-            onValueChanged: valueChangedHandler
-        });
-
-        const $cell = this.$element.find(toSelector(CALENDAR_CELL_CLASS)).eq(4);
-        $($cell).trigger('dxclick');
-
-        const params = valueChangedHandler.getCall(0).args[0];
         assert.ok(params.event, 'Event should be passed');
         assert.ok(params.component, 'Component should be passed');
         assert.ok(params.element, 'Element should be passed');
@@ -3821,5 +3817,78 @@ QUnit.module('dxCalendar number and string value support', {
             .trigger('dxclick');
 
         assert.equal(this.$element.dxCalendar('option', 'value'), '2016-04-12T00:00:00Z', 'value is correct');
+    });
+});
+
+QUnit.module('valueChanged handler should receive correct event', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('<div>')
+            .dxCalendar({
+                focusStateEnabled: true,
+                currentDate: new Date(2010, 10, 10),
+                onValueChanged: this.valueChangedHandler,
+            })
+            .appendTo('#qunit-fixture');
+        this.instance = this.$element.dxCalendar('instance');
+        this.keyboard = keyboardMock(this.$element);
+
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', new Date(1993, 2, 19));
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+        this.$element.remove();
+    }
+}, () => {
+    QUnit.test('on runtime value change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on cell', function(assert) {
+        const $cell = this.$element
+            .find(`.${CALENDAR_CELL_CLASS}`)
+            .eq(4);
+        $cell.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', $cell);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('after value selecting via the keyboard', function(assert) {
+        this.instance.focus();
+        this.keyboard.press('up');
+        const $cell = $(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
+
+        this.keyboard.press('enter');
+
+        this.checkEvent(assert, 'keydown', $cell, 'enter');
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('after click on today button', function(assert) {
+        this.instance.option('showTodayButton', true);
+        const $todayButton = this.$element.find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
+
+        $todayButton.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', $todayButton);
+        this.testProgramChange(assert);
     });
 });

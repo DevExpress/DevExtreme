@@ -1,0 +1,68 @@
+@use "../mixins" as *;
+@use "./mixins" as *;
+
+// adduse
+
+.dx-button-disabled {
+  @include dx-button-disabled();
+}
+
+.dx-button {
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  max-width: 100%;
+
+  @include user-select(none);
+
+  -webkit-user-drag: none;
+
+  .dx-icon {
+    -webkit-user-drag: none;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.dx-button-content {
+  height: 100%;
+  max-height: 100%;
+
+  .dx-button-has-text & {
+    @include dx-overflow();
+  }
+
+  &::after {
+    display: inline-block;
+    position: relative;
+    height: 100%;
+    content: '';
+    vertical-align: middle;
+    font-size: 0;
+  }
+
+  > .dx-inkripple {
+    display: none;
+  }
+}
+
+.dx-button-link {
+  text-decoration: none;
+}
+
+.dx-button-text {
+  display: inline;
+  vertical-align: middle;
+}
+
+.dx-button-submit-input {
+  display: none;
+}
+
+.dx-state-disabled {
+  &.dx-button,
+  .dx-button {
+    @include dx-button-disabled();
+  }
+}

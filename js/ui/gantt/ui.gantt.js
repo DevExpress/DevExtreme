@@ -40,6 +40,7 @@ class Gantt extends Widget {
     _init() {
         super._init();
         this._cache = new GanttDataCache();
+        this._isGanttRendered = false;
     }
     _initMarkup() {
         super._initMarkup();
@@ -77,10 +78,18 @@ class Gantt extends Widget {
         this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
     }
 
+    _refresh() {
+        this._isGanttRendered = false;
+        super._refresh();
+    }
     _renderContent() {
-        this._renderBars();
-        this._renderTreeList();
-        this._renderSplitter();
+        this._isMainElementVisible = this.$element().is(':visible');
+        if(this._isMainElementVisible && !this._isGanttRendered) {
+            this._isGanttRendered = true;
+            this._renderBars();
+            this._renderTreeList();
+            this._renderSplitter();
+        }
     }
     _renderTreeList() {
         const { keyExpr, parentIdExpr } = this.option(GANTT_TASKS);
@@ -107,7 +116,8 @@ class Gantt extends Widget {
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); },
             onContextMenuPreparing: (e) => { this._onTreeListContextMenuPreparing(e); },
             onRowClick: (e) => { this._onTreeListRowClick(e); },
-            onRowDblClick: (e) => { this._onTreeListRowDblClick(e); }
+            onRowDblClick: (e) => { this._onTreeListRowDblClick(e); },
+            onAdjustControl: () => { this._onAdjustControl(); }
         });
     }
     _renderSplitter() {
@@ -168,12 +178,19 @@ class Gantt extends Widget {
         this._fireContentReadyAction();
     }
 
+    _onAdjustControl() {
+        const toolbarHeight = this._$toolbarWrapper.get(0).offsetHeight;
+        this._setTreeListOption('height', '100%');
+        this._setTreeListOption('height', this._$treeList.height() - toolbarHeight);
+        this._adjustHeight();
+        this._ganttView?._ganttViewCore.resetAndUpdate();
+        this._splitter.option('initialLeftPanelWidth', this._$treeListWrapper.width());
+    }
     _onApplyPanelSize(e) {
         this._setInnerElementsWidth(e);
         const rowHeight = this._getTreeListRowHeight();
         this._ganttView?._ganttViewCore.updateRowHeights(rowHeight);
     }
-
     _onTreeListContentReady(e) {
         if(e.component.getDataSource()) {
             this._initGanttView();
@@ -309,7 +326,6 @@ class Gantt extends Widget {
         return getBoundingRect(this._treeList._$element.find('.dx-treelist-headers').get(0)).height;
     }
 
-
     _setInnerElementsWidth(widths) {
         if(!hasWindow()) {
             return;
@@ -322,9 +338,8 @@ class Gantt extends Widget {
         const rightPanelWidth = widths.rightPanelWidth;
 
         this._$treeListWrapper.width(leftPanelWidth);
-
         const isPercentage = isString(leftPanelWidth) && leftPanelWidth.slice(-1) === '%';
-        this._$treeList.width(isPercentage ? '100%' : leftPanelWidth);
+        this._setTreeListOption('width', isPercentage ? '100%' : leftPanelWidth);
 
         this._$ganttView.width(rightPanelWidth);
         this._setGanttViewOption('width', this._$ganttView.width());
@@ -442,7 +457,7 @@ class Gantt extends Widget {
     _createModelChangesListener() {
         return { // IModelChangesListener
             NotifyTaskCreated: (task, callback, errorCallback) => { this._onRecordInserted(GANTT_TASKS, task, callback); },
-            NotifyTaskRemoved: (taskId, errorCallback) => { this._onRecordRemoved(GANTT_TASKS, taskId); },
+            NotifyTaskRemoved: (taskId, errorCallback, task) => { this._onRecordRemoved(GANTT_TASKS, taskId, task); },
             NotifyTaskTitleChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'title', newValue); },
             NotifyTaskDescriptionChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'description', newValue); },
             NotifyTaskStartChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
@@ -450,13 +465,13 @@ class Gantt extends Widget {
             NotifyTaskProgressChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
 
             NotifyDependencyInserted: (dependency, callback, errorCallback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
-            NotifyDependencyRemoved: (dependencyId, errorCallback) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId); },
+            NotifyDependencyRemoved: (dependencyId, errorCallback, dependency) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId, dependency); },
 
             NotifyResourceCreated: (resource, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCES, resource, callback); },
-            NotifyResourceRemoved: (resource, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
+            NotifyResourceRemoved: (resourceId, errorCallback, resource) => { this._onRecordRemoved(GANTT_RESOURCES, resourceId, resource); },
 
             NotifyResourceAssigned: (assignment, callback, errorCallback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
-            NotifyResourceUnassigned: (assignmentId, errorCallback) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); },
+            NotifyResourceUnassigned: (assignmentId, errorCallback, assignment) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId, assignment); },
             NotifyParentDataRecalculated: (data) => { this._onParentTasksRecalculated(data); },
 
             NotifyTaskCreating: (args) => { this._raiseInsertingAction(GANTT_TASKS, args); },
@@ -502,7 +517,7 @@ class Gantt extends Widget {
             });
         }
     }
-    _onRecordRemoved(optionName, key) {
+    _onRecordRemoved(optionName, key, data) {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
             dataOption.remove(key, () => {
@@ -510,7 +525,7 @@ class Gantt extends Widget {
                     this._updateTreeListDataSource();
                 }
 
-                this._raiseDeletedAction(optionName, key);
+                this._raiseDeletedAction(optionName, key, this._convertCoreToMappedData(optionName, data));
             });
         }
     }
@@ -656,23 +671,20 @@ class Gantt extends Widget {
     }
     _raiseDeletingAction(optionName, coreArgs) {
         const action = this._getDeletingAction(optionName);
-        const values = this._convertCoreToMappedData(optionName, coreArgs.values);
-
         if(action) {
-            const args = { cancel: false, key: coreArgs.key, values: values };
+            const args = {
+                cancel: false,
+                key: coreArgs.key,
+                values: this._convertCoreToMappedData(optionName, coreArgs.values)
+            };
             action(args);
             coreArgs.cancel = args.cancel;
         }
-
-        if(!coreArgs.cancel) {
-            this._cache.saveData(coreArgs.key, values);
-        }
     }
-    _raiseDeletedAction(optionName, key) {
+    _raiseDeletedAction(optionName, key, data) {
         const action = this._getDeletedAction(optionName);
         if(action) {
-            const args = { key: key, values: { } };
-            this._cache.pullDataFromCache(key, args.values);
+            const args = { key: key, values: data };
             action(args);
         }
     }
@@ -1535,7 +1547,6 @@ class Gantt extends Widget {
         // eslint-disable-next-line spellcheck/spell-checker
         this._ganttView._ganttViewCore.unassignResourceFromTask(resourceKey, taskKey);
     }
-
     updateDimensions() {
         this._setInnerElementsWidth();
     }

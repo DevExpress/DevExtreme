@@ -1,0 +1,78 @@
+@use "./mixins" as *;
+
+// adduse
+
+
+.dx-texteditor {
+  input[type=date] {
+    &::-webkit-inner-spin-button {
+      height: 20px;
+    }
+  }
+}
+
+.dx-datebox-native {
+  &.dx-state-focused.dx-texteditor-empty {
+    .dx-placeholder {
+      display: none;
+    }
+  }
+}
+
+.dx-datebox {
+  max-width: 100%;
+
+  .dx-texteditor-input::-webkit-datetime-edit {
+    @include dx-overflow();
+  }
+}
+
+.dx-datebox.dx-texteditor-empty {
+  input::-webkit-datetime-edit {
+    color: transparent;
+  }
+
+  &.dx-state-focused {
+    input::-webkit-datetime-edit {
+      color: inherit;
+    }
+  }
+}
+
+.dx-datebox-wrapper {
+  .dx-popup-content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+.dx-rtl {
+  .dx-texteditor-input {
+    text-align: right;
+  }
+}
+
+.dx-datebox-button-cell {
+  .dx-button {
+    min-width: 90px;
+
+    &.dx-datebox-apply-button {
+      margin-right: 10px;
+      margin-left: 0;
+    }
+
+    &.dx-datebox-cancel-button {
+      margin-right: 0;
+      margin-left: 0;
+    }
+  }
+}
+
+.dx-datebox-buttons-container {
+  text-align: right;
+  width: 100%;
+}
+
+.dx-colorview-container-cell {
+  float: left;
+}

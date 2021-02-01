@@ -7,6 +7,7 @@ import browser from 'core/utils/browser';
 import translator from 'animation/translator';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -3478,11 +3479,12 @@ QUnit.module('update', moduleConfig, () => {
 
 QUnit.module('autoscroll', getModuleConfigForTestsWithScroll('#itemsWithScroll', '#scroll'), () => {
     const getElement = (index) => $('#itemsWithScroll').children().eq(index);
+    const itemCount = 10;
+    const itemHeight = 50;
 
     [false, true].forEach((isHorizontal) => {
         [false, true].forEach((isBack) => {
             [false, true].forEach((toEnd) => {
-                const itemCount = 10;
                 const scrollHeight = 250;
                 const scrollProp = isHorizontal ? 'scrollLeft' : 'scrollTop';
                 const positionProp = isHorizontal ? 'left' : 'top';
@@ -3493,9 +3495,9 @@ QUnit.module('autoscroll', getModuleConfigForTestsWithScroll('#itemsWithScroll',
                     scrollPosition = scrollHeight - scrollPosition;
                 }
 
-                const itemHeight = 50;
 
                 QUnit.test(`itemPoints should be corrected during scroll ${isBack ? 'up' : 'down'}${toEnd ? ' to end' : ''} if orientation is ${isHorizontal ? 'horizontal' : 'vertical'}`, function(assert) {
+                    const done = assert.async();
                     if(isHorizontal) {
                         this.$element.children().css({ width: 50, display: 'inline-block' });
                         this.$element.css({ width: 500, whiteSpace: 'nowrap' });
@@ -3523,14 +3525,44 @@ QUnit.module('autoscroll', getModuleConfigForTestsWithScroll('#itemsWithScroll',
                     this.clock.tick(toEnd ? 100 : 10);
 
                     // assert
-                    const itemPoints = sortable.option('itemPoints');
-                    assert.equal(this.$scroll[scrollProp](), scrollPosition, 'scroll position');
-                    assert.equal(itemPoints.length, itemCount + 1, 'item posint count');
-                    for(let i = 0; i < 11; i++) {
-                        assert.equal(itemPoints[i][positionProp], -scrollPosition + i * itemHeight, `point ${i} height is corrected`);
-                    }
+                    this.$scroll.on('scroll', () => {
+                        const itemPoints = sortable.option('itemPoints');
+                        assert.equal(this.$scroll[scrollProp](), scrollPosition, 'scroll position');
+                        assert.equal(itemPoints.length, itemCount + 1, 'item posint count');
+                        for(let i = 0; i < 11; i++) {
+                            assert.equal(itemPoints[i][positionProp], -scrollPosition + i * itemHeight, `point ${i} height is corrected`);
+                        }
+                        done();
+                    });
                 });
             });
+        });
+    });
+
+    QUnit.test('itemPoints should be corrected during browser autoscroll (T960381)', function(assert) {
+        const done = assert.async();
+        const sortable = this.createSortable({
+            dropFeedbackMode: 'indicate',
+            itemOrientation: 'vertical'
+        });
+
+        const pointer = pointerMock(getElement(0)).start();
+
+        pointer.down(25, 25).move(0, 100);
+
+        const scrollBy = 100;
+
+        // act
+        this.$scroll.scrollTop(scrollBy);
+
+        // assert
+        this.$scroll.on('scroll', () => {
+            const itemPoints = sortable.option('itemPoints');
+            assert.equal(itemPoints.length, itemCount + 1, 'item posint count');
+            for(let i = 0; i < itemPoints.length; i++) {
+                assert.equal(itemPoints[i].top, -scrollBy + i * itemHeight, `point ${i} height is corrected`);
+            }
+            done();
         });
     });
 
