@@ -175,15 +175,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   inBounds(): boolean {
-    const location = this.getLocation();
-
-    return this.boundLocation(location) === location;
+    return this.boundLocation() === this.getLocation();
   }
 
-  boundLocation(location?: number): number {
-    const currentLocation = location !== undefined ? location : this.getLocation();
-
-    return Math.max(Math.min(currentLocation, this.getMaxOffset()), this.getMinOffset());
+  boundLocation(): number {
+    return Math.max(Math.min(this.getLocation(), this.getMaxOffset()), this.getMinOffset());
   }
 
   // eslint-disable-next-line class-methods-use-this
