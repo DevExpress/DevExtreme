@@ -1103,4 +1103,51 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.ok($elements.eq(3).find(`.${Consts.BUTTON_CLASS}`).hasClass(Consts.BUTTON_OUTLINED_CLASS), 'switchView stylingMode option is applied');
     });
 
+    test('default items forbidden options (T948755)', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const customCssClass = 'custom-class';
+        const customText = 'customText';
+        const customIcon = 'upload';
+        const buttonOptions = { text: customText, icon: customIcon, stylingMode: 'outlined' };
+        const dropDownButtonOptions = { stylingMode: 'outlined' };
+        const fileManagerInstance = $('#fileManager').dxFileManager('instance');
+        fileManagerInstance.option('toolbar', {
+            items: [{
+                name: 'refresh',
+                location: 'before',
+                showText: 'always',
+                cssClass: customCssClass,
+                options: buttonOptions
+            }, {
+                name: 'switchView',
+                location: 'before',
+                cssClass: customCssClass,
+                options: dropDownButtonOptions
+            }]
+        });
+        this.clock.tick(400);
+
+        const $elements = this.wrapper.getAllItemsOfToolbar();
+        assert.strictEqual($elements.length, 4, 'general toolbar has 4 elements');
+
+        assert.strictEqual($elements.eq(0).text(), 'New directory', 'create is rendered in the expexted position');
+        assert.ok($elements.eq(0).hasClass(customCssClass), 'create has custom css class');
+
+        assert.strictEqual($elements.eq(1).text(), customText, 'refresh is rendered in the expexted position with correct text option');
+        assert.ok($elements.eq(1).hasClass(customCssClass), 'refresh has custom css class');
+        assert.ok($elements.eq(1).hasClass(Consts.TOOLBAR_HAS_LARGE_ICON_CLASS), 'refresh has default css class');
+        assert.ok($elements.eq(1).find('.dx-icon').hasClass(Consts.UPLOAD_ICON_CLASS), 'refresh has correct icon option');
+        assert.ok($elements.eq(1).find(`.${Consts.BUTTON_CLASS}`).hasClass(Consts.BUTTON_OUTLINED_CLASS), 'refresh stylingMode option is applied');
+        assert.notOk($elements.eq(1).hasClass(Consts.TOOLBAR_ITEM_WITH_HIDDEN_TEXT_CLASS), 'refresh text is shown');
+
+        assert.strictEqual($elements.eq(2).find(`.${Consts.TOOLBAR_SEPARATOR_ITEM_CLASS}`).length, 1, 'separator is rendered in the expexted position and has default class');
+        assert.ok($elements.eq(2).hasClass(customCssClass), 'separator has custom css class');
+
+        assert.ok($elements.eq(3).hasClass(Consts.TOOLBAR_VIEWMODE_ITEM_CLASS), 'switchView is rendered in the expexted position and has default class');
+        assert.ok($elements.eq(3).hasClass(customCssClass), 'switchView has custom css class');
+        assert.ok($elements.eq(3).find(`.${Consts.BUTTON_CLASS}`).hasClass(Consts.BUTTON_OUTLINED_CLASS), 'switchView stylingMode option is applied');
+    });
+
 });
