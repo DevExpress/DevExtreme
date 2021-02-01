@@ -79,7 +79,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
     horizontalScrollbarRef, verticalScrollbarRef,
     cursorEnterHandler, cursorLeaveHandler,
-    isScrollbarVisible,
+    isScrollbarVisible, onChangeVisibility,
     scaleRatioWidth, scaleRatioHeight,
     scrollableOffsetLeft, scrollableOffsetTop,
     contentWidth, containerWidth, contentHeight, containerHeight,
@@ -149,6 +149,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               baseContentSize={baseContentWidth}
               baseContainerSize={baseContainerWidth}
               visible={isScrollbarVisible}
+              onChangeVisibility={onChangeVisibility}
               scrollByThumb={scrollByThumb}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
@@ -168,6 +169,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               baseContentSize={baseContentHeight}
               baseContainerSize={baseContainerHeight}
               visible={isScrollbarVisible}
+              onChangeVisibility={onChangeVisibility}
               scrollByThumb={scrollByThumb}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
@@ -199,6 +201,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() isHovered = false;
 
+  @InternalState() needShowScrollbars = false;
+
   @InternalState() scaleRatioWidth;
 
   @InternalState() scaleRatioHeight;
@@ -225,7 +229,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() validDirections = {};
 
-  @InternalState() cachedVariables = {
+  @InternalState() cachedVariables: { [key: string]: any } = {
     validateWheelTimer: undefined,
     locked: false,
     eventForUserAction: null,
@@ -247,6 +251,15 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     if (isHorizontal) {
       this.containerRef.scrollLeft += normalizeCoordinate('left', Math.round(location.left), this.props.rtlEnabled);
     }
+
+    this.prepareDirections(true);
+    this.props.onStart?.(this.getEventArgs());
+    this.eventHandler(
+      (scrollbar) => scrollbar.scrollByHandler(
+        { x: location.left, y: location.top },
+      ),
+    );
+    this.props.onEnd?.(this.getEventArgs());
   }
 
   @Method()
@@ -422,6 +435,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
   }
 
+  onChangeVisibility(visible: boolean): void {
+    this.needShowScrollbars = visible;
+  }
+
   cursorEnterHandler(): void {
     if (this.isHoverMode()) {
       this.isHovered = true;
@@ -453,6 +470,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   /* istanbul ignore next */
   private handleStart(e: Event): void {
     this.cachedVariables.eventForUserAction = e;
+
+    this.needShowScrollbars = true;
+
+    this.eventHandler(
+      (scrollbar) => scrollbar.startHandler(e),
+    );
   }
 
   private handleMove(e): void {

@@ -5,7 +5,6 @@ import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 import { locate } from '../../animation/translator';
 import Class from '../../core/class';
-import Animator from './animator';
 import devices from '../../core/devices';
 import { normalizeKeyName } from '../../events/utils/index';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
@@ -24,79 +23,14 @@ const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
-const OUT_BOUNDS_ACCELERATION = 0.5;
 const MIN_VELOCITY_LIMIT = 1;
 const FRAME_DURATION = Math.round(1000 / 60);
 
-const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
 const BOUNCE_DURATION = isSluggishPlatform ? 300 : 400;
 const BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION;
 const BOUNCE_ACCELERATION_SUM = (1 - Math.pow(ACCELERATION, BOUNCE_FRAMES)) / (1 - ACCELERATION);
 
-const InertiaAnimator = Animator.inherit({
-    ctor: function(scroller) {
-        this.callBase();
-        this.scroller = scroller;
-    },
-
-    VELOCITY_LIMIT: MIN_VELOCITY_LIMIT,
-
-    _isFinished: function() {
-        return Math.abs(this.scroller._velocity) <= this.VELOCITY_LIMIT;
-    },
-
-    _step: function() {
-        this.scroller._scrollStep(this.scroller._velocity);
-        this.scroller._velocity *= this._acceleration();
-    },
-
-    _acceleration: function() {
-        return this.scroller._inBounds() ? ACCELERATION : OUT_BOUNDS_ACCELERATION;
-    },
-
-    _complete: function() {
-        this.scroller._scrollComplete();
-    },
-
-    _stop: function() {
-        this.scroller._stopComplete();
-    }
-});
-
-const BounceAnimator = InertiaAnimator.inherit({
-    VELOCITY_LIMIT: BOUNCE_MIN_VELOCITY_LIMIT,
-
-    _isFinished: function() {
-        return this.scroller._crossBoundOnNextStep() || this.callBase();
-    },
-
-    _acceleration: function() {
-        return ACCELERATION;
-    },
-
-    _complete: function() {
-        this.scroller._move(this.scroller._bounceLocation);
-        this.callBase();
-    }
-});
-
 export const Scroller = Class.inherit({
-
-    ctor: function(options) {
-        this._initOptions(options);
-        this._initAnimators();
-    },
-
-    _initOptions: function(options) {
-        this._topReached = false;
-        this._bottomReached = false;
-    },
-
-    _initAnimators: function() {
-        this._inertiaAnimator = new InertiaAnimator(this);
-        this._bounceAnimator = new BounceAnimator(this);
-    },
-
     _scrollStep: function(delta) {
         // eslint-disable-next-line no-undef
         if(Math.abs(prevLocation - this._location) < 1) {
