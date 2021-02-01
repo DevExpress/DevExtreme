@@ -136,9 +136,10 @@ if(Quill) {
 
         _getFormatHandlers() {
             return {
-                clear: (e) => {
+                clear: ({ event }) => {
                     const range = this.quill.getSelection();
                     if(range) {
+                        this._editorInstance._saveValueChangeEvent(event);
                         this.quill.removeFormat(range);
                         this.updateFormatWidgets();
                     }

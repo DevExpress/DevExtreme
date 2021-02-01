@@ -31,7 +31,7 @@
     "@babel/runtime": "^7.12.1",
     "devexpress-diagram": "2.1.2",
     "devexpress-gantt": "2.1.3",
-    "devextreme-quill": "~0.9.8",
+    "devextreme-quill": "~0.10.2",
     "jszip": "^2.0.0 || ^3.0.0",
     "preact": "^10.4.5",
     "rrule": "2.6.6",
