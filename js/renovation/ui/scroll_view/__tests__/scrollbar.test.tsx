@@ -304,6 +304,14 @@ describe('Methods', () => {
         expect(viewModel.getLocation()).toBe(100);
       });
 
+      it('set/get Velocity(velocity)', () => {
+        const viewModel = new Scrollbar({ direction });
+
+        viewModel.setVelocity(100);
+
+        expect(viewModel.getVelocity()).toBe(100);
+      });
+
       it('getAxis()', () => {
         const viewModel = new Scrollbar({ direction });
 
@@ -415,7 +423,7 @@ describe('Handlers', () => {
             if (inertiaEnabled && !thumbScrolling) {
               expectedVelocity = e.velocity[direction === 'horizontal' ? 'x' : 'y'];
             }
-            expect(viewModel.cachedVariables.velocity).toEqual(expectedVelocity);
+            expect(viewModel.velocity).toEqual(expectedVelocity);
           });
         });
       });
