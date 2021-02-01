@@ -1,3 +1,8 @@
+.dx-fa-button .dx-overlay-content {
+  border-radius: 50%;
+  cursor: pointer;
+}
+
 @mixin dx-fa-button-mixin(
   $main-action-button-size,
   $action-button-size,
