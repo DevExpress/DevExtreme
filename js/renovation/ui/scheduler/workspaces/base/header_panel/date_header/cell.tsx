@@ -108,6 +108,7 @@ export class DateHeaderCell extends JSXComponent(DateHeaderCellProps) {
     return getGroupCellClasses(isFirstGroupCell, isLastGroupCell, cellClasses);
   }
 
+  // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
   get useTemplate(): boolean {
     const { isTimeCellTemplate, dateCellTemplate, timeCellTemplate } = this.props;
 
