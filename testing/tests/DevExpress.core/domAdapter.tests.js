@@ -38,3 +38,7 @@ QUnit.test('inject document', function(assert) {
     });
     assert.equal(domAdapter.getDocument(), doc);
 });
+
+QUnit.test('isNode should ignore objects with nodeType field (T962165)', function(assert) {
+    assert.notOk(domAdapter.isNode({ nodeType: 'nodeType' }));
+});
