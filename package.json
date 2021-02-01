@@ -29,7 +29,7 @@
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@babel/runtime": "^7.12.1",
-    "devexpress-diagram": "2.1.1",
+    "devexpress-diagram": "2.1.2",
     "devexpress-gantt": "2.1.3",
     "devextreme-quill": "~0.9.8",
     "inferno-dom": "^1.0.7",
@@ -68,7 +68,7 @@
     "cssom": "^0.4.4",
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
-    "devextreme-generator": "file:../devextreme-renovation/generator/build",
+    "devextreme-generator": "1.0.143",
     "devextreme-internal-tools": "^4.0.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",

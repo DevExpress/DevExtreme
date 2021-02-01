@@ -94,8 +94,22 @@ const compareDateWithStartDayHour = (startDate, endDate, startDayHour, allDay, s
     return result;
 };
 
-const compareDateWithEndDayHour = (startDate, endDate, startDayHour, endDayHour, allDay, severalDays, max, min) => {
-    const hiddenInterval = (24 - endDayHour + startDayHour) * toMs('hour');
+const compareDateWithEndDayHour = (options) => {
+    const {
+        startDate,
+        endDate,
+        startDayHour,
+        endDayHour,
+        viewStartDayHour,
+        viewEndDayHour,
+        allDay,
+        severalDays,
+        min,
+        max,
+        checkIntersectViewport
+    } = options;
+
+    const hiddenInterval = (24 - viewEndDayHour + viewStartDayHour) * toMs('hour');
     const apptDuration = endDate.getTime() - startDate.getTime();
     const delta = (hiddenInterval - apptDuration) / toMs('hour');
     const apptStartHour = startDate.getHours();
@@ -104,11 +118,19 @@ const compareDateWithEndDayHour = (startDate, endDate, startDayHour, endDayHour,
 
     const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
     const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
+    const apptIntersectViewport = startDate < max && endDate > min;
 
-    result = (apptStartHour < endTime.hours) ||
+    result =
+        (checkIntersectViewport &&
+            apptIntersectViewport) ||
+        (apptStartHour < endTime.hours) ||
         (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) ||
-        (allDay && startDate <= max) ||
-        (severalDays && (startDate < max && endDate > min) && (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60));
+        (allDay &&
+            startDate <= max) ||
+        (severalDays &&
+            apptIntersectViewport &&
+                (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60)
+        );
 
     if(apptDuration < hiddenInterval) {
         if((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
@@ -257,7 +279,8 @@ class AppointmentModel {
             viewStartDayHour,
             viewEndDayHour,
             resources,
-            firstDayOfWeek
+            firstDayOfWeek,
+            checkIntersectViewport
         } = filterOptions;
         const that = this;
 
@@ -315,12 +338,24 @@ class AppointmentModel {
                 result = false;
             }
 
-            if(result && startDayHour !== undefined && (!useRecurrence || !filterOptions.isVirtualScrolling)) {
+            if(result && isDefined(startDayHour) && (!useRecurrence || !filterOptions.isVirtualScrolling)) {
                 result = compareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays);
             }
 
-            if(result && endDayHour !== undefined) {
-                result = compareDateWithEndDayHour(comparableStartDate, comparableEndDate, startDayHour, endDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays, max, min);
+            if(result && isDefined(endDayHour)) {
+                result = compareDateWithEndDayHour({
+                    startDate: comparableStartDate,
+                    endDate: comparableEndDate,
+                    startDayHour,
+                    endDayHour,
+                    viewStartDayHour,
+                    viewEndDayHour,
+                    allDay: appointmentTakesAllDay,
+                    severalDays: appointmentTakesSeveralDays,
+                    min,
+                    max,
+                    checkIntersectViewport
+                });
             }
 
             if(result && useRecurrence && !recurrenceRule) {
@@ -621,10 +656,8 @@ class AppointmentModel {
         return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 
-    add(data) {
-        return this._dataSource.store().insert(data).done((() => {
-            this._dataSource.load();
-        }).bind(this));
+    add(rawAppointment) {
+        return this._dataSource.store().insert(rawAppointment).done(() => this._dataSource.load());
     }
 
     update(target, data) {
@@ -632,22 +665,18 @@ class AppointmentModel {
         const d = new Deferred();
 
         this._dataSource.store().update(key, data)
-            .done(() => {
+            .done(result =>
                 this._dataSource.load()
-                    .done(d.resolve)
-                    .fail(d.reject);
-            })
+                    .done(() => d.resolve(result))
+                    .fail(d.reject))
             .fail(d.reject);
 
         return d.promise();
     }
 
-    remove(target) {
-        const key = this._getStoreKey(target);
-
-        return this._dataSource.store().remove(key).done((() => {
-            this._dataSource.load();
-        }).bind(this));
+    remove(rawAppointment) {
+        const key = this._getStoreKey(rawAppointment);
+        return this._dataSource.store().remove(key).done(() => this._dataSource.load());
     }
 }
 

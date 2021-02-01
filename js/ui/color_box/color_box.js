@@ -192,16 +192,17 @@ const ColorBox = DropDownEditor.inherit({
             applyValueMode: that.option('applyValueMode'),
             focusStateEnabled: that.option('focusStateEnabled'),
             stylingMode: this.option('stylingMode'),
-            onEnterKeyPressed: function() {
+            onEnterKeyPressed: function({ event }) {
                 that._colorViewEnterKeyPressed = true;
                 if(that._colorView.option('value') !== that.option('value')) {
+                    that._saveValueChangeEvent(event);
                     that._applyNewColor(that._colorView.option('value'));
                     that.close();
                 }
             },
 
-            onValueChanged: function(args) {
-                if(colorUtils.makeRgba(args.value) === args.previousValue) {
+            onValueChanged: function({ event, value, previousValue }) {
+                if(colorUtils.makeRgba(value) === previousValue) {
                     return;
                 }
 
@@ -211,12 +212,15 @@ const ColorBox = DropDownEditor.inherit({
                     return;
                 }
 
-                that._applyNewColor(args.value);
+                if(event) {
+                    that._saveValueChangeEvent(event);
+                }
+                that._applyNewColor(value);
             }
         };
     },
 
-    _enterKeyHandler: function() {
+    _enterKeyHandler: function(e) {
         const newValue = this._input().val();
         const value = this.option('value');
         const oldValue = this.option('editAlphaChannel') ? colorUtils.makeRgba(value) : value;
@@ -232,12 +236,14 @@ const ColorBox = DropDownEditor.inherit({
 
         if(newValue !== oldValue) {
             this._applyColorFromInput(newValue);
+            this._saveValueChangeEvent(e);
             this.option('value', this.option('editAlphaChannel') ? colorUtils.makeRgba(newValue) : newValue);
         }
 
         if(this._colorView) {
             const colorViewValue = this._colorView.option('value');
             if(value !== colorViewValue) {
+                this._saveValueChangeEvent(e);
                 this.option('value', colorViewValue);
             }
         }
@@ -246,7 +252,8 @@ const ColorBox = DropDownEditor.inherit({
         return false;
     },
 
-    _applyButtonHandler: function() {
+    _applyButtonHandler: function(e) {
+        this._saveValueChangeEvent(e.event);
         this._applyNewColor(this._colorView.option('value'));
 
         this.callBase();

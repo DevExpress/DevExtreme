@@ -230,8 +230,8 @@ const EditProvider = Class.inherit({
         return this._eventHandler('handleKeyboardEvents', currentFocusedIndex, moveFocusUp);
     },
 
-    handleEnterPressing: function() {
-        return this._eventHandler('handleEnterPressing');
+    handleEnterPressing: function(e) {
+        return this._eventHandler('handleEnterPressing', e);
     },
 
     contextMenuHandlerExists: function() {

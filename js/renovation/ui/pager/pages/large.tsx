@@ -38,8 +38,8 @@ interface SlidingWindowState {
   slidingWindowIndexes: number[];
 }
 type PageIndex = number | 'low' | 'high';
-type PageIndexes = PageIndex[];
 type DelimiterType = 'none' | 'low' | 'high' | 'both';
+interface PageIndexes extends Array<PageIndex> {}
 
 function getDelimiterType(
   startIndex: number, slidingWindowSize: number, pageCount: number,
@@ -90,8 +90,8 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
   );
 }
 
-type PagesLargePropsType = Pick<PagerProps,
-'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesLarge extends JSXComponent<PagesLargePropsType>() {

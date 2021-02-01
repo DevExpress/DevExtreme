@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  JSXComponent, Component, Method, Ref,
+  JSXComponent, Component, Method, Ref, Effect,
 } from 'devextreme-generator/component_declaration/common';
 import {
   DataGridProps,
@@ -12,6 +12,7 @@ import { Widget } from '../common/widget';
 import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
+import { getUpdatedOptions } from './utils/get_updated_options';
 
 const aria = { role: 'presentation' };
 
@@ -58,6 +59,9 @@ export const viewFunction = ({
 export class DataGrid extends JSXComponent(DataGridProps) {
   @Ref() componentInstance!: GridInstance;
 
+  @Ref() prevProps!: DataGridProps;
+
+  // #region methods
   @Method()
   beginCustomLoading(messageText: string): void {
     return this.instance?.beginCustomLoading(messageText);
@@ -396,14 +400,25 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   getController(name: string): any {
     return this.instance?.getController(name);
   }
+  // #endregion
 
-  // It's impossible to define constructor, so it's workaround to lazy creation
-  // of instance within componentHolder by imutable way
+  // It's impossible to define constructor use lazy creation instead
   get instance() {
     if (!this.componentInstance) {
       this.componentInstance = this.init();
     }
     return this.componentInstance;
+  }
+
+  @Effect() updateOptions() {
+    if (this.instance && this.prevProps) {
+      const currentProps = this.props;
+      const updatedOptions = getUpdatedOptions(this.prevProps, currentProps);
+      this.instance.beginUpdate();
+      updatedOptions.forEach(({ path, value }) => this.instance.option(path, value));
+      this.instance.endUpdate();
+    }
+    this.prevProps = this.props;
   }
 
   // TODO without normalization all nested props defaults overwrite by undefined
@@ -425,7 +440,6 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return result;
   }
 
-  // TODO Move to constructor of DataGridComponent
   init() {
     const instance: any = new DataGridComponent(this.normalizeProps());
 

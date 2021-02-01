@@ -99,6 +99,10 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
       padding-bottom: $generic-button-icon-horizontal-padding - 3px;
     }
   }
+
+  &.dx-size-format {
+    width: $generic-toolbar-size-editor-width;
+  }
 }
 
 .dx-htmleditor-toolbar-separator {

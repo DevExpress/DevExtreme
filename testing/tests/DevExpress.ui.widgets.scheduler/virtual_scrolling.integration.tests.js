@@ -32,7 +32,7 @@ const test = (description, callback) => {
 
 testStart(() => initTestMarkup());
 
-module('Virtual scrolling', () => {
+module('Virtual scrolling integration', () => {
     module('Initialization', () => {
         supportedViews.forEach(viewName => {
             [{
@@ -1317,6 +1317,11 @@ module('Virtual scrolling', () => {
 
                 ['horizontal', 'vertical'].forEach(groupOrientation => {
                     test(`A long appointment should be correctly croped if view: ${viewName}, "${groupOrientation}" group orientation`, function(assert) {
+                        if(!isDesktopEnvironment()) {
+                            assert.ok(true, 'This test is for desktop only');
+                            return;
+                        }
+
                         if(viewName === 'month') {
                             assert.ok(true, 'TODO: appointments in virtual month');
                             return;
@@ -1365,7 +1370,8 @@ module('Virtual scrolling', () => {
 
                                         const startViewDate = viewDataProvider.findGroupCellStartDate(
                                             settings.groupIndex,
-                                            settings.info.appointment.startDate
+                                            settings.info.appointment.startDate,
+                                            settings.info.appointment.endDate
                                         );
 
                                         assert.deepEqual(
@@ -1701,13 +1707,13 @@ module('Virtual scrolling', () => {
                                 top: 100,
                                 height: 450
                             }, {
-                                groupIndex: 1,
-                                left: 548,
+                                groupIndex: 0,
+                                left: 324,
                                 top: 100,
                                 height: 450
                             }, {
-                                groupIndex: 0,
-                                left: 324,
+                                groupIndex: 1,
+                                left: 548,
                                 top: 100,
                                 height: 450
                             }, {
@@ -1715,7 +1721,8 @@ module('Virtual scrolling', () => {
                                 left: 773,
                                 top: 100,
                                 height: 450
-                            }]
+                            }],
+                            []
                         ]
                     },
                     {
@@ -1727,13 +1734,13 @@ module('Virtual scrolling', () => {
                                 top: 250,
                                 height: 300
                             }, {
-                                groupIndex: 1,
-                                left: 548,
+                                groupIndex: 0,
+                                left: 324,
                                 top: 250,
                                 height: 300
                             }, {
-                                groupIndex: 0,
-                                left: 324,
+                                groupIndex: 1,
+                                left: 548,
                                 top: 250,
                                 height: 300
                             }, {
@@ -1748,13 +1755,13 @@ module('Virtual scrolling', () => {
                                 top: 900,
                                 height: 400
                             }, {
-                                groupIndex: 1,
-                                left: 548,
+                                groupIndex: 0,
+                                left: 324,
                                 top: 900,
                                 height: 400
                             }, {
-                                groupIndex: 0,
-                                left: 324,
+                                groupIndex: 1,
+                                left: 548,
                                 top: 900,
                                 height: 400
                             }, {
@@ -1775,13 +1782,13 @@ module('Virtual scrolling', () => {
                                 top: 900,
                                 height: 650
                             }, {
-                                groupIndex: 1,
-                                left: 548,
+                                groupIndex: 0,
+                                left: 324,
                                 top: 900,
                                 height: 650
                             }, {
-                                groupIndex: 0,
-                                left: 324,
+                                groupIndex: 1,
+                                left: 548,
                                 top: 900,
                                 height: 650
                             }, {
@@ -1800,13 +1807,13 @@ module('Virtual scrolling', () => {
                                 top: 250,
                                 height: 300
                             }, {
-                                groupIndex: 1,
-                                left: 548,
+                                groupIndex: 0,
+                                left: 324,
                                 top: 250,
                                 height: 300
                             }, {
-                                groupIndex: 0,
-                                left: 324,
+                                groupIndex: 1,
+                                left: 548,
                                 top: 250,
                                 height: 300
                             }, {
@@ -1821,13 +1828,13 @@ module('Virtual scrolling', () => {
                                 top: 900,
                                 height: 400
                             }, {
-                                groupIndex: 1,
-                                left: 548,
+                                groupIndex: 0,
+                                left: 324,
                                 top: 900,
                                 height: 400
                             }, {
-                                groupIndex: 0,
-                                left: 324,
+                                groupIndex: 1,
+                                left: 548,
                                 top: 900,
                                 height: 400
                             }, {
@@ -2641,109 +2648,232 @@ module('Virtual scrolling', () => {
                     };
                 }
             }, () => {
-                test('Scroll Right', function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
+                module('Regular appointmens', () => {
+                    test('Scroll Right', function(assert) {
+                        if(!isDesktopEnvironment()) {
+                            assert.ok(true, 'This test is for desktop only');
+                            return;
+                        }
 
-                    const $style = $('<style>');
-                    const styleBefore = $style.text();
+                        const $style = $('<style>');
+                        const styleBefore = $style.text();
 
-                    $style
-                        .text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 200px } ')
-                        .appendTo('head');
+                        $style
+                            .text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 200px } ')
+                            .appendTo('head');
 
-                    this.createInstance();
+                        this.createInstance();
 
-                    const { instance } = this;
+                        const { instance } = this;
 
-                    return asyncWrapper(assert, promise => {
-                        [
-                            {
-                                offset: { x: 0, y: 0 },
-                                expectedIndices: [0, 2],
-                                appointmentRects: [
-                                    { left: -9899, top: -9878, height: 50 },
-                                    { left: -9499, top: -9728, height: 100 }
-                                ]
-                            },
-                            {
-                                offset: { x: 300, y: 0 },
-                                expectedIndices: [0, 2],
-                                appointmentRects: [
-                                    { left: -10199, top: -9878, height: 50 },
-                                    { left: -9799, top: -9728, height: 100 }
-                                ]
-                            },
-                            {
-                                offset: { x: 900, y: 0 },
-                                expectedIndices: [],
-                                appointmentRects: []
-                            },
-                            {
-                                offset: { x: 0, y: 1100 },
-                                expectedIndices: [1, 3],
-                                appointmentRects: [
-                                    { left: -9699, top: -9878, height: 100 },
-                                    { left: -9299, top: -9828, height: 100 }
-                                ]
-                            },
-                            {
-                                offset: { x: 300, y: 1100 },
-                                expectedIndices: [1, 3],
-                                appointmentRects: [
-                                    { left: -9999, top: -9878, height: 100 },
-                                    { left: -9599, top: -9828, height: 100 }
-                                ]
-                            },
-                            {
-                                offset: { x: 1700, y: 1100 },
-                                expectedIndices: [7, 8, 9, 10],
-                                appointmentRects: [
-                                    { left: -10199, top: -9678, height: 300 },
-                                    { left: -9999, top: -9678, height: 300 },
-                                    { left: -9799, top: -9678, height: 300 },
-                                    { left: -9599, top: -9678, height: 300 }
-                                ]
-                            },
-                        ].forEach(({ offset, expectedIndices, appointmentRects }) => {
-                            const scrollable = instance.getWorkSpaceScrollable();
-
-                            promise = asyncScrollTest(
-                                assert,
-                                promise,
-                                () => {
-
-                                    assert.ok(true, `Scroll to x: ${offset.x}, y: ${offset.y}`);
-
-                                    const filteredItems = instance.getFilteredItems();
-
-                                    assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
-
-                                    filteredItems.forEach((_, index) => {
-                                        const expected = this.data[expectedIndices[index]];
-                                        assert.deepEqual(filteredItems[index], expected, `Filtered item "${index}" is correct`);
-
-                                        const expectedRect = appointmentRects[index];
-                                        const appointmentRect = this.scheduler.appointments
-                                            .getAppointment(index)
-                                            .get(0)
-                                            .getBoundingClientRect();
-
-                                        assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, `appointment part #${index} left is correct`);
-                                        assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, `appointment part #${index} top is correct`);
-                                        assert.roughEqual(appointmentRect.height, expectedRect.height, 2.01, `appointment part #${index} height is correct`);
-                                    });
+                        return asyncWrapper(assert, promise => {
+                            [
+                                {
+                                    offset: { x: 0, y: 0 },
+                                    expectedIndices: [0, 2],
+                                    appointmentRects: [
+                                        { left: -9899, top: -9878, height: 50 },
+                                        { left: -9499, top: -9728, height: 100 }
+                                    ]
                                 },
-                                scrollable,
-                                offset
-                            );
-                        });
+                                {
+                                    offset: { x: 300, y: 0 },
+                                    expectedIndices: [0, 2],
+                                    appointmentRects: [
+                                        { left: -10199, top: -9878, height: 50 },
+                                        { left: -9799, top: -9728, height: 100 }
+                                    ]
+                                },
+                                {
+                                    offset: { x: 900, y: 0 },
+                                    expectedIndices: [],
+                                    appointmentRects: []
+                                },
+                                {
+                                    offset: { x: 0, y: 1100 },
+                                    expectedIndices: [1, 3],
+                                    appointmentRects: [
+                                        { left: -9699, top: -9878, height: 100 },
+                                        { left: -9299, top: -9828, height: 100 }
+                                    ]
+                                },
+                                {
+                                    offset: { x: 300, y: 1100 },
+                                    expectedIndices: [1, 3],
+                                    appointmentRects: [
+                                        { left: -9999, top: -9878, height: 100 },
+                                        { left: -9599, top: -9828, height: 100 }
+                                    ]
+                                },
+                                {
+                                    offset: { x: 1700, y: 1100 },
+                                    expectedIndices: [7, 8, 9, 10],
+                                    appointmentRects: [
+                                        { left: -10199, top: -9678, height: 300 },
+                                        { left: -9999, top: -9678, height: 300 },
+                                        { left: -9799, top: -9678, height: 300 },
+                                        { left: -9599, top: -9678, height: 300 }
+                                    ]
+                                },
+                            ].forEach(({ offset, expectedIndices, appointmentRects }) => {
+                                const scrollable = instance.getWorkSpaceScrollable();
 
-                        return promise;
-                    }).finally(() => {
-                        $style.text(styleBefore);
+                                promise = asyncScrollTest(
+                                    assert,
+                                    promise,
+                                    () => {
+
+                                        assert.ok(true, `Scroll to x: ${offset.x}, y: ${offset.y}`);
+
+                                        const filteredItems = instance.getFilteredItems();
+
+                                        assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
+
+                                        filteredItems.forEach((_, index) => {
+                                            const expected = this.data[expectedIndices[index]];
+                                            assert.deepEqual(filteredItems[index], expected, `Filtered item "${index}" is correct`);
+
+                                            const expectedRect = appointmentRects[index];
+                                            const appointmentRect = this.scheduler.appointments
+                                                .getAppointment(index)
+                                                .get(0)
+                                                .getBoundingClientRect();
+
+                                            assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, `appointment part #${index} left is correct`);
+                                            assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, `appointment part #${index} top is correct`);
+                                            assert.roughEqual(appointmentRect.height, expectedRect.height, 2.01, `appointment part #${index} height is correct`);
+                                        });
+                                    },
+                                    scrollable,
+                                    offset
+                                );
+                            });
+
+                            return promise;
+                        }).finally(() => {
+                            $style.text(styleBefore);
+                        });
+                    });
+                });
+
+                module('Recurrent appointments', () => {
+                    module('Multiple resources', () => {
+                        test('Scroll Right recurrent appointment with multiple resources', function(assert) {
+                            const scheduler = createWrapper({
+                                height: 600,
+                                width: 600,
+                                dataSource: [{
+                                    text: 'Website Re-Design Plan',
+                                    startDate: new Date(2021, 8, 6, 9, 30),
+                                    endDate: new Date(2021, 8, 6, 11, 30),
+                                    resourceId: [1, 3, 5],
+                                    recurrenceRule: 'FREQ=DAILY',
+                                }
+                                ],
+                                views: [{
+                                    type: 'week',
+                                    name: 'Work Week',
+                                    groupOrientation: 'horizontal',
+                                }],
+                                startDayHour: 9,
+                                endDayHour: 18,
+                                currentView: 'Work Week',
+                                scrolling: {
+                                    mode: 'virtual',
+                                    type: 'both',
+                                },
+                                currentDate: new Date(2021, 8, 6),
+                                groups: ['resourceId'],
+                                resources: [{
+                                    fieldExpr: 'resourceId',
+                                    dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+                                    allowMultiple: true,
+                                }]
+                            });
+
+                            scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+
+                            return asyncWrapper(assert, promise => {
+                                [
+                                    {
+                                        offset: { x: 0 },
+                                        appointmentRects: [
+                                            { left: -9824, top: -9788, height: 200 },
+                                            { left: -9749, top: -9788, height: 200 },
+                                            { left: -9674, top: -9788, height: 200 },
+                                            { left: -9599, top: -9788, height: 200 },
+                                            { left: -9524, top: -9788, height: 200 },
+                                            { left: -9449, top: -9788, height: 200 }
+                                        ]
+                                    },
+                                    {
+                                        offset: { x: 300 },
+                                        appointmentRects: [
+                                            { left: -10124, top: -9788, height: 200 },
+                                            { left: -10049, top: -9788, height: 200 },
+                                            { left: -9974, top: -9788, height: 200 },
+                                            { left: -9899, top: -9788, height: 200 },
+                                            { left: -9824, top: -9788, height: 200 },
+                                            { left: -9749, top: -9788, height: 200 },
+                                            { left: -9074, top: -9788, height: 200 }
+                                        ]
+                                    },
+                                    {
+                                        offset: { x: 1100 },
+                                        appointmentRects: [
+                                            { left: -9874, top: -9788, height: 200 },
+                                            { left: -9799, top: -9788, height: 200 },
+                                            { left: -9724, top: -9788, height: 200 },
+                                            { left: -9649, top: -9788, height: 200 },
+                                            { left: -9574, top: -9788, height: 200 },
+                                            { left: -9499, top: -9788, height: 200 }
+                                        ]
+                                    },
+                                    {
+                                        offset: { x: 2100 },
+                                        appointmentRects: [
+                                            { left: -9824, top: -9788, height: 200 },
+                                            { left: -9749, top: -9788, height: 200 },
+                                            { left: -9674, top: -9788, height: 200 },
+                                            { left: -9599, top: -9788, height: 200 },
+                                            { left: -9524, top: -9788, height: 200 },
+                                            { left: -9449, top: -9788, height: 200 }
+                                        ]
+                                    }
+                                ].forEach(({ offset, appointmentRects }) => {
+                                    const scrollable = scheduler.instance.getWorkSpaceScrollable();
+
+                                    promise = asyncScrollTest(
+                                        assert,
+                                        promise,
+                                        () => {
+
+                                            assert.ok(true, `Scroll to x: ${offset.x}`);
+
+                                            assert.equal(
+                                                scheduler.appointments.getAppointmentCount(),
+                                                appointmentRects.length,
+                                                'Appointment amount is correct'
+                                            );
+
+                                            scheduler.appointments.getAppointments()
+                                                .each((index, appointment) => {
+                                                    const appointmentRect = appointment.getBoundingClientRect();
+                                                    const expectedRect = appointmentRects[index];
+
+                                                    assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, `appointment #${index} left is correct`);
+                                                    assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, `appointment #${index} top is correct`);
+                                                    assert.roughEqual(appointmentRect.height, expectedRect.height, 2.01, `appointment #${index} height is correct`);
+                                                });
+                                        },
+                                        scrollable,
+                                        offset
+                                    );
+                                });
+
+                                return promise;
+                            });
+                        });
                     });
                 });
             });
@@ -2779,13 +2909,13 @@ module('Virtual scrolling', () => {
         [
             {
                 groupOrientation: 'horizontal',
-                expectedReducers: [true, true, true, true, false, false]
+                expectedReducers: [true, true, false, true, true, false]
             }, {
                 groupOrientation: 'vertical',
                 expectedReducers: [true, true, false]
             }
         ].forEach(option => {
-            test(`A regular virtual reccurrent appointment should not have a reducer icon if ${option.groupOrientation} group orientation`, function(assert) {
+            test(`Reccurrent appointment should not have a reducer icon if ${option.groupOrientation} group orientation`, function(assert) {
                 this.createInstance({
                     dataSource: [{
                         text: 'Appointment 1',

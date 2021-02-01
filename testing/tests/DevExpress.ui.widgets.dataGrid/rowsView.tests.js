@@ -5509,7 +5509,7 @@ QUnit.module('Virtual scrolling', {
             rowsView._dataController.getItemSize = x.getItemSize;
             rowsView._dataController.getItemSizes = x.getItemSizes;
             rowsView._dataController.viewportItemSize = x.viewportItemSize;
-            rowsView._dataController.setContentSize = x.setContentSize;
+            rowsView._dataController.setContentItemSizes = x.setContentItemSizes;
             rowsView._dataController.setViewportPosition = x.setViewportPosition;
             rowsView._dataController.getItemIndexByPosition = x.getItemIndexByPosition;
             rowsView._dataController._setViewportPositionCore = x._setViewportPositionCore;
