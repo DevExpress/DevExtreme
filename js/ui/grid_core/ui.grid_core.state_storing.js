@@ -182,7 +182,7 @@ export default {
                         that.option('pager').allowedPageSizes = allowedPageSizes;
                     }
 
-                    if(that.option('focusedRowEnabled')) {
+                    if(that.option('focusedRowEnabled') && isDefined(state.focusedRowKey)) {
                         that.option('focusedRowKey', state.focusedRowKey);
                     }
 
