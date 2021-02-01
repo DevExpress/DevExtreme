@@ -336,8 +336,7 @@ class FileManager extends Widget {
     }
 
     _redrawComponent(onlyFileItemsView) {
-        !onlyFileItemsView && this._filesTreeView.refresh();
-        this._itemView.refresh();
+        this._itemView.refresh().then(() => !onlyFileItemsView && this._filesTreeView.refresh());
     }
 
     _getItemViewItems() {

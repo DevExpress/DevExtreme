@@ -133,6 +133,18 @@ export class FileManagerWrapper {
         return this.getFolderToggles(inDialog).eq(index);
     }
 
+    isFolderNodeToggleOpened(text) {
+        let result = null;
+        const targetNode = this.getFolderNodes().filter(function() { return $(this).text() === text; }).eq(0).parent();
+        if(targetNode.length) {
+            const itemToggle = targetNode.children(`.${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
+            if(itemToggle.length) {
+                result = itemToggle.hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS);
+            }
+        }
+        return result;
+    }
+
     getFocusedItemText() {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOCUSED_ITEM_CLASS} span`).text();
     }
