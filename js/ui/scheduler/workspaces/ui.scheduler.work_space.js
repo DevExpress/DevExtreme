@@ -1367,7 +1367,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         );
     }
 
-    renderRHeaderPanel(isRenderDateHeader = true, useTimeCellTemplate = false) {
+    renderRHeaderPanel(isRenderDateHeader = true) {
         if(this.option('groups').length) {
             this._attachGroupCountAttr();
         } else {
@@ -1376,7 +1376,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.renderRComponent(
             this._$thead,
-            dxrDateHeader,
+            this.getRenovatedHeaderPanelComponent(),
             'renovatedHeaderPanel',
             {
                 dateHeaderMap: this.viewDataProvider.dateHeaderMap,
@@ -1392,9 +1392,12 @@ class SchedulerWorkSpace extends WidgetObserver {
                     : this._getCellCount(),
                 columnCountPerGroup: this._getCellCount(),
                 isRenderDateHeader,
-                useTimeCellTemplate,
             }
         );
+    }
+
+    getRenovatedHeaderPanelComponent() {
+        return dxrDateHeader;
     }
 
     renderRComponent(parentElement, componentClass, componentName, viewModel) {

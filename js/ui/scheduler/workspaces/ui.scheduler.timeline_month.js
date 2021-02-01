@@ -2,6 +2,8 @@ import registerComponent from '../../../core/component_registrator';
 import SchedulerTimeline from './ui.scheduler.timeline';
 import dateUtils from '../../../core/utils/date';
 
+import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
+
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 const DAY_IN_MILLISECONDS = 86400000;
 
@@ -114,6 +116,10 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
             left: 0,
             cellPosition: 0
         };
+    }
+
+    getRenovatedHeaderPanelComponent() {
+        return dxrDateHeader;
     }
 }
 

@@ -22,55 +22,42 @@ export const viewFunction = ({
   isHorizontalGrouping,
   props: {
     dateHeaderMap,
-    timeCellTemplate,
     dateCellTemplate,
-    useTimeCellTemplate,
   },
 }: DateHeaderLayout): JSX.Element => (
   <Fragment>
-    {dateHeaderMap.map((dateHeaderRow, rowIndex) => {
-      const rowsCount = dateHeaderMap.length;
-      const isTimeCellTemplate = rowsCount - 1 === rowIndex && useTimeCellTemplate;
-      const isWeekDayRow = rowsCount > 1 && rowIndex === 0 && useTimeCellTemplate;
-
-      return (
-        <Row className="dx-scheduler-header-row" key={rowIndex.toString()}>
-          {dateHeaderRow.map(({
-            startDate,
-            endDate,
-            today,
-            groups: cellGroups,
-            groupIndex,
-            isFirstGroupCell,
-            isLastGroupCell,
-            index,
-            key,
-            text,
-            colSpan,
-          }) => (
-            <DateHeaderCell
-              startDate={startDate}
-              endDate={endDate}
-              groups={isHorizontalGrouping ? cellGroups : undefined}
-              groupIndex={isHorizontalGrouping ? groupIndex : undefined}
-              today={today}
-              index={index}
-              text={text}
-              isFirstGroupCell={isFirstGroupCell}
-              isLastGroupCell={isLastGroupCell}
-              isWeekDayCell={isWeekDayRow}
-              key={key}
-              colSpan={colSpan}
-
-              // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
-              dateCellTemplate={dateCellTemplate}
-              timeCellTemplate={timeCellTemplate}
-              isTimeCellTemplate={isTimeCellTemplate}
-            />
-          ))}
-        </Row>
-      );
-    })}
+    {dateHeaderMap.map((dateHeaderRow, rowIndex) => (
+      <Row className="dx-scheduler-header-row" key={rowIndex.toString()}>
+        {dateHeaderRow.map(({
+          startDate,
+          endDate,
+          today,
+          groups: cellGroups,
+          groupIndex,
+          isFirstGroupCell,
+          isLastGroupCell,
+          index,
+          key,
+          text,
+          colSpan,
+        }) => (
+          <DateHeaderCell
+            startDate={startDate}
+            endDate={endDate}
+            groups={isHorizontalGrouping ? cellGroups : undefined}
+            groupIndex={isHorizontalGrouping ? groupIndex : undefined}
+            today={today}
+            index={index}
+            text={text}
+            isFirstGroupCell={isFirstGroupCell}
+            isLastGroupCell={isLastGroupCell}
+            dateCellTemplate={dateCellTemplate}
+            key={key}
+            colSpan={colSpan}
+          />
+        ))}
+      </Row>
+    ))}
   </Fragment>
 );
 
@@ -81,8 +68,6 @@ export class DateHeaderLayoutProps {
   @OneWay() dateHeaderMap: DateHeaderCellData[][] = [];
 
   @OneWay() groups: Group[] = [];
-
-  @OneWay() useTimeCellTemplate = false;
 
   @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
