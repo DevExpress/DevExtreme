@@ -214,10 +214,17 @@ const SchedulerAppointmentForm = {
                         location: 'right',
                     },
                     editorOptions: {
-                        onValueChanged: ({ value }) => {
-                            this.updateRecurrenceGroup(value, dataExprs);
+                        onValueChanged: (args) => {
+                            const form = this._appointmentForm;
+                            const colSpan = args.value ? 1 : 2;
 
-                            changeSize(value);
+                            form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Main, 'colSpan', colSpan);
+                            form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'colSpan', colSpan);
+
+
+                            this._updateRecurrenceItemVisibility(dataExprs.recurrenceRuleExpr, args.value, form);
+
+                            changeSize(args.value);
                             triggerResize();
                         }
                     }
@@ -245,7 +252,7 @@ const SchedulerAppointmentForm = {
     _updateRecurrenceItemVisibility: function(recurrenceRuleExpr, value, form) {
         form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'visible', value);
         !value && form.updateData(recurrenceRuleExpr, '');
-        form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility(value);
+        form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility?.(value);
     },
 
     updateRecurrenceGroup: function(isRecurrenceGroupVisible, dataExprs) {

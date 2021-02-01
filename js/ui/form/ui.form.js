@@ -1268,16 +1268,16 @@ const Form = Widget.inherit({
             }
             default: {
                 if(isObject(option)) {
-                    if(!this._tryChangeLayoutManagerItemOptions(path, option)) {
-                        let allowUpdateItems;
-                        each(option, (optionName, optionValue) => {
-                            const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName], path);
-                            this._changeItemOption(item, optionName, optionValue);
-                            if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
-                                allowUpdateItems = true;
-                            }
-                        });
-                        allowUpdateItems && this.option('items', items);
+                    let allowUpdateItems;
+                    each(option, (optionName, optionValue) => {
+                        const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName], path);
+                        this._changeItemOption(item, optionName, optionValue);
+                        if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
+                            allowUpdateItems = true;
+                        }
+                    });
+                    if(!this._tryChangeLayoutManagerItemOptions(path, option) && allowUpdateItems) {
+                        this.option('items', items);
                     }
                 }
                 break;
