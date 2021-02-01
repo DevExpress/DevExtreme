@@ -132,7 +132,7 @@ export default class AppointmentPopup {
                 e.cancel = true;
             } else {
                 this.updatePopupFullScreenMode();
-                this._updateForm();
+                this.updateFormRecurrenceGroup();
             }
         });
     }
@@ -144,15 +144,8 @@ export default class AppointmentPopup {
     }
 
     _createAppointmentFormData(rawAppointment) {
-        // const appointment = this._createAppointmentAdapter(rawAppointment);
-        const formData = this._appointmentForm?.option('formData') || {};
-        const recurrenceRule = formData[this.scheduler._dataAccessors.expr.recurrenceRuleExpr];
-
-        // const result = extend(true, { repeat: !!appointment.recurrenceRule }, rawAppointment);
-        const result = extend(true, {
-            repeat: !!recurrenceRule,
-            [this.scheduler._dataAccessors.expr.recurrenceRuleExpr]: recurrenceRule,
-        }, rawAppointment);
+        const appointment = this._createAppointmentAdapter(rawAppointment);
+        const result = extend(true, { repeat: !!appointment.recurrenceRule }, rawAppointment);
         each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;
@@ -205,7 +198,7 @@ export default class AppointmentPopup {
         return this.scheduler.createAppointmentAdapter(rawAppointment);
     }
 
-    _updateForm() {
+    _updateForm(useFormData) {
         const { data } = this.state.appointment;
         const adapter = this._createAppointmentAdapter(data);
 
@@ -216,7 +209,7 @@ export default class AppointmentPopup {
         this.state.appointment.isEmptyText = data === undefined || adapter.text === undefined;
         this.state.appointment.isEmptyDescription = data === undefined || adapter.description === undefined;
 
-        const appointment = this._createAppointmentAdapter(this._createAppointmentFormData(data));
+        const appointment = this._createAppointmentAdapter(this._createAppointmentFormData(data, useFormData));
         if(appointment.text === undefined) {
             appointment.text = '';
         }
@@ -289,6 +282,17 @@ export default class AppointmentPopup {
         const isRecurrence = AppointmentForm.getRecurrenceRule(this._appointmentForm.option('formData'), this.scheduler._dataAccessors.expr);
         if(this.isVisible()) {
             this.changeSize(isRecurrence);
+        }
+    }
+
+    updateFormRecurrenceGroup() {
+        if(this._appointmentForm && this.isVisible()) {
+            const { expr } = this.scheduler._dataAccessors;
+            const formData = this._appointmentForm.option('formData');
+            const isRecurrence = !!AppointmentForm.getRecurrenceRule(formData, expr);
+
+            AppointmentForm.updateRepeatEditor(isRecurrence);
+            AppointmentForm.updateRecurrenceGroup(isRecurrence, expr);
         }
     }
 

@@ -214,16 +214,10 @@ const SchedulerAppointmentForm = {
                         location: 'right',
                     },
                     editorOptions: {
-                        onValueChanged: (args) => {
-                            const form = this._appointmentForm;
-                            const colSpan = args.value ? 1 : 2;
+                        onValueChanged: ({ value }) => {
+                            this.updateRecurrenceGroup(value, dataExprs);
 
-                            form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Main, 'colSpan', colSpan);
-                            form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'colSpan', colSpan);
-
-                            this._updateRecurrenceItemVisibility(dataExprs.recurrenceRuleExpr, args.value, form);
-
-                            changeSize(args.value);
+                            changeSize(value);
                             triggerResize();
                         }
                     }
@@ -252,6 +246,32 @@ const SchedulerAppointmentForm = {
         form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'visible', value);
         !value && form.updateData(recurrenceRuleExpr, '');
         form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility(value);
+    },
+
+    updateRecurrenceGroup: function(isRecurrenceGroupVisible, dataExprs) {
+        const form = this._appointmentForm;
+        const isRecurrenceGroupAlreadyVisible = form.itemOption(
+            APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
+            'visible',
+        );
+
+        if(isRecurrenceGroupVisible !== isRecurrenceGroupAlreadyVisible) {
+            const colSpan = isRecurrenceGroupVisible ? 1 : 2;
+
+            form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Main, 'colSpan', colSpan);
+            form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'colSpan', colSpan);
+
+            this._updateRecurrenceItemVisibility(dataExprs.recurrenceRuleExpr, isRecurrenceGroupVisible, form);
+        }
+    },
+
+    updateRepeatEditor: function(isRecurrence) {
+        const form = this._appointmentForm;
+        const repeatEditor = form.getEditor('repeat');
+
+        if(repeatEditor && repeatEditor.option('value') !== isRecurrence) {
+            repeatEditor.option('value', isRecurrence);
+        }
     },
 
     prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowTimeZoneEditing, readOnly) {
