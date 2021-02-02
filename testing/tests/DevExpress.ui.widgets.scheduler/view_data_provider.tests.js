@@ -1047,6 +1047,100 @@ module('View Data Provider', () => {
                 assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
             });
 
+            test('completeDateHeaderMap should be generated correctly in case of ti', function(assert) {
+                const weekHeaderMock = {
+                    ...dataGenerationWorkSpaceMock,
+                    generateRenderOptions: () => {
+                        return {
+                            ...dataGenerationWorkSpaceMock.generateRenderOptions(),
+                            isGenerateWeekDaysHeaderData: true,
+                            getWeekDaysHeaderText: () => 'week header text',
+                            daysInView: 2,
+                            cellCountInDay: 2,
+                        };
+                    },
+                };
+                const viewDataProvider = new ViewDataProvider(weekHeaderMock);
+
+                viewDataProvider.update(true);
+
+                const expectedDateHeaderMap = [[{
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 0,
+                    text: 'week header text',
+                }, {
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 12),
+                    endDate: new Date(2021, 0, 12, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 2,
+                    text: 'week header text',
+                }], [{
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                    text: 0,
+                    today: true,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 11),
+                    endDate: new Date(2021, 0, 11, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 1,
+                    text: 1,
+                    today: false,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 12),
+                    endDate: new Date(2021, 0, 12, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 2,
+                    text: 0,
+                    today: false,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 13),
+                    endDate: new Date(2021, 0, 13, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1, },
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 3,
+                    text: 1,
+                    today: false,
+                }]];
+
+                const completeDateHeaderMap = viewDataProvider.completeDateHeaderMap;
+
+                assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
+            });
+
             test('dateHeaderMap shoul be generated correctly', function(assert) {
                 const viewDataProvider = new ViewDataProvider(horizontalWorkSpaceMock);
 

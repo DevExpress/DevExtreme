@@ -2,17 +2,16 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 import {
   viewFunction as LayoutView,
-  DateHeaderLayout,
-  DateHeaderLayoutProps,
+  TimelineDateHeaderLayout,
 } from '../layout';
-import { Row } from '../../../row';
+import { Row } from '../../../../base/row';
 import * as utilsModule from '../../../../utils';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../../../consts';
-import { DateHeaderCell } from '../cell';
+import { DateHeaderCell } from '../../../../base/header_panel/date_header/cell';
 
 const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
 
-describe('DateHeaderLayout', () => {
+describe('TimelineDateHeaderLayout', () => {
   describe('Render', () => {
     const dateHeaderMap: any = [[{
       startDate: new Date(2020, 6, 9),
@@ -44,7 +43,6 @@ describe('DateHeaderLayout', () => {
       <LayoutView
         {...viewModel}
         props={{
-          ...(new DateHeaderLayoutProps()),
           dateHeaderMap,
           ...viewModel.props,
         }}
@@ -64,7 +62,14 @@ describe('DateHeaderLayout', () => {
 
     it('should render cells and pass correct props to them in basic case', () => {
       const dateCellTemplate = () => null;
-      const layout = render({ props: { dateCellTemplate }, isHorizontalGrouping: true });
+      const timeCellTemplate = () => null;
+      const layout = render({
+        props: {
+          dateCellTemplate,
+          timeCellTemplate,
+        },
+        isHorizontalGrouping: true,
+      });
 
       const cells = layout.find(DateHeaderCell);
       expect(cells)
@@ -87,7 +92,8 @@ describe('DateHeaderLayout', () => {
           colSpan: firstCellData.colSpan,
           isWeekDayCell: false,
           dateCellTemplate,
-          isTimeCellTemplate: false,
+          timeCellTemplate,
+          isTimeCellTemplate: true,
         });
       expect(firstCell.key())
         .toBe(firstCellData.key);
@@ -109,10 +115,62 @@ describe('DateHeaderLayout', () => {
           colSpan: secondCellData.colSpan,
           isWeekDayCell: false,
           dateCellTemplate,
-          isTimeCellTemplate: false,
+          timeCellTemplate,
+          isTimeCellTemplate: true,
         });
       expect(secondCell.key())
         .toBe(secondCellData.key);
+    });
+
+    describe('templates', () => {
+      const dateCellTemplate = () => null;
+      const timeCellTemplate = () => null;
+
+      [{
+        testDateHeaderMap: [[dateHeaderMap[0][0]]],
+        cellCount: 1,
+        expectedCellData: [{
+          isWeekDayCell: false,
+          isTimeCellTemplate: true,
+        }],
+        description: 'should pass correct props to the cell when there is one row',
+      }, {
+        testDateHeaderMap: [[dateHeaderMap[0][0]], [dateHeaderMap[0][1]]],
+        cellCount: 2,
+        expectedCellData: [{
+          isWeekDayCell: true,
+          isTimeCellTemplate: false,
+        }, {
+          isWeekDayCell: false,
+          isTimeCellTemplate: true,
+        }],
+        description: 'should pass correct props to the cells when there are 2 rows',
+      }].forEach(({
+        testDateHeaderMap,
+        cellCount,
+        expectedCellData,
+        description,
+      }) => {
+        it(description, () => {
+          const layout = render({
+            isHorizontalGrouping: true,
+            props: {
+              dateHeaderMap: testDateHeaderMap,
+              dateCellTemplate,
+              timeCellTemplate,
+            },
+          });
+
+          const cells = layout.find(DateHeaderCell);
+          expect(cells)
+            .toHaveLength(cellCount);
+
+          cells.forEach((cell, index) => {
+            expect(cell.props())
+              .toMatchObject(expectedCellData[index]);
+          });
+        });
+      });
     });
 
     it('should not pass groups and groupInex to cells in case of Vertical Gruping', () => {
@@ -142,7 +200,7 @@ describe('DateHeaderLayout', () => {
       describe('isHorizontalGrouping', () => {
         it('should call "isHorizontalGroupOrientation" with correct parameters', () => {
           const groups = [];
-          const layout = new DateHeaderLayout({
+          const layout = new TimelineDateHeaderLayout({
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
             groups,
           });

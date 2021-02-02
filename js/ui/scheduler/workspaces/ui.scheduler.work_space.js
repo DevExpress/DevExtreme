@@ -177,6 +177,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     get viewDirection() { return 'vertical'; }
 
+    get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -1376,11 +1378,12 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.renderRComponent(
             this._$thead,
-            dxrDateHeader,
+            this.renovatedHeaderPanelComponent,
             'renovatedHeaderPanel',
             {
                 dateHeaderMap: this.viewDataProvider.dateHeaderMap,
                 dateCellTemplate: this.option('dateCellTemplate'),
+                timeCellTemplate: this.option('timeCellTemplate'),
                 groups: this.option('groups'),
                 groupByDate: this.isGroupedByDate(),
                 groupOrientation: this.option('groupOrientation'),
