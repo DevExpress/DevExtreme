@@ -2,7 +2,7 @@
 
 const { task, src, parallel, series, dest, watch } = require('gulp');
 const { join } = require('path');
-const { existsSync, readFileSync, writeFileSync } = require('fs');
+const { existsSync, readFileSync, writeFileSync, mkdirSync } = require('fs');
 const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
 const sass = require('gulp-dart-sass');
@@ -51,7 +51,9 @@ function createBundles(callback) {
     const genericColors = ['carmine', 'contrast', 'dark', 'darkmoon', 'darkviolet', 'greenmist', 'light', 'softblue'];
 
     const saveBundleFile = (fileName, content) => {
-        const bundlePath = join(process.cwd(), 'scss', 'bundles', fileName);
+        const bundlesFolder = join(process.cwd(), 'scss', 'bundles');
+        const bundlePath = join(bundlesFolder, fileName);
+        if(!existsSync(bundlesFolder)) mkdirSync(bundlesFolder);
         writeFileSync(bundlePath, content);
     };
 
