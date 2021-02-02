@@ -19,7 +19,9 @@ import { isDxMouseWheelEvent } from '../../../events/utils/index';
 import { Deferred } from '../../../core/utils/deferred';
 import type { dxPromise } from '../../../core/utils/deferred';
 import { titleize } from '../../../core/utils/inflector';
-import { EventCallback } from '../common/event_callback.d';
+import devices from '../../../core/devices';
+import { BounceAnimator } from './bounce_animator';
+import { InertiaAnimator } from './inertia_animator';
 
 import { ScrollbarProps } from './scrollbar_props';
 import {
@@ -35,6 +37,16 @@ import {
 import BaseWidgetProps from '../../utils/base_props';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
+
+const realDevice = devices.real;
+const isSluggishPlatform = (realDevice as any).platform === 'android';
+/* istanbul ignore next */
+const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
+const FRAME_DURATION = 17; // Math.round(1000 / 60)
+/* istanbul ignore next */
+const BOUNCE_DURATION = isSluggishPlatform ? 300 : 400;
+const BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION;
+const BOUNCE_ACCELERATION_SUM = (1 - ACCELERATION ** BOUNCE_FRAMES) / (1 - ACCELERATION);
 
 const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
 const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
@@ -75,7 +87,13 @@ type ScrollbarPropsType = ScrollbarProps & Pick<BaseWidgetProps, 'visible'>;
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
+  @Mutable() inertiaAnimator?: InertiaAnimator;
+
+  @Mutable() bounceAnimator?: BounceAnimator;
+
   @Mutable() velocity = 0;
+
+  @Mutable() bounceLocation = 0;
 
   @InternalState() active = false;
 
@@ -138,6 +156,42 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return (): void => dxPointerUp.off(this.scrollRef, { namespace });
   }
 
+  @Effect()
+  setupAnimators(): () => void {
+    const animatorConfig = this.getAnimatorArgs();
+
+    this.inertiaAnimator = new InertiaAnimator(animatorConfig);
+    this.bounceAnimator = new BounceAnimator(animatorConfig);
+
+    return (): void => {
+      this.inertiaAnimator = undefined;
+      this.bounceAnimator = undefined;
+    };
+  }
+
+  getAnimatorArgs(): Pick<Scrollbar, 'getVelocity' | 'setVelocity' | 'inBounds' | 'scrollStep' | 'scrollComplete' | 'stopComplete' | 'crossBoundOnNextStep' | 'move' | 'getBounceLocation'> {
+    return {
+      getVelocity: this.getVelocity.bind(this),
+      setVelocity: this.setVelocity.bind(this),
+      inBounds: this.inBounds.bind(this),
+      scrollStep: this.scrollStep.bind(this),
+      scrollComplete: this.scrollComplete.bind(this),
+      stopComplete: this.stopComplete.bind(this),
+      crossBoundOnNextStep: this.crossBoundOnNextStep.bind(this),
+      move: this.move.bind(this),
+      getBounceLocation: this.getBounceLocation.bind(this),
+    };
+  }
+
+  /* istanbul ignore next */
+  crossBoundOnNextStep(): boolean {
+    const { location } = this.cachedVariables;
+    const nextLocation = location + this.velocity;
+
+    return (location < this.getMinOffset() && nextLocation >= this.getMinOffset())
+        || (location > this.getMaxOffset() && nextLocation <= this.getMaxOffset());
+  }
+
   @Method()
   isThumb(element: HTMLDivElement): boolean {
     return this.scrollbarRef.querySelector(`.${SCROLLABLE_SCROLL_CLASS}`) === element
@@ -191,7 +245,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   getMinOffset(): number {
-    return -Math.max(this.props.contentSize - this.props.containerSize, 0);
+    return Math.round(-Math.max(this.props.contentSize - this.props.containerSize, 0));
   }
 
   getAxis(): string {
@@ -203,16 +257,19 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  initHandler(e, action: EventCallback<Event> | undefined,
-    crossThumbScrolling: boolean): dxPromise<void> {
+  initHandler(e, crossThumbScrolling: boolean): dxPromise<void> {
     const stopDeferred = Deferred<void>();
 
-    // this.stopScrolling();
+    this.stopScrolling();
 
     this.prepareThumbScrolling(e, crossThumbScrolling);
-    action?.(e);
 
     return stopDeferred.promise();
+  }
+
+  @Method()
+  startHandler(): void {
+    this.show();
   }
 
   @Method()
@@ -232,21 +289,64 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  endHandler(e, action: EventCallback<Event> | undefined): void {
-    this.velocity = e.velocity[this.getAxis()];
+  endHandler(velocity): void {
+    this.velocity = velocity[this.getAxis()];
     this.inertiaHandler();
     this.resetThumbScrolling();
-    action?.(e);
   }
 
   @Method()
   stopHandler(): void {
+    if (this.cachedVariables.thumbScrolling) {
+      this.scrollComplete();
+    } else {
+      this.scrollToBounds();
+    }
     this.resetThumbScrolling();
+  }
+
+  @Method()
+  scrollByHandler(delta: { x: number; y: number}): void {
+    this.scrollBy(delta);
+    this.scrollComplete();
+  }
+
+  scrollComplete(): void {
+    if (this.inBounds()) {
+      this.hide();
+    }
+
+    this.scrollToBounds();
+  }
+
+  scrollToBounds(): void {
+    if (this.inBounds()) {
+      return;
+    }
+    // this._bounceAction();
+    this.setupBounce();
+    this.bounceAnimator?.start();
+  }
+
+  setupBounce(): void {
+    this.setBounceLocation(this.boundLocation());
+
+    const bounceDistance = this.getBounceLocation() - this.cachedVariables.location;
+
+    this.velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
+  }
+
+  /* istanbul ignore next */
+  // eslint-disable-next-line class-methods-use-this
+  stopComplete(): void { // TODO: it needs if we deside to use the Promises
+    // if(this._stopDeferred) {
+    //     this._stopDeferred.resolve();
+    // }
   }
 
   inertiaHandler(): void {
     this.suppressInertia();
-    // this._inertiaAnimator.start();
+    this.inertiaAnimator?.start();
   }
 
   suppressInertia(): void {
@@ -268,11 +368,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.scrollStep(distance);
   }
 
-  // stopScrolling(): void {
-  //   // this._hideScrollbar(); // it seems necessary // TODO: check it
-  //   // this._inertiaAnimator.stop();
-  //   // this._bounceAnimator.stop();
-  // }
+  stopScrolling(): void {
+    this.hide();
+    this.inertiaAnimator?.stop();
+    this.bounceAnimator?.stop();
+  }
 
   prepareThumbScrolling(e, crossThumbScrolling: boolean): void {
     if (isDxMouseWheelEvent(e.originalEvent)) {
@@ -322,19 +422,34 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     // eventsEngine.triggerHandler(this.props.containerRef, { type: 'scroll' }); // TODO
   }
 
-  setVelocity(value: number): void {
-    this.velocity = value;
+  show(): void {
+    this.props.onChangeVisibility?.(true);
+  }
+
+  hide(): void {
+    this.props.onChangeVisibility?.(false);
   }
 
   getVelocity(): number {
     return this.velocity;
   }
 
+  setBounceLocation(value: number): void {
+    this.bounceLocation = value;
+  }
+
+  getBounceLocation(): number {
+    return this.bounceLocation;
+  }
+
+  setVelocity(value: number): void {
+    this.velocity = value;
+  }
+
   getContainerRef(): any {
     return this.props.containerRef;
   }
 
-  /* istanbul ignore next */
   getContentRef(): any {
     return this.props.contentRef;
   }
@@ -344,7 +459,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return;
     }
 
-    /* istanbul ignore next */
     this.velocity = 0;
     this.setLocation(this.boundLocation());
   }
