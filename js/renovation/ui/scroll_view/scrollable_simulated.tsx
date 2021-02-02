@@ -241,7 +241,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Method()
-  scrollBy(distance: number | Partial<ScrollableLocation>): void {
+  scrollBy(distance: number | Partial<ScrollableLocation>): void { // TODO: rewrite method
     const location = ensureLocation(distance);
     const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
 
