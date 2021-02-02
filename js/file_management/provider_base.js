@@ -56,10 +56,6 @@ class FileSystemProviderBase {
         return DEFAULT_FILE_UPLOAD_CHUNK_SIZE;
     }
 
-    _getItemsByType(path, folders) {
-        return this.getItems(path).filter(item => item.isDirectory === folders);
-    }
-
     _convertDataObjectsToFileItems(entries, pathInfo) {
         const result = [];
         each(entries, (_, entry) => {

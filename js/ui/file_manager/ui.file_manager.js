@@ -163,6 +163,8 @@ class FileManager extends Widget {
             onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this),
             onClick: () => this._setItemsViewAreaActive(false)
         });
+
+        this._filesTreeView.updateCurrentDirectory();
     }
 
     _createItemView($container, viewMode) {
@@ -334,8 +336,7 @@ class FileManager extends Widget {
     }
 
     _redrawComponent(onlyFileItemsView) {
-        !onlyFileItemsView && this._filesTreeView.refresh();
-        this._itemView.refresh();
+        this._itemView.refresh().then(() => !onlyFileItemsView && this._filesTreeView.refresh());
     }
 
     _getItemViewItems() {
