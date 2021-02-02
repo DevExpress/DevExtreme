@@ -487,28 +487,28 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   moveContentByTranslator(location): undefined | void {
-    let translateOffset;
+    let currentTranslateOffset;
     const minOffset = this.getMinOffset();
 
     /* istanbul ignore next */
     if (location > 0) {
-      translateOffset = location;
+      currentTranslateOffset = location;
     } else if (location <= minOffset) {
       /* istanbul ignore next */
-      translateOffset = location - minOffset;
+      currentTranslateOffset = location - minOffset;
     } else {
-      translateOffset = location % 1;
+      currentTranslateOffset = location % 1;
     }
 
-    if (this.translateOffset === translateOffset) {
+    if (this.translateOffset === currentTranslateOffset) {
       return;
     }
 
     const targetLocation = {};
-    targetLocation[this.getProp()] = translateOffset;
-    this.translateOffset = translateOffset;
+    targetLocation[this.getProp()] = currentTranslateOffset;
+    this.translateOffset = currentTranslateOffset;
 
-    if (translateOffset === 0) {
+    if (currentTranslateOffset === 0) {
       resetPosition(this.getContentRef());
     }
 
