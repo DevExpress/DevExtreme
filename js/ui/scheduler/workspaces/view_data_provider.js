@@ -183,7 +183,15 @@ class ViewDataGenerator {
 
         const {
             previousGroupedData: groupedData,
-        } = timePanelMap.reduce(({ previousGroupIndex, previousGroupedData }, cellData) => {
+        } = this._generateTimePanelDataFromMap(timePanelMap, isGroupedAllDayPanel);
+
+        timePanelData.groupedData = groupedData;
+
+        return timePanelData;
+    }
+
+    _generateTimePanelDataFromMap(timePanelMap, isGroupedAllDayPanel) {
+        return timePanelMap.reduce(({ previousGroupIndex, previousGroupedData }, cellData) => {
             const currentGroupIndex = cellData.groupIndex;
             if(currentGroupIndex !== previousGroupIndex) {
                 previousGroupedData.push({
@@ -203,10 +211,6 @@ class ViewDataGenerator {
                 previousGroupedData,
             };
         }, { previousGroupIndex: -1, previousGroupedData: [] });
-
-        timePanelData.groupedData = groupedData;
-
-        return timePanelData;
     }
 
     _getViewDataFromMap(viewDataMap, completeViewDataMap, options) {
