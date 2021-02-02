@@ -16,79 +16,82 @@ import {
   isVerticalGroupOrientation,
 } from '../../utils';
 import { Table } from '../table';
-import { LayoutProps } from '../layout_props';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { DateTimeCellTemplateProps } from '../../types.d';
+import { GroupOrientation } from '../../../types.d';
 
 export const viewFunction = ({
-  props,
+  props: {
+    viewData,
+    timeCellTemplate,
+  },
   topVirtualRowHeight,
   bottomVirtualRowHeight,
   isVerticalGroupOrientation: isVerticalGrouping,
   restAttributes,
-}: TimePanelTableLayout): JSX.Element => {
-  const { viewData, timeCellTemplate } = props;
-
-  return (
-    <Table
+}: TimePanelTableLayout): JSX.Element => (
+  <Table
     // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
-      topVirtualRowHeight={topVirtualRowHeight}
-      bottomVirtualRowHeight={bottomVirtualRowHeight}
-      virtualCellsCount={1}
-      className="dx-scheduler-time-panel"
-    >
-      {viewData
-        .groupedData.map(({ dateTable, groupIndex }, index) => (
-          <Fragment key={getKeyByGroup(groupIndex)}>
-            {getIsGroupedAllDayPanel(viewData, index) && (
-              <Row>
-                <CellBase className="dx-scheduler-time-panel-title-cell">
-                  <AllDayPanelTitle />
-                </CellBase>
-              </Row>
-            )}
-            {dateTable.map((cellsRow) => {
-              const { cellCountInGroupRow } = viewData;
-              const {
-                groups,
-                startDate,
-                text,
-                index: cellIndex,
-                isFirstGroupCell,
-                isLastGroupCell,
-                key,
-              } = cellsRow[0];
+    {...restAttributes}
+    topVirtualRowHeight={topVirtualRowHeight}
+    bottomVirtualRowHeight={bottomVirtualRowHeight}
+    virtualCellsCount={1}
+    className="dx-scheduler-time-panel"
+  >
+    {viewData
+      .groupedData.map(({ dateTable, groupIndex }, index) => (
+        <Fragment key={getKeyByGroup(groupIndex)}>
+          {getIsGroupedAllDayPanel(viewData, index) && (
+            <Row>
+              <CellBase className="dx-scheduler-time-panel-title-cell">
+                <AllDayPanelTitle />
+              </CellBase>
+            </Row>
+          )}
+          {dateTable.map((cell) => {
+            const { cellCountInGroupRow } = viewData;
+            const {
+              groups,
+              startDate,
+              text,
+              index: cellIndex,
+              isFirstGroupCell,
+              isLastGroupCell,
+              key,
+            } = cell;
 
-              return (
-                <Row
-                  className="dx-scheduler-time-panel-row"
-                  key={key}
-                >
-                  <Cell
-                    startDate={startDate}
-                    text={text}
-                    groups={isVerticalGrouping ? groups : undefined}
-                    groupIndex={isVerticalGrouping ? groupIndex : undefined}
-                    isFirstGroupCell={isVerticalGrouping && isFirstGroupCell}
-                    isLastGroupCell={isVerticalGrouping && isLastGroupCell}
-                    index={Math.floor(cellIndex / cellCountInGroupRow)}
-                    timeCellTemplate={timeCellTemplate}
-                  />
-                </Row>
-              );
-            })}
-          </Fragment>
-        ))}
-    </Table>
-  );
-};
+            return (
+              <Row
+                className="dx-scheduler-time-panel-row"
+                key={key}
+              >
+                <Cell
+                  startDate={startDate}
+                  text={text}
+                  groups={isVerticalGrouping ? groups : undefined}
+                  groupIndex={isVerticalGrouping ? groupIndex : undefined}
+                  isFirstGroupCell={isVerticalGrouping && isFirstGroupCell}
+                  isLastGroupCell={isVerticalGrouping && isLastGroupCell}
+                  index={Math.floor(cellIndex / cellCountInGroupRow)}
+                  timeCellTemplate={timeCellTemplate}
+                />
+              </Row>
+            );
+          })}
+        </Fragment>
+      ))}
+  </Table>
+);
 
 @ComponentBindings()
-export class TimePanelTableLayoutProps extends LayoutProps {
+export class TimePanelTableLayoutProps {
   @OneWay() className? = '';
 
+  @OneWay() groupOrientation?: GroupOrientation;
+
   @OneWay() allDayPanelVisible? = false;
+
+  @OneWay() viewData: any = [];
 
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
