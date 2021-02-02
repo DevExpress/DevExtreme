@@ -66,7 +66,6 @@ export const viewFunction = ({
   textSize,
   cloudSize,
   textSizeWithPaddings,
-  containerIsReady,
   border,
   filterId,
   container,
@@ -81,7 +80,7 @@ export const viewFunction = ({
     cornerRadius, arrowWidth,
   },
 }: Tooltip): JSX.Element => {
-  if (!visible || !correctedCoordinates || !containerIsReady
+  if (!visible || !correctedCoordinates
     || isTextEmpty(customizedOptions) || isEmptyContainer) {
     return <div />;
   }
@@ -276,8 +275,6 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @InternalState() isEmptyContainer = false;
 
-  @InternalState() containerIsReady = false;
-
   @Ref() cloudRef!: RefObject<SVGGElement>;
 
   @Ref() textRef!: RefObject<SVGGElement>;
@@ -326,11 +323,6 @@ export class Tooltip extends JSXComponent(TooltipProps) {
       onTooltipHidden?.(this.currentEventData);
       this.currentEventData = undefined;
     }
-  }
-
-  @Effect()
-  containerChange(): void {
-    this.containerIsReady = true;
   }
 
   @Effect()

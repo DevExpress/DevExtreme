@@ -112,7 +112,6 @@ describe('Render', () => {
     },
     props: tooltipProps,
     container: bodyTest,
-    containerIsReady: true,
   };
 
   it('should render main div', () => {
@@ -370,17 +369,6 @@ describe('Render', () => {
 
   it('should not render anything, isEmptyContainer = true', () => {
     const tooltip = shallow(TooltipComponent({ ...props, isEmptyContainer: true } as any));
-
-    expect(tooltip.find('div')).toHaveLength(1);
-    expect(tooltip.find('div').props()).toEqual({});
-    expect(tooltip.find('defs')).toHaveLength(0);
-    expect(tooltip.find('ShadowFilter')).toHaveLength(0);
-    expect(tooltip.find('PathSvgElement')).toHaveLength(0);
-    expect(tooltip.find('TextSvgElement')).toHaveLength(0);
-  });
-
-  it('should not render anything, containerIsReady = false', () => {
-    const tooltip = shallow(TooltipComponent({ ...props, containerIsReady: false } as any));
 
     expect(tooltip.find('div')).toHaveLength(1);
     expect(tooltip.find('div').props()).toEqual({});
@@ -743,14 +731,6 @@ describe('Effects', () => {
       tooltip.checkContainer();
       expect(tooltip.isEmptyContainer).toBe(true);
     });
-  });
-
-  it('should set containerIsReady state', () => {
-    const tooltip = new Tooltip({});
-
-    tooltip.containerChange();
-
-    expect(tooltip.containerIsReady).toBe(true);
   });
 });
 
