@@ -82,7 +82,7 @@ class ViewDataGenerator {
             startCellIndex,
             cellCount
         } = options;
-        let { startRowIndex } = options;
+        const { startRowIndex } = options;
 
         const sliceCells = (row, rowIndex, startIndex, count) => {
             return row
@@ -99,14 +99,15 @@ class ViewDataGenerator {
 
         };
 
+        let correctedStartRowIndex = startRowIndex;
         let allDayPanelMap = [];
         if(this.isStandaloneAllDayPanel) {
-            startRowIndex++;
+            correctedStartRowIndex++;
             allDayPanelMap = sliceCells(completeViewDataMap[0], 0, startCellIndex, cellCount);
         }
 
         const dateTableMap = completeViewDataMap
-            .slice(startRowIndex, startRowIndex + rowCount)
+            .slice(correctedStartRowIndex, correctedStartRowIndex + rowCount)
             .map((row, rowIndex) => sliceCells(row, rowIndex, startCellIndex, cellCount));
 
         return {
