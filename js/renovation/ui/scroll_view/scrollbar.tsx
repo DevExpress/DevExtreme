@@ -261,7 +261,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     crossThumbScrolling: boolean): dxPromise<void> {
     const stopDeferred = Deferred<void>();
 
-    // this.stopScrolling();
+    this.stopScrolling();
 
     this.prepareThumbScrolling(e, crossThumbScrolling);
     action?.(e);
@@ -431,10 +431,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.props.onChangeVisibility?.(false);
   }
 
-  setVelocity(value: number): void {
-    this.velocity = value;
-  }
-
   getVelocity(): number {
     return this.velocity;
   }
@@ -443,11 +439,14 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return this.bounceLocation;
   }
 
+  setVelocity(value: number): void {
+    this.velocity = value;
+  }
+
   getContainerRef(): any {
     return this.props.containerRef;
   }
 
-  /* istanbul ignore next */
   getContentRef(): any {
     return this.props.contentRef;
   }
@@ -457,7 +456,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return;
     }
 
-    /* istanbul ignore next */
     this.velocity = 0;
     this.setLocation(this.boundLocation());
   }

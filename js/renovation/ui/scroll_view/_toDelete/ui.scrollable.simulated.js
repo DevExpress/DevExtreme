@@ -182,22 +182,6 @@ export const Scroller = Class.inherit({
         }
     }))),
 
-    _showScrollbar: function() {
-        this._scrollbar.option('visible', true);
-    },
-
-    _hideScrollbar: function() {
-        this._scrollbar.option('visible', false);
-    },
-
-    _reachedMin: function() {
-        return this._location <= this._minOffset;
-    },
-
-    _reachedMax: function() {
-        return this._location >= this._maxOffset;
-    },
-
     _cursorEnterHandler: function() {
         this._resetScaleRatio();
         this._updateScrollbar();

@@ -169,8 +169,8 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               baseContentSize={baseContentHeight}
               baseContainerSize={baseContainerHeight}
               visible={isScrollbarVisible}
-              onChangeVisibility={onChangeVisibility}
               scrollByThumb={scrollByThumb}
+              onChangeVisibility={onChangeVisibility}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
@@ -458,6 +458,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     const crossThumbScrolling = this.isThumbScrolling(e);
 
+    this.needShowScrollbars = true;
+
     this.eventHandler(
       (scrollbar) => scrollbar.initHandler(
         e,
@@ -470,7 +472,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   /* istanbul ignore next */
   private handleStart(e: Event): void {
     this.cachedVariables.eventForUserAction = e;
-
     this.needShowScrollbars = true;
 
     this.eventHandler(
@@ -496,9 +497,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.eventHandler(
       (scrollbar) => scrollbar.endHandler(e, this.props.onEnd),
     );
+
+    this.props.onEnd?.(this.getEventArgs());
   }
 
   private handleStop(): void {
+    this.needShowScrollbars = false;
+
     this.eventHandler(
       (scrollbar) => scrollbar.stopHandler(),
     );
@@ -507,6 +512,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   /* istanbul ignore next */
   private handleCancel(e: Event): void {
     this.cachedVariables.eventForUserAction = e;
+
+    this.eventHandler((scrollbar) => scrollbar.endHandler({ x: 0, y: 0 }));
   }
 
   isThumbScrolling(e): boolean {
@@ -864,26 +871,19 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get isScrollbarVisible(): boolean {
-    return this.adjustVisibility();
-  }
-
-  adjustVisibility(): boolean {
     const { showScrollbar } = this.props;
 
     if (showScrollbar === 'never') {
       return false;
     }
     if (showScrollbar === 'onHover') {
-      return this.isHovered;
-    }
-    if (showScrollbar === 'onScroll') {
-      return false; // TODO
+      return this.needShowScrollbars || this.isHovered;
     }
     if (showScrollbar === 'always') {
       return true;
     }
 
-    return false;
+    return this.needShowScrollbars || false;
   }
 
   @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
