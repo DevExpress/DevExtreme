@@ -17,7 +17,6 @@ const functions = require('../gulp-data-uri').sassFunctions;
 const starLicense = require('../header-pipes').starLicense;
 
 const cssArtifactsPath = join(process.cwd(), 'artifacts', 'css');
-const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
 const DEFAULT_DEV_BUNDLE_NAMES = [
     'common',
@@ -40,7 +39,6 @@ const compileBundles = (bundles) => {
         }))
         .pipe(autoPrefix())
         .pipe(cleanCss(cleanCssOptions))
-        .pipe(replace(commentsRegex, ''))
         .pipe(starLicense())
         .pipe(replace(/([\s\S]*)(@charset.*?;\s)/, '$2$1'))
         .pipe(dest(cssArtifactsPath));
@@ -57,8 +55,10 @@ function createBundles(callback) {
         writeFileSync(bundlePath, content);
     };
 
+    const readTemplate = (theme) => readFileSync(join(__dirname, `bundle-template.${theme}.scss`), 'utf8');
+
     const saveBundle = (theme, size, color, mode) => {
-        const bundleTemplate = readFileSync(join(__dirname, `bundle-template.${theme}.scss`), 'utf8');
+        const bundleTemplate = readTemplate(theme);
         const bundleContent = bundleTemplate
             .replace('$COLOR', color)
             .replace('$SIZE', size)
@@ -82,6 +82,8 @@ function createBundles(callback) {
 
         genericColors.forEach(color => saveBundle('generic', size, color));
     });
+
+    saveBundleFile('dx.common.scss', readTemplate('common'));
 
     if(callback) callback();
 }
