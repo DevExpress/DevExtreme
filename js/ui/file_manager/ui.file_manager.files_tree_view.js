@@ -258,12 +258,12 @@ class FileManagerFilesTreeView extends Widget {
         return this.toggleDirectoryLineExpandedState(dirLine, state);
     }
 
-    toggleDirectoryLineExpandedState(dirLine, state) {
+    toggleDirectoryLineExpandedState(dirLine, state, forcePropagation) {
         if(!dirLine.length) {
             return new Deferred().resolve().promise();
         }
-        return this.toggleDirectoryExpandedState(dirLine.shift(), state)
-            .then(() => this.toggleDirectoryLineExpandedState(dirLine, state));
+        const promisePropagationMethod = forcePropagation ? 'always' : 'then';
+        return this.toggleDirectoryExpandedState(dirLine.shift(), state)[promisePropagationMethod](() => this.toggleDirectoryLineExpandedState(dirLine, state));
     }
 
 }

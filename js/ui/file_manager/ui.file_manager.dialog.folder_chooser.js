@@ -90,8 +90,8 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
         }
         const locations = this._getLocationsToProcess(isDisabled);
         this._filesTreeView.toggleDirectoryExpandedStateRecursive(locations.locationsToExpand[0], isDisabled)
-            .then(() => this._filesTreeView.toggleDirectoryLineExpandedState(locations.locationsToCollapse, !isDisabled)
-                .then(() => locations.locationKeysToDisable.forEach(key => this._filesTreeView.toggleNodeDisabledState(key, isDisabled))));
+            .always(() => this._filesTreeView.toggleDirectoryLineExpandedState(locations.locationsToCollapse, !isDisabled, true))
+            .always(() => locations.locationKeysToDisable.forEach(key => this._filesTreeView.toggleNodeDisabledState(key, isDisabled)));
     }
 
     _getLocationsToProcess(isDisabled) {
