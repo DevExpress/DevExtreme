@@ -41,10 +41,10 @@ const OUT_BOUNDS_ACCELERATION = 0.5;
 
 const realDevice = devices.real;
 const isSluggishPlatform = (realDevice as any).platform === 'android';
-
+/* istanbul ignore next */
 const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
-const FRAME_DURATION = Math.round(1000 / 60);
-
+const FRAME_DURATION = 17; // Math.round(1000 / 60)
+/* istanbul ignore next */
 const BOUNCE_DURATION = isSluggishPlatform ? 300 : 400;
 const BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION;
 const BOUNCE_ACCELERATION_SUM = (1 - ACCELERATION ** BOUNCE_FRAMES) / (1 - ACCELERATION);
@@ -94,7 +94,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() velocity = 0;
 
-  @Mutable() bounceLocation?: number;
+  @Mutable() bounceLocation = 0;
 
   @InternalState() active = false;
 
@@ -184,6 +184,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     };
   }
 
+  /* istanbul ignore next */
   crossBoundOnNextStep(): boolean {
     const { location } = this.cachedVariables;
     const nextLocation = location + this.velocity;
@@ -301,9 +302,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   stopHandler(): void {
     if (this.cachedVariables.thumbScrolling) {
       this.scrollComplete();
+    } else {
+      this.scrollToBounds();
     }
     this.resetThumbScrolling();
-    this.scrollToBounds();
   }
 
   @Method()
@@ -330,15 +332,16 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   setupBounce(): void {
-    this.bounceLocation = this.boundLocation();
+    this.setBounceLocation(this.boundLocation());
 
-    const bounceDistance = this.bounceLocation - this.cachedVariables.location;
+    const bounceDistance = this.getBounceLocation() - this.cachedVariables.location;
 
     this.velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
   }
 
+  /* istanbul ignore next */
   // eslint-disable-next-line class-methods-use-this
-  stopComplete(): void {
+  stopComplete(): void { // TODO: it needs if we deside to use the Promises
     // if(this._stopDeferred) {
     //     this._stopDeferred.resolve();
     // }
@@ -434,7 +437,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return this.velocity;
   }
 
-  getBounceLocation(): number | undefined {
+  setBounceLocation(value: number): void {
+    this.bounceLocation = value;
+  }
+
+  getBounceLocation(): number {
     return this.bounceLocation;
   }
 

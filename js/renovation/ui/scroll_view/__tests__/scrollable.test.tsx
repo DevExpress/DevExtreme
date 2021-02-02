@@ -637,34 +637,6 @@ each([{
 
           expect(scrollable.scrollEffect.bind(scrollable)).not.toThrow();
         });
-
-        each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbarMode) => {
-          if (Scrollable === ScrollableSimulated) {
-            it('hoverEffect should update invisible class only for onHover mode', () => {
-              const viewModel = new Scrollable({
-                direction: 'horizontal',
-                showScrollbar: showScrollbarMode,
-              }) as ScrollableSimulated;
-
-              const isScrollbarHasInvisibleClass = (model) => {
-                const scrollable = mount(viewFunction(model) as JSX.Element);
-
-                const scrollbar = scrollable.find('.dx-scrollable-scroll');
-                return scrollbar.hasClass('dx-state-invisible');
-              };
-
-              expect(isScrollbarHasInvisibleClass(viewModel)).toBe(showScrollbarMode !== 'always');
-
-              viewModel.cursorEnterHandler();
-              expect(isScrollbarHasInvisibleClass(viewModel)).toBe(
-                (showScrollbarMode !== 'always' && showScrollbarMode !== 'onHover'),
-              );
-
-              viewModel.cursorLeaveHandler();
-              expect(isScrollbarHasInvisibleClass(viewModel)).toBe(showScrollbarMode !== 'always');
-            });
-          }
-        });
       });
     });
 

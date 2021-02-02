@@ -477,6 +477,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.eventHandler(
       (scrollbar) => scrollbar.startHandler(e),
     );
+
+    this.props.onStart?.(this.getEventArgs());
   }
 
   private handleMove(e): void {
@@ -509,7 +511,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     );
   }
 
-  /* istanbul ignore next */
   private handleCancel(e: Event): void {
     this.cachedVariables.eventForUserAction = e;
 
