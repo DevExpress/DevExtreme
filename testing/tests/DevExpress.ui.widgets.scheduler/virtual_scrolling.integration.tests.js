@@ -2759,6 +2759,11 @@ module('Virtual scrolling integration', () => {
                 module('Recurrent appointments', () => {
                     module('Multiple resources', () => {
                         test('Scroll Right recurrent appointment with multiple resources', function(assert) {
+                            if(!isDesktopEnvironment()) {
+                                assert.ok(true, 'This test is for desktop only');
+                                return;
+                            }
+
                             const scheduler = createWrapper({
                                 height: 600,
                                 width: 600,
