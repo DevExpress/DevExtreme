@@ -1,11 +1,9 @@
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
-import { deferUpdate, deferRender } from '../../core/utils/common';
 import { VirtualScrollController, subscribeToExternalScrollers } from './ui.grid_core.virtual_scrolling_core';
 import gridCoreUtils from './ui.grid_core.utils';
 import { each } from '../../core/utils/iterator';
 import { Deferred } from '../../core/utils/deferred';
-import { move } from '../../animation/translator';
 import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
@@ -26,6 +24,7 @@ const SCROLLING_MODE_VIRTUAL = 'virtual';
 const SCROLLING_MODE_STANDARD = 'standard';
 const PIXELS_LIMIT = 250000; // this limit is defined for IE
 const LOAD_TIMEOUT = 300;
+const NEW_SCROLLING_MODE = 'scrolling.newMode';
 
 const isVirtualMode = function(that) {
     return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
@@ -58,6 +57,14 @@ const isItemCountableByDataSource = function(item, dataSource) {
     return item.rowType === 'data' && !item.isNewRow || item.rowType === 'group' && dataSource.isGroupItemCountable(item.data);
 };
 
+const updateItemIndices = function(items) {
+    items.forEach(function(item, index) {
+        item.rowIndex = index;
+    });
+
+    return items;
+};
+
 
 const VirtualScrollingDataSourceAdapterExtender = (function() {
     const updateLoading = function(that) {
@@ -86,6 +93,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             that.callBase.apply(that, arguments);
             that._items = [];
             that._isLoaded = true;
+            that._loadPageCount = 1;
 
             that._virtualScrollController = new VirtualScrollController(that.component, {
                 pageSize: function() {
@@ -169,6 +177,9 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             this.callBase.apply(this, arguments);
         },
         items: function() {
+            if(this.option(NEW_SCROLLING_MODE)) {
+                return this._dataSource.items();
+            }
             return this._items;
         },
         itemsCount: function(isBase) {
@@ -257,6 +268,19 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         dispose: function() {
             this._virtualScrollController.dispose();
             this.callBase.apply(this, arguments);
+        },
+        loadPageCount: function(count) {
+            if(!isDefined(count)) {
+                return this._loadPageCount;
+            }
+            this._loadPageCount = count;
+        },
+        _handleDataLoading: function(options) {
+            const loadPageCount = this.loadPageCount();
+            if(this.option(NEW_SCROLLING_MODE) && loadPageCount > 1) {
+                options.storeLoadOptions.take = loadPageCount * this.pageSize();
+            }
+            this.callBase.apply(this, arguments);
         }
     };
 
@@ -264,7 +288,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         'virtualItemsCount',
         'getContentOffset',
         'getVirtualContentSize',
-        'setContentSize', 'setViewportPosition',
+        'setContentItemSizes', 'setViewportPosition',
         'getViewportItemIndex', 'setViewportItemIndex', 'getItemIndexByPosition',
         'viewportSize', 'viewportItemSize', 'getItemSize', 'getItemSizes',
         'pageIndex', 'beginPageIndex', 'endPageIndex',
@@ -367,7 +391,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                 const itemCount = e.items ? e.items.length : 20;
                 const viewportSize = that._dataController.viewportSize() || 20;
 
-                if(isVirtualRowRendering(that)) {
+                if(isVirtualRowRendering(that) && itemCount > 0) {
                     dataSource._renderTime = (new Date() - startRenderTime) * viewportSize / itemCount;
                 } else {
                     dataSource._renderTime = (new Date() - startRenderTime);
@@ -487,7 +511,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                 if(!isRender) {
                     const rowHeights = this._getRowHeights();
                     const correctedRowHeights = this._correctRowHeights(rowHeights);
-                    dataController.setContentSize(correctedRowHeights);
+                    dataController.setContentItemSizes(correctedRowHeights);
                 }
                 const top = dataController.getContentOffset('begin');
                 const bottom = dataController.getContentOffset('end');
@@ -502,48 +526,6 @@ const VirtualScrollingRowsViewExtender = (function() {
                     this._addVirtualRow($(element), isFixed, 'top', top);
                     this._addVirtualRow($(element), isFixed, 'bottom', bottom);
                     this._isFixedTableRendering = false;
-                });
-            } else {
-                deferUpdate(() => {
-                    this._updateContentPositionCore();
-                });
-            }
-        },
-
-        _updateContentPositionCore: function() {
-            const that = this;
-            let contentHeight;
-            let $tables;
-            let $contentTable;
-            const rowHeight = that._rowHeight || 20;
-            const virtualItemsCount = that._dataController.virtualItemsCount();
-
-            if(virtualItemsCount) {
-                const contentElement = that._findContentElement();
-                $tables = contentElement.children();
-                $contentTable = $tables.eq(0);
-                const virtualTable = $tables.eq(1);
-
-                that._contentTableHeight = $contentTable[0].offsetHeight;
-
-                that._dataController.viewportItemSize(rowHeight);
-                that._dataController.setContentSize(that._contentTableHeight);
-
-                contentHeight = that._dataController.getVirtualContentSize();
-                const top = that._dataController.getContentOffset();
-
-                deferRender(function() {
-                    move($contentTable, { left: 0, top: top });
-
-                    // TODO jsdmitry: Separate this functionality on render and resize
-                    const isRenderVirtualTableContentRequired = that._contentHeight !== contentHeight || contentHeight === 0 ||
-                        !that._isTableLinesDisplaysCorrect(virtualTable) ||
-                        !that._isColumnElementsEqual($contentTable.find('col'), virtualTable.find('col'));
-
-                    if(isRenderVirtualTableContentRequired) {
-                        that._contentHeight = contentHeight;
-                        that._renderVirtualTableContent(virtualTable, contentHeight);
-                    }
                 });
             }
         },
@@ -912,7 +894,7 @@ export default {
                             changingDuration: function(e) {
                                 const dataSource = that.dataSource();
 
-                                if(dataSource.isLoading()) {
+                                if(dataSource.isLoading() && !that.option(NEW_SCROLLING_MODE)) {
                                     return LOAD_TIMEOUT;
                                 }
 
@@ -921,6 +903,10 @@ export default {
                         }, true);
 
                         that._rowsScrollController.positionChanged.add(() => {
+                            if(that.option(NEW_SCROLLING_MODE)) {
+                                that.loadViewport();
+                                return;
+                            }
                             that._dataSource?.setViewportItemIndex(that._rowsScrollController.getViewportItemIndex());
                         });
 
@@ -933,7 +919,7 @@ export default {
                         this.callBase.apply(this, arguments);
                         const rowsScrollController = this._rowsScrollController;
 
-                        if(rowsScrollController) {
+                        if(rowsScrollController && !this.option(NEW_SCROLLING_MODE)) {
                             const visibleItems = this._visibleItems;
                             const isRefresh = change.changeType === 'refresh' || change.isLiveUpdate;
 
@@ -963,10 +949,14 @@ export default {
                                     change.items = visibleItems;
                                 }
 
-                                visibleItems.forEach((item, index) => {
-                                    item.rowIndex = index;
-                                });
+                                updateItemIndices(visibleItems);
                             }
+                        }
+
+                        if(this.option(NEW_SCROLLING_MODE) && isVirtualRowRendering(this) && isDefined(this._loadViewportParams)) {
+                            const { skipForCurrentPage } = this.getLoadPageParams();
+                            const visibleItems = this._items.slice(skipForCurrentPage, skipForCurrentPage + this._loadViewportParams.take);
+                            change.items = this._visibleItems = updateItemIndices(visibleItems);
                         }
                     },
                     _applyChange: function(change) {
@@ -1003,6 +993,9 @@ export default {
                         }
                     },
                     items: function(allItems) {
+                        if(this.option(NEW_SCROLLING_MODE)) {
+                            return this._items;
+                        }
                         return allItems ? this._items : (this._visibleItems || this._items);
                     },
                     getRowIndexDelta: function() {
@@ -1021,7 +1014,12 @@ export default {
                         const rowsScrollController = this._rowsScrollController;
 
                         if(rowsScrollController && !byLoadedRows) {
-                            offset = rowsScrollController.beginPageIndex() * rowsScrollController._dataSource.pageSize();
+                            if(this.option(NEW_SCROLLING_MODE) && isDefined(this._loadViewportParams)) {
+                                const { skipForCurrentPage, pageIndex } = this.getLoadPageParams();
+                                offset = pageIndex * this.pageSize() + skipForCurrentPage;
+                            } else {
+                                offset = rowsScrollController.beginPageIndex() * rowsScrollController._dataSource.pageSize();
+                            }
                         } else if(this.option('scrolling.mode') === 'virtual' && dataSource) {
                             offset = dataSource.beginPageIndex() * dataSource.pageSize();
                         }
@@ -1053,16 +1051,43 @@ export default {
                             dataSource?.setViewportPosition.apply(dataSource, arguments);
                         }
                     },
-                    setContentSize: function(sizes) {
+                    setContentItemSizes: function(sizes) {
                         const rowsScrollController = this._rowsScrollController;
 
 
-                        rowsScrollController && rowsScrollController.setContentSize(sizes);
+                        rowsScrollController && rowsScrollController.setContentItemSizes(sizes);
 
                         const dataSource = this._dataSource;
-                        return dataSource && dataSource.setContentSize(sizes);
+                        return dataSource && dataSource.setContentItemSizes(sizes);
+                    },
+                    getLoadPageParams: function() {
+                        const viewportParams = this._loadViewportParams;
+
+                        const pageIndex = Math.floor(viewportParams.skip / this.pageSize());
+                        const skipForCurrentPage = viewportParams.skip - (pageIndex * this.pageSize());
+                        const loadPageCount = Math.ceil((skipForCurrentPage + viewportParams.take) / this.pageSize());
+
+                        return {
+                            pageIndex,
+                            loadPageCount,
+                            skipForCurrentPage
+                        };
+                    },
+                    loadViewport: function() {
+                        if(isVirtualMode(this)) {
+                            this._loadViewportParams = this._rowsScrollController.getViewportParams();
+                            const { pageIndex, loadPageCount } = this.getLoadPageParams();
+
+                            this._dataSource.pageIndex(pageIndex);
+                            this._dataSource.loadPageCount(loadPageCount);
+                            this.load();
+                        }
                     },
                     loadIfNeed: function() {
+                        if(this.option(NEW_SCROLLING_MODE)) {
+                            return;
+                        }
+
                         const rowsScrollController = this._rowsScrollController;
                         rowsScrollController && rowsScrollController.loadIfNeed();
 

@@ -145,9 +145,11 @@ const ColorView = Editor.inherit({
                 e.stopPropagation();
                 if(e.ctrlKey) {
                     if(this._currentColor.hsv.h <= 360 && !this._isTopColorHue) {
+                        this._saveValueChangeEvent(e);
                         updateHueScaleValue(getHueScaleStep(e));
                     }
                 } else if(this._currentColor.hsv.v < 100) {
+                    this._saveValueChangeEvent(e);
                     updateVerticalPaletteValue(getVerticalPaletteStep(e));
                 }
             },
@@ -160,9 +162,11 @@ const ColorView = Editor.inherit({
                             this._currentColor.hsv.h = 360;
                         }
 
+                        this._saveValueChangeEvent(e);
                         updateHueScaleValue(-getHueScaleStep(e));
                     }
                 } else if(this._currentColor.hsv.v > 0) {
+                    this._saveValueChangeEvent(e);
                     updateVerticalPaletteValue(-getVerticalPaletteStep(e));
                 }
             },
@@ -171,9 +175,11 @@ const ColorView = Editor.inherit({
                 e.stopPropagation();
                 if(e.ctrlKey) {
                     if(isRTL ? this._currentColor.a < 1 : this._currentColor.a > 0 && this.option('editAlphaChannel')) {
+                        this._saveValueChangeEvent(e);
                         updateAlphaScaleValue(-getAlphaScaleStep(e));
                     }
                 } else if(this._currentColor.hsv.s < 100) {
+                    this._saveValueChangeEvent(e);
                     updateHorizontalPaletteValue(getHorizontalPaletteStep(e));
                 }
             },
@@ -182,9 +188,11 @@ const ColorView = Editor.inherit({
                 e.stopPropagation();
                 if(e.ctrlKey) {
                     if(isRTL ? this._currentColor.a > 0 : this._currentColor.a < 1 && this.option('editAlphaChannel')) {
+                        this._saveValueChangeEvent(e);
                         updateAlphaScaleValue(getAlphaScaleStep(e));
                     }
                 } else if(this._currentColor.hsv.s > 0) {
+                    this._saveValueChangeEvent(e);
                     updateHorizontalPaletteValue(-getHorizontalPaletteStep(e));
                 }
             },
@@ -374,15 +382,16 @@ const ColorView = Editor.inherit({
             boundOffset: (function() {
                 return -this._paletteHandleHeight / 2;
             }).bind(this),
-            onDragMove: (function() {
+            onDragMove: ({ event }) => {
                 const paletteHandlePosition = locate(this._$paletteHandle);
                 this._updateByDrag = true;
+                this._saveValueChangeEvent(event);
                 this._updateColorFromHsv(
                     this._currentColor.hsv.h,
                     this._calculateColorSaturation(paletteHandlePosition),
                     this._calculateColorValue(paletteHandlePosition)
                 );
-            }).bind(this)
+            }
         });
 
         this._paletteHandleWidth = this._$paletteHandle.width();
@@ -442,10 +451,11 @@ const ColorView = Editor.inherit({
             boundary: this._$hueScaleWrapper,
             allowMoveByClick: true,
             dragDirection: 'vertical',
-            onDragMove: (function() {
+            onDragMove: ({ event }) => {
                 this._updateByDrag = true;
+                this._saveValueChangeEvent(event);
                 this._updateColorHue(locate(this._$hueScaleHandle).top + this._hueScaleHandleHeight / 2);
-            }).bind(this)
+            }
         });
 
         this._hueScaleHandleHeight = this._$hueScaleHandle.height();
@@ -674,9 +684,10 @@ const ColorView = Editor.inherit({
             value: this._currentColor.a,
             max: 1,
             step: 0.1,
-            onValueChanged: function(e) {
-                let value = e.value;
+            onValueChanged: function(args) {
+                let value = args.value;
                 value = that._currentColor.isValidAlpha(value) ? value : that._currentColor.a;
+                args.event && that._saveValueChangeEvent(args.event);
                 that._updateColorTransparency(value);
                 that._placeAlphaChannelHandle();
             },
@@ -703,13 +714,13 @@ const ColorView = Editor.inherit({
             boundary: $parent,
             allowMoveByClick: true,
             dragDirection: 'horizontal',
-            onDragMove: (function() {
+            onDragMove: ({ event }) => {
                 this._updateByDrag = true;
                 const $alphaChannelHandle = this._$alphaChannelHandle;
                 const alphaChannelHandlePosition = locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
-
+                this._saveValueChangeEvent(event);
                 this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
-            }).bind(this)
+            }
         });
 
         this._alphaChannelHandleWidth = this._$alphaChannelHandle.width();
@@ -763,7 +774,7 @@ const ColorView = Editor.inherit({
         this._refreshMarkup();
     },
 
-    _updateColor: function(isHex, e) {
+    _updateColor: function(isHex, args) {
         let rgba;
         let newColor;
 
@@ -781,6 +792,7 @@ const ColorView = Editor.inherit({
 
         if(!this._suppressEditorsValueUpdating) {
             this._currentColor = new Color(newColor);
+            this._saveValueChangeEvent(args.event);
             this.applyColor();
             this._refreshMarkup();
         }

@@ -500,7 +500,7 @@ const subscribes = {
         const endViewDate = workspace.getEndViewDateByEndDayHour();
         const filterOptions = [];
 
-        const groupsInfo = viewDataProvider.getGroupsInfo();
+        const groupsInfo = viewDataProvider.getCompletedGroupsInfo();
         groupsInfo.forEach((item) => {
             const groupIndex = item.groupIndex;
             const groupStartDate = item.startDate;

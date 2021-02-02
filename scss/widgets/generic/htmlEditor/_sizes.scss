@@ -2,3 +2,12 @@
 
 // adduse
 
+$generic-toolbar-size-editor-width: null !default;
+
+@if $size == "default" {
+  $generic-toolbar-size-editor-width: 105px !default;
+}
+
+@else if $size == "compact" {
+  $generic-toolbar-size-editor-width: 80px !default;
+}

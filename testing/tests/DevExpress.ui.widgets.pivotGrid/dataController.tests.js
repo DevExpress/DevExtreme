@@ -4475,16 +4475,16 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(columnsScrollController.viewportItemSize.firstCall.args[0], 15);
 
         assert.strictEqual(columnsScrollController.viewportSize.lastCall.args[0], 15);
-        assert.strictEqual(columnsScrollController.setContentSize.lastCall.args[0], itemWidths);
+        assert.strictEqual(columnsScrollController.setContentItemSizes.lastCall.args[0], itemWidths);
 
         assert.strictEqual(rowsScrollController.viewportSize.lastCall.args[0], 10);
-        assert.strictEqual(rowsScrollController.setContentSize.lastCall.args[0], itemHeights);
+        assert.strictEqual(rowsScrollController.setContentItemSizes.lastCall.args[0], itemHeights);
 
         assert.strictEqual(rowsScrollController.loadIfNeed.callCount, 1);
         assert.strictEqual(columnsScrollController.loadIfNeed.callCount, 1);
 
-        assert.ok(rowsScrollController.loadIfNeed.calledAfter(rowsScrollController.setContentSize));
-        assert.ok(columnsScrollController.loadIfNeed.calledAfter(columnsScrollController.setContentSize));
+        assert.ok(rowsScrollController.loadIfNeed.calledAfter(rowsScrollController.setContentItemSizes));
+        assert.ok(columnsScrollController.loadIfNeed.calledAfter(columnsScrollController.setContentItemSizes));
 
         assert.deepEqual(result, {
             contentLeft: 150,

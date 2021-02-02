@@ -376,30 +376,48 @@ class GroupedDataMapProvider {
         const getCellStartDate = cell => cell?.cellData.startDate;
         const getCellEndDate = cell => cell?.cellData.endDate;
 
+        const groupStartDate = this.getGroupStartDate(groupIndex);
+        const groupEndDate = this.getGroupEndDate(groupIndex);
+        const isStartBeforeGroup = dateUtils.trimTime(startDate) < dateUtils.trimTime(groupStartDate);
+        const isEndAfterGroup = dateUtils.trimTime(endDate) > dateUtils.trimTime(groupEndDate);
+        const isEndInsideGroup = dateUtils.trimTime(endDate) >= dateUtils.trimTime(groupStartDate) && !isEndAfterGroup;
+        const isStartInsideGroup = dateUtils.trimTime(startDate) >= dateUtils.trimTime(groupStartDate);
+
+        if(dateUtils.trimTime(startDate) > dateUtils.trimTime(groupEndDate) ||
+            dateUtils.trimTime(endDate) < dateUtils.trimTime(groupStartDate)) {
+            return;
+        }
+
+        if(isStartBeforeGroup && (isEndInsideGroup || isEndAfterGroup)) {
+            return groupStartDate;
+        }
+
         const firstRow = this.getFirstGroupRow(groupIndex);
         if(!firstRow) return;
 
-        const groupStartDate = this.getGroupStartDate(groupIndex);
-        const startDateToCompare = dateUtils.trimTime(startDate) < dateUtils.trimTime(groupStartDate) || !endDate
-            ? dateUtils.trimTime(endDate)
-            : startDate;
+        let dateToCompare;
+        if(isStartInsideGroup) {
+            dateToCompare = startDate;
+        } else if(isEndInsideGroup) {
+            dateToCompare = dateUtils.trimTime(endDate);
+        }
 
         const lastRow = this.getLastGroupRow(groupIndex);
         for(let i = 0; i < firstRow.length; ++i) {
             let firstRowCell = firstRow[i];
             const cellStartDate = getCellStartDate(firstRowCell);
 
-            if(dateUtils.sameDate(cellStartDate, startDateToCompare)) {
+            if(dateUtils.sameDate(cellStartDate, dateToCompare)) {
                 let lastRowCell = lastRow[i];
 
-                if(getCellEndDate(lastRowCell) <= startDateToCompare) {
-                    if(endDate.getDate() > startDateToCompare.getDate()) {
+                if(getCellEndDate(lastRowCell) <= dateToCompare) {
+                    if(endDate > dateToCompare) {
                         firstRowCell = firstRow[i + 1];
                         lastRowCell = lastRow[i + 1];
                     }
                 }
 
-                if(getCellEndDate(lastRowCell) > startDate) {
+                if(getCellEndDate(lastRowCell) > dateToCompare) {
                     return getCellStartDate(firstRowCell);
                 }
             }
@@ -462,7 +480,7 @@ class GroupedDataMapProvider {
         }
     }
 
-    getGroupsInfo() {
+    getCompletedGroupsInfo() {
         return this.groupedDataMap.map(groupData => {
             const firstCell = groupData[0][0];
             const {
@@ -476,12 +494,11 @@ class GroupedDataMapProvider {
                 startDate: this.getGroupStartDate(groupIndex),
                 endDate: this.getGroupEndDate(groupIndex)
             };
-        });
+        }).filter(({ startDate }) => !!startDate);
     }
 
     getGroupIndices() {
-        return this.getGroupsInfo()
-            .filter(item => !!item)
+        return this.getCompletedGroupsInfo()
             .map(({ groupIndex }) => groupIndex);
     }
 
@@ -612,8 +629,8 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getCellsGroup(groupIndex);
     }
 
-    getGroupsInfo() {
-        return this._groupedDataMapProvider.getGroupsInfo();
+    getCompletedGroupsInfo() {
+        return this._groupedDataMapProvider.getCompletedGroupsInfo();
     }
 
     getGroupIndices() {

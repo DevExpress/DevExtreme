@@ -14,6 +14,7 @@ import config from 'core/config';
 import browser from 'core/utils/browser';
 import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -896,23 +897,6 @@ QUnit.module('Keyboard navigation', {
         });
     });
 
-    QUnit.test('Event should be passed to the valueChanged action after selecting a cell via the keyboard', function(assert) {
-        const keyboard = keyboardMock(this.$element);
-        const valueChangedHandler = sinon.stub();
-
-        this.calendar.option({
-            onValueChanged: valueChangedHandler,
-            value: null
-        });
-
-        keyboard.press('enter');
-
-        const params = valueChangedHandler.getCall(1).args[0];
-        assert.ok(params.event, 'Event should be passed');
-        assert.ok(params.component, 'Component should be passed');
-        assert.ok(params.element, 'Element should be passed');
-    });
-
     QUnit.test('pressing ctrl+arrows or pageup/pagedown keys must change view correctly', function(assert) {
         const $element = this.$element;
         const calendar = this.calendar;
@@ -1595,24 +1579,6 @@ QUnit.module('Options', {
 
         const params = clickHandler.getCall(0).args[0];
         assert.ok(params, 'Event params should be passed');
-        assert.ok(params.event, 'Event should be passed');
-        assert.ok(params.component, 'Component should be passed');
-        assert.ok(params.element, 'Element should be passed');
-    });
-
-    QUnit.test('Event should be passed to the valueChanged action after click on a cell', function(assert) {
-        const valueChangedHandler = sinon.stub();
-
-        this.reinit({
-            currentDate: new Date(2010, 10, 10),
-            focusStateEnabled: true,
-            onValueChanged: valueChangedHandler
-        });
-
-        const $cell = this.$element.find(toSelector(CALENDAR_CELL_CLASS)).eq(4);
-        $($cell).trigger('dxclick');
-
-        const params = valueChangedHandler.getCall(0).args[0];
         assert.ok(params.event, 'Event should be passed');
         assert.ok(params.component, 'Component should be passed');
         assert.ok(params.element, 'Element should be passed');
@@ -3851,5 +3817,78 @@ QUnit.module('dxCalendar number and string value support', {
             .trigger('dxclick');
 
         assert.equal(this.$element.dxCalendar('option', 'value'), '2016-04-12T00:00:00Z', 'value is correct');
+    });
+});
+
+QUnit.module('valueChanged handler should receive correct event', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('<div>')
+            .dxCalendar({
+                focusStateEnabled: true,
+                currentDate: new Date(2010, 10, 10),
+                onValueChanged: this.valueChangedHandler,
+            })
+            .appendTo('#qunit-fixture');
+        this.instance = this.$element.dxCalendar('instance');
+        this.keyboard = keyboardMock(this.$element);
+
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', new Date(1993, 2, 19));
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+        this.$element.remove();
+    }
+}, () => {
+    QUnit.test('on runtime value change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on cell', function(assert) {
+        const $cell = this.$element
+            .find(`.${CALENDAR_CELL_CLASS}`)
+            .eq(4);
+        $cell.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', $cell);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('after value selecting via the keyboard', function(assert) {
+        this.instance.focus();
+        this.keyboard.press('up');
+        const $cell = $(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
+
+        this.keyboard.press('enter');
+
+        this.checkEvent(assert, 'keydown', $cell, 'enter');
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('after click on today button', function(assert) {
+        this.instance.option('showTodayButton', true);
+        const $todayButton = this.$element.find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
+
+        $todayButton.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', $todayButton);
+        this.testProgramChange(assert);
     });
 });

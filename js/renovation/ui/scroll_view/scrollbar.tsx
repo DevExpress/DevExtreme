@@ -6,6 +6,7 @@ import {
   Ref,
   Effect,
   Method,
+  Mutable,
 } from 'devextreme-generator/component_declaration/common';
 
 import { Widget } from '../common/widget';
@@ -74,11 +75,12 @@ type ScrollbarPropsType = ScrollbarProps & Pick<BaseWidgetProps, 'visible'>;
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
+  @Mutable() velocity = 0;
+
   @InternalState() active = false;
 
   @InternalState() cachedVariables = {
     location: 0,
-    velocity: 0,
     thumbScrolling: false,
     crossThumbScrolling: false,
     translateOffset: undefined,
@@ -155,6 +157,16 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
+  reachedMin(): boolean {
+    return this.getLocation() <= this.getMinOffset();
+  }
+
+  @Method()
+  reachedMax(): boolean {
+    return this.getLocation() >= this.getMaxOffset();
+  }
+
+  @Method()
   getLocation(): number {
     return this.cachedVariables.location;
   }
@@ -165,15 +177,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   inBounds(): boolean {
-    const location = this.getLocation();
-
-    return this.boundLocation(location) === location;
+    return this.boundLocation() === this.getLocation();
   }
 
-  boundLocation(location?: number): number {
-    const currentLocation = location !== undefined ? location : this.getLocation();
-
-    return Math.max(Math.min(currentLocation, this.getMaxOffset()), this.getMinOffset());
+  boundLocation(): number {
+    return Math.max(Math.min(this.getLocation(), this.getMaxOffset()), this.getMinOffset());
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -225,8 +233,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   endHandler(e, action: EventCallback<Event> | undefined): void {
-    this.cachedVariables.velocity = e.velocity[this.getAxis()];
-    // this._inertiaHandler();
+    this.velocity = e.velocity[this.getAxis()];
+    this.inertiaHandler();
     this.resetThumbScrolling();
     action?.(e);
   }
@@ -234,6 +242,17 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   stopHandler(): void {
     this.resetThumbScrolling();
+  }
+
+  inertiaHandler(): void {
+    this.suppressInertia();
+    // this._inertiaAnimator.start();
+  }
+
+  suppressInertia(): void {
+    if (!this.props.inertiaEnabled || this.cachedVariables.thumbScrolling) {
+      this.velocity = 0;
+    }
   }
 
   resetThumbScrolling(): void {
@@ -303,8 +322,21 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     // eventsEngine.triggerHandler(this.props.containerRef, { type: 'scroll' }); // TODO
   }
 
+  setVelocity(value: number): void {
+    this.velocity = value;
+  }
+
+  getVelocity(): number {
+    return this.velocity;
+  }
+
   getContainerRef(): any {
     return this.props.containerRef;
+  }
+
+  /* istanbul ignore next */
+  getContentRef(): any {
+    return this.props.contentRef;
   }
 
   suppressBounce(): void {
@@ -313,10 +345,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     /* istanbul ignore next */
-    this.cachedVariables.velocity = 0;
-    const boundLocation = this.boundLocation();
-
-    this.setLocation(boundLocation);
+    this.velocity = 0;
+    this.setLocation(this.boundLocation());
   }
 
   move(location?: number): void {
@@ -360,11 +390,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.cachedVariables.translateOffset = translateOffset;
 
     if (translateOffset === 0) {
-      resetPosition(this.getContainerRef().current);
+      resetPosition(this.getContentRef().current);
       return;
     }
 
-    move(this.getContainerRef().current, targetLocation);
+    move(this.getContentRef().current, targetLocation);
   }
 
   thumbSize(): number {

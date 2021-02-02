@@ -656,6 +656,7 @@ describe('events/actions', () => {
     const element1 = document.createElement('div');
     const element2 = document.createElement('div');
     const element3 = { some: 'object' };
+    const element4 = null;
     act(() => $('#component').dxPreactTestWidget({
       onEventProp,
     }));
@@ -664,12 +665,14 @@ describe('events/actions', () => {
       eventElement: element1,
       wrappedField: element2,
       nonWrappedField: element3,
+      emptyField: element4,
     });
 
     expect(onEventProp.mock.calls[0][0]).toMatchObject({
       eventElement: element1,
       wrappedField: element2,
       nonWrappedField: element3,
+      emptyField: element4,
       element: $('#component').get(0),
     });
 

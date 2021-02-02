@@ -6,6 +6,8 @@ export declare function isDate<T>(object: T): object is Extract<T, Date>;
 
 export declare function isString<T>(object: T): object is Extract<T, string>;
 
+export declare function type(object: any): 'object' | 'array' | 'string' | 'date' | 'null';
+
 export declare function isNumeric<T>(object: T): object is Extract<T, number>;
 
 export declare function isFunction<T>(object: T): object is Extract<T, Function>;
