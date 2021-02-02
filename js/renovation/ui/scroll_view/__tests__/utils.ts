@@ -138,7 +138,7 @@ export function setScrollbarPosition(scrollbar, { position, contentSize, contain
         && contentSize > containerSize
         && Math.abs(contentSize) > Math.abs(position)) {
     // eslint-disable-next-line no-param-reassign
-    scrollbar.cachedVariables.location = position;
+    scrollbar.location = position;
   }
 }
 

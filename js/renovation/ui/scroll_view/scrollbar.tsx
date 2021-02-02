@@ -95,14 +95,15 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() bounceLocation = 0;
 
-  @InternalState() active = false;
+  @Mutable() location = 0;
 
-  @InternalState() cachedVariables = {
-    location: 0,
-    thumbScrolling: false,
-    crossThumbScrolling: false,
-    translateOffset: undefined,
-  };
+  @Mutable() thumbScrolling = false;
+
+  @Mutable() crossThumbScrolling = false;
+
+  @Mutable() translateOffset?: number;
+
+  @InternalState() active = false;
 
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
@@ -185,7 +186,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   /* istanbul ignore next */
   crossBoundOnNextStep(): boolean {
-    const { location } = this.cachedVariables;
+    const location = this.getLocation();
     const nextLocation = location + this.velocity;
 
     return (location < this.getMinOffset() && nextLocation >= this.getMinOffset())
@@ -222,12 +223,12 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   getLocation(): number {
-    return this.cachedVariables.location;
+    return this.location;
   }
 
   @Method()
-  setLocation(location: number): void {
-    this.cachedVariables.location = location;
+  setLocation(value: number): void {
+    this.location = value;
   }
 
   inBounds(): boolean {
@@ -274,12 +275,12 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   moveHandler(delta: any): void {
-    if (this.cachedVariables.crossThumbScrolling) {
+    if (this.crossThumbScrolling) {
       return;
     }
     const distance = delta;
 
-    if (this.cachedVariables.thumbScrolling) {
+    if (this.thumbScrolling) {
       distance[this.getAxis()] = -Math.round(
         distance[this.getAxis()] / this.containerToContentRatio(),
       );
@@ -297,7 +298,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   stopHandler(): void {
-    if (this.cachedVariables.thumbScrolling) {
+    if (this.thumbScrolling) {
       this.scrollComplete();
     } else {
       this.scrollToBounds();
@@ -331,7 +332,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   setupBounce(): void {
     this.setBounceLocation(this.boundLocation());
 
-    const bounceDistance = this.getBounceLocation() - this.cachedVariables.location;
+    const bounceDistance = this.getBounceLocation() - this.getLocation();
 
     this.velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
   }
@@ -350,14 +351,14 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   suppressInertia(): void {
-    if (!this.props.inertiaEnabled || this.cachedVariables.thumbScrolling) {
+    if (!this.props.inertiaEnabled || this.thumbScrolling) {
       this.velocity = 0;
     }
   }
 
   resetThumbScrolling(): void {
-    this.cachedVariables.thumbScrolling = false;
-    this.cachedVariables.crossThumbScrolling = false;
+    this.thumbScrolling = false;
+    this.crossThumbScrolling = false;
   }
 
   scrollBy(delta): void {
@@ -374,7 +375,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.bounceAnimator?.stop();
   }
 
-  prepareThumbScrolling(e, crossThumbScrolling: boolean): void {
+  // TODO: cross naming with mutable variabless (crossThumbScrolling -> currentCrossThumbScrolling)
+  // https://trello.com/c/ohg2pHUZ/2579-mutable-cross-naming
+  prepareThumbScrolling(e, currentCrossThumbScrolling: boolean): void {
     if (isDxMouseWheelEvent(e.originalEvent)) {
       return;
     }
@@ -387,11 +390,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       this.moveToMouseLocation(e);
     }
 
-    const thumbScrolling = scrollbarClicked || (scrollByThumb && this.isThumb(target));
-    this.cachedVariables.thumbScrolling = thumbScrolling;
-    this.cachedVariables.crossThumbScrolling = !thumbScrolling && crossThumbScrolling;
+    // TODO: cross naming with mutable variabless (thumbScrolling -> currentThumbScrolling)
+    // https://trello.com/c/ohg2pHUZ/2579-mutable-cross-naming
+    const currentThumbScrolling = scrollbarClicked || (scrollByThumb && this.isThumb(target));
+    this.thumbScrolling = currentThumbScrolling;
+    this.crossThumbScrolling = !currentThumbScrolling && currentCrossThumbScrolling;
 
-    if (thumbScrolling) {
+    if (currentThumbScrolling) {
       this.feedbackOn();
     }
   }
@@ -401,7 +406,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
     const mouseLocation = e[`page${this.getAxis().toUpperCase()}`] - scrollableOffset;
     const location = this.getLocation() + mouseLocation
-    / this.containerToContentRatio() - getElementHeight(this.getContainerRef().current) / 2;
+    / this.containerToContentRatio() - getElementHeight(this.getContainerRef()) / 2;
 
     this.scrollStep(-Math.round(location));
   }
@@ -446,12 +451,12 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.velocity = value;
   }
 
-  getContainerRef(): any {
-    return this.props.containerRef;
+  getContainerRef(): HTMLDivElement {
+    return this.props.containerRef.current;
   }
 
-  getContentRef(): any {
-    return this.props.contentRef;
+  getContentRef(): HTMLDivElement {
+    return this.props.contentRef.current;
   }
 
   suppressBounce(): void {
@@ -477,7 +482,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   moveContent(): void {
     const location = this.getLocation();
 
-    this.getContainerRef().current[`scroll${titleize(this.getProp())}`] = -location / this.props.scaleRatio;
+    this.getContainerRef()[`scroll${titleize(this.getProp())}`] = -location / this.props.scaleRatio;
     this.moveContentByTranslator(location);
   }
 
@@ -495,20 +500,19 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       translateOffset = location % 1;
     }
 
-    if (this.cachedVariables.translateOffset === translateOffset) {
+    if (this.translateOffset === translateOffset) {
       return;
     }
 
     const targetLocation = {};
     targetLocation[this.getProp()] = translateOffset;
-    this.cachedVariables.translateOffset = translateOffset;
+    this.translateOffset = translateOffset;
 
     if (translateOffset === 0) {
-      resetPosition(this.getContentRef().current);
-      return;
+      resetPosition(this.getContentRef());
     }
 
-    move(this.getContentRef().current, targetLocation);
+    move(this.getContentRef(), targetLocation);
   }
 
   thumbSize(): number {

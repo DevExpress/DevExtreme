@@ -101,7 +101,7 @@ describe('Simulated', () => {
                         (scrollbar as any)
                           .getContentRef = () => ({ current: scrollableContentElement });
                         scrollbar.scrollableOffset = 0;
-                        scrollbar.cachedVariables.translateOffset = translateOffset;
+                        scrollbar.translateOffset = translateOffset;
                         extendProperties(scrollbar, {
                           contentSize: 500,
                           containerSize: 100,
@@ -893,7 +893,7 @@ describe('Simulated', () => {
                                 setScrollbarPosition(viewModel.verticalScrollbarRef,
                                   { position: scrollbarPosition, contentSize, containerSize });
 
-                                viewModel.cachedVariables.locked = locked;
+                                viewModel.locked = locked;
 
                                 let expectedValidationResult;
                                 if (disabled || locked) {
@@ -921,7 +921,7 @@ describe('Simulated', () => {
                                   (e as any).type = 'dxmousewheel';
                                 }
 
-                                expect(viewModel.cachedVariables.validateWheelTimer)
+                                expect(viewModel.validateWheelTimer)
                                   .toBe(undefined);
 
                                 const actualResult = (viewModel).validate(e);
@@ -931,7 +931,7 @@ describe('Simulated', () => {
                                                 && expectedValidationResult && !bounceEnabled;
 
                                 if (isCheckedByTimeout) {
-                                  expect(viewModel.cachedVariables.validateWheelTimer)
+                                  expect(viewModel.validateWheelTimer)
                                     .not.toBe(undefined);
 
                                   e.delta = 0;
@@ -939,7 +939,7 @@ describe('Simulated', () => {
                                 }
 
                                 viewModel.disposeWheelTimer()();
-                                expect(viewModel.cachedVariables.validateWheelTimer)
+                                expect(viewModel.validateWheelTimer)
                                   .toBe(undefined);
                               });
                             });

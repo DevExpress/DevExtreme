@@ -6,6 +6,7 @@ import {
   Effect,
   RefObject,
   InternalState,
+  Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Scrollbar } from './scrollbar';
@@ -187,6 +188,14 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   view: viewFunction,
 })
 export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
+  @Mutable() validateWheelTimer?: any;
+
+  @Mutable() locked = false;
+
+  @Mutable() eventForUserAction?: Event;
+
+  @Mutable() validDirections: { horizontal?: boolean; vertical?: boolean } = {};
+
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
@@ -226,14 +235,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @InternalState() baseContainerWidth = 0;
 
   @InternalState() baseContainerHeight = 0;
-
-  @InternalState() validDirections = {};
-
-  @InternalState() cachedVariables: { [key: string]: any } = {
-    validateWheelTimer: undefined,
-    locked: false,
-    eventForUserAction: null,
-  };
 
   @Method()
   content(): HTMLDivElement {
@@ -341,7 +342,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Effect({ run: 'once' })
   disposeWheelTimer(): DisposeEffectReturn {
-    return () => this.clearWheelValidationTimer();
+    return (): void => this.clearWheelValidationTimer();
   }
 
   @Effect() scrollEffect(): DisposeEffectReturn {
@@ -351,7 +352,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   getEventArgs(): ScrollEventArgs {
     return {
-      event: this.cachedVariables.eventForUserAction,
+      event: this.eventForUserAction,
       scrollOffset: this.scrollOffset(),
       ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef),
     };
@@ -453,7 +454,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   handleInit(e: Event): void {
     this.suppressDirections(e);
-    this.cachedVariables.eventForUserAction = e;
+    this.eventForUserAction = e;
 
     const crossThumbScrolling = this.isThumbScrolling(e);
 
@@ -467,7 +468,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private handleStart(e: Event): void {
-    this.cachedVariables.eventForUserAction = e;
+    this.eventForUserAction = e;
     this.needShowScrollbars = true;
 
     this.eventHandler(
@@ -481,7 +482,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     e.preventDefault && e.preventDefault();
 
     this.adjustDistance(e, 'delta');
-    this.cachedVariables.eventForUserAction = e;
+    this.eventForUserAction = e;
 
     this.eventHandler(
       (scrollbar) => scrollbar.moveHandler(e.delta),
@@ -490,7 +491,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   private handleEnd(e): void {
     this.adjustDistance(e, 'velocity');
-    this.cachedVariables.eventForUserAction = e;
+    this.eventForUserAction = e;
 
     this.eventHandler(
       (scrollbar) => scrollbar.endHandler(e.velocity),
@@ -508,7 +509,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private handleCancel(e: Event): void {
-    this.cachedVariables.eventForUserAction = e;
+    this.eventForUserAction = e;
 
     this.eventHandler((scrollbar) => scrollbar.endHandler({ x: 0, y: 0 }));
   }
@@ -535,8 +536,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   adjustDistance(e, property: string): void {
     const distance = e[property];
 
-    distance.x *= this.validDirections[DIRECTION_HORIZONTAL];
-    distance.y *= this.validDirections[DIRECTION_VERTICAL];
+    distance.x *= this.validDirections[DIRECTION_HORIZONTAL] ? 1 : 0;
+    distance.y *= this.validDirections[DIRECTION_VERTICAL] ? 1 : 0;
 
     const devicePixelRatio = this.tryGetDevicePixelRatio();
     if (devicePixelRatio && isDxMouseWheelEvent(e.originalEvent)) {
@@ -687,7 +688,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private isLocked(): boolean {
-    return this.cachedVariables.locked;
+    return this.locked;
   }
 
   private validateWheel(e: Event): boolean {
@@ -708,21 +709,21 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     let validated = contentGreaterThanContainer
       && (locatedNotAtBound || scrollFromMin || scrollFromMax);
 
-    validated = validated || this.cachedVariables.validateWheelTimer !== undefined;
+    validated = validated || this.validateWheelTimer !== undefined;
 
     if (validated) {
       this.clearWheelValidationTimer();
-      this.cachedVariables.validateWheelTimer = setTimeout(
+      this.validateWheelTimer = setTimeout(
         this.clearWheelValidationTimer, VALIDATE_WHEEL_TIMEOUT,
-      ) as any;
+      );
     }
 
     return validated;
   }
 
   private clearWheelValidationTimer(): void {
-    clearTimeout(this.cachedVariables.validateWheelTimer);
-    this.cachedVariables.validateWheelTimer = undefined;
+    clearTimeout(this.validateWheelTimer);
+    this.validateWheelTimer = undefined;
   }
 
   private validateMove(e: Event): boolean {
