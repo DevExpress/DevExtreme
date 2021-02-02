@@ -884,18 +884,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 }
             }
 
-            $cells = $cells || this._getHeaderCellElements($tableElement);
+            const resizingController = this.getController('resizing');
+
+            $cells = $cells || resizingController._getHeaderCellElements($tableElement);
 
             result = that._getWidths($cells);
         }
 
         return result;
-    },
-
-    _getHeaderCellElements: function($tableElement) {
-        const columnHeadersView = this.component.getView('columnHeadersView');
-
-        return columnHeadersView.getColumnElements({ $tableElement: $tableElement.children('.dx-header') });
     },
 
     getVisibleColumnIndex: function(columnIndex, rowIndex) {

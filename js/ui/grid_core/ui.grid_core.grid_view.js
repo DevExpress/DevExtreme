@@ -621,6 +621,12 @@ const ResizingController = modules.ViewController.inherit({
         this._lastHeight = $rootElement.height();
     },
 
+    _getHeaderCellElements: function($tableElement) {
+        const columnHeadersView = this.component.getView('columnHeadersView');
+
+        return columnHeadersView.getColumnElements({ $tableElement: $tableElement.children('.dx-header') });
+    },
+
     optionChanged: function(args) {
         switch(args.name) {
             case 'width':
