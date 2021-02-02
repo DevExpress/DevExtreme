@@ -17,7 +17,7 @@ import {
 } from '../../utils';
 import { Table } from '../table';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
-import { DateTimeCellTemplateProps } from '../../types.d';
+import { DateTimeCellTemplateProps, TimePanelData } from '../../types.d';
 import { GroupOrientation } from '../../../types.d';
 
 export const viewFunction = ({
@@ -91,7 +91,10 @@ export class TimePanelTableLayoutProps {
 
   @OneWay() allDayPanelVisible? = false;
 
-  @OneWay() timePanelData: any = [];
+  @OneWay() timePanelData: TimePanelData = {
+    groupedData: [],
+    cellCountInGroupRow: 0,
+  };
 
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
