@@ -127,7 +127,12 @@ export default class FileItemsController {
 
     _getCurrentItemsInternal(onlyFiles) {
         const currentDirectory = this.getCurrentDirectory();
-        return onlyFiles ? this.getFiles(currentDirectory) : this.getDirectoryContents(currentDirectory);
+        const getItemsPromise = this.getDirectoryContents(currentDirectory);
+        return getItemsPromise.then(items => {
+            const separatedItems = this._separateItemsByType(items);
+            currentDirectory.fileItem.hasSubDirectories = !!separatedItems.folders.length;
+            return onlyFiles ? separatedItems.files : items;
+        });
     }
 
     getDirectories(parentDirectoryInfo, skipNavigationOnError) {
@@ -135,9 +140,11 @@ export default class FileItemsController {
             .then(itemInfos => itemInfos.filter(info => info.fileItem.isDirectory));
     }
 
-    getFiles(parentDirectoryInfo) {
-        return this.getDirectoryContents(parentDirectoryInfo)
-            .then(itemInfos => itemInfos.filter(info => !info.fileItem.isDirectory));
+    _separateItemsByType(itemInfos) {
+        const folders = [];
+        const files = [];
+        itemInfos.forEach(info => info.fileItem.isDirectory ? folders.push(info) : files.push(info));
+        return { folders, files };
     }
 
     getDirectoryContents(parentDirectoryInfo, skipNavigationOnError) {
