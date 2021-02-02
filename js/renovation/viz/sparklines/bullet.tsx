@@ -10,6 +10,7 @@ import {
   Nested,
   Fragment,
   Effect,
+  ForwardRef,
   Event,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
@@ -109,6 +110,7 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
   return (
     <Fragment>
       <BaseWidget
+        rootElementRef={viewModel.widgetRootRef}
         ref={viewModel.widgetRef}
         classes={viewModel.cssClasses}
         className={viewModel.cssClassName}
@@ -161,6 +163,7 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
       {customizedTooltipProps.enabled
       && (
       <TooltipComponent
+        rootWidget={viewModel.widgetRootRef}
         ref={viewModel.tooltipRef}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...customizedTooltipProps}
@@ -208,6 +211,8 @@ export class Bullet extends JSXComponent(BulletProps) {
   @Ref() widgetRef!: RefObject<BaseWidget>;
 
   @Ref() tooltipRef!: RefObject<TooltipComponent>;
+
+  @ForwardRef() widgetRootRef!: RefObject<HTMLDivElement>;
 
   @InternalState() argumentAxis = createAxis(true);
 

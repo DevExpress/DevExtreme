@@ -2,16 +2,18 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Tooltip, viewFunction as TooltipComponent } from '../tooltip';
 import {
-  recalculateCoordinates, getCloudAngle, getCloudPoints, prepareData, isTextEmpty,
+  recalculateCoordinates, getCloudAngle, getCloudPoints, prepareData, getCanvas, isTextEmpty,
 } from '../common/tooltip_utils';
 import { getFuncIri } from '../renderers/utils';
 import { getFormatValue, isUpdatedFlatObject } from '../../common/utils';
+import domAdapter from '../../../../core/dom_adapter';
 
 jest.mock('../common/tooltip_utils', () => ({
   getCloudPoints: jest.fn(),
   recalculateCoordinates: jest.fn(),
   getCloudAngle: jest.fn(),
   prepareData: jest.fn(),
+  getCanvas: jest.fn(),
   isTextEmpty: jest.fn(),
 }));
 
@@ -25,6 +27,12 @@ jest.mock('../renderers/utils', () => ({
   getFuncIri: jest.fn().mockReturnValue('url(#filterId)'),
   getGraphicExtraProps: jest.fn(),
 }));
+
+function createElementTest(tagName: string) {
+  return domAdapter.getDocument().createElement(tagName);
+}
+
+const bodyTest = domAdapter.getBody();
 
 describe('Render', () => {
   beforeEach(() => {
@@ -63,9 +71,6 @@ describe('Render', () => {
       offsetX: 0,
       offsetY: 4,
       opacity: 0.4,
-    },
-    canvas: {
-      left: 0, right: 0, top: 0, bottom: 0, width: 400, height: 400,
     },
     arrowWidth: 20,
     arrowLength: 25,
@@ -106,6 +111,7 @@ describe('Render', () => {
       x: 4, y: 5, anchorX: 11, anchorY: 12,
     },
     props: tooltipProps,
+    container: bodyTest,
   };
 
   it('should render main div', () => {
@@ -263,7 +269,9 @@ describe('Render', () => {
 
   it('should be interactive', () => {
     const customizedProps = { ...props.props, interactive: true };
-    const tooltip = shallow(TooltipComponent({ ...props, pointerEvents: 'auto', props: customizedProps } as any));
+    const tooltip = shallow(TooltipComponent({
+      ...props, pointerEvents: 'auto', props: customizedProps,
+    } as any));
 
     expect(tooltip.find('RootSvgElement').props()).toMatchObject({
       styles: {
@@ -316,7 +324,10 @@ describe('Render', () => {
 
   it('should set on the div zIndex', () => {
     const customizedProps = { ...props.props, zIndex: 3 };
-    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+    const tooltip = shallow(TooltipComponent({
+      ...props,
+      props: customizedProps,
+    } as any));
 
     expect(tooltip.find('div').at(0).props().style).toMatchObject({
       zIndex: 3,
@@ -333,6 +344,16 @@ describe('Render', () => {
     expect(tooltip.find('ShadowFilter')).toHaveLength(0);
     expect(tooltip.find('PathSvgElement')).toHaveLength(0);
     expect(tooltip.find('TextSvgElement')).toHaveLength(0);
+  });
+
+  it('should be rendered to passed container', () => {
+    const container = bodyTest.appendChild(createElementTest('div'));
+    container.setAttribute('id', 'some-id');
+
+    const tooltip = shallow(TooltipComponent({ ...props, container } as any));
+    expect(tooltip.find('div').at(0).parent().props().containerInfo.id).toEqual('some-id');
+
+    container.remove();
   });
 
   it('should not render anything, correctedCoordinates = false', () => {
@@ -360,15 +381,23 @@ describe('Render', () => {
   it('should apply rtl for html text', () => {
     const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
     const customizedProps = { ...props.props, rtl: true, contentTemplate };
-    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+    const tooltip = shallow(TooltipComponent({
+      ...props,
+      props: customizedProps,
+    } as any));
 
     expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'rtl' });
   });
 
   it('should apply ltr for html text', () => {
     const contentTemplate = (data) => <p className="tooltip-template">{`${data.valueText}_template`}</p>;
-    const customizedProps = { ...props.props, rtl: false, contentTemplate };
-    const tooltip = shallow(TooltipComponent({ ...props, props: customizedProps } as any));
+    const customizedProps = {
+      ...props.props, rtl: false, contentTemplate,
+    };
+    const tooltip = shallow(TooltipComponent({
+      ...props,
+      props: customizedProps,
+    } as any));
 
     expect(tooltip.find('div').at(1).props().style).toMatchObject({ direction: 'ltr' });
   });
@@ -937,6 +966,54 @@ describe('Getters', () => {
     expect(tooltip.pointerEvents).toEqual('none');
   });
 
+  it('should return body as container by default', () => {
+    const tooltip = new Tooltip({});
+    expect(tooltip.container).toEqual(bodyTest);
+  });
+
+  it('should return body as container if container was not found by selector', () => {
+    const tooltip = new Tooltip({ container: '#some-id' });
+    expect(tooltip.container).toEqual(bodyTest);
+  });
+
+  it('should return passed element as container', () => {
+    const container = bodyTest.appendChild(createElementTest('div'));
+
+    const tooltip = new Tooltip({ container });
+    expect(tooltip.container).toEqual(container);
+
+    container.remove();
+  });
+
+  it('should return found element as container', () => {
+    const container = bodyTest.appendChild(createElementTest('div'));
+    container.setAttribute('id', 'some-id');
+
+    const tooltip = new Tooltip({ container: '#some-id' });
+    expect(tooltip.container).toEqual(container);
+
+    container.remove();
+  });
+
+  it('should select closest container to rootContainer', () => {
+    const htmlStructRoot = bodyTest.appendChild(createElementTest('div'));
+
+    const container1 = htmlStructRoot.appendChild(createElementTest('div'));
+    container1.setAttribute('class', 'container-class');
+
+    const container2 = htmlStructRoot.appendChild(createElementTest('div'));
+    container2.setAttribute('class', 'container-class');
+
+    const masterDiv = createElementTest('div');
+    container2.appendChild(masterDiv);
+
+    const tooltip = new Tooltip({ container: '.container-class', rootWidget: masterDiv });
+
+    expect(tooltip.container).toEqual(container2);
+
+    htmlStructRoot.remove();
+  });
+
   it('should return css className', () => {
     const tooltip = new Tooltip({ className: 'tooltip_test_class_name' });
 
@@ -947,13 +1024,14 @@ describe('Getters', () => {
     const tooltip = new Tooltip({
       paddingLeftRight: 2,
       paddingTopBottom: 3,
-      canvas: {
-        top: 1, left: 2, right: 3, bottom: 4, width: 10, height: 10,
-      },
       x: 30,
       y: 40,
       offset: 7,
       arrowLength: 5,
+    });
+
+    (getCanvas as jest.Mock).mockReturnValue({
+      top: 1, left: 2, right: 3, bottom: 4, width: 10, height: 10,
     });
 
     expect(tooltip.correctedCoordinates).toEqual({
