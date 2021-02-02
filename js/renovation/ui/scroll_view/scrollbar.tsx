@@ -291,11 +291,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  endHandler(e, action: EventCallback<Event> | undefined): void {
-    this.velocity = e.velocity[this.getAxis()];
+  endHandler(velocity): void {
+    this.velocity = velocity[this.getAxis()];
     this.inertiaHandler();
     this.resetThumbScrolling();
-    action?.(e);
   }
 
   @Method()

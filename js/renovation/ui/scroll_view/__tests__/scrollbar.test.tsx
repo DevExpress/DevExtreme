@@ -395,36 +395,29 @@ describe('Handlers', () => {
   each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
     each([true, false]).describe('InertiaEnabled: %o', (inertiaEnabled) => {
       each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
-        each([jest.fn(), undefined, null]).describe('Action: %o', (action) => {
-          it('endHandler(e, action)', () => {
-            const e = { ...defaultEvent, velocity: { x: 10, y: 20 } };
-            const viewModel = new Scrollbar({
-              direction,
-              inertiaEnabled,
-            } as ScrollbarProps);
+        it('endHandler(e.velocity)', () => {
+          const e = { ...defaultEvent, velocity: { x: 10, y: 20 } };
+          const viewModel = new Scrollbar({
+            direction,
+            inertiaEnabled,
+          } as ScrollbarProps);
 
-            mount(viewFunction(viewModel as any) as JSX.Element);
+          mount(viewFunction(viewModel as any) as JSX.Element);
 
-            viewModel.cachedVariables.thumbScrolling = thumbScrolling;
-            viewModel.cachedVariables.crossThumbScrolling = true;
+          viewModel.cachedVariables.thumbScrolling = thumbScrolling;
+          viewModel.cachedVariables.crossThumbScrolling = true;
 
-            viewModel.endHandler(e, action);
+          viewModel.endHandler(e.velocity);
 
-            if (action) {
-              expect(action).toHaveBeenCalledTimes(1);
-              expect(action).toHaveBeenCalledWith(e);
-            }
+          expect(viewModel.cachedVariables.thumbScrolling).toEqual(false);
+          expect(viewModel.cachedVariables.crossThumbScrolling).toEqual(false);
 
-            expect(viewModel.cachedVariables.thumbScrolling).toEqual(false);
-            expect(viewModel.cachedVariables.crossThumbScrolling).toEqual(false);
+          let expectedVelocity = 0;
 
-            let expectedVelocity = 0;
-
-            if (inertiaEnabled && !thumbScrolling) {
-              expectedVelocity = e.velocity[direction === 'horizontal' ? 'x' : 'y'];
-            }
-            expect(viewModel.velocity).toEqual(expectedVelocity);
-          });
+          if (inertiaEnabled && !thumbScrolling) {
+            expectedVelocity = e.velocity[direction === 'horizontal' ? 'x' : 'y'];
+          }
+          expect(viewModel.velocity).toEqual(expectedVelocity);
         });
       });
     });

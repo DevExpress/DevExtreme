@@ -495,7 +495,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.cachedVariables.eventForUserAction = e;
 
     this.eventHandler(
-      (scrollbar) => scrollbar.endHandler(e, this.props.onEnd),
+      (scrollbar) => scrollbar.endHandler(e.velocity),
     );
 
     this.props.onEnd?.(this.getEventArgs());
