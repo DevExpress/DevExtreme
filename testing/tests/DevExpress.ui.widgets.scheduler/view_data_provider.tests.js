@@ -1152,6 +1152,118 @@ module('View Data Provider', {
 
                 assert.deepEqual(viewDataProvider.dateHeaderMap, dateHeaderMap, 'Correct dateHeaderMap');
             });
+
+            test('completeTimePanelMap should be generated correctly', function(assert) {
+                const viewDataProvider = new ViewDataProvider(dataGenerationWorkSpaceMock);
+
+                viewDataProvider.update(true);
+
+                const expectedCompleteTimePanelMap = [{
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                }, {
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 2,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 4,
+                }];
+
+                const completeTimePanelMap = viewDataProvider.completeTimePanelMap;
+
+                assert.deepEqual(completeTimePanelMap, expectedCompleteTimePanelMap, 'Correct Time Panel map');
+            });
+
+            test('timePanelData should be generated correctly', function(assert) {
+                const completeTimePanelMap = [{
+                    startDate: new Date(2021, 1, 2, 0),
+                    edDate: new Date(2021, 1, 2, 1),
+                    groupIndex: 0,
+                }, {
+                    startDate: new Date(2021, 1, 2, 1),
+                    edDate: new Date(2021, 1, 2, 2),
+                    groupIndex: 0,
+                }, {
+                    startDate: new Date(2021, 1, 2, 0),
+                    edDate: new Date(2021, 1, 2, 1),
+                    groupIndex: 1,
+                }, {
+                    startDate: new Date(2021, 1, 2, 1),
+                    edDate: new Date(2021, 1, 2, 2),
+                    groupIndex: 1,
+                }];
+
+                const viewDataProvider = createViewDataProvider({
+                    completeTimePanelMap,
+                });
+
+                const expectedTimePanelMap = {
+                    groupedData: [{
+                        dateTable: [
+                            completeTimePanelMap[0],
+                            completeTimePanelMap[1],
+                        ],
+                        groupIndex: 0,
+                        isGroupedAllDayPanel: true,
+                    }, {
+                        dateTable: [
+                            completeTimePanelMap[2],
+                            completeTimePanelMap[3],
+                        ],
+                        groupIndex: 1,
+                        isGroupedAllDayPanel: true,
+                    }],
+                    bottomVirtualRowHeight: undefined,
+                    topVirtualRowHeight: undefined,
+                    isGroupedAllDayPanel: true,
+                    cellCountInGroupRow: undefined,
+                };
+
+                assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
+            });
+
+            test('timePanelData should be generated correctly when all-day panel is present', function(assert) {
+                const completeTimePanelMap = [{
+                    startDate: new Date(2021, 1, 2, 0),
+                    edDate: new Date(2021, 1, 2, 1),
+                    groupIndex: 0,
+                    allDay: true,
+                }, {
+                    startDate: new Date(2021, 1, 2, 1),
+                    edDate: new Date(2021, 1, 2, 2),
+                    groupIndex: 0,
+                }];
+
+                const viewDataProvider = createViewDataProvider({
+                    completeTimePanelMap,
+                });
+
+                const expectedTimePanelMap = {
+                    groupedData: [{
+                        allDayPanel: completeTimePanelMap[0],
+                        dateTable: [
+                            completeTimePanelMap[1],
+                        ],
+                        groupIndex: 0,
+                        isGroupedAllDayPanel: true,
+                    }],
+                    bottomVirtualRowHeight: undefined,
+                    topVirtualRowHeight: undefined,
+                    isGroupedAllDayPanel: true,
+                    cellCountInGroupRow: undefined,
+                };
+
+                assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
+            });
         });
 
         module('Vertical virtual scrolling', () => {
@@ -1421,6 +1533,53 @@ module('View Data Provider', {
                     expectedGroupedDataMap,
                     'View data map is correct'
                 );
+            });
+
+            test('timePanelData should be generated correctly when virtual scrolling is used', function(assert) {
+                const completeTimePanelMap = [{
+                    startDate: new Date(2021, 1, 2, 0),
+                    edDate: new Date(2021, 1, 2, 1),
+                    groupIndex: 0,
+                }, {
+                    startDate: new Date(2021, 1, 2, 1),
+                    edDate: new Date(2021, 1, 2, 2),
+                    groupIndex: 0,
+                }, {
+                    startDate: new Date(2021, 1, 2, 0),
+                    edDate: new Date(2021, 1, 2, 1),
+                    groupIndex: 1,
+                }, {
+                    startDate: new Date(2021, 1, 2, 1),
+                    edDate: new Date(2021, 1, 2, 2),
+                    groupIndex: 1,
+                }];
+
+                const viewDataProvider = createViewDataProvider({
+                    completeTimePanelMap,
+                    workspaceMock: virtualVerticalWorkSpaceMock,
+                });
+
+                const expectedTimePanelMap = {
+                    groupedData: [{
+                        dateTable: [
+                            completeTimePanelMap[1],
+                        ],
+                        groupIndex: 0,
+                        isGroupedAllDayPanel: true,
+                    }, {
+                        dateTable: [
+                            completeTimePanelMap[2],
+                        ],
+                        groupIndex: 1,
+                        isGroupedAllDayPanel: true,
+                    }],
+                    bottomVirtualRowHeight: 50,
+                    topVirtualRowHeight: 50,
+                    isGroupedAllDayPanel: true,
+                    cellCountInGroupRow: 2,
+                };
+
+                assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
             });
         });
 
