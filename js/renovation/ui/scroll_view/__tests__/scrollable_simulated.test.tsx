@@ -97,9 +97,9 @@ describe('Simulated', () => {
                         scrollbar.scrollbarRef = scrollbarRef.at(index).getDOMNode();
                         scrollbar.scrollRef = scrollElements.at(index).getDOMNode();
                         (scrollbar as any)
-                          .getContainerRef = () => ({ current: scrollableContainerElement });
+                          .getContainerRef = () => scrollableContainerElement;
                         (scrollbar as any)
-                          .getContentRef = () => ({ current: scrollableContentElement });
+                          .getContentRef = () => scrollableContentElement;
                         scrollbar.scrollableOffset = 0;
                         scrollbar.translateOffset = translateOffset;
                         extendProperties(scrollbar, {
@@ -1019,7 +1019,7 @@ describe('Simulated', () => {
             expect(options.originalEvent.preventDefault).toBeCalled();
             expect(options.originalEvent.stopPropagation).toBeCalled();
             expect(scrollFunc).toBeCalledTimes(1);
-            expect(scrollFunc).toBeCalledWith({ [`${(keyName === 'upArrow' || keyName === 'downArrow') ? 'y' : 'x'}`]: (keyName === 'upArrow' || keyName === 'leftArrow') ? -1 : 1 });
+            expect(scrollFunc).toBeCalledWith({ [`${(keyName === 'upArrow' || keyName === 'downArrow') ? 'y' : 'x'}`]: (keyName === 'upArrow' || keyName === 'leftArrow') ? 1 : -1 });
           });
 
           each([1, 2, undefined]).describe('devicePixelRatio: %o', (devicePixelRatio) => {
@@ -1039,16 +1039,16 @@ describe('Simulated', () => {
               expect(scrollByHandler).toBeCalledTimes(1);
               const expectedParams = { top: 0, left: 0 };
               if (keyName === 'leftArrow') {
-                expectedParams.left = -40 / (devicePixelRatio || 1);
-              }
-              if (keyName === 'rightArrow') {
                 expectedParams.left = 40 / (devicePixelRatio || 1);
               }
+              if (keyName === 'rightArrow') {
+                expectedParams.left = -40 / (devicePixelRatio || 1);
+              }
               if (keyName === 'upArrow') {
-                expectedParams.top = -40 / (devicePixelRatio || 1);
+                expectedParams.top = 40 / (devicePixelRatio || 1);
               }
               if (keyName === 'downArrow') {
-                expectedParams.top = 40 / (devicePixelRatio || 1);
+                expectedParams.top = -40 / (devicePixelRatio || 1);
               }
               expect(scrollByHandler).toBeCalledWith(expectedParams);
             });
@@ -1071,7 +1071,7 @@ describe('Simulated', () => {
             expect(options.originalEvent.preventDefault).toBeCalled();
             expect(options.originalEvent.stopPropagation).toBeCalled();
             expect(scrollByPageHandler).toBeCalledTimes(1);
-            expect(scrollByPageHandler).toBeCalledWith(keyName === 'pageUp' ? -1 : 1);
+            expect(scrollByPageHandler).toBeCalledWith(keyName === 'pageUp' ? 1 : -1);
           });
 
           it(`should call scrollBy by ${keyName} key`, () => {

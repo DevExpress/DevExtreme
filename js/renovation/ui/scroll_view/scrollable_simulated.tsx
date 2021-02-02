@@ -754,22 +754,22 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     switch (normalizeKeyName(e)) {
       case KEY_CODES.DOWN:
-        this.scrollByLine({ y: 1 });
-        break;
-      case KEY_CODES.UP:
         this.scrollByLine({ y: -1 });
         break;
-      case KEY_CODES.RIGHT:
-        this.scrollByLine({ x: 1 });
+      case KEY_CODES.UP:
+        this.scrollByLine({ y: 1 });
         break;
-      case KEY_CODES.LEFT:
+      case KEY_CODES.RIGHT:
         this.scrollByLine({ x: -1 });
         break;
+      case KEY_CODES.LEFT:
+        this.scrollByLine({ x: 1 });
+        break;
       case KEY_CODES.PAGE_DOWN:
-        this.scrollByPage(1);
+        this.scrollByPage(-1);
         break;
       case KEY_CODES.PAGE_UP:
-        this.scrollByPage(-1);
+        this.scrollByPage(1);
         break;
       case KEY_CODES.HOME:
         this.scrollToHome();

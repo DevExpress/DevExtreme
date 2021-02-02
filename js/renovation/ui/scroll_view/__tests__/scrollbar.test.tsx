@@ -356,19 +356,18 @@ describe('Methods', () => {
       });
 
       it('getContainerRef()', () => {
-        const ref = {} as HTMLDivElement;
+        const ref = { current: {} } as any;
 
         const viewModel = new Scrollbar({ containerRef: ref });
 
-        expect((viewModel as any).getContainerRef() === ref).toBe(true);
+        expect((viewModel as any).getContainerRef() === ref.current).toBe(true);
       });
 
       it('getContentRef()', () => {
-        const ref = {} as HTMLDivElement;
+        const ref = { current: {} } as any;
 
         const viewModel = new Scrollbar({ contentRef: ref });
-
-        expect((viewModel as any).getContentRef() === ref).toBe(true);
+        expect((viewModel as any).getContentRef() === ref.current).toBe(true);
       });
 
       each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
