@@ -15,6 +15,7 @@ import { deferUpdate } from 'core/utils/common';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 const ACTIVE_STATE_CLASS = 'dx-state-active';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
