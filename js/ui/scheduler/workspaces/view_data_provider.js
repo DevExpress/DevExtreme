@@ -162,6 +162,7 @@ class ViewDataGenerator {
             rowCount,
             topVirtualRowHeight,
             bottomVirtualRowHeight,
+            cellCountInGroupRow,
         } = options;
 
         const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
@@ -177,6 +178,7 @@ class ViewDataGenerator {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
             isGroupedAllDayPanel,
+            cellCountInGroupRow,
         };
 
         const {
