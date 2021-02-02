@@ -257,10 +257,9 @@ const SchedulerAppointmentForm = {
 
     updateRecurrenceGroup: function(isRecurrenceGroupVisible, dataExprs) {
         const form = this._appointmentForm;
-        const isRecurrenceGroupAlreadyVisible = form.itemOption(
+        const isRecurrenceGroupAlreadyVisible = !!form.itemOption(
             APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
-            'visible',
-        );
+        )?.visible;
 
         if(isRecurrenceGroupVisible !== isRecurrenceGroupAlreadyVisible) {
             const colSpan = isRecurrenceGroupVisible ? 1 : 2;
