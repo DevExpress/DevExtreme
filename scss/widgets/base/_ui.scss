@@ -1,8 +1,6 @@
-@use "../base/mixins" as *;
+@use "./mixins" as *;
 
 // adduse
-
-$max-integer: 2147483647;
 
 .dx-clearfix {
   @include dx-clearfix-mixin();
