@@ -121,18 +121,13 @@ describe('Simulated', () => {
                       }
 
                       (viewModel as any).suppressDirections = () => {};
+                      (viewModel as any).getEventArgs = () => {};
 
                       viewModel.initEffect();
                       emit('dxscrollinit', e);
 
-                      if (direction === 'both') {
-                        expect(onStopActionHandler).toBeCalledTimes(2);
-                        expect(onStopActionHandler).nthCalledWith(1, e);
-                        expect(onStopActionHandler).nthCalledWith(2, e);
-                      } else {
-                        expect(onStopActionHandler).toBeCalledTimes(1);
-                        expect(onStopActionHandler).toBeCalledWith(e);
-                      }
+                      expect(onStopActionHandler).toBeCalledTimes(1);
+                      expect(onStopActionHandler).toBeCalledWith((viewModel as any).getEventArgs());
 
                       // eslint-disable-next-line no-nested-ternary
                       const expectedScrollPosition = mouseClickPosition.pageX === 50
@@ -271,25 +266,28 @@ describe('Simulated', () => {
                     expectedVerticalThumbScrolling = false;
                   }
 
+                  viewModel.getEventArgs = jest.fn();
+
                   viewModel.initEffect();
                   emit('dxscrollinit', e);
+
+                  expect(viewModel.needShowScrollbars).toEqual(true);
 
                   const expectedCrossThumbScrolling = expectedVerticalThumbScrolling
                                 || expectedHorizontalThumbScrolling;
 
+                  expect(onStopAction).toHaveBeenCalledTimes(1);
+                  expect(onStopAction).toHaveBeenCalledWith(viewModel.getEventArgs());
+
                   if (direction === 'both') {
                     expect(jestInitHandler).toBeCalledTimes(2);
                     expect(jestInitHandler)
-                      .toHaveBeenNthCalledWith(1, e, onStopAction, expectedCrossThumbScrolling);
+                      .toHaveBeenNthCalledWith(1, e, expectedCrossThumbScrolling);
                     expect(jestInitHandler)
-                      .toHaveBeenNthCalledWith(2, e, onStopAction, expectedCrossThumbScrolling);
+                      .toHaveBeenNthCalledWith(2, e, expectedCrossThumbScrolling);
                   } else {
                     expect(jestInitHandler).toBeCalledTimes(1);
-                    expect(jestInitHandler).toBeCalledWith(
-                      e,
-                      onStopAction,
-                      expectedCrossThumbScrolling,
-                    );
+                    expect(jestInitHandler).toBeCalledWith(e, expectedCrossThumbScrolling);
                   }
                 });
 
@@ -544,6 +542,79 @@ describe('Simulated', () => {
                       expect(jestEndHandler).toBeCalledTimes(1);
                       expect(jestEndHandler).toBeCalledWith({ x: 0, y: 0 });
                     }
+                  });
+
+                  each([undefined, jest.fn()]).describe('onStartActionHandler: %o', (onStartActionHandler) => {
+                    it('should pass correct event param to startHandler on handleStart', () => {
+                      const initialVelocityX = 2.25;
+                      const initialVelocityY = 5.24;
+
+                      const e = {
+                        ...defaultEvent,
+                        velocity: { x: initialVelocityX, y: initialVelocityY },
+                        originalEvent: {
+                          type: isDxWheelEvent ? 'dxmousewheel' : undefined,
+                        },
+                      };
+
+                      const jestStartHandler = jest.fn();
+
+                      const viewModel = new Scrollable({
+                        direction,
+                        scrollByThumb,
+                        scrollByContent,
+                        onStart: onStartActionHandler,
+                      }) as any;
+
+                      const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+                      viewModel.scrollableRef = scrollable.getDOMNode();
+
+                      const scrollbars = scrollable.find(Scrollbar);
+                      const target = scrollable.find(`.${targetClass}`).at(0).getDOMNode();
+                      (e.originalEvent as any).target = target;
+
+                      const initSettings = (scrollbarRef, index) => {
+                        const scrollbar = scrollbarRef.at(index).instance();
+                        scrollbar.scrollbarRef = scrollbarRef.at(index).getDOMNode();
+                        scrollbar.startHandler = jestStartHandler;
+
+                        return scrollbar;
+                      };
+
+                      expect(viewModel.validDirections).toEqual({});
+
+                      if (direction === DIRECTION_VERTICAL) {
+                        viewModel.verticalScrollbarRef = initSettings(scrollbars, 0);
+                      } else if (direction === DIRECTION_HORIZONTAL) {
+                        viewModel.horizontalScrollbarRef = initSettings(scrollbars, 0);
+                      } else {
+                        viewModel.horizontalScrollbarRef = initSettings(scrollbars, 0);
+                        viewModel.verticalScrollbarRef = initSettings(scrollbars, 1);
+                      }
+
+                      viewModel.getEventArgs = jest.fn();
+
+                      viewModel.startEffect();
+                      emit('dxscrollstart', e);
+
+                      expect(viewModel.needShowScrollbars).toEqual(true);
+
+                      if (onStartActionHandler) {
+                        expect(onStartActionHandler).toHaveBeenCalledTimes(1);
+                        expect(onStartActionHandler).toBeCalledWith(viewModel.getEventArgs());
+                      }
+
+                      if (direction === 'both') {
+                        expect(jestStartHandler).toBeCalledTimes(2);
+                        expect(jestStartHandler)
+                          .toHaveBeenNthCalledWith(1, e);
+                        expect(jestStartHandler)
+                          .toHaveBeenNthCalledWith(2, e);
+                      } else {
+                        expect(jestStartHandler).toBeCalledTimes(1);
+                        expect(jestStartHandler).toBeCalledWith(e);
+                      }
+                    });
                   });
                 });
 

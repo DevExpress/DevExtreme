@@ -466,62 +466,55 @@ describe('Handlers', () => {
       each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
         each(['dx-scrollable-scroll', 'dx-scrollable-scrollbar']).describe('Event target: %o', (targetClass) => {
           each([true, false]).describe('CrossThumbScrolling: %o', (crossThumbScrolling) => {
-            each([jest.fn(), undefined]).describe('Action: %o', (action) => {
-              it('initHandler(e, action, crossThumbScrolling)', () => {
-                const e = { ...defaultEvent, originalEvent: {} };
-                if (isDxWheelEvent) {
-                  (e as any).originalEvent.type = 'dxmousewheel';
-                }
+            it('initHandler(e, crossThumbScrolling)', () => {
+              const e = { ...defaultEvent, originalEvent: {} };
+              if (isDxWheelEvent) {
+                (e as any).originalEvent.type = 'dxmousewheel';
+              }
 
-                const viewModel = new Scrollbar({
-                  direction,
-                  scrollByThumb,
-                  onChangeVisibility: jest.fn() as any,
-                } as ScrollbarProps);
+              const viewModel = new Scrollbar({
+                direction,
+                scrollByThumb,
+                onChangeVisibility: jest.fn() as any,
+              } as ScrollbarProps);
 
-                const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
+              const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
 
-                const moveToMouseLocation = jest.fn();
-                viewModel.moveToMouseLocation = moveToMouseLocation;
+              const moveToMouseLocation = jest.fn();
+              viewModel.moveToMouseLocation = moveToMouseLocation;
 
-                (e.originalEvent as any).target = scrollbar.find(`.${targetClass}`).getDOMNode();
-                (viewModel as any).scrollbarRef = scrollbar.getDOMNode();
-                (viewModel as any).bounceAnimator = { stop: jest.fn() };
-                (viewModel as any).inertiaAnimator = { stop: jest.fn() };
+              (e.originalEvent as any).target = scrollbar.find(`.${targetClass}`).getDOMNode();
+              (viewModel as any).scrollbarRef = scrollbar.getDOMNode();
+              (viewModel as any).bounceAnimator = { stop: jest.fn() };
+              (viewModel as any).inertiaAnimator = { stop: jest.fn() };
 
-                viewModel.initHandler(e, action, crossThumbScrolling);
+              viewModel.initHandler(e, crossThumbScrolling);
 
-                const isScrollbarClicked = (targetClass !== 'dx-scrollable-scroll' && scrollByThumb);
+              const isScrollbarClicked = (targetClass !== 'dx-scrollable-scroll' && scrollByThumb);
 
-                expect(viewModel.props.onChangeVisibility).toHaveBeenCalledTimes(1);
-                expect(viewModel.props.onChangeVisibility).toHaveBeenCalledWith(false);
+              expect(viewModel.props.onChangeVisibility).toHaveBeenCalledTimes(1);
+              expect(viewModel.props.onChangeVisibility).toHaveBeenCalledWith(false);
 
-                expect((viewModel as any).bounceAnimator.stop).toHaveBeenCalledTimes(1);
-                expect((viewModel as any).inertiaAnimator.stop).toHaveBeenCalledTimes(1);
+              expect((viewModel as any).bounceAnimator.stop).toHaveBeenCalledTimes(1);
+              expect((viewModel as any).inertiaAnimator.stop).toHaveBeenCalledTimes(1);
 
-                if (isDxWheelEvent || !isScrollbarClicked) {
-                  expect(moveToMouseLocation).toBeCalledTimes(0);
-                } else {
-                  expect(moveToMouseLocation).toBeCalledTimes(1);
-                  expect(moveToMouseLocation).toHaveBeenCalledWith(e);
-                }
+              if (isDxWheelEvent || !isScrollbarClicked) {
+                expect(moveToMouseLocation).toBeCalledTimes(0);
+              } else {
+                expect(moveToMouseLocation).toBeCalledTimes(1);
+                expect(moveToMouseLocation).toHaveBeenCalledWith(e);
+              }
 
-                if (isDxWheelEvent) {
-                  expect(viewModel.cachedVariables.thumbScrolling).toBe(false);
-                  expect(viewModel.cachedVariables.crossThumbScrolling).toBe(false);
-                } else {
-                  const expectedThumbScrolling = isScrollbarClicked || (scrollByThumb && targetClass === 'dx-scrollable-scroll');
+              if (isDxWheelEvent) {
+                expect(viewModel.cachedVariables.thumbScrolling).toBe(false);
+                expect(viewModel.cachedVariables.crossThumbScrolling).toBe(false);
+              } else {
+                const expectedThumbScrolling = isScrollbarClicked || (scrollByThumb && targetClass === 'dx-scrollable-scroll');
 
-                  expect(viewModel.cachedVariables.thumbScrolling).toBe(expectedThumbScrolling);
-                  expect(viewModel.cachedVariables.crossThumbScrolling)
-                    .toBe(!expectedThumbScrolling && crossThumbScrolling);
-                }
-
-                if (action) {
-                  expect(action).toBeCalledTimes(1);
-                  expect(action).toBeCalledWith(e);
-                }
-              });
+                expect(viewModel.cachedVariables.thumbScrolling).toBe(expectedThumbScrolling);
+                expect(viewModel.cachedVariables.crossThumbScrolling)
+                  .toBe(!expectedThumbScrolling && crossThumbScrolling);
+              }
             });
 
             each([undefined, jest.fn()]).describe('visibilityChangeHandler: %o', (visibilityChangeHandler) => {

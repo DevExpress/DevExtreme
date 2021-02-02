@@ -19,7 +19,6 @@ import { isDxMouseWheelEvent } from '../../../events/utils/index';
 import { Deferred } from '../../../core/utils/deferred';
 import type { dxPromise } from '../../../core/utils/deferred';
 import { titleize } from '../../../core/utils/inflector';
-import { EventCallback } from '../common/event_callback.d';
 import devices from '../../../core/devices';
 import { BounceAnimator } from './bounce_animator';
 import { InertiaAnimator } from './inertia_animator';
@@ -258,14 +257,12 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  initHandler(e, action: EventCallback<Event> | undefined,
-    crossThumbScrolling: boolean): dxPromise<void> {
+  initHandler(e, crossThumbScrolling: boolean): dxPromise<void> {
     const stopDeferred = Deferred<void>();
 
     this.stopScrolling();
 
     this.prepareThumbScrolling(e, crossThumbScrolling);
-    action?.(e);
 
     return stopDeferred.promise();
   }

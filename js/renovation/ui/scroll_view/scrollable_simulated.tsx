@@ -451,7 +451,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
   }
 
-  /* istanbul ignore next */
   handleInit(e: Event): void {
     this.suppressDirections(e);
     this.cachedVariables.eventForUserAction = e;
@@ -461,15 +460,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.needShowScrollbars = true;
 
     this.eventHandler(
-      (scrollbar) => scrollbar.initHandler(
-        e,
-        this.props.onStop,
-        crossThumbScrolling,
-      ),
+      (scrollbar) => scrollbar.initHandler(e, crossThumbScrolling),
     );
+
+    this.props.onStop?.(this.getEventArgs());
   }
 
-  /* istanbul ignore next */
   private handleStart(e: Event): void {
     this.cachedVariables.eventForUserAction = e;
     this.needShowScrollbars = true;
