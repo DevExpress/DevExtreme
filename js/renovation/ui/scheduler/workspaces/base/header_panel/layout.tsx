@@ -13,7 +13,7 @@ import {
 import { isHorizontalGroupOrientation } from '../../utils';
 import { GroupPanel } from '../group_panel/group_panel';
 import { GroupPanelProps } from '../group_panel/group_panel_props';
-import { DateHeaderLayout } from './date_header/layout';
+import { DateHeaderLayout, DateHeaderLayoutProps } from './date_header/layout';
 
 export const viewFunction = ({
   isHorizontalGrouping,
@@ -76,7 +76,7 @@ export class HeaderPanelLayoutProps extends GroupPanelProps {
 
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
-  @Template() dateHeaderTemplate: JSXTemplate<any> = DateHeaderLayout;
+  @Template() dateHeaderTemplate: JSXTemplate<DateHeaderLayoutProps> = DateHeaderLayout;
 }
 
 @Component({

@@ -16,7 +16,6 @@ import {
 import { GroupOrientation } from '../../../../types.d';
 import { isHorizontalGroupOrientation } from '../../../utils';
 import { DateHeaderCell } from './cell';
-import { HORIZONTAL_GROUP_ORIENTATION } from '../../../../consts';
 
 export const viewFunction = ({
   isHorizontalGrouping,
@@ -63,7 +62,8 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class DateHeaderLayoutProps {
-  @OneWay() groupOrientation: GroupOrientation = HORIZONTAL_GROUP_ORIENTATION;
+  // TODO: bug in angular
+  @OneWay() groupOrientation: GroupOrientation = 'horizontal';
 
   @OneWay() dateHeaderMap: DateHeaderCellData[][] = [];
 
