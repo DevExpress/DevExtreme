@@ -428,7 +428,7 @@ each([{
                                   });
                                   viewModel.containerRef.scrollLeft = scrollLeft;
                                   viewModel.containerRef.scrollTop = scrollTop;
-                                  viewModel.cachedVariables.locked = locked;
+                                  viewModel.locked = locked;
 
                                   let expectedValidationResult;
                                   if (disabled || locked) {

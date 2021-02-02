@@ -356,25 +356,24 @@ describe('Methods', () => {
       });
 
       it('getContainerRef()', () => {
-        const ref = {} as HTMLDivElement;
+        const ref = { current: {} } as any;
 
         const viewModel = new Scrollbar({ containerRef: ref });
 
-        expect((viewModel as any).getContainerRef() === ref).toBe(true);
+        expect((viewModel as any).getContainerRef() === ref.current).toBe(true);
       });
 
       it('getContentRef()', () => {
-        const ref = {} as HTMLDivElement;
+        const ref = { current: {} } as any;
 
         const viewModel = new Scrollbar({ contentRef: ref });
-
-        expect((viewModel as any).getContentRef() === ref).toBe(true);
+        expect((viewModel as any).getContentRef() === ref.current).toBe(true);
       });
 
       each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
         it('move()', () => {
           const viewModel = new Scrollbar({ scaleRatio }) as any;
-          viewModel.cachedVariables.location = 40;
+          viewModel.location = 40;
 
           viewModel.moveContent = jest.fn();
           viewModel.moveTo = jest.fn();
@@ -385,7 +384,7 @@ describe('Methods', () => {
 
         it('move(50)', () => {
           const viewModel = new Scrollbar({ scaleRatio }) as any;
-          viewModel.cachedVariables.location = 40;
+          viewModel.location = 40;
 
           viewModel.moveContent = jest.fn();
           viewModel.moveTo = jest.fn();
@@ -408,7 +407,7 @@ describe('Methods', () => {
                 contentSize,
               });
 
-              viewModel.cachedVariables.location = location;
+              viewModel.location = location;
               viewModel.scrollStep = jest.fn();
 
               viewModel.scrollBy(delta);
@@ -443,14 +442,14 @@ describe('Handlers', () => {
 
           mount(viewFunction(viewModel as any) as JSX.Element);
 
-          viewModel.cachedVariables.thumbScrolling = thumbScrolling;
-          viewModel.cachedVariables.crossThumbScrolling = true;
+          viewModel.thumbScrolling = thumbScrolling;
+          viewModel.crossThumbScrolling = true;
           (viewModel as any).inertiaAnimator = { start: jest.fn() };
 
           viewModel.endHandler(e.velocity);
 
-          expect(viewModel.cachedVariables.thumbScrolling).toEqual(false);
-          expect(viewModel.cachedVariables.crossThumbScrolling).toEqual(false);
+          expect(viewModel.thumbScrolling).toEqual(false);
+          expect(viewModel.crossThumbScrolling).toEqual(false);
           expect((viewModel as any).inertiaAnimator.start).toHaveBeenCalledTimes(1);
 
           let expectedVelocity = 0;
@@ -506,13 +505,13 @@ describe('Handlers', () => {
               }
 
               if (isDxWheelEvent) {
-                expect(viewModel.cachedVariables.thumbScrolling).toBe(false);
-                expect(viewModel.cachedVariables.crossThumbScrolling).toBe(false);
+                expect(viewModel.thumbScrolling).toBe(false);
+                expect(viewModel.crossThumbScrolling).toBe(false);
               } else {
                 const expectedThumbScrolling = isScrollbarClicked || (scrollByThumb && targetClass === 'dx-scrollable-scroll');
 
-                expect(viewModel.cachedVariables.thumbScrolling).toBe(expectedThumbScrolling);
-                expect(viewModel.cachedVariables.crossThumbScrolling)
+                expect(viewModel.thumbScrolling).toBe(expectedThumbScrolling);
+                expect(viewModel.crossThumbScrolling)
                   .toBe(!expectedThumbScrolling && crossThumbScrolling);
               }
             });
@@ -580,8 +579,8 @@ describe('Handlers', () => {
 
                       mount(viewFunction(viewModel as any) as JSX.Element);
 
-                      viewModel.cachedVariables.thumbScrolling = thumbScrolling;
-                      viewModel.cachedVariables.crossThumbScrolling = true;
+                      viewModel.thumbScrolling = thumbScrolling;
+                      viewModel.crossThumbScrolling = true;
 
                       (viewModel as any).inBounds = () => inBounds;
                       (viewModel as any).bounceAnimator = undefined;
@@ -591,8 +590,8 @@ describe('Handlers', () => {
 
                       viewModel.stopHandler();
 
-                      expect(viewModel.cachedVariables.thumbScrolling).toEqual(false);
-                      expect(viewModel.cachedVariables.crossThumbScrolling).toEqual(false);
+                      expect(viewModel.thumbScrolling).toEqual(false);
+                      expect(viewModel.crossThumbScrolling).toEqual(false);
 
                       if (inBounds) {
                         if (visibilityChangeHandler && thumbScrolling) {
@@ -623,8 +622,8 @@ describe('Handlers', () => {
                     (viewModel as any).scrollBy = scrollByHandler;
                     (viewModel as any).containerToContentRatio = () => containerToContentRatio;
 
-                    viewModel.cachedVariables.thumbScrolling = thumbScrolling;
-                    viewModel.cachedVariables.crossThumbScrolling = crossThumbScrolling;
+                    viewModel.thumbScrolling = thumbScrolling;
+                    viewModel.crossThumbScrolling = crossThumbScrolling;
 
                     viewModel.moveHandler(delta);
                     if (crossThumbScrolling) {
