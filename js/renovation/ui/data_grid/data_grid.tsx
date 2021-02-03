@@ -431,7 +431,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     this.prevProps = this.props;
   }
 
-  @Effect()
+  @Effect({ run: 'once' })
   dispose() {
     return () => { this.instance.dispose(); };
   }
