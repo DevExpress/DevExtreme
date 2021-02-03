@@ -2304,6 +2304,10 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     'standard',
     'virtual'
 ].forEach(scrollingMode => {
+    if(isIE11 && scrollingMode === 'virtual') {
+        return;
+    }
+
     module(`Scrolling mode ${scrollingMode}`, {
         beforeEach: function() {
 
