@@ -2759,9 +2759,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
         let position;
-        const shouldFindPositionByViewData = this.isVirtualScrolling() && (!inAllDayRow || this._isVerticalGroupedWorkSpace());
 
-        if(shouldFindPositionByViewData) {
+        if(this.isRenovatedRender()) {
             const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
             if(!positionByMap) {
                 return undefined;

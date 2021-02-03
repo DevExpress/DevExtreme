@@ -260,7 +260,7 @@ module('Virtual scrolling integration', () => {
         }
     }, function() {
         module('Week view', () => {
-            module('Vertical orientation', () => {
+            module('Vertical virtual scroll', () => {
                 [
                     {
                         showAllDayPanel: true,
@@ -957,7 +957,7 @@ module('Virtual scrolling integration', () => {
 
             });
 
-            module('Both orientations', () => {
+            module('Both virtual scroll orientations', () => {
                 [
                     {
                         showAllDayPanel: true,
@@ -1392,111 +1392,525 @@ module('Virtual scrolling integration', () => {
             });
         });
 
-        test('Recurrent appointment should have correct settings in vertical group orientation', function(assert) {
-            if(!isDesktopEnvironment()) {
-                assert.ok(true, 'This test is for desktop only');
-                return;
-            }
+        module('Recurrent appoitnments', () => {
+            test('it should have correct settings in vertical group orientation', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
 
-            const data = [{
-                text: 'Test0',
-                priorityId: 1,
-                startDate: new Date(2020, 9, 7, 0, 0),
-                endDate: new Date(2020, 9, 7, 0, 15),
-                recurrenceRule: 'FREQ=HOURLY'
-            }, {
-                text: 'Test1',
-                priorityId: 2,
-                startDate: new Date(2020, 9, 7, 0, 0),
-                endDate: new Date(2020, 9, 7, 1, 15),
-                recurrenceRule: 'FREQ=HOURLY'
-            }];
+                const data = [{
+                    text: 'Test0',
+                    priorityId: 1,
+                    startDate: new Date(2020, 9, 7, 0, 0),
+                    endDate: new Date(2020, 9, 7, 0, 15),
+                    recurrenceRule: 'FREQ=HOURLY'
+                }, {
+                    text: 'Test1',
+                    priorityId: 2,
+                    startDate: new Date(2020, 9, 7, 0, 0),
+                    endDate: new Date(2020, 9, 7, 1, 15),
+                    recurrenceRule: 'FREQ=HOURLY'
+                }];
 
-            const instance = createWrapper({
-                dataSource: data,
-                views: [{
-                    type: 'day',
-                    groupOrientation: 'vertical',
-                }],
-                currentView: 'day',
-                scrolling: {
-                    mode: 'virtual'
-                },
-                currentDate: new Date(2020, 9, 7),
-                groups: ['priorityId'],
-                resources: [{
-                    fieldExpr: 'priorityId',
-                    dataSource: [
-                        { id: 1 },
-                        { id: 2 }
-                    ]
-                }],
-                height: 600
-            }).instance;
-
-            instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
-
-            const scrollable = instance.getWorkSpace().getScrollable();
-
-            return asyncWrapper(assert, (promise) => {
-                [
-                    {
-                        offset: { y: 0 },
-                        expectedSettings: [
-                            {
-                                groupIndex: 0,
-                                topPositions: [50, 150, 250, 350, 450, 550, 650, 750]
-                            }
-                        ]
+                const instance = createWrapper({
+                    dataSource: data,
+                    views: [{
+                        type: 'day',
+                        groupOrientation: 'vertical',
+                    }],
+                    currentView: 'day',
+                    scrolling: {
+                        mode: 'virtual'
                     },
-                    {
-                        offset: { y: 2000 },
-                        expectedSettings: [
-                            {
-                                groupIndex: 0,
-                                topPositions: [1750, 1850, 1950, 2050, 2150, 2250, 2350]
-                            },
-                            {
-                                groupIndex: 1,
-                                topPositions: [2500, 2600, 2700]
-                            },
+                    currentDate: new Date(2020, 9, 7),
+                    groups: ['priorityId'],
+                    resources: [{
+                        fieldExpr: 'priorityId',
+                        dataSource: [
+                            { id: 1 },
+                            { id: 2 }
                         ]
-                    },
-                    {
-                        offset: { y: 4000 },
-                        expectedSettings: [
-                            {
-                                groupIndex: 1,
-                                topPositions: [3750, 3800, 3900, 4000, 4100, 4200, 4300, 4400, 4500, 4600, 4700]
-                            }
-                        ]
-                    },
-                ].forEach(({ offset, expectedSettings }) => {
-                    promise = asyncScrollTest(
-                        assert,
-                        promise,
-                        () => {
-                            const filteredItems = instance.getFilteredItems();
+                    }],
+                    height: 600
+                }).instance;
 
-                            filteredItems.forEach((dataItem, index) => {
-                                const settings = instance.fire('createAppointmentSettings', dataItem);
-                                const {
-                                    groupIndex,
-                                    topPositions
-                                } = expectedSettings[index];
-                                assert.equal(settings.length, topPositions.length, 'Settings amount is correct');
-                                topPositions.forEach((top, index) => {
-                                    assert.equal(settings[index].groupIndex, groupIndex, `Appointment groupIndex "${groupIndex}" is correct for offsetY: ${offset.y}`);
-                                    assert.equal(settings[index].top, top, `Appointment top position "${top}" is correct for offsetY: ${offset.y}`);
-                                });
-                            });
+                instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+
+                const scrollable = instance.getWorkSpace().getScrollable();
+
+                return asyncWrapper(assert, (promise) => {
+                    [
+                        {
+                            offset: { y: 0 },
+                            expectedSettings: [
+                                {
+                                    groupIndex: 0,
+                                    topPositions: [50, 150, 250, 350, 450, 550, 650, 750]
+                                }
+                            ]
                         },
-                        scrollable,
-                        offset
-                    );
+                        {
+                            offset: { y: 2000 },
+                            expectedSettings: [
+                                {
+                                    groupIndex: 0,
+                                    topPositions: [1750, 1850, 1950, 2050, 2150, 2250, 2350]
+                                },
+                                {
+                                    groupIndex: 1,
+                                    topPositions: [2500, 2600, 2700]
+                                },
+                            ]
+                        },
+                        {
+                            offset: { y: 4000 },
+                            expectedSettings: [
+                                {
+                                    groupIndex: 1,
+                                    topPositions: [3750, 3800, 3900, 4000, 4100, 4200, 4300, 4400, 4500, 4600, 4700]
+                                }
+                            ]
+                        },
+                    ].forEach(({ offset, expectedSettings }) => {
+                        promise = asyncScrollTest(
+                            assert,
+                            promise,
+                            () => {
+                                const filteredItems = instance.getFilteredItems();
+
+                                filteredItems.forEach((dataItem, index) => {
+                                    const settings = instance.fire('createAppointmentSettings', dataItem);
+                                    const {
+                                        groupIndex,
+                                        topPositions
+                                    } = expectedSettings[index];
+                                    assert.equal(settings.length, topPositions.length, 'Settings amount is correct');
+                                    topPositions.forEach((top, index) => {
+                                        assert.equal(settings[index].groupIndex, groupIndex, `Appointment groupIndex "${groupIndex}" is correct for offsetY: ${offset.y}`);
+                                        assert.equal(settings[index].top, top, `Appointment top position "${top}" is correct for offsetY: ${offset.y}`);
+                                    });
+                                });
+                            },
+                            scrollable,
+                            offset
+                        );
+                    });
+
+                    return promise;
+                });
+            });
+
+            test('it should not have duplicates in horizontal group orientation', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
+                const data = [{
+                    text: 'Test0',
+                    priorityId: [1, 2],
+                    startDate: new Date(2020, 10, 2, 9, 30),
+                    endDate: new Date(2020, 10, 2, 11, 45),
+                    recurrenceRule: 'FREQ=DAILY',
+                }, {
+                    text: 'Test1',
+                    priorityId: [1, 2],
+                    startDate: new Date(2020, 10, 2, 13, 30),
+                    endDate: new Date(2020, 10, 2, 16, 45),
+                    recurrenceRule: 'FREQ=DAILY',
+                }];
+
+                const scheduler = createWrapper({
+                    dataSource: data,
+                    views: [{
+                        type: 'day',
+                        cellDuration: 15,
+                        intervalCount: 2
+                    }],
+                    currentView: 'day',
+                    currentDate: new Date(2020, 10, 2),
+                    startDayHour: 9,
+                    groups: ['priorityId'],
+                    resources: [{
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: [{ id: 1 }, { id: 2 }]
+                    }],
+                    height: 600,
+                    scrolling: {
+                        mode: 'virtual'
+                    },
                 });
 
-                return promise;
+                const { instance } = scheduler;
+
+                instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+
+                const scrollable = instance.getWorkSpace().getScrollable();
+
+                return asyncWrapper(assert, (promise) => {
+                    [
+                        {
+                            offsetY: 0,
+                            expected: [
+                                [{
+                                    groupIndex: 0,
+                                    left: 100,
+                                    top: 100,
+                                    height: 450
+                                }, {
+                                    groupIndex: 0,
+                                    left: 324,
+                                    top: 100,
+                                    height: 450
+                                }, {
+                                    groupIndex: 1,
+                                    left: 548,
+                                    top: 100,
+                                    height: 450
+                                }, {
+                                    groupIndex: 1,
+                                    left: 773,
+                                    top: 100,
+                                    height: 450
+                                }],
+                                []
+                            ]
+                        },
+                        {
+                            offsetY: 500,
+                            expected: [
+                                [{
+                                    groupIndex: 0,
+                                    left: 100,
+                                    top: 250,
+                                    height: 300
+                                }, {
+                                    groupIndex: 0,
+                                    left: 324,
+                                    top: 250,
+                                    height: 300
+                                }, {
+                                    groupIndex: 1,
+                                    left: 548,
+                                    top: 250,
+                                    height: 300
+                                }, {
+                                    groupIndex: 1,
+                                    left: 773,
+                                    top: 250,
+                                    height: 300
+                                }],
+                                [{
+                                    groupIndex: 0,
+                                    left: 100,
+                                    top: 900,
+                                    height: 400
+                                }, {
+                                    groupIndex: 0,
+                                    left: 324,
+                                    top: 900,
+                                    height: 400
+                                }, {
+                                    groupIndex: 1,
+                                    left: 548,
+                                    top: 900,
+                                    height: 400
+                                }, {
+                                    groupIndex: 1,
+                                    left: 773,
+                                    top: 900,
+                                    height: 400
+                                }]
+                            ]
+                        },
+                        {
+                            offsetY: 900,
+                            expected: [
+                                [],
+                                [{
+                                    groupIndex: 0,
+                                    left: 100,
+                                    top: 900,
+                                    height: 650
+                                }, {
+                                    groupIndex: 0,
+                                    left: 324,
+                                    top: 900,
+                                    height: 650
+                                }, {
+                                    groupIndex: 1,
+                                    left: 548,
+                                    top: 900,
+                                    height: 650
+                                }, {
+                                    groupIndex: 1,
+                                    left: 773,
+                                    top: 900,
+                                    height: 650
+                                }]]
+                        },
+                        {
+                            offsetY: 500,
+                            expected: [
+                                [{
+                                    groupIndex: 0,
+                                    left: 100,
+                                    top: 250,
+                                    height: 300
+                                }, {
+                                    groupIndex: 0,
+                                    left: 324,
+                                    top: 250,
+                                    height: 300
+                                }, {
+                                    groupIndex: 1,
+                                    left: 548,
+                                    top: 250,
+                                    height: 300
+                                }, {
+                                    groupIndex: 1,
+                                    left: 773,
+                                    top: 250,
+                                    height: 300
+                                }],
+                                [{
+                                    groupIndex: 0,
+                                    left: 100,
+                                    top: 900,
+                                    height: 400
+                                }, {
+                                    groupIndex: 0,
+                                    left: 324,
+                                    top: 900,
+                                    height: 400
+                                }, {
+                                    groupIndex: 1,
+                                    left: 548,
+                                    top: 900,
+                                    height: 400
+                                }, {
+                                    groupIndex: 1,
+                                    left: 773,
+                                    top: 900,
+                                    height: 400
+                                }]
+                            ]
+                        }
+                    ].forEach(option => {
+                        const {
+                            offsetY,
+                            expected
+                        } = option;
+
+                        promise = asyncScrollTest(
+                            assert,
+                            promise,
+                            () => {
+                                const items = instance._appointments.option('items');
+
+                                assert.equal(items.length, expected.length, `Appointments amount is correct for offsetY=${offsetY}`);
+
+                                expected.forEach((expect, index) => {
+                                    const { settings } = items[index];
+
+                                    assert.equal(settings.length, expect.length, `Appointment settings amount ${settings.length} is correct`);
+
+                                    settings.forEach((setting, index) => {
+                                        const {
+                                            left,
+                                            top,
+                                            groupIndex,
+                                            height
+                                        } = expect[index];
+
+                                        assert.equal(setting.groupIndex, groupIndex, `Settings groupIndex ${setting.groupIndex} is correct`);
+                                        assert.roughEqual(setting.top, top, 1.01, `Settings top ${setting.top} is correct`);
+                                        assert.roughEqual(setting.left, left, 1.01, `Settings left ${setting.left} is correct`);
+                                        assert.equal(setting.height, height, `Settings height ${setting.height} is correct`);
+                                    });
+                                });
+                            },
+                            scrollable,
+                            { y: offsetY }
+                        );
+                    });
+
+                    return promise;
+                });
+            });
+
+            test('Recurrent all day appoitment with multiple resources should be rendered correctly if horizontal grouping', function(assert) {
+                if(!isDesktopEnvironment()) {
+                    assert.ok(true, 'This test is for desktop only');
+                    return;
+                }
+
+                this.createInstance({
+                    dataSource: [{
+                        text: 'allDay recurrent',
+                        startDate: new Date(2021, 8, 6, 9, 30),
+                        endDate: new Date(2021, 8, 6, 11, 30),
+                        priorityId: [1, 3, 5, 9, 12],
+                        recurrenceRule: 'FREQ=DAILY',
+                        allDay: true,
+                    }],
+                    currentView: 'week',
+                    startDayHour: 9,
+                    endDayHour: 18,
+                    currentDate: new Date(2021, 8, 6),
+                    groups: ['priorityId'],
+                    resources: [{
+                        fieldExpr: 'priorityId',
+                        allowMultiple: true,
+                        dataSource: [
+                            { id: 1, label: 'rc_1' }, { id: 2 }, { id: 3 }, { id: 4 },
+                            { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 },
+                            { id: 9 }, { id: 10 }, { id: 11 }, { id: 12 },
+                            { id: 13 }, { id: 14 }, { id: 15 }, { id: 16 }
+                        ]
+                    }],
+                    scrolling: {
+                        mode: 'virtual',
+                        type: 'both'
+                    },
+                    height: 600,
+                    width: 800
+                });
+
+                const { instance } = this.scheduler;
+                const scrollable = instance.getWorkSpaceScrollable();
+
+                instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+
+                return asyncWrapper(assert, promise => {
+                    [
+                        {
+                            offset: { x: 0 },
+                            appointmentRects: [
+                                { left: -9824, top: -9864, height: 25, width: 75 },
+                                { left: -9749, top: -9864, height: 25, width: 75 },
+                                { left: -9674, top: -9864, height: 25, width: 75 },
+                                { left: -9599, top: -9864, height: 25, width: 75 },
+                                { left: -9524, top: -9864, height: 25, width: 75 },
+                                { left: -9449, top: -9864, height: 25, width: 75 },
+                                { left: -8774, top: -9864, height: 25, width: 75 },
+                            ]
+                        },
+                        {
+                            offset: { x: 500 },
+                            appointmentRects: [
+                                { left: -10324, top: -9864, height: 25, width: 75 },
+                                { left: -10249, top: -9864, height: 25, width: 75 },
+                                { left: -10174, top: -9864, height: 25, width: 75 },
+                                { left: -10099, top: -9864, height: 25, width: 75 },
+                                { left: -10024, top: -9864, height: 25, width: 75 },
+                                { left: -9949, top: -9864, height: 25, width: 75 },
+                                { left: -9274, top: -9864, height: 25, width: 75 },
+                                { left: -9199, top: -9864, height: 25, width: 75 },
+                                { left: -9124, top: -9864, height: 25, width: 75 },
+                                { left: -9049, top: -9864, height: 25, width: 75 },
+                                { left: -8974, top: -9864, height: 25, width: 75 },
+                                { left: -8899, top: -9864, height: 25, width: 75 }
+                            ]
+                        },
+                        {
+                            offset: { x: 1000 },
+                            appointmentRects: [
+                                { left: -9774, top: -9864, height: 25, width: 75 },
+                                { left: -9699, top: -9864, height: 25, width: 75 },
+                                { left: -9624, top: -9864, height: 25, width: 75 },
+                                { left: -9549, top: -9864, height: 25, width: 75 },
+                                { left: -9474, top: -9864, height: 25, width: 75 },
+                                { left: -9399, top: -9864, height: 25, width: 75 }
+                            ]
+                        },
+                        {
+                            offset: { x: 1500 },
+                            appointmentRects: [
+                                { left: -10274, top: -9864, height: 25, width: 75 },
+                                { left: -10199, top: -9864, height: 25, width: 75 },
+                                { left: -10124, top: -9864, height: 25, width: 75 },
+                                { left: -10049, top: -9864, height: 25, width: 75 },
+                                { left: -9974, top: -9864, height: 25, width: 75 },
+                                { left: -9899, top: -9864, height: 25, width: 75 },
+                                { left: -9224, top: -9864, height: 25, width: 75 },
+                                { left: -9149, top: -9864, height: 25, width: 75 },
+                                { left: -9074, top: -9864, height: 25, width: 75 },
+                                { left: -8999, top: -9864, height: 25, width: 75 },
+                                { left: -8924, top: -9864, height: 25, width: 75 },
+                                { left: -8849, top: -9864, height: 25, width: 75 }
+                            ]
+                        },
+                        {
+                            offset: { x: 2000 },
+                            appointmentRects: [
+                                { left: -9724, top: -9864, height: 25, width: 75 },
+                                { left: -9649, top: -9864, height: 25, width: 75 },
+                                { left: -9574, top: -9864, height: 25, width: 75 },
+                                { left: -9499, top: -9864, height: 25, width: 75 },
+                                { left: -9424, top: -9864, height: 25, width: 75 },
+                                { left: -9349, top: -9864, height: 25, width: 75 }
+                            ]
+                        },
+                        {
+                            offset: { x: 4200 },
+                            appointmentRects: [
+                                { left: -9824, top: -9864, height: 25, width: 75 },
+                                { left: -9749, top: -9864, height: 25, width: 75 },
+                                { left: -9674, top: -9864, height: 25, width: 75 },
+                                { left: -9599, top: -9864, height: 25, width: 75 },
+                                { left: -9524, top: -9864, height: 25, width: 75 },
+                                { left: -9449, top: -9864, height: 25, width: 75 }
+                            ]
+                        },
+                        {
+                            offset: { x: 5700 },
+                            appointmentRects: [
+                                { left: -9749, top: -9864, height: 25, width: 75 },
+                                { left: -9674, top: -9864, height: 25, width: 75 },
+                                { left: -9599, top: -9864, height: 25, width: 75 },
+                                { left: -9524, top: -9864, height: 25, width: 75 },
+                                { left: -9449, top: -9864, height: 25, width: 75 },
+                                { left: -9374, top: -9864, height: 25, width: 75 }
+                            ]
+                        },
+                        {
+                            offset: { x: 7000 },
+                            appointmentRects: []
+                        }
+                    ].forEach(({ offset, appointmentRects }) => {
+                        promise = asyncScrollTest(
+                            assert,
+                            promise,
+                            () => {
+                                assert.equal(
+                                    appointmentRects.length,
+                                    this.scheduler.appointments.getAppointmentCount(),
+                                    `Appointment count is correct when offsetX: ${offset.x}`
+                                );
+
+                                appointmentRects.forEach((expectedRect, index) => {
+                                    const appointmentRect = this.scheduler.appointments
+                                        .getAppointment(index)
+                                        .get(0)
+                                        .getBoundingClientRect();
+
+                                    assert.roughEqual(appointmentRect.left, expectedRect.left, 2.01, `appointment part #${index} left is correct`);
+                                    assert.roughEqual(appointmentRect.top, expectedRect.top, 2.01, `appointment part #${index} top is correct`);
+                                    assert.roughEqual(appointmentRect.height, expectedRect.height, 2.01, `appointment part #${index} height is correct`);
+                                    assert.roughEqual(appointmentRect.width, expectedRect.width, 2.01, `appointment part #${index} width is correct`);
+                                });
+                            },
+                            scrollable,
+                            offset,
+                            200
+                        );
+                    });
+
+                    return promise;
+                });
             });
         });
 
@@ -1637,246 +2051,6 @@ module('Virtual scrolling integration', () => {
                                 assert.equal(setting.groupIndex, groupIndex, `Settings groupIndex ${setting.groupIndex} is correct`);
                                 assert.equal(setting.top, top, `Settings top ${setting.top} is correct`);
                                 assert.equal(setting.height, height, `Settings height ${setting.height} is correct`);
-                            });
-                        },
-                        scrollable,
-                        { y: offsetY }
-                    );
-                });
-
-                return promise;
-            });
-        });
-
-        test('Horizontally grouped recurrent appointment should not have duplicates', function(assert) {
-            if(!isDesktopEnvironment()) {
-                assert.ok(true, 'This test is for desktop only');
-                return;
-            }
-
-            const data = [{
-                text: 'Test0',
-                priorityId: [1, 2],
-                startDate: new Date(2020, 10, 2, 9, 30),
-                endDate: new Date(2020, 10, 2, 11, 45),
-                recurrenceRule: 'FREQ=DAILY',
-            }, {
-                text: 'Test1',
-                priorityId: [1, 2],
-                startDate: new Date(2020, 10, 2, 13, 30),
-                endDate: new Date(2020, 10, 2, 16, 45),
-                recurrenceRule: 'FREQ=DAILY',
-            }];
-
-            const scheduler = createWrapper({
-                dataSource: data,
-                views: [{
-                    type: 'day',
-                    cellDuration: 15,
-                    intervalCount: 2
-                }],
-                currentView: 'day',
-                currentDate: new Date(2020, 10, 2),
-                startDayHour: 9,
-                groups: ['priorityId'],
-                resources: [{
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: [{ id: 1 }, { id: 2 }]
-                }],
-                height: 600,
-                scrolling: {
-                    mode: 'virtual'
-                },
-            });
-
-            const { instance } = scheduler;
-
-            instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
-
-            const scrollable = instance.getWorkSpace().getScrollable();
-
-            return asyncWrapper(assert, (promise) => {
-                [
-                    {
-                        offsetY: 0,
-                        expected: [
-                            [{
-                                groupIndex: 0,
-                                left: 100,
-                                top: 100,
-                                height: 450
-                            }, {
-                                groupIndex: 0,
-                                left: 324,
-                                top: 100,
-                                height: 450
-                            }, {
-                                groupIndex: 1,
-                                left: 548,
-                                top: 100,
-                                height: 450
-                            }, {
-                                groupIndex: 1,
-                                left: 773,
-                                top: 100,
-                                height: 450
-                            }],
-                            []
-                        ]
-                    },
-                    {
-                        offsetY: 500,
-                        expected: [
-                            [{
-                                groupIndex: 0,
-                                left: 100,
-                                top: 250,
-                                height: 300
-                            }, {
-                                groupIndex: 0,
-                                left: 324,
-                                top: 250,
-                                height: 300
-                            }, {
-                                groupIndex: 1,
-                                left: 548,
-                                top: 250,
-                                height: 300
-                            }, {
-                                groupIndex: 1,
-                                left: 773,
-                                top: 250,
-                                height: 300
-                            }],
-                            [{
-                                groupIndex: 0,
-                                left: 100,
-                                top: 900,
-                                height: 400
-                            }, {
-                                groupIndex: 0,
-                                left: 324,
-                                top: 900,
-                                height: 400
-                            }, {
-                                groupIndex: 1,
-                                left: 548,
-                                top: 900,
-                                height: 400
-                            }, {
-                                groupIndex: 1,
-                                left: 773,
-                                top: 900,
-                                height: 400
-                            }]
-                        ]
-                    },
-                    {
-                        offsetY: 900,
-                        expected: [
-                            [],
-                            [{
-                                groupIndex: 0,
-                                left: 100,
-                                top: 900,
-                                height: 650
-                            }, {
-                                groupIndex: 0,
-                                left: 324,
-                                top: 900,
-                                height: 650
-                            }, {
-                                groupIndex: 1,
-                                left: 548,
-                                top: 900,
-                                height: 650
-                            }, {
-                                groupIndex: 1,
-                                left: 773,
-                                top: 900,
-                                height: 650
-                            }]]
-                    },
-                    {
-                        offsetY: 500,
-                        expected: [
-                            [{
-                                groupIndex: 0,
-                                left: 100,
-                                top: 250,
-                                height: 300
-                            }, {
-                                groupIndex: 0,
-                                left: 324,
-                                top: 250,
-                                height: 300
-                            }, {
-                                groupIndex: 1,
-                                left: 548,
-                                top: 250,
-                                height: 300
-                            }, {
-                                groupIndex: 1,
-                                left: 773,
-                                top: 250,
-                                height: 300
-                            }],
-                            [{
-                                groupIndex: 0,
-                                left: 100,
-                                top: 900,
-                                height: 400
-                            }, {
-                                groupIndex: 0,
-                                left: 324,
-                                top: 900,
-                                height: 400
-                            }, {
-                                groupIndex: 1,
-                                left: 548,
-                                top: 900,
-                                height: 400
-                            }, {
-                                groupIndex: 1,
-                                left: 773,
-                                top: 900,
-                                height: 400
-                            }]
-                        ]
-                    }
-                ].forEach(option => {
-                    const {
-                        offsetY,
-                        expected
-                    } = option;
-
-                    promise = asyncScrollTest(
-                        assert,
-                        promise,
-                        () => {
-                            const items = instance._appointments.option('items');
-
-                            assert.equal(items.length, expected.length, `Appointments amount is correct for offsetY=${offsetY}`);
-
-                            expected.forEach((expect, index) => {
-                                const { settings } = items[index];
-
-                                assert.equal(settings.length, expect.length, `Appointment settings amount ${settings.length} is correct`);
-
-                                settings.forEach((setting, index) => {
-                                    const {
-                                        left,
-                                        top,
-                                        groupIndex,
-                                        height
-                                    } = expect[index];
-
-                                    assert.equal(setting.groupIndex, groupIndex, `Settings groupIndex ${setting.groupIndex} is correct`);
-                                    assert.roughEqual(setting.top, top, 1.01, `Settings top ${setting.top} is correct`);
-                                    assert.roughEqual(setting.left, left, 1.01, `Settings left ${setting.left} is correct`);
-                                    assert.equal(setting.height, height, `Settings height ${setting.height} is correct`);
-                                });
                             });
                         },
                         scrollable,
