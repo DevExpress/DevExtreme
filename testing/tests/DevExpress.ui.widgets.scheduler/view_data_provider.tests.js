@@ -162,6 +162,7 @@ const verticalWorkSpaceMock = {
     isAllDayPanelVisible: true,
     isGroupedAllDayPanel: () => true,
     isVirtualScrolling: () => false,
+    isDateAndTimeView: true
 };
 const horizontalWorkSpaceMock = {
     generateRenderOptions: () => ({
@@ -178,6 +179,7 @@ const horizontalWorkSpaceMock = {
     isAllDayPanelVisible: true,
     isGroupedAllDayPanel: () => false,
     isVirtualScrolling: () => false,
+    isDateAndTimeView: true
 };
 
 const createViewDataProvider = (options) => {
@@ -553,52 +555,121 @@ module('View Data Provider', () => {
                 this.init('vertical');
             }
         }, function() {
-            test('Simple appointments', function(assert) {
-                assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
-                    new Date(2020, 7, 24),
-                    'Group 2 cell 0 start date is correct'
-                );
+            module('Date and time views', () => {
+                test('Simple appointments', function(assert) {
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
+                        new Date(2020, 7, 24),
+                        'Group 2 cell 0 start date is correct'
+                    );
 
-                assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
-                    new Date(2020, 7, 25),
-                    'Group 2 cell 1 start date is correct'
-                );
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
+                        new Date(2020, 7, 25),
+                        'Group 2 cell 1 start date is correct'
+                    );
 
-                assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22)),
-                    new Date(2020, 7, 24, 1),
-                    'Group 3 cell 0 start date is correct'
-                );
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22)),
+                        new Date(2020, 7, 24, 1),
+                        'Group 3 cell 0 start date is correct'
+                    );
 
-                assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
-                    new Date(2020, 7, 25, 1),
-                    'Group 3 cell 1 start date is correct'
-                );
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
+                        new Date(2020, 7, 25, 1),
+                        'Group 3 cell 1 start date is correct'
+                    );
+                });
+
+                test('AllDay appointments', function(assert) {
+                    this.init('vertical');
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 25, 0, 11),
+                        'Group 2 cell 1 allDay start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 25, 0, 11),
+                        'Group 2 cell 1 allDay start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 23, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 24),
+                        'Group 2 cell 1 allDay start date is correct when startDate is out of view'
+                    );
+                });
             });
 
-            test('AllDay appointments', function(assert) {
-                this.init('vertical');
+            module('Date views', () => {
+                const workSpaceMock = {
+                    ...verticalWorkSpaceMock,
+                    isDateAndTimeView: false
+                };
 
-                assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
-                    new Date(2020, 7, 25, 0, 11),
-                    'Group 2 cell 1 allDay start date is correct'
-                );
+                test('Simple appointments', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: workSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping
+                    });
 
-                assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
-                    new Date(2020, 7, 25, 0, 11),
-                    'Group 2 cell 1 allDay start date is correct'
-                );
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
+                        new Date(2020, 7, 24, 0, 10),
+                        'Group 2 cell 0 start date is correct'
+                    );
 
-                assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 23, 0, 11), new Date(2020, 7, 26, 1, 30), true),
-                    new Date(2020, 7, 24),
-                    'Group 2 cell 1 allDay start date is correct when startDate is out of view'
-                );
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
+                        new Date(2020, 7, 25, 0, 11),
+                        'Group 2 cell 1 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22)),
+                        new Date(2020, 7, 24, 1),
+                        'Group 3 cell 0 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
+                        new Date(2020, 7, 25, 0, 11),
+                        'Group 3 cell 1 start date is correct'
+                    );
+                });
+
+
+                test('AllDay appointments', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: workSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping
+                    });
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 25, 0, 11),
+                        'Group 2 cell 1 allDay start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 25, 0, 11),
+                        'Group 2 cell 1 allDay start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 23, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 24),
+                        'Group 2 cell 1 allDay start date is correct when startDate is out of view'
+                    );
+                });
+
             });
         });
 
@@ -682,87 +753,193 @@ module('View Data Provider', () => {
                 this.init('vertical');
             }
         }, function() {
-            module('Vertical Grouping', function() {
-                test('Should return correct cell position for the allDay cell date', function(assert) {
-                    const { viewDataProvider } = this;
+            module('Date and time views', () => {
+                module('Vertical Grouping', function() {
+                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                        const { viewDataProvider } = this;
 
-                    let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
-                    assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
+                        let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
 
-                    position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
-                    assert.deepEqual(position, { rowIndex: 2, cellIndex: 0 }, '2nd allDayPanel cell position is correct');
+                        position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 2, cellIndex: 0 }, '2nd allDayPanel cell position is correct');
+                    });
+
+                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                        const { viewDataProvider } = this;
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24)),
+                            { rowIndex: 1, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29)),
+                            { rowIndex: 1, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1)),
+                            { rowIndex: 3, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29)),
+                            { rowIndex: 3, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+                    });
                 });
 
-                test('Should return correct cell position for the not allDay cell date', function(assert) {
-                    const { viewDataProvider } = this;
+                module('Horizontal Grouping', {
+                    beforeEach: function() {
+                        this.init('horizontal');
+                    }
+                }, function() {
+                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                        const { viewDataProvider } = this;
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24)),
-                        { rowIndex: 1, cellIndex: 0 },
-                        '1st cell position is correct'
-                    );
+                        let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29)),
-                        { rowIndex: 1, cellIndex: 0 },
-                        '1st cell position is correct'
-                    );
+                        position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 2 }, '2nd allDayPanel cell position is correct');
+                    });
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1)),
-                        { rowIndex: 3, cellIndex: 0 },
-                        '2nd cell position is correct'
-                    );
+                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                        const { viewDataProvider } = this;
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29)),
-                        { rowIndex: 3, cellIndex: 0 },
-                        '2nd cell position is correct'
-                    );
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), false),
+                            { rowIndex: 0, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29), false),
+                            { rowIndex: 0, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1), false),
+                            { rowIndex: 0, cellIndex: 2 },
+                            '2nd cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29), false),
+                            { rowIndex: 0, cellIndex: 2 },
+                            '2nd cell position is correct'
+                        );
+                    });
                 });
             });
 
-            module('Horizontal Grouping', {
-                beforeEach: function() {
-                    this.init('horizontal');
-                }
-            }, function() {
-                test('Should return correct cell position for the allDay cell date', function(assert) {
-                    const { viewDataProvider } = this;
+            module('Date views', () => {
+                module('Vertical Grouping', function() {
+                    const workSpaceMock = {
+                        ...verticalWorkSpaceMock,
+                        isDateAndTimeView: false
+                    };
 
-                    let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
-                    assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
+                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                        const viewDataProvider = createViewDataProvider({
+                            workspaceMock: workSpaceMock,
+                            completeViewDataMap: testViewDataMap.verticalGrouping,
+                            completeDateHeaderMap: testHeaderDataMap.verticalGrouping
+                        });
 
-                    position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
-                    assert.deepEqual(position, { rowIndex: 0, cellIndex: 2 }, '2nd allDayPanel cell position is correct');
+                        let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
+
+                        position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 2, cellIndex: 0 }, '2nd allDayPanel cell position is correct');
+                    });
+
+                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                        const viewDataProvider = createViewDataProvider({
+                            workspaceMock: workSpaceMock,
+                            completeViewDataMap: testViewDataMap.verticalGrouping,
+                            completeDateHeaderMap: testHeaderDataMap.verticalGrouping
+                        });
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24)),
+                            { rowIndex: 0, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29)),
+                            { rowIndex: 0, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1)),
+                            { rowIndex: 2, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29)),
+                            { rowIndex: 2, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+                    });
                 });
 
-                test('Should return correct cell position for the not allDay cell date', function(assert) {
-                    const { viewDataProvider } = this;
+                module('Horizontal Grouping', function() {
+                    const workSpaceMock = {
+                        ...horizontalWorkSpaceMock,
+                        isDateAndTimeView: false
+                    };
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), false),
-                        { rowIndex: 0, cellIndex: 0 },
-                        '1st cell position is correct'
-                    );
+                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                        const viewDataProvider = createViewDataProvider({
+                            workspaceMock: workSpaceMock,
+                            completeViewDataMap: testViewDataMap.horizontalGrouping,
+                            completeDateHeaderMap: testHeaderDataMap.horizontalGrouping
+                        });
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29), false),
-                        { rowIndex: 0, cellIndex: 0 },
-                        '1st cell position is correct'
-                    );
+                        let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1), false),
-                        { rowIndex: 0, cellIndex: 2 },
-                        '2nd cell position is correct'
-                    );
+                        position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 2 }, '2nd allDayPanel cell position is correct');
+                    });
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29), false),
-                        { rowIndex: 0, cellIndex: 2 },
-                        '2nd cell position is correct'
-                    );
+                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                        const { viewDataProvider } = this;
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), false),
+                            { rowIndex: 1, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29), false),
+                            { rowIndex: 1, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1), false),
+                            { rowIndex: 3, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29), false),
+                            { rowIndex: 3, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+                    });
                 });
             });
         });
