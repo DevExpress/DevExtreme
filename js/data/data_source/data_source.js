@@ -69,7 +69,7 @@ export const DataSource = Class.inherit({
 
             const throttlingPushHandler = dataUtils.throttleChanges((changes) => {
                 pushDeferred.resolve();
-                this._onPush(changes);
+                pushDeferred.done(() => this._onPush(changes));
             }, throttlingTimeout);
 
             this._onPushHandler = (args) => {

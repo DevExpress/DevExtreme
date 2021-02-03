@@ -171,7 +171,7 @@ const Store = Class.inherit({
         };
 
         if(beforePushArgs.waitFor.length) {
-            when(...beforePushArgs.waitFor).then(processPush);
+            when(...beforePushArgs.waitFor).done(processPush);
         } else {
             processPush();
         }
