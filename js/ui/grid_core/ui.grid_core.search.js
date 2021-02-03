@@ -10,6 +10,7 @@ import dataQuery from '../../data/query';
 const SEARCH_PANEL_CLASS = 'search-panel';
 const SEARCH_TEXT_CLASS = 'search-text';
 const HEADER_PANEL_CLASS = 'header-panel';
+const EDIT_FORM_ITEM_CLASS_SELECTOR = '.dx-datagrid-edit-form-item';
 const FILTERING_TIMEOUT = 700;
 
 
@@ -240,6 +241,10 @@ export default {
                     const stringNormalizer = this._getStringNormalizer();
                     const normalizedSearchText = stringNormalizer(searchText);
 
+                    if($parent.is(EDIT_FORM_ITEM_CLASS_SELECTOR)) {
+                        return;
+                    }
+
                     if(!$parent.length) {
                         $parent = $('<div>').append(cellElement);
                     } else if(column) {
@@ -250,7 +255,7 @@ export default {
                             $items = $parent.children('td').eq(columnIndex).find('*');
                         }
                     }
-                    $items = $items && $items.length ? $items : $parent.find('*');
+                    $items = $items?.length ? $items : $parent.find('*');
 
                     $items = $items.filter(function(_, element) {
                         const $contents = $(element).contents();
