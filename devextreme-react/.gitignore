@@ -1,0 +1,4 @@
+npm/
+src/*
+!src/core
+src/index.ts

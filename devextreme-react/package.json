@@ -1,0 +1,56 @@
+{
+  "author": "Developer Express Inc.",
+  "name": "devextreme-react",
+  "version": "20.2.4",
+  "description": "DevExtreme React UI and Visualization Components",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevExpress/devextreme-react.git"
+  },
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "clean": "gulp clean",
+    "build": "npm run clean && gulp generate",
+    "pack": "npm run clean && gulp npm.pack",
+    "test": "jest"
+  },
+  "keywords": [
+    "react",
+    "devextreme",
+    "devexpress"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "devextreme": "~20.2.4",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.1"
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.1.14",
+    "@types/enzyme-adapter-react-16": "^1.0.2",
+    "@types/jest": "^22.1.2",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.0.9",
+    "del": "^3.0.0",
+    "devextreme": "~20.2.4",
+    "devextreme-react-generator": "^1.0.0",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.6.0",
+    "gulp": "^4.0.0",
+    "jest": "^24.8.0",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "gulp-header": "^2.0.5",
+    "gulp-shell": "^0.6.5",
+    "gulp-typescript": "^5.0.0",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.9.7"
+  },
+  "resolutions": {
+    "@types/react": "^16.9.2"
+  }
+}

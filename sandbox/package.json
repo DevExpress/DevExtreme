@@ -1,0 +1,35 @@
+{
+  "author": "Developer Express Inc.",
+  "name": "devextreme-react-sandbox",
+  "private": true,
+  "version": "20.2.4",
+  "description": "DevExtreme React UI and Visualization Components Sandbox",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevExpress/devextreme-react.git"
+  },
+  "dependencies": {
+    "devextreme": "~20.2.4",
+    "devextreme-react": "~20.2.4",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.0.9",
+    "css-loader": "^2.1.0",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^0.23.1",
+    "ts-loader": "^5.3.3",
+    "tsconfig-paths-webpack-plugin": "^3.3.0",
+    "typescript": "^3.9.7",
+    "url-loader": "^0.6.2",
+    "webpack": "^4.29.2",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.1.14"
+  },
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
+  "license": "MIT"
+}
