@@ -13,7 +13,8 @@ jest.mock('../data_grid_views', () => ({ DataGridViews: () => null }));
 jest.mock('../../../../ui/data_grid/ui.data_grid', () => jest.fn());
 jest.mock('../datagrid_component', () => ({
   DataGridComponent: jest.fn().mockImplementation((options) => ({
-    option() { return options; },
+    option: () => options,
+    dispose: jest.fn(),
   })),
 }));
 jest.mock('../utils/get_updated_options');
@@ -184,6 +185,19 @@ describe('DataGrid', () => {
           expect.assertions(0);
         });
       });
+  });
+
+  describe('Behavior', () => {
+    describe('Effects', () => {
+      it('dispose', () => {
+        const component = new DataGrid({});
+        const { instance } = component;
+
+        component.dispose()();
+
+        expect(instance.dispose).toBeCalledTimes(1);
+      });
+    });
   });
 
   describe('', () => {
