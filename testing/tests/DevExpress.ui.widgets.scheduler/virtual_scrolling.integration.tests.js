@@ -1322,11 +1322,6 @@ module('Virtual scrolling integration', () => {
                             return;
                         }
 
-                        if(viewName === 'month') {
-                            assert.ok(true, 'TODO: appointments in virtual month');
-                            return;
-                        }
-
                         const longAppointment = {
                             startDate: new Date(2015, 2, 4, 0, 10),
                             endDate: new Date(2015, 2, 4, 23, 50)
