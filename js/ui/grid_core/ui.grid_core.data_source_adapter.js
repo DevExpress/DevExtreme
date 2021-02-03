@@ -8,6 +8,8 @@ import ArrayStore from '../../data/array_store';
 import { applyBatch } from '../../data/array_utils';
 import { when, Deferred } from '../../core/utils/deferred';
 
+const NEW_SCROLLING_MODE = 'scrolling.newMode';
+
 export default gridCore.Controller.inherit((function() {
     function cloneItems(items, groupCount) {
         if(items) {
@@ -285,7 +287,7 @@ export default gridCore.Controller.inherit((function() {
                 if(operationTypes.reload) {
                     cachedPagingData = undefined;
                     cachedPagesData = createEmptyPagesData();
-                } else if(operationTypes.take || operationTypes.groupExpanding) {
+                } else if(operationTypes.take && !this.option(NEW_SCROLLING_MODE) || operationTypes.groupExpanding) {
                     cachedPagesData = createEmptyPagesData();
                 }
 

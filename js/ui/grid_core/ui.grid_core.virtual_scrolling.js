@@ -174,17 +174,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
                 options.delay = undefined;
             }
 
-            const cachedPagesData = this._cachedPagesData;
-
             this.callBase.apply(this, arguments);
-            if(this.option(NEW_SCROLLING_MODE)) {
-                if(!operationTypes.fullReload && operationTypes.take) {
-                    options.cachedPagesData = cachedPagesData;
-                    if(!options.isCustomLoading) {
-                        this._cachedPagesData = cachedPagesData;
-                    }
-                }
-            }
         },
         items: function() {
             if(this.option(NEW_SCROLLING_MODE)) {
