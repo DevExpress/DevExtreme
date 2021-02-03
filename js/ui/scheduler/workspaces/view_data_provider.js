@@ -159,6 +159,12 @@ class ViewDataGenerator {
             leftVirtualCellWidth,
             rightVirtualCellWidth,
             cellCountInGroupRow,
+            totalCellCount,
+            totalRowCount,
+            cellCount,
+            rowCount,
+            startRowIndex,
+            startCellIndex,
         } = options;
         const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
 
@@ -213,7 +219,11 @@ class ViewDataGenerator {
             leftVirtualCellWidth,
             rightVirtualCellWidth,
             cellCountInGroupRow,
-            isGroupedAllDayPanel
+            isGroupedAllDayPanel,
+            leftVirtualCellCount: startCellIndex,
+            rightVirtualCellCount: totalCellCount - startCellIndex - cellCount,
+            topVirtualRowCount: startRowIndex,
+            bottomVirtualRowCount: totalRowCount - startRowIndex - rowCount,
         };
     }
 
