@@ -1,23 +1,17 @@
 /* eslint-disable class-methods-use-this */
 import DataGridComponent from '../data_grid';
-import BaseComponent from '../component';
 
-jest.mock('../component', () => {
-  class T {
-    static beginUpdateMock = jest.fn();
+const mockBeginUpdate = jest.fn();
+const mockEndUpdate = jest.fn();
 
-    static endUpdateMock = jest.fn();
-
-    beginUpdate() {
-      T.beginUpdateMock();
-    }
-
-    endUpdate() {
-      T.endUpdateMock();
-    }
+jest.mock('../component', () => class {
+  beginUpdate() {
+    mockBeginUpdate();
   }
 
-  return T;
+  endUpdate() {
+    mockEndUpdate();
+  }
 });
 
 it('beginUpdate', () => {
@@ -31,7 +25,7 @@ it('beginUpdate', () => {
   };
   component.beginUpdate();
 
-  expect((BaseComponent as any).beginUpdateMock).toBeCalledTimes(1);
+  expect(mockBeginUpdate).toBeCalledTimes(1);
   expect(beginUpdate).toBeCalledTimes(1);
 });
 
@@ -46,6 +40,6 @@ it('endUpdate', () => {
   };
   component.endUpdate();
 
-  expect((BaseComponent as any).endUpdateMock).toBeCalledTimes(1);
+  expect(mockEndUpdate).toBeCalledTimes(1);
   expect(endUpdate).toBeCalledTimes(1);
 });
