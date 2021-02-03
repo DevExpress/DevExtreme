@@ -16,36 +16,6 @@ const nodeExists = function(array, currentKey) {
     return !!array.filter(function(key) { return key === currentKey; }).length;
 };
 
-const getSelectedChildKeys = function(that, key, keysToIgnore, deep) {
-    const childKeys = [];
-    const node = that._dataController.getNodeByKey(key);
-
-    node && treeListCore.foreachNodes(node.children, function(childNode) {
-        const ignoreKeyIndex = keysToIgnore.indexOf(childNode.key);
-
-        if(ignoreKeyIndex < 0) {
-            childKeys.push(childNode.key);
-        }
-
-        return deep || ignoreKeyIndex > 0 || ignoreKeyIndex < 0 && that._selectionStateByKey[childNode.key] === undefined;
-    }, deep);
-
-    return childKeys;
-};
-
-const normalizeChildrenKeys = function(that, key, selectedRowKeys) {
-    const node = that._dataController.getNodeByKey(key);
-
-    node && node.children.forEach(function(childNode) {
-        const index = selectedRowKeys.indexOf(childNode.key);
-        if(index >= 0) {
-            selectedRowKeys.splice(index, 1);
-        }
-
-        normalizeChildrenKeys(that, childNode.key, selectedRowKeys);
-    });
-};
-
 treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
     defaultOptions: function() {
         return extend(true, selectionModule.defaultOptions(), {
@@ -310,7 +280,20 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _getSelectedChildKeys: function(key, keysToIgnore) {
-                    return getSelectedChildKeys(this, key, keysToIgnore);
+                    const childKeys = [];
+                    const node = this._dataController.getNodeByKey(key);
+
+                    node && treeListCore.foreachNodes(node.children, (childNode) => {
+                        const ignoreKeyIndex = keysToIgnore.indexOf(childNode.key);
+
+                        if(ignoreKeyIndex < 0) {
+                            childKeys.push(childNode.key);
+                        }
+
+                        return ignoreKeyIndex > 0 || ignoreKeyIndex < 0 && this._selectionStateByKey[childNode.key] === undefined;
+                    });
+
+                    return childKeys;
                 },
 
                 _normalizeParentKeys: function(key, args) {
@@ -335,7 +318,16 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _normalizeChildrenKeys: function(key, args) {
-                    normalizeChildrenKeys(this, key, args.selectedRowKeys);
+                    const node = this._dataController.getNodeByKey(key);
+
+                    node && node.children.forEach((childNode) => {
+                        const index = args.selectedRowKeys.indexOf(childNode.key);
+                        if(index >= 0) {
+                            args.selectedRowKeys.splice(index, 1);
+                        }
+
+                        this._normalizeChildrenKeys(childNode.key, args);
+                    });
                 },
 
                 _normalizeSelectedRowKeysCore: function(keys, args, isSelect) {
@@ -397,21 +389,42 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     return mode === 'leavesOnly';
                 },
 
-                _getAllSelectedRowKeys: function(keys) {
+                _removeDuplicatedKeys: function(keys) {
                     const result = [];
-
-                    keys.forEach((key) => normalizeChildrenKeys(this, key, keys));
-                    let keysToIgnore = keys.slice();
+                    const processedKeys = {};
 
                     keys.forEach((key) => {
-                        const parentKeys = this._getSelectedParentKeys(key, keysToIgnore, true);
-                        keysToIgnore = keysToIgnore.concat(parentKeys);
+                        if(!processedKeys[key]) {
+                            processedKeys[key] = true;
+                            result.push(key);
+                        }
+                    });
 
-                        const childKeys = getSelectedChildKeys(this, key, keysToIgnore, true);
-                        keysToIgnore = keysToIgnore.concat(childKeys);
+                    return result;
+                },
+
+                _getAllChildKeys(key) {
+                    const childKeys = [];
+                    const node = this._dataController.getNodeByKey(key);
+
+                    node && treeListCore.foreachNodes(node.children, function(childNode) {
+                        childKeys.push(childNode.key);
+                    }, true);
+
+                    return childKeys;
+                },
+
+                _getAllSelectedRowKeys: function(keys) {
+                    let result = [];
+
+                    keys.forEach((key) => {
+                        const parentKeys = this._getSelectedParentKeys(key, [], true);
+                        const childKeys = this._getAllChildKeys(key);
 
                         result.push.apply(result, parentKeys.concat([key], childKeys));
                     });
+
+                    result = this._removeDuplicatedKeys(result);
 
                     return result;
                 },
