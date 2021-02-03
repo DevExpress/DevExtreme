@@ -53,7 +53,7 @@
           <span class="value">{{ taskCount }}</span>
         </div>
         <div class="column">
-          <span class="text people-count">People assingned: </span>
+          <span class="text people-count">People assigned: </span>
           <span class="value">{{ peopleCount }}</span>
         </div>
         <div class="column">

@@ -91,7 +91,7 @@ class App extends React.Component {
             </div>
             &nbsp;
             <div className="column">
-              <span className="text people-count">People assingned:</span>
+              <span className="text people-count">People assigned:</span>
               &nbsp;
               <span className="value">{this.state.peopleCount}</span>
             </div>
