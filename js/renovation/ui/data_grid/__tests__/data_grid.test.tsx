@@ -162,6 +162,7 @@ describe('DataGrid', () => {
       ${'isRowExpanded'}
       ${'totalCount'}
       ${'getController'}
+      ${'getComponentInstance'}
     `
       .describe('Methods', ({
         methodName,
