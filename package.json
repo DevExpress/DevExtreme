@@ -1,0 +1,49 @@
+{
+  "name": "devextreme-vue",
+  "version": "20.2.4",
+  "description": "DevExtreme Vue UI and Visualization Components",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevExpress/devextreme-vue.git"
+  },
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "clean": "gulp clean",
+    "build": "npm run clean && gulp generate",
+    "pack": "npm run clean && gulp npm.pack",
+    "test": "jest"
+  },
+  "keywords": [
+    "vue",
+    "devextreme",
+    "devexpress"
+  ],
+  "author": "Developer Express Inc.",
+  "license": "MIT",
+  "dependencies": {
+    "devextreme-vue2-strategy": "~20.2.4"
+  },
+  "peerDependencies": {
+    "devextreme": "~20.2.4",
+    "vue": "^2.5.16 || ^3.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.1.2",
+    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/test-utils": "^2.0.0-beta.7",
+    "del": "^3.0.0",
+    "devextreme": "~20.2.4",
+    "devextreme-vue-generator": "^1.0.0",
+    "gulp": "^4.0.0",
+    "gulp-header": "^2.0.5",
+    "gulp-shell": "^0.6.5",
+    "gulp-typescript": "^5.0.0",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.1.0",
+    "typescript": "^4.0.2",
+    "vue": "3.0.0",
+    "vue-router": "^4.0.1",
+    "vue-template-compiler": "^2.6.3"
+  }
+}
