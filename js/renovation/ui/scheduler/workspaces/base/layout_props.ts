@@ -12,6 +12,10 @@ export class LayoutProps {
   @OneWay() viewData: GroupedViewData = {
     groupedData: [],
     cellCountInGroupRow: 0,
+    leftVirtualCellCount: 0,
+    rightVirtualCellCount: 0,
+    topVirtualRowCount: 0,
+    bottomVirtualRowCount: 0,
   };
 
   @OneWay() groupOrientation?: GroupOrientation;
