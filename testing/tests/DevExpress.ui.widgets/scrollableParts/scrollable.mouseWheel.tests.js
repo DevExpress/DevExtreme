@@ -418,7 +418,7 @@ if(devices.current().deviceType === 'desktop') {
             triggerWheelEvent(delta) {
                 pointerMock(this.getScrollableContainer())
                     .start()
-                    .wheel(delta, this._direction === 'horizontal');
+                    .wheel(delta, { shiftKey: this._direction === 'horizontal' });
             }
 
             getScrollableContainer() {
