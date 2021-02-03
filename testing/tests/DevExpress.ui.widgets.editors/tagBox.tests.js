@@ -5290,6 +5290,28 @@ QUnit.module('single line mode', {
         assert.notOk(endingPositionEvent.isPropagationStopped(), 'event propogation is not stopped for the ending position');
     });
 
+    ['ctrlKey', 'metaKey'].forEach((commandKey) => {
+        QUnit.test(`mousewheel with command key shouldn't prevented (${commandKey} pressed)`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'desktop specific test');
+                return;
+            }
+
+            const spy = sinon.spy();
+
+            $(this.$element).on('dxmousewheel', spy);
+
+            $(this.$element).trigger($.Event('dxmousewheel', {
+                delta: -120,
+                [commandKey]: true
+            }));
+
+            const event = spy.args[0][0];
+            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+            assert.notOk(event.isPropagationStopped(), 'propagation is not stopped');
+        });
+    });
+
     QUnit.test('it is should be possible to scroll tag container natively on mobile device', function(assert) {
         const currentDevice = devices.real();
         let $tagBox;

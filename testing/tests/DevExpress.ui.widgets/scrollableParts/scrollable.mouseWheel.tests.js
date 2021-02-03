@@ -178,7 +178,7 @@ QUnit.test('mousewheel for horizontal direction', function(assert) {
 
     pointerMock($container)
         .start()
-        .wheel(-distance, true);
+        .wheel(-distance, { shiftKey: true });
 
     assert.equal(scrollable.scrollOffset().left, distance, 'scrolled horizontally');
 });
