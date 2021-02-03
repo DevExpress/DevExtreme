@@ -308,6 +308,10 @@ const VirtualScrollingRowsViewExtender = (function() {
                 this.scrollToPage(dataController.pageIndex());
             });
 
+            dataController.dataSourceChanged.add(() => {
+                !this._scrollTop && this._scrollToCurrentPageOnResize();
+            });
+
             dataController.stateLoaded?.add(() => {
                 this._scrollToCurrentPageOnResize();
             });
@@ -871,6 +875,7 @@ module.exports = {
                                 }
 
                                 if(!that._rowsScrollController._dataSource.items().length && this.totalItemsCount()) return;
+
                                 that._rowsScrollController.handleDataChanged(change => {
                                     change = change || {};
                                     change.changeType = change.changeType || 'refresh';
