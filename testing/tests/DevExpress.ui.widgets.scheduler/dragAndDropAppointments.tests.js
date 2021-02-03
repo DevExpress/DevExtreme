@@ -2406,10 +2406,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         });
 
         test('Appointment should be returned back if the "update" method rejects deferred during drag (T453486)', function(assert) {
-            if(scrollingMode === 'virtual') {
-                assert.ok(true, 'TODO: appointments in virtual month');
-                return;
-            }
             this.createInstance({
                 views: ['month'],
                 currentView: 'month',
@@ -2445,10 +2441,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         });
 
         test('Appointment should be dragged correctly between the groups in vertical grouped workspace Month', function(assert) {
-            if(scrollingMode === 'virtual') {
-                assert.ok(true, 'TODO: appointments in virtual month');
-                return;
-            }
             this.createInstance({
                 dataSource: [{
                     text: 'a',
@@ -2489,11 +2481,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         });
 
         test('Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month', function(assert) {
-            if(scrollingMode === 'virtual') {
-                assert.ok(true, 'TODO: appointments in virtual month');
-                return;
-            }
-
             this.createInstance({
                 dataSource: [{
                     text: 'a',

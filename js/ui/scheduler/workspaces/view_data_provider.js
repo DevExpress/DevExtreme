@@ -437,7 +437,7 @@ class GroupedDataMapProvider {
     }
 
     findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay) {
-        if(isAllDay) {
+        if(isAllDay || !this._workspace.isDateAndTimeView) {
             return this.findAllDayGroupCellStartDate(groupIndex, startDate);
         }
 
