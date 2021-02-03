@@ -82,7 +82,7 @@
       }
     }
 
-    &.dx-#{$widget-name}-borders {
+    &.dx-#{$widget-name}-borders, &> .dx-#{$widget-name}-borders {
       > .dx-#{$widget-name}-total-footer {
         border-top: 0;
       }
