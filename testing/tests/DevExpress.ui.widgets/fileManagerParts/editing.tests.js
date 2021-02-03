@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
+import renderer from 'core/renderer';
 import browser from 'core/utils/browser';
 import { compare as compareVersion } from 'core/utils/version';
 import CustomFileSystemProvider from 'file_management/custom_provider';
@@ -1008,11 +1009,15 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('parent and all of selected folders must be disabled: copy folders in files area via toolbar (T939043)', function(assert) {
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+
         this.$element.dxFileManager('option', {
             selectionMode: 'multiple',
             itemView: {
                 showFolders: true
-            }
+            },
+            width: '1200px'
         });
         this.clock.tick(400);
         this.wrapper.getRowNameCellInDetailsView(1).trigger('dxhold');
@@ -1033,6 +1038,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
         assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
+        renderer.fn.width = originalFunc;
     });
 
     test('parent and selected folders must be disabled: copy folder in deep location (T939043)', function(assert) {
