@@ -1620,6 +1620,7 @@ module('View Data Provider', () => {
                     viewDataProvider.update(false);
 
                     const completeViewDataMap = testViewDataMap.verticalGrouping;
+
                     const expectedViewData = {
                         groupedData: [{
                             allDayPanel: [completeViewDataMap[0][1]],
