@@ -165,16 +165,10 @@ const Store = Class.inherit({
 
         this._eventsStrategy.fireEvent('beforePush', [beforePushArgs]);
 
-        const processPush = () => {
+        when(...beforePushArgs.waitFor).done(() => {
             this._pushImpl(changes);
             this._eventsStrategy.fireEvent('push', [changes]);
-        };
-
-        if(beforePushArgs.waitFor.length) {
-            when(...beforePushArgs.waitFor).done(processPush);
-        } else {
-            processPush();
-        }
+        });
     },
 
     _pushImpl: noop,
