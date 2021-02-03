@@ -117,9 +117,7 @@ export const execAsync = (assert, promise, beforeAssertCallback, assertCallback,
     });
 };
 
-export const asyncScrollTest = (assert, promise, assertCallback, scrollable, offset) => {
-    const scrollTimeout = 100;
-
+export const asyncScrollTest = (assert, promise, assertCallback, scrollable, offset, scrollTimeout = 100) => {
     const wrapper = () => {
         return execAsync(
             assert,

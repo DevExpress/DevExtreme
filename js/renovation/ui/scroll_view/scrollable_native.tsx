@@ -7,7 +7,7 @@ import {
   RefObject,
   ComponentBindings,
   OneWay,
-  InternalState,
+  Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
@@ -142,9 +142,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
 
-  @InternalState() cachedVariables = {
-    locked: false,
-  };
+  @Mutable() locked = false;
 
   @Method()
   content(): HTMLDivElement {
@@ -397,7 +395,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   private isLocked(): boolean {
-    return this.cachedVariables.locked;
+    return this.locked;
   }
 
   private isScrolledInMaxDirection(e: Event): boolean {

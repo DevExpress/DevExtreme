@@ -19,7 +19,9 @@ import { isDxMouseWheelEvent } from '../../../events/utils/index';
 import { Deferred } from '../../../core/utils/deferred';
 import type { dxPromise } from '../../../core/utils/deferred';
 import { titleize } from '../../../core/utils/inflector';
-import { EventCallback } from '../common/event_callback.d';
+import devices from '../../../core/devices';
+import { BounceAnimator } from './bounce_animator';
+import { InertiaAnimator } from './inertia_animator';
 
 import { ScrollbarProps } from './scrollbar_props';
 import {
@@ -35,6 +37,16 @@ import {
 import BaseWidgetProps from '../../utils/base_props';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
+
+const realDevice = devices.real;
+const isSluggishPlatform = (realDevice as any).platform === 'android';
+/* istanbul ignore next */
+const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
+const FRAME_DURATION = 17; // Math.round(1000 / 60)
+/* istanbul ignore next */
+const BOUNCE_DURATION = isSluggishPlatform ? 300 : 400;
+const BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION;
+const BOUNCE_ACCELERATION_SUM = (1 - ACCELERATION ** BOUNCE_FRAMES) / (1 - ACCELERATION);
 
 const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = 'dx-scrollable-scrollbar-active';
 const SCROLLABLE_SCROLL_CLASS = 'dx-scrollable-scroll';
@@ -75,16 +87,23 @@ type ScrollbarPropsType = ScrollbarProps & Pick<BaseWidgetProps, 'visible'>;
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
+  @Mutable() inertiaAnimator?: InertiaAnimator;
+
+  @Mutable() bounceAnimator?: BounceAnimator;
+
   @Mutable() velocity = 0;
 
-  @InternalState() active = false;
+  @Mutable() bounceLocation = 0;
 
-  @InternalState() cachedVariables = {
-    location: 0,
-    thumbScrolling: false,
-    crossThumbScrolling: false,
-    translateOffset: undefined,
-  };
+  @Mutable() location = 0;
+
+  @Mutable() thumbScrolling = false;
+
+  @Mutable() crossThumbScrolling = false;
+
+  @Mutable() translateOffset?: number;
+
+  @InternalState() active = false;
 
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
@@ -138,6 +157,42 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return (): void => dxPointerUp.off(this.scrollRef, { namespace });
   }
 
+  @Effect()
+  setupAnimators(): () => void {
+    const animatorConfig = this.getAnimatorArgs();
+
+    this.inertiaAnimator = new InertiaAnimator(animatorConfig);
+    this.bounceAnimator = new BounceAnimator(animatorConfig);
+
+    return (): void => {
+      this.inertiaAnimator = undefined;
+      this.bounceAnimator = undefined;
+    };
+  }
+
+  getAnimatorArgs(): Pick<Scrollbar, 'getVelocity' | 'setVelocity' | 'inBounds' | 'scrollStep' | 'scrollComplete' | 'stopComplete' | 'crossBoundOnNextStep' | 'move' | 'getBounceLocation'> {
+    return {
+      getVelocity: this.getVelocity.bind(this),
+      setVelocity: this.setVelocity.bind(this),
+      inBounds: this.inBounds.bind(this),
+      scrollStep: this.scrollStep.bind(this),
+      scrollComplete: this.scrollComplete.bind(this),
+      stopComplete: this.stopComplete.bind(this),
+      crossBoundOnNextStep: this.crossBoundOnNextStep.bind(this),
+      move: this.move.bind(this),
+      getBounceLocation: this.getBounceLocation.bind(this),
+    };
+  }
+
+  /* istanbul ignore next */
+  crossBoundOnNextStep(): boolean {
+    const location = this.getLocation();
+    const nextLocation = location + this.velocity;
+
+    return (location < this.getMinOffset() && nextLocation >= this.getMinOffset())
+        || (location > this.getMaxOffset() && nextLocation <= this.getMaxOffset());
+  }
+
   @Method()
   isThumb(element: HTMLDivElement): boolean {
     return this.scrollbarRef.querySelector(`.${SCROLLABLE_SCROLL_CLASS}`) === element
@@ -168,12 +223,12 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   getLocation(): number {
-    return this.cachedVariables.location;
+    return this.location;
   }
 
   @Method()
-  setLocation(location: number): void {
-    this.cachedVariables.location = location;
+  setLocation(value: number): void {
+    this.location = value;
   }
 
   inBounds(): boolean {
@@ -191,7 +246,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   getMinOffset(): number {
-    return -Math.max(this.props.contentSize - this.props.containerSize, 0);
+    return Math.round(-Math.max(this.props.contentSize - this.props.containerSize, 0));
   }
 
   getAxis(): string {
@@ -203,26 +258,29 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  initHandler(e, action: EventCallback<Event> | undefined,
-    crossThumbScrolling: boolean): dxPromise<void> {
+  initHandler(e, crossThumbScrolling: boolean): dxPromise<void> {
     const stopDeferred = Deferred<void>();
 
-    // this.stopScrolling();
+    this.stopScrolling();
 
     this.prepareThumbScrolling(e, crossThumbScrolling);
-    action?.(e);
 
     return stopDeferred.promise();
   }
 
   @Method()
+  startHandler(): void {
+    this.show();
+  }
+
+  @Method()
   moveHandler(delta: any): void {
-    if (this.cachedVariables.crossThumbScrolling) {
+    if (this.crossThumbScrolling) {
       return;
     }
     const distance = delta;
 
-    if (this.cachedVariables.thumbScrolling) {
+    if (this.thumbScrolling) {
       distance[this.getAxis()] = -Math.round(
         distance[this.getAxis()] / this.containerToContentRatio(),
       );
@@ -232,32 +290,75 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  endHandler(e, action: EventCallback<Event> | undefined): void {
-    this.velocity = e.velocity[this.getAxis()];
+  endHandler(velocity): void {
+    this.velocity = velocity[this.getAxis()];
     this.inertiaHandler();
     this.resetThumbScrolling();
-    action?.(e);
   }
 
   @Method()
   stopHandler(): void {
+    if (this.thumbScrolling) {
+      this.scrollComplete();
+    } else {
+      this.scrollToBounds();
+    }
     this.resetThumbScrolling();
+  }
+
+  @Method()
+  scrollByHandler(delta: { x: number; y: number}): void {
+    this.scrollBy(delta);
+    this.scrollComplete();
+  }
+
+  scrollComplete(): void {
+    if (this.inBounds()) {
+      this.hide();
+    }
+
+    this.scrollToBounds();
+  }
+
+  scrollToBounds(): void {
+    if (this.inBounds()) {
+      return;
+    }
+    // this._bounceAction();
+    this.setupBounce();
+    this.bounceAnimator?.start();
+  }
+
+  setupBounce(): void {
+    this.setBounceLocation(this.boundLocation());
+
+    const bounceDistance = this.getBounceLocation() - this.getLocation();
+
+    this.velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
+  }
+
+  /* istanbul ignore next */
+  // eslint-disable-next-line class-methods-use-this
+  stopComplete(): void { // TODO: it needs if we deside to use the Promises
+    // if(this._stopDeferred) {
+    //     this._stopDeferred.resolve();
+    // }
   }
 
   inertiaHandler(): void {
     this.suppressInertia();
-    // this._inertiaAnimator.start();
+    this.inertiaAnimator?.start();
   }
 
   suppressInertia(): void {
-    if (!this.props.inertiaEnabled || this.cachedVariables.thumbScrolling) {
+    if (!this.props.inertiaEnabled || this.thumbScrolling) {
       this.velocity = 0;
     }
   }
 
   resetThumbScrolling(): void {
-    this.cachedVariables.thumbScrolling = false;
-    this.cachedVariables.crossThumbScrolling = false;
+    this.thumbScrolling = false;
+    this.crossThumbScrolling = false;
   }
 
   scrollBy(delta): void {
@@ -268,13 +369,15 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.scrollStep(distance);
   }
 
-  // stopScrolling(): void {
-  //   // this._hideScrollbar(); // it seems necessary // TODO: check it
-  //   // this._inertiaAnimator.stop();
-  //   // this._bounceAnimator.stop();
-  // }
+  stopScrolling(): void {
+    this.hide();
+    this.inertiaAnimator?.stop();
+    this.bounceAnimator?.stop();
+  }
 
-  prepareThumbScrolling(e, crossThumbScrolling: boolean): void {
+  // TODO: cross naming with mutable variabless (crossThumbScrolling -> currentCrossThumbScrolling)
+  // https://trello.com/c/ohg2pHUZ/2579-mutable-cross-naming
+  prepareThumbScrolling(e, currentCrossThumbScrolling: boolean): void {
     if (isDxMouseWheelEvent(e.originalEvent)) {
       return;
     }
@@ -287,11 +390,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       this.moveToMouseLocation(e);
     }
 
-    const thumbScrolling = scrollbarClicked || (scrollByThumb && this.isThumb(target));
-    this.cachedVariables.thumbScrolling = thumbScrolling;
-    this.cachedVariables.crossThumbScrolling = !thumbScrolling && crossThumbScrolling;
+    // TODO: cross naming with mutable variabless (thumbScrolling -> currentThumbScrolling)
+    // https://trello.com/c/ohg2pHUZ/2579-mutable-cross-naming
+    const currentThumbScrolling = scrollbarClicked || (scrollByThumb && this.isThumb(target));
+    this.thumbScrolling = currentThumbScrolling;
+    this.crossThumbScrolling = !currentThumbScrolling && currentCrossThumbScrolling;
 
-    if (thumbScrolling) {
+    if (currentThumbScrolling) {
       this.feedbackOn();
     }
   }
@@ -301,7 +406,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
     const mouseLocation = e[`page${this.getAxis().toUpperCase()}`] - scrollableOffset;
     const location = this.getLocation() + mouseLocation
-    / this.containerToContentRatio() - getElementHeight(this.getContainerRef().current) / 2;
+    / this.containerToContentRatio() - getElementHeight(this.getContainerRef()) / 2;
 
     this.scrollStep(-Math.round(location));
   }
@@ -322,21 +427,36 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     // eventsEngine.triggerHandler(this.props.containerRef, { type: 'scroll' }); // TODO
   }
 
-  setVelocity(value: number): void {
-    this.velocity = value;
+  show(): void {
+    this.props.onChangeVisibility?.(true);
+  }
+
+  hide(): void {
+    this.props.onChangeVisibility?.(false);
   }
 
   getVelocity(): number {
     return this.velocity;
   }
 
-  getContainerRef(): any {
-    return this.props.containerRef;
+  setBounceLocation(value: number): void {
+    this.bounceLocation = value;
   }
 
-  /* istanbul ignore next */
-  getContentRef(): any {
-    return this.props.contentRef;
+  getBounceLocation(): number {
+    return this.bounceLocation;
+  }
+
+  setVelocity(value: number): void {
+    this.velocity = value;
+  }
+
+  getContainerRef(): HTMLDivElement {
+    return this.props.containerRef.current;
+  }
+
+  getContentRef(): HTMLDivElement {
+    return this.props.contentRef.current;
   }
 
   suppressBounce(): void {
@@ -344,7 +464,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return;
     }
 
-    /* istanbul ignore next */
     this.velocity = 0;
     this.setLocation(this.boundLocation());
   }
@@ -363,38 +482,37 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   moveContent(): void {
     const location = this.getLocation();
 
-    this.getContainerRef().current[`scroll${titleize(this.getProp())}`] = -location / this.props.scaleRatio;
+    this.getContainerRef()[`scroll${titleize(this.getProp())}`] = -location / this.props.scaleRatio;
     this.moveContentByTranslator(location);
   }
 
   moveContentByTranslator(location): undefined | void {
-    let translateOffset;
+    let currentTranslateOffset;
     const minOffset = this.getMinOffset();
 
     /* istanbul ignore next */
     if (location > 0) {
-      translateOffset = location;
+      currentTranslateOffset = location;
     } else if (location <= minOffset) {
       /* istanbul ignore next */
-      translateOffset = location - minOffset;
+      currentTranslateOffset = location - minOffset;
     } else {
-      translateOffset = location % 1;
+      currentTranslateOffset = location % 1;
     }
 
-    if (this.cachedVariables.translateOffset === translateOffset) {
+    if (this.translateOffset === currentTranslateOffset) {
       return;
     }
 
     const targetLocation = {};
-    targetLocation[this.getProp()] = translateOffset;
-    this.cachedVariables.translateOffset = translateOffset;
+    targetLocation[this.getProp()] = currentTranslateOffset;
+    this.translateOffset = currentTranslateOffset;
 
-    if (translateOffset === 0) {
-      resetPosition(this.getContentRef().current);
-      return;
+    if (currentTranslateOffset === 0) {
+      resetPosition(this.getContentRef());
     }
 
-    move(this.getContentRef().current, targetLocation);
+    move(this.getContentRef(), targetLocation);
   }
 
   thumbSize(): number {

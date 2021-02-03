@@ -8,6 +8,7 @@ import DataGrid from '../data_grid/ui.data_grid';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
+import { Deferred } from '../../core/utils/deferred';
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = 'dx-filemanager-details';
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-details-item-thumbnail';
@@ -98,7 +99,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this),
             onFocusedRowChanged: this._onFilesViewFocusedRowChanged.bind(this),
-            onOptionChanged: this._onFilesViewOptionChanged.bind(this)
+            onOptionChanged: this._onFilesViewOptionChanged.bind(this),
+            onContentReady: () => this._refreshDeferred?.resolve()
         });
     }
 
@@ -426,6 +428,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
 
         this._filesView.option(actualOptions);
+
+        this._refreshDeferred = new Deferred();
+        return this._refreshDeferred.promise();
     }
 
     getSelectedItems() {

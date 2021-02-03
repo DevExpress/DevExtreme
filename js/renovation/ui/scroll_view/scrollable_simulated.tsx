@@ -6,6 +6,7 @@ import {
   Effect,
   RefObject,
   InternalState,
+  Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Scrollbar } from './scrollbar';
@@ -79,7 +80,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
     horizontalScrollbarRef, verticalScrollbarRef,
     cursorEnterHandler, cursorLeaveHandler,
-    isScrollbarVisible,
+    isScrollbarVisible, onChangeVisibility,
     scaleRatioWidth, scaleRatioHeight,
     scrollableOffsetLeft, scrollableOffsetTop,
     contentWidth, containerWidth, contentHeight, containerHeight,
@@ -149,6 +150,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               baseContentSize={baseContentWidth}
               baseContainerSize={baseContainerWidth}
               visible={isScrollbarVisible}
+              onChangeVisibility={onChangeVisibility}
               scrollByThumb={scrollByThumb}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
@@ -169,6 +171,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               baseContainerSize={baseContainerHeight}
               visible={isScrollbarVisible}
               scrollByThumb={scrollByThumb}
+              onChangeVisibility={onChangeVisibility}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
@@ -185,6 +188,14 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   view: viewFunction,
 })
 export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsType>() {
+  @Mutable() validateWheelTimer?: any;
+
+  @Mutable() locked = false;
+
+  @Mutable() eventForUserAction?: Event;
+
+  @Mutable() validDirections: { horizontal?: boolean; vertical?: boolean } = {};
+
   @Ref() scrollableRef!: RefObject<HTMLDivElement>;
 
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
@@ -198,6 +209,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Ref() horizontalScrollbarRef!: RefObject<any>; // TODO: any -> Scrollbar (Generators)
 
   @InternalState() isHovered = false;
+
+  @InternalState() needShowScrollbars = false;
 
   @InternalState() scaleRatioWidth;
 
@@ -223,21 +236,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() baseContainerHeight = 0;
 
-  @InternalState() validDirections = {};
-
-  @InternalState() cachedVariables = {
-    validateWheelTimer: undefined,
-    locked: false,
-    eventForUserAction: null,
-  };
-
   @Method()
   content(): HTMLDivElement {
     return this.contentRef;
   }
 
   @Method()
-  scrollBy(distance: number | Partial<ScrollableLocation>): void {
+  scrollBy(distance: number | Partial<ScrollableLocation>): void { // TODO: rewrite method
     const location = ensureLocation(distance);
     const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
 
@@ -247,6 +252,15 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     if (isHorizontal) {
       this.containerRef.scrollLeft += normalizeCoordinate('left', Math.round(location.left), this.props.rtlEnabled);
     }
+
+    this.prepareDirections(true);
+    this.props.onStart?.(this.getEventArgs());
+    this.eventHandler(
+      (scrollbar) => scrollbar.scrollByHandler(
+        { x: location.left, y: location.top },
+      ),
+    );
+    this.props.onEnd?.(this.getEventArgs());
   }
 
   @Method()
@@ -328,7 +342,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Effect({ run: 'once' })
   disposeWheelTimer(): DisposeEffectReturn {
-    return () => this.clearWheelValidationTimer();
+    return (): void => this.clearWheelValidationTimer();
   }
 
   @Effect() scrollEffect(): DisposeEffectReturn {
@@ -338,7 +352,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   getEventArgs(): ScrollEventArgs {
     return {
-      event: this.cachedVariables.eventForUserAction,
+      event: this.eventForUserAction,
       scrollOffset: this.scrollOffset(),
       ...getBoundaryProps(this.props.direction, this.scrollOffset(), this.containerRef),
     };
@@ -422,6 +436,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
   }
 
+  onChangeVisibility(visible: boolean): void {
+    this.needShowScrollbars = visible;
+  }
+
   cursorEnterHandler(): void {
     if (this.isHoverMode()) {
       this.isHovered = true;
@@ -434,32 +452,37 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
   }
 
-  /* istanbul ignore next */
   handleInit(e: Event): void {
     this.suppressDirections(e);
-    this.cachedVariables.eventForUserAction = e;
+    this.eventForUserAction = e;
 
     const crossThumbScrolling = this.isThumbScrolling(e);
 
+    this.needShowScrollbars = true;
+
     this.eventHandler(
-      (scrollbar) => scrollbar.initHandler(
-        e,
-        this.props.onStop,
-        crossThumbScrolling,
-      ),
+      (scrollbar) => scrollbar.initHandler(e, crossThumbScrolling),
     );
+
+    this.props.onStop?.(this.getEventArgs());
   }
 
-  /* istanbul ignore next */
   private handleStart(e: Event): void {
-    this.cachedVariables.eventForUserAction = e;
+    this.eventForUserAction = e;
+    this.needShowScrollbars = true;
+
+    this.eventHandler(
+      (scrollbar) => scrollbar.startHandler(e),
+    );
+
+    this.props.onStart?.(this.getEventArgs());
   }
 
   private handleMove(e): void {
     e.preventDefault && e.preventDefault();
 
     this.adjustDistance(e, 'delta');
-    this.cachedVariables.eventForUserAction = e;
+    this.eventForUserAction = e;
 
     this.eventHandler(
       (scrollbar) => scrollbar.moveHandler(e.delta),
@@ -468,22 +491,27 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   private handleEnd(e): void {
     this.adjustDistance(e, 'velocity');
-    this.cachedVariables.eventForUserAction = e;
+    this.eventForUserAction = e;
 
     this.eventHandler(
-      (scrollbar) => scrollbar.endHandler(e, this.props.onEnd),
+      (scrollbar) => scrollbar.endHandler(e.velocity),
     );
+
+    this.props.onEnd?.(this.getEventArgs());
   }
 
   private handleStop(): void {
+    this.needShowScrollbars = false;
+
     this.eventHandler(
       (scrollbar) => scrollbar.stopHandler(),
     );
   }
 
-  /* istanbul ignore next */
   private handleCancel(e: Event): void {
-    this.cachedVariables.eventForUserAction = e;
+    this.eventForUserAction = e;
+
+    this.eventHandler((scrollbar) => scrollbar.endHandler({ x: 0, y: 0 }));
   }
 
   isThumbScrolling(e): boolean {
@@ -508,8 +536,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   adjustDistance(e, property: string): void {
     const distance = e[property];
 
-    distance.x *= this.validDirections[DIRECTION_HORIZONTAL];
-    distance.y *= this.validDirections[DIRECTION_VERTICAL];
+    distance.x *= this.validDirections[DIRECTION_HORIZONTAL] ? 1 : 0;
+    distance.y *= this.validDirections[DIRECTION_VERTICAL] ? 1 : 0;
 
     const devicePixelRatio = this.tryGetDevicePixelRatio();
     if (devicePixelRatio && isDxMouseWheelEvent(e.originalEvent)) {
@@ -660,7 +688,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private isLocked(): boolean {
-    return this.cachedVariables.locked;
+    return this.locked;
   }
 
   private validateWheel(e: Event): boolean {
@@ -681,21 +709,21 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     let validated = contentGreaterThanContainer
       && (locatedNotAtBound || scrollFromMin || scrollFromMax);
 
-    validated = validated || this.cachedVariables.validateWheelTimer !== undefined;
+    validated = validated || this.validateWheelTimer !== undefined;
 
     if (validated) {
       this.clearWheelValidationTimer();
-      this.cachedVariables.validateWheelTimer = setTimeout(
+      this.validateWheelTimer = setTimeout(
         this.clearWheelValidationTimer, VALIDATE_WHEEL_TIMEOUT,
-      ) as any;
+      );
     }
 
     return validated;
   }
 
   private clearWheelValidationTimer(): void {
-    clearTimeout(this.cachedVariables.validateWheelTimer);
-    this.cachedVariables.validateWheelTimer = undefined;
+    clearTimeout(this.validateWheelTimer);
+    this.validateWheelTimer = undefined;
   }
 
   private validateMove(e: Event): boolean {
@@ -726,22 +754,22 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     switch (normalizeKeyName(e)) {
       case KEY_CODES.DOWN:
-        this.scrollByLine({ y: 1 });
-        break;
-      case KEY_CODES.UP:
         this.scrollByLine({ y: -1 });
         break;
-      case KEY_CODES.RIGHT:
-        this.scrollByLine({ x: 1 });
+      case KEY_CODES.UP:
+        this.scrollByLine({ y: 1 });
         break;
-      case KEY_CODES.LEFT:
+      case KEY_CODES.RIGHT:
         this.scrollByLine({ x: -1 });
         break;
+      case KEY_CODES.LEFT:
+        this.scrollByLine({ x: 1 });
+        break;
       case KEY_CODES.PAGE_DOWN:
-        this.scrollByPage(1);
+        this.scrollByPage(-1);
         break;
       case KEY_CODES.PAGE_UP:
-        this.scrollByPage(-1);
+        this.scrollByPage(1);
         break;
       case KEY_CODES.HOME:
         this.scrollToHome();
@@ -841,26 +869,19 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get isScrollbarVisible(): boolean {
-    return this.adjustVisibility();
-  }
-
-  adjustVisibility(): boolean {
     const { showScrollbar } = this.props;
 
     if (showScrollbar === 'never') {
       return false;
     }
     if (showScrollbar === 'onHover') {
-      return this.isHovered;
-    }
-    if (showScrollbar === 'onScroll') {
-      return false; // TODO
+      return this.needShowScrollbars || this.isHovered;
     }
     if (showScrollbar === 'always') {
       return true;
     }
 
-    return false;
+    return this.needShowScrollbars || false;
   }
 
   @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
