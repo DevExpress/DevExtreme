@@ -1432,8 +1432,8 @@ module('View Data Provider', {
                 test('viewData should be generated correctly if horizontal grouping', function(assert) {
                     const viewDataProvider = createViewDataProvider({
                         workspaceMock: horizontalGroupedWorkspaceMock,
-                        completeViewDataMap: testViewDataMap.horizontalGrouping,
-                        completeDateHeaderMap: testHeaderDataMap.horizontalGrouping,
+                        completeViewDataMap: horizontalDataMap,
+                        completeDateHeaderMap: horizontalDateHeaderMap,
                     });
 
                     const completeViewDataMap = horizontalDataMap;
@@ -1535,9 +1535,9 @@ module('View Data Provider', {
             module('groupedDataMap', () => {
                 test('groupedDataMap should be generated correctly if vertical grouping', function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        workspaceMock: horizontalGroupedWorkspaceMock,
-                        completeViewDataMap: horizontalDataMap,
-                        completeDateHeaderMap: horizontalDateHeaderMap,
+                        workspaceMock: virtualVerticalWorkSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
                     });
 
                     const completeViewDataMap = testViewDataMap.verticalGrouping;
@@ -1572,10 +1572,11 @@ module('View Data Provider', {
                 });
 
                 test('groupedDataMap should be generated correctly if horizontal grouping', function(assert) {
-                    const viewDataProvider = new ViewDataProvider(horizontalGroupedWorkspaceMock);
-                    viewDataProvider.completeViewDataMap = horizontalDataMap;
-                    viewDataProvider.completeDateHeaderMap = horizontalDateHeaderMap;
-                    viewDataProvider.update(false);
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: horizontalGroupedWorkspaceMock,
+                        completeViewDataMap: horizontalDataMap,
+                        completeDateHeaderMap: horizontalDateHeaderMap,
+                    });
 
                     const completeViewDataMap = horizontalDataMap;
 
