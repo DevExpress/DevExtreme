@@ -1,0 +1,49 @@
+{
+  "author": "Developer Express Inc.",
+  "name": "devextreme-angular-generator",
+  "version": "1.0.0",
+  "description": "Angular UI and visualization components based on DevExtreme widgets",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevExpress/devextreme-angular.git"
+  },
+  "main": "dist/dot-generator",
+  "types": "dist/dot-generator",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "gulp": "npx --node-arg=--max_old_space_size=8048 gulp",
+    "build": "npm run gulp -- build",
+    "test": "npm run gulp -- test",
+    "pack": "npm run gulp -- npm.pack"
+  },
+  "keywords": [
+    "angular",
+    "devextreme",
+    "devexpress"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "deepmerge": "^2.0.1",
+    "dot": "^1.0.3",
+    "inflector-js": "^1.0.1",
+    "mkdirp": "^0.5.1",
+    "yargs": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/dot": "^1.0.29",
+    "@types/jasmine": "2.5.38",
+    "@types/mkdirp": "^0.3.29",
+    "@types/node": "~8.9.4",
+    "@types/yargs": "^6.3.2",
+    "del": "^2.2.0",
+    "gulp": "^4.0.0",
+    "gulp-jasmine": "^2.3.0",
+    "gulp-shell": "^0.5.2",
+    "gulp-sourcemaps": "^2.0.0-alpha",
+    "gulp-typescript": "^3.0.1",
+    "jasmine-reporters": "2.2.0",
+    "typescript": "~3.2.2"
+  }
+}
