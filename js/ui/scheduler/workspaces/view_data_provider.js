@@ -56,6 +56,8 @@ class ViewDataGenerator {
                 })));
             });
         });
+
+        return completeViewDataMap;
     }
 
     _transformViewDataMapForVerticalGrouping(viewDataMap, groupsList) {
@@ -75,18 +77,17 @@ class ViewDataGenerator {
     }
 
     _transformViewDataMapForGroupingByDate(viewDataMap, groupsList) {
-        return viewDataMap.map((cellsRow) => cellsRow.reduce((currentRow, cell) => {
-            currentRow.push(cell);
-            groupsList.slice(1).forEach((groups, index) => {
-                currentRow.push({
-                    ...cell,
-                    groups,
-                    groupIndex: index + 1,
-                });
-            });
+        const correctedGroupList = groupsList.slice(1);
 
-            return currentRow;
-        }, []));
+        return viewDataMap.map((cellsRow) => cellsRow.reduce((currentRow, cell) => [
+            ...currentRow,
+            cell,
+            ...correctedGroupList.map((groups, index) => ({
+                ...cell,
+                groups,
+                groupIndex: index + 1,
+            })),
+        ], []));
     }
 
     _getCompleteDateHeaderMap(options, completeViewDataMap) {
