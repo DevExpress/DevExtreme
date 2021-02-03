@@ -104,10 +104,13 @@ module('Renovated Render', {
                     cellCountInGroupRow: 1,
                     bottomVirtualRowHeight: undefined,
                     isGroupedAllDayPanel: false,
-                    isVirtual: false,
                     topVirtualRowHeight: undefined,
                     leftVirtualCellWidth: undefined,
-                    rightVirtualCellWidth: undefined
+                    rightVirtualCellWidth: undefined,
+                    bottomVirtualRowCount: 0,
+                    topVirtualRowCount: 0,
+                    leftVirtualCellCount: 0,
+                    rightVirtualCellCount: 0,
                 };
                 const expectedViewDataMap = [
                     [{
@@ -235,10 +238,13 @@ module('Renovated Render', {
                     }],
                     bottomVirtualRowHeight: undefined,
                     isGroupedAllDayPanel: false,
-                    isVirtual: false,
                     topVirtualRowHeight: undefined,
                     leftVirtualCellWidth: undefined,
-                    rightVirtualCellWidth: undefined
+                    rightVirtualCellWidth: undefined,
+                    bottomVirtualRowCount: 0,
+                    topVirtualRowCount: 0,
+                    leftVirtualCellCount: 0,
+                    rightVirtualCellCount: 0,
                 };
 
                 const expectedViewDataMap = [[{
