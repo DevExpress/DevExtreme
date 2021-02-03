@@ -16,7 +16,7 @@
     "gulp": "npx --node-arg=--max_old_space_size=8048 gulp",
     "build": "npm run gulp -- build",
     "test": "npm run gulp -- test",
-    "pack": "npm run gulp -- npm.pack"
+    "pack": "npm run gulp -- build && npm run gulp -- npm.pack"
   },
   "keywords": [
     "angular",
