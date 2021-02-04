@@ -133,11 +133,10 @@
                 triggerEvent('click');
             },
 
-            wheel: function(d, shiftKey) {
-                triggerEvent('dxmousewheel', {
-                    delta: d,
-                    shiftKey: shiftKey
-                });
+            wheel: function(d, args) {
+                triggerEvent('dxmousewheel', $.extend({
+                    delta: d
+                }, args));
                 triggerEvent('scroll');
 
                 return this;
