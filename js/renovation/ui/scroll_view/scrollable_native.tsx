@@ -21,6 +21,7 @@ import {
 } from './scrollable_props';
 import { TopPocketProps } from './top_pocket_props';
 import { BottomPocketProps } from './bottom_pocket_props';
+import '../../../events/gesture/emitter.gesture.scroll';
 
 import {
   allowedDirection,
