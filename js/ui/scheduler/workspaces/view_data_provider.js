@@ -60,28 +60,7 @@ class ViewDataGenerator {
             });
         });
 
-        const {
-            currentViewDataMap: result,
-        } = completeViewDataMap.reduce(({ allDayPanelsCount, currentViewDataMap }, row, rowIndex) => {
-            const isAllDay = row[0].allDay;
-
-            const keyBase = (rowIndex - allDayPanelsCount) * totalColumnCount;
-
-            const currentAllDayPanelsCount = isAllDay
-                ? allDayPanelsCount + 1
-                : allDayPanelsCount;
-
-            currentViewDataMap[rowIndex].forEach((cell, cellIndex) => {
-                cell.key = keyBase + cellIndex;
-            });
-
-            return { allDayPanelsCount: currentAllDayPanelsCount, currentViewDataMap };
-        }, {
-            allDayPanelsCount: 0,
-            currentViewDataMap: completeViewDataMap,
-        });
-
-        return result;
+        return this._addKeysToCells(completeViewDataMap, totalColumnCount);
     }
 
     _transformViewDataMapForVerticalGrouping(viewDataMap, groupsList, totalColumnCount) {
@@ -97,28 +76,7 @@ class ViewDataGenerator {
             }))));
         });
 
-        const {
-            currentViewDataMap: result,
-        } = completeViewDataMap.reduce(({ allDayPanelsCount, currentViewDataMap }, row, rowIndex) => {
-            const isAllDay = row[0].allDay;
-
-            const keyBase = (rowIndex - allDayPanelsCount) * totalColumnCount;
-
-            const currentAllDayPanelsCount = isAllDay
-                ? allDayPanelsCount + 1
-                : allDayPanelsCount;
-
-            currentViewDataMap[rowIndex].forEach((cell, cellIndex) => {
-                cell.key = keyBase + cellIndex;
-            });
-
-            return { allDayPanelsCount: currentAllDayPanelsCount, currentViewDataMap };
-        }, {
-            allDayPanelsCount: 0,
-            currentViewDataMap: completeViewDataMap,
-        });
-
-        return result;
+        return this._addKeysToCells(completeViewDataMap, totalColumnCount);
     }
 
     _transformViewDataMapForGroupingByDate(viewDataMap, groupsList, totalColumnCount) {
@@ -141,9 +99,13 @@ class ViewDataGenerator {
             })),
         ], []));
 
+        return this._addKeysToCells(completeViewDataMap, totalColumnCount);
+    }
+
+    _addKeysToCells(viewDataMap, totalColumnCount) {
         const {
             currentViewDataMap: result,
-        } = completeViewDataMap.reduce(({ allDayPanelsCount, currentViewDataMap }, row, rowIndex) => {
+        } = viewDataMap.reduce(({ allDayPanelsCount, currentViewDataMap }, row, rowIndex) => {
             const isAllDay = row[0].allDay;
 
             const keyBase = (rowIndex - allDayPanelsCount) * totalColumnCount;
@@ -159,7 +121,7 @@ class ViewDataGenerator {
             return { allDayPanelsCount: currentAllDayPanelsCount, currentViewDataMap };
         }, {
             allDayPanelsCount: 0,
-            currentViewDataMap: completeViewDataMap,
+            currentViewDataMap: viewDataMap,
         });
 
         return result;
