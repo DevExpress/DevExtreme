@@ -102,7 +102,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    maxFilterLength?: number;
+    maxFilterQueryLength?: number;
     /**
      * @docid
      * @default true

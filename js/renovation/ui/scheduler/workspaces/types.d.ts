@@ -18,16 +18,22 @@ export interface DateHeaderCellData extends ViewCellData {
   colSpan: number;
 }
 
-interface ViewData {
-  dateTable: ViewCellData[][];
+interface ViewDataBase {
   groupIndex: number;
-  allDayPanel?: ViewCellData[];
   isGroupedAllDayPanel?: boolean;
 }
 
-export interface GroupedViewData {
-  groupedData: ViewData[];
-  isVirtual?: boolean;
+interface ViewData extends ViewDataBase {
+  dateTable: ViewCellData[][];
+  allDayPanel?: ViewCellData[];
+}
+
+interface TimePanelCellsData extends ViewDataBase {
+  dateTable: ViewCellData[];
+  allDayPanel?: ViewCellData;
+}
+
+interface GroupedViewDataBase {
   topVirtualRowHeight?: number;
   bottomVirtualRowHeight?: number;
   leftVirtualCellWidth?: number;
@@ -37,6 +43,14 @@ export interface GroupedViewData {
   rightVirtualCellCount: number;
   topVirtualRowCount: number;
   bottomVirtualRowCount: number;
+}
+
+export interface GroupedViewData extends GroupedViewDataBase {
+  groupedData: ViewData[];
+}
+
+export interface TimePanelData extends GroupedViewDataBase {
+  groupedData: TimePanelCellsData[];
 }
 
 export interface GroupItem {
