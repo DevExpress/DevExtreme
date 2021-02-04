@@ -6486,13 +6486,13 @@ declare module DevExpress.ui {
          */
         selectedItemKey?: string | number;
         /**
-         * [descr:dxDropDownButton.Options.showArrowIcon]
-         */
-        showArrowIcon?: boolean;
-        /**
          * [descr:dxDropDownButton.Options.setItemTextAsTitle]
          */
         setItemTextAsTitle?: boolean;
+        /**
+         * [descr:dxDropDownButton.Options.showArrowIcon]
+         */
+        showArrowIcon?: boolean;
         /**
          * [descr:dxDropDownButton.Options.splitButton]
          */
@@ -6687,13 +6687,13 @@ declare module DevExpress.ui {
          */
         selectedItem?: any;
         /**
-         * [descr:dxDropDownList.Options.showDataBeforeSearch]
-         */
-        showDataBeforeSearch?: boolean;
-        /**
          * [descr:dxDropDownList.Options.setItemTextAsTitle]
          */
         setItemTextAsTitle?: boolean;
+        /**
+         * [descr:dxDropDownList.Options.showDataBeforeSearch]
+         */
+        showDataBeforeSearch?: boolean;
         /**
          * [descr:dxDropDownList.Options.value]
          */
