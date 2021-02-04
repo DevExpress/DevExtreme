@@ -5157,7 +5157,6 @@
           {
             "Title": "Web API Service",
             "Name": "WebApi",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Web_API,_PHP,_MongoDB/",
             "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
             "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
             "Equivalents": "webapi",
