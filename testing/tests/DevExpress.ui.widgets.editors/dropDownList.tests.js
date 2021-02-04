@@ -35,6 +35,10 @@ const getPopup = (instance) => {
     return instance._popup;
 };
 
+const getList = (instance) => {
+    return instance._list;
+};
+
 const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
@@ -74,7 +78,7 @@ QUnit.module('focus policy', {
         this.clock.tick(500);
         this.keyboard.keyDown('down');
         const $firstItem = this.instance._$list.find(LIST_ITEM_SELECTOR).eq(0);
-        assert.equal(isRenderer(this.instance._list.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.equal(isRenderer(getList(this.instance).option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS), 'first list element is focused');
 
         this.keyboard.type('some text');
@@ -267,6 +271,7 @@ QUnit.module('displayExpr', moduleConfig, () => {
             dataSource,
             deferRendering: false,
             value: 2,
+            showItemDataTitle: false,
             displayExpr(item) {
                 args.push(item);
             }
@@ -330,6 +335,29 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
         instance.option('wrapItemText', false);
         assert.notOk($itemContainer.hasClass('dx-wrap-item-text'), 'class was removed');
+    });
+
+    [true, false].forEach(showItemDataTitle => {
+        QUnit.test(`showItemDataTitle=${showItemDataTitle} option should be passed to list on init`, function(assert) {
+            const dropDownList = $('#dropDownList').dxDropDownList({
+                deferRendering: false,
+                showItemDataTitle
+            }).dxDropDownList('instance');
+            const list = getList(dropDownList);
+
+            assert.strictEqual(list.option('showItemDataTitle'), showItemDataTitle, 'list option initial value is correct');
+        });
+
+        QUnit.test(`showItemDataTitle option runtime change to ${showItemDataTitle} should be passed to list`, function(assert) {
+            const dropDownList = $('#dropDownList').dxDropDownList({
+                deferRendering: false,
+                showItemDataTitle: !showItemDataTitle
+            }).dxDropDownList('instance');
+            const list = getList(dropDownList);
+
+            dropDownList.option('showItemDataTitle', showItemDataTitle);
+            assert.strictEqual(list.option('showItemDataTitle'), showItemDataTitle, 'list option value is correct after runtime change');
+        });
     });
 
     QUnit.test('widget should render with empty items', function(assert) {
@@ -1005,7 +1033,7 @@ QUnit.module('selectedItem', moduleConfig, () => {
         dropDownList.option('opened', true);
         this.clock.tick(1000);
 
-        assert.equal(dropDownList._list.option('selectedItem'), 1, 'selectedItem is correct');
+        assert.equal(getList(dropDownList).option('selectedItem'), 1, 'selectedItem is correct');
     });
 
     QUnit.test('reset()', function(assert) {
