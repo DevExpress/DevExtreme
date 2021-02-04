@@ -286,7 +286,7 @@ const TagBox = SelectBox.inherit({
 
             showDropDownButton: false,
 
-            maxFilterLength: 1500,
+            maxFilterQueryLength: 1500,
 
             tagTemplate: 'tag',
 
@@ -758,14 +758,14 @@ const TagBox = SelectBox.inherit({
     _getFilter: function(creator) {
         const dataSourceFilter = this._dataSource.filter();
         const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
-        const filterLength = encodeURI(JSON.stringify(filterExpr)).length;
-        const maxFilterLength = this.option('maxFilterLength');
+        const filterQueryLength = encodeURI(JSON.stringify(filterExpr)).length;
+        const maxFilterQueryLength = this.option('maxFilterQueryLength');
 
-        if(filterLength <= maxFilterLength) {
+        if(filterQueryLength <= maxFilterQueryLength) {
             return filterExpr;
         }
 
-        errors.log('W0017', maxFilterLength);
+        errors.log('W0017', maxFilterQueryLength);
     },
 
     _getFilteredItems: function(values) {
@@ -1510,7 +1510,7 @@ const TagBox = SelectBox.inherit({
                 this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !args.value);
                 this._renderSingleLineScroll();
                 break;
-            case 'maxFilterLength':
+            case 'maxFilterQueryLength':
                 break;
             default:
                 this.callBase(args);
