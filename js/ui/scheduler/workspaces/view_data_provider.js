@@ -19,20 +19,21 @@ class ViewDataGenerator {
             groupByDate,
             isHorizontalGrouping,
             isVerticalGrouping,
+            totalCellCount,
         } = options;
         const viewDataMap = [];
         const allDayPanelData = this._generateAllDayPanelData(options, 0, totalRowCount, cellCountInGroupRow);
-        const viewCellsData = this._generateViewCellsData(options, totalRowCount, 0, 0);
+        const viewCellsData = this._generateViewCellsData(options, totalRowCount);
 
         allDayPanelData && viewDataMap.push(allDayPanelData);
         viewDataMap.push(...viewCellsData);
 
         if(isHorizontalGrouping && !groupByDate) {
-            return this._transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList);
+            return this._transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList, totalCellCount);
         }
 
         if(isVerticalGrouping) {
-            return this._transformViewDataMapForVerticalGrouping(viewDataMap, groupsList);
+            return this._transformViewDataMapForVerticalGrouping(viewDataMap, groupsList, totalCellCount);
         }
 
         if(groupByDate) {
@@ -42,7 +43,7 @@ class ViewDataGenerator {
         return viewDataMap;
     }
 
-    _transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList) {
+    _transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList, totalColumnCount) {
         const completeViewDataMap = viewDataMap.map(row => row.slice());
 
         groupsList.slice(1).forEach((groups, index) => {
@@ -57,10 +58,31 @@ class ViewDataGenerator {
             });
         });
 
-        return completeViewDataMap;
+        const {
+            currentViewDataMap: result,
+        } = completeViewDataMap.reduce(({ allDayPanelsCount, currentViewDataMap }, row, rowIndex) => {
+            const isAllDay = row[0].allDay;
+
+            const keyBase = (rowIndex - allDayPanelsCount) * totalColumnCount;
+
+            const currentAllDayPanelsCount = isAllDay
+                ? allDayPanelsCount + 1
+                : allDayPanelsCount;
+
+            currentViewDataMap[rowIndex].forEach((cell, cellIndex) => {
+                cell.key = keyBase + cellIndex;
+            });
+
+            return { allDayPanelsCount: currentAllDayPanelsCount, currentViewDataMap };
+        }, {
+            allDayPanelsCount: 0,
+            currentViewDataMap: completeViewDataMap,
+        });
+
+        return result;
     }
 
-    _transformViewDataMapForVerticalGrouping(viewDataMap, groupsList) {
+    _transformViewDataMapForVerticalGrouping(viewDataMap, groupsList, totalColumnCount) {
         const completeViewDataMap = viewDataMap.map(row => row.slice());
 
         groupsList.slice(1).forEach((groups, index) => {
@@ -73,7 +95,28 @@ class ViewDataGenerator {
             }))));
         });
 
-        return completeViewDataMap;
+        const {
+            currentViewDataMap: result,
+        } = completeViewDataMap.reduce(({ allDayPanelsCount, currentViewDataMap }, row, rowIndex) => {
+            const isAllDay = row[0].allDay;
+
+            const keyBase = (rowIndex - allDayPanelsCount) * totalColumnCount;
+
+            const currentAllDayPanelsCount = isAllDay
+                ? allDayPanelsCount + 1
+                : allDayPanelsCount;
+
+            currentViewDataMap[rowIndex].forEach((cell, cellIndex) => {
+                cell.key = keyBase + cellIndex;
+            });
+
+            return { allDayPanelsCount: currentAllDayPanelsCount, currentViewDataMap };
+        }, {
+            allDayPanelsCount: 0,
+            currentViewDataMap: completeViewDataMap,
+        });
+
+        return result;
     }
 
     _transformViewDataMapForGroupingByDate(viewDataMap, groupsList) {
@@ -278,20 +321,16 @@ class ViewDataGenerator {
         };
     }
 
-    _generateViewCellsData(options, renderRowCount, startRowIndex, rowOffset) {
+    _generateViewCellsData(options, rowsCount) {
         const {
             cellCountInGroupRow,
             cellDataGetters,
-            rowCountInGroup,
         } = options;
         const viewCellsData = [];
 
-        for(let i = 0; i < renderRowCount; ++i) {
-            const rowIndex = startRowIndex + rowOffset + i;
-
-            const rowIndexInGroup = rowIndex % rowCountInGroup;
+        for(let rowIndex = 0; rowIndex < rowsCount; rowIndex += 1) {
             viewCellsData.push(this._generateCellsRow(
-                options, cellDataGetters, rowIndex, cellCountInGroupRow, rowIndexInGroup,
+                options, cellDataGetters, rowIndex, cellCountInGroupRow,
             ));
         }
 
@@ -312,23 +351,16 @@ class ViewDataGenerator {
         );
     }
 
-    _generateCellsRow(options, cellDataGetters, rowIndex, cellCount, rowIndexInGroup, groupIndex) {
+    _generateCellsRow(options, cellDataGetters, rowIndex, columnCount, rowIndexInGroup, groupIndex) {
         const cellsRow = [];
-        const {
-            horizontalGroupCount,
-            groupOrientation,
-        } = options;
 
-        for(let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
+        for(let columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
             const cellDataValue = cellDataGetters.reduce((data, getter) => ({
                 ...data,
                 ...getter(undefined, rowIndex, columnIndex, groupIndex, data.startDate).value
             }), {});
 
-            cellDataValue.index = this._calculateCellIndex(
-                horizontalGroupCount, groupOrientation, this._workspace.isGroupedByDate(),
-                rowIndexInGroup, columnIndex, cellCount,
-            );
+            cellDataValue.index = rowIndex * columnCount + columnIndex;
 
             cellDataValue.isFirstGroupCell = this._isFirstGroupCell(
                 rowIndex, columnIndex, options,
@@ -337,7 +369,7 @@ class ViewDataGenerator {
                 rowIndex, columnIndex, options,
             );
 
-            cellDataValue.key = this._getKeyByRowAndColumn(rowIndex, columnIndex, cellCount);
+            cellDataValue.key = this._getKeyByRowAndColumn(rowIndex, columnIndex, columnCount);
 
             cellsRow.push(cellDataValue);
         }
