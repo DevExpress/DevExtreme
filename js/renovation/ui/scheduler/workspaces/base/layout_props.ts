@@ -16,8 +16,6 @@ export class LayoutProps {
 
   @OneWay() groupOrientation?: GroupOrientation;
 
-  @OneWay() isVirtual?: boolean;
-
   @OneWay() leftVirtualCellWidth = 0;
 
   @OneWay() rightVirtualCellWidth = 0;
