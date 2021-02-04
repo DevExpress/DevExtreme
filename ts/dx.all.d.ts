@@ -5984,6 +5984,10 @@ declare module DevExpress.ui {
          */
         contentTemplate?: DevExpress.core.template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
+         * [descr:dxDropDownBox.Options.dataSource]
+         */
+        dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /**
          * [descr:dxDropDownBox.Options.displayValueFormatter]
          */
         displayValueFormatter?: ((value: string | Array<any>) => string);
@@ -5991,6 +5995,10 @@ declare module DevExpress.ui {
          * [descr:dxDropDownBox.Options.fieldTemplate]
          */
         fieldTemplate?: DevExpress.core.template | ((value: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /**
+         * [descr:dxDropDownBox.Options.items]
+         */
+        items?: Array<any>;
         /**
          * [descr:dxDropDownBox.Options.openOnFieldClick]
          */
