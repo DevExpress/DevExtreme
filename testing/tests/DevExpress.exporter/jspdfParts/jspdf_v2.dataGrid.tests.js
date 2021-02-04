@@ -674,10 +674,10 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
 
         let rowIndex = 0;
         let cellIndex = 0;
-        const onRowExporting = ({ row }) => {
+        const onRowExporting = ({ drawNewTableFromThisRow }) => {
             if(rowIndex === 2) {
-                row.newPage = true;
-                row.tableRect = { x: 10, y: 10, w: 40, h: 54 };
+                drawNewTableFromThisRow.addPage = true;
+                drawNewTableFromThisRow.tableRect = { x: 10, y: 10, w: 40, h: 54 };
             }
             rowIndex++;
         };
@@ -721,10 +721,10 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
 
         let rowIndex = 0;
         let cellIndex = 0;
-        const onRowExporting = ({ row }) => {
+        const onRowExporting = ({ drawNewTableFromThisRow }) => {
             if(rowIndex === 2) {
-                row.newPage = true;
-                row.tableRect = { x: 10, y: 10, w: 40, h: 54 };
+                drawNewTableFromThisRow.addPage = true;
+                drawNewTableFromThisRow.tableRect = { x: 10, y: 10, w: 40, h: 54 };
             }
             rowIndex++;
         };
