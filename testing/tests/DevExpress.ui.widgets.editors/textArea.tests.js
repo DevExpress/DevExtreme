@@ -551,10 +551,10 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
-                pointer.start().wheel(20, helper.isShift());
+                pointer.start().wheel(20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 80);
 
-                pointer.start().wheel(-20, helper.isShift());
+                pointer.start().wheel(-20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 80);
             });
 
@@ -567,10 +567,10 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
-                pointer.start().wheel(-20, helper.isShift());
+                pointer.start().wheel(-20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 70);
 
-                pointer.start().wheel(20, helper.isShift());
+                pointer.start().wheel(20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 70);
             });
 
@@ -583,10 +583,10 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
-                pointer.start().wheel(-20, helper.isShift());
+                pointer.start().wheel(-20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 100);
 
-                pointer.start().wheel(20, helper.isShift());
+                pointer.start().wheel(20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 100);
             });
 

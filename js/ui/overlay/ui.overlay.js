@@ -27,7 +27,7 @@ import {
 } from '../../events/drag';
 import pointerEvents from '../../events/pointer';
 import { keyboard } from '../../events/short';
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../events/utils/index';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import Resizable from '../resizable';
@@ -1008,9 +1008,13 @@ const Overlay = Widget.inherit({
             isNative: true
         }, e => {
             const originalEvent = e.originalEvent.originalEvent;
+            const { type } = originalEvent || {};
+            const isWheel = type === 'wheel';
+            const isMouseMove = type === 'mousemove';
+            const isScrollByWheel = isWheel && !isCommandKeyPressed(e);
             e._cancelPreventDefault = true;
 
-            if(originalEvent && originalEvent.type !== 'mousemove' && e.cancelable !== false) {
+            if(originalEvent && e.cancelable !== false && (!isMouseMove && !isWheel || isScrollByWheel)) {
                 e.preventDefault();
             }
         });

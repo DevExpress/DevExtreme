@@ -133,12 +133,12 @@ const TextEditorMask = TextEditorBase.inherit({
         const input = this._input();
         const eventName = addNamespace(wheelEventName, this.NAME);
         const mouseWheelAction = this._createAction((function(e) {
-            if(focused(input)) {
-                const dxEvent = e.event;
+            const { event } = e;
 
-                this._onMouseWheel(dxEvent);
-                dxEvent.preventDefault();
-                dxEvent.stopPropagation();
+            if(focused(input) && !isCommandKeyPressed(event)) {
+                this._onMouseWheel(event);
+                event.preventDefault();
+                event.stopPropagation();
             }
         }).bind(this));
 
