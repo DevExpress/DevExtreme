@@ -11289,9 +11289,9 @@ declare module DevExpress.ui {
          */
         maxDisplayedTags?: number;
         /**
-         * [descr:dxTagBox.Options.maxFilterLength]
+         * [descr:dxTagBox.Options.maxFilterQueryLength]
          */
-        maxFilterLength?: number;
+        maxFilterQueryLength?: number;
         /**
          * [descr:dxTagBox.Options.multiline]
          */
