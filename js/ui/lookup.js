@@ -752,7 +752,6 @@ const Lookup = DropDownList.inherit({
                 of: this.element()
             };
 
-
             result.closeOnTargetScroll = true;
         }
 
