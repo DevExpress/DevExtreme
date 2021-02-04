@@ -295,7 +295,7 @@ testComponentDefaults(DropDownList,
     {
         groupTemplate: 'group',
         wrapItemText: false,
-        showItemDataTitle: true,
+        showItemDataTitle: false,
         grouped: false
     }
 );

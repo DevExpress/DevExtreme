@@ -103,7 +103,7 @@ const DropDownList = DropDownEditor.inherit({
 
             wrapItemText: false,
 
-            showItemDataTitle: true,
+            showItemDataTitle: false,
 
             /**
             * @name dxDropDownListOptions.fieldTemplate
