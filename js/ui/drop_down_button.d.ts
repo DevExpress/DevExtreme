@@ -221,6 +221,13 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @public
      */
     wrapItemText?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    showItemDataTitle?: boolean;
 }
 /**
  * @docid

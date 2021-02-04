@@ -166,6 +166,13 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @public
      */
     wrapItemText?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    showItemDataTitle?: boolean;
 }
 /**
  * @docid

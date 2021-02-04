@@ -103,6 +103,7 @@ const DropDownList = DropDownEditor.inherit({
 
             wrapItemText: false,
 
+            showItemDataTitle: true,
 
             /**
             * @name dxDropDownListOptions.fieldTemplate
@@ -533,6 +534,7 @@ const DropDownList = DropDownEditor.inherit({
             noDataText: this.option('noDataText'),
             grouped: this.option('grouped'),
             wrapItemText: this.option('wrapItemText'),
+            showItemDataTitle: this.option('showItemDataTitle'),
             onContentReady: this._listContentReadyHandler.bind(this),
             itemTemplate: this.option('itemTemplate'),
             indicateLoading: false,
@@ -872,6 +874,7 @@ const DropDownList = DropDownEditor.inherit({
             case 'groupTemplate':
             case 'wrapItemText':
             case 'noDataText':
+            case 'showItemDataTitle':
                 this._setListOption(args.name);
                 break;
             case 'displayValue':

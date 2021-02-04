@@ -92,6 +92,8 @@ const DropDownButton = Widget.inherit({
 
             wrapItemText: false,
 
+            showItemDataTitle: true,
+
             grouped: false,
             groupTemplate: 'group',
             buttonGroupOptions: {}
@@ -348,7 +350,7 @@ const DropDownButton = Widget.inherit({
             wrapItemText: this.option('wrapItemText'),
             focusStateEnabled: this.option('focusStateEnabled'),
             hoverStateEnabled: this.option('hoverStateEnabled'),
-            showItemDataTitle: true,
+            showItemDataTitle: this.option('showItemDataTitle'),
             onContentReady: () => this._fireContentReadyAction(),
             selectedItemKeys: selectedItemKey && useSelectMode ? [selectedItemKey] : [],
             grouped: this.option('grouped'),
@@ -639,6 +641,7 @@ const DropDownButton = Widget.inherit({
             case 'noDataText':
             case 'groupTemplate':
             case 'wrapItemText':
+            case 'showItemDataTitle':
                 this._setListOption(name, value);
                 break;
             case 'dropDownContentTemplate':

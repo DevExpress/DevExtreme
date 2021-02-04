@@ -6490,6 +6490,10 @@ declare module DevExpress.ui {
          */
         showArrowIcon?: boolean;
         /**
+         * [descr:dxDropDownButton.Options.showItemDataTitle]
+         */
+        showItemDataTitle?: boolean;
+        /**
          * [descr:dxDropDownButton.Options.splitButton]
          */
         splitButton?: boolean;
@@ -6686,6 +6690,10 @@ declare module DevExpress.ui {
          * [descr:dxDropDownList.Options.showDataBeforeSearch]
          */
         showDataBeforeSearch?: boolean;
+        /**
+         * [descr:dxDropDownList.Options.showItemDataTitle]
+         */
+        showItemDataTitle?: boolean;
         /**
          * [descr:dxDropDownList.Options.value]
          */
