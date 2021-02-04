@@ -556,7 +556,7 @@ module('View Data Provider', () => {
             }
         }, function() {
             module('Date and time views', () => {
-                test('Simple appointments', function(assert) {
+                test('it should return correct cell start date', function(assert) {
                     assert.deepEqual(
                         this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
                         new Date(2020, 7, 24),
@@ -582,7 +582,7 @@ module('View Data Provider', () => {
                     );
                 });
 
-                test('AllDay appointments', function(assert) {
+                test('it should return correct all day cell start date', function(assert) {
                     this.init('vertical');
 
                     assert.deepEqual(
@@ -611,7 +611,7 @@ module('View Data Provider', () => {
                     isDateAndTimeView: false
                 };
 
-                test('Simple appointments', function(assert) {
+                test('it should return correct cell start date', function(assert) {
                     const viewDataProvider = createViewDataProvider({
                         workspaceMock: workSpaceMock,
                         completeViewDataMap: testViewDataMap.verticalGrouping,
@@ -644,7 +644,7 @@ module('View Data Provider', () => {
                 });
 
 
-                test('AllDay appointments', function(assert) {
+                test('it should return correct all day cell start date', function(assert) {
                     const viewDataProvider = createViewDataProvider({
                         workspaceMock: workSpaceMock,
                         completeViewDataMap: testViewDataMap.verticalGrouping,
