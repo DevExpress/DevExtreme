@@ -2289,6 +2289,32 @@ QUnit.module('popup options', {
         instance.option('dropDownOptions.animation', null);
         assert.strictEqual(popup.option('animation'), null, 'animation option is passed to the popup after runtime change');
     });
+
+    QUnit.test('Check closeOnTargetScroll option in Material theme', function(assert) {
+        const isMaterialStub = sinon.stub(themes, 'isMaterial');
+        const $lookup = $('#lookup');
+
+        isMaterialStub.returns(true);
+
+        try {
+            const lookup = $lookup
+                .dxLookup({
+                    dataSource: ['blue', 'orange', 'lime', 'purple'],
+                    value: 'orange'
+                })
+                .dxLookup('instance');
+
+            assert.ok(lookup._popupConfig().closeOnTargetScroll, 'lookup close on parent scroll (without centering)');
+
+            lookup.option('dropDownCentered', true);
+
+            assert.ok(lookup._popupConfig().closeOnTargetScroll, 'lookup close on parent scroll (with centering)');
+
+        } finally {
+            $lookup.dxLookup('instance').dispose();
+            isMaterialStub.restore();
+        }
+    });
 });
 
 QUnit.module('list options', {
