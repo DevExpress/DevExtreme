@@ -246,7 +246,7 @@ QUnit.test('scheduler.showAppointmentPopup method should have resource arg if th
         groups: ['ownerId'],
         resources: [
             {
-                field: 'ownerId',
+                fieldExpr: 'ownerId',
                 dataSource: [
                     { id: 1, text: 'John' },
                     { id: 2, text: 'Mike' }
@@ -279,7 +279,7 @@ QUnit.test('scheduler.showAppointmentPopup method should have resource arg if th
         groups: ['ownerId'],
         resources: [
             {
-                field: 'ownerId',
+                fieldExpr: 'ownerId',
                 dataSource: [
                     { id: 1, text: 'John' },
                     { id: 2, text: 'Mike' }
@@ -311,14 +311,14 @@ QUnit.test('WorkSpace should have a correct \'groups\' option', function(assert)
             {
                 displayExpr: 'name',
                 valueExpr: 'key',
-                field: 'resource1',
+                fieldExpr: 'resource1',
                 dataSource: [
                     { key: 1, name: 'One' },
                     { key: 2, name: 'Two' }
                 ]
             },
             {
-                field: 'resource2',
+                fieldExpr: 'resource2',
                 dataSource: [
                     { id: 1, text: 'Room 1' }
                 ]
@@ -368,7 +368,7 @@ QUnit.test('updateScrollPosition should work correctly when groups were not set 
             {
                 displayExpr: 'name',
                 valueExpr: 'key',
-                field: 'resource1',
+                fieldExpr: 'resource1',
                 dataSource: [
                     { key: 1, name: 'One' },
                     { key: 2, name: 'Two' }
@@ -797,7 +797,7 @@ QUnit.test('dataCellTemplate should have correct options', function(assert) {
         groups: ['ownerId'],
         resources: [
             {
-                field: 'ownerId',
+                fieldExpr: 'ownerId',
                 dataSource: [
                     { id: 1, text: 'John' },
                     { id: 2, text: 'Mike' }
@@ -1181,14 +1181,14 @@ QUnit.test('WorkSpace should be refreshed after groups changed', function(assert
             {
                 displayExpr: 'name',
                 valueExpr: 'key',
-                field: 'resource1',
+                fieldExpr: 'resource1',
                 dataSource: [
                     { key: 1, name: 'One' },
                     { key: 2, name: 'Two' }
                 ]
             },
             {
-                field: 'resource2',
+                fieldExpr: 'resource2',
                 dataSource: [
                     { id: 1, text: 'Room 1' }
                 ]
@@ -1452,7 +1452,7 @@ if(devices.real().deviceType === 'desktop') {
     }, () => {
         const resources = [
             {
-                field: 'ownerId',
+                fieldExpr: 'ownerId',
                 dataSource: [
                     { id: 1, text: 'John' },
                     { id: 2, text: 'Mike' }
@@ -1885,7 +1885,7 @@ QUnit.module('Cell Templates in renovated views', () => {
 
     const resources = [
         {
-            field: 'ownerId',
+            fieldExpr: 'ownerId',
             dataSource: [
                 { id: 1, text: 'John' },
                 { id: 2, text: 'Mike' }
@@ -3030,10 +3030,13 @@ QUnit.module('Resource Cell Template', () => {
                     height: 700,
                     width: 700,
                     dataSource: [],
-                    groups: ['owner'],
+                    groups: ['ownerId'],
                     resources: [{
-                        field: 'owner',
-                        dataSource: ['a', 'b']
+                        fieldExpr: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John', color: '#000' },
+                            { id: 2, text: 'Mike', color: '#FFF' },
+                        ],
                     }],
                     resourceCellTemplate: function(cellData, cellIndex, cellElement) {
                         if(!cellIndex) {
@@ -3054,10 +3057,13 @@ QUnit.module('Resource Cell Template', () => {
                     height: 700,
                     width: 700,
                     dataSource: [],
-                    groups: ['owner'],
+                    groups: ['ownerId'],
                     resources: [{
-                        field: 'owner',
-                        dataSource: ['a', 'b']
+                        fieldExpr: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John', color: '#000' },
+                            { id: 2, text: 'Mike', color: '#FFF' },
+                        ],
                     }],
                     resourceCellTemplate: function(cellData, cellIndex, cellElement) {
                         if(!cellIndex) {
@@ -3079,7 +3085,7 @@ QUnit.module('Resource Cell Template', () => {
                     groups: ['ownerId'],
                     resources: [
                         {
-                            field: 'ownerId',
+                            fieldExpr: 'ownerId',
                             dataSource: [
                                 { id: 1, text: 'John' },
                                 { id: 2, text: 'Mike' }
@@ -3106,7 +3112,7 @@ QUnit.module('Resource Cell Template', () => {
                     groups: ['ownerId'],
                     resources: [
                         {
-                            field: 'ownerId',
+                            fieldExpr: 'ownerId',
                             dataSource: [
                                 { id: 1, text: 'John' },
                                 { id: 2, text: 'Mike' }
@@ -3147,7 +3153,7 @@ QUnit.module('Resource Cell Template', () => {
                     groups: ['ownerId'],
                     resources: [
                         {
-                            field: 'ownerId',
+                            fieldExpr: 'ownerId',
                             dataSource: [
                                 { id: 1, text: 'John' },
                                 { id: 2, text: 'Mike' }
@@ -3192,7 +3198,7 @@ QUnit.module('Resource Cell Template', () => {
                     }],
                     resources: [
                         {
-                            field: 'ownerId',
+                            fieldExpr: 'ownerId',
                             dataSource: [
                                 { id: 1, text: 'John', color: '#A2a' },
                                 { id: 2, text: 'Mike', color: '#E2a' }
@@ -3214,7 +3220,7 @@ QUnit.module('Resource Cell Template', () => {
                     groups: ['ownerId'],
                     resources: [
                         {
-                            field: 'ownerId',
+                            fieldExpr: 'ownerId',
                             dataSource: [
                                 { id: 1, text: 'John' },
                                 { id: 2, text: 'Mike' }
@@ -3244,7 +3250,7 @@ QUnit.module('Resource Cell Template', () => {
                     groups: ['ownerId'],
                     resources: [
                         {
-                            field: 'ownerId',
+                            fieldExpr: 'ownerId',
                             dataSource: [
                                 { id: 1, text: 'John' },
                                 { id: 2, text: 'Mike' }
@@ -3299,7 +3305,7 @@ QUnit.module('Resource Cell Template', () => {
                     groups: ['test'],
                     resources: [
                         {
-                            field: 'test',
+                            fieldExpr: 'test',
                             dataSource: dataSource
                         }
                     ],
@@ -3384,7 +3390,7 @@ QUnit.module('Date Cell Template', () => {
                     groups: ['ownerId'],
                     resources: [
                         {
-                            field: 'ownerId',
+                            fieldExpr: 'ownerId',
                             dataSource: [
                                 { id: 1, text: 'John' },
                                 { id: 2, text: 'Mike' }
@@ -3418,7 +3424,7 @@ QUnit.module('Date Cell Template', () => {
                     groups: ['ownerId'],
                     resources: [
                         {
-                            field: 'ownerId',
+                            fieldExpr: 'ownerId',
                             dataSource: [
                                 { id: 1, text: 'John' },
                                 { id: 2, text: 'Mike' }
@@ -3493,7 +3499,7 @@ QUnit.module('Date Cell Template', () => {
                     groups: ['ownerId'],
                     resources: [
                         {
-                            field: 'ownerId',
+                            fieldExpr: 'ownerId',
                             dataSource: [
                                 { id: 1, text: 'John' },
                                 { id: 2, text: 'Mike' }
@@ -3554,7 +3560,7 @@ QUnit.module('Date Cell Template', () => {
                     groups: ['ownerId'],
                     resources: [
                         {
-                            field: 'ownerId',
+                            fieldExpr: 'ownerId',
                             dataSource: [
                                 { id: 1, text: 'John' },
                                 { id: 2, text: 'Mike' }
