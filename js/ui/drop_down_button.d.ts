@@ -227,7 +227,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showItemDataTitle?: boolean;
+    setItemTextAsTitle?: boolean;
 }
 /**
  * @docid

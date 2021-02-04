@@ -232,26 +232,26 @@ module('render', {
         assert.equal($.trim($item.text()), 'First Template', 'item has correct template');
     });
 
-    test('showItemDataTitle as primitive', function(assert) {
+    test('setItemTextAsTitle as primitive', function(assert) {
         const $element = $('#cmp-with-template');
         const instance = new TestComponent(
             $element, {
-                showItemDataTitle: true,
+                setItemTextAsTitle: true,
                 items: [1]
             });
 
         const $item = instance.itemElements().eq(0);
         assert.strictEqual($item.attr('title'), '1', 'title is correct');
 
-        instance.option('showItemDataTitle', false);
+        instance.option('setItemTextAsTitle', false);
         assert.strictEqual(instance.itemElements().eq(0).attr('title'), undefined, 'title was removed');
     });
 
-    test('showItemDataTitle as object', function(assert) {
+    test('setItemTextAsTitle as object', function(assert) {
         const $element = $('#cmp-with-template');
         const instance = new TestComponent(
             $element, {
-                showItemDataTitle: true,
+                setItemTextAsTitle: true,
                 items: [{ name: 'Test', id: 1 }],
                 displayExpr: 'name'
             });

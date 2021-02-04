@@ -274,7 +274,7 @@ testComponentDefaults(DropDownButton, {}, {
     displayExpr: 'this',
     useSelectMode: false,
     wrapItemText: false,
-    showItemDataTitle: true,
+    setItemTextAsTitle: true,
     opened: false,
     splitButton: false,
     showArrowIcon: true,
@@ -295,7 +295,7 @@ testComponentDefaults(DropDownList,
     {
         groupTemplate: 'group',
         wrapItemText: false,
-        showItemDataTitle: false,
+        setItemTextAsTitle: false,
         grouped: false
     }
 );

@@ -271,7 +271,7 @@ QUnit.module('displayExpr', moduleConfig, () => {
             dataSource,
             deferRendering: false,
             value: 2,
-            showItemDataTitle: false,
+            setItemTextAsTitle: false,
             displayExpr(item) {
                 args.push(item);
             }
@@ -337,26 +337,26 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         assert.notOk($itemContainer.hasClass('dx-wrap-item-text'), 'class was removed');
     });
 
-    [true, false].forEach(showItemDataTitle => {
-        QUnit.test(`showItemDataTitle=${showItemDataTitle} option should be passed to list on init`, function(assert) {
+    [true, false].forEach(setItemTextAsTitle => {
+        QUnit.test(`setItemTextAsTitle=${setItemTextAsTitle} option should be passed to list on init`, function(assert) {
             const dropDownList = $('#dropDownList').dxDropDownList({
                 deferRendering: false,
-                showItemDataTitle
+                setItemTextAsTitle
             }).dxDropDownList('instance');
             const list = getList(dropDownList);
 
-            assert.strictEqual(list.option('showItemDataTitle'), showItemDataTitle, 'list option initial value is correct');
+            assert.strictEqual(list.option('setItemTextAsTitle'), setItemTextAsTitle, 'list option initial value is correct');
         });
 
-        QUnit.test(`showItemDataTitle option runtime change to ${showItemDataTitle} should be passed to list`, function(assert) {
+        QUnit.test(`setItemTextAsTitle option runtime change to ${setItemTextAsTitle} should be passed to list`, function(assert) {
             const dropDownList = $('#dropDownList').dxDropDownList({
                 deferRendering: false,
-                showItemDataTitle: !showItemDataTitle
+                setItemTextAsTitle: !setItemTextAsTitle
             }).dxDropDownList('instance');
             const list = getList(dropDownList);
 
-            dropDownList.option('showItemDataTitle', showItemDataTitle);
-            assert.strictEqual(list.option('showItemDataTitle'), showItemDataTitle, 'list option value is correct after runtime change');
+            dropDownList.option('setItemTextAsTitle', setItemTextAsTitle);
+            assert.strictEqual(list.option('setItemTextAsTitle'), setItemTextAsTitle, 'list option value is correct after runtime change');
         });
     });
 

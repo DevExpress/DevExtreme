@@ -476,7 +476,7 @@ const CollectionWidget = Widget.inherit({
             case 'items':
             case '_itemAttributes':
             case 'itemTemplateProperty':
-            case 'showItemDataTitle':
+            case 'setItemTextAsTitle':
                 this._cleanRenderedItems();
                 this._invalidate();
                 break;
@@ -902,7 +902,7 @@ const CollectionWidget = Widget.inherit({
             this._appendItemToContainer.call(this, $container, $itemFrame, index);
         }
 
-        if(this.option('showItemDataTitle')) {
+        if(this.option('setItemTextAsTitle')) {
             const displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
             $itemFrame.attr('title', displayValue);
         }
