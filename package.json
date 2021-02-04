@@ -22,8 +22,6 @@
     "devextreme-vue-generator": "^1.0.0",
     "gulp": "^4.0.0",
     "gulp-header": "^2.0.5",
-    "gulp-rename": "^2.0.0",
-    "gulp-shell": "^0.6.5",
     "gulp-typescript": "^5.0.0",
     "jest": "^24.8.0",
     "source-map-loader": "^0.2.4",

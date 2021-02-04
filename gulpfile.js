@@ -3,8 +3,6 @@ const mkdir = require('mkdirp');
 const fs = require('fs');
 const gulp = require('gulp');
 const header = require('gulp-header');
-const rename = require('gulp-rename');
-const shell = require('gulp-shell');
 const ts = require('gulp-typescript');
 
 const generateSync = require('devextreme-vue-generator').default;
@@ -94,9 +92,4 @@ gulp.task(BUILD, gulp.series(
   GENERATE
 ));
 
-gulp.task(NPM_PACK, gulp.series(
-  BUILD,
-  shell.task(['npm pack']),
-  () => gulp.src('./*.tgz').pipe(rename('vue2-strategy.tgz')).pipe(gulp.dest(config.npm.dist)),
-  (c) => del('./*.tgz', c)
-));
+gulp.task(NPM_PACK, gulp.series(BUILD));
