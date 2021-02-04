@@ -20,10 +20,12 @@ class ViewDataGenerator {
             isHorizontalGrouping,
             isVerticalGrouping,
             totalCellCount,
+            groupCount,
         } = options;
         const viewDataMap = [];
-        const allDayPanelData = this._generateAllDayPanelData(options, 0, totalRowCount, cellCountInGroupRow);
-        const viewCellsData = this._generateViewCellsData(options, totalRowCount);
+        const step = groupByDate ? groupCount : 1;
+        const allDayPanelData = this._generateAllDayPanelData(options, cellCountInGroupRow, step);
+        const viewCellsData = this._generateViewCellsData(options, totalRowCount, step);
 
         allDayPanelData && viewDataMap.push(allDayPanelData);
         viewDataMap.push(...viewCellsData);
@@ -321,7 +323,7 @@ class ViewDataGenerator {
         };
     }
 
-    _generateViewCellsData(options, rowsCount) {
+    _generateViewCellsData(options, rowsCount, step = 1) {
         const {
             cellCountInGroupRow,
             cellDataGetters,
@@ -330,34 +332,33 @@ class ViewDataGenerator {
 
         for(let rowIndex = 0; rowIndex < rowsCount; rowIndex += 1) {
             viewCellsData.push(this._generateCellsRow(
-                options, cellDataGetters, rowIndex, cellCountInGroupRow,
+                options, cellDataGetters, rowIndex, cellCountInGroupRow, step,
             ));
         }
 
         return viewCellsData;
     }
 
-    _generateAllDayPanelData(options, groupIndex, rowCount, cellCount) {
+    _generateAllDayPanelData(options, cellCount, step = 1) {
         const workSpace = this.workspace;
         if(!workSpace.isAllDayPanelVisible) {
             return null;
         }
 
-        const rowIndex = Math.max(groupIndex * rowCount, 0);
-
         return this._generateCellsRow(
             options, [workSpace._getAllDayCellData.bind(workSpace)],
-            rowIndex, cellCount, 0, groupIndex,
+            0, cellCount, step,
         );
     }
 
-    _generateCellsRow(options, cellDataGetters, rowIndex, columnCount, rowIndexInGroup, groupIndex) {
+    _generateCellsRow(options, cellDataGetters, rowIndex, columnCount, step) {
         const cellsRow = [];
 
         for(let columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
+            const correctedColumnIndex = step * columnIndex;
             const cellDataValue = cellDataGetters.reduce((data, getter) => ({
                 ...data,
-                ...getter(undefined, rowIndex, columnIndex, groupIndex, data.startDate).value
+                ...getter(undefined, rowIndex, correctedColumnIndex, 0, data.startDate).value
             }), {});
 
             cellDataValue.index = rowIndex * columnCount + columnIndex;
