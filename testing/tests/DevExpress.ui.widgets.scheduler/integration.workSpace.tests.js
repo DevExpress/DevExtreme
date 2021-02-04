@@ -3030,10 +3030,13 @@ QUnit.module('Resource Cell Template', () => {
                     height: 700,
                     width: 700,
                     dataSource: [],
-                    groups: ['owner'],
+                    groups: ['ownerId'],
                     resources: [{
-                        field: 'owner',
-                        dataSource: ['a', 'b']
+                        field: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John', color: '#000' },
+                            { id: 2, text: 'Mike', color: '#FFF' },
+                        ],
                     }],
                     resourceCellTemplate: function(cellData, cellIndex, cellElement) {
                         if(!cellIndex) {
@@ -3054,10 +3057,13 @@ QUnit.module('Resource Cell Template', () => {
                     height: 700,
                     width: 700,
                     dataSource: [],
-                    groups: ['owner'],
+                    groups: ['ownerId'],
                     resources: [{
-                        field: 'owner',
-                        dataSource: ['a', 'b']
+                        field: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John', color: '#000' },
+                            { id: 2, text: 'Mike', color: '#FFF' },
+                        ],
                     }],
                     resourceCellTemplate: function(cellData, cellIndex, cellElement) {
                         if(!cellIndex) {
