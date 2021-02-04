@@ -477,6 +477,8 @@ class FileManager extends Widget {
 
             onContextMenuItemClick: null,
 
+            onContextMenuPreparing: null,
+
             onCurrentDirectoryChanged: null,
 
             onSelectedFileOpened: null,
@@ -573,6 +575,7 @@ class FileManager extends Widget {
                 }
                 break;
             case 'onContextMenuItemClick':
+            case 'onContextMenuPreparing':
             case 'onCurrentDirectoryChanged':
             case 'onSelectedFileOpened':
             case 'onSelectionChanged':
