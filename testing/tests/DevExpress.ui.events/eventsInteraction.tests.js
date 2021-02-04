@@ -818,7 +818,7 @@ QUnit.test('first horizontal scroll should be selected if scrolling by wheel wit
         assert.ok(false);
     });
 
-    pointerMock($child).start().wheel(60, true);
+    pointerMock($child).start().wheel(60, { shiftKey: true });
 });
 
 QUnit.test('first both scroll should be selected if scrolling by wheel with shift', function(assert) {
@@ -836,7 +836,7 @@ QUnit.test('first both scroll should be selected if scrolling by wheel with shif
         assert.ok(false);
     });
 
-    pointerMock($child).start().wheel(60, true);
+    pointerMock($child).start().wheel(60, { shiftKey: true });
 });
 
 
