@@ -172,7 +172,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    setItemTextAsTitle?: boolean;
+    useItemTextAsTitle?: boolean;
 }
 /**
  * @docid

@@ -6486,10 +6486,6 @@ declare module DevExpress.ui {
          */
         selectedItemKey?: string | number;
         /**
-         * [descr:dxDropDownButton.Options.setItemTextAsTitle]
-         */
-        setItemTextAsTitle?: boolean;
-        /**
          * [descr:dxDropDownButton.Options.showArrowIcon]
          */
         showArrowIcon?: boolean;
@@ -6505,6 +6501,10 @@ declare module DevExpress.ui {
          * [descr:dxDropDownButton.Options.text]
          */
         text?: string;
+        /**
+         * [descr:dxDropDownButton.Options.useItemTextAsTitle]
+         */
+        useItemTextAsTitle?: boolean;
         /**
          * [descr:dxDropDownButton.Options.useSelectMode]
          */
@@ -6687,13 +6687,13 @@ declare module DevExpress.ui {
          */
         selectedItem?: any;
         /**
-         * [descr:dxDropDownList.Options.setItemTextAsTitle]
-         */
-        setItemTextAsTitle?: boolean;
-        /**
          * [descr:dxDropDownList.Options.showDataBeforeSearch]
          */
         showDataBeforeSearch?: boolean;
+        /**
+         * [descr:dxDropDownList.Options.useItemTextAsTitle]
+         */
+        useItemTextAsTitle?: boolean;
         /**
          * [descr:dxDropDownList.Options.value]
          */

@@ -728,7 +728,7 @@ QUnit.module('list integration', {}, () => {
         assert.strictEqual(list.option('selectionMode'), 'single', 'selectionMode is single for useSelectMode: true');
     });
 
-    QUnit.test('setItemTextAsTitle should be true for the list', function(assert) {
+    QUnit.test('useItemTextAsTitle should be true for the list', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', {
             items: [{ key: 1, name: 'Item 1', icon: 'box' }],
             deferRendering: false
@@ -736,7 +736,7 @@ QUnit.module('list integration', {}, () => {
 
         const list = getList(dropDownButton);
 
-        assert.strictEqual(list.option('setItemTextAsTitle'), true, 'option is true');
+        assert.strictEqual(list.option('useItemTextAsTitle'), true, 'option is true');
     });
 
     QUnit.test('wrapItemText option', function(assert) {
@@ -752,26 +752,26 @@ QUnit.module('list integration', {}, () => {
         assert.ok($itemContainer.hasClass('dx-wrap-item-text'), 'class was added');
     });
 
-    [true, false].forEach(setItemTextAsTitle => {
-        QUnit.test(`setItemTextAsTitle=${setItemTextAsTitle} option should be passed to list on init`, function(assert) {
+    [true, false].forEach(useItemTextAsTitle => {
+        QUnit.test(`useItemTextAsTitle=${useItemTextAsTitle} option should be passed to list on init`, function(assert) {
             const dropDownButton = new DropDownButton('#dropDownButton', {
                 deferRendering: false,
-                setItemTextAsTitle
+                useItemTextAsTitle
             });
             const list = getList(dropDownButton);
 
-            assert.strictEqual(list.option('setItemTextAsTitle'), setItemTextAsTitle, 'list option initial value is correct');
+            assert.strictEqual(list.option('useItemTextAsTitle'), useItemTextAsTitle, 'list option initial value is correct');
         });
 
-        QUnit.test(`setItemTextAsTitle option runtime change to ${setItemTextAsTitle} should be passed to list`, function(assert) {
+        QUnit.test(`useItemTextAsTitle option runtime change to ${useItemTextAsTitle} should be passed to list`, function(assert) {
             const dropDownButton = new DropDownButton('#dropDownButton', {
                 deferRendering: false,
-                setItemTextAsTitle: !setItemTextAsTitle
+                useItemTextAsTitle: !useItemTextAsTitle
             });
             const list = getList(dropDownButton);
 
-            dropDownButton.option('setItemTextAsTitle', setItemTextAsTitle);
-            assert.strictEqual(list.option('setItemTextAsTitle'), setItemTextAsTitle, 'list option value is correct after runtime change');
+            dropDownButton.option('useItemTextAsTitle', useItemTextAsTitle);
+            assert.strictEqual(list.option('useItemTextAsTitle'), useItemTextAsTitle, 'list option value is correct after runtime change');
         });
     });
 
