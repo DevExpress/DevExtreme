@@ -255,9 +255,21 @@ class FileManagerToolbar extends Widget {
                 'location',
                 'locateInMenu',
                 'disabled',
-                'showText',
-                'options'
+                'showText'
             ]);
+            if(isDefined(item.options)) {
+                extendAttributes(result.options, item.options, [
+                    'accessKey',
+                    'elementAttr',
+                    'height',
+                    'hint',
+                    'icon',
+                    'stylingMode',
+                    'tabIndex',
+                    'text',
+                    'width'
+                ]);
+            }
             extendAttributes(result.options, item, ['text', 'icon']);
 
             if(item.cssClass) {
