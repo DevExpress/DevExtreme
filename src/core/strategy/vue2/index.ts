@@ -1,5 +1,11 @@
-import * as strategy from "devextreme-vue2-strategy";
+export function createComponent(): any {
+    return;
+}
 
-export const createComponent = strategy.createComponent;
-export const createConfigurationComponent = strategy.createConfigurationComponent;
-export const createExtensionComponent = strategy.createExtensionComponent;
+export function createConfigurationComponent(): any {
+    return;
+}
+
+export function createExtensionComponent(): any {
+    return;
+}
