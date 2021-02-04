@@ -995,7 +995,7 @@ QUnit.module('Recursive selection', {
             // arrange
             const $testElement = $('#treeList');
 
-            /* eslint-disable */
+            /* eslint-disable indent */
             this.options.dataSource = [
                 { id: 1, field1: 'field1', field2: 1, field3: new Date(2001, 0, 1) },
                     { id: 2, parentId: 1, field1: 'field2', field2: 2, field3: new Date(2002, 1, 2) },
@@ -1005,7 +1005,7 @@ QUnit.module('Recursive selection', {
                 { id: 6, field1: 'field3', field2: 6, field3: new Date(2002, 1, 6) },
                 { id: 7, field1: 'test3', field2: 7, field3: new Date(2002, 1, 7) }
             ];
-            /* eslint-enable */
+            /* eslint-enable indent */
             this.options.searchPanel = { text: 'test' };
             this.options.expandNodesOnFiltering = true;
             this.options.filterMode = filterMode;
