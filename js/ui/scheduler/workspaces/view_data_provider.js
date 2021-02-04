@@ -39,7 +39,7 @@ class ViewDataGenerator {
         }
 
         if(groupByDate) {
-            return this._transformViewDataMapForGroupingByDate(viewDataMap, groupsList);
+            return this._transformViewDataMapForGroupingByDate(viewDataMap, groupsList, totalCellCount);
         }
 
         return viewDataMap;
@@ -121,18 +121,48 @@ class ViewDataGenerator {
         return result;
     }
 
-    _transformViewDataMapForGroupingByDate(viewDataMap, groupsList) {
+    _transformViewDataMapForGroupingByDate(viewDataMap, groupsList, totalColumnCount) {
         const correctedGroupList = groupsList.slice(1);
+        const otherGroupCount = correctedGroupList.length;
 
-        return viewDataMap.map((cellsRow) => cellsRow.reduce((currentRow, cell) => [
+        const completeViewDataMap = viewDataMap.map((cellsRow) => cellsRow.reduce((currentRow, cell) => [
             ...currentRow,
-            cell,
+            {
+                ...cell,
+                isFirstGroupCell: true,
+                isLastGroupCell: otherGroupCount === 0,
+            },
             ...correctedGroupList.map((groups, index) => ({
                 ...cell,
                 groups,
                 groupIndex: index + 1,
+                isFirstGroupCell: false,
+                isLastGroupCell: index === otherGroupCount - 1,
             })),
         ], []));
+
+        const {
+            currentViewDataMap: result,
+        } = completeViewDataMap.reduce(({ allDayPanelsCount, currentViewDataMap }, row, rowIndex) => {
+            const isAllDay = row[0].allDay;
+
+            const keyBase = (rowIndex - allDayPanelsCount) * totalColumnCount;
+
+            const currentAllDayPanelsCount = isAllDay
+                ? allDayPanelsCount + 1
+                : allDayPanelsCount;
+
+            currentViewDataMap[rowIndex].forEach((cell, cellIndex) => {
+                cell.key = keyBase + cellIndex;
+            });
+
+            return { allDayPanelsCount: currentAllDayPanelsCount, currentViewDataMap };
+        }, {
+            allDayPanelsCount: 0,
+            currentViewDataMap: completeViewDataMap,
+        });
+
+        return result;
     }
 
     _getCompleteDateHeaderMap(options, completeViewDataMap) {
