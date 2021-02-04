@@ -1523,6 +1523,34 @@ QUnit.module('State Storing with real controllers', {
         assert.strictEqual(this.option('focusedRowKey'), 2);
     });
 
+    QUnit.test('The focusedRowKey option shouldnt reset if focusedRowKey undefined in state (T968279)', function(assert) {
+        // arrange, act
+        this.setupDataGridModules({
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return { };
+                },
+                customSave: function() {
+                }
+            },
+            focusedRowKey: 2,
+            focusedRowEnabled: true,
+            loadingTimeout: null,
+            dataSource: {
+                store: {
+                    type: 'array',
+                    data: [{ id: 1 }, { id: 2 }, { id: 3 }],
+                    key: 'id'
+                }
+            }
+        });
+
+        // assert
+        assert.strictEqual(this.option('focusedRowKey'), 2);
+    });
+
     QUnit.test('Save focused row state when data changed', function(assert) {
     // arrange, act
         let userState;
