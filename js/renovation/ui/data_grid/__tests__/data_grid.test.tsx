@@ -95,7 +95,15 @@ describe('DataGrid', () => {
       expect(Object.prototype.hasOwnProperty.call(instance.option(), 'columns')).toBe(false);
     });
 
-    each`
+    describe('Methods', () => {
+      it('getComponentInstance', () => {
+        const component = new DataGrid({});
+        component.componentInstance = mockDataGridMethods as any;
+
+        expect(component.getComponentInstance()).toMatchObject(mockDataGridMethods);
+      });
+
+      each`
       methodName
       ${'beginCustomLoading'}
       ${'byKey'}
@@ -162,30 +170,30 @@ describe('DataGrid', () => {
       ${'isRowExpanded'}
       ${'totalCount'}
       ${'getController'}
-      ${'getComponentInstance'}
     `
-      .describe('Methods', ({
-        methodName,
-      }) => {
-        it(methodName, () => {
-          mockDataGridMethods[methodName] = jest.fn();
-          const component = new DataGrid({});
-          component.componentInstance = mockDataGridMethods as any;
+        .describe('Proxying the Grid methods', ({
+          methodName,
+        }) => {
+          it(methodName, () => {
+            mockDataGridMethods[methodName] = jest.fn();
+            const component = new DataGrid({});
+            component.componentInstance = mockDataGridMethods as any;
 
-          component[methodName]();
+            component[methodName]();
 
-          expect(mockDataGridMethods[methodName]).toHaveBeenCalled();
+            expect(mockDataGridMethods[methodName]).toHaveBeenCalled();
+          });
+
+          it(`${methodName} if widget is not initialized`, () => {
+            const component = new DataGrid({});
+            component.init = jest.fn();
+            component.componentInstance = null as any;
+            component[methodName]();
+
+            expect.assertions(0);
+          });
         });
-
-        it(`${methodName} if widget is not initialized`, () => {
-          const component = new DataGrid({});
-          component.init = jest.fn();
-          component.componentInstance = null as any;
-          component[methodName]();
-
-          expect.assertions(0);
-        });
-      });
+    });
   });
 
   describe('Behavior', () => {
