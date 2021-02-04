@@ -175,8 +175,6 @@ const EditingController = modules.ViewController.inherit((function() {
             that._columnsController = that.getController('columns');
             that._dataController = that.getController('data');
             that._rowsView = that.getView('rowsView');
-            that._editForm = null;
-            that._updateEditFormDeferred = null;
             that._lastOperation = null;
 
             if(that._deferreds) {
@@ -247,7 +245,7 @@ const EditingController = modules.ViewController.inherit((function() {
             this.component._optionsByReference[EDITING_CHANGES_OPTION_NAME] = true;
         },
 
-        getDefaultEditorTemplate: function() {
+        _getDefaultEditorTemplate: function() {
             return (container, options) => {
                 const $editor = $('<div>').appendTo(container);
 
@@ -708,10 +706,6 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         getPopupContent: function() {},
-
-        getEditForm: function() {
-            return this._editForm;
-        },
 
         _needInsertItem: function(change, changeType) {
             const that = this;
@@ -2220,10 +2214,6 @@ const EditingController = modules.ViewController.inherit((function() {
             });
         },
 
-        _endUpdateCore: function() {
-            this._updateEditFormDeferred && this._updateEditFormDeferred.resolve();
-        },
-
         _updateEditRow: function(row, forceUpdateRow, isCustomSetCellValue) {
             const that = this;
             if(forceUpdateRow || !isRowEditMode(that)) {
@@ -2302,12 +2292,8 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _getFormEditItemTemplate: function(cellOptions, column) {
-            return column.editCellTemplate || this.getDefaultEditorTemplate();
+            return column.editCellTemplate || this._getDefaultEditorTemplate();
         },
-
-        getEditFormTemplate: function() {},
-
-        getEditFormOptions: function() {},
 
         getColumnTemplate: function(options) {
             const that = this;
@@ -2338,9 +2324,9 @@ const EditingController = modules.ViewController.inherit((function() {
                         };
                     }
                 }
-                template = column.editCellTemplate || this.getDefaultEditorTemplate();
+                template = column.editCellTemplate || this._getDefaultEditorTemplate();
             } else if(column.command === 'detail' && options.rowType === 'detail' && isRowEditing) {
-                template = that.getEditFormTemplate(options);
+                template = that?.getEditFormTemplate(options);
             }
 
             return template;

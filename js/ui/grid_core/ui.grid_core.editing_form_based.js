@@ -46,6 +46,13 @@ export default {
     extenders: {
         controllers: {
             editing: {
+                init: function() {
+                    this._editForm = null;
+                    this._updateEditFormDeferred = null;
+
+                    this.callBase.apply(this, arguments);
+                },
+
                 isFormOrPopupEditMode: function() {
                     return this.isPopupEditMode() || this.isFormEditMode();
                 },
@@ -58,10 +65,6 @@ export default {
                 isFormEditMode: function() {
                     const editMode = this.option('editing.mode');
                     return editMode === EDIT_MODE_FORM;
-                },
-
-                init: function() {
-                    this.callBase.apply(this, arguments);
                 },
 
                 getFirstEditableColumnIndex: function() {
@@ -383,6 +386,15 @@ export default {
                             that._editPopup && that._editPopup.repaint();
                         });
                     };
+                },
+
+
+                getEditForm: function() {
+                    return this._editForm;
+                },
+
+                _endUpdateCore: function() {
+                    this._updateEditFormDeferred && this._updateEditFormDeferred.resolve();
                 },
             },
             data: {
