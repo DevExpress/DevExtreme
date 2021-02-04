@@ -479,6 +479,23 @@ QUnit.module('basics', {}, () => {
         assert.notStrictEqual(numberBox.option('value'), 100);
     });
 
+    ['ctrlKey', 'metaKey'].forEach((commandKey) => {
+        QUnit.test(`mousewheel action should not work for zooming (${commandKey} pressed)`, function(assert) {
+            const $numberBox = $('#numberbox').dxNumberBox({
+                value: 100.6
+            });
+
+            const numberBox = $numberBox.dxNumberBox('instance');
+            const $numberBoxInput = $(`.${INPUT_CLASS}`, $numberBox);
+            const mouse = pointerMock($numberBoxInput).start();
+
+            $numberBoxInput.get(0).focus();
+
+            mouse.wheel(10, { [commandKey]: true });
+            assert.equal(numberBox.option('value'), 100.6, `value is not changed, ${commandKey} pressed`);
+        });
+    });
+
     QUnit.testInActiveWindow('input is not focused when spin buttons are clicked if useLargeSpinButtons = true', function(assert) {
         const $element = $('#numberbox').dxNumberBox({
             showSpinButtons: true,
