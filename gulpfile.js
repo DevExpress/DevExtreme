@@ -123,7 +123,10 @@ gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
 
 var INSTALL_STRATEGY = 'install.strategy';
 
-gulp.task(INSTALL_STRATEGY, shell.task([`npm i ../${config.npm.strategySrc} -B --production`], { cwd: config.npm.dist }));
+gulp.task(INSTALL_STRATEGY, function() {
+  return gulp.src(`${config.npm.strategySrc}`)
+        .pipe(gulp.dest(config.npm.strategyDist));
+});
 
 gulp.task(NPM_PACK, gulp.series(
   NPM_BUILD_WITH_HEADERS,

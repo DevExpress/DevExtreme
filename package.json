@@ -21,9 +21,6 @@
   ],
   "author": "Developer Express Inc.",
   "license": "MIT",
-  "dependencies": {
-    "devextreme-vue2-strategy": "~20.2.4"
-  },
   "peerDependencies": {
     "devextreme": "~20.2.4",
     "vue": "^2.5.16 || ^3.0.0"
@@ -35,6 +32,7 @@
     "del": "^3.0.0",
     "devextreme": "~20.2.4",
     "devextreme-vue-generator": "^1.0.0",
+    "devextreme-vue2-strategy": "~20.2.4",
     "gulp": "^4.0.0",
     "gulp-header": "^2.0.5",
     "gulp-shell": "^0.6.5",
