@@ -1004,9 +1004,13 @@ const Overlay = Widget.inherit({
             isNative: true
         }, function(e) {
             const originalEvent = e.originalEvent.originalEvent;
+            const { type } = originalEvent || {};
+            const isWheel = type === 'wheel';
+            const isMouseMove = type === 'mousemove';
+            const isScrollByWheel = isWheel && !eventUtils.isCommandKeyPressed(e);
             e._cancelPreventDefault = true;
 
-            if(originalEvent && originalEvent.type !== 'mousemove' && e.cancelable !== false) {
+            if(originalEvent && e.cancelable !== false && (!isMouseMove && !isWheel || isScrollByWheel)) {
                 e.preventDefault();
             }
         });

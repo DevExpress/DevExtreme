@@ -17,6 +17,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import * as zIndex from 'ui/overlay/z_index';
 import selectors from 'ui/widget/selectors';
 import swatch from 'ui/widget/swatch_container';
+import nativePointerMock from '../../helpers/nativePointerMock.js';
 
 import 'common.css!';
 import 'ui/scroll_view/ui.scrollable';
@@ -3726,6 +3727,31 @@ testModule('scrollable interaction', {
             .lastEvent();
 
         assert.ok(e._cancelPreventDefault, 'overlay should set special flag for prevent default cancelling');
+    });
+
+    ['ctrlKey', 'metaKey'].forEach((commandKey) => {
+        test(`scroll event should not prevent zooming (${commandKey} pressed)`, function(assert) {
+            assert.expect(1);
+
+            const $overlay = $('#overlay').dxOverlay({
+                shading: true,
+                visible: true
+            });
+            const handler = () => {
+                assert.ok(true, 'event popped up');
+            };
+
+            $('#qunit-fixture').on('wheel', handler);
+
+            const $content = $overlay.dxOverlay('$content');
+            const $shader = $content.closest(toSelector(OVERLAY_SHADER_CLASS));
+
+            nativePointerMock($shader)
+                .start()
+                .wheel(10, { [commandKey]: true });
+
+            $('#qunit-fixture').off('wheel', handler);
+        });
     });
 });
 
