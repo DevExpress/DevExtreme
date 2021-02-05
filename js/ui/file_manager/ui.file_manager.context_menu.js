@@ -33,18 +33,25 @@ class FileManagerContextMenu extends Widget {
             cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
             showEvent: '',
             onItemClick: (args) => this._onContextMenuItemClick(args.itemData.name, args),
-            onShowing: () => this._actions.onContextMenuShowing(),
+            onShowing: e => this._handleShowing(e),
             onHidden: () => this._onContextMenuHidden()
         });
 
         super._initMarkup();
     }
 
-    showAt(fileItems, element, offset, targetFileItem) {
+    showAt(fileItems, element, event, targetFileItem, targetItemElement) {
         if(this._isVisible) {
             this._raiseContextMenuHidden();
         }
         this._isVisible = true;
+        this._itemCreationContext = {
+            itemElement: targetItemElement || element,
+            itemData: targetFileItem,
+            fileItems,
+            event,
+            actionButton: isDefined(targetItemElement)
+        };
 
         const items = this.createContextMenuItems(fileItems, null, targetFileItem);
 
@@ -55,8 +62,8 @@ class FileManagerContextMenu extends Widget {
             offset: ''
         };
 
-        if(offset) {
-            position.offset = offset.offsetX + ' ' + offset.offsetY;
+        if(event) {
+            position.offset = event.offsetX + ' ' + event.offsetY;
         } else {
             position.my = 'left top';
             position.at = 'left bottom';
@@ -70,6 +77,13 @@ class FileManagerContextMenu extends Widget {
         });
 
         this._contextMenu.show();
+    }
+
+    _handleShowing(e) {
+        e = extend(e, this._itemCreationContext, { items: this.option('items'), cancel: false });
+        this._actions.onContextMenuShowing(e);
+        const items = this.createContextMenuItems(this._itemCreationContext.fileItems, e.items, this._itemCreationContext.itemData);
+        this._contextMenu.option('dataSource', items);
     }
 
     createContextMenuItems(fileItems, contextMenuItems, targetFileItem) {

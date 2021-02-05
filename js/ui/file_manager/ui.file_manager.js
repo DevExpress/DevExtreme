@@ -3,7 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
-import { equalByValue } from '../../core/utils/common';
+import { ensureDefined, equalByValue } from '../../core/utils/common';
 
 import messageLocalization from '../../localization/message';
 
@@ -186,7 +186,7 @@ class FileManager extends Widget {
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onFocusedItemChanged: this._onItemViewFocusedItemChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
-            onContextMenuShowing: () => this._onContextMenuShowing(VIEW_AREAS.items),
+            onContextMenuShowing: e => this._onContextMenuShowing(VIEW_AREAS.items, e),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option('customizeDetailColumns'),
             detailColumns: this.option('itemView.details.columns')
@@ -216,7 +216,7 @@ class FileManager extends Widget {
             commandManager: this._commandManager,
             items: this.option('contextMenu.items'),
             onItemClick: (args) => this._actions.onContextMenuItemClick(args),
-            onContextMenuShowing: () => this._onContextMenuShowing(viewArea),
+            onContextMenuShowing: e => this._onContextMenuShowing(viewArea, e),
             isolateCreationItemCommands,
             viewArea
         });
@@ -400,8 +400,21 @@ class FileManager extends Widget {
         this._setItemsViewAreaActive(true);
     }
 
-    _onContextMenuShowing(viewArea) {
+    _onContextMenuShowing(viewArea, e) {
         this._setItemsViewAreaActive(viewArea === VIEW_AREAS.items);
+        // to cancel, set cancel to e - treeView - done
+        // to update contextMenuitems, set items to e
+        let eventArgs = extendAttributes({}, e, [
+            'itemElement',
+            'cancel',
+            'event',
+            'items',
+            'actionButton'
+        ]);
+        eventArgs = extend(eventArgs, { viewArea, itemData: e.itemData?.fileItem });
+        this._actions.onContextMenuPreparing(eventArgs);
+        e.cancel = ensureDefined(eventArgs.cancel, false);
+        e.items = ensureDefined(eventArgs.items, []);
     }
 
     _getItemThumbnailInfo(fileInfo) {
@@ -592,6 +605,7 @@ class FileManager extends Widget {
     _initActions() {
         this._actions = {
             onContextMenuItemClick: this._createActionByOption('onContextMenuItemClick'),
+            onContextMenuPreparing: this._createActionByOption('onContextMenuPreparing'),
             onCurrentDirectoryChanged: this._createActionByOption('onCurrentDirectoryChanged'),
             onSelectedFileOpened: this._createActionByOption('onSelectedFileOpened'),
             onSelectionChanged: this._createActionByOption('onSelectionChanged'),

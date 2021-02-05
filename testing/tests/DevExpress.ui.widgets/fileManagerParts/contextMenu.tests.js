@@ -404,6 +404,80 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(spy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
     });
 
+    test('Raise the contextMenuPreparing event on treeView items', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const eventSpy = sinon.spy();
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuPreparing: eventSpy,
+            permissions: {
+                rename: true
+            },
+            contextMenu: {
+                items: contextMenuItems
+            }
+        });
+        this.clock.tick(400);
+
+        const targetItemElement = this.wrapper.getFolderNode(2);
+        targetItemElement.trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        const targetFileSystemItem = fileManager.option('fileSystemProvider[1]');
+
+        assert.strictEqual(eventSpy.callCount, 1, 'event raised');
+        assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
+        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
+        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
+        assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(eventSpy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
+        assert.strictEqual(eventSpy.args[0][0].actionButton, false, 'actionButton flag is correct');
+    });
+
+    test('Raise the contextMenuPreparing event on treeView actionButtons', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const eventSpy = sinon.spy();
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuPreparing: eventSpy,
+            permissions: {
+                rename: true
+            },
+            contextMenu: {
+                items: contextMenuItems
+            }
+        });
+        this.clock.tick(400);
+
+        const targetItemElement = this.wrapper.getFolderNode(2);
+        this.wrapper.getFolderActionButton(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        const targetFileSystemItem = fileManager.option('fileSystemProvider[1]');
+
+        assert.strictEqual(eventSpy.callCount, 1, 'event raised');
+        assert.strictEqual(eventSpy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
+        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
+        assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(eventSpy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
+        assert.strictEqual(eventSpy.args[0][0].actionButton, true, 'actionButton flag is correct');
+    });
+
 });
 
 QUnit.module('Cutomize context menu', moduleConfig, () => {
