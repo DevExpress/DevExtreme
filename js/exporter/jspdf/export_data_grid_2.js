@@ -40,7 +40,6 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 const row = [];
                 table.rows.push(row);
-
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
                     const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
                     const pdfCell = {
