@@ -18,11 +18,12 @@ const
   OUTPUTDIR_CLEAN = 'output-dir.clean',
   OLD_OUTPUTDIR_CREATE = 'output-dir.create',
   GEN_RUN = 'generator.run',
-
+  
+  COPY_STRATEGY = 'copy.strategy',
   NPM_CLEAN = 'npm.clean',
   NPM_PACKAGE = 'npm.package',
   NPM_LICENSE = 'npm.license',
-  NPM_BUILD_WITH_HEADERS = 'npm.license-headers',
+  ADD_HEADERS = 'npm.license-headers',
   NPM_README = 'npm.readme',
   NPM_BUILD = 'npm.build',
   NPM_PACK = 'npm.pack';
@@ -87,49 +88,45 @@ gulp.task(NPM_BUILD, gulp.series(
   }
 ));
 
-gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
-  NPM_BUILD,
-  () => {
-    const pkg = require('./package.json'),
-        now = new Date(),
-        data = {
-            pkg: pkg,
-            date: now.toDateString(),
-            year: now.getFullYear()
-        };
+gulp.task(ADD_HEADERS, function() {
+  const pkg = require('./package.json'),
+      now = new Date(),
+      data = {
+          pkg: pkg,
+          date: now.toDateString(),
+          year: now.getFullYear()
+      };
 
-    var banner = [
-        '/*!',
-        ' * <%= pkg.name %>',
-        ' * Version: <%= pkg.version %>',
-        ' * Build date: <%= date %>',
-        ' *',
-        ' * Copyright (c) 2012 - <%= year %> Developer Express Inc. ALL RIGHTS RESERVED',
-        ' *',
-        ' * This software may be modified and distributed under the terms',
-        ' * of the MIT license. See the LICENSE file in the root of the project for details.',
-        ' *',
-        ' * https://github.com/DevExpress/devextreme-vue',
-        ' */',
-        '\n'
-        ].join('\n');
+  var banner = [
+      '/*!',
+      ' * <%= pkg.name %>',
+      ' * Version: <%= pkg.version %>',
+      ' * Build date: <%= date %>',
+      ' *',
+      ' * Copyright (c) 2012 - <%= year %> Developer Express Inc. ALL RIGHTS RESERVED',
+      ' *',
+      ' * This software may be modified and distributed under the terms',
+      ' * of the MIT license. See the LICENSE file in the root of the project for details.',
+      ' *',
+      ' * https://github.com/DevExpress/devextreme-vue',
+      ' */',
+      '\n'
+      ].join('\n');
 
-    return gulp.src(`${config.npm.dist}**/*.{ts,js}`)
-        .pipe(header(banner, data))
-        .pipe(gulp.dest(config.npm.dist));
-  }
-));
+  return gulp.src(`${config.npm.dist}**/*.{ts,js}`)
+      .pipe(header(banner, data))
+      .pipe(gulp.dest(config.npm.dist));
+});
 
-var INSTALL_STRATEGY = 'install.strategy';
-
-gulp.task(INSTALL_STRATEGY, function() {
+gulp.task(COPY_STRATEGY, function() {
   return gulp.src(`${config.npm.strategySrc}`)
         .pipe(gulp.dest(config.npm.strategyDist));
 });
 
 gulp.task(NPM_PACK, gulp.series(
   CLEAN,
-  INSTALL_STRATEGY,
-  NPM_BUILD_WITH_HEADERS,
+  NPM_BUILD,
+  COPY_STRATEGY,
+  ADD_HEADERS,
   shell.task(['npm pack'], { cwd: config.npm.dist })
 ));

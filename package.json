@@ -11,7 +11,7 @@
   "scripts": {
     "clean": "gulp clean",
     "build": "npm run clean && gulp generate",
-    "pack": "npm run clean && gulp npm.pack",
+    "pack": "gulp npm.pack",
     "test": "jest"
   },
   "keywords": [
