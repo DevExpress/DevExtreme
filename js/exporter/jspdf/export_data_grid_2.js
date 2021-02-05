@@ -7,13 +7,13 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
-            const table = {
+            const tables = [];
+            let table = {
                 rect: options.rect,
                 drawTableBorder: options.drawTableBorder,
                 rows: []
             };
-            const _tables = [];
-            _tables.push(table);
+            tables.push(table);
 
             const columns = dataProvider.getColumns();
             const dataRowsCount = dataProvider.getRowsCount();
@@ -26,17 +26,17 @@ function exportDataGrid(doc, dataGrid, options) {
                         if(!isDefined(tableRect)) {
                             throw 'tableRect is required';
                         }
-                        _tables.push({
+                        table = {
                             rect: tableRect,
                             drawTableBorder: options.drawTableBorder,
                             rows: []
-                        });
+                        };
+                        tables.push(table);
                     }
                 }
 
                 const row = [];
-                const lastTable = _tables[_tables.length - 1];
-                lastTable.rows.push(row);
+                table.rows.push(row);
 
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
                     const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
@@ -61,22 +61,22 @@ function exportDataGrid(doc, dataGrid, options) {
                     }
 
                     if(pdfCell.drawTopBorder === false) {
-                        if(lastTable.rows.length > 1) {
-                            lastTable.rows[lastTable.rows.length - 2][row.length - 1].drawBottomBorder = false;
+                        if(table.rows.length > 1) {
+                            table.rows[table.rows.length - 2][row.length - 1].drawBottomBorder = false;
                         }
                     } else if(!isDefined(pdfCell.drawTopBorder)) {
-                        if(lastTable.rows.length > 1 && lastTable.rows[lastTable.rows.length - 2][row.length - 1].drawBottomBorder === false) {
+                        if(table.rows.length > 1 && table.rows[table.rows.length - 2][row.length - 1].drawBottomBorder === false) {
                             pdfCell.drawTopBorder = false;
                         }
                     }
                 }
             }
 
-            _tables.forEach((_table, index) => {
+            tables.forEach((table, index) => {
                 if(index > 0) {
                     doc.addPage();
                 }
-                drawTable(doc, _table);
+                drawTable(doc, table);
             });
             resolve();
         });
