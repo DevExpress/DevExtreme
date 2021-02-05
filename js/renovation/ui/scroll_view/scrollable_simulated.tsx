@@ -266,7 +266,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.props.onStart?.(this.getEventArgs());
     this.eventHandler(
       (scrollbar) => scrollbar.scrollByHandler(
-        { x: location.left, y: location.top },
+        { x: location.left || 0, y: location.top || 0 },
       ),
     );
     this.props.onEnd?.(this.getEventArgs());
@@ -280,10 +280,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     location = this.applyScaleRatio(location);
     containerPosition = this.applyScaleRatio(containerPosition);
 
-    const distance = normalizeLocation({
-      top: ensureDefined(location.top, containerPosition.top) - containerPosition.top,
-      left: ensureDefined(location.left, containerPosition.left) - containerPosition.left,
-    });
+    const distance = {
+      top: -containerPosition.top - ensureDefined(location.top, -containerPosition.top),
+      left: -containerPosition.left - ensureDefined(location.left, -containerPosition.left),
+    };
 
     this.scrollBy(distance);
   }
@@ -304,14 +304,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
         ...(offset as Partial<ScrollOffset>),
       };
 
-      this.scrollTo({
+      const location = {
         top: getElementLocation(
           element, scrollOffset, DIRECTION_VERTICAL, this.containerRef, this.props.rtlEnabled,
         ),
         left: getElementLocation(
           element, scrollOffset, DIRECTION_HORIZONTAL, this.containerRef, this.props.rtlEnabled,
         ),
-      });
+      };
+
+      this.scrollTo(location);
     }
   }
 
@@ -826,8 +828,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       scrollOffset = Math.abs((scrollOffset / devicePixelRatio) * 100) / 100;
     }
     this.scrollBy({
-      top: (lines.y || 0) * -scrollOffset,
-      left: (lines.x || 0) * -scrollOffset,
+      top: (lines.y || 0) * scrollOffset,
+      left: (lines.x || 0) * scrollOffset,
     });
   }
 
@@ -845,9 +847,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const distance: { left?: number; top?: number } = {};
 
     if (isVertical) {
-      distance.top = page * -getElementHeight(this.containerRef);
+      distance.top = page * getElementHeight(this.containerRef);
     } else {
-      distance.left = page * -getElementWidth(this.containerRef);
+      distance.left = page * getElementWidth(this.containerRef);
     }
 
     this.scrollBy(distance);
