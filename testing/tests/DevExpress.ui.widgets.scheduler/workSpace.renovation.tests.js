@@ -357,6 +357,175 @@ module('Renovated Render', {
                 assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');
             });
 
+            test('should work with grouping by date', function(assert) {
+                this.createInstance({
+                    groupOrientation: 'horizontal',
+                    groupByDate: true,
+                    intervalCount: 2,
+                });
+                this.instance.option('groups', [
+                    {
+                        name: 'res',
+                        items: [
+                            { id: 1, text: 'one' }, { id: 2, text: 'two' }
+                        ]
+                    }
+                ]);
+
+                this.instance.viewDataProvider.update();
+
+                const { viewData } = this.instance.viewDataProvider;
+
+                const expectedViewData = {
+                    cellCountInGroupRow: 2,
+                    groupedData: [{
+                        allDayPanel: [{
+                            allDay: true,
+                            startDate: new Date(2020, 6, 29),
+                            endDate: new Date(2020, 6, 29),
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 0,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 0,
+                        }, {
+                            allDay: true,
+                            startDate: new Date(2020, 6, 29),
+                            endDate: new Date(2020, 6, 29),
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 0,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 1,
+                        }, {
+                            allDay: true,
+                            startDate: new Date(2020, 6, 30),
+                            endDate: new Date(2020, 6, 30),
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 1,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 2,
+                        }, {
+                            allDay: true,
+                            startDate: new Date(2020, 6, 30),
+                            endDate: new Date(2020, 6, 30),
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 1,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 3,
+                        }],
+                        dateTable: [[{
+                            startDate: new Date(2020, 6, 29, 0, 0),
+                            endDate: new Date(2020, 6, 29, 0, 30),
+                            allDay: false,
+                            text: '12:00 AM',
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 0,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 0,
+                        }, {
+                            startDate: new Date(2020, 6, 29, 0, 0),
+                            endDate: new Date(2020, 6, 29, 0, 30),
+                            allDay: false,
+                            text: '12:00 AM',
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 0,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 1,
+                        }, {
+                            startDate: new Date(2020, 6, 30, 0, 0),
+                            endDate: new Date(2020, 6, 30, 0, 30),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 1,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 2,
+                        }, {
+                            startDate: new Date(2020, 6, 30, 0, 0),
+                            endDate: new Date(2020, 6, 30, 0, 30),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 1,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 3,
+                        }], [{
+                            startDate: new Date(2020, 6, 29, 0, 30),
+                            endDate: new Date(2020, 6, 29, 1, 0),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 2,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 4,
+                        }, {
+                            startDate: new Date(2020, 6, 29, 0, 30),
+                            endDate: new Date(2020, 6, 29, 1, 0),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 2,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 5,
+                        }, {
+                            startDate: new Date(2020, 6, 30, 0, 30),
+                            endDate: new Date(2020, 6, 30, 1, 0),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 3,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 6,
+                        }, {
+                            startDate: new Date(2020, 6, 30, 0, 30),
+                            endDate: new Date(2020, 6, 30, 1, 0),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 3,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 7,
+                        }]],
+                        groupIndex: 0,
+                        isGroupedAllDayPanel: false,
+                    }],
+                    bottomVirtualRowHeight: undefined,
+                    isGroupedAllDayPanel: false,
+                    topVirtualRowHeight: undefined,
+                    leftVirtualCellWidth: undefined,
+                    rightVirtualCellWidth: undefined,
+                    bottomVirtualRowCount: 0,
+                    topVirtualRowCount: 0,
+                    leftVirtualCellCount: 0,
+                    rightVirtualCellCount: 0,
+                };
+
+                assert.deepEqual(viewData, expectedViewData, 'correct view data');
+            });
+
             test('should work with vertical grouping', function(assert) {
                 this.createInstance();
                 this.instance.option('groups', [
