@@ -278,12 +278,7 @@ const Scrollable = DOMComponent.inherit({
 
         this._updateIfNeed();
 
-        let location = this._location();
-
-        if(!this.option('useNative')) {
-            targetLocation = this._strategy._applyScaleRatio(targetLocation);
-            location = this._strategy._applyScaleRatio(location);
-        }
+        const location = this._location();
 
         const distance = this._normalizeLocation({
             left: ensureDefined(targetLocation.left, location.left) - location.top,
