@@ -75,7 +75,6 @@ gulp.task(NPM_README,
 );
 
 gulp.task(NPM_BUILD, gulp.series(
-  CLEAN,
   gulp.parallel(NPM_LICENSE, NPM_PACKAGE, NPM_README),
   GENERATE,
   () => {
@@ -129,7 +128,8 @@ gulp.task(INSTALL_STRATEGY, function() {
 });
 
 gulp.task(NPM_PACK, gulp.series(
-  NPM_BUILD_WITH_HEADERS,
+  CLEAN,
   INSTALL_STRATEGY,
+  NPM_BUILD_WITH_HEADERS,
   shell.task(['npm pack'], { cwd: config.npm.dist })
 ));
