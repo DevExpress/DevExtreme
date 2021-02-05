@@ -13,7 +13,7 @@ class ViewDataGenerator {
 
     _getCompleteViewDataMap(options) {
         const {
-            totalRowCount,
+            rowCountInGroup,
             cellCountInGroupRow,
             groupsList,
             groupByDate,
@@ -25,7 +25,7 @@ class ViewDataGenerator {
         const viewDataMap = [];
         const step = groupByDate ? groupCount : 1;
         const allDayPanelData = this._generateAllDayPanelData(options, cellCountInGroupRow, step);
-        const viewCellsData = this._generateViewCellsData(options, totalRowCount, step);
+        const viewCellsData = this._generateViewCellsData(options, rowCountInGroup, step);
 
         allDayPanelData && viewDataMap.push(allDayPanelData);
         viewDataMap.push(...viewCellsData);
@@ -211,6 +211,10 @@ class ViewDataGenerator {
         }));
     }
 
+    _getCompleteTimePanelMap(completeViewDataMap) {
+        return completeViewDataMap.map((row) => row[0]);
+    }
+
     _generateViewDataMap(completeViewDataMap, options) {
         const {
             rowCount,
@@ -255,6 +259,63 @@ class ViewDataGenerator {
         return completeDateHeaderMap.map(headerRow => headerRow.slice(0)); // TODO: virtualization
     }
 
+    _generateTimePanelData(completeTimePanelMap, options) {
+        const {
+            startRowIndex,
+            rowCount,
+            topVirtualRowHeight,
+            bottomVirtualRowHeight,
+            cellCountInGroupRow,
+        } = options;
+
+        const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
+        const showAllDayPanel = this.workspace.isAllDayPanelVisible;
+
+        const indexDifference = this.isVerticalGroupedWorkspace || !showAllDayPanel ? 0 : 1;
+        const correctedStartRowIndex = startRowIndex + indexDifference;
+
+        const timePanelMap = completeTimePanelMap
+            .slice(correctedStartRowIndex, correctedStartRowIndex + rowCount);
+
+        const timePanelData = {
+            topVirtualRowHeight,
+            bottomVirtualRowHeight,
+            isGroupedAllDayPanel,
+            cellCountInGroupRow,
+        };
+
+        const {
+            previousGroupedData: groupedData,
+        } = this._generateTimePanelDataFromMap(timePanelMap, isGroupedAllDayPanel);
+
+        timePanelData.groupedData = groupedData;
+
+        return timePanelData;
+    }
+
+    _generateTimePanelDataFromMap(timePanelMap, isGroupedAllDayPanel) {
+        return timePanelMap.reduce(({ previousGroupIndex, previousGroupedData }, cellData) => {
+            const currentGroupIndex = cellData.groupIndex;
+            if(currentGroupIndex !== previousGroupIndex) {
+                previousGroupedData.push({
+                    dateTable: [],
+                    isGroupedAllDayPanel,
+                    groupIndex: currentGroupIndex,
+                });
+            }
+            if(cellData.allDay) {
+                previousGroupedData[previousGroupedData.length - 1].allDayPanel = cellData;
+            } else {
+                previousGroupedData[previousGroupedData.length - 1].dateTable.push(cellData);
+            }
+
+            return {
+                previousGroupIndex: currentGroupIndex,
+                previousGroupedData,
+            };
+        }, { previousGroupIndex: -1, previousGroupedData: [] });
+    }
+
     _getViewDataFromMap(viewDataMap, completeViewDataMap, options) {
         const {
             topVirtualRowHeight,
@@ -262,6 +323,12 @@ class ViewDataGenerator {
             leftVirtualCellWidth,
             rightVirtualCellWidth,
             cellCountInGroupRow,
+            totalCellCount,
+            totalRowCount,
+            cellCount,
+            rowCount,
+            startRowIndex,
+            startCellIndex,
         } = options;
         const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
 
@@ -305,13 +372,16 @@ class ViewDataGenerator {
 
         return {
             groupedData,
-            isVirtual: this.workspace.isVirtualScrolling(), // TODO get rid of the 'isVirtual' prop
             topVirtualRowHeight,
             bottomVirtualRowHeight,
             leftVirtualCellWidth,
             rightVirtualCellWidth,
             cellCountInGroupRow,
-            isGroupedAllDayPanel
+            isGroupedAllDayPanel,
+            leftVirtualCellCount: startCellIndex,
+            rightVirtualCellCount: totalCellCount - startCellIndex - cellCount,
+            topVirtualRowCount: startRowIndex,
+            bottomVirtualRowCount: totalRowCount - startRowIndex - rowCount,
         };
     }
 
@@ -719,6 +789,9 @@ export default class ViewDataProvider {
     get completeDateHeaderMap() { return this._completeDateHeaderMap; }
     set completeDateHeaderMap(value) { this._completeDateHeaderMap = value; }
 
+    get completeTimePanelMap() { return this._completeTimePanelMap; }
+    set completeTimePanelMap(value) { this._completeTimePanelMap = value; }
+
     get viewData() { return this._viewData; }
     set viewData(value) { this._viewData = value; }
 
@@ -727,6 +800,9 @@ export default class ViewDataProvider {
 
     get dateHeaderMap() { return this._dateHeaderMap; }
     set dateHeaderMap(value) { this._dateHeaderMap = value; }
+
+    get timePanelData() { return this._timePanelData; }
+    set timePanelData(value) { this._timePanelData = value; }
 
     get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
 
@@ -740,17 +816,25 @@ export default class ViewDataProvider {
             this.completeViewDataMap = viewDataGenerator._getCompleteViewDataMap(renderOptions);
             this.completeDateHeaderMap = viewDataGenerator
                 ._getCompleteDateHeaderMap(renderOptions, this.completeViewDataMap);
+            this.completeTimePanelMap = viewDataGenerator
+                ._getCompleteTimePanelMap(this.completeViewDataMap);
         }
 
         this.viewDataMap = viewDataGenerator._generateViewDataMap(this.completeViewDataMap, renderOptions);
         this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, this.completeViewDataMap, renderOptions);
+
         this._groupedDataMapProvider = new GroupedDataMapProvider(
             this.viewDataGenerator,
             this.viewDataMap,
             this.completeViewDataMap,
             this._workspace,
         );
+
         this.dateHeaderMap = viewDataGenerator._generateDateHeaderMap(this.completeDateHeaderMap, renderOptions);
+        this.timePanelData = viewDataGenerator._generateTimePanelData(
+            this.completeTimePanelMap,
+            renderOptions,
+        );
     }
 
     getStartDate() {

@@ -1208,10 +1208,13 @@ QUnit.module('Renovated Render', {
                 cellCountInGroupRow: 2,
                 bottomVirtualRowHeight: undefined,
                 isGroupedAllDayPanel: false,
-                isVirtual: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
-                rightVirtualCellWidth: undefined
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
             };
             const expectedViewDataMap = {
                 allDayPanelMap: [],
@@ -1276,10 +1279,13 @@ QUnit.module('Renovated Render', {
                 }],
                 bottomVirtualRowHeight: undefined,
                 isGroupedAllDayPanel: false,
-                isVirtual: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
-                rightVirtualCellWidth: undefined
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
             };
             const expectedDateTable = expectedViewData.groupedData[0].dateTable[0];
 
@@ -1349,10 +1355,13 @@ QUnit.module('Renovated Render', {
                 bottomVirtualRowHeight: undefined,
                 cellCountInGroupRow: 2,
                 isGroupedAllDayPanel: true,
-                isVirtual: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
-                rightVirtualCellWidth: undefined
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
             };
 
             const expectedViewDataMap = {

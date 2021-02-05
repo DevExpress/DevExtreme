@@ -19,7 +19,7 @@ describe('DateTableBody', () => {
           index: 4,
           isFirstGroupCell: true,
           isLastGroupCell: false,
-          key: '1',
+          key: 3,
           text: 'test 1',
           today: true,
           otherMonth: true,
@@ -32,7 +32,7 @@ describe('DateTableBody', () => {
           index: 5,
           isFirstGroupCell: false,
           isLastGroupCell: false,
-          key: '2',
+          key: 6,
           text: 'test 2',
           today: false,
           otherMonth: false,
@@ -45,7 +45,7 @@ describe('DateTableBody', () => {
           index: 6,
           isFirstGroupCell: false,
           isLastGroupCell: true,
-          key: '3',
+          key: 9,
           text: 'test 3',
           today: false,
           otherMonth: false,
@@ -55,6 +55,7 @@ describe('DateTableBody', () => {
       }],
       leftVirtualCellWidth: 100,
       rightVirtualCellWidth: 200,
+      leftVirtualCellCount: 2,
     };
     const cellTemplate = () => null;
 
@@ -133,7 +134,7 @@ describe('DateTableBody', () => {
             dataCellTemplate,
           });
         expect(cell.key())
-          .toBe(key);
+          .toBe(key.toString());
       };
 
       const cells = tableBody.find(cellTemplate);
@@ -143,6 +144,22 @@ describe('DateTableBody', () => {
       assert(cells, 0);
       assert(cells, 1);
       assert(cells, 2);
+    });
+
+    it('should pass correct keys to rows depending on "leftVirtualCellCount"', () => {
+      const tableBody = render({});
+
+      const rows = tableBody.find(Row);
+
+      expect(rows.length)
+        .toBe(3);
+
+      expect(rows.at(0).key())
+        .toBe('1');
+      expect(rows.at(1).key())
+        .toBe('4');
+      expect(rows.at(2).key())
+        .toBe('7');
     });
 
     it('should render AllDayPanelBody and pass correct arguments to it', () => {

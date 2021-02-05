@@ -277,6 +277,8 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         },
         _handleDataLoading: function(options) {
             const loadPageCount = this.loadPageCount();
+
+            options.loadPageCount = loadPageCount;
             if(this.option(NEW_SCROLLING_MODE) && loadPageCount > 1) {
                 options.storeLoadOptions.take = loadPageCount * this.pageSize();
             }
