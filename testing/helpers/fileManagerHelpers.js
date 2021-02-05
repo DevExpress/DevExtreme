@@ -65,6 +65,7 @@ export const Consts = {
     MENU_ITEM_CLASS: 'dx-menu-item',
     MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
     SUBMENU_CLASS: 'dx-submenu',
+    CONTEXT_MENU_SEPARATOR_CLASS: 'dx-menu-separator',
     SELECTION_CLASS: 'dx-selection',
     ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
@@ -390,6 +391,10 @@ export class FileManagerWrapper {
 
     isDetailsRowFocused(index) {
         return this.getRowInDetailsView(index).is(`.${Consts.FOCUSED_ROW_CLASS}`);
+    }
+
+    getContextMenuItemsWithSeparators() {
+        return $(`.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}:visible, .${Consts.CONTEXT_MENU_CLASS} .${Consts.CONTEXT_MENU_SEPARATOR_CLASS}:visible`);
     }
 
     getContextMenuItems(visible) {
