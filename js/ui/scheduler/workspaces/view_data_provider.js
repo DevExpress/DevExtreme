@@ -13,19 +13,19 @@ class ViewDataGenerator {
 
     _getCompleteViewDataMap(options) {
         const {
-            totalRowCount,
+            rowCountInGroup,
             totalCellCount,
             verticalGroupCount,
         } = options;
 
         const viewDataMap = [];
         for(let groupIndex = 0; groupIndex < verticalGroupCount; groupIndex += 1) {
-            const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, totalRowCount, totalCellCount);
+            const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, rowCountInGroup, totalCellCount);
             const viewCellsData = this._generateViewCellsData(
                 options,
-                totalRowCount,
+                rowCountInGroup,
                 0,
-                totalRowCount * groupIndex
+                rowCountInGroup * groupIndex
             );
 
             allDayPanelData && viewDataMap.push(allDayPanelData);
@@ -231,6 +231,12 @@ class ViewDataGenerator {
             leftVirtualCellWidth,
             rightVirtualCellWidth,
             cellCountInGroupRow,
+            totalCellCount,
+            totalRowCount,
+            cellCount,
+            rowCount,
+            startRowIndex,
+            startCellIndex,
         } = options;
         const isGroupedAllDayPanel = this.workspace.isGroupedAllDayPanel();
 
@@ -274,13 +280,16 @@ class ViewDataGenerator {
 
         return {
             groupedData,
-            isVirtual: this.workspace.isVirtualScrolling(), // TODO get rid of the 'isVirtual' prop
             topVirtualRowHeight,
             bottomVirtualRowHeight,
             leftVirtualCellWidth,
             rightVirtualCellWidth,
             cellCountInGroupRow,
-            isGroupedAllDayPanel
+            isGroupedAllDayPanel,
+            leftVirtualCellCount: startCellIndex,
+            rightVirtualCellCount: totalCellCount - startCellIndex - cellCount,
+            topVirtualRowCount: startRowIndex,
+            bottomVirtualRowCount: totalRowCount - startRowIndex - rowCount,
         };
     }
 

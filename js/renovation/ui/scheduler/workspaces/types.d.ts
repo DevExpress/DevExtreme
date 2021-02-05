@@ -10,7 +10,7 @@ export interface ViewCellData {
   index: number;
   isFirstGroupCell: boolean;
   isLastGroupCell: boolean;
-  key: string;
+  key: number;
   firstDayOfMonth?: boolean;
 }
 
@@ -39,6 +39,10 @@ interface GroupedViewDataBase {
   leftVirtualCellWidth?: number;
   rightVirtualCellWidth?: number;
   cellCountInGroupRow: number;
+  leftVirtualCellCount: number;
+  rightVirtualCellCount: number;
+  topVirtualRowCount: number;
+  bottomVirtualRowCount: number;
 }
 
 export interface GroupedViewData extends GroupedViewDataBase {

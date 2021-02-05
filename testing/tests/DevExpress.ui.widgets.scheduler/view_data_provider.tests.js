@@ -1321,7 +1321,9 @@ module('View Data Provider', {
                     topVirtualRowHeight: 50,
                     bottomVirtualRowHeight: 50,
                     cellCountInGroupRow: 2,
-                    groupOrientation: 'vertical'
+                    groupOrientation: 'vertical',
+                    totalRowCount: 4,
+                    totalCellCount: 2,
                 }),
                 _isVerticalGroupedWorkSpace: () => true,
                 isAllDayPanelVisible: true,
@@ -1337,7 +1339,9 @@ module('View Data Provider', {
                     topVirtualRowHeight: 50,
                     bottomVirtualRowHeight: 50,
                     cellCountInGroupRow: 1,
-                    groupOrientation: 'horizontal'
+                    groupOrientation: 'horizontal',
+                    totalRowCount: 4,
+                    totalCellCount: 4,
                 }),
                 _isVerticalGroupedWorkSpace: () => false,
                 isAllDayPanelVisible: true,
@@ -1415,18 +1419,21 @@ module('View Data Provider', {
                             groupIndex: 3,
                             isGroupedAllDayPanel: true,
                         }],
+                        bottomVirtualRowCount: 1,
+                        topVirtualRowCount: 1,
+                        leftVirtualCellCount: 0,
+                        rightVirtualCellCount: 0,
+                        bottomVirtualRowHeight: 50,
+                        leftVirtualCellWidth: undefined,
+                        rightVirtualCellWidth: undefined,
+                        topVirtualRowHeight: 50,
+                        cellCountInGroupRow: 2,
+                        isGroupedAllDayPanel: true,
                     };
 
                     const viewData = viewDataProvider.viewData;
 
-                    assert.deepEqual(
-                        viewData.groupedData,
-                        expectedViewData.groupedData,
-                        'View data is correct'
-                    );
-                    assert.equal(viewData.topVirtualRowHeight, 50, 'Correct topVirtualRowHeight');
-                    assert.equal(viewData.bottomVirtualRowHeight, 50, 'Correct bottomVirtualRowHeight');
-                    assert.equal(viewData.cellCountInGroupRow, 2, 'Correct cellCountInGroupRow');
+                    assert.deepEqual(viewData, expectedViewData, 'View data is correct');
                 });
 
                 test('viewData should be generated correctly if horizontal grouping', function(assert) {
@@ -1445,18 +1452,21 @@ module('View Data Provider', {
                             groupIndex: 2,
                             isGroupedAllDayPanel: false,
                         }],
+                        bottomVirtualRowCount: 2,
+                        topVirtualRowCount: 1,
+                        leftVirtualCellCount: 0,
+                        rightVirtualCellCount: 0,
+                        bottomVirtualRowHeight: 50,
+                        leftVirtualCellWidth: undefined,
+                        rightVirtualCellWidth: undefined,
+                        topVirtualRowHeight: 50,
+                        cellCountInGroupRow: 1,
+                        isGroupedAllDayPanel: false,
                     };
 
                     const viewData = viewDataProvider.viewData;
 
-                    assert.deepEqual(
-                        viewData.groupedData,
-                        expectedViewData.groupedData,
-                        'View data is correct'
-                    );
-                    assert.equal(viewData.topVirtualRowHeight, 50, 'Correct topVirtualRowHeight');
-                    assert.equal(viewData.bottomVirtualRowHeight, 50, 'Correct bottomVirtualRowHeight');
-                    assert.equal(viewData.cellCountInGroupRow, 1, 'Correct cellCountInGroupRow');
+                    assert.deepEqual(viewData, expectedViewData, 'View data is correct');
                 });
             });
 
@@ -1680,7 +1690,9 @@ module('View Data Provider', {
                     topVirtualRowHeight: 50,
                     bottomVirtualRowHeight: 50,
                     cellCountInGroupRow: 2,
-                    groupOrientation: 'vertical'
+                    groupOrientation: 'vertical',
+                    totalRowCount: 2,
+                    totalCellCount: 3,
                 }),
                 _isVerticalGroupedWorkSpace: () => true,
                 isAllDayPanelVisible: true,
@@ -1702,7 +1714,9 @@ module('View Data Provider', {
                     topVirtualRowHeight: 50,
                     bottomVirtualRowHeight: 50,
                     cellCountInGroupRow: 1,
-                    groupOrientation: 'horizontal'
+                    groupOrientation: 'horizontal',
+                    totalRowCount: 2,
+                    totalCellCount: 3,
                 }),
                 _isVerticalGroupedWorkSpace: () => false,
                 isAllDayPanelVisible: true,
@@ -1778,19 +1792,22 @@ module('View Data Provider', {
                             dateTable: [[completeViewDataMap[1][1]]],
                             groupIndex: 2,
                             isGroupedAllDayPanel: true
-                        }]
+                        }],
+                        bottomVirtualRowCount: 0,
+                        topVirtualRowCount: 0,
+                        leftVirtualCellCount: 1,
+                        rightVirtualCellCount: 1,
+                        bottomVirtualRowHeight: 50,
+                        leftVirtualCellWidth: 20,
+                        rightVirtualCellWidth: 30,
+                        topVirtualRowHeight: 50,
+                        cellCountInGroupRow: 2,
+                        isGroupedAllDayPanel: true,
                     };
 
                     const viewData = viewDataProvider.viewData;
 
-                    assert.deepEqual(
-                        viewData.groupedData,
-                        expectedViewData.groupedData,
-                        'View data is correct'
-                    );
-                    assert.equal(viewData.topVirtualRowHeight, 50, 'Correct topVirtualRowHeight');
-                    assert.equal(viewData.bottomVirtualRowHeight, 50, 'Correct bottomVirtualRowHeight');
-                    assert.equal(viewData.cellCountInGroupRow, 2, 'Correct cellCountInGroupRow');
+                    assert.deepEqual(viewData, expectedViewData, 'View data is correct');
                 });
 
                 test('viewData should be generated correctly if horizontal grouping', function(assert) {
@@ -1809,18 +1826,21 @@ module('View Data Provider', {
                             groupIndex: 3,
                             isGroupedAllDayPanel: false,
                         }],
+                        bottomVirtualRowCount: 0,
+                        topVirtualRowCount: 0,
+                        leftVirtualCellCount: 1,
+                        rightVirtualCellCount: 1,
+                        bottomVirtualRowHeight: 50,
+                        leftVirtualCellWidth: 20,
+                        rightVirtualCellWidth: 30,
+                        topVirtualRowHeight: 50,
+                        cellCountInGroupRow: 1,
+                        isGroupedAllDayPanel: false,
                     };
 
                     const viewData = viewDataProvider.viewData;
 
-                    assert.deepEqual(
-                        viewData.groupedData,
-                        expectedViewData.groupedData,
-                        'View data is correct'
-                    );
-                    assert.equal(viewData.topVirtualRowHeight, 50, 'Correct topVirtualRowHeight');
-                    assert.equal(viewData.bottomVirtualRowHeight, 50, 'Correct bottomVirtualRowHeight');
-                    assert.equal(viewData.cellCountInGroupRow, 1, 'Correct cellCountInGroupRow');
+                    assert.deepEqual(viewData, expectedViewData, 'View data is correct');
                 });
             });
 
