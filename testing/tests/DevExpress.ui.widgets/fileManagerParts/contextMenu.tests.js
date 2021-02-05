@@ -442,10 +442,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuPreparing event on treeView actionButtons', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
-            return;
-        }
         const eventSpy = sinon.spy();
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
@@ -872,6 +868,35 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
 
         const $items = this.wrapper.getContextMenuItems();
         assert.equal($items.length, 0, 'none of items are visible');
+    });
+
+    test('Customize the context menu on the contextMenuPreparing event: treeView', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuPreparing: e => e.items = contextMenuItems,
+            permissions: {
+                rename: true
+            },
+            contextMenu: {
+                items: []
+            }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getFolderActionButton(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItemsWithSeparators();
+        assert.equal($items.length, 3, 'all of items are visible');
+
+        assert.strictEqual($items.eq(0).text(), 'Rename', 'first item is correct');
+        assert.ok($items.eq(1).hasClass(Consts.CONTEXT_MENU_SEPARATOR_CLASS), 'second item is correct');
+        assert.strictEqual($items.eq(2).text(), 'someText', 'third item is correct');
     });
 
 });
