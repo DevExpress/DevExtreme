@@ -1291,9 +1291,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     renderRWorkspace(isGenerateNewViewData = true) {
         this._cleanAllowedPositions();
 
-        const time = Date.now();
         this.viewDataProvider.update(isGenerateNewViewData);
-        console.log(Date.now() - time);
 
         this.renderRHeaderPanel();
         this.renderRAllDayPanel();
