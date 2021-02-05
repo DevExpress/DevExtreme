@@ -33,7 +33,7 @@ import { pointInCanvas } from '../core/utils';
 import {
   ArgumentAxisRange, ValueAxisRange, BulletScaleProps,
 } from './types.d';
-import { OnTooltipHiddenFn, OnTooltipShownFn } from '../common/types.d';
+import { OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData } from '../common/types.d';
 
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;
@@ -195,9 +195,9 @@ export class BulletProps extends BaseWidgetProps {
 
   @Nested() tooltip?: TooltipProps;
 
-  @Event() onTooltipHidden?: OnTooltipHiddenFn<undefined>;
+  @Event() onTooltipHidden?: OnTooltipHiddenFn<BaseEventData>;
 
-  @Event() onTooltipShown?: OnTooltipShownFn<undefined>;
+  @Event() onTooltipShown?: OnTooltipShownFn<BaseEventData>;
 }
 
 @Component({
