@@ -274,9 +274,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
-    const location = normalizeLocation(targetLocation, this.props.direction);
+    let location = normalizeLocation(targetLocation, this.props.direction);
+    let containerPosition = this.scrollOffset();
 
-    const containerPosition = this.scrollOffset();
+    location = this.applyScaleRatio(location);
+    containerPosition = this.applyScaleRatio(containerPosition);
 
     const distance = normalizeLocation({
       top: ensureDefined(location.top, containerPosition.top) - containerPosition.top,
@@ -527,6 +529,21 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.eventHandler((scrollbar) => scrollbar.endHandler({ x: 0, y: 0 }));
   }
 
+  applyScaleRatio(targetLocation): ScrollableLocation {
+    const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
+    const currentTargetLocation = targetLocation;
+
+    if (isVertical && isDefined(targetLocation.top)) {
+      currentTargetLocation.top *= this.getScaleRatio('height');
+    }
+
+    if (isHorizontal && isDefined(targetLocation.left)) {
+      currentTargetLocation.left *= this.getScaleRatio('width');
+    }
+
+    return currentTargetLocation;
+  }
+
   isThumbScrolling(e): boolean {
     const { scrollByThumb } = this.props;
     const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
@@ -647,6 +664,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return Math.round(getBoundingRect(element)[dimension]);
   }
 
+  /* istanbul ignore next */
   // eslint-disable-next-line class-methods-use-this
   getBaseDimension(element, dimension): number {
     return element[`offset${titleize(dimension)}`];

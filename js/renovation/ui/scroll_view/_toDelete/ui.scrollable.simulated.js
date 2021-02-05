@@ -2,7 +2,6 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { each } from '../../core/utils/iterator';
-import { isDefined } from '../../core/utils/type';
 import { locate } from '../../animation/translator';
 import Class from '../../core/class';
 import devices from '../../core/devices';
@@ -19,7 +18,6 @@ const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 
-const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
@@ -142,19 +140,6 @@ export const SimulatedStrategy = Class.inherit({
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
-    },
-
-    _applyScaleRatio: function(targetLocation) {
-        for(const direction in this._scrollers) {
-            const prop = this._getPropByDirection(direction);
-
-            if(isDefined(targetLocation[prop])) {
-                const scroller = this._scrollers[direction];
-
-                targetLocation[prop] *= scroller._getScaleRatio();
-            }
-        }
-        return targetLocation;
     },
 
     _eachScroller: function(callback) {
@@ -286,18 +271,6 @@ export const SimulatedStrategy = Class.inherit({
 
     updateBounds: function() {
         this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
-    },
-
-    scrollBy: function(distance) {
-        const verticalScroller = this._scrollers[VERTICAL];
-        const horizontalScroller = this._scrollers[HORIZONTAL];
-
-        if(verticalScroller) {
-            distance.top = verticalScroller._boundLocation(distance.top + verticalScroller._location) - verticalScroller._location;
-        }
-        if(horizontalScroller) {
-            distance.left = horizontalScroller._boundLocation(distance.left + horizontalScroller._location) - horizontalScroller._location;
-        }
     },
 
     verticalOffset: function() {

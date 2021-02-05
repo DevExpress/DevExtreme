@@ -72,8 +72,8 @@ class ScrollableTestHelper {
     this.initStyles(this.viewModel.scrollableRef,
       args.containerSize || 100, args.containerSize || 100);
 
-    Object.defineProperty(this.viewModel.scrollableRef, 'offsetWidth', { configurable: true, value: args.containerSize });
-    Object.defineProperty(this.viewModel.scrollableRef, 'offsetHeight', { configurable: true, value: args.containerSize });
+    // eslint-disable-next-line max-len
+    this.viewModel.getBaseDimension = (element, dimension) => parseInt(element.style[dimension], 10);
   }
 
   // eslint-disable-next-line class-methods-use-this
