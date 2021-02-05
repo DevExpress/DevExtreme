@@ -676,7 +676,7 @@ class GroupedDataMapProvider {
     getLasGroupCellPosition(groupIndex) {
         const groupRow = this.getLastGroupRow(groupIndex);
 
-        return groupRow[0].position;
+        return groupRow[groupRow.length - 1].position;
     }
 
     getRowCountInGroup(groupIndex) {
