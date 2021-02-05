@@ -136,11 +136,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 items:Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
      * @type_function_param1_field9 viewArea:Enums.FileManagerViewArea
+     * @type_function_param1_field10 actionButton:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: FileSystemItem, itemElement?: dxElement, cancel?: boolean, event?: event, items?: Array<dxFileManagerContextMenuItem>, viewArea?: 'navPane' | 'itemView' }) => any);
+    onContextMenuPreparing?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: FileSystemItem, itemElement?: dxElement, cancel?: boolean, event?: event, items?: Array<dxFileManagerContextMenuItem>, viewArea?: 'navPane' | 'itemView', actionButton?: boolean }) => any);
     /**
      * @docid
      * @extends Action
