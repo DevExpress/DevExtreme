@@ -44,9 +44,6 @@ class ScrollableTestHelper {
   scrollBarHandlers?: string[];
 
   constructor(args) {
-    // const containerRef = React.createRef();
-    // const contentRef = React.createRef();
-
     this.viewModel = new Scrollable({
       ...args,
     }) as any;
@@ -79,6 +76,27 @@ class ScrollableTestHelper {
   // eslint-disable-next-line class-methods-use-this
   initStyles(ref, size, scrollSize, overflow?: boolean) {
     const elementRef = ref;
+
+    Object.defineProperties(window.HTMLElement.prototype, {
+      offsetHeight: {
+        get() { return parseFloat(window.getComputedStyle(this).height) || 0; },
+      },
+      offsetWidth: {
+        get() { return parseFloat(window.getComputedStyle(this).width) || 0; },
+      },
+    });
+
+    Object.defineProperty(elementRef, 'clientWidth', {
+      value: `${size}px`,
+      configurable: true,
+      writable: true,
+    });
+
+    Object.defineProperty(elementRef, 'clientHeight', {
+      value: `${size}px`,
+      configurable: true,
+      writable: true,
+    });
 
     ['width', 'height', 'outerWidth', 'outerHeight'].forEach((prop) => {
       elementRef.style[prop] = `${size}px`;
@@ -156,6 +174,7 @@ class ScrollableTestHelper {
 
       scrollbar.translateOffset = additionalProps.translateOffset;
       scrollbar.scrollableOffset = 0;
+      scrollbar.location = -50;
 
       Object.assign(scrollbar, {
         props: {
@@ -219,6 +238,11 @@ class ScrollableTestHelper {
     } else if (this.isHorizontal) {
       this.viewModel.horizontalScrollbarRef.props[prop] = value;
     }
+  }
+
+  initContainerPosition({ top, left }) {
+    this.viewModel.containerRef.scrollTop = top;
+    this.viewModel.containerRef.scrollLeft = left;
   }
 
   initScrollbarLocation({ top, left }) {
