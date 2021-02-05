@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "gulp build",
-    "pack": "gulp npm.pack",
+    "pack": "npm run build",
     "test": "jest",
     "start": "webpack-dev-server"
   },
@@ -21,7 +21,6 @@
     "devextreme": "~20.2.4",
     "devextreme-vue-generator": "^1.0.0",
     "gulp": "^4.0.0",
-    "gulp-header": "^2.0.5",
     "gulp-typescript": "^5.0.0",
     "jest": "^24.8.0",
     "source-map-loader": "^0.2.4",
