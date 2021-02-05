@@ -22,7 +22,7 @@ class ViewDataGenerator {
             totalCellCount,
             groupCount,
         } = options;
-        const viewDataMap = [];
+        let viewDataMap = [];
         const step = groupByDate ? groupCount : 1;
         const allDayPanelData = this._generateAllDayPanelData(options, cellCountInGroupRow, step);
         const viewCellsData = this._generateViewCellsData(options, rowCountInGroup, step);
@@ -31,21 +31,23 @@ class ViewDataGenerator {
         viewDataMap.push(...viewCellsData);
 
         if(isHorizontalGrouping && !groupByDate) {
-            return this._transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList, totalCellCount);
+            viewDataMap = this._transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList);
         }
 
         if(isVerticalGrouping) {
-            return this._transformViewDataMapForVerticalGrouping(viewDataMap, groupsList, totalCellCount);
+            viewDataMap = this._transformViewDataMapForVerticalGrouping(viewDataMap, groupsList);
         }
 
         if(groupByDate) {
-            return this._transformViewDataMapForGroupingByDate(viewDataMap, groupsList, totalCellCount);
+            viewDataMap = this._transformViewDataMapForGroupingByDate(viewDataMap, groupsList);
         }
 
-        return viewDataMap;
+        const completeViewDataMap = this._addKeysToCells(viewDataMap, totalCellCount);
+
+        return completeViewDataMap;
     }
 
-    _transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList, totalColumnCount) {
+    _transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList) {
         const completeViewDataMap = viewDataMap.map(row => row.slice());
 
         groupsList.slice(1).forEach((groups, index) => {
@@ -60,10 +62,10 @@ class ViewDataGenerator {
             });
         });
 
-        return this._addKeysToCells(completeViewDataMap, totalColumnCount);
+        return completeViewDataMap;
     }
 
-    _transformViewDataMapForVerticalGrouping(viewDataMap, groupsList, totalColumnCount) {
+    _transformViewDataMapForVerticalGrouping(viewDataMap, groupsList) {
         const completeViewDataMap = viewDataMap.map(row => row.slice());
 
         groupsList.slice(1).forEach((groups, index) => {
@@ -76,10 +78,10 @@ class ViewDataGenerator {
             }))));
         });
 
-        return this._addKeysToCells(completeViewDataMap, totalColumnCount);
+        return completeViewDataMap;
     }
 
-    _transformViewDataMapForGroupingByDate(viewDataMap, groupsList, totalColumnCount) {
+    _transformViewDataMapForGroupingByDate(viewDataMap, groupsList) {
         const correctedGroupList = groupsList.slice(1);
         const otherGroupCount = correctedGroupList.length;
 
@@ -99,7 +101,7 @@ class ViewDataGenerator {
             })),
         ], []));
 
-        return this._addKeysToCells(completeViewDataMap, totalColumnCount);
+        return completeViewDataMap;
     }
 
     _addKeysToCells(viewDataMap, totalColumnCount) {
@@ -432,8 +434,6 @@ class ViewDataGenerator {
                 rowIndex, columnIndex, options,
             );
 
-            cellDataValue.key = this._getKeyByRowAndColumn(rowIndex, columnIndex, columnCount);
-
             cellsRow.push(cellDataValue);
         }
 
@@ -455,10 +455,6 @@ class ViewDataGenerator {
         }
 
         return index;
-    }
-
-    _getKeyByRowAndColumn(rowIndex, columnIndex, cellCount) {
-        return rowIndex * cellCount + columnIndex;
     }
 
     generateGroupedDataMap(viewDataMap) {
