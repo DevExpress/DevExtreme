@@ -431,6 +431,28 @@ describe('Methods', () => {
 
 describe('Handlers', () => {
   each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
+    each([undefined, jest.fn()]).describe('Inertia start handler: %o', (inertiaStartHandler) => {
+      it('inertiaHandler()', () => {
+        const viewModel = new Scrollbar({
+          direction,
+        } as ScrollbarProps);
+
+        mount(viewFunction(viewModel as any) as JSX.Element);
+
+        viewModel.suppressInertia = jest.fn();
+        if (inertiaStartHandler) {
+          (viewModel as any).inertiaAnimator = { start: inertiaStartHandler };
+        }
+
+        viewModel.inertiaHandler();
+
+        if (inertiaStartHandler) {
+          expect(inertiaStartHandler).toHaveBeenCalledTimes(1);
+        }
+        expect(viewModel.suppressInertia).toHaveBeenCalledTimes(1);
+      });
+    });
+
     each([true, false]).describe('InertiaEnabled: %o', (inertiaEnabled) => {
       each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
         it('endHandler(e.velocity)', () => {
