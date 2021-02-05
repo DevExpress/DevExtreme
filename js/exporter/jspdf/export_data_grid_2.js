@@ -21,8 +21,8 @@ function exportDataGrid(doc, dataGrid, options) {
                 if(options.onRowExporting) {
                     const drawNewTableFromThisRow = {};
                     options.onRowExporting({ drawNewTableFromThisRow });
-                    const { addPage, tableRect } = drawNewTableFromThisRow;
-                    if(addPage === true) {
+                    const { startNewTable, addPage, tableRect } = drawNewTableFromThisRow;
+                    if(startNewTable === true) {
                         if(!isDefined(tableRect)) {
                             throw 'tableRect is required';
                         }
@@ -31,6 +31,9 @@ function exportDataGrid(doc, dataGrid, options) {
                             drawTableBorder: options.drawTableBorder,
                             rows: []
                         };
+                        if(addPage === true) {
+                            table.drawOnNewPage = true;
+                        }
                         tables.push(table);
                     }
                 }
@@ -72,8 +75,8 @@ function exportDataGrid(doc, dataGrid, options) {
                 }
             }
 
-            tables.forEach((table, index) => {
-                if(index > 0) {
+            tables.forEach((table) => {
+                if(table.drawOnNewPage === true) {
                     doc.addPage();
                 }
                 drawTable(doc, table);
@@ -148,18 +151,7 @@ function drawTable(doc, table) {
 
     if(isDefined(table.rows)) {
         for(let rowIndex = 0; rowIndex < table.rows.length; rowIndex++) {
-            const row = table.rows[rowIndex];
-            if(row.newPage === true) {
-                if(!isDefined(row.tableRect)) {
-                    throw 'row.tableRect is required';
-                }
-                if(isDefined(table.drawTableBorder) ? table.drawTableBorder : (isDefined(table.rows) && table.rows.length === 0)) {
-                    drawBorder(table.rect);
-                }
-                table.rect = row.tableRect;
-                doc.addPage();
-            }
-            drawRow(row);
+            drawRow(table.rows[rowIndex]);
         }
     }
 
