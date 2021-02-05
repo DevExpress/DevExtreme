@@ -27,7 +27,7 @@ describe('resizable-container', () => {
     const parentHtmlEl = getFakeHtml(width) as RefObject<HTMLDivElement>;
     const pageSizesHtmlEl = pageSizes ? getFakeHtml(pageSizes) : undefined;
     const infoHtmlEl = info ? getFakeHtml(info) : undefined;
-    const pagesHtmlEl = getFakeHtml(info + pages);
+    const pagesHtmlEl = getFakeHtml(pages);
     return {
       parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
     };

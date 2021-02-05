@@ -64,7 +64,7 @@ function getElementsWidth({
     parent: parentWidth,
     pageSizes: pageSizesWidth,
     info: infoWidth + getElementStyle('marginLeft', info) + getElementStyle('marginRight', info),
-    pages: pagesHtmlWidth - infoWidth,
+    pages: pagesHtmlWidth,
   };
 }
 
