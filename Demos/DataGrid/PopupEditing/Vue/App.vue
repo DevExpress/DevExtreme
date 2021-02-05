@@ -15,13 +15,7 @@
           :width="700"
           :height="525"
           title="Employee Info"
-        >
-          <DxPosition
-            my="top"
-            at="top"
-            of="window"
-          />
-        </DxPopup>
+        />
         <DxForm>
           <DxItem
             :col-count="2"
@@ -103,7 +97,6 @@ import {
   DxEditing,
   DxPopup,
   DxLookup,
-  DxPosition,
   DxForm
 } from 'devextreme-vue/data-grid';
 import { DxTextArea } from 'devextreme-vue/text-area';
@@ -118,7 +111,6 @@ export default {
     DxEditing,
     DxPopup,
     DxLookup,
-    DxPosition,
     DxForm,
     DxItem,
     DxTextArea

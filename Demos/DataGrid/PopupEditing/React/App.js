@@ -6,7 +6,6 @@ import DataGrid, {
   Popup,
   Paging,
   Lookup,
-  Position,
   Form
 } from 'devextreme-react/data-grid';
 import 'devextreme-react/text-area';
@@ -28,9 +27,7 @@ class App extends React.Component {
           <Editing
             mode="popup"
             allowUpdating={true}>
-            <Popup title="Employee Info" showTitle={true} width={700} height={525}>
-              <Position my="top" at="top" of={window} />
-            </Popup>
+            <Popup title="Employee Info" showTitle={true} width={700} height={525} />
             <Form>
               <Item itemType="group" colCount={2} colSpan={2}>
                 <Item dataField="FirstName" />

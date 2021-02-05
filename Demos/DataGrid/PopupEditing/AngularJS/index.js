@@ -12,12 +12,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 title: "Employee Info",
                 showTitle: true,
                 width: 700,
-                height: 525,
-                position: {
-                    my: "top",
-                    at: "top",
-                    of: window
-                }
+                height: 525
             },
             form: {
                 items: [{
