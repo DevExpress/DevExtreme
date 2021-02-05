@@ -771,13 +771,15 @@ const TagBox = SelectBox.inherit({
     _getFilteredItems: function(values) {
         const creator = new FilterCreator(values);
 
-        const selectedItems = (this._list && this._list.option('selectedItems')) || this.option('selectedItems');
+        const listSelectedItems = this._list && this._list.option('selectedItems');
+        const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource().isLoaded();
+        const selectedItems = listSelectedItems || this.option('selectedItems');
         const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
         const filteredItems = selectedItems.filter(clientFilterFunction);
         const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
         const d = new Deferred();
 
-        if(!this._isDataSourceChanged && selectedItemsAlreadyLoaded) {
+        if((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
             const dataSource = this._dataSource;
@@ -801,6 +803,14 @@ const TagBox = SelectBox.inherit({
                 .fail(d.reject);
 
             return d.promise();
+        }
+    },
+
+    _canUseCurrentDataSource: function(value) {
+        if(isDefined(value)) {
+            this._isDataSourceChanged = value;
+        } else {
+            return this._isDataSourceChanged;
         }
     },
 
@@ -1366,9 +1376,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _dataSourceChangedHandler: function() {
-        if(this._list) {
-            this._isDataSourceChanged = true;
-        }
+        this._isDataSourceChanged = true;
         this.callBase.apply(this, arguments);
     },
 
