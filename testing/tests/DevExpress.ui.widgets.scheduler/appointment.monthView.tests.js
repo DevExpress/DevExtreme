@@ -247,10 +247,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Month appointment inside grouped view should have a right resizable area', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
@@ -293,10 +289,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Rival appointments should have correct positions on month view, rtl mode', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 this.createInstance({
                     rtlEnabled: true,
                     currentDate: new Date(2015, 2, 4),
@@ -315,10 +307,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Recurrence appointment should be rendered correctly when currentDate was changed: month view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 const appointment = {
                     startDate: new Date(2015, 1, 14, 0),
                     endDate: new Date(2015, 1, 14, 0, 30),
@@ -341,10 +329,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Recurrence long appointment should be rendered correctly when currentDate was changed: month view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 const appointment = {
                     text: 'Website Re-Design Plan',
                     priorityId: 2,
@@ -368,10 +352,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Recurrence icon position should be correct (T718691)', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 const data = [{
                     text: 'Book Flights to San Fran for Sales Trip',
                     startDate: new Date(2017, 4, 29, 12, 0),
@@ -398,10 +378,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Appointment startDate should be preprocessed before position calculating', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
 
                 this.createInstance({
                     dataSource: [{ 'text': 'a', 'allDay': true, 'startDate': '2017-03-13T09:05:00Z', 'endDate': '2017-03-20T09:05:00Z' }],
@@ -496,10 +472,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Long term appoinment inflict index shift in other appointments (T737780)', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 const data = [
                     {
                         text: 'Website Re-Design Plan',
@@ -552,10 +524,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Appointments should be rendered correctly, Month view with intervalCount and startDate', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 const tasks = [
                     { text: 'One', startDate: new Date(2017, 5, 22, 4), endDate: new Date(2017, 5, 22, 4, 30) },
                     { text: 'Two', startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
@@ -575,7 +543,8 @@ module('Integration: Appointments in Month view', {
                         startDate: new Date(2017, 0, 19)
                     }],
                     currentView: 'month',
-                    firstDayOfWeek: 1
+                    firstDayOfWeek: 1,
+                    height: 800
                 });
 
                 const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
@@ -584,10 +553,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Appointments should be rendered correctly in vertical grouped workspace Month', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
 
                 this.createInstance({
                     dataSource: [{
@@ -632,10 +597,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Appointment should be resized correctly to left side in horizontal grouped workspace Month', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 this.createInstance({
                     dataSource: [{
                         text: 'a',
@@ -675,10 +636,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Long appointment should have correct parts count(T854740)', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
 
                 const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
 
@@ -699,10 +656,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Long appt parts should have correct coordinates if duration > week in vertical grouped workspace Month', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 this.createInstance({
                     dataSource: [{
                         text: 'a',
@@ -736,10 +689,6 @@ module('Integration: Appointments in Month view', {
             });
 
             test('Long appointment should have correct parts count if widget is zoomed (T854740)', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
 
                 if(!browser.webkit) {
                     assert.ok(true, 'Browser zooming is enabled in webkit');
@@ -802,13 +751,38 @@ module('Integration: Appointments in Month view', {
 
                 assert.equal(scheduler.appointments.getAppointmentPosition(0).top, scheduler.appointments.getAppointmentPosition(1).top, 'Appointment positions are correct');
             });
+        });
+    });
 
-            test('Grouped recurrence tasks should have a right color', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
-
+    module('Recurrence', () => {
+        [
+            {
+                scrollingMode: 'standard',
+                expected: [
+                    {
+                        color: '#ff0000',
+                        indices: [0, 1, 4]
+                    },
+                    {
+                        color: '#0000ff',
+                        indices: [2, 3, 5]
+                    }
+                ]
+            }, {
+                scrollingMode: 'virtual',
+                expected: [
+                    {
+                        color: '#ff0000',
+                        indices: [0, 1, 2]
+                    },
+                    {
+                        color: '#0000ff',
+                        indices: [3, 4, 5]
+                    }
+                ]
+            }
+        ].forEach(({ scrollingMode, expected }) => {
+            test(`Grouped recurrence tasks should have a correct color in ${scrollingMode} scrolling mode`, function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 11, 10),
                     currentView: 'month',
@@ -829,12 +803,21 @@ module('Integration: Appointments in Month view', {
                                 { id: 2, text: 'two', color: '#0000ff' }
                             ]
                         }
-                    ]
+                    ],
+                    scrolling: {
+                        mode: scrollingMode
+                    },
+                    width: 800,
+                    height: 600
                 });
 
-                const task = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-                assert.equal(this.getAppointmentColor(task.eq(0)), '#ff0000', 'Color is OK');
-                assert.equal(this.getAppointmentColor(task.eq(2)), '#0000ff', 'Color is OK');
+                const task = this.instance.$element().find(`.${APPOINTMENT_CLASS}`);
+
+                expected.forEach(({ color, indices }) => {
+                    indices.forEach(index => {
+                        assert.equal(this.getAppointmentColor(task.eq(index)), color, `${color} Color is OK`);
+                    });
+                });
             });
         });
     });
