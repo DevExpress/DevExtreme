@@ -8,11 +8,12 @@ const MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36;
 const MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 
 class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsStrategy {
-
     _getAppointmentParts(appointmentGeometry, appointmentSettings, startDate) {
-        const deltaWidth = appointmentGeometry.sourceAppointmentWidth - appointmentGeometry.reducedWidth;
+        const { groupIndex } = appointmentSettings;
+        const groupDeltaWidth = this._getGroupDeltaWidth(groupIndex);
+        const deltaWidth = appointmentGeometry.sourceAppointmentWidth - appointmentGeometry.reducedWidth - groupDeltaWidth;
         const height = appointmentGeometry.height;
-        const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(appointmentSettings.groupIndex);
+        const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(appointmentSettings.groupIndex) - groupDeltaWidth;
         const maxAppointmentWidth = this._getMaxAppointmentWidth(startDate);
         const longPartCount = Math.ceil((deltaWidth) / fullWeekAppointmentWidth) - 1;
         const realTailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth);
@@ -58,6 +59,18 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
                 rowIndex: ++appointmentSettings.rowIndex,
                 cellIndex: 0
             }));
+        }
+
+        return result;
+    }
+    _getGroupDeltaWidth(groupIndex) {
+        let result = 0;
+        const workspace = this.instance.getWorkSpace();
+        if(workspace.isRenovatedRender()) {
+            const { viewDataProvider } = workspace;
+
+            const cellCountDelta = viewDataProvider.getGroupCellCountDelta(groupIndex);
+            result = cellCountDelta * workspace.getCellWidth();
         }
 
         return result;

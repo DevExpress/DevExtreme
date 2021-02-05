@@ -2974,7 +2974,23 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._groupedStrategy.getAllDayOffset();
     }
 
-    getMaxAllowedPosition() {
+    getMaxAllowedPosition(groupIndex) {
+        if(this.isRenovatedRender()) {
+            return this.getRMaxAllowedHorizontalPosition(groupIndex);
+        }
+
+        return this.getMaxAllowedHorizontalPosition();
+    }
+
+    getRMaxAllowedHorizontalPosition(groupIndex) {
+        const { viewDataProvider } = this;
+
+        const cellAmount = viewDataProvider.getCellCountWithGroup(groupIndex);
+
+        return cellAmount * this.getCellWidth() + this._getVirtualCellOffset();
+    }
+
+    getMaxAllowedHorizontalPosition() {
         if(this._maxAllowedPosition.length === 0) {
             const isRtl = this.option('rtlEnabled');
 

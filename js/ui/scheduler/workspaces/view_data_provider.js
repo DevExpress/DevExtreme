@@ -18,7 +18,7 @@ class ViewDataGenerator {
             verticalGroupCount,
         } = options;
 
-        const viewDataMap = [];
+        const result = [];
         for(let groupIndex = 0; groupIndex < verticalGroupCount; groupIndex += 1) {
             const allDayPanelData = this._generateAllDayPanelData(options, groupIndex, rowCountInGroup, totalCellCount);
             const viewCellsData = this._generateViewCellsData(
@@ -28,11 +28,11 @@ class ViewDataGenerator {
                 rowCountInGroup * groupIndex
             );
 
-            allDayPanelData && viewDataMap.push(allDayPanelData);
-            viewDataMap.push(...viewCellsData);
+            allDayPanelData && result.push(allDayPanelData);
+            result.push(...viewCellsData);
         }
 
-        return viewDataMap;
+        return result;
     }
 
     _getCompleteDateHeaderMap(options, completeViewDataMap) {
@@ -224,7 +224,7 @@ class ViewDataGenerator {
         }, { previousGroupIndex: -1, previousGroupedData: [] });
     }
 
-    _getViewDataFromMap(viewDataMap, completeViewDataMap, options) {
+    _getViewDataFromMap(viewDataMap, options) {
         const {
             topVirtualRowHeight,
             bottomVirtualRowHeight,
@@ -745,8 +745,7 @@ export default class ViewDataProvider {
         }
 
         this.viewDataMap = viewDataGenerator._generateViewDataMap(this.completeViewDataMap, renderOptions);
-        this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, this.completeViewDataMap, renderOptions);
-
+        this.viewData = viewDataGenerator._getViewDataFromMap(this.viewDataMap, renderOptions);
         this._groupedDataMapProvider = new GroupedDataMapProvider(
             this.viewDataGenerator,
             this.viewDataMap,
@@ -808,6 +807,16 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getRowCountInGroup(groupIndex);
     }
 
+    getGroupCellCountDelta(groupIndex) {
+        const { dateTableGroupedMap } = this._groupedDataMapProvider.groupedDataMap;
+        const groupedData = dateTableGroupedMap[groupIndex];
+        const { cellCountInGroupRow: totalCellCountInGroupRow } = this.viewData;
+
+        const cellCountInGroupRow = groupedData[0].length;
+
+        return totalCellCountInGroupRow - cellCountInGroupRow;
+    }
+
     getCellData(rowIndex, cellIndex, isAllDay) {
         if(isAllDay && !this.isVerticalGroupedWorkspace) {
             return this._viewData.groupedData[0].allDayPanel[cellIndex];
@@ -865,6 +874,17 @@ export default class ViewDataProvider {
             allDayPanel: filterCells(allDayPanel),
             dateTable: filteredDateTable
         };
+    }
+
+    getCellCountWithGroup(groupIndex, rowIndex = 0) {
+        const { dateTableGroupedMap } = this.groupedDataMap;
+
+        return dateTableGroupedMap
+            .filter((_, index) => index <= groupIndex)
+            .reduce(
+                (previous, row) => previous + row[rowIndex].length,
+                0
+            );
     }
 
     getAllDayPanel(groupIndex) {
