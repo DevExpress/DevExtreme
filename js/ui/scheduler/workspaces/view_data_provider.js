@@ -83,21 +83,21 @@ class ViewDataGenerator {
 
     _transformViewDataMapForGroupingByDate(viewDataMap, groupsList) {
         const correctedGroupList = groupsList.slice(1);
-        const otherGroupCount = correctedGroupList.length;
+        const correctedGroupCount = correctedGroupList.length;
 
         const completeViewDataMap = viewDataMap.map((cellsRow) => cellsRow.reduce((currentRow, cell) => [
             ...currentRow,
             {
                 ...cell,
                 isFirstGroupCell: true,
-                isLastGroupCell: otherGroupCount === 0,
+                isLastGroupCell: correctedGroupCount === 0,
             },
             ...correctedGroupList.map((groups, index) => ({
                 ...cell,
                 groups,
                 groupIndex: index + 1,
                 isFirstGroupCell: false,
-                isLastGroupCell: index === otherGroupCount - 1,
+                isLastGroupCell: index === correctedGroupCount - 1,
             })),
         ], []));
 
