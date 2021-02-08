@@ -64,7 +64,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             items = this._getFileItemsForContextMenu(targetItem);
         }
 
-        this._showContextMenu(items, e.target, e, targetItem);
+        this._showContextMenu(items, targetItemElement, e, targetItem);
     }
 
     _getItemThumbnailCssClass() {
