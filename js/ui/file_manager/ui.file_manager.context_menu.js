@@ -47,7 +47,7 @@ class FileManagerContextMenu extends Widget {
             this._onContextMenuHidden();
         }
         this._itemCreationContext = {
-            itemElement: targetItemElement || element,
+            itemElement: targetItemElement || element.length && element || undefined,
             itemData: targetFileItem,
             fileItems,
             event,

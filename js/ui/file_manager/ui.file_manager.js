@@ -411,7 +411,7 @@ class FileManager extends Widget {
             'items',
             'actionButton'
         ]);
-        eventArgs = extend(eventArgs, { viewArea, itemData: e.itemData.fileItem });
+        eventArgs = extend(eventArgs, { viewArea, itemData: e.itemData?.fileItem });
         this._actions.onContextMenuPreparing(eventArgs);
         e.cancel = ensureDefined(eventArgs.cancel, false);
         e.items = ensureDefined(eventArgs.items, []);

@@ -652,7 +652,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const targetFileSystemItem = undefined;
 
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
-        assert.strictEqual(eventSpy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
         assert.strictEqual(eventSpy.args[0][0].itemElement, targetItemElement, 'itemElement is correct');
         assert.strictEqual(eventSpy.args[0][0].itemData, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
