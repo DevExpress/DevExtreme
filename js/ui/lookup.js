@@ -748,6 +748,8 @@ const Lookup = DropDownList.inherit({
                 at: 'left bottom',
                 of: this.element()
             };
+
+            result.closeOnTargetScroll = true;
         }
 
         each(['position', 'animation', 'width', 'height'], (function(_, optionName) {
