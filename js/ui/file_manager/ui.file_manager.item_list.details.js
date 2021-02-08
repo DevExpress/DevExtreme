@@ -285,7 +285,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
 
         e = extend(e, {
-            itemElement: this._filesView.getRowElement(e.rowIndex),
+            itemElement: e.target === 'content' && isDefined(e.row) ? this._filesView.getRowElement(e.rowIndex) : undefined,
             itemData: item,
             items: this._contextMenu.option('items'),
             event: e.event,

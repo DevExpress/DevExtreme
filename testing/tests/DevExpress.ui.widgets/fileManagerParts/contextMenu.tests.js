@@ -546,6 +546,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuPreparing event on detailsView free space', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const eventSpy = sinon.spy();
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
@@ -563,15 +567,15 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const targetFileSystemItem = undefined;
 
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
-        assert.strictEqual(eventSpy.args[0][0].event.type, 'dxclick', 'event has correct type');
-        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
+        assert.strictEqual(eventSpy.args[0][0].itemElement, targetItemElement, 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].itemData, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
-        assert.strictEqual(eventSpy.args[0][0].actionButton, true, 'actionButton flag is correct');
+        assert.strictEqual(eventSpy.args[0][0].actionButton, false, 'actionButton flag is correct');
     });
 
     test('Cancel the context menu on the contextMenuPreparing event: detailsView', function(assert) {
@@ -649,14 +653,14 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
         assert.strictEqual(eventSpy.args[0][0].event.type, 'dxclick', 'event has correct type');
-        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].itemElement, targetItemElement, 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].itemData, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
-        assert.strictEqual(eventSpy.args[0][0].actionButton, true, 'actionButton flag is correct');
+        assert.strictEqual(eventSpy.args[0][0].actionButton, false, 'actionButton flag is correct');
     });
 
     test('Cancel the context menu on the contextMenuPreparing event: thumbnailsView', function(assert) {
