@@ -414,12 +414,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
-            permissions: {
-                rename: true
-            },
-            contextMenu: {
-                items: contextMenuItems
-            }
+            permissions: { rename: true },
+            contextMenu: { items: contextMenuItems }
         });
         this.clock.tick(400);
 
@@ -447,12 +443,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
-            permissions: {
-                rename: true
-            },
-            contextMenu: {
-                items: contextMenuItems
-            }
+            permissions: { rename: true },
+            contextMenu: { items: contextMenuItems }
         });
         this.clock.tick(400);
 
@@ -476,14 +468,11 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
     test('Cancel the context menu on the contextMenuPreparing event: treeView', function(assert) {
         const fileManager = this.wrapper.getInstance();
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         fileManager.option({
             onContextMenuPreparing: e => e.cancel = true,
-            permissions: {
-                rename: true
-            },
-            contextMenu: {
-                items: ['rename', { text: 'someText', beginGroup: true }]
-            }
+            permissions: { rename: true },
+            contextMenu: { items: contextMenuItems }
         });
         this.clock.tick(400);
 
@@ -504,12 +493,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
-            permissions: {
-                rename: true
-            },
-            contextMenu: {
-                items: contextMenuItems
-            }
+            permissions: { rename: true },
+            contextMenu: { items: contextMenuItems }
         });
         this.clock.tick(400);
 
@@ -537,12 +522,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
-            permissions: {
-                rename: true
-            },
-            contextMenu: {
-                items: contextMenuItems
-            }
+            permissions: { rename: true },
+            contextMenu: { items: contextMenuItems }
         });
         this.clock.tick(400);
 
@@ -566,14 +547,11 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
     test('Cancel the context menu on the contextMenuPreparing event: detailsView', function(assert) {
         const fileManager = this.wrapper.getInstance();
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         fileManager.option({
             onContextMenuPreparing: e => e.cancel = true,
-            permissions: {
-                rename: true
-            },
-            contextMenu: {
-                items: ['rename', { text: 'someText', beginGroup: true }]
-            }
+            permissions: { rename: true },
+            contextMenu: { items: contextMenuItems }
         });
         this.clock.tick(400);
 
@@ -985,12 +963,8 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: e => e.items = contextMenuItems,
-            permissions: {
-                rename: true
-            },
-            contextMenu: {
-                items: []
-            }
+            permissions: { rename: true },
+            contextMenu: { items: [] }
         });
         this.clock.tick(400);
 
