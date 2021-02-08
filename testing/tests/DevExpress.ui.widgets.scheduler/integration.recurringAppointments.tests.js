@@ -1256,7 +1256,7 @@ QUnit.testStart(function() {
             const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
             const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').outerWidth();
 
-            assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 2.5, 'first appt in 2d group has right left position');
+            assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 4.01, 'first appt in 2d group has right left position');
         });
 
         QUnit.test('Recurrence exception should be adjusted by scheduler timezone', function(assert) {

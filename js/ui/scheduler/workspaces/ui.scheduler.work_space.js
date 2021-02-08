@@ -2834,7 +2834,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getPositionShift(timeShift, isAllDay) {
         return {
-            top: timeShift * this.getCellHeight() - this._getVirtualRowOffset(),
+            top: timeShift * this.getCellHeight(),
             left: 0,
             cellPosition: 0
         };
@@ -3299,10 +3299,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getGroupWidth(groupIndex) {
         let result = this._getCellCount() * this.getCellWidth();
-        const position = this.getMaxAllowedPosition();
+        const position = this.getMaxAllowedPosition(groupIndex);
         const currentPosition = position[groupIndex];
 
-        if(position.length && currentPosition) {
+        if(currentPosition) {
             if(this._isRTL()) {
                 result = currentPosition - position[groupIndex + 1];
             } else {
