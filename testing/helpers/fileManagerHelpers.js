@@ -44,7 +44,6 @@ export const Consts = {
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: 'dx-filemanager-breadcrumbs-parent-folder-item',
     BREADCRUMBS_SEPARATOR_ITEM_CLASS: 'dx-filemanager-breadcrumbs-separator-item',
     ITEMS_PANEL_CLASS: 'dx-filemanager-items-panel',
-    ITEMS_GRID_VIEW_CLASS: 'dx-filemanager-files-view',
     FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
     INACTIVE_AREA_CLASS: 'dx-filemanager-inactive-area',
     CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
@@ -236,7 +235,7 @@ export class FileManagerWrapper {
     }
 
     getDetailsItemList() {
-        return this._$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`);
+        return this.getItemsView();
     }
 
     getThumbnailsViewPort() {
