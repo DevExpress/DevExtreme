@@ -3267,6 +3267,50 @@ QUnit.module('View\'s focus', {
         assert.ok($inputElement.is(':focus'), 'input is focused');
     });
 
+    QUnit.testInActiveWindow('The expand button of the master cell should not lose its tabindex when a row in a detail grid is switched to editing mode (T969832)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [
+                { id: 1, name: 'test1' },
+                { id: 2, name: 'test2' }
+            ],
+            keyExpr: 'id',
+            masterDetail: {
+                enabled: true,
+                template: function(container, options) {
+                    $('<div>')
+                        .addClass('myclass')
+                        .dxDataGrid({
+                            keyExpr: 'id',
+                            dataSource: [
+                                { id: 1 }
+                            ],
+                            editing: {
+                                mode: 'row',
+                                allowUpdating: true
+                            }
+                        }).appendTo(container);
+                }
+            }
+        });
+        this.clock.tick();
+
+        // act
+        $(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').trigger('dxpointerdown').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual($(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').attr('tabindex'), '0', 'tab index is set to the expanded button');
+
+        // act
+        $(this.dataGrid.element()).find('.myclass .dx-link-edit:eq(0)').trigger('dxpointerdown').trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual($(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').attr('tabindex'), '0', 'tab index is set to the expanded button');
+        assert.equal($(this.dataGrid.element()).find('.myclass .dx-editor-cell.dx-focused').length, 1, 'focused edit cell');
+    });
+
     ['Row', 'Cell', 'Batch', 'Form', 'Popup'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - A stand-alone input should be focused on click after adding a new row (T935999)`, function(assert) {
             // arrange
