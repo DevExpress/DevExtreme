@@ -185,7 +185,13 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         const $row = component.$element().closest(this._getItemSelector());
         const fileItemInfo = $row.data('item');
         this._selectItem(fileItemInfo);
-        this._showContextMenu(this._getFileItemsForContextMenu(fileItemInfo), element, event, fileItemInfo, $row);
+        const target = {
+            itemData: fileItemInfo,
+            itemElement: $row,
+            isActionButton: true
+        };
+        const items = this._getFileItemsForContextMenu(fileItemInfo);
+        this._showContextMenu(items, element, event, target);
         this._activeFileActionsButton = component;
         this._activeFileActionsButton.setActive(true);
     }

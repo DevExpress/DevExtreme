@@ -41,17 +41,18 @@ class FileManagerContextMenu extends Widget {
         super._initMarkup();
     }
 
-    showAt(fileItems, element, event, targetFileItem, targetItemElement) {
+    showAt(fileItems, element, event, target) {
+        const { itemData, itemElement, isActionButton = false } = target;
         if(this._isVisible) {
             this._raiseContextMenuHidden();
             this._onContextMenuHidden();
         }
         this._itemCreationContext = {
-            itemElement: targetItemElement || element.length && element || undefined,
-            itemData: targetFileItem,
+            itemElement: itemElement,
+            itemData: itemData,
             fileItems,
             event,
-            actionButton: isDefined(targetItemElement)
+            actionButton: isActionButton
         };
 
         const position = {
@@ -82,7 +83,7 @@ class FileManagerContextMenu extends Widget {
         this._actions.onContextMenuShowing(e);
         const items = this.createContextMenuItems(this._itemCreationContext.fileItems, e.items, this._itemCreationContext.itemData);
         if(!e.cancel) {
-            this._contextMenu.option('items', items);
+            this._contextMenu.option('dataSource', items);
         }
     }
 
