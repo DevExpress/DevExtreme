@@ -5515,7 +5515,7 @@ QUnit.module('Rows view with real dataController and columnController', {
                 }
             };
 
-            this.setupDataGridModules(['data', 'columns', 'rows', 'editing', 'editorFactory', 'masterDetail', 'search']);
+            this.setupDataGridModules(['data', 'columns', 'rows', 'editing', 'editingFormBased', 'editorFactory', 'masterDetail', 'search']);
             this.rowsView.render($testElement);
             clock.tick();
 
