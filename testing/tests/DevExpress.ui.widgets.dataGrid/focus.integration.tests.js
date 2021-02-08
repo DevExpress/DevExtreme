@@ -3296,7 +3296,7 @@ QUnit.module('View\'s focus', {
         this.clock.tick();
 
         // act
-        $(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').trigger('dxpointerdown').trigger('dxclick');
+        $(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').trigger(CLICK_EVENT).trigger('dxclick');
         this.clock.tick();
 
         // assert
