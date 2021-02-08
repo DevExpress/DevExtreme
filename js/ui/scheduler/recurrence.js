@@ -93,7 +93,10 @@ class RecurrenceProcessor {
             }
         }
 
-        return result;
+        return result.map(item => {
+            const match = item.match(/[A-Za-z]+/);
+            return !!match && match[0];
+        }).filter(item => !!item);
     }
 
     getAsciiStringByDate(date) {
