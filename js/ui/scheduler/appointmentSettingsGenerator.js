@@ -36,7 +36,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         const { scheduler } = this;
         const appointment = scheduler.createAppointmentAdapter(rawAppointment);
         const itemResources = scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
-        const isAllDay = this._isAllDayAppointment(rawAppointment);
+        const isInAllDayPanel = this._isAllDayAppointment(rawAppointment);
 
         let appointmentList = this._createAppointments(appointment, itemResources);
 
@@ -46,14 +46,16 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         let gridAppointmentList = this._createGridAppointmentList(appointmentList);
 
-        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment, isAllDay);
+        gridAppointmentList = this._normalizeStartAndEndDates(gridAppointmentList, appointment.allDay);
+
+        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment, isInAllDayPanel);
 
         gridAppointmentList = this._getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment);
 
         const appointmentInfos = this.createAppointmentInfos(
             gridAppointmentList,
             itemResources,
-            isAllDay,
+            isInAllDayPanel,
             appointment.isRecurrent
         );
 
@@ -286,6 +288,22 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             return {
                 startDate: new Date(date),
                 endDate: endDate
+            };
+        });
+    }
+
+    _normalizeStartAndEndDates(appointments, isAllDayAppointment) {
+        return appointments.map((appointment) => {
+            if(!isAllDayAppointment) {
+                return appointment;
+            }
+
+            const { startDate, endDate } = appointment;
+
+            return {
+                ...appointment,
+                startDate: dateUtils.trimTime(startDate),
+                endDate: dateUtils.setToDayEnd(endDate),
             };
         });
     }
