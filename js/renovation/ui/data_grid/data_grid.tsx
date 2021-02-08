@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  JSXComponent, Component, Method, Ref, Effect,
+  JSXComponent, Component, Method, Effect, Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import {
   DataGridProps,
@@ -57,9 +57,9 @@ export const viewFunction = ({
 
 @Component({ defaultOptionRules: null, jQuery: { register: true }, view: viewFunction })
 export class DataGrid extends JSXComponent(DataGridProps) {
-  @Ref() componentInstance!: GridInstance;
+  @Mutable() componentInstance!: GridInstance;
 
-  @Ref() prevProps!: DataGridProps;
+  @Mutable() prevProps!: DataGridProps;
 
   // #region methods
   @Method()

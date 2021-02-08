@@ -110,7 +110,7 @@ export class ButtonProps extends BaseWidgetProps {
   })
   onClick?: (e: { event: Event; validationGroup?: string }) => void = noop;
 
-  @Event() onSubmit?: (e: { event: Event; submitInput: HTMLInputElement }) => void = noop;
+  @Event() onSubmit?: (e: { event: Event; submitInput: HTMLInputElement | null }) => void = noop;
 
   @OneWay() pressed?: boolean;
 
@@ -164,31 +164,35 @@ export class Button extends JSXComponent(ButtonProps) {
     //       (for example, text, icon, etc)
     const { onContentReady } = this.props;
 
-    onContentReady?.({ element: this.contentRef.parentNode });
+    onContentReady?.({ element: this.contentRef.current?.parentNode });
   }
 
   @Method()
   focus(): void {
-    this.widgetRef.focus();
+    this.widgetRef.current?.focus();
   }
 
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
 
-    useInkRipple && this.inkRippleRef.showWave({ element: this.contentRef, event });
+    useInkRipple && this.inkRippleRef.current?.showWave({
+      element: this.contentRef.current, event,
+    });
   }
 
   onInactive(event: Event): void {
     const { useInkRipple } = this.props;
 
-    useInkRipple && this.inkRippleRef.hideWave({ element: this.contentRef, event });
+    useInkRipple && this.inkRippleRef.current?.hideWave({
+      element: this.contentRef.current, event,
+    });
   }
 
   onWidgetClick(event: Event): void {
     const { onClick, useSubmitBehavior, validationGroup } = this.props;
 
     onClick?.({ event, validationGroup });
-    useSubmitBehavior && this.submitInputRef.click();
+    useSubmitBehavior && this.submitInputRef.current?.click();
   }
 
   onWidgetKeyDown(options): Event | undefined {
@@ -214,11 +218,11 @@ export class Button extends JSXComponent(ButtonProps) {
     const { useSubmitBehavior, onSubmit } = this.props;
 
     if (useSubmitBehavior && onSubmit) {
-      click.on(this.submitInputRef,
-        (event) => onSubmit({ event, submitInput: this.submitInputRef }),
+      click.on(this.submitInputRef.current,
+        (event) => onSubmit({ event, submitInput: this.submitInputRef.current }),
         { namespace });
 
-      return (): void => click.off(this.submitInputRef, { namespace });
+      return (): void => click.off(this.submitInputRef.current, { namespace });
     }
 
     return undefined;

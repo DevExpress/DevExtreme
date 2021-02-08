@@ -146,7 +146,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
 
   parseTspanElements(texts: TextItem[]): TextItem[] {
     const items = [...texts];
-    const textElements = this.textRef.children;
+    const textElements = this.textRef.current!.children;
 
     const strokeLength = !this.isStroked ? 0 : items.length;
     for (let i = 0; i < textElements.length; i++) {

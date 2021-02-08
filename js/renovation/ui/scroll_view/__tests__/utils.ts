@@ -52,14 +52,16 @@ export function createContainerRef(
   const scrollWidth = 600;
   const scrollHeight = 600;
   return ({
-    scrollTop: location.top,
-    scrollLeft: isRtlEnabled ? -1 * (location.left || 0) : location.left,
-    offsetHeight: offsetWidth,
-    offsetWidth: offsetHeight,
-    scrollWidth: direction === 'horizontal' || direction === 'both' ? scrollWidth - scrollBarWidth : scrollWidth,
-    scrollHeight: direction === 'vertical' || direction === 'both' ? scrollHeight - scrollBarWidth : scrollHeight,
-    clientWidth: direction === 'horizontal' || direction === 'both' ? offsetWidth - scrollBarWidth : offsetWidth,
-    clientHeight: direction === 'vertical' || direction === 'both' ? offsetHeight - scrollBarWidth : offsetHeight,
+    current: {
+      scrollTop: location.top,
+      scrollLeft: isRtlEnabled ? -1 * (location.left || 0) : location.left,
+      offsetHeight: offsetWidth,
+      offsetWidth: offsetHeight,
+      scrollWidth: direction === 'horizontal' || direction === 'both' ? scrollWidth - scrollBarWidth : scrollWidth,
+      scrollHeight: direction === 'vertical' || direction === 'both' ? scrollHeight - scrollBarWidth : scrollHeight,
+      clientWidth: direction === 'horizontal' || direction === 'both' ? offsetWidth - scrollBarWidth : offsetWidth,
+      clientHeight: direction === 'vertical' || direction === 'both' ? offsetHeight - scrollBarWidth : offsetHeight,
+    },
   }) as RefObject<HTMLDivElement>;
 }
 
@@ -106,28 +108,27 @@ export function initRefs(model, viewFunction, {
 
   viewModel.containerRef = React.createRef();
   viewModel.contentRef = React.createRef();
+  viewModel.verticalScrollbarRef = React.createRef();
+  viewModel.horizontalScrollbarRef = React.createRef();
 
   const scrollable = mount(viewFunction(model as any) as JSX.Element);
-
-  viewModel.containerRef = viewModel.containerRef.current;
-  viewModel.contentRef = viewModel.contentRef.current;
 
   if (strategy === 'simulated') {
     const scrollbar = scrollable.find(Scrollbar);
     if (direction === DIRECTION_VERTICAL) {
-      viewModel.verticalScrollbarRef = scrollbar.instance();
-      Object.assign(viewModel.verticalScrollbarRef,
+      viewModel.verticalScrollbarRef.current = scrollbar.instance();
+      Object.assign(viewModel.verticalScrollbarRef.current,
         { props: { contentSize, containerSize } });
     } else if (direction === DIRECTION_HORIZONTAL) {
-      viewModel.horizontalScrollbarRef = scrollbar.instance();
-      Object.assign(viewModel.horizontalScrollbarRef,
+      viewModel.horizontalScrollbarRef.current = scrollbar.instance();
+      Object.assign(viewModel.horizontalScrollbarRef.current,
         { props: { contentSize, containerSize } });
     } else {
-      viewModel.horizontalScrollbarRef = scrollbar.at(0).instance();
-      Object.assign(viewModel.horizontalScrollbarRef,
+      viewModel.horizontalScrollbarRef.current = scrollbar.at(0).instance();
+      Object.assign(viewModel.horizontalScrollbarRef.current,
         { props: { contentSize, containerSize } });
-      viewModel.verticalScrollbarRef = scrollbar.at(1).instance();
-      Object.assign(viewModel.verticalScrollbarRef,
+      viewModel.verticalScrollbarRef.current = scrollbar.at(1).instance();
+      Object.assign(viewModel.verticalScrollbarRef.current,
         { props: { contentSize, containerSize } });
     }
   }
@@ -142,20 +143,20 @@ export function setScrollbarPosition(scrollbar, { position, contentSize, contain
   }
 }
 
-export function initStyles({ ref, size, overflow }) {
-  const elementRef = ref;
+export function initStyles({ element: receivedElement, size, overflow }) {
+  const element = receivedElement;
 
   ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
-    elementRef.style[prop] = `${size}px`;
+    element.style[prop] = `${size}px`;
   });
 
   ['overflowX', 'overflowY'].forEach((prop) => {
-    elementRef.style[prop] = overflow;
+    element.style[prop] = overflow;
   });
-  elementRef.getBoundingClientRect = jest.fn(() => ({
+  element.getBoundingClientRect = jest.fn(() => ({
     width: size,
     height: size,
   }));
 
-  return elementRef;
+  return element;
 }

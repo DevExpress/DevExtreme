@@ -254,7 +254,8 @@ addGenerationTask('react', ['Cannot find module \'csstype\'.'], false, true, fal
 addGenerationTask('angular', [
     'Cannot find module \'@angular/core\'',
     'Cannot find module \'@angular/common\'',
-    'Cannot find module \'@angular/forms\''
+    'Cannot find module \'@angular/forms\'',
+    'Cannot find module \'@angular/cdk/portal\'',
 ].concat(knownErrors));
 
 addGenerationTask('vue', [], false, true, false);

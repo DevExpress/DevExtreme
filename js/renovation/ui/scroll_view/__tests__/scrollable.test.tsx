@@ -309,6 +309,8 @@ each([{
 
           it('scrollEffect should return unsubscribe callback', () => {
             const scrollable = new Scrollable({ direction });
+            scrollable.containerRef = React.createRef();
+            scrollable.containerRef.current = {};
 
             const detach = scrollable.scrollEffect() as DisposeEffectReturn;
 
@@ -321,7 +323,9 @@ each([{
             const e = { ...defaultEvent };
             const scrollable = new Scrollable({ direction });
             const handleInit = jest.fn();
-            (scrollable as any).handleInit = handleInit;
+            scrollable.handleInit = handleInit;
+            scrollable.wrapperRef = React.createRef();
+            scrollable.containerRef = React.createRef();
 
             scrollable.initEffect();
             emit('dxscrollinit', e);
@@ -346,12 +350,12 @@ each([{
                         });
 
                         initStyles({
-                          ref: (viewModel).containerRef,
+                          element: viewModel.containerRef.current,
                           size: containerSize,
                           overflow,
                         });
                         initStyles({
-                          ref: (viewModel).contentRef,
+                          element: viewModel.contentRef.current,
                           size: contentSize,
                           overflow,
                         });
@@ -391,10 +395,10 @@ each([{
                             each([0, 1]).describe('ScrollLeft: %o', (scrollLeft) => {
                               each([0, 1]).describe('ScrollTop: %o', (scrollTop) => {
                                 it('validate method in native strategy', () => {
-                                  const isScrolledInMaxDirection = (ref) => {
+                                  const isScrolledInMaxDirection = (element) => {
                                     const {
                                       scrollWidth, clientWidth, scrollHeight, clientHeight,
-                                    } = ref;
+                                    } = element;
 
                                     if (delta > 0) {
                                       return shiftKey ? !scrollLeft : !scrollTop;
@@ -417,24 +421,28 @@ each([{
                                   });
 
                                   initStyles({
-                                    ref: (viewModel).containerRef,
+                                    element: viewModel.containerRef.current,
                                     size: containerSize,
                                     overflow,
                                   });
                                   initStyles({
-                                    ref: (viewModel).contentRef,
+                                    element: viewModel.contentRef.current,
                                     size: contentSize,
                                     overflow,
                                   });
-                                  viewModel.containerRef.scrollLeft = scrollLeft;
-                                  viewModel.containerRef.scrollTop = scrollTop;
+                                  viewModel.containerRef.current.scrollLeft = scrollLeft;
+                                  viewModel.containerRef.current.scrollTop = scrollTop;
                                   viewModel.locked = locked;
 
                                   let expectedValidationResult;
                                   if (disabled || locked) {
                                     expectedValidationResult = false;
-                                  } else if (isDxWheelEvent
-                                          && isScrolledInMaxDirection(viewModel.containerRef)) {
+                                  } else if (
+                                    isDxWheelEvent
+                                    && isScrolledInMaxDirection(
+                                      viewModel.containerRef.current,
+                                    )
+                                  ) {
                                     expectedValidationResult = false;
                                   } else {
                                     expectedValidationResult = containerSize < contentSize;
@@ -465,7 +473,8 @@ each([{
             const e = { ...defaultEvent };
             const scrollable = new Scrollable({ direction });
             const handleStart = jest.fn();
-            (scrollable as any).handleStart = handleStart;
+            scrollable.handleStart = handleStart;
+            scrollable.wrapperRef = React.createRef();
 
             scrollable.startEffect();
             emit('dxscrollstart', e);
@@ -478,7 +487,8 @@ each([{
             const e = { ...defaultEvent };
             const scrollable = new Scrollable({ direction });
             const handleMove = jest.fn();
-            (scrollable as any).handleMove = handleMove;
+            scrollable.handleMove = handleMove;
+            scrollable.wrapperRef = React.createRef();
 
             scrollable.moveEffect();
             emit('dxscroll', e);
@@ -491,7 +501,8 @@ each([{
             const e = { ...defaultEvent };
             const scrollable = new Scrollable({ direction });
             const handleEnd = jest.fn();
-            (scrollable as any).handleEnd = handleEnd;
+            scrollable.handleEnd = handleEnd;
+            scrollable.wrapperRef = React.createRef();
 
             scrollable.endEffect();
             emit('dxscrollend', e);
@@ -504,7 +515,8 @@ each([{
             const e = { ...defaultEvent };
             const scrollable = new Scrollable({ direction });
             const handleStop = jest.fn();
-            (scrollable as any).handleStop = handleStop;
+            scrollable.handleStop = handleStop;
+            scrollable.wrapperRef = React.createRef();
 
             scrollable.stopEffect();
             emit('dxscrollstop', e);
@@ -528,6 +540,8 @@ each([{
           each(['init', 'start', 'end', 'stop', 'cancel']).describe('EventName: %o', (shortEventName) => {
             it('Effect should return unsubscribe callback', () => {
               const scrollable = new Scrollable({ direction });
+              scrollable.wrapperRef = React.createRef();
+              scrollable.containerRef = React.createRef();
 
               const detach = scrollable[`${shortEventName}Effect`]() as DisposeEffectReturn;
 
@@ -540,6 +554,7 @@ each([{
 
           it('moveEffect should return unsubscribe callback', () => {
             const scrollable = new Scrollable({ direction });
+            scrollable.wrapperRef = React.createRef();
 
             const detach = scrollable.moveEffect() as DisposeEffectReturn;
 
@@ -631,6 +646,7 @@ each([{
 
         it('should not raise any error if onScroll is not defined', () => {
           const scrollable = new Scrollable({ onScroll: undefined });
+          scrollable.containerRef = React.createRef();
 
           scrollable.scrollEffect();
           emit('scroll');

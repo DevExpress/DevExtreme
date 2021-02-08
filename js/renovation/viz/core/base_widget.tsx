@@ -42,30 +42,42 @@ const getCssClasses = (model: Partial<BaseWidgetProps>): string => {
   return combineClasses(containerClassesMap);
 };
 
-const calculateCanvas = (model: Partial<BaseWidgetProps> & Partial<BaseWidget>): Canvas => {
+const calculateCanvas = (
+  model: Partial<BaseWidgetProps> &
+  Partial<Omit<BaseWidget, 'containerRef'>> &
+  { element: HTMLDivElement | null },
+): Canvas => {
   const { height, width } = model.size ?? {};
   const margin = model.margin ?? {};
   const defaultCanvas = model.defaultCanvas ?? DEFAULT_CANVAS;
-  const elementWidth = !sizeIsValid(width) ? getElementWidth(model.containerRef) : 0;
-  const elementHeight = !sizeIsValid(height) ? getElementHeight(model.containerRef) : 0;
+  const elementWidth = !sizeIsValid(width)
+    ? getElementWidth(model.element)
+    : 0;
+  const elementHeight = !sizeIsValid(height)
+    ? getElementHeight(model.element)
+    : 0;
   const canvas = {
-    width: width && width <= 0 ? 0 : Math.floor(pickPositiveValue([
-      width,
-      elementWidth,
-      defaultCanvas.width,
-    ])),
-    height: height && height <= 0 ? 0 : Math.floor(pickPositiveValue([
-      height,
-      elementHeight,
-      defaultCanvas.height,
-    ])),
+    width:
+      width && width <= 0
+        ? 0
+        : Math.floor(
+          pickPositiveValue([width, elementWidth, defaultCanvas.width]),
+        ),
+    height:
+      height && height <= 0
+        ? 0
+        : Math.floor(
+          pickPositiveValue([height, elementHeight, defaultCanvas.height]),
+        ),
     left: pickPositiveValue([margin.left, defaultCanvas.left]),
     top: pickPositiveValue([margin.top, defaultCanvas.top]),
     right: pickPositiveValue([margin.right, defaultCanvas.right]),
     bottom: pickPositiveValue([margin.bottom, defaultCanvas.bottom]),
   };
-  if (canvas.width - canvas.left - canvas.right <= 0
-    || canvas.height - canvas.top - canvas.bottom <= 0) {
+  if (
+    canvas.width - canvas.left - canvas.right <= 0
+    || canvas.height - canvas.top - canvas.bottom <= 0
+  ) {
     return { ...defaultCanvas };
   }
   return canvas;
@@ -119,7 +131,7 @@ export class Props extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class BaseWidget extends JSXComponent(Props) {
+export class BaseWidget extends JSXComponent<Props, 'rootElementRef'>(Props) {
   @Ref() containerRef!: RefObject<HTMLDivElement>;
 
   @ForwardRef() svgElementRef!: RefObject<SVGElement>;
@@ -128,7 +140,7 @@ export class BaseWidget extends JSXComponent(Props) {
   config?: ConfigContextValue;
 
   @Effect({ run: 'once' }) setRootElementRef(): void {
-    this.props.rootElementRef = this.containerRef;
+    this.props.rootElementRef.current = this.containerRef.current;
   }
 
   @Effect()
@@ -137,12 +149,12 @@ export class BaseWidget extends JSXComponent(Props) {
 
     this.setCanvas();
 
-    onContentReady?.({ element: this.svgElementRef });
+    onContentReady?.({ element: this.svgElementRef.current });
   }
 
   @Method()
-  svg(): SVGElement {
-    return this.svgElementRef;
+  svg(): SVGElement | null {
+    return this.svgElementRef.current;
   }
 
   get shouldRenderConfigProvider(): boolean {
@@ -175,7 +187,7 @@ export class BaseWidget extends JSXComponent(Props) {
     } = this.props;
 
     const newCanvas = calculateCanvas({
-      containerRef: this.containerRef,
+      element: this.containerRef.current,
       defaultCanvas,
       size,
       margin,

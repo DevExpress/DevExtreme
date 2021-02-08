@@ -3,7 +3,7 @@ import {
   JSXComponent,
   Fragment,
   Consumer,
-  Ref,
+  Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import { Page, PageProps } from './page';
 import PagerProps from '../common/pager_props';
@@ -98,7 +98,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
-  @Ref()
+  @Mutable()
   slidingWindowStateRef!: SlidingWindowState;
 
   private get slidingWindowState(): SlidingWindowState {

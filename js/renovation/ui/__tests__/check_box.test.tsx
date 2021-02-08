@@ -252,11 +252,11 @@ describe('CheckBox', () => {
           it('should focus main element', () => {
             const checkBox = new CheckBox({});
             // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-            checkBox.widgetRef = { focus: jest.fn() } as any;
+            checkBox.widgetRef = { current: { focus: jest.fn() } } as any;
             checkBox.focus();
 
-            expect(checkBox.widgetRef.focus).toHaveBeenCalledTimes(1);
-            expect(checkBox.widgetRef.focus).toHaveBeenCalledWith();
+            expect(checkBox.widgetRef.current?.focus).toHaveBeenCalledTimes(1);
+            expect(checkBox.widgetRef.current?.focus).toHaveBeenCalledWith();
           });
         });
       });
@@ -343,48 +343,50 @@ describe('CheckBox', () => {
       it('should ignore inkripple effects if the useInkRipple is "false"', () => {
         const checkBox = new CheckBox({ useInkRipple: false });
         checkBox.inkRippleRef = {
-          showWave: jest.fn(),
-          hideWave: jest.fn(),
+          current: {
+            showWave: jest.fn(),
+            hideWave: jest.fn(),
+          },
         } as any; // eslint-disable-line  @typescript-eslint/no-explicit-any
 
         checkBox.onActive({} as Event);
         checkBox.onInactive({} as Event);
-        expect(checkBox.inkRippleRef.showWave).not.toHaveBeenCalled();
-        expect(checkBox.inkRippleRef.hideWave).not.toHaveBeenCalled();
+        expect(checkBox.inkRippleRef.current?.showWave).not.toHaveBeenCalled();
+        expect(checkBox.inkRippleRef.current?.hideWave).not.toHaveBeenCalled();
       });
 
       it('should show inkripple effect on active action', () => {
         const checkBox = new CheckBox({ useInkRipple: true });
-        const iconRef = {};
+        const iconRef = { current: {} };
         const event = {} as Event;
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.iconRef = iconRef as any;
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-        checkBox.inkRippleRef = { showWave: jest.fn() } as any;
+        checkBox.inkRippleRef = { current: { showWave: jest.fn() } } as any;
         checkBox.onActive(event);
 
-        expect(checkBox.inkRippleRef.showWave).toHaveBeenCalledTimes(1);
-        expect(checkBox.inkRippleRef.showWave).toHaveBeenCalledWith({
+        expect(checkBox.inkRippleRef.current?.showWave).toHaveBeenCalledTimes(1);
+        expect(checkBox.inkRippleRef.current?.showWave).toHaveBeenCalledWith({
           event,
-          element: iconRef,
+          element: iconRef.current,
           wave: 1,
         });
       });
 
       it('should hide inkripple effect on inactive action', () => {
         const checkBox = new CheckBox({ useInkRipple: true });
-        const iconRef = {};
+        const iconRef = { current: {} };
         const event = {} as Event;
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.iconRef = iconRef as any;
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-        checkBox.inkRippleRef = { hideWave: jest.fn() } as any;
+        checkBox.inkRippleRef = { current: { hideWave: jest.fn() } } as any;
         checkBox.onInactive(event);
 
-        expect(checkBox.inkRippleRef.hideWave).toHaveBeenCalledTimes(1);
-        expect(checkBox.inkRippleRef.hideWave).toHaveBeenCalledWith({
+        expect(checkBox.inkRippleRef.current?.hideWave).toHaveBeenCalledTimes(1);
+        expect(checkBox.inkRippleRef.current?.hideWave).toHaveBeenCalledWith({
           event,
-          element: iconRef,
+          element: iconRef.current,
           wave: 1,
         });
       });
@@ -394,48 +396,50 @@ describe('CheckBox', () => {
       it('should ignore inkripple effects if the useInkRipple is "false"', () => {
         const checkBox = new CheckBox({ useInkRipple: false });
         checkBox.inkRippleRef = {
-          showWave: jest.fn(),
-          hideWave: jest.fn(),
+          current: {
+            showWave: jest.fn(),
+            hideWave: jest.fn(),
+          },
         } as any; // eslint-disable-line  @typescript-eslint/no-explicit-any
 
         checkBox.onFocusIn({} as Event);
         checkBox.onFocusOut({} as Event);
-        expect(checkBox.inkRippleRef.showWave).not.toHaveBeenCalled();
-        expect(checkBox.inkRippleRef.hideWave).not.toHaveBeenCalled();
+        expect(checkBox.inkRippleRef.current?.showWave).not.toHaveBeenCalled();
+        expect(checkBox.inkRippleRef.current?.hideWave).not.toHaveBeenCalled();
       });
 
       it('should show inkripple effect on focusin action', () => {
         const checkBox = new CheckBox({ useInkRipple: true });
-        const iconRef = {};
+        const iconRef = { current: {} };
         const event = {} as Event;
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.iconRef = iconRef as any;
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-        checkBox.inkRippleRef = { showWave: jest.fn() } as any;
+        checkBox.inkRippleRef = { current: { showWave: jest.fn() } } as any;
         checkBox.onFocusIn(event);
 
-        expect(checkBox.inkRippleRef.showWave).toHaveBeenCalledTimes(1);
-        expect(checkBox.inkRippleRef.showWave).toHaveBeenCalledWith({
+        expect(checkBox.inkRippleRef.current?.showWave).toHaveBeenCalledTimes(1);
+        expect(checkBox.inkRippleRef.current?.showWave).toHaveBeenCalledWith({
           event,
-          element: iconRef,
+          element: iconRef.current,
           wave: 0,
         });
       });
 
       it('should hide inkripple effect on focusout action', () => {
         const checkBox = new CheckBox({ useInkRipple: true });
-        const iconRef = {};
+        const iconRef = { current: {} };
         const event = {} as Event;
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         checkBox.iconRef = iconRef as any;
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-        checkBox.inkRippleRef = { hideWave: jest.fn() } as any;
+        checkBox.inkRippleRef = { current: { hideWave: jest.fn() } } as any;
         checkBox.onFocusOut(event);
 
-        expect(checkBox.inkRippleRef.hideWave).toHaveBeenCalledTimes(1);
-        expect(checkBox.inkRippleRef.hideWave).toHaveBeenCalledWith({
+        expect(checkBox.inkRippleRef.current?.hideWave).toHaveBeenCalledTimes(1);
+        expect(checkBox.inkRippleRef.current?.hideWave).toHaveBeenCalledWith({
           event,
-          element: iconRef,
+          element: iconRef.current,
           wave: 0,
         });
       });

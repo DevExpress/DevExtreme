@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import getElementComputedStyle from '../../../utils/get_computed_style';
 import {
   ResizableContainer,
@@ -23,10 +24,14 @@ describe('resizable-container', () => {
   function getElementsRef({
     width, pageSizes, info, pages,
   }) {
-    const parentHtmlEl = getFakeHtml(width) as HTMLDivElement;
-    const pageSizesHtmlEl = pageSizes ? getFakeHtml(pageSizes) as HTMLDivElement : undefined;
-    const infoHtmlEl = info ? getFakeHtml(info) as HTMLDivElement : undefined;
-    const pagesHtmlEl = getFakeHtml(info + pages);
+    const parentHtmlEl = { current: getFakeHtml(width) } as RefObject<HTMLDivElement>;
+    const pageSizesHtmlEl = pageSizes
+      ? { current: getFakeHtml(pageSizes) } as RefObject<HTMLDivElement>
+      : undefined;
+    const infoHtmlEl = info
+      ? { current: getFakeHtml(info) } as RefObject<HTMLDivElement>
+      : undefined;
+    const pagesHtmlEl = { current: getFakeHtml(info + pages) } as RefObject<HTMLDivElement>;
     return {
       parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
     };
@@ -80,7 +85,7 @@ describe('resizable-container', () => {
       } = getElementsRef(sizes);
       component.parentRef = parentHtmlEl;
       component.pageSizesRef = pageSizesHtmlEl;
-      component.pagesRef = pagesHtmlEl as HTMLElement;
+      component.pagesRef = pagesHtmlEl;
       component.infoTextRef = infoHtmlEl;
       return component;
     }
@@ -92,7 +97,7 @@ describe('resizable-container', () => {
       } = getElementsRef(sizes);
       component.parentRef = parentHtmlEl;
       component.pageSizesRef = pageSizesHtmlEl;
-      component.pagesRef = pagesHtmlEl as HTMLElement;
+      component.pagesRef = pagesHtmlEl;
       component.infoTextRef = infoHtmlEl;
       return component;
     }

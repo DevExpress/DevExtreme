@@ -126,7 +126,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
     const scrollBarLocation = {};
     scrollBarLocation[prop] = this.calculateScrollBarPosition(position);
-    move(this.scrollRef, scrollBarLocation);
+    move(this.scrollRef.current, scrollBarLocation);
   }
 
   calculateScrollBarPosition(location): number {
@@ -137,12 +137,12 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   pointerDownEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollbar';
 
-    dxPointerDown.on(this.scrollRef,
+    dxPointerDown.on(this.scrollRef.current,
       () => {
         this.feedbackOn();
       }, { namespace });
 
-    return (): void => dxPointerDown.off(this.scrollRef, { namespace });
+    return (): void => dxPointerDown.off(this.scrollRef.current, { namespace });
   }
 
   @Effect()
@@ -154,7 +154,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
         this.feedbackOff();
       }, { namespace });
 
-    return (): void => dxPointerUp.off(this.scrollRef, { namespace });
+    return (): void => dxPointerUp.off(this.scrollRef.current, { namespace });
   }
 
   @Effect()
@@ -195,13 +195,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   isThumb(element: HTMLDivElement): boolean {
-    return this.scrollbarRef.querySelector(`.${SCROLLABLE_SCROLL_CLASS}`) === element
-      || this.scrollbarRef.querySelector(`.${SCROLLABLE_SCROLL_CONTENT_CLASS}`) === element;
+    return this.scrollbarRef.current?.querySelector(`.${SCROLLABLE_SCROLL_CLASS}`) === element
+      || this.scrollbarRef.current?.querySelector(`.${SCROLLABLE_SCROLL_CONTENT_CLASS}`) === element;
   }
 
   @Method()
   isScrollbar(element: HTMLDivElement): boolean {
-    return element === this.scrollbarRef;
+    return element === this.scrollbarRef.current;
   }
 
   @Method()

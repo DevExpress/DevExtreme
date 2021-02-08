@@ -28,11 +28,11 @@ export const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alw
 
 export const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
-export function getElementWidth(element: Element | undefined): number {
+export function getElementWidth(element: Element | undefined | null): number {
   return toNumber(getElementComputedStyle(element)?.width);
 }
 
-export function getElementHeight(element: Element | undefined): number {
+export function getElementHeight(element: Element | undefined | null): number {
   return toNumber(getElementComputedStyle(element)?.height);
 }
 
@@ -99,7 +99,7 @@ function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): nu
 export function getBoundaryProps(
   direction: ScrollableDirection,
   scrollOffset: ScrollableLocation,
-  containerRef: HTMLDivElement,
+  element: HTMLDivElement,
   pushBackValue = 0,
 ): Partial<ScrollableBoundary> {
   const { left, top } = scrollOffset;
@@ -108,19 +108,19 @@ export function getBoundaryProps(
 
   if (isHorizontal) {
     boundaryProps.reachedLeft = left <= 0;
-    boundaryProps.reachedRight = Math.round(left) >= getMaxScrollOffset('width', containerRef);
+    boundaryProps.reachedRight = Math.round(left) >= getMaxScrollOffset('width', element);
   }
   if (isVertical) {
     boundaryProps.reachedTop = top <= 0;
-    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', containerRef) - 2 * pushBackValue;
+    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element) - 2 * pushBackValue;
   }
   return boundaryProps;
 }
 
-export function getContainerOffsetInternal(containerRef: HTMLDivElement): ScrollableLocation {
+export function getContainerOffsetInternal(element: HTMLDivElement): ScrollableLocation {
   return {
-    left: containerRef.scrollLeft,
-    top: containerRef.scrollTop,
+    left: element.scrollLeft,
+    top: element.scrollTop,
   };
 }
 
