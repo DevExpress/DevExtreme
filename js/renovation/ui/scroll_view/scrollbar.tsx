@@ -13,7 +13,7 @@ import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
-import { isPlainObject } from '../../../core/utils/type';
+import { isPlainObject, isDefined } from '../../../core/utils/type';
 import { move, resetPosition } from '../../../animation/translator';
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
 import { Deferred } from '../../../core/utils/deferred';
@@ -235,8 +235,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return this.boundLocation() === this.getLocation();
   }
 
-  boundLocation(): number {
-    return Math.max(Math.min(this.getLocation(), this.getMaxOffset()), this.getMinOffset());
+  @Method()
+  boundLocation(value?: number): number {
+    const currentLocation = isDefined(value) ? value : this.getLocation();
+
+    return Math.max(Math.min(currentLocation, this.getMaxOffset()), this.getMinOffset());
   }
 
   // eslint-disable-next-line class-methods-use-this

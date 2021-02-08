@@ -868,10 +868,6 @@ QUnit.module('Integration: allDay appointments', {
             });
 
             QUnit.test('AllDay appointment is visible on month view, if showAllDayPanel = false ', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 this.createInstance({
                     currentDate: new Date(2015, 2, 10),
                     dataSource: [{
@@ -1250,10 +1246,6 @@ QUnit.module('Integration: allDay appointments', {
             });
 
             QUnit.test('DblClick on appointment should call scheduler.showAppointmentPopup for allDay appointment on month view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 const data = [{
                     text: 'a', allDay: true, startDate: new Date(2015, 2, 5), endDate: new Date(2015, 2, 5, 0, 30)
                 }];

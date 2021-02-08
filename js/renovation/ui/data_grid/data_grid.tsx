@@ -13,6 +13,7 @@ import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
+import DataGridBaseComponent from '../../preact_wrapper/data_grid';
 
 const aria = { role: 'presentation' };
 
@@ -55,11 +56,20 @@ export const viewFunction = ({
   </Widget>
 );
 
-@Component({ defaultOptionRules: null, jQuery: { register: true }, view: viewFunction })
+@Component({
+  defaultOptionRules: null,
+  jQuery: { register: true, component: DataGridBaseComponent },
+  view: viewFunction,
+})
 export class DataGrid extends JSXComponent(DataGridProps) {
   @Mutable() componentInstance!: GridInstance;
 
   @Mutable() prevProps!: DataGridProps;
+
+  @Method()
+  getComponentInstance(): GridInstance {
+    return this.instance;
+  }
 
   // #region methods
   @Method()
@@ -419,6 +429,11 @@ export class DataGrid extends JSXComponent(DataGridProps) {
       this.instance.endUpdate();
     }
     this.prevProps = this.props;
+  }
+
+  @Effect({ run: 'once' })
+  dispose() {
+    return () => { this.instance.dispose(); };
   }
 
   // TODO without normalization all nested props defaults overwrite by undefined

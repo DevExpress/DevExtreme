@@ -17,10 +17,13 @@ export interface Translator {
     translate: (value: number|string|Date) => number 
 }
 
-export interface EventData<T> {
+export interface BaseEventData {
     readonly component: any, //TODO: after improve refs use ref of the widget
+}
+
+export interface EventData<T> extends BaseEventData {
     readonly target?: T,
 }
 
-export type OnTooltipShownFn<T> = (e: EventData<T>) => void;
-export type OnTooltipHiddenFn<T> = (e: EventData<T>) => void;
+export type OnTooltipShownFn<T> = (e: T) => void;
+export type OnTooltipHiddenFn<T> = (e: T) => void;

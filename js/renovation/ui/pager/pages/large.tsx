@@ -99,10 +99,10 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   config?: ConfigContextValue;
 
   @Mutable()
-  slidingWindowStateRef!: SlidingWindowState;
+  slidingWindowStateHolder!: SlidingWindowState;
 
   private get slidingWindowState(): SlidingWindowState {
-    const slidingWindowState = this.slidingWindowStateRef;
+    const slidingWindowState = this.slidingWindowStateHolder;
     if (!slidingWindowState) {
       return {
         indexesForReuse: [],
@@ -140,7 +140,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
       pageIndexes,
       ...slidingWindowState
     } = createPageIndexes(startIndex, slidingWindowSize, pageCount, delimiter);
-    this.slidingWindowStateRef = slidingWindowState;
+    this.slidingWindowStateHolder = slidingWindowState;
     return pageIndexes;
   }
 

@@ -131,7 +131,7 @@ export class Props extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class BaseWidget extends JSXComponent<Props, 'rootElementRef'>(Props) {
+export class BaseWidget extends JSXComponent<Props, 'rootElementRef'>() {
   @Ref() containerRef!: RefObject<HTMLDivElement>;
 
   @ForwardRef() svgElementRef!: RefObject<SVGElement>;

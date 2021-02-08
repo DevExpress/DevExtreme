@@ -35,7 +35,7 @@ export const viewFunction = ({
           {dateTable.map((cellsRow) => (
             <Row
               className="dx-scheduler-date-table-row"
-              key={cellsRow[0].key}
+              key={cellsRow[0].key - viewData.leftVirtualCellCount}
               leftVirtualCellWidth={viewData.leftVirtualCellWidth}
               rightVirtualCellWidth={viewData.rightVirtualCellWidth}
             >
