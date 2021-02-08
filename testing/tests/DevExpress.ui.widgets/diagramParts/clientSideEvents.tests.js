@@ -97,7 +97,7 @@ QUnit.module('ClientSideEvents', {
         assert.equal(apiItem.attachedConnectorIds.length, 0);
         assert.equal(apiItem.containerChildItemIds.length, 1);
         assert.equal(apiItem.containerChildItemIds[0], '5');
-        assert.equal(apiItem.containerId, '');
+        assert.equal(apiItem.containerId, null);
         assert.equal(apiItem.containerExpanded, true);
 
         let count = 0;
