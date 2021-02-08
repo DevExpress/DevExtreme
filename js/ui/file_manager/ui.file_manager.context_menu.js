@@ -34,6 +34,7 @@ class FileManagerContextMenu extends Widget {
             showEvent: '',
             onItemClick: (args) => this._onContextMenuItemClick(args.itemData.name, args),
             onShowing: e => this._handleShowing(e),
+            onShown: () => this._onContextMenuShown(),
             onHidden: () => this._onContextMenuHidden()
         });
 
@@ -43,8 +44,8 @@ class FileManagerContextMenu extends Widget {
     showAt(fileItems, element, event, targetFileItem, targetItemElement) {
         if(this._isVisible) {
             this._raiseContextMenuHidden();
+            this._onContextMenuHidden();
         }
-        this._isVisible = true;
         this._itemCreationContext = {
             itemElement: targetItemElement || element,
             itemData: targetFileItem,
@@ -52,8 +53,6 @@ class FileManagerContextMenu extends Widget {
             event,
             actionButton: isDefined(targetItemElement)
         };
-
-        const items = this.createContextMenuItems(fileItems, null, targetFileItem);
 
         const position = {
             of: element,
@@ -71,7 +70,6 @@ class FileManagerContextMenu extends Widget {
         }
 
         this._contextMenu.option({
-            dataSource: items,
             target: element,
             position
         });
@@ -83,7 +81,9 @@ class FileManagerContextMenu extends Widget {
         e = extend(e, this._itemCreationContext, { items: this.option('items'), cancel: false });
         this._actions.onContextMenuShowing(e);
         const items = this.createContextMenuItems(this._itemCreationContext.fileItems, e.items, this._itemCreationContext.itemData);
-        this._contextMenu.option('dataSource', items);
+        if(!e.cancel) {
+            this._contextMenu.option('items', items);
+        }
     }
 
     createContextMenuItems(fileItems, contextMenuItems, targetFileItem) {
@@ -195,6 +195,10 @@ class FileManagerContextMenu extends Widget {
             onContextMenuShowing: this._createActionByOption('onContextMenuShowing'),
             onItemClick: this._createActionByOption('onItemClick')
         };
+    }
+
+    _onContextMenuShown() {
+        this._isVisible = true;
     }
 
     _onContextMenuHidden() {
