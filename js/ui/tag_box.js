@@ -955,8 +955,18 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemsFromPlain: function(values) {
+        // console.log('_getItemsFromPlain');
         const plainItems = this._getPlainItems();
-        const selectedItems = plainItems.filter((dataItem) => {
+        let loadedPlaneItems = plainItems;
+
+        if(this._list) {
+            const listSelectedItems = this._list.option('selectedItems');
+            if(values.length === listSelectedItems.length) {
+                loadedPlaneItems = plainItems.concat(this._removeDuplicates(this._list.option('selectedItems'), plainItems));
+            }
+        }
+
+        const selectedItems = loadedPlaneItems.filter((dataItem) => {
             let currentValue;
             for(let i = 0; i < values.length; i++) {
                 currentValue = values[i];
