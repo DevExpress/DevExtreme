@@ -545,6 +545,35 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0].actionButton, true, 'actionButton flag is correct');
     });
 
+    test('Raise the contextMenuPreparing event on detailsView free space', function(assert) {
+        const eventSpy = sinon.spy();
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuPreparing: eventSpy,
+            permissions: { rename: true },
+            contextMenu: { items: contextMenuItems }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        const targetItemElement = undefined;
+        const targetFileSystemItem = undefined;
+
+        assert.strictEqual(eventSpy.callCount, 1, 'event raised');
+        assert.strictEqual(eventSpy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
+        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
+        assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
+        assert.strictEqual(eventSpy.args[0][0].actionButton, true, 'actionButton flag is correct');
+    });
+
     test('Cancel the context menu on the contextMenuPreparing event: detailsView', function(assert) {
         const fileManager = this.wrapper.getInstance();
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
@@ -556,6 +585,96 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         this.clock.tick(400);
 
         this.wrapper.getRowActionButtonInDetailsView(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItemsWithSeparators();
+        assert.equal($items.length, 0, 'context menu is invisible');
+    });
+
+    test('Raise the contextMenuPreparing event on thumbnailsView items', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const eventSpy = sinon.spy();
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuPreparing: eventSpy,
+            permissions: { rename: true },
+            itemView: { mode: 'thumbnails' },
+            contextMenu: { items: contextMenuItems }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getThumbnailsItemContent('File 2.jpg').trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        const targetItemElement = this.wrapper.findThumbnailsItem('File 2.jpg');
+        const targetFileSystemItem = fileManager.option('fileSystemProvider[4]');
+
+        assert.strictEqual(eventSpy.callCount, 1, 'event raised');
+        assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
+        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
+        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
+        assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
+        assert.strictEqual(eventSpy.args[0][0].actionButton, false, 'actionButton flag is correct');
+    });
+
+    test('Raise the contextMenuPreparing event on thumbnailsView free space', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const eventSpy = sinon.spy();
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuPreparing: eventSpy,
+            permissions: { rename: true },
+            itemView: { mode: 'thumbnails' },
+            contextMenu: { items: contextMenuItems }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getThumbnailsViewScrollable().trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        const targetItemElement = undefined;
+        const targetFileSystemItem = undefined;
+
+        assert.strictEqual(eventSpy.callCount, 1, 'event raised');
+        assert.strictEqual(eventSpy.args[0][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
+        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
+        assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
+        assert.strictEqual(eventSpy.args[0][0].actionButton, true, 'actionButton flag is correct');
+    });
+
+    test('Cancel the context menu on the contextMenuPreparing event: thumbnailsView', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const fileManager = this.wrapper.getInstance();
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
+        fileManager.option({
+            onContextMenuPreparing: e => e.cancel = true,
+            permissions: { rename: true },
+            itemView: { mode: 'thumbnails' },
+            contextMenu: { items: contextMenuItems }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.findThumbnailsItem('File 2.jpg').trigger('dxcontextmenu');
         this.clock.tick(400);
 
         const $items = this.wrapper.getContextMenuItemsWithSeparators();
@@ -969,6 +1088,53 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         this.clock.tick(400);
 
         this.wrapper.getFolderActionButton(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItemsWithSeparators();
+        assert.equal($items.length, 3, 'all of items are visible');
+
+        assert.strictEqual($items.eq(0).text(), 'Rename', 'first item is correct');
+        assert.ok($items.eq(1).hasClass(Consts.CONTEXT_MENU_SEPARATOR_CLASS), 'second item is correct');
+        assert.strictEqual($items.eq(2).text(), 'someText', 'third item is correct');
+    });
+
+    test('Customize the context menu on the contextMenuPreparing event: detailsView', function(assert) {
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuPreparing: e => e.items = contextMenuItems,
+            permissions: { rename: true },
+            contextMenu: { items: [] }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getRowActionButtonInDetailsView(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItemsWithSeparators();
+        assert.equal($items.length, 3, 'all of items are visible');
+
+        assert.strictEqual($items.eq(0).text(), 'Rename', 'first item is correct');
+        assert.ok($items.eq(1).hasClass(Consts.CONTEXT_MENU_SEPARATOR_CLASS), 'second item is correct');
+        assert.strictEqual($items.eq(2).text(), 'someText', 'third item is correct');
+    });
+
+    test('Customize the context menu on the contextMenuPreparing event: thumbnailsView', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
+        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            onContextMenuPreparing: e => e.items = contextMenuItems,
+            permissions: { rename: true },
+            itemView: { mode: 'thumbnails' },
+            contextMenu: { items: [] }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.findThumbnailsItem('File 2.jpg').trigger('dxcontextmenu');
         this.clock.tick(400);
 
         const $items = this.wrapper.getContextMenuItemsWithSeparators();
