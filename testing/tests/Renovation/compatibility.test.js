@@ -10,7 +10,7 @@ import 'ui/pager';
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
  */
 const PRIVATE_JQUERY_WIDGETS = [
-    'TimePanelTableLayout', 'GroupPanel',
+    'TimePanelTableLayout', 'GroupPanel', 'HeaderPanelLayout', 'TimelineHeaderPanelLayout',
     'DayDateTableLayout', 'WeekTableLayout', 'TimelineDateTableLayout',
     'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
     'GridPager', 'Scrollable',

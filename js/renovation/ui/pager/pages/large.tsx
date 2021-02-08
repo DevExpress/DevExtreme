@@ -3,7 +3,7 @@ import {
   JSXComponent,
   Fragment,
   Consumer,
-  Ref,
+  Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import { Page, PageProps } from './page';
 import PagerProps from '../common/pager_props';
@@ -38,8 +38,8 @@ interface SlidingWindowState {
   slidingWindowIndexes: number[];
 }
 type PageIndex = number | 'low' | 'high';
-type PageIndexes = PageIndex[];
 type DelimiterType = 'none' | 'low' | 'high' | 'both';
+interface PageIndexes extends Array<PageIndex> {}
 
 function getDelimiterType(
   startIndex: number, slidingWindowSize: number, pageCount: number,
@@ -90,19 +90,19 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
   );
 }
 
-type PagesLargePropsType = Pick<PagerProps,
-'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
-  @Ref()
-  slidingWindowStateRef!: SlidingWindowState;
+  @Mutable()
+  slidingWindowStateHolder!: SlidingWindowState;
 
   private get slidingWindowState(): SlidingWindowState {
-    const slidingWindowState = this.slidingWindowStateRef;
+    const slidingWindowState = this.slidingWindowStateHolder;
     if (!slidingWindowState) {
       return {
         indexesForReuse: [],
@@ -140,7 +140,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
       pageIndexes,
       ...slidingWindowState
     } = createPageIndexes(startIndex, slidingWindowSize, pageCount, delimiter);
-    this.slidingWindowStateRef = slidingWindowState;
+    this.slidingWindowStateHolder = slidingWindowState;
     return pageIndexes;
   }
 

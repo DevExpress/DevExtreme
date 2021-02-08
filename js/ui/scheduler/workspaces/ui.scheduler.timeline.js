@@ -13,6 +13,7 @@ import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
 
 import dxrTimelineDateTableLayout from '../../../renovation/ui/scheduler/workspaces/timeline/date_table/layout.j';
+import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -32,6 +33,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     get verticalGroupTableClass() { return GROUP_TABLE_CLASS; }
 
     get viewDirection() { return 'horizontal'; }
+
+    get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
 
     _init() {
         super._init();
@@ -262,14 +265,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _renderView() {
         this._setFirstViewDate();
         let groupCellTemplates;
-        if(!(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace())) {
+        if(!this.isRenovatedRender()) {
             groupCellTemplates = this._renderGroupHeader();
         }
-        this._renderDateHeader();
 
         if(this.isRenovatedRender()) {
             this.renderRWorkspace();
         } else {
+            this._renderDateHeader();
             this._renderTimePanel();
             this._renderDateTable();
             this._renderAllDayPanel();
@@ -634,6 +637,26 @@ class SchedulerTimeline extends SchedulerWorkSpace {
                 dataCellTemplate: this.option('dataCellTemplate'),
             }
         );
+    }
+
+    generateRenderOptions() {
+        const options = super.generateRenderOptions();
+
+        const groupCount = this._getGroupCount();
+        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+            ? groupCount
+            : 1;
+
+        const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
+        const daysInView = cellsInGroup * horizontalGroupCount;
+
+        return {
+            ...options,
+            isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
+            getWeekDaysHeaderText: this._formatWeekdayAndDay.bind(this),
+            daysInView,
+            cellCountInDay: this._getCellCountInDay(),
+        };
     }
 }
 

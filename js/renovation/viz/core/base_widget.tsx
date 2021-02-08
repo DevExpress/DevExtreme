@@ -8,6 +8,7 @@ import {
   Consumer,
   Fragment,
   RefObject,
+  ComponentBindings,
 } from 'devextreme-generator/component_declaration/common';
 import { isDefined } from '../../../core/utils/type';
 import { combineClasses } from '../../utils/combine_classes';
@@ -25,6 +26,11 @@ import {
 } from './utils';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
+import { isUpdatedFlatObject } from '../common/utils';
+
+const DEFAULT_CANVAS = {
+  left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
+};
 
 const getCssClasses = (model: Partial<BaseWidgetProps>): string => {
   const containerClassesMap = {
@@ -39,16 +45,16 @@ const getCssClasses = (model: Partial<BaseWidgetProps>): string => {
 const calculateCanvas = (model: Partial<BaseWidgetProps> & Partial<BaseWidget>): Canvas => {
   const { height, width } = model.size ?? {};
   const margin = model.margin ?? {};
-  const defaultCanvas = model.defaultCanvas ?? {};
+  const defaultCanvas = model.defaultCanvas ?? DEFAULT_CANVAS;
   const elementWidth = !sizeIsValid(width) ? getElementWidth(model.containerRef) : 0;
   const elementHeight = !sizeIsValid(height) ? getElementHeight(model.containerRef) : 0;
   const canvas = {
-    width: Number(width) <= 0 ? 0 : Math.floor(pickPositiveValue([
+    width: width && width <= 0 ? 0 : Math.floor(pickPositiveValue([
       width,
       elementWidth,
       defaultCanvas.width,
     ])),
-    height: Number(height) <= 0 ? 0 : Math.floor(pickPositiveValue([
+    height: height && height <= 0 ? 0 : Math.floor(pickPositiveValue([
       height,
       elementHeight,
       defaultCanvas.height,
@@ -67,7 +73,7 @@ const calculateCanvas = (model: Partial<BaseWidgetProps> & Partial<BaseWidget>):
 
 export const viewFunction = (viewModel: BaseWidget): JSX.Element => {
   const grayFilterId = viewModel.props.disabled ? getNextDefsSvgId() : undefined;
-  const canvas = viewModel.props.canvas || { };
+  const canvas = viewModel.props.canvas ?? DEFAULT_CANVAS;
   const widget = (
     <div
       ref={viewModel.containerRef}
@@ -103,17 +109,27 @@ export const viewFunction = (viewModel: BaseWidget): JSX.Element => {
   );
 };
 
+// https://github.com/DevExpress/devextreme-renovation/issues/573
+@ComponentBindings()
+export class Props extends BaseWidgetProps {
+  @ForwardRef() rootElementRef!: RefObject<HTMLDivElement>;
+}
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class BaseWidget extends JSXComponent(BaseWidgetProps) {
+export class BaseWidget extends JSXComponent<Props, 'rootElementRef'>() {
   @Ref() containerRef!: RefObject<HTMLDivElement>;
 
   @ForwardRef() svgElementRef!: RefObject<SVGElement>;
 
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
+
+  @Effect({ run: 'once' }) setRootElementRef(): void {
+    this.props.rootElementRef = this.containerRef;
+  }
 
   @Effect()
   contentReadyEffect(): void {
@@ -166,7 +182,7 @@ export class BaseWidget extends JSXComponent(BaseWidgetProps) {
     });
 
     if (isDefined(newCanvas.height) && isDefined(newCanvas.width)
-    && Object.keys(newCanvas).some((key) => newCanvas[key] !== canvas?.[key])) {
+    && isUpdatedFlatObject(canvas, newCanvas)) {
       this.props.canvas = newCanvas;
     }
   }

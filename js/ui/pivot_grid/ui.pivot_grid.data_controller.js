@@ -880,11 +880,11 @@ export const DataController = Class.inherit((function() {
             if(rowsScrollController && columnsScrollController) {
                 rowsScrollController.viewportItemSize(contentParams.virtualRowHeight);
                 rowsScrollController.viewportSize(contentParams.viewportHeight / rowsScrollController.viewportItemSize());
-                rowsScrollController.setContentSize(contentParams.itemHeights);
+                rowsScrollController.setContentItemSizes(contentParams.itemHeights);
 
                 columnsScrollController.viewportItemSize(contentParams.virtualColumnWidth);
                 columnsScrollController.viewportSize(contentParams.viewportWidth / columnsScrollController.viewportItemSize());
-                columnsScrollController.setContentSize(contentParams.itemWidths);
+                columnsScrollController.setContentItemSizes(contentParams.itemWidths);
 
                 deferUpdate(function() {
                     columnsScrollController.loadIfNeed();

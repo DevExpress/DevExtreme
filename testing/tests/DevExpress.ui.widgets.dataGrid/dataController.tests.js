@@ -26,6 +26,7 @@ const setupModule = function() {
         'filterRow',
         'search',
         'editing',
+        'editingFormBased',
         'grouping',
         'headerFilter',
         'masterDetail',
@@ -4820,6 +4821,49 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.equal(items[pageSize].dataIndex, 1);
     });
 
+    QUnit.test('New mode. Load params are synchronized after scrolling', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        this.applyOptions({
+            scrolling: {
+                newMode: true,
+                rowRenderingMode: 'virtual',
+                rowPageSize: 5
+            }
+        });
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(200),
+            pageSize: 10
+        });
+
+        // act
+        this.dataController.viewportSize(15);
+
+        // assert
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 1, 'initial load page count');
+        assert.strictEqual(this.dataController.items().length, 10, 'initial loaded items count');
+
+        // act
+        this.dataController.setViewportPosition(500);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 3, skipForCurrentPage: 5 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
+        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 3, 'load page count after scrolling');
+        assert.deepEqual(this.dataController.items()[0].data, { id: 21, name: 'Name 21' }, 'first loaded item');
+        assert.deepEqual(this.dataController.items()[29].data, { id: 50, name: 'Name 50' }, 'last loaded item');
+    });
 });
 
 QUnit.module('Infinite scrolling', {

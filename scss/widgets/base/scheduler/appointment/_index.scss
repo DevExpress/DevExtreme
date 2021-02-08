@@ -1,0 +1,43 @@
+$scheduler-transparent-top-border: null !default;
+$scheduler-appointment-base-color: null !default;
+$scheduler-appointment-text-color: null !default;
+$scheduler-vertical-appointment-shadow: null !default;
+$scheduler-appointment-min-size: null !default;
+$scheduler-vertical-appointment-resizing-shadow: null !default;
+$scheduler-vertical-appointment-hovering-shadow: null !default;
+$scheduler-vertical-appointment-resizable-hovering-shadow: null !default;
+$scheduler-hovered-appointment-top-shadow-size: null !default;
+$scheduler-fill-focused-appointment: null !default;
+$scheduler-appointment-start-color: null !default;
+$scheduler-appointment-dragging-shadow: null !default;
+$scheduler-reduced-icon-offset: null !default;
+
+$agenda-appointment-text-color: null !default;
+$agenda-appointment-recurrence-icon-color: null !default;
+$agenda-appointment-hover-bg: null !default;
+$agenda-appointment-active-bg: null !default;
+$agenda-appointment-title-font-size: null !default;
+
+@use "./regular" with (
+  $transparent-top-border: $scheduler-transparent-top-border,
+  $appointment-base-color: $scheduler-appointment-base-color,
+  $appointment-text-color: $scheduler-appointment-text-color,
+  $vertical-appointment-shadow: $scheduler-vertical-appointment-shadow,
+  $appointment-min-size: $scheduler-appointment-min-size,
+  $vertical-appointment-resizing-shadow: $scheduler-vertical-appointment-resizing-shadow,
+  $vertical-appointment-hovering-shadow: $scheduler-vertical-appointment-hovering-shadow,
+  $vertical-appointment-resizable-hovering-shadow: $scheduler-vertical-appointment-resizable-hovering-shadow,
+  $hovered-appointment-top-shadow-size: $scheduler-hovered-appointment-top-shadow-size,
+  $fill-focused-appointment: $scheduler-fill-focused-appointment,
+  $appointment-start-color: $scheduler-appointment-start-color,
+  $appointment-dragging-shadow: $scheduler-appointment-dragging-shadow,
+  $reduced-icon-offset: $scheduler-reduced-icon-offset
+);
+@use "./agenda" with (
+  $marker-base-color: $scheduler-appointment-base-color,
+  $title-font-size: $agenda-appointment-title-font-size,
+  $text-color: $agenda-appointment-text-color,
+  $recurrence-icon-color: $agenda-appointment-recurrence-icon-color,
+  $hover-bg: $agenda-appointment-hover-bg,
+  $active-bg: $agenda-appointment-active-bg,
+);

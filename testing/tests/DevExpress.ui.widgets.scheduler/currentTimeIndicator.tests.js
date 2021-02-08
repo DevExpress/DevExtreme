@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
 const SCHEDULER_DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
@@ -28,11 +28,11 @@ const stubInvokeMethod = function(instance, options) {
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
         if(subscribe === 'createResourcesTree') {
-            return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
+            return new ResourceManager().createResourcesTree(arguments[1]);
         }
         if(subscribe === 'getResourceTreeLeaves') {
             const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-            return new SchedulerResourcesManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
+            return new ResourceManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
         }
     });
 };

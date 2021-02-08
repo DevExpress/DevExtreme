@@ -2,8 +2,6 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import browser from '../../core/utils/browser';
 import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
-import { isPlainObject, isDefined } from '../../core/utils/type';
-import { extend } from '../../core/utils/extend';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import registerComponent from '../../core/component_registrator';
@@ -18,20 +16,8 @@ const SCROLLABLE_CLASS = 'dx-scrollable';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
-const BOTH = 'both';
 
 const Scrollable = DOMComponent.inherit({
-
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            onUpdated: null,
-            onStart: null,
-            onEnd: null,
-            onBounce: null,
-            onStop: null,
-        });
-    },
-
     _initOptions: function(options) {
         this.callBase(options);
         if(!('useSimulatedScrollbar' in options)) {
@@ -48,7 +34,6 @@ const Scrollable = DOMComponent.inherit({
     _init: function() {
         this.callBase();
         this._initScrollableMarkup();
-        this._locked = false;
     },
 
     _getWindowDevicePixelRatio: function() {
@@ -89,10 +74,7 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _render: function() {
-        this._renderStrategy();
-
         this._renderDisabledState();
-        this._createActions();
         this.update();
 
         this.callBase();
@@ -156,21 +138,6 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    _validate: function(e) {
-        if(this._isLocked()) {
-            return false;
-        }
-
-        this._updateIfNeed();
-
-        return this._strategy.validate(e);
-    },
-
-    _initHandler: function() {
-        const strategy = this._strategy;
-        strategy.handleInit.apply(strategy, arguments);
-    },
-
     _renderDisabledState: function() {
         if(this.option('disabled')) {
             this._lock();
@@ -180,12 +147,7 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _renderStrategy: function() {
-        this._strategy.render();
         this.$element().data(SCROLLABLE_STRATEGY, this._strategy);
-    },
-
-    _createActions: function() {
-        this._strategy && this._strategy.createActions();
     },
 
     _clean: function() {
@@ -235,6 +197,7 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
+    // tests on reset position, think about it
     _resetInactiveDirection: function() {
         const inactiveProp = this._getInactiveProp();
         if(!inactiveProp || !hasWindow()) {
@@ -258,23 +221,6 @@ const Scrollable = DOMComponent.inherit({
 
     _location: function() {
         return this._strategy.location();
-    },
-
-    _normalizeLocation: function(location) {
-        if(isPlainObject(location)) {
-            const left = ensureDefined(location.left, location.x);
-            const top = ensureDefined(location.top, location.y);
-            return {
-                left: isDefined(left) ? -left : undefined,
-                top: isDefined(top) ? -top : undefined
-            };
-        } else {
-            const direction = this.option('direction');
-            return {
-                left: direction !== VERTICAL ? -location : undefined,
-                top: direction !== HORIZONTAL ? -location : undefined
-            };
-        }
     },
 
     _isLocked: function() {
@@ -301,32 +247,6 @@ const Scrollable = DOMComponent.inherit({
     //     }
     //     return current === direction;
     // },
-
-    _updateAllowedDirection: function() {
-        const allowedDirections = this._strategy._allowedDirections();
-
-        if(this._isDirection(BOTH) && allowedDirections.vertical && allowedDirections.horizontal) {
-            this._allowedDirectionValue = BOTH;
-        } else if(this._isDirection(HORIZONTAL) && allowedDirections.horizontal) {
-            this._allowedDirectionValue = HORIZONTAL;
-        } else if(this._isDirection(VERTICAL) && allowedDirections.vertical) {
-            this._allowedDirectionValue = VERTICAL;
-        } else {
-            this._allowedDirectionValue = null;
-        }
-    },
-
-    _allowedDirection: function() {
-        return this._allowedDirectionValue;
-    },
-
-    _container: function() {
-        return this._$container;
-    },
-
-    $content: function() {
-        return this._$content;
-    },
 
     scrollHeight: function() {
         return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
@@ -358,16 +278,11 @@ const Scrollable = DOMComponent.inherit({
 
         this._updateIfNeed();
 
-        let location = this._location();
-
-        if(!this.option('useNative')) {
-            targetLocation = this._strategy._applyScaleRatio(targetLocation);
-            location = this._strategy._applyScaleRatio(location);
-        }
+        const location = this._location();
 
         const distance = this._normalizeLocation({
-            left: location.left - ensureDefined(targetLocation.left, location.left),
-            top: location.top - ensureDefined(targetLocation.top, location.top)
+            left: ensureDefined(targetLocation.left, location.left) - location.top,
+            top: ensureDefined(targetLocation.top, location.top) - location.left
         });
 
         if(!distance.top && !distance.left) {

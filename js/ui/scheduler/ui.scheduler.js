@@ -42,8 +42,8 @@ import { hide as hideLoading, show as showLoading } from './ui.loading';
 import AppointmentCollection from './appointments/appointmentCollection';
 import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
 import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
-import SchedulerHeader from './ui.scheduler.header';
-import SchedulerResourceManager from './ui.scheduler.resource_manager';
+import { Header } from './header/header';
+import { ResourceManager } from './resources/resourceManager';
 import subscribes from './ui.scheduler.subscribes';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone';
@@ -371,7 +371,7 @@ class Scheduler extends Widget {
             allowMultipleCellSelection: true,
 
             scrolling: {
-                mode: 'standard',
+                mode: 'standard'
             },
 
             renovateRender: false,
@@ -945,7 +945,7 @@ class Scheduler extends Widget {
 
         this._initEditing();
 
-        this._resourcesManager = new SchedulerResourceManager(this.option('resources'));
+        this._resourcesManager = new ResourceManager(this.option('resources'));
 
         const combinedDataAccessors = this._combineDataAccessors();
 
@@ -982,29 +982,38 @@ class Scheduler extends Widget {
         const { expr } = this._dataAccessors;
         const createGetter = (property) => compileGetter(`appointmentData.${property}`);
 
+        const getDate = getter => {
+            return (data) => {
+                const value = getter(data);
+                if(value instanceof Date) {
+                    return value.valueOf();
+                }
+                return value;
+            };
+        };
+
         this._templateManager.addDefaultTemplates({
-            ['item']: new BindableTemplate(($container, data, model) => {
-                this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model);
-            }, [
-                'html',
-                'text',
-                'startDate',
-                'endDate',
-                'allDay',
-                'description',
-                'recurrenceRule',
-                'recurrenceException',
-                'startDateTimeZone',
-                'endDateTimeZone'
-            ], this.option('integrationOptions.watchMethod'), {
-                'text': createGetter(expr.textExpr),
-                'startDate': createGetter(expr.startDateExpr),
-                'endDate': createGetter(expr.endDateExpr),
-                'startDateTimeZone': createGetter(expr.startDateTimeZoneExpr),
-                'endDateTimeZone': createGetter(expr.endDateTimeZoneExpr),
-                'allDay': createGetter(expr.allDayExpr),
-                'recurrenceRule': createGetter(expr.recurrenceRuleExpr)
-            })
+            ['item']: new BindableTemplate(($container, data, model) => this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model)
+                , [
+                    'html',
+                    'text',
+                    'startDate',
+                    'endDate',
+                    'allDay',
+                    'description',
+                    'recurrenceRule',
+                    'recurrenceException',
+                    'startDateTimeZone',
+                    'endDateTimeZone'
+                ], this.option('integrationOptions.watchMethod'), {
+                    'text': createGetter(expr.textExpr),
+                    'startDate': getDate(createGetter(expr.startDateExpr)),
+                    'endDate': getDate(createGetter(expr.endDateExpr)),
+                    'startDateTimeZone': createGetter(expr.startDateTimeZoneExpr),
+                    'endDateTimeZone': createGetter(expr.endDateTimeZoneExpr),
+                    'allDay': createGetter(expr.allDayExpr),
+                    'recurrenceRule': createGetter(expr.recurrenceRuleExpr)
+                })
         });
     }
 
@@ -1308,7 +1317,7 @@ class Scheduler extends Widget {
 
     _renderHeader() {
         const $header = $('<div>').appendTo(this.$element());
-        this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
+        this._header = this._createComponent($header, Header, this._headerConfig());
     }
 
     _headerConfig() {
@@ -1469,6 +1478,15 @@ class Scheduler extends Widget {
     _workSpaceConfig(groups, countConfig) {
         const currentViewOptions = this._getCurrentViewOptions();
         const scrolling = this.option('scrolling');
+        const isVirtualScrolling = scrolling.mode === 'virtual' ||
+            currentViewOptions.scrolling?.mode === 'virtual';
+        const isHorizontalVirtualScrollingOrientation = isVirtualScrolling &&
+            ['horizontal', 'both'].filter(item =>
+                scrolling.type === item ||
+                currentViewOptions.scrolling?.type === item
+            ).length > 0;
+        const crossScrollingEnabled = this.option('crossScrollingEnabled') ||
+            isHorizontalVirtualScrollingOrientation;
 
         const result = extend({
             noDataText: this.option('noDataText'),
@@ -1485,7 +1503,7 @@ class Scheduler extends Widget {
             indicatorUpdateInterval: this.option('indicatorUpdateInterval'),
             shadeUntilCurrentTime: this.option('shadeUntilCurrentTime'),
             allDayExpanded: this._appointments.option('items'),
-            crossScrollingEnabled: this.option('crossScrollingEnabled'),
+            crossScrollingEnabled,
             dataCellTemplate: this.option('dataCellTemplate'),
             timeCellTemplate: this.option('timeCellTemplate'),
             resourceCellTemplate: this.option('resourceCellTemplate'),
@@ -1496,10 +1514,8 @@ class Scheduler extends Widget {
                 this.option('selectedCellData', args.selectedCellData);
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
-            scrolling: scrolling,
-            renovateRender: this.option('renovateRender')
-                || scrolling.mode === 'virtual'
-                || currentViewOptions.scrolling?.mode === 'virtual'
+            scrolling,
+            renovateRender: this.option('renovateRender') || isVirtualScrolling
         }, currentViewOptions);
 
         result.observer = this;
@@ -1892,7 +1908,7 @@ class Scheduler extends Widget {
                         .done(() => {
                             dragEvent && dragEvent.cancel.resolve(false);
                         })
-                        .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.UPDATED, rawAppointment, storeAppointment))
+                        .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.UPDATED, storeAppointment))
                         .fail(() => performFailAction());
                 } catch(err) {
                     performFailAction(err);
@@ -1934,16 +1950,12 @@ class Scheduler extends Widget {
         }
     }
 
-    _onDataPromiseCompleted(handlerName, appointment, storeAppointment, isDeletedOperation = false) {
-        const args = { appointmentData: appointment };
+    _onDataPromiseCompleted(handlerName, storeAppointment, appointment) {
+        const args = { appointmentData: appointment || storeAppointment };
 
         if(storeAppointment instanceof Error) {
             args.error = storeAppointment;
         } else {
-            if(!isDeletedOperation) {
-                // store.update promise return array result, but other data method return single object
-                args.appointmentData = storeAppointment[0] || storeAppointment;
-            }
             this._appointmentPopup.isVisible() && this._appointmentPopup.hide();
         }
 
@@ -2188,7 +2200,7 @@ class Scheduler extends Widget {
 
             return this._appointmentModel
                 .add(serializedAppointment)
-                .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.ADDED, serializedAppointment, storeAppointment));
+                .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.ADDED, storeAppointment));
         });
     }
 
@@ -2208,7 +2220,7 @@ class Scheduler extends Widget {
             if(!canceled) {
                 this._appointmentModel
                     .remove(rawAppointment)
-                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, rawAppointment, storeAppointment, true));
+                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, storeAppointment, rawAppointment));
             }
         });
     }

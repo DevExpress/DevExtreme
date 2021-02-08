@@ -1,10 +1,31 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { Canvas } from '../../core/common/types.d';
+import {
+  clear as clearEventHandlers,
+  defaultEvent,
+  emit,
+  getEventHandlers,
+} from '../../../test_utils/events_mock';
 import { Bullet, viewFunction as BulletComponent } from '../bullet';
 import { PathSvgElement } from '../../core/renderers/svg_path';
 import { resolveRtlEnabled } from '../../../utils/resolve_rtl';
+import { TooltipProps } from '../../core/tooltip';
+import { generateCustomizeTooltipCallback } from '../utils';
 
 jest.mock('../../../utils/resolve_rtl');
+jest.mock('../utils', () => {
+  const originalUtils = jest.requireActual('../utils');
+  return ({
+    ...originalUtils,
+    generateCustomizeTooltipCallback: jest.fn(),
+  });
+});
+
+const pointerAction = {
+  move: 'dxpointermove',
+  down: 'dxpointerdown',
+};
 
 describe('Bullet', () => {
   const prepareInternalComponents = jest.fn(() => ({
@@ -35,6 +56,8 @@ describe('Bullet', () => {
     getZeroLevelShape: () => zeroLevelPoints,
   });
 
+  const customizedTooltipProps = { enabled: false } as any;
+
   describe('View', () => {
     it('should pass all necessary properties to the BaseWidget (by default)', () => {
       const onCanvasChange = jest.fn();
@@ -42,13 +65,16 @@ describe('Bullet', () => {
       const cssClassName = 'some-class';
       const viewModel = {
         prepareInternalComponents: getDefaultScaleProps,
+        customizedTooltipProps,
         onCanvasChange,
         cssClasses,
         rtlEnabled: false,
         cssClassName,
-        props: { },
+        props: {
+          disabled: false,
+        },
       };
-      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element);
+      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
 
       expect(bullet.children()).toHaveLength(0);
       expect(bullet.props()).toMatchObject({
@@ -86,9 +112,10 @@ describe('Bullet', () => {
           size,
           margin,
         },
+        customizedTooltipProps,
         defaultCanvas,
       };
-      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element);
+      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
 
       expect(bullet.children()).toHaveLength(0);
       expect(bullet.props()).toMatchObject({
@@ -103,6 +130,7 @@ describe('Bullet', () => {
       const methods = shapeMethods(points, false, [], false, []);
       const viewModel = {
         prepareInternalComponents,
+        customizedTooltipProps,
         ...methods,
         props: { color: '#e8c267' },
       };
@@ -124,13 +152,14 @@ describe('Bullet', () => {
       const methods = shapeMethods([], true, points, false, []);
       const viewModel = {
         prepareInternalComponents,
+        customizedTooltipProps,
         ...methods,
         props: {
           targetColor: '#666666',
           targetWidth: 4,
         },
       };
-      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element);
+      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
 
       expect(bullet.children()).toHaveLength(2);
       expect(bullet.find(PathSvgElement).length).toBe(2);
@@ -151,10 +180,11 @@ describe('Bullet', () => {
       const methods = shapeMethods([], false, [], true, points);
       const viewModel = {
         prepareInternalComponents,
+        customizedTooltipProps,
         ...methods,
         props: { targetColor: '#666666' },
       };
-      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element);
+      const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
 
       expect(bullet.children()).toHaveLength(2);
       expect(bullet.find(PathSvgElement).length).toBe(2);
@@ -167,6 +197,227 @@ describe('Bullet', () => {
         strokeLineCap: 'square',
         stroke: '#666666',
         strokeWidth: 1,
+      });
+    });
+
+    it('should render tooltip', () => {
+      customizedTooltipProps.enabled = true;
+      const viewModel = {
+        prepareInternalComponents: getDefaultScaleProps,
+        customizedTooltipProps,
+        tooltipVisible: true,
+        props: { },
+      };
+      const tooltip = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(1);
+
+      expect(tooltip.props()).toEqual({
+        arrowLength: 10,
+        arrowWidth: 20,
+        border: {
+          color: '#d3d3d3',
+          dashStyle: 'solid',
+          visible: true,
+          width: 1,
+        },
+        color: '#fff',
+        cornerRadius: 0,
+        data: {},
+        enabled: true,
+        font: {
+          color: '#232323',
+          family: 'Segoe UI',
+          opacity: 1,
+          size: 12,
+          weight: 400,
+        },
+        interactive: false,
+        location: 'center',
+        offset: 0,
+        paddingLeftRight: 18,
+        paddingTopBottom: 15,
+        rtl: false,
+        shadow: {
+          blur: 2,
+          color: '#000',
+          offsetX: 0,
+          offsetY: 4,
+          opacity: 0.4,
+        },
+        shared: false,
+        visible: true,
+        x: 0,
+        y: 0,
+      });
+    });
+
+    it('should pass event data to the tooltip', () => {
+      const widgetRef = { current: {} };
+      customizedTooltipProps.enabled = true;
+      customizedTooltipProps.eventData = { component: widgetRef };
+      const viewModel = {
+        prepareInternalComponents: getDefaultScaleProps,
+        widgetRef,
+        customizedTooltipProps,
+        tooltipVisible: true,
+        props: { },
+      };
+      const tooltip = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(1);
+
+      expect(tooltip.props()).toMatchObject({
+        eventData: { component: widgetRef },
+      });
+    });
+  });
+
+  describe('Behavior', () => {
+    describe('Effects', () => {
+      afterEach(clearEventHandlers);
+
+      describe('tooltipEffect', () => {
+        it('should be ignored if the "disabled" is true', () => {
+          const bullet = new Bullet({ disabled: true });
+
+          expect(bullet.tooltipEffect()).toBe(undefined);
+          expect(getEventHandlers(pointerAction.move)).toBeUndefined();
+          expect(getEventHandlers(pointerAction.down)).toBeUndefined();
+        });
+
+        it('should be ignored if the "enabled" of tooltip props is false', () => {
+          const bullet = new Bullet({
+            disabled: false,
+            tooltip: { enabled: false },
+          });
+
+          expect(bullet.tooltipEffect()).toBe(undefined);
+          expect(getEventHandlers(pointerAction.move)).toBeUndefined();
+          expect(getEventHandlers(pointerAction.down)).toBeUndefined();
+        });
+
+        it('should call "pointerHandler" callback by pointer move event', () => {
+          const bullet = new Bullet({
+            value: 10,
+            target: 15,
+            tooltip: { enabled: true },
+          });
+          const baseRef = {} as any;
+          bullet.widgetRef = { svg: jest.fn(() => baseRef) } as any;
+          bullet.pointerHandler = jest.fn();
+          bullet.tooltipEffect();
+
+          emit(pointerAction.down, defaultEvent, baseRef);
+          expect(bullet.pointerHandler).toHaveBeenCalledTimes(1);
+        });
+
+        it('should return event detach callback', () => {
+          const bullet = new Bullet({
+            value: 10,
+            target: 15,
+            tooltip: { enabled: true },
+          });
+          const baseRef = {} as any;
+          bullet.widgetRef = { svg: jest.fn(() => baseRef) } as any;
+          const detach = bullet.tooltipEffect() as () => undefined;
+
+          expect(getEventHandlers(pointerAction.down).length).toBe(1);
+          detach();
+          expect(getEventHandlers(pointerAction.down).length).toBe(0);
+        });
+      });
+    });
+
+    afterEach(clearEventHandlers);
+
+    describe('Pointer events', () => {
+      describe('pointerHandler', () => {
+        it('should change tooltip visibility state to true (if there is no such prop)', () => {
+          const bullet = new Bullet({ });
+          bullet.pointerHandler();
+
+          expect(bullet.tooltipVisible).toBe(true);
+          expect(getEventHandlers(pointerAction.down).length).toBe(1);
+        });
+
+        it('should call "pointerOutHandler" callback by pointer out move', () => {
+          const bullet = new Bullet({ });
+          bullet.pointerOutHandler = jest.fn();
+          bullet.pointerHandler();
+          emit(pointerAction.down, defaultEvent);
+
+          expect(bullet.pointerOutHandler).toHaveBeenCalledTimes(1);
+          expect(bullet.pointerOutHandler).toHaveBeenCalledWith({ ...defaultEvent });
+        });
+      });
+
+      describe('pointerOutHandler', () => {
+        it('should not hide tooltip if pointer in canvas', () => {
+          const bullet = new Bullet({ });
+          bullet.tooltipVisible = true;
+          bullet.canvasState = {
+            top: 0,
+            left: 0,
+            width: 200,
+            height: 50,
+            right: 0,
+            bottom: 0,
+          };
+          bullet.pointerHandler();
+          bullet.pointerOutHandler({ pageX: 100, pageY: 20 });
+
+          expect(bullet.tooltipVisible).toBe(true);
+          expect(getEventHandlers(pointerAction.down).length).toBe(1);
+        });
+
+        it('should hide tooltip if pointer out of canvas', () => {
+          const bullet = new Bullet({ });
+          bullet.tooltipVisible = true;
+          bullet.canvasState = {
+            top: 0,
+            left: 0,
+            width: 200,
+            height: 50,
+            right: 0,
+            bottom: 0,
+          };
+          bullet.pointerHandler();
+          bullet.pointerOutHandler({ pageX: 300, pageY: 200 });
+
+          expect(bullet.tooltipVisible).toBe(false);
+          expect(getEventHandlers(pointerAction.down).length).toBe(0);
+        });
+
+        it('should not hide tooltip if pointer in the canvas with margins, top-left', () => {
+          const bullet = new Bullet({ });
+          bullet.tooltipVisible = true;
+          bullet.canvasState = {
+            top: 10,
+            left: 15,
+            width: 200,
+            height: 50,
+            right: 5,
+            bottom: 20,
+          };
+          bullet.pointerHandler();
+          bullet.pointerOutHandler({ pageX: 10, pageY: 5 });
+
+          expect(bullet.tooltipVisible).toBe(true);
+        });
+
+        it('should not hide tooltip if pointer in the canvas with margins, bottom-right', () => {
+          const bullet = new Bullet({ });
+          bullet.tooltipVisible = true;
+          bullet.canvasState = {
+            top: 10,
+            left: 15,
+            width: 200,
+            height: 50,
+            right: 5,
+            bottom: 20,
+          };
+          bullet.pointerHandler();
+          bullet.pointerOutHandler({ pageX: 199, pageY: 49 });
+
+          expect(bullet.tooltipVisible).toBe(true);
+        });
       });
     });
   });
@@ -229,6 +480,137 @@ describe('Bullet', () => {
         });
       });
 
+      describe('tooltipData', () => {
+        it('should return simple text by default (without fotmatting)', () => {
+          const value = 10;
+          const target = 15;
+          const bullet = new Bullet({ value, target });
+
+          expect(bullet.tooltipData).toEqual({
+            originalValue: value,
+            originalTarget: target,
+            value: String(value),
+            target: String(target),
+            valueTexts: ['Actual Value:', String(value), 'Target Value:', String(target)],
+          });
+        });
+
+        it('should return formatted text if tooltip has such props', () => {
+          const value = 0.2022;
+          const target = 0.7077;
+          const pValue = '20.2%';
+          const pTarget = '70.8%';
+          const tooltip = {
+            format: {
+              type: 'percent',
+              precision: 1,
+            },
+          } as TooltipProps;
+          const bullet = new Bullet({ value, target, tooltip });
+
+          expect(bullet.tooltipData).toEqual({
+            originalValue: value,
+            originalTarget: target,
+            value: pValue,
+            target: pTarget,
+            valueTexts: ['Actual Value:', pValue, 'Target Value:', pTarget],
+          });
+        });
+      });
+
+      describe('tooltipCoords', () => {
+        it('should return zero coords by default (empty canvas and offset)', () => {
+          const bullet = new Bullet({ });
+
+          expect(bullet.tooltipCoords).toEqual({ x: 0, y: 0 });
+        });
+
+        it('should return correct coords by canvas and offset', () => {
+          const bullet = new Bullet({ });
+          bullet.canvasState = { width: 200, height: 100 } as Canvas;
+          bullet.offsetState = { left: 150, top: 200 };
+
+          expect(bullet.tooltipCoords).toEqual({ x: 250, y: 250 });
+        });
+      });
+
+      const value = 10;
+      const target = 15;
+      const data = {
+        originalValue: value,
+        originalTarget: target,
+        value: String(value),
+        target: String(target),
+        valueTexts: ['Actual Value:', String(value), 'Target Value:', String(target)],
+      };
+      const customizeTooltipFn = jest.fn();
+
+      describe('customizedTooltipProps', () => {
+        it('should return inner custom props if bullet doesn\'t have tooltip props', () => {
+          (generateCustomizeTooltipCallback as jest.Mock).mockReturnValue(customizeTooltipFn);
+          const bullet = new Bullet({ value, target });
+          bullet.canvasState = { width: 200, height: 100 } as Canvas;
+          bullet.offsetState = { left: 100, top: 200 };
+          bullet.widgetRef = {} as any;
+
+          expect(bullet.customizedTooltipProps).toEqual({
+            enabled: true,
+            data,
+            eventData: { component: {} },
+            customizeTooltip: customizeTooltipFn,
+            x: 200,
+            y: 250,
+          });
+        });
+
+        it('should return customized tooltip props', () => {
+          const tooltip = {
+            enabled: true,
+            cornerRadius: 5,
+            arrowWidth: 25,
+            arrowLength: 15,
+            offset: 10,
+          };
+          (generateCustomizeTooltipCallback as jest.Mock).mockReturnValue(customizeTooltipFn);
+          const bullet = new Bullet({ value, target, tooltip });
+          bullet.canvasState = { width: 200, height: 100 } as Canvas;
+          bullet.offsetState = { left: 100, top: 200 };
+          bullet.widgetRef = {} as any;
+
+          expect(bullet.customizedTooltipProps).toEqual({
+            ...tooltip,
+            customizeTooltip: customizeTooltipFn,
+            eventData: { component: {} },
+            data,
+            x: 200,
+            y: 250,
+          });
+        });
+
+        it('should return customized tooltip props with onTooltipShown/onTooltipHidden events', () => {
+          (generateCustomizeTooltipCallback as jest.Mock).mockReturnValue(customizeTooltipFn);
+          const onTooltipShown = jest.fn();
+          const onTooltipHidden = jest.fn();
+          const bullet = new Bullet({
+            value, target, onTooltipShown, onTooltipHidden,
+          });
+          bullet.canvasState = { width: 200, height: 100 } as Canvas;
+          bullet.offsetState = { left: 100, top: 200 };
+          bullet.widgetRef = {} as any;
+
+          expect(bullet.customizedTooltipProps).toEqual({
+            enabled: true,
+            data,
+            eventData: { component: {} },
+            onTooltipShown,
+            onTooltipHidden,
+            customizeTooltip: customizeTooltipFn,
+            x: 200,
+            y: 250,
+          });
+        });
+      });
+
       describe('defaultCanvas', () => {
         it('should return all params of canvas', () => {
           const bullet = new Bullet({ });
@@ -256,9 +638,26 @@ describe('Bullet', () => {
             bottom: 40,
           };
           const bullet = new Bullet({ });
+          bullet.widgetRef = { svg: jest.fn(() => null) } as any;
           bullet.onCanvasChange(canvas);
 
           expect(bullet.canvasState).toEqual(canvas);
+        });
+
+        it('should change offset state', () => {
+          const offsetState = {
+            top: 100,
+            left: 200,
+          };
+          const bullet = new Bullet({ });
+          bullet.widgetRef = {
+            svg: jest.fn(() => ({
+              getBoundingClientRect: jest.fn().mockReturnValue(offsetState),
+            })),
+          } as any;
+          bullet.onCanvasChange({} as Canvas);
+
+          expect(bullet.offsetState).toEqual(offsetState);
         });
       });
 
@@ -330,7 +729,7 @@ describe('Bullet', () => {
       });
 
       describe('Shapes', () => {
-        let getTranslator = () => ({ translate: (x: number) => x * 10 });
+        let getTranslator = () => ({ translate: (x: number) => x * 10 }) as any;
 
         describe('getBarValueShape', () => {
           describe('value > 0', () => {

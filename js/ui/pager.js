@@ -127,7 +127,8 @@ const Pager = Widget.inherit({
             } else {
                 pages.push(new Page(1, 0));
                 firstValue = currentPage ? currentPage.value() - currentPage.index : 1;
-                for(i = 1; i <= PAGES_LIMITER; i++) {
+                const pagesCount = count === firstValue + PAGES_LIMITER ? PAGES_LIMITER - 1 : PAGES_LIMITER;
+                for(i = 1; i <= pagesCount; i++) {
                     pages.push(new Page(firstValue + i, i));
                 }
                 pages.push(new Page(count, PAGES_LIMITER + 1));

@@ -429,6 +429,11 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
       /**
       * @docid
       * @prevFileNamespace DevExpress.viz
+      */
+      paletteIndex?: number;
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
       * @default '#303030'
       */
       selectedBorderColor?: string,

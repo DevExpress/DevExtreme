@@ -41,6 +41,7 @@ import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/ba
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
+import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import VirtualSelectionState from './virtual_selection_state';
 
 import { cache } from './cache';
@@ -175,6 +176,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     get verticalGroupTableClass() { return WORKSPACE_VERTICAL_GROUP_TABLE_CLASS; }
 
     get viewDirection() { return 'vertical'; }
+
+    get renovatedHeaderPanelComponent() { return dxrDateHeader; }
 
     _supportedKeys() {
         const clickHandler = function(e) {
@@ -700,6 +703,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 break;
             case 'scrolling':
                 this.option('renovateRender', this._isVirtualModeOn());
+                this.option('crossScrollingEnabled', this._isHorizontalVirtualScrolling());
                 break;
             case 'renovateRender':
                 this.repaint();
@@ -1168,6 +1172,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.isRenovatedRender() && this._isVirtualModeOn();
     }
 
+    _isHorizontalVirtualScrolling() {
+        const orientation = this.option('scrolling.type');
+        return this._isVirtualModeOn() &&
+            (orientation === 'horizontal' || orientation === 'both');
+    }
+
     _initVirtualScrolling() {
         if(this.virtualScrollingDispatcher) {
             this.virtualScrollingDispatcher.dispose();
@@ -1194,19 +1204,20 @@ class SchedulerWorkSpace extends WidgetObserver {
     _renderView() {
         this._setFirstViewDate();
 
-        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
-            this.renderRGroupPanel();
+        if(this.isRenovatedRender()) {
+            if(this._isVerticalGroupedWorkSpace()) {
+                this.renderRGroupPanel();
+            }
         } else {
             this._applyCellTemplates(
                 this._renderGroupHeader()
             );
         }
 
-        this._renderDateHeader();
-
         if(this.isRenovatedRender()) {
             this.renderRWorkspace();
         } else {
+            this._renderDateHeader();
             this._renderTimePanel();
             this._renderGroupAllDayPanel();
             this._renderDateTable();
@@ -1254,9 +1265,12 @@ class SchedulerWorkSpace extends WidgetObserver {
             startCellIndex: 0,
             groupOrientation,
             rowCount,
-            totalRowCount: this._getRowCount(),
+            totalRowCount: rowCount,
             totalCellCount: cellCount,
-            groupCount
+            groupCount,
+            getDateHeaderText: this._getHeaderText.bind(this),
+            today: this._getToday?.(),
+            groupByDate: this.isGroupedByDate(),
         };
 
         if(this.isVirtualScrolling()) {
@@ -1276,6 +1290,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.viewDataProvider.update(isGenerateNewViewData);
 
+        this.renderRHeaderPanel();
         this.renderRAllDayPanel();
         this.renderRTimeTable();
         this.renderRDateTable();
@@ -1292,6 +1307,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupByDate: this.isGroupedByDate(),
             resourceCellTemplate: this.option('resourceCellTemplate'),
             className: this.verticalGroupTableClass,
+            baseColSpan: this.isGroupedByDate()
+                ? 1
+                : this._getCellCount(),
+            columnCountPerGroup: this._getCellCount(),
         };
 
         if(this.option('groups').length) {
@@ -1344,8 +1363,37 @@ class SchedulerWorkSpace extends WidgetObserver {
             dxrTimePanelTableLayout,
             'renovatedTimePanel',
             {
-                viewData: this.viewDataProvider.viewData,
+                timePanelData: this.viewDataProvider.timePanelData,
                 timeCellTemplate: this.option('timeCellTemplate'),
+            }
+        );
+    }
+
+    renderRHeaderPanel(isRenderDateHeader = true) {
+        if(this.option('groups').length) {
+            this._attachGroupCountAttr();
+        } else {
+            this._detachGroupCountAttr();
+        }
+
+        this.renderRComponent(
+            this._$thead,
+            this.renovatedHeaderPanelComponent,
+            'renovatedHeaderPanel',
+            {
+                dateHeaderMap: this.viewDataProvider.dateHeaderMap,
+                dateCellTemplate: this.option('dateCellTemplate'),
+                timeCellTemplate: this.option('timeCellTemplate'),
+                groups: this.option('groups'),
+                groupByDate: this.isGroupedByDate(),
+                groupOrientation: this.option('groupOrientation'),
+                resourceCellTemplate: this.option('resourceCellTemplate'),
+                className: this.verticalGroupTableClass,
+                groupPanelCellBaseColSpan: this.isGroupedByDate()
+                    ? 1
+                    : this._getCellCount(),
+                columnCountPerGroup: this._getCellCount(),
+                isRenderDateHeader,
             }
         );
     }
@@ -2268,6 +2316,12 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.renovatedTimePanel?.dispose();
         this.renovatedTimePanel = undefined;
+
+        this.renovatedGroupPanel?.dispose();
+        this.renovatedGroupPanel = undefined;
+
+        this.renovatedHeaderPanel?.dispose();
+        this.renovatedHeaderPanel = undefined;
     }
 
     getWorkArea() {
@@ -2462,7 +2516,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._$dateTable
             .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
             .eq(position.rowIndex)
-            .find('td')
+            .find(`td:not(.${VIRTUAL_CELL_CLASS})`)
             .eq(position.cellIndex);
     }
 
@@ -2656,9 +2710,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getVirtualRowOffset() {
-        return this.isVirtualScrolling()
-            ? this.virtualScrollingDispatcher.verticalScrollingState.virtualItemSizeBefore
-            : 0;
+        return this.virtualScrollingDispatcher?.virtualRowOffset || 0;
+    }
+
+    _getVirtualCellOffset() {
+        return this.virtualScrollingDispatcher?.virtualCellOffset || 0;
     }
 
     _getCellDataInRenovatedView($cell) {
@@ -2667,7 +2723,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
         }
 
-        const columnIndex = $cell.index();
+        let columnIndex = $cell.index();
+        if(this.isVirtualScrolling()) {
+            columnIndex -= this.virtualScrollingDispatcher.leftVirtualCellsCount;
+        }
 
         const { viewDataProvider } = this;
         const isAllDayCell = this._hasAllDayClass($cell);
@@ -2700,9 +2759,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
         let position;
-        const shouldFindPositionByViewData = this.isVirtualScrolling() && (!inAllDayRow || this._isVerticalGroupedWorkSpace());
 
-        if(shouldFindPositionByViewData) {
+        if(this.isRenovatedRender()) {
             const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
             if(!positionByMap) {
                 return undefined;
@@ -2739,6 +2797,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(position) {
             position.top -= this._getVirtualRowOffset();
+            position.left -= this._getVirtualCellOffset();
         }
 
         return position;
@@ -2808,16 +2867,20 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _isSkippedData() { return false; }
 
-    getCoordinatesByDateInGroup(startDate, appointmentResources, inAllDayRow) {
+    getCoordinatesByDateInGroup(startDate, appointmentResources, inAllDayRow, groupIndex) {
         const result = [];
 
         if(this._isSkippedData(startDate)) {
             return result;
         }
 
-        const groupIndices = this._getGroupCount()
-            ? this._getGroupIndexes(appointmentResources)
-            : [0];
+        let groupIndices = [groupIndex];
+
+        if(!isDefined(groupIndex)) {
+            groupIndices = this._getGroupCount()
+                ? this._getGroupIndexes(appointmentResources)
+                : [0];
+        }
 
         groupIndices.forEach(groupIndex => {
             const coordinates = this.getCoordinatesByDate(startDate, groupIndex, inAllDayRow);
@@ -2920,7 +2983,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$dateTable
                 .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
                 .first()
-                .find(`td:nth-child(${this._getCellCount()}n)`)
+                .find(`td:not(.${VIRTUAL_CELL_CLASS}):nth-child(${this._getCellCount()}n)`)
                 .each((function(_, cell) {
 
                     let maxPosition = $(cell).position().left;
@@ -3040,7 +3103,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
 
-        return new Date(endDateOfLastViewCell.getTime() - toMs('minute'));
+        return new Date(endDateOfLastViewCell.getTime() - this._getEndViewDateTimeDiff());
+    }
+
+    _getEndViewDateTimeDiff() {
+        return toMs('minute');
     }
 
     getDateOfLastViewCell() {
@@ -3175,6 +3242,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolledRowCount += 1;
         }
 
+        // TODO horizontal v-scrolling
         const fullScrolledColumnCount = scrollableScrollLeft / cellWidth;
         let scrolledColumnCount = Math.floor(fullScrolledColumnCount);
         if(scrollableScrollLeft % cellWidth !== 0) {

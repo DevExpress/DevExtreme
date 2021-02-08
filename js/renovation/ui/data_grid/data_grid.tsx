@@ -1,40 +1,77 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  Ref, Component, JSXComponent, Method, RefObject,
+  JSXComponent, Component, Method, Ref, Effect,
 } from 'devextreme-generator/component_declaration/common';
-import LegacyDataGrid from '../../../ui/data_grid/ui.data_grid';
+import {
+  DataGridProps,
+} from './common/data_grid_props';
 
-import { DataGridProps } from './props';
+import '../../../ui/data_grid/ui.data_grid';
 
-import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { Widget } from '../common/widget';
+import { DataGridComponent } from './datagrid_component';
+import { DataGridViews } from './data_grid_views';
+import { GridInstance } from './common/types';
+import { getUpdatedOptions } from './utils/get_updated_options';
+import DataGridBaseComponent from '../../preact_wrapper/data_grid';
 
-/* eslint-enable import/named */
+const aria = { role: 'presentation' };
 
 export const viewFunction = ({
-  domComponentRef, props, restAttributes,
-}: DataGrid): JSX.Element => (
-  <DomComponentWrapper
-    ref={domComponentRef}
-    componentType={LegacyDataGrid as any}
-    componentProps={props}
-  // eslint-disable-next-line react/jsx-props-no-spreading
+  instance,
+  props: {
+    accessKey,
+    activeStateEnabled,
+    disabled,
+    focusStateEnabled,
+    height,
+    hint,
+    hoverStateEnabled,
+    onContentReady,
+    rtlEnabled,
+    tabIndex,
+    visible,
+    width,
+  },
+  restAttributes,
+}: DataGrid) => (
+  <Widget // eslint-disable-line jsx-a11y/no-access-key
+    accessKey={accessKey}
+    activeStateEnabled={activeStateEnabled}
+    aria={aria}
+    disabled={disabled}
+    focusStateEnabled={focusStateEnabled}
+    height={height}
+    hint={hint}
+    hoverStateEnabled={hoverStateEnabled}
+    onContentReady={onContentReady}
+    rtlEnabled={rtlEnabled}
+    tabIndex={tabIndex}
+    visible={visible}
+    width={width}
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
-  />
+  >
+    <DataGridViews instance={instance} />
+  </Widget>
 );
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: true },
+  jQuery: { register: true, component: DataGridBaseComponent },
   view: viewFunction,
 })
 export class DataGrid extends JSXComponent(DataGridProps) {
-  @Ref()
-  domComponentRef!: RefObject<DomComponentWrapper>;
+  @Ref() componentInstance!: GridInstance;
 
-  get instance(): any {
-    return this.domComponentRef.getInstance();
+  @Method()
+  getComponentInstance(): GridInstance {
+    return this.instance;
   }
 
+  @Ref() prevProps!: DataGridProps;
+
+  // #region methods
   @Method()
   beginCustomLoading(messageText: string): void {
     return this.instance?.beginCustomLoading(messageText);
@@ -52,7 +89,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   @Method()
   cellValue(rowIndex: number, dataField: string | number, value: any): any {
-    return this.instance?.cellValue(rowIndex, dataField, value);
+    return this.instance?.cellValue(rowIndex, dataField as any, value);
   }
 
   @Method()
@@ -111,8 +148,8 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  editCell(rowIndex: number, dataField: string | number): void {
-    return this.instance?.editCell(rowIndex, dataField);
+  editCell(rowIndex: number, dataFieldColumnIndex: string | number): void {
+    return this.instance?.editCell(rowIndex, dataFieldColumnIndex as string);
   }
 
   @Method()
@@ -136,20 +173,20 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  focus(element: undefined | Element | JQuery): void {
-    return this.instance?.focus(element);
+  focus(element?: Element | JQuery): void {
+    return this.instance?.focus(element as Element);
   }
 
   @Method()
   getCellElement(
     rowIndex: number, dataField: string | number,
   ): any/* dxElement | undefined */ {
-    return this.instance?.getCellElement(rowIndex, dataField);
+    return this.instance?.getCellElement(rowIndex, dataField as string);
   }
 
   @Method()
-  getCombinedFilter(returnDataField: undefined | boolean): any {
-    return this.instance?.getCombinedFilter(returnDataField);
+  getCombinedFilter(returnDataField?: boolean): any {
+    return this.instance?.getCombinedFilter(returnDataField as boolean);
   }
 
   @Method()
@@ -224,9 +261,9 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   @Method()
   pageIndex(
-    newIndex: undefined | number,
+    newIndex?: number,
   ): Promise<void> & JQueryPromise<void> | number {
-    return this.instance?.pageIndex(newIndex);
+    return this.instance?.pageIndex(newIndex as number);
   }
 
   @Method()
@@ -236,9 +273,9 @@ export class DataGrid extends JSXComponent(DataGridProps) {
 
   @Method()
   refresh(
-    changesOnly: undefined | boolean,
+    changesOnly?: boolean,
   ): Promise<void> & JQueryPromise<void> {
-    return this.instance?.refresh(changesOnly);
+    return this.instance?.refresh(changesOnly as boolean);
   }
 
   @Method()
@@ -350,8 +387,8 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getVisibleColumns(headerLevel: undefined | number): any /* dxDataGridColumn[] */ {
-    return this.instance?.getVisibleColumns(headerLevel);
+  getVisibleColumns(headerLevel?: number): any /* dxDataGridColumn[] */ {
+    return this.instance?.getVisibleColumns(headerLevel as number);
   }
 
   @Method()
@@ -372,5 +409,55 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   @Method()
   getController(name: string): any {
     return this.instance?.getController(name);
+  }
+  // #endregion
+
+  // It's impossible to define constructor use lazy creation instead
+  get instance() {
+    if (!this.componentInstance) {
+      this.componentInstance = this.init();
+    }
+    return this.componentInstance;
+  }
+
+  @Effect() updateOptions() {
+    if (this.instance && this.prevProps) {
+      const currentProps = this.props;
+      const updatedOptions = getUpdatedOptions(this.prevProps, currentProps);
+      this.instance.beginUpdate();
+      updatedOptions.forEach(({ path, value }) => this.instance.option(path, value));
+      this.instance.endUpdate();
+    }
+    this.prevProps = this.props;
+  }
+
+  @Effect({ run: 'once' })
+  dispose() {
+    return () => { this.instance.dispose(); };
+  }
+
+  // TODO without normalization all nested props defaults overwrite by undefined
+  // For example, instance.option('editing') return undefined instead of editing default values
+  // Specifically for React
+  // result[key] = {
+  //   ...props,
+  //   columns: __getNestedColumns(),
+  //   editing: __getNestedEditing()
+  //   ...
+  // }
+  normalizeProps(): {} {
+    const result = {};
+    Object.keys(this.props).forEach((key) => {
+      if (this.props[key] !== undefined) {
+        result[key] = this.props[key];
+      }
+    });
+    return result;
+  }
+
+  init() {
+    const instance: any = new DataGridComponent(this.normalizeProps());
+
+    return instance as GridInstance;
   }
 }

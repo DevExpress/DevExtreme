@@ -7,7 +7,7 @@ import dataUtils from './utils';
 import { compileGetter } from '../core/utils/data';
 import storeHelper from './store_helper';
 const queryByOptions = storeHelper.queryByOptions;
-import { Deferred } from '../core/utils/deferred';
+import { Deferred, when } from '../core/utils/deferred';
 import { noop } from '../core/utils/common';
 
 const storeImpl = {};
@@ -158,8 +158,17 @@ const Store = Class.inherit({
     _updateImpl: abstract,
 
     push: function(changes) {
-        this._pushImpl(changes);
-        this._eventsStrategy.fireEvent('push', [changes]);
+        const beforePushArgs = {
+            changes,
+            waitFor: []
+        };
+
+        this._eventsStrategy.fireEvent('beforePush', [beforePushArgs]);
+
+        when(...beforePushArgs.waitFor).done(() => {
+            this._pushImpl(changes);
+            this._eventsStrategy.fireEvent('push', [changes]);
+        });
     },
 
     _pushImpl: noop,

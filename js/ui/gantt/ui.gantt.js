@@ -40,6 +40,7 @@ class Gantt extends Widget {
     _init() {
         super._init();
         this._cache = new GanttDataCache();
+        this._isGanttRendered = false;
     }
     _initMarkup() {
         super._initMarkup();
@@ -77,10 +78,18 @@ class Gantt extends Widget {
         this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
     }
 
+    _refresh() {
+        this._isGanttRendered = false;
+        super._refresh();
+    }
     _renderContent() {
-        this._renderBars();
-        this._renderTreeList();
-        this._renderSplitter();
+        this._isMainElementVisible = this.$element().is(':visible');
+        if(this._isMainElementVisible && !this._isGanttRendered) {
+            this._isGanttRendered = true;
+            this._renderBars();
+            this._renderTreeList();
+            this._renderSplitter();
+        }
     }
     _renderTreeList() {
         const { keyExpr, parentIdExpr } = this.option(GANTT_TASKS);
@@ -317,7 +326,6 @@ class Gantt extends Widget {
         return getBoundingRect(this._treeList._$element.find('.dx-treelist-headers').get(0)).height;
     }
 
-
     _setInnerElementsWidth(widths) {
         if(!hasWindow()) {
             return;
@@ -330,9 +338,8 @@ class Gantt extends Widget {
         const rightPanelWidth = widths.rightPanelWidth;
 
         this._$treeListWrapper.width(leftPanelWidth);
-
         const isPercentage = isString(leftPanelWidth) && leftPanelWidth.slice(-1) === '%';
-        this._$treeList.width(isPercentage ? '100%' : leftPanelWidth);
+        this._setTreeListOption('width', isPercentage ? '100%' : leftPanelWidth);
 
         this._$ganttView.width(rightPanelWidth);
         this._setGanttViewOption('width', this._$ganttView.width());
@@ -1350,7 +1357,6 @@ class Gantt extends Widget {
         // eslint-disable-next-line spellcheck/spell-checker
         this._ganttView._ganttViewCore.unassignResourceFromTask(resourceKey, taskKey);
     }
-
     updateDimensions() {
         this._setInnerElementsWidth();
     }

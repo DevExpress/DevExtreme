@@ -1034,7 +1034,7 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    endDate?: Date;
+    endDate?: Date | string;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -1064,7 +1064,7 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    startDate?: Date;
+    startDate?: Date | string;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

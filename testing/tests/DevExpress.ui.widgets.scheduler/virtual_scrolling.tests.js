@@ -1,4 +1,3 @@
-/* eslint-disable qunit/no-identical-names */
 import $ from 'jquery';
 import VirtualScrollingDispatcher from 'ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
 import { getWindow } from 'core/utils/window';
@@ -6,14 +5,15 @@ import { noop } from 'core/utils/common';
 import domAdapter from 'core/dom_adapter';
 import eventsEngine from 'events/core/events_engine';
 import { addNamespace } from 'events/utils/index';
-import browser from 'core/devices';
+import browser from 'core/utils/browser';
 
 const {
     module
 } = QUnit;
 
 const test = (description, callback) => {
-    const testFunc = browser.msie
+    const isIE11 = browser.msie && parseInt(browser.version) <= 11;
+    const testFunc = isIE11
         ? QUnit.skip
         : QUnit.test;
 
@@ -323,17 +323,83 @@ module('Virtual Scrolling', {
                     startCellIndex: 0
                 }
             }
-        ].forEach(option => {
-            test(`it should return correct render state if scrolling orientation: ${option.orientation}`, function(assert) {
+        ].forEach(({ orientation, expectedRenderState }) => {
+            test(`it should return correct render state if scrolling orientation: ${orientation}`, function(assert) {
                 this.prepareInstance({
                     scrolling: {
-                        type: option.orientation
+                        type: orientation
                     }
                 });
 
                 const state = this.virtualScrollingDispatcher.getRenderState();
 
-                assert.deepEqual(state, option.expectedRenderState, 'Render state is correct');
+                assert.deepEqual(state, expectedRenderState, 'Render state is correct');
+            });
+        });
+
+        [{
+            orientation: 'vertical',
+            verticalAllowed: true,
+            horizontalAllowed: false
+        }, {
+            orientation: 'horizontal',
+            verticalAllowed: false,
+            horizontalAllowed: true
+        }, {
+            orientation: 'both',
+            verticalAllowed: true,
+            horizontalAllowed: true
+        }].forEach(({ orientation, verticalAllowed, horizontalAllowed }) => {
+            test(`it should correctly create virtual scrolling instances if scrolling orientation is ${orientation}`, function(assert) {
+                this.prepareInstance({
+                    scrolling: {
+                        type: orientation
+                    }
+                });
+
+                const {
+                    horizontalVirtualScrolling,
+                    verticalVirtualScrolling,
+                    horizontalScrollingAllowed,
+                    verticalScrollingAllowed
+                } = this.virtualScrollingDispatcher;
+
+                assert.equal(horizontalScrollingAllowed, horizontalAllowed, 'horizontalScrollingAllowed is correct');
+                assert.equal(verticalScrollingAllowed, verticalAllowed, 'verticalScrollingAllowed is correct');
+                assert.equal(!!horizontalVirtualScrolling, horizontalAllowed, 'Horizontal virtual scrolling created correctly');
+                assert.equal(!!verticalVirtualScrolling, verticalAllowed, 'Horizontal virtual scrolling created correctly');
+            });
+        });
+
+
+        [
+            'both',
+            'vertical',
+            'horizontal'
+        ].forEach(orientation => {
+            [
+                0,
+                -1,
+                undefined,
+                NaN,
+                null
+            ].forEach(testValue => {
+                test(`it should get correct cell sizes if virtual scrolling orientation: ${orientation} and testValue: ${testValue}`, function(assert) {
+                    this.prepareInstance({
+                        scrolling: {
+                            type: orientation
+                        }
+                    });
+
+                    this.workspaceMock.getCellWidth = () => testValue;
+                    this.workspaceMock.getCellMinWidth = () => testValue;
+                    this.workspaceMock.getCellHeight = () => testValue;
+
+                    const dispatcher = new VirtualScrollingDispatcher(this.workspaceMock);
+
+                    assert.ok(dispatcher.rowHeight > 0, 'Row height is correct');
+                    assert.ok(dispatcher.cellWidth > 0, 'Cell width is correct');
+                });
             });
         });
 

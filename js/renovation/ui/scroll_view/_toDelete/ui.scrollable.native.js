@@ -1,5 +1,4 @@
 import eventsEngine from '../../events/core/events_engine';
-import { isDxMouseWheelEvent } from '../../events/utils/index';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import Class from '../../core/class';
@@ -8,7 +7,6 @@ const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
 
 const VERTICAL = 'vertical';
-const HORIZONTAL = 'horizontal';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
 
@@ -28,29 +26,11 @@ const NativeStrategy = Class.inherit({
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
-        this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
         this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
     },
 
-    render: function() {
-        this._renderPushBackOffset();
-    },
-
     updateBounds: noop,
-
-    _renderPushBackOffset: function() {
-        const pushBackValue = this.option('pushBackValue');
-        if(!pushBackValue && !this._component._lastPushBackValue) {
-            return;
-        }
-
-        this._$content.css({
-            paddingTop: pushBackValue,
-            paddingBottom: pushBackValue
-        });
-        this._component._lastPushBackValue = pushBackValue;
-    },
 
     _renderScrollbars: function() {
         this._scrollbars = {};
@@ -84,11 +64,6 @@ const NativeStrategy = Class.inherit({
         each(this._scrollbars || {}, function(direction, scrollbar) {
             callback(scrollbar, direction);
         });
-    },
-
-    createActions: function() {
-        this._scrollAction = this._createActionByOption('onScroll');
-        this._updateAction = this._createActionByOption('onUpdated');
     },
 
     handleScroll: function(e) {
@@ -198,13 +173,6 @@ const NativeStrategy = Class.inherit({
         });
     },
 
-    _allowedDirections: function() {
-        return {
-            vertical: this._isDirection(VERTICAL) && this._contentSize.height > this._containerSize.height,
-            horizontal: this._isDirection(HORIZONTAL) && this._contentSize.width > this._containerSize.width
-        };
-    },
-
     dispose: function() {
         const className = this._$element.get(0).className;
         const scrollableNativeRegexp = new RegExp(SCROLLABLE_NATIVE_CLASS + '\\S*', 'g');
@@ -230,41 +198,6 @@ const NativeStrategy = Class.inherit({
     //    this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
     //     this._$container.scrollLeft(Math.round(-location.left - distance.left));
     // },
-
-    validate: function(e) {
-        if(this.option('disabled')) {
-            return false;
-        }
-
-        if(isDxMouseWheelEvent(e) && this._isScrolledInMaxDirection(e)) {
-            return false;
-        }
-
-        return !!this._allowedDirection();
-    },
-
-    // TODO: rtl
-    // TODO: horizontal scroll when shift is pressed
-    _isScrolledInMaxDirection(e) {
-        const container = this._$container.get(0);
-        let result;
-
-        if(e.delta > 0) {
-            result = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
-        } else {
-            if(e.shiftKey) {
-                result = container.scrollLeft >= this._getMaxOffset().left;
-            } else {
-                result = container.scrollTop >= this._getMaxOffset().top;
-            }
-        }
-
-        return result;
-    },
-
-    getDirection: function() {
-        return this._allowedDirection();
-    },
 
     verticalOffset: function() {
         return this.option('pushBackValue');

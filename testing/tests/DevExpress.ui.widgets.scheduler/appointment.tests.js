@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SchedulerAppointment from 'ui/scheduler/appointments/appointment';
+import { Appointment } from 'ui/scheduler/appointments/appointment';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'animation/fx';
 
@@ -46,7 +46,7 @@ const moduleOptions = {
 
 module('Appointments', moduleOptions, () => {
     test('Scheduler appointment should be initialized', function(assert) {
-        assert.ok(this.instance instanceof SchedulerAppointment, 'dxSchedulerAppointment was initialized');
+        assert.ok(this.instance instanceof Appointment, 'dxSchedulerAppointment was initialized');
     });
 
     test('Scheduler appointment has right direction css-class', function(assert) {

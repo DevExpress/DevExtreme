@@ -98,6 +98,13 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     showDropDownButton?: boolean;
     /**
      * @docid
+     * @default 1500
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    maxFilterQueryLength?: number;
+    /**
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -12,8 +12,9 @@ import {
   ScrollableLocation, ScrollOffset,
 } from './types.d';
 
+import BaseWidgetProps from '../../utils/base_props';
 import {
-  ScrollablePropsType,
+  ScrollableProps,
 } from './scrollable_props';
 
 import { ScrollableNative } from './scrollable_native';
@@ -32,7 +33,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
       useNative,
       pulledDownText,
       pullingDownText,
-      pushBackValue,
       refreshingText,
       reachBottomText,
       ...scrollableProps
@@ -50,7 +50,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         {...scrollableProps}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...restAttributes}
-        pushBackValue={pushBackValue}
         pulledDownText={pulledDownText}
         pullingDownText={pullingDownText}
         refreshingText={refreshingText}
@@ -75,6 +74,8 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   );
 };
 
+type ScrollablePropsType = ScrollableProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+
 export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>([{
   device: (device): boolean => (!devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic'),
   options: {
@@ -86,7 +87,7 @@ export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>(
 }, {
   device: (): boolean => !nativeScrolling,
   options: {
-    useNative: true,
+    useNative: false,
   },
 }, {
   device: (): boolean => nativeScrolling && devices.real().platform === 'android' && !browser.mozilla,

@@ -900,6 +900,22 @@ QUnit.module('default', {
         });
     });
 
+    QUnit.test('\'elementAttr.class\' option should overwrite previous value', function(assert) {
+        const $el = $('#component');
+        const changeClass = (newClass) => {
+            $el
+                .TestComponent({ elementAttr: { class: 'init' } })
+                .TestComponent('instance')
+                .option('elementAttr', { class: newClass });
+
+            return $el.attr('class');
+        };
+
+        assert.strictEqual(changeClass(void 0), 'init');
+        assert.strictEqual(changeClass(null), '');
+        assert.strictEqual(changeClass('new'), 'new');
+    });
+
     QUnit.test('the \'elementAttr\' option should set attributes to widget element according to the object passed', function(assert) {
         const $element = $('#component').TestComponent({
             elementAttr: {

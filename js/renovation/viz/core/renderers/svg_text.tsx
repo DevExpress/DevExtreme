@@ -67,7 +67,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class TextSvgElementProps extends SvgGraphicsProps {
-  @OneWay() text = '';
+  @OneWay() text?: string | null = '';
 
   @OneWay() x = 0;
 
@@ -188,7 +188,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
     setTextNodeAttribute(item, 'y', y);
     for (let i = 1, ii = items.length; i < ii; ++i) {
       item = items[i];
-      if (item.height >= 0) {
+      if (isDefined(item.height) && item.height >= 0) {
         setTextNodeAttribute(item, 'x', x);
         const height = getItemLineHeight(item, lineHeight);
         setTextNodeAttribute(item, 'dy', height); // T177039

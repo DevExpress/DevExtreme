@@ -3,6 +3,7 @@ import { DiagramContextMenu } from 'ui/diagram/ui.diagram.context_menu.js';
 
 export const Consts = {
     SIMPLE_DIAGRAM: '{ "shapes": [{ "key":"107", "type":"Ellipsis", "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }',
+    SIMPLE_DIAGRAM_WITH_CONTAINER: '{"connectors":[],"shapes":[{"key":"1", "type":"verticalContainer", "text":"ASP.NET Team","x":1080,"y":1440,"width":2160,"height":5760,"childKeys":["5"]},{"key":"5","type":"rectangle","text":"Laurence Lebihan","x":1440,"y":2160,"width":1440,"height":1080}]}',
 
     MAIN_TOOLBAR_SELECTOR: '.dx-diagram-toolbar-wrapper > .dx-diagram-toolbar',
     FLOATING_TOOLBAR_SELECTOR: '.dx-diagram-floating-toolbar-container > .dx-diagram-toolbar',

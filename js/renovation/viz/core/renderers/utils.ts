@@ -48,9 +48,9 @@ export const extend = (target: object, source: object): object => {
   return target;
 };
 
-type buildSimpleSegmentFn = (points: (Point|number)[], close: boolean, list: Segment[]) => Segment[];
+type BuildSimpleSegmentFn = (points: (Point|number)[], close: boolean, list: Segment[]) => Segment[];
 
-function buildSegments(points: (Point|number)[]|number[][], buildSimpleSegment: buildSimpleSegmentFn, close: boolean): Segment[] {
+function buildSegments(points: (Point|number)[]|number[][], buildSimpleSegment: BuildSimpleSegmentFn, close: boolean): Segment[] {
   let i: number;
   let ii: number;
   const list: Segment[] = [];

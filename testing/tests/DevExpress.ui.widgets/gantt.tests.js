@@ -153,6 +153,37 @@ QUnit.module('Markup', moduleConfig, () => {
         this.clock.tick();
         assert.roughEqual(initHeight, this.$element.height(), 1, 'collapsed height');
     });
+    test('invalid start or end dates', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope 0', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 1, 'title': 'Scope 1', 'start': null, 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 4, 'parentId': 2, 'title': 'Scope 2', 'start': new Date('2019-02-21'), 'end': null, 'progress': 50 },
+            { 'id': 5, 'parentId': 2, 'title': 'Scope 3', 'start': null, 'end': null, 'progress': 25 }
+        ];
+        const customDependencies = [
+            { 'id': 0, 'predecessorId': 1, 'successorId': 2, 'type': 0 },
+            { 'id': 1, 'predecessorId': 2, 'successorId': 3, 'type': 0 },
+            { 'id': 2, 'predecessorId': 3, 'successorId': 4, 'type': 0 }
+        ];
+        const options = {
+            tasks: { dataSource: customTasks },
+            dependencies: { dataSource: customDependencies }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_DATA_ROW_SELECTOR);
+        assert.strictEqual(treeListElements.length, 5);
+
+        const taskElements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        assert.equal(taskElements.length, 2);
+
+        const dependenciesElements = this.$element.find(TASK_ARROW_SELECTOR);
+        assert.equal(dependenciesElements.length, 1);
+
+        assert.equal(this.instance.getVisibleTaskKeys().length, 2, 'task keys');
+        assert.equal(this.instance.getVisibleDependencyKeys().length, 1, 'dependencies keys');
+    });
 });
 
 QUnit.module('Options', moduleConfig, () => {
@@ -646,11 +677,26 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), 'start task text is shown');
         assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), 'end task text is shown');
         assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
-
         const testTitle = 'text';
         const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
-        titleTextBox.option('value', testTitle);
+        const startTextBox = $dialog.find('.dx-datebox').eq(0).dxDateBox('instance');
+        const endTextBox = $dialog.find('.dx-datebox').eq(1).dxDateBox('instance');
+        startTextBox.option('value', '');
+        endTextBox.option('value', '');
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        assert.equal($dialog.length, 1, 'dialog is shown');
+        let isValidStartTextBox = startTextBox._getValidationErrors() === null;
+        let isValidEndTextBox = endTextBox._getValidationErrors() === null;
+        assert.notOk(isValidStartTextBox, 'empty start validation');
+        assert.notOk(isValidEndTextBox, 'empty end validation');
+        titleTextBox.option('value', testTitle);
+        startTextBox.option('value', tasks[0].start);
+        endTextBox.option('value', tasks[0].end);
+        isValidStartTextBox = startTextBox._getValidationErrors() === null;
+        isValidEndTextBox = endTextBox._getValidationErrors() === null;
+        assert.ok(isValidStartTextBox, 'not empty start validation');
+        assert.ok(isValidEndTextBox, 'not empty end validation');
         $okButton.trigger('dxclick');
         this.clock.tick();
         const firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
@@ -2126,7 +2172,6 @@ QUnit.module('Mappings convert', moduleConfig, () => {
     });
 });
 
-
 QUnit.module('Context Menu', moduleConfig, () => {
     test('showing', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -2241,6 +2286,7 @@ QUnit.module('Context Menu', moduleConfig, () => {
         assert.equal(items.eq(0).text(), 'New Subtask', 'undo item was rendered');
     });
 });
+
 QUnit.module('Strip Lines', moduleConfig, () => {
     test('render', function(assert) {
         const stripLines = [
@@ -2285,6 +2331,7 @@ QUnit.module('Strip Lines', moduleConfig, () => {
         assert.equal($stripLines.length, 0, 'gantt has no strip lines');
     });
 });
+
 QUnit.module('Parent auto calculation', moduleConfig, () => {
     test('render', function(assert) {
         const options = {
@@ -2978,15 +3025,14 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
     test('panel sizes are the same', function(assert) {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
-        this.instance.option('height', 200);
-        this.instance.option('width', 600);
-        this.instance.option('taskListWidth', 300);
+        this.instance.option('width', 1400);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         let leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
         fullScreenCommand.execute();
         assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in FullScreen');
         fullScreenCommand.execute();
+        this.clock.tick();
         const diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
         assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
         this.clock.tick();
@@ -3050,3 +3096,53 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         fullScreenCommand.execute();
     });
 });
+
+QUnit.module('Repaint', moduleConfig, () => {
+    test('should render treeList after repaint()', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        this.instance.repaint();
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_SELECTOR);
+        assert.strictEqual(treeListElements.length, 1);
+    });
+    test('should render task wrapper for each task after repaint()', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        this.instance.repaint();
+        this.clock.tick();
+        const elements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        assert.equal(elements.length, tasks.length - 1);
+    });
+    test('should store task changes after repaint() ', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
+        this.clock.tick();
+        showTaskEditDialog(this.instance);
+        this.clock.tick();
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+
+        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_SELECTOR);
+        assert.equal($inputs.eq(0).val(), tasks[0].title, 'title text is shown');
+        assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), 'start task text is shown');
+        assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), 'end task text is shown');
+        assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
+
+        const testTitle = 'text';
+        const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
+        titleTextBox.option('value', testTitle);
+        const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        this.clock.tick();
+        let firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
+        assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
+
+        this.instance.repaint();
+        this.clock.tick();
+        firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
+        assert.equal(firstTreeListTitleText, testTitle, 'title text is the same after repaint()');
+    });
+});
+

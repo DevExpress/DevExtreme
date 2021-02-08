@@ -489,6 +489,8 @@ QUnit.module('Initialization', {
 
     QUnit.test('Pushed directly from store item should be rerendered correctly', function(assert) {
         const data = new DataSource({
+            pushAggregationTimeout: 0,
+            reshapeOnPush: true,
             store: {
                 type: 'array',
                 key: 'id',
@@ -555,6 +557,8 @@ QUnit.module('Initialization', {
 
         const scheduler = createWrapper({
             dataSource: {
+                pushAggregationTimeout: 0,
+                reshapeOnPush: true,
                 load: () => data,
                 key: 'id'
             },
@@ -3691,29 +3695,6 @@ QUnit.module('Scrolling to time', () => {
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 
-    QUnit.test('Scheduler should have specific dateCellTemplate setting of the view', function(assert) {
-        let countCallTemplate1 = 0;
-        let countCallTemplate2 = 0;
-
-        this.createInstance({
-            dataSource: [],
-            views: [{
-                type: 'week',
-                dateCellTemplate: function(item, index, container) {
-                    assert.equal(isRenderer(container), !!config().useJQuery, 'element is correct');
-                    countCallTemplate2++;
-                }
-            }],
-            dateCellTemplate: function() {
-                countCallTemplate1++;
-            },
-            currentView: 'week'
-        });
-
-        assert.equal(countCallTemplate1, 0, 'count call first template');
-        assert.notEqual(countCallTemplate2, 0, 'count call second template');
-    });
-
     QUnit.test('Scheduler should have specific timeCellTemplate setting of the view', function(assert) {
         let countCallTemplate1 = 0;
         let countCallTemplate2 = 0;
@@ -4172,8 +4153,8 @@ QUnit.module('ScrollTo', () => {
 
         const checkScrollTo = (assert, scheduler, topCellCount, leftCellCount, date, groups, allDay) => {
             const $scrollable = scheduler.workSpace.getDateTableScrollable();
-            const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
-            const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+            const scrollableInstance = $scrollable.dxScrollable('instance');
+            const scrollByStub = sinon.stub(scrollableInstance, 'scrollBy');
 
             const rtlInitialPosition = scrollableInstance.option('rtlEnabled')
                 ? scrollableInstance.scrollLeft()
@@ -4187,14 +4168,14 @@ QUnit.module('ScrollTo', () => {
             const cellHeight = $schedulerCell.get(0).getBoundingClientRect().height;
             const cellWidth = $schedulerCell.get(0).getBoundingClientRect().width;
 
-            assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+            assert.ok(scrollByStub.calledOnce, 'ScrollBy was called');
             assert.equal(
-                scrollBy.getCall(0).args[0].top,
+                scrollByStub.getCall(0).args[0].top,
                 topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
                 'Correct top parameter',
             );
             assert.equal(
-                rtlInitialPosition + scrollBy.getCall(0).args[0].left,
+                rtlInitialPosition + scrollByStub.getCall(0).args[0].left,
                 leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
                 'Correct left parameter',
             );
@@ -4487,7 +4468,7 @@ QUnit.module('ScrollTo', () => {
 
                     const $scrollable = scheduler.workSpace.getDateTableScrollable();
                     const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
-                    const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+                    const scrollBy = sinon.stub(scrollableInstance, 'scrollBy');
 
                     scheduler.instance.scrollTo(date, undefined, true);
 
