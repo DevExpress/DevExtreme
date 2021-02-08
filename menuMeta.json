@@ -1854,7 +1854,7 @@
             "Equivalents": "customization, disable dates, work hours",
             "MvcAdditionalFiles": [
               "/Models/Appointment.cs",
-              "/Models/SampleData/Appointments.cs"
+              "/Models/SampleData/AppointmentsWorkHours.cs"
             ],
             "DemoType": "Web"
           },
