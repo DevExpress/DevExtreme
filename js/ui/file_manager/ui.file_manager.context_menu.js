@@ -204,6 +204,7 @@ class FileManagerContextMenu extends Widget {
 
     _onContextMenuHidden() {
         this._isVisible = false;
+        this._contextMenu.option('visible', false); // dangerous, may be the reason for failure of the test 'context menu items can be updated for visible menu after action button click'
         this._raiseContextMenuHidden();
     }
 
