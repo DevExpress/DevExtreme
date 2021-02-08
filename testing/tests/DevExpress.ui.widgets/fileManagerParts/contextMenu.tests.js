@@ -397,7 +397,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(spy.args[0][0].event.type, 'dxclick', 'event has correct type');
         assert.strictEqual($(spy.args[0][0].itemElement).get(0), $subItems.eq(0).get(0), 'itemElement is correct');
         assert.strictEqual(spy.args[0][0].itemIndex, 1, 'itemIndex is correct');
-        assert.deepEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
+        assert.strictEqual(spy.args[0][0].itemData, itemData, 'itemData is correct');
         assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'fileSystemItem is correct');
