@@ -63,7 +63,7 @@ QUnit.module('Customize keyboard navigation', {
         }, this.options);
 
         setupDataGridModules(this,
-            ['data', 'columns', 'columnHeaders', 'rows', 'editorFactory', 'gridView', 'editing', 'keyboardNavigation', 'validating', 'masterDetail', 'summary'],
+            ['data', 'columns', 'columnHeaders', 'rows', 'editorFactory', 'gridView', 'editing', 'editingFormBased', 'keyboardNavigation', 'validating', 'masterDetail', 'summary'],
             { initViews: true }
         );
     },
