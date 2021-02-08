@@ -117,7 +117,6 @@ class Gantt extends Widget {
             onContextMenuPreparing: (e) => { this._onTreeListContextMenuPreparing(e); },
             onRowClick: (e) => { this._onTreeListRowClick(e); },
             onRowDblClick: (e) => { this._onTreeListRowDblClick(e); },
-            onAdjustControl: () => { this._onAdjustControl(); }
         });
     }
     _renderSplitter() {
@@ -173,7 +172,8 @@ class Gantt extends Widget {
             modelChangesListener: this._createModelChangesListener(),
             taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
             onTaskClick: (e) => { this._onTreeListRowClick(e); },
-            onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); }
+            onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); },
+            onAdjustControl: () => { this._onAdjustControl(); }
         });
         this._fireContentReadyAction();
     }
