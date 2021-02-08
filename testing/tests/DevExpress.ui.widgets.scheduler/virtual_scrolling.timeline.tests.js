@@ -454,6 +454,11 @@ module('Virtual scrolling timelines', () => {
 
             module('timelineWeek', () => {
                 test('multiday appointment should be rendered correctly in timelineWeek view with grouping', function(assert) {
+                    if(!isDesktopEnvironment()) {
+                        assert.ok(true, 'This test is for desktop only');
+                        return;
+                    }
+
                     const scheduler = createWrapper({
                         height: 600,
                         width: 800,

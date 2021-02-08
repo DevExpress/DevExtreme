@@ -728,7 +728,7 @@ QUnit.module('list integration', {}, () => {
         assert.strictEqual(list.option('selectionMode'), 'single', 'selectionMode is single for useSelectMode: true');
     });
 
-    QUnit.test('showItemDataTitle should be true for the list', function(assert) {
+    QUnit.test('useItemTextAsTitle should be true for the list', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', {
             items: [{ key: 1, name: 'Item 1', icon: 'box' }],
             deferRendering: false
@@ -736,7 +736,7 @@ QUnit.module('list integration', {}, () => {
 
         const list = getList(dropDownButton);
 
-        assert.strictEqual(list.option('showItemDataTitle'), true, 'option is true');
+        assert.strictEqual(list.option('useItemTextAsTitle'), true, 'option is true');
     });
 
     QUnit.test('wrapItemText option', function(assert) {
@@ -750,6 +750,29 @@ QUnit.module('list integration', {}, () => {
         const $itemContainer = list._itemContainer();
 
         assert.ok($itemContainer.hasClass('dx-wrap-item-text'), 'class was added');
+    });
+
+    [true, false].forEach(useItemTextAsTitle => {
+        QUnit.test(`useItemTextAsTitle=${useItemTextAsTitle} option should be passed to list on init`, function(assert) {
+            const dropDownButton = new DropDownButton('#dropDownButton', {
+                deferRendering: false,
+                useItemTextAsTitle
+            });
+            const list = getList(dropDownButton);
+
+            assert.strictEqual(list.option('useItemTextAsTitle'), useItemTextAsTitle, 'list option initial value is correct');
+        });
+
+        QUnit.test(`useItemTextAsTitle option runtime change to ${useItemTextAsTitle} should be passed to list`, function(assert) {
+            const dropDownButton = new DropDownButton('#dropDownButton', {
+                deferRendering: false,
+                useItemTextAsTitle: !useItemTextAsTitle
+            });
+            const list = getList(dropDownButton);
+
+            dropDownButton.option('useItemTextAsTitle', useItemTextAsTitle);
+            assert.strictEqual(list.option('useItemTextAsTitle'), useItemTextAsTitle, 'list option value is correct after runtime change');
+        });
     });
 
     [true, false].forEach(wrapItemText => {

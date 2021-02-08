@@ -1208,20 +1208,26 @@ QUnit.module('Renovated Render', {
                 cellCountInGroupRow: 2,
                 bottomVirtualRowHeight: undefined,
                 isGroupedAllDayPanel: false,
-                isVirtual: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
-                rightVirtualCellWidth: undefined
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
             };
-            const expectedViewDataMap = [
-                [{
-                    cellData: cellsBase[0],
-                    position: { cellIndex: 0, rowIndex: 0 }
-                }, {
-                    cellData: cellsBase[1],
-                    position: { cellIndex: 1, rowIndex: 0 }
-                }]
-            ];
+            const expectedViewDataMap = {
+                allDayPanelMap: [],
+                dateTableMap: [
+                    [{
+                        cellData: cellsBase[0],
+                        position: { cellIndex: 0, rowIndex: 0 }
+                    }, {
+                        cellData: cellsBase[1],
+                        position: { cellIndex: 1, rowIndex: 0 }
+                    }]
+                ]
+            };
 
             assert.deepEqual(viewData, expectedViewData, 'correct view data');
             assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct view data map');
@@ -1273,26 +1279,32 @@ QUnit.module('Renovated Render', {
                 }],
                 bottomVirtualRowHeight: undefined,
                 isGroupedAllDayPanel: false,
-                isVirtual: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
-                rightVirtualCellWidth: undefined
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
             };
             const expectedDateTable = expectedViewData.groupedData[0].dateTable[0];
 
-            const expectedViewDataMap = [[{
-                cellData: expectedDateTable[0],
-                position: { cellIndex: 0, rowIndex: 0 }
-            }, {
-                cellData: expectedDateTable[1],
-                position: { cellIndex: 1, rowIndex: 0 }
-            }, {
-                cellData: expectedDateTable[2],
-                position: { cellIndex: 2, rowIndex: 0 }
-            }, {
-                cellData: expectedDateTable[3],
-                position: { cellIndex: 3, rowIndex: 0 }
-            }]];
+            const expectedViewDataMap = {
+                allDayPanelMap: [],
+                dateTableMap: [[{
+                    cellData: expectedDateTable[0],
+                    position: { cellIndex: 0, rowIndex: 0 }
+                }, {
+                    cellData: expectedDateTable[1],
+                    position: { cellIndex: 1, rowIndex: 0 }
+                }, {
+                    cellData: expectedDateTable[2],
+                    position: { cellIndex: 2, rowIndex: 0 }
+                }, {
+                    cellData: expectedDateTable[3],
+                    position: { cellIndex: 3, rowIndex: 0 }
+                }]]
+            };
 
             assert.deepEqual(viewData, expectedViewData, 'correct view data');
             assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');
@@ -1343,27 +1355,33 @@ QUnit.module('Renovated Render', {
                 bottomVirtualRowHeight: undefined,
                 cellCountInGroupRow: 2,
                 isGroupedAllDayPanel: true,
-                isVirtual: false,
                 topVirtualRowHeight: undefined,
                 leftVirtualCellWidth: undefined,
-                rightVirtualCellWidth: undefined
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
             };
 
-            const expectedViewDataMap = [
-                [{
-                    cellData: expectedViewData.groupedData[0].dateTable[0][0],
-                    position: { rowIndex: 0, cellIndex: 0 }
-                }, {
-                    cellData: expectedViewData.groupedData[0].dateTable[0][1],
-                    position: { rowIndex: 0, cellIndex: 1 }
-                }], [{
-                    cellData: expectedViewData.groupedData[1].dateTable[0][0],
-                    position: { rowIndex: 1, cellIndex: 0 }
-                }, {
-                    cellData: expectedViewData.groupedData[1].dateTable[0][1],
-                    position: { rowIndex: 1, cellIndex: 1 }
-                }]
-            ];
+            const expectedViewDataMap = {
+                allDayPanelMap: [],
+                dateTableMap: [
+                    [{
+                        cellData: expectedViewData.groupedData[0].dateTable[0][0],
+                        position: { rowIndex: 0, cellIndex: 0 }
+                    }, {
+                        cellData: expectedViewData.groupedData[0].dateTable[0][1],
+                        position: { rowIndex: 0, cellIndex: 1 }
+                    }], [{
+                        cellData: expectedViewData.groupedData[1].dateTable[0][0],
+                        position: { rowIndex: 1, cellIndex: 0 }
+                    }, {
+                        cellData: expectedViewData.groupedData[1].dateTable[0][1],
+                        position: { rowIndex: 1, cellIndex: 1 }
+                    }]
+                ]
+            };
 
             assert.deepEqual(viewData, expectedViewData, 'correct viewData');
             assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');

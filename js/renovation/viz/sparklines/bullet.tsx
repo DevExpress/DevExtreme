@@ -10,6 +10,7 @@ import {
   Nested,
   Fragment,
   Effect,
+  ForwardRef,
   Event,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
@@ -32,7 +33,7 @@ import { pointInCanvas } from '../core/utils';
 import {
   ArgumentAxisRange, ValueAxisRange, BulletScaleProps,
 } from './types.d';
-import { OnTooltipHiddenFn, OnTooltipShownFn } from '../common/types.d';
+import { OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData } from '../common/types.d';
 
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;
@@ -109,6 +110,7 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
   return (
     <Fragment>
       <BaseWidget
+        rootElementRef={viewModel.widgetRootRef}
         ref={viewModel.widgetRef}
         classes={viewModel.cssClasses}
         className={viewModel.cssClassName}
@@ -161,6 +163,7 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
       {customizedTooltipProps.enabled
       && (
       <TooltipComponent
+        rootWidget={viewModel.widgetRootRef}
         ref={viewModel.tooltipRef}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...customizedTooltipProps}
@@ -192,9 +195,9 @@ export class BulletProps extends BaseWidgetProps {
 
   @Nested() tooltip?: TooltipProps;
 
-  @Event() onTooltipHidden?: OnTooltipHiddenFn<undefined>;
+  @Event() onTooltipHidden?: OnTooltipHiddenFn<BaseEventData>;
 
-  @Event() onTooltipShown?: OnTooltipShownFn<undefined>;
+  @Event() onTooltipShown?: OnTooltipShownFn<BaseEventData>;
 }
 
 @Component({
@@ -208,6 +211,8 @@ export class Bullet extends JSXComponent(BulletProps) {
   @Ref() widgetRef!: RefObject<BaseWidget>;
 
   @Ref() tooltipRef!: RefObject<TooltipComponent>;
+
+  @ForwardRef() widgetRootRef!: RefObject<HTMLDivElement>;
 
   @InternalState() argumentAxis = createAxis(true);
 

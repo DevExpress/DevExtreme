@@ -1265,7 +1265,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             startCellIndex: 0,
             groupOrientation,
             rowCount,
-            totalRowCount: this._getRowCount(),
+            totalRowCount: rowCount,
             totalCellCount: cellCount,
             groupCount,
             getDateHeaderText: this._getHeaderText.bind(this),
@@ -1363,7 +1363,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             dxrTimePanelTableLayout,
             'renovatedTimePanel',
             {
-                viewData: this.viewDataProvider.viewData,
+                timePanelData: this.viewDataProvider.timePanelData,
                 timeCellTemplate: this.option('timeCellTemplate'),
             }
         );
@@ -2759,9 +2759,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
         let position;
-        const shouldFindPositionByViewData = this.isVirtualScrolling() && (!inAllDayRow || this._isVerticalGroupedWorkSpace());
 
-        if(shouldFindPositionByViewData) {
+        if(this.isRenovatedRender()) {
             const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
             if(!positionByMap) {
                 return undefined;

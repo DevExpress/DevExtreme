@@ -12,6 +12,7 @@ export type Border = { stroke?: string, strokeWidth?: number, strokeOpacity?: nu
 export type CustomizedOptions = { text?: string | null, html?: string | null, color?: string, borderColor?: string, fontColor?: string };
 export type CustomizeTooltipFn = (info: any) => CustomizedOptions;
 export type Location = 'center' | 'edge';
+export type Container = string | HTMLElement;
 export interface TooltipData {
   value?: number | Date | string,
   argument?: number | Date | string,

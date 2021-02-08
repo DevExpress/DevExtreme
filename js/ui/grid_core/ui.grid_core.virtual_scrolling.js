@@ -277,6 +277,8 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         },
         _handleDataLoading: function(options) {
             const loadPageCount = this.loadPageCount();
+
+            options.loadPageCount = loadPageCount;
             if(this.option(NEW_SCROLLING_MODE) && loadPageCount > 1) {
                 options.storeLoadOptions.take = loadPageCount * this.pageSize();
             }
@@ -328,6 +330,10 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             dataController.pageChanged.add(() => {
                 this.scrollToPage(dataController.pageIndex());
+            });
+
+            dataController.dataSourceChanged.add(() => {
+                !this._scrollTop && this._scrollToCurrentPageOnResize();
             });
 
             dataController.stateLoaded?.add(() => {
@@ -828,6 +834,7 @@ export default {
                                 }
 
                                 if(!that._rowsScrollController._dataSource.items().length && this.totalItemsCount()) return;
+
                                 that._rowsScrollController.handleDataChanged(change => {
                                     change = change || {};
                                     change.changeType = change.changeType || 'refresh';

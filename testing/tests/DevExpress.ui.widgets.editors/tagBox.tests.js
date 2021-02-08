@@ -5290,6 +5290,28 @@ QUnit.module('single line mode', {
         assert.notOk(endingPositionEvent.isPropagationStopped(), 'event propogation is not stopped for the ending position');
     });
 
+    ['ctrlKey', 'metaKey'].forEach((commandKey) => {
+        QUnit.test(`mousewheel with command key shouldn't prevented (${commandKey} pressed)`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'desktop specific test');
+                return;
+            }
+
+            const spy = sinon.spy();
+
+            $(this.$element).on('dxmousewheel', spy);
+
+            $(this.$element).trigger($.Event('dxmousewheel', {
+                delta: -120,
+                [commandKey]: true
+            }));
+
+            const event = spy.args[0][0];
+            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+            assert.notOk(event.isPropagationStopped(), 'propagation is not stopped');
+        });
+    });
+
     QUnit.test('it is should be possible to scroll tag container natively on mobile device', function(assert) {
         const currentDevice = devices.real();
         let $tagBox;
@@ -6170,7 +6192,7 @@ QUnit.module('performance', () => {
     });
 });
 
-QUnit.module('maxFilterLength', {
+QUnit.module('maxFilterQueryLength', {
     beforeEach: function() {
         this.load = sinon.stub();
         const initialOptions = {
@@ -6203,42 +6225,42 @@ QUnit.module('maxFilterLength', {
         this.stub && this.stub.restore();
     }
 }, () => {
-    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterLength was changed at runtime', function(assert) {
-        this.instance.option('maxFilterLength', 0);
+    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterQueryLength was changed at runtime', function(assert) {
+        this.instance.option('maxFilterQueryLength', 0);
         this.instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
 
         assert.ok(this.load.getCall(0).args[0].filter);
         assert.strictEqual(this.load.getCall(this.load.callCount - 1).args[0].filter, undefined);
     });
 
-    QUnit.test('W0017 warning should be logged after maxFilterLength was changed at runtime and exceeded', function(assert) {
+    QUnit.test('W0017 warning should be logged after maxFilterQueryLength was changed at runtime and exceeded', function(assert) {
         assert.expect(1);
 
         this.stubLogger(assert);
 
-        this.instance.option('maxFilterLength', 0);
+        this.instance.option('maxFilterQueryLength', 0);
         this.instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
     });
 
-    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterLength is exceeded', function(assert) {
-        this.reinit({ maxFilterLength: 1 });
+    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterQueryLength is exceeded', function(assert) {
+        this.reinit({ maxFilterQueryLength: 1 });
 
         assert.strictEqual(this.load.getCall(this.load.callCount - 1).args[0].filter, undefined);
     });
 
-    QUnit.test('W0017 warning should be logged if maxFilterLength is exceeded', function(assert) {
+    QUnit.test('W0017 warning should be logged if maxFilterQueryLength is exceeded', function(assert) {
         assert.expect(1);
 
         this.stubLogger(assert);
 
-        this.reinit({ maxFilterLength: 1 });
+        this.reinit({ maxFilterQueryLength: 1 });
     });
 
-    QUnit.test('load filter should be passed to dataSource when tagBox has some initial values and maxFilterLength is not exceeded', function(assert) {
+    QUnit.test('load filter should be passed to dataSource when tagBox has some initial values and maxFilterQueryLength is not exceeded', function(assert) {
         assert.ok(this.load.getCall(0).args[0].filter);
     });
 
-    QUnit.test('no warning should be logged if maxFilterLength is not exceeded', function(assert) {
+    QUnit.test('no warning should be logged if maxFilterQueryLength is not exceeded', function(assert) {
         assert.expect(0);
 
         this.stubLogger(assert);

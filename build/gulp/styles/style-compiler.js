@@ -2,7 +2,7 @@
 
 const { task, src, parallel, series, dest, watch } = require('gulp');
 const { join } = require('path');
-const { existsSync, readFileSync, writeFileSync } = require('fs');
+const { existsSync, readFileSync, writeFileSync, mkdirSync } = require('fs');
 const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
 const sass = require('gulp-dart-sass');
@@ -17,7 +17,6 @@ const functions = require('../gulp-data-uri').sassFunctions;
 const starLicense = require('../header-pipes').starLicense;
 
 const cssArtifactsPath = join(process.cwd(), 'artifacts', 'css');
-const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
 const DEFAULT_DEV_BUNDLE_NAMES = [
     'common',
@@ -40,7 +39,6 @@ const compileBundles = (bundles) => {
         }))
         .pipe(autoPrefix())
         .pipe(cleanCss(cleanCssOptions))
-        .pipe(replace(commentsRegex, ''))
         .pipe(starLicense())
         .pipe(replace(/([\s\S]*)(@charset.*?;\s)/, '$2$1'))
         .pipe(dest(cssArtifactsPath));
@@ -53,12 +51,16 @@ function createBundles(callback) {
     const genericColors = ['carmine', 'contrast', 'dark', 'darkmoon', 'darkviolet', 'greenmist', 'light', 'softblue'];
 
     const saveBundleFile = (fileName, content) => {
-        const bundlePath = join(process.cwd(), 'scss', 'bundles', fileName);
+        const bundlesFolder = join(process.cwd(), 'scss', 'bundles');
+        const bundlePath = join(bundlesFolder, fileName);
+        if(!existsSync(bundlesFolder)) mkdirSync(bundlesFolder);
         writeFileSync(bundlePath, content);
     };
 
+    const readTemplate = (theme) => readFileSync(join(__dirname, `bundle-template.${theme}.scss`), 'utf8');
+
     const saveBundle = (theme, size, color, mode) => {
-        const bundleTemplate = readFileSync(join(__dirname, `bundle-template.${theme}.scss`), 'utf8');
+        const bundleTemplate = readTemplate(theme);
         const bundleContent = bundleTemplate
             .replace('$COLOR', color)
             .replace('$SIZE', size)
@@ -82,6 +84,8 @@ function createBundles(callback) {
 
         genericColors.forEach(color => saveBundle('generic', size, color));
     });
+
+    saveBundleFile('dx.common.scss', readTemplate('common'));
 
     if(callback) callback();
 }

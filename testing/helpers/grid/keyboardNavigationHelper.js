@@ -71,7 +71,7 @@ export function setupModules(that, modulesOptions, gridModules) {
     gridModules = (gridModules || []).concat([
         'data', 'columns', 'editorFactory',
         'gridView', 'columnHeaders', 'rows', 'grouping',
-        'headerPanel', 'search', 'editing', 'keyboardNavigation',
+        'headerPanel', 'search', 'editing', 'editingFormBased', 'keyboardNavigation',
         'summary', 'masterDetail', 'virtualScrolling'
     ]);
 

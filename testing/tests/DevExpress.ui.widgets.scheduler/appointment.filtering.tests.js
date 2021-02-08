@@ -164,11 +164,6 @@ module('Integration: Appointment filtering', {
             });
 
             test('Remote filter should apply after change view type', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
-
                 const model = [{
                     text: 'New Brochures',
                     startDate: '2017-05-23T14:30:00',
@@ -223,7 +218,7 @@ module('Integration: Appointment filtering', {
                     scrolling: {
                         mode: scrollingMode
                     },
-                    height: 600
+                    height: 1200
                 });
 
                 assert.equal(scheduler.appointments.getAppointmentCount(), 9, `Appointment count should be equals to ${model.length} items`);

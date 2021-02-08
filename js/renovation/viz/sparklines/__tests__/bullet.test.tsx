@@ -70,7 +70,9 @@ describe('Bullet', () => {
         cssClasses,
         rtlEnabled: false,
         cssClassName,
-        props: { },
+        props: {
+          disabled: false,
+        },
       };
       const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
 
@@ -216,14 +218,6 @@ describe('Bullet', () => {
           dashStyle: 'solid',
           visible: true,
           width: 1,
-        },
-        canvas: {
-          bottom: 0,
-          height: 0,
-          left: 0,
-          right: 0,
-          top: 0,
-          width: 0,
         },
         color: '#fff',
         cornerRadius: 0,

@@ -1,8 +1,10 @@
 import {
   RecalculateCoordinates, TooltipCoordinates, StrictSize, CustomizedOptions, CustomizeTooltipFn,
-  InitialBorder, TooltipData, Font,
+  InitialBorder, TooltipData, Canvas, Font,
 } from './types.d';
 import { isFunction, isPlainObject, isDefined } from '../../../../core/utils/type';
+import domAdapter from '../../../../core/dom_adapter';
+import { getWindow } from '../../../../core/utils/window';
 
 const {
   max, min, PI, cos, sin, asin, round, ceil, floor,
@@ -189,6 +191,41 @@ export function getCloudPoints(
   }
 
   return buildPath('M', points, 'Z');
+}
+
+export function getCanvas(container: HTMLElement): Canvas {
+  const containerBox = container.getBoundingClientRect();
+  const html = domAdapter.getDocumentElement();
+  const body = domAdapter.getBody();
+  let left = getWindow()?.pageXOffset || html.scrollLeft || 0;
+  let top = getWindow()?.pageYOffset || html.scrollTop || 0;
+
+  const box = {
+    left,
+    top,
+    width: max(body.clientWidth, html.clientWidth) + left,
+    height: max(
+      body.scrollHeight, html.scrollHeight,
+      body.offsetHeight, html.offsetHeight,
+      body.clientHeight, html.clientHeight,
+    ),
+
+    right: 0,
+    bottom: 0,
+  };
+
+  if (container !== domAdapter.getBody()) {
+    left = max(box.left, box.left + containerBox.left);
+    top = max(box.top, box.top + containerBox.top);
+
+    box.width = min(containerBox.width, box.width) + left + box.left;
+    box.height = min(containerBox.height, box.height) + top + box.top;
+
+    box.left = left;
+    box.top = top;
+  }
+
+  return box;
 }
 
 export function recalculateCoordinates({

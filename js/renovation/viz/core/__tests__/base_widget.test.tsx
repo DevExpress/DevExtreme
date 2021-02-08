@@ -115,6 +115,15 @@ describe('BaseWidget', () => {
           expect(widget.contentReadyEffect.bind(widget)).not.toThrow();
         });
       });
+
+      describe('setRootElementRef', () => {
+        it('rootElementRef should be init', () => {
+          const widget = new BaseWidget({ });
+          widget.containerRef = {} as HTMLElement;
+          widget.setRootElementRef();
+          expect(widget.props.rootElementRef).toEqual({});
+        });
+      });
     });
   });
 
