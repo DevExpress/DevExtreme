@@ -49,13 +49,13 @@ const ListEdit = ListBase.inherit({
         };
 
         const enter = function(e) {
-            if(!this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing(e)) {
                 parent.enter.apply(this, arguments);
             }
         };
 
         const space = function(e) {
-            if(!this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing(e)) {
                 parent.space.apply(this, arguments);
             }
         };

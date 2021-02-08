@@ -11,6 +11,7 @@ import Callbacks from '../../core/utils/callbacks';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
+import { Event as dxEvent } from '../../events/index';
 import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
 import { prepareScrollData } from '../text_box/utils.scroll';
 
@@ -312,12 +313,15 @@ const HtmlEditor = Editor.inherit({
             resizing: this._getModuleConfigByOption('mediaResizing'),
             mentions: this._getModuleConfigByOption('mentions'),
             uploader: {
-                onDrop: (e) => this._saveValueChangeEvent(e),
+                onDrop: (e) => this._saveValueChangeEvent(dxEvent(e)),
                 imageBlot: 'extendedImage'
             },
+            keyboard: {
+                onKeydown: (e) => this._saveValueChangeEvent(dxEvent(e))
+            },
             clipboard: {
-                onPaste: (e) => this._saveValueChangeEvent(e),
-                onCut: (e) => this._saveValueChangeEvent(e),
+                onPaste: (e) => this._saveValueChangeEvent(dxEvent(e)),
+                onCut: (e) => this._saveValueChangeEvent(dxEvent(e)),
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],

@@ -3,10 +3,11 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/selectBox";
 
 // adduse
-@use "../dropDownList";
 
+@use "../dropDownList";
 
 .dx-selectbox-popup-wrapper {
   .dx-overlay-content {

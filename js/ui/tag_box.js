@@ -14,7 +14,7 @@ import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
 import messageLocalization from '../localization/message';
-import { addNamespace, normalizeKeyName } from '../events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/utils/index';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
@@ -550,7 +550,7 @@ const TagBox = SelectBox.inherit({
         const scrollLeft = this._$tagsContainer.scrollLeft();
         const delta = e.delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER;
 
-        if(allowScroll(this._$tagsContainer, delta, true)) {
+        if(!isCommandKeyPressed(e) && allowScroll(this._$tagsContainer, delta, true)) {
             this._$tagsContainer.scrollLeft(scrollLeft + delta);
             return false;
         }
@@ -1362,7 +1362,8 @@ const TagBox = SelectBox.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    _applyButtonHandler: function() {
+    _applyButtonHandler: function(args) {
+        this._saveValueChangeEvent(args.event);
         this.option('value', this._getSortedListValues());
         this._clearTextValue();
         this.callBase();

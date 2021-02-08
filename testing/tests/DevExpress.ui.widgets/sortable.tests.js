@@ -7,6 +7,7 @@ import browser from 'core/utils/browser';
 import translator from 'animation/translator';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =

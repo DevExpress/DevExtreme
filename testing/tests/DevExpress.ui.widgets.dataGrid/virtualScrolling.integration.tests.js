@@ -3045,6 +3045,74 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             });
         });
     });
+
+    QUnit.test('DataGrid should not display virtual rows on data source changing when rowRenderingMode is set to \'virtual\' (T966221)', function(assert) {
+        // arrange
+        const generateDataSource = function(count) {
+            const result = [];
+            for(let i = 0; i < count; ++i) {
+                result.push({ id: i + 1, name: `Name ${i + 1}` });
+            }
+            return result;
+        };
+        const dataSource1 = generateDataSource(40);
+        const dataGrid = createDataGrid({
+            height: 500,
+            dataSource: dataSource1,
+            keyExpr: 'id',
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.pageIndex(1);
+        this.clock.tick();
+        const dataSource2 = generateDataSource(18);
+        dataGrid.option('dataSource', dataSource2);
+        this.clock.tick(300);
+        const $gridElement = $(dataGrid.element());
+        const $virtualRows = $gridElement.find('.dx-datagrid-rowsview .dx-row.dx-virtual-row');
+        const $renderedRows = $gridElement.find('.dx-datagrid-rowsview .dx-row.dx-data-row');
+
+        // assert
+        assert.equal($renderedRows.length, 18, 'rendered data rows');
+        assert.equal($virtualRows.length, 0, 'no virtual rows');
+    });
+
+    QUnit.test('DataGrid should scroll to the required page when data source is set at runtime (T968361)', function(assert) {
+        // arrange
+        const generateDataSource = function(count) {
+            const result = [];
+            for(let i = 0; i < count; ++i) {
+                result.push({ id: i + 1, name: `Name ${i + 1}` });
+            }
+            return result;
+        };
+
+        const dataGrid = createDataGrid({
+            height: 500,
+            keyExpr: 'id',
+            paging: {
+                pageIndex: 5
+            },
+            scrolling: {
+                mode: 'virtual'
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.option('dataSource', generateDataSource(500));
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(dataGrid.pageIndex(), 5, 'correct page index');
+        assert.equal(dataGrid.getScrollable().scrollTop(), 3400, 'top scroll position');
+    });
 });
 
 

@@ -2205,7 +2205,7 @@ class Scheduler extends Widget {
                         .done(() => {
                             dragEvent && dragEvent.cancel.resolve(false);
                         })
-                        .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.UPDATED, rawAppointment, storeAppointment))
+                        .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.UPDATED, storeAppointment))
                         .fail(() => performFailAction());
                 } catch(err) {
                     performFailAction(err);
@@ -2247,16 +2247,12 @@ class Scheduler extends Widget {
         }
     }
 
-    _onDataPromiseCompleted(handlerName, appointment, storeAppointment, isDeletedOperation = false) {
-        const args = { appointmentData: appointment };
+    _onDataPromiseCompleted(handlerName, storeAppointment, appointment) {
+        const args = { appointmentData: appointment || storeAppointment };
 
         if(storeAppointment instanceof Error) {
             args.error = storeAppointment;
         } else {
-            if(!isDeletedOperation) {
-                // store.update promise return array result, but other data method return single object
-                args.appointmentData = storeAppointment[0] || storeAppointment;
-            }
             this._appointmentPopup.isVisible() && this._appointmentPopup.hide();
         }
 
@@ -2494,7 +2490,7 @@ class Scheduler extends Widget {
 
             return this._appointmentModel
                 .add(serializedAppointment)
-                .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.ADDED, serializedAppointment, storeAppointment));
+                .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.ADDED, storeAppointment));
         });
     }
 
@@ -2514,7 +2510,7 @@ class Scheduler extends Widget {
             if(!canceled) {
                 this._appointmentModel
                     .remove(rawAppointment)
-                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, rawAppointment, storeAppointment, true));
+                    .always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, storeAppointment, rawAppointment));
             }
         });
     }

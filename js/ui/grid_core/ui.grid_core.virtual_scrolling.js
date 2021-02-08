@@ -308,6 +308,10 @@ const VirtualScrollingRowsViewExtender = (function() {
                 this.scrollToPage(dataController.pageIndex());
             });
 
+            dataController.dataSourceChanged.add(() => {
+                !this._scrollTop && this._scrollToCurrentPageOnResize();
+            });
+
             dataController.stateLoaded?.add(() => {
                 this._scrollToCurrentPageOnResize();
             });
@@ -837,7 +841,8 @@ export default {
                             return;
                         }
 
-                        that._rowPageIndex = Math.ceil(that.pageIndex() * that.pageSize() / that.getRowPageSize());
+                        const pageIndex = that.pageIndex() >= that.pageCount() ? that.pageCount() - 1 : that.pageIndex();
+                        that._rowPageIndex = Math.ceil(pageIndex * that.pageSize() / that.getRowPageSize());
 
                         that._visibleItems = [];
 
@@ -875,6 +880,7 @@ export default {
                                 }
 
                                 if(!that._rowsScrollController._dataSource.items().length && this.totalItemsCount()) return;
+
                                 that._rowsScrollController.handleDataChanged(change => {
                                     change = change || {};
                                     change.changeType = change.changeType || 'refresh';

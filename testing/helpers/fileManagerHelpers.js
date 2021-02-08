@@ -39,6 +39,7 @@ export const Consts = {
     FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
     FOLDERS_TREE_VIEW_ITEM_CLASS: 'dx-treeview-item',
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: 'dx-treeview-toggle-item-visibility',
+    FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened',
     BREADCRUMBS_CLASS: 'dx-filemanager-breadcrumbs',
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: 'dx-filemanager-breadcrumbs-parent-folder-item',
     BREADCRUMBS_SEPARATOR_ITEM_CLASS: 'dx-filemanager-breadcrumbs-separator-item',
@@ -126,13 +127,6 @@ export class FileManagerWrapper {
         return text.replace(showMoreButtonText, '');
     }
 
-    getFolderNodeByText(text, inDialog) {
-        return this.getFolderNodes(inDialog).filter(function(index, node) {
-            const content = $(node).text();
-            return content === text;
-        }).first();
-    }
-
     getFolderToggles(inDialog) {
         if(inDialog) {
             return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
@@ -142,6 +136,18 @@ export class FileManagerWrapper {
 
     getFolderToggle(index, inDialog) {
         return this.getFolderToggles(inDialog).eq(index);
+    }
+
+    isFolderNodeToggleOpened(text) {
+        let result = null;
+        const targetNode = this.getFolderNodes().filter(function() { return $(this).text() === text; }).eq(0).parent();
+        if(targetNode.length) {
+            const itemToggle = targetNode.children(`.${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
+            if(itemToggle.length) {
+                result = itemToggle.hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS);
+            }
+        }
+        return result;
     }
 
     getFocusedItemText() {
@@ -650,22 +656,27 @@ export const createTestFileSystem = () => {
         {
             name: 'Folder 1',
             isDirectory: true,
+            hasSubDirectories: true,
             items: [
                 {
                     name: 'Folder 1.1',
                     isDirectory: true,
+                    hasSubDirectories: true,
                     items: [
                         {
                             name: 'Folder 1.1.1',
                             isDirectory: true,
+                            hasSubDirectories: true,
                             items: [
                                 {
                                     name: 'Folder 1.1.1.1',
                                     isDirectory: true,
+                                    hasSubDirectories: true,
                                     items: [
                                         {
                                             name: 'Folder 1.1.1.1.1',
                                             isDirectory: true,
+                                            hasSubDirectories: false,
                                             items: [
                                                 {
                                                     name: 'Special deep file.txt',
@@ -697,7 +708,8 @@ export const createTestFileSystem = () => {
                 },
                 {
                     name: 'Folder 1.2',
-                    isDirectory: true
+                    isDirectory: true,
+                    hasSubDirectories: false
                 },
                 {
                     name: 'File 1-1.txt',
@@ -711,6 +723,7 @@ export const createTestFileSystem = () => {
         {
             name: 'Folder 2',
             isDirectory: true,
+            hasSubDirectories: false,
             items: [
                 {
                     name: 'File 2-1.jpg',
@@ -719,7 +732,8 @@ export const createTestFileSystem = () => {
         },
         {
             name: 'Folder 3',
-            isDirectory: true
+            isDirectory: true,
+            hasSubDirectories: false
         },
         {
             name: 'File 1.txt',

@@ -139,6 +139,8 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
 
     const createDataSource = (list = defaultData) => {
         return new DataSource({
+            pushAggregationTimeout: 0,
+            reshapeOnPush: true,
             store: {
                 type: 'array',
                 key: 'id',
