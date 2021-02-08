@@ -657,7 +657,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Split gird on one page, 1 col', function(assert) {
+    QUnit.test('Split grid on one page, 1 col', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
 
@@ -699,7 +699,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Split gird on one page, 1 col - draw table borders', function(assert) {
+    QUnit.test('Split grid on one page, 1 col - draw table borders', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
 
@@ -748,7 +748,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Split gird on different pages, 1 col', function(assert) {
+    QUnit.test('Split grid on different pages, 1 col', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
 
@@ -792,7 +792,7 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Split gird on different pages, 1 col - draw table borders', function(assert) {
+    QUnit.test('Split grid on different pages, 1 col - draw table borders', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
 
