@@ -6051,7 +6051,6 @@ QUnit.module('performance', () => {
     });
 
     QUnit.test('Select All should use cache', function(assert) {
-        this.clock = sinon.useFakeTimers();
         const items = [];
         let keyGetterCounter = 0;
 
@@ -6084,8 +6083,6 @@ QUnit.module('performance', () => {
             displayExpr: 'text'
         }).dxTagBox('instance');
 
-        this.clock.tick();
-
         const isValueEqualsSpy = sinon.spy(tagBox, '_isValueEquals');
 
         // act
@@ -6095,8 +6092,6 @@ QUnit.module('performance', () => {
         // assert
         assert.equal(keyGetterCounter, 512, 'key getter call count');
         assert.equal(isValueEqualsSpy.callCount, 1, '_isValueEquals call count');
-
-        this.clock.restore();
     });
 
     QUnit.test('load filter should be undefined when tagBox has a lot of initial values', function(assert) {
