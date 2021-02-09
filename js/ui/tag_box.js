@@ -771,7 +771,7 @@ const TagBox = SelectBox.inherit({
     _getFilteredItems: function(values) {
         const creator = new FilterCreator(values);
 
-        const listSelectedItems = this._list && this._list.option('selectedItems');
+        const listSelectedItems = this._list?.option('selectedItems');
         const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource().isLoaded();
         const selectedItems = listSelectedItems || this.option('selectedItems');
         const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
@@ -803,14 +803,6 @@ const TagBox = SelectBox.inherit({
                 .fail(d.reject);
 
             return d.promise();
-        }
-    },
-
-    _canUseCurrentDataSource: function(value) {
-        if(isDefined(value)) {
-            this._isDataSourceChanged = value;
-        } else {
-            return this._isDataSourceChanged;
         }
     },
 
@@ -958,14 +950,15 @@ const TagBox = SelectBox.inherit({
         const plainItems = this._getPlainItems();
         let selectedItems = [];
 
-        if(this._list) {
-            const listSelectedItems = this._list.option('selectedItems');
-            if(values.length === listSelectedItems.length) {
-                selectedItems = this._filterSelectedItems(listSelectedItems, values);
-            }
+        const listSelectedItems = this._list?.option('selectedItems');
+
+        if(values.length === listSelectedItems?.length) {
+            selectedItems = this._filterSelectedItems(listSelectedItems, values);
         }
 
-        if((selectedItems.length === 0 && values.length > 0) || (selectedItems.length < values.length)) {
+        const needFilterPlainItems = (selectedItems.length === 0 && values.length > 0) || (selectedItems.length < values.length);
+
+        if(needFilterPlainItems) {
             selectedItems = this._filterSelectedItems(plainItems, values);
         }
 
