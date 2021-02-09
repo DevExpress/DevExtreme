@@ -44,7 +44,6 @@ class FileManagerContextMenu extends Widget {
     showAt(fileItems, element, event, target) {
         const { itemData, itemElement, isActionButton = false } = target;
         if(this._isVisible) {
-            this._raiseContextMenuHidden();
             this._onContextMenuHidden();
         }
         this._itemCreationContext = {
@@ -79,6 +78,9 @@ class FileManagerContextMenu extends Widget {
     }
 
     _handleShowing(e) {
+        if(this._isVisible) {
+            this._onContextMenuHidden();
+        }
         e = extend(e, this._itemCreationContext, { items: this.option('items'), cancel: false });
         this._actions.onContextMenuShowing(e);
         const items = this.createContextMenuItems(this._itemCreationContext.fileItems, e.items, this._itemCreationContext.itemData);
