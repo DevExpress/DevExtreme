@@ -164,18 +164,18 @@ export class Button extends JSXComponent(ButtonProps) {
     //       (for example, text, icon, etc)
     const { onContentReady } = this.props;
 
-    onContentReady?.({ element: this.contentRef.current?.parentNode });
+    onContentReady?.({ element: this.contentRef.current!.parentNode });
   }
 
   @Method()
   focus(): void {
-    this.widgetRef.current?.focus();
+    this.widgetRef.current!.focus();
   }
 
   onActive(event: Event): void {
     const { useInkRipple } = this.props;
 
-    useInkRipple && this.inkRippleRef.current?.showWave({
+    useInkRipple && this.inkRippleRef.current!.showWave({
       element: this.contentRef.current, event,
     });
   }
@@ -183,7 +183,7 @@ export class Button extends JSXComponent(ButtonProps) {
   onInactive(event: Event): void {
     const { useInkRipple } = this.props;
 
-    useInkRipple && this.inkRippleRef.current?.hideWave({
+    useInkRipple && this.inkRippleRef.current!.hideWave({
       element: this.contentRef.current, event,
     });
   }
@@ -192,7 +192,7 @@ export class Button extends JSXComponent(ButtonProps) {
     const { onClick, useSubmitBehavior, validationGroup } = this.props;
 
     onClick?.({ event, validationGroup });
-    useSubmitBehavior && this.submitInputRef.current?.click();
+    useSubmitBehavior && this.submitInputRef.current!.click();
   }
 
   onWidgetKeyDown(options): Event | undefined {

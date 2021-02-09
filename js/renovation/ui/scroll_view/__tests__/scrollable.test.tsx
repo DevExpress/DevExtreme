@@ -649,6 +649,7 @@ each([{
         it('should not raise any error if onScroll is not defined', () => {
           const scrollable = new Scrollable({ onScroll: undefined });
           scrollable.containerRef = React.createRef();
+          scrollable.containerRef.current = {};
 
           scrollable.scrollEffect();
           emit('scroll');
