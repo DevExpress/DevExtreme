@@ -15,7 +15,9 @@ class App extends React.Component {
     this.gridDataSource = this.makeAsyncDataSource('customers.json');
     this.state = {
       treeBoxValue: '1_1',
-      gridBoxValue: [3]
+      gridBoxValue: [3],
+      isGridBoxOpened: false,
+      isTreeBoxOpened: false
     };
     this.treeView_itemSelectionChanged = this.treeView_itemSelectionChanged.bind(this);
     this.syncTreeViewSelection = this.syncTreeViewSelection.bind(this);
@@ -24,6 +26,9 @@ class App extends React.Component {
     this.treeViewRender = this.treeViewRender.bind(this);
     this.treeView_onContentReady = this.treeView_onContentReady.bind(this);
     this.dataGridRender = this.dataGridRender.bind(this);
+    this.onGridBoxOpened = this.onGridBoxOpened.bind(this);
+    this.onTreeBoxOpened = this.onTreeBoxOpened.bind(this);
+    this.onTreeItemClick = this.onTreeItemClick.bind(this);
   }
 
   makeAsyncDataSource(jsonFile) {
@@ -45,12 +50,14 @@ class App extends React.Component {
           <div className="dx-field-value">
             <DropDownBox
               value={this.state.treeBoxValue}
+              opened={this.state.isTreeBoxOpened}
               valueExpr="ID"
               displayExpr="name"
               placeholder="Select a value..."
               showClearButton={true}
               dataSource={this.treeDataSource}
               onValueChanged={this.syncTreeViewSelection}
+              onOptionChanged={this.onTreeBoxOpened}
               contentRender={this.treeViewRender}
             />
           </div>
@@ -60,6 +67,7 @@ class App extends React.Component {
           <div className="dx-field-value">
             <DropDownBox
               value={this.state.gridBoxValue}
+              opened={this.state.isGridBoxOpened}
               valueExpr="ID"
               deferRendering={false}
               displayExpr={this.gridBox_displayExpr}
@@ -67,6 +75,7 @@ class App extends React.Component {
               showClearButton={true}
               dataSource={this.gridDataSource}
               onValueChanged={this.syncDataGridSelection}
+              onOptionChanged={this.onGridBoxOpened}
               contentRender={this.dataGridRender}
             />
           </div>
@@ -86,6 +95,7 @@ class App extends React.Component {
         displayExpr="name"
         selectByClick={true}
         onContentReady={this.treeView_onContentReady}
+        onItemClick={this.onTreeItemClick}
         onItemSelectionChanged={this.treeView_itemSelectionChanged}
       />
     );
@@ -135,7 +145,8 @@ class App extends React.Component {
 
   dataGrid_onSelectionChanged(e) {
     this.setState({
-      gridBoxValue: e.selectedRowKeys
+      gridBoxValue: e.selectedRowKeys,
+      isGridBoxOpened: false
     });
   }
 
@@ -146,6 +157,29 @@ class App extends React.Component {
   treeView_onContentReady(e) {
     e.component.selectItem(this.state.treeBoxValue);
   }
+
+  onTreeItemClick() {
+    this.setState({
+      isTreeBoxOpened: false
+    });
+  }
+
+  onGridBoxOpened(e) {
+    if(e.name === 'opened') {
+      this.setState({
+        isGridBoxOpened: e.value
+      });
+    }
+  }
+
+  onTreeBoxOpened(e) {
+    if(e.name === 'opened') {
+      this.setState({
+        isTreeBoxOpened: e.value
+      });
+    }
+  }
+
 }
 
 export default App;

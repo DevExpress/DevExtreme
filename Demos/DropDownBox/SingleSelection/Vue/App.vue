@@ -5,6 +5,7 @@
       <div class="dx-field-value">
         <DxDropDownBox
           v-model:value="treeBoxValue"
+          v-model:opened="isTreeBoxOpened"
           :show-clear-button="true"
           :data-source="treeDataSource"
           value-expr="ID"
@@ -24,6 +25,7 @@
               display-expr="name"
               @content-ready="$event.component.selectItem(treeBoxValue)"
               @item-selection-changed="treeView_itemSelectionChanged($event)"
+              @item-click="onTreeItemClick($event)"
             />
           </template>
         </DxDropDownBox>
@@ -34,6 +36,7 @@
       <div class="dx-field-value">
         <DxDropDownBox
           v-model:value="gridBoxValue"
+          v-model:opened="isGridBoxOpened"
           :defer-rendering="false"
           :display-expr="gridBoxDisplayExpr"
           :show-clear-button="true"
@@ -47,6 +50,7 @@
               :columns="gridColumns"
               :hover-state-enabled="true"
               v-model:selected-row-keys="gridBoxValue"
+              @selection-changed="onGridSelectionChanged($event)"
               height="100%"
             >
               <DxSelection mode="single"/>
@@ -85,6 +89,8 @@ export default {
       treeDataSource: null,
       treeBoxValue: null,
       gridDataSource: null,
+      isGridBoxOpened: false,
+      isTreeBoxOpened: false,
       gridBoxValue: [3],
       treeViewRefName: 'tree-view',
       gridColumns: ['CompanyName', 'City', 'Phone']
@@ -119,6 +125,12 @@ export default {
     },
     gridBoxDisplayExpr(item) {
       return item && `${item.CompanyName } <${ item.Phone }>`;
+    },
+    onTreeItemClick() {
+      this.isTreeBoxOpened = false;
+    },
+    onGridSelectionChanged() {
+      this.isGridBoxOpened = false;
     }
   }
 };

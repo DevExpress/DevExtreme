@@ -50,6 +50,7 @@ $(function(){
             
             e.component.on("valueChanged", function(args){
                 syncTreeViewSelection(treeView, args.value);
+                e.component.close();
             });
             
             return $treeView;
@@ -90,6 +91,7 @@ $(function(){
             
             e.component.on("valueChanged", function(args){
                 dataGrid.selectRows(args.value, false);
+                e.component.close();
             });
             
             return $dataGrid;

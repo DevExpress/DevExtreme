@@ -35,11 +35,13 @@ window.onload = function() {
     };
 
     var treeDataSource = makeAsyncDataSource("treeProducts.json"),
-        gridDataSource = makeAsyncDataSource("customers.json");
-    
+        gridDataSource = makeAsyncDataSource("customers.json"),
+        isTreeBoxOpened = ko.observable(false);
+
     var treeBoxOptions = {
         value: ko.observable("1_1"),
         valueExpr: "ID",
+        opened: isTreeBoxOpened,
         displayExpr: "name",
         placeholder: "Select a value...",
         showClearButton: true,
@@ -61,16 +63,21 @@ window.onload = function() {
 
                 treeBoxOptions.value(value);
             },
+            onItemClick: function(){
+                isTreeBoxOpened(false);
+            },
             displayExpr: "name",
             selectByClick: true,
             selectNodesRecursive: false
         }
     };
     
-    var gridBoxValue = ko.observable(3);
+    var gridBoxValue = ko.observable(3),
+        isGridBoxOpened = ko.observable(false);
     
     var gridBoxOptions = {
         value: gridBoxValue,
+        opened: isGridBoxOpened,
         valueExpr: "ID",
         deferRendering: false,
         placeholder: "Select a value...",
@@ -95,6 +102,7 @@ window.onload = function() {
             onSelectionChanged: function(selectedItems){
                 var hasSelection = selectedItems.selectedRowKeys.length;
                 gridBoxValue(hasSelection ? selectedItems.selectedRowKeys[0] : null);
+                isGridBoxOpened(false);
             }
         }
     };

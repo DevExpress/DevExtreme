@@ -4,12 +4,14 @@
         <div class="dx-field-value">
             <dx-drop-down-box
                 [(value)]="treeBoxValue"
+                [(opened)]="isTreeBoxOpened"
                 valueExpr="ID"
                 displayExpr="name"
                 placeholder="Select a value..."
                 [showClearButton]="true"
                 [dataSource]="treeDataSource"
                 (onValueChanged)="syncTreeViewSelection($event)"
+                (onOptionChanged)="onTreeBoxOptionChanged($event)"
             >
 
                 <div *dxTemplate="let data of 'content'">
@@ -34,26 +36,28 @@
         <div class="dx-field-value">
             <dx-drop-down-box
                     [(value)]="gridBoxValue"
+                    [(opened)]="isGridBoxOpened"
                     valueExpr="ID"
                     [deferRendering]="false"
                     [displayExpr]="gridBox_displayExpr"
                     placeholder="Select a value..."
                     [showClearButton]="true"
                     [dataSource]="gridDataSource"
+                    (onOptionChanged)="onGridBoxOptionChanged($event)"
             >
 
                 <div *dxTemplate="let data of 'content'">
                     <dx-data-grid
                             [dataSource]="gridDataSource"
-                            [columns]="['CompanyName', 'City', 'Phone']"
-                            [selection]="{ mode: 'single' }"
+                            [columns]="gridColumns"
                             [hoverStateEnabled]="true"
-                            [paging]="{ enabled: true, pageSize: 10 }"
-                            [filterRow]="{ visible: true }"
-                            [scrolling]="{ mode: 'infinite' }"
                             [(selectedRowKeys)]="gridBoxValue"
                             height="100%"
                     >
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxo-filter-row [visible]="true"></dxo-filter-row>
+                        <dxo-scrolling mode="infinite"></dxo-scrolling>
+                        <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
                     </dx-data-grid>
                 </div>
             </dx-drop-down-box>

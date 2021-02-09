@@ -28,10 +28,12 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         gridDataSource = makeAsyncDataSource("customers.json");
     
     $scope.treeBoxValue = "1_1";
+    $scope.isGridBoxOpened = false;
     
     $scope.treeBoxOptions = {
         bindingOptions: {
-            value: 'treeBoxValue'
+            value: 'treeBoxValue',
+            opened: 'isGridBoxOpened'
         },
         valueExpr: "ID",
         displayExpr: "name",
@@ -57,16 +59,21 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             },
             onItemSelectionChanged: function(args){
                 $scope.treeBoxValue = args.component.getSelectedNodeKeys();
+            },
+            onItemClick: function(){
+                $scope.isGridBoxOpened = false;
             }
         }
     };
     
     $scope.gridBoxValue = 3;
     $scope.gridSelectedRowKeys = [$scope.gridBoxValue];
+    $scope.isTreeBoxOpened = false;
     
     $scope.gridBoxOptions = {
         bindingOptions: {
-            value: "gridBoxValue"
+            value: "gridBoxValue",
+            opened: "isTreeBoxOpened"
         },
         valueExpr: "ID",
         deferRendering: false,
@@ -94,6 +101,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             onSelectionChanged: function(selectedItems){
                 var keys = selectedItems.selectedRowKeys;
                 $scope.gridBoxValue = keys.length && keys[0] || null;
+                $scope.isTreeBoxOpened = false;
             }
         }
     };
