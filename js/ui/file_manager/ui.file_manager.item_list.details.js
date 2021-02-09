@@ -290,9 +290,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             fileItems = this._getFileItemsForContextMenu(item);
         }
 
-        e = extend(e, {
+        e = extend({}, {
             targetElement: e.target === 'content' && isDefined(e.row) ? this._filesView.getRowElement(e.rowIndex) : undefined,
-            fileSystemItem: item,
+            itemData: item,
             options: this._contextMenu.option(),
             event: e.event,
             actionButton: false,

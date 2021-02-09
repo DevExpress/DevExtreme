@@ -619,13 +619,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
         this.clock.tick(400);
 
-        const targetItemElement = undefined;
-        const targetFileSystemItem = undefined;
-
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
         assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
-        assert.strictEqual(eventSpy.args[0][0].targetElement, targetItemElement, 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].fileSystemItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].targetElement, undefined, 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].fileSystemItem, undefined, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
@@ -704,13 +701,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         this.wrapper.getThumbnailsViewScrollable().trigger('dxcontextmenu');
         this.clock.tick(400);
 
-        const targetItemElement = undefined;
-        const targetFileSystemItem = undefined;
-
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
         assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
-        assert.strictEqual(eventSpy.args[0][0].targetElement, targetItemElement, 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].fileSystemItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].targetElement, undefined, 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].fileSystemItem, undefined, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
