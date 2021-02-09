@@ -886,10 +886,6 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 }
             }
 
-            const resizingController = this.getController('resizing');
-
-            $cells = $cells || resizingController._getHeaderCellElements($tableElement);
-
             result = that._getWidths($cells);
         }
 
@@ -955,19 +951,19 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
-    getCellElements: function(rowIndex, $tableElement) {
-        return this._getCellElementsCore(rowIndex, $tableElement);
+    getCellElements: function(rowIndex) {
+        return this._getCellElementsCore(rowIndex);
     },
 
-    _getCellElementsCore: function(rowIndex, $tableElement) {
-        const $row = this._getRowElements($tableElement).eq(rowIndex);
+    _getCellElementsCore: function(rowIndex) {
+        const $row = this._getRowElements().eq(rowIndex);
         return $row.children();
     },
 
-    _getCellElement: function(rowIndex, columnIdentifier, $tableElement) {
+    _getCellElement: function(rowIndex, columnIdentifier) {
         const that = this;
         let $cell;
-        const $cells = that.getCellElements(rowIndex, $tableElement);
+        const $cells = that.getCellElements(rowIndex);
         const columnVisibleIndex = that._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
 
         if($cells.length && columnVisibleIndex >= 0) {
