@@ -631,13 +631,13 @@ module('View Data Provider', {
 
                     assert.deepEqual(
                         viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
-                        new Date(2020, 7, 24, 0, 10),
+                        new Date(2020, 7, 24, 0),
                         'Group 2 cell 0 start date is correct'
                     );
 
                     assert.deepEqual(
                         viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
-                        new Date(2020, 7, 25, 0, 11),
+                        new Date(2020, 7, 25, 0),
                         'Group 2 cell 1 start date is correct'
                     );
 
@@ -649,7 +649,7 @@ module('View Data Provider', {
 
                     assert.deepEqual(
                         viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
-                        new Date(2020, 7, 25, 0, 11),
+                        new Date(2020, 7, 25, 1),
                         'Group 3 cell 1 start date is correct'
                     );
                 });

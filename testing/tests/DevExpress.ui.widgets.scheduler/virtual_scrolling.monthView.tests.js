@@ -1,6 +1,7 @@
 import 'common.css!';
 import 'generic_light.css!';
 
+import dateUtils from 'core/utils/date';
 import {
     createWrapper,
     initTestMarkup,
@@ -363,6 +364,71 @@ module('Virtual scrolling Month View', () => {
                 });
 
                 return promise;
+            });
+        });
+
+        ['horizontal', 'vertical'].forEach(groupOrientation => {
+            test(`Appointment should be correctly croped if Month view  and "${groupOrientation}" group orientation`, function(assert) {
+                const longAppointment = {
+                    startDate: new Date(2015, 2, 4, 0, 10),
+                    endDate: new Date(2015, 2, 4, 23, 50)
+                };
+                const scheduler = createWrapper({
+                    currentDate: new Date(2015, 2, 4),
+                    scrolling: {
+                        mode: 'virtual'
+                    },
+                    views: [{
+                        type: 'month',
+                        groupOrientation: groupOrientation
+                    }],
+                    currentView: 'month',
+                    dataSource: [longAppointment],
+                    height: 400
+                });
+
+                const { instance } = scheduler;
+                const workspace = instance.getWorkSpace();
+                const { viewDataProvider } = workspace;
+                const scrollable = workspace.getScrollable();
+
+                workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+
+                return asyncWrapper(assert, promise => {
+                    [
+                        1000, 1050, 1100, 1200, 1250, 1300, 1350, 1400, 1500, 2000
+                    ].forEach(scrollY => {
+                        promise = asyncScrollTest(
+                            assert,
+                            promise,
+                            () => {
+                                const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
+
+                                assert.equal(
+                                    settings.groupIndex,
+                                    0,
+                                    `group index is correct when scrolled to ${scrollY}`
+                                );
+
+                                const startViewDate = viewDataProvider.findGroupCellStartDate(
+                                    settings.groupIndex,
+                                    settings.info.appointment.startDate,
+                                    settings.info.appointment.endDate
+                                );
+
+                                assert.deepEqual(
+                                    dateUtils.trimTime(settings.info.appointment.startDate),
+                                    startViewDate,
+                                    'start date is correct'
+                                );
+                            },
+                            scrollable,
+                            { y: scrollY }
+                        );
+                    });
+
+                    return promise;
+                });
             });
         });
     });
