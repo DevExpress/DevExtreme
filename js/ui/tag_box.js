@@ -947,19 +947,22 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemsFromPlain: function(values) {
-        const plainItems = this._getPlainItems();
-        let selectedItems = [];
-
-        const listSelectedItems = this._list?.option('selectedItems');
-
-        if(values.length === listSelectedItems?.length) {
-            selectedItems = this._filterSelectedItems(listSelectedItems, values);
-        }
-
+        let selectedItems = this._getSelectedItemsFromList(values);
         const needFilterPlainItems = (selectedItems.length === 0 && values.length > 0) || (selectedItems.length < values.length);
 
         if(needFilterPlainItems) {
+            const plainItems = this._getPlainItems();
             selectedItems = this._filterSelectedItems(plainItems, values);
+        }
+
+        return selectedItems;
+    },
+
+    _getSelectedItemsFromList: function(values) {
+        const listSelectedItems = this._list?.option('selectedItems');
+        let selectedItems = [];
+        if(values.length === listSelectedItems?.length) {
+            selectedItems = this._filterSelectedItems(listSelectedItems, values);
         }
 
         return selectedItems;
