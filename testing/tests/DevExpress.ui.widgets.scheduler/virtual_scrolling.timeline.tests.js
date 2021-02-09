@@ -16,7 +16,7 @@ const {
 } = QUnit;
 
 const test = (description, callback) => {
-    const testFunc = isIE11
+    const testFunc = isIE11 || !isDesktopEnvironment()
         ? QUnit.skip
         : QUnit.test;
 
@@ -137,11 +137,6 @@ module('Virtual scrolling timelines', () => {
         module('Vertical grouping', () => {
             module('timelineDay', () => {
                 test('appointments should be rendered correctly', function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
-
                     const data = [
                         {
                             text: 'Appt-001',
@@ -454,11 +449,6 @@ module('Virtual scrolling timelines', () => {
 
             module('timelineWeek', () => {
                 test('multiday appointment should be rendered correctly in timelineWeek view with grouping', function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
-
                     const scheduler = createWrapper({
                         height: 600,
                         width: 800,

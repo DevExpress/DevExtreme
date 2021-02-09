@@ -6,6 +6,7 @@ import {
     initTestMarkup,
     asyncScrollTest,
     asyncWrapper,
+    isDesktopEnvironment,
     isIE11
 } from '../../helpers/scheduler/helpers.js';
 
@@ -15,7 +16,7 @@ const {
 } = QUnit;
 
 const test = (description, callback) => {
-    const testFunc = isIE11
+    const testFunc = isIE11 || !isDesktopEnvironment()
         ? QUnit.skip
         : QUnit.test;
 
