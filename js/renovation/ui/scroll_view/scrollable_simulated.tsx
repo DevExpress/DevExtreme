@@ -22,6 +22,7 @@ import { when } from '../../../core/utils/deferred';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
 import $ from '../../../core/renderer';
 import { ensureDefined } from '../../../core/utils/common';
+import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import '../../../events/gesture/emitter.gesture.scroll';
 
 import type { dxPromise } from '../../../core/utils/deferred';
@@ -368,9 +369,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
         this.eventHandler(
           (scrollbar) => {
             /* istanbul ignore next */
-            if (scrollbar.inBounds()) {
+            if (scrollbar.insideBounds()) {
               scrollbar.setLocation(-this.containerRef[`scroll${scrollbar.getDirection() === DIRECTION_HORIZONTAL ? 'Left' : 'Top'}`]);
-              return scrollbar.move();
+              return scrollbar.moveToLocation();
             }
             /* istanbul ignore next */
             return undefined;
@@ -921,6 +922,23 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
+    this.updateScrollbarSize();
+  }
+
+  /* istanbul ignore next */
+  @Effect() resizeEffect(): DisposeEffectReturn {
+    const callback = (): void => {
+      this.updateScrollbarSize();
+      this.horizontalScrollbarRef.updateLocation();
+      this.verticalScrollbarRef.updateLocation();
+      this.horizontalScrollbarRef.moveScrollbar(this.horizontalScrollbarRef.getLocation());
+      this.verticalScrollbarRef.moveScrollbar(this.verticalScrollbarRef.getLocation());
+    };
+    resizeCallbacks.add(callback);
+    return (): void => { resizeCallbacks.remove(callback); };
+  }
+
+  updateScrollbarSize(): void {
     const scrollableOffset = this.getScrollableOffset() || { left: 0, top: 0 };
 
     this.scaleRatioWidth = this.getScaleRatio('width');
