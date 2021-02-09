@@ -661,9 +661,9 @@ describe('Simulated', () => {
 
               helper.initScrollbarSettings();
 
-              const target = isScrollbarClicked
-                ? helper.viewModel.containerRef.current?.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
-                : helper.viewModel.containerRef;
+              const target = isScrollbarClicked && helper.viewModel.containerRef.current
+                ? helper.viewModel.containerRef.current.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
+                : helper.viewModel.containerRef.current;
 
               const e = { ...defaultEvent, target };
 
