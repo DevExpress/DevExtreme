@@ -7,15 +7,37 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
-            const table = {
+            const tables = [];
+            let table = {
                 rect: options.rect,
                 drawTableBorder: options.drawTableBorder,
                 rows: []
             };
+            tables.push(table);
 
             const columns = dataProvider.getColumns();
             const dataRowsCount = dataProvider.getRowsCount();
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
+                if(options.onRowExporting) {
+                    const drawNewTableFromThisRow = {};
+                    options.onRowExporting({ drawNewTableFromThisRow });
+                    const { startNewTable, addPage, tableRect } = drawNewTableFromThisRow;
+                    if(startNewTable === true) {
+                        if(!isDefined(tableRect)) {
+                            throw 'tableRect is required';
+                        }
+                        table = {
+                            rect: tableRect,
+                            drawTableBorder: options.drawTableBorder,
+                            rows: []
+                        };
+                        if(addPage === true) {
+                            table.drawOnNewPage = true;
+                        }
+                        tables.push(table);
+                    }
+                }
+
                 const row = [];
                 table.rows.push(row);
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
@@ -52,7 +74,12 @@ function exportDataGrid(doc, dataGrid, options) {
                 }
             }
 
-            drawTable(doc, table);
+            tables.forEach((table) => {
+                if(table.drawOnNewPage === true) {
+                    doc.addPage();
+                }
+                drawTable(doc, table);
+            });
             resolve();
         });
     });
