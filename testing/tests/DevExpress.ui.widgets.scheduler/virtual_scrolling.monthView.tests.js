@@ -417,7 +417,7 @@ module('Virtual scrolling Month View', () => {
                             width: 75
                         }, {
                             left: -9924,
-                            top: -9525,
+                            top: -9527,
                             width: 75
                         }]
                     },
@@ -433,7 +433,7 @@ module('Virtual scrolling Month View', () => {
                             width: 75
                         }, {
                             left: -9924,
-                            top: -9525,
+                            top: -9527,
                             width: 75
                         }]
                     },

@@ -1226,7 +1226,7 @@ QUnit.testStart(function() {
 
             const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
 
-            assert.equal($reducedAppointment.eq(1).position().left, 0, 'first appt has right left position');
+            assert.roughEqual($reducedAppointment.eq(1).position().left, 0, 0.1, 'first appt has right left position');
         });
 
         QUnit.test('Reduced reccuring appt should have right left position in first column in grouped Month view', function(assert) {

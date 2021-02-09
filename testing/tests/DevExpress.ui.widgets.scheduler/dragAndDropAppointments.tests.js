@@ -2520,7 +2520,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             const cellPosition = scheduler.workSpace.getCell(6).position();
 
             assert.roughEqual(appointment.position.left, cellPosition.left, 2, 'correct left position');
-            assert.equal($secondPart.position.left, 0, 'correct left position');
+            assert.roughEqual($secondPart.position.left, 0, 0.1, 'second part has correct left position');
         });
 
         test('Appointment should be dragged correctly in grouped timeline (T739132)', function(assert) {
