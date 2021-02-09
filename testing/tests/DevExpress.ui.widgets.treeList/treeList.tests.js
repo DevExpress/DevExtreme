@@ -832,6 +832,26 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         assert.ok($treeListElement.find('.dx-page').first().hasClass('dx-selection'), 'current page - first');
         assert.strictEqual($treeListElement.find('.dx-page-size').length, 3, 'number of containers for page sizes');
     });
+
+    // T969977
+    QUnit.test('HeaderPanel should not have bottom border', function(assert) {
+        // arrange
+        const treeList = createTreeList({
+            dataSource: [],
+            columnChooser: {
+                enabled: true
+            },
+            showBorders: true,
+            columns: ['test']
+        });
+
+        this.clock.tick();
+        const $treeList = $(treeList.$element());
+        const $headerPanel = $treeList.find('.dx-treelist-header-panel');
+
+        // assert
+        assert.equal($headerPanel.css('border-bottom-width'), '0px', 'bottom border width');
+    });
 });
 
 QUnit.module('Option Changed', defaultModuleConfig, () => {
