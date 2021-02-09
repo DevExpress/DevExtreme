@@ -29,11 +29,11 @@ export const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alw
 
 export const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
-export function getElementWidth(element: Element | undefined | null): number {
+export function getElementWidth(element: Element | undefined): number {
   return toNumber(getElementComputedStyle(element)?.width);
 }
 
-export function getElementHeight(element: Element | undefined | null): number {
+export function getElementHeight(element: Element | undefined): number {
   return toNumber(getElementComputedStyle(element)?.height);
 }
 

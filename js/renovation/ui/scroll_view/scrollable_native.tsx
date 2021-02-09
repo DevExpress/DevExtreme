@@ -249,7 +249,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Effect() scrollEffect(): EffectReturn {
-    return subscribeToScrollEvent(this.containerRef.current,
+    return subscribeToScrollEvent(this.containerRef.current!,
       (event: Event) => this.props.onScroll?.({
         event,
         scrollOffset: this.scrollOffset(),
@@ -381,9 +381,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
     return {
       vertical: isVertical
-      && getElementHeight(this.contentRef.current) > getElementHeight(this.containerRef.current),
+      && getElementHeight(this.contentRef.current!) > getElementHeight(this.containerRef.current!),
       horizontal: isHorizontal
-      && getElementWidth(this.contentRef.current) > getElementWidth(this.containerRef.current),
+      && getElementWidth(this.contentRef.current!) > getElementWidth(this.containerRef.current!),
     };
   }
 

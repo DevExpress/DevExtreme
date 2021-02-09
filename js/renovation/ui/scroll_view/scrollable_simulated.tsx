@@ -371,7 +371,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Effect() scrollEffect(): EffectReturn {
-    return subscribeToScrollEvent(this.containerRef.current,
+    return subscribeToScrollEvent(this.containerRef.current!,
       () => {
         this.eventHandler(
           (scrollbar) => {
@@ -875,9 +875,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const distance: { left?: number; top?: number } = {};
 
     if (isVertical) {
-      distance.top = page * getElementHeight(this.containerRef.current);
+      distance.top = page * getElementHeight(this.containerRef.current!);
     } else {
-      distance.left = page * getElementWidth(this.containerRef.current);
+      distance.left = page * getElementWidth(this.containerRef.current!);
     }
 
     this.scrollBy(distance);
@@ -906,11 +906,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const distance: { left?: number; top?: number } = {};
 
     if (isVertical) {
-      distance.top = getElementHeight(this.contentRef.current)
-        - getElementHeight(this.containerRef.current);
+      distance.top = getElementHeight(this.contentRef.current!)
+        - getElementHeight(this.containerRef.current!);
     } else {
-      distance.left = getElementWidth(this.contentRef.current)
-        - getElementWidth(this.containerRef.current);
+      distance.left = getElementWidth(this.contentRef.current!)
+        - getElementWidth(this.containerRef.current!);
     }
 
     this.scrollTo(distance);
