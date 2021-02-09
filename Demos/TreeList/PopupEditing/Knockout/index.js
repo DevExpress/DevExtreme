@@ -12,8 +12,7 @@ window.onload = function() {
                 popup: {
                     title: "Employee Info",
                     showTitle: true,
-                    width: 700,
-                    position: { my: "center", at: "bottom", of: "#employees" }
+                    width: 700
                 }
             },
             columnAutoWidth: true,

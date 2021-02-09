@@ -13,8 +13,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             popup: {
                 title: "Employee Info",
                 showTitle: true,
-                width: 700,
-                position: { my: "top", at: "top", of: window }
+                width: 700
             }
         },
         columnAutoWidth: true,
