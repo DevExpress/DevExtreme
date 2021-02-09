@@ -74,7 +74,7 @@ if(Quill) {
             return isHeaderValue ? `${localize('heading')} ${value}` : localize('normalText');
         }
 
-        return localizationMessage.format(`dxHtmlEditor-${camelize(value)}`) || value;
+        return localize(value) || value;
     };
 
     ToolbarModule = class ToolbarModule extends BaseModule {
