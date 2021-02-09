@@ -8,6 +8,7 @@ import { DateTableCellBase } from '../cell';
 import { MonthDateTableCell } from '../../../month/date_table/cell';
 
 const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel').mockImplementation(() => true);
+const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
 
 describe('DateTableBody', () => {
   describe('Render', () => {
@@ -42,6 +43,7 @@ describe('DateTableBody', () => {
           key: '3',
         }]],
         allDayPanel: [{ startDate: new Date(), key: '1' }],
+        groupIndex: 1,
       }],
     };
     const cellTemplate = () => null;
@@ -59,7 +61,7 @@ describe('DateTableBody', () => {
     );
 
     beforeEach(() => {
-      getIsGroupedAllDayPanel.mockClear();
+      jest.clearAllMocks();
     });
 
     it('should render rows', () => {
@@ -147,6 +149,32 @@ describe('DateTableBody', () => {
       const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
       expect(allDayPanelTableBody.exists())
         .toBe(false);
+    });
+
+    it('should provide correct key to a groups\'s Fragment depending on groupIndex', () => {
+      render({
+        props: {
+          viewData: {
+            groupedData: [{
+              dateTable: [],
+              groupIndex: 3,
+            }, {
+              dateTable: [],
+              groupIndex: 4,
+            }],
+            leftVirtualCellWidth: 100,
+            rightVirtualCellWidth: 200,
+            leftVirtualCellCount: 2,
+          },
+        },
+      });
+
+      expect(getKeyByGroup)
+        .toHaveBeenCalledTimes(2);
+      expect(getKeyByGroup)
+        .toHaveBeenNthCalledWith(1, 3);
+      expect(getKeyByGroup)
+        .toHaveBeenNthCalledWith(2, 4);
     });
   });
 
