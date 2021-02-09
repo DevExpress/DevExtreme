@@ -111,7 +111,18 @@ const ResizingController = modules.ViewController.inherit({
     },
 
     _getBestFitWidths: function() {
-        return this._rowsView.getColumnWidths();
+        const rowsView = this._rowsView;
+        const columnHeadersView = this._columnHeadersView;
+        let widths = rowsView.getColumnWidths();
+
+        if(!widths?.length) {
+            const headersTableElement = columnHeadersView._tableElement;
+            columnHeadersView._tableElement = rowsView._tableElement.children('.dx-header');
+            widths = columnHeadersView.getColumnWidths();
+            columnHeadersView._tableElement = headersTableElement;
+        }
+
+        return widths;
     },
 
     _setVisibleWidths: function(visibleColumns, widths) {
@@ -604,12 +615,6 @@ const ResizingController = modules.ViewController.inherit({
     _updateLastSizes: function($rootElement) {
         this._lastWidth = $rootElement.width();
         this._lastHeight = $rootElement.height();
-    },
-
-    _getHeaderCellElements: function($tableElement) {
-        const columnHeadersView = this.component.getView('columnHeadersView');
-
-        return columnHeadersView.getColumnElements({ $tableElement: $tableElement.children('.dx-header') });
     },
 
     optionChanged: function(args) {
