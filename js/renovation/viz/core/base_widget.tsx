@@ -73,7 +73,7 @@ const calculateCanvas = (model: Partial<BaseWidgetProps> & Partial<BaseWidget>):
 
 export const viewFunction = (viewModel: BaseWidget): JSX.Element => {
   const grayFilterId = viewModel.props.disabled ? getNextDefsSvgId() : undefined;
-  const canvas = viewModel.props.canvas ?? DEFAULT_CANVAS;
+  const canvas = viewModel.props.canvas || DEFAULT_CANVAS;
   const widget = (
     <div
       ref={viewModel.containerRef}
