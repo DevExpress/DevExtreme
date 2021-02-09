@@ -6765,7 +6765,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxFileManager.Options.onContextMenuPreparing]
          */
-        onContextMenuPreparing?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: DevExpress.fileManagement.FileSystemItem, itemElement?: DevExpress.core.dxElement, cancel?: boolean, event?: DevExpress.events.event, items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'>, viewArea?: 'navPane' | 'itemView', actionButton?: boolean }) => any);
+        onContextMenuPreparing?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileSystemItem?: DevExpress.fileManagement.FileSystemItem, targetElement?: DevExpress.core.dxElement, cancel?: boolean, event?: DevExpress.events.event, items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'>, viewArea?: 'navPane' | 'itemView', actionButton?: boolean }) => any);
         /**
          * [descr:dxFileManager.Options.onCurrentDirectoryChanged]
          */
