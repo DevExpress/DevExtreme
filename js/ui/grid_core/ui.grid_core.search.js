@@ -286,7 +286,7 @@ module.exports = {
                             $items = $parent.children('td').eq(columnIndex).find('*');
                         }
                     }
-                    $items = $items && $items.length ? $items : $parent.find('*');
+                    $items = $items?.length ? $items : $parent.find('*');
 
                     $items = $items.filter(function(_, element) {
                         const $contents = $(element).contents();
@@ -371,7 +371,7 @@ module.exports = {
                     const dataType = column.lookup && column.lookup.dataType || column.dataType;
                     const isEquals = dataType !== 'string';
 
-                    if(allowSearch(column)) {
+                    if(allowSearch(column) && !parameters.isOnForm) {
                         if(this.option('templatesRenderAsynchronously')) {
                             if(!this._searchParams.length) {
                                 clearTimeout(this._highlightTimer);
