@@ -1518,6 +1518,33 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         assert.ok(treeList.getRowIndexByKey(2) >= 0, 'key is visible');
     });
 
+    // T969796
+    QUnit.test('TreeList navigateTo to the collapsed child row when scrolling is standard', function(assert) {
+        // arrange
+        const treeList = createTreeList({
+            height: 100,
+            dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, {
+                id: 5,
+                parent_id: 4
+            }],
+            scrolling: {
+                mode: 'standard',
+            },
+            keyExpr: 'id',
+            parentIdExpr: 'parent_id',
+            columns: ['id']
+        });
+
+        this.clock.tick();
+
+        treeList.navigateToRow(5);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(treeList.option('expandedRowKeys'), [4], 'parent node is expanded');
+        assert.ok(treeList.getRowIndexByKey(5) >= 0, 'key is visible');
+    });
+
     // T697860
     QUnit.test('dataSource change with columns should force one loading only', function(assert) {
         const loadingSpy = sinon.spy();

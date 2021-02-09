@@ -287,26 +287,6 @@ each([{
             expect(actualParams).toMatchObject(checkedParams);
           };
 
-          it('scrollEffect', () => {
-            const scrollOffset = { top: 150, left: 150 };
-            const containerRef = createContainerRef(scrollOffset);
-            const onScroll = jest.fn();
-            const scrollable = new Scrollable({ onScroll, direction });
-            scrollable.containerRef = containerRef;
-
-            scrollable.scrollEffect();
-            emit('scroll');
-
-            expect(onScroll).toHaveBeenCalledTimes(1);
-            checkScrollParams(onScroll.mock.calls[0][0], {
-              scrollOffset,
-              reachedTop: false,
-              reachedBottom: false,
-              reachedLeft: false,
-              reachedRight: false,
-            });
-          });
-
           it('scrollEffect should return unsubscribe callback', () => {
             const scrollable = new Scrollable({ direction });
             scrollable.containerRef = React.createRef();
@@ -563,85 +543,107 @@ each([{
             expect(getEventHandlers('dxscroll').length).toBe(0);
           });
 
-          it('ScrollPosition: { top: 0, left: 0 }', () => {
-            const scrollOffset = { top: 0, left: 0 };
-            const containerRef = createContainerRef(scrollOffset);
+          if (Scrollable === ScrollableNative) {
+            it('scrollEffect', () => {
+              const scrollOffset = { top: 150, left: 150 };
+              const containerRef = createContainerRef(scrollOffset);
+              const onScroll = jest.fn();
+              const scrollable = new Scrollable({ onScroll, direction });
+              scrollable.containerRef = containerRef;
 
-            const onScroll = jest.fn();
-            const scrollable = new Scrollable({ onScroll, direction });
-            scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
-            scrollable.scrollEffect();
-            emit('scroll');
+              scrollable.scrollEffect();
+              emit('scroll');
 
-            expect(onScroll).toHaveBeenCalledTimes(1);
-            checkScrollParams(onScroll.mock.calls[0][0], {
-              scrollOffset,
-              reachedTop: true,
-              reachedBottom: false,
-              reachedLeft: true,
-              reachedRight: false,
+              expect(onScroll).toHaveBeenCalledTimes(1);
+              checkScrollParams(onScroll.mock.calls[0][0], {
+                scrollOffset,
+                reachedTop: false,
+                reachedBottom: false,
+                reachedLeft: false,
+                reachedRight: false,
+              });
             });
-          });
 
-          it('ScrollPosition: { top: maxOffset, left: maxOffset }', () => {
-            const scrollOffset = { top: 300, left: 300 };
-            const containerRef = createContainerRef(scrollOffset, 'both');
+            it('ScrollPosition: { top: 0, left: 0 }', () => {
+              const scrollOffset = { top: 0, left: 0 };
+              const containerRef = createContainerRef(scrollOffset);
 
-            const onScroll = jest.fn();
-            const scrollable = new Scrollable({ onScroll, direction });
-            scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
-            scrollable.scrollEffect();
-            emit('scroll');
+              const onScroll = jest.fn();
+              const scrollable = new Scrollable({ onScroll, direction });
+              scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
+              scrollable.scrollEffect();
+              emit('scroll');
 
-            expect(onScroll).toHaveBeenCalledTimes(1);
-            checkScrollParams(onScroll.mock.calls[0][0], {
-              scrollOffset,
-              reachedTop: false,
-              reachedBottom: true,
-              reachedLeft: false,
-              reachedRight: true,
+              expect(onScroll).toHaveBeenCalledTimes(1);
+              checkScrollParams(onScroll.mock.calls[0][0], {
+                scrollOffset,
+                reachedTop: true,
+                reachedBottom: false,
+                reachedLeft: true,
+                reachedRight: false,
+              });
             });
-          });
 
-          it('ScrollPosition: { top: maxOffset - 1, left: maxOffset - 1 }', () => {
-            const scrollOffset = { top: 199, left: 199 };
-            const containerRef = createContainerRef(scrollOffset);
+            it('ScrollPosition: { top: maxOffset, left: maxOffset }', () => {
+              const scrollOffset = { top: 300, left: 300 };
+              const containerRef = createContainerRef(scrollOffset, 'both');
 
-            const onScroll = jest.fn();
-            const scrollable = new Scrollable({ onScroll, direction });
-            scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
-            scrollable.scrollEffect();
-            emit('scroll');
+              const onScroll = jest.fn();
+              const scrollable = new Scrollable({ onScroll, direction });
+              scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
+              scrollable.scrollEffect();
+              emit('scroll');
 
-            expect(onScroll).toHaveBeenCalledTimes(1);
-            checkScrollParams(onScroll.mock.calls[0][0], {
-              scrollOffset,
-              reachedTop: false,
-              reachedBottom: false,
-              reachedLeft: false,
-              reachedRight: false,
+              expect(onScroll).toHaveBeenCalledTimes(1);
+              checkScrollParams(onScroll.mock.calls[0][0], {
+                scrollOffset,
+                reachedTop: false,
+                reachedBottom: true,
+                reachedLeft: false,
+                reachedRight: true,
+              });
             });
-          });
 
-          it('ScrollPosition: { top: 1, left: 1 }', () => {
-            const scrollOffset = { top: 1, left: 1 };
-            const containerRef = createContainerRef(scrollOffset, 'both');
+            it('ScrollPosition: { top: maxOffset - 1, left: maxOffset - 1 }', () => {
+              const scrollOffset = { top: 199, left: 199 };
+              const containerRef = createContainerRef(scrollOffset);
 
-            const onScroll = jest.fn();
-            const scrollable = new Scrollable({ onScroll, direction });
-            scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
-            scrollable.scrollEffect();
-            emit('scroll');
+              const onScroll = jest.fn();
+              const scrollable = new Scrollable({ onScroll, direction });
+              scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
+              scrollable.scrollEffect();
+              emit('scroll');
 
-            expect(onScroll).toHaveBeenCalledTimes(1);
-            checkScrollParams(onScroll.mock.calls[0][0], {
-              scrollOffset,
-              reachedTop: false,
-              reachedBottom: false,
-              reachedLeft: false,
-              reachedRight: false,
+              expect(onScroll).toHaveBeenCalledTimes(1);
+              checkScrollParams(onScroll.mock.calls[0][0], {
+                scrollOffset,
+                reachedTop: false,
+                reachedBottom: false,
+                reachedLeft: false,
+                reachedRight: false,
+              });
             });
-          });
+
+            it('ScrollPosition: { top: 1, left: 1 }', () => {
+              const scrollOffset = { top: 1, left: 1 };
+              const containerRef = createContainerRef(scrollOffset, 'both');
+
+              const onScroll = jest.fn();
+              const scrollable = new Scrollable({ onScroll, direction });
+              scrollable.containerRef = containerRef as RefObject<HTMLDivElement>;
+              scrollable.scrollEffect();
+              emit('scroll');
+
+              expect(onScroll).toHaveBeenCalledTimes(1);
+              checkScrollParams(onScroll.mock.calls[0][0], {
+                scrollOffset,
+                reachedTop: false,
+                reachedBottom: false,
+                reachedLeft: false,
+                reachedRight: false,
+              });
+            });
+          }
         });
 
         it('should not raise any error if onScroll is not defined', () => {

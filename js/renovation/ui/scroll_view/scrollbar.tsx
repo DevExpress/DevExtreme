@@ -120,13 +120,18 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     let position = location;
     const prop = this.props.direction === DIRECTION_HORIZONTAL ? 'left' : 'top';
 
-    if (isPlainObject(location)) {
-      position = location[prop] || 0;
+    if (isPlainObject(position)) {
+      position = position[prop] || 0;
     }
 
     const scrollBarLocation = {};
     scrollBarLocation[prop] = this.calculateScrollBarPosition(position);
     move(this.scrollRef.current, scrollBarLocation);
+  }
+
+  @Method()
+  getDirection(): any {
+    return this.props.direction;
   }
 
   calculateScrollBarPosition(location): number {
@@ -479,7 +484,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.setLocation(currentLocation);
 
     this.moveContent();
-    this.moveTo(this.getLocation());
+    this.moveScrollbar(this.getLocation());
   }
 
   moveContent(): void {
@@ -487,6 +492,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
     this.getContainerRef()[`scroll${titleize(this.getProp())}`] = -location / this.props.scaleRatio;
     this.moveContentByTranslator(location);
+  }
+
+  moveScrollbar(location): void { // TODO: apply scale ratio
+    this.moveTo(location);
   }
 
   moveContentByTranslator(location): undefined | void {

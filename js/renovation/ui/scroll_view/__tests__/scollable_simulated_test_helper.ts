@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { isDefined } from '../../../../core/utils/type';
 import {
 
   ScrollDirection,
@@ -72,13 +71,11 @@ class ScrollableTestHelper {
     this.viewModel.horizontalScrollbarRef = React.createRef();
     this.viewModel.horizontalScrollbarRef.current = {};
 
-    this.initStyles(this.viewModel.containerRef.current,
-      args.containerSize || 100, args.containerSize || 200);
-    this.initStyles(this.viewModel.contentRef.current,
-      isDefined(args.contentSize) ? args.contentSize : 200,
-      isDefined(args.contentSize) ? args.contentSize : 200, args.overflow || false);
-    this.initStyles(this.viewModel.scrollableRef.current,
-      args.containerSize || 100, args.containerSize || 100);
+    const { contentSize = 200, containerSize = 100, overflow = false } = args;
+
+    this.initStyles(this.viewModel.containerRef.current, containerSize, contentSize);
+    this.initStyles(this.viewModel.contentRef.current, contentSize, contentSize, overflow);
+    this.initStyles(this.viewModel.scrollableRef.current, containerSize, contentSize);
 
     // eslint-disable-next-line max-len
     this.viewModel.getBaseDimension = (element, dimension) => parseInt(element.style[dimension], 10);
@@ -95,26 +92,26 @@ class ScrollableTestHelper {
       offsetWidth: {
         get() { return parseFloat(window.getComputedStyle(this).width) || 0; },
       },
-    });
-
-    Object.defineProperty(element, 'clientWidth', {
-      value: `${size}px`,
-      configurable: true,
-      writable: true,
-    });
-
-    Object.defineProperty(element, 'clientHeight', {
-      value: `${size}px`,
-      configurable: true,
-      writable: true,
+      scrollHeight: {
+        configurable: true,
+        get() { return scrollSize || 0; },
+      },
+      scrollWidth: {
+        configurable: true,
+        get() { return scrollSize || 0; },
+      },
+      clientWidth: {
+        configurable: true,
+        get() { return parseFloat(window.getComputedStyle(this).width) || 0; },
+      },
+      clientHeight: {
+        configurable: true,
+        get() { return parseFloat(window.getComputedStyle(this).width) || 0; },
+      },
     });
 
     ['width', 'height', 'outerWidth', 'outerHeight'].forEach((prop) => {
       element.style[prop] = `${size}px`;
-    });
-
-    ['scrollWidth', 'scrollHeight'].forEach((prop) => {
-      element.style[prop] = `${scrollSize}px`;
     });
 
     if (overflow) {
@@ -361,6 +358,21 @@ class ScrollableTestHelper {
       scrollWidth,
       scrollHeight,
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  checkScrollParams(jestExpect, actualParams, expectedParams): void {
+    const checkedParams = expectedParams;
+
+    if (this.direction === 'vertical') {
+      delete checkedParams.reachedLeft;
+      delete checkedParams.reachedRight;
+    } else if (this.direction === 'horizontal') {
+      delete checkedParams.reachedTop;
+      delete checkedParams.reachedBottom;
+    }
+
+    jestExpect(actualParams).toMatchObject(checkedParams);
   }
 }
 

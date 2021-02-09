@@ -372,7 +372,21 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Effect() scrollEffect(): EffectReturn {
     return subscribeToScrollEvent(this.containerRef.current,
-      () => this.props.onScroll?.(this.getEventArgs()));
+      () => {
+        this.eventHandler(
+          (scrollbar) => {
+            /* istanbul ignore next */
+            if (scrollbar.inBounds()) {
+              scrollbar.setLocation(-this.containerRef.current![`scroll${scrollbar.getDirection() === DIRECTION_HORIZONTAL ? 'Left' : 'Top'}`]);
+              return scrollbar.move();
+            }
+            /* istanbul ignore next */
+            return undefined;
+          },
+        );
+
+        return this.props.onScroll?.(this.getEventArgs());
+      });
   }
 
   getEventArgs(): ScrollEventArgs {

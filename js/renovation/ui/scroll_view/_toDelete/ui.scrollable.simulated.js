@@ -1,11 +1,9 @@
 import $ from '../../core/renderer';
-import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { each } from '../../core/utils/iterator';
 import { locate } from '../../animation/translator';
 import Class from '../../core/class';
 import devices from '../../core/devices';
-import { normalizeKeyName } from '../../events/utils/index';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
 import { when } from '../../core/utils/deferred';
 
@@ -184,21 +182,6 @@ export const SimulatedStrategy = Class.inherit({
     handleScroll: function() {
         this._component._updateRtlConfig();
         this._scrollAction();
-    },
-
-    _keyDownHandler: function(e) {
-        clearTimeout(this._updateHandlerTimeout);
-        this._updateHandlerTimeout = setTimeout(() => {
-            if(normalizeKeyName(e) === 'tab') {
-                this._eachScroller((scroller) => {
-                    scroller._updateHandler();
-                });
-            }
-        });
-
-        if(!this._$container.is(domAdapter.getActiveElement())) {
-            return;
-        }
     },
 
     location: function() {
