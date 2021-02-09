@@ -239,13 +239,13 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   @Method()
-  clientHeight(): number | undefined {
-    return this.containerRef.current?.clientHeight;
+  clientHeight(): number {
+    return this.containerRef.current!.clientHeight;
   }
 
   @Method()
-  clientWidth(): number | undefined {
-    return this.containerRef.current?.clientWidth;
+  clientWidth(): number {
+    return this.containerRef.current!.clientWidth;
   }
 
   @Effect() scrollEffect(): EffectReturn {

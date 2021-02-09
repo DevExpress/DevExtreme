@@ -983,6 +983,8 @@ describe('Simulated', () => {
             },
           };
           const scrollable = new Scrollable({ direction });
+          scrollable.contentRef = React.createRef();
+          scrollable.containerRef = React.createRef();
           scrollable.scrollTo = jest.fn();
           scrollable.onWidgetKeyDown(options);
           expect(scrollable.scrollTo).toBeCalledTimes(1);

@@ -1,3 +1,4 @@
+import React from 'react';
 import { mount } from 'enzyme';
 import { isDefined } from '../../../../core/utils/type';
 import {
@@ -56,17 +57,27 @@ class ScrollableTestHelper {
     this.isBoth = isBoth;
 
     this.scrollable = mount(viewFunction(this.viewModel) as JSX.Element);
-    this.viewModel.scrollableRef = this.scrollable.getDOMNode();
+    this.viewModel.scrollableRef = React.createRef();
+    this.viewModel.scrollableRef.current = this.scrollable.getDOMNode();
 
-    this.viewModel.containerRef = this.getContainerElement();
-    this.viewModel.contentRef = this.getContentElement();
+    this.viewModel.containerRef = React.createRef();
+    this.viewModel.containerRef.current = this.getContainerElement();
+    this.viewModel.contentRef = React.createRef();
+    this.viewModel.contentRef.current = this.getContentElement();
 
-    this.initStyles(this.viewModel.containerRef,
+    this.viewModel.wrapperRef = React.createRef();
+    this.viewModel.wrapperRef.current = {} as HTMLDivElement;
+    this.viewModel.verticalScrollbarRef = React.createRef();
+    this.viewModel.verticalScrollbarRef.current = {};
+    this.viewModel.horizontalScrollbarRef = React.createRef();
+    this.viewModel.horizontalScrollbarRef.current = {};
+
+    this.initStyles(this.viewModel.containerRef.current,
       args.containerSize || 100, args.containerSize || 200);
-    this.initStyles(this.viewModel.contentRef,
+    this.initStyles(this.viewModel.contentRef.current,
       isDefined(args.contentSize) ? args.contentSize : 200,
       isDefined(args.contentSize) ? args.contentSize : 200, args.overflow || false);
-    this.initStyles(this.viewModel.scrollableRef,
+    this.initStyles(this.viewModel.scrollableRef.current,
       args.containerSize || 100, args.containerSize || 100);
 
     // eslint-disable-next-line max-len
@@ -74,8 +85,8 @@ class ScrollableTestHelper {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  initStyles(ref, size, scrollSize, overflow?: boolean) {
-    const elementRef = ref;
+  initStyles(receivedElement, size, scrollSize, overflow?: boolean) {
+    const element = receivedElement;
 
     Object.defineProperties(window.HTMLElement.prototype, {
       offsetHeight: {
@@ -86,38 +97,38 @@ class ScrollableTestHelper {
       },
     });
 
-    Object.defineProperty(elementRef, 'clientWidth', {
+    Object.defineProperty(element, 'clientWidth', {
       value: `${size}px`,
       configurable: true,
       writable: true,
     });
 
-    Object.defineProperty(elementRef, 'clientHeight', {
+    Object.defineProperty(element, 'clientHeight', {
       value: `${size}px`,
       configurable: true,
       writable: true,
     });
 
     ['width', 'height', 'outerWidth', 'outerHeight'].forEach((prop) => {
-      elementRef.style[prop] = `${size}px`;
+      element.style[prop] = `${size}px`;
     });
 
     ['scrollWidth', 'scrollHeight'].forEach((prop) => {
-      elementRef.style[prop] = `${scrollSize}px`;
+      element.style[prop] = `${scrollSize}px`;
     });
 
     if (overflow) {
       ['overflowX', 'overflowY'].forEach((prop) => {
-        elementRef.style[prop] = overflow;
+        element.style[prop] = overflow;
       });
     }
 
-    elementRef.getBoundingClientRect = jest.fn(() => ({
+    element.getBoundingClientRect = jest.fn(() => ({
       width: size,
       height: size,
     }));
 
-    return elementRef;
+    return element;
   }
 
   getScrollable() {
@@ -133,7 +144,7 @@ class ScrollableTestHelper {
   }
 
   getScrollableRef() {
-    return this.viewModel.scrollableRef;
+    return this.viewModel.scrollableRef.current;
   }
 
   getScrollbars() {
@@ -169,8 +180,10 @@ class ScrollableTestHelper {
 
     const initSettings = (scrollbarRef) => {
       const scrollbar = scrollbarRef.instance();
-      scrollbar.scrollbarRef = scrollbarRef.getDOMNode();
-      scrollbar.scrollRef = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
+      scrollbar.scrollbarRef = React.createRef();
+      scrollbar.scrollbarRef.current = scrollbarRef.getDOMNode();
+      scrollbar.scrollRef = React.createRef();
+      scrollbar.scrollRef.current = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
 
       scrollbar.translateOffset = additionalProps.translateOffset;
       scrollbar.scrollableOffset = 0;
@@ -184,8 +197,8 @@ class ScrollableTestHelper {
             contentSize: 200,
             containerSize: 100,
             scrollableOffset: 0,
-            contentRef: { current: this.viewModel.contentRef },
-            containerRef: { current: this.viewModel.containerRef },
+            contentRef: { current: this.viewModel.contentRef.current },
+            containerRef: { current: this.viewModel.containerRef.current },
             ...additionalProps.props,
           },
         },
@@ -195,12 +208,12 @@ class ScrollableTestHelper {
     };
 
     if (this.isBoth) {
-      this.viewModel.horizontalScrollbarRef = initSettings(scrollbars.at(0));
-      this.viewModel.verticalScrollbarRef = initSettings(scrollbars.at(1));
+      this.viewModel.horizontalScrollbarRef.current = initSettings(scrollbars.at(0));
+      this.viewModel.verticalScrollbarRef.current = initSettings(scrollbars.at(1));
     } else if (this.isVertical) {
-      this.viewModel.verticalScrollbarRef = initSettings(scrollbars.at(0));
+      this.viewModel.verticalScrollbarRef.current = initSettings(scrollbars.at(0));
     } else if (this.isHorizontal) {
-      this.viewModel.horizontalScrollbarRef = initSettings(scrollbars.at(0));
+      this.viewModel.horizontalScrollbarRef.current = initSettings(scrollbars.at(0));
     }
   }
 
@@ -210,58 +223,62 @@ class ScrollableTestHelper {
     this.scrollBarHandlers.forEach((handler) => {
       this[`${handler}HandlerMock`] = jest.fn();
       if (this.isVertical) {
-        this.viewModel.verticalScrollbarRef[`${handler}Handler`] = this[`${handler}HandlerMock`];
+        this.viewModel.verticalScrollbarRef.current[`${handler}Handler`] = this[`${handler}HandlerMock`];
       }
       if (this.isHorizontal) {
-        this.viewModel.horizontalScrollbarRef[`${handler}Handler`] = this[`${handler}HandlerMock`];
+        this.viewModel.horizontalScrollbarRef.current[`${handler}Handler`] = this[`${handler}HandlerMock`];
       }
     });
   }
 
   changeScrollbarHandlerMock(handler, callback) {
     if (this.isBoth) {
-      this.viewModel.horizontalScrollbarRef[`${handler}Handler`] = (args) => callback(args);
-      this.viewModel.verticalScrollbarRef[`${handler}Handler`] = (args) => callback(args);
+      this.viewModel.horizontalScrollbarRef.current[`${handler}Handler`] = (args) => callback(args);
+      this.viewModel.verticalScrollbarRef.current[`${handler}Handler`] = (args) => callback(args);
     } else if (this.isVertical) {
-      this.viewModel.verticalScrollbarRef[`${handler}Handler`] = (args) => callback(args);
+      this.viewModel.verticalScrollbarRef.current[`${handler}Handler`] = (args) => callback(args);
     } else if (this.isHorizontal) {
-      this.viewModel.horizontalScrollbarRef[`${handler}Handler`] = (args) => callback(args);
+      this.viewModel.horizontalScrollbarRef.current[`${handler}Handler`] = (args) => callback(args);
     }
   }
 
   changeScrollbarProp(prop, value) {
     if (this.isBoth) {
-      this.viewModel.horizontalScrollbarRef.props[prop] = value;
-      this.viewModel.verticalScrollbarRef.props[prop] = value;
+      this.viewModel.horizontalScrollbarRef.current.props[prop] = value;
+      this.viewModel.verticalScrollbarRef.current.props[prop] = value;
     } else if (this.isVertical) {
-      this.viewModel.verticalScrollbarRef.props[prop] = value;
+      this.viewModel.verticalScrollbarRef.current.props[prop] = value;
     } else if (this.isHorizontal) {
-      this.viewModel.horizontalScrollbarRef.props[prop] = value;
+      this.viewModel.horizontalScrollbarRef.current.props[prop] = value;
     }
   }
 
   initContainerPosition({ top, left }) {
-    this.viewModel.containerRef.scrollTop = top;
-    this.viewModel.containerRef.scrollLeft = left;
+    this.viewModel.containerRef.current!.scrollTop = top;
+    this.viewModel.containerRef.current!.scrollLeft = left;
   }
 
   initScrollbarLocation({ top, left }) {
     if (this.isVertical) {
-      this.viewModel.verticalScrollbarRef.location = top;
+      this.viewModel.verticalScrollbarRef.current.location = top;
     }
     if (this.isHorizontal) {
-      this.viewModel.horizontalScrollbarRef.location = left;
+      this.viewModel.horizontalScrollbarRef.current.location = left;
     }
   }
 
   checkContainerPosition(jestExpect, expectedPosition) {
     if (this.isVertical) {
-      jestExpect(this.viewModel.verticalScrollbarRef.props.containerRef.current.scrollTop)
-        .toEqual(expectedPosition.top);
+      jestExpect(
+        this.viewModel.verticalScrollbarRef.current.props.containerRef.current
+          .scrollTop,
+      ).toEqual(expectedPosition.top);
     }
     if (this.isHorizontal) {
-      jestExpect(this.viewModel.horizontalScrollbarRef.props.containerRef.current.scrollLeft)
-        .toEqual(expectedPosition.left);
+      jestExpect(
+        this.viewModel.horizontalScrollbarRef.current.props.containerRef.current
+          .scrollLeft,
+      ).toEqual(expectedPosition.left);
     }
   }
 

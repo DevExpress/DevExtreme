@@ -356,13 +356,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   @Method()
-  clientHeight(): number | undefined {
-    return this.containerRef.current?.clientHeight;
+  clientHeight(): number {
+    return this.containerRef.current!.clientHeight;
   }
 
   @Method()
-  clientWidth(): number | undefined {
-    return this.containerRef.current?.clientWidth;
+  clientWidth(): number {
+    return this.containerRef.current!.clientWidth;
   }
 
   @Effect({ run: 'once' })
@@ -660,12 +660,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return {
       vertical:
         isVertical
-        && (Math.round(this.verticalScrollbarRef.current?.getMinOffset() || 0)
+        && (Math.round(this.verticalScrollbarRef.current!.getMinOffset() || 0)
           < 0
           || bounceEnabled),
       horizontal:
         isHorizontal
-        && (Math.round(this.horizontalScrollbarRef.current?.getMinOffset() || 0)
+        && (Math.round(this.horizontalScrollbarRef.current!.getMinOffset() || 0)
           < 0
           || bounceEnabled),
     };
@@ -690,11 +690,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const axis = dimension === 'width' ? 'x' : 'y';
 
     const overflowStyleName = `overflow${axis.toUpperCase()}`;
-    const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef.current || undefined) === 'hidden';
+    const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef.current!) === 'hidden';
     let contentSize = this.getRealDimension(this.contentRef.current, dimension);
 
     if (!isOverflowHidden) {
-      const containerScrollSize = this.contentRef.current?.[`scroll${titleize(dimension)}`] * this.getScaleRatio(dimension);
+      const containerScrollSize = this.contentRef.current![`scroll${titleize(dimension)}`] * this.getScaleRatio(dimension);
 
       contentSize = Math.max(containerScrollSize, contentSize);
     }
