@@ -131,13 +131,25 @@ const ResizingController = modules.ViewController.inherit({
     },
 
     _getBestFitWidths: function() {
+        const rowsView = this._rowsView;
+        const columnHeadersView = this._columnHeadersView;
+
         if(!this.option('legacyRendering')) {
-            return this._rowsView.getColumnWidths();
+            let widths = rowsView.getColumnWidths();
+
+            if(!widths?.length) {
+                const headersTableElement = columnHeadersView._tableElement;
+                columnHeadersView._tableElement = rowsView._tableElement.children('.dx-header');
+                widths = columnHeadersView.getColumnWidths();
+                columnHeadersView._tableElement = headersTableElement;
+            }
+
+            return widths;
         }
 
-        const rowsColumnWidths = this._rowsView.getColumnWidths();
-        const headerColumnWidths = this._columnHeadersView && this._columnHeadersView.getColumnWidths();
-        const footerColumnWidths = this._footerView && this._footerView.getColumnWidths();
+        const rowsColumnWidths = rowsView.getColumnWidths();
+        const headerColumnWidths = columnHeadersView?.getColumnWidths();
+        const footerColumnWidths = this._footerView?.getColumnWidths();
 
         let resultWidths = mergeArraysByMaxValue(rowsColumnWidths, headerColumnWidths);
         resultWidths = mergeArraysByMaxValue(resultWidths, footerColumnWidths);
@@ -619,12 +631,6 @@ const ResizingController = modules.ViewController.inherit({
     _updateLastSizes: function($rootElement) {
         this._lastWidth = $rootElement.width();
         this._lastHeight = $rootElement.height();
-    },
-
-    _getHeaderCellElements: function($tableElement) {
-        const columnHeadersView = this.component.getView('columnHeadersView');
-
-        return columnHeadersView.getColumnElements({ $tableElement: $tableElement.children('.dx-header') });
     },
 
     optionChanged: function(args) {
