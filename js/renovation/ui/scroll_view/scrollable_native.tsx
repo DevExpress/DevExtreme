@@ -12,7 +12,7 @@ import {
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
 import { isDefined } from '../../../core/utils/type';
 import BaseWidgetProps from '../../utils/base_props';
@@ -147,7 +147,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   content(): HTMLDivElement {
-    return this.contentRef;
+    return this.contentRef.current!;
   }
 
   @Method()
@@ -156,10 +156,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
 
     if (isVertical) {
-      this.containerRef.scrollTop += Math.round(location.top);
+      this.containerRef.current!.scrollTop += Math.round(location.top);
     }
     if (isHorizontal) {
-      this.containerRef.scrollLeft += normalizeCoordinate('left', Math.round(location.left), this.props.rtlEnabled);
+      this.containerRef.current!.scrollLeft += normalizeCoordinate('left', Math.round(location.left), this.props.rtlEnabled);
     }
   }
 
@@ -191,10 +191,18 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
       this.scrollTo({
         top: getElementLocation(
-          element, scrollOffset, DIRECTION_VERTICAL, this.containerRef, this.props.rtlEnabled,
+          element,
+          scrollOffset,
+          DIRECTION_VERTICAL,
+          this.containerRef.current!,
+          this.props.rtlEnabled,
         ),
         left: getElementLocation(
-          element, scrollOffset, DIRECTION_HORIZONTAL, this.containerRef, this.props.rtlEnabled,
+          element,
+          scrollOffset,
+          DIRECTION_HORIZONTAL,
+          this.containerRef.current!,
+          this.props.rtlEnabled,
         ),
       });
     }
@@ -213,10 +221,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @Method()
   scrollOffset(): ScrollableLocation {
     const { rtlEnabled } = this.props;
-    const { left, top } = getContainerOffsetInternal(this.containerRef);
+    const { left, top } = getContainerOffsetInternal(this.containerRef.current!);
     return {
-      left: getPublicCoordinate('left', left, this.containerRef, rtlEnabled),
-      top: getPublicCoordinate('top', top, this.containerRef, rtlEnabled),
+      left: getPublicCoordinate('left', left, this.containerRef.current!, rtlEnabled),
+      top: getPublicCoordinate('top', top, this.containerRef.current!, rtlEnabled),
     };
   }
 
@@ -232,21 +240,21 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @Method()
   clientHeight(): number {
-    return this.containerRef.clientHeight;
+    return this.containerRef.current!.clientHeight;
   }
 
   @Method()
   clientWidth(): number {
-    return this.containerRef.clientWidth;
+    return this.containerRef.current!.clientWidth;
   }
 
-  @Effect() scrollEffect(): DisposeEffectReturn {
-    return subscribeToScrollEvent(this.containerRef,
+  @Effect() scrollEffect(): EffectReturn {
+    return subscribeToScrollEvent(this.containerRef.current!,
       (event: Event) => this.props.onScroll?.({
         event,
         scrollOffset: this.scrollOffset(),
         ...getBoundaryProps(
-          this.props.direction, this.scrollOffset(), this.containerRef, this.pushBackValue,
+          this.props.direction, this.scrollOffset(), this.containerRef.current!, this.pushBackValue,
         ),
       }));
   }
@@ -256,14 +264,14 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const namespace = 'dxScrollable';
 
     /* istanbul ignore next */
-    dxScrollInit.on(this.wrapperRef,
+    dxScrollInit.on(this.wrapperRef.current,
       (e: Event) => {
         this.handleInit(e);
       }, {
         getDirection: () => this.getDirection(),
         validate: (e) => this.validate(e),
         isNative: true,
-        scrollTarget: this.containerRef,
+        scrollTarget: this.containerRef.current,
       }, { namespace });
 
     return (): void => dxScrollInit.off(this.wrapperRef, { namespace });
@@ -273,48 +281,48 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   startEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollable';
 
-    dxScrollStart.on(this.wrapperRef,
+    dxScrollStart.on(this.wrapperRef.current,
       (e: Event) => {
         this.handleStart(e);
       }, { namespace });
 
-    return (): void => dxScrollStart.off(this.wrapperRef, { namespace });
+    return (): void => dxScrollStart.off(this.wrapperRef.current, { namespace });
   }
 
   @Effect()
   moveEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollable';
 
-    dxScrollMove.on(this.wrapperRef,
+    dxScrollMove.on(this.wrapperRef.current,
       (e: Event) => {
         this.handleMove(e);
       }, { namespace });
 
-    return (): void => dxScrollMove.off(this.wrapperRef, { namespace });
+    return (): void => dxScrollMove.off(this.wrapperRef.current, { namespace });
   }
 
   @Effect()
   endEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollable';
 
-    dxScrollEnd.on(this.wrapperRef,
+    dxScrollEnd.on(this.wrapperRef.current,
       (e: Event) => {
         this.handleEnd(e);
       }, { namespace });
 
-    return (): void => dxScrollEnd.off(this.wrapperRef, { namespace });
+    return (): void => dxScrollEnd.off(this.wrapperRef.current, { namespace });
   }
 
   @Effect()
   stopEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollable';
 
-    dxScrollStop.on(this.wrapperRef,
+    dxScrollStop.on(this.wrapperRef.current,
       (event: Event) => {
         this.handleStop(event);
       }, { namespace });
 
-    return (): void => dxScrollStop.off(this.wrapperRef, { namespace });
+    return (): void => dxScrollStop.off(this.wrapperRef.current, { namespace });
   }
 
   @Effect()
@@ -373,9 +381,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
     return {
       vertical: isVertical
-      && getElementHeight(this.contentRef) > getElementHeight(this.containerRef),
+      && getElementHeight(this.contentRef.current!) > getElementHeight(this.containerRef.current!),
       horizontal: isHorizontal
-      && getElementWidth(this.contentRef) > getElementWidth(this.containerRef),
+      && getElementWidth(this.contentRef.current!) > getElementWidth(this.containerRef.current!),
     };
   }
 
@@ -403,7 +411,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     const { delta, shiftKey } = e as any;
     const {
       scrollLeft, scrollTop, scrollWidth, clientWidth, scrollHeight, clientHeight,
-    } = this.containerRef;
+    } = this.containerRef.current!;
 
     if (delta > 0) {
       return shiftKey ? !scrollLeft : !scrollTop;

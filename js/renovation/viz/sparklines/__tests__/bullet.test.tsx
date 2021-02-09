@@ -299,8 +299,9 @@ describe('Bullet', () => {
             target: 15,
             tooltip: { enabled: true },
           });
+          bullet.widgetRef = React.createRef();
           const baseRef = {} as any;
-          bullet.widgetRef = { svg: jest.fn(() => baseRef) } as any;
+          bullet.widgetRef.current = { svg: jest.fn(() => baseRef) } as any;
           bullet.pointerHandler = jest.fn();
           bullet.tooltipEffect();
 
@@ -650,7 +651,8 @@ describe('Bullet', () => {
             left: 200,
           };
           const bullet = new Bullet({ });
-          bullet.widgetRef = {
+          bullet.widgetRef = React.createRef();
+          bullet.widgetRef.current = {
             svg: jest.fn(() => ({
               getBoundingClientRect: jest.fn().mockReturnValue(offsetState),
             })),

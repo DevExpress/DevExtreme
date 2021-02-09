@@ -100,7 +100,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   }
 
   @Effect({ run: 'always' }) effectUpdateChildProps(): void {
-    const parentWidth = getElementWidth(this.parentRef);
+    const parentWidth = this.parentRef.current ? getElementWidth(this.parentRef.current) : 0;
     if (parentWidth > 0) {
       this.updateChildrenProps();
     }
@@ -113,10 +113,10 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
   updateChildrenProps(): void {
     const currentElementsWidth = getElementsWidth({
-      parent: this.parentRef,
-      pageSizes: this.pageSizesRef,
-      info: this.infoTextRef,
-      pages: this.pagesRef,
+      parent: this.parentRef.current!,
+      pageSizes: this.pageSizesRef?.current || undefined,
+      info: this.infoTextRef?.current || undefined,
+      pages: this.pagesRef!.current!,
     });
     const isEmpty = !isDefined(this.elementsWidth);
     if (isEmpty) {

@@ -62,57 +62,57 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   content(): HTMLDivElement {
-    return this.scrollableRef.content();
+    return this.scrollableRef.current!.content();
   }
 
   @Method()
   scrollBy(distance: number | Partial<ScrollableLocation>): void {
-    this.scrollableRef.scrollBy(distance);
+    this.scrollableRef.current!.scrollBy(distance);
   }
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
-    this.scrollableRef.scrollTo(targetLocation);
+    this.scrollableRef.current!.scrollTo(targetLocation);
   }
 
   @Method()
   scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
-    this.scrollableRef.scrollToElement(element, offset);
+    this.scrollableRef.current!.scrollToElement(element, offset);
   }
 
   @Method()
   scrollHeight(): number {
-    return this.scrollableRef.scrollHeight();
+    return this.scrollableRef.current!.scrollHeight();
   }
 
   @Method()
   scrollWidth(): number {
-    return this.scrollableRef.scrollWidth();
+    return this.scrollableRef.current!.scrollWidth();
   }
 
   @Method()
   scrollOffset(): ScrollableLocation {
-    return this.scrollableRef.scrollOffset();
+    return this.scrollableRef.current!.scrollOffset();
   }
 
   @Method()
   scrollTop(): number {
-    return this.scrollableRef.scrollTop();
+    return this.scrollableRef.current!.scrollTop();
   }
 
   @Method()
   scrollLeft(): number {
-    return this.scrollableRef.scrollLeft();
+    return this.scrollableRef.current!.scrollLeft();
   }
 
   @Method()
   clientHeight(): number {
-    return this.scrollableRef.clientHeight();
+    return this.scrollableRef.current!.clientHeight();
   }
 
   @Method()
   clientWidth(): number {
-    return this.scrollableRef.clientWidth();
+    return this.scrollableRef.current!.clientWidth();
   }
 
   // eslint-disable-next-line class-methods-use-this
