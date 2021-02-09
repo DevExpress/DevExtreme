@@ -187,9 +187,8 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
 
             const rowIndexByKey = that.getFocusedRowIndexByKey(key);
-            const isPaginate = dataController.getDataSource().paginate();
 
-            if(!isAutoNavigate && needFocusRow || !isPaginate || rowIndexByKey >= 0) {
+            if(!isAutoNavigate && needFocusRow || rowIndexByKey >= 0) {
                 that._navigateTo(key, d, needFocusRow);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
