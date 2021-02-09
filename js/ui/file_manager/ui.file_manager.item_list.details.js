@@ -290,7 +290,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             fileItems = this._getFileItemsForContextMenu(item);
         }
 
-        e = extend({}, {
+        const eventArgs = extend({}, {
             targetElement: e.target === 'content' && isDefined(e.row) ? this._filesView.getRowElement(e.rowIndex) : undefined,
             itemData: item,
             options: this._contextMenu.option(),
@@ -298,8 +298,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             actionButton: false,
             cancel: false
         });
-        this._raiseContextMenuShowing(e);
-        e.items = e.cancel ? [] : this._contextMenu.createContextMenuItems(fileItems, e.items, item);
+        this._raiseContextMenuShowing(eventArgs);
+        e.items = eventArgs.cancel ? [] : this._contextMenu.createContextMenuItems(fileItems, eventArgs.items, item);
     }
 
     _onFilesViewSelectionChanged({ component, selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
