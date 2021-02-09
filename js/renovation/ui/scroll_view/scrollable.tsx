@@ -87,7 +87,7 @@ export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>(
 }, {
   device: (): boolean => !nativeScrolling,
   options: {
-    useNative: true,
+    useNative: false,
   },
 }, {
   device: (): boolean => nativeScrolling && devices.real().platform === 'android' && !browser.mozilla,

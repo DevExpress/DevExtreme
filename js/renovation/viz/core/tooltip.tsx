@@ -1,6 +1,6 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState,
-  RefObject, Method, Template, Event,
+  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState, Portal,
+  RefObject, Method, Template, Event, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
 
@@ -13,16 +13,17 @@ import { isDefined } from '../../../core/utils/type';
 
 import {
   StrictSize, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
-  Font, TooltipCoordinates, Canvas,
+  Font, TooltipCoordinates, Canvas, Container,
 } from './common/types.d';
 import {
   Format, EventData, OnTooltipHiddenFn, OnTooltipShownFn,
 } from '../common/types.d';
 
 import {
-  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, isTextEmpty,
+  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, getCanvas, isTextEmpty,
 } from './common/tooltip_utils';
 import { normalizeEnum } from '../../../viz/core/utils';
+import domAdapter from '../../../core/dom_adapter';
 import { isUpdatedFlatObject } from '../common/utils';
 
 interface PinnedSize extends StrictSize {
@@ -67,6 +68,7 @@ export const viewFunction = ({
   textSizeWithPaddings,
   border,
   filterId,
+  container,
   customizedOptions,
   pointerEvents,
   cssClassName,
@@ -78,7 +80,8 @@ export const viewFunction = ({
     cornerRadius, arrowWidth,
   },
 }: Tooltip): JSX.Element => {
-  if (!visible || !correctedCoordinates || isTextEmpty(customizedOptions) || isEmptyContainer) {
+  if (!visible || !correctedCoordinates
+    || isTextEmpty(customizedOptions) || isEmptyContainer) {
     return <div />;
   }
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
@@ -92,101 +95,103 @@ export const viewFunction = ({
   const textFont = font ?? DEFAULT_FONT;
   const cloudShadow = shadow ?? DEFAULT_SHADOW;
   return (
-    <div
-      className={cssClassName}
-      style={{
-        position: 'absolute',
-        pointerEvents: 'none',
-        left: cloudSize.x,
-        top: cloudSize.y,
-        zIndex,
-      }}
-    >
-      <RootSvgElement
-        width={cloudSize.width}
-        height={cloudSize.height}
-        styles={{
+    <Portal container={container}>
+      <div
+        className={cssClassName}
+        style={{
           position: 'absolute',
-          ...styles,
+          pointerEvents: 'none',
+          left: cloudSize.x,
+          top: cloudSize.y,
+          zIndex,
         }}
       >
-        <defs>
-          <ShadowFilter
-            id={filterId}
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
-            blur={cloudShadow.blur}
-            color={cloudShadow.color}
-            offsetX={cloudShadow.offsetX}
-            offsetY={cloudShadow.offsetY}
-            opacity={cloudShadow.opacity}
-          />
-        </defs>
-        <g
-          filter={getFuncIri(filterId)}
-          ref={cloudRef}
-          transform={`translate(${-cloudSize.x}, ${-cloudSize.y})`}
+        <RootSvgElement
+          width={cloudSize.width}
+          height={cloudSize.height}
+          styles={{
+            position: 'absolute',
+            ...styles,
+          }}
         >
-          <PathSvgElement
-            pointerEvents={pointerEvents}
-            d={d}
-            fill={customizedOptions.color}
-            stroke={customizedOptions.borderColor}
-            strokeWidth={border.strokeWidth}
-            strokeOpacity={border.strokeOpacity}
-            dashStyle={border.dashStyle}
-            opacity={opacity}
-            rotate={angle}
-            rotateX={correctedCoordinates.x}
-            rotateY={correctedCoordinates.y}
-          />
-          {(customizedOptions.html || TooltipTemplate) ? null
-            : (
-              <g
-                textAnchor="middle"
-                ref={textRef}
-                transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - textSize.height / 2 - textSize.y})`}
-              >
-                <TextSvgElement
-                  text={customizedOptions.text}
-                  styles={{
-                    fill: customizedOptions.fontColor,
-                    fontFamily: textFont.family,
-                    fontSize: textFont.size,
-                    fontWeight: textFont.weight,
-                    opacity: textFont.opacity,
-                    pointerEvents,
-                  }}
-                />
-              </g>
-            )}
-        </g>
-      </RootSvgElement>
-      {!(customizedOptions.html || TooltipTemplate) ? null
-        : (
-          <div
-            ref={htmlRef}
-            style={{
-              position: 'relative',
-              display: 'inline-block',
-              left: correctedCoordinates.x - cloudSize.x - textSize.width / 2,
-              top: correctedCoordinates.y - cloudSize.y - textSize.height / 2,
-              fill: customizedOptions.fontColor,
-              fontFamily: textFont.family,
-              fontSize: textFont.size,
-              fontWeight: textFont.weight,
-              opacity: textFont.opacity,
-              pointerEvents,
-              direction: rtl ? 'rtl' : 'ltr',
-            }}
+          <defs>
+            <ShadowFilter
+              id={filterId}
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+              blur={cloudShadow.blur}
+              color={cloudShadow.color}
+              offsetX={cloudShadow.offsetX}
+              offsetY={cloudShadow.offsetY}
+              opacity={cloudShadow.opacity}
+            />
+          </defs>
+          <g
+            filter={getFuncIri(filterId)}
+            ref={cloudRef}
+            transform={`translate(${-cloudSize.x}, ${-cloudSize.y})`}
           >
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            {TooltipTemplate && (<TooltipTemplate {...data} />)}
-          </div>
-        )}
-    </div>
+            <PathSvgElement
+              pointerEvents={pointerEvents}
+              d={d}
+              fill={customizedOptions.color}
+              stroke={customizedOptions.borderColor}
+              strokeWidth={border.strokeWidth}
+              strokeOpacity={border.strokeOpacity}
+              dashStyle={border.dashStyle}
+              opacity={opacity}
+              rotate={angle}
+              rotateX={correctedCoordinates.x}
+              rotateY={correctedCoordinates.y}
+            />
+            {(customizedOptions.html || TooltipTemplate) ? null
+              : (
+                <g
+                  textAnchor="middle"
+                  ref={textRef}
+                  transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - textSize.height / 2 - textSize.y})`}
+                >
+                  <TextSvgElement
+                    text={customizedOptions.text}
+                    styles={{
+                      fill: customizedOptions.fontColor,
+                      fontFamily: textFont.family,
+                      fontSize: textFont.size,
+                      fontWeight: textFont.weight,
+                      opacity: textFont.opacity,
+                      pointerEvents,
+                    }}
+                  />
+                </g>
+              )}
+          </g>
+        </RootSvgElement>
+        {!(customizedOptions.html || TooltipTemplate) ? null
+          : (
+            <div
+              ref={htmlRef}
+              style={{
+                position: 'relative',
+                display: 'inline-block',
+                left: correctedCoordinates.x - cloudSize.x - textSize.width / 2,
+                top: correctedCoordinates.y - cloudSize.y - textSize.height / 2,
+                fill: customizedOptions.fontColor,
+                fontFamily: textFont.family,
+                fontSize: textFont.size,
+                fontWeight: textFont.weight,
+                opacity: textFont.opacity,
+                pointerEvents,
+                direction: rtl ? 'rtl' : 'ltr',
+              }}
+            >
+              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+              {TooltipTemplate && (<TooltipTemplate {...data} />)}
+            </div>
+          )}
+      </div>
+    </Portal>
   );
 };
 
@@ -197,6 +202,8 @@ export class TooltipProps {
   @OneWay() border?: InitialBorder = DEFAULT_BORDER;
 
   @OneWay() data?: TooltipData = {};
+
+  @ForwardRef() rootWidget?: RefObject<HTMLDivElement>;
 
   @OneWay() paddingLeftRight? = 18;
 
@@ -214,6 +221,8 @@ export class TooltipProps {
 
   @OneWay() offset? = 0;
 
+  @OneWay() container?: Container;
+
   @OneWay() opacity?: number;
 
   @OneWay() format?: Format;
@@ -221,8 +230,6 @@ export class TooltipProps {
   @OneWay() argumentFormat?: Format;
 
   @OneWay() customizeTooltip?: CustomizeTooltipFn;
-
-  @OneWay() canvas?: Canvas = DEFAULT_CANVAS;
 
   @OneWay() font?: Font = DEFAULT_FONT;
 
@@ -246,11 +253,11 @@ export class TooltipProps {
 
   @OneWay() className?: string;
 
-  @OneWay() eventData?: EventData<never>;
+  @OneWay() eventData?: EventData<unknown>;
 
-  @Event() onTooltipHidden?: OnTooltipHiddenFn<never>;
+  @Event() onTooltipHidden?: OnTooltipHiddenFn<EventData<unknown>>;
 
-  @Event() onTooltipShown?: OnTooltipShownFn<never>;
+  @Event() onTooltipShown?: OnTooltipShownFn<EventData<unknown>>;
 }
 
 @Component({
@@ -264,7 +271,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @InternalState() cloudSize: PinnedSize = DEFAULT_SIZE;
 
-  @InternalState() currentEventData?: EventData<never>;
+  @InternalState() currentEventData?: EventData<unknown>;
 
   @InternalState() isEmptyContainer = false;
 
@@ -298,10 +305,10 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   eventsEffect(): void {
     const {
       onTooltipShown, onTooltipHidden, visible,
-      eventData = {} as EventData<never>, // TODO: remove {} after fix nested props + test
+      eventData = {} as EventData<unknown>, // TODO: remove {} after fix nested props + test
     } = this.props;
-    const isEqual = (object1: EventData<never> | undefined,
-      object2: EventData<never>): boolean => {
+    const isEqual = (object1: EventData<unknown> | undefined,
+      object2: EventData<unknown>): boolean => {
       if (!object1) {
         return false;
       }
@@ -355,6 +362,25 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     return {};
   }
 
+  get container(): HTMLElement {
+    const propsContainer = this.props.container;
+    if (propsContainer) {
+      if (typeof propsContainer === 'string') {
+        const tmp = this.props.rootWidget;
+        let node = tmp?.closest(propsContainer);
+        if (!node) {
+          node = domAdapter.getDocument().querySelector(propsContainer);
+        }
+        if (node) {
+          return node as HTMLElement;
+        }
+      } else {
+        return propsContainer;
+      }
+    }
+    return domAdapter.getBody();
+  }
+
   get customizedOptions(): CustomizedOptions {
     const {
       data, customizeTooltip, color, border, font,
@@ -393,8 +419,9 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   }
 
   get correctedCoordinates(): TooltipCoordinates | false {
+    const canvas = getCanvas(this.container);
     const {
-      canvas, x, y, offset, arrowLength,
+      x, y, offset, arrowLength,
     } = this.props;
     return recalculateCoordinates({
       canvas: canvas ?? DEFAULT_CANVAS,

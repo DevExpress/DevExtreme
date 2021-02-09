@@ -81,15 +81,6 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 done2();
             });
 
-        const done3 = assert.async();
-        this.controller
-            .getFiles(selectedDir)
-            .done(files => {
-                assert.equal(files.length, 1);
-                assert.equal(files[0].fileItem.name, 'File1');
-                done3();
-            });
-
         this.clock.tick(100);
     });
 

@@ -489,6 +489,8 @@ QUnit.module('Initialization', {
 
     QUnit.test('Pushed directly from store item should be rerendered correctly', function(assert) {
         const data = new DataSource({
+            pushAggregationTimeout: 0,
+            reshapeOnPush: true,
             store: {
                 type: 'array',
                 key: 'id',
@@ -555,6 +557,8 @@ QUnit.module('Initialization', {
 
         const scheduler = createWrapper({
             dataSource: {
+                pushAggregationTimeout: 0,
+                reshapeOnPush: true,
                 load: () => data,
                 key: 'id'
             },

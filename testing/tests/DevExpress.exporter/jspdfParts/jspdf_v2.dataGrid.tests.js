@@ -1,9 +1,10 @@
 import $ from 'jquery';
 import { jsPDF } from 'jspdf';
 
-import { isDefined, isFunction, isObject } from 'core/utils/type';
+import { isFunction, isObject } from 'core/utils/type';
 
 import 'ui/data_grid/ui.data_grid';
+import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -21,138 +22,6 @@ const moduleConfig = {
         this.customizeCellCallCount = 0;
     }
 };
-
-function exportDataGrid(doc, dataGrid, options) {
-    if(!isDefined(options.rect)) {
-        throw 'options.rect is required';
-    }
-    const dataProvider = dataGrid.getDataProvider();
-    return new Promise((resolve) => {
-        dataProvider.ready().done(() => {
-            const table = {
-                rect: options.rect,
-                drawTableBorder: options.drawTableBorder,
-                rows: []
-            };
-
-            const columns = dataProvider.getColumns();
-            const dataRowsCount = dataProvider.getRowsCount();
-            for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
-                const row = [];
-                table.rows.push(row);
-                for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
-                    const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-                    const pdfCell = {
-                        text: cellData.value
-                    };
-
-                    if(options.onCellExporting) {
-                        options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
-                    }
-
-                    row.push(pdfCell);
-
-                    if(pdfCell.drawLeftBorder === false) {
-                        if(row.length > 1) {
-                            row[row.length - 2].drawRightBorder = 0;
-                        }
-                    } else if(!isDefined(pdfCell.drawLeftBorder)) {
-                        if(row.length > 1 && row[row.length - 2].drawRightBorder === false) {
-                            pdfCell.drawLeftBorder = false;
-                        }
-                    }
-
-                    if(pdfCell.drawTopBorder === false) {
-                        if(table.rows.length > 1) {
-                            table.rows[table.rows.length - 2][row.length - 1].drawBottomBorder = false;
-                        }
-                    } else if(!isDefined(pdfCell.drawTopBorder)) {
-                        if(table.rows.length > 1 && table.rows[table.rows.length - 2][row.length - 1].drawBottomBorder === false) {
-                            pdfCell.drawTopBorder = false;
-                        }
-                    }
-                }
-            }
-
-            drawTable(doc, table);
-            resolve();
-        });
-    });
-}
-
-function drawTable(doc, table) {
-    if(!isDefined(doc)) {
-        throw 'doc is required';
-    }
-
-    function drawBorder(rect, drawLeftBorder = true, drawRightBorder = true, drawTopBorder = true, drawBottomBorder = true) {
-        if(!isDefined(rect)) {
-            throw 'rect is required';
-        }
-
-        const defaultBorderLineWidth = 1;
-        if(!drawLeftBorder && !drawRightBorder && !drawTopBorder && !drawBottomBorder) {
-            return;
-        } else if(drawLeftBorder && drawRightBorder && drawTopBorder && drawBottomBorder) {
-            doc.setLineWidth(defaultBorderLineWidth);
-            doc.rect(rect.x, rect.y, rect.w, rect.h);
-        } else {
-            doc.setLineWidth(defaultBorderLineWidth);
-
-            if(drawTopBorder) {
-                doc.line(rect.x, rect.y, rect.x + rect.w, rect.y); // top
-            }
-
-            if(drawLeftBorder) {
-                doc.line(rect.x, rect.y, rect.x, rect.y + rect.h); // left
-            }
-
-            if(drawRightBorder) {
-                doc.line(rect.x + rect.w, rect.y, rect.x + rect.w, rect.y + rect.h); // right
-            }
-
-            if(drawBottomBorder) {
-                doc.line(rect.x, rect.y + rect.h, rect.x + rect.w, rect.y + rect.h); // bottom
-            }
-        }
-    }
-
-    function drawRow(rowCells) {
-        if(!isDefined(rowCells)) {
-            throw 'rowCells is required';
-        }
-        rowCells.forEach(cell => {
-            if(cell.skip === true) {
-                return;
-            }
-            if(!isDefined(cell.rect)) {
-                throw 'cell.rect is required';
-            }
-            if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-                const textY = cell.rect.y + (cell.rect.h / 2);
-                doc.text(cell.text, cell.rect.x, textY, { baseline: 'middle' }); // align by vertical 'middle', https://github.com/MrRio/jsPDF/issues/1573
-            }
-            drawBorder(cell.rect, cell.drawLeftBorder, cell.drawRightBorder, cell.drawTopBorder, cell.drawBottomBorder);
-        });
-    }
-
-    if(!isDefined(table)) {
-        return Promise.resolve();
-    }
-    if(!isDefined(table.rect)) {
-        throw 'table.rect is required';
-    }
-
-    if(isDefined(table.rows)) {
-        for(let rowIndex = 0; rowIndex < table.rows.length; rowIndex++) {
-            drawRow(table.rows[rowIndex]);
-        }
-    }
-
-    if(isDefined(table.drawTableBorder) ? table.drawTableBorder : (isDefined(table.rows) && table.rows.length === 0)) {
-        drawBorder(table.rect);
-    }
-}
 
 QUnit.module('exportDataGrid', moduleConfig, () => {
 
@@ -197,6 +66,12 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         result.text = function() {
             this.__log.push('text,' + argumentsToString.apply(null, arguments));
             this.__text.apply(this, arguments);
+        };
+
+        result.__addPage = result.addPage;
+        result.addPage = function() {
+            this.__log.push('addPage,' + argumentsToString.apply(null, arguments));
+            this.__addPage.apply(this, arguments);
         };
 
         return result;
@@ -776,6 +651,192 @@ QUnit.module('exportDataGrid', moduleConfig, () => {
         ];
 
         exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 200, h: 60 }, onCellExporting }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('Split grid on one page, 1 col', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ f1: 'v1_1' }, { f1: 'v2_1' }, { f1: 'v3_1' }],
+        });
+
+        const pdfCellRects = [
+            { x: 10, y: 15, w: 40, h: 16 },
+            { x: 10, y: 31, w: 40, h: 20 },
+            { x: 60, y: 15, w: 40, h: 24 },
+            { x: 60, y: 39, w: 40, h: 30 }
+        ];
+
+        let rowIndex = 0;
+        let cellIndex = 0;
+        const onRowExporting = ({ drawNewTableFromThisRow }) => {
+            if(rowIndex === 2) {
+                drawNewTableFromThisRow.startNewTable = true;
+                drawNewTableFromThisRow.tableRect = { x: 60, y: 15, w: 40, h: 54 };
+            }
+            rowIndex++;
+        };
+        const onCellExporting = ({ pdfCell }) => {
+            pdfCell.rect = pdfCellRects[cellIndex];
+            cellIndex++;
+        };
+
+        const expectedLog = [
+            'text,F1,10,23,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,40,16',
+            'text,v1_1,10,41,{baseline:middle}', 'setLineWidth,1', 'rect,10,31,40,20',
+            'text,v2_1,60,27,{baseline:middle}', 'setLineWidth,1', 'rect,60,15,40,24',
+            'text,v3_1,60,54,{baseline:middle}', 'setLineWidth,1', 'rect,60,39,40,30',
+        ];
+        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 40, h: 36 }, onRowExporting, onCellExporting }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('Split grid on one page, 1 col - draw table borders', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ f1: 'v1_1' }, { f1: 'v2_1' }, { f1: 'v3_1' }],
+        });
+
+        const pdfCellRects = [
+            { x: 10, y: 15, w: 40, h: 16 },
+            { x: 10, y: 31, w: 40, h: 20 },
+            { x: 60, y: 15, w: 40, h: 24 },
+            { x: 60, y: 39, w: 40, h: 30 }
+        ];
+
+        let rowIndex = 0;
+        let cellIndex = 0;
+        const onRowExporting = ({ drawNewTableFromThisRow }) => {
+            if(rowIndex === 2) {
+                drawNewTableFromThisRow.startNewTable = true;
+                drawNewTableFromThisRow.tableRect = { x: 60, y: 15, w: 40, h: 54 };
+            }
+            rowIndex++;
+        };
+        const onCellExporting = ({ pdfCell }) => {
+            pdfCell.rect = pdfCellRects[cellIndex];
+            pdfCell.drawLeftBorder = false;
+            pdfCell.drawRightBorder = false;
+            pdfCell.drawTopBorder = false;
+            pdfCell.drawBottomBorder = false;
+            cellIndex++;
+        };
+
+        const expectedLog = [
+            'text,F1,10,23,{baseline:middle}',
+            'text,v1_1,10,41,{baseline:middle}',
+            'setLineWidth,1', 'rect,10,15,40,36',
+            'text,v2_1,60,27,{baseline:middle}',
+            'text,v3_1,60,54,{baseline:middle}',
+            'setLineWidth,1', 'rect,60,15,40,54'
+        ];
+
+        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 15, w: 40, h: 36 }, onRowExporting, onCellExporting, drawTableBorder: true }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('Split grid on different pages, 1 col', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ f1: 'v1_1' }, { f1: 'v2_1' }, { f1: 'v3_1' }],
+        });
+
+        const pdfCellRects = [
+            { x: 10, y: 800, w: 40, h: 16 },
+            { x: 10, y: 816, w: 40, h: 20 },
+            { x: 10, y: 10, w: 40, h: 24 },
+            { x: 10, y: 34, w: 40, h: 30 }
+        ];
+
+        let rowIndex = 0;
+        let cellIndex = 0;
+        const onRowExporting = ({ drawNewTableFromThisRow }) => {
+            if(rowIndex === 2) {
+                drawNewTableFromThisRow.startNewTable = true;
+                drawNewTableFromThisRow.addPage = true;
+                drawNewTableFromThisRow.tableRect = { x: 10, y: 10, w: 40, h: 54 };
+            }
+            rowIndex++;
+        };
+        const onCellExporting = ({ pdfCell }) => {
+            pdfCell.rect = pdfCellRects[cellIndex];
+            cellIndex++;
+        };
+
+        const expectedLog = [
+            'text,F1,10,808,{baseline:middle}', 'setLineWidth,1', 'rect,10,800,40,16',
+            'text,v1_1,10,826,{baseline:middle}', 'setLineWidth,1', 'rect,10,816,40,20',
+            'addPage,',
+            'text,v2_1,10,22,{baseline:middle}', 'setLineWidth,1', 'rect,10,10,40,24',
+            'text,v3_1,10,49,{baseline:middle}', 'setLineWidth,1', 'rect,10,34,40,30',
+        ];
+        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 800, w: 40, h: 36 }, onRowExporting, onCellExporting }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('Split grid on different pages, 1 col - draw table borders', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ f1: 'v1_1' }, { f1: 'v2_1' }, { f1: 'v3_1' }],
+        });
+
+        const pdfCellRects = [
+            { x: 10, y: 800, w: 40, h: 16 },
+            { x: 10, y: 816, w: 40, h: 20 },
+            { x: 10, y: 10, w: 40, h: 24 },
+            { x: 10, y: 34, w: 40, h: 30 }
+        ];
+
+        let rowIndex = 0;
+        let cellIndex = 0;
+        const onRowExporting = ({ drawNewTableFromThisRow }) => {
+            if(rowIndex === 2) {
+                drawNewTableFromThisRow.startNewTable = true;
+                drawNewTableFromThisRow.addPage = true;
+                drawNewTableFromThisRow.tableRect = { x: 10, y: 10, w: 40, h: 54 };
+            }
+            rowIndex++;
+        };
+        const onCellExporting = ({ pdfCell }) => {
+            pdfCell.rect = pdfCellRects[cellIndex];
+            pdfCell.drawLeftBorder = false;
+            pdfCell.drawRightBorder = false;
+            pdfCell.drawTopBorder = false;
+            pdfCell.drawBottomBorder = false;
+            cellIndex++;
+        };
+
+        const expectedLog = [
+            'text,F1,10,808,{baseline:middle}',
+            'text,v1_1,10,826,{baseline:middle}',
+            'setLineWidth,1', 'rect,10,800,40,36',
+            'addPage,',
+            'text,v2_1,10,22,{baseline:middle}',
+            'text,v3_1,10,49,{baseline:middle}',
+            'setLineWidth,1', 'rect,10,10,40,54'
+        ];
+
+        exportDataGrid(doc, dataGrid, { rect: { x: 10, y: 800, w: 40, h: 36 }, onRowExporting, onCellExporting, drawTableBorder: true }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();

@@ -3,6 +3,7 @@ const Widget = require('ui/widget/ui.widget');
 const registerComponent = require('core/component_registrator');
 
 require('common.css!');
+require('generic_light.css!');
 
 (function() {
 

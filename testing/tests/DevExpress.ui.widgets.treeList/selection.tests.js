@@ -962,7 +962,7 @@ QUnit.module('Recursive selection', {
     });
 
     QUnit.test('getSelectedRowKeys with \'all\' parameter', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -979,6 +979,70 @@ QUnit.module('Recursive selection', {
 
         // act, assert
         assert.deepEqual(this.getSelectedRowKeys('all'), [1, 2, 3, 4, 5], 'all selected items');
+    });
+
+    ['withAncestors', 'matchOnly', 'fullBranch'].forEach((filterMode) => {
+        // T968435
+        QUnit.test(`getSelectedRowKeys with 'all' parameter and filterMode is '${filterMode}' when filtered nodes are at different levels`, function(assert) {
+            // arrange
+            const $testElement = $('#treeList');
+
+            /* eslint-disable indent */
+            this.options.dataSource = [
+                { id: 1, field1: 'field1', field2: 1, field3: new Date(2001, 0, 1) },
+                    { id: 2, parentId: 1, field1: 'field2', field2: 2, field3: new Date(2002, 1, 2) },
+                        { id: 3, parentId: 2, field1: 'test1', field2: 3, field3: new Date(2002, 1, 3) },
+                        { id: 4, parentId: 2, field1: 'test2', field2: 4, field3: new Date(2002, 1, 4) },
+                    { id: 5, parentId: 1, field1: 'field2', field2: 5, field3: new Date(2002, 1, 5) },
+                { id: 6, field1: 'field3', field2: 6, field3: new Date(2002, 1, 6) },
+                { id: 7, field1: 'test3', field2: 7, field3: new Date(2002, 1, 7) }
+            ];
+            /* eslint-enable indent */
+            this.options.searchPanel = { text: 'test' };
+            this.options.expandNodesOnFiltering = true;
+            this.options.filterMode = filterMode;
+
+            this.setupTreeList();
+            this.rowsView.render($testElement);
+
+            // act
+            this.selectAll();
+
+            // assert
+            assert.deepEqual(this.getSelectedRowKeys('all'), [1, 2, 3, 4, 5, 6, 7], 'all selected items');
+        });
+
+        // T968433
+        QUnit.test(`getSelectedRowKeys with 'all' parameter and filterMode is '${filterMode}' when filtered nodes are at the same level`, function(assert) {
+            // arrange
+            const $testElement = $('#treeList');
+
+            /* eslint-disable indent */
+            this.options.dataSource = [
+                { id: 1, field1: 'field1', field2: 1, field3: new Date(2001, 0, 1) },
+                    { id: 2, parentId: 1, field1: 'field2', field2: 2, field3: new Date(2002, 1, 2) },
+                        { id: 3, parentId: 2, field1: 'field3', field2: 3, field3: new Date(2002, 1, 3) },
+                            { id: 4, parentId: 3, field1: 'test1', field2: 4, field3: new Date(2002, 1, 4) },
+                            { id: 5, parentId: 3, field1: 'test2', field2: 5, field3: new Date(2002, 1, 5) },
+                    { id: 6, parentId: 1, field1: 'field4', field2: 6, field3: new Date(2002, 1, 6) },
+                        { id: 7, parentId: 6, field1: 'field5', field2: 7, field3: new Date(2002, 1, 7) },
+                    { id: 8, parentId: 1, field1: 'field6', field2: 8, field3: new Date(2002, 1, 8) },
+                        { id: 9, parentId: 8, field1: 'field7', field2: 9, field3: new Date(2002, 1, 9) }
+            ];
+            /* eslint-enable indent */
+            this.options.searchPanel = { text: 'test' };
+            this.options.expandNodesOnFiltering = true;
+            this.options.filterMode = filterMode;
+
+            this.setupTreeList();
+            this.rowsView.render($testElement);
+
+            // act
+            this.selectAll();
+
+            // assert
+            assert.deepEqual(this.getSelectedRowKeys('all'), [1, 2, 3, 4, 5, 6, 7, 8, 9], 'all selected items');
+        });
     });
 
     QUnit.test('getSelectedRowKeys with \'excludeRecursive\' parameter', function(assert) {

@@ -2977,7 +2977,7 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search', 'errorHandling'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'masterDetail', 'editing', 'editingFormBased', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search', 'errorHandling'], {
             initViews: true
         });
 
@@ -10569,7 +10569,7 @@ QUnit.module('Editing with validation', {
             return renderer('.dx-datagrid');
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'editingFormBased', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
             initViews: true,
             options: {
                 keyboardNavigation: {
@@ -15605,7 +15605,7 @@ QUnit.module('Editing with scrolling', {
         };
 
         this.setupDataGrid = function() {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editorFactory', 'virtualScrolling', 'errorHandling', 'validating', 'grouping', 'masterDetail', 'adaptivity'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editingFormBased', 'editorFactory', 'virtualScrolling', 'errorHandling', 'validating', 'grouping', 'masterDetail', 'adaptivity'], {
                 initViews: true
             });
         };
@@ -16466,7 +16466,7 @@ QUnit.module('Edit Form', {
         };
 
         this.setupModules = function(that) {
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'keyboardNavigation'], {
+            setupDataGridModules(that, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editingFormBased', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'keyboardNavigation'], {
                 initViews: true
             });
         };
@@ -17853,7 +17853,7 @@ QUnit.module('Editing - "popup" mode', {
 
         this.setupModules = function(that) {
 
-            setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'rows', 'masterDetail', 'editing', 'editorFactory', 'errorHandling', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
+            setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'rows', 'masterDetail', 'editing', 'editingFormBased', 'editorFactory', 'errorHandling', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
                 initViews: true
             });
 
@@ -19510,7 +19510,7 @@ QUnit.module('Async validation', {
             return renderer('.dx-datagrid');
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'editingFormBased', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary', 'keyboardNavigation'], {
             initViews: true,
             options: {
                 keyboardNavigation: {

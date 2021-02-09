@@ -177,6 +177,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     get viewDirection() { return 'vertical'; }
 
+    get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+
     _supportedKeys() {
         const clickHandler = function(e) {
             e.preventDefault();
@@ -1263,7 +1265,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             startCellIndex: 0,
             groupOrientation,
             rowCount,
-            totalRowCount: this._getRowCount(),
+            totalRowCount: rowCount,
             totalCellCount: cellCount,
             groupCount,
             getDateHeaderText: this._getHeaderText.bind(this),
@@ -1361,7 +1363,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             dxrTimePanelTableLayout,
             'renovatedTimePanel',
             {
-                viewData: this.viewDataProvider.viewData,
+                timePanelData: this.viewDataProvider.timePanelData,
                 timeCellTemplate: this.option('timeCellTemplate'),
             }
         );
@@ -1376,11 +1378,12 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.renderRComponent(
             this._$thead,
-            dxrDateHeader,
+            this.renovatedHeaderPanelComponent,
             'renovatedHeaderPanel',
             {
                 dateHeaderMap: this.viewDataProvider.dateHeaderMap,
                 dateCellTemplate: this.option('dateCellTemplate'),
+                timeCellTemplate: this.option('timeCellTemplate'),
                 groups: this.option('groups'),
                 groupByDate: this.isGroupedByDate(),
                 groupOrientation: this.option('groupOrientation'),
@@ -2759,9 +2762,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
         let position;
-        const shouldFindPositionByViewData = this.isVirtualScrolling() && (!inAllDayRow || this._isVerticalGroupedWorkSpace());
 
-        if(shouldFindPositionByViewData) {
+        if(this.isRenovatedRender()) {
             const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
             if(!positionByMap) {
                 return undefined;

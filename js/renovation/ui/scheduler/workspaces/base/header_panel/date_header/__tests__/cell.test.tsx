@@ -58,44 +58,101 @@ describe('DateHeaderCell', () => {
         .toBe('Test text');
     });
 
-    it('should render template and should not render children', () => {
-      const dateCellTemplate = () => null;
-      const cell = render({
-        props: {
-          dateCellTemplate,
-        },
+    describe('templates', () => {
+      it('should render date cell template and should not render default markup', () => {
+        const timeCellTemplate = () => null;
+        const dateCellTemplate = () => null;
+
+        const cell = render({
+          useTemplate: true,
+          props: {
+            dateCellTemplate,
+            timeCellTemplate,
+            isTimeCellTemplate: false,
+          },
+        });
+
+        expect(cell.children())
+          .toHaveLength(1);
+        expect(cell.find(dateCellTemplate).exists())
+          .toBe(true);
+        expect(cell.find(timeCellTemplate).exists())
+          .toBe(false);
       });
 
-      expect(cell.children())
-        .toHaveLength(1);
-      expect(cell.find(dateCellTemplate).exists())
-        .toBe(true);
-    });
+      it('should render time cell template and should not render default markup and date cell template', () => {
+        const timeCellTemplate = () => null;
+        const dateCellTemplate = () => null;
 
-    it('should pass correct props to the template', () => {
-      const dateCellTemplate = () => null;
-      const props = {
-        groups: { id: 1 },
-        groupIndex: 1,
-        index: 0,
-        text: 'Test text',
-        dateCellTemplate,
-      };
-
-      const cell = render({ props });
-
-      const renderedTemplate = cell.find(dateCellTemplate);
-
-      expect(renderedTemplate.props())
-        .toEqual({
-          data: {
-            date: startDate,
-            text: props.text,
-            groups: props.groups,
-            groupIndex: props.groupIndex,
+        const cell = render({
+          useTemplate: true,
+          props: {
+            timeCellTemplate,
+            dateCellTemplate,
+            isTimeCellTemplate: true,
           },
-          index: props.index,
         });
+
+        expect(cell.children())
+          .toHaveLength(1);
+        expect(cell.find(timeCellTemplate).exists())
+          .toBe(true);
+        expect(cell.find(dateCellTemplate).exists())
+          .toBe(false);
+      });
+
+      it('should pass correct props to the date cell template', () => {
+        const dateCellTemplate = () => null;
+        const props = {
+          groups: { id: 1 },
+          groupIndex: 1,
+          index: 0,
+          text: 'Test text',
+          dateCellTemplate,
+        };
+
+        const cell = render({ props, useTemplate: true });
+
+        const renderedTemplate = cell.find(dateCellTemplate);
+
+        expect(renderedTemplate.props())
+          .toEqual({
+            data: {
+              date: startDate,
+              text: props.text,
+              groups: props.groups,
+              groupIndex: props.groupIndex,
+            },
+            index: props.index,
+          });
+      });
+
+      it('should pass correct props to the time cell template', () => {
+        const timeCellTemplate = () => null;
+        const props = {
+          groups: { id: 1 },
+          groupIndex: 1,
+          index: 0,
+          text: 'Test text',
+          timeCellTemplate,
+          isTimeCellTemplate: true,
+        };
+
+        const cell = render({ props, useTemplate: true });
+
+        const renderedTemplate = cell.find(timeCellTemplate);
+
+        expect(renderedTemplate.props())
+          .toEqual({
+            data: {
+              date: startDate,
+              text: props.text,
+              groups: props.groups,
+              groupIndex: props.groupIndex,
+            },
+            index: props.index,
+          });
+      });
     });
   });
 
@@ -108,6 +165,7 @@ describe('DateHeaderCell', () => {
             isLastGroupCell: 'isLastGroupCell',
             today: 'today',
             className: 'class',
+            isWeekDayCell: 'isWeekDayCell',
           } as any);
 
           expect(cell.classes)
@@ -118,11 +176,55 @@ describe('DateHeaderCell', () => {
               'dx-scheduler-header-panel-cell': true,
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-header-panel-current-time-cell': 'today',
+              'dx-scheduler-header-panel-week-cell': 'isWeekDayCell',
               class: true,
             });
 
           expect(getGroupCellClasses)
             .toHaveBeenCalledWith('isFirstGroupCell', 'isLastGroupCell', 'combineClasses');
+        });
+      });
+
+      describe('useTemplate', () => {
+        [true, false].forEach((isTimeCellTemplate) => {
+          [{
+            dateCellTemplate: undefined,
+            timeCellTemplate: undefined,
+            description: `should work correctly if both temlates are undefined and "isTimeCellTemplate" is ${isTimeCellTemplate}`,
+            expectedResult: false,
+          }, {
+            dateCellTemplate: () => null,
+            timeCellTemplate: undefined,
+            description: `should work correctly if timeCellTemplate is undefined and "isTimeCellTemplate" is ${isTimeCellTemplate}`,
+            expectedResult: !isTimeCellTemplate,
+          }, {
+            dateCellTemplate: undefined,
+            timeCellTemplate: () => null,
+            description: `should work correctly if dateCellTemplate is undefined and "isTimeCellTemplate" is ${isTimeCellTemplate}`,
+            expectedResult: isTimeCellTemplate,
+          }, {
+            dateCellTemplate: () => null,
+            timeCellTemplate: () => null,
+            description: `should work correctly if both temlates are defined and "isTimeCellTemplate" is ${isTimeCellTemplate}`,
+            isTimeCellTemplate: false,
+            expectedResult: true,
+          }].forEach(({
+            dateCellTemplate,
+            timeCellTemplate,
+            description,
+            expectedResult,
+          }) => {
+            test(description, () => {
+              const cell = new DateHeaderCell({
+                dateCellTemplate,
+                timeCellTemplate,
+                isTimeCellTemplate,
+              });
+
+              expect(cell.useTemplate)
+                .toBe(expectedResult);
+            });
+          });
         });
       });
     });

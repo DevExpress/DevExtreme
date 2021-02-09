@@ -10,7 +10,7 @@ export interface ViewCellData {
   index: number;
   isFirstGroupCell: boolean;
   isLastGroupCell: boolean;
-  key: string;
+  key: number;
   firstDayOfMonth?: boolean;
 }
 
@@ -18,21 +18,39 @@ export interface DateHeaderCellData extends ViewCellData {
   colSpan: number;
 }
 
-interface ViewData {
-  dateTable: ViewCellData[][];
+interface ViewDataBase {
   groupIndex: number;
-  allDayPanel?: ViewCellData[];
   isGroupedAllDayPanel?: boolean;
 }
 
-export interface GroupedViewData {
-  groupedData: ViewData[];
-  isVirtual?: boolean;
+interface ViewData extends ViewDataBase {
+  dateTable: ViewCellData[][];
+  allDayPanel?: ViewCellData[];
+}
+
+interface TimePanelCellsData extends ViewDataBase {
+  dateTable: ViewCellData[];
+  allDayPanel?: ViewCellData;
+}
+
+interface GroupedViewDataBase {
   topVirtualRowHeight?: number;
   bottomVirtualRowHeight?: number;
   leftVirtualCellWidth?: number;
   rightVirtualCellWidth?: number;
   cellCountInGroupRow: number;
+  leftVirtualCellCount: number;
+  rightVirtualCellCount: number;
+  topVirtualRowCount: number;
+  bottomVirtualRowCount: number;
+}
+
+export interface GroupedViewData extends GroupedViewDataBase {
+  groupedData: ViewData[];
+}
+
+export interface TimePanelData extends GroupedViewDataBase {
+  groupedData: TimePanelCellsData[];
 }
 
 export interface GroupItem {
