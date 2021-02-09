@@ -5,6 +5,7 @@ import { ensureDefined } from '../../core/utils/common';
 
 import Widget from '../widget/ui.widget';
 import ContextMenu from '../context_menu/ui.context_menu';
+import { extendAttributes } from './ui.file_manager.common';
 
 const FILEMANAGER_CONTEXT_MEMU_CLASS = 'dx-filemanager-context-menu';
 
@@ -47,8 +48,8 @@ class FileManagerContextMenu extends Widget {
             this._onContextMenuHidden();
         }
         this._itemCreationContext = {
-            itemElement: itemElement,
-            itemData: itemData,
+            itemElement,
+            itemData,
             fileItems,
             event,
             actionButton: isActionButton
@@ -81,7 +82,7 @@ class FileManagerContextMenu extends Widget {
         if(this._isVisible) {
             this._onContextMenuHidden();
         }
-        e = extend(e, this._itemCreationContext, { items: this.option('items'), cancel: false });
+        e = extend(e, this._itemCreationContext, { options: this.option(), cancel: false });
         this._actions.onContextMenuShowing(e);
         const items = this.createContextMenuItems(this._itemCreationContext.fileItems, e.items, this._itemCreationContext.itemData);
         if(!e.cancel) {
@@ -127,14 +128,6 @@ class FileManagerContextMenu extends Widget {
         return !!DEFAULT_CONTEXT_MENU_ITEMS[commandName];
     }
 
-    _extendAttributes(targetObject, sourceObject, objectKeysArray) {
-        objectKeysArray.forEach(objectKey => {
-            extend(targetObject, isDefined(sourceObject[objectKey])
-                ? { [objectKey]: sourceObject[objectKey] }
-                : {});
-        });
-    }
-
     _configureItemByCommandName(commandName, item, fileItems, targetFileItem) {
         if(!this._isDefaultItem(commandName)) {
             const res = extend(true, {}, item);
@@ -150,12 +143,12 @@ class FileManagerContextMenu extends Widget {
         const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
         extend(result, defaultConfig);
         result.originalItemData = item;
-        this._extendAttributes(result, item, ['visible', 'beginGroup', 'text', 'icon']);
+        extendAttributes(result, item, ['visible', 'beginGroup', 'text', 'icon']);
 
         if(!isDefined(result.visible)) {
             result._autoHide = true;
         } else {
-            this._extendAttributes(result, item, ['visible', 'disabled']);
+            extendAttributes(result, item, ['visible', 'disabled']);
         }
 
         if(commandName && !result.name) {

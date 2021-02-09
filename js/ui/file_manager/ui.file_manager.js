@@ -402,16 +402,17 @@ class FileManager extends Widget {
 
     _onContextMenuShowing(viewArea, e) {
         this._setItemsViewAreaActive(viewArea === VIEW_AREAS.items);
-        // to cancel, set cancel to e - treeView - done
-        // to update contextMenuitems, set items to e
         let eventArgs = extendAttributes({}, e, [
             'itemElement',
             'cancel',
             'event',
-            'items',
             'actionButton'
         ]);
-        eventArgs = extend(eventArgs, { viewArea, itemData: e.itemData?.fileItem });
+        eventArgs = extend(eventArgs, {
+            viewArea,
+            itemData: e.itemData?.fileItem,
+            items: e.options.items
+        });
         this._actions.onContextMenuPreparing(eventArgs);
         e.cancel = ensureDefined(eventArgs.cancel, false);
         e.items = ensureDefined(eventArgs.items, []);
