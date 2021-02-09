@@ -1998,7 +1998,10 @@ export default {
                 renderDelayedTemplates: function(change) {
                     this.callBase.apply(this, arguments);
                     if(!change || !change.repaintChangesOnly) {
-                        this.renderFocusState();
+                        const keyboardController = this.getController('keyboardNavigation');
+                        const preventScroll = keyboardController._isVirtualScrolling() ? this.option('focusedRowIndex') === keyboardController.getRowIndex() : false;
+
+                        this.renderFocusState(preventScroll);
                     }
                 },
                 _renderCore: function(change) {
