@@ -34,7 +34,7 @@ class FileManagerContextMenu extends Widget {
             cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
             showEvent: '',
             onItemClick: (args) => this._onContextMenuItemClick(args.itemData.name, args),
-            onShowing: e => this._handleShowing(e),
+            onShowing: e => this._onContextMenuShowing(e),
             onShown: () => this._onContextMenuShown(),
             onHidden: () => this._onContextMenuHidden()
         });
@@ -47,8 +47,8 @@ class FileManagerContextMenu extends Widget {
         if(this._isVisible) {
             this._onContextMenuHidden();
         }
-        this._itemCreationContext = {
-            itemElement,
+        this._menuShowingContext = {
+            targetElement: itemElement,
             itemData,
             fileItems,
             event,
@@ -76,18 +76,6 @@ class FileManagerContextMenu extends Widget {
         });
 
         this._contextMenu.show();
-    }
-
-    _handleShowing(e) {
-        if(this._isVisible) {
-            this._onContextMenuHidden();
-        }
-        e = extend(e, this._itemCreationContext, { options: this.option(), cancel: false });
-        this._actions.onContextMenuShowing(e);
-        const items = this.createContextMenuItems(this._itemCreationContext.fileItems, e.items, this._itemCreationContext.itemData);
-        if(!e.cancel) {
-            this._contextMenu.option('dataSource', items);
-        }
     }
 
     createContextMenuItems(fileItems, contextMenuItems, targetFileItem) {
@@ -193,13 +181,25 @@ class FileManagerContextMenu extends Widget {
         };
     }
 
+    _onContextMenuShowing(e) {
+        if(this._isVisible) {
+            this._onContextMenuHidden();
+        }
+        e = extend(e, this._menuShowingContext, { options: this.option(), cancel: false });
+        this._actions.onContextMenuShowing(e);
+        const items = this.createContextMenuItems(this._menuShowingContext.fileItems, e.items, this._menuShowingContext.fileSystemItem);
+        if(!e.cancel) {
+            this._contextMenu.option('dataSource', items);
+        }
+    }
+
     _onContextMenuShown() {
         this._isVisible = true;
     }
 
     _onContextMenuHidden() {
         this._isVisible = false;
-        this._contextMenu.option('visible', false); // dangerous, may be the reason for failure of the test 'context menu items can be updated for visible menu after action button click'
+        this._contextMenu.option('visible', false);
         this._raiseContextMenuHidden();
     }
 

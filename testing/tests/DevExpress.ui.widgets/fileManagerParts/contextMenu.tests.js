@@ -455,7 +455,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(spy.args[0][0].itemData, contextMenuItems[0], 'itemData is correct');
         assert.strictEqual(spy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
-        assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, preparingEventArgs.itemData.dataItem, 'integrated fileSystemItem is correct');
+        assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, preparingEventArgs.fileSystemItem.dataItem, 'integrated fileSystemItem is correct');
         assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'fileSystemItem is correct');
         assert.strictEqual(spy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
     });
@@ -483,8 +483,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
         assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
-        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual($(eventSpy.args[0][0].targetElement).get(0), targetItemElement.get(0), 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
@@ -512,8 +512,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
         assert.strictEqual(eventSpy.args[0][0].event.type, 'dxclick', 'event has correct type');
-        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual($(eventSpy.args[0][0].targetElement).get(0), targetItemElement.get(0), 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
@@ -562,8 +562,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
         assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
-        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual($(eventSpy.args[0][0].targetElement).get(0), targetItemElement.get(0), 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
@@ -591,8 +591,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
         assert.strictEqual(eventSpy.args[0][0].event.type, 'dxclick', 'event has correct type');
-        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual($(eventSpy.args[0][0].targetElement).get(0), targetItemElement.get(0), 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
@@ -624,8 +624,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
         assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
-        assert.strictEqual(eventSpy.args[0][0].itemElement, targetItemElement, 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].itemData, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].targetElement, targetItemElement, 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].fileSystemItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
@@ -675,8 +675,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
         assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
-        assert.strictEqual($(eventSpy.args[0][0].itemElement).get(0), targetItemElement.get(0), 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].itemData.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual($(eventSpy.args[0][0].targetElement).get(0), targetItemElement.get(0), 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
@@ -709,8 +709,8 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
         assert.strictEqual(eventSpy.callCount, 1, 'event raised');
         assert.strictEqual(eventSpy.args[0][0].event.type, 'dxcontextmenu', 'event has correct type');
-        assert.strictEqual(eventSpy.args[0][0].itemElement, targetItemElement, 'itemElement is correct');
-        assert.strictEqual(eventSpy.args[0][0].itemData, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
+        assert.strictEqual(eventSpy.args[0][0].targetElement, targetItemElement, 'itemElement is correct');
+        assert.strictEqual(eventSpy.args[0][0].fileSystemItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
         assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
