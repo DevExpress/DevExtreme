@@ -1,4 +1,6 @@
-import { isNumeric, isDefined, isPlainObject } from '../../../core/utils/type';
+import {
+  isNumeric, isDefined, isPlainObject, isWindow,
+} from '../../../core/utils/type';
 import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
 import { camelize } from '../../../core/utils/inflector';
 import getElementComputedStyle from '../../utils/get_computed_style';
@@ -42,6 +44,32 @@ export function getElementStyle(
 ): number | string {
   const computedStyle = getElementComputedStyle(element) || {};
   return computedStyle[name];
+}
+
+export function getWindowByElement(element: Element): Element {
+  return isWindow(element) ? element : (element as any).defaultView;
+}
+
+export function getElementOffset(
+  element?: Element,
+): { left: number; top: number } {
+  if (!element) return { left: 0, top: 0 };
+
+  if (!element.getClientRects().length) {
+    return {
+      top: 0,
+      left: 0,
+    };
+  }
+
+  const rect = element.getBoundingClientRect();
+  const window = getWindowByElement((element as any).ownerDocument);
+  const docElem = element.ownerDocument.documentElement;
+
+  return {
+    top: rect.top + (window as any).pageYOffset - docElem.clientTop,
+    left: rect.left + (window as any).pageXOffset - docElem.clientLeft,
+  };
 }
 
 export function ensureLocation(
