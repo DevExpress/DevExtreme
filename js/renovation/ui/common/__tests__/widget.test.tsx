@@ -11,6 +11,7 @@ import { Widget, viewFunction, WidgetProps } from '../widget';
 import { isFakeClickEvent } from '../../../../events/utils/index';
 import { ConfigProvider } from '../../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
+import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
@@ -18,6 +19,7 @@ jest.mock('../../../../events/utils/index', () => ({
 }));
 jest.mock('../../../common/config_provider', () => ({ ConfigProvider: () => null }));
 jest.mock('../../../utils/resolve_rtl');
+jest.mock('../../../../core/utils/resize_callbacks');
 
 describe('Widget', () => {
   describe('Render', () => {
@@ -541,6 +543,45 @@ describe('Widget', () => {
 
           emit(EVENT.resize);
           expect(getEventHandlers(EVENT.resize)).toBe(undefined);
+        });
+      });
+
+      describe('windowResizeEffect', () => {
+        afterEach(() => {
+          jest.clearAllMocks();
+        });
+
+        it('should subscribe to windowResizeEffect event', () => {
+          const onDimensionChanged = jest.fn();
+          const widget = new Widget({ onDimensionChanged });
+
+          const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
+
+          expect(resizeCallbacks.add).toBeCalledTimes(1);
+          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+
+          dispose?.();
+        });
+
+        it('should return unsubscribe callback', () => {
+          const onDimensionChanged = jest.fn();
+          const widget = new Widget({ onDimensionChanged });
+
+          const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
+
+          dispose?.();
+
+          expect(resizeCallbacks.remove).toBeCalledTimes(1);
+          const callbackPassedToAdd = (resizeCallbacks as any).add.mock.calls[0][0];
+          const callbackPassedToRemove = (resizeCallbacks as any).add.mock.calls[0][0];
+          expect(callbackPassedToAdd).toEqual(callbackPassedToRemove);
+        });
+
+        it('should not subscribe if callback does not exist', () => {
+          const widget = new Widget({ });
+          const dispose = widget.windowResizeEffect();
+
+          expect(dispose).toBe(undefined);
         });
       });
 
