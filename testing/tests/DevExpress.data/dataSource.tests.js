@@ -1861,6 +1861,17 @@ QUnit.module('live update', {
         this.clock.tick(100);
 
         assert.equal(items[0].field, 2);
+
+        dataSource.store().push([
+            { type: 'update', key: 1, data: { field: 3 } }
+        ]);
+
+        assert.equal(items[0].field, 2);
+
+        this.clock.tick(100);
+
+        assert.equal(items[0].field, 3);
+
     });
 
     QUnit.test('load is called with throttle when reshapeOnPush and pushAggregationTimeout is defined', function(assert) {
