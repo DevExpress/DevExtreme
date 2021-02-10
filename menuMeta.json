@@ -5098,7 +5098,6 @@
           {
             "Title": "Grouped List",
             "Name": "GroupedList",
-            "DocUrl": "Guide/UI_Components/List/Grouping/In_the_Data_Source/",
             "Widget": "List",
             "MvcAdditionalFiles": [
               "/Models/SampleData/ListGroupedData.cs"
