@@ -4169,9 +4169,10 @@ QUnit.module('ScrollTo', () => {
             const cellWidth = $schedulerCell.get(0).getBoundingClientRect().width;
 
             assert.ok(scrollByStub.calledOnce, 'ScrollBy was called');
-            assert.equal(
+            assert.roughEqual(
                 scrollByStub.getCall(0).args[0].top,
                 topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
+                2.01,
                 'Correct top parameter',
             );
             assert.equal(
@@ -4483,9 +4484,10 @@ QUnit.module('ScrollTo', () => {
                         : topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2;
 
                     assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
-                    assert.equal(
+                    assert.roughEqual(
                         scrollBy.getCall(0).args[0].top,
                         top,
+                        2.01,
                         'Correct top parameter',
                     );
                     assert.equal(
@@ -4517,7 +4519,7 @@ QUnit.module('ScrollTo', () => {
                 leftCellCount: 23,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
-                QUnit.test(`ScrollTo should work correctly when RTL is enabled in ${view}`, function(assert) {
+                QUnit.test(`ScrollTo should work correctly when RTL is enabled in ${view} view`, function(assert) {
                     const scheduler = this.createScheduler({
                         rtlEnabled: true,
                         currentView: view,
