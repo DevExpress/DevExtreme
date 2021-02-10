@@ -113,7 +113,8 @@ let focused;
             'right': 'ArrowRight',
             'down': 'ArrowDown',
             'ins': 'Insert',
-            'del': 'Delete'
+            'del': 'Delete',
+            'spaceIE': 'Spacebar'
         },
 
         SHIFT_MAP: {
