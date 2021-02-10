@@ -3311,6 +3311,51 @@ QUnit.module('View\'s focus', {
         assert.equal($(this.dataGrid.element()).find('.myclass .dx-editor-cell.dx-focused').length, 1, 'focused edit cell');
     });
 
+    QUnit.testInActiveWindow('Grid should scroll to the top when a command button is clicked in a detail grid (T969832)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [
+                { id: 1, name: 'test1' },
+                { id: 2, name: 'test2' }
+            ],
+            keyExpr: 'id',
+            height: 150,
+            masterDetail: {
+                enabled: true,
+                template: function(container) {
+                    $('<div>')
+                        .dxDataGrid({
+                            keyExpr: 'id',
+                            dataSource: [
+                                { id: 1 }
+                            ],
+                            editing: {
+                                mode: 'row',
+                                allowUpdating: true
+                            }
+                        }).appendTo(container);
+                }
+            }
+        });
+        this.clock.tick();
+
+        // act
+        this.dataGrid.expandRow(2);
+        this.clock.tick();
+
+        this.dataGrid.getScrollable().scrollTo({ top: this.dataGrid.getScrollable().scrollHeight() });
+        const scrollTop = this.dataGrid.getScrollable().scrollTop();
+
+        // assert
+        assert.ok(scrollTop > 0, 'top scroll position more than 0');
+
+        // act
+        $(this.dataGrid.element()).find('.dx-link-edit:eq(0)').trigger('dxpointerdown').trigger('click').focus();
+
+        // assert
+        assert.strictEqual(this.dataGrid.getScrollable().scrollTop(), scrollTop, 'top scroll position after editing');
+    });
+
     ['Row', 'Cell', 'Batch', 'Form', 'Popup'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - A stand-alone input should be focused on click after adding a new row (T935999)`, function(assert) {
             // arrange
