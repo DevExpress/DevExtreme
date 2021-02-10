@@ -677,6 +677,16 @@ QUnit.module('Recurrences', function() {
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
 
+    QUnit.test('evalRecurrenceRule should return valid object if byDay has frequence for day', function(assert) {
+        let ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=MONTHLY;BYDAY=1TU');
+
+        assert.ok(ruleObject.isValid, 'returned ruleObject is invalid');
+
+        ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=MONTHLY;BYDAY=1TU,3FR');
+
+        assert.ok(ruleObject.isValid, 'returned ruleObject is invalid');
+    });
+
     QUnit.test('getDateByAsciiString should return a valid date for yyyyMMddThhmmss format', function(assert) {
         const date = getRecurrenceProcessor().getDateByAsciiString('20150303T030000');
 

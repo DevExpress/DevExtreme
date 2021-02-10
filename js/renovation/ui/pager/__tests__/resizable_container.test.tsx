@@ -18,8 +18,8 @@ jest.mock('../../../../core/utils/resize_callbacks');
 (getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
 
 describe('resizable-container', () => {
-  function getFakeHtml(width: number | null): HTMLElement | undefined {
-    return width ? { width: `${width}px` } as unknown as HTMLElement : undefined;
+  function getFakeHtml(width: number | null): HTMLDivElement | undefined {
+    return width ? { width: `${width}px` } as unknown as HTMLDivElement : undefined;
   }
   function getElementsRef({
     width, pageSizes, info, pages,
@@ -31,7 +31,7 @@ describe('resizable-container', () => {
     const infoHtmlEl = info
       ? { current: getFakeHtml(info) } as RefObject<HTMLDivElement>
       : undefined;
-    const pagesHtmlEl = { current: getFakeHtml(info + pages) } as RefObject<HTMLDivElement>;
+    const pagesHtmlEl = { current: getFakeHtml(pages) } as RefObject<HTMLDivElement>;
     return {
       parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
     };
@@ -129,6 +129,40 @@ describe('resizable-container', () => {
         });
         expect(component.infoTextVisible).toBe(true);
         expect(component.isLargeDisplayMode).toBe(true);
+      });
+
+      it('simulate resize from large to small in react', () => {
+        const component = createComponent({
+          width: 450, pageSizes: 100, pages: 200, info: 100,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+        updateComponent(component, {
+          width: 350, pageSizes: 100, pages: 200, info: 100,
+        });
+        // resize callback start
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(true);
+        // in react state don't changed before all effect completed
+        component.infoTextVisible = true;
+        // effect effectUpdateChildProps because re-render after state changed
+        component.effectUpdateChildProps();
+        component.infoTextVisible = true;
+        // childs render with updated state infoTextVisible = false
+        updateComponent(component, {
+          width: 350, pageSizes: 100, pages: 200, info: 0,
+        });
+        // resize callback end but resizeCallbacks fire resuse
+        // because unsubscribe and sibscribe to resizeCallbacks
+        // BUT resize callback closure wrong infoTextVisible = true
+        expect(component.infoTextVisible).toBe(true);
+        component.effectUpdateChildProps();
+        //  effect effectUpdateChildProps because re-render
+        component.infoTextVisible = false;
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
       });
 
       it('resize from large to small', () => {

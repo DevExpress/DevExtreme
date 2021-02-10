@@ -237,17 +237,6 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    // _isDirection: function(direction) {
-    //     const current = this.option('direction');
-    //     if(direction === VERTICAL) {
-    //         return current !== HORIZONTAL;
-    //     }
-    //     if(direction === HORIZONTAL) {
-    //         return current !== VERTICAL;
-    //     }
-    //     return current === direction;
-    // },
-
     scrollHeight: function() {
         return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
     },

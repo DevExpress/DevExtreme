@@ -7,6 +7,8 @@ const TRANSFORM_MATRIX_REGEX = /matrix(3d)?\((.+?)\)/;
 const TRANSLATE_REGEX = /translate(?:3d)?\((.+?)\)/;
 
 export const locate = function($element) {
+    $element = $($element);
+
     const translate = getTranslate($element);
 
     return {
