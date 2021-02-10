@@ -64,7 +64,7 @@ function getElementsWidth({
     parent: parentWidth,
     pageSizes: pageSizesWidth,
     info: infoWidth + getElementStyle('marginLeft', info) + getElementStyle('marginRight', info),
-    pages: pagesHtmlWidth - infoWidth,
+    pages: pagesHtmlWidth,
   };
 }
 
@@ -93,8 +93,10 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
 
   @Mutable() elementsWidth!: ChildElements<number>;
 
+  @Mutable() actualAdaptivityProps!: { infoTextVisible: boolean; isLargeDisplayMode: boolean};
+
   @Effect() subscribeToResize(): DisposeEffectReturn {
-    const callback = (): void => this.updateChildrenProps();
+    const callback = (): void => { this.updateAdaptivityProps(); };
     resizeCallbacks.add(callback);
     return (): void => { resizeCallbacks.remove(callback); };
   }
@@ -102,42 +104,38 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   @Effect({ run: 'always' }) effectUpdateChildProps(): void {
     const parentWidth = getElementWidth(this.parentRef);
     if (parentWidth > 0) {
-      this.updateChildrenProps();
+      this.updateAdaptivityProps();
     }
   }
 
-  updateElementsWidth({ info, pageSizes, pages }: ChildElements<number>): void {
-    this.elementsWidth = { info, pageSizes, pages };
-  }
-
-  // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
-  updateChildrenProps(): void {
+  updateAdaptivityProps(): void {
     const currentElementsWidth = getElementsWidth({
       parent: this.parentRef,
       pageSizes: this.pageSizesRef,
       info: this.infoTextRef,
       pages: this.pagesRef,
     });
+    if (isDefined(this.actualAdaptivityProps)
+    && ((this.actualAdaptivityProps.infoTextVisible !== this.infoTextVisible
+      || this.actualAdaptivityProps.isLargeDisplayMode !== this.isLargeDisplayMode))) {
+      return;
+    }
     const isEmpty = !isDefined(this.elementsWidth);
     if (isEmpty) {
-      const current = calculateAdaptivityProps(currentElementsWidth);
-      this.updateElementsWidth(currentElementsWidth);
-      this.infoTextVisible = current.infoTextVisible;
-      this.isLargeDisplayMode = current.isLargeDisplayMode;
-    } else {
-      if (this.isLargeDisplayMode) {
-        this.elementsWidth.pageSizes = currentElementsWidth.pageSizes;
-        this.elementsWidth.pages = currentElementsWidth.pages;
-      }
-      if (this.infoTextVisible) {
-        this.elementsWidth.info = currentElementsWidth.info;
-      }
-      const current = calculateAdaptivityProps({
-        parent: currentElementsWidth.parent,
-        ...this.elementsWidth,
-      });
-      this.infoTextVisible = current.infoTextVisible;
-      this.isLargeDisplayMode = current.isLargeDisplayMode;
+      this.elementsWidth = {} as ChildElements<number>;
     }
+    if (isEmpty || this.isLargeDisplayMode) {
+      this.elementsWidth.pageSizes = currentElementsWidth.pageSizes;
+      this.elementsWidth.pages = currentElementsWidth.pages;
+    }
+    if (isEmpty || this.infoTextVisible) {
+      this.elementsWidth.info = currentElementsWidth.info;
+    }
+    this.actualAdaptivityProps = calculateAdaptivityProps({
+      parent: currentElementsWidth.parent,
+      ...this.elementsWidth,
+    });
+    this.infoTextVisible = this.actualAdaptivityProps.infoTextVisible;
+    this.isLargeDisplayMode = this.actualAdaptivityProps.isLargeDisplayMode;
   }
 }

@@ -68,7 +68,7 @@ describe('PagerContent', () => {
         pageIndex: 2,
         totalCount: 100,
       });
-      expect(pagesContainer.childAt(1).props()).toMatchObject({
+      expect(pagesContainer.childAt(1).childAt(0).props()).toMatchObject({
         isLargeDisplayMode: true,
         hasKnownLastPage: true,
         maxPagesCount: 10,
@@ -175,7 +175,7 @@ describe('PagerContent', () => {
       expect(tree.props().rootElementRef).toBe(widgetRootElementRef);
       const childrenContainer = tree.find('div').first();
       expect(childrenContainer.childAt(0).props().rootElementRef).toBe(pageSizesRef);
-      expect(childrenContainer.childAt(1).instance()).toBe(pagesRef.current);
+      expect(childrenContainer.childAt(1).childAt(1).instance()).toBe(pagesRef.current);
       expect(childrenContainer.childAt(1).childAt(0).props().rootElementRef).toBe(infoTextRef);
     });
   });
