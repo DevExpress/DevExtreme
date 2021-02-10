@@ -3788,7 +3788,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             };
             const store = new ArrayStore({
                 key: 'id',
-                data: generateData(100000)
+                data: generateData(100)
             });
             const dataGrid = createDataGrid({
                 dataSource: {
@@ -3830,7 +3830,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             // assert
             assert.strictEqual(dataGrid.option('focusedRowKey'), 1, 'focused row key');
             assert.strictEqual(dataGrid.option('focusedRowIndex'), 0, 'focused row index');
-            assert.strictEqual(dataGrid.getScrollable().scrollOffset().top, 35, 'scroll position');
+            assert.roughEqual(dataGrid.getScrollable().scrollOffset().top, 35, 1, 'scroll position');
         });
     });
 });
