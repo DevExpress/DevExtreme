@@ -7,7 +7,9 @@ import {
 import { InfoText } from './info';
 import { PageIndexSelector } from './pages/page_index_selector';
 import { PageSizeSelector } from './page_size/selector';
-import { PAGER_PAGES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS } from './common/consts';
+import {
+  PAGER_PAGES_CLASS, PAGER_PAGE_INDEXIES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS,
+} from './common/consts';
 import PagerProps, { DisplayMode } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
@@ -55,7 +57,6 @@ export const viewFunction = ({
     )}
     {pagesContainerVisible && (
       <div
-        ref={pagesRef as any}
         className={PAGER_PAGES_CLASS}
         style={{ visibility: pagesContainerVisibility }}
       >
@@ -68,17 +69,22 @@ export const viewFunction = ({
           totalCount={totalCount}
         />
         )}
-        <PageIndexSelector
-          hasKnownLastPage={hasKnownLastPage}
-          isLargeDisplayMode={isLargeDisplayMode}
-          maxPagesCount={maxPagesCount}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          pageIndexChange={pageIndexChange}
-          pagesCountText={pagesCountText}
-          showNavigationButtons={showNavigationButtons}
-          totalCount={totalCount}
-        />
+        <div
+          className={PAGER_PAGE_INDEXIES_CLASS}
+          ref={pagesRef as any}
+        >
+          <PageIndexSelector
+            hasKnownLastPage={hasKnownLastPage}
+            isLargeDisplayMode={isLargeDisplayMode}
+            maxPagesCount={maxPagesCount}
+            pageCount={pageCount}
+            pageIndex={pageIndex}
+            pageIndexChange={pageIndexChange}
+            pagesCountText={pagesCountText}
+            showNavigationButtons={showNavigationButtons}
+            totalCount={totalCount}
+          />
+        </div>
       </div>
     )}
   </Widget>

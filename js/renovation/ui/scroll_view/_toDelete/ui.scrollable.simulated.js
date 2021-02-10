@@ -3,12 +3,8 @@ import eventsEngine from '../../events/core/events_engine';
 import { each } from '../../core/utils/iterator';
 import { locate } from '../../animation/translator';
 import Class from '../../core/class';
-import devices from '../../core/devices';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
 import { when } from '../../core/utils/deferred';
-
-const realDevice = devices.real;
-const isSluggishPlatform = realDevice.platform === 'android';
 
 const SCROLLABLE_SIMULATED = 'dxSimulatedScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -18,15 +14,7 @@ const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 
 const HORIZONTAL = 'horizontal';
 
-const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
-const MIN_VELOCITY_LIMIT = 1;
-const FRAME_DURATION = Math.round(1000 / 60);
-
 export const Scroller = Class.inherit({
-    _scrollStep: function(delta) {
-        eventsEngine.triggerHandler(this._$container, { type: 'scroll' });
-    },
-
     _scrollToBounds: function() {
         this._bounceAction();
     },
@@ -57,15 +45,6 @@ export const Scroller = Class.inherit({
 
     _resetScaleRatio: function() {
         this._scaleRatio = null;
-    },
-
-    _updateLocation: function() {
-        this._location = (locate(this._$content)[this._prop] - this._$container[this._scrollProp]()) * this._getScaleRatio();
-    },
-
-    _updateBounds: function() {
-        this._maxOffset = Math.round(this._getMaxOffset());
-        this._minOffset = Math.round(this._getMinOffset());
     },
 
     _updateScrollbar: deferUpdater(function() {
@@ -279,11 +258,4 @@ export const SimulatedStrategy = Class.inherit({
         eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_CURSOR}`);
         eventsEngine.off(this._$container, `.${SCROLLABLE_SIMULATED_KEYBOARD}`);
     }
-
 });
-
-export {
-    ACCELERATION,
-    MIN_VELOCITY_LIMIT,
-    FRAME_DURATION
-};

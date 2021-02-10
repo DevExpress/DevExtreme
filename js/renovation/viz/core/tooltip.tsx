@@ -92,8 +92,8 @@ export const viewFunction = ({
     MozUserSelect: 'auto',
     WebkitUserSelect: 'auto',
   } : {};
-  const textFont = font ?? DEFAULT_FONT;
-  const cloudShadow = shadow ?? DEFAULT_SHADOW;
+  const textFont = font || DEFAULT_FONT;
+  const cloudShadow = shadow || DEFAULT_SHADOW;
   return (
     <Portal container={container}>
       <div

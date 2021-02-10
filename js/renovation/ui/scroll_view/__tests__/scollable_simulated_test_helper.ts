@@ -250,6 +250,17 @@ class ScrollableTestHelper {
     }
   }
 
+  changeScrollbarMethod(method, mock) {
+    if (this.isBoth) {
+      this.viewModel.horizontalScrollbarRef[method] = mock;
+      this.viewModel.verticalScrollbarRef[method] = mock;
+    } else if (this.isVertical) {
+      this.viewModel.verticalScrollbarRef[method] = mock;
+    } else if (this.isHorizontal) {
+      this.viewModel.horizontalScrollbarRef[method] = mock;
+    }
+  }
+
   initContainerPosition({ top, left }) {
     this.viewModel.containerRef.current!.scrollTop = top;
     this.viewModel.containerRef.current!.scrollLeft = left;
