@@ -203,8 +203,8 @@ export default class FileItemsController {
         return this._processEditAction(actionInfo,
             () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
             () => {
-                parentDirectoryInfo.fileItem.hasSubDirectories = true;
                 this._resetDirectoryState(parentDirectoryInfo, true);
+                parentDirectoryInfo.fileItem.hasSubDirectories = true;
             });
     }
 
