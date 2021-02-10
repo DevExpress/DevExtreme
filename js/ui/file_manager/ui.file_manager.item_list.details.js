@@ -295,7 +295,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             itemData: item,
             options: this._contextMenu.option(),
             event: e.event,
-            actionButton: false,
+            isActionButton: false,
             cancel: false
         });
         this._raiseContextMenuShowing(eventArgs);

@@ -490,7 +490,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
-        assert.strictEqual(eventSpy.args[0][0].actionButton, false, 'actionButton flag is correct');
+        assert.strictEqual(eventSpy.args[0][0]._isActionButton, false, '_isActionButton flag is correct');
     });
 
     test('Raise the contextMenuPreparing event on treeView actionButtons', function(assert) {
@@ -519,7 +519,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
-        assert.strictEqual(eventSpy.args[0][0].actionButton, true, 'actionButton flag is correct');
+        assert.strictEqual(eventSpy.args[0][0]._isActionButton, true, '_isActionButton flag is correct');
     });
 
     test('Cancel the context menu on the contextMenuPreparing event: treeView', function(assert) {
@@ -569,7 +569,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
-        assert.strictEqual(eventSpy.args[0][0].actionButton, false, 'actionButton flag is correct');
+        assert.strictEqual(eventSpy.args[0][0]._isActionButton, false, '_isActionButton flag is correct');
     });
 
     test('Raise the contextMenuPreparing event on detailsView actionButtons', function(assert) {
@@ -598,7 +598,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
-        assert.strictEqual(eventSpy.args[0][0].actionButton, true, 'actionButton flag is correct');
+        assert.strictEqual(eventSpy.args[0][0]._isActionButton, true, '_isActionButton flag is correct');
     });
 
     test('Raise the contextMenuPreparing event on detailsView free space', function(assert) {
@@ -628,7 +628,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
-        assert.strictEqual(eventSpy.args[0][0].actionButton, false, 'actionButton flag is correct');
+        assert.strictEqual(eventSpy.args[0][0]._isActionButton, false, '_isActionButton flag is correct');
     });
 
     test('Cancel the context menu on the contextMenuPreparing event: detailsView', function(assert) {
@@ -679,7 +679,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
-        assert.strictEqual(eventSpy.args[0][0].actionButton, false, 'actionButton flag is correct');
+        assert.strictEqual(eventSpy.args[0][0]._isActionButton, false, '_isActionButton flag is correct');
     });
 
     test('Raise the contextMenuPreparing event on thumbnailsView free space', function(assert) {
@@ -710,7 +710,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
-        assert.strictEqual(eventSpy.args[0][0].actionButton, false, 'actionButton flag is correct');
+        assert.strictEqual(eventSpy.args[0][0]._isActionButton, false, '_isActionButton flag is correct');
     });
 
     test('Cancel the context menu on the contextMenuPreparing event: thumbnailsView', function(assert) {

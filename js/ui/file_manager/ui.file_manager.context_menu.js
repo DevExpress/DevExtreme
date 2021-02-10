@@ -52,7 +52,7 @@ class FileManagerContextMenu extends Widget {
             itemData,
             fileItems,
             event,
-            actionButton: isActionButton
+            isActionButton
         };
 
         const position = {

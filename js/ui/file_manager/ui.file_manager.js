@@ -402,16 +402,12 @@ class FileManager extends Widget {
 
     _onContextMenuShowing(viewArea, e) {
         this._setItemsViewAreaActive(viewArea === VIEW_AREAS.items);
-        let eventArgs = extendAttributes({}, e, [
-            'targetElement',
-            'cancel',
-            'event',
-            'actionButton'
-        ]);
+        let eventArgs = extendAttributes({}, e, ['targetElement', 'cancel', 'event']);
         eventArgs = extend(eventArgs, {
             viewArea,
             fileSystemItem: e.itemData?.fileItem,
-            items: e.options.items
+            items: e.options.items,
+            _isActionButton: e.isActionButton
         });
         this._actions.onContextMenuPreparing(eventArgs);
         e.cancel = ensureDefined(eventArgs.cancel, false);
