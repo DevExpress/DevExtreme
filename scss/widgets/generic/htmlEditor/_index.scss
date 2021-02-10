@@ -29,6 +29,19 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
       border-color: $htmleditor-invalid-border-color;
     }
   }
+
+  &.dx-editor-filled,
+  &.dx-editor-underlined {
+    border-color: $htmleditor-filled-border-color;
+
+    .dx-htmleditor-toolbar-wrapper:first-child {
+      border-color: $htmleditor-filled-border-color;
+    }
+  }
+
+  &.dx-editor-underlined {
+    border-bottom-color: $htmleditor-border-color;
+  }
 }
 
 .dx-htmleditor-content {

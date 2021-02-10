@@ -29,6 +29,13 @@ const QUILL_CLIPBOARD_CLASS = 'ql-clipboard';
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = 'dx-htmleditor-submit-element';
 const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
+const TEXTEDITOR_STYLING_MODE_PREFIX = 'dx-editor-';
+const ALLOWED_STYLE_CLASSES = [
+    TEXTEDITOR_STYLING_MODE_PREFIX + 'outlined',
+    TEXTEDITOR_STYLING_MODE_PREFIX + 'filled',
+    TEXTEDITOR_STYLING_MODE_PREFIX + 'underlined'
+];
+
 const MARKDOWN_VALUE_TYPE = 'markdown';
 
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
@@ -48,7 +55,9 @@ const HtmlEditor = Editor.inherit({
             mentions: null,
             customizeModules: null,
 
-            formDialogOptions: null
+            formDialogOptions: null,
+
+            stylingMode: 'outlined',
         });
     },
 
@@ -101,12 +110,30 @@ const HtmlEditor = Editor.inherit({
         return $(relatedTarget).hasClass(QUILL_CLIPBOARD_CLASS);
     },
 
+    _renderStylingMode: function() {
+        const optionName = 'stylingMode';
+        const optionValue = this.option(optionName);
+        ALLOWED_STYLE_CLASSES.forEach(className => this.$element().removeClass(className));
+
+        let stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + optionValue;
+
+        if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
+            const defaultOptionValue = this._getDefaultOptions()[optionName];
+            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
+            stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + (platformOptionValue || defaultOptionValue);
+        }
+
+        this.$element().addClass(stylingModeClass);
+    },
+
     _initMarkup: function() {
         this._$htmlContainer = $('<div>').addClass(QUILL_CONTAINER_CLASS);
 
         this.$element()
             .addClass(HTML_EDITOR_CLASS)
             .wrapInner(this._$htmlContainer);
+
+        this._renderStylingMode();
 
         const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
         const transclude = true;
