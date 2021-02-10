@@ -558,6 +558,7 @@ describe('Widget', () => {
           const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
 
           expect(resizeCallbacks.add).toBeCalledTimes(1);
+          expect(resizeCallbacks.add).toHaveBeenCalledWith(onDimensionChanged);
           expect(resizeCallbacks.remove).toBeCalledTimes(0);
 
           dispose?.();
@@ -572,10 +573,7 @@ describe('Widget', () => {
           dispose?.();
 
           expect(resizeCallbacks.remove).toBeCalledTimes(1);
-
-          const callbackPassedToAdd = (resizeCallbacks as any).add.mock.calls[0][0];
-          const callbackPassedToRemove = (resizeCallbacks as any).remove.mock.calls[0][0];
-          expect(callbackPassedToAdd).toEqual(callbackPassedToRemove);
+          expect(resizeCallbacks.remove).toHaveBeenCalledWith(onDimensionChanged);
         });
 
         it('should not subscribe on window.onresize event if onDimensionChanged callback does not defined', () => {
