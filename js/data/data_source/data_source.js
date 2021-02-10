@@ -65,15 +65,20 @@ export const DataSource = Class.inherit({
                 ? () => this._changedTime * 5
                 : options.pushAggregationTimeout;
 
-            const pushDeferred = new Deferred();
+            let pushDeferred;
 
             const throttlingPushHandler = dataUtils.throttleChanges((changes) => {
                 pushDeferred.resolve();
                 pushDeferred.done(() => this._onPush(changes));
+                pushDeferred = undefined;
             }, throttlingTimeout);
 
             this._onPushHandler = (args) => {
                 this._aggregationTimeoutId = throttlingPushHandler(args.changes);
+
+                if(!pushDeferred) {
+                    pushDeferred = new Deferred();
+                }
 
                 args.waitFor.push(pushDeferred.promise());
             };
