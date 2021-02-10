@@ -202,7 +202,10 @@ export default class FileItemsController {
         const actionInfo = this._createEditActionInfo('create', tempDirInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
-            () => this._resetDirectoryState(parentDirectoryInfo, true));
+            () => {
+                this._resetDirectoryState(parentDirectoryInfo, true);
+                parentDirectoryInfo.fileItem.hasSubDirectories = true;
+            });
     }
 
     renameItem(fileItemInfo, name) {
