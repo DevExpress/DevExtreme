@@ -1104,19 +1104,41 @@ module('Empty dateBox', {
         assert.strictEqual(this.$input.val(), '', 'value is correct');
     });
 
-    test('navigation keys should do nothing in an empty datebox', function(assert) {
-        this.keyboard.press('home');
-        this.keyboard.press('end');
-        this.keyboard.press('del');
-        this.keyboard.press('backspace');
-        this.keyboard.press('esc');
-        this.keyboard.press('left');
-        this.keyboard.press('right');
-        this.keyboard.press('enter');
+    [
+        'home',
+        'end',
+        'del',
+        'backpace',
+        'esc',
+        'left',
+        'right',
+        'enter'
+    ].forEach((key) => {
+        test(`${key} key should do nothing in an empty datebox`, function(assert) {
+            this.keyboard.press(key);
 
-        assert.deepEqual(this.instance.option('value'), null, 'value is good');
-        assert.deepEqual(this.$input.val(), '', 'text is good');
-        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, 'caret is good');
+            assert.deepEqual(this.instance.option('value'), null, 'value is good');
+            assert.deepEqual(this.$input.val(), '', 'text is good');
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, 'caret is good');
+        });
+    });
+
+    [
+        'space',
+        'spaceIE' // IE11 support (T972456)
+    ].forEach((key) => {
+        test(`${key} keydown event should be prevented`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
+            const value = new Date(2020, 5, 5);
+            this.instance.option({ value });
+            this.keyboard.keyDown(key);
+
+            assert.ok(this.keyboard.event.isDefaultPrevented(), `${key} key keydown prevented`);
+        });
     });
 });
 
