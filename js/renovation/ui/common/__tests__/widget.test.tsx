@@ -551,7 +551,7 @@ describe('Widget', () => {
           jest.clearAllMocks();
         });
 
-        it('should subscribe to windowResizeEffect event', () => {
+        it('should subscribe on window.onresize event', () => {
           const onDimensionChanged = jest.fn();
           const widget = new Widget({ onDimensionChanged });
 
@@ -563,7 +563,7 @@ describe('Widget', () => {
           dispose?.();
         });
 
-        it('should return unsubscribe callback', () => {
+        it('should return window.onresize unsubscribe callback', () => {
           const onDimensionChanged = jest.fn();
           const widget = new Widget({ onDimensionChanged });
 
@@ -572,15 +572,18 @@ describe('Widget', () => {
           dispose?.();
 
           expect(resizeCallbacks.remove).toBeCalledTimes(1);
+
           const callbackPassedToAdd = (resizeCallbacks as any).add.mock.calls[0][0];
-          const callbackPassedToRemove = (resizeCallbacks as any).add.mock.calls[0][0];
+          const callbackPassedToRemove = (resizeCallbacks as any).remove.mock.calls[0][0];
           expect(callbackPassedToAdd).toEqual(callbackPassedToRemove);
         });
 
-        it('should not subscribe if callback does not exist', () => {
+        it('should not subscribe on window.onresize event if onDimensionChanged callback does not defined', () => {
           const widget = new Widget({ });
           const dispose = widget.windowResizeEffect();
 
+          expect(resizeCallbacks.add).toBeCalledTimes(0);
+          expect(resizeCallbacks.remove).toBeCalledTimes(0);
           expect(dispose).toBe(undefined);
         });
       });

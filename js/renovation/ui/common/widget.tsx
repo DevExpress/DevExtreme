@@ -320,10 +320,9 @@ export class Widget extends JSXComponent(WidgetProps) {
     const { onDimensionChanged } = this.props;
 
     if (onDimensionChanged) {
-      const resizeCallback = (): void => onDimensionChanged();
-      resizeCallbacks.add(resizeCallback);
+      resizeCallbacks.add(onDimensionChanged);
 
-      return (): void => { resizeCallbacks.remove(resizeCallback); };
+      return (): void => { resizeCallbacks.remove(onDimensionChanged); };
     }
 
     return undefined;
