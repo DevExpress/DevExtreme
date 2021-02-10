@@ -35,10 +35,10 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                     e.preventDefault();
 
                     if(this._widget.option('zoomLevel') === this._widget.option('maxZoomLevel')) {
-                        const contouredDate = this._widget._view.option('contouredDate');
+                        const viewValue = this._getContouredValue();
                         const lastActionElement = this._lastActionElement;
-                        if(contouredDate && lastActionElement === 'calendar') {
-                            this.dateBoxValue(contouredDate, e);
+                        if(viewValue && lastActionElement === 'calendar') {
+                            this.dateBoxValue(viewValue, e);
                         }
 
                         this.dateBox.close();
@@ -61,6 +61,10 @@ const CalendarStrategy = DateBoxStrategy.inherit({
 
     _getWidgetName: function() {
         return Calendar;
+    },
+
+    _getContouredValue: function() {
+        return this._widget._view.option('contouredDate');
     },
 
     getKeyboardListener() {
