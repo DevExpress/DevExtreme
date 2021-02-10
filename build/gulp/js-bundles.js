@@ -24,9 +24,7 @@ const namedDebug = lazyPipe()
     .pipe(named, (file) => path.basename(file.path, path.extname(file.path)) + '.debug');
 
 const BUNDLES = [
-    '/bundles/dx.all.js',
-    '/bundles/dx.web.js',
-    '/bundles/dx.viz.js'
+    '/bundles/dx.all.js'
 ];
 
 const BUNDLES_ESM_PACKAGE = BUNDLES.map(file => '/cjs' + file);
