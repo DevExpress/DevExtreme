@@ -758,13 +758,15 @@ const TagBox = SelectBox.inherit({
     _getFilteredItems: function(values) {
         const creator = new FilterCreator(values);
 
-        const selectedItems = (this._list && this._list.option('selectedItems')) || this.option('selectedItems');
+        const listSelectedItems = this._list?.option('selectedItems');
+        const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource().isLoaded();
+        const selectedItems = listSelectedItems || this.option('selectedItems');
         const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
         const filteredItems = selectedItems.filter(clientFilterFunction);
         const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
         const d = new Deferred();
 
-        if(!this._isDataSourceChanged && selectedItemsAlreadyLoaded) {
+        if((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
             const dataSource = this._dataSource;
@@ -935,7 +937,28 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemsFromPlain: function(values) {
-        const plainItems = this._getPlainItems();
+        let selectedItems = this._getSelectedItemsFromList(values);
+        const needFilterPlainItems = (selectedItems.length === 0 && values.length > 0) || (selectedItems.length < values.length);
+
+        if(needFilterPlainItems) {
+            const plainItems = this._getPlainItems();
+            selectedItems = this._filterSelectedItems(plainItems, values);
+        }
+
+        return selectedItems;
+    },
+
+    _getSelectedItemsFromList: function(values) {
+        const listSelectedItems = this._list?.option('selectedItems');
+        let selectedItems = [];
+        if(values.length === listSelectedItems?.length) {
+            selectedItems = this._filterSelectedItems(listSelectedItems, values);
+        }
+
+        return selectedItems;
+    },
+
+    _filterSelectedItems: function(plainItems, values) {
         const selectedItems = plainItems.filter((dataItem) => {
             let currentValue;
             for(let i = 0; i < values.length; i++) {
@@ -1356,9 +1379,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _dataSourceChangedHandler: function() {
-        if(this._list) {
-            this._isDataSourceChanged = true;
-        }
+        this._isDataSourceChanged = true;
         this.callBase.apply(this, arguments);
     },
 
