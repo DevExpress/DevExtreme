@@ -124,7 +124,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _isSingleCharKey({ originalEvent, ctrl, alt }) {
         const key = originalEvent.data || (
-            originalEvent.key === 'Spacebar' ? // IE11 (T972456)
+            normalizeKeyName(originalEvent) === 'space' ? // IE11 (T972456)
                 ' ' :
                 originalEvent.key
         );
