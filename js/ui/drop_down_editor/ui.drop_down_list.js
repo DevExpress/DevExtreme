@@ -462,8 +462,6 @@ const DropDownList = DropDownEditor.inherit({
         return this.callBase().concat([!canListHaveFocus && this._list]);
     },
 
-    _fireContentReadyAction: noop,
-
     _setAriaTargetForList: function() {
         this._list._getAriaTarget = this._getAriaTarget.bind(this);
     },
