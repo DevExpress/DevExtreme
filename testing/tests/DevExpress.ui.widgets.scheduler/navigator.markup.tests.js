@@ -14,7 +14,6 @@ QUnit.testStart(() => {
 
 const moduleConfig = {
     beforeEach: function() {
-        devices.current({ platform: 'generic' });
         this.instance = $('#navigator').dxSchedulerNavigator().dxSchedulerNavigator('instance');
         this.instance.notifyObserver = noop.noop;
     }
