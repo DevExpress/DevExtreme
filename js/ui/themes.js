@@ -103,7 +103,7 @@ export function waitForThemeLoad(themeName) {
     }
 }
 
-function isPendingThemeLoaded() {
+export function isPendingThemeLoaded() {
     if(!pendingThemeName) {
         return true;
     }
@@ -248,7 +248,10 @@ export function current(options) {
         }
     } else {
         if(isAutoInit) {
-            waitForThemeLoad(ANY_THEME);
+            if(hasWindow()) {
+                waitForThemeLoad(ANY_THEME);
+            }
+
             themeReadyCallback.fire();
             themeReadyCallback.empty();
         } else {
@@ -446,4 +449,5 @@ export default {
     attachCssClasses,
     current,
     waitForThemeLoad,
+    isPendingThemeLoaded,
 };
