@@ -93,6 +93,26 @@ const DEFAULT_ITEM_CONFIGS = {
     }
 };
 
+const DEFAULT_ITEM_ALLOWED_PROPERTIES = [
+    'visible',
+    'location',
+    'locateInMenu',
+    'disabled',
+    'showText'
+];
+
+const DEFAULT_ITEM_ALLOWED_OPTION_PROPERTIES = [
+    'accessKey',
+    'elementAttr',
+    'height',
+    'hint',
+    'icon',
+    'stylingMode',
+    'tabIndex',
+    'text',
+    'width'
+];
+
 const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ 'separator', 'switchView' ];
 
 const REFRESH_ICON_MAP = {
@@ -250,25 +270,9 @@ class FileManagerToolbar extends Widget {
             const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
             extend(true, result, defaultConfig);
             let resultCssClass = result.cssClass || '';
-            extendAttributes(result, item, [
-                'visible',
-                'location',
-                'locateInMenu',
-                'disabled',
-                'showText'
-            ]);
+            extendAttributes(result, item, DEFAULT_ITEM_ALLOWED_PROPERTIES);
             if(isDefined(item.options)) {
-                extendAttributes(result.options, item.options, [
-                    'accessKey',
-                    'elementAttr',
-                    'height',
-                    'hint',
-                    'icon',
-                    'stylingMode',
-                    'tabIndex',
-                    'text',
-                    'width'
-                ]);
+                extendAttributes(result.options, item.options, DEFAULT_ITEM_ALLOWED_OPTION_PROPERTIES);
             }
             extendAttributes(result.options, item, ['text', 'icon']);
 
