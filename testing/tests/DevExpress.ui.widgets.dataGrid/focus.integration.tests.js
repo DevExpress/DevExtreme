@@ -3311,7 +3311,7 @@ QUnit.module('View\'s focus', {
         assert.equal($(this.dataGrid.element()).find('.myclass .dx-editor-cell.dx-focused').length, 1, 'focused edit cell');
     });
 
-    QUnit.testInActiveWindow('Grid should scroll to the top when a command button is clicked in a detail grid (T969832)', function(assert) {
+    QUnit.testInActiveWindow('Grid should not scroll to the top when a command button is clicked in a detail grid (T969832)', function(assert) {
         // arrange
         this.dataGrid.option({
             dataSource: [
