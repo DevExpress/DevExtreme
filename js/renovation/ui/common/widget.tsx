@@ -29,6 +29,7 @@ import { EffectReturn } from '../../utils/effect_return.d';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { ConfigProvider } from '../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
+import resizeCallbacks from '../../../core/utils/resize_callbacks';
 
 const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
@@ -314,6 +315,18 @@ export class Widget extends JSXComponent(WidgetProps) {
     if (onDimensionChanged) {
       resize.on(this.widgetRef.current, onDimensionChanged, { namespace });
       return (): void => resize.off(this.widgetRef.current, { namespace });
+    }
+
+    return undefined;
+  }
+
+  @Effect() windowResizeEffect(): EffectReturn {
+    const { onDimensionChanged } = this.props;
+
+    if (onDimensionChanged) {
+      resizeCallbacks.add(onDimensionChanged);
+
+      return (): void => { resizeCallbacks.remove(onDimensionChanged); };
     }
 
     return undefined;

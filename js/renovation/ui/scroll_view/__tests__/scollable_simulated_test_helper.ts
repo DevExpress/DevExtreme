@@ -73,12 +73,9 @@ class ScrollableTestHelper {
 
     const { contentSize = 200, containerSize = 100, overflow = false } = args;
 
-    this.initStyles(this.viewModel.containerRef.current, containerSize, contentSize);
-    this.initStyles(this.viewModel.contentRef.current, contentSize, contentSize, overflow);
-    this.initStyles(this.viewModel.scrollableRef.current, containerSize, contentSize);
-
-    // eslint-disable-next-line max-len
-    this.viewModel.getBaseDimension = (element, dimension) => parseInt(element.style[dimension], 10);
+    this.initStyles(this.viewModel.containerRef.current!, containerSize, contentSize);
+    this.initStyles(this.viewModel.contentRef.current!, contentSize, contentSize, overflow);
+    this.initStyles(this.viewModel.scrollableRef.current!, containerSize, contentSize);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -193,6 +190,8 @@ class ScrollableTestHelper {
             scaleRatio: 1,
             contentSize: 200,
             containerSize: 100,
+            baseContentSize: additionalProps.props.contentSize || 200,
+            baseContainerSize: additionalProps.props.containerSize || 100,
             scrollableOffset: 0,
             contentRef: { current: this.viewModel.contentRef.current },
             containerRef: { current: this.viewModel.containerRef.current },
@@ -247,6 +246,21 @@ class ScrollableTestHelper {
       this.viewModel.verticalScrollbarRef.current.props[prop] = value;
     } else if (this.isHorizontal) {
       this.viewModel.horizontalScrollbarRef.current.props[prop] = value;
+    }
+  }
+
+  checkScrollbarProps(expectedProps) {
+    if (this.isVertical) {
+      this.viewModel.verticalScrollbarRef.current!.props = {
+        direction: 'vertical',
+        ...expectedProps,
+      };
+    }
+    if (this.isHorizontal) {
+      this.viewModel.horizontalScrollbarRef.current!.props = {
+        direction: 'horizontal',
+        ...expectedProps,
+      };
     }
   }
 

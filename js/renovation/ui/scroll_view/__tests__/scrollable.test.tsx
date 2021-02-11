@@ -317,13 +317,14 @@ each([{
           each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
             each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
               each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
-                each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
+                if (Scrollable === ScrollableNative) {
                   each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
                     each([true, false]).describe('IsShiftKeyPressed: %o', (isShiftKeyPressed) => {
+                      // TODO: check this test
                       it('scrollinit eventArgs', () => {
-                        const viewModel = new Scrollable({ direction, bounceEnabled }) as any;
+                        const viewModel = new Scrollable({ direction }) as any;
                         initRefs(viewModel, viewFunction, {
-                          strategy: Scrollable === ScrollableSimulated ? 'simulated' : 'native',
+                          strategy: 'native',
                           direction,
                           contentSize,
                           containerSize,
@@ -340,11 +341,8 @@ each([{
                           overflow,
                         });
 
-                        const isSimulatedStrategy = Scrollable === ScrollableSimulated;
-                        const hasScrollBar = isSimulatedStrategy
-                          ? (containerSize < contentSize || bounceEnabled)
-                          : containerSize < contentSize;
-                        let expectedDirectionResult = hasScrollBar
+                        const hasScrollBar = containerSize < contentSize;
+                        const expectedDirectionResult = hasScrollBar
                           ? direction
                           : undefined;
 
@@ -353,20 +351,11 @@ each([{
                           (e as any).type = 'dxmousewheel';
                         }
 
-                        if (isSimulatedStrategy && isDxWheelEvent) {
-                          expectedDirectionResult = direction;
-                          if (direction === 'both') {
-                            expectedDirectionResult = isShiftKeyPressed ? 'horizontal' : 'vertical';
-                          }
-                        }
-
                         expect(viewModel.getDirection(e)).toBe(expectedDirectionResult);
                       });
                     });
                   });
-                });
 
-                if (Scrollable === ScrollableNative) {
                   each([true, false]).describe('Disabled: %o', (disabled) => {
                     each([true, false]).describe('IsLocked: %o', (locked) => {
                       each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {

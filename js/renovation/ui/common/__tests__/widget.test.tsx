@@ -12,6 +12,7 @@ import { Widget, viewFunction, WidgetProps } from '../widget';
 import { isFakeClickEvent } from '../../../../events/utils/index';
 import { ConfigProvider } from '../../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
+import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
@@ -19,6 +20,7 @@ jest.mock('../../../../events/utils/index', () => ({
 }));
 jest.mock('../../../common/config_provider', () => ({ ConfigProvider: () => null }));
 jest.mock('../../../utils/resolve_rtl');
+jest.mock('../../../../core/utils/resize_callbacks');
 
 describe('Widget', () => {
   describe('Render', () => {
@@ -548,6 +550,46 @@ describe('Widget', () => {
 
           emit(EVENT.resize);
           expect(getEventHandlers(EVENT.resize)).toBe(undefined);
+        });
+      });
+
+      describe('windowResizeEffect', () => {
+        afterEach(() => {
+          jest.clearAllMocks();
+        });
+
+        it('should subscribe on window.onresize event', () => {
+          const onDimensionChanged = jest.fn();
+          const widget = new Widget({ onDimensionChanged });
+
+          const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
+
+          expect(resizeCallbacks.add).toBeCalledTimes(1);
+          expect(resizeCallbacks.add).toHaveBeenCalledWith(onDimensionChanged);
+          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+
+          dispose?.();
+        });
+
+        it('should return window.onresize unsubscribe callback', () => {
+          const onDimensionChanged = jest.fn();
+          const widget = new Widget({ onDimensionChanged });
+
+          const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
+
+          dispose?.();
+
+          expect(resizeCallbacks.remove).toBeCalledTimes(1);
+          expect(resizeCallbacks.remove).toHaveBeenCalledWith(onDimensionChanged);
+        });
+
+        it('should not subscribe on window.onresize event if onDimensionChanged callback does not defined', () => {
+          const widget = new Widget({ });
+          const dispose = widget.windowResizeEffect();
+
+          expect(resizeCallbacks.add).toBeCalledTimes(0);
+          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+          expect(dispose).toBe(undefined);
         });
       });
 
