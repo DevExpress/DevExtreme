@@ -1,7 +1,8 @@
-import { ComponentPublicInstance as IVue } from "vue";
+import { ComponentPublicInstance as IVue, VNodeProps } from "vue";
 import { getOption } from "./config";
 import { IComponentInfo } from "./configuration-component";
 import { getOptionInfo, isEqual } from "./helpers";
+import { VMODEL_NAME } from "./vue-helper";
 
 type UpdateFunc = (name: string, value: any) => void;
 type EmitOptionChangedFunc = (name: string, value: any) => void;
@@ -278,6 +279,10 @@ function hasProp(vueInstance: Pick<IVue, "$options">, propName: string) {
     return props && props.hasOwnProperty(propName);
 }
 
+function hasVModelValue(options: Record<string, any>, props: VNodeProps) {
+    return options.model && props.hasOwnProperty(VMODEL_NAME);
+}
+
 function setEmitOptionChangedFunc(
     config: Configuration,
     vueInstance: Pick<IVue, "$" | "$props" | "$emit" | "$options">,
@@ -286,7 +291,11 @@ function setEmitOptionChangedFunc(
         const props = vueInstance.$props;
         if (hasProp(vueInstance, name) && !isEqual(value, props[name]) && vueInstance.$emit) {
             innerChanges[name] = value;
-            vueInstance.$emit("update:" + name, value);
+            const eventName = name === "value" && hasVModelValue(vueInstance.$options, props) ?
+                `update:${VMODEL_NAME}` :
+                `update:${name}`;
+
+            vueInstance.$emit(eventName, value);
         }
     };
 }

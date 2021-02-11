@@ -7,6 +7,8 @@ import { IConfigurationComponent } from "./configuration-component";
 
 import { isFragment } from "./children-processing";
 
+export const VMODEL_NAME = "modelValue";
+
 export function getChildren(component: IBaseComponent): any {
     if (!hasChildren(component) || !component.$_config) {
         return [];
@@ -107,6 +109,18 @@ export function getNodeOptions(component: Pick<ComponentPublicInstance, "$">) {
 
 export function getNodeTypeOfComponent(component: Pick<ComponentPublicInstance, "$">): any {
     return component.$.vnode.type;
+}
+
+export function getVModelValue(options: Record<string, any>) {
+    return options[VMODEL_NAME];
+}
+
+export function setVModel(config: any): void {
+    const eventName = `update:${VMODEL_NAME}`;
+    config.model.prop = VMODEL_NAME;
+    config.model.event = eventName;
+    config.props.modelValue = {};
+    config.emits = { ...config.emits, [`${eventName}`]: null };
 }
 
 interface ChildConfiguration extends VNode {

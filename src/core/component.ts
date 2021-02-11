@@ -3,7 +3,7 @@ import { ComponentPublicInstance, defineComponent, h, VNode } from "vue";
 import * as CreateCallback from "devextreme/core/utils/callbacks";
 import * as events from "devextreme/events";
 
-import { defaultSlots, getChildren, getComponentInstance, getComponentProps } from "./vue-helper";
+import { defaultSlots, getChildren, getComponentInstance, getComponentProps, getVModelValue, VMODEL_NAME } from "./vue-helper";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
@@ -124,7 +124,7 @@ function initBaseComponent() {
                     if (Array.isArray(v)) {
                         thisComponent.$_instance.option(n, v);
                     } else {
-                        thisComponent.$_pendingOptions[n] = v;
+                        thisComponent.$_pendingOptions[n === VMODEL_NAME ? "value" : n] = v;
                     }
                 },
                 null,
@@ -158,6 +158,11 @@ function initBaseComponent() {
                 thisComponent.$_templatesManager = new TemplatesManager(this as ComponentPublicInstance);
 
                 const config = thisComponent.$_config;
+
+                if (config.initialValues.hasOwnProperty(VMODEL_NAME)) {
+                    config.initialValues.value = getVModelValue(config.initialValues);
+                }
+
                 const options: object = {
                     templatesRenderAsynchronously: true,
                     ...getComponentProps(thisComponent),
