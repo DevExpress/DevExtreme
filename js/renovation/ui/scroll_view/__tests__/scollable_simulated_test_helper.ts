@@ -177,6 +177,8 @@ class ScrollableTestHelper {
             scaleRatio: 1,
             contentSize: 200,
             containerSize: 100,
+            baseContentSize: additionalProps.props.contentSize || 200,
+            baseContainerSize: additionalProps.props.containerSize || 100,
             scrollableOffset: 0,
             contentRef: { current: this.viewModel.contentRef },
             containerRef: { current: this.viewModel.containerRef },

@@ -314,42 +314,40 @@ each([{
             each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
               each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
                 if (Scrollable === ScrollableNative) {
-                  each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-                    each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
-                      each([true, false]).describe('IsShiftKeyPressed: %o', (isShiftKeyPressed) => {
-                        // TODO: check this test
-                        it('scrollinit eventArgs', () => {
-                          const viewModel = new Scrollable({ direction, bounceEnabled }) as any;
-                          initRefs(viewModel, viewFunction, {
-                            strategy: 'native',
-                            direction,
-                            contentSize,
-                            containerSize,
-                          });
-
-                          initStyles({
-                            ref: (viewModel).containerRef,
-                            size: containerSize,
-                            overflow,
-                          });
-                          initStyles({
-                            ref: (viewModel).contentRef,
-                            size: contentSize,
-                            overflow,
-                          });
-
-                          const hasScrollBar = containerSize < contentSize;
-                          const expectedDirectionResult = hasScrollBar
-                            ? direction
-                            : undefined;
-
-                          const e = { ...defaultEvent, shiftKey: isShiftKeyPressed };
-                          if (isDxWheelEvent) {
-                            (e as any).type = 'dxmousewheel';
-                          }
-
-                          expect(viewModel.getDirection(e)).toBe(expectedDirectionResult);
+                  each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
+                    each([true, false]).describe('IsShiftKeyPressed: %o', (isShiftKeyPressed) => {
+                      // TODO: check this test
+                      it('scrollinit eventArgs', () => {
+                        const viewModel = new Scrollable({ direction }) as any;
+                        initRefs(viewModel, viewFunction, {
+                          strategy: 'native',
+                          direction,
+                          contentSize,
+                          containerSize,
                         });
+
+                        initStyles({
+                          ref: (viewModel).containerRef,
+                          size: containerSize,
+                          overflow,
+                        });
+                        initStyles({
+                          ref: (viewModel).contentRef,
+                          size: contentSize,
+                          overflow,
+                        });
+
+                        const hasScrollBar = containerSize < contentSize;
+                        const expectedDirectionResult = hasScrollBar
+                          ? direction
+                          : undefined;
+
+                        const e = { ...defaultEvent, shiftKey: isShiftKeyPressed };
+                        if (isDxWheelEvent) {
+                          (e as any).type = 'dxmousewheel';
+                        }
+
+                        expect(viewModel.getDirection(e)).toBe(expectedDirectionResult);
                       });
                     });
                   });

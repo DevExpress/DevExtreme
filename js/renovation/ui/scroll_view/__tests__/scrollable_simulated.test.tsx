@@ -670,42 +670,43 @@ describe('Simulated', () => {
                 helper.viewModel.effectUpdateScrollbarSize();
 
                 if (helper.isVertical) {
-                  expect(helper.viewModel.scrollableOffsetLeft)
-                    .toEqual(10);
+                  expect(helper.viewModel.scrollableOffsetLeft).toEqual(10);
                   expect(helper.viewModel.containerWidth).toEqual(containerSize);
                   expect(helper.viewModel.contentWidth).toEqual(contentSize);
                   expect(helper.viewModel.baseContainerWidth).toEqual(containerSize);
                   expect(helper.viewModel.baseContentWidth).toEqual(contentSize);
                 }
                 if (helper.isHorizontal) {
-                  expect(helper.viewModel.scrollableOffsetTop)
-                    .toEqual(10);
+                  expect(helper.viewModel.scrollableOffsetTop).toEqual(10);
                   expect(helper.viewModel.containerHeight).toEqual(containerSize);
                   expect(helper.viewModel.contentHeight).toEqual(contentSize);
-                  expect(helper.viewModel.baseContainerWidth).toEqual(containerSize);
-                  expect(helper.viewModel.baseContentWidth).toEqual(contentSize);
+                  expect(helper.viewModel.baseContainerHeight).toEqual(containerSize);
+                  expect(helper.viewModel.baseContentHeight).toEqual(contentSize);
                 }
               });
 
               each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
                 each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
-                  each([true, false]).describe('IsShiftKeyPressed: %o', (isShiftKeyPressed) => {
+                  each([true, false]).describe('IsShiftKeyPressed: %o', (shiftKey) => {
                     it('scrollinit eventArgs', () => {
                       const helper = new ScrollableTestHelper({
-                        direction, bounceEnabled, contentSize, containerSize,
+                        direction, overflow, bounceEnabled, contentSize, containerSize,
                       });
 
-                      helper.initScrollbarSettings();
+                      helper.initScrollbarSettings({ props: { containerSize, contentSize } });
 
-                      let expectedDirectionResult = direction;
+                      let expectedDirectionResult = (containerSize < contentSize || bounceEnabled) ? direction : undefined;
 
-                      const e = { ...defaultEvent, shiftKey: isShiftKeyPressed };
+                      const e = { ...defaultEvent, shiftKey };
                       if (isDxWheelEvent) {
                         (e as any).type = 'dxmousewheel';
                       }
 
-                      if (isDxWheelEvent && direction === 'both') {
-                        expectedDirectionResult = isShiftKeyPressed ? 'horizontal' : 'vertical';
+                      if (isDxWheelEvent) {
+                        expectedDirectionResult = direction;
+                        if (direction === 'both') {
+                          expectedDirectionResult = shiftKey ? 'horizontal' : 'vertical';
+                        }
                       }
 
                       expect((helper.viewModel as any).getDirection(e)).toBe(expectedDirectionResult);
