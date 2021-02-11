@@ -107,7 +107,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @InternalState() active = false;
 
-  @InternalState() scrollTranslateOffset: {left: number; top: number} = { left: 0, top: 0 };
+  @InternalState() scrollTranslateOffset: { left: number; top: number } = { left: 0, top: 0 };
 
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 

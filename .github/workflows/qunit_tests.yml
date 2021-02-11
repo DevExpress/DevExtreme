@@ -32,9 +32,9 @@ jobs:
       uses: actions/cache@v2
       with:
         path: .\node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
         restore-keys: |
-          ${{ runner.os }}-node
+          ${{ runner.os }}-node-modules
 
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund
@@ -44,7 +44,7 @@ jobs:
         DEVEXTREME_TEST_CI: "true"
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
-      run: npx npm-run-all -p build:r
+      run: npm run build:r
 
     - name: Run QUnit tests
       env:

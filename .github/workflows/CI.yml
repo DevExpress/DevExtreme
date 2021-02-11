@@ -20,15 +20,15 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '15'
+        node-version: '14'
 
     - name: Restore npm cache
       uses: actions/cache@v2
       with:
         path: .\node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+        key: ${{ runner.os }}-node-modules-key-${{ hashFiles('**/package.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-modules
+          ${{ runner.os }}-node-modules-key
 
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund
