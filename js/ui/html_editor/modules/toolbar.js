@@ -12,7 +12,7 @@ import { each } from '../../../core/utils/iterator';
 import { isString, isObject, isDefined, isEmptyObject, isBoolean } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import localizationMessage from '../../../localization/message';
-import { titleize } from '../../../core/utils/inflector';
+import { titleize, camelize } from '../../../core/utils/inflector';
 
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
@@ -64,8 +64,18 @@ if(Quill) {
     const USER_ACTION = 'user';
     const SILENT_ACTION = 'silent';
 
-    const HEADING_TEXT = localizationMessage.format('dxHtmlEditor-heading');
-    const NORMAL_TEXT = localizationMessage.format('dxHtmlEditor-normalText');
+    const localize = (name) => {
+        return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
+    };
+
+    const localizeValue = (value, formatName) => {
+        if(formatName === 'header') {
+            const isHeaderValue = isDefined(value) && value !== false;
+            return isHeaderValue ? `${localize('heading')} ${value}` : localize('normalText');
+        }
+
+        return localize(value) || value;
+    };
 
     ToolbarModule = class ToolbarModule extends BaseModule {
         constructor(quill, options) {
@@ -508,7 +518,7 @@ if(Quill) {
                 widget: 'dxButton',
                 formatName: formatName,
                 options: {
-                    hint: buttonText,
+                    hint: localize(buttonText),
                     text: buttonText,
                     icon: iconName.toLowerCase(),
                     onClick: this._formatHandlers[formatName] || this._getDefaultClickHandler(formatName),
@@ -525,7 +535,10 @@ if(Quill) {
                 options: {
                     stylingMode: 'filled',
                     dataSource: item.formatValues,
-                    placeholder: titleize(item.formatName),
+                    displayExpr: (value) => {
+                        return localizeValue(value, item.formatName);
+                    },
+                    placeholder: localize(item.formatName),
                     onValueChanged: (e) => {
                         if(!this._isReset) {
                             this._applyFormat([item.formatName, e.value, USER_ACTION], e.event);
@@ -587,14 +600,6 @@ if(Quill) {
 
         _getDefaultItemsConfig() {
             return {
-                header: {
-                    options: {
-                        displayExpr: (item) => {
-                            const isHeaderValue = isDefined(item) && item !== false;
-                            return isHeaderValue ? `${HEADING_TEXT} ${item}` : NORMAL_TEXT;
-                        }
-                    }
-                },
                 clear: {
                     options: {
                         disabled: true

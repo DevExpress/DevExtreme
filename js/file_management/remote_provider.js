@@ -59,10 +59,6 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         return this._executeRequest(FILE_SYSTEM_COMMNAD.CREATE_DIR, {
             pathInfo: parentDir.getFullPathInfo(),
             name
-        }).done(() => {
-            if(parentDir && !parentDir.isRoot()) {
-                parentDir.hasSubDirectories = true;
-            }
         });
     }
 

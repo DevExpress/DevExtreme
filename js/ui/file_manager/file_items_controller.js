@@ -201,7 +201,13 @@ export default class FileItemsController {
         const tempDirInfo = this._createDirInfoByName(name, parentDirectoryInfo);
         const actionInfo = this._createEditActionInfo('create', tempDirInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
-            () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
+            () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name)
+                .done(info => {
+                    if(!parentDirectoryInfo.fileItem.isRoot()) {
+                        parentDirectoryInfo.fileItem.hasSubDirectories = true;
+                    }
+                    return info;
+                }),
             () => this._resetDirectoryState(parentDirectoryInfo, true));
     }
 

@@ -1271,6 +1271,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             getDateHeaderText: this._getHeaderText.bind(this),
             today: this._getToday?.(),
             groupByDate: this.isGroupedByDate(),
+            groupsList: this._getAllGroups(),
+            isHorizontalGrouping: this._isHorizontalGroupedWorkSpace(),
+            isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
         };
 
         if(this.isVirtualScrolling()) {
@@ -2138,6 +2141,16 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const leaf = findLeafByIndex(tree, leafIndex);
         return makeBranch(leaf).reverse();
+    }
+
+    _getAllGroups() {
+        const groupCount = this._getGroupCount();
+
+        return [...(new Array(groupCount))].map((_, groupIndex) => {
+            const groupsArray = this._getCellGroups(groupIndex);
+
+            return this._getGroupsObjectFromGroupsArray(groupsArray);
+        });
     }
 
     _getCellGroups(groupIndex) {

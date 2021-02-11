@@ -309,18 +309,22 @@ const TextEditorMask = TextEditorBase.inherit({
 
     _renderValue: function() {
         if(this._maskRulesChain) {
-            const text = this._maskRulesChain.text();
-
             this._showMaskPlaceholder();
 
             if(this._$hiddenElement) {
                 const value = this._maskRulesChain.value();
-                const hiddenElementValue = this._isMaskedValueMode() ? text : value;
+                const submitElementValue = !isEmpty(value) ?
+                    this._getPreparedValue() :
+                    '';
 
-                this._$hiddenElement.val(!isEmpty(value) ? hiddenElementValue : '');
+                this._$hiddenElement.val(submitElementValue);
             }
         }
         return this.callBase();
+    },
+
+    _getPreparedValue: function() {
+        return this._convertToValue().replace(/\s+$/, '');
     },
 
     _valueChangeEventHandler: function(e) {
@@ -331,7 +335,7 @@ const TextEditorMask = TextEditorBase.inherit({
 
         this._saveValueChangeEvent(e);
 
-        this.option('value', this._convertToValue().replace(/\s+$/, ''));
+        this.option('value', this._getPreparedValue());
     },
 
     _isControlKeyFired: function(e) {

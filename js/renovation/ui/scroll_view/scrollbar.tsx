@@ -14,14 +14,15 @@ import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 import { isPlainObject, isDefined } from '../../../core/utils/type';
-import { move, resetPosition } from '../../../animation/translator';
+import { move, resetPosition, locate } from '../../../animation/translator';
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
-import { Deferred } from '../../../core/utils/deferred';
-import type { dxPromise } from '../../../core/utils/deferred';
+// import { Deferred } from '../../../core/utils/deferred';
+// import type { dxPromise } from '../../../core/utils/deferred';
 import { titleize } from '../../../core/utils/inflector';
 import devices from '../../../core/devices';
 import { BounceAnimator } from './bounce_animator';
 import { InertiaAnimator } from './inertia_animator';
+import eventsEngine from '../../../events/core/events_engine';
 
 import { ScrollbarProps } from './scrollbar_props';
 import {
@@ -127,6 +128,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     const scrollBarLocation = {};
     scrollBarLocation[prop] = this.calculateScrollBarPosition(position);
     move(this.scrollRef, scrollBarLocation);
+  }
+
+  /* istanbul ignore next */
+  updateLocation(): void {
+    this.setLocation((locate(this.getContentRef())[this.getProp()] - this.getContainerRef()[`scroll${titleize(this.getProp())}`]) * this.props.scaleRatio);
   }
 
   @Method()
@@ -241,6 +247,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
+  insideBounds(): boolean {
+    return this.inBounds();
+  }
+
+  @Method()
   boundLocation(value?: number): number {
     const currentLocation = isDefined(value) ? value : this.getLocation();
 
@@ -266,14 +277,14 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  initHandler(e, crossThumbScrolling: boolean): dxPromise<void> {
-    const stopDeferred = Deferred<void>();
+  initHandler(e, crossThumbScrolling: boolean): void { // dxPromise<void> {
+    // const stopDeferred = Deferred<void>();
 
     this.stopScrolling();
 
     this.prepareThumbScrolling(e, crossThumbScrolling);
 
-    return stopDeferred.promise();
+    // return stopDeferred.promise();
   }
 
   @Method()
@@ -432,7 +443,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return;
     }
 
-    // eventsEngine.triggerHandler(this.props.containerRef, { type: 'scroll' }); // TODO
+    this.triggerScrollEvent();
+  }
+
+  triggerScrollEvent(): void {
+    (eventsEngine as any).triggerHandler(this.getContainerRef(), { type: 'scroll' });
   }
 
   show(): void {
@@ -487,6 +502,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.moveScrollbar(this.getLocation());
   }
 
+  @Method()
+  moveToLocation(): void {
+    this.move();
+  }
+
   moveContent(): void {
     const location = this.getLocation();
 
@@ -494,6 +514,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.moveContentByTranslator(location);
   }
 
+  @Method()
   moveScrollbar(location): void { // TODO: apply scale ratio
     this.moveTo(location);
   }

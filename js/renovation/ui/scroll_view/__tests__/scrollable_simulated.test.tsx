@@ -21,7 +21,6 @@ import {
 
 import {
   ScrollableSimulated as Scrollable,
-  ScrollableSimulated,
   viewFunction,
 } from '../scrollable_simulated';
 
@@ -50,6 +49,26 @@ describe('Simulated', () => {
       beforeEach(clearEventHandlers);
 
       each(['vertical', 'horizontal', 'both']).describe('ScrollEffect params. Direction: %o', (direction) => {
+        each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
+          each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
+            each([true, false]).describe('InertiaEnabled: %o', (inertiaEnabled) => {
+              it('should pass all necessary properties to the nested Scrollbars', () => {
+                const propertySettings = {
+                  showScrollbar,
+                  bounceEnabled,
+                  inertiaEnabled,
+                  scrollByThumb: true,
+                };
+
+                const helper = new ScrollableTestHelper({ direction, ...propertySettings });
+                helper.initScrollbarSettings();
+
+                helper.checkScrollbarProps(propertySettings);
+              });
+            });
+          });
+        });
+
         each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
           each([true, false]).describe('ScrollByThumb: %o', (scrollByThumb) => {
             each(['dx-scrollable-scrollbar', 'dx-scrollable-scroll', 'dx-scrollable-container']).describe('Event target: %o', (targetClass) => {
@@ -114,7 +133,7 @@ describe('Simulated', () => {
                         helper.checkScrollbarScrollPositions(expect, { vertical: '', horizontal: `translate(${expectedScrollPosition * 0.2}px, 0px)` });
                       }
 
-                      expect(helper.viewModel.getScrollableOffset()).toEqual({ top: 0, left: 0 });
+                      expect(helper.viewModel.scrollableOffset).toEqual({ top: 0, left: 0 });
                     });
                   });
                 });
@@ -181,75 +200,48 @@ describe('Simulated', () => {
                     (e as any).originalEvent.type = 'dxmousewheel';
                   }
 
-                  const jestInitHandler = jest.fn();
                   const onStopAction = jest.fn();
 
-                  const viewModel = new Scrollable({
+                  const helper = new ScrollableTestHelper({
                     direction,
                     scrollByThumb,
                     scrollByContent,
                     onStop: onStopAction,
-                  }) as any;
-                  const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-                  viewModel.scrollableRef = scrollable.getDOMNode();
+                  });
 
-                  const scrollbars = scrollable.find(Scrollbar);
-
-                  const target = scrollable.find(`.${targetClass}`).at(0).getDOMNode();
+                  const target = helper.scrollable.find(`.${targetClass}`).at(0).getDOMNode();
                   (e.originalEvent as any).target = target;
 
-                  const initSettings = (scrollbarRef, index) => {
-                    const scrollbar = scrollbarRef.at(index).instance();
-                    scrollbar.scrollbarRef = scrollbarRef.at(index).getDOMNode();
-                    scrollbar.initHandler = jestInitHandler;
+                  helper.initScrollbarSettings();
 
-                    return scrollbar;
-                  };
-
-                  expect(viewModel.validDirections).toEqual({});
+                  expect(helper.viewModel.validDirections).toEqual({});
 
                   let expectedVerticalThumbScrolling;
                   let expectedHorizontalThumbScrolling;
 
                   if (direction === DIRECTION_VERTICAL) {
-                    viewModel.verticalScrollbarRef = initSettings(scrollbars, 0);
-                    expectedVerticalThumbScrolling = (scrollByThumb
-                                    && viewModel.verticalScrollbarRef.isThumb(target));
+                    expectedVerticalThumbScrolling = (scrollByThumb && helper.viewModel.verticalScrollbarRef.isThumb(target));
                   } else if (direction === DIRECTION_HORIZONTAL) {
-                    viewModel.horizontalScrollbarRef = initSettings(scrollbars, 0);
-                    expectedHorizontalThumbScrolling = (scrollByThumb
-                                    && viewModel.horizontalScrollbarRef.isThumb(target));
+                    expectedHorizontalThumbScrolling = (scrollByThumb && helper.viewModel.horizontalScrollbarRef.isThumb(target));
                   } else {
-                    viewModel.horizontalScrollbarRef = initSettings(scrollbars, 0);
-                    viewModel.verticalScrollbarRef = initSettings(scrollbars, 1);
-                    expectedHorizontalThumbScrolling = (scrollByThumb
-                                    && viewModel.horizontalScrollbarRef.isThumb(target));
+                    expectedHorizontalThumbScrolling = (scrollByThumb && helper.viewModel.horizontalScrollbarRef.isThumb(target));
                     expectedVerticalThumbScrolling = false;
                   }
 
-                  viewModel.getEventArgs = jest.fn();
+                  helper.viewModel.getEventArgs = jest.fn();
 
-                  viewModel.initEffect();
+                  helper.viewModel.initEffect();
                   emit('dxscrollinit', e);
 
-                  expect(viewModel.needShowScrollbars).toEqual(true);
+                  expect(helper.viewModel.needShowScrollbars).toEqual(false);
 
                   const expectedCrossThumbScrolling = expectedVerticalThumbScrolling
                                 || expectedHorizontalThumbScrolling;
 
                   expect(onStopAction).toHaveBeenCalledTimes(1);
-                  expect(onStopAction).toHaveBeenCalledWith(viewModel.getEventArgs());
+                  expect(onStopAction).toHaveBeenCalledWith(helper.viewModel.getEventArgs());
 
-                  if (direction === 'both') {
-                    expect(jestInitHandler).toBeCalledTimes(2);
-                    expect(jestInitHandler)
-                      .toHaveBeenNthCalledWith(1, e, expectedCrossThumbScrolling);
-                    expect(jestInitHandler)
-                      .toHaveBeenNthCalledWith(2, e, expectedCrossThumbScrolling);
-                  } else {
-                    expect(jestInitHandler).toBeCalledTimes(1);
-                    expect(jestInitHandler).toBeCalledWith(e, expectedCrossThumbScrolling);
-                  }
+                  helper.checkScrollbarEventHandlerCalls(expect, ['init'], [[e, expectedCrossThumbScrolling]]);
                 });
 
                 each([1, 0.5, 2, undefined]).describe('DevicePixelRatio: %o', (devicePixelRatio) => {
@@ -657,40 +649,69 @@ describe('Simulated', () => {
         each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
           each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
             each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
-              each([undefined, { left: 10, top: 10 }]).describe('Scrollable offset: %o', (scrollableOffset) => {
-                it('UpdateScrollbarSize(), thumbSize default', () => {
-                  const helper = new ScrollableTestHelper({
-                    direction, overflow, contentSize, containerSize,
+              it('UpdateScrollbarSize(), thumbSize default', () => {
+                const helper = new ScrollableTestHelper({
+                  direction, overflow, contentSize, containerSize,
+                });
+
+                if (helper.isVertical) {
+                  const styles = helper.getVerticalScrollElement().props.style;
+
+                  expect(styles).toEqual({ height: 15 });
+                }
+                if (helper.isHorizontal) {
+                  const styles = helper.getHorizontalScrollElement().props.style;
+
+                  expect(styles).toEqual({ width: 15 });
+                }
+
+                (helper.viewModel as any).getScrollableOffset = () => ({ left: 10, top: 10 });
+                // TODO: mockwindow
+                helper.viewModel.effectUpdateScrollbarSize();
+
+                if (helper.isVertical) {
+                  expect(helper.viewModel.scrollableOffsetLeft).toEqual(10);
+                  expect(helper.viewModel.containerWidth).toEqual(containerSize);
+                  expect(helper.viewModel.contentWidth).toEqual(contentSize);
+                  expect(helper.viewModel.baseContainerWidth).toEqual(containerSize);
+                  expect(helper.viewModel.baseContentWidth).toEqual(contentSize);
+                }
+                if (helper.isHorizontal) {
+                  expect(helper.viewModel.scrollableOffsetTop).toEqual(10);
+                  expect(helper.viewModel.containerHeight).toEqual(containerSize);
+                  expect(helper.viewModel.contentHeight).toEqual(contentSize);
+                  expect(helper.viewModel.baseContainerHeight).toEqual(containerSize);
+                  expect(helper.viewModel.baseContentHeight).toEqual(contentSize);
+                }
+              });
+
+              each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
+                each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
+                  each([true, false]).describe('IsShiftKeyPressed: %o', (shiftKey) => {
+                    it('scrollinit eventArgs', () => {
+                      const helper = new ScrollableTestHelper({
+                        direction, overflow, bounceEnabled, contentSize, containerSize,
+                      });
+
+                      helper.initScrollbarSettings({ props: { containerSize, contentSize } });
+
+                      let expectedDirectionResult = (containerSize < contentSize || bounceEnabled) ? direction : undefined;
+
+                      const e = { ...defaultEvent, shiftKey };
+                      if (isDxWheelEvent) {
+                        (e as any).type = 'dxmousewheel';
+                      }
+
+                      if (isDxWheelEvent) {
+                        expectedDirectionResult = direction;
+                        if (direction === 'both') {
+                          expectedDirectionResult = shiftKey ? 'horizontal' : 'vertical';
+                        }
+                      }
+
+                      expect((helper.viewModel as any).getDirection(e)).toBe(expectedDirectionResult);
+                    });
                   });
-
-                  if (helper.isVertical) {
-                    const styles = helper.getVerticalScrollElement().props.style;
-
-                    expect(styles).toEqual({ height: 15 });
-                  }
-                  if (helper.isHorizontal) {
-                    const styles = helper.getHorizontalScrollElement().props.style;
-
-                    expect(styles).toEqual({ width: 15 });
-                  }
-
-                  helper.viewModel.getScrollableOffset = () => scrollableOffset;
-                  // TODO: mockwindow
-                  helper.viewModel.effectUpdateScrollbarSize();
-
-                  // TODO: check other params on update size
-                  if (helper.isVertical) {
-                    expect(helper.viewModel.scrollableOffsetLeft)
-                      .toEqual(scrollableOffset?.left || 0);
-                    expect(helper.viewModel.containerWidth).toEqual(containerSize);
-                    expect(helper.viewModel.contentWidth).toEqual(contentSize);
-                  }
-                  if (helper.isHorizontal) {
-                    expect(helper.viewModel.scrollableOffsetTop)
-                      .toEqual(scrollableOffset?.left || 0);
-                    expect(helper.viewModel.containerHeight).toEqual(containerSize);
-                    expect(helper.viewModel.contentHeight).toEqual(contentSize);
-                  }
                 });
               });
             });
@@ -728,9 +749,9 @@ describe('Simulated', () => {
         });
 
         each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-          each([true, false]).describe('Disabled: %o', (disabled) => {
-            each([true, false]).describe('IsLocked: %o', (locked) => {
-              each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
+          each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
+            each([true, false]).describe('Disabled: %o', (disabled) => {
+              each([true, false]).describe('IsLocked: %o', (locked) => {
                 it('validate(e)', () => {
                   const helper = new ScrollableTestHelper({ direction, bounceEnabled, disabled });
 
@@ -770,267 +791,6 @@ describe('Simulated', () => {
             });
           });
         });
-        //       each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-        //         let helper;
-
-        //         beforeAll(() => {
-        //           helper = new ScrollableTestHelper({
-        //             direction, bounceEnabled, disabled, scrollByContent, overflow,
-        //           });
-
-        //           helper.initScrollbarSettings({
-        //             props: { containerSize, contentSize },
-        //           });
-        //         });
-
-        //         beforeEach(() => {
-        //           helper.viewModel.validateWheelTimer = undefined;
-        //         });
-
-        //         each([true, false]).describe('Disabled: %o', (disabled) => {
-        //           each([true, false]).describe('IsLocked: %o', (locked) => {
-        //             each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
-        //               each([-1, 1]).describe('Wheel delta: %o', (delta) => {
-        //                 each([-100, 0]).describe('Scrollbar position: %o', (scrollbarPosition) => {
-        //                   it('validate()', () => {
-        //                     const target = isScrollbarClicked
-        //                       ? helper.viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
-        //                       : helper.viewModel.containerRef;
-
-        //                     const e = { ...defaultEvent, target, delta };
-        //                     if (isDxWheelEvent) {
-        //                       (e as any).type = 'dxmousewheel';
-        //                     }
-
-        //                     if (contentSize > containerSize && Math.abs(contentSize) > Math.abs(scrollbarPosition)) {
-        //                       helper.initScrollbarLocation({
-        //                         top: scrollbarPosition,
-        //                         left: scrollbarPosition,
-        //                       });
-        //                     }
-
-        //                     helper.viewModel.locked = locked;
-
-        //                     if (disabled || locked) {
-        //                       expect((helper.viewModel as any).validate(e)).toBe(false);
-        //                       return;
-        //                     } if (bounceEnabled) {
-        //                       expect((helper.viewModel as any).validate(e)).toBe(true);
-        //                       return;
-        //                     }
-
-        //                     if (!isDxWheelEvent) {
-        //                       if (!scrollByContent && !isScrollbarClicked) {
-        //                         expect((helper.viewModel as any).validate(e)).toBe(false);
-        //                       } else {
-        //                         expect((helper.viewModel as any).validate(e)).toBe(helper.viewModel.allowedDirection() !== undefined);
-        //                       }
-        //                     } else {
-        //                       expectedValidationResult = (contentSize > containerSize)
-        //                             && (
-        //                               (scrollbarPosition < 0 && delta > 0)
-        //                               || (scrollbarPosition >= 0 && delta < 0)
-        //                             );
-        //                     }
-
-        //                     expect(true).toBe(false);
-
-        //                     // let expectedValidationResult;
-
-        //                     // if (isDxWheelEvent) {
-        //                     //   expectedValidationResult = (contentSize > containerSize)
-        //                     //     && (
-        //                     //       (scrollbarPosition < 0 && delta > 0)
-        //                     //       || (scrollbarPosition >= 0 && delta < 0)
-        //                     //     );
-        //                     // } else if (!scrollByContent && !isScrollbarClicked) {
-        //                     //   expectedValidationResult = false;
-        //                     // } else {
-        //                     //   expectedValidationResult = containerSize < contentSize
-        //                     //     || bounceEnabled;
-        //                     // }
-
-        //                     // expect(helper.viewModel.validateWheelTimer)
-        //                     //   .toBe(undefined);
-
-        //                     // const actualResult = (helper.viewModel as any).validate(e);
-        //                     // expect(actualResult).toBe(expectedValidationResult);
-
-        //                     // const isCheckedByTimeout = isDxWheelEvent
-        //                     //   && expectedValidationResult && !bounceEnabled;
-
-        //                     // if (isCheckedByTimeout) {
-        //                     //   expect(helper.viewModel.validateWheelTimer)
-        //                     //     .not.toBe(undefined);
-
-        //                     //   e.delta = 0;
-        //                     //   expect((helper.viewModel as any).validate(e)).toBe(true);
-        //                     // }
-
-        //                     // helper.viewModel.disposeWheelTimer()();
-        //                     // expect(helper.viewModel.validateWheelTimer)
-        //                     //   .toBe(undefined);
-        //                   });
-        //                 });
-        //               });
-        //             });
-        //           });
-        //         });
-        //       });
-        //     });
-        //   });
-        // });
-
-        // each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
-        //   each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
-        //     each(['hidden', 'visible']).describe('OverflowStyle: %o', (overflow) => {
-        //       each([undefined, { left: 10, top: 10 }]).describe('Scrollable offset: %o', (scrollableOffset) => {
-        //         it('UpdateScrollbarSize(), thumbSize default', () => {
-        //           const helper = new ScrollableTestHelper({
-        //             direction, overflow, contentSize, containerSize,
-        //           });
-
-        //           if (helper.isVertical) {
-        //             const styles = helper.getVerticalScrollElement().props.style;
-
-        //             expect(styles).toEqual({ height: 15 });
-        //           }
-        //           if (helper.isHorizontal) {
-        //             const styles = helper.getHorizontalScrollElement().props.style;
-
-        //             expect(styles).toEqual({ width: 15 });
-        //           }
-
-        //           helper.viewModel.getScrollableOffset = () => scrollableOffset;
-        //           // TODO: mockwindow
-        //           helper.viewModel.effectUpdateScrollbarSize();
-
-        //           // TODO: check other params on update size
-        //           if (helper.isVertical) {
-        //             expect(helper.viewModel.scrollableOffsetLeft)
-        //               .toEqual(scrollableOffset?.left || 0);
-        //             expect(helper.viewModel.containerWidth).toEqual(containerSize);
-        //             expect(helper.viewModel.contentWidth).toEqual(contentSize);
-        //           }
-        //           if (helper.isHorizontal) {
-        //             expect(helper.viewModel.scrollableOffsetTop)
-        //               .toEqual(scrollableOffset?.left || 0);
-        //             expect(helper.viewModel.containerHeight).toEqual(containerSize);
-        //             expect(helper.viewModel.contentHeight).toEqual(contentSize);
-        //           }
-        //         });
-        //       });
-
-        //       each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-        //         let helper;
-
-        //         beforeAll(() => {
-        //           helper = new ScrollableTestHelper({
-        //             direction, bounceEnabled, disabled, scrollByContent, overflow,
-        //           });
-
-        //           helper.initScrollbarSettings({
-        //             props: { containerSize, contentSize },
-        //           });
-        //         });
-
-        //         beforeEach(() => {
-        //           helper.viewModel.validateWheelTimer = undefined;
-        //         });
-
-        //         each([true, false]).describe('Disabled: %o', (disabled) => {
-        //           each([true, false]).describe('IsLocked: %o', (locked) => {
-        //             each([true, false]).describe('IsDxWheelEvent: %o', (isDxWheelEvent) => {
-        //               each([-1, 1]).describe('Wheel delta: %o', (delta) => {
-        //                 each([-100, 0]).describe('Scrollbar position: %o', (scrollbarPosition) => {
-        //                   it('validate()', () => {
-        //                     const target = isScrollbarClicked
-        //                       ? helper.viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
-        //                       : helper.viewModel.containerRef;
-
-        //                     const e = { ...defaultEvent, target, delta };
-        //                     if (isDxWheelEvent) {
-        //                       (e as any).type = 'dxmousewheel';
-        //                     }
-
-        //                     if (contentSize > containerSize && Math.abs(contentSize) > Math.abs(scrollbarPosition)) {
-        //                       helper.initScrollbarLocation({
-        //                         top: scrollbarPosition,
-        //                         left: scrollbarPosition,
-        //                       });
-        //                     }
-
-        //                     helper.viewModel.locked = locked;
-
-        //                     if (disabled || locked) {
-        //                       expect((helper.viewModel as any).validate(e)).toBe(false);
-        //                       return;
-        //                     } if (bounceEnabled) {
-        //                       expect((helper.viewModel as any).validate(e)).toBe(true);
-        //                       return;
-        //                     }
-
-        //                     if (!isDxWheelEvent) {
-        //                       if (!scrollByContent && !isScrollbarClicked) {
-        //                         expect((helper.viewModel as any).validate(e)).toBe(false);
-        //                       } else {
-        //                         expect((helper.viewModel as any).validate(e)).toBe(helper.viewModel.allowedDirection() !== undefined);
-        //                       }
-        //                     } else {
-        //                       expectedValidationResult = (contentSize > containerSize)
-        //                             && (
-        //                               (scrollbarPosition < 0 && delta > 0)
-        //                               || (scrollbarPosition >= 0 && delta < 0)
-        //                             );
-        //                     }
-
-        //                     expect(true).toBe(false);
-
-        //                     // let expectedValidationResult;
-
-        //                     // if (isDxWheelEvent) {
-        //                     //   expectedValidationResult = (contentSize > containerSize)
-        //                     //     && (
-        //                     //       (scrollbarPosition < 0 && delta > 0)
-        //                     //       || (scrollbarPosition >= 0 && delta < 0)
-        //                     //     );
-        //                     // } else if (!scrollByContent && !isScrollbarClicked) {
-        //                     //   expectedValidationResult = false;
-        //                     // } else {
-        //                     //   expectedValidationResult = containerSize < contentSize
-        //                     //     || bounceEnabled;
-        //                     // }
-
-        //                     // expect(helper.viewModel.validateWheelTimer)
-        //                     //   .toBe(undefined);
-
-        //                     // const actualResult = (helper.viewModel as any).validate(e);
-        //                     // expect(actualResult).toBe(expectedValidationResult);
-
-        //                     // const isCheckedByTimeout = isDxWheelEvent
-        //                     //   && expectedValidationResult && !bounceEnabled;
-
-        //                     // if (isCheckedByTimeout) {
-        //                     //   expect(helper.viewModel.validateWheelTimer)
-        //                     //     .not.toBe(undefined);
-
-        //                     //   e.delta = 0;
-        //                     //   expect((helper.viewModel as any).validate(e)).toBe(true);
-        //                     // }
-
-        //                     // helper.viewModel.disposeWheelTimer()();
-        //                     // expect(helper.viewModel.validateWheelTimer)
-        //                     //   .toBe(undefined);
-        //                   });
-        //                 });
-        //               });
-        //             });
-        //           });
-        //         });
-        //       });
-        //     });
-        //   });
-        // });
 
         each([
           [{ top: 0, left: 0 }, {
@@ -1067,29 +827,17 @@ describe('Simulated', () => {
         });
       });
 
-      each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbarMode) => {
+      each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbar) => {
         it('hoverEffect should update invisible class only for onHover mode', () => {
-          const viewModel = new Scrollable({
-            direction: 'horizontal',
-            showScrollbar: showScrollbarMode,
-          }) as ScrollableSimulated;
+          const helper = new ScrollableTestHelper({ direction: 'horizontal', showScrollbar });
 
-          const isScrollbarHasInvisibleClass = (model) => {
-            const scrollable = mount(viewFunction(model) as JSX.Element);
+          expect(helper.viewModel.isScrollbarVisible).toBe(showScrollbar === 'always');
 
-            const scrollbar = scrollable.find('.dx-scrollable-scroll');
-            return scrollbar.hasClass('dx-state-invisible');
-          };
+          helper.viewModel.cursorEnterHandler();
+          expect(helper.viewModel.isScrollbarVisible).toBe(showScrollbar === 'always' || showScrollbar === 'onHover');
 
-          expect(isScrollbarHasInvisibleClass(viewModel)).toBe(showScrollbarMode !== 'always');
-
-          viewModel.cursorEnterHandler();
-          expect(isScrollbarHasInvisibleClass(viewModel)).toBe(
-            (showScrollbarMode !== 'always' && showScrollbarMode !== 'onHover'),
-          );
-
-          viewModel.cursorLeaveHandler();
-          expect(isScrollbarHasInvisibleClass(viewModel)).toBe(showScrollbarMode !== 'always');
+          helper.viewModel.cursorLeaveHandler();
+          expect(helper.viewModel.isScrollbarVisible).toBe(showScrollbar === 'always');
         });
       });
     });
@@ -1303,6 +1051,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 40 });
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
@@ -1321,6 +1070,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 40 });
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
@@ -1339,6 +1089,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 40 });
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
@@ -1357,6 +1108,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 40 });
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
@@ -1375,6 +1127,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 40 });
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
@@ -1393,6 +1146,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 40 });
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
@@ -1415,6 +1169,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 50 });
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
@@ -1433,6 +1188,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 50 });
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
@@ -1451,6 +1207,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 50 });
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
@@ -1469,6 +1226,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 50 });
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
@@ -1487,6 +1245,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 50 });
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
@@ -1505,6 +1264,7 @@ describe('Simulated', () => {
 
             helper.initScrollbarSettings();
             helper.changeScrollbarProp('containerRef', { current: helper.getContainerRefMock({}) });
+            helper.changeScrollbarMethod('triggerScrollEvent', jest.fn());
             helper.initContainerPosition({ top: 50, left: 50 });
             helper.initScrollbarLocation({ top: -50, left: -50 });
 

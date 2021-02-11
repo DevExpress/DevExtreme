@@ -312,116 +312,116 @@ describe('Methods', () => {
         viewModel.scrollbarRef = scrollbar.getDOMNode();
         expect(viewModel.isThumb(scrollbar.getDOMNode())).toBe(false);
       });
+    });
 
-      it('getMaxOffset()', () => {
-        const viewModel = new Scrollbar({ direction });
+    it('getMaxOffset()', () => {
+      const viewModel = new Scrollbar({ direction });
 
-        expect(viewModel.getMaxOffset()).toBe(0);
+      expect(viewModel.getMaxOffset()).toBe(0);
+    });
+
+    it('set/get Location(location)', () => {
+      const viewModel = new Scrollbar({ direction });
+
+      viewModel.setLocation(100);
+
+      expect(viewModel.getLocation()).toBe(100);
+    });
+
+    it('set/get Velocity(velocity)', () => {
+      const viewModel = new Scrollbar({ direction });
+
+      viewModel.setVelocity(100);
+
+      expect(viewModel.getVelocity()).toBe(100);
+    });
+
+    it('set/get BounceLocation(location)', () => {
+      const viewModel = new Scrollbar({ direction });
+
+      viewModel.setBounceLocation(100);
+
+      expect(viewModel.getBounceLocation()).toBe(100);
+    });
+
+    it('getAxis()', () => {
+      const viewModel = new Scrollbar({ direction });
+
+      expect((viewModel as any).getAxis()).toBe(direction === 'horizontal' ? 'x' : 'y');
+    });
+
+    it('getProp()', () => {
+      const viewModel = new Scrollbar({ direction });
+
+      expect((viewModel as any).getProp()).toBe(direction === 'horizontal' ? 'left' : 'top');
+    });
+
+    it('getContainerRef()', () => {
+      const ref = { current: {} } as any;
+
+      const viewModel = new Scrollbar({ direction, containerRef: ref });
+
+      expect((viewModel as any).getContainerRef() === ref.current).toBe(true);
+    });
+
+    it('getContentRef()', () => {
+      const ref = { current: {} } as any;
+
+      const viewModel = new Scrollbar({ direction, contentRef: ref });
+      expect((viewModel as any).getContentRef() === ref.current).toBe(true);
+    });
+
+    each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
+      it('move()', () => {
+        const viewModel = new Scrollbar({ direction, scaleRatio }) as any;
+        viewModel.location = 40;
+
+        viewModel.moveContent = jest.fn();
+        viewModel.moveTo = jest.fn();
+        viewModel.move();
+
+        expect(viewModel.getLocation()).toBe(40);
       });
 
-      it('set/get Location(location)', () => {
-        const viewModel = new Scrollbar({ direction });
+      it('move(50)', () => {
+        const viewModel = new Scrollbar({ direction, scaleRatio }) as any;
+        viewModel.location = 40;
 
-        viewModel.setLocation(100);
+        viewModel.moveContent = jest.fn();
+        viewModel.moveTo = jest.fn();
+        viewModel.move(50);
 
-        expect(viewModel.getLocation()).toBe(100);
+        expect(viewModel.getLocation()).toBe(50 * scaleRatio);
       });
+    });
 
-      it('set/get Velocity(velocity)', () => {
-        const viewModel = new Scrollbar({ direction });
+    each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
+      each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
+        each([-20, 20, -80, 80, 120, -120]).describe('Location: %o', (location) => {
+          it('scrollBy({ x: 10, y: 15 })', () => {
+            const delta = { x: 10, y: 15 };
+            const OUT_BOUNDS_ACCELERATION = 0.5;
 
-        viewModel.setVelocity(100);
-
-        expect(viewModel.getVelocity()).toBe(100);
-      });
-
-      it('set/get BounceLocation(location)', () => {
-        const viewModel = new Scrollbar({ direction });
-
-        viewModel.setBounceLocation(100);
-
-        expect(viewModel.getBounceLocation()).toBe(100);
-      });
-
-      it('getAxis()', () => {
-        const viewModel = new Scrollbar({ direction });
-
-        expect((viewModel as any).getAxis()).toBe(direction === 'horizontal' ? 'x' : 'y');
-      });
-
-      it('getProp()', () => {
-        const viewModel = new Scrollbar({ direction });
-
-        expect((viewModel as any).getProp()).toBe(direction === 'horizontal' ? 'left' : 'top');
-      });
-
-      it('getContainerRef()', () => {
-        const ref = { current: {} } as any;
-
-        const viewModel = new Scrollbar({ containerRef: ref });
-
-        expect((viewModel as any).getContainerRef() === ref.current).toBe(true);
-      });
-
-      it('getContentRef()', () => {
-        const ref = { current: {} } as any;
-
-        const viewModel = new Scrollbar({ contentRef: ref });
-        expect((viewModel as any).getContentRef() === ref.current).toBe(true);
-      });
-
-      each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
-        it('move()', () => {
-          const viewModel = new Scrollbar({ scaleRatio }) as any;
-          viewModel.location = 40;
-
-          viewModel.moveContent = jest.fn();
-          viewModel.moveTo = jest.fn();
-          viewModel.move();
-
-          expect(viewModel.getLocation()).toBe(40);
-        });
-
-        it('move(50)', () => {
-          const viewModel = new Scrollbar({ scaleRatio }) as any;
-          viewModel.location = 40;
-
-          viewModel.moveContent = jest.fn();
-          viewModel.moveTo = jest.fn();
-          viewModel.move(50);
-
-          expect(viewModel.getLocation()).toBe(50 * scaleRatio);
-        });
-      });
-
-      each([100, 200]).describe('ContainerSize: %o', (containerSize) => {
-        each([0, 100, 200]).describe('ContentSize: %o', (contentSize) => {
-          each([-20, 20, -80, 80, 120, -120]).describe('Location: %o', (location) => {
-            it('scrollBy({ x: 10, y: 15 })', () => {
-              const delta = { x: 10, y: 15 };
-              const OUT_BOUNDS_ACCELERATION = 0.5;
-
-              const viewModel = new Scrollbar({
-                direction,
-                containerSize,
-                contentSize,
-              });
-
-              viewModel.location = location;
-              viewModel.scrollStep = jest.fn();
-
-              viewModel.scrollBy(delta);
-
-              const axis = direction === 'horizontal' ? 'x' : 'y';
-
-              expect(viewModel.scrollStep).toBeCalledTimes(1);
-
-              if ((containerSize - contentSize) < location && location < 0) {
-                expect(viewModel.scrollStep).toBeCalledWith(delta[axis]);
-              } else {
-                expect(viewModel.scrollStep).toBeCalledWith(delta[axis] * OUT_BOUNDS_ACCELERATION);
-              }
+            const viewModel = new Scrollbar({
+              direction,
+              containerSize,
+              contentSize,
             });
+
+            viewModel.location = location;
+            viewModel.scrollStep = jest.fn();
+
+            viewModel.scrollBy(delta);
+
+            const axis = direction === 'horizontal' ? 'x' : 'y';
+
+            expect(viewModel.scrollStep).toBeCalledTimes(1);
+
+            if ((containerSize - contentSize) < location && location < 0) {
+              expect(viewModel.scrollStep).toBeCalledWith(delta[axis]);
+            } else {
+              expect(viewModel.scrollStep).toBeCalledWith(delta[axis] * OUT_BOUNDS_ACCELERATION);
+            }
           });
         });
       });
