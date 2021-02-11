@@ -501,7 +501,7 @@ const DraggingHeaderView = modules.View.inherit({
             const targetLocation = targetDraggingPanel.getName();
             const rowIndex = targetLocation === 'headers' ? dragOptions.rowIndex : undefined;
             const sourceColumn = dragOptions.sourceColumn;
-            const columnElements = targetDraggingPanel.getColumnElements({ index: rowIndex, bandColumnIndex: sourceColumn?.ownerBand }) || [];
+            const columnElements = targetDraggingPanel.getColumnElements(rowIndex, sourceColumn?.ownerBand) || [];
             const pointsByTarget = dragOptions.pointsByTarget = dragOptions.pointsByTarget || {};
             const pointsByColumns = targetLocation === 'columnChooser' ? [] : pointsByTarget[targetLocation] || controller._generatePointsByColumns(extend({}, dragOptions, {
                 targetDraggingPanel: targetDraggingPanel,
@@ -1132,7 +1132,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
                 };
 
                 for(let i = 0; i < rowCount; i++) {
-                    const columnElements = draggingPanel.getColumnElements({ index: i }) || [];
+                    const columnElements = draggingPanel.getColumnElements(i) || [];
                     if(columnElements.length) {
                         columns = draggingPanel.getColumns(i) || [];
                         each(columnElements, subscribeToEvents);

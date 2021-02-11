@@ -347,7 +347,7 @@ module.exports = {
                     return columnElements && columnElements.eq(index);
                 },
 
-                getColumnElements: function({ index, bandColumnIndex } = {}) {
+                getColumnElements: function(index, bandColumnIndex) {
                     const that = this;
                     let $cellElement;
                     const columnsController = that._columnsController;
