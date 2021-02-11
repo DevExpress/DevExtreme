@@ -16,8 +16,8 @@ import domAdapter from '../../../core/dom_adapter';
 import { isPlainObject, isDefined } from '../../../core/utils/type';
 import { move, resetPosition, locate } from '../../../animation/translator';
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
-import { Deferred } from '../../../core/utils/deferred';
-import type { dxPromise } from '../../../core/utils/deferred';
+// import { Deferred } from '../../../core/utils/deferred';
+// import type { dxPromise } from '../../../core/utils/deferred';
 import { titleize } from '../../../core/utils/inflector';
 import devices from '../../../core/devices';
 import { BounceAnimator } from './bounce_animator';
@@ -130,7 +130,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     move(this.scrollRef, scrollBarLocation);
   }
 
-  @Method()
   /* istanbul ignore next */
   updateLocation(): void {
     this.setLocation((locate(this.getContentRef())[this.getProp()] - this.getContainerRef()[`scroll${titleize(this.getProp())}`]) * this.props.scaleRatio);
@@ -278,14 +277,14 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  initHandler(e, crossThumbScrolling: boolean): dxPromise<void> {
-    const stopDeferred = Deferred<void>();
+  initHandler(e, crossThumbScrolling: boolean): void { // dxPromise<void> {
+    // const stopDeferred = Deferred<void>();
 
     this.stopScrolling();
 
     this.prepareThumbScrolling(e, crossThumbScrolling);
 
-    return stopDeferred.promise();
+    // return stopDeferred.promise();
   }
 
   @Method()
