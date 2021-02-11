@@ -22,7 +22,7 @@
     />
     <h5 class="text-box-label">v-model</h5>
     <dx-text-box
-    v-model:value="text"
+    v-model="text"
     valueChangeEvent="input"
     />
     <h5 class="text-box-label">@focusIn (clears text)</h5>
