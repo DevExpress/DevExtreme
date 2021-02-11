@@ -266,7 +266,7 @@ module.exports = {
                 _toggleBestFitMode: function(isBestFit) {
                     this.callBase.apply(this, arguments);
                     if(this.option('masterDetail.template')) {
-                        const $rowsTable = this._rowsView._getTableElement();
+                        const $rowsTable = this._rowsView.getTableElement();
                         if($rowsTable) {
                             $rowsTable
                                 .find('.dx-master-detail-cell')

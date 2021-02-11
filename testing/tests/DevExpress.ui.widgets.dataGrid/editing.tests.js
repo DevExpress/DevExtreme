@@ -3640,7 +3640,7 @@ QUnit.module('Editing with real dataController', {
 
         // assert
         assert.equal(rowsView._getRowElements().length, 1, 'count rows');
-        assert.equal(rowsView._getTableElement().find('.dx-row-inserted').length, 1, 'insert row');
+        assert.equal(rowsView.getTableElement().find('.dx-row-inserted').length, 1, 'insert row');
     });
 
     QUnit.test('Insert row when set onInitNewRow', function(assert) {

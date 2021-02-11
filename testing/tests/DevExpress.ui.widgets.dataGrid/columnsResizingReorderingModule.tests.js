@@ -3296,7 +3296,7 @@ QUnit.module('Headers reordering', {
         this.renderViews($('#container'));
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td')),
+        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView.getTableElement().find('td')),
             [{ x: -10000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -9000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points');
     });
 
@@ -3308,7 +3308,7 @@ QUnit.module('Headers reordering', {
         this.renderViews($('#container'));
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'), null, null, 5),
+        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView.getTableElement().find('td'), null, null, 5),
             [{ x: -10000, y: -10000, columnIndex: 5, index: 5 }, { x: -9500, y: -10000, columnIndex: 6, index: 6 }, { x: -9000, y: -10000, columnIndex: 7, index: 7 }], 'dragging points');
     });
 
@@ -3322,7 +3322,7 @@ QUnit.module('Headers reordering', {
         $('#container').css('direction', 'rtl');
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td')),
+        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView.getTableElement().find('td')),
             [{ x: -9000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -10000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points for RTL');
     });
 
