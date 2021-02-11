@@ -1609,4 +1609,41 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.2'), true, '\'Folder 1.2\' toggle is opened');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1.1.1'), false, '\'Folder 1.1.1\' toggle is closed');
     });
+
+    test('treeView must update expand node icons on folder create - treeView (T946436)', function(assert) {
+        if(browser.msie && compareVersion($.fn.jquery, [3], 1) === 0) {
+            assert.ok(true, 'This test not for IE + jQuery 3.x');
+            return;
+        }
+        const operationDelay = 400;
+        this.fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay,
+                operationsToDelay: 'crud'
+            }),
+            itemView: { showFolders: true }
+        });
+        this.clock.tick(3 * operationDelay + 400);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 2, 'There are 2 node toggles');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), false, '\'Folder 1\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 2'), null, '\'Folder 2\' toggle is absent');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 3'), null, '\'Folder 3\' toggle is absent');
+
+        this.wrapper.getFolderNode(3).trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        this.wrapper.getContextMenuItem('New directory').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Create').trigger('dxclick');
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getFolderToggles().length, 3, 'There are 3 node toggles');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files'), true, '\'Files\' toggle is opened');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1'), false, '\'Folder 1\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 2'), null, '\'Folder 2\' toggle is absent');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 3'), false, '\'Folder 3\' toggle is closed');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Untitled directory'), null, '\'Untitled directory\' toggle is absent');
+    });
 });
