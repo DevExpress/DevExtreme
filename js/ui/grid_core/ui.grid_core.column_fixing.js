@@ -291,13 +291,13 @@ const baseFixedColumns = {
         return normalizeColumnWidths(fixedColumns, result, fixedWidths);
     },
 
-    _getTableElement: function() {
+    getTableElement: function() {
         const tableElement = this._isFixedTableRendering ? this._fixedTableElement : this.callBase();
 
         return tableElement;
     },
 
-    _setTableElement: function(tableElement) {
+    setTableElement: function(tableElement) {
         if(this._isFixedTableRendering) {
             this._fixedTableElement = tableElement.addClass(POINTER_EVENTS_NONE_CLASS);
         } else {
@@ -306,7 +306,7 @@ const baseFixedColumns = {
     },
 
     getColumns: function(rowIndex, $tableElement) {
-        $tableElement = $tableElement || this._getTableElement();
+        $tableElement = $tableElement || this.getTableElement();
 
         if(this._isFixedTableRendering || $tableElement && $tableElement.closest('table').parent('.' + this.addWidgetPrefix(CONTENT_FIXED_CLASS)).length) {
             return this.getFixedColumns(rowIndex);
