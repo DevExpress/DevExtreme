@@ -1,17 +1,10 @@
 import $ from '../../core/renderer';
-import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { each } from '../../core/utils/iterator';
-import { isDefined } from '../../core/utils/type';
 import { locate } from '../../animation/translator';
 import Class from '../../core/class';
-import devices from '../../core/devices';
-import { normalizeKeyName } from '../../events/utils/index';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
 import { when } from '../../core/utils/deferred';
-
-const realDevice = devices.real;
-const isSluggishPlatform = realDevice.platform === 'android';
 
 const SCROLLABLE_SIMULATED = 'dxSimulatedScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -19,18 +12,9 @@ const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 
-const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
-const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
-const MIN_VELOCITY_LIMIT = 1;
-const FRAME_DURATION = Math.round(1000 / 60);
-
 export const Scroller = Class.inherit({
-    _scrollStep: function(delta) {
-        eventsEngine.triggerHandler(this._$container, { type: 'scroll' });
-    },
-
     _scrollToBounds: function() {
         this._bounceAction();
     },
@@ -61,15 +45,6 @@ export const Scroller = Class.inherit({
 
     _resetScaleRatio: function() {
         this._scaleRatio = null;
-    },
-
-    _updateLocation: function() {
-        this._location = (locate(this._$content)[this._prop] - this._$container[this._scrollProp]()) * this._getScaleRatio();
-    },
-
-    _updateBounds: function() {
-        this._maxOffset = Math.round(this._getMaxOffset());
-        this._minOffset = Math.round(this._getMinOffset());
     },
 
     _updateScrollbar: deferUpdater(function() {
@@ -144,19 +119,6 @@ export const SimulatedStrategy = Class.inherit({
         this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
     },
 
-    _applyScaleRatio: function(targetLocation) {
-        for(const direction in this._scrollers) {
-            const prop = this._getPropByDirection(direction);
-
-            if(isDefined(targetLocation[prop])) {
-                const scroller = this._scrollers[direction];
-
-                targetLocation[prop] *= scroller._getScaleRatio();
-            }
-        }
-        return targetLocation;
-    },
-
     _eachScroller: function(callback) {
         callback = callback.bind(this);
         each(this._scrollers, function(direction, scroller) {
@@ -199,21 +161,6 @@ export const SimulatedStrategy = Class.inherit({
     handleScroll: function() {
         this._component._updateRtlConfig();
         this._scrollAction();
-    },
-
-    _keyDownHandler: function(e) {
-        clearTimeout(this._updateHandlerTimeout);
-        this._updateHandlerTimeout = setTimeout(() => {
-            if(normalizeKeyName(e) === 'tab') {
-                this._eachScroller((scroller) => {
-                    scroller._updateHandler();
-                });
-            }
-        });
-
-        if(!this._$container.is(domAdapter.getActiveElement())) {
-            return;
-        }
     },
 
     location: function() {
@@ -288,18 +235,6 @@ export const SimulatedStrategy = Class.inherit({
         this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
     },
 
-    scrollBy: function(distance) {
-        const verticalScroller = this._scrollers[VERTICAL];
-        const horizontalScroller = this._scrollers[HORIZONTAL];
-
-        if(verticalScroller) {
-            distance.top = verticalScroller._boundLocation(distance.top + verticalScroller._location) - verticalScroller._location;
-        }
-        if(horizontalScroller) {
-            distance.left = horizontalScroller._boundLocation(distance.left + horizontalScroller._location) - horizontalScroller._location;
-        }
-    },
-
     verticalOffset: function() {
         return 0;
     },
@@ -323,11 +258,4 @@ export const SimulatedStrategy = Class.inherit({
         eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_CURSOR}`);
         eventsEngine.off(this._$container, `.${SCROLLABLE_SIMULATED_KEYBOARD}`);
     }
-
 });
-
-export {
-    ACCELERATION,
-    MIN_VELOCITY_LIMIT,
-    FRAME_DURATION
-};

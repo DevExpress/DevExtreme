@@ -583,7 +583,7 @@ class GroupedDataMapProvider {
     }
 
     findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay) {
-        if(isAllDay) {
+        if(isAllDay || !this._workspace.isDateAndTimeView) {
             return this.findAllDayGroupCellStartDate(groupIndex, startDate);
         }
 
@@ -651,7 +651,11 @@ class GroupedDataMapProvider {
             ? dateUtils.trimTime(startDate).getTime()
             : startDate.getTime();
 
-        const isStartTimeInCell = cellData => {
+        const isStartDateInCell = cellData => {
+            if(!this._workspace.isDateAndTimeView) {
+                return dateUtils.sameDate(startDate, cellData.startDate);
+            }
+
             const cellStartTime = cellData.startDate.getTime();
             const cellEndTime = cellData.endDate.getTime();
 
@@ -677,7 +681,7 @@ class GroupedDataMapProvider {
                 const { cellData } = cell;
 
                 if(cellData.groupIndex === groupIndex) {
-                    if(isStartTimeInCell(cellData)) {
+                    if(isStartDateInCell(cellData)) {
                         return cell.position;
                     }
                 }

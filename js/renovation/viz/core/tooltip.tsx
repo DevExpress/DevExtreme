@@ -92,8 +92,8 @@ export const viewFunction = ({
     MozUserSelect: 'auto',
     WebkitUserSelect: 'auto',
   } : {};
-  const textFont = font ?? DEFAULT_FONT;
-  const cloudShadow = shadow ?? DEFAULT_SHADOW;
+  const textFont = font || DEFAULT_FONT;
+  const cloudShadow = shadow || DEFAULT_SHADOW;
   return (
     <Portal container={container}>
       <div
@@ -253,11 +253,11 @@ export class TooltipProps {
 
   @OneWay() className?: string;
 
-  @OneWay() eventData?: EventData<never>;
+  @OneWay() eventData?: EventData<unknown>;
 
-  @Event() onTooltipHidden?: OnTooltipHiddenFn<never>;
+  @Event() onTooltipHidden?: OnTooltipHiddenFn<EventData<unknown>>;
 
-  @Event() onTooltipShown?: OnTooltipShownFn<never>;
+  @Event() onTooltipShown?: OnTooltipShownFn<EventData<unknown>>;
 }
 
 @Component({
@@ -271,7 +271,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @InternalState() cloudSize: PinnedSize = DEFAULT_SIZE;
 
-  @InternalState() currentEventData?: EventData<never>;
+  @InternalState() currentEventData?: EventData<unknown>;
 
   @InternalState() isEmptyContainer = false;
 
@@ -305,10 +305,10 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   eventsEffect(): void {
     const {
       onTooltipShown, onTooltipHidden, visible,
-      eventData = {} as EventData<never>, // TODO: remove {} after fix nested props + test
+      eventData = {} as EventData<unknown>, // TODO: remove {} after fix nested props + test
     } = this.props;
-    const isEqual = (object1: EventData<never> | undefined,
-      object2: EventData<never>): boolean => {
+    const isEqual = (object1: EventData<unknown> | undefined,
+      object2: EventData<unknown>): boolean => {
       if (!object1) {
         return false;
       }

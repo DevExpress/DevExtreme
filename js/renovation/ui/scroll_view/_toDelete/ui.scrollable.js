@@ -237,17 +237,6 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    // _isDirection: function(direction) {
-    //     const current = this.option('direction');
-    //     if(direction === VERTICAL) {
-    //         return current !== HORIZONTAL;
-    //     }
-    //     if(direction === HORIZONTAL) {
-    //         return current !== VERTICAL;
-    //     }
-    //     return current === direction;
-    // },
-
     scrollHeight: function() {
         return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
     },
@@ -278,12 +267,7 @@ const Scrollable = DOMComponent.inherit({
 
         this._updateIfNeed();
 
-        let location = this._location();
-
-        if(!this.option('useNative')) {
-            targetLocation = this._strategy._applyScaleRatio(targetLocation);
-            location = this._strategy._applyScaleRatio(location);
-        }
+        const location = this._location();
 
         const distance = this._normalizeLocation({
             left: ensureDefined(targetLocation.left, location.left) - location.top,

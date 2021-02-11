@@ -133,15 +133,6 @@ export function initRefs(model, viewFunction, {
   }
 }
 
-export function setScrollbarPosition(scrollbar, { position, contentSize, containerSize }) {
-  if (scrollbar
-        && contentSize > containerSize
-        && Math.abs(contentSize) > Math.abs(position)) {
-    // eslint-disable-next-line no-param-reassign
-    scrollbar.location = position;
-  }
-}
-
 export function initStyles({ ref, size, overflow }) {
   const elementRef = ref;
 

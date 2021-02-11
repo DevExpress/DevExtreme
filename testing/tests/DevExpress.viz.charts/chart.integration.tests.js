@@ -964,16 +964,20 @@ QUnit.test('Reload dataSource - visualRange option should be changed', function(
             width: 1000,
             height: 600
         },
-        dataSource: [{
-            arg: 1,
-            val: 4
-        }, {
-            arg: 2,
-            val: 5
-        }, {
-            arg: 5,
-            val: 7
-        }],
+        dataSource: {
+            pushAggregationTimeout: 0,
+            reshapeOnPush: true,
+            store: [{
+                arg: 1,
+                val: 4
+            }, {
+                arg: 2,
+                val: 5
+            }, {
+                arg: 5,
+                val: 7
+            }]
+        },
         series: { type: 'line' },
         onOptionChanged: visualRangeChanged,
         valueAxis: [{ valueMarginsEnabled: false }],
@@ -988,7 +992,6 @@ QUnit.test('Reload dataSource - visualRange option should be changed', function(
         { type: 'insert', data: { arg: 8, val: 3 } },
         { type: 'insert', data: { arg: 11, val: 8 } }
     ]);
-    ds.load();
 
     // assert
     // argumentAxis

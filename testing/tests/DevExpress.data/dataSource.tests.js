@@ -1836,6 +1836,44 @@ QUnit.module('live update', {
         assert.equal(this.loadSpy.callCount, 1);
     });
 
+    QUnit.test('dataSource items are modified only after pushAggregationTimeout (T950900)', function(assert) {
+        const items = [
+            {
+                id: 1,
+                field: 1
+            }
+        ];
+        const store = new ArrayStore({
+            key: 'id',
+            data: items
+        });
+        const dataSource = new DataSource({
+            store,
+            pushAggregationTimeout: 100
+        });
+
+        dataSource.store().push([
+            { type: 'update', key: 1, data: { field: 2 } }
+        ]);
+
+        assert.equal(items[0].field, 1);
+
+        this.clock.tick(100);
+
+        assert.equal(items[0].field, 2);
+
+        dataSource.store().push([
+            { type: 'update', key: 1, data: { field: 3 } }
+        ]);
+
+        assert.equal(items[0].field, 2);
+
+        this.clock.tick(100);
+
+        assert.equal(items[0].field, 3);
+
+    });
+
     QUnit.test('load is called with throttle when reshapeOnPush and pushAggregationTimeout is defined', function(assert) {
         const dataSource = this.createDataSource({
             reshapeOnPush: true,

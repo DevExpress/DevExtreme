@@ -70,7 +70,9 @@ describe('Bullet', () => {
         cssClasses,
         rtlEnabled: false,
         cssClassName,
-        props: { },
+        props: {
+          disabled: false,
+        },
       };
       const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
 

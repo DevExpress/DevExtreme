@@ -3,7 +3,7 @@ import {
   JSXComponent,
   Fragment,
   Consumer,
-  Ref,
+  Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import { Page, PageProps } from './page';
 import PagerProps from '../common/pager_props';
@@ -98,11 +98,11 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
-  @Ref()
-  slidingWindowStateRef!: SlidingWindowState;
+  @Mutable()
+  slidingWindowStateHolder!: SlidingWindowState;
 
   private get slidingWindowState(): SlidingWindowState {
-    const slidingWindowState = this.slidingWindowStateRef;
+    const slidingWindowState = this.slidingWindowStateHolder;
     if (!slidingWindowState) {
       return {
         indexesForReuse: [],
@@ -140,7 +140,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
       pageIndexes,
       ...slidingWindowState
     } = createPageIndexes(startIndex, slidingWindowSize, pageCount, delimiter);
-    this.slidingWindowStateRef = slidingWindowState;
+    this.slidingWindowStateHolder = slidingWindowState;
     return pageIndexes;
   }
 

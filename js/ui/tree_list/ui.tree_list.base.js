@@ -29,6 +29,7 @@ treeListCore.registerModulesOrder([
     'selection',
     'editorFactory',
     'columnChooser',
+    'editingFormBased',
     'editing',
     'grouping',
     'masterDetail',
