@@ -139,9 +139,9 @@ const ResizingController = modules.ViewController.inherit({
 
             if(!widths?.length) {
                 const headersTableElement = columnHeadersView._tableElement;
-                columnHeadersView._tableElement = rowsView._tableElement?.children('.dx-header');
+                columnHeadersView._setTableElement(rowsView._getTableElement()?.children('.dx-header'));
                 widths = columnHeadersView.getColumnWidths();
-                columnHeadersView._tableElement = headersTableElement;
+                columnHeadersView._setTableElement(headersTableElement);
             }
 
             return widths;
