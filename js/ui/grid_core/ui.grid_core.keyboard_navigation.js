@@ -2002,17 +2002,17 @@ export default {
                 },
                 renderDelayedTemplates: function(change) {
                     this.callBase.apply(this, arguments);
+                    this._renderFocusByChange(change);
+                },
+                _renderFocusByChange(change) {
                     if(!change || !change.repaintChangesOnly) {
                         const preventScroll = shouldPreventScroll(this);
                         this.renderFocusState(preventScroll);
                     }
                 },
                 _renderCore: function(change) {
-                    this.callBase(change);
-                    if(!change || !change.repaintChangesOnly) {
-                        const preventScroll = shouldPreventScroll(this);
-                        this.renderFocusState(preventScroll);
-                    }
+                    this.callBase.apply(this, arguments);
+                    this._renderFocusByChange(change);
                 },
                 _editCellPrepared: function($cell) {
                     const editorInstance = this._getEditorInstance($cell);
