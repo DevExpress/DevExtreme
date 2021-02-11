@@ -2016,7 +2016,7 @@ QUnit.module('Rows view', {
         $testElement.height(300);
         const oldFunc = rowsView._renderScrollable;
         rowsView._renderScrollable = function() {
-            oldTableHeight = this._getTableElement().height();
+            oldTableHeight = this.getTableElement().height();
             oldFunc.call(rowsView);
         };
 

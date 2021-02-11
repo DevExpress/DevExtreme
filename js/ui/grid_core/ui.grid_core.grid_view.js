@@ -116,10 +116,10 @@ const ResizingController = modules.ViewController.inherit({
         let widths = rowsView.getColumnWidths();
 
         if(!widths?.length) {
-            const headersTableElement = columnHeadersView._tableElement;
-            columnHeadersView._setTableElement(rowsView._getTableElement()?.children('.dx-header'));
+            const headersTableElement = columnHeadersView.getTableElement();
+            columnHeadersView.setTableElement(rowsView.getTableElement()?.children('.dx-header'));
             widths = columnHeadersView.getColumnWidths();
-            columnHeadersView._setTableElement(headersTableElement);
+            columnHeadersView.setTableElement(headersTableElement);
         }
 
         return widths;
@@ -159,7 +159,7 @@ const ResizingController = modules.ViewController.inherit({
     },
 
     _toggleBestFitMode: function(isBestFit) {
-        const $rowsTable = this._rowsView._getTableElement();
+        const $rowsTable = this._rowsView.getTableElement();
         const $rowsFixedTable = this._rowsView.getTableElements().eq(1);
 
         if(!$rowsTable) return;
