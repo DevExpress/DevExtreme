@@ -273,13 +273,13 @@ module('View Data Provider', {
             test('getLasGroupCellPosition', function(assert) {
                 assert.deepEqual(
                     this.viewDataProvider.getLasGroupCellPosition(2),
-                    { rowIndex: 1, cellIndex: 0 },
+                    { rowIndex: 1, cellIndex: 1 },
                     'Last position for the group 2 is correct'
                 );
 
                 assert.deepEqual(
                     this.viewDataProvider.getLasGroupCellPosition(3),
-                    { rowIndex: 3, cellIndex: 0 },
+                    { rowIndex: 3, cellIndex: 1 },
                     'Last position for the group 3 is correct'
                 );
             });
@@ -631,13 +631,13 @@ module('View Data Provider', {
 
                     assert.deepEqual(
                         viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
-                        new Date(2020, 7, 24, 0, 10),
+                        new Date(2020, 7, 24, 0),
                         'Group 2 cell 0 start date is correct'
                     );
 
                     assert.deepEqual(
                         viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
-                        new Date(2020, 7, 25, 0, 11),
+                        new Date(2020, 7, 25, 0),
                         'Group 2 cell 1 start date is correct'
                     );
 
@@ -649,7 +649,7 @@ module('View Data Provider', {
 
                     assert.deepEqual(
                         viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
-                        new Date(2020, 7, 25, 0, 11),
+                        new Date(2020, 7, 25, 1),
                         'Group 3 cell 1 start date is correct'
                     );
                 });

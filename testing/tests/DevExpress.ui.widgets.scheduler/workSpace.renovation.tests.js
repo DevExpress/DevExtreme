@@ -4,6 +4,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 
 import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
@@ -808,7 +809,7 @@ module('Renovated Render', {
     });
 
     module('getCellData', () => {
-        ['standard', 'virtual'].forEach(scrollingMode => {
+        supportedScrollingModes.forEach(scrollingMode => {
             test(`should return cell data in basic case if ${scrollingMode} scrolling mode`, function(assert) {
                 this.createInstance({
                     showAllDayPanel: false,

@@ -16,7 +16,7 @@ import {
     initTestMarkup,
     asyncAssert,
     createWrapper,
-    isIE11
+    supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
@@ -166,14 +166,7 @@ module('Integration: Appointment Day, Week views', {
         });
     });
 
-    [
-        'standard',
-        'virtual'
-    ].forEach(scrollingMode => {
-        if(isIE11 && scrollingMode === 'virtual') {
-            return;
-        }
-
+    supportedScrollingModes.forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {
                 const createInstance = this.createInstance.bind(this);
