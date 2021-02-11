@@ -446,12 +446,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   cancelEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollable';
 
-    dxScrollCancel.on(this.wrapperRef,
+    dxScrollCancel.on(this.wrapperRef.current,
       (event: Event) => {
         this.handleCancel(event);
       }, { namespace });
 
-    return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
+    return (): void => dxScrollCancel.off(this.wrapperRef.current, { namespace });
   }
 
   onChangeVisibility(visible: boolean): void {
@@ -890,7 +890,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get scaleRatioWidth(): number {
-    if (!isDefined(this.scrollableRef)) {
+    if (!isDefined(this.scrollableRef.current)) {
       return 1;
     }
 
@@ -908,7 +908,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get scaleRatioHeight(): number {
-    if (!isDefined(this.scrollableRef)) {
+    if (!isDefined(this.scrollableRef.current)) {
       return 1;
     }
 
@@ -926,7 +926,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get contentWidth(): number {
-    if (!isDefined(this.contentRef)) {
+    if (!isDefined(this.contentRef.current)) {
       return 1;
     }
 
@@ -948,7 +948,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get contentHeight(): number {
-    if (!isDefined(this.contentRef)) {
+    if (!isDefined(this.contentRef.current)) {
       return 1;
     }
 
@@ -974,7 +974,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   getScrollableOffset(): { left: number; top: number } {
-    return getElementOffset(this.scrollableRef);
+    return getElementOffset(this.scrollableRef.current!);
   }
 
   get cssClasses(): string {

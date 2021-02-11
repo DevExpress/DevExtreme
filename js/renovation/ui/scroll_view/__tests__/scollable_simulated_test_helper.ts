@@ -47,6 +47,19 @@ class ScrollableTestHelper {
     this.viewModel = new Scrollable({
       ...args,
     }) as any;
+    this.viewModel.scrollableRef = React.createRef();
+    this.viewModel.containerRef = React.createRef();
+    this.viewModel.contentRef = React.createRef();
+    this.viewModel.wrapperRef = React.createRef();
+    this.viewModel.verticalScrollbarRef = React.createRef();
+    this.viewModel.horizontalScrollbarRef = React.createRef();
+
+    this.viewModel.scrollableRef.current = {} as HTMLDivElement;
+    this.viewModel.containerRef.current = {} as HTMLDivElement;
+    this.viewModel.contentRef.current = {} as HTMLDivElement;
+    this.viewModel.wrapperRef.current = {} as HTMLDivElement;
+    this.viewModel.verticalScrollbarRef.current = {};
+    this.viewModel.horizontalScrollbarRef.current = {};
 
     this.direction = args.direction;
 
@@ -56,20 +69,10 @@ class ScrollableTestHelper {
     this.isBoth = isBoth;
 
     this.scrollable = mount(viewFunction(this.viewModel) as JSX.Element);
-    this.viewModel.scrollableRef = React.createRef();
+
     this.viewModel.scrollableRef.current = this.scrollable.getDOMNode();
-
-    this.viewModel.containerRef = React.createRef();
     this.viewModel.containerRef.current = this.getContainerElement();
-    this.viewModel.contentRef = React.createRef();
     this.viewModel.contentRef.current = this.getContentElement();
-
-    this.viewModel.wrapperRef = React.createRef();
-    this.viewModel.wrapperRef.current = {} as HTMLDivElement;
-    this.viewModel.verticalScrollbarRef = React.createRef();
-    this.viewModel.verticalScrollbarRef.current = {};
-    this.viewModel.horizontalScrollbarRef = React.createRef();
-    this.viewModel.horizontalScrollbarRef.current = {};
 
     const { contentSize = 200, containerSize = 100, overflow = false } = args;
 

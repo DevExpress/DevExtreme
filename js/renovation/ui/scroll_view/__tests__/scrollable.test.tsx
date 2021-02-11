@@ -155,6 +155,12 @@ each([{
                   };
 
                   const viewModel = new Scrollable({ direction, ...propertySettings });
+                  viewModel.contentRef = React.createRef();
+                  viewModel.containerRef = React.createRef();
+                  viewModel.scrollableRef = React.createRef();
+                  viewModel.contentRef.current = {} as HTMLDivElement;
+                  viewModel.scrollableRef.current = {} as HTMLDivElement;
+
                   const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
 
                   const scrollbars = scrollable.find(Scrollbar);
@@ -203,6 +209,11 @@ each([{
       each([true, false]).describe('tabIndex on container. useKeyboard: %o', (useKeyboard) => {
         it('tabIndex on scrollable, useKeyboard', () => {
           const viewModel = new Scrollable({ useKeyboard });
+          viewModel.contentRef = React.createRef();
+          viewModel.containerRef = React.createRef();
+          viewModel.scrollableRef = React.createRef();
+          viewModel.contentRef.current = {} as HTMLDivElement;
+          viewModel.scrollableRef.current = {} as HTMLDivElement;
 
           const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
           const scrollableTabIndex = scrollable.getDOMNode().attributes.getNamedItem('tabindex');
@@ -498,6 +509,7 @@ each([{
             const scrollable = new Scrollable({ direction });
             const handleCancel = jest.fn();
             (scrollable as any).handleCancel = handleCancel;
+            scrollable.wrapperRef = React.createRef();
 
             scrollable.cancelEffect();
             emit('dxscrollcancel', e);
