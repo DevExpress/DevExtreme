@@ -191,7 +191,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             if(!isCurrentRowsViewClick && !isEditorOverlay && !isColumnResizing) {
                 const targetInsideFocusedView = this._focusedView ? $target.parents().filter(this._focusedView.element()).length > 0 : false;
 
-                !targetInsideFocusedView && this._resetFocusedCell(this._getFocusedCell(), true);
+                !targetInsideFocusedView && this._resetFocusedCell(true);
                 this._resetFocusedView();
             }
         });
@@ -508,7 +508,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(isOriginalHandlerRequired) {
             this._editorFactory.loseFocus();
             if(this._editingController.isEditing() && !this._isRowEditMode()) {
-                this._resetFocusedCell(this._getFocusedCell(), true);
+                this._resetFocusedCell(true);
                 this._resetFocusedView();
                 this._closeEditCell();
             }
@@ -1216,8 +1216,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._editorFactory.focus($cell, true);
         }
     },
-    _resetFocusedCell: function($cellElement, preventScroll) {
-        const $cell = isElementDefined($cellElement) ? $cellElement : this._getFocusedCell();
+    _resetFocusedCell: function(preventScroll) {
+        const $cell = this._getFocusedCell();
 
         isElementDefined($cell) && $cell.removeAttr('tabindex');
         this._isNeedFocus = false;
