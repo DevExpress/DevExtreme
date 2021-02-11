@@ -44,7 +44,8 @@ const knownErrors = [
     'Cannot find module \'preact/hooks\'',
     'Cannot find module \'preact/compat\'',
     'js/renovation/preact_wrapper/',
-    'js\\renovation\\preact_wrapper\\'
+    'js\\renovation\\preact_wrapper\\',
+    'Cannot find module \'../../inferno/src\'',
 ];
 
 function deleteJQueryComponents(cb) {
