@@ -155,8 +155,6 @@ describe('Simulated', () => {
                   viewModel.contentRef = React.createRef();
                   viewModel.containerRef = React.createRef();
                   viewModel.scrollableRef = React.createRef();
-                  viewModel.contentRef.current = {} as HTMLDivElement;
-                  viewModel.scrollableRef.current = {} as HTMLDivElement;
 
                   const scrollable = mount(viewFunction(viewModel) as JSX.Element);
                   viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
@@ -287,6 +285,7 @@ describe('Simulated', () => {
                     viewModel.verticalScrollbarRef = React.createRef();
                     viewModel.horizontalScrollbarRef = React.createRef();
                     viewModel.wrapperRef = React.createRef();
+                    viewModel.contentRef = React.createRef();
                     viewModel.containerRef = React.createRef();
                     viewModel.scrollableRef = React.createRef();
 
@@ -611,10 +610,12 @@ describe('Simulated', () => {
                     scrollByThumb,
                     scrollByContent,
                   }) as any;
+                  viewModel.wrapperRef = React.createRef();
+                  viewModel.contentRef = React.createRef();
+                  viewModel.containerRef = React.createRef();
+                  viewModel.scrollableRef = React.createRef();
 
                   const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-                  viewModel.wrapperRef = React.createRef();
-                  viewModel.scrollableRef = React.createRef();
                   viewModel.scrollableRef.current = scrollable.getDOMNode();
 
                   const scrollbars = scrollable.find(Scrollbar);
@@ -1873,10 +1874,9 @@ describe('Simulated', () => {
           viewModel.contentRef = React.createRef();
           viewModel.containerRef = React.createRef();
           viewModel.scrollableRef = React.createRef();
-          viewModel.contentRef.current = {} as HTMLDivElement;
-          viewModel.scrollableRef.current = {} as HTMLDivElement;
 
           const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+          viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
 
           expect(viewModel.isContent(scrollable.find('.dx-scrollable-container').getDOMNode())).toBe(true);
         });
@@ -1886,10 +1886,9 @@ describe('Simulated', () => {
           viewModel.contentRef = React.createRef();
           viewModel.containerRef = React.createRef();
           viewModel.scrollableRef = React.createRef();
-          viewModel.contentRef.current = {} as HTMLDivElement;
-          viewModel.scrollableRef.current = {} as HTMLDivElement;
 
           const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+          viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
 
           expect(viewModel.isContent(scrollable.find('.dx-scrollable-scrollbar').getDOMNode())).toBe(true);
         });
@@ -1899,8 +1898,6 @@ describe('Simulated', () => {
           viewModel.contentRef = React.createRef();
           viewModel.containerRef = React.createRef();
           viewModel.scrollableRef = React.createRef();
-          viewModel.contentRef.current = {} as HTMLDivElement;
-          viewModel.scrollableRef.current = {} as HTMLDivElement;
 
           mount(viewFunction(viewModel as any) as JSX.Element);
           expect(viewModel.isContent(mount(<div />).getDOMNode())).toBe(false);

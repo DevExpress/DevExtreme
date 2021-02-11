@@ -158,8 +158,6 @@ each([{
                   viewModel.contentRef = React.createRef();
                   viewModel.containerRef = React.createRef();
                   viewModel.scrollableRef = React.createRef();
-                  viewModel.contentRef.current = {} as HTMLDivElement;
-                  viewModel.scrollableRef.current = {} as HTMLDivElement;
 
                   const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
 
@@ -212,8 +210,6 @@ each([{
           viewModel.contentRef = React.createRef();
           viewModel.containerRef = React.createRef();
           viewModel.scrollableRef = React.createRef();
-          viewModel.contentRef.current = {} as HTMLDivElement;
-          viewModel.scrollableRef.current = {} as HTMLDivElement;
 
           const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
           const scrollableTabIndex = scrollable.getDOMNode().attributes.getNamedItem('tabindex');
@@ -650,7 +646,6 @@ each([{
         it('should not raise any error if onScroll is not defined', () => {
           const scrollable = new Scrollable({ onScroll: undefined });
           scrollable.containerRef = React.createRef();
-          scrollable.containerRef.current = {};
 
           scrollable.scrollEffect();
           emit('scroll');

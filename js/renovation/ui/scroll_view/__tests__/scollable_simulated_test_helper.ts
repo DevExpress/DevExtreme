@@ -54,9 +54,6 @@ class ScrollableTestHelper {
     this.viewModel.verticalScrollbarRef = React.createRef();
     this.viewModel.horizontalScrollbarRef = React.createRef();
 
-    this.viewModel.scrollableRef.current = {} as HTMLDivElement;
-    this.viewModel.containerRef.current = {} as HTMLDivElement;
-    this.viewModel.contentRef.current = {} as HTMLDivElement;
     this.viewModel.wrapperRef.current = {} as HTMLDivElement;
     this.viewModel.verticalScrollbarRef.current = {};
     this.viewModel.horizontalScrollbarRef.current = {};

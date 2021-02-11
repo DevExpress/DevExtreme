@@ -874,19 +874,27 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get baseContentWidth(): number {
-    return Math.round(this.contentRef.current!.offsetWidth);
+    return isDefined(this.contentRef.current)
+      ? Math.round(this.contentRef.current.offsetWidth)
+      : 0;
   }
 
   get baseContainerWidth(): number {
-    return Math.round(this.containerRef.current!.offsetWidth);
+    return isDefined(this.containerRef.current)
+      ? Math.round(this.containerRef.current.offsetWidth)
+      : 0;
   }
 
   get baseContentHeight(): number {
-    return Math.round(this.contentRef.current!.offsetHeight);
+    return isDefined(this.contentRef.current)
+      ? Math.round(this.contentRef.current.offsetHeight)
+      : 0;
   }
 
   get baseContainerHeight(): number {
-    return Math.round(this.containerRef.current!.offsetHeight);
+    return isDefined(this.containerRef.current)
+      ? Math.round(this.containerRef.current.offsetHeight)
+      : 0;
   }
 
   get scaleRatioWidth(): number {
@@ -898,8 +906,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     /* istanbul ignore next */
     if (hasWindow()) {
-      const realDimension = getElementWidth(this.scrollableRef.current!);
-      const baseDimension = this.scrollableRef.current!.offsetWidth;
+      const realDimension = getElementWidth(this.scrollableRef.current);
+      const baseDimension = this.scrollableRef.current.offsetWidth;
 
       scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
     }
@@ -916,8 +924,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     /* istanbul ignore next */
     if (hasWindow()) {
-      const realDimension = getElementHeight(this.scrollableRef.current!);
-      const baseDimension = this.scrollableRef.current!.offsetHeight;
+      const realDimension = getElementHeight(this.scrollableRef.current);
+      const baseDimension = this.scrollableRef.current.offsetHeight;
 
       scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
     }
@@ -944,7 +952,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get containerWidth(): number {
-    return getElementWidth(this.containerRef.current!);
+    return isDefined(this.containerRef.current) ? getElementWidth(this.containerRef.current) : 0;
   }
 
   get contentHeight(): number {
@@ -966,7 +974,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get containerHeight(): number {
-    return getElementHeight(this.containerRef.current!);
+    return isDefined(this.containerRef.current)
+      ? getElementHeight(this.containerRef.current)
+      : 0;
   }
 
   get scrollableOffset(): { left: number; top: number } {
@@ -974,7 +984,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   getScrollableOffset(): { left: number; top: number } {
-    return getElementOffset(this.scrollableRef.current!);
+    return isDefined(this.scrollableRef.current)
+      ? getElementOffset(this.scrollableRef.current)
+      : { left: 0, top: 0 };
   }
 
   get cssClasses(): string {
