@@ -316,12 +316,12 @@ export default class PreactWrapper extends DOMComponent {
 
     const template = this._getTemplate(templateOption);
 
-    const templateWrapper = (data: any) => {
+    const templateWrapper = (model: any) => {
       return createElement(
         TemplateWrapper,
         {
           template,
-          data
+          model
         }
       )
     };

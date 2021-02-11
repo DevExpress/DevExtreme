@@ -2,6 +2,7 @@ import $ from 'jquery';
 import RenovatedPager from 'renovation/ui/pager/pager.j.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
+// eslint-disable-next-line spellcheck/spell-checker
 import { rerender as reRender } from 'inferno';
 
 // default export not supported

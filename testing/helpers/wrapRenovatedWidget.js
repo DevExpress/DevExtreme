@@ -1,3 +1,4 @@
+// eslint-disable-next-line spellcheck/spell-checker
 import { rerender as reRender } from 'inferno';
 
 function callMethod() {

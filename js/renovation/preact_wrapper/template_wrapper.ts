@@ -9,9 +9,9 @@ import { removeDifferentElements, wrapElement } from './utils';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
-export class TemplateWrapper extends InfernoComponent
-  // <{ template: any, data: { model: any; index: number } }>
-{
+interface TemplateProps { template: any; data: { model: any; index: number } }
+
+export class TemplateWrapper extends InfernoComponent<TemplateProps> {
   constructor(props) {
     super(props);
     this.renderTemplate = this.renderTemplate.bind(this);
@@ -25,7 +25,7 @@ export class TemplateWrapper extends InfernoComponent
     const $parent = $(parentNode);
     const $children = $parent.contents();
 
-    const { data, index } = this.props.data;
+    const { data, index } = this.props.model;
 
     Object.keys(data).forEach((name) => {
       if (data[name] && domAdapter.isNode(data[name])) {
@@ -55,18 +55,18 @@ export class TemplateWrapper extends InfernoComponent
   component;
 
   createEffects(): InfernoEffect[] {
-    return [
-      new InfernoEffect(this.renderTemplate, [
-        this.props.template,
-      ]),
-    ];
+    return [new InfernoEffect(this.renderTemplate, [this.props.template])];
   }
 
   updateEffects(): void {
+    // eslint-disable-next-line no-underscore-dangle
     this._effects[0].update([this.props.template]);
   }
 
   render(): JSX.Element {
-    return createElement('div', { style: { display: 'none' }, ref: this.dummyDivRef });
+    return createElement('div', {
+      style: { display: 'none' },
+      ref: this.dummyDivRef,
+    });
   }
 }
