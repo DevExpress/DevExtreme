@@ -48,60 +48,80 @@ class ViewDataGenerator {
     }
 
     _transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList) {
-        const completeViewDataMap = viewDataMap.map(row => row.slice());
+        const result = viewDataMap.map(row => row.slice());
 
         groupsList.slice(1).forEach((groups, index) => {
             const groupIndex = index + 1;
 
             viewDataMap.forEach((row, rowIndex) => {
-                completeViewDataMap[rowIndex].push(...row.map((cellData) => ({
-                    ...cellData,
-                    groups,
-                    groupIndex,
-                })));
+                const nextGroupRow = row.map((cellData) => {
+                    return ({
+                        ...cellData,
+                        groups,
+                        groupIndex,
+                    });
+                });
+
+                result[rowIndex].push(...nextGroupRow);
             });
         });
 
-        return completeViewDataMap;
+        return result;
     }
 
     _transformViewDataMapForVerticalGrouping(viewDataMap, groupsList) {
-        const completeViewDataMap = viewDataMap.map(row => row.slice());
+        const result = viewDataMap.map(row => row.slice());
 
         groupsList.slice(1).forEach((groups, index) => {
             const groupIndex = index + 1;
 
-            completeViewDataMap.push(...viewDataMap.map((cellsRow) => cellsRow.map((cellData) => ({
-                ...cellData,
-                groupIndex,
-                groups,
-            }))));
+            const nextGroupMap = viewDataMap.map((cellsRow) => {
+                const nextRow = cellsRow.map((cellData) => {
+                    return ({
+                        ...cellData,
+                        groupIndex,
+                        groups,
+                    });
+                });
+
+                return nextRow;
+            });
+
+            result.push(...nextGroupMap);
         });
 
-        return completeViewDataMap;
+        return result;
     }
 
     _transformViewDataMapForGroupingByDate(viewDataMap, groupsList) {
         const correctedGroupList = groupsList.slice(1);
         const correctedGroupCount = correctedGroupList.length;
 
-        const completeViewDataMap = viewDataMap.map((cellsRow) => cellsRow.reduce((currentRow, cell) => [
-            ...currentRow,
-            {
-                ...cell,
-                isFirstGroupCell: true,
-                isLastGroupCell: correctedGroupCount === 0,
-            },
-            ...correctedGroupList.map((groups, index) => ({
-                ...cell,
-                groups,
-                groupIndex: index + 1,
-                isFirstGroupCell: false,
-                isLastGroupCell: index === correctedGroupCount - 1,
-            })),
-        ], []));
+        const result = viewDataMap.map((cellsRow) => {
+            const groupedByDateCellsRow = cellsRow.reduce((currentRow, cell) => {
+                const rowWithCurrentCell = [
+                    ...currentRow,
+                    {
+                        ...cell,
+                        isFirstGroupCell: true,
+                        isLastGroupCell: correctedGroupCount === 0,
+                    },
+                    ...correctedGroupList.map((groups, index) => ({
+                        ...cell,
+                        groups,
+                        groupIndex: index + 1,
+                        isFirstGroupCell: false,
+                        isLastGroupCell: index === correctedGroupCount - 1,
+                    })),
+                ];
 
-        return completeViewDataMap;
+                return rowWithCurrentCell;
+            }, []);
+
+            return groupedByDateCellsRow;
+        });
+
+        return result;
     }
 
     _addKeysToCells(viewDataMap, totalColumnCount) {
