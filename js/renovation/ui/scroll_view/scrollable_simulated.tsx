@@ -487,7 +487,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private handleMove(e): void {
-    e.preventDefault && e.preventDefault();
+    e.preventDefault?.preventDefault();
 
     this.adjustDistance(e, 'delta');
     this.eventForUserAction = e;

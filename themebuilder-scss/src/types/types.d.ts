@@ -7,7 +7,7 @@ interface MetaItem {
   [key: string]: string;
 }
 
-interface ThemesMetadata {
+export interface ThemesMetadata {
   generic: MetaItem[];
   material: MetaItem[];
 }

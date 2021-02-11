@@ -77,7 +77,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
       editorType: 'dxCheckBox',
       editorOptions: {
         type: 'boolean',
-        onValueChanged: (args) => e.form.itemOption('text1', 'visible', args.value),
+        onValueChanged: (args): boolean => e.form.itemOption('text1', 'visible', args.value),
       },
     }, {
       name: 'text1',

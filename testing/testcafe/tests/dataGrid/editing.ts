@@ -8,7 +8,7 @@ fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'))
   .afterEach(() => disposeWidgets());
 
-const getGridConfig = (config) => {
+const getGridConfig = (config): Record<string, unknown> => {
   const defaultConfig = {
     errorRowEnabled: true,
     dataSource: {
@@ -59,7 +59,7 @@ test('Click should work if a column button set using svg icon (T863635)', async 
       {
         hint: 'svg icon',
         icon: '<svg id="svg-icon"><circle cx="15" cy="15" r="14" /> </svg>',
-        onClick: () => {
+        onClick: (): void => {
           const global = window as any;
           if (!global.onSvgClickCounter) {
             global.onSvgClickCounter = 0;
@@ -135,7 +135,7 @@ test('Async Validation(Row) - Only valid data is saved in a new row', async (t) 
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -187,7 +187,7 @@ test('Async Validation(Row) - Only valid data is saved in a modified row', async
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -249,7 +249,7 @@ test('Async Validation(Row) - Data is not saved when a dependant cell value beco
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -258,7 +258,7 @@ test('Async Validation(Row) - Data is not saved when a dependant cell value beco
         return d.promise();
       },
     }],
-    setCellValue(rowData, value) {
+    setCellValue(rowData, value): void {
       rowData.age = value;
       if (value === 1) {
         rowData.name = '';
@@ -299,7 +299,7 @@ test('Async Validation(Cell) - Only the last cell should be switched to edit mod
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback() {
+      validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(true);
@@ -351,7 +351,7 @@ test('Async Validation(Cell) - Only valid data is saved in a new row', async (t)
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -408,7 +408,7 @@ test('Async Validation(Cell) - Only valid data is saved in a modified cell', asy
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -478,7 +478,7 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -487,7 +487,7 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
         return d.promise();
       },
     }],
-    setCellValue(rowData, value) {
+    setCellValue(rowData, value): void {
       rowData.age = value;
       if (value === 1) {
         rowData.name = '';
@@ -519,7 +519,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
   },
   columns: [{
     dataField: 'age',
-    setCellValue: (rowData, value) => {
+    setCellValue: (rowData, value): void => {
       rowData.age = value;
       rowData.name = 'testb';
     },
@@ -527,7 +527,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
     dataField: 'name',
     validationRules: [{
       type: 'async',
-      validationCallback() {
+      validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(false);
@@ -558,7 +558,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
   },
   columns: [{
     dataField: 'age',
-    setCellValue: (rowData, value) => {
+    setCellValue: (rowData, value): void => {
       rowData.age = value;
       rowData.name = 'testb';
     },
@@ -566,7 +566,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
     dataField: 'name',
     validationRules: [{
       type: 'async',
-      validationCallback() {
+      validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(false);
@@ -599,10 +599,10 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData) => (rowData.age ? `${rowData.age}b` : undefined),
+    calculateCellValue: (rowData): string | void => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
-      validationCallback() {
+      validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(false);
@@ -635,10 +635,10 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData) => (rowData.age ? `${rowData.age}b` : undefined),
+    calculateCellValue: (rowData): string | void => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
-      validationCallback() {
+      validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(false);
@@ -700,7 +700,7 @@ test('Async Validation(Batch) - Only valid data is saved in a new row', async (t
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -765,7 +765,7 @@ test('Async Validation(Batch) - Only valid data is saved in a modified cell', as
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -850,7 +850,7 @@ test('Async Validation(Batch) - Data is not saved when a dependant cell value be
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -859,7 +859,7 @@ test('Async Validation(Batch) - Data is not saved when a dependant cell value be
         return d.promise();
       },
     }],
-    setCellValue(rowData, value) {
+    setCellValue(rowData, value): void {
       rowData.age = value;
       if (value === 1) {
         rowData.name = '';
@@ -912,7 +912,7 @@ test('Async Validation(Batch) - Data is not saved when a cell with async setCell
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -921,7 +921,7 @@ test('Async Validation(Batch) - Data is not saved when a cell with async setCell
         return d.promise();
       },
     }],
-    setCellValue(rowData, value) {
+    setCellValue(rowData, value): JQueryPromise<unknown> {
       const d = $.Deferred();
       setTimeout(() => {
         rowData.age = value;
@@ -984,7 +984,7 @@ test('Validation(Row) - Unmodified data cell should be marked as invalid when a 
     dataField: 'name',
     validationRules: [{
       type: 'custom',
-      validationCallback(params) {
+      validationCallback(params): boolean {
         return params.data.age >= 10;
       },
     }],
@@ -1039,7 +1039,7 @@ test('Validation(Row) - Unmodified data cell should be marked as invalid when a 
     validationRules: [{
       type: 'custom',
       reevaluate: true,
-      validationCallback(params) {
+      validationCallback(params): boolean {
         return params.data.age >= 10;
       },
     }],
@@ -1088,7 +1088,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
     dataField: 'name',
     validationRules: [{
       type: 'custom',
-      validationCallback(params) {
+      validationCallback(params): boolean {
         return params.data.age >= 10;
       },
     }],
@@ -1138,7 +1138,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
     validationRules: [{
       type: 'custom',
       reevaluate: true,
-      validationCallback(params) {
+      validationCallback(params): boolean {
         return params.data.age >= 10;
       },
     }],
@@ -1211,7 +1211,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
       validationRules: [{
         type: 'custom',
         reevaluate,
-        validationCallback(params) {
+        validationCallback(params): boolean {
           return params.data.age >= 10;
         },
       }],
@@ -1291,7 +1291,7 @@ test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways sho
     validationRules: [{
       type: 'custom',
       reevaluate: true,
-      validationCallback: (params) => params.data.name.length <= 0,
+      validationCallback: (params): boolean => params.data.name.length <= 0,
     }],
   }],
 })));
@@ -1388,7 +1388,7 @@ test('Async Validation(Batch) - Validation frame should be rendered when a neigh
     validationRules: [{
       type: 'async',
       message: 'Invalid value',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(params.data.name.length < 2);
@@ -1472,7 +1472,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
   loadingTimeout: undefined,
   masterDetail: {
     enabled: true,
-    template() {
+    template(): any {
       return ($('<div id="detailContainer">') as any).dxDataGrid({
         dataSource: [],
         keyExpr: 'id',
@@ -1538,7 +1538,7 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
   loadingTimeout: undefined,
   masterDetail: {
     enabled: true,
-    template() {
+    template(): any {
       return ($('<div id="detailContainer">') as any).dxDataGrid({
         dataSource: [],
         keyExpr: 'id',
@@ -1602,7 +1602,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
   loadingTimeout: undefined,
   masterDetail: {
     enabled: true,
-    template() {
+    template(): any {
       return ($('<div id="detailContainer">') as any).dxDataGrid({
         dataSource: [],
         keyExpr: 'id',

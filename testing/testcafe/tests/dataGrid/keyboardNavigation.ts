@@ -145,7 +145,7 @@ test('TextArea should be focused on editing start', async (t) => {
   const dataGrid = new DataGrid('#container');
   const commandCell = dataGrid.getDataCell(1, 3).element;
   const dataCell = dataGrid.getDataCell(1, 0);
-  const getTextArea = () => dataCell.element.find('.text-area-1');
+  const getTextArea = (): Selector => dataCell.element.find('.text-area-1');
 
   await t
     // act, assert
@@ -167,15 +167,15 @@ test('TextArea should be focused on editing start', async (t) => {
   columns: [
     {
       dataField: 'name',
-      editCellTemplate: (cell) => $(cell).append($('<textarea class="text-area-1" />')),
+      editCellTemplate: (cell): any => $(cell).append($('<textarea class="text-area-1" />')),
     },
     {
       dataField: 'phone',
-      editCellTemplate: (cell) => $(cell).append($('<textarea class="text-area-2" />')),
+      editCellTemplate: (cell): any => $(cell).append($('<textarea class="text-area-2" />')),
     },
     {
       dataField: 'room',
-      editCellTemplate: (cell) => $(cell).append($('<textarea />')),
+      editCellTemplate: (cell): any => $(cell).append($('<textarea />')),
     },
   ],
 }));
@@ -1508,8 +1508,8 @@ test('Horizontal moving by keydown if scrolling.columnRenderingMode: virtual', a
     await t.expect(cell.isFocused).ok(`Cell[0, ${columnIndex}] is focused`);
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount) {
-    const items: {}[] = [];
+  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+    const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
       const item = {};
@@ -1560,8 +1560,8 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
     await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, 0] is focused`);
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount) {
-    const items: {}[] = [];
+  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+    const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
       const item = {};
@@ -1621,8 +1621,8 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
       }
     }
   }).before(() => {
-    const generateData = function (rowCount, columnCount) {
-      const items: {}[] = [];
+    const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+      const items: Record<string, unknown>[] = [];
 
       for (let i = 0; i < rowCount; i += 1) {
         const item = {};
@@ -1712,8 +1712,8 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     }
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount) {
-    const items: {}[] = [];
+  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+    const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
       const item = {};
@@ -1807,8 +1807,8 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     }
   }
 }).before(() => {
-  const generateData = function (rowCount, columnCount) {
-    const items: {}[] = [];
+  const generateData = function (rowCount, columnCount): Record<string, unknown>[] {
+    const items: Record<string, unknown>[] = [];
 
     for (let i = 0; i < rowCount; i += 1) {
       const item = {};

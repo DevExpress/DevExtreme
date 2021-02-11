@@ -42,7 +42,7 @@ export const getFuncIri = (id: string, pathModified?: boolean): string => (
   id !== null ? `url(${pathModified ? window.location.href.split('#')[0] : ''}#${id})` : id
 );
 
-export const extend = (target: object, source: object): object => {
+export const extend = (target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> => {
   target = { ...target, ...source };
 
   return target;
