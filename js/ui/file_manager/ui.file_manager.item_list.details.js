@@ -299,7 +299,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             cancel: false
         });
         this._raiseContextMenuShowing(eventArgs);
-        e.items = eventArgs.cancel ? [] : this._contextMenu.createContextMenuItems(fileItems, eventArgs.items, item);
+        e.items = eventArgs.cancel ? [] : this._contextMenu.createContextMenuItems(fileItems, null, item);
     }
 
     _onFilesViewSelectionChanged({ component, selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {

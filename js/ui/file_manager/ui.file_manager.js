@@ -406,12 +406,10 @@ class FileManager extends Widget {
         eventArgs = extend(eventArgs, {
             viewArea,
             fileSystemItem: e.itemData?.fileItem,
-            items: e.options.items,
             _isActionButton: e.isActionButton
         });
         this._actions.onContextMenuPreparing(eventArgs);
         e.cancel = ensureDefined(eventArgs.cancel, false);
-        e.items = ensureDefined(eventArgs.items, []);
     }
 
     _getItemThumbnailInfo(fileInfo) {

@@ -330,7 +330,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         this.wrapper.getFolderNode(2).trigger('dxcontextmenu');
         this.clock.tick(800);
 
-        const $items = this.wrapper.getContextMenuItems();
+        let $items = this.wrapper.getContextMenuItems();
         $items.eq(0).trigger('dxclick');
         this.clock.tick(800);
 
@@ -346,6 +346,23 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual($(spy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'fileSystemItem is correct');
         assert.strictEqual(spy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
+
+        this.wrapper.getFolderNode(2).trigger('dxcontextmenu');
+        this.clock.tick(800);
+
+        $items = this.wrapper.getContextMenuItems();
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(800);
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 1, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, 'rename', 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(spy.args[1][0].fileSystemItem.dataItem, targetFileSystemItem, 'fileSystemItem is correct');
+        assert.strictEqual(spy.args[1][0].viewArea, 'navPane', 'viewArea is correct');
     });
 
     test('Raise the ContextMenuItemClick event on subitems', function(assert) {
@@ -426,7 +443,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         let preparingEventArgs = {};
         fileManager.option({
             onContextMenuPreparing: e => {
-                e.items = contextMenuItems;
+                e.component.option('contextMenu.items', contextMenuItems);
                 preparingEventArgs = e;
             },
             onContextMenuItemClick: spy,
@@ -434,7 +451,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
                 rename: true
             },
             contextMenu: {
-                items: ['rename', { text: 'someText', beginGroup: true }]
+                items: []
             }
         });
         this.clock.tick(800);
@@ -442,7 +459,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         this.wrapper.getFolderNode(2).trigger('dxcontextmenu');
         this.clock.tick(800);
 
-        const $items = this.wrapper.getContextMenuItems();
+        let $items = this.wrapper.getContextMenuItems();
         $items.eq(0).trigger('dxclick');
         this.clock.tick(800);
 
@@ -458,6 +475,24 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, preparingEventArgs.fileSystemItem.dataItem, 'integrated fileSystemItem is correct');
         assert.strictEqual(spy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'fileSystemItem is correct');
         assert.strictEqual(spy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
+
+        this.wrapper.getFolderNode(2).trigger('dxcontextmenu');
+        this.clock.tick(800);
+
+        $items = this.wrapper.getContextMenuItems();
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(800);
+
+        assert.strictEqual(spy.callCount, 2, 'event raised');
+        assert.strictEqual(spy.args[1][0].event.type, 'dxclick', 'event has correct type');
+        assert.strictEqual($(spy.args[1][0].itemElement).get(0), $items.eq(1).get(0), 'itemElement is correct');
+        assert.strictEqual(spy.args[1][0].itemIndex, 1, 'itemIndex is correct');
+        assert.strictEqual(spy.args[1][0].itemData, 'rename', 'itemData is correct');
+        assert.strictEqual(spy.args[1][0].component, fileManager, 'component is correct');
+        assert.strictEqual($(spy.args[1][0].element).get(0), this.$element.get(0), 'element is correct');
+        assert.strictEqual(spy.args[1][0].fileSystemItem.dataItem, preparingEventArgs.fileSystemItem.dataItem, 'integrated fileSystemItem is correct');
+        assert.strictEqual(spy.args[1][0].fileSystemItem.dataItem, targetFileSystemItem, 'fileSystemItem is correct');
+        assert.strictEqual(spy.args[1][0].viewArea, 'navPane', 'viewArea is correct');
     });
 
     test('Raise the contextMenuPreparing event on treeView items', function(assert) {
@@ -466,12 +501,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
             return;
         }
         const eventSpy = sinon.spy();
-        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
-            permissions: { rename: true },
-            contextMenu: { items: contextMenuItems }
+            permissions: { rename: true }
         });
         this.clock.tick(400);
 
@@ -486,7 +519,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual($(eventSpy.args[0][0].targetElement).get(0), targetItemElement.get(0), 'itemElement is correct');
         assert.strictEqual(eventSpy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
-        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
@@ -495,12 +527,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
     test('Raise the contextMenuPreparing event on treeView actionButtons', function(assert) {
         const eventSpy = sinon.spy();
-        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
-            permissions: { rename: true },
-            contextMenu: { items: contextMenuItems }
+            permissions: { rename: true }
         });
         this.clock.tick(400);
 
@@ -515,7 +545,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual($(eventSpy.args[0][0].targetElement).get(0), targetItemElement.get(0), 'itemElement is correct');
         assert.strictEqual(eventSpy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
-        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
@@ -545,12 +574,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
             return;
         }
         const eventSpy = sinon.spy();
-        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
-            permissions: { rename: true },
-            contextMenu: { items: contextMenuItems }
+            permissions: { rename: true }
         });
         this.clock.tick(400);
 
@@ -565,7 +592,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual($(eventSpy.args[0][0].targetElement).get(0), targetItemElement.get(0), 'itemElement is correct');
         assert.strictEqual(eventSpy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
-        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
@@ -574,12 +600,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 
     test('Raise the contextMenuPreparing event on detailsView actionButtons', function(assert) {
         const eventSpy = sinon.spy();
-        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
-            permissions: { rename: true },
-            contextMenu: { items: contextMenuItems }
+            permissions: { rename: true }
         });
         this.clock.tick(400);
 
@@ -594,7 +618,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual($(eventSpy.args[0][0].targetElement).get(0), targetItemElement.get(0), 'itemElement is correct');
         assert.strictEqual(eventSpy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
-        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
@@ -607,12 +630,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
             return;
         }
         const eventSpy = sinon.spy();
-        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
-            permissions: { rename: true },
-            contextMenu: { items: contextMenuItems }
+            permissions: { rename: true }
         });
         this.clock.tick(400);
 
@@ -624,7 +645,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0].targetElement, undefined, 'itemElement is correct');
         assert.strictEqual(eventSpy.args[0][0].fileSystemItem, undefined, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
-        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
@@ -654,13 +674,11 @@ QUnit.module('Raise context menu', moduleConfig, () => {
             return;
         }
         const eventSpy = sinon.spy();
-        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
             permissions: { rename: true },
-            itemView: { mode: 'thumbnails' },
-            contextMenu: { items: contextMenuItems }
+            itemView: { mode: 'thumbnails' }
         });
         this.clock.tick(400);
 
@@ -675,7 +693,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual($(eventSpy.args[0][0].targetElement).get(0), targetItemElement.get(0), 'itemElement is correct');
         assert.strictEqual(eventSpy.args[0][0].fileSystemItem.dataItem, targetFileSystemItem, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
-        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
@@ -688,13 +705,11 @@ QUnit.module('Raise context menu', moduleConfig, () => {
             return;
         }
         const eventSpy = sinon.spy();
-        const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             onContextMenuPreparing: eventSpy,
             permissions: { rename: true },
-            itemView: { mode: 'thumbnails' },
-            contextMenu: { items: contextMenuItems }
+            itemView: { mode: 'thumbnails' }
         });
         this.clock.tick(400);
 
@@ -706,7 +721,6 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0].targetElement, undefined, 'itemElement is correct');
         assert.strictEqual(eventSpy.args[0][0].fileSystemItem, undefined, 'itemData(fileSystemItem) is correct');
         assert.strictEqual(eventSpy.args[0][0].cancel, false, 'cancel flag presents');
-        assert.deepEqual(eventSpy.args[0][0].items, contextMenuItems, 'items are correct');
         assert.strictEqual(eventSpy.args[0][0].component, fileManager, 'component is correct');
         assert.strictEqual($(eventSpy.args[0][0].element).get(0), this.$element.get(0), 'element is correct');
         assert.strictEqual(eventSpy.args[0][0].viewArea, 'itemView', 'viewArea is correct');
@@ -1135,7 +1149,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: e => e.items = contextMenuItems,
+            onContextMenuPreparing: e => e.component.option('contextMenu.items', contextMenuItems),
             permissions: { rename: true },
             contextMenu: { items: [] }
         });
@@ -1156,7 +1170,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: e => e.items = contextMenuItems,
+            onContextMenuPreparing: e => e.component.option('contextMenu.items', contextMenuItems),
             permissions: { rename: true },
             contextMenu: { items: [] }
         });
@@ -1181,7 +1195,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: e => e.items = contextMenuItems,
+            onContextMenuPreparing: e => e.component.option('contextMenu.items', contextMenuItems),
             permissions: { rename: true },
             itemView: { mode: 'thumbnails' },
             contextMenu: { items: [] }

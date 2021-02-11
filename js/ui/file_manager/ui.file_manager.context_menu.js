@@ -187,8 +187,8 @@ class FileManagerContextMenu extends Widget {
         }
         e = extend(e, this._menuShowingContext, { options: this.option(), cancel: false });
         this._actions.onContextMenuShowing(e);
-        const items = this.createContextMenuItems(this._menuShowingContext.fileItems, e.items, this._menuShowingContext.fileSystemItem);
         if(!e.cancel) {
+            const items = this.createContextMenuItems(this._menuShowingContext.fileItems, null, this._menuShowingContext.fileSystemItem);
             this._contextMenu.option('dataSource', items);
         }
     }
@@ -199,6 +199,7 @@ class FileManagerContextMenu extends Widget {
 
     _onContextMenuHidden() {
         this._isVisible = false;
+        this._menuShowingContext = {};
         this._contextMenu.option('visible', false);
         this._raiseContextMenuHidden();
     }
