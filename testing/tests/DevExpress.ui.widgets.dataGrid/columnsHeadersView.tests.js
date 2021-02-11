@@ -2272,7 +2272,7 @@ QUnit.module('Headers with band columns', {
         this.columnHeadersView.render($testElement);
 
         // act
-        $columnElements = this.columnHeadersView.getColumnElements({ index: 0 });
+        $columnElements = this.columnHeadersView.getColumnElements(0);
 
         // assert
         assert.equal($columnElements.length, 3, 'count column');
@@ -2281,7 +2281,7 @@ QUnit.module('Headers with band columns', {
         assert.strictEqual($columnElements.eq(2).text(), 'Band column 2', 'text of the third cell');
 
         // act
-        $columnElements = this.columnHeadersView.getColumnElements({ index: 1 });
+        $columnElements = this.columnHeadersView.getColumnElements(1);
 
         // assert
         assert.equal($columnElements.length, 4, 'count column');
@@ -2300,7 +2300,7 @@ QUnit.module('Headers with band columns', {
         this.columnHeadersView.render($testElement);
 
         // act
-        const $columnElements = this.columnHeadersView.getColumnElements({ index: 1, bandColumnIndex: 4 });
+        const $columnElements = this.columnHeadersView.getColumnElements(1, 4);
 
         // assert
         assert.equal($columnElements.length, 2, 'count column');
@@ -2432,7 +2432,7 @@ QUnit.module('Headers with band columns', {
         this.columnHeadersView.render($testElement);
 
         // act
-        const $columnElements = this.columnHeadersView.getColumnElements({ index: 1, bandColumnIndex: 3 });
+        const $columnElements = this.columnHeadersView.getColumnElements(1, 3);
 
         // assert
         assert.ok(!$columnElements, 'no cells');
