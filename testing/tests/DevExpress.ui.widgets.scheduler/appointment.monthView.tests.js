@@ -10,7 +10,8 @@ import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/ui.scheduler.appointm
 import {
     SchedulerTestWrapper,
     initTestMarkup,
-    createWrapper
+    createWrapper,
+    supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
@@ -140,10 +141,7 @@ module('Integration: Appointments in Month view', {
         });
     });
 
-    [
-        'standard',
-        'virtual'
-    ].forEach(scrollingMode => {
+    supportedScrollingModes.forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {
                 const createInstance = this.createInstance.bind(this);

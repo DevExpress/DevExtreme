@@ -7,7 +7,12 @@ import dragEvents from 'events/drag';
 import translator from 'animation/translator';
 import { DataSource } from 'data/data_source/data_source';
 import dateSerialization from 'core/utils/date_serialization';
-import { createWrapper, SchedulerTestWrapper, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
+import {
+    createWrapper,
+    SchedulerTestWrapper,
+    isDesktopEnvironment,
+    supportedScrollingModes
+} from '../../helpers/scheduler/helpers.js';
 import dateUtils from 'core/utils/date';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
@@ -25,7 +30,7 @@ QUnit.testStart(function() {
             </div>');
 });
 
-['standard', 'virtual'].forEach(scrollingMode => {
+supportedScrollingModes.forEach(scrollingMode => {
     module(`Integration: Recurring Appointments in the ${scrollingMode} scrolling mode`, {
         beforeEach: function() {
             fx.off = true;

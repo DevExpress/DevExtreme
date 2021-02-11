@@ -15,7 +15,8 @@ import {
     initTestMarkup,
     isDesktopEnvironment,
     CLASSES,
-    isIE11
+    isIE11,
+    supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
@@ -2299,15 +2300,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     });
 });
 
-
-[
-    'standard',
-    'virtual'
-].forEach(scrollingMode => {
-    if(isIE11 && scrollingMode === 'virtual') {
-        return;
-    }
-
+supportedScrollingModes.forEach(scrollingMode => {
     module(`Scrolling mode ${scrollingMode}`, {
         beforeEach: function() {
 
