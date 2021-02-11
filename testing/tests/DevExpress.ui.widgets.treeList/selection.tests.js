@@ -283,6 +283,31 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         assert.ok($gridCell.find('.dx-select-checkbox').parent().hasClass('dx-treelist-icon-container'), 'Checkbox inside icon container');
     });
 
+    // T972125
+    QUnit.test('The Select All checkbox should have correct position when first defined column has no dataField and showColumnLines is false', function(assert) {
+    // arrange
+        const $testElement = $('#treeList');
+
+        this.options.showColumnHeaders = true;
+        this.options.showColumnLines = false;
+        this.options.columns = [ { caption: 'Test' } ];
+        this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always', allowSelectAll: true };
+
+        this.setupTreeList();
+        this.columnHeadersView.render($testElement);
+
+        const $headerCell = $testElement.find('.dx-treelist-select-all').eq(0);
+        const $headerTextContent = $headerCell.children('.dx-treelist-text-content');
+        const $selectAll = $headerCell.children('.dx-select-checkbox');
+
+        // assert
+        assert.strictEqual($headerCell.length, 1, 'the header with select all checkbox is rendered');
+        assert.strictEqual($headerTextContent.length, 1, 'the header text content is rendered');
+        assert.strictEqual($selectAll.length, 1, 'the Select All checkbox is rendered');
+        assert.roughEqual($selectAll.offset().top, $headerTextContent.offset().top, 1.1, 'the Select All checkbox position is roughly equal to the header text content position');
+        assert.strictEqual($headerTextContent.css('display'), 'inline-block', 'the display style of the header text content');
+    });
+
     QUnit.test('Checkboxes should not be rendered if selection is not multiple', function(assert) {
     // arrange
         const $testElement = $('#treeList');
