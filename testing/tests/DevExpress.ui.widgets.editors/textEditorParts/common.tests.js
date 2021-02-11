@@ -21,6 +21,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const CLEAR_BUTTON_SELECTOR = '.dx-clear-button-area';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const EVENTS = [
     'FocusIn', 'FocusOut',
@@ -195,7 +196,7 @@ QUnit.module('general', {}, () => {
 
         const $placeholder = element.find('.' + PLACEHOLDER_CLASS);
 
-        assert.equal($placeholder.hasClass('dx-state-invisible'), true, 'placeholder is invisible');
+        assert.equal($placeholder.hasClass(INVISIBLE_STATE_CLASS), true, 'placeholder is invisible');
     });
 
     QUnit.testInActiveWindow('placeholder pointerup event (T181734)', function(assert) {
@@ -1141,7 +1142,27 @@ QUnit.module('regressions', moduleConfig, () => {
 
         const $placeholder = $textEditor.find('.' + PLACEHOLDER_CLASS);
 
-        assert.equal($placeholder.hasClass('dx-state-invisible'), true, 'display none was attached as inline style');
+        assert.equal($placeholder.hasClass(INVISIBLE_STATE_CLASS), true, 'display none was attached as inline style');
+    });
+
+    QUnit.test('Only editor input placeholder should change visibility depending on input text (T970003)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor();
+        const $input = $textEditor.find(`.${INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        $textEditor.append($('<div>').attr('class', PLACEHOLDER_CLASS));
+        const $placeholders = $textEditor.find(`.${PLACEHOLDER_CLASS}`);
+
+        assert.notOk($placeholders.eq(0).hasClass(INVISIBLE_STATE_CLASS), 'input placeholder is visible');
+        assert.notOk($placeholders.eq(1).hasClass(INVISIBLE_STATE_CLASS), 'additional placeholder is visible');
+
+        keyboard
+            .focus()
+            .type('text')
+            .blur();
+
+        assert.ok($placeholders.eq(0).hasClass(INVISIBLE_STATE_CLASS), 'input placeholder is hidden');
+        assert.notOk($placeholders.eq(1).hasClass(INVISIBLE_STATE_CLASS), 'additional placeholder visibility is not changed');
     });
 });
 
