@@ -445,7 +445,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
         const caret = this._caret();
         const point = number.getDecimalSeparator();
-        const pointIndex = text.indexOf(point);
+        const pointIndex = this._getTextSeparatorIndex(text);
         const isCaretOnFloat = pointIndex >= 0 && pointIndex < caret.start;
         const textParts = this._removeStubs(text, true).split(point);
 

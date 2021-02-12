@@ -2186,4 +2186,16 @@ QUnit.module('symbol with dot in format', {
 
         assert.strictEqual(this.instance.option('value'), 22.5, 'value is correct');
     });
+
+    QUnit.test('should not prevent value formatting on every input', function(assert) {
+        this.instance.option({
+            format: '\'.\' 00.00'
+        });
+
+        this.keyboard
+            .caret(4)
+            .type('2233445567');
+
+        assert.strictEqual(this.$input.val(), '. 67.50', 'value is correct');
+    });
 });
