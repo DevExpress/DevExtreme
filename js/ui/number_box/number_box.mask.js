@@ -14,6 +14,7 @@ import { getFormat as getLDMLFormat } from '../../localization/ldml/number';
 import NumberBoxBase from './number_box.base';
 import { addNamespace, getChar, normalizeKeyName } from '../../events/utils/index';
 import { ensureDefined, escapeRegExp } from '../../core/utils/common';
+import { getRealSeparatorIndex, splitByIndex } from './utils';
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';
 const MOVE_FORWARD = 1;
@@ -602,7 +603,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _getPrecisionLimits: function(text) {
         const currentFormat = this._getFormatForSign(text);
-        const floatPart = (currentFormat.split('.')[1] || '').replace(/[^#0]/g, '');
+        const realSeparatorIndex = getRealSeparatorIndex(currentFormat).index;
+        const floatPart = (splitByIndex(currentFormat, realSeparatorIndex)[1] || '').replace(/[^#0]/g, '');
         const minPrecision = floatPart.replace(/^(0*)#*/, '$1').length;
         const maxPrecision = floatPart.length;
 

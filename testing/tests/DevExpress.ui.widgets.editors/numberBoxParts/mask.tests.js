@@ -572,6 +572,21 @@ QUnit.module('format: fixed point format', moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret().start, 1, 'caret was moved');
     });
 
+    QUnit.test('symbol with dot should not change max precision (T972648)', function(assert) {
+        this.instance.option({
+            value: 1.13,
+            format: '\'.\' 0.00',
+        });
+
+        this.keyboard
+            .caret(4)
+            .type('89')
+            .change();
+
+        assert.strictEqual(this.keyboard.caret().start, 6, 'caret is in the correct position');
+        assert.strictEqual(this.instance.option('value'), 1.89, 'value is correct');
+    });
+
     QUnit.test('removing last integer should replace it to 0', function(assert) {
         this.instance.option({
             format: '#0.00',
