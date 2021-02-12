@@ -8031,6 +8031,10 @@ declare module DevExpress.ui {
          */
         insertTask(data: any): void;
         /**
+         * [descr:dxGantt.scrollToDate(date)]
+         */
+        scrollToDate(date: Date | number | string): void;
+        /**
          * [descr:dxGantt.unassignResourceFromTask(resourceKey, taskKey)]
          */
         unassignResourceFromTask(resourceKey: any, taskKey: any): void;

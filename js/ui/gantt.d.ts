@@ -839,6 +839,14 @@ export default class dxGantt extends Widget {
      * @public
      */
     updateDimensions(): void;
+    /**
+     * @docid
+     * @publicName scrollToDate(date)
+     * @param1 date:Date|Number|string
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    scrollToDate(date: Date | Number | string): void;
 }
 
 /**
