@@ -488,36 +488,37 @@ QUnit.module('Initialization', {
     });
 
     QUnit.test('Pushed directly from store item should be rerendered correctly', function(assert) {
-        const data = new DataSource({
+        const data = [{
+            id: 0,
+            text: 'abc',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        },
+        {
+            id: 1,
+            text: 'abc',
+            startDate: new Date(2017, 4, 23, 9, 30),
+            endDate: new Date(2017, 4, 23, 11, 30)
+        }];
+        const dataSource = new DataSource({
             pushAggregationTimeout: 0,
             reshapeOnPush: true,
             store: {
                 type: 'array',
                 key: 'id',
-                data: [{
-                    id: 0,
-                    text: 'abc',
-                    startDate: new Date(2017, 4, 22, 9, 30),
-                    endDate: new Date(2017, 4, 22, 11, 30)
-                },
-                {
-                    id: 1,
-                    text: 'abc',
-                    startDate: new Date(2017, 4, 23, 9, 30),
-                    endDate: new Date(2017, 4, 23, 11, 30)
-                }]
+                data
             }
         });
 
         this.createInstance({
-            dataSource: data,
+            dataSource: dataSource,
             views: ['week'],
             currentView: 'week',
             currentDate: new Date(2017, 4, 25)
         });
 
-        const dataSource = this.instance.getDataSource();
-        dataSource.store().push([
+        const dataSourceInstance = this.instance.getDataSource();
+        dataSourceInstance.store().push([
             {
                 type: 'update', key: 0, data: {
                     text: 'Update-1',
@@ -533,7 +534,6 @@ QUnit.module('Initialization', {
                 }
             }
         ]);
-        dataSource.load();
 
         const appointment = this.instance.$element().find('.dx-scheduler-appointment-title');
         assert.equal(appointment.eq(0).text(), 'Update-1', 'Appointment is rerendered');
@@ -569,7 +569,6 @@ QUnit.module('Initialization', {
 
         const dataSource = scheduler.instance.getDataSource();
         dataSource.store().push([{ type: 'update', key: pushItem.id, data: pushItem }]);
-        dataSource.load();
 
         assert.equal(scheduler.appointments.getTitleText(0), 'Test Appointment', 'Appointment is rerendered');
         assert.equal(scheduler.appointments.getTitleText(1), 'Pushed Appointment', 'Pushed appointment is rerendered');
