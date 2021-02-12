@@ -6763,6 +6763,10 @@ declare module DevExpress.ui {
          */
         onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event, fileSystemItem?: DevExpress.fileManagement.FileSystemItem, viewArea?: 'navPane' | 'itemView' }) => any);
         /**
+         * [descr:dxFileManager.Options.onContextMenuShowing]
+         */
+        onContextMenuShowing?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileSystemItem?: DevExpress.fileManagement.FileSystemItem, targetElement?: DevExpress.core.dxElement, cancel?: boolean, event?: DevExpress.events.event, viewArea?: 'navPane' | 'itemView' }) => any);
+        /**
          * [descr:dxFileManager.Options.onCurrentDirectoryChanged]
          */
         onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, directory?: DevExpress.fileManagement.FileSystemItem }) => any);
