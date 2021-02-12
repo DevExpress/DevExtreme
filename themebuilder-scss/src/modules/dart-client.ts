@@ -57,6 +57,7 @@ export default class DartClient {
 
   send(message: DartCompilerConfig): Promise<DartCompilerResult> {
     this.client.setTimeout(0);
+
     return new Promise((resolve) => {
       let data = '';
 
@@ -75,15 +76,21 @@ export default class DartClient {
         resolve(parsedData);
       });
 
-      this.removeErrorHandlers();
-      this.setErrorHandlers((e) => {
+      const errorHandler = (e?: Error): void => {
         Logger.log('Dart client error on write', e);
         this.client.end();
         this.dispose();
         resolve({
           error: `${e.name}: ${e.message}`,
         });
-      });
+      };
+
+      if (this.client.destroyed) {
+        errorHandler({ name: 'Error', message: 'Client destroyed' });
+      }
+
+      this.removeErrorHandlers();
+      this.setErrorHandlers(errorHandler);
 
       Logger.log('DartClient send', message);
       this.client.write(JSON.stringify(message));
