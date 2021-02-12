@@ -1,4 +1,4 @@
-The DevExtreme HTML5 JavaScript **Gantt** UI component allows you to validate relationships between tasks and handle errors. Set the [enableDependencyValidation](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/validation/#enableDependencyValidation) property to **true** to enable task validation.
+The DevExtreme JavaScript **Gantt** UI component allows you to validate relationships between tasks and handle errors. Set the [enableDependencyValidation](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/validation/#enableDependencyValidation) property to **true** to enable task validation.
 
 The Gantt supports the following dependency validation rules:
 

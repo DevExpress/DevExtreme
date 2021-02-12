@@ -1,4 +1,4 @@
-This demo illustrates the DevExtreme HTML5 JavaScript **Gantt** UI component's appearance settings:
+This demo illustrates the DevExtreme JavaScript **Gantt** UI component's appearance settings:
 
 * [scaleType](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/#scaleType) - Specifies views to display tasks: hours, days, weeks, months, etc.
 * [taskTitlePosition](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/#taskTitlePosition) - Specifies where to display a task's title - none, inside or outside the task.

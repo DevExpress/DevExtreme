@@ -54,7 +54,7 @@
       :close-on-outside-click="true"
     >
       <div>
-        The DevExtreme HTML5 JavaScript <b>Gantt</b> allows you to display the task flow and dependencies between tasks over a certain period.
+        The DevExtreme JavaScript <b>Gantt</b> allows you to display the task flow and dependencies between tasks over a certain period.
         <br>
         <br>
         You can move and modify tasks (a task name, duration or progress, for example) directly from the chart.
