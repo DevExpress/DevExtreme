@@ -44,7 +44,6 @@ export const Consts = {
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: 'dx-filemanager-breadcrumbs-parent-folder-item',
     BREADCRUMBS_SEPARATOR_ITEM_CLASS: 'dx-filemanager-breadcrumbs-separator-item',
     ITEMS_PANEL_CLASS: 'dx-filemanager-items-panel',
-    ITEMS_GRID_VIEW_CLASS: 'dx-filemanager-files-view',
     FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
     INACTIVE_AREA_CLASS: 'dx-filemanager-inactive-area',
     CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
@@ -70,6 +69,7 @@ export const Consts = {
     MENU_ITEM_CLASS: 'dx-menu-item',
     MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
     SUBMENU_CLASS: 'dx-submenu',
+    CONTEXT_MENU_SEPARATOR_CLASS: 'dx-menu-separator',
     SELECTION_CLASS: 'dx-selection',
     ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
@@ -252,7 +252,7 @@ export class FileManagerWrapper {
     }
 
     getDetailsItemList() {
-        return this._$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`);
+        return this.getItemsView();
     }
 
     getThumbnailsViewPort() {
@@ -407,6 +407,10 @@ export class FileManagerWrapper {
 
     isDetailsRowFocused(index) {
         return this.getRowInDetailsView(index).is(`.${Consts.FOCUSED_ROW_CLASS}`);
+    }
+
+    getContextMenuItemsWithSeparators() {
+        return $(`.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}:visible, .${Consts.CONTEXT_MENU_CLASS} .${Consts.CONTEXT_MENU_SEPARATOR_CLASS}:visible`);
     }
 
     getContextMenuItems(visible) {
