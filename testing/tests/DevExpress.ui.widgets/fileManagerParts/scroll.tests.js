@@ -107,8 +107,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         // switch to details and remember scroll position
         this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
         this.clock.tick(400);
-        let detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(0);
-        $(detailsViewSelector).trigger('dxclick');
+        this.wrapper.getToolbarViewSwitcherListItem(0).trigger('dxclick');
         this.clock.tick(400);
 
         const detailsScrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
@@ -116,8 +115,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         // switch to thumbnails and check scroll position
         this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
         this.clock.tick(400);
-        const thumbnailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(1);
-        $(thumbnailsViewSelector).trigger('dxclick');
+        this.wrapper.getToolbarViewSwitcherListItem(1).trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), thumbnailsScrollPosition, 'thumbnails scroll position is the same');
@@ -125,8 +123,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         // switch to details and check scroll position
         this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
         this.clock.tick(400);
-        detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(0);
-        $(detailsViewSelector).trigger('dxclick');
+        this.wrapper.getToolbarViewSwitcherListItem(0).trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), detailsScrollPosition, 'details scroll position is the same');

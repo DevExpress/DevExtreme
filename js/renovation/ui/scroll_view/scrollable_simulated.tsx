@@ -15,14 +15,12 @@ import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import { isDxMouseWheelEvent, normalizeKeyName } from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
-import { getBoundingRect } from '../../../core/utils/position';
-import { titleize } from '../../../core/utils/inflector';
+// import { getBoundingRect } from '../../../core/utils/position';
+// import { titleize } from '../../../core/utils/inflector';
 import { isDefined } from '../../../core/utils/type';
-import { when } from '../../../core/utils/deferred';
+// import { when } from '../../../core/utils/deferred';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
-import $ from '../../../core/renderer';
 import { ensureDefined } from '../../../core/utils/common';
-import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import '../../../events/gesture/emitter.gesture.scroll';
 
 import type { dxPromise } from '../../../core/utils/deferred';
@@ -37,7 +35,7 @@ import {
   normalizeLocation, ScrollDirection,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
-  getElementWidth, getElementHeight, getElementStyle,
+  getElementWidth, getElementHeight, getElementStyle, getElementOffset,
   updateAllowedDirection,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
@@ -216,29 +214,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() needShowScrollbars = false;
 
-  @InternalState() scaleRatioWidth;
-
-  @InternalState() scaleRatioHeight;
-
   @InternalState() scrollableOffsetLeft = 0;
 
   @InternalState() scrollableOffsetTop = 0;
-
-  @InternalState() contentWidth = 0;
-
-  @InternalState() contentHeight = 0;
-
-  @InternalState() containerWidth = 0;
-
-  @InternalState() containerHeight = 0;
-
-  @InternalState() baseContentWidth = 0;
-
-  @InternalState() baseContentHeight = 0;
-
-  @InternalState() baseContainerWidth = 0;
-
-  @InternalState() baseContainerHeight = 0;
 
   @Method()
   content(): HTMLDivElement {
@@ -468,12 +446,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   cancelEffect(): DisposeEffectReturn {
     const namespace = 'dxScrollable';
 
-    dxScrollCancel.on(this.wrapperRef,
+    dxScrollCancel.on(this.wrapperRef.current,
       (event: Event) => {
         this.handleCancel(event);
       }, { namespace });
 
-    return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
+    return (): void => dxScrollCancel.off(this.wrapperRef.current, { namespace });
   }
 
   onChangeVisibility(visible: boolean): void {
@@ -497,8 +475,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.eventForUserAction = e;
 
     const crossThumbScrolling = this.isThumbScrolling(e);
-
-    this.needShowScrollbars = true;
 
     this.eventHandler(
       (scrollbar) => scrollbar.initHandler(e, crossThumbScrolling),
@@ -559,11 +535,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const currentTargetLocation = targetLocation;
 
     if (isVertical && isDefined(targetLocation.top)) {
-      currentTargetLocation.top *= this.getScaleRatio('height');
+      currentTargetLocation.top *= this.scaleRatioHeight;
     }
 
     if (isHorizontal && isDefined(targetLocation.left)) {
-      currentTargetLocation.left *= this.getScaleRatio('width');
+      currentTargetLocation.left *= this.scaleRatioWidth;
     }
 
     return currentTargetLocation;
@@ -646,7 +622,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     handler: (
       scrollbarInstance: any
     ) => dxPromise<void>,
-  ): dxPromise<void> {
+  ): any { // dxPromise<void> {
     const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
     const deferreds: ReturnType<typeof handler>[] = [];
 
@@ -657,7 +633,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       deferreds.push(handler(this.horizontalScrollbarRef.current));
     }
 
-    return when.apply($, deferreds).promise();
+    // return when.apply($, deferreds).promise();
   }
 
   private getDirection(e: Event): string | undefined {
@@ -684,51 +660,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
           < 0
           || bounceEnabled),
     };
-  }
-
-  containerSize(dimension: string): number {
-    return this.getRealDimension(this.containerRef.current, dimension);
-  }
-
-  // eslint-disable-next-line
-  getRealDimension(element, dimension): number {
-    return Math.round(getBoundingRect(element)[dimension]);
-  }
-
-  /* istanbul ignore next */
-  // eslint-disable-next-line class-methods-use-this
-  getBaseDimension(element, dimension): number {
-    return element[`offset${titleize(dimension)}`];
-  }
-
-  contentSize(dimension: string): number {
-    const axis = dimension === 'width' ? 'x' : 'y';
-
-    const overflowStyleName = `overflow${axis.toUpperCase()}`;
-    const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef.current!) === 'hidden';
-    let contentSize = this.getRealDimension(this.contentRef.current, dimension);
-
-    if (!isOverflowHidden) {
-      const containerScrollSize = this.contentRef.current![`scroll${titleize(dimension)}`] * this.getScaleRatio(dimension);
-
-      contentSize = Math.max(containerScrollSize, contentSize);
-    }
-
-    return contentSize;
-  }
-
-  getScaleRatio(dimension: string): number {
-    let scaleRatio = 1;
-
-    /* istanbul ignore next */
-    if (hasWindow()) {
-      const realDimension = this.getRealDimension(this.scrollableRef.current, dimension);
-      const baseDimension = this.getBaseDimension(this.scrollableRef.current, dimension);
-
-      scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
-    }
-
-    return scaleRatio;
   }
 
   private validate(e: Event): boolean {
@@ -934,50 +865,128 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       return true;
     }
 
-    return this.needShowScrollbars || false;
+    return this.needShowScrollbars;
   }
 
   @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
-    this.updateScrollbarSize();
+    this.scrollableOffsetLeft = this.scrollableOffset.left;
+    this.scrollableOffsetTop = this.scrollableOffset.top;
   }
 
-  /* istanbul ignore next */
-  @Effect() resizeEffect(): DisposeEffectReturn {
-    const callback = (): void => {
-      this.updateScrollbarSize();
-      this.horizontalScrollbarRef.current.updateLocation();
-      this.verticalScrollbarRef.current.updateLocation();
-      this.horizontalScrollbarRef.current.moveScrollbar(
-        this.horizontalScrollbarRef.current.getLocation(),
-      );
-      this.verticalScrollbarRef.current.moveScrollbar(
-        this.verticalScrollbarRef.current.getLocation(),
-      );
-    };
-    resizeCallbacks.add(callback);
-    return (): void => { resizeCallbacks.remove(callback); };
+  get baseContentWidth(): number {
+    return isDefined(this.contentRef?.current)
+      ? Math.round(this.contentRef.current.offsetWidth)
+      : 0;
   }
 
-  updateScrollbarSize(): void {
-    const scrollableOffset = this.getScrollableOffset() || { left: 0, top: 0 };
-
-    this.scaleRatioWidth = this.getScaleRatio('width');
-    this.contentWidth = this.contentSize('width');
-    this.containerWidth = this.containerSize('width');
-    this.baseContentWidth = Math.round(this.getBaseDimension(this.contentRef.current, 'width'));
-    this.baseContainerWidth = Math.round(this.getBaseDimension(this.containerRef.current, 'width'));
-    this.scrollableOffsetLeft = scrollableOffset.left;
-
-    this.scaleRatioHeight = this.getScaleRatio('height');
-    this.contentHeight = this.contentSize('height');
-    this.containerHeight = this.containerSize('height');
-    this.baseContentHeight = Math.round(this.getBaseDimension(this.contentRef.current, 'height'));
-    this.baseContainerHeight = Math.round(this.getBaseDimension(this.containerRef.current, 'height'));
-    this.scrollableOffsetTop = scrollableOffset.top;
+  get baseContainerWidth(): number {
+    return isDefined(this.containerRef?.current)
+      ? Math.round(this.containerRef.current.offsetWidth)
+      : 0;
   }
 
-  getScrollableOffset(): { left: number; top: number } | undefined {
-    return $(this.scrollableRef.current!).offset();
+  get baseContentHeight(): number {
+    return isDefined(this.contentRef?.current)
+      ? Math.round(this.contentRef.current.offsetHeight)
+      : 0;
+  }
+
+  get baseContainerHeight(): number {
+    return isDefined(this.containerRef?.current)
+      ? Math.round(this.containerRef.current.offsetHeight)
+      : 0;
+  }
+
+  get scaleRatioWidth(): number {
+    if (!isDefined(this.scrollableRef?.current)) {
+      return 1;
+    }
+
+    let scaleRatio = 1;
+
+    /* istanbul ignore next */
+    if (hasWindow()) {
+      const realDimension = getElementWidth(this.scrollableRef.current);
+      const baseDimension = this.scrollableRef.current.offsetWidth;
+
+      scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
+    }
+
+    return scaleRatio;
+  }
+
+  get scaleRatioHeight(): number {
+    if (!isDefined(this.scrollableRef?.current)) {
+      return 1;
+    }
+
+    let scaleRatio = 1;
+
+    /* istanbul ignore next */
+    if (hasWindow()) {
+      const realDimension = getElementHeight(this.scrollableRef.current);
+      const baseDimension = this.scrollableRef.current.offsetHeight;
+
+      scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
+    }
+
+    return scaleRatio;
+  }
+
+  get contentWidth(): number {
+    if (!isDefined(this.contentRef?.current)) {
+      return 1;
+    }
+
+    const overflowStyleName = 'overflowX';
+    const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef.current!) === 'hidden';
+    let contentSize = getElementWidth(this.contentRef.current!);
+
+    if (!isOverflowHidden) {
+      const containerScrollSize = this.contentRef.current!.scrollWidth * this.scaleRatioWidth;
+
+      contentSize = Math.max(containerScrollSize, contentSize);
+    }
+
+    return contentSize;
+  }
+
+  get containerWidth(): number {
+    return isDefined(this.containerRef?.current) ? getElementWidth(this.containerRef.current) : 0;
+  }
+
+  get contentHeight(): number {
+    if (!isDefined(this.contentRef?.current)) {
+      return 1;
+    }
+
+    const overflowStyleName = 'overflowY';
+    const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef.current!) === 'hidden';
+    let contentSize = getElementHeight(this.contentRef.current!);
+
+    if (!isOverflowHidden) {
+      const containerScrollSize = this.contentRef.current!.scrollHeight * this.scaleRatioHeight;
+
+      contentSize = Math.max(containerScrollSize, contentSize);
+    }
+
+    return contentSize;
+  }
+
+  get containerHeight(): number {
+    return isDefined(this.containerRef?.current)
+      ? getElementHeight(this.containerRef.current)
+      : 0;
+  }
+
+  get scrollableOffset(): { left: number; top: number } {
+    return this.getScrollableOffset();
+  }
+
+  getScrollableOffset(): { left: number; top: number } {
+    return isDefined(this.scrollableRef?.current)
+      ? getElementOffset(this.scrollableRef.current)
+      : { left: 0, top: 0 };
   }
 
   get cssClasses(): string {

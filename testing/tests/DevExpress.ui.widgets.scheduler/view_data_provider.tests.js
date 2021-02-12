@@ -273,13 +273,13 @@ module('View Data Provider', {
             test('getLasGroupCellPosition', function(assert) {
                 assert.deepEqual(
                     this.viewDataProvider.getLasGroupCellPosition(2),
-                    { rowIndex: 1, cellIndex: 0 },
+                    { rowIndex: 1, cellIndex: 1 },
                     'Last position for the group 2 is correct'
                 );
 
                 assert.deepEqual(
                     this.viewDataProvider.getLasGroupCellPosition(3),
-                    { rowIndex: 3, cellIndex: 0 },
+                    { rowIndex: 3, cellIndex: 1 },
                     'Last position for the group 3 is correct'
                 );
             });
@@ -631,13 +631,13 @@ module('View Data Provider', {
 
                     assert.deepEqual(
                         viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
-                        new Date(2020, 7, 24, 0, 10),
+                        new Date(2020, 7, 24, 0),
                         'Group 2 cell 0 start date is correct'
                     );
 
                     assert.deepEqual(
                         viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
-                        new Date(2020, 7, 25, 0, 11),
+                        new Date(2020, 7, 25, 0),
                         'Group 2 cell 1 start date is correct'
                     );
 
@@ -649,7 +649,7 @@ module('View Data Provider', {
 
                     assert.deepEqual(
                         viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
-                        new Date(2020, 7, 25, 0, 11),
+                        new Date(2020, 7, 25, 1),
                         'Group 3 cell 1 start date is correct'
                     );
                 });
@@ -973,6 +973,9 @@ module('View Data Provider', {
                         getDateHeaderText: (index) => index,
                         today: baseStartDate,
                         groupByDate: false,
+                        isHorizontalGrouping: true,
+                        isVerticalGrouping: false,
+                        groupsList: [{ groupId: 1 }, { groupId: 2 }],
                         cellCountInGroupRow: 2,
                         rowCountInGroup: 2,
                         cellDataGetters: [(_, rowIndex, columnIndex) => {
@@ -1201,22 +1204,22 @@ module('View Data Provider', {
                     today: false,
                 }, {
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 12),
-                    endDate: new Date(2021, 0, 12, 2),
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
-                    groups: { groupId: 1 },
+                    groups: { groupId: 2 },
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 2,
                     text: 0,
-                    today: false,
+                    today: true,
                 }, {
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 13),
-                    endDate: new Date(2021, 0, 13, 2),
+                    startDate: new Date(2021, 0, 11),
+                    endDate: new Date(2021, 0, 11, 2),
                     groupIndex: 1,
-                    groups: { groupId: 1, },
+                    groups: { groupId: 2, },
                     index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: true,
@@ -1230,12 +1233,13 @@ module('View Data Provider', {
                 assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
             });
 
-            test('completeDateHeaderMap should be generated correctly when groupin by date is used', function(assert) {
+            test('completeDateHeaderMap should be generated correctly when grouping by date is used', function(assert) {
                 const workSpaceMock = {
                     ...dataGenerationWorkSpaceMock,
                     generateRenderOptions: () => ({
                         ...dataGenerationWorkSpaceMock.generateRenderOptions(),
                         groupByDate: true,
+                        isHorizontalGrouping: true,
                     }),
                 };
                 const viewDataProvider = new ViewDataProvider(workSpaceMock);
@@ -1256,16 +1260,16 @@ module('View Data Provider', {
                     today: true,
                 }, {
                     colSpan: 2,
-                    startDate: new Date(2021, 0, 11),
-                    endDate: new Date(2021, 0, 11, 2),
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
-                    groups: { groupId: 1 },
-                    index: 1,
+                    groups: { groupId: 2 },
+                    index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: true,
                     key: 1,
                     text: 1,
-                    today: false,
+                    today: true,
                 }]];
 
                 const completeDateHeaderMap = viewDataProvider.completeDateHeaderMap;
@@ -1273,7 +1277,7 @@ module('View Data Provider', {
                 assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
             });
 
-            test('completeDateHeaderMap should be generated correctly in case of ti', function(assert) {
+            test('completeDateHeaderMap should be generated correctly when it is necessary to generate week days header', function(assert) {
                 const weekHeaderMock = {
                     ...dataGenerationWorkSpaceMock,
                     generateRenderOptions: () => {
@@ -1303,10 +1307,10 @@ module('View Data Provider', {
                     text: 'week header text',
                 }, {
                     colSpan: 2,
-                    startDate: new Date(2021, 0, 12),
-                    endDate: new Date(2021, 0, 12, 2),
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
-                    groups: { groupId: 1 },
+                    groups: { groupId: 2 },
                     index: 0,
                     isFirstGroupCell: false,
                     isLastGroupCell: false,
@@ -1338,22 +1342,22 @@ module('View Data Provider', {
                     today: false,
                 }, {
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 12),
-                    endDate: new Date(2021, 0, 12, 2),
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
-                    groups: { groupId: 1 },
+                    groups: { groupId: 2 },
                     index: 0,
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 2,
                     text: 0,
-                    today: false,
+                    today: true,
                 }, {
                     colSpan: 1,
-                    startDate: new Date(2021, 0, 13),
-                    endDate: new Date(2021, 0, 13, 2),
+                    startDate: new Date(2021, 0, 11),
+                    endDate: new Date(2021, 0, 11, 2),
                     groupIndex: 1,
-                    groups: { groupId: 1, },
+                    groups: { groupId: 2, },
                     index: 1,
                     isFirstGroupCell: false,
                     isLastGroupCell: true,

@@ -61,6 +61,10 @@ export const CLASSES = {
 
 export const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
+export const supportedScrollingModes = !isIE11
+    ? ['standard', 'virtual']
+    : ['standard'];
+
 export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 
 export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance'));

@@ -47,6 +47,16 @@ class ScrollableTestHelper {
     this.viewModel = new Scrollable({
       ...args,
     }) as any;
+    this.viewModel.scrollableRef = React.createRef();
+    this.viewModel.containerRef = React.createRef();
+    this.viewModel.contentRef = React.createRef();
+    this.viewModel.wrapperRef = React.createRef();
+    this.viewModel.verticalScrollbarRef = React.createRef();
+    this.viewModel.horizontalScrollbarRef = React.createRef();
+
+    this.viewModel.wrapperRef.current = {} as HTMLDivElement;
+    this.viewModel.verticalScrollbarRef.current = {};
+    this.viewModel.horizontalScrollbarRef.current = {};
 
     this.direction = args.direction;
 
@@ -56,29 +66,16 @@ class ScrollableTestHelper {
     this.isBoth = isBoth;
 
     this.scrollable = mount(viewFunction(this.viewModel) as JSX.Element);
-    this.viewModel.scrollableRef = React.createRef();
+
     this.viewModel.scrollableRef.current = this.scrollable.getDOMNode();
-
-    this.viewModel.containerRef = React.createRef();
     this.viewModel.containerRef.current = this.getContainerElement();
-    this.viewModel.contentRef = React.createRef();
     this.viewModel.contentRef.current = this.getContentElement();
-
-    this.viewModel.wrapperRef = React.createRef();
-    this.viewModel.wrapperRef.current = {} as HTMLDivElement;
-    this.viewModel.verticalScrollbarRef = React.createRef();
-    this.viewModel.verticalScrollbarRef.current = {};
-    this.viewModel.horizontalScrollbarRef = React.createRef();
-    this.viewModel.horizontalScrollbarRef.current = {};
 
     const { contentSize = 200, containerSize = 100, overflow = false } = args;
 
-    this.initStyles(this.viewModel.containerRef.current, containerSize, contentSize);
-    this.initStyles(this.viewModel.contentRef.current, contentSize, contentSize, overflow);
-    this.initStyles(this.viewModel.scrollableRef.current, containerSize, contentSize);
-
-    // eslint-disable-next-line max-len
-    this.viewModel.getBaseDimension = (element, dimension) => parseInt(element.style[dimension], 10);
+    this.initStyles(this.viewModel.containerRef.current!, containerSize, contentSize);
+    this.initStyles(this.viewModel.contentRef.current!, contentSize, contentSize, overflow);
+    this.initStyles(this.viewModel.scrollableRef.current!, containerSize, contentSize);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -193,6 +190,8 @@ class ScrollableTestHelper {
             scaleRatio: 1,
             contentSize: 200,
             containerSize: 100,
+            baseContentSize: additionalProps.props.contentSize || 200,
+            baseContainerSize: additionalProps.props.containerSize || 100,
             scrollableOffset: 0,
             contentRef: { current: this.viewModel.contentRef.current },
             containerRef: { current: this.viewModel.containerRef.current },
@@ -250,6 +249,21 @@ class ScrollableTestHelper {
     }
   }
 
+  checkScrollbarProps(expectedProps) {
+    if (this.isVertical) {
+      this.viewModel.verticalScrollbarRef.current!.props = {
+        direction: 'vertical',
+        ...expectedProps,
+      };
+    }
+    if (this.isHorizontal) {
+      this.viewModel.horizontalScrollbarRef.current!.props = {
+        direction: 'horizontal',
+        ...expectedProps,
+      };
+    }
+  }
+
   changeScrollbarMethod(method, mock) {
     if (this.isBoth) {
       this.viewModel.horizontalScrollbarRef.current[method] = mock;
@@ -291,16 +305,13 @@ class ScrollableTestHelper {
   }
 
   checkScrollbarScrollPositions(jestExpect, { vertical, horizontal }) {
-    if (this.isVertical) {
-      jestExpect(window.getComputedStyle(
-        this.getVerticalScroll().getDOMNode(),
-      ).transform).toEqual(vertical);
-    }
-
-    if (this.isHorizontal) {
-      jestExpect(window.getComputedStyle(
-        this.getHorizontalScroll().getDOMNode(),
-      ).transform).toEqual(horizontal);
+    if (this.isBoth) {
+      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', horizontal);
+      jestExpect(this.getScrollbars().at(1).instance().styles).toHaveProperty('transform', vertical);
+    } else if (this.isVertical) {
+      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', vertical);
+    } else if (this.isHorizontal) {
+      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', horizontal);
     }
   }
 

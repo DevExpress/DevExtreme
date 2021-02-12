@@ -1271,6 +1271,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             getDateHeaderText: this._getHeaderText.bind(this),
             today: this._getToday?.(),
             groupByDate: this.isGroupedByDate(),
+            groupsList: this._getAllGroups(),
+            isHorizontalGrouping: this._isHorizontalGroupedWorkSpace(),
+            isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
         };
 
         if(this.isVirtualScrolling()) {
@@ -2140,6 +2143,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         return makeBranch(leaf).reverse();
     }
 
+    _getAllGroups() {
+        const groupCount = this._getGroupCount();
+
+        return [...(new Array(groupCount))].map((_, groupIndex) => {
+            const groupsArray = this._getCellGroups(groupIndex);
+
+            return this._getGroupsObjectFromGroupsArray(groupsArray);
+        });
+    }
+
     _getCellGroups(groupIndex) {
         const result = [];
 
@@ -2796,14 +2809,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
     calculateCellPositionByView(date, groupIndex, inAllDayRow,) {
         const index = this.getCellIndexByDate(date, inAllDayRow);
-        const position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow);
 
-        if(position) {
-            position.top -= this._getVirtualRowOffset();
-            position.left -= this._getVirtualCellOffset();
-        }
-
-        return position;
+        return this._getCellPositionByIndex(index, groupIndex, inAllDayRow);
     }
 
     getVerticalMax(groupIndex) {
@@ -2977,16 +2984,24 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._groupedStrategy.getAllDayOffset();
     }
 
-    getMaxAllowedPosition() {
+    getMaxAllowedPosition(groupIndex) {
+        if(this.isRenovatedRender()) {
+            return this.getRMaxAllowedHorizontalPosition(groupIndex || 0);
+        }
+
+        return this.getMaxAllowedHorizontalPosition();
+    }
+
+    getMaxAllowedHorizontalPosition() {
         if(this._maxAllowedPosition.length === 0) {
             const isRtl = this.option('rtlEnabled');
 
             this._maxAllowedPosition = [];
 
             this._$dateTable
-                .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
+                .find('tr')
                 .first()
-                .find(`td:not(.${VIRTUAL_CELL_CLASS}):nth-child(${this._getCellCount()}n)`)
+                .find(`td:nth-child(${this._getCellCount()}n)`)
                 .each((function(_, cell) {
 
                     let maxPosition = $(cell).position().left;
@@ -3002,9 +3017,33 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._maxAllowedPosition;
     }
 
+    getRMaxAllowedHorizontalPosition(groupIndex) {
+        const getMaxPosition = cellIndex => {
+            const cell = this._$dateTable
+                .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
+                .first()
+                .find(`td:not(.${VIRTUAL_CELL_CLASS})`)
+                .get(cellIndex);
+
+            let maxPosition = $(cell).position().left;
+            if(!this.option('rtlEnabled')) {
+                maxPosition += getBoundingRect(cell).width;
+            }
+
+            this._maxAllowedPosition[groupIndex] = Math.round(maxPosition);
+        };
+
+        if(!this._maxAllowedPosition[groupIndex]) {
+            const { cellIndex } = this.viewDataProvider.getLasGroupCellPosition(groupIndex);
+            getMaxPosition(cellIndex);
+        }
+
+        return this._maxAllowedPosition[groupIndex];
+    }
+
     getMaxAllowedVerticalPosition(groupIndex) {
-        if(this.isVirtualScrolling()) {
-            return this.getMaxAllowedVerticalPositionVirtual(groupIndex);
+        if(this.isRenovatedRender()) {
+            return this.getRMaxAllowedVerticalPosition(groupIndex);
         }
 
         return this.getMaxAllowedVerticalPositionStandard(groupIndex);
@@ -3026,8 +3065,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._maxAllowedVerticalPosition[groupIndex];
     }
 
-    // TODO - virtual scrolling strategy
-    getMaxAllowedVerticalPositionVirtual(groupIndex) {
+    // TODO - renovate render strategy
+    getRMaxAllowedVerticalPosition(groupIndex) {
         const getMaxPosition = rowIndex => {
             const row = this._$dateTable
                 .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
@@ -3276,10 +3315,10 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getGroupWidth(groupIndex) {
         let result = this._getCellCount() * this.getCellWidth();
-        const position = this.getMaxAllowedPosition();
+        const position = this.getMaxAllowedPosition(groupIndex);
         const currentPosition = position[groupIndex];
 
-        if(position.length && currentPosition) {
+        if(currentPosition) {
             if(this._isRTL()) {
                 result = currentPosition - position[groupIndex + 1];
             } else {
