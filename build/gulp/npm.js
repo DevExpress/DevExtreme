@@ -9,7 +9,6 @@ const merge = require('merge-stream');
 const replace = require('gulp-replace');
 const through = require('through2');
 
-const MODULES = require('./modules_metadata.json');
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
@@ -100,12 +99,12 @@ if(isEsmPackage) {
 
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
+const hasDefaultExport = (content) => /exports\.default\s=/.test(String(content));
+const isCjsModule = (path) => path.indexOf('esm/') !== 0;
+
 const addDefaultExport = lazyPipe().pipe(() =>
     through.obj((chunk, enc, callback) => {
-        const moduleName = chunk.relative.replace('.js', '').replace(/^cjs(\/|\\)/, '').split('\\').join('/');
-        const moduleMeta = MODULES.filter(({ name }) => name === moduleName)[0];
-
-        if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
+        if(isCjsModule(chunk.relative) && hasDefaultExport(chunk.contents)) {
             chunk.contents = Buffer.from(
                 `${String(chunk.contents)}module.exports.default = module.exports;`
             );
