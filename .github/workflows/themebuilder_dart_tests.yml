@@ -28,6 +28,8 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: Run TestCafe tests
+    - name: Install dart
       uses: cedx/setup-dart@v2
+
+    - name: Run themebuilder tests
       run: npm run test-dart
