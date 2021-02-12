@@ -12,8 +12,6 @@ describe('SvgPattern', () => {
 
       expect(root.html()).toBe('<svg xmlns="http://www.w3.org/2000/svg" version="1.1"'
         + ' fill="none" stroke="none" stroke-width="0"'
-        + ' style="display:block;overflow:hidden;line-height:normal;'
-        + '-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"'
         + ' direction="ltr"></svg>');
     });
 
@@ -30,8 +28,6 @@ describe('SvgPattern', () => {
 
       expect(root.html()).toBe('<svg xmlns="http://www.w3.org/2000/svg" version="1.1"'
         + ' class="dxc dxc-chart" fill="none" stroke="none" stroke-width="0"'
-        + ' style="display:block;overflow:hidden;line-height:normal;'
-        + '-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"'
         + ' width="820" height="440" direction="ltr"><defs></defs></svg>');
     });
 
@@ -46,19 +42,6 @@ describe('SvgPattern', () => {
       const root = shallow(<RootSvgElementComponent {...vm as any} /> as JSX.Element);
 
       expect(root.prop('direction')).toBe('rtl');
-    });
-
-    it('should pass styles', () => {
-      const vm = {
-        props: {
-          className: 'dxc dxc-chart',
-          width: 820,
-          height: 440,
-          styles: { styles: true },
-        } as RootSvgElementProps,
-      };
-      const root = shallow(<RootSvgElementComponent {...vm as any} /> as JSX.Element);
-      expect(root.prop('style').styles).toBe(true);
     });
   });
 
@@ -80,6 +63,28 @@ describe('SvgPattern', () => {
         component.svgRef = {} as SVGElement;
         component.setRootElementRef();
         expect(component.props.rootElementRef).toBeUndefined();
+      });
+    });
+  });
+
+  describe('Getters', () => {
+    it('should return merged styles', () => {
+      const props = {
+        className: 'dxc dxc-chart',
+        width: 820,
+        height: 440,
+        styles: { myProp: true },
+      } as RootSvgElementProps;
+      const root = new RootSvgElement(props);
+      expect(root.styles).toStrictEqual({
+        display: 'block',
+        lineHeight: 'normal',
+        MozUserSelect: 'none',
+        msUserSelect: 'none',
+        myProp: true,
+        overflow: 'hidden',
+        WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
+        WebkitUserSelect: 'none',
       });
     });
   });

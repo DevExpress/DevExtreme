@@ -33,12 +33,12 @@ const KEY_STROKE = 'stroke';
 export const viewFunction = ({
   textRef, textItems,
   styles, textAnchor, isStroked,
-  props,
+  computedProps,
 }: TextSvgElement): JSX.Element => {
   const texts = textItems || [];
   const {
     text, x, y, fill, stroke, strokeWidth, strokeOpacity, opacity,
-  } = props;
+  } = computedProps;
   return (
     <text
       ref={textRef}
@@ -52,7 +52,7 @@ export const viewFunction = ({
       strokeOpacity={strokeOpacity}
       opacity={opacity}
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...getGraphicExtraProps(props, x, y)}
+      {...getGraphicExtraProps(computedProps, x, y)}
     >
       {texts.length ? isStroked && texts.map(({ style, className, value }, index) => (
         <tspan key={index} style={style} className={className}>{value}</tspan>
@@ -128,6 +128,10 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
 
   get textAnchor(): string | undefined {
     return convertAlignmentToAnchor(this.props.align, this.config?.rtlEnabled);
+  }
+
+  get computedProps(): TextSvgElementProps {
+    return this.props;
   }
 
   @Effect()

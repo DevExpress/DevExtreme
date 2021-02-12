@@ -22,11 +22,11 @@ import {
 export const viewFunction = ({
   pathRef,
   d,
-  props,
+  computedProps,
 }: PathSvgElement): JSX.Element => {
   const {
     className, fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity, pointerEvents,
-  } = props;
+  } = computedProps;
   return (
     <path
       ref={pathRef}
@@ -40,7 +40,7 @@ export const viewFunction = ({
       opacity={opacity}
       pointerEvents={pointerEvents}
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...getGraphicExtraProps(props)}
+      {...getGraphicExtraProps(computedProps)}
     />
   );
 };
@@ -76,5 +76,9 @@ export class PathSvgElement extends JSXComponent(PathSvgElementProps) {
     }
 
     return path;
+  }
+
+  get computedProps(): PathSvgElementProps {
+    return this.props;
   }
 }
