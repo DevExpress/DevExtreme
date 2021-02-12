@@ -75,7 +75,7 @@ describe('Simulated', () => {
               each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
                 each([0, undefined]).describe('TranslateOffset: %o', (translateOffset) => {
                   each([{ pageX: 50, pageY: 50 }, { pageX: 100, pageY: 100 }]).describe('mouseClickPosition: %o', (mouseClickPosition) => {
-                    it('should change scroll and content position on init', () => {
+                    it('should change scroll and content position when init handler was called', () => {
                       const e = { ...defaultEvent, originalEvent: {} };
                       if (isDxWheelEvent) {
                         (e as any).originalEvent.type = 'dxmousewheel';
@@ -121,16 +121,16 @@ describe('Simulated', () => {
 
                       if (isDxWheelEvent || !scrollByThumb || targetClass !== 'dx-scrollable-scrollbar') {
                         helper.checkContainerPosition(expect, { top: 0, left: 0 });
-                        helper.checkScrollbarScrollPositions(expect, { vertical: '', horizontal: '' });
+                        helper.checkScrollbarScrollPositions(expect, { vertical: 'translate(0px, 0px)', horizontal: 'translate(0px, 0px)' });
                       } else if (direction === 'vertical') {
                         helper.checkContainerPosition(expect,
                           { top: expectedScrollPosition, left: 0 });
-                        helper.checkScrollbarScrollPositions(expect, { vertical: `translate(0px, ${expectedScrollPosition * 0.2}px)`, horizontal: '' });
+                        helper.checkScrollbarScrollPositions(expect, { vertical: `translate(0px, ${expectedScrollPosition * 0.2}px)`, horizontal: 'translate(0px, 0px)' });
                       } else {
                         helper.checkContainerPosition(expect,
                           { top: 0, left: expectedScrollPosition });
 
-                        helper.checkScrollbarScrollPositions(expect, { vertical: '', horizontal: `translate(${expectedScrollPosition * 0.2}px, 0px)` });
+                        helper.checkScrollbarScrollPositions(expect, { vertical: 'translate(0px, 0px)', horizontal: `translate(${expectedScrollPosition * 0.2}px, 0px)` });
                       }
 
                       expect(helper.viewModel.scrollableOffset).toEqual({ top: 0, left: 0 });
@@ -685,12 +685,12 @@ describe('Simulated', () => {
                 if (helper.isVertical) {
                   const styles = helper.getVerticalScrollElement().props.style;
 
-                  expect(styles).toEqual({ height: 15 });
+                  expect(styles).toEqual({ height: 15, transform: 'translate(0px, 0px)' });
                 }
                 if (helper.isHorizontal) {
                   const styles = helper.getHorizontalScrollElement().props.style;
 
-                  expect(styles).toEqual({ width: 15 });
+                  expect(styles).toEqual({ width: 15, transform: 'translate(0px, 0px)' });
                 }
 
                 (helper.viewModel as any).getScrollableOffset = () => ({ left: 10, top: 10 });

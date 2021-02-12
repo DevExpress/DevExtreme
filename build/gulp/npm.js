@@ -72,6 +72,8 @@ const distGlobsPattern = (jsFolder, exclude) => [
     `!${jsFolder}/jquery*`,
     `!${jsFolder}/jszip*`,
     `!${jsFolder}/dx.custom*`,
+    `!${jsFolder}/dx.viz*`,
+    `!${jsFolder}/dx.web*`,
     `!${jsFolder}/dx-diagram*`,
     `!${jsFolder}/dx-gantt*`,
     `!${jsFolder}/dx-quill*`,

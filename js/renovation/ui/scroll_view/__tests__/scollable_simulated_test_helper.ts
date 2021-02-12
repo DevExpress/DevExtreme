@@ -305,16 +305,13 @@ class ScrollableTestHelper {
   }
 
   checkScrollbarScrollPositions(jestExpect, { vertical, horizontal }) {
-    if (this.isVertical) {
-      jestExpect(window.getComputedStyle(
-        this.getVerticalScroll().getDOMNode(),
-      ).transform).toEqual(vertical);
-    }
-
-    if (this.isHorizontal) {
-      jestExpect(window.getComputedStyle(
-        this.getHorizontalScroll().getDOMNode(),
-      ).transform).toEqual(horizontal);
+    if (this.isBoth) {
+      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', horizontal);
+      jestExpect(this.getScrollbars().at(1).instance().styles).toHaveProperty('transform', vertical);
+    } else if (this.isVertical) {
+      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', vertical);
+    } else if (this.isHorizontal) {
+      jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', horizontal);
     }
   }
 

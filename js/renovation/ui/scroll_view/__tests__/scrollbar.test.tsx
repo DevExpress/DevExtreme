@@ -1,7 +1,6 @@
 import React from 'react';
 import each from 'jest-each';
 import { mount } from 'enzyme';
-import { isNumeric } from '../../../../core/utils/type';
 
 import {
   clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
@@ -192,38 +191,31 @@ describe('TopPocket', () => {
 describe('Methods', () => {
   each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
     each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
-      each([{ top: -100, left: -100 }, { top: -100 }, { left: -100 }, -100]).describe('Location: %o', (location) => {
-        it('moveTo()', () => {
-          const scrollRef = React.createRef();
-          const viewModel = new Scrollbar({
-            showScrollbar,
-            direction,
-            scaleRatio: 1,
-            containerSize: 100,
-            contentSize: 500,
-          });
-          (viewModel as any).scrollRef = scrollRef;
-
-          mount(viewFunction(viewModel as any) as JSX.Element);
-
-          viewModel.moveTo(location);
-
-          const scrollbarStyle = window.getComputedStyle((viewModel as any).scrollRef.current);
-          if (showScrollbar === 'never') {
-            expect(scrollbarStyle.transform).toEqual('');
-            return;
-          }
-
-          let expectedValue = 0;
-          const expectedThumbRatio = 0.2;
-          if (isNumeric(location)) {
-            expectedValue = -location * expectedThumbRatio;
-          } else {
-            expectedValue = -(location[direction === DIRECTION_HORIZONTAL ? 'left' : 'top'] || 0) * expectedThumbRatio;
-          }
-
-          expect(scrollbarStyle).toHaveProperty('transform', direction === DIRECTION_HORIZONTAL ? `translate(${expectedValue}px, 0px)` : `translate(0px, ${expectedValue}px)`);
+      it('scroll transform property after moveTo()', () => {
+        const scrollRef = React.createRef();
+        const viewModel = new Scrollbar({
+          showScrollbar,
+          direction,
+          scaleRatio: 1,
+          containerSize: 100,
+          contentSize: 500,
         });
+        (viewModel as any).scrollRef = scrollRef;
+
+        mount(viewFunction(viewModel as any) as JSX.Element);
+        (viewModel as any).scrollRef = (viewModel as any).scrollRef.current;
+
+        const location = -100;
+        viewModel.moveTo(location);
+
+        const expectedThumbRatio = 0.2;
+        const expectedLocation = -location * expectedThumbRatio;
+
+        if (showScrollbar === 'never') {
+          expect(viewModel.styles).toHaveProperty('transform', undefined);
+        } else {
+          expect(viewModel.styles).toHaveProperty('transform', direction === DIRECTION_HORIZONTAL ? `translate(${expectedLocation}px, 0px)` : `translate(0px, ${expectedLocation}px)`);
+        }
       });
 
       it('isScrollbar(element), element is scrollbar element', () => {
@@ -347,16 +339,16 @@ describe('Methods', () => {
       expect(viewModel.getBounceLocation()).toBe(100);
     });
 
-    it('getAxis()', () => {
+    it('get axis()', () => {
       const viewModel = new Scrollbar({ direction });
 
-      expect((viewModel as any).getAxis()).toBe(direction === 'horizontal' ? 'x' : 'y');
+      expect((viewModel as any).axis).toBe(direction === 'horizontal' ? 'x' : 'y');
     });
 
-    it('getProp()', () => {
+    it('get prop()', () => {
       const viewModel = new Scrollbar({ direction });
 
-      expect((viewModel as any).getProp()).toBe(direction === 'horizontal' ? 'left' : 'top');
+      expect((viewModel as any).scrollProp).toBe(direction === 'horizontal' ? 'left' : 'top');
     });
 
     it('getContainerRef()', () => {
