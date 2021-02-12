@@ -984,9 +984,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   getScrollableOffset(): { left: number; top: number } {
-    return isDefined(this.scrollableRef?.current)
-      ? getElementOffset(this.scrollableRef.current)
-      : { left: 0, top: 0 };
+    return getElementOffset(this.scrollableRef.current!);
   }
 
   get cssClasses(): string {
