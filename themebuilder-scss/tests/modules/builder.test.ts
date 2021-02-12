@@ -12,8 +12,6 @@ const normalizeCss = (css: string): string => css
   .replace(/\s*\/\*[\s\S]*?\*\/\s*/g, '')
   .trim();
 
-jest.mock('fibers', () => undefined);
-
 describe('Builder integration tests', () => {
   test('Build theme without parameters', () => {
     const config: ConfigSettings = {
