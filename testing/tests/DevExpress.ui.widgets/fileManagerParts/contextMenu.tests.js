@@ -422,7 +422,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(spy.args[0][0].viewArea, 'navPane', 'viewArea is correct');
     });
 
-    test('Raise the ContextMenuItemClick event for items modified on contextMenuPreparing', function(assert) {
+    test('Raise the ContextMenuItemClick event for items modified on contextMenuShowing', function(assert) {
         const spy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         const contextMenuItems = [
@@ -442,7 +442,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         ];
         let preparingEventArgs = {};
         fileManager.option({
-            onContextMenuPreparing: e => {
+            onContextMenuShowing: e => {
                 e.component.option('contextMenu.items', contextMenuItems);
                 preparingEventArgs = e;
             },
@@ -495,7 +495,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(spy.args[1][0].viewArea, 'navPane', 'viewArea is correct');
     });
 
-    test('Raise the contextMenuPreparing event on treeView items', function(assert) {
+    test('Raise the contextMenuShowing event on treeView items', function(assert) {
         if(!isDesktopDevice()) {
             assert.ok(true, 'only on desktops');
             return;
@@ -503,7 +503,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: eventSpy,
+            onContextMenuShowing: eventSpy,
             permissions: { rename: true }
         });
         this.clock.tick(400);
@@ -525,11 +525,11 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0]._isActionButton, false, '_isActionButton flag is correct');
     });
 
-    test('Raise the contextMenuPreparing event on treeView actionButtons', function(assert) {
+    test('Raise the contextMenuShowing event on treeView actionButtons', function(assert) {
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: eventSpy,
+            onContextMenuShowing: eventSpy,
             permissions: { rename: true }
         });
         this.clock.tick(400);
@@ -551,11 +551,11 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0]._isActionButton, true, '_isActionButton flag is correct');
     });
 
-    test('Cancel the context menu on the contextMenuPreparing event: treeView', function(assert) {
+    test('Cancel the context menu on the contextMenuShowing event: treeView', function(assert) {
         const fileManager = this.wrapper.getInstance();
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         fileManager.option({
-            onContextMenuPreparing: e => e.cancel = true,
+            onContextMenuShowing: e => e.cancel = true,
             permissions: { rename: true },
             contextMenu: { items: contextMenuItems }
         });
@@ -568,7 +568,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.equal($items.length, 0, 'context menu is invisible');
     });
 
-    test('Raise the contextMenuPreparing event on detailsView items', function(assert) {
+    test('Raise the contextMenuShowing event on detailsView items', function(assert) {
         if(!isDesktopDevice()) {
             assert.ok(true, 'only on desktops');
             return;
@@ -576,7 +576,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: eventSpy,
+            onContextMenuShowing: eventSpy,
             permissions: { rename: true }
         });
         this.clock.tick(400);
@@ -598,11 +598,11 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0]._isActionButton, false, '_isActionButton flag is correct');
     });
 
-    test('Raise the contextMenuPreparing event on detailsView actionButtons', function(assert) {
+    test('Raise the contextMenuShowing event on detailsView actionButtons', function(assert) {
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: eventSpy,
+            onContextMenuShowing: eventSpy,
             permissions: { rename: true }
         });
         this.clock.tick(400);
@@ -624,7 +624,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0]._isActionButton, true, '_isActionButton flag is correct');
     });
 
-    test('Raise the contextMenuPreparing event on detailsView free space', function(assert) {
+    test('Raise the contextMenuShowing event on detailsView free space', function(assert) {
         if(!isDesktopDevice()) {
             assert.ok(true, 'only on desktops');
             return;
@@ -632,7 +632,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: eventSpy,
+            onContextMenuShowing: eventSpy,
             permissions: { rename: true }
         });
         this.clock.tick(400);
@@ -651,11 +651,11 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0]._isActionButton, false, '_isActionButton flag is correct');
     });
 
-    test('Cancel the context menu on the contextMenuPreparing event: detailsView', function(assert) {
+    test('Cancel the context menu on the contextMenuShowing event: detailsView', function(assert) {
         const fileManager = this.wrapper.getInstance();
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         fileManager.option({
-            onContextMenuPreparing: e => e.cancel = true,
+            onContextMenuShowing: e => e.cancel = true,
             permissions: { rename: true },
             contextMenu: { items: contextMenuItems }
         });
@@ -668,7 +668,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.equal($items.length, 0, 'context menu is invisible');
     });
 
-    test('Raise the contextMenuPreparing event on thumbnailsView items', function(assert) {
+    test('Raise the contextMenuShowing event on thumbnailsView items', function(assert) {
         if(!isDesktopDevice()) {
             assert.ok(true, 'only on desktops');
             return;
@@ -676,7 +676,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: eventSpy,
+            onContextMenuShowing: eventSpy,
             permissions: { rename: true },
             itemView: { mode: 'thumbnails' }
         });
@@ -699,7 +699,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0]._isActionButton, false, '_isActionButton flag is correct');
     });
 
-    test('Raise the contextMenuPreparing event on thumbnailsView free space', function(assert) {
+    test('Raise the contextMenuShowing event on thumbnailsView free space', function(assert) {
         if(!isDesktopDevice()) {
             assert.ok(true, 'only on desktops');
             return;
@@ -707,7 +707,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: eventSpy,
+            onContextMenuShowing: eventSpy,
             permissions: { rename: true },
             itemView: { mode: 'thumbnails' }
         });
@@ -727,7 +727,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.strictEqual(eventSpy.args[0][0]._isActionButton, false, '_isActionButton flag is correct');
     });
 
-    test('Cancel the context menu on the contextMenuPreparing event: thumbnailsView', function(assert) {
+    test('Cancel the context menu on the contextMenuShowing event: thumbnailsView', function(assert) {
         if(!isDesktopDevice()) {
             assert.ok(true, 'only on desktops');
             return;
@@ -735,7 +735,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const fileManager = this.wrapper.getInstance();
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         fileManager.option({
-            onContextMenuPreparing: e => e.cancel = true,
+            onContextMenuShowing: e => e.cancel = true,
             permissions: { rename: true },
             itemView: { mode: 'thumbnails' },
             contextMenu: { items: contextMenuItems }
@@ -1145,11 +1145,11 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         assert.equal($items.length, 0, 'none of items are visible');
     });
 
-    test('Customize the context menu on the contextMenuPreparing event: treeView', function(assert) {
+    test('Customize the context menu on the contextMenuShowing event: treeView', function(assert) {
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: e => e.component.option('contextMenu.items', contextMenuItems),
+            onContextMenuShowing: e => e.component.option('contextMenu.items', contextMenuItems),
             permissions: { rename: true },
             contextMenu: { items: [] }
         });
@@ -1166,11 +1166,11 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         assert.strictEqual($items.eq(2).text(), 'someText', 'third item is correct');
     });
 
-    test('Customize the context menu on the contextMenuPreparing event: detailsView', function(assert) {
+    test('Customize the context menu on the contextMenuShowing event: detailsView', function(assert) {
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: e => e.component.option('contextMenu.items', contextMenuItems),
+            onContextMenuShowing: e => e.component.option('contextMenu.items', contextMenuItems),
             permissions: { rename: true },
             contextMenu: { items: [] }
         });
@@ -1187,7 +1187,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         assert.strictEqual($items.eq(2).text(), 'someText', 'third item is correct');
     });
 
-    test('Customize the context menu on the contextMenuPreparing event: thumbnailsView', function(assert) {
+    test('Customize the context menu on the contextMenuShowing event: thumbnailsView', function(assert) {
         if(!isDesktopDevice()) {
             assert.ok(true, 'only on desktops');
             return;
@@ -1195,7 +1195,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            onContextMenuPreparing: e => e.component.option('contextMenu.items', contextMenuItems),
+            onContextMenuShowing: e => e.component.option('contextMenu.items', contextMenuItems),
             permissions: { rename: true },
             itemView: { mode: 'thumbnails' },
             contextMenu: { items: [] }

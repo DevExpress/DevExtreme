@@ -408,7 +408,7 @@ class FileManager extends Widget {
             fileSystemItem: e.itemData?.fileItem,
             _isActionButton: e.isActionButton
         });
-        this._actions.onContextMenuPreparing(eventArgs);
+        this._actions.onContextMenuShowing(eventArgs);
         e.cancel = ensureDefined(eventArgs.cancel, false);
     }
 
@@ -485,7 +485,7 @@ class FileManager extends Widget {
 
             onContextMenuItemClick: null,
 
-            onContextMenuPreparing: null,
+            onContextMenuShowing: null,
 
             onCurrentDirectoryChanged: null,
 
@@ -583,7 +583,7 @@ class FileManager extends Widget {
                 }
                 break;
             case 'onContextMenuItemClick':
-            case 'onContextMenuPreparing':
+            case 'onContextMenuShowing':
             case 'onCurrentDirectoryChanged':
             case 'onSelectedFileOpened':
             case 'onSelectionChanged':
@@ -600,7 +600,7 @@ class FileManager extends Widget {
     _initActions() {
         this._actions = {
             onContextMenuItemClick: this._createActionByOption('onContextMenuItemClick'),
-            onContextMenuPreparing: this._createActionByOption('onContextMenuPreparing'),
+            onContextMenuShowing: this._createActionByOption('onContextMenuShowing'),
             onCurrentDirectoryChanged: this._createActionByOption('onCurrentDirectoryChanged'),
             onSelectedFileOpened: this._createActionByOption('onSelectedFileOpened'),
             onSelectionChanged: this._createActionByOption('onSelectionChanged'),
