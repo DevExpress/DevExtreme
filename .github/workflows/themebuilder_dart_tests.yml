@@ -1,0 +1,33 @@
+name: Themebuilder dart tests
+
+on: [push, pull_request]
+
+jobs:
+  testcafe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Cd in themebuilder folder
+      run: cd themebuilder-scss
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node
+
+    - name: Run npm install
+      run: npm install --no-package-lock --no-audit --no-fund
+
+    - name: Build
+      run: npm run build
+
+    - name: Run TestCafe tests
+      uses: cedx/setup-dart@v2
+      run: npm run test-dart
