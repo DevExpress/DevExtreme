@@ -1,5 +1,5 @@
 import * as sass from 'sass';
-import fiber from 'fibers';
+// import fiber from 'fibers';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 import DartClient from './dart-client';
@@ -35,7 +35,7 @@ export default class Compiler {
       functions: {
         'collector($map)': this.collector.bind(this),
       },
-      fiber,
+      // fiber,
     };
 
     compilerOptions = { ...compilerOptions, ...options };
