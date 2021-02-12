@@ -75,15 +75,53 @@ export const getCaretWithOffset = function(caret, offset) {
     };
 };
 
+const getRealSeparatorIndex = function(str) {
+    let quoteBalance = 0;
+    let separatorCount = 0;
+
+    for(let i = 0; i < str.length; ++i) {
+        if(str[i] === '\'') {
+            quoteBalance++;
+        }
+        if(str[i] === '.') {
+            ++separatorCount;
+            if(quoteBalance % 2 === 0) {
+                return separatorCount;
+            }
+        }
+    }
+
+    return 1;
+};
+
+const getNthOccurrence = function(str, c, n) {
+    let i = -1;
+
+    while(n-- && i++ < str.length) {
+        i = str.indexOf(c, i);
+    }
+
+    return i;
+};
+
+const splitByIndex = function(str, index) {
+    if(index === -1) {
+        return [str];
+    }
+
+    return [str.slice(0, index), str.slice(index + 1)];
+};
+
 export const getCaretAfterFormat = function(text, formatted, caret, format) {
     caret = getCaretWithOffset(caret, 0);
 
     const point = number.getDecimalSeparator();
     const isSeparatorBasedText = isSeparatorBasedString(text);
-    const pointPosition = isSeparatorBasedText ? 0 : text.indexOf(point);
-    const newPointPosition = formatted.indexOf(point);
-    const textParts = isSeparatorBasedText ? text.split(text[pointPosition]) : text.split(point);
-    const formattedParts = formatted.split(point);
+    const realSeparatorIndex = getRealSeparatorIndex(format);
+    const pointPosition = isSeparatorBasedText ? 0 : getNthOccurrence(text, point, realSeparatorIndex);
+    const newPointPosition = getNthOccurrence(formatted, point, realSeparatorIndex);
+    const textParts = splitByIndex(text, pointPosition);
+    const formattedParts = splitByIndex(formatted, newPointPosition);
     const isCaretOnFloat = pointPosition !== -1 && caret.start > pointPosition;
 
     if(isCaretOnFloat) {
