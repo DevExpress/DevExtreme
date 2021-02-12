@@ -874,31 +874,31 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get baseContentWidth(): number {
-    return isDefined(this.contentRef.current)
+    return isDefined(this.contentRef?.current)
       ? Math.round(this.contentRef.current.offsetWidth)
       : 0;
   }
 
   get baseContainerWidth(): number {
-    return isDefined(this.containerRef.current)
+    return isDefined(this.containerRef?.current)
       ? Math.round(this.containerRef.current.offsetWidth)
       : 0;
   }
 
   get baseContentHeight(): number {
-    return isDefined(this.contentRef.current)
+    return isDefined(this.contentRef?.current)
       ? Math.round(this.contentRef.current.offsetHeight)
       : 0;
   }
 
   get baseContainerHeight(): number {
-    return isDefined(this.containerRef.current)
+    return isDefined(this.containerRef?.current)
       ? Math.round(this.containerRef.current.offsetHeight)
       : 0;
   }
 
   get scaleRatioWidth(): number {
-    if (!isDefined(this.scrollableRef.current)) {
+    if (!isDefined(this.scrollableRef?.current)) {
       return 1;
     }
 
@@ -916,7 +916,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get scaleRatioHeight(): number {
-    if (!isDefined(this.scrollableRef.current)) {
+    if (!isDefined(this.scrollableRef?.current)) {
       return 1;
     }
 
@@ -934,7 +934,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get contentWidth(): number {
-    if (!isDefined(this.contentRef.current)) {
+    if (!isDefined(this.contentRef?.current)) {
       return 1;
     }
 
@@ -952,11 +952,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get containerWidth(): number {
-    return isDefined(this.containerRef.current) ? getElementWidth(this.containerRef.current) : 0;
+    return isDefined(this.containerRef?.current) ? getElementWidth(this.containerRef.current) : 0;
   }
 
   get contentHeight(): number {
-    if (!isDefined(this.contentRef.current)) {
+    if (!isDefined(this.contentRef?.current)) {
       return 1;
     }
 
@@ -974,7 +974,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get containerHeight(): number {
-    return isDefined(this.containerRef.current)
+    return isDefined(this.containerRef?.current)
       ? getElementHeight(this.containerRef.current)
       : 0;
   }
@@ -984,7 +984,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   getScrollableOffset(): { left: number; top: number } {
-    return isDefined(this.scrollableRef.current)
+    return isDefined(this.scrollableRef?.current)
       ? getElementOffset(this.scrollableRef.current)
       : { left: 0, top: 0 };
   }
