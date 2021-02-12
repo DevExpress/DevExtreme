@@ -292,18 +292,22 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const formatOption = this.option('format');
         const isCustomParser = isFunction(formatOption.parser);
         const parser = isCustomParser ? formatOption.parser : number.parse;
+        let integerPartStartIndex = 0;
 
         if(!isCustomParser) {
-            const formatPointIndex = format.indexOf('.');
-            const textPointIndex = text.indexOf(number.getDecimalSeparator());
+            const formatPointIndex = getRealSeparatorIndex(format).index;
+            const textPointIndex = this._getTextSeparatorIndex(text);
 
             const formatIntegerPartLength = formatPointIndex !== -1 ? formatPointIndex : format.length;
             const textIntegerPartLength = textPointIndex !== -1 ? textPointIndex : text.length;
 
             if(textIntegerPartLength > formatIntegerPartLength && format.indexOf('#') === -1) {
-                text = text.substr(textIntegerPartLength - formatIntegerPartLength);
+                integerPartStartIndex = textIntegerPartLength - formatIntegerPartLength;
             }
         }
+
+        text = this._removeStubs(text, true);
+        text = text.substr(integerPartStartIndex);
 
         return parser(text, format);
     },
@@ -427,8 +431,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _getParsedValue: function(text, format) {
         const sign = number.getSign(text, format?.formatter || format);
-        const textWithoutStubs = this._removeStubs(text, true);
-        const parsedValue = this._parse(textWithoutStubs, format);
+        const parsedValue = this._parse(text, format);
         const parsedValueSign = parsedValue < 0 ? -1 : 1;
         const parsedValueWithSign = isNumeric(parsedValue) && sign !== parsedValueSign ? sign * parsedValue : parsedValue;
 

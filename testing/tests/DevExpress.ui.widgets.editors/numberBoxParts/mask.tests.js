@@ -2175,4 +2175,15 @@ QUnit.module('symbol with dot in format', {
 
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, 'caret position is correct');
     });
+
+    QUnit.test('should not affect integer part length calculation', function(assert) {
+        this.instance.option('format', '\'.\' 00.0');
+
+        this.keyboard
+            .caret(4)
+            .type('22')
+            .change();
+
+        assert.strictEqual(this.instance.option('value'), 22.5, 'value is correct');
+    });
 });
