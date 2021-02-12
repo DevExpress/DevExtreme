@@ -572,21 +572,6 @@ QUnit.module('format: fixed point format', moduleConfig, () => {
         assert.deepEqual(this.keyboard.caret().start, 1, 'caret was moved');
     });
 
-    QUnit.test('symbol with dot should not change max precision (T972648)', function(assert) {
-        this.instance.option({
-            value: 1.13,
-            format: '\'.\' 0.00',
-        });
-
-        this.keyboard
-            .caret(4)
-            .type('89')
-            .change();
-
-        assert.strictEqual(this.keyboard.caret().start, 6, 'caret is in the correct position');
-        assert.strictEqual(this.instance.option('value'), 1.89, 'value is correct');
-    });
-
     QUnit.test('removing last integer should replace it to 0', function(assert) {
         this.instance.option({
             format: '#0.00',
@@ -2153,5 +2138,41 @@ QUnit.module('stubs', moduleConfig, function() {
             assert.equal(this.input.val(), expectedText, 'text is correct');
             assert.equal(this.instance.option('value'), expectedValue, 'value is correct');
         });
+    });
+});
+
+QUnit.module('symbol with dot in format', {
+    beforeEach: function() {
+        this.$element = $('#numberbox').dxNumberBox({
+            useMaskBehavior: true,
+            value: 1.5,
+            format: '\'.\' 0.00'
+        });
+        this.clock = sinon.useFakeTimers();
+        this.$input = this.$element.find(`.${INPUT_CLASS}`);
+        this.instance = this.$element.dxNumberBox('instance');
+        this.keyboard = keyboardMock(this.$input, true);
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.test('should not change max precision (T972648)', function(assert) {
+        this.keyboard
+            .caret(4)
+            .type('89')
+            .change();
+
+        assert.strictEqual(this.keyboard.caret().start, 6, 'caret position is correct');
+        assert.strictEqual(this.instance.option('value'), 1.89, 'value is correct');
+    });
+
+    QUnit.test('should not affect caret position on focusin', function(assert) {
+        this.keyboard
+            .caret(6)
+            .focus();
+        this.clock.tick(CARET_TIMEOUT_DURATION);
+
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, 'caret position is correct');
     });
 });

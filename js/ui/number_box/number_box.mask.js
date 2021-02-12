@@ -14,7 +14,7 @@ import { getFormat as getLDMLFormat } from '../../localization/ldml/number';
 import NumberBoxBase from './number_box.base';
 import { addNamespace, getChar, normalizeKeyName } from '../../events/utils/index';
 import { ensureDefined, escapeRegExp } from '../../core/utils/common';
-import { getRealSeparatorIndex, splitByIndex } from './utils';
+import { getRealSeparatorIndex, getNthOccurrence, splitByIndex } from './utils';
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';
 const MOVE_FORWARD = 1;
@@ -60,6 +60,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
         });
     },
 
+    _getTextSeparatorIndex: function(text) {
+        const decimalSeparator = number.getDecimalSeparator();
+        const realSeparatorOccurrenceIndex = getRealSeparatorIndex(this.option('format')).occurrence;
+        return getNthOccurrence(text, decimalSeparator, realSeparatorOccurrenceIndex);
+    },
+
     _focusInHandler: function(e) {
         if(!this._preventNestedFocusEvent(e)) {
             this.clearCaretTimeout();
@@ -69,8 +75,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
                 if(caret.start === caret.end && this._useMaskBehavior()) {
                     const text = this._getInputVal();
-                    const decimalSeparator = number.getDecimalSeparator();
-                    const decimalSeparatorIndex = text.indexOf(decimalSeparator);
+                    const decimalSeparatorIndex = this._getTextSeparatorIndex(text);
 
                     if(decimalSeparatorIndex >= 0) {
                         this._caret({ start: decimalSeparatorIndex, end: decimalSeparatorIndex });
