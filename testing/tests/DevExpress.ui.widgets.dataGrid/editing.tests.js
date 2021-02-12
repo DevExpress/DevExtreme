@@ -12515,6 +12515,7 @@ QUnit.module('Editing with validation', {
 
         // act
         this.editCell(0, 1);
+        this.clock.tick();
         this.focus(this.getCellElement(0, 1));
         this.clock.tick();
 
