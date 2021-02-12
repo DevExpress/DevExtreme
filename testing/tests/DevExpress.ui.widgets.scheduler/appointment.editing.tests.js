@@ -97,10 +97,6 @@ module('Integration: Appointment editing', {
             }
         }, () => {
             test('Scheduler appointment popup should correctly update recurrence appointment', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 const tasks = [{
                     text: 'Recurrence task',
                     start: new Date(2017, 2, 13),

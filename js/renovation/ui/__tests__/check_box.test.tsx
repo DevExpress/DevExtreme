@@ -15,7 +15,7 @@ import { Widget } from '../common/widget';
 import { InkRipple } from '../common/ink_ripple';
 import { ValidationMessage } from '../validation_message';
 
-type Mock = jest.Mock;
+interface Mock extends jest.Mock {}
 
 jest.mock('../validation_message', () => ({ ValidationMessage: () => null }));
 

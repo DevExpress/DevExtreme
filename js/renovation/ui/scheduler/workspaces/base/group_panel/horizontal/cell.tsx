@@ -1,8 +1,8 @@
 import {
-  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template,
+  Component, ComponentBindings, JSXComponent, OneWay,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../../../../../utils/combine_classes';
-import { GroupItem, ResourceCellTemplateProps } from '../../../types.d';
+import { GroupPanelCellProps } from '../cell_props';
 
 export const viewFunction = ({
   classes,
@@ -42,26 +42,12 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class GroupPanelHorizontalCellProps {
-  @OneWay() id: string | number = 0;
-
-  @OneWay() text?: string = '';
-
-  @OneWay() color?: string;
-
-  @OneWay() data: GroupItem = { id: 0 };
-
-  @OneWay() index?: number;
-
+export class GroupPanelHorizontalCellProps extends GroupPanelCellProps {
   @OneWay() isFirstGroupCell = false;
 
   @OneWay() isLastGroupCell = false;
 
   @OneWay() colSpan = 1;
-
-  @Template() cellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
-
-  @OneWay() className = '';
 }
 
 @Component({

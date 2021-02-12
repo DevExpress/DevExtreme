@@ -2,7 +2,6 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import browser from '../../core/utils/browser';
 import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
-import { isPlainObject, isDefined } from '../../core/utils/type';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import registerComponent from '../../core/component_registrator';
@@ -35,7 +34,6 @@ const Scrollable = DOMComponent.inherit({
     _init: function() {
         this.callBase();
         this._initScrollableMarkup();
-        this._locked = false;
     },
 
     _getWindowDevicePixelRatio: function() {
@@ -76,8 +74,6 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _render: function() {
-        this._renderStrategy();
-
         this._renderDisabledState();
         this.update();
 
@@ -142,21 +138,6 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    _validate: function(e) {
-        if(this._isLocked()) {
-            return false;
-        }
-
-        this._updateIfNeed();
-
-        return this._strategy.validate(e);
-    },
-
-    _initHandler: function() {
-        const strategy = this._strategy;
-        strategy.handleInit.apply(strategy, arguments);
-    },
-
     _renderDisabledState: function() {
         if(this.option('disabled')) {
             this._lock();
@@ -166,7 +147,6 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _renderStrategy: function() {
-        this._strategy.render();
         this.$element().data(SCROLLABLE_STRATEGY, this._strategy);
     },
 
@@ -217,6 +197,7 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
+    // tests on reset position, think about it
     _resetInactiveDirection: function() {
         const inactiveProp = this._getInactiveProp();
         if(!inactiveProp || !hasWindow()) {
@@ -242,23 +223,6 @@ const Scrollable = DOMComponent.inherit({
         return this._strategy.location();
     },
 
-    _normalizeLocation: function(location) {
-        if(isPlainObject(location)) {
-            const left = ensureDefined(location.left, location.x);
-            const top = ensureDefined(location.top, location.y);
-            return {
-                left: isDefined(left) ? -left : undefined,
-                top: isDefined(top) ? -top : undefined
-            };
-        } else {
-            const direction = this.option('direction');
-            return {
-                left: direction !== VERTICAL ? -location : undefined,
-                top: direction !== HORIZONTAL ? -location : undefined
-            };
-        }
-    },
-
     _isLocked: function() {
         return this._locked;
     },
@@ -271,25 +235,6 @@ const Scrollable = DOMComponent.inherit({
         if(!this.option('disabled')) {
             this._locked = false;
         }
-    },
-
-    // _isDirection: function(direction) {
-    //     const current = this.option('direction');
-    //     if(direction === VERTICAL) {
-    //         return current !== HORIZONTAL;
-    //     }
-    //     if(direction === HORIZONTAL) {
-    //         return current !== VERTICAL;
-    //     }
-    //     return current === direction;
-    // },
-
-    _container: function() {
-        return this._$container;
-    },
-
-    $content: function() {
-        return this._$content;
     },
 
     scrollHeight: function() {
@@ -322,16 +267,11 @@ const Scrollable = DOMComponent.inherit({
 
         this._updateIfNeed();
 
-        let location = this._location();
-
-        if(!this.option('useNative')) {
-            targetLocation = this._strategy._applyScaleRatio(targetLocation);
-            location = this._strategy._applyScaleRatio(location);
-        }
+        const location = this._location();
 
         const distance = this._normalizeLocation({
-            left: location.left - ensureDefined(targetLocation.left, location.left),
-            top: location.top - ensureDefined(targetLocation.top, location.top)
+            left: ensureDefined(targetLocation.left, location.left) - location.top,
+            top: ensureDefined(targetLocation.top, location.top) - location.left
         });
 
         if(!distance.top && !distance.left) {

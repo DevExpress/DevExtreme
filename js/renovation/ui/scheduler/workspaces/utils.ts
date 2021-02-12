@@ -1,6 +1,6 @@
 import { CSSAttributes } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../../utils/combine_classes';
-import { Group, GroupedViewData } from './types.d';
+import { Group, GroupedViewData, TimePanelData } from './types.d';
 import { GroupOrientation } from '../types.d';
 import {
   HORIZONTAL_GROUP_ORIENTATION,
@@ -58,11 +58,11 @@ export const getGroupCellClasses = (
 });
 
 export const getIsGroupedAllDayPanel = (
-  viewData: GroupedViewData, index: number,
+  viewData: GroupedViewData | TimePanelData, index: number,
 ): boolean => {
   const { groupedData } = viewData;
   const groupData = groupedData[index];
-  const isAllDayPanel = !!(groupData?.allDayPanel?.length);
+  const isAllDayPanel = !!(groupData?.allDayPanel);
   const isGroupedAllDayPanel = !!(groupData?.isGroupedAllDayPanel);
 
   return isAllDayPanel && isGroupedAllDayPanel;

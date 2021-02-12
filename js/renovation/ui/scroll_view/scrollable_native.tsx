@@ -6,6 +6,8 @@ import {
   Effect,
   RefObject,
   ComponentBindings,
+  OneWay,
+  Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
@@ -19,11 +21,14 @@ import {
 } from './scrollable_props';
 import { TopPocketProps } from './top_pocket_props';
 import { BottomPocketProps } from './bottom_pocket_props';
+import '../../../events/gesture/emitter.gesture.scroll';
 
 import {
   allowedDirection,
   ScrollableLocation, ScrollOffset,
 } from './types.d';
+
+import { isDxMouseWheelEvent } from '../../../events/utils/index';
 
 import {
   ensureLocation, ScrollDirection, normalizeCoordinate,
@@ -58,6 +63,7 @@ import {
 export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef,
+    styles,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -82,7 +88,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
         <div className={SCROLLABLE_CONTAINER_CLASS} ref={containerRef}>
-          <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
+          <div className={SCROLLABLE_CONTENT_CLASS} style={styles} ref={contentRef}>
             {forceGeneratePockets && (
             <TopPocket
               pullingDownText={pullingDownText}
@@ -118,6 +124,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
 };
 @ComponentBindings()
 export class ScrollableNativeProps extends ScrollableProps {
+  @OneWay() pushBackValue?: number;
 }
 
 type ScrollableNativePropsType = ScrollableNativeProps
@@ -135,6 +142,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @Ref() contentRef!: RefObject<HTMLDivElement>;
 
   @Ref() containerRef!: RefObject<HTMLDivElement>;
+
+  @Mutable() locked = false;
 
   @Method()
   content(): HTMLDivElement {
@@ -370,9 +379,39 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     };
   }
 
-  // eslint-disable-next-line
-  private validate(event: Event): boolean {
-    return true; // TODO
+  private validate(e: Event): boolean {
+    if (this.isLocked()) {
+      return false;
+    }
+
+    if (this.props.disabled) {
+      return false;
+    }
+
+    if (isDxMouseWheelEvent(e) && this.isScrolledInMaxDirection(e)) {
+      return false;
+    }
+
+    return isDefined(this.allowedDirection());
+  }
+
+  private isLocked(): boolean {
+    return this.locked;
+  }
+
+  private isScrolledInMaxDirection(e: Event): boolean {
+    const { delta, shiftKey } = e as any;
+    const {
+      scrollLeft, scrollTop, scrollWidth, clientWidth, scrollHeight, clientHeight,
+    } = this.containerRef;
+
+    if (delta > 0) {
+      return shiftKey ? !scrollLeft : !scrollTop;
+    }
+
+    return shiftKey
+      ? scrollLeft >= scrollWidth - clientWidth
+      : scrollTop >= scrollHeight - clientHeight;
   }
 
   get cssClasses(): string {
@@ -399,5 +438,12 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     }
 
     return (devices.real().platform === 'ios' ? 1 : 0);
+  }
+
+  get styles(): { [key: string]: any } {
+    return {
+      paddingTop: this.pushBackValue !== 0 ? this.pushBackValue : undefined,
+      paddingBottom: this.pushBackValue !== 0 ? this.pushBackValue : undefined,
+    };
   }
 }

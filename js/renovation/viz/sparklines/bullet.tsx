@@ -10,6 +10,8 @@ import {
   Nested,
   Fragment,
   Effect,
+  ForwardRef,
+  Event,
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../utils/combine_classes';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
@@ -28,7 +30,10 @@ import pointerEvents from '../../../events/pointer';
 import { EffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 import { pointInCanvas } from '../core/utils';
-import { ArgumentAxisRange, ValueAxisRange, BulletScaleProps } from './types.d';
+import {
+  ArgumentAxisRange, ValueAxisRange, BulletScaleProps,
+} from './types.d';
+import { OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData } from '../common/types.d';
 
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;
@@ -47,13 +52,13 @@ const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EV
 
 const inCanvas = (canvas: Canvas, x: number, y: number): boolean => {
   const {
-    left, right, top, bottom, width, height,
+    width, height,
   } = canvas;
   return pointInCanvas({
-    left,
-    top,
-    right: width - right,
-    bottom: height - bottom,
+    left: 0,
+    top: 0,
+    right: width,
+    bottom: height,
     width,
     height,
   }, x, y);
@@ -105,6 +110,7 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
   return (
     <Fragment>
       <BaseWidget
+        rootElementRef={viewModel.widgetRootRef}
         ref={viewModel.widgetRef}
         classes={viewModel.cssClasses}
         className={viewModel.cssClassName}
@@ -157,6 +163,7 @@ export const viewFunction = (viewModel: Bullet): JSX.Element => {
       {customizedTooltipProps.enabled
       && (
       <TooltipComponent
+        rootWidget={viewModel.widgetRootRef}
         ref={viewModel.tooltipRef}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...customizedTooltipProps}
@@ -187,6 +194,10 @@ export class BulletProps extends BaseWidgetProps {
   @OneWay() endScaleValue?: number;
 
   @Nested() tooltip?: TooltipProps;
+
+  @Event() onTooltipHidden?: OnTooltipHiddenFn<BaseEventData>;
+
+  @Event() onTooltipShown?: OnTooltipShownFn<BaseEventData>;
 }
 
 @Component({
@@ -200,6 +211,8 @@ export class Bullet extends JSXComponent(BulletProps) {
   @Ref() widgetRef!: RefObject<BaseWidget>;
 
   @Ref() tooltipRef!: RefObject<TooltipComponent>;
+
+  @ForwardRef() widgetRootRef!: RefObject<HTMLDivElement>;
 
   @InternalState() argumentAxis = createAxis(true);
 
@@ -224,11 +237,11 @@ export class Bullet extends JSXComponent(BulletProps) {
   @Effect()
   tooltipEffect(): EffectReturn {
     const { disabled } = this.props;
-
     if (!disabled && this.customizedTooltipProps.enabled) {
-      eventsEngine.on(this.widgetRef.svg(), POINTER_ACTION, this.pointerHandler);
+      const svg = this.widgetRef.svg();
+      eventsEngine.on(svg, POINTER_ACTION, this.pointerHandler);
       return (): void => {
-        eventsEngine.off(this.widgetRef.svg(), POINTER_ACTION, this.pointerHandler);
+        eventsEngine.off(svg, POINTER_ACTION, this.pointerHandler);
       };
     }
 
@@ -278,9 +291,12 @@ export class Bullet extends JSXComponent(BulletProps) {
   }
 
   get customizedTooltipProps(): Partial<TooltipProps> {
-    const { tooltip } = this.props;
+    const { tooltip, onTooltipHidden, onTooltipShown } = this.props;
     const customProps = {
       enabled: this.tooltipEnabled,
+      eventData: { component: this.widgetRef },
+      onTooltipHidden,
+      onTooltipShown,
       customizeTooltip:
         generateCustomizeTooltipCallback(tooltip?.customizeTooltip, tooltip?.font, this.rtlEnabled),
       data: this.tooltipData,
@@ -457,9 +473,8 @@ export class Bullet extends JSXComponent(BulletProps) {
   }
 
   pointerHandler(): void {
-    const { tooltip } = this.props;
-    this.tooltipVisible = tooltip?.visible !== undefined ? tooltip.visible : true;
-    this.tooltipVisible && eventsEngine.on(
+    this.tooltipVisible = true;
+    eventsEngine.on(
       domAdapter.getDocument(), POINTER_ACTION, this.pointerOutHandler,
     );
   }

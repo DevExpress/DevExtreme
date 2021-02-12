@@ -124,19 +124,21 @@ export default class VirtualScrollingDispatcher {
 
     getCellHeight() {
         const cellHeight = this.workspace.getCellHeight(false);
-
-        return cellHeight > 0
+        const result = cellHeight > 0
             ? cellHeight
             : DEFAULT_CELL_HEIGHT;
+
+        return Math.round(result);
     }
 
     getCellWidth() {
         const cellWidth = this.workspace.getCellWidth() ||
             this.workspace.getCellMinWidth();
-
-        return cellWidth > 0
+        const result = cellWidth > 0
             ? cellWidth
             : MIN_CELL_WIDTH;
+
+        return Math.round(result);
     }
 
     calculateCoordinatesByDataAndPosition(cellData, position, date, isCalculateTime, isVerticalDirectionView) {

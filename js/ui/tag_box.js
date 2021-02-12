@@ -14,7 +14,7 @@ import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
 import messageLocalization from '../localization/message';
-import { addNamespace, normalizeKeyName } from '../events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/utils/index';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
@@ -286,7 +286,7 @@ const TagBox = SelectBox.inherit({
 
             showDropDownButton: false,
 
-            maxFilterLength: 1500,
+            maxFilterQueryLength: 1500,
 
             tagTemplate: 'tag',
 
@@ -550,7 +550,7 @@ const TagBox = SelectBox.inherit({
         const scrollLeft = this._$tagsContainer.scrollLeft();
         const delta = e.delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER;
 
-        if(allowScroll(this._$tagsContainer, delta, true)) {
+        if(!isCommandKeyPressed(e) && allowScroll(this._$tagsContainer, delta, true)) {
             this._$tagsContainer.scrollLeft(scrollLeft + delta);
             return false;
         }
@@ -758,26 +758,28 @@ const TagBox = SelectBox.inherit({
     _getFilter: function(creator) {
         const dataSourceFilter = this._dataSource.filter();
         const filterExpr = creator.getCombinedFilter(this.option('valueExpr'), dataSourceFilter);
-        const filterLength = encodeURI(JSON.stringify(filterExpr)).length;
-        const maxFilterLength = this.option('maxFilterLength');
+        const filterQueryLength = encodeURI(JSON.stringify(filterExpr)).length;
+        const maxFilterQueryLength = this.option('maxFilterQueryLength');
 
-        if(filterLength <= maxFilterLength) {
+        if(filterQueryLength <= maxFilterQueryLength) {
             return filterExpr;
         }
 
-        errors.log('W0017', maxFilterLength);
+        errors.log('W0017', maxFilterQueryLength);
     },
 
     _getFilteredItems: function(values) {
         const creator = new FilterCreator(values);
 
-        const selectedItems = (this._list && this._list.option('selectedItems')) || this.option('selectedItems');
+        const listSelectedItems = this._list?.option('selectedItems');
+        const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource().isLoaded();
+        const selectedItems = listSelectedItems || this.option('selectedItems');
         const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
         const filteredItems = selectedItems.filter(clientFilterFunction);
         const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
         const d = new Deferred();
 
-        if(!this._isDataSourceChanged && selectedItemsAlreadyLoaded) {
+        if((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
             const dataSource = this._dataSource;
@@ -945,7 +947,28 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemsFromPlain: function(values) {
-        const plainItems = this._getPlainItems();
+        let selectedItems = this._getSelectedItemsFromList(values);
+        const needFilterPlainItems = (selectedItems.length === 0 && values.length > 0) || (selectedItems.length < values.length);
+
+        if(needFilterPlainItems) {
+            const plainItems = this._getPlainItems();
+            selectedItems = this._filterSelectedItems(plainItems, values);
+        }
+
+        return selectedItems;
+    },
+
+    _getSelectedItemsFromList: function(values) {
+        const listSelectedItems = this._list?.option('selectedItems');
+        let selectedItems = [];
+        if(values.length === listSelectedItems?.length) {
+            selectedItems = this._filterSelectedItems(listSelectedItems, values);
+        }
+
+        return selectedItems;
+    },
+
+    _filterSelectedItems: function(plainItems, values) {
         const selectedItems = plainItems.filter((dataItem) => {
             let currentValue;
             for(let i = 0; i < values.length; i++) {
@@ -1366,13 +1389,12 @@ const TagBox = SelectBox.inherit({
     },
 
     _dataSourceChangedHandler: function() {
-        if(this._list) {
-            this._isDataSourceChanged = true;
-        }
+        this._isDataSourceChanged = true;
         this.callBase.apply(this, arguments);
     },
 
-    _applyButtonHandler: function() {
+    _applyButtonHandler: function(args) {
+        this._saveValueChangeEvent(args.event);
         this.option('value', this._getSortedListValues());
         this._clearTextValue();
         this.callBase();
@@ -1509,7 +1531,7 @@ const TagBox = SelectBox.inherit({
                 this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !args.value);
                 this._renderSingleLineScroll();
                 break;
-            case 'maxFilterLength':
+            case 'maxFilterQueryLength':
                 break;
             default:
                 this.callBase(args);

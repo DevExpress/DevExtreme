@@ -85,7 +85,9 @@ describe('DateHeaderLayout', () => {
           isFirstGroupCell: firstCellData.isFirstGroupCell,
           isLastGroupCell: firstCellData.isLastGroupCell,
           colSpan: firstCellData.colSpan,
+          isWeekDayCell: false,
           dateCellTemplate,
+          isTimeCellTemplate: false,
         });
       expect(firstCell.key())
         .toBe(firstCellData.key);
@@ -105,7 +107,9 @@ describe('DateHeaderLayout', () => {
           isFirstGroupCell: secondCellData.isFirstGroupCell,
           isLastGroupCell: secondCellData.isLastGroupCell,
           colSpan: secondCellData.colSpan,
+          isWeekDayCell: false,
           dateCellTemplate,
+          isTimeCellTemplate: false,
         });
       expect(secondCell.key())
         .toBe(secondCellData.key);

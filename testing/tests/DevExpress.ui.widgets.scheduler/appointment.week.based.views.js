@@ -15,7 +15,8 @@ import {
     SchedulerTestWrapper,
     initTestMarkup,
     asyncAssert,
-    createWrapper
+    createWrapper,
+    supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
@@ -165,10 +166,7 @@ module('Integration: Appointment Day, Week views', {
         });
     });
 
-    [
-        'standard',
-        'virtual'
-    ].forEach(scrollingMode => {
+    supportedScrollingModes.forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {
                 const createInstance = this.createInstance.bind(this);
@@ -1045,10 +1043,6 @@ module('Integration: Appointment Day, Week views', {
                 'timelineMonth'
             ].forEach(viewName => {
                 test(`Appointment with equal startDate and endDate should render in whole cell on ${viewName} view (T858496)`, function(assert) {
-                    if(scrollingMode === 'virtual') {
-                        assert.ok(true, 'TODO: appointments in virtual month');
-                        return;
-                    }
                     this.createInstance({
                         dataSource: [{
                             text: 'Zero-minute appointment',

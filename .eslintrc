@@ -138,7 +138,7 @@
             "@typescript-eslint/no-dupe-class-members": "error",
             "no-empty-function": "off",
             "@typescript-eslint/no-empty-function": "error",
-            "@typescript-eslint/no-empty-interface": "error",
+            "@typescript-eslint/no-empty-interface": ["error", {"allowSingleExtends":true }],
             "@typescript-eslint/no-explicit-any": "error",
             "@typescript-eslint/no-extra-non-null-assertion": "error",
             "no-extra-parens": "off",
@@ -191,7 +191,13 @@
             "@typescript-eslint/switch-exhaustiveness-check": "error",
             "@typescript-eslint/triple-slash-reference": "error",
             "@typescript-eslint/type-annotation-spacing": "error",
-            "@typescript-eslint/unified-signatures": "error"
+            "@typescript-eslint/unified-signatures": "error",
+            "@typescript-eslint/no-type-alias": ["error",
+                {
+                    "allowAliases": "in-unions-and-intersections",
+                    "allowCallbacks": "always"
+                }
+            ]
             /*
             "@typescript-eslint/prefer-includes": "error",
             "@typescript-eslint/prefer-nullish-coalescing": "error",

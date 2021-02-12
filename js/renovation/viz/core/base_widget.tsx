@@ -8,6 +8,7 @@ import {
   Consumer,
   Fragment,
   RefObject,
+  ComponentBindings,
 } from 'devextreme-generator/component_declaration/common';
 import { isDefined } from '../../../core/utils/type';
 import { combineClasses } from '../../utils/combine_classes';
@@ -72,7 +73,7 @@ const calculateCanvas = (model: Partial<BaseWidgetProps> & Partial<BaseWidget>):
 
 export const viewFunction = (viewModel: BaseWidget): JSX.Element => {
   const grayFilterId = viewModel.props.disabled ? getNextDefsSvgId() : undefined;
-  const canvas = viewModel.props.canvas ?? DEFAULT_CANVAS;
+  const canvas = viewModel.props.canvas || DEFAULT_CANVAS;
   const widget = (
     <div
       ref={viewModel.containerRef}
@@ -108,17 +109,27 @@ export const viewFunction = (viewModel: BaseWidget): JSX.Element => {
   );
 };
 
+// https://github.com/DevExpress/devextreme-renovation/issues/573
+@ComponentBindings()
+export class Props extends BaseWidgetProps {
+  @ForwardRef() rootElementRef!: RefObject<HTMLDivElement>;
+}
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class BaseWidget extends JSXComponent(BaseWidgetProps) {
+export class BaseWidget extends JSXComponent<Props, 'rootElementRef'>() {
   @Ref() containerRef!: RefObject<HTMLDivElement>;
 
   @ForwardRef() svgElementRef!: RefObject<SVGElement>;
 
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
+
+  @Effect({ run: 'once' }) setRootElementRef(): void {
+    this.props.rootElementRef = this.containerRef;
+  }
 
   @Effect()
   contentReadyEffect(): void {

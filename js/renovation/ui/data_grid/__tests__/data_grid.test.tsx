@@ -7,14 +7,17 @@ import { DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../common/widget';
 import { DataGridViews } from '../data_grid_views';
 import '../datagrid_component';
+import { getUpdatedOptions } from '../utils/get_updated_options';
 
 jest.mock('../data_grid_views', () => ({ DataGridViews: () => null }));
 jest.mock('../../../../ui/data_grid/ui.data_grid', () => jest.fn());
 jest.mock('../datagrid_component', () => ({
   DataGridComponent: jest.fn().mockImplementation((options) => ({
-    option() { return options; },
+    option: () => options,
+    dispose: jest.fn(),
   })),
 }));
+jest.mock('../utils/get_updated_options');
 
 describe('DataGrid', () => {
   describe('View', () => {
@@ -41,7 +44,7 @@ describe('DataGrid', () => {
         restAttributes: { 'rest-attributes': 'true' },
         instance,
         props,
-      } as Partial<DataGridProps>;
+      } as Partial<DataGridProps> & {aria: {} };
       const tree = mount(<DataGridView {...gridProps as any} /> as any);
 
       expect(tree.find(Widget).props()).toMatchObject({
@@ -92,7 +95,15 @@ describe('DataGrid', () => {
       expect(Object.prototype.hasOwnProperty.call(instance.option(), 'columns')).toBe(false);
     });
 
-    each`
+    describe('Methods', () => {
+      it('getComponentInstance', () => {
+        const component = new DataGrid({});
+        component.componentInstance = mockDataGridMethods as any;
+
+        expect(component.getComponentInstance()).toMatchObject(mockDataGridMethods);
+      });
+
+      each`
       methodName
       ${'beginCustomLoading'}
       ${'byKey'}
@@ -160,27 +171,66 @@ describe('DataGrid', () => {
       ${'totalCount'}
       ${'getController'}
     `
-      .describe('Methods', ({
-        methodName,
-      }) => {
-        it(methodName, () => {
-          mockDataGridMethods[methodName] = jest.fn();
-          const component = new DataGrid({});
-          component.componentInstance = mockDataGridMethods as any;
+        .describe('Proxying the Grid methods', ({
+          methodName,
+        }) => {
+          it(methodName, () => {
+            mockDataGridMethods[methodName] = jest.fn();
+            const component = new DataGrid({});
+            component.componentInstance = mockDataGridMethods as any;
 
-          component[methodName]();
+            component[methodName]();
 
-          expect(mockDataGridMethods[methodName]).toHaveBeenCalled();
+            expect(mockDataGridMethods[methodName]).toHaveBeenCalled();
+          });
+
+          it(`${methodName} if widget is not initialized`, () => {
+            const component = new DataGrid({});
+            component.init = jest.fn();
+            component.componentInstance = null as any;
+            component[methodName]();
+
+            expect.assertions(0);
+          });
         });
+    });
+  });
 
-        it(`${methodName} if widget is not initialized`, () => {
-          const component = new DataGrid({});
-          component.init = jest.fn();
-          component.componentInstance = null as any;
-          component[methodName]();
+  describe('Behavior', () => {
+    describe('Effects', () => {
+      it('dispose', () => {
+        const component = new DataGrid({});
+        const { instance } = component;
 
-          expect.assertions(0);
-        });
+        component.dispose()();
+
+        expect(instance.dispose).toBeCalledTimes(1);
       });
+    });
+  });
+
+  describe('', () => {
+    it('updateOptions', () => {
+      (getUpdatedOptions as jest.Mock).mockReturnValue([{ path: 'columns', value: ['test', 'test2'] }]);
+      const initialProps = {
+        columns: ['test'],
+      } as DataGridProps;
+      const component = new DataGrid(initialProps);
+      component.instance.option = jest.fn();
+      component.instance.beginUpdate = jest.fn();
+      component.instance.endUpdate = jest.fn();
+      component.updateOptions();
+      expect(component.prevProps).toBe(initialProps);
+      component.props = {
+        columns: ['test', 'test2'],
+      } as DataGridProps;
+      component.updateOptions();
+      expect(getUpdatedOptions).toBeCalledTimes(1);
+      expect(getUpdatedOptions).toBeCalledWith(initialProps, component.props);
+      expect(component.prevProps).toBe(component.props);
+      expect(component.instance.option).toBeCalledWith('columns', ['test', 'test2']);
+      expect(component.instance.beginUpdate).toBeCalledTimes(1);
+      expect(component.instance.endUpdate).toBeCalledTimes(1);
+    });
   });
 });

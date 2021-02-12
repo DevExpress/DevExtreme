@@ -103,6 +103,7 @@ const DropDownList = DropDownEditor.inherit({
 
             wrapItemText: false,
 
+            useItemTextAsTitle: false,
 
             /**
             * @name dxDropDownListOptions.fieldTemplate
@@ -461,8 +462,6 @@ const DropDownList = DropDownEditor.inherit({
         return this.callBase().concat([!canListHaveFocus && this._list]);
     },
 
-    _fireContentReadyAction: noop,
-
     _setAriaTargetForList: function() {
         this._list._getAriaTarget = this._getAriaTarget.bind(this);
     },
@@ -533,6 +532,7 @@ const DropDownList = DropDownEditor.inherit({
             noDataText: this.option('noDataText'),
             grouped: this.option('grouped'),
             wrapItemText: this.option('wrapItemText'),
+            useItemTextAsTitle: this.option('useItemTextAsTitle'),
             onContentReady: this._listContentReadyHandler.bind(this),
             itemTemplate: this.option('itemTemplate'),
             indicateLoading: false,
@@ -872,6 +872,7 @@ const DropDownList = DropDownEditor.inherit({
             case 'groupTemplate':
             case 'wrapItemText':
             case 'noDataText':
+            case 'useItemTextAsTitle':
                 this._setListOption(args.name);
                 break;
             case 'displayValue':

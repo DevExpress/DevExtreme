@@ -9,7 +9,11 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import Query from 'data/query';
 import dataUtils from 'core/element_data';
-import { SchedulerTestWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
+import {
+    SchedulerTestWrapper,
+    CLASSES,
+    supportedScrollingModes
+} from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -306,10 +310,7 @@ QUnit.module('Integration: allDay appointments', {
         });
     });
 
-    [
-        'standard',
-        'virtual'
-    ].forEach(scrollingMode => {
+    supportedScrollingModes.forEach(scrollingMode => {
         QUnit.module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {
                 const createInstance = this.createInstance.bind(this);
@@ -868,10 +869,6 @@ QUnit.module('Integration: allDay appointments', {
             });
 
             QUnit.test('AllDay appointment is visible on month view, if showAllDayPanel = false ', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 this.createInstance({
                     currentDate: new Date(2015, 2, 10),
                     dataSource: [{
@@ -1250,10 +1247,6 @@ QUnit.module('Integration: allDay appointments', {
             });
 
             QUnit.test('DblClick on appointment should call scheduler.showAppointmentPopup for allDay appointment on month view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: appointments in virtual month');
-                    return;
-                }
                 const data = [{
                     text: 'a', allDay: true, startDate: new Date(2015, 2, 5), endDate: new Date(2015, 2, 5, 0, 30)
                 }];

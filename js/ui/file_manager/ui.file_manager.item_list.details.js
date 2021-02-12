@@ -8,6 +8,7 @@ import DataGrid from '../data_grid/ui.data_grid';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
+import { Deferred } from '../../core/utils/deferred';
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = 'dx-filemanager-details';
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-details-item-thumbnail';
@@ -98,7 +99,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this),
             onFocusedRowChanged: this._onFilesViewFocusedRowChanged.bind(this),
-            onOptionChanged: this._onFilesViewOptionChanged.bind(this)
+            onOptionChanged: this._onFilesViewOptionChanged.bind(this),
+            onContentReady: () => this._refreshDeferred?.resolve()
         });
     }
 
@@ -158,7 +160,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         ]);
 
         if(columnOptions.cssClass) {
-            resultCssClass = resultCssClass ? `${resultCssClass} ${columnOptions.cssClass}` : columnOptions.cssClass;
+            resultCssClass = `${resultCssClass} ${columnOptions.cssClass}`;
         }
 
         if(resultCssClass) {
@@ -183,7 +185,13 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         const $row = component.$element().closest(this._getItemSelector());
         const fileItemInfo = $row.data('item');
         this._selectItem(fileItemInfo);
-        this._showContextMenu(this._getFileItemsForContextMenu(fileItemInfo), element, fileItemInfo);
+        const target = {
+            itemData: fileItemInfo,
+            itemElement: $row,
+            isActionButton: true
+        };
+        const items = this._getFileItemsForContextMenu(fileItemInfo);
+        this._showContextMenu(items, element, event, target);
         this._activeFileActionsButton = component;
         this._activeFileActionsButton.setActive(true);
     }
@@ -274,7 +282,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             return;
         }
         let fileItems = null;
-        let item = null;
+        let item = {};
 
         if(e.row && e.row.rowType === 'data') {
             item = e.row.data;
@@ -282,8 +290,16 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             fileItems = this._getFileItemsForContextMenu(item);
         }
 
-        e.items = this._contextMenu.createContextMenuItems(fileItems, null, item);
-        this._raiseContextMenuShowing();
+        const eventArgs = extend({}, {
+            targetElement: e.target === 'content' && isDefined(e.row) ? this._filesView.getRowElement(e.rowIndex) : undefined,
+            itemData: item,
+            options: this._contextMenu.option(),
+            event: e.event,
+            isActionButton: false,
+            cancel: false
+        });
+        this._raiseContextMenuShowing(eventArgs);
+        e.items = eventArgs.cancel ? [] : this._contextMenu.createContextMenuItems(fileItems, null, item);
     }
 
     _onFilesViewSelectionChanged({ component, selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
@@ -426,6 +442,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
 
         this._filesView.option(actualOptions);
+
+        this._refreshDeferred = new Deferred();
+        return this._refreshDeferred.promise();
     }
 
     getSelectedItems() {

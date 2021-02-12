@@ -4,6 +4,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 
 import { stubInvokeMethod } from '../../helpers/scheduler/workspaceTestHelper.js';
+import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_month';
@@ -104,40 +105,58 @@ module('Renovated Render', {
                     cellCountInGroupRow: 1,
                     bottomVirtualRowHeight: undefined,
                     isGroupedAllDayPanel: false,
-                    isVirtual: false,
                     topVirtualRowHeight: undefined,
                     leftVirtualCellWidth: undefined,
-                    rightVirtualCellWidth: undefined
+                    rightVirtualCellWidth: undefined,
+                    bottomVirtualRowCount: 0,
+                    topVirtualRowCount: 0,
+                    leftVirtualCellCount: 0,
+                    rightVirtualCellCount: 0,
                 };
-                const expectedViewDataMap = [
-                    [{
+                const expectedViewDataMap = {
+                    allDayPanelMap: [{
                         cellData: {
-                            startDate: new Date(2020, 6, 29, 0, 0),
-                            endDate: new Date(2020, 6, 29, 0, 30),
-                            allDay: false,
+                            startDate: new Date(2020, 6, 29),
+                            endDate: new Date(2020, 6, 29),
+                            allDay: true,
                             groupIndex: 0,
                             index: 0,
-                            text: '12:00 AM',
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
                             key: 0,
                         },
                         position: { cellIndex: 0, rowIndex: 0 }
-                    }], [{
-                        cellData: {
-                            startDate: new Date(2020, 6, 29, 0, 30),
-                            endDate: new Date(2020, 6, 29, 1, 0),
-                            allDay: false,
-                            groupIndex: 0,
-                            index: 1,
-                            text: '',
-                            isFirstGroupCell: true,
-                            isLastGroupCell: true,
-                            key: 1,
-                        },
-                        position: { cellIndex: 0, rowIndex: 1 }
-                    }]
-                ];
+                    }],
+                    dateTableMap: [
+                        [{
+                            cellData: {
+                                startDate: new Date(2020, 6, 29, 0, 0),
+                                endDate: new Date(2020, 6, 29, 0, 30),
+                                allDay: false,
+                                groupIndex: 0,
+                                index: 0,
+                                text: '12:00 AM',
+                                isFirstGroupCell: true,
+                                isLastGroupCell: true,
+                                key: 0,
+                            },
+                            position: { cellIndex: 0, rowIndex: 0 }
+                        }], [{
+                            cellData: {
+                                startDate: new Date(2020, 6, 29, 0, 30),
+                                endDate: new Date(2020, 6, 29, 1, 0),
+                                allDay: false,
+                                groupIndex: 0,
+                                index: 1,
+                                text: '',
+                                isFirstGroupCell: true,
+                                isLastGroupCell: true,
+                                key: 1,
+                            },
+                            position: { cellIndex: 0, rowIndex: 1 }
+                        }]
+                    ]
+                };
 
                 assert.deepEqual(viewData, expectedViewData, 'correct view data');
                 assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct view data map');
@@ -200,7 +219,7 @@ module('Renovated Render', {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
                             allDay: false,
-                            text: '',
+                            text: '12:00 AM',
                             groups: { res: 2 },
                             groupIndex: 1,
                             index: 0,
@@ -235,72 +254,277 @@ module('Renovated Render', {
                     }],
                     bottomVirtualRowHeight: undefined,
                     isGroupedAllDayPanel: false,
-                    isVirtual: false,
                     topVirtualRowHeight: undefined,
                     leftVirtualCellWidth: undefined,
-                    rightVirtualCellWidth: undefined
+                    rightVirtualCellWidth: undefined,
+                    bottomVirtualRowCount: 0,
+                    topVirtualRowCount: 0,
+                    leftVirtualCellCount: 0,
+                    rightVirtualCellCount: 0,
                 };
 
-                const expectedViewDataMap = [[{
-                    cellData: {
-                        startDate: new Date(2020, 6, 29, 0, 0),
-                        endDate: new Date(2020, 6, 29, 0, 30),
-                        allDay: false,
-                        text: '12:00 AM',
-                        groups: { res: 1 },
-                        groupIndex: 0,
-                        index: 0,
-                        isFirstGroupCell: true,
-                        isLastGroupCell: true,
-                        key: 0,
-                    },
-                    position: { cellIndex: 0, rowIndex: 0 }
-                }, {
-                    cellData: {
-                        startDate: new Date(2020, 6, 29, 0, 0),
-                        endDate: new Date(2020, 6, 29, 0, 30),
-                        allDay: false,
-                        text: '',
-                        groups: { res: 2 },
-                        groupIndex: 1,
-                        index: 0,
-                        isFirstGroupCell: true,
-                        isLastGroupCell: true,
-                        key: 1,
-                    },
-                    position: { cellIndex: 1, rowIndex: 0 }
-                }], [{
-                    cellData: {
-                        startDate: new Date(2020, 6, 29, 0, 30),
-                        endDate: new Date(2020, 6, 29, 1, 0),
-                        allDay: false,
-                        text: '',
-                        groups: { res: 1 },
-                        groupIndex: 0,
-                        index: 1,
-                        isFirstGroupCell: true,
-                        isLastGroupCell: true,
-                        key: 2,
-                    },
-                    position: { cellIndex: 0, rowIndex: 1 }
-                }, {
-                    cellData: {
-                        startDate: new Date(2020, 6, 29, 0, 30),
-                        endDate: new Date(2020, 6, 29, 1, 0),
-                        allDay: false,
-                        text: '',
-                        groups: { res: 2 },
-                        groupIndex: 1,
-                        index: 1,
-                        isFirstGroupCell: true,
-                        isLastGroupCell: true,
-                        key: 3,
-                    },
-                    position: { cellIndex: 1, rowIndex: 1 }
-                }]];
+                const expectedViewDataMap = {
+                    allDayPanelMap: [
+                        {
+                            cellData: {
+                                startDate: new Date(2020, 6, 29),
+                                endDate: new Date(2020, 6, 29),
+                                allDay: true,
+                                groups: { res: 1 },
+                                groupIndex: 0,
+                                index: 0,
+                                isFirstGroupCell: true,
+                                isLastGroupCell: true,
+                                key: 0,
+                            },
+                            position: { cellIndex: 0, rowIndex: 0 }
+                        }, {
+                            cellData: {
+                                startDate: new Date(2020, 6, 29),
+                                endDate: new Date(2020, 6, 29),
+                                allDay: true,
+                                groups: { res: 2 },
+                                groupIndex: 1,
+                                index: 0,
+                                isFirstGroupCell: true,
+                                isLastGroupCell: true,
+                                key: 1,
+                            },
+                            position: { cellIndex: 1, rowIndex: 0 }
+                        }
+                    ],
+                    dateTableMap: [
+                        [{
+                            cellData: {
+                                startDate: new Date(2020, 6, 29, 0, 0),
+                                endDate: new Date(2020, 6, 29, 0, 30),
+                                allDay: false,
+                                text: '12:00 AM',
+                                groups: { res: 1 },
+                                groupIndex: 0,
+                                index: 0,
+                                isFirstGroupCell: true,
+                                isLastGroupCell: true,
+                                key: 0,
+                            },
+                            position: { cellIndex: 0, rowIndex: 0 }
+                        }, {
+                            cellData: {
+                                startDate: new Date(2020, 6, 29, 0, 0),
+                                endDate: new Date(2020, 6, 29, 0, 30),
+                                allDay: false,
+                                text: '12:00 AM',
+                                groups: { res: 2 },
+                                groupIndex: 1,
+                                index: 0,
+                                isFirstGroupCell: true,
+                                isLastGroupCell: true,
+                                key: 1,
+                            },
+                            position: { cellIndex: 1, rowIndex: 0 }
+                        }], [{
+                            cellData: {
+                                startDate: new Date(2020, 6, 29, 0, 30),
+                                endDate: new Date(2020, 6, 29, 1, 0),
+                                allDay: false,
+                                text: '',
+                                groups: { res: 1 },
+                                groupIndex: 0,
+                                index: 1,
+                                isFirstGroupCell: true,
+                                isLastGroupCell: true,
+                                key: 2,
+                            },
+                            position: { cellIndex: 0, rowIndex: 1 }
+                        }, {
+                            cellData: {
+                                startDate: new Date(2020, 6, 29, 0, 30),
+                                endDate: new Date(2020, 6, 29, 1, 0),
+                                allDay: false,
+                                text: '',
+                                groups: { res: 2 },
+                                groupIndex: 1,
+                                index: 1,
+                                isFirstGroupCell: true,
+                                isLastGroupCell: true,
+                                key: 3,
+                            },
+                            position: { cellIndex: 1, rowIndex: 1 }
+                        }]
+                    ]
+                };
 
                 assert.deepEqual(viewData, expectedViewData, 'correct view data');
                 assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');
+            });
+
+            test('should work with grouping by date', function(assert) {
+                this.createInstance({
+                    groupOrientation: 'horizontal',
+                    groupByDate: true,
+                    intervalCount: 2,
+                });
+                this.instance.option('groups', [
+                    {
+                        name: 'res',
+                        items: [
+                            { id: 1, text: 'one' }, { id: 2, text: 'two' }
+                        ]
+                    }
+                ]);
+
+                this.instance.viewDataProvider.update();
+
+                const { viewData } = this.instance.viewDataProvider;
+
+                const expectedViewData = {
+                    cellCountInGroupRow: 2,
+                    groupedData: [{
+                        allDayPanel: [{
+                            allDay: true,
+                            startDate: new Date(2020, 6, 29),
+                            endDate: new Date(2020, 6, 29),
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 0,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 0,
+                        }, {
+                            allDay: true,
+                            startDate: new Date(2020, 6, 29),
+                            endDate: new Date(2020, 6, 29),
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 0,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 1,
+                        }, {
+                            allDay: true,
+                            startDate: new Date(2020, 6, 30),
+                            endDate: new Date(2020, 6, 30),
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 1,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 2,
+                        }, {
+                            allDay: true,
+                            startDate: new Date(2020, 6, 30),
+                            endDate: new Date(2020, 6, 30),
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 1,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 3,
+                        }],
+                        dateTable: [[{
+                            startDate: new Date(2020, 6, 29, 0, 0),
+                            endDate: new Date(2020, 6, 29, 0, 30),
+                            allDay: false,
+                            text: '12:00 AM',
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 0,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 0,
+                        }, {
+                            startDate: new Date(2020, 6, 29, 0, 0),
+                            endDate: new Date(2020, 6, 29, 0, 30),
+                            allDay: false,
+                            text: '12:00 AM',
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 0,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 1,
+                        }, {
+                            startDate: new Date(2020, 6, 30, 0, 0),
+                            endDate: new Date(2020, 6, 30, 0, 30),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 1,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 2,
+                        }, {
+                            startDate: new Date(2020, 6, 30, 0, 0),
+                            endDate: new Date(2020, 6, 30, 0, 30),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 1,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 3,
+                        }], [{
+                            startDate: new Date(2020, 6, 29, 0, 30),
+                            endDate: new Date(2020, 6, 29, 1, 0),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 2,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 4,
+                        }, {
+                            startDate: new Date(2020, 6, 29, 0, 30),
+                            endDate: new Date(2020, 6, 29, 1, 0),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 2,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 5,
+                        }, {
+                            startDate: new Date(2020, 6, 30, 0, 30),
+                            endDate: new Date(2020, 6, 30, 1, 0),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 1 },
+                            groupIndex: 0,
+                            index: 3,
+                            isFirstGroupCell: true,
+                            isLastGroupCell: false,
+                            key: 6,
+                        }, {
+                            startDate: new Date(2020, 6, 30, 0, 30),
+                            endDate: new Date(2020, 6, 30, 1, 0),
+                            allDay: false,
+                            text: '',
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            index: 3,
+                            isFirstGroupCell: false,
+                            isLastGroupCell: true,
+                            key: 7,
+                        }]],
+                        groupIndex: 0,
+                        isGroupedAllDayPanel: false,
+                    }],
+                    bottomVirtualRowHeight: undefined,
+                    isGroupedAllDayPanel: false,
+                    topVirtualRowHeight: undefined,
+                    leftVirtualCellWidth: undefined,
+                    rightVirtualCellWidth: undefined,
+                    bottomVirtualRowCount: 0,
+                    topVirtualRowCount: 0,
+                    leftVirtualCellCount: 0,
+                    rightVirtualCellCount: 0,
+                };
+
+                assert.deepEqual(viewData, expectedViewData, 'correct view data');
             });
 
             test('should work with vertical grouping', function(assert) {
@@ -397,91 +621,95 @@ module('Renovated Render', {
                     }],
                 };
 
-                const expectedViewDataMap = [
-                    [{
-                        cellData: {
-                            allDay: true,
-                            startDate: new Date(2020, 6, 29),
-                            endDate: new Date(2020, 6, 29),
-                            groups: { res: 1 },
-                            groupIndex: 0,
-                            index: 0,
-                            isFirstGroupCell: true,
-                            isLastGroupCell: false,
-                            key: 0,
-                        },
-                        position: { rowIndex: 0, cellIndex: 0 }
-                    }], [{
-                        cellData: {
-                            startDate: new Date(2020, 6, 29, 0, 0),
-                            endDate: new Date(2020, 6, 29, 0, 30),
-                            allDay: false,
-                            text: '12:00 AM',
-                            groups: { res: 1 },
-                            groupIndex: 0,
-                            index: 0,
-                            isFirstGroupCell: true,
-                            isLastGroupCell: false,
-                            key: 0,
-                        },
-                        position: { rowIndex: 1, cellIndex: 0 }
-                    }], [{
-                        cellData: {
-                            startDate: new Date(2020, 6, 29, 0, 30),
-                            endDate: new Date(2020, 6, 29, 1, 0),
-                            allDay: false,
-                            text: '',
-                            groups: { res: 1 },
-                            groupIndex: 0,
-                            index: 1,
-                            isFirstGroupCell: false,
-                            isLastGroupCell: true,
-                            key: 1,
-                        },
-                        position: { rowIndex: 2, cellIndex: 0 }
-                    }], [{
-                        cellData: {
-                            allDay: true,
-                            startDate: new Date(2020, 6, 29),
-                            endDate: new Date(2020, 6, 29),
-                            groups: { res: 2 },
-                            groupIndex: 1,
-                            index: 0,
-                            isFirstGroupCell: true,
-                            isLastGroupCell: false,
-                            key: 2,
-                        },
-                        position: { rowIndex: 3, cellIndex: 0 }
-                    }], [{
-                        cellData: {
-                            startDate: new Date(2020, 6, 29, 0, 0),
-                            endDate: new Date(2020, 6, 29, 0, 30),
-                            allDay: false,
-                            text: '12:00 AM',
-                            groups: { res: 2 },
-                            groupIndex: 1,
-                            index: 0,
-                            isFirstGroupCell: true,
-                            isLastGroupCell: false,
-                            key: 2,
-                        },
-                        position: { rowIndex: 4, cellIndex: 0 }
-                    }], [{
-                        cellData: {
-                            startDate: new Date(2020, 6, 29, 0, 30),
-                            endDate: new Date(2020, 6, 29, 1, 0),
-                            allDay: false,
-                            text: '',
-                            groups: { res: 2 },
-                            groupIndex: 1,
-                            index: 1,
-                            isFirstGroupCell: false,
-                            isLastGroupCell: true,
-                            key: 3,
-                        },
-                        position: { rowIndex: 5, cellIndex: 0 }
-                    }]
-                ];
+                const expectedViewDataMap = {
+                    allDayPanelMap: [],
+                    dateTableMap:
+                    [
+                        [{
+                            cellData: {
+                                allDay: true,
+                                startDate: new Date(2020, 6, 29),
+                                endDate: new Date(2020, 6, 29),
+                                groups: { res: 1 },
+                                groupIndex: 0,
+                                index: 0,
+                                isFirstGroupCell: true,
+                                isLastGroupCell: false,
+                                key: 0,
+                            },
+                            position: { rowIndex: 0, cellIndex: 0 }
+                        }], [{
+                            cellData: {
+                                startDate: new Date(2020, 6, 29, 0, 0),
+                                endDate: new Date(2020, 6, 29, 0, 30),
+                                allDay: false,
+                                text: '12:00 AM',
+                                groups: { res: 1 },
+                                groupIndex: 0,
+                                index: 0,
+                                isFirstGroupCell: true,
+                                isLastGroupCell: false,
+                                key: 0,
+                            },
+                            position: { rowIndex: 1, cellIndex: 0 }
+                        }], [{
+                            cellData: {
+                                startDate: new Date(2020, 6, 29, 0, 30),
+                                endDate: new Date(2020, 6, 29, 1, 0),
+                                allDay: false,
+                                text: '',
+                                groups: { res: 1 },
+                                groupIndex: 0,
+                                index: 1,
+                                isFirstGroupCell: false,
+                                isLastGroupCell: true,
+                                key: 1,
+                            },
+                            position: { rowIndex: 2, cellIndex: 0 }
+                        }], [{
+                            cellData: {
+                                allDay: true,
+                                startDate: new Date(2020, 6, 29),
+                                endDate: new Date(2020, 6, 29),
+                                groups: { res: 2 },
+                                groupIndex: 1,
+                                index: 0,
+                                isFirstGroupCell: true,
+                                isLastGroupCell: false,
+                                key: 2,
+                            },
+                            position: { rowIndex: 3, cellIndex: 0 }
+                        }], [{
+                            cellData: {
+                                startDate: new Date(2020, 6, 29, 0, 0),
+                                endDate: new Date(2020, 6, 29, 0, 30),
+                                allDay: false,
+                                text: '12:00 AM',
+                                groups: { res: 2 },
+                                groupIndex: 1,
+                                index: 0,
+                                isFirstGroupCell: true,
+                                isLastGroupCell: false,
+                                key: 2,
+                            },
+                            position: { rowIndex: 4, cellIndex: 0 }
+                        }], [{
+                            cellData: {
+                                startDate: new Date(2020, 6, 29, 0, 30),
+                                endDate: new Date(2020, 6, 29, 1, 0),
+                                allDay: false,
+                                text: '',
+                                groups: { res: 2 },
+                                groupIndex: 1,
+                                index: 1,
+                                isFirstGroupCell: false,
+                                isLastGroupCell: true,
+                                key: 3,
+                            },
+                            position: { rowIndex: 5, cellIndex: 0 }
+                        }]
+                    ]
+                };
 
                 assert.deepEqual(viewData.groupedData[0].allDayPanel, expectedViewData.groupedData[0].allDayPanel, 'correct allDayPanel');
                 assert.deepEqual(viewData.groupedData[0].dateTable, expectedViewData.groupedData[0].dateTable, 'correct dateTable');
@@ -581,7 +809,7 @@ module('Renovated Render', {
     });
 
     module('getCellData', () => {
-        ['standard', 'virtual'].forEach(scrollingMode => {
+        supportedScrollingModes.forEach(scrollingMode => {
             test(`should return cell data in basic case if ${scrollingMode} scrolling mode`, function(assert) {
                 this.createInstance({
                     showAllDayPanel: false,

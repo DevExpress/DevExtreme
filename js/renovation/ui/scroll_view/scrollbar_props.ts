@@ -1,6 +1,7 @@
 import {
   ComponentBindings,
   OneWay,
+  Event,
 } from 'devextreme-generator/component_declaration/common';
 
 import { ScrollableDirection, ScrollableShowScrollbar } from './types.d';
@@ -34,7 +35,11 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() bounceEnabled = true;
 
+  @OneWay() inertiaEnabled = true;
+
   @OneWay() scrollByThumb = false;
 
   @OneWay() scrollScrollbar: ScrollableShowScrollbar = 'onScroll';
+
+  @Event() onChangeVisibility?: (args: boolean) => void;
 }

@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay, Slot,
+  Component, ComponentBindings, CSSAttributes, Fragment, JSXComponent, OneWay, Slot,
 } from 'devextreme-generator/component_declaration/common';
 import { addHeightToStyle } from '../utils';
 import { VirtualRow } from './virtual-row';
@@ -26,7 +26,56 @@ export const viewFunction = ({
     style={style}
   >
     <tbody>
-      {hasTopVirtualRow && (
+      {/*
+        This is a workaround for https://github.com/preactjs/preact/issues/2987
+        TODO: remove once we start using inferno
+      */}
+      {hasTopVirtualRow && hasBottomVirtualRow && (
+        <Fragment>
+          <VirtualRow
+            height={topVirtualRowHeight}
+            cellsCount={virtualCellsCount}
+            leftVirtualCellWidth={leftVirtualCellWidth}
+            rightVirtualCellWidth={rightVirtualCellWidth}
+          />
+          {children}
+          <VirtualRow
+            height={bottomVirtualRowHeight}
+            cellsCount={virtualCellsCount}
+            leftVirtualCellWidth={leftVirtualCellWidth}
+            rightVirtualCellWidth={rightVirtualCellWidth}
+          />
+        </Fragment>
+      )}
+      {hasTopVirtualRow && !hasBottomVirtualRow && (
+        <Fragment>
+          <VirtualRow
+            height={topVirtualRowHeight}
+            cellsCount={virtualCellsCount}
+            leftVirtualCellWidth={leftVirtualCellWidth}
+            rightVirtualCellWidth={rightVirtualCellWidth}
+          />
+          {children}
+        </Fragment>
+      )}
+      {!hasTopVirtualRow && hasBottomVirtualRow && (
+        <Fragment>
+          {children}
+          <VirtualRow
+            height={bottomVirtualRowHeight}
+            cellsCount={virtualCellsCount}
+            leftVirtualCellWidth={leftVirtualCellWidth}
+            rightVirtualCellWidth={rightVirtualCellWidth}
+          />
+        </Fragment>
+      )}
+      {!hasTopVirtualRow && !hasBottomVirtualRow && (
+        <Fragment>
+          {children}
+        </Fragment>
+      )}
+
+      {/* {hasTopVirtualRow && (
         <VirtualRow
           height={topVirtualRowHeight}
           cellsCount={virtualCellsCount}
@@ -42,7 +91,7 @@ export const viewFunction = ({
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}
         />
-      )}
+      )} */}
     </tbody>
   </table>
 );

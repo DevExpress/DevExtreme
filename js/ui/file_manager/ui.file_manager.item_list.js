@@ -120,8 +120,8 @@ class FileManagerItemListBase extends Widget {
         this._actions.onSelectedItemOpened({ fileItemInfo });
     }
 
-    _raiseContextMenuShowing() {
-        this._actions.onContextMenuShowing();
+    _raiseContextMenuShowing(e) {
+        this._actions.onContextMenuShowing(e);
     }
 
     _tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
@@ -191,8 +191,8 @@ class FileManagerItemListBase extends Widget {
         return devices.real().deviceType === 'desktop';
     }
 
-    _showContextMenu(items, element, offset, targetFileItem) {
-        this._contextMenu.showAt(items, element, offset, targetFileItem);
+    _showContextMenu(items, element, event, target) {
+        this._contextMenu.showAt(items, element, event, target);
     }
 
     get _contextMenu() {

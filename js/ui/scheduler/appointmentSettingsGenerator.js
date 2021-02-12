@@ -139,15 +139,15 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         const isChangeOffsetInRange = startDateRangeOffset !== endDateRangeOffset;
 
         if(isChangeOffsetInRange) {
-            return appointmentList.map(a => {
-                let diffStartDateOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common - this.timeZoneCalculator.getOffsets(a.startDate).common;
-                let diffEndDateOffset = this.timeZoneCalculator.getOffsets(appointment.endDate).common - this.timeZoneCalculator.getOffsets(a.endDate).common;
+            return appointmentList.map(item => {
+                let diffStartDateOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common - this.timeZoneCalculator.getOffsets(item.startDate).common;
+                let diffEndDateOffset = this.timeZoneCalculator.getOffsets(appointment.endDate).common - this.timeZoneCalculator.getOffsets(item.endDate).common;
 
-                diffStartDateOffset = this._getProcessedNotNativeDateIfCrossDST(a.startDate, diffStartDateOffset);
-                diffEndDateOffset = this._getProcessedNotNativeDateIfCrossDST(a.endDate, diffEndDateOffset);
+                diffStartDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.startDate, diffStartDateOffset);
+                diffEndDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.endDate, diffEndDateOffset);
 
-                const newStartDate = new Date(a.startDate.getTime() + diffStartDateOffset * toMs('hour'));
-                let newEndDate = new Date(a.endDate.getTime() + diffEndDateOffset * toMs('hour'));
+                const newStartDate = new Date(item.startDate.getTime() + diffStartDateOffset * toMs('hour'));
+                let newEndDate = new Date(item.endDate.getTime() + diffEndDateOffset * toMs('hour'));
 
                 const testNewStartDate = this.timeZoneCalculator.createDate(newStartDate, { path: 'toGrid' });
                 const testNewEndDate = this.timeZoneCalculator.createDate(newEndDate, { path: 'toGrid' });
@@ -157,6 +157,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 }
 
                 return {
+                    ...item,
                     startDate: newStartDate,
                     endDate: newEndDate
                 };
@@ -217,7 +218,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _createExtremeRecurrenceDates(rawAppointment) {
-        const dateRange = this.workspace.getDateRange();
+        const dateRange = this.scheduler._workSpace.getDateRange();
 
         const startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment)
             ? dateUtils.trimTime(dateRange[0])
@@ -225,13 +226,13 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         const commonTimeZone = this.scheduler.option('timeZone');
 
-        const minRecurrenceDate = commonTimeZone ?
-            this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' }) :
-            startViewDate;
+        const minRecurrenceDate = commonTimeZone
+            ? this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' })
+            : startViewDate;
 
-        const maxRecurrenceDate = commonTimeZone ?
-            this.timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' }) :
-            dateRange[1];
+        const maxRecurrenceDate = commonTimeZone
+            ? this.timeZoneCalculator.createDate(dateRange[1], { path: 'fromGrid' })
+            : dateRange[1];
 
         return [
             minRecurrenceDate,
@@ -386,7 +387,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
                 return this.viewDataProvider.isGroupIntersectDateInterval(groupIndex, startDate, endDate);
             });
 
-        if(recurrent && this.isVerticalGrouping) {
+        if(recurrent) {
             return this._createRecurrentAppointmentInfos(appointments, resources, allDay);
         }
 
@@ -464,7 +465,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     _createRecurrenceAppointments(appointment, resources) {
         const { duration } = appointment;
         const result = [];
-        const groupIndices = this.isVerticalGrouping && this.workspace._getGroupCount()
+        const groupIndices = this.workspace._getGroupCount()
             ? this._getGroupIndices(resources)
             : [0];
 

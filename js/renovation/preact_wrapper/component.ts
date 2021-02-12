@@ -7,6 +7,7 @@ import DOMComponent from '../../core/dom_component';
 import { extend } from '../../core/utils/extend';
 import { wrapElement, removeDifferentElements } from './utils';
 import { getPublicElement } from '../../core/element';
+import { isDefined } from '../../core/utils/type';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
@@ -227,7 +228,7 @@ export default class PreactWrapper extends DOMComponent {
 
       action = function (actArgs: { [name: string]: any }) {
         Object.keys(actArgs).forEach((name) => {
-          if (domAdapter.isNode(actArgs[name])) {
+          if (isDefined(actArgs[name]) && domAdapter.isNode(actArgs[name])) {
             actArgs[name] = getPublicElement($(actArgs[name]));
           }
         });

@@ -18,6 +18,7 @@ import typeUtils from 'core/utils/type';
 import uiDateUtils from 'ui/date_box/ui.date_utils';
 import { noop } from 'core/utils/common';
 import { logger } from 'core/utils/console';
+import { normalizeKeyName } from 'events/utils/index';
 
 import '../../helpers/calendarFixtures.js';
 
@@ -56,7 +57,6 @@ const DATEBOX_ADAPTIVITY_MODE_CLASS = 'dx-datebox-adaptivity-mode';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
-const TODAY_CELL_CLASS = 'dx-calendar-today';
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_BUTTON_VISIBLE_CLASS = 'dx-dropdowneditor-button-visible';
@@ -64,6 +64,9 @@ const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const POPUP_CLASS = 'dx-popup';
 const LIST_CLASS = 'dx-list';
+const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
+const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
 
 const CALENDAR_HOURS_NUMBERBOX_SELECTOR = '.dx-numberbox-spin-down';
 const CALENDAR_APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
@@ -263,7 +266,7 @@ QUnit.module('datebox tests', moduleConfig, () => {
         });
 
         const dateBox = $dateBox.dxDateBox('instance');
-        const $clearButton = $dateBox.find('.dx-clear-button-area');
+        const $clearButton = $dateBox.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
 
         assert.ok(!dateBox.option('opened'), 'popup is closed');
         $($clearButton).trigger('dxclick');
@@ -279,32 +282,13 @@ QUnit.module('datebox tests', moduleConfig, () => {
         });
         const instance = $dateBox.dxDateBox('instance');
         const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const $clearButton = $dateBox.find('.dx-clear-button-area');
+        const $clearButton = $dateBox.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
 
         $($input.val('asd')).trigger('change');
         $($clearButton).trigger('dxclick');
 
         assert.equal(instance.option('text'), '', 'dateBox \'text\' option is clear');
         assert.equal($input.val(), '', 'dateBox input is empty');
-    });
-
-    QUnit.test('clear button press should save value change event', function(assert) {
-        const onValueChanged = sinon.spy();
-
-        const $dateBox = $('#dateBox').dxDateBox({
-            type: 'date',
-            pickerType: 'calendar',
-            showClearButton: true,
-            onValueChanged,
-            value: new Date()
-        });
-
-        const clearButton = $dateBox.find('.dx-clear-button-area');
-
-        $(clearButton).trigger('dxclick');
-
-        assert.equal(onValueChanged.callCount, 2, 'value changed event was fired twice');
-        assert.ok(onValueChanged.getCall(1).args[0].event, 'event was saved');
     });
 
     QUnit.test('out of range value should not be marked as invalid on init', function(assert) {
@@ -350,7 +334,7 @@ QUnit.module('datebox tests', moduleConfig, () => {
         const dateBox = $dateBox.dxDateBox('instance');
         const $input = $dateBox.find('.' + TEXTEDITOR_INPUT_CLASS);
         const keyboard = keyboardMock($input);
-        const $clearButton = $dateBox.find('.dx-clear-button-area');
+        const $clearButton = $dateBox.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
 
         keyboard.type('123').press('enter');
         assert.notOk(dateBox.option('isValid'), 'widget is invalid');
@@ -2273,36 +2257,6 @@ QUnit.module('datebox w/ calendar', {
         this.fixture.dateBox.option('value', new Date(2015, 6, 14));
     });
 
-    QUnit.test('ValueChanged action should have jQuery event as a parameter when value was changed by user interaction', function(assert) {
-        const valueChangedHandler = sinon.stub();
-
-        this.fixture.dateBox.option({
-            onValueChanged: valueChangedHandler,
-            opened: true
-        });
-
-        $('.dx-calendar-cell').eq(0).trigger('dxclick');
-
-        assert.deepEqual(this.fixture.dateBox.option('value'), new Date(2015, 10, 29), 'value has been changed');
-        assert.ok(valueChangedHandler.getCall(0).args[0].event, 'Event is defined');
-    });
-
-    QUnit.test('valueChangeEvent cache should be cleared after the value changing', function(assert) {
-        const valueChangedHandler = sinon.stub();
-
-        this.fixture.dateBox.option({
-            onValueChanged: valueChangedHandler,
-            opened: true
-        });
-
-        $('.dx-calendar-cell').eq(0).trigger('dxclick');
-        this.fixture.dateBox.option('value', new Date());
-
-        assert.equal(valueChangedHandler.callCount, 2, 'valueChangeEventHandler was called 2 times');
-        assert.ok(valueChangedHandler.getCall(0).args[0].event, 'Event exists in first call via user interaction');
-        assert.notOk(valueChangedHandler.getCall(1).args[0].event, 'Event does not exist in second call via api');
-    });
-
     QUnit.test('dateBox\'s \'min\' and \'max\' options equal to undefined (T171537)', function(assert) {
         assert.strictEqual(this.fixture.dateBox.option('min'), undefined);
         assert.strictEqual(this.fixture.dateBox.option('max'), undefined);
@@ -2351,7 +2305,7 @@ QUnit.module('datebox w/ calendar', {
             }]
         });
 
-        const cell = dateBox._popup._wrapper().find('.dx-calendar-cell');
+        const cell = dateBox._popup._wrapper().find(`.${CALENDAR_CELL_CLASS}`);
 
         assert.ok(dateBox.option('isValid'));
         assert.strictEqual(dateBox.option('text'), '');
@@ -2379,7 +2333,7 @@ QUnit.module('datebox w/ calendar', {
             })
             .dxDateBox('instance');
 
-        $('.dx-calendar-cell').eq(0).trigger('dxclick');
+        $(`.${CALENDAR_CELL_CLASS}`).eq(0).trigger('dxclick');
         $(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
 
         assert.notOk(dateBox.option('opened'));
@@ -3329,7 +3283,7 @@ QUnit.module('datebox with time component', {
 
         dateBox.open();
 
-        $('.dx-calendar-cell').first().trigger('dxclick');
+        $(`.${CALENDAR_CELL_CLASS}`).first().trigger('dxclick');
         $(CALENDAR_APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
 
         assert.equal(dateBox.option('value').getSeconds(), 0, 'seconds has zero value');
@@ -3461,19 +3415,61 @@ QUnit.module('datebox with time component', {
         assert.ok(amPmEditor.hasClass('dx-editor-underlined'));
     });
 
-    QUnit.test('datebox with the \'datetime\' type should have an \'event\' parameter of the ValueChanged event', function(assert) {
-        $('#dateBox').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendar',
-            onValueChanged: ({ event }) => {
-                assert.ok(event, 'event field is exist');
-                assert.strictEqual(event.type, 'dxclick', 'it\'s a \'dxclick\' event');
-            },
-            opened: true
-        });
+    QUnit.test('dateBox should update time on enter pressing (T969012)', function(assert) {
+        const date = new Date('2015/1/25');
+        const expectedDate = new Date(date);
+        expectedDate.setHours(11, 28);
 
-        $(`.${TODAY_CELL_CLASS}`).trigger('dxclick');
-        $(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            value: date,
+            opened: true,
+            pickerType: 'calendar'
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+        const $content = $(dateBox.content());
+        const timeView = $content
+            .find(`.${TIMEVIEW_CLASS}`)
+            .dxTimeView('instance');
+
+        timeView.option('value', expectedDate);
+        keyboard
+            .focus()
+            .press('enter');
+
+        assert.deepEqual(dateBox.option('value'), expectedDate, 'dateBox value was updated');
+    });
+
+    QUnit.test('dateBox should update date and time on enter pressing after navigation using arrows', function(assert) {
+        const date = new Date('2015/1/25');
+        const time = new Date(date);
+        time.setHours(11, 28);
+
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            value: date,
+            opened: true,
+            pickerType: 'calendar'
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+        const $content = $(dateBox.content());
+        const timeView = $content
+            .find(`.${TIMEVIEW_CLASS}`)
+            .dxTimeView('instance');
+
+        keyboard.press('up');
+        timeView.option('value', time);
+        keyboard
+            .focus()
+            .press('enter');
+
+        const expectedDate = new Date(time);
+        expectedDate.setDate(18);
+        assert.deepEqual(dateBox.option('value'), expectedDate, 'dateBox value was updated');
     });
 });
 
@@ -3943,23 +3939,6 @@ QUnit.module('datebox w/ time list', {
         this.dateBox.open();
         $items.eq(3).trigger('dxclick');
         assert.strictEqual($input.val(), $items.eq(3).text(), 'new time is applied');
-    });
-
-    QUnit.test('event field should be defined after value has been changed via List', function(assert) {
-        assert.expect(2);
-
-        this.dateBox.option({
-            opened: true,
-            onValueChanged: ({ event }) => {
-                assert.ok(!!event, 'event field is defined');
-                assert.strictEqual(event.type, 'dxclick');
-            }
-        });
-
-        $(this.dateBox.content())
-            .find('.dx-list-item')
-            .first()
-            .trigger('dxclick');
     });
 });
 
@@ -4624,59 +4603,6 @@ QUnit.module('keyboard navigation', {
 
         const selectedDate = this.dateBox.option('value');
         assert.equal(selectedDate.getDate(), 1, 'day is right');
-    });
-
-    QUnit.testInActiveWindow('valueChangeEvent should have Event when enter key was pressed', function(assert) {
-        let $dateBox;
-
-        try {
-            const valueChangedHandler = sinon.stub();
-
-            $dateBox = $('<div>').appendTo('body').dxDateBox({
-                pickerType: 'calendar',
-                focusStateEnabled: true,
-                onValueChanged: valueChangedHandler,
-                opened: true
-            });
-
-            const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            const kb = keyboardMock($input);
-
-            $input.focusin();
-            kb.press('enter');
-
-            assert.ok(valueChangedHandler.getCall(0).args[0].event, 'Event exists');
-        } finally {
-            $dateBox.remove();
-        }
-    });
-
-    QUnit.testInActiveWindow('onValueChanged fires after clearing and enter key press', function(assert) {
-        const valueChanged = sinon.stub();
-
-        this.dateBox = this.$dateBox
-            .dxDateBox({
-                value: null,
-                pickerType: 'calendar',
-                type: 'date',
-                focusStateEnabled: true,
-                opened: true,
-                onValueChanged: valueChanged
-            }).dxDateBox('instance');
-
-        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        $input.focusin();
-
-        $('.dx-calendar .dx-calendar-cell').eq(12).trigger('dxclick');
-
-        // attempt to simulate real clearing
-        $input.val('');
-        this.dateBox.option('text', '');
-
-        $($input).trigger($.Event('keydown', { key: 'Enter' }));
-
-        assert.equal(valueChanged.callCount, 2, 'valueChanged is called');
     });
 
     QUnit.test('Enter key press prevents default when popup in opened', function(assert) {
@@ -5804,7 +5730,7 @@ QUnit.module('DateBox number and string value support', {
         const dateBox = $dateBox.dxDateBox('instance');
         dateBox.open();
 
-        $('.dx-calendar-cell').eq(0).trigger('dxclick');
+        $(`.${CALENDAR_CELL_CLASS}`).eq(0).trigger('dxclick');
 
         assert.deepEqual(dateBox.option('value'), new Date(2017, 10, 26), 'value is changed');
 
@@ -5854,5 +5780,170 @@ testModule('native picker', function() {
                 assert.strictEqual(currentDate.getMinutes(), 1);
             }
         });
+    });
+});
+
+QUnit.module('valueChanged handler should receive correct event', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+
+        this.valueChangedHandler = sinon.stub();
+        const initialOptions = {
+            opened: true,
+            onValueChanged: this.valueChangedHandler,
+            pickerType: 'calendar',
+            type: 'date'
+        };
+        this.init = (options) => {
+            this.$element = $('#dateBox').dxDateBox(options);
+            this.instance = this.$element.dxDateBox('instance');
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            this.keyboard = keyboardMock(this.$input);
+        };
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', new Date(1991, 5, 5));
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, initialOptions, options));
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+
+        this.init(initialOptions);
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+}, () => {
+    test('on runtime change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    [false, true].forEach(useMaskBehavior => {
+        test(`on change when useMaskBehavior=${useMaskBehavior}`, function(assert) {
+            this.reinit({ useMaskBehavior });
+
+            this.keyboard
+                .type('10/10/2020')
+                .change();
+
+            this.checkEvent(assert, 'change', this.$input);
+            this.testProgramChange(assert);
+        });
+
+        test(`on enter press after typing when useMaskBehavior=${useMaskBehavior}`, function(assert) {
+            this.reinit({ useMaskBehavior });
+
+            this.keyboard
+                .type('10/10/2020')
+                .press('enter');
+
+            this.checkEvent(assert, 'keydown', this.$input, 'enter');
+            this.testProgramChange(assert);
+        });
+
+        test(`on enter press after clearing when useMaskBehavior=${useMaskBehavior}`, function(assert) {
+            this.reinit({ useMaskBehavior, value: new Date() });
+
+            // attempt to simulate real clearing
+            this.$input.val('');
+            this.instance.option('text', '');
+
+            this.$input.trigger($.Event('keydown', { key: 'Enter' }));
+
+            this.checkEvent(assert, 'keydown', this.$input, 'enter');
+            this.testProgramChange(assert);
+        });
+
+        QUnit.skip(`on calendar cell selecting using enter when useMaskBehavior=${useMaskBehavior}`, function(assert) {
+            this.reinit({ useMaskBehavior });
+            const $calendarCell = $('.dx-calendar-today');
+
+            this.keyboard.press('enter');
+
+            this.checkEvent(assert, 'keydown', $calendarCell, 'enter');
+            this.testProgramChange(assert);
+        });
+    });
+
+    ['calendar', 'rollers'].forEach(pickerType => {
+        ['date', 'datetime', 'time'].forEach(type => {
+            QUnit.test(`on click on apply button if pickerType=${pickerType} and type=${type}`, function(assert) {
+                this.reinit({ applyValueMode: 'useButtons', pickerType, type });
+                const $applyButton = $(this.instance.content()).parent().find(CALENDAR_APPLY_BUTTON_SELECTOR);
+
+                if(pickerType === 'calendar' && type === 'date') {
+                    $(`.${CALENDAR_CELL_CLASS}`).eq(0).trigger('dxclick');
+                }
+                $applyButton.trigger('dxclick');
+
+                this.checkEvent(assert, 'dxclick', $applyButton);
+                this.testProgramChange(assert);
+            });
+        });
+    });
+
+    QUnit.test('on click on clear button', function(assert) {
+        this.reinit({ showClearButton: true, value: new Date() });
+        const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
+
+        $clearButton.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', $clearButton);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.module('list integration', {
+        beforeEach: function() {
+            this.reinit({ pickerType: 'list', type: 'time' });
+            this.$listItem = $(this.instance.content()).find(LIST_ITEM_SELECTOR).eq(0);
+        }
+    }, () => {
+        QUnit.test('on list item click', function(assert) {
+            this.$listItem.trigger('dxclick');
+
+            this.checkEvent(assert, 'dxclick', this.$listItem);
+            this.testProgramChange(assert);
+        });
+
+        QUnit.test('on list item selecting using enter', function(assert) {
+            this.keyboard
+                .press('down')
+                .press('enter');
+
+            this.checkEvent(assert, 'keydown', this.$listItem, 'enter');
+            this.testProgramChange(assert);
+        });
+    });
+
+    QUnit.test('on calendar cell click', function(assert) {
+        const $calendarCell = $(`.${CALENDAR_CELL_CLASS}`).eq(0);
+        $calendarCell.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', $calendarCell);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on today button', function(assert) {
+        this.reinit({ calendarOptions: { showTodayButton: true } });
+        const $todayButton = $(this.instance.content()).parent().find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
+
+        $todayButton.trigger('dxclick');
+
+        this.checkEvent(assert, 'dxclick', $todayButton);
+        this.testProgramChange(assert);
     });
 });

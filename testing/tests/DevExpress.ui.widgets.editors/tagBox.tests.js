@@ -17,6 +17,7 @@ import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
 import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -585,23 +586,6 @@ QUnit.module('tags', moduleSetup, () => {
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'one item is chosen');
     });
 
-    QUnit.test('clear button should save valueChangeEvent', function(assert) {
-        const valueChangedHandler = sinon.spy();
-
-        const $element = $('#tagBox').dxTagBox({
-            items: [1],
-            showClearButton: true,
-            value: [1],
-            onValueChanged: valueChangedHandler
-        });
-
-        const $clearButton = $element.find('.dx-clear-button-area');
-        $clearButton.trigger('dxclick');
-
-        assert.equal(valueChangedHandler.callCount, 1, 'valueChangedHandler has been called');
-        assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
-    });
-
     QUnit.test('clear button should also clear the input value', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: [1],
@@ -679,46 +663,36 @@ QUnit.module('tags', moduleSetup, () => {
         assert.equal($tag.text(), '', 'tag has correct text');
     });
 
-    QUnit.test('Tag should repaint tags on \'repaint\' if dataSource is reloaded (T873372)', function(assert) {
-        let items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }];
-        const dataSource = new DataSource({
-            store: new CustomStore({
-                key: 'value',
-                load: function() {
-                    const deferred = $.Deferred();
-                    deferred.resolve(items);
-                    return deferred.promise();
-                }
-            }),
-            paginate: true
-        });
-        const $tagBox = $('#tagBox').dxTagBox({
-            dataSource,
-            displayExpr: 'name',
-            valueExpr: 'value',
-            value: [1]
-        });
-        const tagBox = $tagBox.dxTagBox('instance');
-        this.clock.tick();
-        items = [{ name: 'updated', value: 1 }];
-        dataSource.reload();
-        tagBox.repaint();
+    [true, false].forEach((deferRenderingValue) => {
+        QUnit.test(`Tag should repaint tags on 'repaint' if dataSource is reloaded and deferRendering: ${deferRenderingValue} (T873372)`, function(assert) {
+            let items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }];
+            const dataSource = new DataSource({
+                store: new CustomStore({
+                    key: 'value',
+                    load: function() {
+                        const deferred = $.Deferred();
+                        deferred.resolve(items);
+                        return deferred.promise();
+                    }
+                }),
+                paginate: true
+            });
+            const $tagBox = $('#tagBox').dxTagBox({
+                dataSource,
+                displayExpr: 'name',
+                valueExpr: 'value',
+                deferRendering: deferRenderingValue,
+                value: [1]
+            });
+            const tagBox = $tagBox.dxTagBox('instance');
+            this.clock.tick();
+            items = [{ name: 'updated', value: 1 }];
+            dataSource.reload();
+            tagBox.repaint();
 
-        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
-        assert.equal($tag.text(), 'updated', 'tag has updated text');
-    });
-
-    QUnit.test('onValueChanged has dxclick event on remove button click', function(assert) {
-        const $element = $('#tagBox').dxTagBox({
-            value: ['123'],
-            onValueChanged: function(e) {
-                assert.equal(e.event.type, 'dxclick', 'correct event type');
-                assert.deepEqual(e.event.target, $removeButton.get(0), 'correct target element');
-            }
+            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+            assert.equal($tag.text(), 'updated', 'tag has updated text');
         });
-
-        const $removeButton = $element.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).last();
-        $($removeButton).trigger('dxclick');
     });
 });
 
@@ -1545,28 +1519,6 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         assert.equal($tags.length, 0, 'tags should not be rendered before button click');
         assert.equal($listItems.length, 1, 'list item should be selected after enter press');
         assert.equal(checkbox.option('value'), true, 'checkbox is checked');
-    });
-
-    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', function(assert) {
-        const valueChangedStub = sinon.stub();
-        const $tagBox = $('#tagBox').dxTagBox({
-            acceptCustomValue: true,
-            items: [1, 2, 3],
-            onValueChanged: valueChangedStub,
-            onCustomItemCreating: (e) => {
-                e.customItem = e.text;
-            }
-        });
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-
-        keyboardMock($input)
-            .type('test')
-            .press('enter');
-
-        const event = valueChangedStub.getCall(0).args[0].event;
-        assert.ok(valueChangedStub.calledOnce);
-        assert.ok(!!event);
-        assert.strictEqual(event.type, 'keydown');
     });
 });
 
@@ -4038,7 +3990,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchTimeout: TIME_TO_WAIT,
             opened: true
         });
-        const tagBox = $('#tagBox').dxTagBox('instance');
+        const tagBox = $tagBox.dxTagBox('instance');
 
         this.clock.tick(TIME_TO_WAIT * 3);
         let $listItems = getListItems(tagBox);
@@ -4072,7 +4024,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchTimeout: TIME_TO_WAIT,
             opened: true
         });
-        const tagBox = $('#tagBox').dxTagBox('instance');
+        const tagBox = $tagBox.dxTagBox('instance');
 
         this.clock.tick(TIME_TO_WAIT * 3);
         let $listItems = getListItems(tagBox);
@@ -4098,6 +4050,67 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 3, 'correctly tags count');
         assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
+    });
+
+
+    QUnit.test('TagBox should use one DataSource request on list item selection if the editor has selected items from next pages (T970259)', function(assert) {
+        const data = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }];
+
+        const loadSpy = sinon.spy(function(loadOptions) {
+            const deferred = $.Deferred();
+            if(loadOptions.take && !loadOptions.searchValue) {
+                deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take));
+            } else if(loadOptions.filter) {
+                const result = data.filter((item) => {
+                    if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
+                        return item[2];
+                    } else if(item.id === loadOptions.filter[2].id) {
+                        return item;
+                    } else if(Array.isArray(loadOptions.filter) && loadOptions.filter.length > 2) {
+                        for(let i = 0; i < loadOptions.filter.length; i++) {
+                            const element = loadOptions.filter[i];
+                            if(Array.isArray(element) && element[2] === item.id) {
+                                return item;
+                            }
+                        }
+                    }
+                });
+
+                deferred.resolve(result);
+            }
+
+            return deferred;
+        });
+
+        const dataSource = new DataSource({
+            paginate: true,
+            pageSize: 5,
+            store: new CustomStore({
+                key: 'id',
+                load: loadSpy
+            })
+        });
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource,
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            opened: false,
+            value: [1, 7],
+            dropDownOptions: {
+                height: 150
+            }
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        tagBox.open();
+        this.clock.tick(TIME_TO_WAIT);
+        const $listItems = getListItems(tagBox);
+        $listItems.eq(3).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.strictEqual(loadSpy.callCount, 4, 'no unnecessary loadings');
     });
 });
 
@@ -5341,6 +5354,28 @@ QUnit.module('single line mode', {
         assert.notOk(endingPositionEvent.isPropagationStopped(), 'event propogation is not stopped for the ending position');
     });
 
+    ['ctrlKey', 'metaKey'].forEach((commandKey) => {
+        QUnit.test(`mousewheel with command key shouldn't prevented (${commandKey} pressed)`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'desktop specific test');
+                return;
+            }
+
+            const spy = sinon.spy();
+
+            $(this.$element).on('dxmousewheel', spy);
+
+            $(this.$element).trigger($.Event('dxmousewheel', {
+                delta: -120,
+                [commandKey]: true
+            }));
+
+            const event = spy.args[0][0];
+            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+            assert.notOk(event.isPropagationStopped(), 'propagation is not stopped');
+        });
+    });
+
     QUnit.test('it is should be possible to scroll tag container natively on mobile device', function(assert) {
         const currentDevice = devices.real();
         let $tagBox;
@@ -6055,8 +6090,8 @@ QUnit.module('performance', () => {
         $('.dx-list-select-all-checkbox').trigger('dxclick');
 
         // assert
-        assert.equal(keyGetterCounter, 613, 'key getter call count');
-        assert.equal(isValueEqualsSpy.callCount, 100, '_isValueEquals call count');
+        assert.equal(keyGetterCounter, 512, 'key getter call count');
+        assert.equal(isValueEqualsSpy.callCount, 1, '_isValueEquals call count');
     });
 
     QUnit.test('load filter should be undefined when tagBox has a lot of initial values', function(assert) {
@@ -6221,7 +6256,7 @@ QUnit.module('performance', () => {
     });
 });
 
-QUnit.module('maxFilterLength', {
+QUnit.module('maxFilterQueryLength', {
     beforeEach: function() {
         this.load = sinon.stub();
         const initialOptions = {
@@ -6254,42 +6289,42 @@ QUnit.module('maxFilterLength', {
         this.stub && this.stub.restore();
     }
 }, () => {
-    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterLength was changed at runtime', function(assert) {
-        this.instance.option('maxFilterLength', 0);
+    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterQueryLength was changed at runtime', function(assert) {
+        this.instance.option('maxFilterQueryLength', 0);
         this.instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
 
         assert.ok(this.load.getCall(0).args[0].filter);
         assert.strictEqual(this.load.getCall(this.load.callCount - 1).args[0].filter, undefined);
     });
 
-    QUnit.test('W0017 warning should be logged after maxFilterLength was changed at runtime and exceeded', function(assert) {
+    QUnit.test('W0017 warning should be logged after maxFilterQueryLength was changed at runtime and exceeded', function(assert) {
         assert.expect(1);
 
         this.stubLogger(assert);
 
-        this.instance.option('maxFilterLength', 0);
+        this.instance.option('maxFilterQueryLength', 0);
         this.instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
     });
 
-    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterLength is exceeded', function(assert) {
-        this.reinit({ maxFilterLength: 1 });
+    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterQueryLength is exceeded', function(assert) {
+        this.reinit({ maxFilterQueryLength: 1 });
 
         assert.strictEqual(this.load.getCall(this.load.callCount - 1).args[0].filter, undefined);
     });
 
-    QUnit.test('W0017 warning should be logged if maxFilterLength is exceeded', function(assert) {
+    QUnit.test('W0017 warning should be logged if maxFilterQueryLength is exceeded', function(assert) {
         assert.expect(1);
 
         this.stubLogger(assert);
 
-        this.reinit({ maxFilterLength: 1 });
+        this.reinit({ maxFilterQueryLength: 1 });
     });
 
-    QUnit.test('load filter should be passed to dataSource when tagBox has some initial values and maxFilterLength is not exceeded', function(assert) {
+    QUnit.test('load filter should be passed to dataSource when tagBox has some initial values and maxFilterQueryLength is not exceeded', function(assert) {
         assert.ok(this.load.getCall(0).args[0].filter);
     });
 
-    QUnit.test('no warning should be logged if maxFilterLength is not exceeded', function(assert) {
+    QUnit.test('no warning should be logged if maxFilterQueryLength is not exceeded', function(assert) {
         assert.expect(0);
 
         this.stubLogger(assert);
@@ -6676,36 +6711,50 @@ QUnit.module('regression', {
     });
 });
 
-QUnit.module('event passed to valueChanged (showSelectionControls=true)', {
+QUnit.module('valueChanged should receive correct event parameter', {
     beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
 
-        this._init = (options) => {
+        this.valueChangedHandler = sinon.stub();
+        const initialOptions = {
+            focusStateEnabled: true,
+            items: [1, 2, 3],
+            onValueChanged: this.valueChangedHandler,
+            opened: true,
+            value: [1, 2],
+        };
+        this.init = (options) => {
             this.$element = $('<div>')
                 .appendTo('#qunit-fixture')
                 .dxTagBox(options);
             this.instance = this.$element.dxTagBox('instance');
-            this.$input = this.$element.find('.' + TEXTBOX_CLASS);
+            this.$input = this.$element.find(`.${TEXTBOX_CLASS}`);
             this.keyboard = keyboardMock(this.$input);
+            this.$listItems = $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
+            this.$firstItem = this.$listItems.eq(0);
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, initialOptions, options));
+        };
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', [3]);
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
         };
 
-
-        this.valueChangedHandler = sinon.stub();
-        this._init({
-            focusStateEnabled: true,
-            showSelectionControls: true,
-            items: [1, 2, 3],
-            value: [1, 2],
-            onValueChanged: this.valueChangedHandler,
-            opened: true,
-        });
-
-        this.$listItems = getListItems(this.instance);
-        this.$firstItem = this.$listItems.eq(0);
-        this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CKECKBOX_CLASS}`);
-        this.$selectAllItem = $(`.${SELECT_ALL_CLASS}`);
-        this.$selectAllItemCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+        this.init(initialOptions);
     },
     afterEach: function() {
         this.$element.remove();
@@ -6713,177 +6762,141 @@ QUnit.module('event passed to valueChanged (showSelectionControls=true)', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Correct event should be passed to valueChanged when tag is removed using backspace (T947619)', function(assert) {
-        this.keyboard
-            .focus()
-            .keyDown('backspace');
+    [false, true].forEach(showSelectionControls => {
+        QUnit.module(`when showSelectionControls=${showSelectionControls}`, {
+            beforeEach: function() {
+                this.reinit({ showSelectionControls });
+            }
+        }, () => {
+            QUnit.test('on runtime change', function(assert) {
+                this.testProgramChange(assert);
+            });
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Backspace', 'event key is correct');
+            QUnit.test('on tag removing using backspace (T947619)', function(assert) {
+                this.keyboard
+                    .focus()
+                    .keyDown('backspace');
+
+                this.checkEvent(assert, 'keydown', this.$input, 'backspace');
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on tag removing using delete', function(assert) {
+                this.keyboard
+                    .focus()
+                    .press('left')
+                    .keyDown('del');
+
+                this.checkEvent(assert, 'keydown', this.$input, 'delete');
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on tag removing using remove button', function(assert) {
+                const $removeButton = this.$element
+                    .find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`)
+                    .first();
+
+                $removeButton.trigger('dxclick');
+
+                this.checkEvent(assert, 'dxclick', $removeButton);
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on click on item (T947619)', function(assert) {
+                this.$firstItem.trigger('dxclick');
+
+                this.checkEvent(assert, 'dxclick', this.$firstItem);
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on click on clearButton', function(assert) {
+                this.reinit({ showClearButton: true });
+                const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA}`);
+
+                $clearButton.trigger('dxclick');
+
+                this.checkEvent(assert, 'dxclick', $clearButton);
+                this.testProgramChange(assert);
+            });
+
+            ['enter', 'space'].forEach(key => {
+                QUnit.test(`on item selecting using ${key}`, function(assert) {
+                    this.reinit({ value: [] });
+
+                    this.keyboard
+                        .focus()
+                        .press('down')
+                        .keyDown(key);
+
+                    this.checkEvent(assert, 'keydown', this.$firstItem, key);
+                    this.testProgramChange(assert);
+                });
+            });
+
+            QUnit.test('on custom item adding', function(assert) {
+                this.reinit({ acceptCustomValue: true });
+
+                this.keyboard
+                    .type('custom')
+                    .press('enter');
+
+                this.checkEvent(assert, 'keydown', this.$input, 'enter');
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on click on apply button when applyValueMode=useButtons', function(assert) {
+                this.reinit({ applyValueMode: 'useButtons' });
+                const $applyButton = $('.dx-button.dx-popup-done');
+
+                this.$firstItem.trigger('dxclick');
+                $applyButton.trigger('dxclick');
+
+                this.checkEvent(assert, 'dxclick', $applyButton);
+                this.testProgramChange(assert);
+            });
+        });
     });
 
-    QUnit.test('Correct event should be passed to valueChanged when tag is removed using delete', function(assert) {
-        this.keyboard
-            .focus()
-            .press('left')
-            .keyDown('del');
+    QUnit.module('when showSelectionControls=true', {
+        beforeEach: function() {
+            this.reinit({ showSelectionControls: true });
+            this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CKECKBOX_CLASS}`);
+            this.$selectAllItem = $(`.${SELECT_ALL_CLASS}`);
+            this.$selectAllItemCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+        }
+    }, () => {
+        QUnit.test('on click on item checkBox (T947619)', function(assert) {
+            this.$firstItemCheckBox.trigger('dxclick');
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Delete', 'event key is correct');
-    });
+            this.checkEvent(assert, 'dxclick', this.$firstItemCheckBox);
+            this.testProgramChange(assert);
+        });
 
-    QUnit.test('event passed to valueChanged should be undefined when value runtime changes after tag removing', function(assert) {
-        this.keyboard
-            .focus()
-            .press('backspace');
+        QUnit.test('on click on selectAll item (T947619)', function(assert) {
+            this.$selectAllItem.trigger('dxclick');
 
-        this.instance.option('value', [3]);
+            this.checkEvent(assert, 'dxclick', this.$selectAllItem);
+            this.testProgramChange(assert);
+        });
 
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
+        QUnit.test('on click on selectAll item checkBox (T947619)', function(assert) {
+            this.$selectAllItemCheckBox.trigger('dxclick');
 
-    QUnit.test('event passed to valueChanged should be correct after click on item (T947619)', function(assert) {
-        this.$firstItem.trigger('dxclick');
+            this.checkEvent(assert, 'dxclick', this.$selectAllItemCheckBox);
+            this.testProgramChange(assert);
+        });
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$firstItem.get(0), 'event target is correct');
-    });
+        ['enter', 'space'].forEach(key => {
+            QUnit.test(`on selectAll item selecting using ${key}`, function(assert) {
+                this.keyboard
+                    .focus()
+                    .press('down')
+                    .press('up')
+                    .keyDown(key);
 
-    QUnit.test('event passed to valueChanged should be correct after click on item checkBox (T947619)', function(assert) {
-        this.$firstItemCheckBox.trigger('dxclick');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$firstItemCheckBox.get(0), 'event target is correct');
-    });
-
-    QUnit.test('event passed to valueChanged should be correct after click on selectAll item (T947619)', function(assert) {
-        this.$selectAllItem.trigger('dxclick');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$selectAllItem.get(0), 'event target is correct');
-    });
-
-    QUnit.test('event passed to valueChanged should be correct after click on selectAll item checkBox (T947619)', function(assert) {
-        this.$selectAllItemCheckBox.trigger('dxclick');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$selectAllItemCheckBox.get(0), 'event target is correct');
-    });
-
-    QUnit.test('Correct event should be passed to valueChanged when item is selected using enter', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .keyDown('enter');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Enter', 'event key is correct');
-        assert.strictEqual(data.event.target.get(0), this.$firstItem.get(0), 'target is correct');
-    });
-
-    QUnit.test('Correct event should be passed to valueChanged when item is selected using space', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .keyDown('space');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, ' ', 'event key is correct');
-        assert.strictEqual(data.event.target.get(0), this.$firstItem.get(0), 'target is correct');
-    });
-
-    QUnit.test('Correct event should be passed to valueChanged when selectAll item is selected using enter', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('enter');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Enter', 'event key is correct');
-    });
-
-    QUnit.test('Correct event should be passed to valueChanged when selectAll item is selected using space', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('space');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, ' ', 'event key is correct');
-    });
-
-    QUnit.test('event=undefined should be passed to valueChanged when value changes runtime after selectAll item is selected using enter', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('enter');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event=undefined should be passed to valueChanged when value changes runtime after selectAll item is selected using space', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('space');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on item', function(assert) {
-        this.$firstItem.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on selectAll item', function(assert) {
-        this.$selectAllItem.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on item checkBox', function(assert) {
-        this.$firstItemCheckBox.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on selectAll item checkBox', function(assert) {
-        this.$selectAllItemCheckBox.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
+                this.checkEvent(assert, 'keydown', this.$selectAllItem, key);
+                this.testProgramChange(assert);
+            });
+        });
     });
 });

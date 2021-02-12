@@ -232,26 +232,26 @@ module('render', {
         assert.equal($.trim($item.text()), 'First Template', 'item has correct template');
     });
 
-    test('showItemDataTitle as primitive', function(assert) {
+    test('useItemTextAsTitle as primitive', function(assert) {
         const $element = $('#cmp-with-template');
         const instance = new TestComponent(
             $element, {
-                showItemDataTitle: true,
+                useItemTextAsTitle: true,
                 items: [1]
             });
 
         const $item = instance.itemElements().eq(0);
         assert.strictEqual($item.attr('title'), '1', 'title is correct');
 
-        instance.option('showItemDataTitle', false);
+        instance.option('useItemTextAsTitle', false);
         assert.strictEqual(instance.itemElements().eq(0).attr('title'), undefined, 'title was removed');
     });
 
-    test('showItemDataTitle as object', function(assert) {
+    test('useItemTextAsTitle as object', function(assert) {
         const $element = $('#cmp-with-template');
         const instance = new TestComponent(
             $element, {
-                showItemDataTitle: true,
+                useItemTextAsTitle: true,
                 items: [{ name: 'Test', id: 1 }],
                 displayExpr: 'name'
             });
@@ -1194,6 +1194,24 @@ module('keyboard navigation', {
 
         keyboard.keyDown('space');
         assert.equal(itemClicked, 2, 'press space on item call item click action');
+    }),
+
+    test('enter press should replace event target and currentTarget properties with item native element', function(assert) {
+        const handler = sinon.stub();
+        const $element = $('#cmp');
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ['0'],
+            onItemClick: handler
+        });
+
+        const $item = $element.find('.item').eq(0);
+        const keyboard = keyboardMock($element);
+
+        keyboard.press('enter');
+        const event = handler.getCall(0).args[0].event;
+        assert.strictEqual(event.target, $item.get(0), 'event target is correct');
+        assert.strictEqual(event.currentTarget, $item.get(0), 'event target is correct');
     }),
 
     test('default page scroll should be prevented for space key', function(assert) {

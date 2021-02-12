@@ -6502,6 +6502,10 @@ declare module DevExpress.ui {
          */
         text?: string;
         /**
+         * [descr:dxDropDownButton.Options.useItemTextAsTitle]
+         */
+        useItemTextAsTitle?: boolean;
+        /**
          * [descr:dxDropDownButton.Options.useSelectMode]
          */
         useSelectMode?: boolean;
@@ -6687,6 +6691,10 @@ declare module DevExpress.ui {
          */
         showDataBeforeSearch?: boolean;
         /**
+         * [descr:dxDropDownList.Options.useItemTextAsTitle]
+         */
+        useItemTextAsTitle?: boolean;
+        /**
          * [descr:dxDropDownList.Options.value]
          */
         value?: any;
@@ -6754,6 +6762,10 @@ declare module DevExpress.ui {
          * [descr:dxFileManager.Options.onContextMenuItemClick]
          */
         onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event, fileSystemItem?: DevExpress.fileManagement.FileSystemItem, viewArea?: 'navPane' | 'itemView' }) => any);
+        /**
+         * [descr:dxFileManager.Options.onContextMenuShowing]
+         */
+        onContextMenuShowing?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileSystemItem?: DevExpress.fileManagement.FileSystemItem, targetElement?: DevExpress.core.dxElement, cancel?: boolean, event?: DevExpress.events.event, viewArea?: 'navPane' | 'itemView' }) => any);
         /**
          * [descr:dxFileManager.Options.onCurrentDirectoryChanged]
          */
@@ -11293,9 +11305,9 @@ declare module DevExpress.ui {
          */
         maxDisplayedTags?: number;
         /**
-         * [descr:dxTagBox.Options.maxFilterLength]
+         * [descr:dxTagBox.Options.maxFilterQueryLength]
          */
-        maxFilterLength?: number;
+        maxFilterQueryLength?: number;
         /**
          * [descr:dxTagBox.Options.multiline]
          */

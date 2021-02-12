@@ -56,7 +56,7 @@ describe('Bullet', () => {
     getZeroLevelShape: () => zeroLevelPoints,
   });
 
-  const customizedTooltipProps = { enabled: false };
+  const customizedTooltipProps = { enabled: false } as any;
 
   describe('View', () => {
     it('should pass all necessary properties to the BaseWidget (by default)', () => {
@@ -70,7 +70,9 @@ describe('Bullet', () => {
         cssClasses,
         rtlEnabled: false,
         cssClassName,
-        props: { },
+        props: {
+          disabled: false,
+        },
       };
       const bullet = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(0);
 
@@ -217,14 +219,6 @@ describe('Bullet', () => {
           visible: true,
           width: 1,
         },
-        canvas: {
-          bottom: 0,
-          height: 0,
-          left: 0,
-          right: 0,
-          top: 0,
-          width: 0,
-        },
         color: '#fff',
         cornerRadius: 0,
         data: {},
@@ -250,10 +244,27 @@ describe('Bullet', () => {
           opacity: 0.4,
         },
         shared: false,
-        target: {},
         visible: true,
         x: 0,
         y: 0,
+      });
+    });
+
+    it('should pass event data to the tooltip', () => {
+      const widgetRef = { current: {} };
+      customizedTooltipProps.enabled = true;
+      customizedTooltipProps.eventData = { component: widgetRef };
+      const viewModel = {
+        prepareInternalComponents: getDefaultScaleProps,
+        widgetRef,
+        customizedTooltipProps,
+        tooltipVisible: true,
+        props: { },
+      };
+      const tooltip = shallow(<BulletComponent {...viewModel as any} /> as JSX.Element).childAt(1);
+
+      expect(tooltip.props()).toMatchObject({
+        eventData: { component: widgetRef },
       });
     });
   });
@@ -326,14 +337,6 @@ describe('Bullet', () => {
           expect(getEventHandlers(pointerAction.down).length).toBe(1);
         });
 
-        it('should change tooltip visibility state from props', () => {
-          const bullet = new Bullet({ tooltip: { visible: false } });
-          bullet.pointerHandler();
-
-          expect(bullet.tooltipVisible).toBe(false);
-          expect(getEventHandlers(pointerAction.down)).toBeUndefined();
-        });
-
         it('should call "pointerOutHandler" callback by pointer out move', () => {
           const bullet = new Bullet({ });
           bullet.pointerOutHandler = jest.fn();
@@ -380,6 +383,40 @@ describe('Bullet', () => {
 
           expect(bullet.tooltipVisible).toBe(false);
           expect(getEventHandlers(pointerAction.down).length).toBe(0);
+        });
+
+        it('should not hide tooltip if pointer in the canvas with margins, top-left', () => {
+          const bullet = new Bullet({ });
+          bullet.tooltipVisible = true;
+          bullet.canvasState = {
+            top: 10,
+            left: 15,
+            width: 200,
+            height: 50,
+            right: 5,
+            bottom: 20,
+          };
+          bullet.pointerHandler();
+          bullet.pointerOutHandler({ pageX: 10, pageY: 5 });
+
+          expect(bullet.tooltipVisible).toBe(true);
+        });
+
+        it('should not hide tooltip if pointer in the canvas with margins, bottom-right', () => {
+          const bullet = new Bullet({ });
+          bullet.tooltipVisible = true;
+          bullet.canvasState = {
+            top: 10,
+            left: 15,
+            width: 200,
+            height: 50,
+            right: 5,
+            bottom: 20,
+          };
+          bullet.pointerHandler();
+          bullet.pointerOutHandler({ pageX: 199, pageY: 49 });
+
+          expect(bullet.tooltipVisible).toBe(true);
         });
       });
     });
@@ -514,10 +551,12 @@ describe('Bullet', () => {
           const bullet = new Bullet({ value, target });
           bullet.canvasState = { width: 200, height: 100 } as Canvas;
           bullet.offsetState = { left: 100, top: 200 };
+          bullet.widgetRef = {} as any;
 
           expect(bullet.customizedTooltipProps).toEqual({
             enabled: true,
             data,
+            eventData: { component: {} },
             customizeTooltip: customizeTooltipFn,
             x: 200,
             y: 250,
@@ -536,11 +575,36 @@ describe('Bullet', () => {
           const bullet = new Bullet({ value, target, tooltip });
           bullet.canvasState = { width: 200, height: 100 } as Canvas;
           bullet.offsetState = { left: 100, top: 200 };
+          bullet.widgetRef = {} as any;
 
           expect(bullet.customizedTooltipProps).toEqual({
             ...tooltip,
             customizeTooltip: customizeTooltipFn,
+            eventData: { component: {} },
             data,
+            x: 200,
+            y: 250,
+          });
+        });
+
+        it('should return customized tooltip props with onTooltipShown/onTooltipHidden events', () => {
+          (generateCustomizeTooltipCallback as jest.Mock).mockReturnValue(customizeTooltipFn);
+          const onTooltipShown = jest.fn();
+          const onTooltipHidden = jest.fn();
+          const bullet = new Bullet({
+            value, target, onTooltipShown, onTooltipHidden,
+          });
+          bullet.canvasState = { width: 200, height: 100 } as Canvas;
+          bullet.offsetState = { left: 100, top: 200 };
+          bullet.widgetRef = {} as any;
+
+          expect(bullet.customizedTooltipProps).toEqual({
+            enabled: true,
+            data,
+            eventData: { component: {} },
+            onTooltipShown,
+            onTooltipHidden,
+            customizeTooltip: customizeTooltipFn,
             x: 200,
             y: 250,
           });
@@ -665,7 +729,7 @@ describe('Bullet', () => {
       });
 
       describe('Shapes', () => {
-        let getTranslator = () => ({ translate: (x: number) => x * 10 });
+        let getTranslator = () => ({ translate: (x: number) => x * 10 }) as any;
 
         describe('getBarValueShape', () => {
           describe('value > 0', () => {

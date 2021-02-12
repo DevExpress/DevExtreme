@@ -148,10 +148,6 @@ module('Integration: Appointments in Timeline views', {
             });
 
             test('Rival long appointments should have right position on timelineMonth view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: timelines appointment virtualization');
-                    return;
-                }
                 const data = [{
                     'id': '1',
                     'text': 'Long event',
@@ -313,10 +309,6 @@ module('Integration: Appointments in Timeline views', {
             });
 
             test('AllDay appointment should have right width on timelineWeek view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: timelines appointment virtualization');
-                    return;
-                }
                 const appointment = {
                     startDate: new Date(2015, 11, 14),
                     endDate: new Date(2015, 11, 17),
@@ -340,10 +332,6 @@ module('Integration: Appointments in Timeline views', {
             });
 
             test('AllDay appointment without allDay field should have right width on timelineDay view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: timelines appointment virtualization');
-                    return;
-                }
                 const appointment = {
                     startDate: new Date(2015, 11, 14, 0, 0),
                     endDate: new Date(2015, 11, 14, 24, 0)
@@ -366,10 +354,6 @@ module('Integration: Appointments in Timeline views', {
             });
 
             test('Long multiday appointment should have right width on timelineWorkWeek view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: timelines appointment virtualization');
-                    return;
-                }
                 const appointment = {
                     startDate: new Date(2015, 2, 2, 9),
                     endDate: new Date(2015, 2, 4, 18)
@@ -392,10 +376,6 @@ module('Integration: Appointments in Timeline views', {
             });
 
             test('Long multiday appointment should have right width on timelineWeek view when set startDayHour > appointment endDate (T533348)', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: timelines appointment virtualization');
-                    return;
-                }
                 const appointment = {
                     startDate: new Date(2016, 1, 1, 11, 0),
                     endDate: new Date(2016, 1, 4, 1, 0)
@@ -421,10 +401,6 @@ module('Integration: Appointments in Timeline views', {
             });
 
             test('Long multiday appointment should have right position on timelineWeek view', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok(true, 'TODO: timelines appointment virtualization');
-                    return;
-                }
                 const appointment = {
                     startDate: new Date(2015, 2, 2, 9),
                     endDate: new Date(2015, 2, 5, 18)

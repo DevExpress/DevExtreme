@@ -15,7 +15,8 @@ import {
     initTestMarkup,
     isDesktopEnvironment,
     CLASSES,
-    isIE11
+    isIE11,
+    supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
@@ -2299,11 +2300,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     });
 });
 
-
-[
-    'standard',
-    'virtual'
-].forEach(scrollingMode => {
+supportedScrollingModes.forEach(scrollingMode => {
     module(`Scrolling mode ${scrollingMode}`, {
         beforeEach: function() {
 
@@ -2406,10 +2403,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         });
 
         test('Appointment should be returned back if the "update" method rejects deferred during drag (T453486)', function(assert) {
-            if(scrollingMode === 'virtual') {
-                assert.ok(true, 'TODO: appointments in virtual month');
-                return;
-            }
             this.createInstance({
                 views: ['month'],
                 currentView: 'month',
@@ -2445,10 +2438,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         });
 
         test('Appointment should be dragged correctly between the groups in vertical grouped workspace Month', function(assert) {
-            if(scrollingMode === 'virtual') {
-                assert.ok(true, 'TODO: appointments in virtual month');
-                return;
-            }
             this.createInstance({
                 dataSource: [{
                     text: 'a',
@@ -2489,11 +2478,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         });
 
         test('Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month', function(assert) {
-            if(scrollingMode === 'virtual') {
-                assert.ok(true, 'TODO: appointments in virtual month');
-                return;
-            }
-
             this.createInstance({
                 dataSource: [{
                     text: 'a',
@@ -2529,7 +2513,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             const cellPosition = scheduler.workSpace.getCell(6).position();
 
             assert.roughEqual(appointment.position.left, cellPosition.left, 2, 'correct left position');
-            assert.equal($secondPart.position.left, 0, 'correct left position');
+            assert.roughEqual($secondPart.position.left, 0, 0.1, 'second part has correct left position');
         });
 
         test('Appointment should be dragged correctly in grouped timeline (T739132)', function(assert) {
