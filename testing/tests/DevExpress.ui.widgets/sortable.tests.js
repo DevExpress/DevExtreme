@@ -58,7 +58,7 @@ QUnit.testStart(function() {
                 </div><div id="item32" class="draggable" style="height: 50px; background: red;">item10</div>
             </div>
         </div>
-        <div id="bothScrolls" style="height: 600px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0px; top: 0px;">
+        <div id="bothScrolls" style="height: 600px; width: 300px; padding: 1rem; overflow: auto; background: grey; position: absolute; left: 0px; top: 0px;">
             <div id="itemsWithBothScrolls" style="overflow: visible; width: 600px;">
                 <div id="item40" class="draggable" style="height: 50px; background: red; width: 600px;">item0</div>
                 <div id="item41" class="draggable" style="height: 50px; background: yellow; width: 600px;">item1</div>
@@ -72,7 +72,7 @@ QUnit.testStart(function() {
                 <div id="item49" class="draggable" style="height: 50px; background: yellow; width: 600px;">item9</div>
             </div>
         </div>
-        <div id="bothScrolls2" style="height: 300px; width: 300px; overflow: auto; background: grey; position: absolute; left: 500px; top: 500px;">
+        <div id="bothScrolls2" style="height: 300px; width: 300px; padding: 1rem; overflow: auto; background: grey; position: absolute; left: 500px; top: 500px;">
             <div id="itemsWithBothScrolls2" style="overflow: visible; width: 600px;">
                 <div id="item50" class="draggable" style="height: 50px; background: red; width: 600px;">item0</div>
                 <div id="item51" class="draggable" style="height: 50px; background: yellow; width: 600px;">item1</div>
