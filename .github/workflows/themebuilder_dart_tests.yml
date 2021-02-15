@@ -22,6 +22,9 @@ jobs:
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund
 
+    - name: Generate bundles
+      run: npx gulp create-scss-bundles
+
     - name: Install dart
       uses: cedx/setup-dart@v2
 
