@@ -36,6 +36,10 @@ jobs:
       run: npm run build
       working-directory: ./themebuilder-scss
 
-    - name: Run themebuilder tests
+    - name: Run themebuilder tests (full set, node)
+      run: npm run test-dart
+      working-directory: ./themebuilder-scss
+
+    - name: Run themebuilder tests (integration only, dart)
       run: npm run test-dart
       working-directory: ./themebuilder-scss
