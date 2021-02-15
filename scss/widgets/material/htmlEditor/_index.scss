@@ -26,6 +26,42 @@
       border-color: $htmleditor-invalid-border-color;
     }
   }
+
+  &.dx-htmleditor-filled {
+    border-color: $htmleditor-filled-border-color;
+    background: $texteditor-bg;
+  }
+
+  &.dx-htmleditor-underlined {
+    border-color: $htmleditor-filled-border-color;
+    border-bottom-color: $htmleditor-border-color;
+
+    &.dx-invalid {
+      border-bottom-color: $texteditor-invalid-faded-border-color;
+
+      &.dx-state-focused {
+        border-color: $htmleditor-filled-border-color;
+        border-bottom-color: $htmleditor-invalid-border-color;
+      }
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        &::before {
+          border-top: 1px solid $texteditor-invalid-focused-border-color;
+          border-bottom: 1px solid $texteditor-invalid-focused-border-color;
+        }
+      }
+    }
+
+    .dx-htmleditor-content {
+      padding-left: 0;
+    }
+
+    &.dx-rtl {
+      padding-left: 1px;
+      padding-right: 15px;
+    }
+  }
 }
 
 .dx-htmleditor-content {

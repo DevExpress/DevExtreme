@@ -27,12 +27,6 @@ const TEXTEDITOR_CONTAINER_CLASS = 'dx-texteditor-container';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const TEXTEDITOR_PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
-const TEXTEDITOR_STYLING_MODE_PREFIX = 'dx-editor-';
-const ALLOWED_STYLE_CLASSES = [
-    TEXTEDITOR_STYLING_MODE_PREFIX + 'outlined',
-    TEXTEDITOR_STYLING_MODE_PREFIX + 'filled',
-    TEXTEDITOR_STYLING_MODE_PREFIX + 'underlined'
-];
 
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const TEXTEDITOR_PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
@@ -190,21 +184,8 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderStylingMode: function() {
-        const optionName = 'stylingMode';
-        const optionValue = this.option(optionName);
-        ALLOWED_STYLE_CLASSES.forEach(className => this.$element().removeClass(className));
-
-        let stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + optionValue;
-
-        if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
-            const defaultOptionValue = this._getDefaultOptions()[optionName];
-            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
-            stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + (platformOptionValue || defaultOptionValue);
-        }
-
-        this.$element().addClass(stylingModeClass);
-
-        this._updateButtonsStyling(optionValue);
+        this.callBase();
+        this._updateButtonsStyling(this.option('stylingMode'));
     },
 
     _initMarkup: function() {

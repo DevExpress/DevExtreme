@@ -30,17 +30,40 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
     }
   }
 
-  &.dx-editor-filled,
-  &.dx-editor-underlined {
+  &.dx-htmleditor-filled {
     border-color: $htmleditor-filled-border-color;
+    background: $texteditor-filled-bg;
 
-    .dx-htmleditor-toolbar-wrapper:first-child {
-      border-color: $htmleditor-filled-border-color;
+    &.dx-invalid {
+      background-color: $texteditor-filled-invalid-background;
+
+      &.dx-state-focused {
+        background: transparent;
+      }
     }
   }
 
-  &.dx-editor-underlined {
+  &.dx-htmleditor-underlined {
+    border-color: $htmleditor-filled-border-color;
     border-bottom-color: $htmleditor-border-color;
+
+    &.dx-invalid {
+      border-bottom-color: $texteditor-invalid-faded-border-color;
+
+      &.dx-state-focused {
+        border-color: $htmleditor-filled-border-color;
+        border-bottom-color: $htmleditor-invalid-border-color;
+      }
+    }
+
+    .dx-htmleditor-content {
+      padding-left: 0;
+    }
+
+    &.dx-rtl {
+      padding-left: 1px;
+      padding-right: 15px;
+    }
   }
 }
 
