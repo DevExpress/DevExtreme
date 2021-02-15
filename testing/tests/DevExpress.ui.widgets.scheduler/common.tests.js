@@ -4186,7 +4186,7 @@ QUnit.module('ScrollTo', () => {
                 this.createScheduler = (options = {}) => {
                     return createWrapper({
                         showCurrentTimeIndicator: false,
-                        scrolling: { mode: scrollingMode },
+                        scrolling: { mode: scrollingMode, type: 'both' },
                         currentDate: new Date(2020, 8, 6),
                         currentView: 'week',
                         height: 500,
