@@ -1360,6 +1360,9 @@ class Gantt extends Widget {
     updateDimensions() {
         this._setInnerElementsWidth();
     }
+    scrollToDate(date) {
+        this._ganttView._ganttViewCore.scrollToDate(date);
+    }
 
     _optionChanged(args) {
         switch(args.name) {

@@ -11,7 +11,7 @@ const addAttributes = ($element, attributes): void => {
 };
 
 // NOTE: function for jQuery templates
-export const wrapElement = ($element, $wrapper) => {
+export const wrapElement = ($element, $wrapper): any => {
   const { attributes } = $wrapper.get(0);
   const children = $wrapper.contents();
 

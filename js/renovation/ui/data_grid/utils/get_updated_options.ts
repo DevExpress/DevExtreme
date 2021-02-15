@@ -33,7 +33,10 @@ function compare(resultPaths: ResultItem[], item1, item2, key: string): void {
   }
 }
 
-const objectDiffsFiltered = (propsEnumerator: (string) => string[]) => (oldProps: {}, props: {}):
+const objectDiffsFiltered = (propsEnumerator: (string) => string[]) => (
+  oldProps: Record<string, unknown>,
+  props: Record<string, unknown>,
+):
 ResultItem[] => {
   if (!props) {
     return [];
@@ -57,7 +60,9 @@ const reactProps = { key: true, ref: true, children: true };
 const objectDiffsWithoutReactProps = objectDiffsFiltered((prop) => Object.keys(prop)
   .filter((p) => !reactProps[p]));
 
-export function getUpdatedOptions(oldProps: {}, props: {}):
-ResultItem[] {
+export function getUpdatedOptions(
+  oldProps: Record<string, unknown>,
+  props: Record<string, unknown>,
+): ResultItem[] {
   return objectDiffsWithoutReactProps(oldProps, props);
 }

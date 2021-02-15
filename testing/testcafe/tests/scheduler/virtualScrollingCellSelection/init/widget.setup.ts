@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import createWidget from '../../../../helpers/createWidget';
 
-export const createScheduler = async (options = {}) => {
+export const createScheduler = async (options = {}): Promise<void> => {
   createWidget('dxScheduler', {
     dataSource: [],
     views: ['week'],
@@ -55,7 +55,7 @@ export const scrollTo = ClientFunction((y) => {
 export const checkSelectionWhenFocusedInViewport = async (
   t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex: number,
   lastCellColumnIndex: number, lastCellRowIndex = 0,
-) => {
+): Promise<void> => {
   await t
     .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
     .eql(selectedCellsCount)
@@ -74,7 +74,7 @@ export const checkSelectionWhenFocusedInViewport = async (
 export const checkSelectionWhenFocusedIsNotInViewport = async (
   t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex: number,
   lastCellColumnIndex: number, lastCellRowIndex = 0,
-) => {
+): Promise<void> => {
   await t
     .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
     .eql(selectedCellsCount)
@@ -90,7 +90,7 @@ export const checkSelectionWhenFocusedIsNotInViewport = async (
     .notOk();
 };
 
-export const checkAllDayCellsWhenInViewport = async (t: any, scheduler: any) => {
+export const checkAllDayCellsWhenInViewport = async (t: any, scheduler: any): Promise<void> => {
   await t
     .expect(scheduler.allDayTableCells.filter('.dx-state-focused').count)
     .eql(2)
@@ -101,7 +101,7 @@ export const checkAllDayCellsWhenInViewport = async (t: any, scheduler: any) => 
     .expect(scheduler.getAllDayTableCell(1).hasClass('dx-scheduler-focused-cell'))
     .ok();
 };
-export const checkAllDayCellsWhenNotInViewport = async (t: any, scheduler: any) => {
+export const checkAllDayCellsWhenNotInViewport = async (t: any, scheduler: any): Promise<void> => {
   await t
     .expect(scheduler.allDayTableCells.filter('.dx-state-focused').count)
     .eql(0)

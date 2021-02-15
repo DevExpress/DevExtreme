@@ -48,7 +48,7 @@ export default class DataGrid extends Widget {
     );
   }
 
-  addWidgetPrefix(className: string) {
+  addWidgetPrefix(className: string): string {
     return Widget.addClassPrefix(this.name, className);
   }
 

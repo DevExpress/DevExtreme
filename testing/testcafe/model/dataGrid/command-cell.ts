@@ -25,7 +25,7 @@ export default class CommandCell extends FocusableElement {
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
   }
 
-  getButton(index: number) {
+  getButton(index: number): Selector {
     return this.element.find(`.${CLASS.commandLink}:nth-child(${index + 1})`);
   }
 

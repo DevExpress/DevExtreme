@@ -445,7 +445,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   //   editing: __getNestedEditing()
   //   ...
   // }
-  normalizeProps(): {} {
+  normalizeProps(): Record<string, unknown> {
     const result = {};
     Object.keys(this.props).forEach((key) => {
       if (this.props[key] !== undefined) {
