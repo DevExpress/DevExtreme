@@ -4328,6 +4328,7 @@ QUnit.module('ScrollTo', () => {
                         }],
                         currentView: view.type,
                         groups: ['ownerId'],
+                        width: 400,
                     });
 
                     checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
@@ -4364,6 +4365,7 @@ QUnit.module('ScrollTo', () => {
                         }],
                         currentView: view.type,
                         groups: ['ownerId'],
+                        width: 400,
                     });
 
                     checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
@@ -4464,6 +4466,7 @@ QUnit.module('ScrollTo', () => {
                 QUnit.test(`ScrollTo to all-day cells should work in ${view} view`, function(assert) {
                     const scheduler = this.createScheduler({
                         currentView: view,
+                        height: 400,
                     });
 
                     const $scrollable = scheduler.workSpace.getDateTableScrollable();
@@ -4522,6 +4525,7 @@ QUnit.module('ScrollTo', () => {
                     const scheduler = this.createScheduler({
                         rtlEnabled: true,
                         currentView: view,
+                        height: 400,
                     });
 
                     checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
