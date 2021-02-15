@@ -3,6 +3,7 @@ module.exports = {
         'ts-jest': {
             tsConfig: 'tests/tsconfig.json',
         },
+        'DART_TEST': false,
     },
     moduleFileExtensions: [
         'ts',

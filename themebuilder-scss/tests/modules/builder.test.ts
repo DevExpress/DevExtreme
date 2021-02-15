@@ -1,9 +1,12 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import Compiler from '../../src/modules/compiler';
 import { buildTheme } from '../../src/modules/builder';
 import commands from '../../src/modules/commands';
 // eslint-disable-next-line import/extensions
 import { version, metadata } from '../../src/data/metadata/dx-theme-builder-metadata';
+
+declare let DART_TEST: boolean;
 
 const buildTimeout = 150000;
 
@@ -13,6 +16,14 @@ const normalizeCss = (css: string): string => css
   .trim();
 
 describe('Builder integration tests', () => {
+  beforeAll(() => {
+    if (DART_TEST) {
+      Compiler.prototype.nodeCompiler = () => {
+        throw new Error('We should not run nodeCompiler while testing dart server');
+      };
+    }
+  });
+
   test('Build theme without parameters', () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
