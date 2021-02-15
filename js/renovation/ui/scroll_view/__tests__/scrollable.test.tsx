@@ -141,45 +141,6 @@ each([{
         });
       });
 
-      if (Scrollable === ScrollableSimulated) {
-        each(['vertical', 'horizontal', 'both']).describe('Direction: %o', (direction) => {
-          each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
-            each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-              each([true, false]).describe('InertiaEnabled: %o', (inertiaEnabled) => {
-                it('should pass all necessary properties to the nested Scrollbars', () => {
-                  const propertySettings = {
-                    showScrollbar,
-                    bounceEnabled,
-                    inertiaEnabled,
-                    scrollByThumb: true,
-                  };
-
-                  const viewModel = new Scrollable({ direction, ...propertySettings });
-                  const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
-
-                  const scrollbars = scrollable.find(Scrollbar);
-                  if (direction === 'both') {
-                    expect(scrollbars.at(0).instance().props).toMatchObject({
-                      direction: 'horizontal',
-                      ...propertySettings,
-                    });
-                    expect(scrollbars.at(1).instance().props).toMatchObject({
-                      direction: 'vertical',
-                      ...propertySettings,
-                    });
-                  } else {
-                    expect(scrollbars.at(0).instance().props).toMatchObject({
-                      direction,
-                      ...propertySettings,
-                    });
-                  }
-                });
-              });
-            });
-          });
-        });
-      }
-
       it('should have ref to scrollable content', () => {
         const contentRef = React.createRef();
         const props = {
@@ -200,20 +161,18 @@ each([{
         expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
       });
 
-      each([true, false]).describe('tabIndex on container. useKeyboard: %o', (useKeyboard) => {
-        it('tabIndex on scrollable, useKeyboard', () => {
-          const viewModel = new Scrollable({ useKeyboard });
+      if (Scrollable === ScrollableNative) {
+        each([true, false]).describe('tabIndex on container. useKeyboard: %o', (useKeyboard) => {
+          it('tabIndex on scrollable, useKeyboard', () => {
+            const viewModel = new Scrollable({ useKeyboard });
 
-          const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
-          const scrollableTabIndex = scrollable.getDOMNode().attributes.getNamedItem('tabindex');
+            const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+            const scrollableTabIndex = scrollable.getDOMNode().attributes.getNamedItem('tabindex');
 
-          if (Scrollable === ScrollableSimulated && useKeyboard) {
-            expect((scrollableTabIndex as any).value).toEqual('0');
-          } else {
             expect(scrollableTabIndex).toEqual(null);
-          }
+          });
         });
-      });
+      }
     });
 
     describe('Scrollbar', () => {

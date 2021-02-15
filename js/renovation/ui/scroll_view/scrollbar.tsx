@@ -14,20 +14,16 @@ import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 import { isDefined } from '../../../core/utils/type';
-import { move, resetPosition, locate } from '../../../animation/translator';
 import { isDxMouseWheelEvent } from '../../../events/utils/index';
 // import { Deferred } from '../../../core/utils/deferred';
 // import type { dxPromise } from '../../../core/utils/deferred';
-import { titleize } from '../../../core/utils/inflector';
 import devices from '../../../core/devices';
 import { BounceAnimator } from './bounce_animator';
 import { InertiaAnimator } from './inertia_animator';
-import eventsEngine from '../../../events/core/events_engine';
 
 import { ScrollbarProps } from './scrollbar_props';
 import {
   DIRECTION_HORIZONTAL, SCROLLABLE_SCROLLBAR_CLASS,
-  getElementHeight,
 } from './scrollable_utils';
 
 import {
@@ -36,7 +32,7 @@ import {
 } from '../../../events/short';
 
 import BaseWidgetProps from '../../utils/base_props';
-import { ScrollableDirection } from './types.d';
+import { ScrollableSimulatedProps } from './scrollable_simulated_props';
 
 const OUT_BOUNDS_ACCELERATION = 0.5;
 
@@ -60,7 +56,7 @@ const THUMB_MIN_SIZE = 15;
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
     cssClasses, styles, scrollRef, scrollbarRef, hoverStateEnabled,
-    isVisible,
+    isVisible, windowResizeHandler,
     props: { activeStateEnabled },
     restAttributes,
   } = viewModel;
@@ -72,6 +68,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
       activeStateEnabled={activeStateEnabled}
       hoverStateEnabled={hoverStateEnabled}
       visible={isVisible}
+      onDimensionChanged={windowResizeHandler}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
@@ -82,7 +79,8 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   );
 };
 
-type ScrollbarPropsType = ScrollbarProps & Pick<BaseWidgetProps, 'visible'>;
+type ScrollbarPropsType = ScrollbarProps & Pick<BaseWidgetProps, 'visible'>
+& Pick<ScrollableSimulatedProps, 'contentPositionChange' | 'contentTranslateOffsetChange'>;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
@@ -105,39 +103,42 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() translateOffset?: number;
 
+  @Mutable() windowSizeChanged?: boolean;
+
+  @Mutable() prevThumbRatio = 0;
+
+  @Mutable() pendingThumbScrolling?: boolean;
+
   @InternalState() active = false;
 
-  @InternalState() scrollTranslateOffset: { left: number; top: number } = { left: 0, top: 0 };
+  @InternalState() scrollLocation = 0;
 
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
 
-  @Method()
-  moveTo(location: number): void {
-    if (this.props.showScrollbar === 'never') {
-      return;
-    }
-
-    this.scrollTranslateOffset = {
+  get scrollTranslateOffset(): {left: number; top: number} {
+    return {
       ...{ left: 0, top: 0 },
-      ...{ [this.scrollProp]: this.calculateScrollBarPosition(location) },
+      ...{ [this.scrollProp]: this.scrollPosition },
     };
   }
 
-  /* istanbul ignore next */
-  updateLocation(): void {
-    this.setLocation((locate(this.getContentRef())[this.scrollProp] - this.getContainerRef()[`scroll${titleize(this.scrollProp)}`]) * this.props.scaleRatio);
+  get scrollPosition(): number {
+    const thumbRatioChanged = (this.thumbRatio - this.prevThumbRatio) > 0.01;
+    if (this.windowSizeChanged || thumbRatioChanged) {
+      this.scrollLocation = this.boundLocation(this.scrollLocation);
+      this.windowSizeChanged = undefined;
+      this.prevThumbRatio = this.thumbRatio;
+    }
+
+    return -this.scrollLocation * this.thumbRatio;
   }
 
-  @Method()
-  getDirection(): Partial<ScrollableDirection> { // 'vertical' & 'horizontal'
-    return this.props.direction;
-  }
-
-  calculateScrollBarPosition(location): number {
-    return -location * this.thumbRatio;
-  }
+  // @Method()
+  // getDirection(): Partial<ScrollableDirection> { // 'vertical' & 'horizontal'
+  //   return this.props.direction;
+  // }
 
   @Effect()
   pointerDownEffect(): DisposeEffectReturn {
@@ -241,10 +242,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return this.boundLocation() === this.getLocation();
   }
 
-  @Method()
-  insideBounds(): boolean {
-    return this.inBounds();
-  }
+  // @Method()
+  // insideBounds(): boolean {
+  //   return this.inBounds();
+  // }
 
   @Method()
   boundLocation(value?: number): number {
@@ -263,12 +264,16 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return Math.round(-Math.max(this.props.contentSize - this.props.containerSize, 0));
   }
 
-  get axis(): string {
+  get axis(): 'x' | 'y' {
     return this.props.direction === DIRECTION_HORIZONTAL ? 'x' : 'y';
   }
 
-  get scrollProp(): string {
+  get scrollProp(): 'left' | 'top' {
     return this.props.direction === DIRECTION_HORIZONTAL ? 'left' : 'top';
+  }
+
+  get fullScrollProp(): 'scrollLeft' | 'scrollTop' {
+    return this.props.direction === DIRECTION_HORIZONTAL ? 'scrollLeft' : 'scrollTop';
   }
 
   @Method()
@@ -354,6 +359,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   /* istanbul ignore next */
   // eslint-disable-next-line class-methods-use-this
   stopComplete(): void { // TODO: it needs if we deside to use the Promises
+    this.velocity = 0;
     // if(this._stopDeferred) {
     //     this._stopDeferred.resolve();
     // }
@@ -416,41 +422,25 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   moveToMouseLocation(e): void {
-    const { scrollableOffset } = this.props;
-
-    const mouseLocation = e[`page${this.axis.toUpperCase()}`] - scrollableOffset;
+    const mouseLocation = e[`page${this.axis.toUpperCase()}`] - this.props.scrollableOffset;
     const location = this.getLocation() + mouseLocation
-    / this.containerToContentRatio() - getElementHeight(this.getContainerRef()) / 2;
+    / this.containerToContentRatio() - this.props.containerSize / 2;
 
     this.scrollStep(-Math.round(location));
   }
 
   scrollStep(delta): void {
-    const prevLocation = this.getLocation();
-
-    this.setLocation(prevLocation + delta);
+    this.setLocation(this.getLocation() + delta);
     this.suppressBounce();
     this.move();
-
-    /* istanbul ignore next */
-    if (Math.abs(prevLocation - this.getLocation()) < 1) {
-      // eslint-disable-next-line no-useless-return
-      return;
-    }
-
-    this.triggerScrollEvent();
-  }
-
-  triggerScrollEvent(): void {
-    (eventsEngine as any).triggerHandler(this.getContainerRef(), { type: 'scroll' });
   }
 
   show(): void {
-    this.props.onChangeVisibility?.(true);
+    this.props.scrollVisibilityChange?.(true);
   }
 
   hide(): void {
-    this.props.onChangeVisibility?.(false);
+    this.props.scrollVisibilityChange?.(false);
   }
 
   getVelocity(): number {
@@ -469,14 +459,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.velocity = value;
   }
 
-  getContainerRef(): HTMLDivElement {
-    return this.props.containerRef.current;
-  }
-
-  getContentRef(): HTMLDivElement {
-    return this.props.contentRef.current;
-  }
-
   suppressBounce(): void {
     if (this.props.bounceEnabled || this.inBounds()) {
       return;
@@ -492,55 +474,32 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       : this.getLocation();
 
     this.setLocation(currentLocation);
+    this.scrollLocation = currentLocation;
 
     this.moveContent();
-    this.moveScrollbar(this.getLocation());
   }
 
-  @Method()
-  moveToLocation(): void {
-    this.move();
-  }
+  // @Method()
+  // moveToLocation(): void {
+  //   this.move();
+  // }
 
   moveContent(): void {
     const location = this.getLocation();
-
-    this.getContainerRef()[`scroll${titleize(this.scrollProp)}`] = -location / this.props.scaleRatio;
-    this.moveContentByTranslator(location);
-  }
-
-  @Method()
-  moveScrollbar(location): void { // TODO: apply scale ratio
-    this.moveTo(location);
-  }
-
-  moveContentByTranslator(location): undefined | void {
-    let currentTranslateOffset;
     const minOffset = this.getMinOffset();
 
-    /* istanbul ignore next */
+    let currentTranslateOffset: number;
     if (location > 0) {
       currentTranslateOffset = location;
     } else if (location <= minOffset) {
-      /* istanbul ignore next */
       currentTranslateOffset = location - minOffset;
     } else {
       currentTranslateOffset = location % 1;
     }
 
-    if (this.translateOffset === currentTranslateOffset) {
-      return;
-    }
-
-    const targetLocation = {};
-    targetLocation[this.scrollProp] = currentTranslateOffset;
-    this.translateOffset = currentTranslateOffset;
-
-    if (currentTranslateOffset === 0) {
-      resetPosition(this.getContentRef());
-    }
-
-    move(this.getContentRef(), targetLocation);
+    // there is an issue https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
+    this.props.contentPositionChange?.(this.fullScrollProp, location, this.props.scaleRatio,);
+    this.props.contentTranslateOffsetChange?.({ [this.scrollProp]: currentTranslateOffset });
   }
 
   get thumbSize(): number {
@@ -556,7 +515,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   get thumbRatio(): number {
     const { contentSize, containerSize, scaleRatio } = this.props;
 
-    return (containerSize - this.thumbSize) / (scaleRatio * (contentSize - containerSize));
+    if (contentSize) {
+      return (containerSize - this.thumbSize) / (scaleRatio * (contentSize - containerSize));
+    }
+
+    return 0;
   }
 
   containerToContentRatio(): number {
@@ -571,15 +534,19 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
   }
 
+  windowResizeHandler(): void {
+    this.windowSizeChanged = true;
+  }
+
   get dimension(): string {
     return this.props.direction === DIRECTION_HORIZONTAL ? 'width' : 'height';
   }
 
-  private feedbackOn(): void {
+  feedbackOn(): void {
     this.active = true;
   }
 
-  private feedbackOff(): void {
+  feedbackOff(): void {
     this.active = false;
   }
 
@@ -596,12 +563,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get styles(): { [key: string]: string | number } {
-    const style = this.restAttributes.style || {};
-
     return {
-      ...style,
       [this.dimension]: this.thumbSize || THUMB_MIN_SIZE,
-      transform: this.props.showScrollbar === 'never' ? undefined : `translate(${this.scrollTranslateOffset.left}px, ${this.scrollTranslateOffset.top}px)`,
+      transform: this.props.showScrollbar === 'never'
+        ? 'none'
+        : `translate(${this.scrollTranslateOffset.left}px, ${this.scrollTranslateOffset.top}px)`,
     };
   }
 

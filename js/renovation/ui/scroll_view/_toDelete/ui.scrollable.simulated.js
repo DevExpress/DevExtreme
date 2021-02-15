@@ -1,6 +1,5 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import { each } from '../../core/utils/iterator';
 import { locate } from '../../animation/translator';
 import Class from '../../core/class';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
@@ -11,8 +10,6 @@ const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
-
-const HORIZONTAL = 'horizontal';
 
 export const Scroller = Class.inherit({
     _scrollToBounds: function() {
@@ -32,9 +29,9 @@ export const Scroller = Class.inherit({
     _update: function() {
         this._stopScrolling();
         return deferUpdate(() => {
-            this._resetScaleRatio();
+            // this._resetScaleRatio();
             this._updateLocation();
-            this._updateBounds();
+            // this._updateBounds();
             this._updateScrollbar();
             deferRender(() => {
                 this._moveScrollbar();
@@ -43,46 +40,13 @@ export const Scroller = Class.inherit({
         });
     },
 
-    _resetScaleRatio: function() {
-        this._scaleRatio = null;
-    },
-
-    _updateScrollbar: deferUpdater(function() {
-        const containerSize = this._containerSize();
-        const contentSize = this._contentSize();
-
-        // NOTE: Real container and content sizes can be a fractional number when scaling.
-        //       Let's save sizes when scale = 100% to decide whether it is necessary to show
-        //       the scrollbar based on by more precise numbers. We can do it because the container
-        //       size to content size ratio should remain approximately the same at any zoom.
-        const baseContainerSize = this._getBaseDimension(this._$container.get(0), this._dimension);
-        const baseContentSize = this._getBaseDimension(this._$content.get(0), this._dimension);
-
-        deferRender(() => {
-            this._scrollbar.option({
-                containerSize,
-                contentSize,
-                baseContainerSize,
-                baseContentSize,
-                scaleRatio: this._getScaleRatio()
-            });
-        });
-    }),
-
     _moveToBounds: deferRenderer(deferUpdater(deferRenderer(function() {
-        const location = this._boundLocation();
-        const locationChanged = location !== this._location;
-
-        this._location = location;
-        this._move();
-
-        if(locationChanged) {
-            this._scrollAction();
-        }
+        // if(locationChanged) {
+        this._scrollAction();
+        // }
     }))),
 
     _cursorEnterHandler: function() {
-        this._resetScaleRatio();
         this._updateScrollbar();
 
         this._scrollbar.cursorEnter();
@@ -117,13 +81,6 @@ export const SimulatedStrategy = Class.inherit({
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
-    },
-
-    _eachScroller: function(callback) {
-        callback = callback.bind(this);
-        each(this._scrollers, function(direction, scroller) {
-            callback(scroller, direction);
-        });
     },
 
     _saveActive: function() {
@@ -229,10 +186,6 @@ export const SimulatedStrategy = Class.inherit({
             });
             return when().promise();
         }));
-    },
-
-    updateBounds: function() {
-        this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
     },
 
     verticalOffset: function() {
