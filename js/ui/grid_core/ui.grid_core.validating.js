@@ -1202,7 +1202,7 @@ export default {
                         const rowOptions = $focus?.closest('.dx-row').data('options');
                         const change = rowOptions ? this.getController('editing').getChangeByKey(rowOptions.key) : null;
                         const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
-                        const isCellModified = (change?.data && change?.data[column?.name] !== undefined) && !this._editingController.isSaving();
+                        const isCellModified = (change?.data?.[column?.name] !== undefined) && !this._editingController.isSaving();
                         let revertTooltip;
 
                         if((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
