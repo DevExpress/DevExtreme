@@ -22,7 +22,7 @@ test('Scheduler should have correct height in month view (T927862)', async (t) =
   }, true);
 });
 
-const createScheduler = async (view: string, resourcesValue?: unknown[]) => {
+const createScheduler = async (view: string, resourcesValue?: unknown[]): Promise<void> => {
   await createWidget('dxScheduler', {
     dataSource: createDataSetForScreenShotTests(),
     currentDate: new Date(2020, 6, 15),

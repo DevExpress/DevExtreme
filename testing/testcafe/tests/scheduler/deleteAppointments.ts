@@ -7,14 +7,14 @@ fixture`Delete appointments`
 
 const scheduler = new Scheduler('#container');
 
-const createRecurrenceData = () => [{
+const createRecurrenceData = (): Record<string, unknown>[] => [{
   Text: 'Text',
   StartDate: new Date(2017, 4, 22, 1, 30, 0, 0),
   EndDate: new Date(2017, 4, 22, 2, 30, 0, 0),
   RecurrenceRule: 'FREQ=DAILY',
 }];
 
-const createScheduler = async (data) => {
+const createScheduler = async (data): Promise<void> => {
   createWidget('dxScheduler', {
     dataSource: data,
     views: ['week'],
@@ -29,7 +29,7 @@ const createScheduler = async (data) => {
   }, true);
 };
 
-const createSimpleData = () => [{
+const createSimpleData = (): Record<string, unknown>[] => [{
   Text: 'Text',
   StartDate: new Date(2017, 4, 22, 1, 30, 0, 0),
   EndDate: new Date(2017, 4, 22, 2, 30, 0, 0),

@@ -323,7 +323,7 @@ class ScrollableTestHelper {
     });
   }
 
-  checkValidDirection(jestExpect, expectedValidDirections, options?: {[key: string]: any }) {
+  checkValidDirection(jestExpect, expectedValidDirections, options?: { [key: string]: any }) {
     if (expectedValidDirections) {
       jestExpect(this.viewModel.validDirections).toEqual(expectedValidDirections);
     } else {
@@ -331,7 +331,7 @@ class ScrollableTestHelper {
     }
   }
 
-  getValidDirection(options): { vertical: boolean; horizontal: boolean} {
+  getValidDirection(options): { vertical: boolean; horizontal: boolean } {
     const {
       scrollByContent, scrollByThumb, targetClass, isDxWheelEvent,
     } = options;

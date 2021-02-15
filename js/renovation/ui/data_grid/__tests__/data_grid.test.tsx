@@ -44,7 +44,7 @@ describe('DataGrid', () => {
         restAttributes: { 'rest-attributes': 'true' },
         instance,
         props,
-      } as Partial<DataGridProps> & {aria: {} };
+      } as Partial<DataGridProps> & { aria: Record<string, unknown> };
       const tree = mount(<DataGridView {...gridProps as any} /> as any);
 
       expect(tree.find(Widget).props()).toMatchObject({

@@ -7,7 +7,7 @@ interface Options {
   backgroundColor: string;
 }
 
-const createElement = (tagName: string, options: Options) => {
+const createElement = (tagName: string, options: Options): HTMLElement => {
   const element = document.createElement(tagName);
   const {
     id, width, height, backgroundColor,

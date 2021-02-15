@@ -31,9 +31,9 @@ describe('subscribeToClickEvent', () => {
     emit(EVENT.dxClick);
     expect(clickHandler).toHaveBeenCalledTimes(1);
 
-        unsubscribeFn?.();
+    unsubscribeFn?.();
 
-        emit(EVENT.dxClick);
-        expect(clickHandler).toHaveBeenCalledTimes(1);
+    emit(EVENT.dxClick);
+    expect(clickHandler).toHaveBeenCalledTimes(1);
   });
 });
