@@ -11,6 +11,17 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v2
 
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: .\node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-package-lock --no-audit --no-fund
+
     - name: Install dart
       uses: cedx/setup-dart@v2
 
