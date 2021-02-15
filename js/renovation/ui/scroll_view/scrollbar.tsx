@@ -343,7 +343,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     if (this.inBounds()) {
       return;
     }
-    // this._bounceAction();
+
+    this.props.onBounce?.();
     this.setupBounce();
     this.bounceAnimator?.start();
   }

@@ -605,43 +605,55 @@ describe('Handlers', () => {
               });
 
               each([true, false]).describe('inBound: %o', (inBounds) => {
-                it('scrollByHandler(delta)', () => {
-                  const bounceAnimatorStartHandler = jest.fn();
+                each([undefined, jest.fn()]).describe('visibilityChangeHandler: %o', (onBounceHandler) => {
+                  it('scrollByHandler(delta)', () => {
+                    const bounceAnimatorStartHandler = jest.fn();
 
-                  const delta = { x: 50, y: 70 };
-                  const viewModel = new Scrollbar({
-                    direction,
-                    scrollVisibilityChange: visibilityChangeHandler as any,
-                  } as ScrollbarProps);
+                    const delta = { x: 50, y: 70 };
+                    const viewModel = new Scrollbar({
+                      direction,
+                      scrollVisibilityChange: visibilityChangeHandler as any,
+                      onBounce: onBounceHandler,
+                    } as ScrollbarProps);
 
-                  mount(viewFunction(viewModel as any) as JSX.Element);
+                    mount(viewFunction(viewModel as any) as JSX.Element);
 
-                  (viewModel as any).scrollBy = jest.fn();
-                  (viewModel as any).inBounds = () => inBounds;
-                  (viewModel as any).bounceAnimator = {
-                    start: bounceAnimatorStartHandler,
-                  };
+                    (viewModel as any).scrollBy = jest.fn();
+                    (viewModel as any).inBounds = () => inBounds;
+                    (viewModel as any).bounceAnimator = {
+                      start: bounceAnimatorStartHandler,
+                    };
 
-                  viewModel.scrollByHandler(delta);
+                    viewModel.scrollByHandler(delta);
 
-                  expect((viewModel as any).scrollBy).toBeCalledTimes(1);
-                  expect((viewModel as any).scrollBy).toHaveBeenCalledWith(delta);
-                  if (inBounds) {
-                    if (visibilityChangeHandler) {
-                      expect(visibilityChangeHandler).toHaveBeenCalledTimes(1);
-                      expect(visibilityChangeHandler).toHaveBeenCalledWith(false);
+                    expect((viewModel as any).scrollBy).toBeCalledTimes(1);
+                    expect((viewModel as any).scrollBy).toHaveBeenCalledWith(delta);
+                    if (inBounds) {
+                      if (visibilityChangeHandler) {
+                        expect(visibilityChangeHandler).toHaveBeenCalledTimes(1);
+                        expect(visibilityChangeHandler).toHaveBeenCalledWith(false);
+                      }
+                      if (onBounceHandler) {
+                        expect(onBounceHandler).toHaveBeenCalledTimes(0);
+                      }
+                    } else {
+                      if (onBounceHandler) {
+                        expect(onBounceHandler).toHaveBeenCalledTimes(1);
+                      }
+                      expect(bounceAnimatorStartHandler).toHaveBeenCalledTimes(1);
                     }
-                  } else {
-                    expect(bounceAnimatorStartHandler).toHaveBeenCalledTimes(1);
-                  }
+                  });
                 });
 
                 each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
                   each([undefined, jest.fn()]).describe('BounceAnimatorStartHandler: %o', (bounceAnimatorStartHandler) => {
                     it('stopHandler()', () => {
+                      const onBounceHandler = jest.fn();
+
                       const viewModel = new Scrollbar({
                         direction,
                         scrollVisibilityChange: visibilityChangeHandler as any,
+                        onBounce: () => { onBounceHandler(); },
                       } as ScrollbarProps);
 
                       mount(viewFunction(viewModel as any) as JSX.Element);

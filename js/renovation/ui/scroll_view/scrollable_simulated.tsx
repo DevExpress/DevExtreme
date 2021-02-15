@@ -88,7 +88,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     scrollableOffsetLeft, scrollableOffsetTop,
     contentWidth, containerClientWidth, contentHeight, containerClientHeight,
     baseContentWidth, baseContainerWidth, baseContentHeight, baseContainerHeight,
-    scrollableRef, windowResizeHandler, contentStyles,
+    scrollableRef, windowResizeHandler, contentStyles, containerStyles, onBounce,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
@@ -122,6 +122,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
         <div
           className={SCROLLABLE_CONTAINER_CLASS}
           ref={containerRef}
+          style={containerStyles}
         >
           <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef} style={contentStyles}>
             {forceGeneratePockets && (
@@ -160,6 +161,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
+              onBounce={onBounce}
             />
           )}
           {isVertical && (
@@ -181,6 +183,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
+              onBounce={onBounce}
             />
           )}
         </div>
@@ -477,6 +480,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.needShowScrollbars = visible;
   }
 
+  onBounce(): void {
+    this.props.onBounce?.(this.getEventArgs());
+  }
+
   contentPositionChange(scrollProp: 'scrollLeft' | 'scrollTop', location: number, ratio: number): void {
     this.containerRef[scrollProp] = -location / ratio;
 
@@ -535,6 +542,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private handleMove(e): void {
+    if (this.isLocked()) {
+      e.cancel = true;
+      return;
+    }
+
     e.preventDefault();
 
     this.adjustDistance(e, 'delta');
@@ -681,10 +693,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private allowedDirection(): string | undefined {
-    return updateAllowedDirection(this.allowedDirections(), this.props.direction);
+    return updateAllowedDirection(this.allowedDirections, this.props.direction);
   }
 
-  private allowedDirections(): allowedDirection {
+  get allowedDirections(): allowedDirection {
+    if (!isDefined(this.verticalScrollbarRef) && !isDefined(this.horizontalScrollbarRef)) {
+      return { vertical: false, horizontal: false };
+    }
+
     const { bounceEnabled, direction } = this.props;
     const { isVertical, isHorizontal } = new ScrollDirection(direction);
 
@@ -1009,11 +1025,21 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return getElementOffset(this.scrollableRef);
   }
 
-  get contentStyles(): { [key: string]: string | number } {
+  get contentStyles(): { [key: string]: string } {
     const { left, top } = { ...{ left: 0, top: 0 }, ...this.props.contentTranslateOffset };
 
     return {
       transform: `translate(${left}px, ${top}px)`,
+    };
+  }
+
+  get containerStyles(): { [key: string]: string } {
+    let touchDirection = this.allowedDirections.vertical ? 'pan-x' : '';
+    touchDirection = this.allowedDirections.horizontal ? 'pan-y' : touchDirection;
+    touchDirection = this.allowedDirections.vertical && this.allowedDirections.horizontal ? 'none' : touchDirection;
+
+    return {
+      touchAction: touchDirection,
     };
   }
 

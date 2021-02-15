@@ -38,4 +38,6 @@ export class ScrollbarProps extends ScrollableInternalProps {
   @OneWay() scrollScrollbar: ScrollableShowScrollbar = 'onScroll';
 
   @Event() scrollVisibilityChange?: (args: boolean) => void;
+
+  @Event() onBounce?: () => void;
 }
