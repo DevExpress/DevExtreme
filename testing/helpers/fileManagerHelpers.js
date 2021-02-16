@@ -66,6 +66,7 @@ export const Consts = {
     DROP_DOWN_BUTTON_ACTION_CLASS: 'dx-dropdownbutton-action',
     TEXT_EDITOR_INPUT_CLASS: 'dx-texteditor-input',
     MENU_ITEM_WITH_TEXT_CLASS: 'dx-menu-item-has-text',
+    MENU_ITEM_SELECTED_CLASS: 'dx-menu-item-selected',
     CONTEXT_MENU_CLASS: 'dx-context-menu',
     MENU_ITEM_CLASS: 'dx-menu-item',
     MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
