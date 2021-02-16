@@ -24,10 +24,10 @@ export class ScrollableSimulatedProps extends ScrollableProps {
   @Event() onStop?: EventCallback<ScrollEventArgs>;
 
   @TwoWay()
-  contentTranslateOffset: {left: number; top: number} = { left: 0, top: 0 };
+  contentTranslateOffset: { left: number; top: number } = { left: 0, top: 0 };
 
   @Event()
-  contentTranslateOffsetChange?: EventCallback<{ left?: number; top?: number}>;
+  contentTranslateOffsetChange?: EventCallback<{ left?: number; top?: number }>;
 
   @Event()
   contentPositionChange?: (scrollProp: 'scrollLeft' | 'scrollTop', location: number, ratio: number) => void;

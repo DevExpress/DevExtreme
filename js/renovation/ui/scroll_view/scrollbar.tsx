@@ -80,7 +80,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 };
 
 type ScrollbarPropsType = ScrollbarProps & Pick<BaseWidgetProps, 'visible'>
-& Pick<ScrollableSimulatedProps, 'contentPositionChange' | 'contentTranslateOffsetChange'>;
+& Pick<ScrollableSimulatedProps, 'contentPositionChange' | 'contentTranslateOffset' | 'contentTranslateOffsetChange'>;
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
@@ -117,7 +117,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
 
-  get scrollTranslateOffset(): {left: number; top: number} {
+  get scrollTranslateOffset(): { left: number; top: number } {
     return {
       ...{ left: 0, top: 0 },
       ...{ [this.scrollProp]: this.scrollPosition },
@@ -499,7 +499,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     }
 
     // there is an issue https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
-    this.props.contentPositionChange?.(this.fullScrollProp, location, this.props.scaleRatio,);
+    this.props.contentPositionChange?.(this.fullScrollProp, location, this.props.scaleRatio);
     this.props.contentTranslateOffsetChange?.({ [this.scrollProp]: currentTranslateOffset });
   }
 
