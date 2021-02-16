@@ -171,6 +171,7 @@ class Gantt extends Widget {
             onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: this._createModelChangesListener(),
             taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
+            taskContentTemplate: this._getTaskContentTemplateFunc(this.option('taskContentTemplate')),
             onTaskClick: (e) => { this._onTreeListRowClick(e); },
             onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); },
             onAdjustControl: () => { this._onAdjustControl(); }
@@ -1179,6 +1180,20 @@ class Gantt extends Widget {
         return createTemplateFunction;
     }
 
+    _getTaskContentTemplateFunc(taskContentTemplateOption) {
+        const isTaskShowing = true;
+        const template = taskContentTemplateOption && this._getTemplate(taskContentTemplateOption);
+        const createTemplateFunction = template && ((container, item) => {
+            item.taskData = this.getTaskDataByCoreData(item.taskData);
+            template.render({
+                model: item,
+                container: getPublicElement($(container))
+            });
+            return isTaskShowing;
+        });
+        return createTemplateFunction;
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
@@ -1274,6 +1289,7 @@ class Gantt extends Widget {
                 items: undefined
             },
             taskTooltipContentTemplate: null,
+            taskContentTemplate: null,
             rootValue: 0
         });
     }
@@ -1501,6 +1517,9 @@ class Gantt extends Widget {
                 break;
             case 'taskTooltipContentTemplate':
                 this._setGanttViewOption('taskTooltipContentTemplate', this._getTaskTooltipContentTemplateFunc(args.value));
+                break;
+            case 'taskContentTemplate':
+                this._setGanttViewOption('taskContentTemplate', this._getTaskContentTemplateFunc(args.value));
                 break;
             case 'rootValue':
                 this._setTreeListOption('rootValue', args.value);

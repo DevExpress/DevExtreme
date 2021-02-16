@@ -36,7 +36,8 @@ export class GanttView extends Widget {
             areAlternateRowsEnabled: false,
             viewType: this._getViewTypeByScaleType(this.option('scaleType')),
             cultureInfo: this._getCultureInfo(),
-            taskTooltipContentTemplate: this.option('taskTooltipContentTemplate')
+            taskTooltipContentTemplate: this.option('taskTooltipContentTemplate'),
+            taskContentTemplate: this.option('taskContentTemplate')
         });
         this._selectTask(this.option('selectedRowKey'));
         this.updateBarItemsState();
@@ -193,6 +194,9 @@ export class GanttView extends Widget {
                 break;
             case 'taskTooltipContentTemplate':
                 this._ganttViewCore.setTaskTooltipContentTemplate(args.value);
+                break;
+            case 'taskContentTemplate':
+                this._ganttViewCore.setTaskContentTemplate(args.value);
                 break;
             default:
                 super._optionChanged(args);
