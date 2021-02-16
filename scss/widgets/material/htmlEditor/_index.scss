@@ -13,11 +13,11 @@
 
 
 .dx-htmleditor {
-  .dx-htmleditor-toolbar-wrapper:first-child {
-    border-bottom: 1px solid $htmleditor-toolbar-border-color;
-  }
+  border-color: transparent;
 
-  border-color: $htmleditor-border-color;
+  .dx-htmleditor-toolbar-wrapper:first-child {
+    border-bottom: 1px solid $texteditor-border-color;
+  }
 
   &.dx-invalid {
     border-color: $htmleditor-invalid-faded-border-color;
@@ -27,30 +27,35 @@
     }
   }
 
+  &.dx-htmleditor-outlined {
+    border-color: $texteditor-border-color;
+    border-radius: $texteditor-input-border-radius;
+
+    &.dx-state-disabled,
+    &.dx-state-readonly {
+      border-color: color.change($texteditor-color, $alpha: 0.5);
+    }
+
+    &.dx-invalid {
+      border-color: $texteditor-invalid-faded-border-color;
+    }
+  }
+
   &.dx-htmleditor-filled {
-    border-color: $htmleditor-filled-border-color;
     background: $texteditor-bg;
+
+    &.dx-state-disabled,
+    &.dx-state-readonly {
+      background-color: color.change($texteditor-bg, $alpha: 0.12);
+    }
   }
 
   &.dx-htmleditor-underlined {
-    border-color: $htmleditor-filled-border-color;
-    border-bottom-color: $htmleditor-border-color;
+    border-color: transparent;
+    border-bottom-color: $texteditor-border-color;
 
     &.dx-invalid {
       border-bottom-color: $texteditor-invalid-faded-border-color;
-
-      &.dx-state-focused {
-        border-color: $htmleditor-filled-border-color;
-        border-bottom-color: $htmleditor-invalid-border-color;
-      }
-
-      &.dx-state-focused,
-      &.dx-state-active {
-        &::before {
-          border-top: 1px solid $texteditor-invalid-focused-border-color;
-          border-bottom: 1px solid $texteditor-invalid-focused-border-color;
-        }
-      }
     }
 
     .dx-htmleditor-content {
@@ -58,8 +63,10 @@
     }
 
     &.dx-rtl {
-      padding-left: 1px;
-      padding-right: 15px;
+      .dx-htmleditor-content {
+        padding-left: $material-html-editor-horizontal-padding;
+        padding-right: 0;
+      }
     }
   }
 }

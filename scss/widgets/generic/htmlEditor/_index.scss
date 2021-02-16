@@ -22,7 +22,7 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 
   border-color: $htmleditor-border-color;
 
-  &.dx-invalid {
+  &.dx-invalid.dx-htmleditor-outlined {
     border-color: $htmleditor-invalid-faded-border-color;
 
     &.dx-state-focused {
@@ -61,8 +61,10 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
     }
 
     &.dx-rtl {
-      padding-left: 1px;
-      padding-right: 15px;
+      .dx-htmleditor-content {
+        padding-left: $generic-html-editor-horizontal-padding;
+        padding-right: 0;
+      }
     }
   }
 }
