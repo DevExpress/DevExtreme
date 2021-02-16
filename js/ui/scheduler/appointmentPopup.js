@@ -10,7 +10,7 @@ import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
 import Popup from '../popup';
 import { AppointmentForm } from './appointment_form';
-import { hide as hideLoading, show as showLoading } from './ui.loading';
+import { hide as hideLoading, show as showLoading } from './loading';
 
 const toMs = dateUtils.dateToMilliseconds;
 
