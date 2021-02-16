@@ -52,7 +52,7 @@ QUnit.module('ScrollTo', () => {
             assert.roughEqual(
                 rtlInitialPosition + scrollByStub.getCall(0).args[0].left,
                 leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
-                1.01,
+                3.01,
                 'Correct left parameter',
             );
         };
