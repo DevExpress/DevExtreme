@@ -18,9 +18,9 @@ spawn(
   'dart',
   ['./main.dart'],
   {
-    detached: true,
+    // detached: true,
     cwd: join(process.cwd(), 'dart-compiler'),
   },
 );
 
-setTimeout(() => process.exit(), 1000);
+// setTimeout(() => process.exit(), 1000);
