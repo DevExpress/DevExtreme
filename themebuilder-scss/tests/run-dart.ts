@@ -39,4 +39,4 @@ childProcess.on('close', (code) => {
   console.log(`child process exited with code ${code}`);
 });
 
-// setTimeout(() => process.exit(), 1000);
+setTimeout(() => process.exit(), 3000);
