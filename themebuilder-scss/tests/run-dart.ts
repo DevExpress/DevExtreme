@@ -13,8 +13,9 @@ const copyMeta = (): void => {
 };
 
 copyMeta();
+console.log('CWD:', process.cwd());
 
-spawn(
+const childProcess = spawn(
   'dart',
   ['./main.dart'],
   {
@@ -22,5 +23,21 @@ spawn(
     cwd: join(process.cwd(), 'dart-compiler'),
   },
 );
+
+childProcess.on('error', (error) => {
+  console.error('Failed to start subprocess.', error);
+});
+
+childProcess.stdout.on('data', (data) => {
+  console.log(`stdout: ${data}`);
+});
+
+childProcess.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`);
+});
+
+childProcess.on('close', (code) => {
+  console.log(`child process exited with code ${code}`);
+});
 
 // setTimeout(() => process.exit(), 1000);
