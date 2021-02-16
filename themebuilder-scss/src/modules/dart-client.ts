@@ -55,7 +55,7 @@ export default class DartClient {
     });
   }
 
-  send(message: DartCompilerConfig): Promise<DartCompilerResult> {
+  send(message: DartCompilerConfig | DartCompilerKeepAliveConfig): Promise<DartCompilerResult> {
     this.client.setTimeout(0);
 
     return new Promise((resolve) => {

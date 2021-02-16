@@ -119,6 +119,10 @@ interface DartCompilerConfig {
   items: ConfigMetaItem[];
 }
 
+interface DartCompilerKeepAliveConfig {
+  keepAlive: boolean;
+}
+
 interface DartCompilerResult {
   changedVariables?: { [key: string]: string };
   css?: string;
