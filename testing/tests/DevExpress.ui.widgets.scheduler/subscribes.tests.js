@@ -1,6 +1,6 @@
 import 'common.css!';
 import 'generic_light.css!';
-import 'ui/scheduler/ui.scheduler.subscribes';
+import 'ui/scheduler/subscribes';
 import 'ui/scheduler/ui.scheduler';
 import {
     AppointmentSettingsGeneratorBaseStrategy,
