@@ -22,6 +22,10 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
+import {
+    template
+} from '../core/templates/template';
+
 export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.allowedFileExtensions
