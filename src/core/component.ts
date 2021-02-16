@@ -1,7 +1,7 @@
 import * as VueType from "vue";
 import IVue, { VNode, VueConstructor } from "vue";
 
-import * as events from "devextreme/events";
+import { triggerHandler } from "devextreme/events";
 
 import { pullAllChildren } from "./children-processing";
 import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./configuration";
@@ -105,7 +105,7 @@ const BaseComponent = (): VueConstructor<IBaseComponent> => Vue.extend({
     beforeDestroy(): void {
         const instance = this.$_instance;
         if (instance) {
-            events.triggerHandler(this.$el, DX_REMOVE_EVENT);
+            triggerHandler(this.$el, DX_REMOVE_EVENT);
             instance.dispose();
         }
     },
