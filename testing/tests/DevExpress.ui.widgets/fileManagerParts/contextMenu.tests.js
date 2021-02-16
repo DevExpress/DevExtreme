@@ -908,7 +908,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        this.wrapper.getDetailsItemList().trigger('dxcontextmenu');
+        this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
         this.clock.tick(400);
 
         let $items = this.wrapper.getContextMenuItems();
