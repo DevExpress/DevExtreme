@@ -1213,4 +1213,67 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         assert.strictEqual($items.eq(2).text(), 'someText', 'third item is correct');
     });
 
+    test('default items missed and forbidden options (T972377)', function(assert) {
+        const fileManagerInstance = $('#fileManager').dxFileManager('instance');
+        fileManagerInstance.option('contextMenu', {
+            items: ['upload', {
+                name: 'refresh',
+                closeMenuOnClick: false,
+                selectable: true,
+                selected: true,
+                items: ['upload', 'refresh']
+            }]
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        let $items = this.wrapper.getContextMenuItems(true);
+        assert.strictEqual($items.length, 2, 'there are two items');
+
+        $items.eq(1).trigger('mouseenter');
+        this.clock.tick(400);
+
+        const $subMenuItems = this.wrapper.getContextMenuSubMenuItems();
+        assert.strictEqual($subMenuItems.length, 0, 'there are no items available');
+
+        $items.eq(1).trigger('dxclick');
+        this.clock.tick(600);
+
+        $items = this.wrapper.getContextMenuItems(true);
+        assert.strictEqual($items.length, 2, 'context menu is still visible');
+        assert.ok($items.eq(1).hasClass(Consts.MENU_ITEM_SELECTED_CLASS), 'context menu item is selected');
+    });
+
+    test('custom items missed and forbidden options (T972377)', function(assert) {
+        const customText = 'customText';
+        const clickSpy = sinon.spy();
+        const fileManagerInstance = $('#fileManager').dxFileManager('instance');
+        fileManagerInstance.option('contextMenu', {
+            items: [{
+                text: customText,
+                closeMenuOnClick: false,
+                selectable: true,
+                selected: true,
+                onClick: clickSpy
+            }, 'refresh']
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getDetailsViewScrollable().trigger('dxcontextmenu');
+        this.clock.tick(400);
+
+        let $items = this.wrapper.getContextMenuItems(true);
+        assert.strictEqual($items.length, 2, 'there are two items');
+
+        $items.eq(0).trigger('dxclick');
+        this.clock.tick(600);
+
+        $items = this.wrapper.getContextMenuItems(true);
+        assert.strictEqual(clickSpy.callCount, 1, 'custom command is called');
+        assert.strictEqual($items.length, 2, 'context menu is still visible');
+        assert.ok($items.eq(0).hasClass(Consts.MENU_ITEM_SELECTED_CLASS), 'context menu item is selected');
+    });
+
 });
