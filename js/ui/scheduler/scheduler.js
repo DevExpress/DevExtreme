@@ -40,11 +40,11 @@ import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrat
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
 import { hide as hideLoading, show as showLoading } from './ui.loading';
 import AppointmentCollection from './appointments/appointmentCollection';
-import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
-import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
+import SchedulerLayoutManager from './appointments.layout_manager';
+import SchedulerAppointmentModel from './appointment_model';
 import { Header } from './header/header';
 import { ResourceManager } from './resources/resourceManager';
-import subscribes from './ui.scheduler.subscribes';
+import subscribes from './subscribes';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone';
 import SchedulerAgenda from './workspaces/ui.scheduler.agenda';
