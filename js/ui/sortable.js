@@ -236,9 +236,17 @@ const Sortable = Draggable.inherit({
 
         if($scrollable) {
             const offset = $scrollable.offset();
-            const validY = offset.top + $scrollable.height() >= event.pageY && offset.top <= event.pageY;
-            const validX = offset.left + $scrollable.width() >= event.pageX && offset.left <= event.pageX;
-
+            // use getComputedStyle, because vertical scrollbar is reduce width
+            // eslint-disable-next-line no-undef
+            const style = window.getComputedStyle($scrollable[0]);
+            const paddingLeft = parseFloat(style.paddingLeft) || 0;
+            const paddingTop = parseFloat(style.paddingTop) || 0;
+            const width = parseFloat(style.width) || 0;
+            const height = parseFloat(style.height) || 0;
+            const startX = offset.left + paddingLeft;
+            const startY = offset.top + paddingTop;
+            const validX = startX < event.pageX && event.pageX < startX + width;
+            const validY = startY < event.pageY && event.pageY < startY + height;
             return validY && validX;
         }
 
