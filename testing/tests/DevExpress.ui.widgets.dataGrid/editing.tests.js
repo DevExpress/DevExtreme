@@ -11945,7 +11945,7 @@ QUnit.module('Editing with validation', {
         // assert
         const selectBoxInstance = $testElement.find('tbody td').eq(0).find('.dx-selectbox').dxSelectBox('instance');
         const invalidTooltipInstance = $testElement.find('tbody td').eq(0).find('.dx-overlay.dx-invalid-message').dxOverlay('instance');
-        const revertTooltipInstance = $testElement.find('tbody td').eq(0).find('.dx-overlay.dx-datagrid-revert-tooltip').dxTooltip('instance');
+        const revertTooltipInstance = $testElement.find('tbody td').eq(0).find('.dx-overlay.dx-datagrid-revert-tooltip').dxOverlay('instance');
 
         assert.ok(selectBoxInstance.option('opened'), 'drop-down editor is shown');
         assert.ok(invalidTooltipInstance.option('visible'), 'invalid message tooltip is visible');
@@ -11998,7 +11998,7 @@ QUnit.module('Editing with validation', {
         // assert
         const selectBoxInstance = $testElement.find('tbody td').eq(2).find('.dx-selectbox').dxSelectBox('instance');
         const invalidTooltipInstance = $testElement.find('tbody td').eq(2).find('.dx-overlay.dx-invalid-message').dxOverlay('instance');
-        const revertTooltipInstance = $testElement.find('tbody td').eq(2).find('.dx-overlay.dx-datagrid-revert-tooltip').dxTooltip('instance');
+        const revertTooltipInstance = $testElement.find('tbody td').eq(2).find('.dx-overlay.dx-datagrid-revert-tooltip').dxOverlay('instance');
 
         assert.ok(selectBoxInstance.option('opened'), 'drop-down editor is shown');
         assert.ok(invalidTooltipInstance.option('visible'), 'invalid message tooltip is visible');
@@ -14241,7 +14241,7 @@ QUnit.module('Editing with validation', {
         assert.strictEqual(overlayPosition.at, 'bottom right', 'position.at');
         assert.strictEqual(overlayPosition.collision, 'none flip', 'position.collision');
 
-        const tooltipInstance = $(rowsView.getCellElement(0, 1)).find('.dx-overlay.dx-datagrid-revert-tooltip').dxTooltip('instance');
+        const tooltipInstance = $(rowsView.getCellElement(0, 1)).find('.dx-overlay.dx-datagrid-revert-tooltip').dxOverlay('instance');
         assert.ok(overlayInstance, 'has invalid message');
         const tooltipPosition = tooltipInstance.option('position');
         assert.strictEqual(tooltipPosition.my, 'top right', 'position.my');
