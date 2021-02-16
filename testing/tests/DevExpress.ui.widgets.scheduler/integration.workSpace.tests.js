@@ -1610,7 +1610,7 @@ if(devices.real().deviceType === 'desktop') {
                 showAllDayPanel: true,
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
-                scrolling: { mode: 'virtual' },
+                scrolling: { mode: 'virtual', type: 'both' },
             });
 
             checkSelection(assert, scheduler, 0, 5);
@@ -1627,7 +1627,7 @@ if(devices.real().deviceType === 'desktop') {
                 showAllDayPanel: true,
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
-                scrolling: { mode: 'virtual' },
+                scrolling: { mode: 'virtual', type: 'both' },
                 resources,
                 groups: ['ownerId'],
             });
@@ -1655,7 +1655,7 @@ if(devices.real().deviceType === 'desktop') {
                 showAllDayPanel: true,
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
-                scrolling: { mode: 'virtual' },
+                scrolling: { mode: 'virtual', type: 'both' },
                 resources,
                 groups: ['ownerId'],
             });
@@ -1684,7 +1684,7 @@ if(devices.real().deviceType === 'desktop') {
                 showAllDayPanel: true,
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
-                scrolling: { mode: 'virtual' },
+                scrolling: { mode: 'virtual', type: 'both' },
                 resources,
                 groups: ['ownerId'],
             });
@@ -1712,7 +1712,7 @@ if(devices.real().deviceType === 'desktop') {
                 showAllDayPanel: true,
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
-                scrolling: { mode: 'virtual' },
+                scrolling: { mode: 'virtual', type: 'both' },
             });
 
             scheduler.workSpace.selectCells(0, 5);
