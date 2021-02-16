@@ -12,8 +12,8 @@ import {
     DxDataGridModule
 } from 'devextreme-angular';
 
-import * as readyCallbacks from 'devextreme/core/utils/ready_callbacks';
-import * as events from 'devextreme/events';
+import readyCallbacks from 'devextreme/core/utils/ready_callbacks';
+import { on } from 'devextreme/events';
 
 @Component({
     selector: 'test-container-component',
@@ -75,7 +75,7 @@ describe('events', () => {
         const element = fixture.nativeElement.querySelector('.elem');
         let counter = 0;
         fixture.ngZone.runOutsideAngular(() => {
-            events.on(element, 'click', () => {
+            on(element, 'click', () => {
                 expect(NgZone.isInAngularZone()).toBe(true);
                 counter++;
             });

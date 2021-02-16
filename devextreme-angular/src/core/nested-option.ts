@@ -4,8 +4,8 @@ import { DX_TEMPLATE_WRAPPER_CLASS } from './template';
 import { getElement } from './utils';
 
 import render from 'devextreme/core/renderer';
-import * as events from 'devextreme/events';
-import * as domAdapter from 'devextreme/core/dom_adapter';
+import { triggerHandler } from 'devextreme/events';
+import domAdapter from 'devextreme/core/dom_adapter';
 
 const VISIBILITY_CHANGE_SELECTOR = 'dx-visibility-change-handler';
 
@@ -217,7 +217,7 @@ let triggerShownEvent = function(element) {
     changeHandlers.push.apply(changeHandlers, element.querySelectorAll('.' + VISIBILITY_CHANGE_SELECTOR));
 
     for (let i = 0; i < changeHandlers.length; i++) {
-        events.triggerHandler(changeHandlers[i], 'dxshown');
+        triggerHandler(changeHandlers[i], 'dxshown');
     }
 };
 

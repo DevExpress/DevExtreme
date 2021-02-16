@@ -13,8 +13,8 @@ import {
 
 import { DxTemplateHost } from './template-host';
 import { getElement } from './utils';
-import * as events from 'devextreme/events';
-import * as domAdapter from 'devextreme/core/dom_adapter';
+import { one } from 'devextreme/events';
+import domAdapter from 'devextreme/core/dom_adapter';
 
 export const DX_TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
@@ -77,7 +77,7 @@ export class DxTemplateDirective {
                 domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
             }
 
-            events.one(element, 'dxremove', ({}, params) => {
+            one(element, 'dxremove', ({}, params) => {
                 if (!params || !params._angularIntegration) {
                     childView.destroy();
                 }

@@ -1,6 +1,6 @@
 import { PLATFORM_ID, Inject, NgModule } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
-import * as ajax from 'devextreme/core/utils/ajax';
+import ajax from 'devextreme/core/utils/ajax';
 import { Deferred } from 'devextreme/core/utils/deferred';
 import { TransferState, makeStateKey, BrowserTransferStateModule } from '@angular/platform-browser';
 

@@ -1,12 +1,12 @@
 /* tslint:disable:max-line-length */
 import { NgModule, Inject, NgZone, Optional, VERSION } from '@angular/core';
 import { XhrFactory } from '@angular/common/http';
-import * as httpRequest from 'devextreme/core/http_request';
+import httpRequest from 'devextreme/core/http_request';
 import { DOCUMENT } from '@angular/common';
 
-import * as domAdapter from 'devextreme/core/dom_adapter';
-import * as readyCallbacks from 'devextreme/core/utils/ready_callbacks';
-import * as eventsEngine from 'devextreme/events/core/events_engine';
+import domAdapter from 'devextreme/core/dom_adapter';
+import readyCallbacks from 'devextreme/core/utils/ready_callbacks';
+import eventsEngine from 'devextreme/events/core/events_engine';
 
 const outsideZoneEvents = ['mousemove', 'mouseover', 'mouseout'];
 const insideZoneEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];

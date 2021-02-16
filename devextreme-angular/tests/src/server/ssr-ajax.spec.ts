@@ -7,7 +7,7 @@ import { isPlatformServer } from '@angular/common';
 import { DxServerTransferStateModule } from 'devextreme-angular';
 
 import { Deferred } from 'devextreme/core/utils/deferred';
-import * as ajax from 'devextreme/core/utils/ajax';
+import ajax from 'devextreme/core/utils/ajax';
 
 import { ServerModule, ServerTransferStateModule } from '@angular/platform-server';
 import { BrowserModule, TransferState, makeStateKey } from '@angular/platform-browser';

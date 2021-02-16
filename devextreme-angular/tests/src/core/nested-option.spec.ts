@@ -38,7 +38,7 @@ import {
     extractTemplate
 } from 'devextreme-angular';
 
-import * as events from 'devextreme/events';
+import { on } from 'devextreme/events';
 
 // TODO: Try to replace dxButton to Widget ('require' required)
 import DxButton from 'devextreme/ui/button';
@@ -150,7 +150,7 @@ export class DxiTestCollectionOptionWithTemplateComponent extends CollectionNest
         extractTemplate(this, this.element, this.renderer, this.document);
 
         element.classList.add('dx-visibility-change-handler');
-        events.on(element, 'dxshown', function() {
+        on(element, 'dxshown', function() {
             this.shownEventFired = true;
         }.bind(this));
 
