@@ -133,15 +133,24 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         if(this._isDefaultColumn(columnOptions.dataField)) {
             const defaultConfig = extend(true, {}, DEFAULT_COLUMN_CONFIGS[columnOptions.dataField]);
             resultCssClass = defaultConfig.cssClass || '';
-            if(columnOptions.dataField === 'thumbnail') {
-                defaultConfig.cellTemplate = this._createThumbnailColumnCell.bind(this);
-                defaultConfig.calculateSortValue = `fileItem.${defaultConfig.calculateSortValue}`;
-            }
-            if(columnOptions.dataField === 'name') {
-                defaultConfig.cellTemplate = this._createNameColumnCell.bind(this);
-            }
-            if(columnOptions.dataField === 'size') {
-                defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
+            switch(columnOptions.dataField) {
+                case 'thumbnail':
+                    defaultConfig.cellTemplate = this._createThumbnailColumnCell.bind(this);
+                    defaultConfig.calculateSortValue = `fileItem.${defaultConfig.calculateSortValue}`;
+                    break;
+                case 'name':
+                    defaultConfig.cellTemplate = this._createNameColumnCell.bind(this);
+                    defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionName');
+                    break;
+                case 'size':
+                    defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
+                    defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionFileSize');
+                    break;
+                case 'dateModified':
+                    defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionDateModified');
+                    break;
+                default:
+                    break;
             }
             extend(true, result, defaultConfig);
         }
