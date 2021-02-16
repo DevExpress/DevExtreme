@@ -52,23 +52,29 @@ each([{
   describe(`${Scrollable === ScrollableNative ? 'Native' : 'Simulated'}`, () => {
     describe('Render', () => {
       it('should render scrollable content', () => {
-        const scrollable = shallow(viewFunction({ props: { } } as any) as JSX.Element);
+        const viewModel = new Scrollable({ });
+
+        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+
         const scrollableContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content');
         expect(scrollableContent.exists()).toBe(true);
       });
 
       each([true, false]).describe('NeedScrollViewContentWrapper: %o', (needScrollViewContentWrapper) => {
         it('should render scrollView content only if needScrollViewContentWrapper option is enabled', () => {
-          const scrollable = mount(
-            viewFunction({ props: { needScrollViewContentWrapper } } as any) as JSX.Element,
-          );
+          const viewModel = new Scrollable({ needScrollViewContentWrapper });
+
+          const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+
           const scrollViewContent = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
           expect(scrollViewContent.exists()).toBe(needScrollViewContentWrapper);
         });
       });
 
       it('should not render top & bottom pockets', () => {
-        const scrollable = shallow(viewFunction({ props: { } } as any) as JSX.Element);
+        const viewModel = new Scrollable({ });
+
+        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
         expect(topPocket.exists()).toBe(false);
         const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
@@ -76,10 +82,9 @@ each([{
       });
 
       it('should render top & bottom pockets', () => {
-        const scrollable = mount(viewFunction({
-          props:
-            { forceGeneratePockets: true },
-        } as any) as JSX.Element);
+        const viewModel = new Scrollable({ forceGeneratePockets: true });
+
+        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
         expect(topPocket.exists()).toBe(true);
         const bottomPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-bottom-pocket');
@@ -87,10 +92,10 @@ each([{
       });
 
       it('should render top pockets with classes', () => {
-        const scrollable = mount(viewFunction({
-          props:
-            { forceGeneratePockets: true },
-        } as any) as JSX.Element);
+        const viewModel = new Scrollable({ forceGeneratePockets: true });
+
+        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+
         const pullDown = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down');
         expect(pullDown.exists()).toBe(true);
         const pullDownImage = scrollable.find('.dx-scrollview-top-pocket > .dx-scrollview-pull-down > .dx-scrollview-pull-down-image');
@@ -102,10 +107,9 @@ each([{
       });
 
       it('should render bottom pockets with classes', () => {
-        const scrollable = mount(viewFunction({
-          props:
-            { forceGeneratePockets: true },
-        } as any) as JSX.Element);
+        const viewModel = new Scrollable({ forceGeneratePockets: true });
+
+        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const reachBottom = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom');
         expect(reachBottom.exists()).toBe(true);
         const reachBottomIndicator = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom > .dx-scrollview-scrollbottom-indicator');
@@ -115,105 +119,78 @@ each([{
       });
 
       it('should render slot', () => {
-        const props = {
-          props: { children: <div className="content" /> },
-        } as Partial<any>;
-        const scrollable = shallow(viewFunction(props as any) as JSX.Element);
+        const viewModel = new Scrollable({ children: <div className="content" /> });
+
+        const scrollable = shallow(viewFunction(viewModel) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-content .content').exists()).toBe(true);
       });
 
       it('should pass all necessary properties to the Widget', () => {
         const cssClasses = 'dx-scrollview';
-        const props = {
-          props: {
-            width: '120px',
-            height: '300px',
-            rtlEnabled: true,
-            disabled: true,
+
+        const config = {
+          width: '120px',
+          height: '300px',
+          rtlEnabled: true,
+          disabled: true,
+        };
+
+        const viewModel = new Scrollable(config);
+
+        Object.defineProperties(viewModel, {
+          cssClasses: {
+            get() { return (cssClasses); },
           },
-          cssClasses,
-        } as Partial<any>;
-        const scrollable = mount(viewFunction(props as any) as JSX.Element);
+        });
+
+        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
         expect(scrollable.find(Widget).at(0).props()).toMatchObject({
           classes: cssClasses,
-          ...props.props,
+          ...config,
         });
       });
 
-      if (Scrollable === ScrollableSimulated) {
-        each(['vertical', 'horizontal', 'both']).describe('Direction: %o', (direction) => {
-          each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
-            each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-              each([true, false]).describe('InertiaEnabled: %o', (inertiaEnabled) => {
-                it('should pass all necessary properties to the nested Scrollbars', () => {
-                  const propertySettings = {
-                    showScrollbar,
-                    bounceEnabled,
-                    inertiaEnabled,
-                    scrollByThumb: true,
-                  };
-
-                  const viewModel = new Scrollable({ direction, ...propertySettings });
-                  const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
-
-                  const scrollbars = scrollable.find(Scrollbar);
-                  if (direction === 'both') {
-                    expect(scrollbars.at(0).instance().props).toMatchObject({
-                      direction: 'horizontal',
-                      ...propertySettings,
-                    });
-                    expect(scrollbars.at(1).instance().props).toMatchObject({
-                      direction: 'vertical',
-                      ...propertySettings,
-                    });
-                  } else {
-                    expect(scrollbars.at(0).instance().props).toMatchObject({
-                      direction,
-                      ...propertySettings,
-                    });
-                  }
-                });
-              });
-            });
-          });
-        });
-      }
-
       it('should have ref to scrollable content', () => {
         const contentRef = React.createRef();
-        const props = {
-          props: {},
-          contentRef,
-        } as any as Partial<any>;
-        const scrollable = mount(viewFunction(props as any) as JSX.Element);
+        const viewModel = new Scrollable({});
+        viewModel.contentRef = contentRef;
+
+        Object.defineProperties(viewModel, {
+          contentWidth: {
+            get() { return 0; },
+          },
+          contentHeight: {
+            get() { return 0; },
+          },
+        });
+
+        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+
         expect(scrollable.find('.dx-scrollable-content').instance()).toBe(contentRef.current);
       });
 
       it('should have ref to scrollable container', () => {
         const containerRef = React.createRef();
-        const props = {
-          props: {},
-          containerRef,
-        } as any as Partial<any>;
-        const scrollable = mount(viewFunction(props as any) as JSX.Element);
+        const viewModel = new Scrollable({});
+        viewModel.containerRef = containerRef;
+
+        const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
       });
 
-      each([true, false]).describe('tabIndex on container. useKeyboard: %o', (useKeyboard) => {
-        it('tabIndex on scrollable, useKeyboard', () => {
-          const viewModel = new Scrollable({ useKeyboard });
+      if (Scrollable === ScrollableNative) {
+        each([true, false]).describe('tabIndex on container. useKeyboard: %o', (useKeyboard) => {
+          it('tabIndex on scrollable, useKeyboard', () => {
+            const viewModel = new Scrollable({ useKeyboard });
 
-          const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
-          const scrollableTabIndex = scrollable.getDOMNode().attributes.getNamedItem('tabindex');
+            const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+            const scrollableTabIndex = scrollable.getDOMNode().attributes.getNamedItem('tabindex');
 
-          if (Scrollable === ScrollableSimulated && useKeyboard) {
-            expect((scrollableTabIndex as any).value).toEqual('0');
-          } else {
             expect(scrollableTabIndex).toEqual(null);
-          }
+          });
         });
-      });
+      }
     });
 
     describe('Scrollbar', () => {
@@ -221,11 +198,8 @@ each([{
         each([true, false, undefined, null]).describe('UseSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
           each(['never', 'always', 'onScroll', 'onHover', true, false, undefined, null]).describe('ShowScrollbar: %o', (showScrollbar) => {
             it('Scrollbar should render if useSimulatedScrollbar is set to true and nativeStrategy is used', () => {
-              const scrollable = mount(
-                viewFunction({
-                  props: { showScrollbar, useSimulatedScrollbar, direction },
-                } as any) as JSX.Element,
-              );
+              const viewModel = new Scrollable({ showScrollbar, useSimulatedScrollbar, direction });
+              const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
               const scrollBar = scrollable.find(Scrollbar);
               const isScrollbarsForSimulatedStrategy = Scrollable === ScrollableSimulated;
@@ -250,7 +224,8 @@ each([{
       describe('cssClasses', () => {
         each(['horizontal', 'vertical', 'both', undefined, null]).describe('Direction: %o', (direction) => {
           it('should add direction class', () => {
-            const scrollable = mount(viewFunction({ props: { direction, useSimulatedScrollbar: true, showScrollbar: 'always' } } as any) as JSX.Element);
+            const viewModel = new Scrollable({ direction, useSimulatedScrollbar: true, showScrollbar: 'always' });
+            const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
 
             const horizontalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-horizontal');
             const verticalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-vertical');

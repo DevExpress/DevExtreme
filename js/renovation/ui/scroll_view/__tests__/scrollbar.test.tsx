@@ -1,4 +1,3 @@
-import React from 'react';
 import each from 'jest-each';
 import { mount } from 'enzyme';
 
@@ -12,7 +11,7 @@ import {
 } from '../scrollbar';
 
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
-import { DIRECTION_HORIZONTAL } from '../scrollable_utils';
+import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../scrollable_utils';
 import { ScrollbarProps } from '../scrollbar_props';
 
 describe('TopPocket', () => {
@@ -95,6 +94,16 @@ describe('TopPocket', () => {
           });
         });
       });
+    });
+  });
+
+  describe('windowResizeHandler', () => {
+    it('should set windowSizeChanged flag value on window resize', () => {
+      const viewModel = new Scrollbar({});
+
+      viewModel.windowResizeHandler();
+
+      expect(viewModel.windowSizeChanged).toBe(true);
     });
   });
 
@@ -185,33 +194,93 @@ describe('TopPocket', () => {
 });
 
 describe('Methods', () => {
-  each(['horizontal', 'vertical']).describe('Direction: %o', (direction) => {
+  each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
     each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
-      it('scroll transform property after moveTo()', () => {
-        const scrollRef = React.createRef();
-        const viewModel = new Scrollbar({
-          showScrollbar,
-          direction,
-          scaleRatio: 1,
-          containerSize: 100,
-          contentSize: 500,
+      each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
+        it('move(location) call should set correct location & scrollLocation values', () => {
+          const viewModel = new Scrollbar({
+            showScrollbar,
+            direction,
+            scaleRatio,
+            containerSize: 100,
+            contentSize: 500,
+          });
+
+          const location = -100;
+
+          viewModel.moveContent = jest.fn();
+          viewModel.move(location);
+
+          const expectedLocation = location * scaleRatio;
+          expect(viewModel.location).toEqual(expectedLocation);
+          expect(viewModel.scrollLocation).toEqual(expectedLocation);
         });
-        (viewModel as any).scrollRef = scrollRef;
 
-        mount(viewFunction(viewModel as any) as JSX.Element);
-        (viewModel as any).scrollRef = (viewModel as any).scrollRef.current;
+        it('move() call should set correct location & scrollLocation values', () => {
+          const viewModel = new Scrollbar({
+            showScrollbar,
+            direction,
+            scaleRatio,
+            containerSize: 100,
+            contentSize: 500,
+          });
 
-        const location = -100;
-        viewModel.moveTo(location);
+          viewModel.location = -20;
 
-        const expectedThumbRatio = 0.2;
-        const expectedLocation = -location * expectedThumbRatio;
+          viewModel.moveContent = jest.fn();
+          viewModel.move();
 
-        if (showScrollbar === 'never') {
-          expect(viewModel.styles).toHaveProperty('transform', undefined);
-        } else {
-          expect(viewModel.styles).toHaveProperty('transform', direction === DIRECTION_HORIZONTAL ? `translate(${expectedLocation}px, 0px)` : `translate(0px, ${expectedLocation}px)`);
-        }
+          const expectedLocation = -20;
+          expect(viewModel.location).toEqual(expectedLocation);
+          expect(viewModel.scrollLocation).toEqual(expectedLocation);
+        });
+
+        each([-500.25, -400, -100.25, 0.25, 100.25, 500.25]).describe('Location: %o', (location) => {
+          afterEach(() => {
+            jest.clearAllMocks();
+          });
+
+          each([undefined, jest.fn()]).describe('contentPositionChange: %o', (contentPositionChange) => {
+            each([undefined, jest.fn()]).describe('contentTranslateOffsetChange: %o', (contentTranslateOffsetChange) => {
+              it('moveContent() call should change position of content and scroll', () => {
+                const viewModel = new Scrollbar({
+                  showScrollbar, // TODO: we don't need check it
+                  direction,
+                  scaleRatio,
+                  contentPositionChange,
+                  contentTranslateOffsetChange,
+                });
+
+                const minOffset = -400;
+                viewModel.location = location;
+                viewModel.getMinOffset = jest.fn(() => minOffset);
+
+                viewModel.moveContent();
+
+                if (contentPositionChange) {
+                  expect(contentPositionChange).toHaveBeenCalledTimes(1);
+                  expect(contentPositionChange)
+                    .toHaveBeenCalledWith(viewModel.fullScrollProp, location, scaleRatio);
+                }
+
+                if (contentTranslateOffsetChange) {
+                  let expectedContentTranslate = 0;
+                  if (location > 0) {
+                    expectedContentTranslate = location;
+                  } else if (location <= minOffset) {
+                    expectedContentTranslate = location - minOffset;
+                  } else {
+                    expectedContentTranslate = location % 1;
+                  }
+
+                  expect(contentTranslateOffsetChange).toHaveBeenCalledTimes(1);
+                  expect(contentTranslateOffsetChange)
+                    .toHaveBeenCalledWith({ [viewModel.scrollProp]: expectedContentTranslate });
+                }
+              });
+            });
+          });
+        });
       });
 
       it('isScrollbar(element), element is scrollbar element', () => {
@@ -347,21 +416,6 @@ describe('Methods', () => {
       expect((viewModel as any).scrollProp).toBe(direction === 'horizontal' ? 'left' : 'top');
     });
 
-    it('getContainerRef()', () => {
-      const ref = { current: {} } as any;
-
-      const viewModel = new Scrollbar({ direction, containerRef: ref });
-
-      expect((viewModel as any).getContainerRef() === ref.current).toBe(true);
-    });
-
-    it('getContentRef()', () => {
-      const ref = { current: {} } as any;
-
-      const viewModel = new Scrollbar({ direction, contentRef: ref });
-      expect((viewModel as any).getContentRef() === ref.current).toBe(true);
-    });
-
     each([1, 0.5]).describe('ScaleRatio: %o', (scaleRatio) => {
       it('move()', () => {
         const viewModel = new Scrollbar({ direction, scaleRatio }) as any;
@@ -487,7 +541,7 @@ describe('Handlers', () => {
               const viewModel = new Scrollbar({
                 direction,
                 scrollByThumb,
-                onChangeVisibility: jest.fn() as any,
+                scrollVisibilityChange: jest.fn() as any,
               } as ScrollbarProps);
 
               const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
@@ -504,8 +558,8 @@ describe('Handlers', () => {
 
               const isScrollbarClicked = (targetClass !== 'dx-scrollable-scroll' && scrollByThumb);
 
-              expect(viewModel.props.onChangeVisibility).toHaveBeenCalledTimes(1);
-              expect(viewModel.props.onChangeVisibility).toHaveBeenCalledWith(false);
+              expect(viewModel.props.scrollVisibilityChange).toHaveBeenCalledTimes(1);
+              expect(viewModel.props.scrollVisibilityChange).toHaveBeenCalledWith(false);
 
               expect((viewModel as any).bounceAnimator.stop).toHaveBeenCalledTimes(1);
               expect((viewModel as any).inertiaAnimator.stop).toHaveBeenCalledTimes(1);
@@ -537,7 +591,7 @@ describe('Handlers', () => {
               it('show scrollbar on startHandler()', () => {
                 const viewModel = new Scrollbar({
                   direction,
-                  onChangeVisibility: visibilityChangeHandler as any,
+                  scrollVisibilityChange: visibilityChangeHandler as any,
                 } as ScrollbarProps);
 
                 mount(viewFunction(viewModel as any) as JSX.Element);
@@ -551,43 +605,55 @@ describe('Handlers', () => {
               });
 
               each([true, false]).describe('inBound: %o', (inBounds) => {
-                it('scrollByHandler(delta)', () => {
-                  const bounceAnimatorStartHandler = jest.fn();
+                each([undefined, jest.fn()]).describe('visibilityChangeHandler: %o', (onBounceHandler) => {
+                  it('scrollByHandler(delta)', () => {
+                    const bounceAnimatorStartHandler = jest.fn();
 
-                  const delta = { x: 50, y: 70 };
-                  const viewModel = new Scrollbar({
-                    direction,
-                    onChangeVisibility: visibilityChangeHandler as any,
-                  } as ScrollbarProps);
+                    const delta = { x: 50, y: 70 };
+                    const viewModel = new Scrollbar({
+                      direction,
+                      scrollVisibilityChange: visibilityChangeHandler as any,
+                      onBounce: onBounceHandler,
+                    } as ScrollbarProps);
 
-                  mount(viewFunction(viewModel as any) as JSX.Element);
+                    mount(viewFunction(viewModel as any) as JSX.Element);
 
-                  (viewModel as any).scrollBy = jest.fn();
-                  (viewModel as any).inBounds = () => inBounds;
-                  (viewModel as any).bounceAnimator = {
-                    start: bounceAnimatorStartHandler,
-                  };
+                    (viewModel as any).scrollBy = jest.fn();
+                    (viewModel as any).inBounds = () => inBounds;
+                    (viewModel as any).bounceAnimator = {
+                      start: bounceAnimatorStartHandler,
+                    };
 
-                  viewModel.scrollByHandler(delta);
+                    viewModel.scrollByHandler(delta);
 
-                  expect((viewModel as any).scrollBy).toBeCalledTimes(1);
-                  expect((viewModel as any).scrollBy).toHaveBeenCalledWith(delta);
-                  if (inBounds) {
-                    if (visibilityChangeHandler) {
-                      expect(visibilityChangeHandler).toHaveBeenCalledTimes(1);
-                      expect(visibilityChangeHandler).toHaveBeenCalledWith(false);
+                    expect((viewModel as any).scrollBy).toBeCalledTimes(1);
+                    expect((viewModel as any).scrollBy).toHaveBeenCalledWith(delta);
+                    if (inBounds) {
+                      if (visibilityChangeHandler) {
+                        expect(visibilityChangeHandler).toHaveBeenCalledTimes(1);
+                        expect(visibilityChangeHandler).toHaveBeenCalledWith(false);
+                      }
+                      if (onBounceHandler) {
+                        expect(onBounceHandler).toHaveBeenCalledTimes(0);
+                      }
+                    } else {
+                      if (onBounceHandler) {
+                        expect(onBounceHandler).toHaveBeenCalledTimes(1);
+                      }
+                      expect(bounceAnimatorStartHandler).toHaveBeenCalledTimes(1);
                     }
-                  } else {
-                    expect(bounceAnimatorStartHandler).toHaveBeenCalledTimes(1);
-                  }
+                  });
                 });
 
                 each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
                   each([undefined, jest.fn()]).describe('BounceAnimatorStartHandler: %o', (bounceAnimatorStartHandler) => {
                     it('stopHandler()', () => {
+                      const onBounceHandler = jest.fn();
+
                       const viewModel = new Scrollbar({
                         direction,
-                        onChangeVisibility: visibilityChangeHandler as any,
+                        scrollVisibilityChange: visibilityChangeHandler as any,
+                        onBounce: () => { onBounceHandler(); },
                       } as ScrollbarProps);
 
                       mount(viewFunction(viewModel as any) as JSX.Element);
