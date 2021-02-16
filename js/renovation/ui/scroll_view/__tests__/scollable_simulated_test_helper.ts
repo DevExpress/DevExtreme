@@ -181,7 +181,6 @@ class ScrollableTestHelper {
             baseContentSize: additionalProps.props.contentSize || 200,
             baseContainerSize: additionalProps.props.containerSize || 100,
             scrollableOffset: 0,
-            scrollVisibilityChange: scrollbar.props.scrollVisibilityChange.bind(this.viewModel),
             contentTranslateOffsetChange:
               scrollbar.props.contentTranslateOffsetChange.bind(this.viewModel),
             contentPositionChange:

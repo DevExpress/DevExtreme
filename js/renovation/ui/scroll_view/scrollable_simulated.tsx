@@ -15,8 +15,6 @@ import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { isDxMouseWheelEvent, normalizeKeyName } from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
-// import { getBoundingRect } from '../../../core/utils/position';
-// import { titleize } from '../../../core/utils/inflector';
 import { isDefined } from '../../../core/utils/type';
 // import { when } from '../../../core/utils/deferred';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
@@ -83,7 +81,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
     horizontalScrollbarRef, verticalScrollbarRef,
     cursorEnterHandler, cursorLeaveHandler,
-    isScrollbarVisible, scrollVisibilityChange, contentTranslateOffsetChange, contentPositionChange,
+    isHovered, contentTranslateOffsetChange, contentPositionChange,
     scaleRatioWidth, scaleRatioHeight,
     scrollableOffsetLeft, scrollableOffsetTop,
     contentWidth, containerClientWidth, contentHeight, containerClientHeight,
@@ -149,8 +147,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               containerSize={containerClientWidth}
               baseContentSize={baseContentWidth}
               baseContainerSize={baseContainerWidth}
-              visible={isScrollbarVisible}
-              scrollVisibilityChange={scrollVisibilityChange}
+              isScrollableHovered={isHovered}
               contentPositionChange={contentPositionChange}
               contentTranslateOffset={contentTranslateOffset}
               contentTranslateOffsetChange={contentTranslateOffsetChange}
@@ -171,12 +168,11 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               containerSize={containerClientHeight}
               baseContentSize={baseContentHeight}
               baseContainerSize={baseContainerHeight}
-              visible={isScrollbarVisible}
-              scrollByThumb={scrollByThumb}
-              scrollVisibilityChange={scrollVisibilityChange}
+              isScrollableHovered={isHovered}
               contentPositionChange={contentPositionChange}
               contentTranslateOffset={contentTranslateOffset}
               contentTranslateOffsetChange={contentTranslateOffsetChange}
+              scrollByThumb={scrollByThumb}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
@@ -216,8 +212,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() isHovered = false;
 
-  @InternalState() needShowScrollbars = false;
-
   @InternalState() scrollableOffsetLeft = 0;
 
   @InternalState() scrollableOffsetTop = 0;
@@ -234,13 +228,17 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() contentClientHeight = 0;
 
+  @InternalState() containerOffsetWidth = 0;
+
+  @InternalState() containerOffsetHeight = 0;
+
+  @InternalState() contentOffsetWidth = 0;
+
+  @InternalState() contentOffsetHeight = 0;
+
   @Method()
   content(): HTMLDivElement {
     return this.contentRef;
-  }
-
-  windowResizeHandler(): void {
-    this.updateSizes();
   }
 
   @Method()
@@ -464,19 +462,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
   }
 
-  scrollVisibilityChange(visible: boolean): void {
-    // Hack for onScrollMode
-    // if (!visible && this.props.showScrollbar === 'onScroll') { // TODO: pendingNeedShowScrollbar
-    //   setTimeout(() => {
-    // // this.scrollbarVisibility = false;
-    // // this.scrollbarVisibilityChange
-    // this.needShowScrollbars = false;
-    //   }, 1000);
-    //   return;
-    // }
-    this.needShowScrollbars = visible;
-  }
-
   onBounce(): void {
     this.props.onBounce?.(this.getEventArgs());
   }
@@ -503,13 +488,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   cursorEnterHandler(): void {
-    if (this.isHoverMode()) {
+    if (this.props.showScrollbar === 'onHover') {
       this.isHovered = true;
     }
   }
 
   cursorLeaveHandler(): void {
-    if (this.isHoverMode()) {
+    if (this.props.showScrollbar === 'onHover') {
       this.isHovered = false;
     }
   }
@@ -529,7 +514,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   private handleStart(e: Event): void {
     this.eventForUserAction = e;
-    this.needShowScrollbars = true;
 
     this.eventHandler(
       (scrollbar) => scrollbar.startHandler(e),
@@ -566,8 +550,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private handleStop(): void {
-    this.needShowScrollbars = false;
-
     this.eventHandler(
       (scrollbar) => scrollbar.stopHandler(),
     );
@@ -884,30 +866,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.scrollTo(distance);
   }
 
-  private isHoverMode(): boolean {
-    return this.props.showScrollbar === 'onHover';
-  }
-
-  get isScrollbarVisible(): boolean {
-    const { showScrollbar } = this.props;
-
-    if (showScrollbar === 'never') {
-      return false;
-    }
-    if (showScrollbar === 'onHover') {
-      return this.needShowScrollbars || this.isHovered;
-    }
-    if (showScrollbar === 'always') {
-      return true;
-    }
-
-    return this.needShowScrollbars;
-  }
-
   @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
     this.scrollableOffsetLeft = this.scrollableOffset.left;
     this.scrollableOffsetTop = this.scrollableOffset.top;
 
+    this.updateSizes();
+  }
+
+  windowResizeHandler(): void {
     this.updateSizes();
   }
 
@@ -919,22 +885,27 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.contentClientHeight = this.contentRef.clientHeight;
     this.contentScrollWidth = this.contentRef.scrollWidth;
     this.contentScrollHeight = this.contentRef.scrollHeight;
+
+    this.containerOffsetWidth = this.containerRef.offsetWidth;
+    this.containerOffsetHeight = this.containerRef.offsetHeight;
+    this.contentOffsetWidth = this.contentRef.offsetWidth;
+    this.contentOffsetHeight = this.contentRef.offsetHeight;
   }
 
   get baseContentWidth(): number {
-    return Math.round(this.contentRef?.offsetWidth);
+    return this.contentOffsetWidth;
   }
 
   get baseContainerWidth(): number {
-    return Math.round(this.containerRef?.offsetWidth);
+    return this.containerOffsetWidth;
   }
 
   get baseContentHeight(): number {
-    return Math.round(this.contentRef?.offsetHeight);
+    return this.contentOffsetHeight;
   }
 
   get baseContainerHeight(): number {
-    return Math.round(this.containerRef?.offsetHeight);
+    return this.containerOffsetHeight;
   }
 
   get scaleRatioWidth(): number {
@@ -983,7 +954,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     if (!isOverflowHidden) {
       const containerScrollSize = this.contentScrollWidth * this.scaleRatioWidth;
 
-      this.contentClientWidth = Math.max(containerScrollSize, this.contentClientWidth);
+      return Math.max(containerScrollSize, this.contentClientWidth);
     }
 
     return this.contentClientWidth;
@@ -999,7 +970,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     if (!isOverflowHidden) {
       const containerScrollSize = this.contentScrollHeight * this.scaleRatioHeight;
 
-      this.contentClientHeight = Math.max(containerScrollSize, this.contentClientHeight);
+      return Math.max(containerScrollSize, this.contentClientHeight);
     }
 
     return this.contentClientHeight;
