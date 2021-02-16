@@ -1214,6 +1214,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('default items missed and forbidden options (T972377)', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('contextMenu', {
             items: ['upload', {
@@ -1247,6 +1251,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('custom items missed and forbidden options (T972377)', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const customText = 'customText';
         const clickSpy = sinon.spy();
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
