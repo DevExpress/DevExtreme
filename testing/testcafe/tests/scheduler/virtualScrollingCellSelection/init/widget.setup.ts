@@ -76,8 +76,8 @@ export const checkSelectionWhenFocusedInViewport = async (
 };
 
 export const checkSelectionWhenFocusedIsNotInViewport = async (
-  t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex: number,
-  lastCellColumnIndex: number, lastCellRowIndex = 0,
+  t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex = 0,
+  lastCellColumnIndex = 0, lastCellRowIndex = 0,
 ): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells().count)
