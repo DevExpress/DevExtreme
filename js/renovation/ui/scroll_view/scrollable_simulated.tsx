@@ -22,6 +22,7 @@ import { isDefined } from '../../../core/utils/type';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
 import { ensureDefined } from '../../../core/utils/common';
 import '../../../events/gesture/emitter.gesture.scroll';
+import eventsEngine from '../../../events/core/events_engine';
 
 import type { dxPromise } from '../../../core/utils/deferred';
 import {
@@ -35,7 +36,7 @@ import {
   normalizeLocation, ScrollDirection,
   getContainerOffsetInternal,
   getElementLocation, getPublicCoordinate, getBoundaryProps,
-  getElementWidth, getElementHeight, getElementStyle, getElementOffset,
+  getElementStyle, getElementOffset,
   updateAllowedDirection,
   DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL,
@@ -82,24 +83,21 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     cssClasses, wrapperRef, contentRef, containerRef, onWidgetKeyDown,
     horizontalScrollbarRef, verticalScrollbarRef,
     cursorEnterHandler, cursorLeaveHandler,
-    isScrollbarVisible, onChangeVisibility,
+    isScrollbarVisible, scrollVisibilityChange, contentTranslateOffsetChange, contentPositionChange,
     scaleRatioWidth, scaleRatioHeight,
     scrollableOffsetLeft, scrollableOffsetTop,
-    contentWidth, containerWidth, contentHeight, containerHeight,
+    contentWidth, containerClientWidth, contentHeight, containerClientHeight,
     baseContentWidth, baseContainerWidth, baseContentHeight, baseContainerHeight,
-    scrollableRef,
+    scrollableRef, windowResizeHandler, contentStyles, containerStyles, onBounce,
+    direction,
     props: {
       disabled, height, width, rtlEnabled, children,
       forceGeneratePockets, needScrollViewContentWrapper,
-      showScrollbar, direction, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
-      reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled,
+      showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
+      reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled, contentTranslateOffset,
     },
     restAttributes,
   } = viewModel;
-
-  const targetDirection = direction ?? 'vertical';
-  const isVertical = targetDirection !== 'horizontal';
-  const isHorizontal = targetDirection !== 'vertical';
 
   return (
     <Widget
@@ -114,14 +112,16 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       onKeyDown={onWidgetKeyDown}
       onHoverStart={cursorEnterHandler}
       onHoverEnd={cursorLeaveHandler}
+      onDimensionChanged={windowResizeHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
         <div
           className={SCROLLABLE_CONTAINER_CLASS}
           ref={containerRef}
+          style={containerStyles}
         >
-          <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef}>
+          <div className={SCROLLABLE_CONTENT_CLASS} ref={contentRef} style={contentStyles}>
             {forceGeneratePockets && (
             <TopPocket
               pullingDownText={pullingDownText}
@@ -139,44 +139,48 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             />
             )}
           </div>
-          {isHorizontal && (
+          {direction.isHorizontal && (
             <Scrollbar
               direction="horizontal"
               ref={horizontalScrollbarRef}
-              containerRef={containerRef}
-              contentRef={contentRef}
               scaleRatio={scaleRatioWidth}
               scrollableOffset={scrollableOffsetLeft}
               contentSize={contentWidth}
-              containerSize={containerWidth}
+              containerSize={containerClientWidth}
               baseContentSize={baseContentWidth}
               baseContainerSize={baseContainerWidth}
               visible={isScrollbarVisible}
-              onChangeVisibility={onChangeVisibility}
+              scrollVisibilityChange={scrollVisibilityChange}
+              contentPositionChange={contentPositionChange}
+              contentTranslateOffset={contentTranslateOffset}
+              contentTranslateOffsetChange={contentTranslateOffsetChange}
               scrollByThumb={scrollByThumb}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
+              onBounce={onBounce}
             />
           )}
-          {isVertical && (
+          {direction.isVertical && (
             <Scrollbar
               direction="vertical"
               ref={verticalScrollbarRef}
-              containerRef={containerRef}
-              contentRef={contentRef}
               scaleRatio={scaleRatioHeight}
               scrollableOffset={scrollableOffsetTop}
               contentSize={contentHeight}
-              containerSize={containerHeight}
+              containerSize={containerClientHeight}
               baseContentSize={baseContentHeight}
               baseContainerSize={baseContainerHeight}
               visible={isScrollbarVisible}
               scrollByThumb={scrollByThumb}
-              onChangeVisibility={onChangeVisibility}
+              scrollVisibilityChange={scrollVisibilityChange}
+              contentPositionChange={contentPositionChange}
+              contentTranslateOffset={contentTranslateOffset}
+              contentTranslateOffsetChange={contentTranslateOffsetChange}
               bounceEnabled={bounceEnabled}
               showScrollbar={showScrollbar}
               inertiaEnabled={inertiaEnabled}
+              onBounce={onBounce}
             />
           )}
         </div>
@@ -218,9 +222,25 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @InternalState() scrollableOffsetTop = 0;
 
+  @InternalState() containerClientWidth = 0;
+
+  @InternalState() containerClientHeight = 0;
+
+  @InternalState() contentScrollWidth = 0;
+
+  @InternalState() contentScrollHeight = 0;
+
+  @InternalState() contentClientWidth = 0;
+
+  @InternalState() contentClientHeight = 0;
+
   @Method()
   content(): HTMLDivElement {
     return this.contentRef;
+  }
+
+  windowResizeHandler(): void {
+    this.updateSizes();
   }
 
   @Method()
@@ -283,16 +303,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
         ...(offset as Partial<ScrollOffset>),
       };
 
-      const location = {
+      this.scrollTo({
         top: getElementLocation(
           element, scrollOffset, DIRECTION_VERTICAL, this.containerRef, this.props.rtlEnabled,
         ),
         left: getElementLocation(
           element, scrollOffset, DIRECTION_HORIZONTAL, this.containerRef, this.props.rtlEnabled,
         ),
-      };
-
-      this.scrollTo(location);
+      });
     }
   }
 
@@ -310,6 +328,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   scrollOffset(): ScrollableLocation {
     const { rtlEnabled } = this.props;
     const { left, top } = getContainerOffsetInternal(this.containerRef);
+
     return {
       left: getPublicCoordinate('left', left, this.containerRef, rtlEnabled),
       top: getPublicCoordinate('top', top, this.containerRef, rtlEnabled),
@@ -343,21 +362,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Effect() scrollEffect(): DisposeEffectReturn {
     return subscribeToScrollEvent(this.containerRef,
-      () => {
-        this.eventHandler(
-          (scrollbar) => {
-            /* istanbul ignore next */
-            if (scrollbar.insideBounds()) {
-              scrollbar.setLocation(-this.containerRef[`scroll${scrollbar.getDirection() === DIRECTION_HORIZONTAL ? 'Left' : 'Top'}`]);
-              return scrollbar.moveToLocation();
-            }
-            /* istanbul ignore next */
-            return undefined;
-          },
-        );
-
-        return this.props.onScroll?.(this.getEventArgs());
-      });
+      () => this.props.onScroll?.(this.getEventArgs()));
+    // this.eventHandler( // Think about reworking it | only for tab press support
+    //   (scrollbar) => {
+    //     /* istanbul ignore next */
+    //     if (scrollbar.insideBounds()) {
+    //       scrollbar.setLocation(
+    // -this.containerRef[`scroll${scrollbar.getDirection()
+    // === DIRECTION_HORIZONTAL ? 'Left' : 'Top'}`]);
+    //       return scrollbar.moveToLocation();
+    //     }
+    //     /* istanbul ignore next */
+    //     return undefined;
+    //   },
+    // );
   }
 
   getEventArgs(): ScrollEventArgs {
@@ -446,8 +464,42 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return (): void => dxScrollCancel.off(this.wrapperRef, { namespace });
   }
 
-  onChangeVisibility(visible: boolean): void {
+  scrollVisibilityChange(visible: boolean): void {
+    // Hack for onScrollMode
+    // if (!visible && this.props.showScrollbar === 'onScroll') { // TODO: pendingNeedShowScrollbar
+    //   setTimeout(() => {
+    // // this.scrollbarVisibility = false;
+    // // this.scrollbarVisibilityChange
+    // this.needShowScrollbars = false;
+    //   }, 1000);
+    //   return;
+    // }
     this.needShowScrollbars = visible;
+  }
+
+  onBounce(): void {
+    this.props.onBounce?.(this.getEventArgs());
+  }
+
+  contentPositionChange(scrollProp: 'scrollLeft' | 'scrollTop', location: number, ratio: number): void {
+    this.containerRef[scrollProp] = -location / ratio;
+
+    if (Math.abs(location - this.containerRef[scrollProp] * ratio) > 1) {
+      this.triggerScrollEvent();
+    }
+  }
+
+  triggerScrollEvent(): void {
+    (eventsEngine as any).triggerHandler(this.containerRef, { type: 'scroll' });
+  }
+
+  contentTranslateOffsetChange(
+    translateOffset: { left?: number; top?: number },
+  ): void {
+    this.props.contentTranslateOffset = {
+      ...this.props.contentTranslateOffset,
+      ...translateOffset,
+    };
   }
 
   cursorEnterHandler(): void {
@@ -466,7 +518,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.suppressDirections(e);
     this.eventForUserAction = e;
 
-    const crossThumbScrolling = this.isThumbScrolling(e);
+    const crossThumbScrolling = this.isCrossThumbScrolling(e);
 
     this.eventHandler(
       (scrollbar) => scrollbar.initHandler(e, crossThumbScrolling),
@@ -487,7 +539,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private handleMove(e): void {
-    e.preventDefault && e.preventDefault();
+    if (this.isLocked()) {
+      e.cancel = true;
+      return;
+    }
+
+    e.preventDefault();
 
     this.adjustDistance(e, 'delta');
     this.eventForUserAction = e;
@@ -523,34 +580,31 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   applyScaleRatio(targetLocation): ScrollableLocation {
-    const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
     const currentTargetLocation = targetLocation;
 
-    if (isVertical && isDefined(targetLocation.top)) {
+    if (this.direction.isVertical && isDefined(targetLocation.top)) {
       currentTargetLocation.top *= this.scaleRatioHeight;
     }
 
-    if (isHorizontal && isDefined(targetLocation.left)) {
+    if (this.direction.isHorizontal && isDefined(targetLocation.left)) {
       currentTargetLocation.left *= this.scaleRatioWidth;
     }
 
     return currentTargetLocation;
   }
 
-  isThumbScrolling(e): boolean {
-    const { scrollByThumb } = this.props;
-    const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
+  isCrossThumbScrolling(e): boolean {
     const { target } = e.originalEvent;
 
     let verticalScrolling;
     let horizontalScrolling;
 
-    if (isVertical) {
-      verticalScrolling = scrollByThumb && this.verticalScrollbarRef.isThumb(target);
+    if (this.direction.isVertical) {
+      verticalScrolling = this.props.scrollByThumb && this.verticalScrollbarRef.isThumb(target);
     }
 
-    if (isHorizontal) {
-      horizontalScrolling = scrollByThumb && this.horizontalScrollbarRef.isThumb(target);
+    if (this.direction.isHorizontal) {
+      horizontalScrolling = this.props.scrollByThumb && this.horizontalScrollbarRef.isThumb(target);
     }
 
     return verticalScrolling || horizontalScrolling;
@@ -577,12 +631,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     this.prepareDirections(false);
 
-    const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
-    if (isVertical) {
+    if (this.direction.isVertical) {
       const isValid = this.validateEvent(e, this.verticalScrollbarRef);
       this.validDirections[DIRECTION_VERTICAL] = isValid;
     }
-    if (isHorizontal) {
+    if (this.direction.isHorizontal) {
       const isValid = this.validateEvent(e, this.horizontalScrollbarRef);
       this.validDirections[DIRECTION_HORIZONTAL] = isValid;
     }
@@ -615,13 +668,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       scrollbarInstance: any
     ) => dxPromise<void>,
   ): any { // dxPromise<void> {
-    const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
     const deferreds: ReturnType<typeof handler>[] = [];
 
-    if (isVertical) {
+    if (this.direction.isVertical) {
       deferreds.push(handler(this.verticalScrollbarRef));
     }
-    if (isHorizontal) {
+    if (this.direction.isHorizontal) {
       deferreds.push(handler(this.horizontalScrollbarRef));
     }
 
@@ -633,18 +685,19 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   private allowedDirection(): string | undefined {
-    return updateAllowedDirection(this.allowedDirections(), this.props.direction);
+    return updateAllowedDirection(this.allowedDirections, this.props.direction);
   }
 
-  private allowedDirections(): allowedDirection {
-    const { bounceEnabled, direction } = this.props;
-    const { isVertical, isHorizontal } = new ScrollDirection(direction);
+  get allowedDirections(): allowedDirection {
+    if (!isDefined(this.verticalScrollbarRef) && !isDefined(this.horizontalScrollbarRef)) {
+      return { vertical: false, horizontal: false };
+    }
 
     return {
-      vertical: isVertical
-      && (Math.round(this.verticalScrollbarRef.getMinOffset()) < 0 || bounceEnabled),
-      horizontal: isHorizontal
-      && (Math.round(this.horizontalScrollbarRef.getMinOffset()) < 0 || bounceEnabled),
+      vertical: this.direction.isVertical
+      && (Math.round(this.verticalScrollbarRef.getMinOffset()) < 0 || this.props.bounceEnabled),
+      horizontal: this.direction.isHorizontal
+      && (Math.round(this.horizontalScrollbarRef.getMinOffset()) < 0 || this.props.bounceEnabled),
     };
   }
 
@@ -793,9 +846,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const distance: { left?: number; top?: number } = {};
 
     if (isVertical) {
-      distance.top = page * getElementHeight(this.containerRef);
+      distance.top = page * this.containerRef.clientHeight;
     } else {
-      distance.left = page * getElementWidth(this.containerRef);
+      distance.left = page * this.containerRef.clientWidth;
     }
 
     this.scrollBy(distance);
@@ -813,8 +866,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   scrollToHome(): void {
-    const { isVertical } = new ScrollDirection(this.wheelDirection());
-    const distance = { [isVertical ? 'top' : 'left']: 0 };
+    const distance = { [this.direction.isVertical ? 'top' : 'left']: 0 };
 
     this.scrollTo(distance);
   }
@@ -824,9 +876,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     const distance: { left?: number; top?: number } = {};
 
     if (isVertical) {
-      distance.top = getElementHeight(this.contentRef) - getElementHeight(this.containerRef);
+      distance.top = this.contentRef.clientHeight - this.containerRef.clientHeight;
     } else {
-      distance.left = getElementWidth(this.contentRef) - getElementWidth(this.containerRef);
+      distance.left = this.contentRef.clientWidth - this.containerRef.clientWidth;
     }
 
     this.scrollTo(distance);
@@ -855,6 +907,18 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   @Effect({ run: 'always' }) effectUpdateScrollbarSize(): void {
     this.scrollableOffsetLeft = this.scrollableOffset.left;
     this.scrollableOffsetTop = this.scrollableOffset.top;
+
+    this.updateSizes();
+  }
+
+  updateSizes(): void {
+    this.containerClientWidth = this.containerRef.clientWidth;
+    this.containerClientHeight = this.containerRef.clientHeight;
+
+    this.contentClientWidth = this.contentRef.clientWidth;
+    this.contentClientHeight = this.contentRef.clientHeight;
+    this.contentScrollWidth = this.contentRef.scrollWidth;
+    this.contentScrollHeight = this.contentRef.scrollHeight;
   }
 
   get baseContentWidth(): number {
@@ -882,8 +946,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     /* istanbul ignore next */
     if (hasWindow()) {
-      const realDimension = getElementWidth(this.scrollableRef);
-      const baseDimension = this.scrollableRef?.offsetWidth;
+      const realDimension = this.scrollableRef.clientWidth;
+      const baseDimension = this.scrollableRef.offsetWidth;
 
       scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
     }
@@ -900,7 +964,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
     /* istanbul ignore next */
     if (hasWindow()) {
-      const realDimension = getElementHeight(this.scrollableRef);
+      const realDimension = this.scrollableRef.clientHeight;
       const baseDimension = this.scrollableRef.offsetHeight;
 
       scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
@@ -911,46 +975,34 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   get contentWidth(): number {
     if (!isDefined(this.contentRef)) {
-      return 1;
+      return 0;
     }
 
-    const overflowStyleName = 'overflowX';
-    const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef) === 'hidden';
-    let contentSize = getElementWidth(this.contentRef);
+    const isOverflowHidden = getElementStyle('overflowX', this.contentRef) === 'hidden';
 
     if (!isOverflowHidden) {
-      const containerScrollSize = this.contentRef.scrollWidth * this.scaleRatioWidth;
+      const containerScrollSize = this.contentScrollWidth * this.scaleRatioWidth;
 
-      contentSize = Math.max(containerScrollSize, contentSize);
+      this.contentClientWidth = Math.max(containerScrollSize, this.contentClientWidth);
     }
 
-    return contentSize;
-  }
-
-  get containerWidth(): number {
-    return getElementWidth(this.containerRef);
+    return this.contentClientWidth;
   }
 
   get contentHeight(): number {
     if (!isDefined(this.contentRef)) {
-      return 1;
+      return 0;
     }
 
-    const overflowStyleName = 'overflowY';
-    const isOverflowHidden = getElementStyle((overflowStyleName as 'overflowX' | 'overflowY'), this.contentRef) === 'hidden';
-    let contentSize = getElementHeight(this.contentRef);
+    const isOverflowHidden = getElementStyle('overflowY', this.contentRef) === 'hidden';
 
     if (!isOverflowHidden) {
-      const containerScrollSize = this.contentRef.scrollHeight * this.scaleRatioHeight;
+      const containerScrollSize = this.contentScrollHeight * this.scaleRatioHeight;
 
-      contentSize = Math.max(containerScrollSize, contentSize);
+      this.contentClientHeight = Math.max(containerScrollSize, this.contentClientHeight);
     }
 
-    return contentSize;
-  }
-
-  get containerHeight(): number {
-    return getElementHeight(this.containerRef);
+    return this.contentClientHeight;
   }
 
   get scrollableOffset(): { left: number; top: number } {
@@ -959,6 +1011,24 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   getScrollableOffset(): { left: number; top: number } {
     return getElementOffset(this.scrollableRef);
+  }
+
+  get contentStyles(): { [key: string]: string } {
+    const { left, top } = { ...{ left: 0, top: 0 }, ...this.props.contentTranslateOffset };
+
+    return {
+      transform: `translate(${left}px, ${top}px)`,
+    };
+  }
+
+  get containerStyles(): { [key: string]: string } {
+    let touchDirection = this.allowedDirections.vertical ? 'pan-x' : '';
+    touchDirection = this.allowedDirections.horizontal ? 'pan-y' : touchDirection;
+    touchDirection = this.allowedDirections.vertical && this.allowedDirections.horizontal ? 'none' : touchDirection;
+
+    return {
+      touchAction: touchDirection,
+    };
   }
 
   get cssClasses(): string {
@@ -976,5 +1046,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
       [`${classes}`]: !!classes,
     };
     return combineClasses(classesMap);
+  }
+
+  get direction(): { isVertical: boolean; isHorizontal: boolean } {
+    return new ScrollDirection(this.props.direction);
   }
 }

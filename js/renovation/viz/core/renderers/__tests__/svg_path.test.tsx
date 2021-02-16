@@ -23,7 +23,7 @@ describe('PathSvgElement', () => {
     it('should pass props to path element', () => {
       const viewModel = {
         d: 'M 1 2 L 3 4',
-        props,
+        computedProps: props,
       };
       const path = shallow(<PathSvgComponent {...viewModel as any} /> as JSX.Element);
 
@@ -39,7 +39,7 @@ describe('PathSvgElement', () => {
       jest.spyOn(utilsModule, 'getGraphicExtraProps').mockImplementation(() => ({ transform: 'transformation', 'stroke-dasharray': 'dash' }));
       const viewModel = {
         d: 'M 1 2 L 3 4',
-        props,
+        computedProps: props,
       };
       const path = shallow(<PathSvgComponent {...viewModel as any} /> as JSX.Element);
 
@@ -90,6 +90,14 @@ describe('PathSvgElement', () => {
         const path = new PathSvgElement({ type: 'bezier', points: pathPoints });
         expect(path.d).toBe('M 10 20 C 30 70 50 40 70 75 C 90 120 100 50 120 60');
       });
+    });
+  });
+
+  describe('Getters', () => {
+    it('should be returned props by computedProps', () => {
+      const path = new PathSvgElement({ type: 'bezierarea' });
+
+      expect(path.computedProps).toStrictEqual({ type: 'bezierarea' });
     });
   });
 });

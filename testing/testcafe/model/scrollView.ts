@@ -18,7 +18,7 @@ export default class ScrollView extends Widget {
     this.scrollbar = new Scrollbar(direction);
   }
 
-  static getScrollViewContainer() {
+  static getScrollViewContainer(): Selector {
     return Selector(`.${CLASS.scrollbarContainer}`);
   }
 }

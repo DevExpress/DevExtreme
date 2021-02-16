@@ -87,11 +87,15 @@ export const viewFunction = ({
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
   const d = getCloudPoints(textSizeWithPaddings, correctedCoordinates, angle,
     { cornerRadius: Number(cornerRadius), arrowWidth: Number(arrowWidth) }, true);
-  const styles = interactive ? {
+  let styles = interactive ? {
     msUserSelect: 'text',
     MozUserSelect: 'auto',
     WebkitUserSelect: 'auto',
   } : {};
+  styles = {
+    ...styles,
+    ...{ position: 'absolute' },
+  };
   const textFont = font || DEFAULT_FONT;
   const cloudShadow = shadow || DEFAULT_SHADOW;
   return (
@@ -109,10 +113,7 @@ export const viewFunction = ({
         <RootSvgElement
           width={cloudSize.width}
           height={cloudSize.height}
-          styles={{
-            position: 'absolute',
-            ...styles,
-          }}
+          styles={styles}
         >
           <defs>
             <ShadowFilter

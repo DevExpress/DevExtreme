@@ -5,7 +5,7 @@ export default async function createWidget(
   options: any,
   disableAnimation = false,
   selector = '#container',
-) {
+): Promise<void> {
   await ClientFunction(() => {
     const widgetOptions = typeof options === 'function' ? options() : options;
     (window as any).widget = $(`${selector}`)[widgetName](widgetOptions)[widgetName]('instance');
@@ -26,7 +26,7 @@ export default async function createWidget(
   }
 }
 
-export async function disposeWidgets() {
+export async function disposeWidgets(): Promise<void> {
   await ClientFunction(() => {
     const widgetSelector = '.dx-widget';
     const $elements = $(widgetSelector)

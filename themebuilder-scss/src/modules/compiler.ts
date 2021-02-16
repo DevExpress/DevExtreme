@@ -7,7 +7,7 @@ import DartClient from './dart-client';
 export enum ImportType {
   Index,
   Color,
-  Unknown
+  Unknown,
 }
 
 export default class Compiler {

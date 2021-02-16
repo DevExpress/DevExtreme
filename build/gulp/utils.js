@@ -20,9 +20,7 @@ let packageDir = '';
 
 if(isRenovationPackage) {
     packageDir = 'devextreme-renovation';
-} else if(isEsmPackage) {
-    packageDir = 'devextreme-esm';
-} else if(isRegularPackage) {
+} else {
     packageDir = 'devextreme';
 }
 

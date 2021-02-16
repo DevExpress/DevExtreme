@@ -17,7 +17,7 @@ export interface Axis {
   getVisibleArea: () => [number, number];
   visualRange: () => void;
   calculateInterval: () => void;
-  getMarginOptions: () => {};
+  getMarginOptions: () => Record<string, number>;
 }
 
 export interface SparklineTooltipData extends TooltipData {
@@ -41,7 +41,7 @@ export const createAxis = (isHorizontal: boolean): Axis => {
     },
     visualRange: noop,
     calculateInterval: noop,
-    getMarginOptions: (): {} => ({}),
+    getMarginOptions: (): Record<string, never> => ({}),
   };
 };
 

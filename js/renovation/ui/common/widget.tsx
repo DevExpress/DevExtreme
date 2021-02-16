@@ -31,7 +31,8 @@ import { ConfigProvider } from '../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 
-const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
+const getAria = (args: Record<string, unknown>):
+{ [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
     return {
       ...r,
@@ -96,7 +97,7 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() activeStateUnit?: string;
 
-  @OneWay() aria?: object = {};
+  @OneWay() aria?: Record<string, string> = {};
 
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
@@ -112,7 +113,7 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onInactive?: (e: Event) => void;
 
-  @Event() onKeyboardHandled?: (args: object) => void;
+  @Event() onKeyboardHandled?: (args: Record<string, unknown>) => void;
 
   @Event() onVisibilityChange?: (args: boolean) => void;
 
@@ -188,6 +189,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   activeEffect(): EffectReturn {
     const {
       activeStateEnabled, activeStateUnit, disabled, onInactive,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       _feedbackShowTimeout, _feedbackHideTimeout, onActive,
     } = this.props;
     const selector = activeStateUnit;

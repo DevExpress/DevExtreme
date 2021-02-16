@@ -73,7 +73,7 @@ export default class Scheduler extends Widget {
     this.appointmentTooltip = new AppointmentTooltip(this.element);
   }
 
-  static getDialog() {
+  static getDialog(): AppointmentDialog {
     return new AppointmentDialog();
   }
 
@@ -113,11 +113,11 @@ export default class Scheduler extends Widget {
     return new AppointmentCollector(this.element, index);
   }
 
-  getAppointmentCount() {
+  getAppointmentCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointment}`).count;
   }
 
-  getAppointmentCollectorCount() {
+  getAppointmentCollectorCount(): Promise<number> {
     return this.element.find(`.${CLASS.appointmentCollector}`).count;
   }
 

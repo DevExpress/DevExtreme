@@ -14,7 +14,7 @@ export const resourceDataSource = [{
   label: 'Priority',
 }];
 
-export const createDataSetForScreenShotTests = () => {
+export const createDataSetForScreenShotTests = (): Record<string, unknown>[] => {
   const result: {
     text: string;
     startDate: Date;

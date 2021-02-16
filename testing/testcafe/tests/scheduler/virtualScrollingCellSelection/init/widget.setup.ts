@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 import createWidget from '../../../../helpers/createWidget';
 import { CLASS } from '../../../../model/scheduler';
 
-export const createScheduler = async (options = {}) => {
+export const createScheduler = async (options = {}): Promise<void> => {
   createWidget('dxScheduler', {
     dataSource: [],
     views: ['week'],
@@ -57,7 +57,7 @@ export const scrollTo = ClientFunction((x, y) => {
 export const checkSelectionWhenFocusedInViewport = async (
   t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex: number,
   lastCellColumnIndex: number, lastCellRowIndex = 0,
-) => {
+): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells().count)
     .eql(selectedCellsCount)
@@ -76,9 +76,9 @@ export const checkSelectionWhenFocusedInViewport = async (
 };
 
 export const checkSelectionWhenFocusedIsNotInViewport = async (
-  t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex = 0,
-  lastCellColumnIndex = 0, lastCellRowIndex = 0,
-) => {
+  t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex: number,
+  lastCellColumnIndex: number, lastCellRowIndex = 0,
+): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells().count)
     .eql(selectedCellsCount)
@@ -100,7 +100,7 @@ export const checkSelectionWhenFocusedIsNotInViewport = async (
   }
 };
 
-export const checkAllDayCellsWhenInViewport = async (t: any, scheduler: any) => {
+export const checkAllDayCellsWhenInViewport = async (t: any, scheduler: any): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells(true).count)
     .eql(2)
@@ -111,7 +111,7 @@ export const checkAllDayCellsWhenInViewport = async (t: any, scheduler: any) => 
     .expect(scheduler.getAllDayTableCell(1).hasClass(CLASS.focusedCell))
     .ok();
 };
-export const checkAllDayCellsWhenNotInViewport = async (t: any, scheduler: any) => {
+export const checkAllDayCellsWhenNotInViewport = async (t: any, scheduler: any): Promise<void> => {
   await t
     .expect(scheduler.getSelectedCells(true).count)
     .eql(0)

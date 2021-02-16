@@ -6,7 +6,7 @@ import { createDataSetForScreenShotTests, resourceDataSource } from './utils';
 fixture`Scheduler: Generic theme layout`
   .page(url(__dirname, '../../container.html'));
 
-const createScheduler = async (view: string, groupOrientation: string) => {
+const createScheduler = async (view: string, groupOrientation: string): Promise<void> => {
   await createWidget('dxScheduler', {
     dataSource: createDataSetForScreenShotTests(),
     currentDate: new Date(2020, 6, 15),

@@ -201,7 +201,7 @@ test('Selection should work in month view', async (t) => {
 }));
 
 test('Selection should work in timeline views', async (t) => {
-  const checkSelection = async () => {
+  const checkSelection = async (): Promise<void> => {
     await t
       .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
