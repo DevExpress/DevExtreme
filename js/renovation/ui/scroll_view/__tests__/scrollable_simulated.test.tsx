@@ -1049,9 +1049,9 @@ describe('Simulated', () => {
                 stopPropagation: jest.fn(),
               },
             };
-            const scrollable = new Scrollable({ direction });
-            scrollable.scrollByPage = scrollByPageHandler;
-            scrollable.onWidgetKeyDown(options);
+            const helper = new ScrollableTestHelper({ direction });
+            helper.viewModel.scrollByPage = scrollByPageHandler;
+            helper.viewModel.onWidgetKeyDown(options);
             expect(options.originalEvent.preventDefault).toBeCalled();
             expect(options.originalEvent.stopPropagation).toBeCalled();
             expect(scrollByPageHandler).toBeCalledTimes(1);
@@ -1067,9 +1067,9 @@ describe('Simulated', () => {
                 stopPropagation: jest.fn(),
               },
             };
-            const scrollable = new Scrollable({ direction });
-            scrollable.scrollBy = scrollByHandler;
-            scrollable.onWidgetKeyDown(options);
+            const helper = new ScrollableTestHelper({ direction });
+            helper.viewModel.scrollBy = scrollByHandler;
+            helper.viewModel.onWidgetKeyDown(options);
             expect(scrollByHandler).toBeCalledTimes(1);
           });
         });
@@ -1082,12 +1082,13 @@ describe('Simulated', () => {
               stopPropagation: jest.fn(),
             },
           };
-          const scrollable = new Scrollable({ direction });
-          scrollable.scrollToHome = jest.fn();
-          scrollable.onWidgetKeyDown(options);
+          const helper = new ScrollableTestHelper({ direction });
+          helper.viewModel.scrollToHome = jest.fn();
+          helper.viewModel.onWidgetKeyDown(options);
+
           expect(options.originalEvent.preventDefault).toBeCalled();
           expect(options.originalEvent.stopPropagation).toBeCalled();
-          expect(scrollable.scrollToHome).toBeCalledTimes(1);
+          expect(helper.viewModel.scrollToHome).toBeCalledTimes(1);
         });
 
         it('should scroll to start by "home" key', () => {
@@ -1098,11 +1099,12 @@ describe('Simulated', () => {
               stopPropagation: jest.fn(),
             },
           };
-          const scrollable = new Scrollable({ direction });
-          scrollable.scrollTo = jest.fn();
-          scrollable.onWidgetKeyDown(options);
-          expect(scrollable.scrollTo).toBeCalledTimes(1);
-          expect(scrollable.scrollTo).toBeCalledWith({ [`${direction === 'horizontal' ? 'left' : 'top'}`]: 0 });
+          const helper = new ScrollableTestHelper({ direction });
+          helper.viewModel.scrollTo = jest.fn();
+          helper.viewModel.onWidgetKeyDown(options);
+
+          expect(helper.viewModel.scrollTo).toBeCalledTimes(1);
+          expect(helper.viewModel.scrollTo).toBeCalledWith({ [`${direction === 'horizontal' ? 'left' : 'top'}`]: 0 });
         });
 
         it('should prevent default key down event by "end" key', () => {
@@ -1113,12 +1115,12 @@ describe('Simulated', () => {
               stopPropagation: jest.fn(),
             },
           };
-          const scrollable = new Scrollable({ direction });
-          scrollable.scrollToEnd = jest.fn();
-          scrollable.onWidgetKeyDown(options);
+          const helper = new ScrollableTestHelper({ direction });
+          helper.viewModel.scrollToEnd = jest.fn();
+          helper.viewModel.onWidgetKeyDown(options);
           expect(options.originalEvent.preventDefault).toBeCalled();
           expect(options.originalEvent.stopPropagation).toBeCalled();
-          expect(scrollable.scrollToEnd).toBeCalledTimes(1);
+          expect(helper.viewModel.scrollToEnd).toBeCalledTimes(1);
         });
 
         it('should scroll to end by "end" key', () => {
@@ -1129,10 +1131,10 @@ describe('Simulated', () => {
               stopPropagation: jest.fn(),
             },
           };
-          const scrollable = new Scrollable({ direction });
-          scrollable.scrollTo = jest.fn();
-          scrollable.onWidgetKeyDown(options);
-          expect(scrollable.scrollTo).toBeCalledTimes(1);
+          const helper = new ScrollableTestHelper({ direction });
+          helper.viewModel.scrollTo = jest.fn();
+          helper.viewModel.onWidgetKeyDown(options);
+          expect(helper.viewModel.scrollTo).toBeCalledTimes(1);
         });
       });
 
@@ -1145,12 +1147,12 @@ describe('Simulated', () => {
             stopPropagation: jest.fn(),
           },
         };
-        const scrollable = new Scrollable({ });
-        scrollable.scrollToHome = scrollFunc;
-        scrollable.scrollToEnd = scrollFunc;
-        scrollable.scrollByLine = scrollFunc;
-        scrollable.scrollByPage = scrollFunc;
-        scrollable.onWidgetKeyDown(options);
+        const helper = new ScrollableTestHelper({ });
+        helper.viewModel.scrollToHome = scrollFunc;
+        helper.viewModel.scrollToEnd = scrollFunc;
+        helper.viewModel.scrollByLine = scrollFunc;
+        helper.viewModel.scrollByPage = scrollFunc;
+        helper.viewModel.onWidgetKeyDown(options);
 
         expect(options.originalEvent.preventDefault).not.toBeCalled();
         expect(options.originalEvent.stopPropagation).not.toBeCalled();
