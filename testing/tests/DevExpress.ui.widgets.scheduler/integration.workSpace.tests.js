@@ -1580,6 +1580,7 @@ if(devices.real().deviceType === 'desktop') {
                             showAllDayPanel: true,
                             currentDate: new Date(2018, 3, 8),
                             height: 600,
+                            width: 1000,
                             editing: { allowDragging: false },
                             scrolling: { mode: 'virtual', type: 'both' },
                         });
