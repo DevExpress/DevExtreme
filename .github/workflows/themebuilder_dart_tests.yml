@@ -28,8 +28,9 @@ jobs:
     - name: Install dart
       uses: cedx/setup-dart@v2
 
-    - name: Check environment
-      run: dart --version
+    - name: Install dart packeges
+      run: pub get
+      working-directory: ./themebuilder-scss/dart-compiler
 
     - name: Run npm install
       run: npm install --no-package-lock --no-audit --no-fund

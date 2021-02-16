@@ -13,13 +13,12 @@ const copyMeta = (): void => {
 };
 
 copyMeta();
-console.log('CWD:', process.cwd());
 
 const childProcess = spawn(
   'dart',
   ['./main.dart'],
   {
-    // detached: true,
+    detached: true,
     cwd: join(process.cwd(), 'dart-compiler'),
   },
 );
