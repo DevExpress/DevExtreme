@@ -13,7 +13,7 @@ export default class Scrollbar {
     this.element = Selector(`.${CLASS.scrollbar}-${postfix}`);
   }
 
-  getScroll() {
+  getScroll(): Selector {
     return this.element.find(`.${CLASS.scrollableScroll}`);
   }
 

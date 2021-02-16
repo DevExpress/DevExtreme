@@ -44,11 +44,14 @@ export const Consts = {
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: 'dx-filemanager-breadcrumbs-parent-folder-item',
     BREADCRUMBS_SEPARATOR_ITEM_CLASS: 'dx-filemanager-breadcrumbs-separator-item',
     ITEMS_PANEL_CLASS: 'dx-filemanager-items-panel',
-    ITEMS_GRID_VIEW_CLASS: 'dx-filemanager-files-view',
     FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
     INACTIVE_AREA_CLASS: 'dx-filemanager-inactive-area',
     CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
-    TOOLBAR_SEPARATOR_ITEM: 'dx-filemanager-toolbar-separator-item',
+    TOOLBAR_SEPARATOR_ITEM_CLASS: 'dx-filemanager-toolbar-separator-item',
+    TOOLBAR_VIEWMODE_ITEM_CLASS: 'dx-filemanager-toolbar-viewmode-item',
+    TOOLBAR_HAS_LARGE_ICON_CLASS: 'dx-filemanager-toolbar-has-large-icon',
+    TOOLBAR_ITEM_CLASS: 'dx-toolbar-item',
+    TOOLBAR_ITEM_WITH_HIDDEN_TEXT_CLASS: 'dx-toolbar-text-auto-hide',
     DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
     FOLDER_CHOOSER_DIALOG_CLASS: 'dx-filemanager-dialog-folder-chooser-popup',
@@ -57,6 +60,7 @@ export const Consts = {
     BUTTON_CLASS: 'dx-button',
     BUTTON_HAS_TEXT_CLASS: 'dx-button-has-text',
     BUTTON_TEXT_CLASS: 'dx-button-text',
+    BUTTON_OUTLINED_CLASS: 'dx-button-mode-outlined',
     DROP_DOWN_BUTTON_CLASS: 'dx-dropdownbutton',
     DROP_DOWN_BUTTON_ACTION_CLASS: 'dx-dropdownbutton-action',
     TEXT_EDITOR_INPUT_CLASS: 'dx-texteditor-input',
@@ -65,6 +69,7 @@ export const Consts = {
     MENU_ITEM_CLASS: 'dx-menu-item',
     MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
     SUBMENU_CLASS: 'dx-submenu',
+    CONTEXT_MENU_SEPARATOR_CLASS: 'dx-menu-separator',
     SELECTION_CLASS: 'dx-selection',
     ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
@@ -72,6 +77,7 @@ export const Consts = {
     SPLITTER_CLASS: 'dx-splitter',
     FOCUSED_STATE_CLASS: 'dx-state-focused',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
+    READONLY_STATE_CLASS: 'dx-state-readonly',
     UPLOAD_ICON_CLASS: 'dx-icon-upload',
     DROPDOWN_MENU_BUTTON_CLASS: 'dx-dropdownmenu-button',
     DROPDOWN_MENU_LIST_CLASS: 'dx-dropdownmenu-list',
@@ -183,6 +189,19 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS}`);
     }
 
+    getGeneralToolbar() {
+        return this.getToolbar().children().first();
+    }
+
+    getFileSelectionToolbar() {
+        return this.getToolbar().children().first().next();
+    }
+
+    getAllItemsOfToolbar(isFileSelection) {
+        const toolbarElement = isFileSelection ? this.getFileSelectionToolbar() : this.getGeneralToolbar();
+        return toolbarElement.find(`.${Consts.TOOLBAR_ITEM_CLASS}`);
+    }
+
     getToolbarElements() {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
@@ -193,13 +212,11 @@ export class FileManagerWrapper {
     }
 
     getGeneralToolbarElements() {
-        const _$generalToolbar = this.getToolbar().children().first();
-        return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return this.getGeneralToolbar().find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getFileSelectionToolbarElements() {
-        const _$fileSelectionToolbar = this.getToolbar().children().first().next();
-        return _$fileSelectionToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return this.getFileSelectionToolbar().find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getToolbarButton(text) {
@@ -207,7 +224,7 @@ export class FileManagerWrapper {
     }
 
     getToolbarSeparators() {
-        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM}:visible`);
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM_CLASS}:visible`);
     }
 
     getToolbarDropDownButton() {
@@ -219,11 +236,11 @@ export class FileManagerWrapper {
     }
 
     getToolbarDropDownMenuItem(childIndex) {
-        return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
+        return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`).eq(childIndex);
     }
 
     getToolbarViewSwitcherListItem(childIndex) {
-        return $(`.${Consts.POPUP_NORMAL_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
+        return $(`.${Consts.POPUP_NORMAL_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`).eq(childIndex);
     }
 
     getToolbarNavigationPaneToggleButton() {
@@ -235,7 +252,7 @@ export class FileManagerWrapper {
     }
 
     getDetailsItemList() {
-        return this._$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`);
+        return this.getItemsView();
     }
 
     getThumbnailsViewPort() {
@@ -390,6 +407,10 @@ export class FileManagerWrapper {
 
     isDetailsRowFocused(index) {
         return this.getRowInDetailsView(index).is(`.${Consts.FOCUSED_ROW_CLASS}`);
+    }
+
+    getContextMenuItemsWithSeparators() {
+        return $(`.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}:visible, .${Consts.CONTEXT_MENU_CLASS} .${Consts.CONTEXT_MENU_SEPARATOR_CLASS}:visible`);
     }
 
     getContextMenuItems(visible) {

@@ -8,23 +8,24 @@ const MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36;
 const MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 
 class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsStrategy {
-
     _getAppointmentParts(appointmentGeometry, appointmentSettings, startDate) {
-        const deltaWidth = appointmentGeometry.sourceAppointmentWidth - appointmentGeometry.reducedWidth;
+        const apptDeltaWidth = appointmentGeometry.sourceAppointmentWidth - appointmentGeometry.reducedWidth;
         const height = appointmentGeometry.height;
         const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(appointmentSettings.groupIndex);
         const maxAppointmentWidth = this._getMaxAppointmentWidth(startDate);
-        const longPartCount = Math.ceil((deltaWidth) / fullWeekAppointmentWidth) - 1;
-        const realTailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth);
+        const longPartCount = Math.ceil((apptDeltaWidth) / fullWeekAppointmentWidth) - 1;
+        const realTailWidth = Math.floor(apptDeltaWidth % fullWeekAppointmentWidth);
         const tailWidth = longPartCount ? realTailWidth : (realTailWidth || fullWeekAppointmentWidth);
         const result = [];
         let totalWidth = appointmentGeometry.reducedWidth + tailWidth;
         let currentPartTop = appointmentSettings.top + this.getDefaultCellHeight();
         let left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
 
+
         if(this.instance._groupOrientation === 'vertical') {
             left += this.instance.fire('getWorkSpaceDateTableOffset');
         }
+
         for(let i = 0; i < longPartCount; i++) {
             if(totalWidth > maxAppointmentWidth) {
                 break;
@@ -58,6 +59,25 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
                 rowIndex: ++appointmentSettings.rowIndex,
                 cellIndex: 0
             }));
+        }
+
+        const { groupIndex } = appointmentSettings;
+        const groupDeltaWidth = this._getGroupDeltaWidth(groupIndex);
+        result.forEach(item => {
+            item.left = Math.max(item.left + groupDeltaWidth, 0);
+            item.width = Math.max(item.width - groupDeltaWidth, 0);
+        });
+
+        return result;
+    }
+    _getGroupDeltaWidth(groupIndex) {
+        let result = 0;
+        const workspace = this.instance.getWorkSpace();
+        if(workspace.isRenovatedRender()) {
+            const { viewDataProvider } = workspace;
+
+            const cellCountDelta = viewDataProvider.getGroupCellCountDelta(groupIndex);
+            result = cellCountDelta * workspace.getCellWidth();
         }
 
         return result;

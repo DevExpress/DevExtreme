@@ -2,7 +2,7 @@
 import Component from './component';
 
 export class GridPagerWrapper extends Component {
-  _optionChanged(args: {name: string; value: unknown}): void {
+  _optionChanged(args: { name: string; value: unknown }): void {
     switch (args.name) {
       case 'pageIndex': {
         const pageIndexChanged = this.option('pageIndexChanged');

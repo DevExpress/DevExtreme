@@ -93,7 +93,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
 
   @Mutable() elementsWidth!: ChildElements<number>;
 
-  @Mutable() actualAdaptivityProps!: { infoTextVisible: boolean; isLargeDisplayMode: boolean};
+  @Mutable() actualAdaptivityProps!: { infoTextVisible: boolean; isLargeDisplayMode: boolean };
 
   @Effect() subscribeToResize(): DisposeEffectReturn {
     const callback = (): void => { this.updateAdaptivityProps(); };

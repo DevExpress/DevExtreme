@@ -109,9 +109,9 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() hoverStateEnabled?: boolean = true;
 
-  @OneWay() validationError?: object | null = null;
+  @OneWay() validationError?: Record<string, unknown> | null = null;
 
-  @OneWay() validationErrors?: object[] | null = null;
+  @OneWay() validationErrors?: Record<string, unknown>[] | null = null;
 
   @OneWay() text?: string = '';
 
@@ -238,22 +238,27 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       && !!this.validationErrors?.length;
   }
 
-  get aria(): object {
+  get aria(): Record<string, string> {
     const { readOnly, isValid } = this.props;
     const checked = !!this.props.value;
     const indeterminate = this.props.value === null;
 
-    return {
+    const result: Record<string, string> = {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`,
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
-      // eslint-disable-next-line spellcheck/spell-checker
-      describedby: this.shouldShowValidationMessage ? `dx-${new Guid()}` : undefined,
     };
+
+    if (this.shouldShowValidationMessage) {
+      // eslint-disable-next-line spellcheck/spell-checker
+      result.describedby = `dx-${new Guid()}`;
+    }
+
+    return result;
   }
 
-  get validationErrors(): object[] | null | undefined {
+  get validationErrors(): Record<string, unknown>[] | null | undefined {
     const { validationErrors, validationError } = this.props;
     let allValidationErrors = validationErrors;
     if (!allValidationErrors && validationError) {

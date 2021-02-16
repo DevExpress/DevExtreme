@@ -5,7 +5,7 @@ export interface ViewCellData {
   otherMonth?: boolean;
   today?: boolean;
   allDay?: boolean;
-  groups?: object;
+  groups?: Record<string, unknown>;
   groupIndex?: number;
   index: number;
   isFirstGroupCell: boolean;
