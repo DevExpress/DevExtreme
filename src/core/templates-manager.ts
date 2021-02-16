@@ -4,8 +4,8 @@ import {
     mountTemplate
 } from "./templates-discovering";
 
-import * as domAdapter from "devextreme/core/dom_adapter";
-import * as events from "devextreme/events";
+import domAdapter from "devextreme/core/dom_adapter";
+import { one } from "devextreme/events";
 import { DX_REMOVE_EVENT, DX_TEMPLATE_WRAPPER_CLASS } from "./constants";
 import { allKeysAreEqual } from "./helpers";
 
@@ -85,12 +85,12 @@ class TemplatesManager {
                     const removalListener = document.createElement(container.nodeName === "TABLE" ? "tbody" : "span");
                     removalListener.style.display = "none";
                     container.appendChild(removalListener);
-                    events.one(
+                    one(
                         removalListener,
                         DX_REMOVE_EVENT,
                         mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate));
                 } else {
-                    events.one(
+                    one(
                         element,
                         DX_REMOVE_EVENT,
                         mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate));

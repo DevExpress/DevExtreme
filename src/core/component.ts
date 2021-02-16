@@ -1,7 +1,7 @@
 import { ComponentPublicInstance, defineComponent, h, VNode } from "vue";
 
-import * as CreateCallback from "devextreme/core/utils/callbacks";
-import * as events from "devextreme/events";
+import CreateCallback from "devextreme/core/utils/callbacks";
+import { triggerHandler } from "devextreme/events";
 
 import { defaultSlots, getChildren, getComponentInstance, getComponentProps, getVModelValue, VMODEL_NAME } from "./vue-helper";
 
@@ -111,7 +111,7 @@ function initBaseComponent() {
             const thisComponent = this as any as IBaseComponent;
             const instance = thisComponent.$_instance;
             if (instance) {
-                events.triggerHandler(this.$el, DX_REMOVE_EVENT);
+                triggerHandler(this.$el, DX_REMOVE_EVENT);
                 instance.dispose();
             }
         },
