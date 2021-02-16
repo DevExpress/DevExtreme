@@ -78,6 +78,7 @@ export class PathSvgElement extends JSXComponent(PathSvgElementProps) {
     return path;
   }
 
+  // https://trello.com/c/rc9RQJ2y
   get computedProps(): PathSvgElementProps {
     return this.props;
   }

@@ -130,6 +130,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
     return convertAlignmentToAnchor(this.props.align, this.config?.rtlEnabled);
   }
 
+  // https://trello.com/c/rc9RQJ2y
   get computedProps(): TextSvgElementProps {
     return this.props;
   }

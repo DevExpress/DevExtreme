@@ -79,6 +79,7 @@ export class RootSvgElement extends JSXComponent(RootSvgElementProps) {
     }
   }
 
+  // https://trello.com/c/rc9RQJ2y
   get styles(): any {
     return {
       display: 'block',
