@@ -99,12 +99,18 @@ if(isEsmPackage) {
 
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
+const modulesWithStringExport = [
+    'cjs/core/version.js'
+];
+
+// NOTE: 'use strict' prohibits adding new 'default' field to string
+const canSupplementDefaultExport = (path) => !modulesWithStringExport.includes(path);
 const hasDefaultExport = (content) => /exports\.default\s=/.test(String(content));
 const isCjsModule = (path) => !path.startsWith('esm/');
 
 const addDefaultExport = lazyPipe().pipe(() =>
     through.obj((chunk, enc, callback) => {
-        if(isCjsModule(chunk.relative) && hasDefaultExport(chunk.contents)) {
+        if(isCjsModule(chunk.relative) && hasDefaultExport(chunk.contents) && canSupplementDefaultExport(chunk.relative)) {
             chunk.contents = Buffer.from(
                 `${String(chunk.contents)}module.exports.default = module.exports;`
             );
