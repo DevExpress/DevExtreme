@@ -158,7 +158,7 @@ export default class VirtualScrollingDispatcher {
             ? 0
             : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
 
-        const cellWidth = workSpace.getCellWidth();
+        const cellWidth = this.cellWidth;
 
         const top = isVerticalDirectionView
             ? (rowIndex + scrollInCell) * this.rowHeight
