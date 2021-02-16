@@ -100,7 +100,7 @@ if(isEsmPackage) {
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
 const hasDefaultExport = (content) => /exports\.default\s=/.test(String(content));
-const isCjsModule = (path) => path.indexOf('esm/') !== 0;
+const isCjsModule = (path) => !path.startsWith('esm/');
 
 const addDefaultExport = lazyPipe().pipe(() =>
     through.obj((chunk, enc, callback) => {
