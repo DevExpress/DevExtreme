@@ -21,7 +21,7 @@ import {
 
 import {
   ScrollableSimulated as Scrollable,
-  viewFunction,
+  viewFunction as ScrollableComponent,
 } from '../scrollable_simulated';
 
 import {
@@ -243,7 +243,7 @@ describe('Simulated', () => {
                   const viewModel = new Scrollable({
                     direction, scrollByThumb, scrollByContent,
                   }) as any;
-                  const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+                  const scrollable = mount(ScrollableComponent(viewModel) as JSX.Element);
                   viewModel.scrollableRef = scrollable.getDOMNode();
 
                   const scrollbars = scrollable.find(Scrollbar);
@@ -327,10 +327,8 @@ describe('Simulated', () => {
                   helper.viewModel.initEffect();
                   emit('dxscrollinit', e);
 
-                  expect(helper.viewModel.needShowScrollbars).toEqual(false);
-
                   const expectedCrossThumbScrolling = expectedVerticalThumbScrolling
-                                || expectedHorizontalThumbScrolling;
+                    || expectedHorizontalThumbScrolling;
 
                   expect(onStopAction).toHaveBeenCalledTimes(1);
                   expect(onStopAction).toHaveBeenCalledWith(helper.viewModel.getEventArgs());
@@ -361,7 +359,7 @@ describe('Simulated', () => {
                         scrollByContent,
                       }) as any;
 
-                      const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+                      const scrollable = mount(ScrollableComponent(viewModel) as JSX.Element);
                       viewModel.scrollableRef = scrollable.getDOMNode();
                       viewModel.locked = locked;
 
@@ -588,8 +586,6 @@ describe('Simulated', () => {
                       helper.viewModel.startEffect();
                       emit('dxscrollstart', e);
 
-                      expect(helper.viewModel.needShowScrollbars).toEqual(true);
-
                       if (onStartActionHandler) {
                         expect(onStartActionHandler).toHaveBeenCalledTimes(1);
                         expect(onStartActionHandler)
@@ -710,7 +706,7 @@ describe('Simulated', () => {
                     scrollByContent,
                   }) as any;
 
-                  const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+                  const scrollable = mount(ScrollableComponent(viewModel) as JSX.Element);
                   viewModel.scrollableRef = scrollable.getDOMNode();
 
                   const scrollbars = scrollable.find(Scrollbar);
@@ -952,16 +948,16 @@ describe('Simulated', () => {
       });
 
       each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbar) => {
-        it('hoverEffect should update invisible class only for onHover mode', () => {
-          const helper = new ScrollableTestHelper({ direction: 'horizontal', showScrollbar });
+        it('hoverStart, hoverEnd handlers should update isHovered state only for onHover mode', () => {
+          const viewModel = new Scrollable({ direction: 'horizontal', showScrollbar }) as any;
 
-          expect(helper.viewModel.isScrollbarVisible).toBe(showScrollbar === 'always');
+          expect(viewModel.isHovered).toBe(false);
 
-          helper.viewModel.cursorEnterHandler();
-          expect(helper.viewModel.isScrollbarVisible).toBe(showScrollbar === 'always' || showScrollbar === 'onHover');
+          viewModel.cursorEnterHandler();
+          expect(viewModel.isHovered).toBe(showScrollbar === 'onHover');
 
-          helper.viewModel.cursorLeaveHandler();
-          expect(helper.viewModel.isScrollbarVisible).toBe(showScrollbar === 'always');
+          viewModel.cursorLeaveHandler();
+          expect(viewModel.isHovered).toBe(false);
         });
       });
     });
@@ -1964,7 +1960,7 @@ describe('Simulated', () => {
         it('element is scrollable container', () => {
           const viewModel = new Scrollable({ direction: 'vertical' });
 
-          const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+          const scrollable = mount(ScrollableComponent(viewModel as any) as JSX.Element);
           viewModel.scrollableRef = scrollable.getDOMNode();
 
           expect(viewModel.isContent(scrollable.find('.dx-scrollable-container').getDOMNode())).toBe(true);
@@ -1973,7 +1969,7 @@ describe('Simulated', () => {
         it('element is scrollbar', () => {
           const viewModel = new Scrollable({ direction: 'vertical' });
 
-          const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
+          const scrollable = mount(ScrollableComponent(viewModel as any) as JSX.Element);
           viewModel.scrollableRef = scrollable.getDOMNode();
 
           expect(viewModel.isContent(scrollable.find('.dx-scrollable-scrollbar').getDOMNode())).toBe(true);
@@ -1982,7 +1978,7 @@ describe('Simulated', () => {
         it('element is not inside scrollable', () => {
           const viewModel = new Scrollable({ direction: 'vertical' });
 
-          mount(viewFunction(viewModel as any) as JSX.Element);
+          mount(ScrollableComponent(viewModel as any) as JSX.Element);
           expect(viewModel.isContent(mount(<div />).getDOMNode())).toBe(false);
         });
       });
