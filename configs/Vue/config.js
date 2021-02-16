@@ -91,7 +91,7 @@ System.config({
     'luxon': 'npm:luxon/build/global/luxon.min.js',
     'es6-object-assign': 'npm:es6-object-assign',
 
-    'devextreme': 'npm:devextreme',
+    'devextreme': 'npm:devextreme/cjs',
     'devextreme-vue': 'npm:devextreme-vue',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
