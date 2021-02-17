@@ -402,7 +402,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
         isCurrentValidatorProcessing: function({ rowKey, columnIndex }) {
             return this._currentCellValidator && this._currentCellValidator.option('validationGroup').key === rowKey
-                    && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
+                && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
         },
 
         validateCell: function(validator) {
@@ -1124,6 +1124,20 @@ module.exports = {
                         !hideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
                     },
 
+                    _getColumnByCell: function($cell) {
+                        if(!$cell) {
+                            return null;
+                        }
+
+                        const rowsView = this.getView('rowsView');
+                        const $fixedTableElement = rowsView.getFixedTableElement && rowsView.getFixedTableElement();
+                        const columnController = this.getController('columns');
+                        const cellInFixedTable = $fixedTableElement && $cell.closest($fixedTableElement).length;
+                        const columns = cellInFixedTable ? columnController.getFixedColumns() : columnController.getVisibleColumns();
+
+                        return columns[$cell.index()];
+                    },
+
                     focus: function($element, hideBorder) {
                         if(!arguments.length) return this.callBase();
 
@@ -1142,7 +1156,7 @@ module.exports = {
                         const editData = rowOptions ? editingController.getEditDataByKey(rowOptions.key) : null;
                         let validationResult;
                         const $cell = $focus && $focus.is('td') ? $focus : null;
-                        const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
+                        const column = this._getColumnByCell($cell);
                         const validatingController = this.getController('validating');
 
                         if(validator) {
