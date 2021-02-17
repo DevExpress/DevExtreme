@@ -228,7 +228,8 @@ class DrawerStrategy {
         return false;
     }
 
-    onViewContentWrapperCreated() {}
+    onViewContentWrapperCreated($viewContentWrapper, panelPosition) {
+    }
 }
 
 module.exports = DrawerStrategy;
