@@ -6,7 +6,7 @@ import DataSource from '../../data/data_source';
 import timeZoneDataUtils from './timezones/utils.timezones_data';
 import { extend } from '../../core/utils/extend';
 
-import './ui.scheduler.recurrence_editor';
+import './recurrence_editor';
 import '../text_area';
 import '../tag_box';
 import '../switch';

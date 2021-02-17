@@ -25,7 +25,7 @@ import {
 import Scrollable from '../../scroll_view/ui.scrollable';
 import HorizontalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.horizontal';
 import VerticalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.vertical';
-import tableCreatorModule from '../ui.scheduler.table_creator';
+import tableCreatorModule from '../table_creator';
 const { tableCreator } = tableCreatorModule;
 import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
