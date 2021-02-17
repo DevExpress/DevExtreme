@@ -374,7 +374,7 @@ class Scheduler extends Widget {
                 mode: 'standard'
             },
 
-            renovateRender: false,
+            renovateRender: true,
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: 'bottom',
@@ -1515,7 +1515,7 @@ class Scheduler extends Widget {
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
             scrolling,
-            renovateRender: true,
+            renovateRender: this.option('renovateRender') || isVirtualScrolling
         }, currentViewOptions);
 
         result.observer = this;
