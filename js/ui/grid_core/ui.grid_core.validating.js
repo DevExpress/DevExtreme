@@ -1251,7 +1251,7 @@ export default {
                                 editingController.waitForDeferredOperations().done(() => {
                                     when(validatingController.validateCell(validator)).done((result) => {
                                         validationResult = result;
-                                        const column = validationResult.validator.option('dataGetter').column;
+                                        const column = validationResult.validator.option('dataGetter')().column;
                                         if(change && column && !validatingController.isCurrentValidatorProcessing({ rowKey: change.key, columnIndex: column.index })) {
                                             return;
                                         }
