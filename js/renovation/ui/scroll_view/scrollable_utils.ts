@@ -105,7 +105,7 @@ export class ScrollDirection {
   readonly DIRECTION_BOTH = 'both';
 
   constructor(direction: ScrollableDirection) {
-    this.direction = direction;
+    this.direction = direction ?? DIRECTION_VERTICAL;
   }
 
   get isHorizontal(): boolean {

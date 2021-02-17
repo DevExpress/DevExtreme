@@ -46,6 +46,7 @@ class ScrollableTestHelper {
   constructor(args) {
     this.viewModel = new Scrollable({
       ...args,
+      contentTranslateOffset: { top: 0, left: 0 },
     }) as any;
     this.viewModel.scrollableRef = React.createRef();
     this.viewModel.containerRef = React.createRef();
@@ -193,8 +194,10 @@ class ScrollableTestHelper {
             baseContentSize: additionalProps.props.contentSize || 200,
             baseContainerSize: additionalProps.props.containerSize || 100,
             scrollableOffset: 0,
-            contentRef: { current: this.viewModel.contentRef.current },
-            containerRef: { current: this.viewModel.containerRef.current },
+            contentTranslateOffsetChange:
+              scrollbar.props.contentTranslateOffsetChange.bind(this.viewModel),
+            contentPositionChange:
+              scrollbar.props.contentPositionChange.bind(this.viewModel),
             ...additionalProps.props,
           },
         },
@@ -265,13 +268,15 @@ class ScrollableTestHelper {
   }
 
   changeScrollbarMethod(method, mock) {
+    const { horizontalScrollbarRef, verticalScrollbarRef } = this.viewModel;
+
     if (this.isBoth) {
-      this.viewModel.horizontalScrollbarRef.current[method] = mock;
-      this.viewModel.verticalScrollbarRef.current[method] = mock;
+      horizontalScrollbarRef.current![method] = mock;
+      verticalScrollbarRef.current![method] = mock;
     } else if (this.isVertical) {
-      this.viewModel.verticalScrollbarRef.current[method] = mock;
+      verticalScrollbarRef.current![method] = mock;
     } else if (this.isHorizontal) {
-      this.viewModel.horizontalScrollbarRef.current[method] = mock;
+      horizontalScrollbarRef.current![method] = mock;
     }
   }
 
@@ -290,21 +295,11 @@ class ScrollableTestHelper {
   }
 
   checkContainerPosition(jestExpect, expectedPosition) {
-    if (this.isVertical) {
-      jestExpect(
-        this.viewModel.verticalScrollbarRef.current.props.containerRef.current
-          .scrollTop,
-      ).toEqual(expectedPosition.top);
-    }
-    if (this.isHorizontal) {
-      jestExpect(
-        this.viewModel.horizontalScrollbarRef.current.props.containerRef.current
-          .scrollLeft,
-      ).toEqual(expectedPosition.left);
-    }
+    jestExpect(this.viewModel.containerRef.current!.scrollTop).toEqual(expectedPosition.top);
+    jestExpect(this.viewModel.containerRef.current!.scrollLeft).toEqual(expectedPosition.left);
   }
 
-  checkScrollbarScrollPositions(jestExpect, { vertical, horizontal }) {
+  checkScrollTransform(jestExpect, { vertical, horizontal }) {
     if (this.isBoth) {
       jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', horizontal);
       jestExpect(this.getScrollbars().at(1).instance().styles).toHaveProperty('transform', vertical);

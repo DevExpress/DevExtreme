@@ -373,10 +373,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   private allowedDirection(): string | undefined {
-    return updateAllowedDirection(this.allowedDirections(), this.props.direction);
+    return updateAllowedDirection(this.allowedDirections, this.props.direction);
   }
 
-  private allowedDirections(): allowedDirection {
+  get allowedDirections(): allowedDirection {
     const { isVertical, isHorizontal } = new ScrollDirection(this.props.direction);
 
     return {
