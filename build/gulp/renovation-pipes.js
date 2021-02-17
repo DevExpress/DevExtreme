@@ -13,7 +13,15 @@ const overwriteQUnitWidgetTemplate = require('./overwrite-qunit-renovation-widge
 
 const fileToComponentMap = {};
 renovatedComponents.forEach((component) => {
-    fileToComponentMap[path.resolve(path.join('./js/', component.pathInJSFolder))] = component;
+    const oldComponentFileName = path.join('./js/', component.pathInJSFolder);
+    fileToComponentMap[path.resolve(oldComponentFileName)] = {
+        ...component,
+        pathInRenovationFolder: path
+            .relative(
+                path.dirname(oldComponentFileName),
+                path.join('./js/renovation', component.pathInRenovationFolder)
+            ).replace(/\\/g, '/')
+    };
 });
 
 module.exports = {
