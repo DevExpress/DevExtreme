@@ -49,22 +49,26 @@ const compilerServer = async() => {
 };
 
 const run = async(restart = false) => {
-    if(restart) {
-        log('Try to restart dart server');
-        runServer();
-        return;
-    }
+    try {
+        if(restart) {
+            log('Try to restart dart server');
+            runServer();
+            return;
+        }
 
-    if(!await isDartInstalled()) {
-        log('Dart is not installed');
-        return;
-    }
+        if(!await isDartInstalled()) {
+            log('Dart is not installed');
+            return;
+        }
 
-    if(compilerServer()) {
-        runServer();
-        log('Dart compile server has been run');
-    } else {
-        log('Dart compile server has not been run.');
+        if(await compilerServer()) {
+            runServer();
+            log('Dart compile server has been run');
+        } else {
+            log('Dart compile server has not been run.');
+        }
+    } catch(e) {
+        log('Unexpected error:', e);
     }
 };
 

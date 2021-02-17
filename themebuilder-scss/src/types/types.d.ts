@@ -128,3 +128,8 @@ interface DartCompilerResult {
   css?: string;
   error?: string;
 }
+
+interface SocketEventListener {
+  name: string;
+  handler: (e?: Error) => void;
+}

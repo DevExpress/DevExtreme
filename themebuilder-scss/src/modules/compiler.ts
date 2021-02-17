@@ -79,6 +79,8 @@ export default class Compiler {
           changedVariables: reply.changedVariables,
         });
       }
+    }).finally(() => {
+      this.dartClient.dispose();
     });
   }
 
