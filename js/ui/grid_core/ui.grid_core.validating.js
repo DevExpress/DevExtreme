@@ -1150,7 +1150,7 @@ module.exports = {
                                 editingController.waitForDeferredOperations().done(() => {
                                     when(validatingController.validateCell(validator)).done((result) => {
                                         validationResult = result;
-                                        const column = validationResult.validator.option('dataGetter').column;
+                                        const column = validationResult.validator.option('dataGetter')().column;
                                         if(editData && column && !validatingController.isCurrentValidatorProcessing({ rowKey: editData.key, columnIndex: column.index })) {
                                             return;
                                         }
