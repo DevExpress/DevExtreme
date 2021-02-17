@@ -1515,7 +1515,7 @@ class Scheduler extends Widget {
             },
             groupByDate: this._getCurrentViewOption('groupByDate'),
             scrolling,
-            renovateRender: this.option('renovateRender') || isVirtualScrolling
+            renovateRender: true,
         }, currentViewOptions);
 
         result.observer = this;
