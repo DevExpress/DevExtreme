@@ -14297,6 +14297,74 @@ QUnit.module('Editing with validation', {
         assert.strictEqual(overlayPosition.at, 'bottom left', 'position.at');
     });
 
+
+    QUnit.testInActiveWindow('Validation message and revert button should be rendered in fixed cells (T973090)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+
+        this.$element().width(500);
+
+        rowsView.render(this.gridContainer);
+
+        this.applyOptions({
+            width: 500,
+            dataSource: [
+                { id: 1, field1: 'field1', field2: 'field2', field3: 'field3', field4: 'field4' }
+            ],
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'field1',
+                    validationRules: [{ type: 'required' }],
+                    fixed: true
+                },
+                {
+                    dataField: 'field2',
+                    validationRules: [{ type: 'required' }]
+                },
+                {
+                    dataField: 'field3',
+                    validationRules: [{ type: 'required' }]
+                },
+                {
+                    dataField: 'field4',
+                    validationRules: [{ type: 'required' }],
+                    fixed: true,
+                    fixedPosition: 'right'
+                }
+            ]
+        });
+
+        this.clock.tick();
+
+        // act
+        for(let i = 0; i < 4; i++) {
+            this.editCell(0, i);
+            this.clock.tick();
+
+            const $cell = $(rowsView.getCellElement(0, i));
+            const inputElement = getInputElements($cell).first();
+
+            this.focus($cell);
+            inputElement.val('');
+            inputElement.trigger('change');
+
+            this.clock.tick();
+
+            // assert
+            assert.ok($cell.find('.dx-datagrid-revert-tooltip').length, `revert button is rendered in the [0, ${i}] cell`);
+            assert.ok($cell.find('.dx-datagrid-invalid-message').length, `validation message is rendered in the [0, ${i}] cell`);
+
+            // act
+            this.cancelEditData();
+            this.clock.tick();
+        }
+    });
+
     // T829925
     QUnit.test('No exceptions on editing a column with given setCellValue when repaintChangedOnly is true', function(assert) {
     // arrange
