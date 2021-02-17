@@ -581,11 +581,12 @@ QUnit.module('skip mousewheel event test', () => {
 });
 
 QUnit.module('skip mouse event tests', () => {
-    const needSkipMouseDown = element => {
-        const mouse = nativePointerMock(element);
+    const needSkipMouseDown = (element, selector) => {
+        const target = selector ? element.find(selector).first() : element;
+        const mouse = nativePointerMock(target);
         let needSkip;
 
-        element.on({
+        target.on({
             'mousedown': e => {
                 needSkip = needSkipEvent(e);
             }
@@ -609,7 +610,21 @@ QUnit.module('skip mouse event tests', () => {
         assert.ok(needSkipMouseDown(element));
     });
 
-    test('needSkipEvent returns false for div click', function(assert) {
+    test('needSkipEvent returns true for clicking the contenteditable', function(assert) {
+        const element = $(`
+        <div contenteditable="true">
+            <h1>Test</h1>
+            <div class="text">
+                <b>Bold</b>
+            </div>
+        </div>
+    `);
+        assert.ok(needSkipMouseDown(element, 'h1'));
+        assert.ok(needSkipMouseDown(element, '.text'));
+        assert.ok(needSkipMouseDown(element, 'b'));
+    });
+
+    test('needSkipEvent returns true for div click', function(assert) {
         const element = $('<div />');
         assert.ok(!needSkipMouseDown(element));
     });
