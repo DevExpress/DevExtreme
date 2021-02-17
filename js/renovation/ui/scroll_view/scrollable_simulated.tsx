@@ -475,15 +475,15 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   contentPositionChange(scrollProp: 'scrollLeft' | 'scrollTop', location: number, ratio: number): void {
-    this.containerRef[scrollProp] = -location / ratio;
+    this.containerRef.current![scrollProp] = -location / ratio;
 
-    if (Math.abs(location - this.containerRef[scrollProp] * ratio) > 1) {
+    if (Math.abs(location - this.containerRef.current![scrollProp] * ratio) > 1) {
       this.triggerScrollEvent();
     }
   }
 
   triggerScrollEvent(): void {
-    (eventsEngine as any).triggerHandler(this.containerRef, { type: 'scroll' });
+    (eventsEngine as any).triggerHandler(this.containerRef.current, { type: 'scroll' });
   }
 
   contentTranslateOffsetChange(
@@ -681,7 +681,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   get allowedDirections(): allowedDirection {
-    if (!isDefined(this.verticalScrollbarRef) && !isDefined(this.horizontalScrollbarRef)) {
+    if (
+      !isDefined(this.verticalScrollbarRef?.current)
+      && !isDefined(this.horizontalScrollbarRef?.current)
+    ) {
       return { vertical: false, horizontal: false };
     }
 

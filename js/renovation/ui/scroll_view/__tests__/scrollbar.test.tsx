@@ -1,6 +1,7 @@
 import each from 'jest-each';
 import { mount } from 'enzyme';
 
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import {
   clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
 } from '../../../test_utils/events_mock';
@@ -145,7 +146,7 @@ describe('TopPocket', () => {
 
     it('should subscribe to pointerDown event', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = React.createRef();
+      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
       const feedbackOn = jest.fn();
       (scrollbar as any).feedbackOn = feedbackOn;
 
@@ -157,7 +158,7 @@ describe('TopPocket', () => {
 
     it('pointerDownEffect should return unsubscribe callback', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = React.createRef();
+      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
 
       const detach = scrollbar.pointerDownEffect() as DisposeEffectReturn;
 
@@ -168,7 +169,7 @@ describe('TopPocket', () => {
 
     it('Down & Up effects should add & remove scroll active class', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = React.createRef();
+      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
 
       scrollbar.pointerDownEffect();
       emit('dxpointerdown');
@@ -207,7 +208,7 @@ describe('TopPocket', () => {
 
     it('pointerUpEffect should return unsubscribe callback', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
-      scrollbar.scrollRef = React.createRef();
+      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
 
       const detach = scrollbar.pointerUpEffect() as DisposeEffectReturn;
 

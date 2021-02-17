@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import {
 
   ScrollDirection,
@@ -56,8 +57,6 @@ class ScrollableTestHelper {
     this.viewModel.horizontalScrollbarRef = React.createRef();
 
     this.viewModel.wrapperRef.current = {} as HTMLDivElement;
-    this.viewModel.verticalScrollbarRef.current = {};
-    this.viewModel.horizontalScrollbarRef.current = {};
 
     this.direction = args.direction;
 
@@ -364,16 +363,18 @@ class ScrollableTestHelper {
   getContainerRefMock({
     clientWidth = 100, clientHeight = 100, scrollTop = 50, scrollLeft = 50, offsetWidth = 300,
     offsetHeight = 300, scrollWidth = 600, scrollHeight = 600,
-  }): any {
+  }): RefObject {
     return {
-      clientWidth,
-      clientHeight,
-      scrollTop,
-      scrollLeft,
-      offsetWidth,
-      offsetHeight,
-      scrollWidth,
-      scrollHeight,
+      current: {
+        clientWidth,
+        clientHeight,
+        scrollTop,
+        scrollLeft,
+        offsetWidth,
+        offsetHeight,
+        scrollWidth,
+        scrollHeight,
+      },
     };
   }
 

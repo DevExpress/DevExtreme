@@ -732,6 +732,8 @@ describe('Simulated', () => {
                   viewModel.contentRef = React.createRef();
                   viewModel.containerRef = React.createRef();
                   viewModel.scrollableRef = React.createRef();
+                  viewModel.horizontalScrollbarRef = React.createRef();
+                  viewModel.verticalScrollbarRef = React.createRef();
 
                   const scrollable = mount(ScrollableComponent(viewModel) as JSX.Element);
                   viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
@@ -1989,6 +1991,8 @@ describe('Simulated', () => {
           viewModel.contentRef = React.createRef();
           viewModel.containerRef = React.createRef();
           viewModel.scrollableRef = React.createRef();
+          viewModel.horizontalScrollbarRef = React.createRef();
+          viewModel.verticalScrollbarRef = React.createRef();
 
           const scrollable = mount(ScrollableComponent(viewModel as any) as JSX.Element);
           viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
@@ -2001,6 +2005,8 @@ describe('Simulated', () => {
           viewModel.contentRef = React.createRef();
           viewModel.containerRef = React.createRef();
           viewModel.scrollableRef = React.createRef();
+          viewModel.horizontalScrollbarRef = React.createRef();
+          viewModel.verticalScrollbarRef = React.createRef();
 
           const scrollable = mount(ScrollableComponent(viewModel as any) as JSX.Element);
           viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
@@ -2013,6 +2019,8 @@ describe('Simulated', () => {
           viewModel.contentRef = React.createRef();
           viewModel.containerRef = React.createRef();
           viewModel.scrollableRef = React.createRef();
+          viewModel.horizontalScrollbarRef = React.createRef();
+          viewModel.verticalScrollbarRef = React.createRef();
 
           mount(ScrollableComponent(viewModel as any) as JSX.Element);
           expect(viewModel.isContent(mount(<div />).getDOMNode())).toBe(false);

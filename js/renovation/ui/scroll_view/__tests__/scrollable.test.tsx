@@ -53,6 +53,8 @@ each([{
     describe('Render', () => {
       it('should render scrollable content', () => {
         const viewModel = new Scrollable({ });
+        viewModel.horizontalScrollbarRef = React.createRef();
+        viewModel.verticalScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
@@ -63,6 +65,8 @@ each([{
       each([true, false]).describe('NeedScrollViewContentWrapper: %o', (needScrollViewContentWrapper) => {
         it('should render scrollView content only if needScrollViewContentWrapper option is enabled', () => {
           const viewModel = new Scrollable({ needScrollViewContentWrapper });
+          viewModel.horizontalScrollbarRef = React.createRef();
+          viewModel.verticalScrollbarRef = React.createRef();
 
           const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
@@ -73,6 +77,8 @@ each([{
 
       it('should not render top & bottom pockets', () => {
         const viewModel = new Scrollable({ });
+        viewModel.horizontalScrollbarRef = React.createRef();
+        viewModel.verticalScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
@@ -83,6 +89,8 @@ each([{
 
       it('should render top & bottom pockets', () => {
         const viewModel = new Scrollable({ forceGeneratePockets: true });
+        viewModel.horizontalScrollbarRef = React.createRef();
+        viewModel.verticalScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const topPocket = scrollable.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content .dx-scrollview-top-pocket');
@@ -93,6 +101,8 @@ each([{
 
       it('should render top pockets with classes', () => {
         const viewModel = new Scrollable({ forceGeneratePockets: true });
+        viewModel.horizontalScrollbarRef = React.createRef();
+        viewModel.verticalScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
@@ -108,6 +118,8 @@ each([{
 
       it('should render bottom pockets with classes', () => {
         const viewModel = new Scrollable({ forceGeneratePockets: true });
+        viewModel.horizontalScrollbarRef = React.createRef();
+        viewModel.verticalScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         const reachBottom = scrollable.find('.dx-scrollview-bottom-pocket > .dx-scrollview-scrollbottom');
@@ -120,6 +132,8 @@ each([{
 
       it('should render slot', () => {
         const viewModel = new Scrollable({ children: <div className="content" /> });
+        viewModel.horizontalScrollbarRef = React.createRef();
+        viewModel.verticalScrollbarRef = React.createRef();
 
         const scrollable = shallow(viewFunction(viewModel) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-content .content').exists()).toBe(true);
@@ -136,6 +150,8 @@ each([{
         };
 
         const viewModel = new Scrollable(config);
+        viewModel.horizontalScrollbarRef = React.createRef();
+        viewModel.verticalScrollbarRef = React.createRef();
 
         Object.defineProperties(viewModel, {
           cssClasses: {
@@ -155,6 +171,8 @@ each([{
         const contentRef = React.createRef();
         const viewModel = new Scrollable({});
         viewModel.contentRef = contentRef;
+        viewModel.horizontalScrollbarRef = React.createRef();
+        viewModel.verticalScrollbarRef = React.createRef();
 
         Object.defineProperties(viewModel, {
           contentWidth: {
@@ -174,6 +192,8 @@ each([{
         const containerRef = React.createRef();
         const viewModel = new Scrollable({});
         viewModel.containerRef = containerRef;
+        viewModel.horizontalScrollbarRef = React.createRef();
+        viewModel.verticalScrollbarRef = React.createRef();
 
         const scrollable = mount(viewFunction(viewModel) as JSX.Element);
         expect(scrollable.find('.dx-scrollable-container').instance()).toBe(containerRef.current);
@@ -202,6 +222,8 @@ each([{
           each(['never', 'always', 'onScroll', 'onHover', true, false, undefined, null]).describe('ShowScrollbar: %o', (showScrollbar) => {
             it('Scrollbar should render if useSimulatedScrollbar is set to true and nativeStrategy is used', () => {
               const viewModel = new Scrollable({ showScrollbar, useSimulatedScrollbar, direction });
+              viewModel.horizontalScrollbarRef = React.createRef();
+              viewModel.verticalScrollbarRef = React.createRef();
               const scrollable = mount(viewFunction(viewModel) as JSX.Element);
 
               const scrollBar = scrollable.find(Scrollbar);
@@ -228,6 +250,8 @@ each([{
         each(['horizontal', 'vertical', 'both', undefined, null]).describe('Direction: %o', (direction) => {
           it('should add direction class', () => {
             const viewModel = new Scrollable({ direction, useSimulatedScrollbar: true, showScrollbar: 'always' });
+            viewModel.horizontalScrollbarRef = React.createRef();
+            viewModel.verticalScrollbarRef = React.createRef();
             const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
 
             const horizontalScrollbar = scrollable.find('.dx-scrollable-scrollbar.dx-scrollbar-horizontal');
