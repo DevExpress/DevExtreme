@@ -12520,7 +12520,7 @@ QUnit.module('Editing with validation', {
         this.clock.tick();
 
         // assert
-        assert.equal($('.dx-revert-button').length, 0, 'revert button was hided');
+        assert.equal($('.dx-revert-button').length, 0, 'revert button was hidden');
     });
 
     QUnit.testInActiveWindow('Change hint for revert button', function(assert) {
