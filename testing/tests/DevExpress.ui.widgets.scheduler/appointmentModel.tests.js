@@ -1,4 +1,4 @@
-import AppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
+import AppointmentModel from 'ui/scheduler/appointment_model';
 import { compileGetter, compileSetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'data/data_source/data_source';

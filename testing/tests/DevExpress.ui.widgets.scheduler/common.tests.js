@@ -16,7 +16,7 @@ import $ from 'jquery';
 import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
 import dxScheduler from 'ui/scheduler/ui.scheduler';
 import { getTimeZones } from 'time_zone_utils';
-import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
+import dxSchedulerAppointmentModel from 'ui/scheduler/appointment_model';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import themes from 'ui/themes';
 import errors from 'ui/widget/ui.errors';
