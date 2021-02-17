@@ -1224,20 +1224,6 @@ export default {
                         !hideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
                     },
 
-                    _getColumnByCell: function($cell) {
-                        if(!$cell) {
-                            return null;
-                        }
-
-                        const rowsView = this.getView('rowsView');
-                        const $fixedTableElement = rowsView.getFixedTableElement && rowsView.getFixedTableElement();
-                        const columnController = this.getController('columns');
-                        const cellInFixedTable = $fixedTableElement && $cell.closest($fixedTableElement).length;
-                        const columns = cellInFixedTable ? columnController.getFixedColumns() : columnController.getVisibleColumns();
-
-                        return columns[$cell.index()];
-                    },
-
                     focus: function($element, hideBorder) {
                         if(!arguments.length) return this.callBase();
 
@@ -1255,8 +1241,6 @@ export default {
                         const editingController = this.getController('editing');
                         const change = rowOptions ? editingController.getChangeByKey(rowOptions.key) : null;
                         let validationResult;
-                        const $cell = $focus && $focus.is('td') ? $focus : null;
-                        const column = this._getColumnByCell($cell);
                         const validatingController = this.getController('validating');
 
                         if(validator) {
@@ -1266,6 +1250,7 @@ export default {
                                 editingController.waitForDeferredOperations().done(() => {
                                     when(validatingController.validateCell(validator)).done((result) => {
                                         validationResult = result;
+                                        const column = validationResult.validator.option('dataGetter').column;
                                         if(change && column && !validatingController.isCurrentValidatorProcessing({ rowKey: change.key, columnIndex: column.index })) {
                                             return;
                                         }
