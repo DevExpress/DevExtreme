@@ -7936,6 +7936,10 @@ declare module DevExpress.ui {
          */
         stripLines?: Array<dxGanttStripLine>;
         /**
+         * [descr:dxGantt.Options.taskContentTemplate]
+         */
+        taskContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, item: { cellSize?: any, isMilestone?: boolean, taskData?: any, taskHTML?: any, taskPosition?: any, taskResources?: Array<any>, taskSize?: any }) => any);
+        /**
          * [descr:dxGantt.Options.taskListWidth]
          */
         taskListWidth?: number;
