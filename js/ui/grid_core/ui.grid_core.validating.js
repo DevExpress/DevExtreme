@@ -1124,20 +1124,6 @@ module.exports = {
                         !hideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
                     },
 
-                    _getColumnByCell: function($cell) {
-                        if(!$cell) {
-                            return null;
-                        }
-
-                        const rowsView = this.getView('rowsView');
-                        const $fixedTableElement = rowsView.getFixedTableElement && rowsView.getFixedTableElement();
-                        const columnController = this.getController('columns');
-                        const cellInFixedTable = $fixedTableElement && $cell.closest($fixedTableElement).length;
-                        const columns = cellInFixedTable ? columnController.getFixedColumns() : columnController.getVisibleColumns();
-
-                        return columns[$cell.index()];
-                    },
-
                     focus: function($element, hideBorder) {
                         if(!arguments.length) return this.callBase();
 
@@ -1155,8 +1141,6 @@ module.exports = {
                         const editingController = this.getController('editing');
                         const editData = rowOptions ? editingController.getEditDataByKey(rowOptions.key) : null;
                         let validationResult;
-                        const $cell = $focus && $focus.is('td') ? $focus : null;
-                        const column = this._getColumnByCell($cell);
                         const validatingController = this.getController('validating');
 
                         if(validator) {
@@ -1166,6 +1150,7 @@ module.exports = {
                                 editingController.waitForDeferredOperations().done(() => {
                                     when(validatingController.validateCell(validator)).done((result) => {
                                         validationResult = result;
+                                        const column = validationResult.validator.option('dataGetter').column;
                                         if(editData && column && !validatingController.isCurrentValidatorProcessing({ rowKey: editData.key, columnIndex: column.index })) {
                                             return;
                                         }
