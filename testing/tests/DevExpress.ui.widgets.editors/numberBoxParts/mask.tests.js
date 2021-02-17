@@ -2140,3 +2140,62 @@ QUnit.module('stubs', moduleConfig, function() {
         });
     });
 });
+
+QUnit.module('symbol with dot in format', {
+    beforeEach: function() {
+        this.$element = $('#numberbox').dxNumberBox({
+            useMaskBehavior: true,
+            value: 1.5,
+            format: '\'.\' 0.00'
+        });
+        this.clock = sinon.useFakeTimers();
+        this.$input = this.$element.find(`.${INPUT_CLASS}`);
+        this.instance = this.$element.dxNumberBox('instance');
+        this.keyboard = keyboardMock(this.$input, true);
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.test('should not change max precision (T972648)', function(assert) {
+        this.keyboard
+            .caret(4)
+            .type('89')
+            .change();
+
+        assert.strictEqual(this.keyboard.caret().start, 6, 'caret position is correct');
+        assert.strictEqual(this.instance.option('value'), 1.89, 'value is correct');
+    });
+
+    QUnit.test('should not affect caret position on focusin', function(assert) {
+        this.keyboard
+            .caret(6)
+            .focus();
+        this.clock.tick(CARET_TIMEOUT_DURATION);
+
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, 'caret position is correct');
+    });
+
+    QUnit.test('should not affect integer part length calculation', function(assert) {
+        this.instance.option('format', '\'.\' 00.0');
+
+        this.keyboard
+            .caret(4)
+            .type('22')
+            .change();
+
+        assert.strictEqual(this.instance.option('value'), 22.5, 'value is correct');
+    });
+
+    QUnit.test('should not prevent value formatting on every input', function(assert) {
+        this.instance.option({
+            format: '\'.\' 00.00'
+        });
+
+        this.keyboard
+            .caret(4)
+            .type('2233445567');
+
+        assert.strictEqual(this.$input.val(), '. 67.50', 'value is correct');
+    });
+});

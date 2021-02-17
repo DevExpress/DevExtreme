@@ -154,7 +154,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   }
 
   get pageIndexes(): PageIndexes {
-    const { pageCount } = this.props as {pageCount: number};
+    const { pageCount } = this.props as { pageCount: number };
     if (this.isSlidingWindowMode()) {
       return createPageIndexes(0, pageCount, pageCount, 'none').pageIndexes;
     }

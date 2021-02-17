@@ -6,7 +6,7 @@ import url from '../../helpers/getPageUrl';
 fixture`Scheduler: Navigator`
   .page(url(__dirname, '../container.html'));
 
-const createScheduler = async (options = {}) => {
+const createScheduler = async (options = {}): Promise<void> => {
   await createWidget('dxScheduler', extend(options, {
     dataSource: [],
     currentDate: new Date(2017, 4, 18),

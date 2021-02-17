@@ -22,7 +22,7 @@ export default class MetadataGenerator {
     return this.metadata;
   }
 
-  static executor(str: string, regex: RegExp, handler: Function): void {
+  static executor(str: string, regex: RegExp, handler: (matches: any) => void): void {
     let matches = regex.exec(str);
     while (matches !== null) {
       handler(matches);

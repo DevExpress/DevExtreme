@@ -17,8 +17,9 @@ import { ConfigContextValue, ConfigContext } from '../../../common/config_contex
 export const viewFunction = ({
   svgRef,
   config,
+  styles,
   props: {
-    className, width, height, pointerEvents, filter, children, styles,
+    className, width, height, pointerEvents, filter, children,
   },
 }: RootSvgElement): JSX.Element => (
   <svg
@@ -29,16 +30,7 @@ export const viewFunction = ({
     fill="none"
     stroke="none"
     strokeWidth={0}
-    style={{
-      display: 'block',
-      overflow: 'hidden',
-      lineHeight: 'normal',
-      msUserSelect: 'none',
-      MozUserSelect: 'none',
-      WebkitUserSelect: 'none',
-      WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
-      ...styles,
-    }}
+    style={styles}
     width={width}
     height={height}
     direction={config?.rtlEnabled ? 'rtl' : 'ltr'}
@@ -85,5 +77,19 @@ export class RootSvgElement extends JSXComponent(RootSvgElementProps) {
     if (rootElementRef) {
       this.props.rootElementRef = this.svgRef;
     }
+  }
+
+  // https://trello.com/c/rc9RQJ2y
+  get styles(): any {
+    return {
+      display: 'block',
+      overflow: 'hidden',
+      lineHeight: 'normal',
+      msUserSelect: 'none',
+      MozUserSelect: 'none',
+      WebkitUserSelect: 'none',
+      WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
+      ...this.props.styles,
+    };
   }
 }

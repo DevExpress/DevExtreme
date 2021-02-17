@@ -756,7 +756,8 @@
 
         const eventMock = function(type, options) {
             options = $.extend({
-                type: type
+                type: type,
+                target: $element.get(0)
             }, options);
 
             if(type.indexOf('touch') > -1) {

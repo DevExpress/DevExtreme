@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import {
 
   ScrollDirection,
@@ -46,6 +47,7 @@ class ScrollableTestHelper {
   constructor(args) {
     this.viewModel = new Scrollable({
       ...args,
+      contentTranslateOffset: { top: 0, left: 0 },
     }) as any;
     this.viewModel.scrollableRef = React.createRef();
     this.viewModel.containerRef = React.createRef();
@@ -55,8 +57,6 @@ class ScrollableTestHelper {
     this.viewModel.horizontalScrollbarRef = React.createRef();
 
     this.viewModel.wrapperRef.current = {} as HTMLDivElement;
-    this.viewModel.verticalScrollbarRef.current = {};
-    this.viewModel.horizontalScrollbarRef.current = {};
 
     this.direction = args.direction;
 
@@ -193,8 +193,10 @@ class ScrollableTestHelper {
             baseContentSize: additionalProps.props.contentSize || 200,
             baseContainerSize: additionalProps.props.containerSize || 100,
             scrollableOffset: 0,
-            contentRef: { current: this.viewModel.contentRef.current },
-            containerRef: { current: this.viewModel.containerRef.current },
+            contentTranslateOffsetChange:
+              scrollbar.props.contentTranslateOffsetChange.bind(this.viewModel),
+            contentPositionChange:
+              scrollbar.props.contentPositionChange.bind(this.viewModel),
             ...additionalProps.props,
           },
         },
@@ -265,13 +267,15 @@ class ScrollableTestHelper {
   }
 
   changeScrollbarMethod(method, mock) {
+    const { horizontalScrollbarRef, verticalScrollbarRef } = this.viewModel;
+
     if (this.isBoth) {
-      this.viewModel.horizontalScrollbarRef.current[method] = mock;
-      this.viewModel.verticalScrollbarRef.current[method] = mock;
+      horizontalScrollbarRef.current![method] = mock;
+      verticalScrollbarRef.current![method] = mock;
     } else if (this.isVertical) {
-      this.viewModel.verticalScrollbarRef.current[method] = mock;
+      verticalScrollbarRef.current![method] = mock;
     } else if (this.isHorizontal) {
-      this.viewModel.horizontalScrollbarRef.current[method] = mock;
+      horizontalScrollbarRef.current![method] = mock;
     }
   }
 
@@ -290,21 +294,11 @@ class ScrollableTestHelper {
   }
 
   checkContainerPosition(jestExpect, expectedPosition) {
-    if (this.isVertical) {
-      jestExpect(
-        this.viewModel.verticalScrollbarRef.current.props.containerRef.current
-          .scrollTop,
-      ).toEqual(expectedPosition.top);
-    }
-    if (this.isHorizontal) {
-      jestExpect(
-        this.viewModel.horizontalScrollbarRef.current.props.containerRef.current
-          .scrollLeft,
-      ).toEqual(expectedPosition.left);
-    }
+    jestExpect(this.viewModel.containerRef.current!.scrollTop).toEqual(expectedPosition.top);
+    jestExpect(this.viewModel.containerRef.current!.scrollLeft).toEqual(expectedPosition.left);
   }
 
-  checkScrollbarScrollPositions(jestExpect, { vertical, horizontal }) {
+  checkScrollTransform(jestExpect, { vertical, horizontal }) {
     if (this.isBoth) {
       jestExpect(this.getScrollbars().at(0).instance().styles).toHaveProperty('transform', horizontal);
       jestExpect(this.getScrollbars().at(1).instance().styles).toHaveProperty('transform', vertical);
@@ -340,7 +334,7 @@ class ScrollableTestHelper {
     });
   }
 
-  checkValidDirection(jestExpect, expectedValidDirections, options?: {[key: string]: any }) {
+  checkValidDirection(jestExpect, expectedValidDirections, options?: { [key: string]: any }) {
     if (expectedValidDirections) {
       jestExpect(this.viewModel.validDirections).toEqual(expectedValidDirections);
     } else {
@@ -348,7 +342,7 @@ class ScrollableTestHelper {
     }
   }
 
-  getValidDirection(options): { vertical: boolean; horizontal: boolean} {
+  getValidDirection(options): { vertical: boolean; horizontal: boolean } {
     const {
       scrollByContent, scrollByThumb, targetClass, isDxWheelEvent,
     } = options;
@@ -369,16 +363,18 @@ class ScrollableTestHelper {
   getContainerRefMock({
     clientWidth = 100, clientHeight = 100, scrollTop = 50, scrollLeft = 50, offsetWidth = 300,
     offsetHeight = 300, scrollWidth = 600, scrollHeight = 600,
-  }): any {
+  }): RefObject {
     return {
-      clientWidth,
-      clientHeight,
-      scrollTop,
-      scrollLeft,
-      offsetWidth,
-      offsetHeight,
-      scrollWidth,
-      scrollHeight,
+      current: {
+        clientWidth,
+        clientHeight,
+        scrollTop,
+        scrollLeft,
+        offsetWidth,
+        offsetHeight,
+        scrollWidth,
+        scrollHeight,
+      },
     };
   }
 

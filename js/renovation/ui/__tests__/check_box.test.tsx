@@ -488,17 +488,17 @@ describe('CheckBox', () => {
         /* eslint-disable spellcheck/spell-checker */
         it('should have no "describedby" when widget is valid', () => {
           expect(new CheckBox({}).aria)
-            .toMatchObject({ describedby: undefined });
+            .not.toHaveProperty('describedby');
         });
 
         it('should have no "describedby" when widget "validationStatus" is not "invalid"', () => {
           expect(new CheckBox({ isValid: false, validationStatus: 'pending' }).aria)
-            .toMatchObject({ describedby: undefined });
+            .not.toHaveProperty('describedby');
         });
 
         it('should have no "describedby" when there is no validation errors', () => {
           expect(new CheckBox({ isValid: false, validationStatus: 'invalid' }).aria)
-            .toMatchObject({ describedby: undefined });
+            .not.toHaveProperty('describedby');
         });
 
         it('should have "describedby" when widget is invalid', () => {

@@ -25,7 +25,7 @@ export default class ContextMenu extends Widget {
     this.overlayWrapper = new OverlayWrapper();
   }
 
-  getItemCount() {
+  getItemCount(): Promise<number> {
     return this.items.count;
   }
 }

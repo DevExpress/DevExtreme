@@ -101,6 +101,11 @@ function isFixedColumnIndexOffsetRequired(that, column) {
     return result;
 }
 
+function shouldPreventScroll(that) {
+    const keyboardController = that.getController('keyboardNavigation');
+    return keyboardController._isVirtualScrolling() ? that.option('focusedRowIndex') === keyboardController.getRowIndex() : false;
+}
+
 const KeyboardNavigationController = core.ViewController.inherit({
     // #region Initialization
     init: function() {
@@ -2003,15 +2008,17 @@ export default {
                 },
                 renderDelayedTemplates: function(change) {
                     this.callBase.apply(this, arguments);
+                    this._renderFocusByChange(change);
+                },
+                _renderFocusByChange(change) {
                     if(!change || !change.repaintChangesOnly) {
-                        this.renderFocusState();
+                        const preventScroll = shouldPreventScroll(this);
+                        this.renderFocusState(preventScroll);
                     }
                 },
                 _renderCore: function(change) {
-                    this.callBase(change);
-                    if(!change || !change.repaintChangesOnly) {
-                        this.renderFocusState();
-                    }
+                    this.callBase.apply(this, arguments);
+                    this._renderFocusByChange(change);
                 },
                 _editCellPrepared: function($cell) {
                     const editorInstance = this._getEditorInstance($cell);

@@ -228,7 +228,7 @@ export class Button extends JSXComponent(ButtonProps) {
     return undefined;
   }
 
-  get aria(): object {
+  get aria(): Record<string, string> {
     const { text, icon } = this.props;
 
     let label = text || icon;

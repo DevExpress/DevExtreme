@@ -31,7 +31,7 @@ describe('TextSvgElement', () => {
         styles,
         textAnchor,
         isStroked,
-        props,
+        computedProps: props,
       };
 
       const svgText = shallow(<TextSvgComponent {...viewModel as any} /> as JSX.Element);
@@ -100,12 +100,12 @@ describe('TextSvgElement', () => {
 
     it('should pass transform and dash style', () => {
       jest.spyOn(utilsModule, 'getGraphicExtraProps').mockImplementation(() => ({ transform: 'transformation', 'stroke-dasharray': 'dash' }));
-      const props = getProps('some text');
-      const rect = shallow(<TextSvgComponent {...{ props } as any} /> as JSX.Element);
+      const computedProps = getProps('some text');
+      const rect = shallow(<TextSvgComponent {...{ computedProps } as any} /> as JSX.Element);
 
       expect(rect.props()).toMatchObject({ transform: 'transformation', 'stroke-dasharray': 'dash' });
       expect(utilsModule.getGraphicExtraProps)
-        .toHaveBeenCalledWith(props, props.x, props.y);
+        .toHaveBeenCalledWith(computedProps, computedProps.x, computedProps.y);
     });
   });
 
@@ -405,6 +405,14 @@ describe('TextSvgElement', () => {
           height: 20,
         });
       });
+    });
+  });
+
+  describe('Getters', () => {
+    it('should be returned props by computedProps', () => {
+      const text = new TextSvgElement({ text: 'some text' });
+
+      expect(text.computedProps).toStrictEqual({ text: 'some text' });
     });
   });
 });
