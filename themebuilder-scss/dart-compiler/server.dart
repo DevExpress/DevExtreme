@@ -24,8 +24,9 @@ class Server {
     try {
       var request = await utf8.decoder.bind(client).join('');
       var options = json.decode(request);
-      result = options['keepAlive'] ?
-        CompilerResult(null, null, 'keepAlive') : 
+      var keepAlive = options['keepAlive'] ?? false;
+      result = keepAlive ?
+        CompilerResult(null, null, 'keepAlive') :
         CompileWithOptions(options);
     } catch(e) {
       Logger.log('the following error occured ${e.toString()}');

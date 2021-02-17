@@ -23,9 +23,9 @@ const childProcess = spawn(
   },
 );
 
-childProcess.stdout.on('data', (data) => console.log(data));
-childProcess.stderr.on('data', (data) => console.error(data));
-childProcess.on('error', (error) => console.error('Failed to start subprocess.', error));
-childProcess.on('close', (code) => console.log('Child process exited with code ', code));
+childProcess.stdout.on('data', (data) => console.log(data.toString()));
+childProcess.stderr.on('data', (data) => console.error(data.toString()));
+childProcess.on('error', (error) => console.error('Failed to start subprocess.', error.toString()));
+childProcess.on('close', (code) => console.log('Child process exited with code ', code.toString()));
 
 setTimeout(() => process.exit(), 3000);
