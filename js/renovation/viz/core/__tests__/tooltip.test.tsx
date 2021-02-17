@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import { Tooltip, viewFunction as TooltipComponent } from '../tooltip';
 import {
   recalculateCoordinates, getCloudAngle, getCloudPoints, prepareData, getCanvas, isTextEmpty,
@@ -427,7 +428,8 @@ describe('Effects', () => {
         x: 1, y: 2, width: 10, height: 20,
       };
       tooltip.textSize = box;
-      tooltip.textRef = {
+      tooltip.textRef = React.createRef();
+      tooltip.textRef.current = {
         getBBox: jest.fn().mockReturnValue({ ...box }),
       } as any;
       tooltip.calculateSize();
@@ -447,6 +449,9 @@ describe('Effects', () => {
         height: 32.2,
       };
       tooltip.cloudSize = cloudSize;
+      tooltip.textRef = React.createRef();
+      tooltip.htmlRef = React.createRef();
+      tooltip.cloudRef = React.createRef();
       tooltip.cloudRef = {
         getBBox: jest.fn().mockReturnValue({
           x: 7, y: 9, width: 13, height: 15,
@@ -465,7 +470,9 @@ describe('Effects', () => {
       tooltip.textSize = {
         x: 0, y: 0, width: 5, height: 10,
       };
-      tooltip.textRef = {
+      tooltip.htmlRef = React.createRef();
+      tooltip.textRef = React.createRef();
+      tooltip.textRef.current = {
         getBBox: jest.fn().mockReturnValue(box),
       } as any;
       tooltip.calculateSize();
@@ -483,7 +490,10 @@ describe('Effects', () => {
         width: 30,
         height: 34,
       };
-      tooltip.cloudRef = {
+      tooltip.textRef = React.createRef();
+      tooltip.htmlRef = React.createRef();
+      tooltip.cloudRef = React.createRef();
+      tooltip.cloudRef.current = {
         getBBox: jest.fn().mockReturnValue({
           x: 7, y: 9, width: 13, height: 15,
         }),
@@ -505,10 +515,11 @@ describe('Effects', () => {
         html: 'customized_html_text',
       });
       const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-      tooltip.htmlRef = { current: {} } as any;
+      tooltip.htmlRef = React.createRef();
+      tooltip.htmlRef.current = {} as HTMLDivElement;
       tooltip.setHtmlText();
 
-      expect(tooltip.htmlRef.innerHTML).toEqual('customized_html_text');
+      expect(tooltip.htmlRef.current.innerHTML).toEqual('customized_html_text');
     });
 
     it('should not set html text, html option is not set by user', () => {
@@ -516,10 +527,11 @@ describe('Effects', () => {
         text: 'customized_tooltip_text',
       });
       const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
-      tooltip.htmlRef = { current: {} } as any;
+      tooltip.htmlRef = React.createRef();
+      tooltip.htmlRef.current = {} as HTMLDivElement;
       tooltip.setHtmlText();
 
-      expect(tooltip.htmlRef.innerHTML).toEqual(undefined);
+      expect(tooltip.htmlRef.current.innerHTML).toEqual(undefined);
     });
 
     it('should not set html text for invisible tooltip (visibility is false)', () => {
@@ -527,9 +539,10 @@ describe('Effects', () => {
         html: 'customized_html_text',
       });
       const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: false });
+      tooltip.htmlRef = React.createRef();
       tooltip.setHtmlText();
 
-      expect(tooltip.htmlRef).toBe(undefined);
+      expect(tooltip.htmlRef.current).toBe(null);
     });
 
     it('should not set html text for invisible tooltip (htmlRef is not rendered)', () => {
@@ -537,9 +550,10 @@ describe('Effects', () => {
         html: 'customized_html_text',
       });
       const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+      tooltip.htmlRef = React.createRef();
       tooltip.setHtmlText();
 
-      expect(tooltip.htmlRef).toBe(undefined);
+      expect(tooltip.htmlRef.current).toBe(null);
     });
   });
 
@@ -691,7 +705,8 @@ describe('Effects', () => {
       const box = {
         x: 1, y: 2, width: 10, height: 20,
       };
-      tooltip.htmlRef = {
+      tooltip.htmlRef = React.createRef();
+      tooltip.htmlRef.current = {
         getBoundingClientRect: jest.fn().mockReturnValue(box),
       } as any;
 
@@ -704,7 +719,8 @@ describe('Effects', () => {
       const box = {
         x: 1, y: 2, width: 0, height: 0,
       };
-      tooltip.htmlRef = {
+      tooltip.htmlRef = React.createRef();
+      tooltip.htmlRef.current = {
         getBoundingClientRect: jest.fn().mockReturnValue(box),
       } as any;
 
@@ -714,6 +730,7 @@ describe('Effects', () => {
 
     it('should not set isEmptyContainer prop, htmlRef is not rendered', () => {
       const tooltip = new Tooltip({ visible: false });
+      tooltip.htmlRef = React.createRef();
 
       tooltip.checkContainer();
       expect(tooltip.isEmptyContainer).toBe(false);
@@ -724,7 +741,8 @@ describe('Effects', () => {
       const box = {
         x: 1, y: 2, width: 0, height: 0,
       };
-      tooltip.htmlRef = {
+      tooltip.htmlRef = React.createRef();
+      tooltip.htmlRef.current = {
         getBoundingClientRect: jest.fn().mockReturnValue(box),
       } as any;
 
@@ -747,7 +765,9 @@ describe('Methods', () => {
       const box = {
         x: 1, y: 2, width: 10, height: 20,
       };
-      tooltip.textRef = {
+      tooltip.textRef = React.createRef();
+      tooltip.htmlRef = React.createRef();
+      tooltip.textRef.current = {
         getBBox: jest.fn().mockReturnValue(box),
       } as any;
 
@@ -759,7 +779,9 @@ describe('Methods', () => {
       const box = {
         x: 1, y: 2, width: 10, height: 20,
       };
-      tooltip.htmlRef = {
+      tooltip.textRef = React.createRef();
+      tooltip.htmlRef = React.createRef();
+      tooltip.htmlRef.current = {
         getBoundingClientRect: jest.fn().mockReturnValue(box),
       } as any;
 
@@ -777,6 +799,8 @@ describe('Methods', () => {
 
     it('should not calculate text size for invisible tooltip (textRef and htmlRef is not rendered)', () => {
       const tooltip = new Tooltip({ data: { valueText: 'Tooltip value text' } as any, visible: true });
+      tooltip.textRef = React.createRef();
+      tooltip.htmlRef = React.createRef();
 
       expect(tooltip.calculateContentSize()).toEqual({
         x: 0, y: 0, width: 0, height: 0,
@@ -789,7 +813,8 @@ describe('Methods', () => {
       const tooltip = new Tooltip({
         data: { valueText: 'Tooltip value text' } as any, visible: true, x: 1, y: 2, shadow: { offsetX: 12, offsetY: 14, blur: 1.1 } as any,
       });
-      tooltip.cloudRef = {
+      tooltip.cloudRef = React.createRef();
+      tooltip.cloudRef.current = {
         getBBox: jest.fn().mockReturnValue({
           x: 7, y: 9, width: 13, height: 15,
         }),
@@ -1007,7 +1032,10 @@ describe('Getters', () => {
     const masterDiv = createElementTest('div');
     container2.appendChild(masterDiv);
 
-    const tooltip = new Tooltip({ container: '.container-class', rootWidget: masterDiv });
+    const rootWidgetRef = React.createRef() as RefObject<HTMLDivElement>;
+    rootWidgetRef.current = masterDiv;
+
+    const tooltip = new Tooltip({ container: '.container-class', rootWidget: rootWidgetRef });
 
     expect(tooltip.container).toEqual(container2);
 

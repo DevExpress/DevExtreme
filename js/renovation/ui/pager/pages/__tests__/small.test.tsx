@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 import { mount } from 'enzyme';
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
 import getElementComputedStyle from '../../../../utils/get_computed_style';
 import messageLocalization from '../../../../../localization/message';
@@ -33,7 +34,7 @@ describe('Small pager pages', () => {
       valueChange: jest.fn(),
       width: 40,
       value: 3,
-      pageIndexRef: pageIndexRef as unknown as HTMLDivElement,
+      pageIndexRef,
       selectLastPageIndex: jest.fn(),
       pagesCountText: 'of',
       props,
@@ -58,7 +59,7 @@ describe('Small pager pages', () => {
       (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '19px' });
       const component = new PagesSmall({ pageCount: 100 });
       const numberBoxElement = {};
-      component.pageIndexRef = numberBoxElement as HTMLDivElement;
+      component.pageIndexRef = { current: numberBoxElement } as RefObject<HTMLDivElement>;
       component.updateWidth();
       expect(getElementComputedStyle).toBeCalledWith(numberBoxElement);
       expect(component.width).toBe(19 + 10 * 3);

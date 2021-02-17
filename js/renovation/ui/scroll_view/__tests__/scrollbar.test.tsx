@@ -1,6 +1,7 @@
 import each from 'jest-each';
 import { mount } from 'enzyme';
 
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import {
   clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
 } from '../../../test_utils/events_mock';
@@ -145,6 +146,7 @@ describe('TopPocket', () => {
 
     it('should subscribe to pointerDown event', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
+      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
       const feedbackOn = jest.fn();
       (scrollbar as any).feedbackOn = feedbackOn;
 
@@ -156,6 +158,7 @@ describe('TopPocket', () => {
 
     it('pointerDownEffect should return unsubscribe callback', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
+      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
 
       const detach = scrollbar.pointerDownEffect() as DisposeEffectReturn;
 
@@ -166,6 +169,7 @@ describe('TopPocket', () => {
 
     it('Down & Up effects should add & remove scroll active class', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
+      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
 
       scrollbar.pointerDownEffect();
       emit('dxpointerdown');
@@ -204,6 +208,7 @@ describe('TopPocket', () => {
 
     it('pointerUpEffect should return unsubscribe callback', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
+      scrollbar.scrollRef = {} as RefObject<HTMLDivElement>;
 
       const detach = scrollbar.pointerUpEffect() as DisposeEffectReturn;
 
@@ -322,7 +327,7 @@ describe('Methods', () => {
         } as ScrollbarProps) as any;
 
         const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
-        viewModel.scrollbarRef = scrollbar.getDOMNode();
+        viewModel.scrollbarRef = { current: scrollbar.getDOMNode() };
 
         expect(viewModel.isScrollbar(scrollbar.getDOMNode())).toBe(true);
       });
@@ -344,7 +349,7 @@ describe('Methods', () => {
         } as ScrollbarProps) as any;
 
         const scrollbar = mount(viewFunction(viewModel) as JSX.Element);
-        viewModel.scrollbarRef = scrollbar.getDOMNode();
+        viewModel.scrollbarRef = { current: scrollbar.getDOMNode() };
 
         expect(viewModel.isThumb(scrollbar.find('.dx-scrollable-scroll').getDOMNode())).toBe(true);
       });
@@ -373,7 +378,7 @@ describe('Methods', () => {
         } as ScrollbarProps) as any;
 
         const scrollbar = mount(viewFunction(viewModel as any) as JSX.Element);
-        viewModel.scrollbarRef = scrollbar.getDOMNode();
+        viewModel.scrollbarRef = { current: scrollbar.getDOMNode() };
 
         expect(viewModel.isThumb(scrollbar.find('.dx-scrollable-scroll-content').getDOMNode())).toBe(true);
       });
@@ -582,7 +587,7 @@ describe('Handlers', () => {
               viewModel.moveToMouseLocation = moveToMouseLocation;
 
               (e.originalEvent as any).target = scrollbar.find(`.${targetClass}`).getDOMNode();
-              (viewModel as any).scrollbarRef = scrollbar.getDOMNode();
+              (viewModel as any).scrollbarRef = { current: scrollbar.getDOMNode() };
               (viewModel as any).bounceAnimator = { stop: jest.fn() };
               (viewModel as any).inertiaAnimator = { stop: jest.fn() };
 

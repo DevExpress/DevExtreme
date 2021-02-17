@@ -45,11 +45,13 @@ export class LightButton extends JSXComponent<LightButtonProps, 'onClick'>() {
   @Consumer(KeyboardActionContext)
   keyboardContext!: KeyboardActionContextType;
 
-  @Effect() keyboardEffect(): EffectReturn {
-    return this.keyboardContext.registerKeyboardAction(this.widgetRef, this.props.onClick);
+  @Effect() keyboardEffect(): DisposeEffectReturn {
+    return this.keyboardContext.registerKeyboardAction(
+      this.widgetRef.current!, this.props.onClick,
+    );
   }
 
-  @Effect() subscribeToClick(): DisposeEffectReturn {
-    return subscribeToClickEvent(this.widgetRef, this.props.onClick);
+  @Effect() subscribeToClick(): EffectReturn {
+    return subscribeToClickEvent(this.widgetRef.current!, this.props.onClick);
   }
 }

@@ -128,7 +128,7 @@ function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): nu
 export function getBoundaryProps(
   direction: ScrollableDirection,
   scrollOffset: ScrollableLocation,
-  containerRef: HTMLDivElement,
+  element: HTMLDivElement,
   pushBackValue = 0,
 ): Partial<ScrollableBoundary> {
   const { left, top } = scrollOffset;
@@ -137,19 +137,19 @@ export function getBoundaryProps(
 
   if (isHorizontal) {
     boundaryProps.reachedLeft = left <= 0;
-    boundaryProps.reachedRight = Math.round(left) >= getMaxScrollOffset('width', containerRef);
+    boundaryProps.reachedRight = Math.round(left) >= getMaxScrollOffset('width', element);
   }
   if (isVertical) {
     boundaryProps.reachedTop = top <= 0;
-    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', containerRef) - 2 * pushBackValue;
+    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element) - 2 * pushBackValue;
   }
   return boundaryProps;
 }
 
-export function getContainerOffsetInternal(containerRef: HTMLDivElement): ScrollableLocation {
+export function getContainerOffsetInternal(element: HTMLDivElement): ScrollableLocation {
   return {
-    left: containerRef.scrollLeft,
-    top: containerRef.scrollTop,
+    left: element.scrollLeft,
+    top: element.scrollTop,
   };
 }
 
