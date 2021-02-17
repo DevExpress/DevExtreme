@@ -313,7 +313,9 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      */
     visible?: boolean;
     /**
-     * @docid
+     * @docid dxFileManagerContextMenuItem.template
+     * @type template|function
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
@@ -362,19 +364,24 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      */
     visible?: boolean;
     /**
-     * @docid
+     * @docid dxFileManagerToolbarItem.html
+     * @type String
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
     html?: string;
     /**
-     * @docid
+     * @docid dxFileManagerToolbarItem.template
+     * @type template|function
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
     template?: template | (() => string | Element | JQuery);
-     /**
-     * @docid
+    /**
+     * @docid dxFileManagerToolbarItem.menuItemTemplate
+     * @type template|function
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
