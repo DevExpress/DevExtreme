@@ -1,1 +1,1 @@
-This demo illustrates the ability of&nbsp;the **RangeSelector** to&nbsp;show the **Chart** with customized settings.
+This demo illustrates the ability of&nbsp;the RangeSelector to&nbsp;show the Chart with customized settings.

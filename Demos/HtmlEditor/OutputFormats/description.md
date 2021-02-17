@@ -1,1 +1,1 @@
-In&nbsp;this demo, you can switch between the HTML and Markdown output formats and view the result below the **HtmlEditor**.
+In&nbsp;this demo, you can switch between the HTML and Markdown output formats and view the result below the HtmlEditor.

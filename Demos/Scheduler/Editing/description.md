@@ -1,1 +1,1 @@
-This example demonstrates appointment editing. You can add, update and delete appointments, as&nbsp;well as&nbsp;modify them by&nbsp;dragging or&nbsp;resizing. Toggle the check boxes under the **Scheduler** to&nbsp;define which editing features are enabled.
+This example demonstrates appointment editing. You can add, update and delete appointments, as&nbsp;well as&nbsp;modify them by&nbsp;dragging or&nbsp;resizing. Toggle the check boxes under the Scheduler to&nbsp;define which editing features are enabled.

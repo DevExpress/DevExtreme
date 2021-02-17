@@ -1,4 +1,4 @@
-The **DataGrid** UI component can highlight the focused row. To enable this feature, set the [focusedRowEnabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#focusedRowEnabled) property to **true**.
+The DataGrid UI component can highlight the focused row. To enable this feature, set the [focusedRowEnabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#focusedRowEnabled) property to **true**.
 
 To focus a row programmatically, specify the [focusedRowKey](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#focusedRowKey) property. In the UI, users can click a row to focus it. To focus a row in code, specify the focusedRowKey property. The UI component automatically scrolls to the focused row if the [autoNavigateToFocusedRow](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#autoNavigateToFocusedRow) property is enabled. The focused row is saved in the UI component's [state](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/stateStoring/).
 

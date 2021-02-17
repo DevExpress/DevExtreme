@@ -1,1 +1,1 @@
-This demo shows how to&nbsp;use the API of&nbsp;the **LinearGauge** to&nbsp;change its value and subvalue indicators at&nbsp;runtime. To&nbsp;get and set values of&nbsp;the indicators, the **value** and **subvalues** methods are utilized.
+This demo shows how to&nbsp;use the API of&nbsp;the LinearGauge to&nbsp;change its value and subvalue indicators at&nbsp;runtime. To&nbsp;get and set values of&nbsp;the indicators, the **value** and **subvalues** methods are utilized.

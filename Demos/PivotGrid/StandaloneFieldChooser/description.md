@@ -1,1 +1,1 @@
-The standalone field chooser is&nbsp;the&nbsp;**PivotGridFieldChooser** UI component that shares the data source with the **PivotGrid** and has three different layouts. Active layout changes can be&nbsp;applied to&nbsp;the **PivotGrid** in&nbsp;instant or&nbsp;on-demand mode.
+The standalone field chooser is&nbsp;the&nbsp;PivotGridFieldChooser UI component that shares the data source with the PivotGrid and has three different layouts. Active layout changes can be&nbsp;applied to&nbsp;the PivotGrid in&nbsp;instant or&nbsp;on-demand mode.

@@ -1,4 +1,4 @@
-To display appointments from Google Calendar in the **Scheduler**, follow the steps below:
+To display appointments from Google Calendar in the Scheduler, follow the steps below:
 
 1. **Get Google API key**   
     Follow the instructions from step 1 in the <a href="https://developers.google.com/calendar/quickstart/js" target="_blank">Browser Quickstart</a> tutorial.
@@ -14,4 +14,4 @@ To display appointments from Google Calendar in the **Scheduler**, follow the st
     Open Google Calendar settings, choose the calendar to be integrated, and copy its ID from the **Integrate calendar** section.
 
 1. **Set up the Scheduler**    
-    Configure the [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) to load data from Google Calendar as shown in this demo. If a [timeZone](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#timeZone) is specified in the **Scheduler**, ensure it is the same as in Google Calendar. 
+    Configure the [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) to load data from Google Calendar as shown in this demo. If a [timeZone](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#timeZone) is specified in the Scheduler, ensure it is the same as in Google Calendar. 

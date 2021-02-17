@@ -1,1 +1,1 @@
-The **RangeSlider** is&nbsp;a&nbsp;UI component that allows a&nbsp;user to&nbsp;choose a&nbsp;range of&nbsp;numeric values.
+The RangeSlider is&nbsp;a&nbsp;UI component that allows a&nbsp;user to&nbsp;choose a&nbsp;range of&nbsp;numeric values.

@@ -1,1 +1,1 @@
-**ButtonGroup** is a UI component that displays a set of toggleable buttons and allows a user to select one or several of them. This demo illustrates how to configure the **ButtonGroup** to enable single and multiple selection.
+ButtonGroup is a UI component that displays a set of toggleable buttons and allows a user to select one or several of them. This demo illustrates how to configure the ButtonGroup to enable single and multiple selection.

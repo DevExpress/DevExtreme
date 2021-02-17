@@ -1,1 +1,1 @@
-This example shows the **PolarChart** with inverted axes. You can specify the clockwise or&nbsp;counter-clockwise direction of&nbsp;the **argumentAxis** by&nbsp;using the **inverted** property. Similarly, you can change the direction of&nbsp;the **valueAxis**.
+This example shows the PolarChart with inverted axes. You can specify the clockwise or&nbsp;counter-clockwise direction of&nbsp;the **argumentAxis** by&nbsp;using the **inverted** property. Similarly, you can change the direction of&nbsp;the **valueAxis**.

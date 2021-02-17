@@ -1,4 +1,4 @@
-To add a search bar to the **List** and enable the search functionality, do the following:
+To add a search bar to the List and enable the search functionality, do the following:
 
 - Set the [searchEnabled](/Documentation/ApiReference/UI_Components/dxList/Configuration/#searchEnabled) property to **true**.   
 

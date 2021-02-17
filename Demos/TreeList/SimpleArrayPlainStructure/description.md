@@ -1,4 +1,4 @@
-To bind the **TreeList** to an array that contains plain-structured data objects, do the following:
+To bind the TreeList to an array that contains plain-structured data objects, do the following:
 
 1. Assign the array to the [dataSource](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#dataSource) property.
 1. Specify the data fields that provide node keys in the [keyExpr](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#keyExpr) property and parent node keys in the [parentIdExpr](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#parentIdExpr) property.

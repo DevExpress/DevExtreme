@@ -15,4 +15,4 @@ Specifies the direction in which to move focus when a user presses Enter:
 - [editOnKeyPress](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/keyboardNavigation/#editOnKeyPress)    
 Specifies whether to start entering a new cell value on a key press.
 
-In this demo, you can use the controls under the **TreeList** to change any of these properties.
+In this demo, you can use the controls under the TreeList to change any of these properties.

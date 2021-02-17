@@ -1,1 +1,1 @@
-This demo illustrates the **ActionSheet** UI component in&nbsp;the popover mode.
+This demo illustrates the ActionSheet UI component in&nbsp;the popover mode.

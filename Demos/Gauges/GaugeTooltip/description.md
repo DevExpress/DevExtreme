@@ -1,1 +1,1 @@
-This demo shows how to&nbsp;enable and customize the tooltip of&nbsp;the **CircularGauge**. Hover over the value indicator or&nbsp;any of&nbsp;the subvalue indicators to&nbsp;show its tooltip.
+This demo shows how to&nbsp;enable and customize the tooltip of&nbsp;the CircularGauge. Hover over the value indicator or&nbsp;any of&nbsp;the subvalue indicators to&nbsp;show its tooltip.

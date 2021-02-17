@@ -1,4 +1,4 @@
-The **DataGrid** splits records into multiple pages. This technique helps optimize control performance: the client only needs to load and render one page at a time. Users can use a scroll bar or a pager to navigate between pages. This demo shows how to enable and customize the pager.
+The DataGrid splits records into multiple pages. This technique helps optimize control performance: the client only needs to load and render one page at a time. Users can use a scroll bar or a pager to navigate between pages. This demo shows how to enable and customize the pager.
 
 The pager is configured in the [pager](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/pager/) object and contains the following elements:
 

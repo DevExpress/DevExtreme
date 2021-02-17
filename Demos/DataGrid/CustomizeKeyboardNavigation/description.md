@@ -15,4 +15,4 @@ Specifies the direction in which to move focus when a user presses Enter:
 - [editOnKeyPress](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/keyboardNavigation/#editOnKeyPress)    
 Specifies whether to start entering a new cell value on a key press.
 
-In this demo, you can use the controls under the **DataGrid** to change any of these properties.
+In this demo, you can use the controls under the DataGrid to change any of these properties.

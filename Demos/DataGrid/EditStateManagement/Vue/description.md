@@ -1,4 +1,4 @@
-Our **DataGrid** UI component manages its edit state automatically. If your use case requires full control over the editing process, you can use the API members below to manage state manually. In this demo, we manage state with a help of the <a href="https://vuex.vuejs.org/" target="_blank">Vuex</a> library.
+Our DataGrid UI component manages its edit state automatically. If your use case requires full control over the editing process, you can use the API members below to manage state manually. In this demo, we manage state with a help of the <a href="https://vuex.vuejs.org/" target="_blank">Vuex</a> library.
 
 **UI component Properties**
 
@@ -11,7 +11,7 @@ The name or data field of the column being edited.
 - **editing**.[changes](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#changes)       
 Pending row changes.
 
-Use these properties to access and change edit state. Two-way bind them to UI component properties so that you can get and set the properties at runtime. In this demo, we bind the **editRowKey** and **changes** properties to computed properties and display their values under the **DataGrid**.
+Use these properties to access and change edit state. Two-way bind them to UI component properties so that you can get and set the properties at runtime. In this demo, we bind the **editRowKey** and **changes** properties to computed properties and display their values under the DataGrid.
 
 **Utility Method**
 

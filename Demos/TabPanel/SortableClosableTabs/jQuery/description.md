@@ -2,7 +2,7 @@ This demo illustrates how you can allow end-users to reorder, add, and remove ta
 
 **Reorder tabs**       
 
-Wrap the **TabPanel** into the [Sortable](/Documentation/ApiReference/UI_Components/dxSortable/) UI component and set the following properties as needed:
+Wrap the TabPanel into the [Sortable](/Documentation/ApiReference/UI_Components/dxSortable/) UI component and set the following properties as needed:
 
 - [filter](/Documentation/ApiReference/UI_Components/dxSortable/Configuration/#filter)         
 Specify a CSS selector to indicate draggable items. This demo sets filter to `.dx-tab`.
@@ -23,4 +23,4 @@ This demo adds and removes tabs in the following two functions:
 - `addButtonHandler` - a click handler for the *"Add Tab"* button.
 - `closeButtonHandler` - a click handler for a tab's Close icon. The demo uses the [itemTitleTemplate](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/#itemTitleTemplate) property to display this icon.
 
-Both handlers modify the **TabPanel**'s [dataSource](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/#dataSource).
+Both handlers modify the TabPanel's [dataSource](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/#dataSource).

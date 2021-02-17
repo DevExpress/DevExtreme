@@ -1,4 +1,4 @@
-To change how a **DateBox** displays dates, use the [displayFormat](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#displayFormat) property. This demo illustrates the following examples:
+To change how a DateBox displays dates, use the [displayFormat](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#displayFormat) property. This demo illustrates the following examples:
 
 - **Locale-dependent format**     
 The DateBox formats its value according to the user's locale. This is the default format and you do not need to define the **displayFormat** property. Refer to the following help topic for more information: [Localize Dates, Numbers, and Currencies](/Documentation/Guide/Common/Localization/#Localize_Dates_Numbers_and_Currencies)
@@ -12,6 +12,6 @@ Use an LDML pattern to construct a custom date-time format string. This demo set
 - **Format with literal characters**    
 Specify the **displayFormat** property as a string that contains literal and LDML characters. Wrap any characters that are not part of the LDML pattern in quotation marks. Otherwise, they can be interpreted as wildcards. In this example, if you remove quotation marks from the word "Year", the letter "a" is interpreted as an "AM/PM" placeholder.
 
-You can also use an input mask in the **DateBox**. Input masks ensure that the input value matches the **displayFormat**. To do this, set the [useMaskBehavior](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#useMaskBehavior) value to *true*.
+You can also use an input mask in the DateBox. Input masks ensure that the input value matches the **displayFormat**. To do this, set the [useMaskBehavior](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#useMaskBehavior) value to *true*.
 
 For more information about value formatting, refer to the [Value Formatting](/Documentation/Guide/Common/Value_Formatting/) article.

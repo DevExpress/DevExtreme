@@ -1,1 +1,1 @@
-The **MultiView** UI component contains several views and allows an&nbsp;end user to&nbsp;switch between them. In&nbsp;this demo, all views are defined using a&nbsp;custom template. You can navigate through the views by&nbsp;swiping them in&nbsp;the horizontal direction.
+The MultiView UI component contains several views and allows an&nbsp;end user to&nbsp;switch between them. In&nbsp;this demo, all views are defined using a&nbsp;custom template. You can navigate through the views by&nbsp;swiping them in&nbsp;the horizontal direction.

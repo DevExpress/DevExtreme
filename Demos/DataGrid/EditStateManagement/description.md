@@ -1,4 +1,4 @@
-Our **DataGrid** UI component manages its edit state automatically. If your use case requires full control over the editing process, you can use the API members below to manage state manually.
+Our DataGrid UI component manages its edit state automatically. If your use case requires full control over the editing process, you can use the API members below to manage state manually.
 
 **UI component Properties**
 
@@ -11,7 +11,7 @@ The name or data field of the column being edited.
 - **editing**.[changes](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#changes)       
 Pending row changes.
 
-You can get and set these properties at runtime to access and change edit state. In this demo, the [onOptionChanged](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onOptionChanged) function gets **editRowKey** and **changes** property values and displays them under the **DataGrid**.
+You can get and set these properties at runtime to access and change edit state. In this demo, the [onOptionChanged](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onOptionChanged) function gets **editRowKey** and **changes** property values and displays them under the DataGrid.
 
 **Utility Method**
 

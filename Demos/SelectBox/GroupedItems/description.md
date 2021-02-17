@@ -1,8 +1,8 @@
-Data items in the **SelectBox**'s drop-down list can be organized in groups.
+Data items in the SelectBox's drop-down list can be organized in groups.
 
 If the data source provides data items ungrouped, use the [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/)'s [group](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#group) property to specify the data field to group by. This case is illustrated in this demo.
 
-The **SelectBox** can also work with initially grouped data items. In this case, the data array should contain objects with the **key** and **items** fields:
+The SelectBox can also work with initially grouped data items. In this case, the data array should contain objects with the **key** and **items** fields:
 
     let dataSource = [{
         key: "Group 1", // Group caption 

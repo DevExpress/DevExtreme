@@ -1,4 +1,4 @@
-This demo shows how to enable item drag and drop in the **List** UI component. You can reorder items or drag and drop them between two separate lists. Use the handles on the right side of items to initiate drag and drop.
+This demo shows how to enable item drag and drop in the List UI component. You can reorder items or drag and drop them between two separate lists. Use the handles on the right side of items to initiate drag and drop.
 
 The following steps describe how to configure this functionality:
 

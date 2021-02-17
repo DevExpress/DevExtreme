@@ -1,1 +1,1 @@
-The **TextArea** is&nbsp;a&nbsp;UI component that enables a&nbsp;user to&nbsp;enter and edit a&nbsp;multi-line text.
+The TextArea is&nbsp;a&nbsp;UI component that enables a&nbsp;user to&nbsp;enter and edit a&nbsp;multi-line text.

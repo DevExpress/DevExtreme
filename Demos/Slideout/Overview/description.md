@@ -1,1 +1,1 @@
-The **SlideOut** UI component is&nbsp;a&nbsp;classic slide-out menu paired with a&nbsp;view. A&nbsp;user opens the menu by&nbsp;swiping away the view. This demo shows how to&nbsp;group menu items and how to&nbsp;define custom templates for the view and group headers.
+The SlideOut UI component is&nbsp;a&nbsp;classic slide-out menu paired with a&nbsp;view. A&nbsp;user opens the menu by&nbsp;swiping away the view. This demo shows how to&nbsp;group menu items and how to&nbsp;define custom templates for the view and group headers.

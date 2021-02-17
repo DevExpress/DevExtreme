@@ -1,1 +1,1 @@
-This demo shows how to&nbsp;use the API of&nbsp;the **BarGauge** to&nbsp;change the number of&nbsp;indicated values at&nbsp;runtime. For this purpose, an&nbsp;array of&nbsp;new values is&nbsp;passed as&nbsp;the parameter of&nbsp;the **value** method.
+This demo shows how to&nbsp;use the API of&nbsp;the BarGauge to&nbsp;change the number of&nbsp;indicated values at&nbsp;runtime. For this purpose, an&nbsp;array of&nbsp;new values is&nbsp;passed as&nbsp;the parameter of&nbsp;the **value** method.

@@ -1,1 +1,1 @@
-The **ColorBox** is&nbsp;a&nbsp;UI component that allows an&nbsp;end user to&nbsp;enter a&nbsp;color or&nbsp;pick it&nbsp;out from the drop-down editor.
+The ColorBox is&nbsp;a&nbsp;UI component that allows an&nbsp;end user to&nbsp;enter a&nbsp;color or&nbsp;pick it&nbsp;out from the drop-down editor.

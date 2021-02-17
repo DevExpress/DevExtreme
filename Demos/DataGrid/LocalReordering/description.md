@@ -1,4 +1,4 @@
-The **DataGrid** allows users to drag and drop rows. Use the icon to the left of the row as the drag handle.
+The DataGrid allows users to drag and drop rows. Use the icon to the left of the row as the drag handle.
 
 To enable this feature, set the [allowReordering](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/rowDragging/#allowReordering) property to **true** and change the row index in the [onReorder](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/rowDragging/#onReorder) function.
 

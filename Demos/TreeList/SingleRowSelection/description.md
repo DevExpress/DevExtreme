@@ -1,1 +1,1 @@
-The **TreeList** UI component supports two row selection modes: single and multiple. In&nbsp;this demo, the single mode is&nbsp;utilized. To&nbsp;select a&nbsp;row, just click&nbsp;it.
+The TreeList UI component supports two row selection modes: single and multiple. In&nbsp;this demo, the single mode is&nbsp;utilized. To&nbsp;select a&nbsp;row, just click&nbsp;it.

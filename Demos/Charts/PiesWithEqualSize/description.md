@@ -1,1 +1,1 @@
-When several **PieChart** UI components are displayed side by&nbsp;side, their pies may differ in&nbsp;size. To&nbsp;eliminate these differences, you can collect all **PieCharts** in&nbsp;a&nbsp;single size group by&nbsp;setting their **sizeGroup** property to&nbsp;identical values.
+When several PieChart UI components are displayed side by&nbsp;side, their pies may differ in&nbsp;size. To&nbsp;eliminate these differences, you can collect all **PieCharts** in&nbsp;a&nbsp;single size group by&nbsp;setting their **sizeGroup** property to&nbsp;identical values.

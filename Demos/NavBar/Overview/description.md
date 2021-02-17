@@ -1,1 +1,1 @@
-The **NavBar** is&nbsp;a&nbsp;UI component that navigates the application views.
+The NavBar is&nbsp;a&nbsp;UI component that navigates the application views.

@@ -1,1 +1,1 @@
-The **LoadIndicator** is&nbsp;a&nbsp;UI element notifying the viewer that a&nbsp;process is&nbsp;in&nbsp;progress.
+The LoadIndicator is&nbsp;a&nbsp;UI element notifying the viewer that a&nbsp;process is&nbsp;in&nbsp;progress.

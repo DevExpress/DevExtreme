@@ -1,1 +1,1 @@
-The **CheckBox** is&nbsp;a&nbsp;small box, which when selected by&nbsp;the end user, shows that a&nbsp;particular feature has been enabled or&nbsp;a&nbsp;specific property has been chosen.
+The CheckBox is&nbsp;a&nbsp;small box, which when selected by&nbsp;the end user, shows that a&nbsp;particular feature has been enabled or&nbsp;a&nbsp;specific property has been chosen.

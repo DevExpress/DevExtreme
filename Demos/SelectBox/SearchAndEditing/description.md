@@ -11,4 +11,4 @@ Specifies the minimum number of characters that a user should type in to trigger
 - [showDataBeforeSearch](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#showDataBeforeSearch)        
 Specifies whether the UI component should display the unfiltered item list until a user have typed in the minimum number of characters (**minSearchLength**).
 
-Set the [acceptCustomValue](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#acceptCustomValue) property to **true** to allow users to add values to the **SelectBox**. You should also implement the [onCustomItemCreating](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#onCustomItemCreating) handler to create new data source entries.
+Set the [acceptCustomValue](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#acceptCustomValue) property to **true** to allow users to add values to the SelectBox. You should also implement the [onCustomItemCreating](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#onCustomItemCreating) handler to create new data source entries.

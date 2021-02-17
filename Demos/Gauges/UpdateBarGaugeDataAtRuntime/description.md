@@ -1,1 +1,1 @@
-This demo illustrates how to&nbsp;bind an&nbsp;array of&nbsp;values to&nbsp;the **BarGauge**. Since an&nbsp;array can not be&nbsp;bound to&nbsp;a&nbsp;field as&nbsp;a&nbsp;regular value, it&nbsp;is&nbsp;bound as&nbsp;a&nbsp;computed one.
+This demo illustrates how to&nbsp;bind an&nbsp;array of&nbsp;values to&nbsp;the BarGauge. Since an&nbsp;array can not be&nbsp;bound to&nbsp;a&nbsp;field as&nbsp;a&nbsp;regular value, it&nbsp;is&nbsp;bound as&nbsp;a&nbsp;computed one.

@@ -1,1 +1,1 @@
-The **TileView** UI component contains a&nbsp;collection of&nbsp;tiles. Tiles can store much more information than ordinary buttons, that is&nbsp;why they are very popular in&nbsp;apps designed for touch devices. This demo illustrates how to&nbsp;create a&nbsp;simple **TileView**.
+The TileView UI component contains a&nbsp;collection of&nbsp;tiles. Tiles can store much more information than ordinary buttons, that is&nbsp;why they are very popular in&nbsp;apps designed for touch devices. This demo illustrates how to&nbsp;create a&nbsp;simple TileView.

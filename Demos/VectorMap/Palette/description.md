@@ -1,4 +1,4 @@
-This demo shows how to&nbsp;color specific map areas using a&nbsp;palette. In&nbsp;the **VectorMap** UI component, a&nbsp;palette defines a&nbsp;range of&nbsp;colors that are used to&nbsp;paint areas. This range is&nbsp;divided into segments using the value assigned to&nbsp;the **colorGroups** property. Each segment contributes a&nbsp;color into an&nbsp;array of&nbsp;colors.
+This demo shows how to&nbsp;color specific map areas using a&nbsp;palette. In&nbsp;the VectorMap UI component, a&nbsp;palette defines a&nbsp;range of&nbsp;colors that are used to&nbsp;paint areas. This range is&nbsp;divided into segments using the value assigned to&nbsp;the **colorGroups** property. Each segment contributes a&nbsp;color into an&nbsp;array of&nbsp;colors.
 
 
 

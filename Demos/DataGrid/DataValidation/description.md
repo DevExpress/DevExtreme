@@ -1,4 +1,4 @@
-The **DataGrid** allows you to validate user input. You can apply pre-defined [validation rules](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#validationRules) or custom rules to individual columns. 
+The DataGrid allows you to validate user input. You can apply pre-defined [validation rules](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#validationRules) or custom rules to individual columns. 
 
 In this demo, the following rules are used:
 

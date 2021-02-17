@@ -1,1 +1,1 @@
-This demo illustrates how the **PieChart** UI component arranges labels in&nbsp;several columns. To&nbsp;maximize readability, the UI component ensures that labels do&nbsp;not overlap one another.
+This demo illustrates how the PieChart UI component arranges labels in&nbsp;several columns. To&nbsp;maximize readability, the UI component ensures that labels do&nbsp;not overlap one another.

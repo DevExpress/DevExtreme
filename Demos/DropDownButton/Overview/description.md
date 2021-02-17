@@ -1,4 +1,4 @@
-The **DropDownButton** is&nbsp;a&nbsp;button that opens a&nbsp;drop-down menu. The button displays&nbsp;a [text](/Documentation/ApiReference/UI_Components/dxDropDownButton/Configuration/#text) and&nbsp;an [icon](/Documentation/ApiReference/UI_Components/dxDropDownButton/Configuration/#icon).
+The DropDownButton is&nbsp;a&nbsp;button that opens a&nbsp;drop-down menu. The button displays&nbsp;a [text](/Documentation/ApiReference/UI_Components/dxDropDownButton/Configuration/#text) and&nbsp;an [icon](/Documentation/ApiReference/UI_Components/dxDropDownButton/Configuration/#icon).
 
 
 
@@ -6,11 +6,11 @@ Menu items can be&nbsp;specified in&nbsp;the [items](/Documentation/ApiReference
 
 
 
-The **DropDownButton** stores the most recent selected menu item if&nbsp;you set the [useSelectMode](/Documentation/ApiReference/UI_Components/dxDropDownButton/Configuration/#useSelectMode) property to&nbsp;**true**. In&nbsp;this case, the button uses the selected item&rsquo;s text and icon.
+The DropDownButton stores the most recent selected menu item if&nbsp;you set the [useSelectMode](/Documentation/ApiReference/UI_Components/dxDropDownButton/Configuration/#useSelectMode) property to&nbsp;**true**. In&nbsp;this case, the button uses the selected item&rsquo;s text and icon.
 
 
 
-You can implement&nbsp;a [dropDownContentTemplate](/Documentation/ApiReference/UI_Components/dxDropDownButton/Configuration/#dropDownContentTemplate)Â to replace the drop-down menu with custom content.
+You can implement&nbsp;a [dropDownContentTemplate](/Documentation/ApiReference/UI_Components/dxDropDownButton/Configuration/#dropDownContentTemplate) to replace the drop-down menu with custom content.
 
 
 

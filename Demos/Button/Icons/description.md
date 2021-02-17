@@ -1,4 +1,4 @@
-To add an icon to a **Button**, set the **icon** property. This demo shows how you can use this property:   
+To add an icon to a Button, set the **icon** property. This demo shows how you can use this property:   
 
 - **Built-in icons**    
 DevExtreme ships with its own [icon library](/Documentation/Guide/Themes_and_Styles/Icons/#Built-In_Icon_Library). Pick any icon and assign its name to the **icon** property.

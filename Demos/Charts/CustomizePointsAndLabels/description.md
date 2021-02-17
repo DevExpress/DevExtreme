@@ -1,1 +1,1 @@
-This demo shows how you can customize individual points and labels in&nbsp;the **Chart**.
+This demo shows how you can customize individual points and labels in&nbsp;the Chart.

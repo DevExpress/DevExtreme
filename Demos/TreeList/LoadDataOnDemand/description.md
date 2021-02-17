@@ -1,1 +1,1 @@
-This example demonstrates how to&nbsp;load data on&nbsp;demand every time a&nbsp;user expands a&nbsp;**TreeList** node. For this purpose, filtering is&nbsp;delegated to&nbsp;the server, and IDs of&nbsp;expanded nodes are sent to&nbsp;the server with every request for data.
+This example demonstrates how to&nbsp;load data on&nbsp;demand every time a&nbsp;user expands a&nbsp;TreeList node. For this purpose, filtering is&nbsp;delegated to&nbsp;the server, and IDs of&nbsp;expanded nodes are sent to&nbsp;the server with every request for data.

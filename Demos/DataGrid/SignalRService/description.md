@@ -1,4 +1,4 @@
-This example demonstrates real-time data update in a **DataGrid** bound to a <a href="https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/introduction-to-signalr" target="_blank">SignalR</a> service. Access to the service is configured in a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/).
+This example demonstrates real-time data update in a DataGrid bound to a <a href="https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/introduction-to-signalr" target="_blank">SignalR</a> service. Access to the service is configured in a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/).
  
 The **CustomStore** fetches the remote dataset at launch and keeps its local copy. Whenever the remote dataset changes, the server calls a client-side function that updates the local copy of the dataset (`updateStockPrices` in this demo). This function uses the store's [push(changes)](/Documentation/ApiReference/Data_Layer/CustomStore/Methods/#pushchanges) method.
 

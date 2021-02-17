@@ -1,1 +1,1 @@
-This example demonstrates how you can flag specific locations on&nbsp;the **VectorMap** using markers of&nbsp;the _&laquo;bubble&raquo;_ type. Marker size depends upon the attribute specified by&nbsp;the **dataField** property.
+This example demonstrates how you can flag specific locations on&nbsp;the VectorMap using markers of&nbsp;the _&laquo;bubble&raquo;_ type. Marker size depends upon the attribute specified by&nbsp;the **dataField** property.

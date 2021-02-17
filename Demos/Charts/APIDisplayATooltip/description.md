@@ -1,1 +1,1 @@
-This demo illustrates how to&nbsp;show and hide the point&rsquo;s tooltip with the API. To&nbsp;test this feature, select a&nbsp;continent from the drop-down menu under the **PieChart** or&nbsp;click a&nbsp;point directly in&nbsp;the **PieChart**.
+This demo illustrates how to&nbsp;show and hide the point&rsquo;s tooltip with the API. To&nbsp;test this feature, select a&nbsp;continent from the drop-down menu under the PieChart or&nbsp;click a&nbsp;point directly in&nbsp;the PieChart.

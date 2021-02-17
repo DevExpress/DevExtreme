@@ -1,3 +1,3 @@
-This demo shows how two users can edit data in&nbsp;the **Scheduler** simultaneously. A&nbsp;SignalR service is&nbsp;used to&nbsp;broadcast push notifications.
+This demo shows how two users can edit data in&nbsp;the Scheduler simultaneously. A&nbsp;SignalR service is&nbsp;used to&nbsp;broadcast push notifications.
 
-Each **Scheduler** has an&nbsp;individual store to&nbsp;emulate the situation when **Schedulers** are being edited on&nbsp;two different clients. Changes made in&nbsp;one **Scheduler** are repeated in&nbsp;the other and persist until the browser session has expired.
+Each Scheduler has an&nbsp;individual store to&nbsp;emulate the situation when **Schedulers** are being edited on&nbsp;two different clients. Changes made in&nbsp;one Scheduler are repeated in&nbsp;the other and persist until the browser session has expired.

@@ -1,1 +1,1 @@
-The **TreeMap** UI component supports three layout algorithms out of&nbsp;the box and provides the capability to&nbsp;implement your own algorithm. In&nbsp;this demo, you can change the applied algorithm at&nbsp;runtime using the drop-down menu above the UI component.
+The TreeMap UI component supports three layout algorithms out of&nbsp;the box and provides the capability to&nbsp;implement your own algorithm. In&nbsp;this demo, you can change the applied algorithm at&nbsp;runtime using the drop-down menu above the UI component.

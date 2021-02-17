@@ -1,1 +1,1 @@
-This example demonstrates four basic **Scheduler** views: _&laquo;Day&raquo;_, _&laquo;Week&raquo;_, _&laquo;WorkWeek&raquo;_ and _&laquo;Month&raquo;_
+This example demonstrates four basic Scheduler views: _&laquo;Day&raquo;_, _&laquo;Week&raquo;_, _&laquo;WorkWeek&raquo;_ and _&laquo;Month&raquo;_
