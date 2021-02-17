@@ -8,13 +8,15 @@ import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import dxTreeList from '../tree_list';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
-import { hasWindow } from '../../core/utils/window';
+import { hasWindow, getWindow } from '../../core/utils/window';
 import DataOption from './ui.gantt.data.option';
 import SplitterControl from '../splitter';
 import { GanttDialog } from './ui.gantt.dialogs';
 import LoadPanel from '../load_panel';
 import { getPublicElement } from '../../core/element';
 import { GanttDataCache } from './ui.gantt.cache';
+
+const window = getWindow();
 
 // STYLE gantt
 
@@ -170,6 +172,7 @@ class Gantt extends Widget {
             onExpandAll: this._expandAll.bind(this),
             onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: this._createModelChangesListener(),
+            exportHelper: this._createGanttViewExportHelper(),
             taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
             taskContentTemplate: this._getTaskContentTemplateFunc(this.option('taskContentTemplate')),
             onTaskClick: (e) => { this._onTreeListRowClick(e); },
@@ -1378,6 +1381,95 @@ class Gantt extends Widget {
     }
     scrollToDate(date) {
         this._ganttView._ganttViewCore.scrollToDate(date);
+    }
+
+    // export
+    getTreeListTableStyle() {
+        const table = this._treeList._$element.find('.dx-treelist-table').get(0);
+        const style = window.getComputedStyle(table);
+        return {
+            color: style.color,
+            fontSize: style.fontSize,
+            fontFamily: style.fontFamily,
+            fontWeight: style.fontWeight,
+            fontStyle: style.fontStyle,
+            textAlign: 'left',
+            verticalAlign: 'middle'
+        };
+    }
+    getTreeListColCount() {
+        const headerView = this.getHeaderView();
+        const widths = headerView.getColumnWidths().filter(w => w > 0);
+        return widths.length;
+    }
+    getTreeListHeaderInfo(colIndex) {
+        const element = this.getHeaderElement(colIndex);
+        if(!element) return null;
+
+        const style = window.getComputedStyle(element);
+        const styleForExport = {
+            color: style.color,
+            padding: style.padding,
+            verticalAlign: style.verticalAlign,
+            width: element.clientWidth
+        };
+        return {
+            content: element.textContent,
+            styles: styleForExport
+        };
+    }
+
+    getTreeListCellInfo(rowIndex, colIndex) {
+        const treeList = this._treeList;
+        const cellElement = treeList.getCellElement(rowIndex, colIndex);
+        const cell = cellElement[0];
+        if(!cell) return null;
+
+        const style = window.getComputedStyle(cell);
+        const styleForExport = {
+            color: style.color,
+            padding: style.padding
+        };
+
+        const nodeKey = treeList.getKeyByRowIndex(rowIndex);
+        const isRowSelected = treeList.isRowSelected(nodeKey);
+
+        let cellBackColor = null;
+        if(isRowSelected) {
+            cellBackColor = style.backgroundColor;
+        } else {
+            const node = treeList.getNodeByKey(nodeKey);
+            const nodeHasChildren = node?.children.length > 0;
+            if(nodeHasChildren) {
+                cellBackColor = window.getComputedStyle(cell.parentNode).backgroundColor;
+            }
+        }
+        if(cellBackColor) {
+            styleForExport.backgroundColor = cellBackColor;
+        }
+
+        const icon = cellElement.find('.dx-treelist-icon-container')[0];
+        const extraSpace = icon?.offsetWidth;
+        if(extraSpace) { styleForExport.extraLeftPadding = extraSpace; }
+
+        return {
+            content: cell.textContent,
+            styles: styleForExport
+        };
+    }
+    getHeaderView() {
+        return this._treeList._views.columnHeadersView;
+    }
+    getHeaderElement(index) {
+        return this.getHeaderView().getHeaderElement(index).get(0);
+    }
+    _createGanttViewExportHelper() {
+        return {
+            getTreeListTableStyle: this.getTreeListTableStyle.bind(this),
+            getTreeListColCount: this.getTreeListColCount.bind(this),
+            getTreeListHeaderInfo: this.getTreeListHeaderInfo.bind(this),
+            getTreeListCellInfo: this.getTreeListCellInfo.bind(this),
+        };
     }
 
     _optionChanged(args) {
