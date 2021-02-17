@@ -321,7 +321,7 @@ const Drawer = Widget.inherit({
             if(typeUtils.isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
-                return getBoundingRect(this._getPanelTemplateElement()).width;
+                return this.getElementWidth(this._strategy.getPanelContent());
             }
         } else {
             return 0;
@@ -339,23 +339,16 @@ const Drawer = Widget.inherit({
             if(typeUtils.isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
-                return getBoundingRect(this._getPanelTemplateElement()).height;
+                return this.getElementHeight(this._strategy.getPanelContent());
             }
         } else {
             return 0;
         }
     },
 
-    _getPanelTemplateElement() {
-        let $result = this._strategy.getPanelContent();
-
-        if($result.children().length) {
-            $result = $result.children().eq(0);
-            if($result.hasClass('dx-template-wrapper') && $result.children().length) { // For Angular, T948509
-                $result = $result.children().eq(0);
-            }
-        }
-        return $result.get(0);
+    getElementHeight($element) {
+        const $children = $element.children();
+        return $children.length ? getBoundingRect($children.eq(0).get(0)).height : getBoundingRect($element.get(0)).height;
     },
 
     isHorizontalDirection() {
