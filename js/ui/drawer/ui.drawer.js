@@ -321,17 +321,11 @@ const Drawer = Widget.inherit({
             if(typeUtils.isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
-                return this.getElementWidth(this._strategy.getPanelContent());
+                return getBoundingRect(this._getPanelTemplateElement()).width;
             }
         } else {
             return 0;
         }
-    },
-
-    getElementWidth($element) {
-        const $children = $element.children();
-
-        return $children.length ? getBoundingRect($children.eq(0).get(0)).width : getBoundingRect($element.get(0)).width;
     },
 
     getRealPanelHeight() {
@@ -339,11 +333,25 @@ const Drawer = Widget.inherit({
             if(typeUtils.isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
-                return this.getElementHeight(this._strategy.getPanelContent());
+                return getBoundingRect(this._getPanelTemplateElement()).height;
             }
         } else {
             return 0;
         }
+    },
+
+    _getPanelTemplateElement() {
+        const $panelContent = this._strategy.getPanelContent();
+        let $result = $panelContent;
+
+        if($panelContent.children().length) {
+            $result = $panelContent.children().eq(0);
+            if($panelContent.hasClass('dx-overlay-content') && $result.hasClass('dx-template-wrapper') && $result.children().length) {
+                // T948509, T956751
+                $result = $result.children().eq(0);
+            }
+        }
+        return $result.get(0);
     },
 
     getElementHeight($element) {
