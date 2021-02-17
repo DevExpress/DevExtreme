@@ -413,10 +413,6 @@
       .dx-text-content-alignment-right {
         margin-left: $grid-text-content-margin;
       }
-
-      .dx-master-detail-cell {
-        max-width: 0;
-      }
     }
 
     [class*="column"] + [class*="column"]:last-child {
