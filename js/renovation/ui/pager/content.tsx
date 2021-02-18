@@ -108,7 +108,7 @@ export class PagerContentProps extends PagerProps {
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagerContent extends JSXComponent<PagerContentProps>() {
-  @ForwardRef() widgetRootElementRef!: any;
+  @ForwardRef() widgetRootElementRef!: RefObject;
 
   @Provider(KeyboardActionContext)
   get keyboardAction(): KeyboardActionContextType {
@@ -117,7 +117,7 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
         (element: HTMLElement, action: EventCallback): DisposeEffectReturn => {
           const fakePagerInstance = {
             option: (): boolean => false,
-            element: (): HTMLElement | null => this.widgetRootElementRef,
+            element: (): HTMLElement | null => this.widgetRootElementRef.current,
             // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             _createActionByOption: () => noop,
           };
@@ -129,7 +129,7 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
   @Effect({ run: 'once' }) setRootElementRef(): void {
     const { rootElementRef } = this.props;
     if (rootElementRef) {
-      this.props.rootElementRef = this.widgetRootElementRef;
+      rootElementRef.current = this.widgetRootElementRef.current;
     }
   }
 

@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable jest/expect-expect */
 import React from 'react';
 import { mount } from 'enzyme';
@@ -21,7 +20,7 @@ import {
 
 import {
   ScrollableSimulated as Scrollable,
-  viewFunction,
+  viewFunction as ScrollableComponent,
 } from '../scrollable_simulated';
 
 import {
@@ -70,41 +69,6 @@ describe('Simulated', () => {
               }
 
               expect((helper.viewModel as any).containerStyles).toEqual({ touchAction: expectedTouchAction });
-            });
-          });
-        });
-      });
-
-      each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
-        each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-          each([true, false]).describe('InertiaEnabled: %o', (inertiaEnabled) => {
-            it('should pass all necessary properties to the nested Scrollbars', () => {
-              const propertySettings = {
-                showScrollbar,
-                bounceEnabled,
-                inertiaEnabled,
-                scrollByThumb: true,
-              };
-
-              const helper = new ScrollableTestHelper({ direction, ...propertySettings });
-              helper.initScrollbarSettings();
-
-              const scrollbars = helper.getScrollbars();
-              if (direction === 'both') {
-                expect(scrollbars.at(0).instance().props).toMatchObject({
-                  direction: 'horizontal',
-                  ...propertySettings,
-                });
-                expect(scrollbars.at(1).instance().props).toMatchObject({
-                  direction: 'vertical',
-                  ...propertySettings,
-                });
-              } else {
-                expect(scrollbars.at(0).instance().props).toMatchObject({
-                  direction,
-                  ...propertySettings,
-                });
-              }
             });
           });
         });
@@ -242,9 +206,15 @@ describe('Simulated', () => {
 
                   const viewModel = new Scrollable({
                     direction, scrollByThumb, scrollByContent,
-                  }) as any;
-                  const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-                  viewModel.scrollableRef = scrollable.getDOMNode();
+                  });
+                  viewModel.wrapperRef = React.createRef();
+                  viewModel.verticalScrollbarRef = React.createRef();
+                  viewModel.horizontalScrollbarRef = React.createRef();
+                  viewModel.contentRef = React.createRef();
+                  viewModel.containerRef = React.createRef();
+                  viewModel.scrollableRef = React.createRef();
+                  const scrollable = mount(ScrollableComponent(viewModel) as JSX.Element);
+                  viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
 
                   const scrollbars = scrollable.find(Scrollbar);
 
@@ -252,7 +222,8 @@ describe('Simulated', () => {
 
                   const initSettings = (scrollbarRef, index) => {
                     const scrollbar = scrollbarRef.at(index).instance();
-                    scrollbar.scrollbarRef = scrollbarRef.at(index).getDOMNode();
+                    scrollbar.scrollbarRef = React.createRef();
+                    scrollbar.scrollbarRef.current = scrollbarRef.at(index).getDOMNode();
                     scrollbar.initHandler = jest.fn();
 
                     return scrollbar;
@@ -261,12 +232,12 @@ describe('Simulated', () => {
                   expect(viewModel.validDirections).toEqual({});
 
                   if (direction === DIRECTION_VERTICAL) {
-                    viewModel.verticalScrollbarRef = initSettings(scrollbars, 0);
+                    viewModel.verticalScrollbarRef.current = initSettings(scrollbars, 0);
                   } else if (direction === DIRECTION_HORIZONTAL) {
-                    viewModel.horizontalScrollbarRef = initSettings(scrollbars, 0);
+                    viewModel.horizontalScrollbarRef.current = initSettings(scrollbars, 0);
                   } else {
-                    viewModel.horizontalScrollbarRef = initSettings(scrollbars, 0);
-                    viewModel.verticalScrollbarRef = initSettings(scrollbars, 1);
+                    viewModel.horizontalScrollbarRef.current = initSettings(scrollbars, 0);
+                    viewModel.verticalScrollbarRef.current = initSettings(scrollbars, 1);
                   }
 
                   viewModel.initEffect();
@@ -279,7 +250,7 @@ describe('Simulated', () => {
                     });
                   } else {
                     const isDirectionValid = scrollByContent
-                                    || (scrollByThumb && targetClass !== 'dx-scrollable-container');
+                      || (scrollByThumb && targetClass !== 'dx-scrollable-container');
 
                     expect(viewModel.validDirections).toEqual({
                       vertical: direction !== DIRECTION_HORIZONTAL && isDirectionValid && !(direction === 'both' && scrollByThumb && !scrollByContent && targetClass !== 'dx-scrollable-container'),
@@ -314,11 +285,20 @@ describe('Simulated', () => {
                   let expectedHorizontalThumbScrolling;
 
                   if (direction === DIRECTION_VERTICAL) {
-                    expectedVerticalThumbScrolling = (scrollByThumb && helper.viewModel.verticalScrollbarRef.isThumb(target));
+                    expectedVerticalThumbScrolling = scrollByThumb
+                      && helper.viewModel.verticalScrollbarRef.current!.isThumb(
+                        target,
+                      );
                   } else if (direction === DIRECTION_HORIZONTAL) {
-                    expectedHorizontalThumbScrolling = (scrollByThumb && helper.viewModel.horizontalScrollbarRef.isThumb(target));
+                    expectedHorizontalThumbScrolling = scrollByThumb
+                      && helper.viewModel.horizontalScrollbarRef.current!.isThumb(
+                        target,
+                      );
                   } else {
-                    expectedHorizontalThumbScrolling = (scrollByThumb && helper.viewModel.horizontalScrollbarRef.isThumb(target));
+                    expectedHorizontalThumbScrolling = scrollByThumb
+                      && helper.viewModel.horizontalScrollbarRef.current!.isThumb(
+                        target,
+                      );
                     expectedVerticalThumbScrolling = false;
                   }
 
@@ -327,10 +307,8 @@ describe('Simulated', () => {
                   helper.viewModel.initEffect();
                   emit('dxscrollinit', e);
 
-                  expect(helper.viewModel.needShowScrollbars).toEqual(false);
-
                   const expectedCrossThumbScrolling = expectedVerticalThumbScrolling
-                                || expectedHorizontalThumbScrolling;
+                    || expectedHorizontalThumbScrolling;
 
                   expect(onStopAction).toHaveBeenCalledTimes(1);
                   expect(onStopAction).toHaveBeenCalledWith(helper.viewModel.getEventArgs());
@@ -359,10 +337,16 @@ describe('Simulated', () => {
                         direction,
                         scrollByThumb,
                         scrollByContent,
-                      }) as any;
+                      });
+                      viewModel.verticalScrollbarRef = React.createRef();
+                      viewModel.horizontalScrollbarRef = React.createRef();
+                      viewModel.wrapperRef = React.createRef();
+                      viewModel.contentRef = React.createRef();
+                      viewModel.containerRef = React.createRef();
+                      viewModel.scrollableRef = React.createRef();
 
-                      const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-                      viewModel.scrollableRef = scrollable.getDOMNode();
+                      const scrollable = mount(ScrollableComponent(viewModel) as JSX.Element);
+                      viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
                       viewModel.locked = locked;
 
                       const scrollbars = scrollable.find(Scrollbar);
@@ -371,7 +355,8 @@ describe('Simulated', () => {
 
                       const initSettings = (scrollbarRef, index) => {
                         const scrollbar = scrollbarRef.at(index).instance();
-                        scrollbar.scrollbarRef = scrollbarRef.at(index).getDOMNode();
+                        scrollbar.scrollbarRef = React.createRef();
+                        scrollbar.scrollbarRef.current = scrollbarRef.at(index).getDOMNode();
                         scrollbar.initHandler = jest.fn();
                         scrollbar.moveHandler = jestMoveHandler;
 
@@ -381,12 +366,12 @@ describe('Simulated', () => {
                       expect(viewModel.validDirections).toEqual({});
 
                       if (direction === DIRECTION_VERTICAL) {
-                        viewModel.verticalScrollbarRef = initSettings(scrollbars, 0);
+                        viewModel.verticalScrollbarRef.current = initSettings(scrollbars, 0);
                       } else if (direction === DIRECTION_HORIZONTAL) {
-                        viewModel.horizontalScrollbarRef = initSettings(scrollbars, 0);
+                        viewModel.horizontalScrollbarRef.current = initSettings(scrollbars, 0);
                       } else {
-                        viewModel.horizontalScrollbarRef = initSettings(scrollbars, 0);
-                        viewModel.verticalScrollbarRef = initSettings(scrollbars, 1);
+                        viewModel.horizontalScrollbarRef.current = initSettings(scrollbars, 0);
+                        viewModel.verticalScrollbarRef.current = initSettings(scrollbars, 1);
                       }
 
                       viewModel.initEffect();
@@ -588,8 +573,6 @@ describe('Simulated', () => {
                       helper.viewModel.startEffect();
                       emit('dxscrollstart', e);
 
-                      expect(helper.viewModel.needShowScrollbars).toEqual(true);
-
                       if (onStartActionHandler) {
                         expect(onStartActionHandler).toHaveBeenCalledTimes(1);
                         expect(onStartActionHandler)
@@ -708,10 +691,16 @@ describe('Simulated', () => {
                     direction,
                     scrollByThumb,
                     scrollByContent,
-                  }) as any;
+                  });
+                  viewModel.wrapperRef = React.createRef();
+                  viewModel.contentRef = React.createRef();
+                  viewModel.containerRef = React.createRef();
+                  viewModel.scrollableRef = React.createRef();
+                  viewModel.horizontalScrollbarRef = React.createRef();
+                  viewModel.verticalScrollbarRef = React.createRef();
 
-                  const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-                  viewModel.scrollableRef = scrollable.getDOMNode();
+                  const scrollable = mount(ScrollableComponent(viewModel) as JSX.Element);
+                  viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
 
                   const scrollbars = scrollable.find(Scrollbar);
 
@@ -719,7 +708,7 @@ describe('Simulated', () => {
                     const scrollbar = scrollbarRef.at(index).instance();
                     scrollbar.stopHandler = jestStopHandler;
 
-                    return scrollbar;
+                    return { current: scrollbar };
                   };
 
                   if (direction === DIRECTION_VERTICAL) {
@@ -754,9 +743,9 @@ describe('Simulated', () => {
 
               helper.initScrollbarSettings();
 
-              const target = isScrollbarClicked
-                ? helper.viewModel.containerRef.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
-                : helper.viewModel.containerRef;
+              const target = isScrollbarClicked && helper.viewModel.containerRef.current
+                ? helper.viewModel.containerRef.current.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`)
+                : helper.viewModel.containerRef.current;
 
               const e = { ...defaultEvent, target };
 
@@ -952,16 +941,16 @@ describe('Simulated', () => {
       });
 
       each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbar) => {
-        it('hoverEffect should update invisible class only for onHover mode', () => {
-          const helper = new ScrollableTestHelper({ direction: 'horizontal', showScrollbar });
+        it('hoverStart, hoverEnd handlers should update isHovered state only for onHover mode', () => {
+          const viewModel = new Scrollable({ direction: 'horizontal', showScrollbar }) as any;
 
-          expect(helper.viewModel.isScrollbarVisible).toBe(showScrollbar === 'always');
+          expect(viewModel.isHovered).toBe(false);
 
-          helper.viewModel.cursorEnterHandler();
-          expect(helper.viewModel.isScrollbarVisible).toBe(showScrollbar === 'always' || showScrollbar === 'onHover');
+          viewModel.cursorEnterHandler();
+          expect(viewModel.isHovered).toBe(showScrollbar === 'onHover');
 
-          helper.viewModel.cursorLeaveHandler();
-          expect(helper.viewModel.isScrollbarVisible).toBe(showScrollbar === 'always');
+          viewModel.cursorLeaveHandler();
+          expect(viewModel.isHovered).toBe(false);
         });
       });
     });
@@ -1165,7 +1154,7 @@ describe('Simulated', () => {
         it('should get the content of the widget', () => {
           const scrollable = new Scrollable({});
           const content = { };
-          scrollable.contentRef = content as RefObject<HTMLDivElement>;
+          scrollable.contentRef = { current: content } as RefObject<HTMLDivElement>;
           expect(scrollable.content()).toEqual(content);
         });
       });
@@ -1903,7 +1892,7 @@ describe('Simulated', () => {
       describe('ScrollHeight', () => {
         it('should get height of the scroll content', () => {
           const scrollable = new Scrollable({});
-          scrollable.contentRef = { offsetHeight: 300 } as RefObject<HTMLDivElement>;
+          scrollable.contentRef = { current: { offsetHeight: 300 } } as RefObject<HTMLDivElement>;
 
           expect(scrollable.scrollHeight()).toEqual(300);
         });
@@ -1912,7 +1901,7 @@ describe('Simulated', () => {
       describe('ScrollWidth', () => {
         it('should get width of the scroll content', () => {
           const scrollable = new Scrollable({});
-          scrollable.contentRef = { offsetWidth: 400 } as RefObject<HTMLDivElement>;
+          scrollable.contentRef = { current: { offsetWidth: 400 } } as RefObject<HTMLDivElement>;
 
           expect(scrollable.scrollWidth()).toEqual(400);
         });
@@ -1945,7 +1934,7 @@ describe('Simulated', () => {
       describe('ClientHeight', () => {
         it('should get client height of the scroll container', () => {
           const scrollable = new Scrollable({});
-          scrollable.containerRef = { clientHeight: 120 } as RefObject<HTMLDivElement>;
+          scrollable.containerRef = { current: { clientHeight: 120 } } as RefObject<HTMLDivElement>;
 
           expect(scrollable.clientHeight()).toEqual(120);
         });
@@ -1954,7 +1943,7 @@ describe('Simulated', () => {
       describe('ClientWidth', () => {
         it('should get client width of the scroll container', () => {
           const scrollable = new Scrollable({});
-          scrollable.containerRef = { clientWidth: 120 } as RefObject<HTMLDivElement>;
+          scrollable.containerRef = { current: { clientWidth: 120 } } as RefObject<HTMLDivElement>;
 
           expect(scrollable.clientWidth()).toEqual(120);
         });
@@ -1963,26 +1952,41 @@ describe('Simulated', () => {
       describe('isContent', () => {
         it('element is scrollable container', () => {
           const viewModel = new Scrollable({ direction: 'vertical' });
+          viewModel.contentRef = React.createRef();
+          viewModel.containerRef = React.createRef();
+          viewModel.scrollableRef = React.createRef();
+          viewModel.horizontalScrollbarRef = React.createRef();
+          viewModel.verticalScrollbarRef = React.createRef();
 
-          const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
-          viewModel.scrollableRef = scrollable.getDOMNode();
+          const scrollable = mount(ScrollableComponent(viewModel as any) as JSX.Element);
+          viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
 
           expect(viewModel.isContent(scrollable.find('.dx-scrollable-container').getDOMNode())).toBe(true);
         });
 
         it('element is scrollbar', () => {
           const viewModel = new Scrollable({ direction: 'vertical' });
+          viewModel.contentRef = React.createRef();
+          viewModel.containerRef = React.createRef();
+          viewModel.scrollableRef = React.createRef();
+          viewModel.horizontalScrollbarRef = React.createRef();
+          viewModel.verticalScrollbarRef = React.createRef();
 
-          const scrollable = mount(viewFunction(viewModel as any) as JSX.Element);
-          viewModel.scrollableRef = scrollable.getDOMNode();
+          const scrollable = mount(ScrollableComponent(viewModel as any) as JSX.Element);
+          viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
 
           expect(viewModel.isContent(scrollable.find('.dx-scrollable-scrollbar').getDOMNode())).toBe(true);
         });
 
         it('element is not inside scrollable', () => {
           const viewModel = new Scrollable({ direction: 'vertical' });
+          viewModel.contentRef = React.createRef();
+          viewModel.containerRef = React.createRef();
+          viewModel.scrollableRef = React.createRef();
+          viewModel.horizontalScrollbarRef = React.createRef();
+          viewModel.verticalScrollbarRef = React.createRef();
 
-          mount(viewFunction(viewModel as any) as JSX.Element);
+          mount(ScrollableComponent(viewModel as any) as JSX.Element);
           expect(viewModel.isContent(mount(<div />).getDOMNode())).toBe(false);
         });
       });

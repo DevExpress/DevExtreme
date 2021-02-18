@@ -44,7 +44,7 @@ describe('Native', () => {
         it('should get the content of the widget', () => {
           const scrollable = new Scrollable({});
           const content = { };
-          scrollable.contentRef = content as RefObject<HTMLDivElement>;
+          scrollable.contentRef = { current: content } as RefObject<HTMLDivElement>;
           expect(scrollable.content()).toEqual(content);
         });
       });
@@ -61,8 +61,8 @@ describe('Native', () => {
             scrollable.scrollBy(100);
             const expected = normalizeRtl(rtlEnabled, 0);
 
-            expect(containerRefMock.scrollTop).toEqual(250);
-            expect(containerRefMock.scrollLeft).toEqual(expected);
+            expect(containerRefMock.current?.scrollTop).toEqual(250);
+            expect(containerRefMock.current?.scrollLeft).toEqual(expected);
           });
 
           it(`should scroll by positive distance as number in the horizontal direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -75,8 +75,8 @@ describe('Native', () => {
             scrollable.scrollBy(normalizeRtl(rtlEnabled, 100));
             const expectedLeft = normalizeRtl(rtlEnabled, 250);
 
-            expect(containerRefMock.scrollTop).toEqual(0);
-            expect(containerRefMock.scrollLeft).toEqual(expectedLeft);
+            expect(containerRefMock.current?.scrollTop).toEqual(0);
+            expect(containerRefMock.current?.scrollLeft).toEqual(expectedLeft);
           });
 
           it(`should scroll by positive distance as number in the both direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -88,8 +88,8 @@ describe('Native', () => {
 
             scrollable.scrollBy({ top: 100, left: normalizeRtl(rtlEnabled, 100) });
 
-            expect(containerRefMock.scrollTop).toEqual(250);
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 250));
+            expect(containerRefMock.current?.scrollTop).toEqual(250);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 250));
           });
 
           it(`should scroll by positive distance as object in the vertical direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -101,8 +101,8 @@ describe('Native', () => {
 
             scrollable.scrollBy({ top: 100 });
 
-            expect(containerRefMock.scrollTop).toEqual(250);
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 0));
+            expect(containerRefMock.current?.scrollTop).toEqual(250);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 0));
           });
 
           it(`should scroll by positive distance as object in the horizontal direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -114,8 +114,8 @@ describe('Native', () => {
 
             scrollable.scrollBy({ top: 70, left: normalizeRtl(rtlEnabled, 100) });
 
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 250));
-            expect(containerRefMock.scrollTop).toEqual(0);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 250));
+            expect(containerRefMock.current?.scrollTop).toEqual(0);
           });
 
           it(`should scroll by positive distance as object in the both direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -126,8 +126,8 @@ describe('Native', () => {
 
             scrollable.scrollBy({ top: 70, left: normalizeRtl(rtlEnabled, 70) });
 
-            expect(containerRefMock.scrollTop).toEqual(220);
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 220));
+            expect(containerRefMock.current?.scrollTop).toEqual(220);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 220));
           });
 
           it(`should scroll by negative distance as number in the vertical direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -138,8 +138,8 @@ describe('Native', () => {
 
             scrollable.scrollBy(-50);
 
-            expect(containerRefMock.scrollTop).toEqual(100);
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 0));
+            expect(containerRefMock.current?.scrollTop).toEqual(100);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 0));
           });
 
           it(`should scroll by negative distance as number in the horizontal direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -150,8 +150,8 @@ describe('Native', () => {
 
             scrollable.scrollBy({ top: -50, left: normalizeRtl(rtlEnabled, -50) });
 
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 100));
-            expect(containerRefMock.scrollTop).toEqual(0);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 100));
+            expect(containerRefMock.current?.scrollTop).toEqual(0);
           });
 
           it(`should scroll by negative distance as number in the both direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -162,8 +162,8 @@ describe('Native', () => {
 
             scrollable.scrollBy({ top: -50, left: normalizeRtl(rtlEnabled, -50) });
 
-            expect(containerRefMock.scrollTop).toEqual(100);
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 100));
+            expect(containerRefMock.current?.scrollTop).toEqual(100);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 100));
           });
 
           it(`should scroll by negative distance as object in the vertical direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -174,8 +174,8 @@ describe('Native', () => {
 
             scrollable.scrollBy({ top: -50, left: 70 });
 
-            expect(containerRefMock.scrollTop).toEqual(100);
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 0));
+            expect(containerRefMock.current?.scrollTop).toEqual(100);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 0));
           });
 
           it(`should scroll by negative distance as object in the horizontal direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -186,8 +186,8 @@ describe('Native', () => {
 
             scrollable.scrollBy({ top: 70, left: normalizeRtl(rtlEnabled, -50) });
 
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 100));
-            expect(containerRefMock.scrollTop).toEqual(0);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 100));
+            expect(containerRefMock.current?.scrollTop).toEqual(0);
           });
 
           it(`should scroll by negative distance as object in the both direction. rtlEnabled: ${rtlEnabled}`, () => {
@@ -198,8 +198,8 @@ describe('Native', () => {
 
             scrollable.scrollBy({ top: -70, left: normalizeRtl(rtlEnabled, -50) });
 
-            expect(containerRefMock.scrollTop).toEqual(80);
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 100));
+            expect(containerRefMock.current?.scrollTop).toEqual(80);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 100));
           });
         });
       });
@@ -214,8 +214,8 @@ describe('Native', () => {
 
             scrollable.scrollTo(200);
 
-            expect(containerRefMock.scrollTop).toEqual(200);
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 0));
+            expect(containerRefMock.current?.scrollTop).toEqual(200);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 0));
           });
 
           it('should scroll position as number in the horizontal direction', () => {
@@ -227,10 +227,10 @@ describe('Native', () => {
             const expected = 200;
             scrollable.scrollTo(expected);
 
-            expect(containerRefMock.scrollLeft).toEqual(rtlEnabled
-              ? calculateRtlScrollLeft(containerRefMock, expected)
+            expect(containerRefMock.current?.scrollLeft).toEqual(rtlEnabled
+              ? calculateRtlScrollLeft(containerRefMock.current!, expected)
               : expected);
-            expect(containerRefMock.scrollTop).toEqual(0);
+            expect(containerRefMock.current?.scrollTop).toEqual(0);
           });
 
           it('should scroll position as number in the both direction', () => {
@@ -242,9 +242,9 @@ describe('Native', () => {
             scrollable.scrollTo(200);
             const expected = 200;
 
-            expect(containerRefMock.scrollTop).toEqual(200);
-            expect(containerRefMock.scrollLeft).toEqual(rtlEnabled
-              ? calculateRtlScrollLeft(containerRefMock, expected)
+            expect(containerRefMock.current?.scrollTop).toEqual(200);
+            expect(containerRefMock.current?.scrollLeft).toEqual(rtlEnabled
+              ? calculateRtlScrollLeft(containerRefMock.current!, expected)
               : expected);
           });
 
@@ -256,8 +256,8 @@ describe('Native', () => {
 
             scrollable.scrollTo({ top: 100, left: 70 });
 
-            expect(containerRefMock.scrollTop).toEqual(100);
-            expect(containerRefMock.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 0));
+            expect(containerRefMock.current?.scrollTop).toEqual(100);
+            expect(containerRefMock.current?.scrollLeft).toEqual(normalizeRtl(rtlEnabled, 0));
           });
 
           it('should scroll position as object in the horizontal direction', () => {
@@ -269,10 +269,10 @@ describe('Native', () => {
             scrollable.scrollTo({ top: 70, left: 100 });
             const expectedLeft = 100;
 
-            expect(containerRefMock.scrollLeft).toEqual(rtlEnabled
-              ? calculateRtlScrollLeft(containerRefMock, expectedLeft)
+            expect(containerRefMock.current?.scrollLeft).toEqual(rtlEnabled
+              ? calculateRtlScrollLeft(containerRefMock.current!, expectedLeft)
               : expectedLeft);
-            expect(containerRefMock.scrollTop).toEqual(0);
+            expect(containerRefMock.current?.scrollTop).toEqual(0);
           });
 
           it('should scroll position as object in the both direction', () => {
@@ -283,9 +283,9 @@ describe('Native', () => {
 
             scrollable.scrollTo({ top: 70, left: 70 });
 
-            expect(containerRefMock.scrollTop).toEqual(70);
-            expect(containerRefMock.scrollLeft).toEqual(rtlEnabled
-              ? calculateRtlScrollLeft(containerRefMock, 70)
+            expect(containerRefMock.current?.scrollTop).toEqual(70);
+            expect(containerRefMock.current?.scrollLeft).toEqual(rtlEnabled
+              ? calculateRtlScrollLeft(containerRefMock.current!, 70)
               : 70);
           });
         });
@@ -335,8 +335,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
-                expect(containerRef.scrollLeft).toEqual(0);
+                expect(containerRef.current?.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+                expect(containerRef.current?.scrollLeft).toEqual(0);
               });
 
               it('should scroll to element from bottom side by vertical direction.', () => {
@@ -353,8 +353,8 @@ describe('Native', () => {
                   ? scrollBarSize
                   : 0;
 
-                expect(containerRef.scrollTop).toEqual(250 + getOffsetValue('bottom', offset) + scrollOffset);
-                expect(containerRef.scrollLeft).toEqual(0);
+                expect(containerRef.current?.scrollTop).toEqual(250 + getOffsetValue('bottom', offset) + scrollOffset);
+                expect(containerRef.current?.scrollLeft).toEqual(0);
               });
 
               it('should scroll to element from left side by horizontal direction', () => {
@@ -368,8 +368,8 @@ describe('Native', () => {
                 scrollable.scrollToElement(element, offset);
 
                 const expectedLeft = element.offsetLeft - getOffsetValue('left', offset);
-                expect(containerRef.scrollLeft).toEqual(expectedLeft);
-                expect(containerRef.scrollTop).toEqual(0);
+                expect(containerRef.current?.scrollLeft).toEqual(expectedLeft);
+                expect(containerRef.current?.scrollTop).toEqual(0);
               });
 
               it('should scroll to element from right side by horizontal direction', () => {
@@ -385,8 +385,8 @@ describe('Native', () => {
                 const scrollOffset = direction === 'horizontal' || direction === 'both'
                   ? scrollBarSize
                   : 0;
-                expect(containerRef.scrollLeft).toEqual(250 + getOffsetValue('right', offset) + scrollOffset);
-                expect(containerRef.scrollTop).toEqual(0);
+                expect(containerRef.current?.scrollLeft).toEqual(250 + getOffsetValue('right', offset) + scrollOffset);
+                expect(containerRef.current?.scrollTop).toEqual(0);
               });
 
               it('should scroll to element from left side and top side by both direction', () => {
@@ -397,8 +397,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
-                expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+                expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+                expect(containerRef.current?.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
               });
 
               it('should scroll to element from right side and top side by both direction', () => {
@@ -409,8 +409,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollLeft).toEqual(250 + getOffsetValue('right', offset) + scrollBarSize);
-                expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+                expect(containerRef.current?.scrollLeft).toEqual(250 + getOffsetValue('right', offset) + scrollBarSize);
+                expect(containerRef.current?.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
               });
 
               it('should scroll to element from left side and bottom side by both direction', () => {
@@ -421,8 +421,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
-                expect(containerRef.scrollTop).toEqual(250 + getOffsetValue('bottom', offset) + scrollBarSize);
+                expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+                expect(containerRef.current?.scrollTop).toEqual(250 + getOffsetValue('bottom', offset) + scrollBarSize);
               });
 
               it('should scroll to element from right side and bottom side by both direction', () => {
@@ -433,8 +433,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollLeft).toEqual(250 + getOffsetValue('right', offset) + scrollBarSize);
-                expect(containerRef.scrollTop).toEqual(250 + getOffsetValue('bottom', offset) + scrollBarSize);
+                expect(containerRef.current?.scrollLeft).toEqual(250 + getOffsetValue('right', offset) + scrollBarSize);
+                expect(containerRef.current?.scrollTop).toEqual(250 + getOffsetValue('bottom', offset) + scrollBarSize);
               });
 
               it('should do not scroll to an element when it in the visible area', () => {
@@ -445,8 +445,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollTop).toEqual(100);
-                expect(containerRef.scrollLeft).toEqual(100);
+                expect(containerRef.current?.scrollTop).toEqual(100);
+                expect(containerRef.current?.scrollLeft).toEqual(100);
               });
             });
 
@@ -469,8 +469,8 @@ describe('Native', () => {
                 const scrollOffset = direction === 'vertical' || direction === 'both'
                   ? scrollBarSize
                   : 0;
-                expect(containerRef.scrollTop).toEqual(120 + getOffsetValue('bottom', offset) + scrollOffset);
-                expect(containerRef.scrollLeft).toEqual(0);
+                expect(containerRef.current?.scrollTop).toEqual(120 + getOffsetValue('bottom', offset) + scrollOffset);
+                expect(containerRef.current?.scrollLeft).toEqual(0);
               });
 
               it('should scroll to element from bottom side by vertical direction', () => {
@@ -487,8 +487,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
-                expect(containerRef.scrollLeft).toEqual(0);
+                expect(containerRef.current?.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+                expect(containerRef.current?.scrollLeft).toEqual(0);
               });
 
               it('should scroll to element from left side by horizontal direction', () => {
@@ -508,8 +508,8 @@ describe('Native', () => {
                 const scrollOffset = direction === 'horizontal' || direction === 'both'
                   ? scrollBarSize
                   : 0;
-                expect(containerRef.scrollLeft).toEqual(120 + getOffsetValue('right', offset) + scrollOffset);
-                expect(containerRef.scrollTop).toEqual(0);
+                expect(containerRef.current?.scrollLeft).toEqual(120 + getOffsetValue('right', offset) + scrollOffset);
+                expect(containerRef.current?.scrollTop).toEqual(0);
               });
 
               it('should scroll to element from right side by horizontal direction', () => {
@@ -526,8 +526,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
-                expect(containerRef.scrollTop).toEqual(0);
+                expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+                expect(containerRef.current?.scrollTop).toEqual(0);
               });
 
               it('should scroll to element from left side and top side by both direction', () => {
@@ -542,8 +542,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollLeft).toEqual(120 + getOffsetValue('right', offset) + scrollBarSize);
-                expect(containerRef.scrollTop).toEqual(120 + getOffsetValue('bottom', offset) + scrollBarSize);
+                expect(containerRef.current?.scrollLeft).toEqual(120 + getOffsetValue('right', offset) + scrollBarSize);
+                expect(containerRef.current?.scrollTop).toEqual(120 + getOffsetValue('bottom', offset) + scrollBarSize);
               });
 
               it('should scroll to element from right side and top side by both direction', () => {
@@ -558,8 +558,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
-                expect(containerRef.scrollTop).toEqual(120 + getOffsetValue('bottom', offset) + scrollBarSize);
+                expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+                expect(containerRef.current?.scrollTop).toEqual(120 + getOffsetValue('bottom', offset) + scrollBarSize);
               });
 
               it('should scroll to element from left side and bottom side by both direction', () => {
@@ -574,8 +574,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollLeft).toEqual(120 + getOffsetValue('right', offset) + scrollBarSize);
-                expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+                expect(containerRef.current?.scrollLeft).toEqual(120 + getOffsetValue('right', offset) + scrollBarSize);
+                expect(containerRef.current?.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
               });
 
               it('should scroll to element from right side and bottom side by both direction', () => {
@@ -590,8 +590,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
-                expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+                expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+                expect(containerRef.current?.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
               });
 
               it('should do not scroll to an element when it in the visible area', () => {
@@ -606,8 +606,8 @@ describe('Native', () => {
 
                 scrollable.scrollToElement(element, offset);
 
-                expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
-                expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+                expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+                expect(containerRef.current?.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
               });
             });
           });
@@ -633,8 +633,8 @@ describe('Native', () => {
 
               scrollable.scrollToElement(element);
 
-              expect(containerRef.scrollTop).toEqual(217);
-              expect(containerRef.scrollLeft).toEqual(217);
+              expect(containerRef.current?.scrollTop).toEqual(217);
+              expect(containerRef.current?.scrollLeft).toEqual(217);
             });
 
             it('it should not scroll to element when it is not located inside the scrollable content', () => {
@@ -645,8 +645,8 @@ describe('Native', () => {
 
               scrollable.scrollToElement(element);
 
-              expect(containerRef.scrollTop).toEqual(100);
-              expect(containerRef.scrollLeft).toEqual(100);
+              expect(containerRef.current?.scrollTop).toEqual(100);
+              expect(containerRef.current?.scrollLeft).toEqual(100);
             });
           });
         });
@@ -661,7 +661,7 @@ describe('Native', () => {
               scrollable.containerRef = containerRef;
 
               scrollable.scrollToElement(element);
-              expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
+              expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft);
             });
 
             it('should scroll to element from left side by horizontal direction', () => {
@@ -672,7 +672,7 @@ describe('Native', () => {
               scrollable.containerRef = containerRef;
 
               scrollable.scrollToElement(element);
-              expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
+              expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft);
             });
 
             it('should scroll to element from right side by horizontal direction for IE', () => {
@@ -684,7 +684,7 @@ describe('Native', () => {
               scrollable.containerRef = containerRef;
 
               scrollable.scrollToElement(element);
-              expect(containerRef.scrollLeft).toEqual(element.offsetLeft * -1);
+              expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft * -1);
               testBehavior.positive = false;
             });
           });
@@ -702,7 +702,7 @@ describe('Native', () => {
               scrollable.containerRef = containerRef;
 
               scrollable.scrollToElement(element);
-              expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
+              expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft);
             });
 
             it('should scroll to element from left side by horizontal direction', () => {
@@ -717,7 +717,7 @@ describe('Native', () => {
               scrollable.containerRef = containerRef;
 
               scrollable.scrollToElement(element);
-              expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
+              expect(containerRef.current?.scrollLeft).toEqual(element.offsetLeft);
             });
           });
         });
@@ -726,7 +726,7 @@ describe('Native', () => {
       describe('ScrollHeight', () => {
         it('should get height of the scroll content', () => {
           const scrollable = new Scrollable({});
-          scrollable.contentRef = { offsetHeight: 300 } as RefObject<HTMLDivElement>;
+          scrollable.contentRef = { current: { offsetHeight: 300 } } as RefObject<HTMLDivElement>;
 
           expect(scrollable.scrollHeight()).toEqual(300);
         });
@@ -735,7 +735,7 @@ describe('Native', () => {
       describe('ScrollWidth', () => {
         it('should get width of the scroll content', () => {
           const scrollable = new Scrollable({});
-          scrollable.contentRef = { offsetWidth: 400 } as RefObject<HTMLDivElement>;
+          scrollable.contentRef = { current: { offsetWidth: 400 } } as RefObject<HTMLDivElement>;
 
           expect(scrollable.scrollWidth()).toEqual(400);
         });
@@ -768,7 +768,7 @@ describe('Native', () => {
       describe('ClientHeight', () => {
         it('should get client height of the scroll container', () => {
           const scrollable = new Scrollable({});
-          scrollable.containerRef = { clientHeight: 120 } as RefObject<HTMLDivElement>;
+          scrollable.containerRef = { current: { clientHeight: 120 } } as RefObject<HTMLDivElement>;
 
           expect(scrollable.clientHeight()).toEqual(120);
         });
@@ -777,7 +777,7 @@ describe('Native', () => {
       describe('ClientWidth', () => {
         it('should get client width of the scroll container', () => {
           const scrollable = new Scrollable({});
-          scrollable.containerRef = { clientWidth: 120 } as RefObject<HTMLDivElement>;
+          scrollable.containerRef = { current: { clientWidth: 120 } } as RefObject<HTMLDivElement>;
 
           expect(scrollable.clientWidth()).toEqual(120);
         });

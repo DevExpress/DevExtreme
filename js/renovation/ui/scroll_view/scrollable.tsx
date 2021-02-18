@@ -172,6 +172,6 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollableRef(): any {
-    return this.scrollableNativeRef || this.scrollableSimulatedRef;
+    return this.scrollableNativeRef.current! || this.scrollableSimulatedRef.current!;
   }
 }

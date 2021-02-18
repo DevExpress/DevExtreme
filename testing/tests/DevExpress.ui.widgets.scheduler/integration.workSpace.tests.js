@@ -155,7 +155,7 @@ QUnit.test('Scheduler work space should have a single type class', function(asse
     QUnit.test(`Pointer down on workspace cell should focus cell in ${scrollingMode} mode`, function(assert) {
         this.createInstance({
             currentDate: new Date(2015, 1, 10),
-            scrolling: { mode: scrollingMode },
+            scrolling: { mode: scrollingMode, type: 'both' },
         });
 
         const $firstCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0);
@@ -1217,7 +1217,7 @@ QUnit.test('WorkSpace should be refreshed after groups changed', function(assert
             showAllDayPanel: true,
             currentDate: new Date(2018, 3, 11),
             height: 600,
-            scrolling: { mode: scrollingMode },
+            scrolling: { mode: scrollingMode, type: 'both' },
         });
 
         const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
@@ -1580,8 +1580,9 @@ if(devices.real().deviceType === 'desktop') {
                             showAllDayPanel: true,
                             currentDate: new Date(2018, 3, 8),
                             height: 600,
+                            width: 1000,
                             editing: { allowDragging: false },
-                            scrolling: { mode: 'virtual' },
+                            scrolling: { mode: 'virtual', type: 'both' },
                         });
 
                         const $cells = instance.workSpace.getCells();
@@ -1610,7 +1611,8 @@ if(devices.real().deviceType === 'desktop') {
                 showAllDayPanel: true,
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
-                scrolling: { mode: 'virtual' },
+                width: 1000,
+                scrolling: { mode: 'virtual', type: 'both' },
             });
 
             checkSelection(assert, scheduler, 0, 5);
@@ -1627,7 +1629,8 @@ if(devices.real().deviceType === 'desktop') {
                 showAllDayPanel: true,
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
-                scrolling: { mode: 'virtual' },
+                width: 1000,
+                scrolling: { mode: 'virtual', type: 'both' },
                 resources,
                 groups: ['ownerId'],
             });
@@ -1655,7 +1658,8 @@ if(devices.real().deviceType === 'desktop') {
                 showAllDayPanel: true,
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
-                scrolling: { mode: 'virtual' },
+                width: 1000,
+                scrolling: { mode: 'virtual', type: 'both' },
                 resources,
                 groups: ['ownerId'],
             });
@@ -1684,7 +1688,8 @@ if(devices.real().deviceType === 'desktop') {
                 showAllDayPanel: true,
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
-                scrolling: { mode: 'virtual' },
+                width: 1000,
+                scrolling: { mode: 'virtual', type: 'both' },
                 resources,
                 groups: ['ownerId'],
             });
@@ -1712,7 +1717,8 @@ if(devices.real().deviceType === 'desktop') {
                 showAllDayPanel: true,
                 currentDate: new Date(2020, 11, 23),
                 height: 1000,
-                scrolling: { mode: 'virtual' },
+                width: 1000,
+                scrolling: { mode: 'virtual', type: 'both' },
             });
 
             scheduler.workSpace.selectCells(0, 5);
@@ -2595,7 +2601,7 @@ QUnit.test('SelectedCellData option should not change when dateTable is scrolled
         showAllDayPanel: true,
         currentDate: new Date(2020, 8, 21),
         height: 300,
-        scrolling: { mode: 'virtual' },
+        scrolling: { mode: 'virtual', type: 'both' },
     });
     scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
@@ -2637,7 +2643,7 @@ QUnit.test('"onOptionChanged" should not be called on scroll when virtual scroll
         showAllDayPanel: true,
         currentDate: new Date(2020, 8, 21),
         height: 300,
-        scrolling: { mode: 'virtual' },
+        scrolling: { mode: 'virtual', type: 'both' },
         onOptionChanged: () => {
             onOptionChangedCalls += 1;
         },
@@ -2681,7 +2687,7 @@ if(devices.real().deviceType === 'desktop') {
             showAllDayPanel: true,
             currentDate: new Date(2020, 8, 20),
             height: 300,
-            scrolling: { mode: 'virtual' },
+            scrolling: { mode: 'virtual', type: 'both' },
         });
 
         const { instance } = scheduler;

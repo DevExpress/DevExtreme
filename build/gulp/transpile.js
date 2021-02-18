@@ -123,7 +123,6 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
         }))
         .pipe(gulp.dest(dist))
 ]);
-gulp.task('tmp',);
 
 gulp.task('transpile', gulp.series(
     'bundler-config',

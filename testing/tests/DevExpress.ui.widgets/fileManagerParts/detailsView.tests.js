@@ -2,6 +2,8 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import pointerEvents from 'events/pointer';
+import localization from 'localization';
+import messageLocalization from 'localization/message';
 import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 
@@ -667,5 +669,28 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsCellValue(3, 2), '2.txt', 'file 2 has correct name in correct column');
         assert.strictEqual(this.wrapper.getDetailsCellValue(4, 2), '3.txt', 'file 3 has correct name in correct column');
         assert.strictEqual(this.wrapper.getDetailsCellValue(5, 2), '4.txt', 'file 4 has correct name in correct column');
+    });
+
+    test('localize header captions (T949528)', function(assert) {
+        const captionName = 'TEST';
+        const captionDate = 'TEST1';
+        const captionSize = 'TEST2';
+        const locale = localization.locale();
+        messageLocalization.load({
+            'ja': {
+                'dxFileManager-listDetailsColumnCaptionName': captionName,
+                'dxFileManager-listDetailsColumnCaptionDateModified': captionDate,
+                'dxFileManager-listDetailsColumnCaptionFileSize': captionSize,
+            }
+        });
+        localization.locale('ja');
+
+        this.wrapper.getInstance().repaint();
+        this.clock.tick(600);
+
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(1).text(), captionName, 'first column is Name');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(2).text(), captionDate, 'second column is Date Modified');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(3).text(), captionSize, 'third column is File Size');
+        localization.locale(locale);
     });
 });

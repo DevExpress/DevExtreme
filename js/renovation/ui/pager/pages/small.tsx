@@ -70,7 +70,9 @@ export class PagesSmall extends JSXComponent<PagerSmallProps>() {
   @InternalState() private minWidth = 10;
 
   @Effect() updateWidth(): void {
-    this.minWidth = getElementMinWidth(this.pageIndexRef) || this.minWidth;
+    this.minWidth = (this.pageIndexRef.current
+        && getElementMinWidth(this.pageIndexRef.current))
+      || this.minWidth;
   }
 
   selectLastPageIndex(): void {

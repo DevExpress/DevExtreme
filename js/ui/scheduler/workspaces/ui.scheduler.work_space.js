@@ -25,7 +25,7 @@ import {
 import Scrollable from '../../scroll_view/ui.scrollable';
 import HorizontalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.horizontal';
 import VerticalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.vertical';
-import tableCreatorModule from '../ui.scheduler.table_creator';
+import tableCreatorModule from '../table_creator';
 const { tableCreator } = tableCreatorModule;
 import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
@@ -1451,7 +1451,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     _setSelectedCellsByCellData(data) {
         const cells = [];
         const $cells = this._getAllCells(data?.[0]?.allDay);
-        const cellsInRow = this._getTotalCellCount(this._getGroupCount());
+        let cellsInRow = this._getTotalCellCount(this._getGroupCount());
+
+        if(this.isVirtualScrolling()) {
+            const renderState = this.virtualScrollingDispatcher.getRenderState();
+
+            cellsInRow = renderState.cellCount || cellsInRow;
+        }
 
         data.forEach((cellData) => {
             const { groups, startDate, allDay } = cellData;
@@ -3532,13 +3538,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getCoordinatesByCell($cell) {
-        const columnIndex = $cell.index();
+        let columnIndex = $cell.index();
         let rowIndex = $cell.parent().index();
         const isAllDayCell = this._hasAllDayClass($cell);
         const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
 
         if(this.isVirtualScrolling() && !(isAllDayCell && !isVerticalGrouping)) {
             rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
+        }
+        if(this.isVirtualScrolling()) {
+            columnIndex -= this.virtualScrollingDispatcher.leftVirtualCellsCount;
         }
 
         return { rowIndex, columnIndex };
