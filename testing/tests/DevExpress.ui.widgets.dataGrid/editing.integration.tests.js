@@ -1834,7 +1834,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
         assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
-        assert.ok($firstCell.find('.dx-datagrid-revert-tooltip .dx-overlay-content').is(':visible'), 'revert button is visible');
+        assert.ok($(grid.element()).find('.dx-datagrid-revert-tooltip .dx-overlay-content').is(':visible'), 'revert button is visible');
         assert.ok($(grid.element()).find('.dx-invalid-message .dx-overlay-content').is(':visible'), 'error message is visible');
     });
 
@@ -4239,6 +4239,72 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 assert.strictEqual($editor.css(`padding-${direction}`), '0px', `no ${direction} padding`);
             });
         });
+    });
+
+    QUnit.test('The validation message and revert button should be scrolled with an invalid cell (T973104)', function(assert) {
+        // arrange, act
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 20; i++) {
+                const item = { id: i + 1 };
+                for(let j = 0; j < 30; j++) {
+                    item[`field_${j + 1}`] = '';
+                }
+                items.push(item);
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            width: 700,
+            height: 400,
+            dataSource: getData(),
+            keyExpr: 'id',
+            columnAutoWidth: true,
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            customizeColumns: function(columns) {
+                columns.forEach(col => {
+                    col.width = 70;
+                    col.validationRules = [{ type: 'required' }];
+                });
+            }
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.editCell(5, 5);
+        this.clock.tick();
+
+        const $cellElement = $(dataGrid.getCellElement(5, 5));
+        const $revertButton = $(dataGrid.element()).find('.dx-datagrid-revert-tooltip .dx-overlay-content');
+        const $validationMessage = $(dataGrid.element()).find('.dx-datagrid-invalid-message .dx-overlay-content');
+
+
+        // assert
+        assert.ok($revertButton.length, 'revert button is rendered');
+        assert.ok($validationMessage.length, 'validation message is rendered');
+
+        // act
+        const revertButtonDiff = {
+            top: $revertButton.offset().top - $cellElement.offset().top,
+            left: $revertButton.offset().left - $cellElement.offset().left,
+        };
+        const validationMessageDiff = {
+            top: $validationMessage.offset().top - $cellElement.offset().top,
+            left: $validationMessage.offset().left - $cellElement.offset().left,
+        };
+        dataGrid.getScrollable().scrollTo({ top: 100, left: 100 });
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual($revertButton.offset().top - $cellElement.offset().top, revertButtonDiff.top, 'top revert position relative to the cell is not changed');
+        assert.strictEqual($revertButton.offset().left - $cellElement.offset().left, revertButtonDiff.left, 'left revert position relative to the cell is not changed');
+        assert.strictEqual($validationMessage.offset().top - $cellElement.offset().top, validationMessageDiff.top, 'top validation message position relative to the cell is not changed');
+        assert.strictEqual($validationMessage.offset().left - $cellElement.offset().left, validationMessageDiff.left, 'left validation message position relative to the cell is not changed');
     });
 });
 
