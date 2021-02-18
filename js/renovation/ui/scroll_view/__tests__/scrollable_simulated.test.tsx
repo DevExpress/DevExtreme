@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable jest/expect-expect */
 import React from 'react';
 import { mount } from 'enzyme';
@@ -70,41 +69,6 @@ describe('Simulated', () => {
               }
 
               expect((helper.viewModel as any).containerStyles).toEqual({ touchAction: expectedTouchAction });
-            });
-          });
-        });
-      });
-
-      each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
-        each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-          each([true, false]).describe('InertiaEnabled: %o', (inertiaEnabled) => {
-            it('should pass all necessary properties to the nested Scrollbars', () => {
-              const propertySettings = {
-                showScrollbar,
-                bounceEnabled,
-                inertiaEnabled,
-                scrollByThumb: true,
-              };
-
-              const helper = new ScrollableTestHelper({ direction, ...propertySettings });
-              helper.initScrollbarSettings();
-
-              const scrollbars = helper.getScrollbars();
-              if (direction === 'both') {
-                expect(scrollbars.at(0).instance().props).toMatchObject({
-                  direction: 'horizontal',
-                  ...propertySettings,
-                });
-                expect(scrollbars.at(1).instance().props).toMatchObject({
-                  direction: 'vertical',
-                  ...propertySettings,
-                });
-              } else {
-                expect(scrollbars.at(0).instance().props).toMatchObject({
-                  direction,
-                  ...propertySettings,
-                });
-              }
             });
           });
         });
@@ -286,7 +250,7 @@ describe('Simulated', () => {
                     });
                   } else {
                     const isDirectionValid = scrollByContent
-                                    || (scrollByThumb && targetClass !== 'dx-scrollable-container');
+                      || (scrollByThumb && targetClass !== 'dx-scrollable-container');
 
                     expect(viewModel.validDirections).toEqual({
                       vertical: direction !== DIRECTION_HORIZONTAL && isDirectionValid && !(direction === 'both' && scrollByThumb && !scrollByContent && targetClass !== 'dx-scrollable-container'),
