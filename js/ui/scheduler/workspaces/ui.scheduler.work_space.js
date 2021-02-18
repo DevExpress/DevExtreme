@@ -2773,7 +2773,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         groupIndex = groupIndex || 0;
         let position;
 
-        if(this.isRenovatedRender()) {
+        if(this.isVirtualScrolling()) {
             const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
             if(!positionByMap) {
                 return undefined;
