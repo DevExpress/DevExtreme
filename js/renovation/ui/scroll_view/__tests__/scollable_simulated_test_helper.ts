@@ -20,7 +20,7 @@ import { Scrollbar } from '../scrollbar';
 class ScrollableTestHelper {
   direction: ScrollableDirection;
 
-  viewModel: Scrollable;
+  viewModel: any;
 
   scrollable: any;
 
