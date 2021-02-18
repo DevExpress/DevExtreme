@@ -13,10 +13,20 @@ class PushStrategy extends DrawerStrategy {
         const drawer = this.getDrawerInstance();
 
         $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', config.maxSize);
+        if(drawer.getMinSize()) {
+            let paddingCssPropertyName = 'padding';
+            switch(drawer.calcTargetPosition()) {
+                case 'left': paddingCssPropertyName += 'Right'; break;
+                case 'right': paddingCssPropertyName += 'Left'; break;
+                case 'top': paddingCssPropertyName += 'Bottom'; break;
+                case 'bottom': paddingCssPropertyName += 'Top'; break;
+            }
+            $(drawer.viewContent()).css(paddingCssPropertyName, drawer.getMinSize());
+        }
 
         if(animate) {
             const animationConfig = {
-                $element: config.$content,
+                $element: $(drawer.viewContent()),
                 position: config.contentPosition,
                 direction: drawer.calcTargetPosition(),
                 duration: drawer.option('animationDuration'),
@@ -28,9 +38,9 @@ class PushStrategy extends DrawerStrategy {
             animation.moveTo(animationConfig);
         } else {
             if(drawer.isHorizontalDirection()) {
-                translator.move(config.$content, { left: config.contentPosition });
+                translator.move($(drawer.viewContent()), { left: config.contentPosition });
             } else {
-                translator.move(config.$content, { top: config.contentPosition });
+                translator.move($(drawer.viewContent()), { top: config.contentPosition });
             }
         }
     }
@@ -40,6 +50,10 @@ class PushStrategy extends DrawerStrategy {
             contentPosition: this._getPanelSize(isDrawerOpened) * this.getDrawerInstance()._getPositionCorrection(),
             maxSize: this._getPanelSize(true)
         });
+    }
+
+    onPanelContentRendered() {
+        $(this.getDrawerInstance().viewContent()).addClass('dx-theme-background-color');
     }
 }
 

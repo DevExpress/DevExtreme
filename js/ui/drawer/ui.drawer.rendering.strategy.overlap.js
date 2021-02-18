@@ -49,6 +49,10 @@ class OverlapStrategy extends DrawerStrategy {
         if(this.getDrawerInstance().calcTargetPosition() === 'right') {
             $overlayContent.css('left', 'auto');
         }
+        if(this.getDrawerInstance().calcTargetPosition() === 'bottom') {
+            $overlayContent.css('top', 'auto');
+            $overlayContent.css('bottom', '0px');
+        }
     }
 
     _getOverlayPosition() {
@@ -100,13 +104,14 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
-    onViewContentWrapperCreated($viewContentWrapper, panelPosition) {
-        this._setupContent($viewContentWrapper, panelPosition);
+    onPanelContentRendered() {
+        this._updateViewContentStyles();
     }
 
-    _setupContent($content, position) {
-        $content.css('padding' + camelize(position, true), this.getDrawerInstance().option('minSize'));
-        $content.css('transform', 'inherit');
+    _updateViewContentStyles() {
+        const drawer = this.getDrawerInstance();
+        $(drawer.viewContent()).css('padding' + camelize(drawer.calcTargetPosition(), true), drawer.option('minSize'));
+        $(drawer.viewContent()).css('transform', 'inherit');
     }
 
     _slidePositionRendering(config, _, animate) {
@@ -115,7 +120,7 @@ class OverlapStrategy extends DrawerStrategy {
         this._initialPosition = drawer.isHorizontalDirection() ? { left: config.panelOffset } : { top: config.panelOffset };
         const position = drawer.calcTargetPosition();
 
-        this._setupContent(config.$content, position, config.drawer);
+        this._updateViewContentStyles();
 
         if(animate) {
             const animationConfig = extend(config.defaultAnimationConfig, {
@@ -141,7 +146,7 @@ class OverlapStrategy extends DrawerStrategy {
         this._initialPosition = { left: 0 };
         const position = drawer.calcTargetPosition();
 
-        this._setupContent(config.$content, position);
+        this._updateViewContentStyles();
 
         translator.move(config.$panelOverlayContent, { left: 0 });
 
