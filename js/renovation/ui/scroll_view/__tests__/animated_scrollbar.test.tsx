@@ -11,6 +11,14 @@ import {
 
 describe('Public methods', () => {
   each([
+    { name: 'inBounds', argsCount: 0 },
+    { name: 'getMaxOffset', argsCount: 0 },
+    { name: 'scrollStep', argsCount: 1 },
+    { name: 'move', argsCount: 1 },
+    { name: 'getLocation', argsCount: 0 },
+    { name: 'stopComplete', argsCount: 0 },
+    { name: 'scrollComplete', argsCount: 0 },
+    { name: 'boundLocation', argsCount: 1 },
     { name: 'getMinOffset', argsCount: 0 },
     { name: 'validateEvent', argsCount: 1 },
     { name: 'isThumb', argsCount: 1 },
@@ -41,7 +49,7 @@ describe('Public methods', () => {
   it('animator should call stopComplete during step if was stopped', () => {
     const stopCompleteHandler = jest.fn();
     const viewModel = new AnimatedScrollbar({ });
-    (viewModel as any).scrollbarRef = { stopComplete: stopCompleteHandler };
+    (viewModel as any).scrollbarRef = { current: { stopComplete: stopCompleteHandler } };
     viewModel.stopped = true;
 
     viewModel.stepCore();
@@ -56,9 +64,11 @@ describe('Public methods', () => {
 
       const viewModel = new AnimatedScrollbar({ });
       (viewModel as any).scrollbarRef = {
-        scrollComplete: scrollCompleteHandler,
-        move: scrollbarMoveHandler,
-        boundLocation: () => -700,
+        current: {
+          scrollComplete: scrollCompleteHandler,
+          move: scrollbarMoveHandler,
+          boundLocation: () => -700,
+        },
       };
       Object.defineProperties(viewModel, {
         isFinished: { get() { return true; } },
@@ -99,7 +109,7 @@ describe('Public methods', () => {
         viewModel.velocity = -5;
         const acceleration = 0.5;
         Object.defineProperties(viewModel, { acceleration: { get() { return acceleration; } } });
-        (viewModel as any).scrollbarRef = { inBounds, scrollStep: scrollStepHandler };
+        (viewModel as any).scrollbarRef = { current: { inBounds, scrollStep: scrollStepHandler } };
 
         viewModel.step();
 
@@ -151,8 +161,10 @@ describe('Animator', () => {
 
       viewModel.stepCore = jest.fn();
       (viewModel as any).scrollbarRef = {
-        boundLocation: () => -700,
-        getLocation: () => -1500,
+        current: {
+          boundLocation: () => -700,
+          getLocation: () => -1500,
+        },
       };
 
       viewModel.start('bounce');
@@ -189,11 +201,12 @@ describe('Animator', () => {
 
   describe('Getters', () => {
     each([() => true, () => false]).describe('inBounds: %o', (inBounds) => {
-      each([undefined, { inBounds }]).describe('ScrollbarRef: %o', (scrollbarRef) => {
+      each([undefined, { current: inBounds }]).describe('ScrollbarRef: %o', (scrollbarRef) => {
         each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
           it('acceleration', () => {
             const viewModel = new AnimatedScrollbar({ });
-            viewModel.scrollbarRef = scrollbarRef;
+            (viewModel as any).inBounds = inBounds;
+            (viewModel as any).scrollbarRef = scrollbarRef;
 
             Object.defineProperties(viewModel, {
               isBounceAnimator: { get() { return isBounceAnimator; } },
