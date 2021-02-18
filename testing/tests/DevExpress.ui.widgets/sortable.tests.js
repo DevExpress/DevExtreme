@@ -2807,7 +2807,7 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
         const items = this.$element.children();
 
         function scrollTestIteration(targetY, expectedWidth, expectedOffset) {
-        // act
+            // act
             const pointer = pointerMock(items.eq(0)).start().down().move(0, targetY);
             const $placeholder = $(PLACEHOLDER_SELECTOR);
 
@@ -3599,3 +3599,77 @@ QUnit.module('autoscroll', getModuleConfigForTestsWithScroll('#itemsWithScroll',
     });
 
 });
+
+// T971119
+QUnit.module('Check bounds for container with padding', crossComponentModuleConfig, () => {
+    QUnit.test('before left', function(assert) {
+        const onReorderSpy = sinon.spy();
+        $('#scroll').css('padding', '50px');
+
+        this.createSortable({
+            moveItemOnDrop: true,
+            onReorder: onReorderSpy
+        }, $('#itemsWithScroll'));
+
+        // act
+        const $sourceElement = $('#scroll .draggable').eq(0);
+        const startPosition = { x: $sourceElement.offset().left, y: $sourceElement.offset().top };
+        pointerMock($sourceElement).start(startPosition).down().move(0, 100).move(-1, 10).up();
+        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+    });
+    QUnit.test('after right', function(assert) {
+        const onReorderSpy = sinon.spy();
+
+        $('#scroll').css('padding', '50px');
+
+        this.createSortable({
+            moveItemOnDrop: true,
+            onReorder: onReorderSpy
+        }, $('#itemsWithScroll'));
+
+        // act
+        const $sourceElement = $('#scroll .draggable').eq(0);
+        const startPosition = { x: $sourceElement.offset().left, y: $sourceElement.offset().top };
+        pointerMock($sourceElement).start(startPosition).down().move(0, 100).move($sourceElement.width() + 1, 10).up();
+        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+    });
+    QUnit.test('above top', function(assert) {
+        // arrange
+        const onReorderSpy = sinon.spy();
+
+        $('#scroll').css('padding', '50px');
+        $('#scroll').css('height', '500px');
+
+        this.createSortable({
+            moveItemOnDrop: true,
+            onReorder: onReorderSpy
+        }, $('#itemsWithScroll'));
+
+        // act
+        const $sourceElement = $('#scroll .draggable').eq(1);
+        const startPosition = { x: 50, y: 50 };
+        pointerMock($sourceElement).start(startPosition).down().move(50, 0).move(10, -(50 + 1)).up();
+        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+    });
+    QUnit.test('under bottom', function(assert) {
+        // arrange
+        const onReorderSpy = sinon.spy();
+
+        $('#scroll').css('padding', '50px');
+        $('#scroll').css('height', '500px');
+
+        this.createSortable({
+            moveItemOnDrop: true,
+            onReorder: onReorderSpy
+        }, $('#itemsWithScroll'));
+
+        // act
+        const $firstElement = $('#scroll .draggable').eq(0);
+        pointerMock($firstElement).start({ x: 50, y: 0 }).down().move(50, 0).move(10, 500 + 50 + 1).up();
+
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+    });
+
+});
+
