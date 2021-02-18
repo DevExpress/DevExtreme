@@ -127,27 +127,27 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   step(): void {
-    if (!this.props.bounceEnabled && !this.scrollbarRef.inBounds()) {
+    if (!this.props.bounceEnabled && !this.inBounds()) {
       this.velocity = 0;
     }
 
-    this.scrollbarRef.scrollStep(this.velocity);
+    this.scrollStep(this.velocity);
 
     this.velocity *= this.acceleration;
   }
 
   setupBounce(): void {
-    const bounceDistance = this.scrollbarRef.boundLocation() - this.scrollbarRef.getLocation();
+    const bounceDistance = this.boundLocation() - this.getLocation();
 
     this.velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
   }
 
   complete(): void {
     if (this.isBounceAnimator) {
-      this.scrollbarRef.move(this.scrollbarRef.boundLocation());
+      this.move(this.boundLocation());
     }
 
-    this.scrollbarRef.scrollComplete();
+    this.scrollComplete();
   }
 
   get isBounceAnimator(): boolean {
@@ -172,13 +172,13 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       return 0;
     }
 
-    return this.scrollbarRef.inBounds() || this.isBounceAnimator
+    return this.inBounds() || this.isBounceAnimator
       ? ACCELERATION
       : OUT_BOUNDS_ACCELERATION;
   }
 
   stop(): void {
-    this.scrollbarRef.stopComplete();
+    this.stopComplete();
   }
 
   suppressInertia(thumbScrolling?: boolean): void {
@@ -189,14 +189,46 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   /* istanbul ignore next */
   crossBoundOnNextStep(): boolean {
-    const location = this.scrollbarRef.getLocation();
+    const location = this.getLocation();
     const nextLocation = location + this.velocity;
 
     const minOffset = this.getMinOffset();
 
     return (location < minOffset && nextLocation >= minOffset)
-      || (location > this.scrollbarRef.getMaxOffset()
-      && nextLocation <= this.scrollbarRef.getMaxOffset());
+      || (location > this.getMaxOffset()
+      && nextLocation <= this.getMaxOffset());
+  }
+
+  inBounds(): boolean {
+    return this.scrollbarRef.current!.inBounds();
+  }
+
+  getMaxOffset(): number {
+    return this.scrollbarRef.current!.getMaxOffset();
+  }
+
+  scrollStep(delta: number): void {
+    return this.scrollbarRef.current!.scrollStep(delta);
+  }
+
+  move(location?: number): void {
+    return this.scrollbarRef.current!.move(location);
+  }
+
+  getLocation(): number {
+    return this.scrollbarRef.current!.getLocation();
+  }
+
+  stopComplete(): void {
+    return this.scrollbarRef.current!.stopComplete();
+  }
+
+  scrollComplete(): void {
+    return this.scrollbarRef.current!.scrollComplete();
+  }
+
+  boundLocation(value?: number): number {
+    return this.scrollbarRef.current!.boundLocation(value);
   }
 
   @Method()
