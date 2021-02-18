@@ -100,7 +100,7 @@ if(isEsmPackage) {
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
 // NOTE: 'use strict' prohibits adding new 'default' field to string
-const canSupplementDefaultExport = (path) => !path.endsWith('version.js') && !path.endsWith('remove_event.js');
+const canSupplementDefaultExport = (path) => !path.endsWith('version.js') && !path.endsWith('remove_event.js') && !path.endsWith('default_messages.js');
 const hasDefaultExport = (content) => /exports\.default\s=/.test(String(content));
 const isCjsModule = (path) => !path.startsWith('esm/');
 
