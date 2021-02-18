@@ -9,7 +9,8 @@ import {
   Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
-import { Scrollbar } from './scrollbar';
+
+import { AnimatedScrollbar } from './animated_scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
@@ -138,7 +139,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             )}
           </div>
           {direction.isHorizontal && (
-            <Scrollbar
+            <AnimatedScrollbar
               direction="horizontal"
               ref={horizontalScrollbarRef}
               scaleRatio={scaleRatioWidth}
@@ -159,7 +160,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
             />
           )}
           {direction.isVertical && (
-            <Scrollbar
+            <AnimatedScrollbar
               direction="vertical"
               ref={verticalScrollbarRef}
               scaleRatio={scaleRatioHeight}

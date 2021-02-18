@@ -1451,7 +1451,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     _setSelectedCellsByCellData(data) {
         const cells = [];
         const $cells = this._getAllCells(data?.[0]?.allDay);
-        const cellsInRow = this._getTotalCellCount(this._getGroupCount());
+        let cellsInRow = this._getTotalCellCount(this._getGroupCount());
+
+        if(this.isVirtualScrolling()) {
+            const renderState = this.virtualScrollingDispatcher.getRenderState();
+
+            cellsInRow = renderState.cellCount || cellsInRow;
+        }
 
         data.forEach((cellData) => {
             const { groups, startDate, allDay } = cellData;
@@ -3535,13 +3541,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getCoordinatesByCell($cell) {
-        const columnIndex = $cell.index();
+        let columnIndex = $cell.index();
         let rowIndex = $cell.parent().index();
         const isAllDayCell = this._hasAllDayClass($cell);
         const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
 
         if(this.isVirtualScrolling() && !(isAllDayCell && !isVerticalGrouping)) {
             rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
+        }
+        if(this.isVirtualScrolling()) {
+            columnIndex -= this.virtualScrollingDispatcher.leftVirtualCellsCount;
         }
 
         return { rowIndex, columnIndex };
