@@ -84,6 +84,7 @@ const environment = {
 
         that.templateManager = sinon.createStubInstance(TemplateManagerModule.TemplateManager);
         that.templateManager._tempTemplates = [];
+        that.templateManager.extractTemplates = () => ({ templates: [], anonymousTemplateMeta: {} });
         this.templateManagerCtor = sinon.stub(TemplateManagerModule, 'TemplateManager', function() {
             return that.templateManager;
         });
