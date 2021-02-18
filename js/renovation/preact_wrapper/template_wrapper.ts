@@ -9,7 +9,7 @@ import { removeDifferentElements, wrapElement } from './utils';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
-interface TemplateProps { template: any; data: { model: any; index: number } }
+interface TemplateProps { template: any; model: { data: any; index: number } }
 
 export class TemplateWrapper extends InfernoComponent<TemplateProps> {
   constructor(props) {
