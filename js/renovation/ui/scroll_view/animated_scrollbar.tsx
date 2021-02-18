@@ -201,46 +201,46 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Method()
   getMinOffset(): number {
-    return this.scrollbarRef.getMinOffset();
+    return this.scrollbarRef.current!.getMinOffset();
   }
 
   @Method()
   validateEvent(event): boolean {
-    return this.scrollbarRef.validateEvent(event);
+    return this.scrollbarRef.current!.validateEvent(event);
   }
 
   @Method()
   isThumb(element: HTMLDivElement): boolean {
-    return this.scrollbarRef.isThumb(element);
+    return this.scrollbarRef.current!.isThumb(element);
   }
 
   @Method()
   initHandler(e, crossThumbScrolling: boolean): void {
-    this.scrollbarRef.initHandler(e, crossThumbScrolling);
+    this.scrollbarRef.current!.initHandler(e, crossThumbScrolling);
   }
 
   @Method()
   startHandler(): void {
-    this.scrollbarRef.startHandler();
+    this.scrollbarRef.current!.startHandler();
   }
 
   @Method()
   moveHandler(delta: any): void {
-    this.scrollbarRef.moveHandler(delta);
+    this.scrollbarRef.current!.moveHandler(delta);
   }
 
   @Method()
   endHandler(velocity): void {
-    this.scrollbarRef.endHandler(velocity);
+    this.scrollbarRef.current!.endHandler(velocity);
   }
 
   @Method()
   stopHandler(): void {
-    this.scrollbarRef.stopHandler();
+    this.scrollbarRef.current!.stopHandler();
   }
 
   @Method()
   scrollByHandler(delta: { x: number; y: number }): void {
-    this.scrollbarRef.scrollByHandler(delta);
+    this.scrollbarRef.current!.scrollByHandler(delta);
   }
 }

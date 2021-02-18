@@ -23,18 +23,18 @@ describe('Public methods', () => {
   ]).describe('Method: %o', (methodInfo) => {
     it(`${methodInfo.name}() method should call according method from scrollbar`, () => {
       const viewModel = new AnimatedScrollbar({ });
-      (viewModel as any).scrollbarRef = { [`${methodInfo.name}`]: jest.fn() };
+      (viewModel as any).scrollbarRef = { current: { [`${methodInfo.name}`]: jest.fn() } };
 
       if (methodInfo.argsCount === 2) {
         viewModel[methodInfo.name]('arg1', 'arg2');
-        expect(viewModel.scrollbarRef[`${methodInfo.name}`]).toHaveBeenCalledWith('arg1', 'arg2');
+        expect(viewModel.scrollbarRef.current![`${methodInfo.name}`]).toHaveBeenCalledWith('arg1', 'arg2');
       } else if (methodInfo.argsCount === 1) {
         viewModel[methodInfo.name]('arg1');
-        expect(viewModel.scrollbarRef[`${methodInfo.name}`]).toHaveBeenCalledWith('arg1');
+        expect(viewModel.scrollbarRef.current![`${methodInfo.name}`]).toHaveBeenCalledWith('arg1');
       } else {
         viewModel[methodInfo.name]();
       }
-      expect(viewModel.scrollbarRef[`${methodInfo.name}`]).toHaveBeenCalledTimes(1);
+      expect(viewModel.scrollbarRef.current![`${methodInfo.name}`]).toHaveBeenCalledTimes(1);
     });
   });
 
