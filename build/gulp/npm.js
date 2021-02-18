@@ -99,8 +99,16 @@ if(isEsmPackage) {
 
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
-// NOTE: 'use strict' prohibits adding new 'default' field to string
-const canSupplementDefaultExport = (path) => !path.endsWith('version.js') && !path.endsWith('remove_event.js');
+const modulesWithProhibitDefaultExport = [
+    // NOTE: 'use strict' prohibits adding new 'default' field to string
+    'version.js',
+    'remove_event.js',
+    // NOTE: deep extend cause infinite loop for modules with 'default' field
+    'default_messages.js',
+    'grid_core'
+];
+
+const canSupplementDefaultExport = (path) => modulesWithProhibitDefaultExport.every(name => !path.includes(name));
 const hasDefaultExport = (content) => /exports\.default\s=/.test(String(content));
 const isCjsModule = (path) => !path.startsWith('esm/');
 
