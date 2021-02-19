@@ -246,7 +246,7 @@ export default {
                         if($rowsTable) {
                             $rowsTable
                                 .find('.dx-master-detail-cell')
-                                .toggleClass('max-width', isBestFit ? 0 : '');
+                                .css('maxWidth', isBestFit ? 0 : '');
                         }
                     }
                 }
