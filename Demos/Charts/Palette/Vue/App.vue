@@ -49,7 +49,8 @@ import DxPieChart, {
 } from 'devextreme-vue/pie-chart';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { paletteCollection, paletteExtensionModes, dataSource } from './data.js';
-import { getPalette } from 'devextreme/viz/palette';
+import palette from 'devextreme/viz/palette';
+const { getPalette } = palette;
 
 export default {
   components: {

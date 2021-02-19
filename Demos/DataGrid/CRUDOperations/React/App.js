@@ -5,7 +5,8 @@ import { Button } from 'devextreme-react/button';
 import { SelectBox } from 'devextreme-react/select-box';
 
 import CustomStore from 'devextreme/data/custom_store';
-import { formatDate } from 'devextreme/localization';
+import localization from 'devextreme/localization';
+const { formatDate } = localization;
 import 'whatwg-fetch';
 
 const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';

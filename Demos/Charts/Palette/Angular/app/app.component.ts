@@ -3,7 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPieChartModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DataItem, Service } from './app.service';
-import { getPalette } from "devextreme/viz/palette";
+import palette from 'devextreme/viz/palette';
+const { getPalette } = palette;
 
 if(!/localhost/.test(document.location.host)) {
     enableProdMode();

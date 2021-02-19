@@ -5,7 +5,8 @@ import SelectBox from 'devextreme-react/select-box';
 import deMessages from 'npm:devextreme/localization/messages/de.json!json';
 import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
 
-import { locale, loadMessages, formatMessage } from 'devextreme/localization';
+import localization from 'devextreme/localization';
+const { locale, loadMessages, formatMessage } = localization;
 
 import service from './data.js';
 

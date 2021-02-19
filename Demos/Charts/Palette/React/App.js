@@ -6,7 +6,8 @@ import PieChart, {
 } from 'devextreme-react/pie-chart';
 import SelectBox from 'devextreme-react/select-box';
 import { paletteCollection, paletteExtensionModes, dataSource } from './data.js';
-import { getPalette } from 'devextreme/viz/palette';
+import palette from 'devextreme/viz/palette';
+const { getPalette } = palette;
 
 class App extends React.Component {
   constructor(props) {

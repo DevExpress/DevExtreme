@@ -4,7 +4,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSelectBoxModule, DxDataGridModule } from 'devextreme-angular';
 import { Locale, Payment, Service } from './app.service';
 
-import { locale, loadMessages, formatMessage } from 'devextreme/localization';
+import localization from 'devextreme/localization';
+const { locale, loadMessages, formatMessage } = localization;
 
 import deMessages from 'npm:devextreme/localization/messages/de.json!json';
 import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';

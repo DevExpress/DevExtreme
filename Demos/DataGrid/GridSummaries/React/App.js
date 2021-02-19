@@ -1,8 +1,8 @@
 ﻿import React from 'react';
 import DataGrid, { Column, Selection, Summary, TotalItem } from 'devextreme-react/data-grid';
 import service from './data.js';
-import { formatDate } from 'devextreme/localization';
-
+import localization from 'devextreme/localization';
+const { formatDate } = localization;
 class App extends React.Component {
   constructor(props) {
     super(props);

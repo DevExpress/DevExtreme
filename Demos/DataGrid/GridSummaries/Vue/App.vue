@@ -58,7 +58,8 @@ import {
   DxSummary,
   DxTotalItem
 } from 'devextreme-vue/data-grid';
-import { formatDate } from 'devextreme/localization';
+import localization from 'devextreme/localization';
+const { formatDate } = localization;
 
 import service from './data.js';
 
