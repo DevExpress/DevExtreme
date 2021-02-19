@@ -23,7 +23,6 @@ import { normalizeKeyName } from 'events/utils/index';
 import '../../helpers/calendarFixtures.js';
 
 import 'ui/validator';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

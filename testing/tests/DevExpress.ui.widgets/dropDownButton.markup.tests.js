@@ -3,7 +3,6 @@ import DropDownButton from 'ui/drop_down_button';
 import windowUtils from 'core/utils/window';
 import eventsEngine from 'events/core/events_engine';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';

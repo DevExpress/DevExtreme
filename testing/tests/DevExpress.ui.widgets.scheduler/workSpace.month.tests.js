@@ -1,4 +1,3 @@
-import 'common.css!';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';

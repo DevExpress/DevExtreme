@@ -13,7 +13,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';

@@ -3,7 +3,6 @@ import errors from 'core/errors';
 
 import 'ui/slide_out';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const SLIDEOUT_CLASS = 'dx-slideout';

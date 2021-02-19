@@ -5,7 +5,6 @@ import Views from 'ui/calendar/ui.calendar.views';
 import fx from 'animation/fx';
 import dateSerialization from 'core/utils/date_serialization';
 
-import 'common.css!';
 import 'ui/calendar';
 
 const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';

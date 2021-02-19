@@ -13,7 +13,6 @@ import { deferUpdate } from 'core/utils/common';
 
 import 'ui/button_group';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/button';
 import 'ui/tabs';

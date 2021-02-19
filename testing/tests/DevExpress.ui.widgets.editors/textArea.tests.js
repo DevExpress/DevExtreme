@@ -4,7 +4,6 @@ import nativePointerMock from '../../helpers/nativePointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from 'core/devices';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/text_area';
 import 'ui/scroll_view/ui.scrollable';

@@ -1,6 +1,5 @@
 const $ = require('jquery');
 
-require('common.css!');
 require('ui/scroll_view');
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';

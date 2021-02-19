@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import 'ui/button';
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

@@ -1,4 +1,3 @@
-import 'common.css!';
 import device from 'core/devices';
 import domAdapter from 'core/dom_adapter';
 import browser from 'core/utils/browser';

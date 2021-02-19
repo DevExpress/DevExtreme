@@ -1,6 +1,5 @@
 import $ from 'jquery';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/text_box';
 import 'ui/select_box';

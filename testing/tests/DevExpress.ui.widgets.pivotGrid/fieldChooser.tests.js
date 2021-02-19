@@ -3,7 +3,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';
 import renderer from 'core/renderer';

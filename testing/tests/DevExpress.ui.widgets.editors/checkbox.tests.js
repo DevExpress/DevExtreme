@@ -5,7 +5,6 @@ import { validateGroup } from 'ui/validation_engine';
 import 'ui/check_box';
 import { normalizeKeyName } from 'events/utils/index';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/validator';
 

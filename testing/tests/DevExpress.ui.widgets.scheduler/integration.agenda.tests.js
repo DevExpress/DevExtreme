@@ -10,7 +10,6 @@ import dataUtils from 'core/element_data';
 import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 

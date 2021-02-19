@@ -3,7 +3,6 @@ import Tabs from 'ui/tabs';
 import windowUtils from 'core/utils/window';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

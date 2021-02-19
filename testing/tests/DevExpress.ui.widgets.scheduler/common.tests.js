@@ -1,6 +1,5 @@
 import fx from 'animation/fx';
 import Color from 'color';
-import 'common.css!';
 import config from 'core/config';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';
