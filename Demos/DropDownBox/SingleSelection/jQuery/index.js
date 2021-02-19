@@ -75,7 +75,7 @@ $(function(){
                     hoverStateEnabled: true,
                     paging: { enabled: true, pageSize: 10 },
                     filterRow: { visible: true },
-                    scrolling: { mode: "infinite" },
+                    scrolling: { mode: "virtual" },
                     selection: { mode: "single" },
                     selectedRowKeys: [value],
                     height: "100%",

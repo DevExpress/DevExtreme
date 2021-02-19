@@ -87,7 +87,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             hoverStateEnabled: true,
             paging: { enabled: true, pageSize: 10 },
             filterRow: { visible: true },
-            scrolling: { mode: "infinite" },
+            scrolling: { mode: "virtual" },
             height: 345,
             selection: { mode: "multiple" },
             bindingOptions: {

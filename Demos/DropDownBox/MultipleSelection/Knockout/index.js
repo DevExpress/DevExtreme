@@ -85,7 +85,7 @@ window.onload = function() {
             hoverStateEnabled: true,
             paging: { enabled: true, pageSize: 10 },
             filterRow: { visible: true },
-            scrolling: { mode: "infinite" },
+            scrolling: { mode: "virtual" },
             height: 345,
             selection: { mode: "multiple" },
             selectedRowKeys: ko.computed(function(){

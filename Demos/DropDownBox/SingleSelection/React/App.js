@@ -111,7 +111,7 @@ class App extends React.Component {
         onSelectionChanged={this.dataGrid_onSelectionChanged}
         height="100%">
         <Selection mode="single" />
-        <Scrolling mode="infinite" />
+        <Scrolling mode="virtual" />
         <Paging enabled={true} pageSize={10} />
         <FilterRow visible={true} />
       </DataGrid>

@@ -100,7 +100,7 @@ class App extends React.Component {
         selectedRowKeys={this.state.gridBoxValue}
         onSelectionChanged={this.dataGrid_onSelectionChanged}>
         <Selection mode="multiple" />
-        <Scrolling mode="infinite" />
+        <Scrolling mode="virtual" />
         <Paging enabled={true} pageSize={10} />
         <FilterRow visible={true} />
       </DataGrid>

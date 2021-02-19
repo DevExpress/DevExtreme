@@ -59,7 +59,7 @@
                 :page-size="10"
               />
               <DxFilterRow :visible="true"/>
-              <DxScrolling mode="infinite"/>
+              <DxScrolling mode="virtual"/>
             </DxDataGrid>
           </template>
         </DxDropDownBox>
