@@ -3,7 +3,7 @@ import { Deferred } from '../../core/utils/deferred';
 import treeListCore from './ui.tree_list.core';
 import { equalByValue } from '../../core/utils/common';
 import dataSourceAdapterProvider from './ui.tree_list.data_source_adapter';
-import dataControllerModule from '../grid_core/ui.grid_core.data_controller';
+import { dataControllerModule } from '../grid_core/ui.grid_core.data_controller';
 
 export const DataController = dataControllerModule.controllers.data.inherit((function() {
     return {

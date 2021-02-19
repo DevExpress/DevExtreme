@@ -2,7 +2,7 @@
 import { extend } from './extend';
 import { logger } from './console';
 import { format } from './string';
-import version from '../version';
+import { version } from '../version';
 
 const ERROR_URL = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
 

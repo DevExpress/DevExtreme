@@ -25,7 +25,7 @@ const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
 const HEADER_FILTER_INDICATOR_CLASS = 'dx-header-filter-indicator';
 const MULTI_ROW_HEADER_CLASS = 'dx-header-multi-row';
 
-export default {
+export const columnHeadersModule = {
     defaultOptions: function() {
         return {
             showColumnHeaders: true,

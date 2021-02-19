@@ -1,5 +1,5 @@
 import treeListCore from './ui.tree_list.core';
-import gridViewModule from '../grid_core/ui.grid_core.grid_view';
+import { gridViewModule } from '../grid_core/ui.grid_core.grid_view';
 
 const GridView = gridViewModule.views.gridView.inherit((function() {
     return {
