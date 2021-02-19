@@ -6,6 +6,7 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
 import { removeDifferentElements, wrapElement } from './utils';
+import Number from '../../core/polyfills/number';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
