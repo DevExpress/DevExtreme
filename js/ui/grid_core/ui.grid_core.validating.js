@@ -1206,10 +1206,10 @@ export default {
                         const rowOptions = $focus?.closest('.dx-row').data('options');
                         const change = rowOptions ? this.getController('editing').getChangeByKey(rowOptions.key) : null;
                         const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
+                        const isCellModified = (change?.data?.[column?.name] !== undefined) && !this._editingController.isSaving();
                         let revertTooltip;
 
-                        if((validationResult && validationResult.status === VALIDATION_STATUS.invalid)
-                            || (change?.type === 'update' && !this._editingController.isSaving())) {
+                        if((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
                             if(this._editingController.getEditMode() === EDIT_MODE_CELL) {
                                 revertTooltip = this._showRevertButton($focus);
                             }
