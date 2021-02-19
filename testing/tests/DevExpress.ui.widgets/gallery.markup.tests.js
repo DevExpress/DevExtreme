@@ -2,7 +2,6 @@ import $ from 'jquery';
 import Gallery from 'ui/gallery';
 import windowUtils from 'core/utils/window';
 
-import 'common.css!';
 
 QUnit.testStart(() => {
     const markup =

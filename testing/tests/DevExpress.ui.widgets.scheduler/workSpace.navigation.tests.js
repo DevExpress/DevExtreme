@@ -1,4 +1,3 @@
-import 'common.css!';
 import config from 'core/config';
 import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';

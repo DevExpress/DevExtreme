@@ -4,7 +4,6 @@ import repaintFloatingActionButton from 'ui/speed_dial_action/repaint_floating_a
 import fx from 'animation/fx';
 
 import 'ui/speed_dial_action';
-import 'common.css!';
 import 'generic_light.css!';
 
 const { test } = QUnit;

@@ -12,7 +12,6 @@ import { isRenderer } from 'core/utils/type';
 import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import { logger } from 'core/utils/console';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

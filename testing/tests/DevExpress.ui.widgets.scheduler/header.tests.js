@@ -6,7 +6,6 @@ import devices from 'core/devices';
 
 import 'ui/scheduler/ui.scheduler';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 

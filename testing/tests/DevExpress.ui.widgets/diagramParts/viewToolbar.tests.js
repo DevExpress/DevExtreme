@@ -1,6 +1,5 @@
 import $ from 'jquery';
 const { test } = QUnit;
-import 'common.css!';
 import 'ui/diagram';
 
 import { Consts, getViewToolbarElement, getViewToolbarInstance, findViewToolbarItem, findContextMenuItem, getContextMenuItemCheck } from '../../../helpers/diagramHelpers.js';

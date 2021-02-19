@@ -13,7 +13,6 @@ import { isDefined } from 'core/utils/type';
 
 import 'ui/data_grid/ui.data_grid';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 let helper;

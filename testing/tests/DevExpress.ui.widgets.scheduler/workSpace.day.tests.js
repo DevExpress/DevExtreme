@@ -1,4 +1,3 @@
-import 'common.css!';
 import dragEvents from 'events/drag';
 import 'generic_light.css!';
 import $ from 'jquery';

@@ -3,7 +3,6 @@ const GoogleProvider = require('ui/map/provider.dynamic.google');
 const memoryLeaksHelper = require('../../helpers/memoryLeaksHelper.js');
 
 require('bundles/modules/parts/widgets-all');
-require('common.css!');
 
 GoogleProvider.remapConstant('http://fakeUrl');
 

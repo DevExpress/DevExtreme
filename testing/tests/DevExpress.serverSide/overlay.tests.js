@@ -1,6 +1,5 @@
 const $ = require('jquery');
 
-require('common.css!');
 require('ui/overlay');
 
 QUnit.testStart(function() {
