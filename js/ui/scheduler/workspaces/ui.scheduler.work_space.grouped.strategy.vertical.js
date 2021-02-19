@@ -74,7 +74,7 @@ class VerticalGroupedStrategy extends GroupedStrategy {
     }
 
     getHorizontalMax(groupIndex) {
-        if(this._workSpace.isRenovatedRender()) {
+        if(this._workSpace.isVirtualScrolling()) {
             return this._workSpace.getMaxAllowedPosition(groupIndex);
         }
 
