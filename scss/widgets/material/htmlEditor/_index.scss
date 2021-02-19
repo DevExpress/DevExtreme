@@ -14,56 +14,42 @@
 
 .dx-htmleditor {
   border-color: transparent;
+  position: relative;
 
   .dx-htmleditor-toolbar-wrapper:first-child {
     border-bottom: 1px solid $texteditor-border-color;
   }
 
   &.dx-invalid {
-    border-color: $htmleditor-invalid-faded-border-color;
+    border: 1px solid $htmleditor-invalid-faded-border-color;
 
     &.dx-state-focused {
       border-color: $htmleditor-invalid-border-color;
     }
   }
 
-  &::before {
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 0;
-    width: 100%;
-    content: '';
-    position: absolute;
-    z-index: 2;
-    transform: scale(0);
-  }
-
-  &.dx-state-focused,
-  &.dx-state-active {
-    &::before {
-      border-bottom: 2px solid $texteditor-focused-border-color;
-      transform: scale(1);
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
-    }
-  }
-
   &.dx-htmleditor-outlined {
-    border-color: $texteditor-border-color;
+    box-shadow: inset 0 0 0 1px $texteditor-border-color;
+    border-color: transparent;
     border-radius: $texteditor-input-border-radius;
 
     &.dx-state-disabled,
     &.dx-state-readonly,
     &.dx-state-readonly.dx-state-hover {
-      border-color: color.change($texteditor-color, $alpha: 0.5);
+      box-shadow: inset 0 0 0 1px color.change($texteditor-color, $alpha: 0.5);
     }
 
     &.dx-invalid {
-      border-color: $texteditor-invalid-faded-border-color;
+      box-shadow: inset 0 0 0 1px $texteditor-invalid-faded-border-color;
     }
 
     &.dx-state-hover {
-      border-color: $texteditor-hover-border-color;
+      box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      box-shadow: inset 0 0 0 2px $texteditor-focused-border-color;
     }
   }
 
@@ -101,7 +87,7 @@
       }
     }
 
-    &.dx-state-hover {
+    &.dx-state-hover:not(.dx-state-focused) {
       border-bottom: 2px solid $texteditor-hover-border-color;
     }
 
@@ -110,6 +96,30 @@
     &.dx-state-readonly.dx-state-hover {
       border-bottom-style: dotted;
       border-bottom-width: 1px;
+    }
+  }
+
+  &.dx-htmleditor-filled,
+  &.dx-htmleditor-underlined {
+    &::before {
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 0;
+      width: 100%;
+      content: '';
+      position: absolute;
+      z-index: 2;
+      transform: scale(0);
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      &::before {
+        border-bottom: 2px solid $texteditor-focused-border-color;
+        transform: scale(1);
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
+      }
     }
   }
 }
