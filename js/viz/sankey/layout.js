@@ -6,7 +6,7 @@ const _ALIGNMENT_DEFAULT = _ALIGNMENT_CENTER;
 import graphModule from './graph';
 import validatorModule from './data_validator';
 
-const layout = {
+export const layout = {
     _weightPerPixel: null,
 
     _getCascadeIdx: function(nodeTitle, cascadesConfig) {
@@ -308,5 +308,3 @@ const layout = {
             box2.y >= box1.y + box1.height || box2.y + box2.height <= box1.y);
     }
 };
-
-export default layout;

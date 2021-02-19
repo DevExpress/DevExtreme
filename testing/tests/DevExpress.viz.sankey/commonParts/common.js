@@ -8,7 +8,7 @@ const find = function(array, predicate) {
 require('viz/sankey/sankey');
 require('viz/themes');
 
-const layoutBuilder = require('viz/sankey/layout');
+const layoutBuilder = require('viz/sankey/layout').layout;
 const spiesLayoutBuilder = {
     computeLayout: sinon.spy(layoutBuilder, 'computeLayout'),
     _computeNodes: sinon.spy(layoutBuilder, '_computeNodes')
