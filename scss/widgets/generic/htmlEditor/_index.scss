@@ -22,11 +22,15 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 
   border-color: $htmleditor-border-color;
 
-  &.dx-invalid.dx-htmleditor-outlined {
-    border-color: $htmleditor-invalid-faded-border-color;
+  &.dx-htmleditor-outlined {
+    border-radius: $texteditor-input-border-radius;
 
-    &.dx-state-focused {
-      border-color: $htmleditor-invalid-border-color;
+    &.dx-invalid {
+      border-color: $htmleditor-invalid-faded-border-color;
+
+      &.dx-state-focused {
+        border-color: $htmleditor-invalid-border-color;
+      }
     }
   }
 
