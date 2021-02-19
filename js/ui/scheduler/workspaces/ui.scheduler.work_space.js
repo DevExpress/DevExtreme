@@ -2988,7 +2988,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getMaxAllowedPosition(groupIndex) {
-        if(this.isRenovatedRender()) {
+        if(this.isVirtualScrolling()) {
             return this.getRMaxAllowedHorizontalPosition(groupIndex || 0);
         }
 
@@ -3045,7 +3045,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getMaxAllowedVerticalPosition(groupIndex) {
-        if(this.isRenovatedRender()) {
+        if(this.isVirtualScrolling()) {
             return this.getRMaxAllowedVerticalPosition(groupIndex);
         }
 
