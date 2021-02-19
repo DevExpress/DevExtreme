@@ -841,7 +841,7 @@ export default {
                             return;
                         }
 
-                        const pageIndex = that.pageIndex() >= that.pageCount() ? that.pageCount() - 1 : that.pageIndex();
+                        const pageIndex = !isVirtualMode(this) && that.pageIndex() >= that.pageCount() ? that.pageCount() - 1 : that.pageIndex();
                         that._rowPageIndex = Math.ceil(pageIndex * that.pageSize() / that.getRowPageSize());
 
                         that._visibleItems = [];
