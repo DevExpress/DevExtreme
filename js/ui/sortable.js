@@ -257,8 +257,8 @@ const Sortable = Draggable.inherit({
 
         if($scrollable) {
             const { left, right, top, bottom } = getScrollableBoundary($scrollable);
-            const validX = left < event.pageX && event.pageX < right;
-            const validY = top < event.pageY && event.pageY < bottom;
+            const validX = left <= event.pageX && event.pageX <= right;
+            const validY = top <= event.pageY && event.pageY <= bottom;
             return validY && validX;
         }
 
