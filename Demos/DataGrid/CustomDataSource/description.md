@@ -1,4 +1,4 @@
-DevExtreme provides the [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) UI component to load and edit data from a custom data source. In this demo, the **CustomStore** fetches data from a custom remote server and displays it in the DataGrid.
+DevExtreme provides the [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) component to load and edit data from a custom data source. In this demo, the **CustomStore** fetches data from a custom remote server and displays it in the DataGrid.
 
 The communication between the **CustomStore** and the server is organized as follows:
  

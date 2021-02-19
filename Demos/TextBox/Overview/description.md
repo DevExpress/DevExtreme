@@ -10,7 +10,7 @@ An input prompt the TextBox displays when the **value** is not defined.
 Specifies whether to display the button that clears the TextBox **value**.
 
 - [mode](/Documentation/ApiReference/UI_Components/dxTextBox/Configuration/#mode)        
-Affects a set of keyboard characters displayed on a mobile device when the TextBox gets focus and modifies the UI component's display style. In this example, the **mode** is set to *"password"* so that entered characters are obscured, and the password cannot be read.
+Affects a set of keyboard characters displayed on a mobile device when the TextBox gets focus and modifies the component's display style. In this example, the **mode** is set to *"password"* so that entered characters are obscured, and the password cannot be read.
 
 - [mask](/Documentation/ApiReference/UI_Components/dxTextBox/Configuration/#mask)        
 An input mask.

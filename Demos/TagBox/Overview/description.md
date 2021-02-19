@@ -1,1 +1,1 @@
-The TagBox UI component is&nbsp;an&nbsp;editor that allows an&nbsp;end user to&nbsp;select multiple items from a&nbsp;drop-down list.
+The TagBox component is&nbsp;an&nbsp;editor that allows an&nbsp;end user to&nbsp;select multiple items from a&nbsp;drop-down list.

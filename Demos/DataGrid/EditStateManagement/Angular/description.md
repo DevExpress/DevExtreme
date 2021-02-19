@@ -1,6 +1,6 @@
-Our DataGrid UI component manages its edit state automatically. If your use case requires full control over the editing process, you can use the API members below to manage state manually. In this demo, we manage state with a help of the <a href="https://angular.io/guide/rx-library" target="_blank">RxJS</a> library.
+Our DataGrid component manages its edit state automatically. If your use case requires full control over the editing process, you can use the API members below to manage state manually. In this demo, we manage state with a help of the <a href="https://angular.io/guide/rx-library" target="_blank">RxJS</a> library.
 
-**UI component Properties**
+**Component Properties**
 
 - **editing**.[editRowKey](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#editRowKey)        
 The key for the row being edited.
@@ -11,7 +11,7 @@ The name or data field of the column being edited.
 - **editing**.[changes](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#changes)       
 Pending row changes.
 
-Use these properties to access and change edit state. Two-way bind them to UI component properties so that you can get and set the properties at runtime. In this demo, we bind the **editRowKey** and **changes** properties to display their values under the DataGrid.
+Use these properties to access and change edit state. Two-way bind them to component properties so that you can get and set the properties at runtime. In this demo, we bind the **editRowKey** and **changes** properties to display their values under the DataGrid.
 
 **Utility Method**
 
@@ -34,8 +34,8 @@ Set the `e.cancel` field to **true**.
 1. **Send a request to the server**      
 Pending changes are stored in the `e.changes` array. This array has only a single element in all [edit modes](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#mode), except for batch. Check if this element is not empty and send it to the server (see the `processSaving` method in `app.component.ts` and the `saveChange` method in `app.service.ts`).
 
-1. **Apply the same changes to the UI component's data source**       
-If the server successfully saves changes, call the **applyChanges** method to save the same changes in the UI component's data source (see the `updateOrders` method in `app.service.ts`).
+1. **Apply the same changes to the DataGrid's data source**       
+If the server successfully saves changes, call the **applyChanges** method to save the same changes in the DataGrid's data source (see the `updateOrders` method in `app.service.ts`).
 
 1. **Reset edit state**         
 Assign **null** to the **editRowKey** and an empty array to the **changes** property (see the `processSaving` method in `app.component.ts`).

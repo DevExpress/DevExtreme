@@ -1,6 +1,6 @@
-Our DataGrid UI component manages its edit state automatically. If your use case requires full control over the editing process, you can use the API members below to manage state manually.
+Our DataGrid component manages its edit state automatically. If your use case requires full control over the editing process, you can use the API members below to manage state manually.
 
-**UI component Properties**
+**Component Properties**
 
 - **editing**.[editRowKey](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#editRowKey)        
 The key for the row being edited.
@@ -37,7 +37,7 @@ Pending changes are stored in the `e.changes` array. This array has only a singl
 1. **Apply the same changes to a local array**       
 If the server successfully saves changes, call the **applyChanges** method to save the same changes in a local array.
 
-1. **Update the UI component's data source and reset edit state**         
+1. **Update the DataGrid's data source and reset edit state**         
 Assign the local array to the [dataSource](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#dataSource), **null** to the **editRowKey**, and an empty array to the **changes** property.
 
 [note] This functionality is available as a <a href="https://www.devexpress.com/aboutus/pre-release.xml" target="_blank">community technology preview (CTP)</a>. Should you have any questions or suggestions prior to its official release, please email your comments to <a href="mailto:support@devexpress.com">support@devexpress.com</a>. You can also share your feedback on <a href="https://github.com/DevExpress/DevExtreme/issues/13636" target="_blank">this feature's discussion page</a>. 

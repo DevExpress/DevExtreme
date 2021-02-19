@@ -1,1 +1,1 @@
-You can access selected shape data via the [onSelectionChanged](/Documentation/ApiReference/UI_Components/dxDiagram/Configuration/#onSelectionChanged) function. In this demo, the function fetches selected shape information and displays it under the Diagram UI component.
+You can access selected shape data via the [onSelectionChanged](/Documentation/ApiReference/UI_Components/dxDiagram/Configuration/#onSelectionChanged) function. In this demo, the function fetches selected shape information and displays it under the Diagram component.

@@ -1,1 +1,1 @@
-This demo demonstrates the TreeView UI component&rsquo;s searching capabilities. The UI component can find nodes containing your search string or&nbsp;only starting with it&nbsp;depending on&nbsp;the search mode.
+This demo demonstrates the TreeView component&rsquo;s searching capabilities. The component can find nodes containing your search string or&nbsp;only starting with it&nbsp;depending on&nbsp;the search mode.

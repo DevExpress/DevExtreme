@@ -1,1 +1,1 @@
-In&nbsp;this example, the PolarChart UI component visualizes a&nbsp;curve that has the shape of&nbsp;a&nbsp;petalled flower. This curve is&nbsp;commonly-known as&nbsp;&laquo;rose&raquo; or&nbsp;&laquo;rhodonea&raquo;. It&nbsp;is&nbsp;visualized by&nbsp;the _line_ series type.
+In&nbsp;this example, the PolarChart component visualizes a&nbsp;curve that has the shape of&nbsp;a&nbsp;petalled flower. This curve is&nbsp;commonly-known as&nbsp;&laquo;rose&raquo; or&nbsp;&laquo;rhodonea&raquo;. It&nbsp;is&nbsp;visualized by&nbsp;the _line_ series type.

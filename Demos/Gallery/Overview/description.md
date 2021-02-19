@@ -1,1 +1,1 @@
-The Gallery is&nbsp;a&nbsp;UI component that displays a&nbsp;collection of&nbsp;images in&nbsp;a&nbsp;carousel. The UI component is&nbsp;supplied with various navigation controls that allow a&nbsp;user to&nbsp;switch between images.
+The Gallery is&nbsp;a&nbsp;UI component that displays a&nbsp;collection of&nbsp;images in&nbsp;a&nbsp;carousel. The component is&nbsp;supplied with various navigation controls that allow a&nbsp;user to&nbsp;switch between images.

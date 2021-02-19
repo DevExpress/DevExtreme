@@ -1,1 +1,1 @@
-In&nbsp;this demo, the TreeMap UI component accepts a&nbsp;data source of&nbsp;a&nbsp;plain structure.
+In&nbsp;this demo, the TreeMap component accepts a&nbsp;data source of&nbsp;a&nbsp;plain structure.

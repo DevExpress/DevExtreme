@@ -1,7 +1,7 @@
 This example demonstrates the following properties:
 
 * [showBorders](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#showBorders)      
-Specifies whether the outer borders of the UI component are visible.
+Specifies whether the outer borders of the DataGrid are visible.
 
 * [showColumnLines](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#showColumnLines)      
 Specifies whether vertical lines that separate columns are visible.

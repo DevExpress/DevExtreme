@@ -1,4 +1,4 @@
-The Diagram UI component provides a collection of built-in shapes. You can extend this collection with custom shapes.
+The Diagram component provides a collection of built-in shapes. You can extend this collection with custom shapes.
 
 An array of custom shape objects is accessible through the [customShapes](/Documentation/ApiReference/UI_Components/dxDiagram/Configuration/customShapes/) property. For each custom shape object, you can specify the type, background image, default size, text, connection points, and other settings. Note that shape images should be supplied as SVG files.
 

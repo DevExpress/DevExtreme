@@ -1,4 +1,4 @@
-The Button UI component supports several predefined color schemes. To apply a scheme, set the [type](/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#type) property to one of the following values:     
+The Button component supports several predefined color schemes. To apply a scheme, set the [type](/Documentation/ApiReference/UI_Components/dxButton/Configuration/#type) property to one of the following values:     
 
 - *"normal"*    
 - *"success"*

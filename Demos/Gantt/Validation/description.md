@@ -1,4 +1,4 @@
-The DevExtreme JavaScript Gantt UI component allows you to validate relationships between tasks and handle errors. Set the [enableDependencyValidation](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/validation/#enableDependencyValidation) property to **true** to enable task validation.
+The DevExtreme JavaScript Gantt component allows you to validate relationships between tasks and handle errors. Set the [enableDependencyValidation](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/validation/#enableDependencyValidation) property to **true** to enable task validation.
 
 The Gantt supports the following dependency validation rules:
 
@@ -14,4 +14,4 @@ The Gantt also has the [autoUpdateParentTasks](/Documentation/ApiReference/UI_Co
 * A parent task and its last child ends at the same time.
 * A parent task's progress is a summary progress of its child tasks.
 
-The Gantt processes changes in task values before they are saved to a database. The UI component displays a popup window with a list of available actions if an error can be handled in several ways.
+The Gantt processes changes in task values before they are saved to a database. The component displays a popup window with a list of available actions if an error can be handled in several ways.

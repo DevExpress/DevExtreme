@@ -1,4 +1,4 @@
-This demo shows the Diagram UI component's capability to wrap shapes into containers. A container is a special shape with the following features:
+This demo shows the Diagram component's capability to wrap shapes into containers. A container is a special shape with the following features:
 
 * a container can contain other shapes (including other containers), 
 * a container is dragged with its content,

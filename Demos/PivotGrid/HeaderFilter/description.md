@@ -11,4 +11,4 @@ Specifies whether to show all field values or only those that satisfy the other 
 - [width](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/headerFilter/#width) and [height](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/headerFilter/#height)     
 Configures the popup menu size.
 
-In this demo, a filter is applied to the Country field. This filter includes only the United Kingdom. The City field displays only cities in this country because the **showRelevantValues** property is **true**. If you clear the corresponding checkbox under the UI component, the City field displays all cities, regardless of the other applied filters.
+In this demo, a filter is applied to the Country field. This filter includes only the United Kingdom. The City field displays only cities in this country because the **showRelevantValues** property is **true**. If you clear the corresponding checkbox under the PivotGrid, the City field displays all cities, regardless of the other applied filters.

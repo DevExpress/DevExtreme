@@ -1,1 +1,1 @@
-The TreeMap UI component visualizes hierarchical data as&nbsp;a&nbsp;set of&nbsp;nested rectangles whose sizes are proportional to&nbsp;the visualized values. In&nbsp;this demo, the TreeMap accepts a&nbsp;data source of&nbsp;a&nbsp;hierarchical structure.
+The TreeMap component visualizes hierarchical data as&nbsp;a&nbsp;set of&nbsp;nested rectangles whose sizes are proportional to&nbsp;the visualized values. In&nbsp;this demo, the TreeMap accepts a&nbsp;data source of&nbsp;a&nbsp;hierarchical structure.

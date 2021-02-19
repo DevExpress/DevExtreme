@@ -1,1 +1,1 @@
-The Accordion UI component contains several panels displayed one under another. These panels can be&nbsp;collapsed or&nbsp;expanded by&nbsp;a&nbsp;user, which makes this UI component very useful for presenting information in&nbsp;a&nbsp;limited amount of&nbsp;space.
+The Accordion component contains several panels displayed one under another. These panels can be&nbsp;collapsed or&nbsp;expanded by&nbsp;a&nbsp;user, which makes this component very useful for presenting information in&nbsp;a&nbsp;limited amount of&nbsp;space.

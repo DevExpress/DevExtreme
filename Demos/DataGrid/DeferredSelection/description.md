@@ -7,6 +7,6 @@ This demo illustrates the second scenario. Deferred selection is enabled and the
 
 To enable deferred selection in your application, set the **selection**.[deferred](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/selection/#deferred) property to **true**.
 
-To specify the initially selected rows, use the [selectionFilter](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#selectionFilter) property. The UI component updates this property's value at runtime and you can always access the applied filter. In this demo, the **selectionFilter** selects rows whose `Status` is `Completed`.
+To specify the initially selected rows, use the [selectionFilter](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#selectionFilter) property. The DataGrid updates this property's value at runtime and you can always access the applied filter. In this demo, the **selectionFilter** selects rows whose `Status` is `Completed`.
 
 To load the selected rows' data, call the [getSelectedRowsData()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#getSelectedRowsData) method. In deferred selection mode, this method returns a Promise. You can access row data in its fulfillment handler. In this demo, the **getSelectedRowsData()** method gets data objects that are then used to calculate statistics for the selected tasks.
