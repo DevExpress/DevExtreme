@@ -39,10 +39,6 @@
       box-shadow: inset 0 0 0 1px color.change($texteditor-color, $alpha: 0.5);
     }
 
-    &.dx-invalid {
-      box-shadow: inset 0 0 0 1px $texteditor-invalid-faded-border-color;
-    }
-
     &.dx-state-hover {
       box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
     }
@@ -50,6 +46,16 @@
     &.dx-state-focused,
     &.dx-state-active {
       box-shadow: inset 0 0 0 2px $texteditor-focused-border-color;
+    }
+
+    &.dx-invalid {
+      border-color: transparent;
+      box-shadow: inset 0 0 0 1px $texteditor-invalid-faded-border-color;
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        box-shadow: inset 0 0 0 2px $texteditor-invalid-focused-border-color;
+      }
     }
   }
 
@@ -72,10 +78,6 @@
     border-color: transparent;
     border-bottom-color: $texteditor-border-color;
 
-    &.dx-invalid {
-      border-bottom-color: $texteditor-invalid-faded-border-color;
-    }
-
     .dx-htmleditor-content {
       padding-left: 0;
     }
@@ -96,6 +98,10 @@
     &.dx-state-readonly.dx-state-hover {
       border-bottom-style: dotted;
       border-bottom-width: 1px;
+    }
+
+    &.dx-invalid {
+      border-bottom-color: $texteditor-invalid-faded-border-color;
     }
   }
 
@@ -119,6 +125,12 @@
         border-bottom: 2px solid $texteditor-focused-border-color;
         transform: scale(1);
         transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
+      }
+
+      &.dx-invalid {
+        &::before {
+          border-bottom-color: $texteditor-invalid-focused-border-color;
+        }
       }
     }
   }

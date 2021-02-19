@@ -25,10 +25,20 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
   &.dx-htmleditor-outlined {
     border-radius: $texteditor-input-border-radius;
 
+    &.dx-state-hover {
+      border-color: $texteditor-hover-border-color;
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      border-color: $texteditor-focused-border-color;
+    }
+
     &.dx-invalid {
       border-color: $htmleditor-invalid-faded-border-color;
 
-      &.dx-state-focused {
+      &.dx-state-focused,
+      &.dx-state-active {
         border-color: $htmleditor-invalid-border-color;
       }
     }
@@ -38,11 +48,32 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
     border-color: $htmleditor-filled-border-color;
     background: $texteditor-filled-bg;
 
+    &.dx-state-readonly {
+      border-style: dashed;
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        background-color: color.change($texteditor-filled-bg, $alpha: 0.03);
+      }
+    }
+
+    &.dx-state-hover {
+      background-color: color.change($texteditor-hover-border-color, $alpha: 0.07);
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      background-color: transparent;
+      border-color: $texteditor-focused-border-color;
+    }
+
     &.dx-invalid {
       background-color: $texteditor-filled-invalid-background;
 
-      &.dx-state-focused {
+      &.dx-state-focused,
+      &.dx-state-active {
         background: transparent;
+        border-color: $htmleditor-invalid-border-color;
       }
     }
   }
@@ -51,23 +82,36 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
     border-color: $htmleditor-filled-border-color;
     border-bottom-color: $htmleditor-border-color;
 
-    &.dx-invalid {
-      border-bottom-color: $texteditor-invalid-faded-border-color;
-
-      &.dx-state-focused {
-        border-color: $htmleditor-filled-border-color;
-        border-bottom-color: $htmleditor-invalid-border-color;
-      }
-    }
-
     .dx-htmleditor-content {
       padding-left: 0;
+    }
+
+    &.dx-state-hover {
+      border-bottom-color: $texteditor-hover-border-color;
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      border-bottom-color: $texteditor-focused-border-color;
+
+      &.dx-invalid {
+        border-bottom-color: $htmleditor-invalid-border-color;
+      }
     }
 
     &.dx-rtl {
       .dx-htmleditor-content {
         padding-left: $generic-html-editor-horizontal-padding;
         padding-right: 0;
+      }
+    }
+
+    &.dx-invalid {
+      border-bottom-color: $texteditor-invalid-faded-border-color;
+
+      &.dx-state-focused {
+        border-color: $htmleditor-filled-border-color;
+        border-bottom-color: $htmleditor-invalid-border-color;
       }
     }
   }
