@@ -3,7 +3,6 @@ import animationFrame from 'animation/frame';
 import devices from 'core/devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import {

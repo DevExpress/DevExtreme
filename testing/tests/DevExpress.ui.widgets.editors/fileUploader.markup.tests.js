@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import 'common.css!';
 import 'ui/file_uploader';
 
 QUnit.testStart(function() {

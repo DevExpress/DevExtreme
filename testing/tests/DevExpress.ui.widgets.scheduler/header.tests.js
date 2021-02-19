@@ -6,7 +6,6 @@ const devices = require('core/devices');
 
 require('ui/scheduler/ui.scheduler');
 
-require('common.css!');
 require('generic_light.css!');
 
 

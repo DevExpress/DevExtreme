@@ -8,7 +8,6 @@ import { normalizeKeyName } from 'events/utils/index';
 import 'ui/range_slider';
 import 'ui/number_box/number_box';
 import 'ui/validator';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

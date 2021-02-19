@@ -27,7 +27,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 
 import 'ui/data_grid/ui.data_grid';
 import 'ui/lookup';

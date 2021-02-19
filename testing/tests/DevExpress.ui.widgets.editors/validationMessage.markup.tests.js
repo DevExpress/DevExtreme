@@ -1,7 +1,6 @@
 import ValidationMessage from 'ui/validation_message';
 import $ from 'jquery';
 
-import 'common.css!';
 
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 

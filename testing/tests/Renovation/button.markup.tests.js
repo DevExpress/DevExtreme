@@ -5,7 +5,6 @@ import config from 'core/config';
 import { act } from 'preact/test-utils';
 
 import 'renovation/ui/button.j';
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

@@ -21,7 +21,6 @@ QUnit.testStart(function() {
 });
 
 
-import 'common.css!';
 import devices from 'core/devices';
 import visibilityChange from 'events/visibility_change';
 import 'generic_light.css!';

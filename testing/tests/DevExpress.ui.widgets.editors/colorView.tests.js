@@ -12,7 +12,6 @@ const COLORVIEW_PALETTE_SELECTOR = '.dx-colorview-palette';
 const COLORVIEW_HUE_SCALE_SELECTOR = '.dx-colorview-hue-scale';
 const COLORVIEW_ALPHA_CHANNEL_SCALE_SELECTOR = '.dx-colorview-alpha-channel-scale';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/color_box/color_view';
 

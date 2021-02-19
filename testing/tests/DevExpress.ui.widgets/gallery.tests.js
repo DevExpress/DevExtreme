@@ -11,7 +11,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/gallery';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

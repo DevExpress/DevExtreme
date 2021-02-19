@@ -5,7 +5,6 @@ import Validator from 'ui/validator';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import '../../helpers/ignoreQuillTimers.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/text_box';
 import 'ui/date_box';

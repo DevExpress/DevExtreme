@@ -5,7 +5,6 @@ import CustomStore from 'data/custom_store';
 import fx from 'animation/fx';
 import windowUtils from 'core/utils/window';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

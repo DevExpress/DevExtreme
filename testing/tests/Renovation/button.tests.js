@@ -11,7 +11,6 @@ import { Deferred } from 'core/utils/deferred';
 import { act } from 'preact/test-utils';
 
 import 'renovation/ui/button.j';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
