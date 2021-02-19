@@ -2154,7 +2154,7 @@ QUnit.module('Scrolling to time', () => {
                             setTimeout(function() {
                                 resourceCounter++;
                                 assert.equal(counter, resourceCounter - 1);
-                                d.resolve([]);
+                                d.resolve([{ id: 1, text: 'text' }]);
                             }, 100);
 
                             return d.promise();
