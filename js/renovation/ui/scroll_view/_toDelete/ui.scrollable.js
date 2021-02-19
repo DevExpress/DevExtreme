@@ -1,14 +1,8 @@
 import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
-import browser from '../../core/utils/browser';
 import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
 import { getWindow, hasWindow } from '../../core/utils/window';
-import domAdapter from '../../core/dom_adapter';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
-import { focusable } from '../widget/selectors';
-import { addNamespace } from '../../events/utils/index';
-import { when } from '../../core/utils/deferred';
 
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -31,11 +25,6 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    _init: function() {
-        this.callBase();
-        this._initScrollableMarkup();
-    },
-
     _getWindowDevicePixelRatio: function() {
         return hasWindow()
             ? getWindow().devicePixelRatio
@@ -53,24 +42,9 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    _initScrollableMarkup: function() {
-        if(domAdapter.hasDocumentProperty('onbeforeactivate') && browser.msie && browser.version < 12) {
-            // eslint-disable-next-line no-undef
-            eventsEngine.on($element, addNamespace('beforeactivate', SCROLLABLE), function(e) {
-                if(!$(e.target).is(focusable)) {
-                    e.preventDefault();
-                }
-            });
-        }
-    },
-
     _dimensionChanged: function() {
         this.update();
         this._updateRtlPosition();
-    },
-
-    _initMarkup: function() {
-        this.callBase();
     },
 
     _render: function() {
@@ -122,10 +96,6 @@ const Scrollable = DOMComponent.inherit({
         };
     },
 
-    _updateBounds: function() {
-        this._strategy.updateBounds();
-    },
-
     _updateRtlConfig: function() {
         if(this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
             const { clientWidth, scrollLeft } = this._container().get(0);
@@ -138,20 +108,8 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    _renderDisabledState: function() {
-        if(this.option('disabled')) {
-            this._lock();
-        } else {
-            this._unlock();
-        }
-    },
-
     _renderStrategy: function() {
         this.$element().data(SCROLLABLE_STRATEGY, this._strategy);
-    },
-
-    _clean: function() {
-        this._strategy && this._strategy.dispose();
     },
 
     _optionChanged: function(args) {
@@ -197,59 +155,6 @@ const Scrollable = DOMComponent.inherit({
         }
     },
 
-    // tests on reset position, think about it
-    _resetInactiveDirection: function() {
-        const inactiveProp = this._getInactiveProp();
-        if(!inactiveProp || !hasWindow()) {
-            return;
-        }
-
-        const scrollOffset = this.scrollOffset();
-        scrollOffset[inactiveProp] = 0;
-        this.scrollTo(scrollOffset);
-    },
-
-    _getInactiveProp: function() {
-        const direction = this.option('direction');
-        if(direction === VERTICAL) {
-            return 'left';
-        }
-        if(direction === HORIZONTAL) {
-            return 'top';
-        }
-    },
-
-    _location: function() {
-        return this._strategy.location();
-    },
-
-    _isLocked: function() {
-        return this._locked;
-    },
-
-    _lock: function() {
-        this._locked = true;
-    },
-
-    _unlock: function() {
-        if(!this.option('disabled')) {
-            this._locked = false;
-        }
-    },
-
-    scrollHeight: function() {
-        return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
-    },
-
-    update: function() {
-        if(!this._strategy) {
-            return;
-        }
-        return when(this._strategy.update()).done((function() {
-            this._updateAllowedDirection();
-        }).bind(this));
-    },
-
     scrollBy: function(distance) {
         distance = this._normalizeLocation(distance);
 
@@ -282,27 +187,6 @@ const Scrollable = DOMComponent.inherit({
         this._updateRtlConfig();
     },
 
-    // scrollToElement: function(element, offset) {
-    //     const $element = $(element);
-    //     const elementInsideContent = this.$content().find(element).length;
-    //     const elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;
-    //     if(!elementInsideContent || !elementIsInsideContent) {
-    //         return;
-    //     }
-
-    //     const scrollPosition = { top: 0, left: 0 };
-    //     const direction = this.option('direction');
-
-    //     if(direction !== VERTICAL) {
-    //         scrollPosition.left = this.getScrollElementPosition($element, HORIZONTAL, offset);
-    //     }
-    //     if(direction !== HORIZONTAL) {
-    //         scrollPosition.top = this.getScrollElementPosition($element, VERTICAL, offset);
-    //     }
-
-    //     this.scrollTo(scrollPosition);
-    // },
-
     scrollToElementTopLeft: function(element) {
         const $element = $(element);
         const elementInsideContent = this.$content().find(element).length;
@@ -325,44 +209,6 @@ const Scrollable = DOMComponent.inherit({
         }
 
         this.scrollTo(scrollPosition);
-    },
-
-    getScrollElementPosition: function($element, direction, offset) {
-    //     offset = offset || {};
-    //     const isVertical = direction === VERTICAL;
-    //     const startOffset = (isVertical ? offset.top : offset.left) || 0;
-    //     const endOffset = (isVertical ? offset.bottom : offset.right) || 0;
-        // eslint-disable-next-line no-undef
-        const pushBackOffset = isVertical ? this._strategy.verticalOffset() : 0;
-        //     const elementPositionRelativeToContent = this._elementPositionRelativeToContent($element, isVertical ? 'top' : 'left');
-        // eslint-disable-next-line no-unused-vars
-        const elementPosition = /* elementPositionRelativeToContent */ -pushBackOffset;
-        //     const elementSize = $element[isVertical ? 'outerHeight' : 'outerWidth']();
-        //     const scrollLocation = (isVertical ? this.scrollTop() : this.scrollLeft());
-        //     const clientSize = this._container().get(0)[isVertical ? 'clientHeight' : 'clientWidth'];
-
-        //     const startDistance = scrollLocation - elementPosition + startOffset;
-        //     const endDistance = scrollLocation - elementPosition - elementSize + clientSize - endOffset;
-
-        //     if(startDistance <= 0 && endDistance >= 0) {
-        //         return scrollLocation;
-        //     }
-
-    //     return scrollLocation - (Math.abs(startDistance) > Math.abs(endDistance) ? endDistance : startDistance);
-    },
-
-    _elementPositionRelativeToContent: function($element, prop) {
-        let result = 0;
-        while(this._hasScrollContent($element)) {
-            result += $element.position()[prop];
-            $element = $element.offsetParent();
-        }
-        return result;
-    },
-
-    _hasScrollContent: function($element) {
-        const $content = this.$content();
-        return $element.closest($content).length && !$element.is($content);
     },
 
     _updateIfNeed: function() {
