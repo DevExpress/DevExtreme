@@ -15,7 +15,8 @@ module.exports = {
         presets: ['@babel/preset-env'],
         plugins: common.plugins.concat([
             'add-module-exports',
-            ['@babel/plugin-transform-modules-commonjs', { strict: true }]
+            ['@babel/plugin-transform-modules-commonjs', { strict: true }],
+            ['@babel/plugin-transform-classes', { loose: true }]
         ])
     }),
 
