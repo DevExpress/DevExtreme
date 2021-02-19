@@ -50,7 +50,7 @@ const HtmlEditor = Editor.inherit({
 
             formDialogOptions: null,
 
-            stylingMode: 'outlined',
+            stylingMode: 'outlined'
         });
     },
 
