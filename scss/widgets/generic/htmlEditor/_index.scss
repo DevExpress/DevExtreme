@@ -22,6 +22,10 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 
   border-color: $htmleditor-border-color;
 
+  &.dx-state-readonly {
+    border-style: dashed;
+  }
+
   &.dx-htmleditor-outlined {
     border-radius: $texteditor-input-border-radius;
 

@@ -111,7 +111,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @docid
      * @type Enums.EditorStylingMode
      * @default 'outlined'
-     * @default 'underlined' [for](Material)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
