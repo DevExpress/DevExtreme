@@ -37,6 +37,8 @@ const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
 const MAX_OFFSET = 0;
 const THUMB_MIN_SIZE = 15;
 
+const HIDE_SCROLLBAR_TIMEOUT = 500;
+
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
     cssClasses, styles, scrollRef, scrollbarRef, hoverStateEnabled,
@@ -84,7 +86,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() windowSizeChanged?: boolean;
 
-  @Mutable() prevThumbRatio = 0;
+  @Mutable() prevThumbRatio = 1;
 
   @InternalState() showOnScrollByWheel?: boolean;
 
@@ -257,7 +259,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     if (isDefined(this.showOnScrollByWheel) && this.props.showScrollbar === 'onScroll') {
       setTimeout(() => {
         this.showOnScrollByWheel = undefined;
-      }, 500);
+      }, HIDE_SCROLLBAR_TIMEOUT);
     }
   }
 
@@ -379,14 +381,18 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Method()
   move(location?: number): void {
+    this.moveScrollbar(location);
+    this.moveContent();
+  }
+
+  @Method()
+  moveScrollbar(location?: number): void {
     const currentLocation = location !== undefined
       ? location * this.props.scaleRatio
       : this.getLocation();
 
     this.setLocation(currentLocation);
     this.scrollLocation = currentLocation;
-
-    this.moveContent();
   }
 
   moveContent(): void {
@@ -423,7 +429,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return (containerSize - this.thumbSize) / (scaleRatio * (contentSize - containerSize));
     }
 
-    return 0;
+    return 1;
   }
 
   containerToContentRatio(): number {
@@ -499,7 +505,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get visible(): boolean {
-    const { showScrollbar } = this.props;
+    const { showScrollbar, forceVisibility } = this.props;
 
     if (!this.isVisible) {
       return false;
@@ -511,7 +517,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return true;
     }
 
-    return this.visibility || !!this.showOnScrollByWheel;
+    return forceVisibility || this.visibility || !!this.showOnScrollByWheel;
   }
 
   get hoverStateEnabled(): boolean {

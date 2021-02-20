@@ -168,7 +168,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   get acceleration(): number {
-    if (!isDefined(this.scrollbarRef)) {
+    if (!isDefined(this.scrollbarRef?.current)) {
       return 0;
     }
 
@@ -215,10 +215,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     return this.scrollbarRef.current!.move(location);
   }
 
-  getLocation(): number {
-    return this.scrollbarRef.current!.getLocation();
-  }
-
   stopComplete(): void {
     return this.scrollbarRef.current!.stopComplete();
   }
@@ -227,8 +223,14 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     return this.scrollbarRef.current!.scrollComplete();
   }
 
+  @Method()
   boundLocation(value?: number): number {
     return this.scrollbarRef.current!.boundLocation(value);
+  }
+
+  @Method()
+  getLocation(): number {
+    return this.scrollbarRef.current!.getLocation();
   }
 
   @Method()

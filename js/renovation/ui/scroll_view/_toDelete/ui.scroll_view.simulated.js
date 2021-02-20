@@ -5,7 +5,7 @@ import { each } from '../../core/utils/iterator';
 import { executeAsync } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 const math = Math;
-import { Scroller, SimulatedStrategy } from './ui.scrollable.simulated';
+// import { Scroller, SimulatedStrategy } from './ui.scrollable.simulated';
 import LoadIndicator from '../load_indicator';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';

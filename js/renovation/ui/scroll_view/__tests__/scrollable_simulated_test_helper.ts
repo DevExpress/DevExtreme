@@ -13,7 +13,7 @@ import {
 
 import {
   ScrollableDirection,
-} from '../types.d';
+} from '../types';
 
 import { Scrollbar } from '../scrollbar';
 
@@ -317,14 +317,14 @@ class ScrollableTestHelper {
           jestExpect(this[`${handler}HandlerMock`]).toBeCalledTimes(2);
           if (expectedArgs[indexOf].length === 2) {
             jestExpect(this[`${handler}HandlerMock`]).toHaveBeenNthCalledWith(1, expectedArgs[indexOf][0], expectedArgs[indexOf][1]);
-          } else {
+          } else if (expectedArgs[indexOf].length === 1) {
             jestExpect(this[`${handler}HandlerMock`]).toHaveBeenNthCalledWith(2, expectedArgs[indexOf][0]);
           }
         } else {
           jestExpect(this[`${handler}HandlerMock`]).toBeCalledTimes(1);
           if (expectedArgs[indexOf].length === 2) {
             jestExpect(this[`${handler}HandlerMock`]).toHaveBeenCalledWith(expectedArgs[indexOf][0], expectedArgs[indexOf][1]);
-          } else {
+          } else if (expectedArgs[indexOf].length === 1) {
             jestExpect(this[`${handler}HandlerMock`]).toHaveBeenCalledWith(expectedArgs[indexOf][0]);
           }
         }

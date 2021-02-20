@@ -129,7 +129,6 @@ export function getBoundaryProps(
   direction: ScrollableDirection,
   scrollOffset: ScrollableLocation,
   element: HTMLDivElement,
-  pushBackValue = 0,
 ): Partial<ScrollableBoundary> {
   const { left, top } = scrollOffset;
   const boundaryProps: Partial<ScrollableBoundary> = {};
@@ -141,7 +140,7 @@ export function getBoundaryProps(
   }
   if (isVertical) {
     boundaryProps.reachedTop = top <= 0;
-    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element) - 2 * pushBackValue;
+    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element);
   }
   return boundaryProps;
 }
