@@ -40,11 +40,8 @@ const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 const COMMON_SRC = ['js/**/*.d.ts', 'js/**/*.js'];
 
 const knownErrors = [
-    'Cannot find module \'preact\'',
-    'Cannot find module \'preact/hooks\'',
-    'Cannot find module \'preact/compat\'',
-    'js/renovation/preact_wrapper/',
-    'js\\renovation\\preact_wrapper\\',
+    'js/renovation/inferno_wrapper/',
+    'js\\renovation\\inferno_wrapper\\',
     'Cannot find module \'../../inferno/src\'',
 ];
 
@@ -80,8 +77,8 @@ const processErrors = (knownErrors, errors = []) => (e) => {
     }
 };
 
-function generatePreactComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = true) {
-    return function generatePreactComponents(done) {
+function generateInfernoComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = true) {
+    return function generateInfernoComponents(done) {
         const tsProject = ts.createProject('build/gulp/generator/ts-configs/inferno.tsconfig.json');
 
         generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
@@ -140,17 +137,17 @@ gulp.task('generate-jquery-components-watch', function watchJQueryComponents() {
 
 gulp.task('generate-components', gulp.series(
     'generate-jquery-components',
-    generatePreactComponents(),
-    ifEsmPackage(generatePreactComponents('./esm', transpileConfig.esm)),
-    ifEsmPackage(generatePreactComponents('./cjs', transpileConfig.cjs)),
+    generateInfernoComponents(),
+    ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm)),
+    ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs)),
     processRenovationMeta
 ));
 
 gulp.task('generate-components-dev', gulp.series(
     'generate-jquery-components',
-    generatePreactComponents('./', transpileConfig.cjs, true),
-    ifEsmPackage(generatePreactComponents('./esm', transpileConfig.esm, true)),
-    ifEsmPackage(generatePreactComponents('./cjs', transpileConfig.cjs, true)),
+    generateInfernoComponents('./', transpileConfig.cjs, true),
+    ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm, true)),
+    ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs, true)),
     processRenovationMeta
 ));
 
@@ -275,7 +272,7 @@ gulp.task('react-compilation-check', function() {
 
     const tsProject = ts.createProject('build/gulp/generator/ts-configs/react.tsconfig.json');
 
-    return gulp.src([...SRC, '!js/renovation/preact_wrapper/**/*.*'], { base: 'js' })
+    return gulp.src([...SRC, '!js/renovation/inferno_wrapper/**/*.*'], { base: 'js' })
         .pipe(generateComponents(generator))
         .pipe(tsProject());
 });

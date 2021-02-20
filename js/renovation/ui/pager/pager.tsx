@@ -5,7 +5,7 @@ import {
 import { ResizableContainer } from './resizable_container';
 import PagerProps from './common/pager_props';
 import { PagerContent } from './content';
-import { GridPagerWrapper } from '../../preact_wrapper/grid_pager';
+import { GridPagerWrapper } from '../../inferno_wrapper/grid_pager';
 import { combineClasses } from '../../utils/combine_classes';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
