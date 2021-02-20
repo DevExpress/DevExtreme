@@ -322,10 +322,10 @@ export default {
                             clearTimeout(this._highlightTimer);
 
                             this._highlightTimer = setTimeout(function() {
-                                this._highlightSearchText(this._getTableElement());
+                                this._highlightSearchText(this.getTableElement());
                             }.bind(this));
                         } else {
-                            this._highlightSearchText(this._getTableElement());
+                            this._highlightSearchText(this.getTableElement());
                         }
                     }
                 },
