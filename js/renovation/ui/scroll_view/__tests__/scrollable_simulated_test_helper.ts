@@ -13,7 +13,7 @@ import {
 
 import {
   ScrollableDirection,
-} from '../types.d';
+} from '../types';
 
 import { Scrollbar } from '../scrollbar';
 
