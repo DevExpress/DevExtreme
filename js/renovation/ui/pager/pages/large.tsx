@@ -10,8 +10,7 @@ import PagerProps from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = ({ pages }: PagesLarge) => {
+export const viewFunction = ({ pages }: PagesLarge): JSX.Element => {
   const PagesMarkup = pages.map(({ key, pageProps }) => (pageProps
     ? (
       <Page
@@ -56,7 +55,6 @@ function createPageIndexesBySlidingWindowIndexes(slidingWindowIndexes: number[],
   delimiter: DelimiterType): SlidingWindowState & { pageIndexes: PageIndexes } {
   let pageIndexes: PageIndexes = [];
   let indexesForReuse: number[] = [];
-  // eslint-disable-next-line default-case
   switch (delimiter) {
     case 'none':
       pageIndexes = [...slidingWindowIndexes];
@@ -73,6 +71,7 @@ function createPageIndexesBySlidingWindowIndexes(slidingWindowIndexes: number[],
       pageIndexes = [0, 'low', ...slidingWindowIndexes, pageCount - 1];
       indexesForReuse = slidingWindowIndexes.slice(1);
       break;
+    default:
   }
   return {
     slidingWindowIndexes, indexesForReuse, pageIndexes,

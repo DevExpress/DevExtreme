@@ -60,9 +60,7 @@ const reactProps = { key: true, ref: true, children: true };
 const objectDiffsWithoutReactProps = objectDiffsFiltered((prop) => Object.keys(prop)
   .filter((p) => !reactProps[p]));
 
-export function getUpdatedOptions(
-  oldProps: Record<string, unknown>,
-  props: Record<string, unknown>,
-): ResultItem[] {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function getUpdatedOptions(oldProps: {}, props: {}): ResultItem[] {
   return objectDiffsWithoutReactProps(oldProps, props);
 }
