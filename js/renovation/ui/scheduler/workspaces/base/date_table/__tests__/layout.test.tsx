@@ -107,14 +107,18 @@ describe('DateTableLayoutBase', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('classes', () => {
-        it('should been set correctly', () => {
-          const layout = new DateTableLayoutBase({ className: 'some-class' } as any);
+        it('should return date-table class if "addDateTableClass" is true', () => {
+          const layout = new DateTableLayoutBase({ addDateTableClass: true } as any);
 
-          expect(layout.classes.split(' '))
-            .toEqual([
-              'dx-scheduler-date-table',
-              'some-class',
-            ]);
+          expect(layout.classes)
+            .toBe('dx-scheduler-date-table');
+        });
+
+        it('should return undefined if "addDateTableClass" is false', () => {
+          const layout = new DateTableLayoutBase({ addDateTableClass: false } as any);
+
+          expect(layout.classes)
+            .toBe(undefined);
         });
       });
 
