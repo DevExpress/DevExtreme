@@ -10,7 +10,7 @@ import { PageSizeSelector } from './page_size/selector';
 import {
   PAGER_PAGES_CLASS, PAGER_PAGE_INDEXIES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS,
 } from './common/consts';
-import PagerProps, { DisplayMode } from './common/pager_props';
+import { PagerProps, DisplayMode } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';

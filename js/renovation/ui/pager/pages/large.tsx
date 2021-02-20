@@ -6,7 +6,7 @@ import {
   Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import { Page, PageProps } from './page';
-import PagerProps from '../common/pager_props';
+import { PagerProps } from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';

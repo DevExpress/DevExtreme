@@ -5,7 +5,7 @@ import {
 import { LightButton } from '../common/light_button';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
-import PagerProps from '../common/pager_props';
+import { PagerProps } from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
