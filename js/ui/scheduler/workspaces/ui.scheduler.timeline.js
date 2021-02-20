@@ -632,10 +632,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             this._$dateTable,
             dxrTimelineDateTableLayout,
             'renovatedDateTable',
-            {
-                viewData: this.viewDataProvider.viewData,
-                dataCellTemplate: this.option('dataCellTemplate'),
-            }
+            this._getRDateTableProps(),
         );
     }
 

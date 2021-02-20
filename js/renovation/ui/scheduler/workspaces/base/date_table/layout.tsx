@@ -51,8 +51,10 @@ export class DateTableLayoutBaseProps extends DateTableLayoutProps {
   view: viewFunction,
 })
 export class DateTableLayoutBase extends JSXComponent<DateTableLayoutBaseProps, 'cellTemplate'>() {
-  get classes(): string {
-    return `dx-scheduler-date-table ${this.props.className}`;
+  get classes(): string | undefined {
+    const { addDateTableClass } = this.props;
+
+    return addDateTableClass ? 'dx-scheduler-date-table' : undefined;
   }
 
   get topVirtualRowHeight(): number {
