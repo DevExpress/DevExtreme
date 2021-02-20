@@ -2309,12 +2309,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.cache.clear();
         this._cleanAllowedPositions();
         this.virtualSelectionState?.releaseSelectedAndFocusedCells();
-        this._$thead.empty();
-        this._$dateTable.empty();
-        this._shader && this._shader.clean();
-        this._$timePanel.empty();
-        this._$allDayTable && this._$allDayTable.empty();
-        this._$groupTable.empty();
+        if(!this.isRenovatedRender()) {
+            this._$thead.empty();
+            this._$dateTable.empty();
+            this._shader && this._shader.clean();
+            this._$timePanel.empty();
+            this._$allDayTable && this._$allDayTable.empty();
+            this._$groupTable.empty();
+        }
+
         delete this._hiddenInterval;
         delete this._interval;
     }
