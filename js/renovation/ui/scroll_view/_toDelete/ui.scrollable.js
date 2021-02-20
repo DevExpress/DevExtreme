@@ -31,19 +31,7 @@ const Scrollable = DOMComponent.inherit({
             : 1;
     },
 
-    _visibilityChanged: function(visible) {
-        if(visible) {
-            this.update();
-            this._updateRtlPosition();
-            this._savedScrollOffset && this.scrollTo(this._savedScrollOffset);
-            delete this._savedScrollOffset;
-        } else {
-            this._savedScrollOffset = this.scrollOffset();
-        }
-    },
-
     _dimensionChanged: function() {
-        this.update();
         this._updateRtlPosition();
     },
 
