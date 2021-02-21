@@ -51,7 +51,7 @@ export function getWindowByElement(element: Element): Element {
 }
 
 export function getElementOffset(
-  element?: Element,
+  element: Element | null,
 ): { left: number; top: number } {
   if (!element) return { left: 0, top: 0 };
 

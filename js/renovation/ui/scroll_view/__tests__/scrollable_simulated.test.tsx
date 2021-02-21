@@ -96,21 +96,70 @@ describe('Simulated', () => {
       it('should update sizes on window resize and trigger onUpdated', () => {
         const onUpdatedMock = jest.fn();
         const helper = new ScrollableTestHelper({ onUpdated: onUpdatedMock });
+        helper.viewModel.contentRef = React.createRef();
+        helper.viewModel.containerRef = React.createRef();
+        helper.viewModel.getEventArgs = jest.fn();
 
         helper.viewModel.updateSizes = jest.fn();
         helper.viewModel.windowResizeHandler();
 
         expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
         expect(onUpdatedMock).toBeCalledTimes(1);
+        expect(onUpdatedMock).toHaveBeenCalledWith(helper.viewModel.getEventArgs());
       });
 
       it('should update sizes on window resize, onUpdated: undefined', () => {
         const helper = new ScrollableTestHelper({ onUpdated: undefined });
+        helper.viewModel.contentRef = React.createRef();
+        helper.viewModel.containerRef = React.createRef();
 
         helper.viewModel.updateSizes = jest.fn();
         helper.viewModel.windowResizeHandler();
 
         expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
+      });
+    });
+
+    describe('update()', () => {
+      it('should update sizes on update() method call and trigger onUpdated', () => {
+        const onUpdatedMock = jest.fn();
+        const helper = new ScrollableTestHelper({ onUpdated: onUpdatedMock });
+        helper.viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+        helper.viewModel.containerRef = React.createRef();
+        helper.viewModel.getEventArgs = jest.fn();
+
+        helper.viewModel.updateSizes = jest.fn();
+        helper.viewModel.update();
+
+        expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
+        expect(onUpdatedMock).toBeCalledTimes(1);
+        expect(onUpdatedMock).toHaveBeenCalledWith(helper.viewModel.getEventArgs());
+      });
+
+      it('should update sizes on update() method call, onUpdated: undefined', () => {
+        const helper = new ScrollableTestHelper({ onUpdated: undefined });
+        helper.viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+        helper.viewModel.containerRef = React.createRef();
+        helper.viewModel.getEventArgs = jest.fn();
+
+        helper.viewModel.updateSizes = jest.fn();
+        helper.viewModel.update();
+
+        expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
+      });
+
+      it('should update sizes on update() method call, onUpdated, contentRef.current = null', () => {
+        const onUpdatedMock = jest.fn();
+        const helper = new ScrollableTestHelper({ onUpdated: onUpdatedMock });
+        helper.viewModel.contentRef = { current: null } as RefObject<HTMLDivElement>;
+        helper.viewModel.containerRef = React.createRef();
+        helper.viewModel.getEventArgs = jest.fn();
+
+        helper.viewModel.updateSizes = jest.fn();
+        helper.viewModel.update();
+
+        expect(helper.viewModel.updateSizes).not.toBeCalled();
+        expect(onUpdatedMock).not.toBeCalled();
       });
     });
 
@@ -127,6 +176,73 @@ describe('Simulated', () => {
             expect(viewModel.locked).toEqual(true);
           } else {
             expect(viewModel.locked).toEqual(false);
+          }
+        });
+      });
+
+      each([true, false]).describe('elementRef.current exist', (elementRefExist) => {
+        it('effectUpdateScrollbarSize()', () => {
+          const viewModel = new Scrollable({});
+
+          viewModel.scrollableOffsetLeft = 5;
+          viewModel.scrollableOffsetLeft = 7;
+
+          viewModel.containerClientWidth = 1;
+          viewModel.containerClientHeight = 2;
+          viewModel.containerOffsetWidth = 3;
+          viewModel.containerOffsetHeight = 4;
+
+          viewModel.contentClientWidth = 5;
+          viewModel.contentClientHeight = 6;
+          viewModel.contentScrollWidth = 7;
+          viewModel.contentScrollHeight = 8;
+
+          viewModel.contentOffsetWidth = 9;
+          viewModel.contentOffsetHeight = 10;
+
+          const containerRef = {
+            current: elementRefExist ? {
+              clientWidth: 10,
+              clientHeight: 20,
+              offsetWidth: 30,
+              offsetHeight: 40,
+            } : null,
+          } as RefObject;
+
+          const contentRef = {
+            current: elementRefExist ? {
+              clientWidth: 50,
+              clientHeight: 60,
+              scrollWidth: 70,
+              scrollHeight: 80,
+              offsetWidth: 90,
+              offsetHeight: 100,
+            } : null,
+          } as RefObject;
+
+          viewModel.containerRef = containerRef;
+          viewModel.contentRef = contentRef;
+
+          viewModel.getScrollableOffset = () => ({ left: 10, top: 20 });
+          viewModel.effectUpdateScrollbarSize();
+
+          expect(viewModel.scrollableOffsetLeft).toEqual(10);
+          expect(viewModel.scrollableOffsetTop).toEqual(20);
+
+          if (elementRefExist) {
+            expect(viewModel.containerClientWidth).toEqual(10);
+            expect(viewModel.containerClientHeight).toEqual(20);
+            expect(viewModel.containerOffsetWidth).toEqual(30);
+            expect(viewModel.containerOffsetHeight).toEqual(40);
+          }
+
+          if (elementRefExist) {
+            expect(viewModel.contentClientWidth).toEqual(50);
+            expect(viewModel.contentClientHeight).toEqual(60);
+            expect(viewModel.contentScrollWidth).toEqual(70);
+            expect(viewModel.contentScrollHeight).toEqual(80);
+            expect(viewModel.contentOffsetWidth).toEqual(90);
+            expect(viewModel.contentOffsetHeight).toEqual(100);
           }
         });
       });
@@ -252,12 +368,13 @@ describe('Simulated', () => {
                   const viewModel = new Scrollable({
                     direction, scrollByThumb, scrollByContent,
                   });
-                  viewModel.wrapperRef = React.createRef();
-                  viewModel.verticalScrollbarRef = React.createRef();
-                  viewModel.horizontalScrollbarRef = React.createRef();
-                  viewModel.contentRef = React.createRef();
-                  viewModel.containerRef = React.createRef();
-                  viewModel.scrollableRef = React.createRef();
+                  (viewModel as any).wrapperRef = React.createRef();
+                  (viewModel as any).verticalScrollbarRef = React.createRef();
+                  (viewModel as any).horizontalScrollbarRef = React.createRef();
+                  (viewModel as any).contentRef = React.createRef();
+                  (viewModel as any).containerRef = React.createRef();
+                  (viewModel as any).scrollableRef = React.createRef();
+
                   const scrollable = mount(ScrollableComponent(viewModel) as JSX.Element);
                   viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
 
@@ -383,12 +500,12 @@ describe('Simulated', () => {
                         scrollByThumb,
                         scrollByContent,
                       });
-                      viewModel.verticalScrollbarRef = React.createRef();
-                      viewModel.horizontalScrollbarRef = React.createRef();
-                      viewModel.wrapperRef = React.createRef();
-                      viewModel.contentRef = React.createRef();
-                      viewModel.containerRef = React.createRef();
-                      viewModel.scrollableRef = React.createRef();
+                      (viewModel as any).verticalScrollbarRef = React.createRef();
+                      (viewModel as any).horizontalScrollbarRef = React.createRef();
+                      (viewModel as any).wrapperRef = React.createRef();
+                      (viewModel as any).contentRef = React.createRef();
+                      (viewModel as any).containerRef = React.createRef();
+                      (viewModel as any).scrollableRef = React.createRef();
 
                       const scrollable = mount(ScrollableComponent(viewModel) as JSX.Element);
                       viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
@@ -737,12 +854,12 @@ describe('Simulated', () => {
                     scrollByThumb,
                     scrollByContent,
                   });
-                  viewModel.wrapperRef = React.createRef();
-                  viewModel.contentRef = React.createRef();
-                  viewModel.containerRef = React.createRef();
-                  viewModel.scrollableRef = React.createRef();
-                  viewModel.horizontalScrollbarRef = React.createRef();
-                  viewModel.verticalScrollbarRef = React.createRef();
+                  (viewModel as any).wrapperRef = React.createRef();
+                  (viewModel as any).contentRef = React.createRef();
+                  (viewModel as any).containerRef = React.createRef();
+                  (viewModel as any).scrollableRef = React.createRef();
+                  (viewModel as any).horizontalScrollbarRef = React.createRef();
+                  (viewModel as any).verticalScrollbarRef = React.createRef();
 
                   const scrollable = mount(ScrollableComponent(viewModel) as JSX.Element);
                   viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
@@ -757,12 +874,12 @@ describe('Simulated', () => {
                   };
 
                   if (direction === DIRECTION_VERTICAL) {
-                    viewModel.verticalScrollbarRef = initSettings(scrollbars, 0);
+                    (viewModel as any).verticalScrollbarRef = initSettings(scrollbars, 0);
                   } else if (direction === DIRECTION_HORIZONTAL) {
-                    viewModel.horizontalScrollbarRef = initSettings(scrollbars, 0);
+                    (viewModel as any).horizontalScrollbarRef = initSettings(scrollbars, 0);
                   } else {
-                    viewModel.horizontalScrollbarRef = initSettings(scrollbars, 0);
-                    viewModel.verticalScrollbarRef = initSettings(scrollbars, 1);
+                    (viewModel as any).horizontalScrollbarRef = initSettings(scrollbars, 0);
+                    (viewModel as any).verticalScrollbarRef = initSettings(scrollbars, 1);
                   }
 
                   viewModel.stopEffect();
@@ -851,7 +968,12 @@ describe('Simulated', () => {
                         direction, overflow, bounceEnabled, contentSize, containerSize,
                       });
 
-                      helper.initScrollbarSettings({ props: { containerSize, contentSize } });
+                      Object.defineProperties(helper.viewModel, {
+                        contentHeight: { get() { return contentSize; } },
+                        contentWidth: { get() { return contentSize; } },
+                      });
+                      helper.viewModel.containerClientHeight = containerSize;
+                      helper.viewModel.containerClientWidth = containerSize;
 
                       let expectedDirectionResult = (containerSize < contentSize || bounceEnabled) ? direction : undefined;
 
@@ -2013,11 +2135,11 @@ describe('Simulated', () => {
       describe('isContent', () => {
         it('element is scrollable container', () => {
           const viewModel = new Scrollable({ direction: 'vertical' });
-          viewModel.contentRef = React.createRef();
-          viewModel.containerRef = React.createRef();
-          viewModel.scrollableRef = React.createRef();
-          viewModel.horizontalScrollbarRef = React.createRef();
-          viewModel.verticalScrollbarRef = React.createRef();
+          (viewModel as any).contentRef = React.createRef();
+          (viewModel as any).containerRef = React.createRef();
+          (viewModel as any).scrollableRef = React.createRef();
+          (viewModel as any).horizontalScrollbarRef = React.createRef();
+          (viewModel as any).verticalScrollbarRef = React.createRef();
 
           const scrollable = mount(ScrollableComponent(viewModel as any) as JSX.Element);
           viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
@@ -2027,11 +2149,11 @@ describe('Simulated', () => {
 
         it('element is scrollbar', () => {
           const viewModel = new Scrollable({ direction: 'vertical' });
-          viewModel.contentRef = React.createRef();
-          viewModel.containerRef = React.createRef();
-          viewModel.scrollableRef = React.createRef();
-          viewModel.horizontalScrollbarRef = React.createRef();
-          viewModel.verticalScrollbarRef = React.createRef();
+          (viewModel as any).contentRef = React.createRef();
+          (viewModel as any).containerRef = React.createRef();
+          (viewModel as any).scrollableRef = React.createRef();
+          (viewModel as any).horizontalScrollbarRef = React.createRef();
+          (viewModel as any).verticalScrollbarRef = React.createRef();
 
           const scrollable = mount(ScrollableComponent(viewModel as any) as JSX.Element);
           viewModel.scrollableRef.current = scrollable.getDOMNode() as HTMLDivElement;
@@ -2041,11 +2163,11 @@ describe('Simulated', () => {
 
         it('element is not inside scrollable', () => {
           const viewModel = new Scrollable({ direction: 'vertical' });
-          viewModel.contentRef = React.createRef();
-          viewModel.containerRef = React.createRef();
-          viewModel.scrollableRef = React.createRef();
-          viewModel.horizontalScrollbarRef = React.createRef();
-          viewModel.verticalScrollbarRef = React.createRef();
+          (viewModel as any).contentRef = React.createRef();
+          (viewModel as any).containerRef = React.createRef();
+          (viewModel as any).scrollableRef = React.createRef();
+          (viewModel as any).horizontalScrollbarRef = React.createRef();
+          (viewModel as any).verticalScrollbarRef = React.createRef();
 
           mount(ScrollableComponent(viewModel as any) as JSX.Element);
           expect(viewModel.isContent(mount(<div />).getDOMNode())).toBe(false);
