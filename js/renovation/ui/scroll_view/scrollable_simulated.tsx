@@ -654,7 +654,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
   }
 
-  validateEvent(e, scrollbarRef: AnimatedScrollbar): boolean {
+  validateEvent(e, scrollbarRef: any): boolean {
     const { scrollByThumb, scrollByContent } = this.props;
 
     return (scrollByThumb && scrollbarRef.validateEvent(e))
@@ -676,7 +676,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return false;
   }
 
-  eventHandler(handler: (scrollbarInstance: AnimatedScrollbar) => void): void {
+  eventHandler(handler: (scrollbarInstance: any) => void): void {
     if (this.direction.isVertical) {
       handler(this.verticalScrollbarRef.current!);
     }
