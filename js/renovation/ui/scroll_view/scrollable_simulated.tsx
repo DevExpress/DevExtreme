@@ -17,13 +17,11 @@ import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import { isDxMouseWheelEvent, normalizeKeyName } from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
-// import { when } from '../../../core/utils/deferred';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
 import { ensureDefined } from '../../../core/utils/common';
 import '../../../events/gesture/emitter.gesture.scroll';
 import eventsEngine from '../../../events/core/events_engine';
 
-import type { dxPromise } from '../../../core/utils/deferred';
 import {
   ScrollableLocation, ScrollOffset,
   allowedDirection,
@@ -63,7 +61,6 @@ import {
   dxScrollStop,
   dxScrollCancel,
 } from '../../../events/short';
-import { Scrollbar } from './scrollbar';
 
 const KEY_CODES = {
   PAGE_UP: 'pageUp',
@@ -418,7 +415,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return (): void => dxScrollInit.off(this.wrapperRef.current, { namespace });
   }
 
-  getInitEventData(): any {
+  getInitEventData(): {
+    getDirection: (e: Event) => string | undefined;
+    validate: (e: Event) => boolean;
+    isNative: boolean;
+    scrollTarget: HTMLDivElement | null;
+  } {
     return {
       getDirection: this.getDirection,
       validate: this.validate,
@@ -652,7 +654,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
   }
 
-  validateEvent(e, scrollbarRef: Scrollbar): boolean {
+  validateEvent(e, scrollbarRef: AnimatedScrollbar): boolean {
     const { scrollByThumb, scrollByContent } = this.props;
 
     return (scrollByThumb && scrollbarRef.validateEvent(e))
@@ -664,7 +666,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     this.validDirections[DIRECTION_VERTICAL] = value;
   }
 
-  isContent(element): boolean {
+  isContent(element: HTMLDivElement): boolean {
     const closest = element.closest('.dx-scrollable-simulated');
 
     if (isDefined(closest)) {
@@ -674,21 +676,13 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return false;
   }
 
-  eventHandler(
-    handler: (
-      scrollbarInstance: any
-    ) => dxPromise<void>,
-  ): any { // dxPromise<void> {
-    const deferreds: ReturnType<typeof handler>[] = [];
-
+  eventHandler(handler: (scrollbarInstance: AnimatedScrollbar) => void): void {
     if (this.direction.isVertical) {
-      deferreds.push(handler(this.verticalScrollbarRef.current!));
+      handler(this.verticalScrollbarRef.current!);
     }
     if (this.direction.isHorizontal) {
-      deferreds.push(handler(this.horizontalScrollbarRef.current!));
+      handler(this.horizontalScrollbarRef.current!);
     }
-
-    // return when.apply($, deferreds).promise();
   }
 
   getDirection(e: Event): string | undefined {
@@ -1049,7 +1043,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
   }
 
   getScrollableOffset(): { left: number; top: number } {
-    return getElementOffset(this.scrollableRef.current!);
+    return getElementOffset(this.scrollableRef.current);
   }
 
   get contentStyles(): { [key: string]: string } {
