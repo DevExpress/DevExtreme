@@ -229,14 +229,18 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     return this.scrollbarRef.current!.scrollComplete();
   }
 
+  getLocation(): number {
+    return this.scrollbarRef.current!.getLocation();
+  }
+
   @Method()
   boundLocation(value?: number): number {
     return this.scrollbarRef.current!.boundLocation(value);
   }
 
   @Method()
-  getLocation(): number {
-    return this.scrollbarRef.current!.getLocation();
+  getScrollLocation(): number {
+    return this.scrollbarRef.current!.getScrollLocation();
   }
 
   @Method()
@@ -252,6 +256,16 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   @Method()
   isThumb(element: HTMLDivElement): boolean {
     return this.scrollbarRef.current!.isThumb(element);
+  }
+
+  @Method()
+  reachedMin(): boolean {
+    return this.scrollbarRef.current!.reachedMin();
+  }
+
+  @Method()
+  reachedMax(): boolean {
+    return this.scrollbarRef.current!.reachedMax();
   }
 
   @Method()

@@ -1,8 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { RefObject } from 'devextreme-generator/component_declaration/common';
 import {
-
   ScrollDirection,
 } from '../scrollable_utils';
 
@@ -182,6 +180,7 @@ class ScrollableTestHelper {
       scrollbar.translateOffset = additionalProps.translateOffset;
       scrollbar.scrollableOffset = 0;
       scrollbar.location = -50;
+      scrollbar.scrollLocation = -50;
 
       Object.assign(scrollbar, {
         props: {
@@ -287,9 +286,11 @@ class ScrollableTestHelper {
   initScrollbarLocation({ top, left }) {
     if (this.isVertical) {
       this.viewModel.verticalScrollbarRef.current.location = top;
+      this.viewModel.verticalScrollbarRef.current.scrollLocation = top;
     }
     if (this.isHorizontal) {
       this.viewModel.horizontalScrollbarRef.current.location = left;
+      this.viewModel.horizontalScrollbarRef.current.scrollLocation = left;
     }
   }
 
@@ -363,7 +364,7 @@ class ScrollableTestHelper {
   getContainerRefMock({
     clientWidth = 100, clientHeight = 100, scrollTop = 50, scrollLeft = 50, offsetWidth = 300,
     offsetHeight = 300, scrollWidth = 600, scrollHeight = 600,
-  }): RefObject {
+  }): any {
     return {
       current: {
         clientWidth,
