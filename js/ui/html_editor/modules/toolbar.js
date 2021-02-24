@@ -493,7 +493,11 @@ if(Quill) {
         }
 
         _normalizeItemOptions(item) {
-            item.name = isDefined(item.name) ? item.name : item.formatName;
+            if(isObject(item)) {
+                item.name = item.name ? item.name : item.formatName;
+            } else {
+                item = { name: item };
+            }
 
             return item;
         }
