@@ -1768,7 +1768,7 @@ QUnit.test('Center-top side of page, Html', function(assert) {
     this.resetTooltipMocks();
 
     this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textHtml.width = sinon.spy(function() { return 60; });
+    this.tooltip._textHtml.width = sinon.spy(function() { return 59.2; });
 
     // act
     this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 80, offset: 30 });
