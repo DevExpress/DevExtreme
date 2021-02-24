@@ -322,35 +322,34 @@ if(devices.real().deviceType === 'desktop') {
         });
     });
 
-    ['dxmousewheel', 'other'].forEach((type) => {
-        [true, false].forEach((bounceEnabled) => {
-            [true, false].forEach(ctrlKey => {
-                [true, false].forEach(metaKey => {
-                    QUnit.test(`Handle ctrl key (T970904). type: ${type}, bounceEnabled: ${bounceEnabled}, ctrlKey: ${ctrlKey}, metaKey: ${metaKey}`, function(assert) {
-                        if(devices.real().deviceType !== 'desktop') {
-                            assert.ok(true, 'scenario is relevant only for desktop');
-                            return;
-                        }
 
-                        const scrollable = $('#scrollable').dxScrollable({
-                            useNative: false
-                        }).dxScrollable('instance');
+    [true, false].forEach((bounceEnabled) => {
+        [true, false].forEach(ctrlKey => {
+            [true, false].forEach(metaKey => {
+                QUnit.test(`Handle ctrl key (T970904). bounceEnabled: ${bounceEnabled}, ctrlKey: ${ctrlKey}, metaKey: ${metaKey}`, function(assert) {
+                    if(devices.real().deviceType !== 'desktop') {
+                        assert.ok(true, 'scenario is relevant only for desktop');
+                        return;
+                    }
 
-                        const validateRes = scrollable._validate({
-                            type: type,
-                            delta: -100,
-                            bounceEnabled,
-                            ctrlKey,
-                            metaKey,
-                        });
+                    const scrollable = $('#scrollable').dxScrollable({
+                        useNative: false,
+                        bounceEnabled
+                    }).dxScrollable('instance');
 
-                        const expectedRes = type === 'dxmousewheel' && (metaKey || ctrlKey)
-                            ? false
-                            : true;
-
-                        assert.equal(validateRes, expectedRes);
-                        scrollable.dispose();
+                    const validateRes = scrollable._validate({
+                        type: 'dxmousewheel',
+                        delta: -100,
+                        ctrlKey,
+                        metaKey,
                     });
+
+                    const expectedRes = (metaKey || ctrlKey)
+                        ? false
+                        : true;
+
+                    assert.equal(validateRes, expectedRes);
+                    scrollable.dispose();
                 });
             });
         });
