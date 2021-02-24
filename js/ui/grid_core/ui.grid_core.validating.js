@@ -429,7 +429,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
         isCurrentValidatorProcessing: function({ rowKey, columnIndex }) {
             return this._currentCellValidator && this._currentCellValidator.option('validationGroup').key === rowKey
-                    && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
+                && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
         },
 
         validateCell: function(validator) {
@@ -1246,8 +1246,6 @@ export default {
                         const editingController = this.getController('editing');
                         const change = rowOptions ? editingController.getChangeByKey(rowOptions.key) : null;
                         let validationResult;
-                        const $cell = $focus && $focus.is('td') ? $focus : null;
-                        const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
                         const validatingController = this.getController('validating');
 
                         if(validator) {
@@ -1257,6 +1255,7 @@ export default {
                                 editingController.waitForDeferredOperations().done(() => {
                                     when(validatingController.validateCell(validator)).done((result) => {
                                         validationResult = result;
+                                        const column = validationResult.validator.option('dataGetter')().column;
                                         if(change && column && !validatingController.isCurrentValidatorProcessing({ rowKey: change.key, columnIndex: column.index })) {
                                             return;
                                         }
