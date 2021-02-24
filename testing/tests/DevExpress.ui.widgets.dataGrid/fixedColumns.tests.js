@@ -1924,9 +1924,7 @@ QUnit.module('Fixed columns', {
 
         that.clock.restore();
         that.items = generateData(20);
-        that.options.scrolling = {
-            pushBackValue: 0 // for ios devices
-        };
+
         that.setupDataGrid();
         that.rowsView.render(that.gridContainer);
         that.rowsView.height(100);
@@ -1956,9 +1954,7 @@ QUnit.module('Fixed columns', {
 
             that.clock.restore();
             that.items = generateData(20);
-            that.options.scrolling = {
-                pushBackValue: 0 // for ios devices
-            };
+
             that.setupDataGrid();
             that.rowsView.render(that.gridContainer);
             that.rowsView.height(100);

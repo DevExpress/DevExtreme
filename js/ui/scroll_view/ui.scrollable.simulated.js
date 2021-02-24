@@ -1079,10 +1079,6 @@ export const SimulatedStrategy = Class.inherit({
         }
     },
 
-    verticalOffset: function() {
-        return 0;
-    },
-
     dispose: function() {
         this._resetActive();
 

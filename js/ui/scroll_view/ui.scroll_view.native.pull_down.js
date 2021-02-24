@@ -67,12 +67,6 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this._refreshPullDownText();
     },
 
-    _pushBackFromBoundary: function() {
-        if(!this._isLocked() && !this._component.isEmpty()) {
-            this.callBase();
-        }
-    },
-
     _refreshPullDownText: function() {
         const that = this;
         const pullDownTextItems = [{
