@@ -35,6 +35,12 @@ const SRC = [
     '!js/renovation/test_utils/**/*'
 ];
 
+const IGNORE_PATHS_BY_FRAMEWORKS = {
+    vue: ['!js/renovation/viz/**/*'],
+    react: [],
+    angular: []
+};
+
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 
 const COMMON_SRC = ['js/**/*.d.ts', 'js/**/*.js'];
@@ -170,14 +176,25 @@ function addGenerationTask(
 
     generator.options = BASE_GENERATOR_OPTIONS;
 
-    gulp.task(`generate-${frameworkName}-declaration-only`, function() {
-        return gulp.src(SRC, { base: 'js' })
+    function compileComponents(done) {
+        const errors = [];
+        const ignorePaths = IGNORE_PATHS_BY_FRAMEWORKS[frameworkName];
+
+        return gulp.src(SRC.concat(ignorePaths), { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(gulpIf(compileTs, tsProject({
-                error: processErrors(knownErrors),
+                error: processErrors(knownErrors, errors),
                 finish() { }
-            })))
+            }))).on('end', function() {
+                done(errors.map(e => e.message).join('\n') || undefined);
+            });
+    }
+
+    gulp.task(`${frameworkName}-compilation-check`, compileComponents);
+
+    gulp.task(`generate-${frameworkName}-declaration-only`, function(done) {
+        return compileComponents(done)
             .pipe(gulpIf(babelGeneratedFiles, babel(transpileConfig.cjs)))
             .pipe(gulp.dest(frameworkDest));
     });
@@ -268,14 +285,4 @@ gulp.task('generate-components-watch', gulp.series('generate-components', functi
         ));
 }));
 
-gulp.task('react-compilation-check', function() {
-    const generator = require('devextreme-generator/react-generator').default;
-
-    generator.options = BASE_GENERATOR_OPTIONS;
-
-    const tsProject = ts.createProject('build/gulp/generator/ts-configs/react.tsconfig.json');
-
-    return gulp.src([...SRC, '!js/renovation/preact_wrapper/**/*.*'], { base: 'js' })
-        .pipe(generateComponents(generator))
-        .pipe(tsProject());
-});
+gulp.task('native-components-compilation-check', gulp.series('react-compilation-check', 'angular-compilation-check', 'vue-compilation-check'));

@@ -181,7 +181,7 @@ function run_test_jest {
 function run_native_components {
     npm i
     npx gulp localization
-    npx gulp react-compilation-check
+    npx gulp native-components-compilation-check
 }
 
 function run_test_scss {
