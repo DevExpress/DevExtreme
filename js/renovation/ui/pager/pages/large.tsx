@@ -55,6 +55,7 @@ function createPageIndexesBySlidingWindowIndexes(slidingWindowIndexes: number[],
   delimiter: DelimiterType): SlidingWindowState & { pageIndexes: PageIndexes } {
   let pageIndexes: PageIndexes = [];
   let indexesForReuse: number[] = [];
+  // eslint-disable-next-line default-case
   switch (delimiter) {
     case 'none':
       pageIndexes = [...slidingWindowIndexes];
@@ -71,7 +72,6 @@ function createPageIndexesBySlidingWindowIndexes(slidingWindowIndexes: number[],
       pageIndexes = [0, 'low', ...slidingWindowIndexes, pageCount - 1];
       indexesForReuse = slidingWindowIndexes.slice(1);
       break;
-    default:
   }
   return {
     slidingWindowIndexes, indexesForReuse, pageIndexes,

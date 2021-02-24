@@ -109,8 +109,8 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   updateAdaptivityProps(): void {
     const currentElementsWidth = getElementsWidth({
       parent: this.parentRef.current,
-      pageSizes: this.pageSizesRef?.current || undefined,
-      info: this.infoTextRef?.current || undefined,
+      pageSizes: this.pageSizesRef.current,
+      info: this.infoTextRef.current,
       pages: this.pagesRef.current,
     });
     if (isDefined(this.actualAdaptivityProps)
