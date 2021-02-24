@@ -1023,6 +1023,10 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     validate: function(e) {
+        if(isDxMouseWheelEvent(e) && isCommandKeyPressed(e)) {
+            return false;
+        }
+
         if(this.option('disabled')) {
             return false;
         }
@@ -1035,10 +1039,6 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     _validateWheel: function(e) {
-        if(isCommandKeyPressed(e)) {
-            return false;
-        }
-
         const scroller = this._scrollers[this._wheelDirection(e)];
         const reachedMin = scroller._reachedMin();
         const reachedMax = scroller._reachedMax();

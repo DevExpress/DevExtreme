@@ -322,6 +322,40 @@ if(devices.real().deviceType === 'desktop') {
         });
     });
 
+    ['dxmousewheel', 'other'].forEach((type) => {
+        [true, false].forEach((bounceEnabled) => {
+            [true, false].forEach(ctrlKey => {
+                [true, false].forEach(metaKey => {
+                    QUnit.test(`Handle ctrl key (T970904). type: ${type}, bounceEnabled: ${bounceEnabled}, ctrlKey: ${ctrlKey}, metaKey: ${metaKey}`, function(assert) {
+                        if(devices.real().deviceType !== 'desktop') {
+                            assert.ok(true, 'scenario is relevant only for desktop');
+                            return;
+                        }
+
+                        const scrollable = $('#scrollable').dxScrollable({
+                            useNative: false
+                        }).dxScrollable('instance');
+
+                        const validateRes = scrollable._validate({
+                            type: type,
+                            delta: -100,
+                            bounceEnabled,
+                            ctrlKey,
+                            metaKey,
+                        });
+
+                        const expectedRes = type === 'dxmousewheel' && (metaKey || ctrlKey)
+                            ? false
+                            : true;
+
+                        assert.equal(validateRes, expectedRes);
+                        scrollable.dispose();
+                    });
+                });
+            });
+        });
+    });
+
     [1, 1.5, 0.25].forEach((browserZoom) => {
         ['up', 'down', 'left', 'right'].forEach((key) => {
             QUnit.testInActiveWindow(`Offset after press "${key}" key with browser zoom - ${browserZoom * 100}%: useNative - ${false}, direction: "both"`, function(assert) {
