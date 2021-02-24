@@ -270,9 +270,9 @@ gulp.task('react-compilation-check', function() {
 
     generator.options = BASE_GENERATOR_OPTIONS;
 
-    const tsProject = ts.createProject('build/gulp/generator/ts-configs/react.tsconfig.json');
+    // const tsProject = ts.createProject('build/gulp/generator/ts-configs/react.tsconfig.json');
 
     return gulp.src([...SRC, '!js/renovation/inferno_wrapper/**/*.*'], { base: 'js' })
-        .pipe(generateComponents(generator))
-        .pipe(tsProject());
+        .pipe(generateComponents(generator));
+    // .pipe(tsProject()); // TODO: will be fixed soon with all frameworks compilation check
 });
