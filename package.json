@@ -194,6 +194,7 @@
     "build:angular:watch": "gulp generate-angular-watch",
     "build:vue": "gulp generate-vue",
     "build:vue:watch": "gulp generate-vue-watch",
+    "compile:r": "tsc -p ./renovation.tsconfig.json",
     "dev": "gulp dev",
     "dev:r": "cross-env USE_RENOVATION=true gulp dev",
     "transpile-tests": "gulp transpile-tests",
