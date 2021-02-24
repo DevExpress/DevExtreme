@@ -1,4 +1,3 @@
-import 'common.css!';
 import dateUtils from 'core/utils/date';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';

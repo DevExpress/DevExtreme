@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import fx from 'animation/fx';

@@ -1,5 +1,4 @@
 import fx from 'animation/fx';
-import 'common.css!';
 import config from 'core/config';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';

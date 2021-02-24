@@ -2,7 +2,6 @@ import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 
-import 'common.css!';
 import 'generic_light.css!';
 import Pager from 'ui/pager';
 import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js';

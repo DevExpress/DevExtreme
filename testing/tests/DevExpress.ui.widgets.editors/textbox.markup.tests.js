@@ -3,7 +3,6 @@ import devices from 'core/devices';
 import browser from 'core/utils/browser';
 
 import 'ui/text_box';
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

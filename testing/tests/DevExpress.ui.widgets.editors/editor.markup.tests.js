@@ -2,7 +2,6 @@ import $ from 'jquery';
 import Editor from 'ui/editor/editor';
 import Class from 'core/class';
 
-import 'common.css!';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 

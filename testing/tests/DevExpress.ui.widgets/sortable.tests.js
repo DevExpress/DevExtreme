@@ -8,7 +8,6 @@ import translator from 'animation/translator';
 import viewPort from 'core/utils/view_port';
 import devices from 'core/devices';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

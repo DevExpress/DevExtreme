@@ -13,7 +13,6 @@ import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import visibilityChangeUtils from 'events/visibility_change';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/popup';
 import 'ui/tab_panel';

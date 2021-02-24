@@ -1,5 +1,3 @@
-require('common.css!');
-
 QUnit.testStart(function() {
     const markup = '<div id="texteditor"></div>';
 

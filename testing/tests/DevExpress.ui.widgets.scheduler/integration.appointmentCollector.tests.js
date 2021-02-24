@@ -11,7 +11,6 @@ import CustomStore from 'data/custom_store';
 import AppointmentAdapter from 'ui/scheduler/appointmentAdapter';
 
 import 'ui/scheduler/ui.scheduler';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

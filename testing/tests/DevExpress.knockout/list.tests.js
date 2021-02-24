@@ -5,7 +5,6 @@ const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 require('ui/list');
 require('integration/knockout');
 
-require('common.css!');
 require('generic_light.css!');
 
 QUnit.testStart(function() {

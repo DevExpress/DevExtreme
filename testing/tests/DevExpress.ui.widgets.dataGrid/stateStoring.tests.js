@@ -5,7 +5,6 @@ import Promise from 'core/polyfills/promise';
 import fx from 'animation/fx';
 
 import 'ui/data_grid/ui.data_grid';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

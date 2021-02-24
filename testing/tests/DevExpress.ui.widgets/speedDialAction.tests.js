@@ -4,7 +4,6 @@ import fx from 'animation/fx';
 import SpeedDialItem from 'ui/speed_dial_action/speed_dial_item';
 
 import 'ui/speed_dial_action';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

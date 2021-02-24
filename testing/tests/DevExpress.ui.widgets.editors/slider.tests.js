@@ -1,6 +1,5 @@
 import fx from 'animation/fx';
 import positionUtils from 'animation/position';
-import 'common.css!';
 import 'generic_light.css!';
 import config from 'core/config';
 import browser from 'core/utils/browser';

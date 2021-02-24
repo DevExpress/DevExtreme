@@ -9,7 +9,6 @@ import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scroll_view';
 
