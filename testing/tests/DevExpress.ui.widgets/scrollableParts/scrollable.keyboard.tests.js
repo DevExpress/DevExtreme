@@ -349,7 +349,6 @@ if(devices.real().deviceType === 'desktop') {
                         : true;
 
                     assert.equal(validateRes, expectedRes);
-                    scrollable.dispose();
                 });
             });
         });
