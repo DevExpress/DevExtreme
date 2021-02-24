@@ -270,7 +270,7 @@ module.exports = {
                         if($rowsTable) {
                             $rowsTable
                                 .find('.dx-master-detail-cell')
-                                .toggleClass('dx-hidden', isBestFit);
+                                .css('maxWidth', isBestFit ? 0 : '');
                         }
                     }
                 }
