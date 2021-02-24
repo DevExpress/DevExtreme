@@ -2,8 +2,9 @@ import animationFrame from 'animation/frame';
 import 'generic_light.css!';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
-import { RTL_CLASS } from './scrollable.constants.js';
+import Scrollable from 'ui/scrollable';
+import { RTL_CLASS, SCROLLABLE_CONTENT_CLASS } from './scrollable.constants.js';
+import { act } from 'preact/test-utils';
 
 
 const moduleConfig = {
@@ -51,7 +52,7 @@ QUnit.test('rtlEnabled scrolls to very right position', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`).width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
@@ -66,7 +67,7 @@ QUnit.test('rtlEnabled scrolls to very right position after changing the size of
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`).width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
@@ -84,7 +85,7 @@ QUnit.test('rtlEnabled scrolls to very right position after shown event', functi
     $wrapper.show();
     triggerShownEvent($wrapper);
     const scrollable = $scrollable.dxScrollable('instance');
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`).width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
@@ -100,16 +101,19 @@ QUnit.test('init option \'rtl\' is true', function(assert) {
 });
 
 QUnit.test('rtlEnabled scrolls to very right position when a width was changing via API', function(assert) {
-    const $scrollable = $('#scrollable')
-        .dxScrollable({
-            direction: 'horizontal',
-            rtlEnabled: true,
-            useNative: true
-        });
+    const $scrollable = $('#scrollable').dxScrollable({
+        direction: 'horizontal',
+        rtlEnabled: true,
+        useNative: true
+    });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    scrollable.option('width', 50);
 
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    act(() => {
+        scrollable.option('width', 100);
+    });
+
+
+    const veryRightPosition = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`).width() - $scrollable.width();
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });

@@ -6,7 +6,7 @@ import devices from 'core/devices';
 
 import 'generic_light.css!';
 import 'ui/text_area';
-import 'ui/scroll_view/ui.scrollable';
+import 'ui/scrollable';
 
 QUnit.testStart(() => {
     const markup =
