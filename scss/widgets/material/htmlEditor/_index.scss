@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/sizes" as *;
+@use "../button/colors" as *;
 @use "../textEditor/colors" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
@@ -18,6 +19,24 @@
 
   .dx-htmleditor-toolbar-wrapper:first-child {
     border-bottom: 1px solid $texteditor-border-color;
+  }
+
+  &.dx-state-readonly {
+    .dx-htmleditor-toolbar {
+      .dx-toolbar-button {
+        .dx-button:not(.dx-state-disabled) {
+          box-shadow: none;
+
+          .dx-icon {
+            opacity: $button-disabled-icon-opacity;
+          }
+
+          .dx-button-text {
+            color: $button-disabled-text-color;
+          }
+        }
+      }
+    }
   }
 
   &.dx-invalid {
@@ -61,6 +80,7 @@
 
   &.dx-htmleditor-filled {
     background: $texteditor-bg;
+    border-radius: $texteditor-input-border-radius;
 
     &.dx-state-hover {
       background-color: $texteditor-hover-bg;
@@ -102,6 +122,12 @@
 
     &.dx-invalid {
       border-bottom-color: $texteditor-invalid-faded-border-color;
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        border-color: transparent;
+        border-bottom-color: $texteditor-invalid-focused-border-color;
+      }
     }
   }
 

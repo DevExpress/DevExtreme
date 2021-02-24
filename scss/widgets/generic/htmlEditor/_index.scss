@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/sizes" as *;
+@use "../button/colors" as *;
 @use "../textEditor/colors" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
@@ -24,6 +25,20 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 
   &.dx-state-readonly {
     border-style: dashed;
+
+    .dx-htmleditor-toolbar {
+      .dx-toolbar-button {
+        .dx-button:not(.dx-state-disabled) {
+          .dx-icon {
+            opacity: $button-disabled-icon-opacity;
+          }
+
+          .dx-button-text {
+            opacity: $button-disabled-text-opacity;
+          }
+        }
+      }
+    }
   }
 
   &.dx-htmleditor-outlined {
@@ -51,6 +66,7 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
   &.dx-htmleditor-filled {
     border-color: $htmleditor-filled-border-color;
     background: $texteditor-filled-bg;
+    border-radius: $texteditor-input-border-radius;
 
     &.dx-state-readonly {
       border-style: dashed;
@@ -58,6 +74,10 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
       &.dx-state-focused,
       &.dx-state-active {
         background-color: color.change($texteditor-filled-bg, $alpha: 0.03);
+
+        &.dx-state-hover {
+          background-color: color.change($texteditor-hover-border-color, $alpha: 0.07);
+        }
       }
     }
 
