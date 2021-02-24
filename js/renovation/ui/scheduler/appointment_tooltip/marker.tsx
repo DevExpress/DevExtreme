@@ -1,7 +1,7 @@
 import {
-  Component, ComponentBindings, JSXComponent, Effect, OneWay, CSSAttributes,
+  Component, ComponentBindings, JSXComponent, OneWay, CSSAttributes,
 } from 'devextreme-generator/component_declaration/common';
-import { DeferredColor, Color } from './types.d';
+import { Color } from './types.d';
 
 export const viewFunction = (viewModel: Marker): JSX.Element => (
   <div
@@ -18,7 +18,7 @@ export const viewFunction = (viewModel: Marker): JSX.Element => (
 
 @ComponentBindings()
 export class MarkerProps {
-  @OneWay() color?: DeferredColor;
+  // @OneWay() color?: DeferredColor;
 
   @OneWay() className?: string = '';
 }
@@ -29,14 +29,6 @@ export class MarkerProps {
 })
 export class Marker extends JSXComponent(MarkerProps) {
   appointmentColor!: Color;
-
-  @Effect()
-  colorEffect(): void {
-    const { color } = this.props;
-    color?.done((value) => {
-      this.appointmentColor = value;
-    });
-  }
 
   get style(): CSSAttributes {
     return { background: this.appointmentColor };
