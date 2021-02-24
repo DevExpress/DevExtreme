@@ -17,25 +17,29 @@
   border-color: transparent;
   position: relative;
 
-  .dx-htmleditor-toolbar-wrapper:first-child {
-    border-bottom: 1px solid $texteditor-border-color;
+  .dx-htmleditor-toolbar-wrapper {
+    position: relative;
+
+    &:first-child {
+      border-bottom: 1px solid $texteditor-border-color;
+    }
   }
 
   &.dx-state-readonly {
-    .dx-htmleditor-toolbar {
-      .dx-toolbar-button {
-        .dx-button:not(.dx-state-disabled) {
-          box-shadow: none;
+    .dx-htmleditor-toolbar-wrapper::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background-color: color.change($base-bg, $alpha: 0.2);
+      content: '';
+      pointer-events: none;
+    }
 
-          .dx-icon {
-            opacity: $button-disabled-icon-opacity;
-          }
-
-          .dx-button-text {
-            color: $button-disabled-text-color;
-          }
-        }
-      }
+    .dx-toolbar-button .dx-button.dx-state-disabled {
+      opacity: $base-disabled-opacity;
     }
   }
 

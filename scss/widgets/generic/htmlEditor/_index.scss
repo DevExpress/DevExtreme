@@ -17,8 +17,12 @@ $generic-html-editor-toolbar-height: $generic-base-inline-widget-height;
 $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 
 .dx-htmleditor {
-  .dx-htmleditor-toolbar-wrapper:first-child {
-    border-bottom: 1px solid $htmleditor-toolbar-border-color;
+  .dx-htmleditor-toolbar-wrapper {
+    position: relative;
+
+    &:first-child {
+      border-bottom: 1px solid $htmleditor-toolbar-border-color;
+    }
   }
 
   border-color: $htmleditor-border-color;
@@ -26,18 +30,20 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
   &.dx-state-readonly {
     border-style: dashed;
 
-    .dx-htmleditor-toolbar {
-      .dx-toolbar-button {
-        .dx-button:not(.dx-state-disabled) {
-          .dx-icon {
-            opacity: $button-disabled-icon-opacity;
-          }
+    .dx-htmleditor-toolbar-wrapper::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background-color: color.change($base-bg, $alpha: 0.2);
+      content: '';
+      pointer-events: none;
+    }
 
-          .dx-button-text {
-            opacity: $button-disabled-text-opacity;
-          }
-        }
-      }
+    .dx-toolbar-button .dx-button.dx-state-disabled {
+      opacity: $base-disabled-opacity;
     }
   }
 
