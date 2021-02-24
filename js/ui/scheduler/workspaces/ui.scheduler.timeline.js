@@ -358,11 +358,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return false;
     }
 
-    _cleanView() {
-        super._cleanView();
-        this._$sidebarTable.empty();
-    }
-
     _visibilityChanged(visible) {
         super._visibilityChanged(visible);
     }
