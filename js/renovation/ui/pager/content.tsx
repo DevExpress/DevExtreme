@@ -19,7 +19,6 @@ import { EventCallback } from '../common/event_callback.d';
 import { KeyboardActionContext, KeyboardActionContextType } from './common/keyboard_action_context';
 import noop from '../../utils/noop';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   widgetRootElementRef,
   classes,
@@ -37,7 +36,7 @@ export const viewFunction = ({
     visible,
   },
   restAttributes,
-}: PagerContent) => (
+}: PagerContent): JSX.Element => (
   <Widget
     rootElementRef={widgetRootElementRef}
     rtlEnabled={rtlEnabled}

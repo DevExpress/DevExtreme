@@ -6,13 +6,12 @@ import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return.
 import { EventCallback } from '../../common/event_callback.d';
 import { KeyboardActionContext, KeyboardActionContextType } from './keyboard_action_context';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   widgetRef,
   props: {
     className, children, label,
   },
-}: LightButton) => (
+}: LightButton): JSX.Element => (
   <div
     ref={widgetRef}
     className={className}
@@ -27,8 +26,7 @@ export const viewFunction = ({
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
 export class LightButtonProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | string | number;
 
   @OneWay() className = '';
 
