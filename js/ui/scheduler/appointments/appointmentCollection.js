@@ -44,6 +44,7 @@ class SchedulerAppointments extends CollectionWidget {
     constructor(element, options) {
         super(element, options);
         this._virtualAppointments = {};
+        this._focusedAppointmentInfo = null;
     }
 
     notifyObserver(subject, args) {
@@ -129,11 +130,21 @@ class SchedulerAppointments extends CollectionWidget {
     _focusInHandler(e) {
         super._focusInHandler(e);
         this._$currentAppointment = $(e.target);
+
+        const appointmentData = this._getItemData(this._$currentAppointment);
+        const appointmentSettings = this._$currentAppointment.data(APPOINTMENT_SETTINGS_KEY);
+
+        this._focusedAppointmentInfo = {
+            data: appointmentData,
+            settings: appointmentSettings,
+        };
+
         this.option('focusedElement', getPublicElement($(e.target)));
     }
 
     _focusOutHandler(e) {
         const $appointment = this._getAppointmentByIndex(0);
+        this._focusedAppointmentInfo = null;
 
         this.option('focusedElement', getPublicElement($appointment));
         super._focusOutHandler(e);
@@ -169,6 +180,7 @@ class SchedulerAppointments extends CollectionWidget {
                 this._renderDropDownAppointments();
 
                 this._attachAppointmentsEvents();
+                this.focusAppointment();
                 break;
             case 'fixedContainer':
             case 'allDayContainer':
@@ -953,6 +965,46 @@ class SchedulerAppointments extends CollectionWidget {
 
             this.option('focusedElement', focusedElement);
             eventsEngine.trigger(focusedElement, 'focus');
+        }
+    }
+
+    focusAppointment() {
+        const { _focusedAppointmentInfo: focusedAppointmentInfo } = this;
+
+        if(focusedAppointmentInfo) {
+            const $appointments = this._findItemElementByItem(focusedAppointmentInfo.data);
+            const { startDate, endDate } = focusedAppointmentInfo.settings.info.sourceAppointment;
+            const { groupIndex, appointmentReduced } = focusedAppointmentInfo.settings;
+
+            let $focusedAppointment = null;
+            let currentIndex = 0;
+
+            while(!$focusedAppointment && currentIndex < $appointments.length) {
+                const $currentAppointment = $appointments[currentIndex];
+                const {
+                    info: itemInfo, groupIndex: itemGroupIndex, appointmentReduced: itemReduced,
+                } = $currentAppointment.data(APPOINTMENT_SETTINGS_KEY);
+
+                const {
+                    startDate: itemStartDate,
+                    endDate: itemEndDate,
+                } = itemInfo.sourceAppointment;
+
+                const isFocusedAppointment = startDate.getTime() === itemStartDate.getTime()
+                    && endDate.getTime() === itemEndDate.getTime()
+                    && groupIndex === itemGroupIndex
+                    && appointmentReduced === itemReduced;
+
+                if(isFocusedAppointment) {
+                    $focusedAppointment = $currentAppointment;
+                }
+
+                currentIndex += 1;
+            }
+
+            this._$currentAppointment = $focusedAppointment;
+
+            this.focus();
         }
     }
 
