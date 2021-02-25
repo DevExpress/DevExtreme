@@ -7,8 +7,7 @@ import messageLocalization from '../../../localization/message';
 import PagerProps from './common/pager_props';
 
 export const PAGER_INFO_CLASS = 'dx-info';
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = ({ text, props: { rootElementRef } }: InfoText) => (
+export const viewFunction = ({ text, props: { rootElementRef } }: InfoText): JSX.Element => (
   <div ref={rootElementRef} className={PAGER_INFO_CLASS}>
     {text}
   </div>

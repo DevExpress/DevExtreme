@@ -9,9 +9,11 @@ import {
   AnimatedScrollbar,
 } from '../animated_scrollbar';
 
+import { isDefined } from '../../../../core/utils/type';
+
 describe('Public methods', () => {
   each([
-    { name: 'inBounds', argsCount: 0 },
+    { name: 'inBounds', argsCount: 0, defaultValue: false },
     { name: 'getMaxOffset', argsCount: 0 },
     { name: 'scrollStep', argsCount: 1 },
     { name: 'move', argsCount: 1 },
@@ -29,20 +31,27 @@ describe('Public methods', () => {
     { name: 'stopHandler', argsCount: 0 },
     { name: 'scrollByHandler', argsCount: 1 },
   ]).describe('Method: %o', (methodInfo) => {
-    it(`${methodInfo.name}() method should call according method from scrollbar`, () => {
-      const viewModel = new AnimatedScrollbar({ });
-      (viewModel as any).scrollbarRef = { current: { [`${methodInfo.name}`]: jest.fn() } };
+    each([{ [`${methodInfo.name}`]: jest.fn() }, null]).describe('ScrollbarRef.current: %o', (current) => {
+      it(`${methodInfo.name}() method should call according method from scrollbar`, () => {
+        const viewModel = new AnimatedScrollbar({ });
+        (viewModel as any).scrollbarRef = { current };
 
-      if (methodInfo.argsCount === 2) {
-        viewModel[methodInfo.name]('arg1', 'arg2');
-        expect(viewModel.scrollbarRef.current![`${methodInfo.name}`]).toHaveBeenCalledWith('arg1', 'arg2');
-      } else if (methodInfo.argsCount === 1) {
-        viewModel[methodInfo.name]('arg1');
-        expect(viewModel.scrollbarRef.current![`${methodInfo.name}`]).toHaveBeenCalledWith('arg1');
-      } else {
-        viewModel[methodInfo.name]();
-      }
-      expect(viewModel.scrollbarRef.current![`${methodInfo.name}`]).toHaveBeenCalledTimes(1);
+        if (isDefined(viewModel.scrollbarRef.current)) {
+          if (methodInfo.argsCount === 2) {
+            viewModel[methodInfo.name]('arg1', 'arg2');
+            expect(viewModel.scrollbarRef.current[`${methodInfo.name}`]).toHaveBeenCalledWith('arg1', 'arg2');
+          } else if (methodInfo.argsCount === 1) {
+            viewModel[methodInfo.name]('arg1');
+            expect(viewModel.scrollbarRef.current[`${methodInfo.name}`]).toHaveBeenCalledWith('arg1');
+          } else {
+            viewModel[methodInfo.name]();
+          }
+          expect(viewModel.scrollbarRef.current[`${methodInfo.name}`]).toHaveBeenCalledTimes(1);
+        } else if (isDefined(methodInfo.defaultValue)) {
+          const returnValue = viewModel[methodInfo.name]();
+          expect(returnValue).toEqual(methodInfo.defaultValue);
+        }
+      });
     });
   });
 

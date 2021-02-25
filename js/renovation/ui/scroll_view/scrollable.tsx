@@ -118,6 +118,11 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   }
 
   @Method()
+  update(): void {
+    this.scrollableRef.update();
+  }
+
+  @Method()
   scrollTo(targetLocation: number | Partial<ScrollableLocation>): void {
     this.scrollableRef.scrollTo(targetLocation);
   }

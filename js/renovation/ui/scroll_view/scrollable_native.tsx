@@ -64,7 +64,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
     windowResizeHandler, needForceScrollbarsVisibility,
     props: {
-      disabled, height, width, rtlEnabled, children,
+      disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
       showScrollbar, scrollByThumb, useSimulatedScrollbar, pullingDownText,
       pulledDownText, refreshingText, reachBottomText,
@@ -79,6 +79,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       rtlEnabled={rtlEnabled}
       height={height}
       width={width}
+      visible={visible}
       onDimensionChanged={windowResizeHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
@@ -171,6 +172,16 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @Method()
   content(): HTMLDivElement {
     return this.contentRef.current!;
+  }
+
+  @Method()
+  update(): void {
+    const contentEl = this.contentRef.current;
+
+    if (isDefined(contentEl)) {
+      this.updateSizes();
+      this.props.onUpdated?.(this.getEventArgs());
+    }
   }
 
   @Method()
@@ -347,11 +358,18 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   }
 
   updateSizes(): void {
-    this.containerClientWidth = this.containerRef.current!.clientWidth;
-    this.containerClientHeight = this.containerRef.current!.clientHeight;
+    const containerEl = this.containerRef.current;
+    const contentEl = this.contentRef.current;
 
-    this.contentClientWidth = this.contentRef.current!.clientWidth;
-    this.contentClientHeight = this.contentRef.current!.clientHeight;
+    if (isDefined(containerEl)) {
+      this.containerClientWidth = containerEl.clientWidth;
+      this.containerClientHeight = containerEl.clientHeight;
+    }
+
+    if (isDefined(contentEl)) {
+      this.contentClientWidth = contentEl.clientWidth;
+      this.contentClientHeight = contentEl.clientHeight;
+    }
   }
 
   moveScrollbars(): void {
@@ -407,7 +425,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
         this.handleInit(e);
       }, this.getInitEventData(), { namespace });
 
-    return (): void => dxScrollInit.off(this.wrapperRef, { namespace });
+    return (): void => dxScrollInit.off(this.wrapperRef.current, { namespace });
   }
 
   getInitEventData(): any {

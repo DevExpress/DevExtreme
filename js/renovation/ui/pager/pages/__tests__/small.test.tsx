@@ -12,7 +12,6 @@ jest.mock('../../../../../localization/message', () => ({
 }));
 
 describe('Small pager pages', () => {
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const render = (props) => {
     const tree = mount<Element>(<PagesSmallComponent {...props} /> as any).childAt(0);
     const pageIndexNumberBox = tree.childAt(0);

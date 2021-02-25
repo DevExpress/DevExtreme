@@ -8,13 +8,12 @@ import { FullPageSize } from '../common/types.d';
 import { getElementMinWidth } from '../utils/get_element_width';
 import PagerProps from '../common/pager_props';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   width,
   props: {
     pageSize, pageSizeChange, pageSizes,
   },
-}: PageSizeSmall) => (
+}: PageSizeSmall): JSX.Element => (
   <SelectBox
     displayExpr="text"
     valueExpr="value"

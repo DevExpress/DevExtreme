@@ -10,8 +10,7 @@ import PagerProps from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = ({ pages }: PagesLarge) => {
+export const viewFunction = ({ pages }: PagesLarge): JSX.Element => {
   const PagesMarkup = pages.map(({ key, pageProps }) => (pageProps
     ? (
       <Page

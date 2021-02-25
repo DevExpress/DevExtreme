@@ -242,8 +242,6 @@ QUnit.module('Rows view', {
         assert.strictEqual(scrollable.option('test'), 'test', 'scrollable test');
         // T654402
         assert.strictEqual(scrollable.option('updateManually'), false, 'scrollable updateManually');
-        // T698156
-        assert.strictEqual(scrollable.option('pushBackValue'), 0, 'scrollable pushBackValue');
     });
 
     QUnit.test('Check WAI-ARIA attributes for data rows/cells after render rows', function(assert) {
@@ -2015,7 +2013,7 @@ QUnit.module('Rows view', {
         $testElement.height(300);
         const oldFunc = rowsView._renderScrollable;
         rowsView._renderScrollable = function() {
-            oldTableHeight = this._getTableElement().height();
+            oldTableHeight = this.getTableElement().height();
             oldFunc.call(rowsView);
         };
 
