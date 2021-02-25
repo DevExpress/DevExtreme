@@ -14,7 +14,7 @@ import { AnimatedScrollbar } from './animated_scrollbar';
 import { Widget } from '../common/widget';
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
-import { isDxMouseWheelEvent, normalizeKeyName } from '../../../events/utils/index';
+import { isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed } from '../../../events/utils/index';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { isDefined } from '../../../core/utils/type';
 import { ScrollableSimulatedPropsType } from './scrollable_simulated_props';
@@ -725,7 +725,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
 
   @Method()
   validate(e: Event): boolean {
-    if (this.isLocked() || this.props.disabled) {
+    if (this.isLocked() || this.props.disabled
+    || (isDxMouseWheelEvent(e) && isCommandKeyPressed({
+      ctrlKey: (e as any).ctrlKey,
+      metaKey: (e as any).metaKey,
+    }))) {
       return false;
     }
 
