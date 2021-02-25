@@ -18,7 +18,6 @@ const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
 const LIGHT_PAGES_CLASS = 'dx-light-pages';
 const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   pageIndexRef,
   selectLastPageIndex,
@@ -27,7 +26,7 @@ export const viewFunction = ({
   value,
   pagesCountText,
   props: { pageCount },
-}: PagesSmall) => (
+}: PagesSmall): JSX.Element => (
   <div className={LIGHT_PAGES_CLASS}>
     <NumberBox
       rootElementRef={pageIndexRef}

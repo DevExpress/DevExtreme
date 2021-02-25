@@ -92,13 +92,14 @@ function populateAxesInfo(axes) {
         let axisInfo;
         let tickInterval = axis._tickInterval;
         const synchronizedValue = options.synchronizedValue;
+        const action = axis.getViewport().action;
 
         if(majorTicks && majorTicks.length > 0 &&
             isNumeric(majorTicks[0]) &&
             options.type !== 'discrete' &&
             !businessRange.isEmpty() &&
             !(businessRange.breaks && businessRange.breaks.length) &&
-            axis.getViewport().action !== 'zoom'
+            action !== 'zoom' && action !== 'pan'
         ) {
 
             axis.applyMargins();
