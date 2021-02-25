@@ -32,10 +32,10 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 
     .dx-htmleditor-toolbar-wrapper::before {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 1px;
+      bottom: 1px;
+      left: 1px;
+      right: 1px;
       z-index: 2;
       background-color: color.change($base-bg, $alpha: 0.2);
       content: '';
