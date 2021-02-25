@@ -88,13 +88,21 @@ System.config({
         'es6-object-assign': 'npm:es6-object-assign',
 
         'devextreme': 'npm:devextreme/cjs',
+        'devextreme/bundles/dx.all': 'npm:devextreme/bundles/dx.all.js',
         'jszip': 'npm:jszip/dist/jszip.min.js',
         'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
         'devexpress-diagram': 'npm:devexpress-diagram',
         'devexpress-gantt': 'npm:devexpress-gantt',
         'devextreme-angular': 'npm:devextreme-angular',
-        'preact': 'npm:preact/dist/preact.js',
-        'preact/hooks': 'npm:preact/hooks/dist/hooks.js'
+        'devextreme-generator': 'npm:devextreme-generator',
+        'inferno': 'npm:inferno/dist/inferno.min.js',
+        'inferno-compat': 'npm:inferno-compat/dist/inferno-compat.min.js',
+        'inferno-create-element': 'npm:inferno-create-element/dist/inferno-create-element.min.js',
+        'inferno-dom': 'npm:inferno-dom/dist/inferno-dom.min.js',
+        'inferno-hydrate': 'npm:inferno-hydrate/dist/inferno-hydrate.min.js',
+        'inferno-clone-vnode': 'npm:inferno-clone-vnode/dist/inferno-clone-vnode.min.js',
+        'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
+        'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js'
     },
     packages: {
         'app': {
@@ -102,6 +110,9 @@ System.config({
             defaultExtension: 'ts'
         },
         'devextreme': {
+            defaultExtension: 'js'
+        },
+        'devextreme-generator': {
             defaultExtension: 'js'
         },
         'devextreme/events/utils': {

@@ -97,8 +97,15 @@ System.config({
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
     'devexpress-gantt': 'npm:devexpress-gantt/dist/dx-gantt.js',
-    'preact': 'npm:preact/dist/preact.js',
-    'preact/hooks': 'npm:preact/hooks/dist/hooks.js',
+    'devextreme-generator': 'npm:devextreme-generator',
+    'inferno': 'npm:inferno/dist/inferno.min.js',
+    'inferno-compat': 'npm:inferno-compat/dist/inferno-compat.min.js',
+    'inferno-create-element': 'npm:inferno-create-element/dist/inferno-create-element.min.js',
+    'inferno-dom': 'npm:inferno-dom/dist/inferno-dom.min.js',
+    'inferno-hydrate': 'npm:inferno-hydrate/dist/inferno-hydrate.min.js',
+    'inferno-clone-vnode': 'npm:inferno-clone-vnode/dist/inferno-clone-vnode.min.js',
+    'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
+    'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
 
     'plugin-babel': 'npm:systemjs-plugin-babel/plugin-babel.js',
     'systemjs-babel-build': 'npm:systemjs-plugin-babel/systemjs-babel-browser.js'
@@ -108,6 +115,9 @@ System.config({
       main: 'index.js'
     },
     'devextreme': {
+      defaultExtension: 'js'
+    },
+    'devextreme-generator': {
       defaultExtension: 'js'
     },
     'devextreme/events/utils': {
