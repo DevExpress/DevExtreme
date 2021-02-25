@@ -4,7 +4,6 @@ import Scrollable from 'ui/scroll_view/ui.scrollable';
 import { SCROLLABLE_CONTENT_CLASS, SCROLLABLE_CONTAINER_CLASS } from './scrollableParts/scrollable.constants.js';
 import { extend } from 'core/utils/extend';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

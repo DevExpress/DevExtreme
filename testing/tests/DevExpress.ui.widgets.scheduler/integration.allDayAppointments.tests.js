@@ -9,9 +9,12 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import Query from 'data/query';
 import dataUtils from 'core/element_data';
-import { SchedulerTestWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
+import {
+    SchedulerTestWrapper,
+    CLASSES,
+    supportedScrollingModes
+} from '../../helpers/scheduler/helpers.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
@@ -306,10 +309,7 @@ QUnit.module('Integration: allDay appointments', {
         });
     });
 
-    [
-        'standard',
-        'virtual'
-    ].forEach(scrollingMode => {
+    supportedScrollingModes.forEach(scrollingMode => {
         QUnit.module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {
                 const createInstance = this.createInstance.bind(this);

@@ -6,16 +6,16 @@ import Color from 'color';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import browser from 'core/utils/browser';
-import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/ui.scheduler.appointment_form';
+import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/appointment_form';
 import {
     SchedulerTestWrapper,
     initTestMarkup,
-    createWrapper
+    createWrapper,
+    supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'common.css!';
 import 'generic_light.css!';
 
 const {
@@ -140,10 +140,7 @@ module('Integration: Appointments in Month view', {
         });
     });
 
-    [
-        'standard',
-        'virtual'
-    ].forEach(scrollingMode => {
+    supportedScrollingModes.forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {
                 const createInstance = this.createInstance.bind(this);

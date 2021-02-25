@@ -1,6 +1,5 @@
-import 'common.css!';
 import 'generic_light.css!';
-import 'ui/scheduler/ui.scheduler.subscribes';
+import 'ui/scheduler/subscribes';
 import 'ui/scheduler/ui.scheduler';
 import {
     AppointmentSettingsGeneratorBaseStrategy,
@@ -1137,318 +1136,325 @@ module('Grouping By Date', {
         assert.roughEqual(result.left, left, epsilon, 'left is correct');
     }
 }, function() {
-    test('\'isGroupedByDate\' should be true only for horizontal grouped workspace with groups', function(assert) {
-        this.createInstance({
-            views: [{
-                name: 'DAY',
-                type: 'day',
-                groupOrientation: 'horizontal'
-            }, {
-                name: 'WEEK',
-                type: 'week',
-                groupOrientation: 'vertical'
-            }],
-            currentView: 'DAY',
-            dataSource: [],
-            groupByDate: true,
-            groups: ['priorityId'],
-            resources: [{
-                field: 'typeId',
-                dataSource: [{ id: 1, color: 'red' }]
-            },
-            {
-                field: 'priorityId',
-                dataSource: [{ id: 1, color: 'black' }]
-            }
-            ]
+    [true, false].forEach((isRenovatedRender) => {
+        test(`'isGroupedByDate' should be true only for horizontal grouped workspace with groups when renovateRender is ${isRenovatedRender}`, function(assert) {
+            this.createInstance({
+                views: [{
+                    name: 'DAY',
+                    type: 'day',
+                    groupOrientation: 'horizontal'
+                }, {
+                    name: 'WEEK',
+                    type: 'week',
+                    groupOrientation: 'vertical'
+                }],
+                currentView: 'DAY',
+                dataSource: [],
+                groupByDate: true,
+                groups: ['priorityId'],
+                resources: [{
+                    field: 'typeId',
+                    dataSource: [{ id: 1, color: 'red' }]
+                }, {
+                    field: 'priorityId',
+                    dataSource: [{ id: 1, color: 'black' }]
+                }],
+                renovateRender: isRenovatedRender,
+            });
+
+            assert.equal(this.instance.fire('isGroupedByDate'), true, 'Workspace is grouped by date');
+
+            this.instance.option('currentView', 'WEEK');
+            assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
+
+            this.instance.option('groups', []);
+            this.instance.option('currentView', 'DAY');
+            assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
         });
 
-        assert.equal(this.instance.fire('isGroupedByDate'), true, 'Workspace is grouped by date');
-
-        this.instance.option('currentView', 'WEEK');
-        assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
-
-        this.instance.option('groups', []);
-        this.instance.option('currentView', 'DAY');
-        assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
-    });
-
-    test('\'createAppointmentSettings\' should work correct when groupByDate = true, Day view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'day',
-            views: [{
-                type: 'day',
-                name: 'day',
-                intervalCount: 2
-            }],
-            currentDate: new Date(2018, 4, 21, 9, 0),
-            groupByDate: true,
-            startDayHour: 9,
-            groups: ['priorityId'],
-            resources: [
+        test(`createAppointmentSettings' should work correct when groupByDate = true, Day view when renovateRender is ${isRenovatedRender}`, function(assert) {
+            const priorityData = [
                 {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
                 }
-            ],
+            ];
+            this.createInstance({
+                currentView: 'day',
+                views: [{
+                    type: 'day',
+                    name: 'day',
+                    intervalCount: 2
+                }],
+                currentDate: new Date(2018, 4, 21, 9, 0),
+                groupByDate: true,
+                startDayHour: 9,
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: 'Priority'
+                    }
+                ],
+                renovateRender: isRenovatedRender,
+            });
+
+            this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
+                startDate: new Date(2018, 4, 21, 9, 0),
+                priorityId: 2
+            })[0], 0, 0, 0, 324, 1.1);
+
+
+            this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
+                startDate: new Date(2018, 4, 22, 9, 0),
+                priorityId: 1
+            })[0], 1, 0, 0, 548, 1.1);
         });
 
-        this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 21, 9, 0),
-            priorityId: 2
-        })[0], 0, 0, 0, 324, 1.1);
-
-
-        this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 22, 9, 0),
-            priorityId: 1
-        })[0], 1, 0, 0, 548, 1.1);
-    });
-
-    test('\'createAppointmentSettings\' should work correct for allDay appointment when groupByDate = true, Week view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'week',
-            views: [{
-                type: 'week',
-                name: 'week',
-                intervalCount: 2
-            }],
-            currentDate: new Date(2018, 4, 21, 9, 0),
-            groupByDate: true,
-            startDayHour: 9,
-            groups: ['priorityId'],
-            resources: [
+        test(`'createAppointmentSettings' should work correct for allDay appointment when groupByDate = true, Week view when renovateRender is ${isRenovatedRender}`, function(assert) {
+            const priorityData = [
                 {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
                 }
-            ],
+            ];
+            this.createInstance({
+                currentView: 'week',
+                views: [{
+                    type: 'week',
+                    name: 'week',
+                    intervalCount: 2
+                }],
+                currentDate: new Date(2018, 4, 21, 9, 0),
+                groupByDate: true,
+                startDayHour: 9,
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: 'Priority'
+                    }
+                ],
+                renovateRender: isRenovatedRender,
+            });
+
+            const results = this.instance.fire('createAppointmentSettings', {
+                startDate: new Date(2018, 4, 21, 9, 0),
+                endDate: new Date(2018, 4, 23, 9, 0),
+                priorityId: 2,
+                allDay: true
+            });
+
+            assert.equal(results.length, 3, 'Result length is OK');
+            this.checkNeedCoordinatesResult(assert, results[0], 1, 0, 0, 196, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[1], 2, 0, 0, 260, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[2], 3, 0, 0, 324, 1.1);
         });
 
-        const results = this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 21, 9, 0),
-            endDate: new Date(2018, 4, 23, 9, 0),
-            priorityId: 2,
-            allDay: true
-        });
-
-        assert.equal(results.length, 3, 'Result length is OK');
-        this.checkNeedCoordinatesResult(assert, results[0], 1, 0, 0, 196, 1.1);
-        this.checkNeedCoordinatesResult(assert, results[1], 2, 0, 0, 260, 1.1);
-        this.checkNeedCoordinatesResult(assert, results[2], 3, 0, 0, 324, 1.1);
-    });
-
-    test('\'createAppointmentSettings\' should work correct when groupByDate = true, Week view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'week',
-            views: ['week'],
-            currentDate: new Date(2018, 4, 21, 9, 0),
-            groupByDate: true,
-            startDayHour: 9,
-            groups: ['priorityId'],
-            resources: [
+        test(`'createAppointmentSettings' should work correct when groupByDate = true, Week view when renovateRender is ${isRenovatedRender}`, function(assert) {
+            const priorityData = [
                 {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
                 }
-            ],
+            ];
+            this.createInstance({
+                currentView: 'week',
+                views: ['week'],
+                currentDate: new Date(2018, 4, 21, 9, 0),
+                groupByDate: true,
+                startDayHour: 9,
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: 'Priority'
+                    }
+                ],
+                renovateRender: isRenovatedRender,
+            });
+
+            this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
+                startDate: new Date(2018, 4, 22, 10, 0),
+                priorityId: 2
+            })[0], 2, 2, 100, 420, 1.5);
+
+            this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
+                startDate: new Date(2018, 4, 25, 11, 0),
+                priorityId: 1
+            })[0], 5, 4, 200, 740, 1.5);
         });
 
-        this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 22, 10, 0),
-            priorityId: 2
-        })[0], 2, 2, 100, 420, 1.5);
 
-        this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 25, 11, 0),
-            priorityId: 1
-        })[0], 5, 4, 200, 740, 1.5);
-    });
-
-
-    test('\'createAppointmentSettings\' should work correct when groupByDate = true, Month view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'month',
-            views: [{
-                type: 'month',
-                name: 'month',
-                groupOrientation: 'horizontal'
-            }],
-            currentDate: new Date(2018, 4, 21, 9, 0),
-            groupByDate: true,
-            groups: ['priorityId'],
-            resources: [
+        test(`createAppointmentSettings' should work correct when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, function(assert) {
+            const priorityData = [
                 {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
                 }
-            ],
+            ];
+            this.createInstance({
+                currentView: 'month',
+                views: [{
+                    type: 'month',
+                    name: 'month',
+                    groupOrientation: 'horizontal'
+                }],
+                currentDate: new Date(2018, 4, 21, 9, 0),
+                groupByDate: true,
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: 'Priority'
+                    }
+                ],
+                renovateRender: isRenovatedRender,
+            });
+
+            const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
+            const cellWidth = $cell.getBoundingClientRect().width;
+            const cellHeight = $cell.getBoundingClientRect().height;
+
+            const results = this.instance.fire('createAppointmentSettings', {
+                startDate: new Date(2018, 4, 22, 10, 0),
+                endDate: new Date(2018, 4, 24),
+                priorityId: 2
+            });
+
+            assert.equal(results.length, 2, 'Coordinates count is ok');
+            this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
         });
 
-        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
-        const cellWidth = $cell.getBoundingClientRect().width;
-        const cellHeight = $cell.getBoundingClientRect().height;
-
-        const results = this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 22, 10, 0),
-            endDate: new Date(2018, 4, 24),
-            priorityId: 2
-        });
-
-        assert.equal(results.length, 2, 'Coordinates count is ok');
-        this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3, cellWidth * 5, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
-    });
-
-    test('\'createAppointmentSettings\' should work correct for recurrenceAppointment when groupByDate = true, Month view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'month',
-            views: [{
-                type: 'month',
-                name: 'month',
-                groupOrientation: 'horizontal'
-            }],
-            currentDate: new Date(2018, 4, 21, 9, 0),
-            groupByDate: true,
-            groups: ['priorityId'],
-            resources: [
+        test(`createAppointmentSettings' should work correct for recurrenceAppointment when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, function(assert) {
+            const priorityData = [
                 {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
                 }
-            ],
+            ];
+            this.createInstance({
+                currentView: 'month',
+                views: [{
+                    type: 'month',
+                    name: 'month',
+                    groupOrientation: 'horizontal'
+                }],
+                currentDate: new Date(2018, 4, 21, 9, 0),
+                groupByDate: true,
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: 'Priority'
+                    }
+                ],
+                renovateRender: isRenovatedRender,
+            });
+
+            const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
+            const cellWidth = $cell.getBoundingClientRect().width;
+            const cellHeight = $cell.getBoundingClientRect().height;
+
+            const results = this.instance.fire('createAppointmentSettings', {
+                startDate: new Date(2018, 4, 22, 10, 0),
+                endDate: new Date(2018, 4, 23, 12),
+                priorityId: 2,
+                recurrenceRule: 'FREQ=DAILY;COUNT=3'
+            });
+
+            assert.equal(results.length, 6, 'Coordinates count is ok');
+            this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[2], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[3], 4, 3, cellHeight * 3, cellWidth * 9, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[4], 4, 3, cellHeight * 3, cellWidth * 9, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[5], 5, 3, cellHeight * 3, cellWidth * 11, 1.5);
         });
 
-        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
-        const cellWidth = $cell.getBoundingClientRect().width;
-        const cellHeight = $cell.getBoundingClientRect().height;
-
-        const results = this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 22, 10, 0),
-            endDate: new Date(2018, 4, 23, 12),
-            priorityId: 2,
-            recurrenceRule: 'FREQ=DAILY;COUNT=3'
-        });
-
-        assert.equal(results.length, 6, 'Coordinates count is ok');
-        this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3, cellWidth * 5, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[2], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[3], 4, 3, cellHeight * 3, cellWidth * 9, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[4], 4, 3, cellHeight * 3, cellWidth * 9, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[5], 5, 3, cellHeight * 3, cellWidth * 11, 1.5);
-    });
-
-    test('\'createAppointmentSettings\' should work correct when groupByDate = true, Timeline view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'timelineWeek',
-            views: [{
-                type: 'timelineWeek',
-                name: 'timelineWeek',
-                groupOrientation: 'horizontal'
-            }],
-            currentDate: new Date(2018, 4, 21),
-            cellDuration: 60,
-            groupByDate: true,
-            startDayHour: 10,
-            endDayHour: 12,
-            groups: ['priorityId'],
-            resources: [
+        test(`'createAppointmentSettings' should work correct when groupByDate = true, Timeline view when renovateRender is ${isRenovatedRender}`, function(assert) {
+            const priorityData = [
                 {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
                 }
-            ],
+            ];
+            this.createInstance({
+                currentView: 'timelineWeek',
+                views: [{
+                    type: 'timelineWeek',
+                    name: 'timelineWeek',
+                    groupOrientation: 'horizontal'
+                }],
+                currentDate: new Date(2018, 4, 21),
+                cellDuration: 60,
+                groupByDate: true,
+                startDayHour: 10,
+                endDayHour: 12,
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: 'Priority'
+                    }
+                ],
+                renovateRender: isRenovatedRender,
+            });
+
+            const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().width;
+
+            const results = this.instance.fire('createAppointmentSettings', {
+                startDate: new Date(2018, 4, 21, 10, 0),
+                endDate: new Date(2018, 4, 21, 12, 0),
+                priorityId: 2
+            });
+
+            this.checkNeedCoordinatesResult(assert, results[0], 2, 0, 0, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 3, 0, 0, cellWidth * 7, 1.5);
         });
-
-        const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().width;
-
-        const results = this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 21, 10, 0),
-            endDate: new Date(2018, 4, 21, 12, 0),
-            priorityId: 2
-        });
-
-        this.checkNeedCoordinatesResult(assert, results[0], 2, 0, 0, cellWidth * 5, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[1], 3, 0, 0, cellWidth * 7, 1.5);
     });
 
     test('\'getResizableAppointmentArea\' should return correct area when groupByDate = true, Month view', function(assert) {

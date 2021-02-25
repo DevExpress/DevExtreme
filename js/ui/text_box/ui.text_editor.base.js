@@ -391,6 +391,7 @@ const TextEditorBase = Editor.inherit({
     _togglePlaceholder: function(isEmpty) {
         this.$element()
             .find(`.${TEXTEDITOR_PLACEHOLDER_CLASS}`)
+            .eq(0)
             .toggleClass(STATE_INVISIBLE_CLASS, !isEmpty);
     },
 

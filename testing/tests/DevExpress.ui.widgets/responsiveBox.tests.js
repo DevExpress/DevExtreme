@@ -9,7 +9,6 @@ import 'ui/box';
 import eventsEngine from 'events/core/events_engine';
 import domAdapter from 'core/dom_adapter';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

@@ -29,17 +29,17 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() scrollableOffset = 0;
 
-  @OneWay() containerRef: any;
-
-  @OneWay() contentRef: any;
-
-  @OneWay() bounceEnabled = true;
-
-  @OneWay() inertiaEnabled = true;
-
   @OneWay() scrollByThumb = false;
 
   @OneWay() scrollScrollbar: ScrollableShowScrollbar = 'onScroll';
 
-  @Event() onChangeVisibility?: (args: boolean) => void;
+  @OneWay() isScrollableHovered = false;
+
+  @OneWay() bounceEnabled = true;
+
+  @OneWay() forceVisibility = false;
+
+  @Event() onAnimatorStart?: (animator: 'inertia'| 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
+
+  @Event() onAnimatorCancel?: () => void;
 }

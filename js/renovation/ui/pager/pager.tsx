@@ -8,11 +8,10 @@ import { PagerContent } from './content';
 import { GridPagerWrapper } from '../../preact_wrapper/grid_pager';
 import { combineClasses } from '../../utils/combine_classes';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   pagerProps,
   restAttributes,
-}: Pager) => (
+}: Pager): JSX.Element => (
   <ResizableContainer
     contentTemplate={PagerContent}
     pagerProps={pagerProps}

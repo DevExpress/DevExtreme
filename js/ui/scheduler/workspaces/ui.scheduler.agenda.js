@@ -7,7 +7,7 @@ import registerComponent from '../../../core/component_registrator';
 import WorkSpace from './ui.scheduler.work_space';
 import { extend } from '../../../core/utils/extend';
 import dateLocalization from '../../../localization/date';
-import tableCreatorModule from '../ui.scheduler.table_creator';
+import tableCreatorModule from '../table_creator';
 const { tableCreator } = tableCreatorModule;
 
 const AGENDA_CLASS = 'dx-scheduler-agenda';

@@ -3,7 +3,6 @@ import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpe
 import translator from 'animation/translator';
 
 import 'ui/scheduler/ui.scheduler';
-import 'common.css!';
 import 'generic_light.css!';
 
 const { test, module } = QUnit;

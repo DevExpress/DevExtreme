@@ -1,10 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import { each } from '../../core/utils/iterator';
-import { locate } from '../../animation/translator';
 import Class from '../../core/class';
-import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
-import { when } from '../../core/utils/deferred';
 
 const SCROLLABLE_SIMULATED = 'dxSimulatedScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -12,119 +8,11 @@ const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 
-const HORIZONTAL = 'horizontal';
-
-export const Scroller = Class.inherit({
-    _scrollToBounds: function() {
-        this._bounceAction();
-    },
-
-    _disposeHandler: function() {
-        this._stopScrolling();
-        this._$scrollbar.remove();
-    },
-
-    _updateHandler: function() {
-        this._update();
-        this._moveToBounds();
-    },
-
-    _update: function() {
-        this._stopScrolling();
-        return deferUpdate(() => {
-            this._resetScaleRatio();
-            this._updateLocation();
-            this._updateBounds();
-            this._updateScrollbar();
-            deferRender(() => {
-                this._moveScrollbar();
-                this._scrollbar.update();
-            });
-        });
-    },
-
-    _resetScaleRatio: function() {
-        this._scaleRatio = null;
-    },
-
-    _updateScrollbar: deferUpdater(function() {
-        const containerSize = this._containerSize();
-        const contentSize = this._contentSize();
-
-        // NOTE: Real container and content sizes can be a fractional number when scaling.
-        //       Let's save sizes when scale = 100% to decide whether it is necessary to show
-        //       the scrollbar based on by more precise numbers. We can do it because the container
-        //       size to content size ratio should remain approximately the same at any zoom.
-        const baseContainerSize = this._getBaseDimension(this._$container.get(0), this._dimension);
-        const baseContentSize = this._getBaseDimension(this._$content.get(0), this._dimension);
-
-        deferRender(() => {
-            this._scrollbar.option({
-                containerSize,
-                contentSize,
-                baseContainerSize,
-                baseContentSize,
-                scaleRatio: this._getScaleRatio()
-            });
-        });
-    }),
-
-    _moveToBounds: deferRenderer(deferUpdater(deferRenderer(function() {
-        const location = this._boundLocation();
-        const locationChanged = location !== this._location;
-
-        this._location = location;
-        this._move();
-
-        if(locationChanged) {
-            this._scrollAction();
-        }
-    }))),
-
-    _cursorEnterHandler: function() {
-        this._resetScaleRatio();
-        this._updateScrollbar();
-
-        this._scrollbar.cursorEnter();
-    },
-
-    _cursorLeaveHandler: function() {
-        this._scrollbar.cursorLeave();
-    },
-
-    dispose: noop
-});
-
 
 let hoveredScrollable;
 let activeScrollable;
 
 export const SimulatedStrategy = Class.inherit({
-
-    ctor: function(scrollable) {
-        this._init(scrollable);
-    },
-
-    _init: function(scrollable) {
-        this._component = scrollable;
-        this._$element = scrollable.$element();
-        this._$container = scrollable._$container;
-        this._$wrapper = scrollable._$wrapper;
-        this._$content = scrollable._$content;
-        this.option = scrollable.option.bind(scrollable);
-        this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
-        this._isLocked = scrollable._isLocked.bind(scrollable);
-        this._isDirection = scrollable._isDirection.bind(scrollable);
-        this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
-        this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
-    },
-
-    _eachScroller: function(callback) {
-        callback = callback.bind(this);
-        each(this._scrollers, function(direction, scroller) {
-            callback(scroller, direction);
-        });
-    },
 
     _saveActive: function() {
         activeScrollable = this;
@@ -138,7 +26,6 @@ export const SimulatedStrategy = Class.inherit({
 
     handleMove: function(e) {
         if(this._isLocked()) {
-            e.cancel = true;
             this._resetActive();
             return;
         }
@@ -160,15 +47,6 @@ export const SimulatedStrategy = Class.inherit({
 
     handleScroll: function() {
         this._component._updateRtlConfig();
-        this._scrollAction();
-    },
-
-    location: function() {
-        const location = locate(this._$content);
-
-        location.top -= this._$container.scrollTop();
-        location.left -= this._$container.scrollLeft();
-        return location;
     },
 
     _cursorEnterHandler: function(e) {
@@ -214,29 +92,6 @@ export const SimulatedStrategy = Class.inherit({
         if(targetScrollable) {
             targetScrollable._cursorEnterHandler();
         }
-    },
-
-    update: function() {
-        const result = this._eventHandler('update').done(this._updateAction);
-
-        return when(result, deferUpdate(() => {
-            const allowedDirections = this._allowedDirections();
-            deferRender(() => {
-                let touchDirection = allowedDirections.vertical ? 'pan-x' : '';
-                touchDirection = allowedDirections.horizontal ? 'pan-y' : touchDirection;
-                touchDirection = allowedDirections.vertical && allowedDirections.horizontal ? 'none' : touchDirection;
-                this._$container.css('touchAction', touchDirection);
-            });
-            return when().promise();
-        }));
-    },
-
-    updateBounds: function() {
-        this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
-    },
-
-    verticalOffset: function() {
-        return 0;
     },
 
     dispose: function() {

@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import RenovatedPager from 'renovation/ui/pager/pager.j.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { act } from 'preact/test-utils';
+
+// eslint-disable-next-line spellcheck/spell-checker
+import { rerender as reRender } from 'inferno';
 
 // default export not supported
 export class WrappedWidget extends RenovatedPager {
@@ -29,7 +31,8 @@ export class WrappedWidget extends RenovatedPager {
     _dimensionChanged() {
         if(!this.firing) {
             this.firing = true;
-            act(() => resizeCallbacks.fire());
+            resizeCallbacks.fire();
+            reRender();
         }
         this.firing = false;
     }

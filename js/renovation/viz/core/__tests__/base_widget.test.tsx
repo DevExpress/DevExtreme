@@ -104,7 +104,9 @@ describe('BaseWidget', () => {
           const onContentReady = jest.fn();
           const widget = new BaseWidget({ onContentReady });
           const svgElement = {};
-          widget.svgElementRef = svgElement as SVGElement;
+          widget.containerRef = React.createRef();
+          widget.svgElementRef = React.createRef();
+          widget.svgElementRef.current = svgElement as SVGElement;
           widget.contentReadyEffect();
           expect(onContentReady).toHaveBeenCalledTimes(1);
           expect(onContentReady).toHaveBeenCalledWith({ element: svgElement });
@@ -112,16 +114,20 @@ describe('BaseWidget', () => {
 
         it('should not raise any error if "onContentReady" is not defined', () => {
           const widget = new BaseWidget({ onContentReady: undefined });
+          widget.svgElementRef = React.createRef();
+          widget.containerRef = React.createRef();
           expect(widget.contentReadyEffect.bind(widget)).not.toThrow();
         });
       });
 
       describe('setRootElementRef', () => {
         it('rootElementRef should be init', () => {
-          const widget = new BaseWidget({ });
-          widget.containerRef = {} as HTMLElement;
+          const widget = new BaseWidget({ rootElementRef: { current: null } });
+          const element = {} as HTMLDivElement;
+          widget.containerRef = React.createRef();
+          widget.containerRef.current = element;
           widget.setRootElementRef();
-          expect(widget.props.rootElementRef).toEqual({});
+          expect(widget.props.rootElementRef.current).toEqual(element);
         });
       });
     });
@@ -132,7 +138,8 @@ describe('BaseWidget', () => {
       it('should return svg root element', () => {
         const widget = new BaseWidget({ });
         const root = { } as SVGElement;
-        widget.svgElementRef = root;
+        widget.svgElementRef = React.createRef();
+        widget.svgElementRef.current = root;
 
         expect(widget.svg()).toEqual(root);
       });
@@ -175,6 +182,7 @@ describe('BaseWidget', () => {
     describe('setCanvas', () => {
       it('should get empty canvas by default', () => {
         const widget = new BaseWidget({ canvas: DEFAULT_CANVAS });
+        widget.containerRef = React.createRef();
         widget.setCanvas();
 
         expect(widget.props.canvas).toEqual(DEFAULT_CANVAS);
@@ -182,6 +190,7 @@ describe('BaseWidget', () => {
 
       it('should get size from props (props.size)', () => {
         const widget = new BaseWidget({ size: { width: 600, height: 400 } });
+        widget.containerRef = React.createRef();
         widget.setCanvas();
 
         expect(widget.props.canvas).toMatchObject({
@@ -200,6 +209,7 @@ describe('BaseWidget', () => {
           paddingBottom: '10px',
         });
         const widget = new BaseWidget({ });
+        widget.containerRef = React.createRef();
         widget.setCanvas();
 
         expect(widget.props.canvas).toMatchObject({
@@ -226,6 +236,7 @@ describe('BaseWidget', () => {
           bottom: 40,
         };
         const widget = new BaseWidget({ defaultCanvas });
+        widget.containerRef = React.createRef();
         widget.setCanvas();
 
         expect(widget.props.canvas).toEqual({
@@ -251,6 +262,7 @@ describe('BaseWidget', () => {
           size: { width: 600 },
           canvas: { ...DEFAULT_CANVAS, width: 300, height: 100 },
         });
+        widget.containerRef = React.createRef();
         widget.setCanvas();
 
         expect(widget.props.canvas).toMatchObject({
@@ -276,6 +288,7 @@ describe('BaseWidget', () => {
             top: 40,
           },
         });
+        widget.containerRef = React.createRef();
         widget.setCanvas();
 
         expect(widget.props.canvas).toEqual({
@@ -301,6 +314,7 @@ describe('BaseWidget', () => {
           },
           defaultCanvas,
         });
+        widget.containerRef = React.createRef();
         widget.setCanvas();
 
         expect(widget.props.canvas).toEqual(defaultCanvas);
@@ -325,6 +339,7 @@ describe('BaseWidget', () => {
             right: 400,
           },
         });
+        widget.containerRef = React.createRef();
         widget.setCanvas();
 
         expect(widget.props.canvas).toEqual({

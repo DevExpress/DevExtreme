@@ -3,7 +3,6 @@ import fx from 'animation/fx';
 import { animation, _translator } from 'ui/multi_view/ui.multi_view.animation';
 import 'ui/multi_view';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.module('Integration tests', {

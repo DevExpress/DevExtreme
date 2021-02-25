@@ -31,7 +31,7 @@ describe('TextSvgElement', () => {
         styles,
         textAnchor,
         isStroked,
-        props,
+        computedProps: props,
       };
 
       const svgText = shallow(<TextSvgComponent {...viewModel as any} /> as JSX.Element);
@@ -100,12 +100,12 @@ describe('TextSvgElement', () => {
 
     it('should pass transform and dash style', () => {
       jest.spyOn(utilsModule, 'getGraphicExtraProps').mockImplementation(() => ({ transform: 'transformation', 'stroke-dasharray': 'dash' }));
-      const props = getProps('some text');
-      const rect = shallow(<TextSvgComponent {...{ props } as any} /> as JSX.Element);
+      const computedProps = getProps('some text');
+      const rect = shallow(<TextSvgComponent {...{ computedProps } as any} /> as JSX.Element);
 
       expect(rect.props()).toMatchObject({ transform: 'transformation', 'stroke-dasharray': 'dash' });
       expect(utilsModule.getGraphicExtraProps)
-        .toHaveBeenCalledWith(props, props.x, props.y);
+        .toHaveBeenCalledWith(computedProps, computedProps.x, computedProps.y);
     });
   });
 
@@ -126,7 +126,8 @@ describe('TextSvgElement', () => {
           text: 'Multiline\ntext',
           textsAlignment: 'center',
         });
-        text.textRef = {
+        text.textRef = React.createRef();
+        text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
             { setAttribute: jest.fn(), getSubStringLength: () => (100) },
@@ -135,8 +136,8 @@ describe('TextSvgElement', () => {
         } as any;
         text.effectUpdateText();
 
-        expect(text.textRef.children[0].setAttribute).toHaveBeenCalledTimes(0);
-        expect(text.textRef.children[1].setAttribute).toHaveBeenCalledTimes(0);
+        expect(text.textRef.current?.children[0].setAttribute).toHaveBeenCalledTimes(0);
+        expect(text.textRef.current?.children[1].setAttribute).toHaveBeenCalledTimes(0);
       });
 
       it('should align text nodes to right', () => {
@@ -144,7 +145,8 @@ describe('TextSvgElement', () => {
           text: 'Multiline\ntext',
           textsAlignment: 'right',
         });
-        text.textRef = {
+        text.textRef = React.createRef();
+        text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
             { setAttribute: jest.fn(), getSubStringLength: () => (100) },
@@ -153,9 +155,9 @@ describe('TextSvgElement', () => {
         } as any;
         text.effectUpdateText();
 
-        expect(text.textRef.children[0].setAttribute).toHaveBeenCalledTimes(0);
-        expect(text.textRef.children[1].setAttribute).toHaveBeenCalledTimes(1);
-        expect(text.textRef.children[1].setAttribute).toHaveBeenCalledWith('dx', 30);
+        expect(text.textRef.current?.children[0].setAttribute).toHaveBeenCalledTimes(0);
+        expect(text.textRef.current?.children[1].setAttribute).toHaveBeenCalledTimes(1);
+        expect(text.textRef.current?.children[1].setAttribute).toHaveBeenCalledWith('dx', 30);
       });
 
       it('should align text nodes to left', () => {
@@ -163,7 +165,8 @@ describe('TextSvgElement', () => {
           text: 'Multiline\ntext',
           textsAlignment: 'left',
         });
-        text.textRef = {
+        text.textRef = React.createRef();
+        text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
             { setAttribute: jest.fn(), getSubStringLength: () => (100) },
@@ -172,9 +175,9 @@ describe('TextSvgElement', () => {
         } as any;
         text.effectUpdateText();
 
-        expect(text.textRef.children[0].setAttribute).toHaveBeenCalledTimes(0);
-        expect(text.textRef.children[1].setAttribute).toHaveBeenCalledTimes(1);
-        expect(text.textRef.children[1].setAttribute).toHaveBeenCalledWith('dx', -30);
+        expect(text.textRef.current?.children[0].setAttribute).toHaveBeenCalledTimes(0);
+        expect(text.textRef.current?.children[1].setAttribute).toHaveBeenCalledTimes(1);
+        expect(text.textRef.current?.children[1].setAttribute).toHaveBeenCalledWith('dx', -30);
       });
 
       it('should locate text nodes by default', () => {
@@ -183,7 +186,8 @@ describe('TextSvgElement', () => {
           x: 50,
           y: 100,
         });
-        text.textRef = {
+        text.textRef = React.createRef();
+        text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
             { setAttribute: jest.fn() }, { setAttribute: jest.fn() },
@@ -191,12 +195,12 @@ describe('TextSvgElement', () => {
         } as any;
         text.effectUpdateText();
 
-        expect(text.textRef.children[0].setAttribute).toHaveBeenCalledTimes(2);
-        expect(text.textRef.children[1].setAttribute).toHaveBeenCalledTimes(2);
-        expect(text.textRef.children[0].setAttribute).nthCalledWith(1, 'x', 50);
-        expect(text.textRef.children[0].setAttribute).lastCalledWith('y', 100);
-        expect(text.textRef.children[1].setAttribute).nthCalledWith(1, 'x', 50);
-        expect(text.textRef.children[1].setAttribute).lastCalledWith('dy', 12);
+        expect(text.textRef.current?.children[0].setAttribute).toHaveBeenCalledTimes(2);
+        expect(text.textRef.current?.children[1].setAttribute).toHaveBeenCalledTimes(2);
+        expect(text.textRef.current?.children[0].setAttribute).nthCalledWith(1, 'x', 50);
+        expect(text.textRef.current?.children[0].setAttribute).lastCalledWith('y', 100);
+        expect(text.textRef.current?.children[1].setAttribute).nthCalledWith(1, 'x', 50);
+        expect(text.textRef.current?.children[1].setAttribute).lastCalledWith('dy', 12);
       });
 
       it('should locate text nodes with style', () => {
@@ -205,7 +209,8 @@ describe('TextSvgElement', () => {
           x: 50,
           y: 100,
         });
-        text.textRef = {
+        text.textRef = React.createRef();
+        text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
             { setAttribute: jest.fn() },
@@ -215,13 +220,13 @@ describe('TextSvgElement', () => {
         } as any;
         text.effectUpdateText();
 
-        expect(text.textRef.children[0].setAttribute).toHaveBeenCalledTimes(2);
-        expect(text.textRef.children[1].setAttribute).toHaveBeenCalledTimes(2);
-        expect(text.textRef.children[2].setAttribute).toHaveBeenCalledTimes(0);
-        expect(text.textRef.children[0].setAttribute).nthCalledWith(1, 'x', 50);
-        expect(text.textRef.children[0].setAttribute).lastCalledWith('y', 100);
-        expect(text.textRef.children[1].setAttribute).nthCalledWith(1, 'x', 50);
-        expect(text.textRef.children[1].setAttribute).lastCalledWith('dy', 18);
+        expect(text.textRef.current?.children[0].setAttribute).toHaveBeenCalledTimes(2);
+        expect(text.textRef.current?.children[1].setAttribute).toHaveBeenCalledTimes(2);
+        expect(text.textRef.current?.children[2].setAttribute).toHaveBeenCalledTimes(0);
+        expect(text.textRef.current?.children[0].setAttribute).nthCalledWith(1, 'x', 50);
+        expect(text.textRef.current?.children[0].setAttribute).lastCalledWith('y', 100);
+        expect(text.textRef.current?.children[1].setAttribute).nthCalledWith(1, 'x', 50);
+        expect(text.textRef.current?.children[1].setAttribute).lastCalledWith('dy', 18);
       });
 
       it('should pass stroke to text nodes', () => {
@@ -231,7 +236,8 @@ describe('TextSvgElement', () => {
           strokeWidth: 2,
           strokeOpacity: 0.75,
         });
-        text.textRef = {
+        text.textRef = React.createRef();
+        text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
             { setAttribute: jest.fn() },
@@ -242,18 +248,18 @@ describe('TextSvgElement', () => {
         } as any;
         text.effectUpdateText();
 
-        expect(text.textRef.children[0].setAttribute).toHaveBeenCalledTimes(4);
-        expect(text.textRef.children[1].setAttribute).toHaveBeenCalledTimes(4);
-        expect(text.textRef.children[2].setAttribute).toHaveBeenCalledTimes(0);
-        expect(text.textRef.children[3].setAttribute).toHaveBeenCalledTimes(0);
-        expect(text.textRef.children[0].setAttribute).nthCalledWith(1, 'stroke', 'red');
-        expect(text.textRef.children[0].setAttribute).nthCalledWith(2, 'stroke-width', '2');
-        expect(text.textRef.children[0].setAttribute).nthCalledWith(3, 'stroke-opacity', '0.75');
-        expect(text.textRef.children[0].setAttribute).nthCalledWith(4, 'stroke-linejoin', 'round');
-        expect(text.textRef.children[1].setAttribute).nthCalledWith(1, 'stroke', 'red');
-        expect(text.textRef.children[1].setAttribute).nthCalledWith(2, 'stroke-width', '2');
-        expect(text.textRef.children[1].setAttribute).nthCalledWith(3, 'stroke-opacity', '0.75');
-        expect(text.textRef.children[1].setAttribute).nthCalledWith(4, 'stroke-linejoin', 'round');
+        expect(text.textRef.current?.children[0].setAttribute).toHaveBeenCalledTimes(4);
+        expect(text.textRef.current?.children[1].setAttribute).toHaveBeenCalledTimes(4);
+        expect(text.textRef.current?.children[2].setAttribute).toHaveBeenCalledTimes(0);
+        expect(text.textRef.current?.children[3].setAttribute).toHaveBeenCalledTimes(0);
+        expect(text.textRef.current?.children[0].setAttribute).nthCalledWith(1, 'stroke', 'red');
+        expect(text.textRef.current?.children[0].setAttribute).nthCalledWith(2, 'stroke-width', '2');
+        expect(text.textRef.current?.children[0].setAttribute).nthCalledWith(3, 'stroke-opacity', '0.75');
+        expect(text.textRef.current?.children[0].setAttribute).nthCalledWith(4, 'stroke-linejoin', 'round');
+        expect(text.textRef.current?.children[1].setAttribute).nthCalledWith(1, 'stroke', 'red');
+        expect(text.textRef.current?.children[1].setAttribute).nthCalledWith(2, 'stroke-width', '2');
+        expect(text.textRef.current?.children[1].setAttribute).nthCalledWith(3, 'stroke-opacity', '0.75');
+        expect(text.textRef.current?.children[1].setAttribute).nthCalledWith(4, 'stroke-linejoin', 'round');
       });
 
       it('should pass stroke to text nodes - default opacity', () => {
@@ -262,7 +268,8 @@ describe('TextSvgElement', () => {
           stroke: 'any',
           strokeWidth: 1,
         });
-        text.textRef = {
+        text.textRef = React.createRef();
+        text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
             { setAttribute: jest.fn() },
@@ -271,8 +278,8 @@ describe('TextSvgElement', () => {
         } as any;
         text.effectUpdateText();
 
-        expect(text.textRef.children[0].setAttribute).nthCalledWith(3, 'stroke-opacity', '1');
-        expect(text.textRef.children[1].setAttribute).nthCalledWith(3, 'stroke-opacity', '1');
+        expect(text.textRef.current?.children[0].setAttribute).nthCalledWith(3, 'stroke-opacity', '1');
+        expect(text.textRef.current?.children[1].setAttribute).nthCalledWith(3, 'stroke-opacity', '1');
       });
     });
   });
@@ -398,6 +405,14 @@ describe('TextSvgElement', () => {
           height: 20,
         });
       });
+    });
+  });
+
+  describe('Getters', () => {
+    it('should be returned props by computedProps', () => {
+      const text = new TextSvgElement({ text: 'some text' });
+
+      expect(text.computedProps).toStrictEqual({ text: 'some text' });
     });
   });
 });

@@ -123,7 +123,7 @@ const createScheduler = async (
   rtlEnabled: boolean,
   resources: undefined | any[],
   groups: undefined | string[],
-) => {
+): Promise<void> => {
   await createWidget('dxScheduler', {
     dataSource: data,
     views: ['agenda'],

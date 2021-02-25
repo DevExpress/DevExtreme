@@ -52,6 +52,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _onContextMenu(e) {
         e.preventDefault();
+        e.stopPropagation();
         if(!this._isDesktop()) {
             return;
         }
@@ -64,7 +65,11 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             items = this._getFileItemsForContextMenu(targetItem);
         }
 
-        this._showContextMenu(items, e.target, e, targetItem);
+        const target = {
+            itemData: targetItem,
+            itemElement: targetItemElement.length ? targetItemElement : undefined
+        };
+        this._showContextMenu(items, e.target, e, target);
     }
 
     _getItemThumbnailCssClass() {

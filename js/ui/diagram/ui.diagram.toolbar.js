@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-
 import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
 import DiagramBar from './diagram.bar';
@@ -291,7 +290,9 @@ class DiagramToolbar extends DiagramPanel {
                 target: widget.$element(),
                 cssClass: DiagramMenuHelper.getContextMenuCssClass(),
                 showEvent: '',
-                closeOnOutsideClick: !Browser.TouchUI,
+                closeOnOutsideClick: (e) => {
+                    return !Browser.TouchUI && ($(e.target).closest(widget._contextMenu._dropDownButtonElement).length === 0);
+                },
                 focusStateEnabled: false,
                 position: { at: 'left bottom' },
                 itemTemplate: function(itemData, itemIndex, itemElement) {
@@ -314,6 +315,14 @@ class DiagramToolbar extends DiagramPanel {
                 onInitialized: ({ component }) => this._onContextMenuInitialized(component, item, widget),
                 onDisposing: ({ component }) => this._onContextMenuDisposing(component, item)
             });
+
+            // prevent showing context menu by toggle "close" click
+            if(!Browser.TouchUI) {
+                widget._contextMenu._dropDownButtonElement = widget.$element(); // i.e. widget.NAME === 'dxButton'
+                if(widget.NAME === 'dxTextBox') {
+                    widget._contextMenu._dropDownButtonElement = widget.getButton('dropDown').element();
+                }
+            }
         }
     }
     _onContextMenuInitialized(widget, item, rootWidget) {

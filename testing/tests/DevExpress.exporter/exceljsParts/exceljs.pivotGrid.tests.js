@@ -12,7 +12,6 @@ import browser from 'core/utils/browser';
 import typeUtils from 'core/utils/type';
 import 'ui/pivot_grid/ui.pivot_grid';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import { DataController__internals } from 'ui/pivot_grid/ui.pivot_grid.data_controller.js';

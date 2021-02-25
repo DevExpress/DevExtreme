@@ -16,6 +16,8 @@ import { convertRulesToOptions } from '../../../../core/options/utils';
 import { current } from '../../../../ui/themes';
 import { ScrollViewProps } from '../scroll_view_props';
 
+import { isDefined } from '../../../../core/utils/type';
+
 interface Mock extends jest.Mock {}
 
 jest.mock('../../../../core/devices', () => {
@@ -37,6 +39,41 @@ jest.mock('../../../../ui/themes', () => ({
 }));
 
 describe('ScrollView', () => {
+  describe('Public methods', () => {
+    each([
+      { name: 'clientWidth', argsCount: 0 },
+      { name: 'clientHeight', argsCount: 0 },
+      { name: 'scrollLeft', argsCount: 0 },
+      { name: 'scrollTop', argsCount: 0 },
+      { name: 'scrollOffset', argsCount: 0 },
+      { name: 'scrollWidth', argsCount: 0 },
+      { name: 'scrollHeight', argsCount: 0 },
+      { name: 'scrollToElement', argsCount: 2 },
+      { name: 'scrollTo', argsCount: 1 },
+      { name: 'scrollBy', argsCount: 1 },
+      { name: 'content', argsCount: 0 },
+    ]).describe('Method: %o', (methodInfo) => {
+      it(`${methodInfo.name}() method should call according method from scrollbar`, () => {
+        const viewModel = new ScrollView({ });
+
+        (viewModel as any).scrollableRef = { current: { [`${methodInfo.name}`]: jest.fn() } };
+
+        if (isDefined(viewModel.scrollableRef.current)) {
+          if (methodInfo.argsCount === 2) {
+            viewModel[methodInfo.name]('arg1', 'arg2');
+            expect(viewModel.scrollableRef.current[`${methodInfo.name}`]).toHaveBeenCalledWith('arg1', 'arg2');
+          } else if (methodInfo.argsCount === 1) {
+            viewModel[methodInfo.name]('arg1');
+            expect(viewModel.scrollableRef.current[`${methodInfo.name}`]).toHaveBeenCalledWith('arg1');
+          } else {
+            viewModel[methodInfo.name]();
+          }
+          expect(viewModel.scrollableRef.current[`${methodInfo.name}`]).toHaveBeenCalledTimes(1);
+        }
+      });
+    });
+  });
+
   describe('Logic', () => {
     describe('Getters', () => {
       describe('cssClasses', () => {
@@ -46,7 +83,8 @@ describe('ScrollView', () => {
         });
 
         it('should render scrollView content', () => {
-          const scrollView = mount(viewFunction({ props: { } } as any) as JSX.Element);
+          const scrollView = mount(viewFunction({ props: {} } as any) as JSX.Element);
+
           const scrollViewContent = scrollView.find('.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content');
           expect(scrollViewContent.exists()).toBe(true);
         });
@@ -137,6 +175,7 @@ describe('ScrollView', () => {
         (current as Mock).mockImplementation(() => 'generic');
 
         const scrollView = mount(viewFunction(new ScrollView({})) as JSX.Element);
+
         const scrollViewTopPocketTexts = scrollView.find('.dx-scrollview-pull-down-text > div');
         expect(scrollViewTopPocketTexts.length).toBe(3);
 

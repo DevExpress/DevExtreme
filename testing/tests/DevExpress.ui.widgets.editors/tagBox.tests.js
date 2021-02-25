@@ -19,7 +19,6 @@ import TagBox from 'ui/tag_box';
 import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import { normalizeKeyName } from 'events/utils/index';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

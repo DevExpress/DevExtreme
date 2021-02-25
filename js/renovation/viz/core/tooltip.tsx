@@ -87,11 +87,15 @@ export const viewFunction = ({
   const angle = getCloudAngle(textSizeWithPaddings, correctedCoordinates);
   const d = getCloudPoints(textSizeWithPaddings, correctedCoordinates, angle,
     { cornerRadius: Number(cornerRadius), arrowWidth: Number(arrowWidth) }, true);
-  const styles = interactive ? {
+  let styles = interactive ? {
     msUserSelect: 'text',
     MozUserSelect: 'auto',
     WebkitUserSelect: 'auto',
   } : {};
+  styles = {
+    ...styles,
+    ...{ position: 'absolute' },
+  };
   const textFont = font || DEFAULT_FONT;
   const cloudShadow = shadow || DEFAULT_SHADOW;
   return (
@@ -109,10 +113,7 @@ export const viewFunction = ({
         <RootSvgElement
           width={cloudSize.width}
           height={cloudSize.height}
-          styles={{
-            position: 'absolute',
-            ...styles,
-          }}
+          styles={styles}
         >
           <defs>
             <ShadowFilter
@@ -284,8 +285,8 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   @Effect()
   setHtmlText(): void {
     const htmlText = this.customizedOptions.html;
-    if (htmlText && this.htmlRef && this.props.visible) {
-      this.htmlRef.innerHTML = htmlText;
+    if (htmlText && this.htmlRef.current && this.props.visible) {
+      this.htmlRef.current.innerHTML = htmlText;
     }
   }
 
@@ -327,8 +328,8 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   @Effect()
   checkContainer(): void {
-    if (this.htmlRef && this.props.visible) {
-      const htmlTextSize = this.htmlRef.getBoundingClientRect();
+    if (this.htmlRef.current && this.props.visible) {
+      const htmlTextSize = this.htmlRef.current.getBoundingClientRect();
       if (!htmlTextSize.width && !htmlTextSize.height) {
         this.isEmptyContainer = true;
       }
@@ -366,7 +367,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     const propsContainer = this.props.container;
     if (propsContainer) {
       if (typeof propsContainer === 'string') {
-        const tmp = this.props.rootWidget;
+        const tmp = this.props.rootWidget?.current;
         let node = tmp?.closest(propsContainer);
         if (!node) {
           node = domAdapter.getDocument().querySelector(propsContainer);
@@ -435,8 +436,12 @@ export class Tooltip extends JSXComponent(TooltipProps) {
 
   calculateContentSize(): PinnedSize {
     let size = DEFAULT_SIZE;
-    if (this.props.visible && (this.textRef || this.htmlRef)) {
-      size = this.textRef ? this.textRef.getBBox() : this.htmlRef.getBoundingClientRect();
+    if (this.props.visible) {
+      if (this.textRef.current) {
+        size = this.textRef.current.getBBox();
+      } else if (this.htmlRef.current) {
+        size = this.htmlRef.current.getBoundingClientRect();
+      }
     }
 
     return size;
@@ -445,8 +450,8 @@ export class Tooltip extends JSXComponent(TooltipProps) {
   calculateCloudSize(): PinnedSize {
     let cloudSize = DEFAULT_SIZE;
     if (isDefined(this.props.x) && isDefined(this.props.y)
-      && this.props.visible && this.cloudRef) {
-      const size = this.cloudRef.getBBox();
+      && this.props.visible && this.cloudRef.current) {
+      const size = this.cloudRef.current.getBBox();
       const {
         lm, tm, rm, bm,
       } = this.margins;

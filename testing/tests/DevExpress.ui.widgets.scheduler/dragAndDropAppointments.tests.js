@@ -15,10 +15,10 @@ import {
     initTestMarkup,
     isDesktopEnvironment,
     CLASSES,
-    isIE11
+    isIE11,
+    supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
@@ -2299,15 +2299,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     });
 });
 
-
-[
-    'standard',
-    'virtual'
-].forEach(scrollingMode => {
-    if(isIE11 && scrollingMode === 'virtual') {
-        return;
-    }
-
+supportedScrollingModes.forEach(scrollingMode => {
     module(`Scrolling mode ${scrollingMode}`, {
         beforeEach: function() {
 
@@ -2520,7 +2512,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             const cellPosition = scheduler.workSpace.getCell(6).position();
 
             assert.roughEqual(appointment.position.left, cellPosition.left, 2, 'correct left position');
-            assert.equal($secondPart.position.left, 0, 'correct left position');
+            assert.roughEqual($secondPart.position.left, 0, 0.1, 'second part has correct left position');
         });
 
         test('Appointment should be dragged correctly in grouped timeline (T739132)', function(assert) {

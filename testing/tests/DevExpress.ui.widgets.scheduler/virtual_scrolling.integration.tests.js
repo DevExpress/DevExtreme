@@ -2,7 +2,6 @@ import $ from 'jquery';
 
 import { getWindow } from 'core/utils/window';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import { DataSource } from 'data/data_source/data_source';
@@ -23,15 +22,13 @@ const {
 } = QUnit;
 
 const test = (description, callback) => {
-    const testFunc = isIE11
+    const testFunc = isIE11 || !isDesktopEnvironment()
         ? QUnit.skip
         : QUnit.test;
-
     return testFunc(description, sinon.test(callback));
 };
 
 testStart(() => initTestMarkup());
-
 module('Virtual scrolling integration', () => {
     module('Initialization', () => {
         supportedViews.forEach(viewName => {
@@ -447,11 +444,6 @@ module('Virtual scrolling integration', () => {
                     }
                 ].forEach(option => {
                     test(`Long appointment part should be rendered correctly without render the main part if horizontal grouping and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
-                        if(!isDesktopEnvironment()) {
-                            assert.ok(true, 'This test is for desktop only');
-                            return;
-                        }
-
                         const data = [{
                             startDate: new Date(2020, 9, 12, 11, 30),
                             endDate: new Date(2020, 9, 13, 10, 30),
@@ -1040,11 +1032,6 @@ module('Virtual scrolling integration', () => {
                     }
                 ].forEach(({ showAllDayPanel, steps }) => {
                     test(`Long appointment should be rendered correctly if horizontal grouping, and showAllDayPanel is ${showAllDayPanel}`, function(assert) {
-                        if(!isDesktopEnvironment()) {
-                            assert.ok(true, 'This test is for desktop only');
-                            return;
-                        }
-
                         const data = [{
                             startDate: new Date(2020, 9, 12, 1, 30),
                             endDate: new Date(2020, 9, 13, 0, 30),
@@ -1114,11 +1101,6 @@ module('Virtual scrolling integration', () => {
                 });
 
                 test('Appointment with multiple resources should be rendered correctly if horizontal grouping', function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
-
                     const data = [{
                         startDate: new Date(2020, 9, 12, 1, 30),
                         endDate: new Date(2020, 9, 12, 22, 30),
@@ -1210,6 +1192,72 @@ module('Virtual scrolling integration', () => {
                                 },
                                 scrollable,
                                 offset
+                            );
+                        });
+
+                        return promise;
+                    });
+                });
+            });
+
+
+            ['horizontal', 'vertical'].forEach(groupOrientation => {
+                test(`A long appointment should be correctly croped if Week view  and "${groupOrientation}" group orientation`, function(assert) {
+                    const longAppointment = {
+                        startDate: new Date(2015, 2, 4, 0, 10),
+                        endDate: new Date(2015, 2, 4, 23, 50)
+                    };
+                    this.createInstance({
+                        currentDate: new Date(2015, 2, 4),
+                        scrolling: {
+                            mode: 'virtual'
+                        },
+                        views: [{
+                            type: 'week',
+                            groupOrientation: groupOrientation
+                        }],
+                        currentView: 'week',
+                        dataSource: [longAppointment],
+                        height: 400
+                    });
+
+                    const { instance } = this.scheduler;
+                    const workspace = instance.getWorkSpace();
+                    const { viewDataProvider } = workspace;
+                    const scrollable = workspace.getScrollable();
+
+                    workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+
+                    return asyncWrapper(assert, promise => {
+                        [
+                            1000, 1050, 1100, 1200, 1250, 1300, 1350, 1400, 1500, 2000
+                        ].forEach(scrollY => {
+                            promise = asyncScrollTest(
+                                assert,
+                                promise,
+                                () => {
+                                    const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
+
+                                    assert.equal(
+                                        settings.groupIndex,
+                                        0,
+                                        `group index is correct when scrolled to ${scrollY}`
+                                    );
+
+                                    const startViewDate = viewDataProvider.findGroupCellStartDate(
+                                        settings.groupIndex,
+                                        settings.info.appointment.startDate,
+                                        settings.info.appointment.endDate
+                                    );
+
+                                    assert.deepEqual(
+                                        settings.info.appointment.startDate,
+                                        startViewDate,
+                                        'start date is correct'
+                                    );
+                                },
+                                scrollable,
+                                { y: scrollY }
                             );
                         });
 
@@ -1314,86 +1362,11 @@ module('Virtual scrolling integration', () => {
 
                     assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
                 });
-
-                ['horizontal', 'vertical'].forEach(groupOrientation => {
-                    test(`A long appointment should be correctly croped if view: ${viewName}, "${groupOrientation}" group orientation`, function(assert) {
-                        if(!isDesktopEnvironment()) {
-                            assert.ok(true, 'This test is for desktop only');
-                            return;
-                        }
-
-                        const longAppointment = {
-                            startDate: new Date(2015, 2, 4, 0, 10),
-                            endDate: new Date(2015, 2, 4, 23, 50)
-                        };
-                        this.createInstance({
-                            currentDate: new Date(2015, 2, 4),
-                            scrolling: {
-                                mode: 'virtual'
-                            },
-                            views: [{
-                                type: viewName,
-                                groupOrientation: groupOrientation
-                            }],
-                            currentView: viewName,
-                            dataSource: [longAppointment],
-                            height: 400
-                        });
-
-                        const { instance } = this.scheduler;
-                        const workspace = instance.getWorkSpace();
-                        const { viewDataProvider } = workspace;
-                        const scrollable = workspace.getScrollable();
-
-                        workspace.virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
-
-                        return asyncWrapper(assert, promise => {
-                            [
-                                1000, 1050, 1100, 1200, 1250, 1300, 1350, 1400, 1500, 2000
-                            ].forEach(scrollY => {
-                                promise = asyncScrollTest(
-                                    assert,
-                                    promise,
-                                    () => {
-                                        const settings = instance.fire('createAppointmentSettings', longAppointment)[0];
-
-                                        assert.equal(
-                                            settings.groupIndex,
-                                            0,
-                                            `group index is correct when scrolled to ${scrollY}`
-                                        );
-
-                                        const startViewDate = viewDataProvider.findGroupCellStartDate(
-                                            settings.groupIndex,
-                                            settings.info.appointment.startDate,
-                                            settings.info.appointment.endDate
-                                        );
-
-                                        assert.deepEqual(
-                                            settings.info.appointment.startDate,
-                                            startViewDate,
-                                            'start date is correct'
-                                        );
-                                    },
-                                    scrollable,
-                                    { y: scrollY }
-                                );
-                            });
-
-                            return promise;
-                        });
-                    });
-                });
             });
         });
 
         module('Recurrent appoitnments', () => {
             test('it should have correct settings in vertical group orientation', function(assert) {
-                if(!isDesktopEnvironment()) {
-                    assert.ok(true, 'This test is for desktop only');
-                    return;
-                }
-
                 const data = [{
                     text: 'Test0',
                     priorityId: 1,
@@ -1497,11 +1470,6 @@ module('Virtual scrolling integration', () => {
             });
 
             test('it should not have duplicates in horizontal group orientation', function(assert) {
-                if(!isDesktopEnvironment()) {
-                    assert.ok(true, 'This test is for desktop only');
-                    return;
-                }
-
                 const data = [{
                     text: 'Test0',
                     priorityId: [1, 2],
@@ -1737,11 +1705,6 @@ module('Virtual scrolling integration', () => {
             });
 
             test('Recurrent all day appoitment with multiple resources should be rendered correctly if horizontal grouping', function(assert) {
-                if(!isDesktopEnvironment()) {
-                    assert.ok(true, 'This test is for desktop only');
-                    return;
-                }
-
                 this.createInstance({
                     dataSource: [{
                         text: 'allDay recurrent',
@@ -1910,11 +1873,6 @@ module('Virtual scrolling integration', () => {
         });
 
         test('A vertically grouped long recurrent appointment should not have duplicates', function(assert) {
-            if(!isDesktopEnvironment()) {
-                assert.ok(true, 'This test is for desktop only');
-                return;
-            }
-
             const data = [{
                 text: 'Website Re-Design Plan',
                 priorityId: [1, 2],
@@ -2308,11 +2266,6 @@ module('Virtual scrolling integration', () => {
             });
 
             test('Recurrent appointments should be filtered correctly in vertical group orientation', function(assert) {
-                if(!isDesktopEnvironment()) {
-                    assert.ok(true, 'This test is for desktop only');
-                    return;
-                }
-
                 const data = [{
                     text: 'Test0',
                     priorityId: 1,
@@ -2457,11 +2410,6 @@ module('Virtual scrolling integration', () => {
         }, function() {
             module('Vertical grouping', () => {
                 test('Scroll Down', function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
-
                     this.createInstance();
 
                     const { instance } = this;
@@ -2499,11 +2447,6 @@ module('Virtual scrolling integration', () => {
                 });
 
                 test('Scroll Up', function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
-
                     this.createInstance();
 
                     const { instance } = this;
@@ -2542,11 +2485,6 @@ module('Virtual scrolling integration', () => {
                 });
 
                 test('Scroll Down if groups and resources', function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
-
                     this.createInstance({
                         groups: ['resourceId0'],
                         resources: [{
@@ -2600,11 +2538,6 @@ module('Virtual scrolling integration', () => {
                 });
 
                 test('Next day appointments should be filtered', function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
-
                     this.createInstance({
                         groups: ['resourceId0'],
                         dataSource: [{
@@ -2819,11 +2752,6 @@ module('Virtual scrolling integration', () => {
             }, () => {
                 module('Regular appointmens', () => {
                     test('Scroll Right', function(assert) {
-                        if(!isDesktopEnvironment()) {
-                            assert.ok(true, 'This test is for desktop only');
-                            return;
-                        }
-
                         const $style = $('<style>');
                         const styleBefore = $style.text();
 
@@ -2928,11 +2856,6 @@ module('Virtual scrolling integration', () => {
                 module('Recurrent appointments', () => {
                     module('Multiple resources', () => {
                         test('Scroll Right recurrent appointment with multiple resources', function(assert) {
-                            if(!isDesktopEnvironment()) {
-                                assert.ok(true, 'This test is for desktop only');
-                                return;
-                            }
-
                             const scheduler = createWrapper({
                                 height: 600,
                                 width: 600,

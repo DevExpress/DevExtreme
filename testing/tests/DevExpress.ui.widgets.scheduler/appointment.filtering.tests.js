@@ -7,12 +7,12 @@ import {
     SchedulerTestWrapper,
     initTestMarkup,
     createWrapper,
-    asyncAssert
+    asyncAssert,
+    supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'common.css!';
 import 'generic_light.css!';
 
 const {
@@ -62,10 +62,7 @@ module('Integration: Appointment filtering', {
         this.clock.restore();
     }
 }, () => {
-    [
-        'standard',
-        'virtual'
-    ].forEach(scrollingMode => {
+    supportedScrollingModes.forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {
                 const createInstance = this.createInstance.bind(this);

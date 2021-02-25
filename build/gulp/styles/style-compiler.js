@@ -19,7 +19,6 @@ const starLicense = require('../header-pipes').starLicense;
 const cssArtifactsPath = join(process.cwd(), 'artifacts', 'css');
 
 const DEFAULT_DEV_BUNDLE_NAMES = [
-    'common',
     'light',
     'material.blue.light'
 ];

@@ -1,6 +1,6 @@
 const { compileCode } = require('devextreme-generator/component-compiler');
 const { getTsConfig } = require('devextreme-generator/utils/typescript-utils');
-const generator = require('devextreme-generator/preact-generator').default;
+const generator = require('devextreme-generator/inferno-generator').default;
 const ts = require('typescript');
 const path = require('path');
 const fs = require('fs');
@@ -10,7 +10,7 @@ const { BASE_GENERATOR_OPTIONS_WITH_JQUERY } = require('../../../../build/gulp/g
 
 const THIS_FILE = fs.readFileSync(__filename);
 const jestTransformer = tsJest.createTransformer();
-const TS_CONFIG_PATH = 'build/gulp/generator/ts-configs/preact.tsconfig.json';
+const TS_CONFIG_PATH = 'build/gulp/generator/ts-configs/inferno.tsconfig.json';
 const tsConfig = getTsConfig(TS_CONFIG_PATH);
 
 generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;

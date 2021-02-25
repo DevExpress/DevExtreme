@@ -11,7 +11,7 @@ import Button from '../../button';
 import Calendar from '../../calendar';
 import Popover from '../../popover';
 import Popup from '../../popup';
-import publisherMixin from '../ui.scheduler.publisher_mixin';
+import publisherMixin from '../publisher_mixin';
 import dateLocalization from '../../../localization/date';
 import Scrollable from '../../scroll_view/ui.scrollable';
 

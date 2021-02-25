@@ -18,16 +18,20 @@ jest.mock('../../../../core/utils/resize_callbacks');
 (getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
 
 describe('resizable-container', () => {
-  function getFakeHtml(width: number | null): RefObject<HTMLDivElement> | undefined {
-    return width ? { width: `${width}px` } as unknown as RefObject<HTMLDivElement> : undefined;
+  function getFakeHtml(width: number | null): HTMLDivElement | undefined {
+    return width ? { width: `${width}px` } as unknown as HTMLDivElement : undefined;
   }
   function getElementsRef({
     width, pageSizes, info, pages,
   }) {
-    const parentHtmlEl = getFakeHtml(width) as RefObject<HTMLDivElement>;
-    const pageSizesHtmlEl = pageSizes ? getFakeHtml(pageSizes) : undefined;
-    const infoHtmlEl = info ? getFakeHtml(info) : undefined;
-    const pagesHtmlEl = getFakeHtml(pages);
+    const parentHtmlEl = { current: getFakeHtml(width) } as RefObject<HTMLDivElement>;
+    const pageSizesHtmlEl = {
+      current: pageSizes ? getFakeHtml(pageSizes) : undefined,
+    } as RefObject<HTMLDivElement>;
+    const infoHtmlEl = {
+      current: info ? getFakeHtml(info) : undefined,
+    } as RefObject<HTMLDivElement>;
+    const pagesHtmlEl = { current: getFakeHtml(pages) } as RefObject<HTMLDivElement>;
     return {
       parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
     };

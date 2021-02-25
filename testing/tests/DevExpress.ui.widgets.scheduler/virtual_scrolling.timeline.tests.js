@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'generic_light.css!';
 
 import {
@@ -16,7 +15,7 @@ const {
 } = QUnit;
 
 const test = (description, callback) => {
-    const testFunc = isIE11
+    const testFunc = isIE11 || !isDesktopEnvironment()
         ? QUnit.skip
         : QUnit.test;
 
@@ -72,7 +71,7 @@ module('Virtual scrolling timelines', () => {
                             expectedRects: [{
                                 left: -9099,
                                 top: -9827,
-                                width: 2600
+                                width: 300
                             }]
                         },
                         {
@@ -80,7 +79,7 @@ module('Virtual scrolling timelines', () => {
                             expectedRects: [{
                                 left: -10099,
                                 top: -9827,
-                                width: 2600
+                                width: 1300
                             }]
                         },
                         {
@@ -88,7 +87,7 @@ module('Virtual scrolling timelines', () => {
                             expectedRects: [{
                                 left: -10399,
                                 top: -9827,
-                                width: 1900
+                                width: 1600
                             }]
                         },
                         {
@@ -137,11 +136,6 @@ module('Virtual scrolling timelines', () => {
         module('Vertical grouping', () => {
             module('timelineDay', () => {
                 test('appointments should be rendered correctly', function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
-
                     const data = [
                         {
                             text: 'Appt-001',
@@ -218,7 +212,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -9099,
                                     top: -9528,
-                                    width: 1800
+                                    width: 400
                                 }]
                             },
                             {
@@ -226,11 +220,11 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10099,
                                     top: -9528,
-                                    width: 1800
+                                    width: 1400
                                 }, {
                                     left: -8899,
                                     top: -9677,
-                                    width: 2250
+                                    width: 200
                                 }]
                             },
                             {
@@ -242,7 +236,7 @@ module('Virtual scrolling timelines', () => {
                                 }, {
                                     left: -9899,
                                     top: -9677,
-                                    width: 2250
+                                    width: 1200
                                 }]
                             },
                             {
@@ -262,7 +256,7 @@ module('Virtual scrolling timelines', () => {
                                 }, {
                                     left: -9649,
                                     top: -9528,
-                                    width: 11100
+                                    width: 950
                                 }]
                             },
                             {
@@ -270,7 +264,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9528,
-                                    width: 10750
+                                    width: 1600
                                 }]
                             },
                             {
@@ -278,15 +272,15 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9528,
-                                    width: 8950
+                                    width: 1600
                                 }, {
                                     left: -9899,
                                     top: -9827,
-                                    width: 6000
+                                    width: 1200
                                 }, {
                                     left: -9899,
                                     top: -9677,
-                                    width: 6000
+                                    width: 1200
                                 }]
                             },
                             {
@@ -294,15 +288,15 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9528,
-                                    width: 7950
+                                    width: 1600
                                 }, {
                                     left: -10299,
                                     top: -9827,
-                                    width: 5400
+                                    width: 1600
                                 }, {
                                     left: -10299,
                                     top: -9677,
-                                    width: 5400
+                                    width: 1600
                                 }]
                             },
                             {
@@ -310,15 +304,15 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9528,
-                                    width: 6950
+                                    width: 1600
                                 }, {
                                     left: -10299,
                                     top: -9827,
-                                    width: 4400
+                                    width: 1600
                                 }, {
                                     left: -10299,
                                     top: -9677,
-                                    width: 4400
+                                    width: 1600
                                 }]
                             },
                             {
@@ -326,15 +320,15 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9528,
-                                    width: 5950
+                                    width: 1600
                                 }, {
                                     left: -10299,
                                     top: -9827,
-                                    width: 3400
+                                    width: 1600
                                 }, {
                                     left: -10299,
                                     top: -9677,
-                                    width: 3400
+                                    width: 1600
                                 }]
                             },
                             {
@@ -342,7 +336,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9528,
-                                    width: 3950
+                                    width: 1600
                                 }, {
                                     left: -10299,
                                     top: -9827,
@@ -358,7 +352,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10399,
                                     top: -9528,
-                                    width: 3550
+                                    width: 1600
                                 }, {
                                     left: -10399,
                                     top: -9827,
@@ -374,7 +368,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9528,
-                                    width: 2950
+                                    width: 1600
                                 }, {
                                     left: -10299,
                                     top: -9827,
@@ -390,7 +384,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9528,
-                                    width: 1950
+                                    width: 1600
                                 }]
                             },
                             {
@@ -454,11 +448,6 @@ module('Virtual scrolling timelines', () => {
 
             module('timelineWeek', () => {
                 test('multiday appointment should be rendered correctly in timelineWeek view with grouping', function(assert) {
-                    if(!isDesktopEnvironment()) {
-                        assert.ok(true, 'This test is for desktop only');
-                        return;
-                    }
-
                     const scheduler = createWrapper({
                         height: 600,
                         width: 800,
@@ -500,7 +489,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -9899,
                                     top: -9603,
-                                    width: 22000
+                                    width: 1200
                                 }]
                             },
                             {
@@ -508,7 +497,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9603,
-                                    width: 14400
+                                    width: 1600
                                 }]
                             },
                             {
@@ -516,7 +505,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9603,
-                                    width: 2400
+                                    width: 1600
                                 }]
                             },
                             {

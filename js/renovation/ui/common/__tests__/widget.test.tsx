@@ -2,6 +2,7 @@ import React, { createRef } from 'react';
 // Should be before component import
 import { mount } from 'enzyme';
 // import { create as mount } from 'react-test-renderer';
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
@@ -11,6 +12,7 @@ import { Widget, viewFunction, WidgetProps } from '../widget';
 import { isFakeClickEvent } from '../../../../events/utils/index';
 import { ConfigProvider } from '../../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
+import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
@@ -18,6 +20,7 @@ jest.mock('../../../../events/utils/index', () => ({
 }));
 jest.mock('../../../common/config_provider', () => ({ ConfigProvider: () => null }));
 jest.mock('../../../utils/resolve_rtl');
+jest.mock('../../../../core/utils/resize_callbacks');
 
 describe('Widget', () => {
   describe('Render', () => {
@@ -209,6 +212,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ activeStateEnabled: true, disabled: false });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.activeEffect() as DisposeEffectReturn;
 
@@ -261,6 +265,7 @@ describe('Widget', () => {
           const e = { ...defaultEvent };
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           widget.clickEffect();
           emit(EVENT.dxClick, e);
@@ -272,6 +277,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.clickEffect() as DisposeEffectReturn;
           detach();
@@ -358,6 +364,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: false });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.focusEffect() as DisposeEffectReturn;
 
@@ -421,6 +428,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: false });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           widget.active = false;
           const detach = widget.hoverEffect() as DisposeEffectReturn;
 
@@ -528,6 +536,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onDimensionChanged });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           const detach = widget.resizeEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
@@ -541,6 +550,46 @@ describe('Widget', () => {
 
           emit(EVENT.resize);
           expect(getEventHandlers(EVENT.resize)).toBe(undefined);
+        });
+      });
+
+      describe('windowResizeEffect', () => {
+        afterEach(() => {
+          jest.clearAllMocks();
+        });
+
+        it('should subscribe on window.onresize event', () => {
+          const onDimensionChanged = jest.fn();
+          const widget = new Widget({ onDimensionChanged });
+
+          const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
+
+          expect(resizeCallbacks.add).toBeCalledTimes(1);
+          expect(resizeCallbacks.add).toHaveBeenCalledWith(onDimensionChanged);
+          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+
+          dispose?.();
+        });
+
+        it('should return window.onresize unsubscribe callback', () => {
+          const onDimensionChanged = jest.fn();
+          const widget = new Widget({ onDimensionChanged });
+
+          const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
+
+          dispose?.();
+
+          expect(resizeCallbacks.remove).toBeCalledTimes(1);
+          expect(resizeCallbacks.remove).toHaveBeenCalledWith(onDimensionChanged);
+        });
+
+        it('should not subscribe on window.onresize event if onDimensionChanged callback does not defined', () => {
+          const widget = new Widget({ });
+          const dispose = widget.windowResizeEffect();
+
+          expect(resizeCallbacks.add).toBeCalledTimes(0);
+          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+          expect(dispose).toBe(undefined);
         });
       });
 
@@ -584,21 +633,21 @@ describe('Widget', () => {
 
       describe('setRootElementRef', () => {
         it('set rootElementRef to div ref', () => {
-          const widgetRef = {} as HTMLDivElement;
+          const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           const component = new Widget({
             rootElementRef: {},
           } as WidgetProps);
           component.widgetRef = widgetRef;
           component.setRootElementRef();
 
-          expect(component.props.rootElementRef).toBe(component.widgetRef);
+          expect(component.props.rootElementRef?.current).toBe(component.widgetRef.current);
         });
 
         it('hasnt rootElementRef', () => {
           const component = new Widget({ });
-          component.widgetRef = {} as HTMLDivElement;
+          component.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           component.setRootElementRef();
-          expect(component.props.rootElementRef).toBeUndefined();
+          expect(component.props.rootElementRef?.current).toBeUndefined();
         });
       });
     });

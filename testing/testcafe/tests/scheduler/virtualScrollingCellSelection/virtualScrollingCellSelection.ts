@@ -23,10 +23,10 @@ const scheduler = new Scheduler('#container');
 
     await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
 
-    await scrollTo(500);
+    await scrollTo(0, 500);
     await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 9, 6, 1);
 
-    await scrollTo(0);
+    await scrollTo(0, 0);
     await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
   }).before(() => createScheduler({ showAllDayPanel }));
 
@@ -36,10 +36,10 @@ const scheduler = new Scheduler('#container');
 
     await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
 
-    await scrollTo(500);
+    await scrollTo(0, 500);
     await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 9, 6, 1);
 
-    await scrollTo(0);
+    await scrollTo(0, 0);
     await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
   }).before(() => createScheduler({
     showAllDayPanel,
@@ -56,10 +56,10 @@ const scheduler = new Scheduler('#container');
 
     await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 2);
 
-    await scrollTo(500);
+    await scrollTo(0, 500);
     await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 9, 6, 2);
 
-    await scrollTo(0);
+    await scrollTo(0, 0);
     await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 2);
   }).before(() => createScheduler({
     showAllDayPanel,
@@ -80,12 +80,12 @@ const scheduler = new Scheduler('#container');
       t, scheduler, 8 - indexDifference, 6 - indexDifference, 1,
     );
 
-    await scrollTo(1100);
+    await scrollTo(0, 1100);
     await checkSelectionWhenFocusedIsNotInViewport(
       t, scheduler, 4 + indexDifference, 2 + indexDifference, 1,
     );
 
-    await scrollTo(0);
+    await scrollTo(0, 0);
     await checkSelectionWhenFocusedInViewport(
       t, scheduler, 8 - indexDifference, 6 - indexDifference, 1,
     );
@@ -105,10 +105,10 @@ test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when horiz
 
   await checkAllDayCellsWhenInViewport(t, scheduler);
 
-  await scrollTo(500);
+  await scrollTo(0, 500);
   await checkAllDayCellsWhenInViewport(t, scheduler);
 
-  await scrollTo(0);
+  await scrollTo(0, 0);
   await checkAllDayCellsWhenInViewport(t, scheduler);
 }).before(() => createScheduler({
   showAllDayPanel: true,
@@ -121,10 +121,10 @@ test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when verti
 
   await checkAllDayCellsWhenInViewport(t, scheduler);
 
-  await scrollTo(500);
+  await scrollTo(0, 500);
   await checkAllDayCellsWhenNotInViewport(t, scheduler);
 
-  await scrollTo(0);
+  await scrollTo(0, 0);
   await checkAllDayCellsWhenInViewport(t, scheduler);
 }).before(() => createScheduler({
   showAllDayPanel: true,
@@ -144,12 +144,12 @@ test('Selection should work correctly while scrolling', async (t) => {
 
   await checkSelectionWhenFocusedInViewport(t, scheduler, 8, 6, 1);
 
-  await scrollTo(500);
+  await scrollTo(0, 500);
 
   await moveMouse(scheduler.dateTable, scheduler.getDateTableCell(4, 1));
   await checkSelectionWhenFocusedInViewport(t, scheduler, 14, 6, 1, 4);
 
-  await scrollTo(0);
+  await scrollTo(0, 0);
   await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 14, 6, 6);
 }).before(() => createScheduler({
   groups: ['resourceId0'],
@@ -164,12 +164,12 @@ test('Selection should work correctly while scrolling when appointments are grou
 
   await checkSelectionWhenFocusedInViewport(t, scheduler, 7, 5, 1);
 
-  await scrollTo(500);
+  await scrollTo(0, 500);
 
   await moveMouse(scheduler.dateTable, scheduler.getDateTableCell(4, 1));
   await checkSelectionWhenFocusedInViewport(t, scheduler, 14, 6, 1, 4);
 
-  await scrollTo(0);
+  await scrollTo(0, 0);
   await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 12, 5, 5);
 }).before(() => createScheduler({
   groups: ['resourceId0'],
@@ -185,12 +185,12 @@ test('Selection should work in month view', async (t) => {
 
   await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
 
-  await scrollTo(1500);
+  await scrollTo(0, 1500);
   await t
-    .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
+    .expect(scheduler.getSelectedCells().count)
     .eql(0);
 
-  await scrollTo(0);
+  await scrollTo(0, 0);
   await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
 }).before(() => createScheduler({
   views: [{
@@ -201,18 +201,18 @@ test('Selection should work in month view', async (t) => {
 }));
 
 test('Selection should work in timeline views', async (t) => {
-  const checkSelection = async () => {
+  const checkSelection = async (): Promise<void> => {
     await t
       .dragToElement(scheduler.getDateTableCell(0, 0), scheduler.getDateTableCell(0, 1));
 
     await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
 
-    await scrollTo(500);
+    await scrollTo(0, 500);
     await t
-      .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
+      .expect(scheduler.getSelectedCells().count)
       .eql(0);
 
-    await scrollTo(0);
+    await scrollTo(0, 0);
     await checkSelectionWhenFocusedInViewport(t, scheduler, 2, 0, 1);
   };
 

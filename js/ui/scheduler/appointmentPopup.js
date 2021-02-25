@@ -9,8 +9,8 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
 import Popup from '../popup';
-import { AppointmentForm } from './ui.scheduler.appointment_form';
-import { hide as hideLoading, show as showLoading } from './ui.loading';
+import { AppointmentForm } from './appointment_form';
+import { hide as hideLoading, show as showLoading } from './loading';
 
 const toMs = dateUtils.dateToMilliseconds;
 

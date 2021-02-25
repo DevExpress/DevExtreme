@@ -44,7 +44,7 @@ export class CellBaseProps {
 
   @OneWay() allDay?: boolean = false;
 
-  @OneWay() groups?: object;
+  @OneWay() groups?: Record<string, unknown>;
 
   @OneWay() groupIndex?: number;
 

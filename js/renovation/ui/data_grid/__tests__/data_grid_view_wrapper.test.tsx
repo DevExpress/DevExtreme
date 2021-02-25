@@ -31,7 +31,7 @@ describe('DataGridViews', () => {
       component.renderView();
 
       expect(component.props.view).toMatchObject({
-        _$element: $(widgetRef),
+        _$element: $(widgetRef.current),
       });
       expect((component.props.view.render)).toHaveBeenCalledTimes(1);
     });

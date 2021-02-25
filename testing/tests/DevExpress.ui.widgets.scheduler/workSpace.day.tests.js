@@ -1,4 +1,3 @@
-import 'common.css!';
 import dragEvents from 'events/drag';
 import 'generic_light.css!';
 import $ from 'jquery';
@@ -121,14 +120,19 @@ module('Work Space Day', {
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(12).position().left, 'Cell coordinates are right');
     });
 
-    test('Work space should return coordinates of first cell for dates before first view date', function(assert) {
-        const $element = this.instance.$element();
+    [true, false].forEach((renovateRender) => {
+        test(`Work space should return coordinates of first cell for dates before first view date when renovateRender is ${renovateRender}`, function(assert) {
+            this.instance.option({
+                currentDate: new Date(2015, 2, 4),
+                renovateRender,
+            });
 
-        this.instance.option('currentDate', new Date(2015, 2, 4));
+            const $element = this.instance.$element();
+            const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 3, 0, 0));
 
-        const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 3, 0, 0));
-        assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(0).position().top, 'Cell coordinates are right');
-        assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(0).position().left, 'Cell coordinates are right');
+            assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(0).position().top, 'Cell coordinates are right');
+            assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(0).position().left, 'Cell coordinates are right');
+        });
     });
 
     test('getDataByDroppableCell should work right with the single group', function(assert) {

@@ -1,4 +1,3 @@
-import 'common.css!';
 import dateUtils from 'core/utils/date';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';

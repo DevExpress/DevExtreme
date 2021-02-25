@@ -8,7 +8,6 @@ import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
 import dxButton from 'ui/button';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

@@ -8,6 +8,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
 
+
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
 const createLargeDataSource = function(count) {
@@ -3001,6 +3002,87 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal($renderedRows.length, 18, 'rendered data rows');
         assert.equal($virtualRows.length, 0, 'no virtual rows');
+    });
+
+    QUnit.test('DataGrid should display rows from a particular page when dataSource is set initially (rowRenderingMode = \'virtual\') (T971067)', function(assert) {
+        // arrange
+        const generateDataSource = function(count) {
+            const result = [];
+            for(let i = 0; i < count; ++i) {
+                result.push({ id: i + 1, name: `Name ${i + 1}` });
+            }
+            return result;
+        };
+        const dataGrid = createDataGrid({
+            height: 500,
+            dataSource: generateDataSource(100),
+            keyExpr: 'id',
+            columns: ['id', 'name'],
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                pageIndex: 2
+            }
+        });
+
+        // act
+        this.clock.tick();
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 20, 'rendered data rows');
+        assert.equal(visibleRows[0].key, 41, 'the first row key');
+    });
+
+    QUnit.test('DataGrid should display rows from a particular page when dataSource is set at runtime (rowRenderingMode = \'virtual\') (T971067)', function(assert) {
+        // arrange
+        const generateDataSource = function(count) {
+            const result = [];
+            for(let i = 0; i < count; ++i) {
+                result.push({ id: i + 1, name: `Name ${i + 1}` });
+            }
+            return result;
+        };
+        const dataGrid = createDataGrid({
+            height: 500,
+            dataSource: [],
+            columns: ['id', 'name'],
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                pageIndex: 2
+            }
+        });
+
+        // act
+        this.clock.tick();
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 0, 'rows are not rendered');
+
+        // act
+        dataGrid.option('dataSource', {
+            store: {
+                type: 'array',
+                data: generateDataSource(100),
+                key: 'id'
+            }
+        });
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 20, 'rendered data rows');
+        assert.equal(visibleRows[0].key, 41, 'the first row key');
     });
 
     QUnit.test('DataGrid should scroll to the required page when data source is set at runtime (T968361)', function(assert) {

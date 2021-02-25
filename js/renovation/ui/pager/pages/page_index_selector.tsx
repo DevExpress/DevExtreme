@@ -17,7 +17,6 @@ const nextButtonClassName = `${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}
 const prevButtonClassName = `${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`;
 const nextButtonDisabledClassName = `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}`;
 const prevButtonDisabledClassName = `${PAGER_BUTTON_DISABLE_CLASS} ${PAGER_NAVIGATE_BUTTON} ${PAGER_PREV_BUTTON_CLASS}`;
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   renderPrevButton,
   renderNextButton,
@@ -30,7 +29,7 @@ export const viewFunction = ({
     isLargeDisplayMode, maxPagesCount,
     pageCount, pageIndex, pagesCountText,
   },
-}: PageIndexSelector) => (
+}: PageIndexSelector): JSX.Element => (
   <Fragment>
     {renderPrevButton && (
     <LightButton

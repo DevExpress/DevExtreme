@@ -21,7 +21,6 @@ import { ScrollableNative } from './scrollable_native';
 import { ScrollableSimulated } from './scrollable_simulated';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
-import browser from '../../../core/utils/browser';
 import { nativeScrolling, touch } from '../../../core/utils/support';
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
@@ -89,11 +88,6 @@ export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>(
   options: {
     useNative: false,
   },
-}, {
-  device: (): boolean => nativeScrolling && devices.real().platform === 'android' && !browser.mozilla,
-  options: {
-    useSimulatedScrollbar: true,
-  },
 }]);
 
 @Component({
@@ -115,6 +109,11 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   @Method()
   scrollBy(distance: number | Partial<ScrollableLocation>): void {
     this.scrollableRef.scrollBy(distance);
+  }
+
+  @Method()
+  update(): void {
+    this.scrollableRef.update();
   }
 
   @Method()
@@ -162,6 +161,11 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
     return this.scrollableRef.clientWidth();
   }
 
+  @Method()
+  validate(e: Event): boolean {
+    return this.scrollableRef.validate(e);
+  }
+
   get cssClasses(): string {
     const { classes } = this.props;
 
@@ -172,6 +176,6 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollableRef(): any {
-    return this.scrollableNativeRef || this.scrollableSimulatedRef;
+    return this.scrollableNativeRef.current! || this.scrollableSimulatedRef.current!;
   }
 }

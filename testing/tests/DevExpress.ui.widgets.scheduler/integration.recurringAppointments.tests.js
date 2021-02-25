@@ -7,11 +7,15 @@ import dragEvents from 'events/drag';
 import translator from 'animation/translator';
 import { DataSource } from 'data/data_source/data_source';
 import dateSerialization from 'core/utils/date_serialization';
-import { createWrapper, SchedulerTestWrapper, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
+import {
+    createWrapper,
+    SchedulerTestWrapper,
+    isDesktopEnvironment,
+    supportedScrollingModes
+} from '../../helpers/scheduler/helpers.js';
 import dateUtils from 'core/utils/date';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
@@ -25,7 +29,7 @@ QUnit.testStart(function() {
             </div>');
 });
 
-['standard', 'virtual'].forEach(scrollingMode => {
+supportedScrollingModes.forEach(scrollingMode => {
     module(`Integration: Recurring Appointments in the ${scrollingMode} scrolling mode`, {
         beforeEach: function() {
             fx.off = true;
@@ -1226,7 +1230,7 @@ QUnit.testStart(function() {
 
             const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
 
-            assert.equal($reducedAppointment.eq(1).position().left, 0, 'first appt has right left position');
+            assert.roughEqual($reducedAppointment.eq(1).position().left, 0, 0.1, 'first appt has right left position');
         });
 
         QUnit.test('Reduced reccuring appt should have right left position in first column in grouped Month view', function(assert) {
@@ -1256,7 +1260,7 @@ QUnit.testStart(function() {
             const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
             const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').outerWidth();
 
-            assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 2.5, 'first appt in 2d group has right left position');
+            assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 4.01, 'first appt in 2d group has right left position');
         });
 
         QUnit.test('Recurrence exception should be adjusted by scheduler timezone', function(assert) {

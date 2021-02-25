@@ -10,6 +10,8 @@ import { resetPosition } from '../animation/translator';
 import fx from '../animation/fx';
 import { Deferred } from '../core/utils/deferred';
 
+const window = getWindow();
+
 // STYLE sortable
 
 const SORTABLE = 'dxSortable';
@@ -36,6 +38,25 @@ const stopAnimation = (element) => {
     element.style.transform = '';
     element.style.transition = '';
 };
+
+function getScrollableBoundary($scrollable) {
+    const offset = $scrollable.offset();
+    const style = $scrollable[0].style;
+    const paddingLeft = parseFloat(style.paddingLeft) || 0;
+    const paddingRight = parseFloat(style.paddingRight) || 0;
+    const paddingTop = parseFloat(style.paddingTop) || 0;
+    // use clientWidth, because vertical scrollbar reduces content width
+    const width = $scrollable[0].clientWidth - (paddingLeft + paddingRight);
+    const height = $scrollable.height();
+    const left = offset.left + paddingLeft;
+    const top = offset.top + paddingTop;
+    return {
+        left,
+        right: left + width,
+        top,
+        bottom: top + height
+    };
+}
 
 const Sortable = Draggable.inherit({
     _init: function() {
@@ -235,10 +256,9 @@ const Sortable = Draggable.inherit({
         const $scrollable = this._getScrollable($targetDraggable);
 
         if($scrollable) {
-            const offset = $scrollable.offset();
-            const validY = offset.top + $scrollable.height() >= event.pageY && offset.top <= event.pageY;
-            const validX = offset.left + $scrollable.width() >= event.pageX && offset.left <= event.pageX;
-
+            const { left, right, top, bottom } = getScrollableBoundary($scrollable);
+            const validX = left <= event.pageX && event.pageX <= right;
+            const validY = top <= event.pageY && event.pageY <= bottom;
             return validY && validX;
         }
 
@@ -661,7 +681,6 @@ const Sortable = Draggable.inherit({
             const isVerticalOrientation = this._isVerticalOrientation();
             const start = isVerticalOrientation ? 'top' : 'left';
             const end = isVerticalOrientation ? 'bottom' : 'right';
-            const window = getWindow();
             const pageOffset = isVerticalOrientation ? window.pageYOffset : window.pageXOffset;
 
             if(position[start] < (clientRect[start] + pageOffset) || position[start] > (clientRect[end] + pageOffset)) {
@@ -894,3 +913,4 @@ const Sortable = Draggable.inherit({
 registerComponent(SORTABLE, Sortable);
 
 export default Sortable;
+

@@ -11,7 +11,6 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { normalizeKeyName } from 'events/utils/index';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/select_box';
 
@@ -995,57 +994,6 @@ QUnit.module('ContentReady event', {
         this.clock.restore();
     }
 }, () => {
-    QUnit.skip('ContentReady should be raised when widget non-dropdown part is rendered (deferRendering is true)', function(assert) {
-        assert.expect(4);
-
-        $('#autocomplete').dxAutocomplete({
-            value: 'text',
-            focusStateEnabled: true,
-            deferRendering: true,
-            onContentReady: (e) => {
-                assert.ok(true, 'ContentReady is raised');
-                assert.ok(e.component, 'Component info should be passed');
-                assert.ok(e.element, 'Element info should be passed');
-                assert.strictEqual($(e.element).text(), 'text', 'Text is correct');
-            }
-        });
-    });
-
-    QUnit.test('ContentReady should be raised when list is rendered after its first opening (deferRendering is true)', function(assert) {
-        assert.expect(3);
-
-        const autocomplete = $('#autocomplete').dxAutocomplete({
-            dataSource: ['item 1', 'item 2', 'item 3'],
-            searchTimeout: 0,
-            focusStateEnabled: true,
-            deferRendering: true
-        }).dxAutocomplete('instance');
-
-        autocomplete.on('contentReady', (e) => {
-            assert.ok(true, 'ContentReady is raised');
-            assert.ok(e.component, 'Component info should be passed');
-            assert.ok(e.element, 'Element info should be passed');
-        });
-
-        autocomplete.open();
-    });
-
-    QUnit.skip('ContentReady should be raised when list is rendered after its first opening (deferRendering is false)', function(assert) {
-        assert.expect(6);
-
-        $('#autocomplete').dxAutocomplete({
-            dataSource: ['item 1', 'item 2', 'item 3'],
-            searchTimeout: 0,
-            focusStateEnabled: true,
-            deferRendering: false,
-            onContentReady: (e) => {
-                assert.ok(true, 'ContentReady is raised');
-                assert.ok(e.component, 'Component info should be passed');
-                assert.ok(e.element, 'Element info should be passed');
-            }
-        }).dxAutocomplete('instance');
-    });
-
     QUnit.test('ContentReady should be raised after items loading', function(assert) {
         assert.expect(5);
 
