@@ -1,9 +1,10 @@
 import {
-  isNumeric, isDefined, isPlainObject, isWindow,
+  isNumeric, isDefined, isPlainObject,
 } from '../../../core/utils/type';
 import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
 import { camelize } from '../../../core/utils/inflector';
 import getElementComputedStyle from '../../utils/get_computed_style';
+
 import { toNumber } from '../../utils/type_conversion';
 import { ensureDefined } from '../../../core/utils/common';
 
@@ -40,36 +41,10 @@ export function getElementHeight(element: Element | undefined): number {
 }
 
 export function getElementStyle(
-  name: keyof CSSStyleDeclaration, element?: Element,
+  name: keyof CSSStyleDeclaration, element: Element | null,
 ): number | string {
   const computedStyle = getElementComputedStyle(element) || {};
   return computedStyle[name];
-}
-
-export function getWindowByElement(element: Element): Element {
-  return isWindow(element) ? element : (element as any).defaultView;
-}
-
-export function getElementOffset(
-  element: Element | null,
-): { left: number; top: number } {
-  if (!element) return { left: 0, top: 0 };
-
-  if (!element.getClientRects().length) {
-    return {
-      top: 0,
-      left: 0,
-    };
-  }
-
-  const rect = element.getBoundingClientRect();
-  const window = getWindowByElement((element as any).ownerDocument);
-  const docElem = element.ownerDocument.documentElement;
-
-  return {
-    top: rect.top + (window as any).pageYOffset - docElem.clientTop,
-    left: rect.left + (window as any).pageXOffset - docElem.clientLeft,
-  };
 }
 
 export function ensureLocation(
@@ -211,7 +186,7 @@ function getElementLocationInternal(
   const containerSize = containerRef[`offset${dimension}`];
   const elementOffset = element[`offset${dimension}`];
   const offsetStart = offset[prop];
-  const offsetEnd = offset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'];
+  const offsetEnd = offset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'] || 0;
 
   const containerLocation = normalizeCoordinate(
     prop,
