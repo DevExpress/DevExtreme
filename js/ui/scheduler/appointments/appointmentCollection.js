@@ -173,7 +173,7 @@ class SchedulerAppointments extends CollectionWidget {
     _optionChanged(args) {
         switch(args.name) {
             case 'items':
-                this._cleanFocusState();
+                // this._cleanFocusState();
                 this._clearDropDownItems();
                 this._clearDropDownItemsElements();
                 this._repaintAppointments(args.value);
