@@ -687,7 +687,7 @@ class ScrollableTestHelper {
         const maxHorizontalOffset = containerElement.scrollWidth - containerElement.clientWidth;
 
         return {
-            vertical: this._useNative ? maxVerticalOffset : maxVerticalOffset,
+            vertical: maxVerticalOffset,
             horizontal: maxHorizontalOffset
         };
     }

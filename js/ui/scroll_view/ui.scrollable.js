@@ -18,6 +18,7 @@ import { SimulatedStrategy } from './ui.scrollable.simulated';
 import NativeStrategy from './ui.scrollable.native';
 import { deviceDependentOptions } from './ui.scrollable.device';
 import { when } from '../../core/utils/deferred';
+import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -432,12 +433,34 @@ const Scrollable = DOMComponent.inherit({
             location = this._strategy._applyScaleRatio(location);
         }
 
+        if(this._isScrollInverted()) {
+            const { positive } = getScrollRtlBehavior();
+
+            if(positive) {
+                // support webkit < v.86
+                location.left = Math.abs(location.left - this._getMaxOffset().left);
+            } else {
+                location.left -= this._getMaxOffset().left;
+            }
+        }
+
         const distance = this._normalizeLocation({
             left: location.left - ensureDefined(targetLocation.left, location.left),
             top: location.top - ensureDefined(targetLocation.top, location.top)
         });
 
+        if(!distance.top && !distance.left) {
+            return;
+        }
+
         this._strategy.scrollBy(distance);
+    },
+
+    _isScrollInverted: function() {
+        const { rtlEnabled, useNative } = this.option();
+        const { decreasing, positive } = getScrollRtlBehavior();
+
+        return useNative && rtlEnabled && (decreasing ^ positive);
     },
 
     scrollToElement: function(element, offset) {

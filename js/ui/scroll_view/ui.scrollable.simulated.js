@@ -1065,10 +1065,6 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     scrollBy: function(distance) {
-        if(!distance.top && !distance.left) {
-            return;
-        }
-
         const verticalScroller = this._scrollers[VERTICAL];
         const horizontalScroller = this._scrollers[HORIZONTAL];
 

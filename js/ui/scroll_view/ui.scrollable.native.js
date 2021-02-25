@@ -4,10 +4,8 @@ import { isDxMouseWheelEvent } from '../../events/utils/index';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
-import { isDefined } from '../../core/utils/type';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
-import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
@@ -42,6 +40,7 @@ const NativeStrategy = Class.inherit({
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
+        this._isScrollInverted = scrollable._isScrollInverted.bind(scrollable);
     },
 
     render: function() {
@@ -56,8 +55,6 @@ const NativeStrategy = Class.inherit({
         if(this._showScrollbar && this._useSimulatedScrollbar) {
             this._renderScrollbars();
         }
-
-        this._scrollRtlBehavior = getScrollRtlBehavior();
     },
 
     updateRtlPosition: noop,
@@ -133,13 +130,6 @@ const NativeStrategy = Class.inherit({
             top: -top,
             left: this._isScrollInverted() ? this._getMaxOffset().left - Math.abs(left) : -left
         };
-    },
-
-    _isScrollInverted: function() {
-        const { rtlEnabled } = this.option();
-        const { decreasing, positive } = this._scrollRtlBehavior;
-
-        return rtlEnabled && (decreasing ^ positive);
     },
 
     _isReachedLeft: function(left) {
@@ -264,27 +254,9 @@ const NativeStrategy = Class.inherit({
     },
 
     scrollBy: function(distance) {
-        if(!distance.top && !isDefined(distance.left)) {
-            return;
-        }
-
         const { top, left } = this.location();
         this._$container.scrollTop(Math.round(-top - distance.top));
-        this._$container.scrollLeft(this._normalizeLeftOffset(Math.round(-left - distance.left)));
-    },
-
-    _normalizeLeftOffset: function(offset) {
-        if(this._isScrollInverted()) {
-            const { positive } = this._scrollRtlBehavior;
-
-            if(positive) {
-                offset = Math.abs(offset - this._getMaxOffset().left);
-            } else {
-                offset -= this._getMaxOffset().left;
-            }
-        }
-
-        return offset;
+        this._$container.scrollLeft(Math.round(-left - distance.left));
     },
 
     validate: function(e) {
