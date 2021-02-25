@@ -1603,7 +1603,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
             // assert
             assert.equal(dataGrid.option('focusedRowIndex'), 79, 'focused row index');
-            assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'forcused row is rendered');
+            assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
         });
 
         QUnit.testInActiveWindow(`autoNavigateToFocusedRow should work when rowRenderingMode is virtual, focusedRowIndex is specified and scrolling.mode == "${scrollingMode}" (T971695)`, function(assert) {
@@ -1639,7 +1639,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
             // assert
             assert.equal(dataGrid.option('focusedRowKey'), 80, 'focused row key');
-            assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'forcused row is rendered');
+            assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
         });
     });
 });
