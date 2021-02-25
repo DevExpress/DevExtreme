@@ -88,7 +88,10 @@
 
     &.dx-state-hover {
       background-color: $texteditor-hover-bg;
-      border-bottom: 1px solid $texteditor-hover-border-color;
+
+      &:not(.dx-invalid) {
+        border-bottom: 1px solid $texteditor-hover-border-color;
+      }
     }
 
     &.dx-state-disabled,
@@ -131,6 +134,10 @@
       &.dx-state-active {
         border-color: transparent;
         border-bottom-color: $texteditor-invalid-focused-border-color;
+      }
+
+      &.dx-state-hover:not(.dx-state-focused) {
+        border-bottom-color: $texteditor-invalid-faded-border-color;
       }
     }
   }
