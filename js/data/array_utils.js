@@ -2,7 +2,7 @@ import { isPlainObject, isEmptyObject, isDefined } from '../core/utils/type';
 import config from '../core/config';
 import Guid from '../core/guid';
 import { extend, extendFromObject } from '../core/utils/extend';
-import errorUtils from './errors';
+import { errors } from './errors';
 import { deepExtendArraySafe } from '../core/utils/object';
 import { compileGetter } from '../core/utils/data';
 import dataUtils from './utils';
@@ -106,7 +106,7 @@ function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immuta
 }
 
 function getErrorResult(isBatch, logError, errorCode) {
-    return !isBatch ? dataUtils.rejectedPromise(errorUtils.errors.Error(errorCode)) : logError && errorUtils.errors.log(errorCode);
+    return !isBatch ? dataUtils.rejectedPromise(errors.Error(errorCode)) : logError && errors.log(errorCode);
 }
 
 function applyChanges(data, changes, options = {}) {
@@ -176,7 +176,7 @@ function insert(keyInfo, array, data, index, isBatch, logError) {
         keyValue = keyInfo.keyOf(obj);
         if(keyValue === undefined || typeof keyValue === 'object' && isEmptyObject(keyValue)) {
             if(Array.isArray(keyExpr)) {
-                throw errorUtils.errors.Error('E4007');
+                throw errors.Error('E4007');
             }
             keyValue = obj[keyExpr] = String(new Guid());
         } else {

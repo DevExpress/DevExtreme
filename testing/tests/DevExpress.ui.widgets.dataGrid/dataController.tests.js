@@ -2,7 +2,7 @@ import $ from 'jquery';
 import config from 'core/config';
 import formatHelper from 'format_helper';
 import errors from 'ui/widget/ui.errors';
-import dataErrors from 'data/errors';
+import { errors as dataErrors } from 'data/errors';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
@@ -8136,7 +8136,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
     });
 
     QUnit.test('update error', function(assert) {
-        const errors = dataErrors.errors;
+        const errors = dataErrors;
         sinon.spy(errors, 'log');
         const dataSource = new DataSource({
             key: 'field1',

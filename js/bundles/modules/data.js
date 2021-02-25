@@ -8,17 +8,17 @@ Object.defineProperty(DevExpress.data, 'errorHandler', {
         return require('../../data/errors').errorHandler;
     },
     set: function(value) {
-        require('../../data/errors').errorHandler = value;
+        require('../../data/errors').setErrorHandler(value);
     }
 });
 
 // TODO: try remove (plugins failed without this)
 Object.defineProperty(DevExpress.data, '_errorHandler', {
     get: function() {
-        return require('../../data/errors')._errorHandler;
+        return require('../../data/errors').handleError;
     },
     set: function(value) {
-        require('../../data/errors')._errorHandler = value;
+        require('../../data/errors').setErrorHandler(value);
     }
 });
 
