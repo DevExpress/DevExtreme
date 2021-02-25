@@ -8,7 +8,7 @@ export interface AppointmentItem {
   data: dxSchedulerAppointment;
   currentData?: dxSchedulerAppointment;
   settings?: AppointmentItemSettings;
-  color?: string;
+  color?: Promise<Color>;
   disabled?: boolean;
 }
 

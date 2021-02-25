@@ -1,20 +1,22 @@
-interface dxPromiseCallback<T> {
+interface Callback<T> {
     (value?: T, ...args: any[]): void;
 }
-
-export interface dxDeferred<T> {
+declare class DeferredObj<T> {
+    constructor();
     state(): string;
-    always(alwaysCallback?: dxPromiseCallback<T>): dxDeferred<T>;
-    done(doneCallback?: dxPromiseCallback<T>): dxDeferred<T>;
-    fail(failCallback?: dxPromiseCallback<T>): dxDeferred<T>;
-    progress(progressCallback?: dxPromiseCallback<T>): dxDeferred<T>;
-    notify(value?: any, ...args: any[]): dxDeferred<T>;
-    notifyWith(context: any, args?: any[]): dxDeferred<T>;
-    reject(value?: any, ...args: any[]): dxDeferred<T>;
-    rejectWith(context: any, args?: any[]): dxDeferred<T>;
-    resolve(value?: T, ...args: any[]): dxDeferred<T>;
-    resolveWith(context: any, args?: T[]): dxDeferred<T>;
+    always(alwaysCallback?: Callback<T>): DeferredObj<T>;
+    catch(catchCallback?: Callback<T>): DeferredObj<T>;
+    then(resolveCallback?: Callback<T>, rejectCallback?: Callback<T>): DeferredObj<T>;
+    done(doneCallback?: Callback<T>): DeferredObj<T>;
+    fail(failCallback?: Callback<T>): DeferredObj<T>;
+    progress(progressCallback?: Callback<T>): DeferredObj<T>;
+    notify(value?: T, ...args: any[]): DeferredObj<T>;
+    notifyWith(context: DeferredObj<T>, args?: any[]): DeferredObj<T>;
+    reject(value?: T, ...args: any[]): DeferredObj<T>;
+    rejectWith(context: DeferredObj<T>, args?: any[]): DeferredObj<T>;
+    resolve(value?: T, ...args: any[]): DeferredObj<T>;
+    resolveWith(context: DeferredObj<T>, args?: T[]): DeferredObj<T>;
     promise(target?: any): Promise<T>;
 }
 
-export function Deferred<T>(): dxDeferred<T>;
+export function Deferred<T>(): DeferredObj<T>;
