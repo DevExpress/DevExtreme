@@ -184,14 +184,6 @@ function run_native_components {
     npx gulp native-components-compilation-check
 }
 
-function run_test_scss {
-    npm i
-    npm run build-themes
-
-    cd themebuilder-scss
-    npm i && npm run build && npm run test
-}
-
 function run_test_styles {
     npm i
     npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false

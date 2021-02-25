@@ -918,7 +918,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             useKeyboard: false,
             bounceEnabled: false,
             updateManually: true,
-            pushBackValue: 0
         };
         if(this._needCreateCrossScrolling()) {
             config = extend(config, this._createCrossScrollingConfig());
@@ -1005,7 +1004,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
-            pushBackValue: 0,
             onScroll: e => {
                 this._headerSemaphore.take();
                 this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ left: e.scrollOffset.left });
@@ -1028,7 +1026,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
-            pushBackValue: 0,
             onScroll: e => {
                 this._sideBarSemaphore.take();
                 this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ top: e.scrollOffset.top });
@@ -2312,10 +2309,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(!this.isRenovatedRender()) {
             this._$thead.empty();
             this._$dateTable.empty();
-            this._shader && this._shader.clean();
             this._$timePanel.empty();
-            this._$allDayTable && this._$allDayTable.empty();
             this._$groupTable.empty();
+
+            this._shader?.clean();
+            this._$allDayTable?.empty();
+            this._$sidebarTable?.empty();
         }
 
         delete this._hiddenInterval;

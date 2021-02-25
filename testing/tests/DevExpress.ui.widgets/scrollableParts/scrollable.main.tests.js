@@ -531,34 +531,6 @@ QUnit.test('simulated scrollable should stop animators on disposing', function(a
     assert.ok(horizontalScroller._bounceAnimator._isStopped());
 });
 
-QUnit.test('scrollable content should not blink in bounce on iOS', function(assert) {
-    const $scrollable = $('#scrollable').dxScrollable({
-        useNative: true
-    });
-    const instance = $scrollable.dxScrollable('instance');
-    const $wrapper = $scrollable.find('.' + SCROLLABLE_WRAPPER_CLASS);
-    let onStart = false;
-    let onEnd = false;
-
-    $wrapper
-        .on('dxscrollstart', function() {
-            onStart = instance._strategy._disablePushBack;
-        })
-        .on('dxscrollend', function() {
-            onEnd = instance._strategy._disablePushBack;
-        });
-
-    pointerMock($('.content1'))
-        .start()
-        .down()
-        .move(0, 10)
-        .up();
-
-    assert.ok(onStart, 'constant _disablePushBack is true on scroll start');
-    assert.ok(!onEnd, 'constant _disablePushBack is false on scroll end');
-});
-
-
 QUnit.module('scrollers interaction', moduleConfig);
 
 QUnit.test('scrolling component with content size equal to container size nested in another component causes outer component scrolling', function(assert) {
