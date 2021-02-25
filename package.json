@@ -119,7 +119,6 @@
     "inferno": "^7.4.6",
     "inferno-compat": "^7.4.6",
     "inferno-create-element": "^7.4.6",
-    "inferno-dom": "^1.0.7",
     "inferno-hydrate": "^7.4.6",
     "intl": "^1.2.5",
     "jest": "^24.9.0",
