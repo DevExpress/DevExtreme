@@ -2,7 +2,10 @@
   "extends": "../../tsconfig.json",
 
   "compilerOptions": {
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
   "include": [
       "src/**/*"
