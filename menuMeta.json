@@ -746,7 +746,6 @@
           {
             "Title": "Master-Detail View",
             "Name": "MasterDetailView",
-            "DocUrl": "Guide/UI_Components/DataGrid/Master-Detail_Interface/",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridMasterDetailViewController.cs",
@@ -759,7 +758,6 @@
           {
             "Title": "Master-Detail API",
             "Name": "MasterDetailAPI",
-            "DocUrl": "Guide/UI_Components/DataGrid/Master-Detail_Interface/#API",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridMasterDetailAPIController.cs",
