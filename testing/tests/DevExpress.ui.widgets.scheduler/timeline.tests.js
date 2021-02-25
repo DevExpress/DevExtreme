@@ -1,10 +1,9 @@
-import 'common.css!';
 import dateUtils from 'core/utils/date';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_day';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
@@ -29,7 +28,7 @@ const stubInvokeMethod = function(instance) {
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
         if(subscribe === 'createResourcesTree') {
-            return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
+            return new ResourceManager().createResourcesTree(arguments[1]);
         }
         if(subscribe === 'convertDateByTimezone') {
             return arguments[1];
@@ -199,38 +198,41 @@ QUnit.test('Group table cells should have correct height', function(assert) {
     assert.roughEqual(dateTableCellHeight, groupHeaderHeight, 1.1, 'Cell height is OK');
 });
 
-QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 10, 16),
-        startDayHour: 9,
-        hoursInterval: 1
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`the 'getCoordinatesByDate' method should return right coordinates when renovateRender is ${true}`, function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 10, 16),
+            startDayHour: 9,
+            hoursInterval: 1,
+            renovateRender,
+        });
+
+        const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
+        const $expectedCell = this.instance.$element()
+            .find('.dx-scheduler-date-table-cell').eq(1);
+        const expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
+
+        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
     });
 
-    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
-    const $expectedCell = this.instance.$element()
-        .find('.dx-scheduler-date-table-cell').eq(1);
-    const expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
+    QUnit.test(`the 'getCoordinatesByDate' method should return right coordinates for rtl mode when renovateRender is ${true}`, function(assert) {
+        this.instance.option({
+            rtlEnabled: true,
+            width: 100,
+            currentDate: new Date(2015, 10, 16),
+            startDayHour: 9,
+            hoursInterval: 1,
+            renovateRender,
+        });
 
-    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
-});
+        const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
+        const $expectedCell = this.instance.$element()
+            .find('.dx-scheduler-date-table-cell').eq(1);
 
-QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates for rtl mode', function(assert) {
-    this.createInstance({ rtlEnabled: true });
+        const expectedPositionLeft = $expectedCell.position().left + $expectedCell.outerWidth() - 0.5 * $expectedCell.outerWidth();
 
-    this.instance.option({
-        width: 100,
-        currentDate: new Date(2015, 10, 16),
-        startDayHour: 9,
-        hoursInterval: 1
+        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
     });
-
-    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
-    const $expectedCell = this.instance.$element()
-        .find('.dx-scheduler-date-table-cell').eq(1);
-
-    const expectedPositionLeft = $expectedCell.position().left + $expectedCell.outerWidth() - 0.5 * $expectedCell.outerWidth();
-
-    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
 });
 
 QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates for grouped timeline', function(assert) {
@@ -525,38 +527,40 @@ QUnit.test('Scheduler timeline week cells should have right height if crossScrol
     assert.roughEqual($firstRowCell.outerHeight(), $lastRowCell.outerHeight(), 1.5, 'Cells has correct height');
 });
 
-QUnit.test('The part of long appointment should have right coordinates on current week (T342192)', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 1, 23),
-        firstDayOfWeek: 1,
-        startDayHour: 1,
-        endDayHour: 10,
-        hoursInterval: 0.5
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`The part of long appointment should have right coordinates on current week (T342192) when renovateRender is ${renovateRender}`, function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 1, 23),
+            firstDayOfWeek: 1,
+            startDayHour: 1,
+            endDayHour: 10,
+            hoursInterval: 0.5,
+            renovateRender,
+        });
+        const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 0, 30), 0, false);
+        const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
+
+        const expectedPositionLeft = $expectedCell.position().left;
+
+        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
     });
-    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 0, 30), 0, false);
-    const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
 
-    const expectedPositionLeft = $expectedCell.position().left;
+    QUnit.test(`The part of long appointment should have right coordinates on current week (T342192) №2 when renovateRender is ${renovateRender}`, function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 1, 23),
+            firstDayOfWeek: 1,
+            startDayHour: 1,
+            endDayHour: 10,
+            hoursInterval: 0.5,
+            renovateRender,
+        });
+        const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 1, 28, 10, 30), 0, false);
+        const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
 
-    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
+        const expectedPositionLeft = $expectedCell.position().left;
 
-});
-
-QUnit.test('The part of long appointment should have right coordinates on current week (T342192) №2', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 1, 23),
-        firstDayOfWeek: 1,
-        startDayHour: 1,
-        endDayHour: 10,
-        hoursInterval: 0.5
+        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
     });
-    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 1, 28, 10, 30), 0, false);
-    const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
-
-    const expectedPositionLeft = $expectedCell.position().left;
-
-    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
-
 });
 
 QUnit.test('The part of long appointment should have right coordinates on current week (T342192) №3', function(assert) {
@@ -704,176 +708,187 @@ QUnit.test('getEndViewDate should return correct value', function(assert) {
     assert.deepEqual(this.instance.getEndViewDate(), new Date(2018, 3, 30, 17, 59), 'End view date is OK');
 });
 
-QUnit.module('Timeline Keyboard Navigation', {
-    beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
-            currentDate: new Date(2015, 9, 16),
-            focusStateEnabled: true,
-            onContentReady: function(e) {
-                const scrollable = e.component.getScrollable();
-                scrollable.option('scrollByContent', false);
-                e.component.initDragBehavior();
-                e.component._attachTablesEvents();
-            },
-        }).dxSchedulerTimelineMonth('instance');
-        stubInvokeMethod(this.instance);
-    }
-}, () => {
-    QUnit.test('Timeline should select/unselect cells with shift & arrows', function(assert) {
-        this.instance.option({
-            focusStateEnabled: true,
-            width: 1000,
-            height: 800,
-            currentDate: new Date(2015, 3, 1),
-            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }] }]
-        });
+QUnit.module('Timeline Keyboard Navigation', () => {
+    ['standard', 'virtual'].forEach((scrollingMode) => {
+        const moduleDescription = scrollingMode === 'virtual'
+            ? 'Virtual Scrolling'
+            : 'Standard Scrolling';
 
-        const $element = this.instance.$element();
-        const $cells = this.instance.$element().find('.' + CELL_CLASS);
-        const keyboard = keyboardMock($element);
-
-        pointerMock($cells.eq(2)).start().click();
-        keyboard.keyDown('down', { shiftKey: true });
-        assert.equal($cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
-        assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 1, 'right cells are focused');
-
-        keyboard.keyDown('right', { shiftKey: true });
-        assert.equal($cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
-        assert.equal($cells.slice(1, 4).filter('.dx-state-focused').length, 2, 'right cells are focused');
-
-        keyboard.keyDown('left', { shiftKey: true });
-        assert.equal($cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
-        assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 1, 'right cells are focused');
-
-        keyboard.keyDown('left', { shiftKey: true });
-        assert.equal($cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
-        assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 2, 'right cells are focused');
-    });
-
-    QUnit.test('Timeline should select/unselect cells with mouse', function(assert) {
-        this.instance.option({
-            width: 1000,
-            height: 800,
-            currentDate: new Date(2015, 3, 1),
-            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]
-        });
-
-        const $element = this.instance.$element();
-        const cells = $element.find('.' + CELL_CLASS);
-        const $table = $element.find('.dx-scheduler-date-table');
-        pointerMock(cells.eq(3)).start().click();
-
-        let cell = cells.eq(15).get(0);
-
-        $($table).trigger($.Event('dxpointerdown', { target: cells.eq(3).get(0), which: 1, pointerType: 'mouse' }));
-        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
-
-        assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells is correct');
-        assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is focused');
-        assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is focused');
-
-        cell = cells.eq(35).get(0);
-
-        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
-
-        assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells has not changed');
-        assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is still focused');
-        assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is still focused');
-        assert.notOk(cells.eq(35).hasClass('dx-state-focused'), 'cell from another group is not focused');
-
-        $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
-    });
-
-    QUnit.module('Keyboard Multiselection with GroupByDate', () => {
-        [
-            { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: false, key: 'left' },
-            { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: true, key: 'left' },
-            { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: false, key: 'right' },
-            { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: true, key: 'right' },
-        ].forEach((config) => {
-            QUnit.test(`Multiselection with ${config.key} arrow should work correctly with groupByDate
-                in Timeleine when rtlEnabled is equal to ${config.rtlEnabled}`, function(assert) {
-                const {
-                    startCell, endCell, focusedCellsCount, rtlEnabled, key,
-                } = config;
-
+        QUnit.module(moduleDescription, {
+            beforeEach: function() {
+                this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
+                    currentDate: new Date(2015, 9, 16),
+                    focusStateEnabled: true,
+                    onContentReady: function(e) {
+                        const scrollable = e.component.getScrollable();
+                        scrollable.option('scrollByContent', false);
+                        e.component.initDragBehavior();
+                        e.component._attachTablesEvents();
+                    },
+                    renovateRender: scrollingMode === 'virtual',
+                    scrolling: { mode: scrollingMode, type: 'vertical' },
+                }).dxSchedulerTimelineMonth('instance');
+                stubInvokeMethod(this.instance);
+            }
+        }, () => {
+            QUnit.test('Timeline should select/unselect cells with shift & arrows', function(assert) {
                 this.instance.option({
                     focusStateEnabled: true,
-                    groupOrientation: 'horizontal',
-                    groupByDate: true,
-                    rtlEnabled,
-                    groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+                    width: 1000,
+                    height: 800,
+                    currentDate: new Date(2015, 3, 1),
+                    groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }] }]
                 });
 
                 const $element = this.instance.$element();
+                const $cells = this.instance.$element().find('.' + CELL_CLASS);
                 const keyboard = keyboardMock($element);
-                const cells = $element.find('.' + CELL_CLASS);
 
-                pointerMock(cells.eq(startCell)).start().click();
-                keyboard.keyDown(key, { shiftKey: true });
+                pointerMock($cells.eq(2)).start().click();
+                keyboard.keyDown('down', { shiftKey: true });
+                assert.equal($cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
+                assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 1, 'right cells are focused');
 
-                assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'right quantity of focused cells');
-                assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'this first focused cell is correct');
-                assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'this last focused cell is correct');
+                keyboard.keyDown('right', { shiftKey: true });
+                assert.equal($cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
+                assert.equal($cells.slice(1, 4).filter('.dx-state-focused').length, 2, 'right cells are focused');
+
+                keyboard.keyDown('left', { shiftKey: true });
+                assert.equal($cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
+                assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 1, 'right cells are focused');
+
+                keyboard.keyDown('left', { shiftKey: true });
+                assert.equal($cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
+                assert.equal($cells.slice(1, 3).filter('.dx-state-focused').length, 2, 'right cells are focused');
             });
-        });
-    });
 
-    QUnit.module('Mouse Multiselection with Vertical Grouping and Grouping by Date', () => {
-        [{
-            startCell: 3,
-            endCell: 7,
-            focusedCellsCount: 5,
-            cellFromAnotherGroup: 40,
-            groupOrientation: 'vertical',
-            groupByDate: false,
-            description: 'Mouse Multiselection should work correctly with timeline when it is grouped vertically'
-        }, {
-            startCell: 3,
-            endCell: 7,
-            focusedCellsCount: 3,
-            cellFromAnotherGroup: 8,
-            groupOrientation: 'horizontal',
-            groupByDate: true,
-            description: 'Mouse Multiselection should work correctly with timeline when it is grouped by date',
-        }].forEach(({
-            startCell, endCell, focusedCellsCount, cellFromAnotherGroup,
-            groupOrientation, groupByDate, description,
-        }) => {
-            QUnit.test(description, function(assert) {
+            QUnit.test('Timeline should select/unselect cells with mouse', function(assert) {
                 this.instance.option({
-                    focusStateEnabled: true,
-                    groupOrientation,
-                    groupByDate,
-                    groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
-                    allowMultipleCellSelection: true,
+                    width: 1000,
+                    height: 800,
+                    currentDate: new Date(2015, 3, 1),
+                    groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]
                 });
 
                 const $element = this.instance.$element();
-
                 const cells = $element.find('.' + CELL_CLASS);
                 const $table = $element.find('.dx-scheduler-date-table');
-                pointerMock(cells.eq(startCell)).start().click();
+                pointerMock(cells.eq(3)).start().click();
 
-                let cell = cells.eq(endCell).get(0);
+                let cell = cells.eq(15).get(0);
 
-                $($table).trigger($.Event('dxpointerdown', { target: cells.eq(startCell).get(0), which: 1, pointerType: 'mouse' }));
+                $($table).trigger($.Event('dxpointerdown', { target: cells.eq(3).get(0), which: 1, pointerType: 'mouse' }));
                 $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
 
-                assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells is correct');
-                assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is focused');
-                assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is focused');
+                assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells is correct');
+                assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is focused');
+                assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is focused');
 
-                cell = cells.eq(cellFromAnotherGroup).get(0);
+                cell = cells.eq(35).get(0);
 
                 $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
 
-                assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells has not changed');
-                assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is still focused');
-                assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is still focused');
-                assert.notOk(cells.eq(cellFromAnotherGroup).hasClass('dx-state-focused'), 'cell from another group is not focused');
+                assert.equal(cells.filter('.dx-state-focused').length, 13, 'the amount of focused cells has not changed');
+                assert.ok(cells.eq(3).hasClass('dx-state-focused'), 'the start cell is still focused');
+                assert.ok(cells.eq(15).hasClass('dx-state-focused'), 'the end cell is still focused');
+                assert.notOk(cells.eq(35).hasClass('dx-state-focused'), 'cell from another group is not focused');
 
                 $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
+            });
+
+            QUnit.module('Keyboard Multiselection with GroupByDate', () => {
+                [
+                    { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: false, key: 'left' },
+                    { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: true, key: 'left' },
+                    { startCell: 1, endCell: 3, focusedCellsCount: 2, rtlEnabled: false, key: 'right' },
+                    { startCell: 3, endCell: 1, focusedCellsCount: 2, rtlEnabled: true, key: 'right' },
+                ].forEach((config) => {
+                    QUnit.test(`Multiselection with ${config.key} arrow should work correctly with groupByDate
+                        in Timeleine when rtlEnabled is equal to ${config.rtlEnabled}`, function(assert) {
+                        const {
+                            startCell, endCell, focusedCellsCount, rtlEnabled, key,
+                        } = config;
+
+                        this.instance.option({
+                            focusStateEnabled: true,
+                            groupOrientation: 'horizontal',
+                            groupByDate: true,
+                            rtlEnabled,
+                            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+                        });
+
+                        const $element = this.instance.$element();
+                        const keyboard = keyboardMock($element);
+                        const cells = $element.find('.' + CELL_CLASS);
+
+                        pointerMock(cells.eq(startCell)).start().click();
+                        keyboard.keyDown(key, { shiftKey: true });
+
+                        assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'right quantity of focused cells');
+                        assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'this first focused cell is correct');
+                        assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'this last focused cell is correct');
+                    });
+                });
+            });
+
+            QUnit.module('Mouse Multiselection with Vertical Grouping and Grouping by Date', () => {
+                [{
+                    startCell: 3,
+                    endCell: 7,
+                    focusedCellsCount: 5,
+                    cellFromAnotherGroup: 40,
+                    groupOrientation: 'vertical',
+                    groupByDate: false,
+                    description: 'Mouse Multiselection should work correctly with timeline when it is grouped vertically'
+                }, {
+                    startCell: 3,
+                    endCell: 7,
+                    focusedCellsCount: 3,
+                    cellFromAnotherGroup: 8,
+                    groupOrientation: 'horizontal',
+                    groupByDate: true,
+                    description: 'Mouse Multiselection should work correctly with timeline when it is grouped by date',
+                }].forEach(({
+                    startCell, endCell, focusedCellsCount, cellFromAnotherGroup,
+                    groupOrientation, groupByDate, description,
+                }) => {
+                    QUnit.test(description, function(assert) {
+                        this.instance.option({
+                            focusStateEnabled: true,
+                            groupOrientation,
+                            groupByDate,
+                            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+                            allowMultipleCellSelection: true,
+                            scrolling: { mode: scrollingMode, type: 'both' },
+                        });
+
+                        const $element = this.instance.$element();
+
+                        const cells = $element.find('.' + CELL_CLASS);
+                        const $table = $element.find('.dx-scheduler-date-table');
+                        pointerMock(cells.eq(startCell)).start().click();
+
+                        let cell = cells.eq(endCell).get(0);
+
+                        $($table).trigger($.Event('dxpointerdown', { target: cells.eq(startCell).get(0), which: 1, pointerType: 'mouse' }));
+                        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+
+                        assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells is correct');
+                        assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is focused');
+                        assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is focused');
+
+                        cell = cells.eq(cellFromAnotherGroup).get(0);
+
+                        $($table).trigger($.Event('dxpointermove', { target: cell, which: 1 }));
+
+                        assert.equal(cells.filter('.dx-state-focused').length, focusedCellsCount, 'the amount of focused cells has not changed');
+                        assert.ok(cells.eq(startCell).hasClass('dx-state-focused'), 'the start cell is still focused');
+                        assert.ok(cells.eq(endCell).hasClass('dx-state-focused'), 'the end cell is still focused');
+                        assert.notOk(cells.eq(cellFromAnotherGroup).hasClass('dx-state-focused'), 'cell from another group is not focused');
+
+                        $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
+                    });
+                });
             });
         });
     });
@@ -1064,21 +1079,26 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', f
     assert.equal($groupHeaderCells.eq(83).text(), 'b', 'Group header content height is OK');
 });
 
-QUnit.test('Timeline should find cell coordinates by date, groupByDate = true', function(assert) {
-    const $element = this.instance.$element();
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`Timeline should find cell coordinates by date, groupByDate = true when renovateRender is ${renovateRender}`, function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 2, 4),
+            renovateRender,
+        });
 
-    this.instance.option('currentDate', new Date(2015, 2, 4));
-    let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
+        let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
+        const $element = this.instance.$element();
 
-    assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().top, 'Top cell coordinates are right');
-    assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().left, 'Left cell coordinates are right');
-    assert.equal(coords.hMax, 16800, 'hMax is right');
+        assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().top, 'Top cell coordinates are right');
+        assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().left, 'Left cell coordinates are right');
+        assert.equal(coords.hMax, 16800, 'hMax is right');
 
-    coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 2, false);
+        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 2, false);
 
-    assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(30).position().top, 'Top cell coordinates are right');
-    assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(30).position().left, 'Left cell coordinates are right');
-    assert.equal(coords.hMax, 16800, 'hMax is right');
+        assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(30).position().top, 'Top cell coordinates are right');
+        assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(30).position().left, 'Left cell coordinates are right');
+        assert.equal(coords.hMax, 16800, 'hMax is right');
+    });
 });
 
 QUnit.module('TimelineDay with grouping by date', {
@@ -1137,5 +1157,310 @@ QUnit.module('TimelineDay with grouping by date', {
         assert.equal($groupHeaderCells.length, 12, 'Group header cells count is OK');
         assert.roughEqual(groupHeaderWidth, dateTableCellWidth, 1.1, 'Group header cell has correct size');
         assert.roughEqual(headerCellWidth, dateTableCellWidth * 2, 1.1, 'Header cell has correct size');
+    });
+});
+
+QUnit.module('Renovated Render', {
+    before() {
+        this.qUnitMaxDepth = QUnit.dump.maxDepth;
+        QUnit.dump.maxDepth = 10;
+    },
+    beforeEach() {
+        this.createInstance = (options = {}, workSpace = 'dxSchedulerTimelineDay') => {
+            this.instance = $('#scheduler-timeline')[workSpace]({
+                renovateRender: true,
+                currentDate: new Date(2020, 11, 21),
+                startDayHour: 0,
+                endDayHour: 1,
+                ...options,
+            })[workSpace]('instance');
+            stubInvokeMethod(this.instance);
+        };
+    },
+    after() {
+        QUnit.dump.maxDepth = this.qUnitMaxDepth;
+    }
+}, () => {
+    QUnit.module('Generate View Data', () => {
+        const cellsBase = [{
+            startDate: new Date(2020, 11, 21, 0, 0),
+            endDate: new Date(2020, 11, 21, 0, 30),
+            allDay: false,
+            groupIndex: 0,
+            index: 0,
+            isFirstGroupCell: true,
+            isLastGroupCell: true,
+            key: 0,
+        }, {
+            startDate: new Date(2020, 11, 21, 0, 30),
+            endDate: new Date(2020, 11, 21, 1, 0),
+            groupIndex: 0,
+            index: 1,
+            allDay: false,
+            isFirstGroupCell: true,
+            isLastGroupCell: true,
+            key: 1,
+        }];
+
+        QUnit.test('should work in basic case', function(assert) {
+            this.createInstance();
+
+            this.instance.viewDataProvider.update();
+
+            const { viewData, viewDataMap } = this.instance.viewDataProvider;
+
+            const expectedViewData = {
+                groupedData: [{
+                    dateTable: [cellsBase],
+                    groupIndex: 0,
+                    isGroupedAllDayPanel: false
+                }],
+                cellCountInGroupRow: 2,
+                bottomVirtualRowHeight: undefined,
+                isGroupedAllDayPanel: false,
+                topVirtualRowHeight: undefined,
+                leftVirtualCellWidth: undefined,
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
+            };
+            const expectedViewDataMap = {
+                allDayPanelMap: [],
+                dateTableMap: [
+                    [{
+                        cellData: cellsBase[0],
+                        position: { cellIndex: 0, rowIndex: 0 }
+                    }, {
+                        cellData: cellsBase[1],
+                        position: { cellIndex: 1, rowIndex: 0 }
+                    }]
+                ]
+            };
+
+            assert.deepEqual(viewData, expectedViewData, 'correct view data');
+            assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct view data map');
+        });
+
+        QUnit.test('should work with horizontal grouping', function(assert) {
+            this.createInstance({
+                groupOrientation: 'horizontal',
+            });
+            this.instance.option('groups', [
+                {
+                    name: 'res',
+                    items: [
+                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
+                    ]
+                }
+            ]);
+
+            this.instance.viewDataProvider.update();
+
+            const { viewData, viewDataMap } = this.instance.viewDataProvider;
+
+            const expectedViewData = {
+                cellCountInGroupRow: 2,
+                groupedData: [{
+                    dateTable: [[{
+                        ...cellsBase[0],
+                        groups: { res: 1 },
+                        isLastGroupCell: false,
+                    }, {
+                        ...cellsBase[1],
+                        groups: { res: 1 },
+                        isFirstGroupCell: false,
+                    }, {
+                        ...cellsBase[0],
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        isLastGroupCell: false,
+                        key: 2,
+                    }, {
+                        ...cellsBase[1],
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        isFirstGroupCell: false,
+                        key: 3,
+                    }]],
+                    groupIndex: 0,
+                    isGroupedAllDayPanel: false,
+                }],
+                bottomVirtualRowHeight: undefined,
+                isGroupedAllDayPanel: false,
+                topVirtualRowHeight: undefined,
+                leftVirtualCellWidth: undefined,
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
+            };
+            const expectedDateTable = expectedViewData.groupedData[0].dateTable[0];
+
+            const expectedViewDataMap = {
+                allDayPanelMap: [],
+                dateTableMap: [[{
+                    cellData: expectedDateTable[0],
+                    position: { cellIndex: 0, rowIndex: 0 }
+                }, {
+                    cellData: expectedDateTable[1],
+                    position: { cellIndex: 1, rowIndex: 0 }
+                }, {
+                    cellData: expectedDateTable[2],
+                    position: { cellIndex: 2, rowIndex: 0 }
+                }, {
+                    cellData: expectedDateTable[3],
+                    position: { cellIndex: 3, rowIndex: 0 }
+                }]]
+            };
+
+            assert.deepEqual(viewData, expectedViewData, 'correct view data');
+            assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');
+        });
+
+        QUnit.test('should work with vertical grouping', function(assert) {
+            this.createInstance();
+            this.instance.option('groups', [
+                {
+                    name: 'res',
+                    items: [
+                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
+                    ]
+                }
+            ]);
+            this.instance.option('groupOrientation', 'vertical');
+
+            this.instance.viewDataProvider.update();
+
+            const { viewData, viewDataMap } = this.instance.viewDataProvider;
+
+            const expectedViewData = {
+                groupedData: [{
+                    dateTable: [[{
+                        ...cellsBase[0],
+                        groups: { res: 1 },
+                    }, {
+                        ...cellsBase[1],
+                        groups: { res: 1 },
+                    }]],
+                    groupIndex: 0,
+                    isGroupedAllDayPanel: true,
+                }, {
+                    dateTable: [[{
+                        ...cellsBase[0],
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        key: 2,
+                    }, {
+                        ...cellsBase[1],
+                        groups: { res: 2 },
+                        groupIndex: 1,
+                        key: 3,
+                    }]],
+                    groupIndex: 1,
+                    isGroupedAllDayPanel: true,
+                }],
+                bottomVirtualRowHeight: undefined,
+                cellCountInGroupRow: 2,
+                isGroupedAllDayPanel: true,
+                topVirtualRowHeight: undefined,
+                leftVirtualCellWidth: undefined,
+                rightVirtualCellWidth: undefined,
+                bottomVirtualRowCount: 0,
+                topVirtualRowCount: 0,
+                leftVirtualCellCount: 0,
+                rightVirtualCellCount: 0,
+            };
+
+            const expectedViewDataMap = {
+                allDayPanelMap: [],
+                dateTableMap: [
+                    [{
+                        cellData: expectedViewData.groupedData[0].dateTable[0][0],
+                        position: { rowIndex: 0, cellIndex: 0 }
+                    }, {
+                        cellData: expectedViewData.groupedData[0].dateTable[0][1],
+                        position: { rowIndex: 0, cellIndex: 1 }
+                    }], [{
+                        cellData: expectedViewData.groupedData[1].dateTable[0][0],
+                        position: { rowIndex: 1, cellIndex: 0 }
+                    }, {
+                        cellData: expectedViewData.groupedData[1].dateTable[0][1],
+                        position: { rowIndex: 1, cellIndex: 1 }
+                    }]
+                ]
+            };
+
+            assert.deepEqual(viewData, expectedViewData, 'correct viewData');
+            assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');
+        });
+
+        QUnit.test('should work correctly with timelineWeek', function(assert) {
+            this.createInstance({}, TIMELINE_WEEK.class);
+
+            this.instance.viewDataProvider.update();
+
+            const { viewData } = this.instance.viewDataProvider;
+
+            const firstCell = {
+                ...cellsBase[0],
+                startDate: new Date(2020, 11, 20, 0, 0),
+                endDate: new Date(2020, 11, 20, 0, 30),
+            };
+            const lastCell = {
+                ...cellsBase[0],
+                startDate: new Date(2020, 11, 26, 0, 30),
+                endDate: new Date(2020, 11, 26, 1, 0),
+                key: 13,
+                index: 13,
+            };
+
+            const dateTable = viewData.groupedData[0].dateTable[0];
+
+            assert.equal(dateTable.length, 14, 'Correct number of cells');
+            assert.deepEqual(dateTable[0], firstCell, 'Correct first cell');
+            assert.deepEqual(dateTable[13], lastCell, 'Correct last cell');
+        });
+
+        QUnit.test('should work correctly with timelineMonth', function(assert) {
+            this.createInstance({}, TIMELINE_MONTH.class);
+
+            this.instance.viewDataProvider.update();
+
+            const { viewData } = this.instance.viewDataProvider;
+
+            const firstCell = {
+                ...cellsBase[0],
+                startDate: new Date(2020, 11, 1, 0, 0),
+                endDate: new Date(2020, 11, 1, 1, 0),
+            };
+            const lastCell = {
+                ...cellsBase[0],
+                startDate: new Date(2020, 11, 31, 0, 0),
+                endDate: new Date(2020, 11, 31, 1, 0),
+                key: 30,
+                index: 30,
+            };
+
+            const dateTable = viewData.groupedData[0].dateTable[0];
+
+            assert.equal(dateTable.length, 31, 'Correct number of cells');
+            assert.deepEqual(dateTable[0], firstCell, 'Correct first cell');
+            assert.deepEqual(dateTable[30], lastCell, 'Correct last cell');
+        });
+    });
+
+    [TIMELINE_DAY, TIMELINE_WEEK, TIMELINE_MONTH].forEach(({ class: viewClass, name }) => {
+        QUnit.test(`rtlEnabled should be aplied correctly in ${name}`, function(assert) {
+            this.createInstance({}, viewClass);
+
+            this.instance.option('rtlEnabled', true);
+            const $element = this.instance.$element();
+            const cells = $element.find(`.${CELL_CLASS}`);
+
+            assert.ok(cells.length > 0, 'Cells have been rendered');
+        });
     });
 });

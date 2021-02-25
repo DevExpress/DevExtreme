@@ -15,7 +15,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
   await dataGrid.scrollTo({ x: 100 });
   await t.expect(dataGrid.getScrollLeft()).eql(100);
 }).before(() => {
-  const generateData = (rowCount, columnCount) => {
+  const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
     const items = [];
 
     for (let i = 0; i < rowCount; i += 1) {

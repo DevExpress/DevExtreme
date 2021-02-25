@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, ForwardRef, JSXComponent,
+  Component, ComponentBindings, ForwardRef, JSXComponent, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import { format } from '../../../core/utils/string';
@@ -7,15 +7,14 @@ import messageLocalization from '../../../localization/message';
 import PagerProps from './common/pager_props';
 
 export const PAGER_INFO_CLASS = 'dx-info';
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = ({ text, props: { rootElementRef } }: InfoText) => (
-  <div ref={rootElementRef as any} className={PAGER_INFO_CLASS}>
+export const viewFunction = ({ text, props: { rootElementRef } }: InfoText): JSX.Element => (
+  <div ref={rootElementRef} className={PAGER_INFO_CLASS}>
     {text}
   </div>
 );
 @ComponentBindings()
 export class InfoTextProps {
-  @ForwardRef() rootElementRef?: HTMLDivElement;
+  @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 }
 type InfoTextPropsType = InfoTextProps & Pick<PagerProps, 'infoText' | 'pageCount' | 'pageIndex' | 'totalCount'>;
 

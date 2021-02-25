@@ -2,7 +2,8 @@ import $ from 'jquery';
 import Box from 'ui/box';
 import registerComponent from 'core/component_registrator';
 
-import 'common.css!';
+import 'generic_light.css!';
+
 import 'ui/scroll_view/ui.scrollable';
 
 QUnit.testStart(function() {

@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, ForwardRef, JSXComponent, OneWay,
+  Component, ComponentBindings, ForwardRef, JSXComponent, OneWay, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import { WidgetProps } from './common/widget';
 import LegacyValidationMessage from '../../ui/validation_message';
@@ -11,7 +11,7 @@ export const viewFunction = ({
   restAttributes,
 }: ValidationMessage): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={rootElementRef as any}
+    rootElementRef={rootElementRef}
     componentType={LegacyValidationMessage}
     componentProps={componentProps}
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -23,17 +23,17 @@ export const viewFunction = ({
 export class ValidationMessageProps extends WidgetProps {
   @OneWay() mode?: 'auto'|'always' = 'auto';
 
-  @OneWay() validationErrors?: object[] | null;
+  @OneWay() validationErrors?: Record<string, unknown>[] | null;
 
   @OneWay() positionRequest?: string;
 
-  @ForwardRef() boundary?: string | Element;
+  @ForwardRef() boundary?: RefObject<string | Element>;
 
-  @ForwardRef() container?: string | Element;
+  @ForwardRef() container?: RefObject<string | Element>;
 
-  @ForwardRef() target?: string | Element;
+  @ForwardRef() target?: RefObject<string | Element>;
 
-  @OneWay() offset?: object = { h: 0, v: 0 };
+  @OneWay() offset?: Record<string, number> = { h: 0, v: 0 };
 }
 @Component({
   defaultOptionRules: null,

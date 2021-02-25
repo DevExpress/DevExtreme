@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
+import { MonthDateTableCell } from '../cell';
 
 jest.mock('../../../base/date_table/layout', () => ({
   ...jest.requireActual('../../../base/date_table/layout'),
@@ -36,8 +37,7 @@ describe('MonthDateTableLayout', () => {
       expect(layout.props())
         .toMatchObject({
           viewData,
-          viewType: 'month',
-          // cellTemplate: MonthDateTableCell,
+          cellTemplate: MonthDateTableCell,
         });
     });
   });

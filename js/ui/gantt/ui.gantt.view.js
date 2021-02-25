@@ -20,6 +20,7 @@ export class GanttView extends Widget {
         this._collapseAll = this._createActionByOption('onCollapseAll');
         this._taskClick = this._createActionByOption('onTaskClick');
         this._taskDblClick = this._createActionByOption('onTaskDblClick');
+        this._onAdjustControl = this._createActionByOption('onAdjustControl');
     }
     _initMarkup() {
         const GanttView = getGanttViewCore();
@@ -35,7 +36,8 @@ export class GanttView extends Widget {
             areAlternateRowsEnabled: false,
             viewType: this._getViewTypeByScaleType(this.option('scaleType')),
             cultureInfo: this._getCultureInfo(),
-            taskTooltipContentTemplate: this.option('taskTooltipContentTemplate')
+            taskTooltipContentTemplate: this.option('taskTooltipContentTemplate'),
+            taskContentTemplate: this.option('taskContentTemplate')
         });
         this._selectTask(this.option('selectedRowKey'));
         this.updateBarItemsState();
@@ -193,6 +195,9 @@ export class GanttView extends Widget {
             case 'taskTooltipContentTemplate':
                 this._ganttViewCore.setTaskTooltipContentTemplate(args.value);
                 break;
+            case 'taskContentTemplate':
+                this._ganttViewCore.setTaskContentTemplate(args.value);
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -246,13 +251,18 @@ export class GanttView extends Widget {
     getModelChangesListener() {
         return this.option('modelChangesListener');
     }
+    getExportInfo() {
+        return this.option('exportInfo');
+    }
     showPopupMenu(info) {
         this._onPopupMenuShowing(info);
     }
     getMainElement() {
         return this.option('mainElement').get(0);
     }
-    adjustControl() {}
+    adjustControl() {
+        this._onAdjustControl();
+    }
     getRequireFirstLoadParentAutoCalc() {
         return this.option('validation.autoUpdateParentTasks');
     }
@@ -283,5 +293,22 @@ export class GanttView extends Widget {
     }
     destroyTemplate(container) {
         $(container).empty();
+    }
+    // export
+    getTreeListTableStyle() {
+        return this.callExportHelperMethod('getTreeListTableStyle');
+    }
+    getTreeListColCount() {
+        return this.callExportHelperMethod('getTreeListColCount');
+    }
+    getTreeListHeaderInfo(colIndex) {
+        return this.callExportHelperMethod('getTreeListHeaderInfo', colIndex);
+    }
+    getTreeListCellInfo(rowIndex, colIndex) {
+        return this.callExportHelperMethod('getTreeListCellInfo', rowIndex, colIndex);
+    }
+    callExportHelperMethod(methodName, ...args) {
+        const helper = this.option('exportHelper');
+        return helper[methodName](...args);
     }
 }

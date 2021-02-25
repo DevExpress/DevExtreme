@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import dateUtils from 'core/utils/date';
-import RecurrenceEditor from 'ui/scheduler/ui.scheduler.recurrence_editor';
+import RecurrenceEditor from 'ui/scheduler/recurrence_editor';
 import SelectBox from 'ui/select_box';
 import NumberBox from 'ui/number_box';
 import RadioGroup from 'ui/radio_group';

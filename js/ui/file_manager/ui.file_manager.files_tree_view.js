@@ -85,14 +85,9 @@ class FileManagerFilesTreeView extends Widget {
         }
     }
 
-    _onFilesTreeViewItemExpanded({ itemData, node }) {
+    _onFilesTreeViewItemExpanded({ itemData }) {
         if(this._storeExpandedState) {
             itemData.expanded = true;
-        }
-
-        if(node.expandedDeferred) {
-            node.expandedDeferred.resolve();
-            delete node.expandedDeferred;
         }
     }
 
@@ -124,14 +119,15 @@ class FileManagerFilesTreeView extends Widget {
     _onFilesTreeViewItemContextMenu({ itemElement, event }) {
         event.preventDefault();
         const itemData = $(itemElement).data('item');
-        this._contextMenu.showAt([ itemData ], itemElement, event);
+        this._contextMenu.showAt([ itemData ], itemElement, event, { itemData, itemElement });
     }
 
     _onFileItemActionButtonClick({ component, element, event }) {
         event.stopPropagation();
-        const $item = component.$element().closest(this._filesTreeViewItemSelector);
-        const item = $item.data('item');
-        this._contextMenu.showAt([ item ], element);
+        const itemElement = component.$element().closest(this._filesTreeViewItemSelector);
+        const itemData = itemElement.data('item');
+        const target = { itemData, itemElement, isActionButton: true };
+        this._contextMenu.showAt([ itemData ], element, event, target);
         this._activeFileActionsButton = component;
         this._activeFileActionsButton.setActive(true);
     }
@@ -230,14 +226,9 @@ class FileManagerFilesTreeView extends Widget {
         if(!treeViewNode) {
             return deferred.reject().promise();
         }
-        if(treeViewNode.expanded === state) {
+        if(treeViewNode.expanded === state || treeViewNode.itemsLoaded && !treeViewNode.fileItem.hasSubDirectories) {
             return deferred.resolve().promise();
         }
-
-        if(directoryInfo?.items.length === 0) {
-            return deferred.reject().promise();
-        }
-
         const action = state ? 'expandItem' : 'collapseItem';
         return this._filesTreeView[action](directoryInfo.getInternalKey());
     }

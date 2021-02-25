@@ -131,6 +131,12 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       /**
       * @docid
       * @prevFileNamespace DevExpress.viz
+      * @default 4
+      */
+      padding?: number,
+      /**
+      * @docid
+      * @prevFileNamespace DevExpress.viz
      * @default undefined
       */
       headerHeight?: number,

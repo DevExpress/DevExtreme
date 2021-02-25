@@ -14,19 +14,19 @@ $material-on-value-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius colo
 $material-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color.change($base-text-color, $alpha: 0.1);
 $material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color.change($switch-invalid-handle-bg, $alpha: 0.1);
 
-.dx-switch-wrapper {
-  position: relative;
-  padding: $material-switch-shadow-blur-radius;
-  box-sizing: content-box;
-  left: -$material-switch-shadow-blur-radius;
-  top: -$material-switch-shadow-blur-radius;
-  overflow: hidden;
-  vertical-align: middle;
-}
-
 .dx-switch {
   width: $material-switch-width;
   height: $material-switch-height;
+
+  .dx-switch-wrapper {
+    position: relative;
+    padding: $material-switch-shadow-blur-radius;
+    left: -$material-switch-shadow-blur-radius;
+    top: -$material-switch-shadow-blur-radius;
+    overflow: hidden;
+    vertical-align: middle;
+    box-sizing: content-box;
+  }
 
   &.dx-state-readonly,
   &.dx-state-disabled {

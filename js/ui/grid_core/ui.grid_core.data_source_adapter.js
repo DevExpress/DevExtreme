@@ -8,6 +8,8 @@ import ArrayStore from '../../data/array_store';
 import { applyBatch } from '../../data/array_utils';
 import { when, Deferred } from '../../core/utils/deferred';
 
+const NEW_SCROLLING_MODE = 'scrolling.newMode';
+
 export default gridCore.Controller.inherit((function() {
     function cloneItems(items, groupCount) {
         if(items) {
@@ -56,14 +58,20 @@ export default gridCore.Controller.inherit((function() {
         return { pages: {} };
     }
 
+    function getPageKey(pageIndex, loadPageCount) {
+        return isDefined(loadPageCount) ? `${pageIndex}:${loadPageCount}` : pageIndex;
+    }
+
     function getPageDataFromCache(options) {
-        return options.cachedPagesData.pages[options.pageIndex];
+        const key = getPageKey(options.pageIndex, options.loadPageCount);
+        return options.cachedPagesData.pages[key];
     }
 
     function setPageDataToCache(options, data) {
         const pageIndex = options.pageIndex;
         if(pageIndex !== undefined) {
-            options.cachedPagesData.pages[pageIndex] = data;
+            const key = getPageKey(pageIndex, options.loadPageCount);
+            options.cachedPagesData.pages[key] = data;
         }
     }
 
@@ -279,7 +287,7 @@ export default gridCore.Controller.inherit((function() {
                 if(operationTypes.reload) {
                     cachedPagingData = undefined;
                     cachedPagesData = createEmptyPagesData();
-                } else if(operationTypes.take || operationTypes.groupExpanding) {
+                } else if(operationTypes.take && !this.option(NEW_SCROLLING_MODE) || operationTypes.groupExpanding) {
                     cachedPagesData = createEmptyPagesData();
                 }
 
@@ -394,7 +402,7 @@ export default gridCore.Controller.inherit((function() {
             const cachedPagesData = options.cachedPagesData;
             const storeLoadOptions = options.storeLoadOptions;
             const needCache = this.option('cacheEnabled') !== false && storeLoadOptions;
-            const needPageCache = needCache && !options.isCustomLoading && cachedPagesData && (!localPaging || storeLoadOptions.group) && !this.option('legacyRendering');
+            const needPageCache = needCache && !options.isCustomLoading && cachedPagesData && (!localPaging || storeLoadOptions.group);
             const needPagingCache = needCache && localPaging;
             const needStoreCache = needPagingCache && !options.isCustomLoading;
 
@@ -459,7 +467,7 @@ export default gridCore.Controller.inherit((function() {
 
                 if(needPageCache) {
                     cachedPagesData.extra = cachedPagesData.extra || extend({}, options.extra);
-                    when(options.data).done(function(data) {
+                    when(options.data).done((data) => {
                         setPageDataToCache(options, cloneItems(data, groupCount));
                     });
                 }

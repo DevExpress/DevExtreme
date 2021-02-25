@@ -1,12 +1,16 @@
 import {
   Component, ComponentBindings, JSXComponent,
-  OneWay, Template, Event,
+  OneWay, Template, Event, JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
 import noop from '../../../utils/noop';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../ui/scheduler';
 import {
-  AppointmentItem, FormattedContent, GetTextAndFormatDateFn, CheckAndDeleteAppointmentFn,
+  AppointmentItem,
+  FormattedContent,
+  GetTextAndFormatDateFn,
+  CheckAndDeleteAppointmentFn,
+  AppointmentTooltipTemplate,
 } from './types.d';
 import { Marker } from './marker';
 import { Button } from '../../button';
@@ -60,7 +64,7 @@ export class TooltipItemLayoutProps {
 
   @OneWay() showDeleteButton?: boolean = true;
 
-  @Template() itemContentTemplate?: any;
+  @Template() itemContentTemplate?: JSXTemplate<AppointmentTooltipTemplate>;
 
   @Event() onDelete: CheckAndDeleteAppointmentFn = noop;
 

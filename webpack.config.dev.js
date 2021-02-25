@@ -18,11 +18,12 @@ module.exports = Object.assign({
                     {
                         loader: 'devextreme-generator/webpack-loader',
                         options: {
-                            platform: 'preact',
+                            platform: 'inferno',
                             defaultOptionsModule: 'js/core/options/utils',
                             jqueryComponentRegistratorModule: 'js/core/component_registrator',
                             jqueryBaseComponentModule: 'js/renovation/preact_wrapper/component',
-                            tsConfig: path.resolve('build/gulp/generator/ts-configs/preact.tsconfig.json')
+                            modulesPath: 'devextreme-generator/modules/inferno',
+                            tsConfig: path.resolve('build/gulp/generator/ts-configs/inferno.tsconfig.json')
                         },
                     },
                 ],

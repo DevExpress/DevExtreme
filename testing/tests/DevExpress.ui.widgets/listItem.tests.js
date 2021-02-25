@@ -6,6 +6,8 @@ const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';
 const LIST_ITEM_CHEVRON_CONTAINER_CLASS = 'dx-list-item-chevron-container';
 const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 
+import 'generic_light.css!';
+
 QUnit.module('showChevron builtin', () => {
     QUnit.test('showChevron should be rendered correctly by default', function(assert) {
         const widget = new List($('<div>'), {

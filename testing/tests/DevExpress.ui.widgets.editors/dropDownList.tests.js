@@ -15,7 +15,6 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 
 import 'ui/drop_down_editor/ui.drop_down_list';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -33,6 +32,10 @@ const LIST_CLASS = 'dx-list';
 
 const getPopup = (instance) => {
     return instance._popup;
+};
+
+const getList = (instance) => {
+    return instance._list;
 };
 
 const moduleConfig = {
@@ -74,7 +77,7 @@ QUnit.module('focus policy', {
         this.clock.tick(500);
         this.keyboard.keyDown('down');
         const $firstItem = this.instance._$list.find(LIST_ITEM_SELECTOR).eq(0);
-        assert.equal(isRenderer(this.instance._list.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.equal(isRenderer(getList(this.instance).option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS), 'first list element is focused');
 
         this.keyboard.type('some text');
@@ -267,6 +270,7 @@ QUnit.module('displayExpr', moduleConfig, () => {
             dataSource,
             deferRendering: false,
             value: 2,
+            useItemTextAsTitle: false,
             displayExpr(item) {
                 args.push(item);
             }
@@ -330,6 +334,29 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
         instance.option('wrapItemText', false);
         assert.notOk($itemContainer.hasClass('dx-wrap-item-text'), 'class was removed');
+    });
+
+    [true, false].forEach(useItemTextAsTitle => {
+        QUnit.test(`useItemTextAsTitle=${useItemTextAsTitle} option should be passed to list on init`, function(assert) {
+            const dropDownList = $('#dropDownList').dxDropDownList({
+                deferRendering: false,
+                useItemTextAsTitle
+            }).dxDropDownList('instance');
+            const list = getList(dropDownList);
+
+            assert.strictEqual(list.option('useItemTextAsTitle'), useItemTextAsTitle, 'list option initial value is correct');
+        });
+
+        QUnit.test(`useItemTextAsTitle option runtime change to ${useItemTextAsTitle} should be passed to list`, function(assert) {
+            const dropDownList = $('#dropDownList').dxDropDownList({
+                deferRendering: false,
+                useItemTextAsTitle: !useItemTextAsTitle
+            }).dxDropDownList('instance');
+            const list = getList(dropDownList);
+
+            dropDownList.option('useItemTextAsTitle', useItemTextAsTitle);
+            assert.strictEqual(list.option('useItemTextAsTitle'), useItemTextAsTitle, 'list option value is correct after runtime change');
+        });
     });
 
     QUnit.test('widget should render with empty items', function(assert) {
@@ -440,59 +467,6 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         this.clock.tick();
 
         assert.equal($.trim($('.dx-list-item').text()), 'test', 'template rendered');
-    });
-
-    QUnit.test('contentReady action fires when dataSource loaded', function(assert) {
-        let contentReadyFired = 0;
-
-        const $dropDownList = $('#dropDownList').dxDropDownList({
-            dataSource: [1],
-            deferRendering: true,
-            onContentReady() {
-                contentReadyFired++;
-            }
-        });
-
-        assert.equal(contentReadyFired, 0, 'no content ready before opening');
-        $dropDownList.dxDropDownList('open');
-        this.clock.tick();
-
-        assert.equal(contentReadyFired, 1, 'content ready fired when content is rendered');
-
-        $dropDownList.dxDropDownList('close');
-        $dropDownList.dxDropDownList('open');
-
-        assert.equal(contentReadyFired, 1, 'content ready not fired when reopen dropdown');
-    });
-
-    QUnit.test('contentReady action fires when readOnly=true', function(assert) {
-        const contentReadyActionStub = sinon.stub();
-
-        const $dropDownList = $('#dropDownList').dxDropDownList({
-            readOnly: true,
-            dataSource: [1],
-            onContentReady: contentReadyActionStub,
-            deferRendering: true
-        });
-
-        $dropDownList.dxDropDownList('open');
-
-        assert.ok(contentReadyActionStub.called, 'content ready fired when content is rendered');
-    });
-
-    QUnit.test('contentReady action fires when disabled=true', function(assert) {
-        const contentReadyActionStub = sinon.stub();
-
-        const $dropDownList = $('#dropDownList').dxDropDownList({
-            disabled: true,
-            dataSource: [1],
-            onContentReady: contentReadyActionStub,
-            deferRendering: true
-        });
-
-        $dropDownList.dxDropDownList('open');
-
-        assert.ok(contentReadyActionStub.called, 'content ready fired when content is rendered');
     });
 
     QUnit.test('dataSource with Guid key', function(assert) {
@@ -1005,7 +979,7 @@ QUnit.module('selectedItem', moduleConfig, () => {
         dropDownList.option('opened', true);
         this.clock.tick(1000);
 
-        assert.equal(dropDownList._list.option('selectedItem'), 1, 'selectedItem is correct');
+        assert.equal(getList(dropDownList).option('selectedItem'), 1, 'selectedItem is correct');
     });
 
     QUnit.test('reset()', function(assert) {
@@ -1289,7 +1263,6 @@ QUnit.module('popup', moduleConfig, () => {
             id: 2,
             value: 'value12'
         }];
-        const onContentReadySpy = sinon.spy();
         const dropDownList = $('#dropDownList').dxDropDownList({
             displayExpr: 'value',
             valueExpr: 'id',
@@ -1298,8 +1271,7 @@ QUnit.module('popup', moduleConfig, () => {
                 paginate: true,
                 pageSize: 2
             }),
-            opened: true,
-            onContentReady: onContentReadySpy
+            opened: true
         }).dxDropDownList('instance');
         const listInstance = $(`.${LIST_CLASS}`).dxList('instance');
         listInstance.option({
@@ -1736,3 +1708,59 @@ QUnit.module(
 
     }
 );
+
+QUnit.module('contentReady', {
+    beforeEach: function() {
+        fx.off = true;
+
+        this.contentReadyActionStub = sinon.stub();
+        this.$dropDownList = $('#dropDownList').dxDropDownList({
+            onContentReady: this.contentReadyActionStub,
+            deferRendering: true
+        });
+        this.instance = this.$dropDownList.dxDropDownList('instance');
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('fires on base content rendering', function(assert) {
+        assert.strictEqual(this.contentReadyActionStub.callCount, 1, 'content ready is fired');
+    });
+
+    QUnit.test('fires after popup first rendering', function(assert) {
+        this.instance.open();
+
+        assert.strictEqual(this.contentReadyActionStub.callCount, 2, 'content ready is fired after popup first opening');
+    });
+
+    QUnit.test('does not fire after reopening', function(assert) {
+        this.instance.open();
+        this.instance.close();
+        this.instance.open();
+
+        assert.strictEqual(this.contentReadyActionStub.callCount, 2, 'content ready is not fired after reopening');
+    });
+
+    QUnit.test('fires on popup rendering without opening', function(assert) {
+        this.instance.option('deferRendering', false);
+
+        assert.strictEqual(this.contentReadyActionStub.callCount, 2, 'content ready is fired on popup rendering');
+    });
+
+    QUnit.test('fires on popup first opening when readOnly=true', function(assert) {
+        this.instance.option('readOnly', true);
+
+        this.instance.open();
+
+        assert.strictEqual(this.contentReadyActionStub.callCount, 2, 'content ready is fired on popup rendering');
+    });
+
+    QUnit.test('fires on popup first opening when disabled=true', function(assert) {
+        this.instance.option('disabled', true);
+
+        this.instance.open();
+
+        assert.strictEqual(this.contentReadyActionStub.callCount, 2, 'content ready is fired on popup rendering');
+    });
+});

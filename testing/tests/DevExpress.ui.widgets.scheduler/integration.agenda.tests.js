@@ -3,15 +3,13 @@ import devices from 'core/devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dblclickEvent from 'events/dblclick';
 import fx from 'animation/fx';
-import Color from 'color';
 import AgendaAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.agenda';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
-import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dataUtils from 'core/element_data';
 import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
@@ -38,7 +36,7 @@ const createInstance = function(options) {
     return new SchedulerTestWrapper(instance);
 };
 
-module('Integration: Agenda', {
+const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
@@ -50,7 +48,9 @@ module('Integration: Agenda', {
         fx.off = false;
         this.clock.restore();
     }
-}, function() {
+};
+
+module('Integration: Agenda', moduleConfig, () => {
     test('Scheduler should have a right agenda work space', function(assert) {
         this.createInstance({
             views: ['agenda'],
@@ -229,7 +229,7 @@ module('Integration: Agenda', {
     });
 
     test('Particular recurrence appt should have a correct data', function(assert) {
-        this.createInstance({
+        const scheduler = createWrapper({
             views: ['agenda'],
             resources: [
                 { field: 'ownerId', dataSource: [{ id: 1, color: '#ff0000' }, { id: 2, color: '#0000ff' }] }
@@ -246,26 +246,25 @@ module('Integration: Agenda', {
                     recurrenceRule: 'FREQ=DAILY',
                     ownerId: 1
                 }
-            ]
+            ],
+            height: 600
         });
 
-        let apptIndex = 0;
+        let appointmentIndex = 0;
 
-        sinon.stub(this.instance, 'showAppointmentPopup', function(appData, createNew, singleAppData) {
-            const expectedDate = new Date(2015, 2, 23 + apptIndex);
+        sinon.stub(scheduler.instance, 'showAppointmentPopup', (rawAppointment, isNew, targetedRawAppointment) => {
+            const expectedDate = new Date(2015, 2, 23 + appointmentIndex);
             expectedDate.setHours(1);
 
-            assert.equal(singleAppData.startDate.getTime(), expectedDate.getTime(), 'Start date is OK');
+            assert.equal(targetedRawAppointment.startDate.getTime(), expectedDate.getTime(), 'Start date is OK');
         });
 
-        this.instance.$element().find('.dx-scheduler-appointment').each(function() {
-            const $appt = $(this);
+        scheduler.appointmentList.forEach(appointment => {
+            assert.equal(appointment.title.text, 'a', 'Title is OK');
+            assert.equal(appointment.marker.color, '#ff0000', 'Appointment color is OK');
+            appointment.dbClick();
 
-            assert.equal($appt.find('.dx-scheduler-appointment-title').text(), 'a', 'Title is OK');
-            assert.equal(new Color($appt.css('backgroundColor')).toHex(), '#ff0000', 'Appointment color is OK');
-
-            $appt.trigger('dxdblclick');
-            apptIndex++;
+            appointmentIndex++;
         });
     });
 
@@ -486,7 +485,7 @@ module('Integration: Agenda', {
     });
 
     test('Grouped appointments should have a correct color', function(assert) {
-        this.createInstance({
+        const scheduler = createWrapper({
             views: ['agenda'],
             groups: ['roomId', 'ownerId'],
             resources: [
@@ -512,13 +511,11 @@ module('Integration: Agenda', {
             ]
         });
 
-        const $appointments = this.instance.$element().find('.dx-scheduler-appointment');
+        assert.equal(scheduler.appointmentList[0].marker.color, '#ff0000', 'Appointment color is OK');
+        assert.equal(scheduler.appointmentList[1].marker.color, '#ff0000', 'Appointment color is OK');
 
-        assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Appointment color is OK');
-        assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#ff0000', 'Appointment color is OK');
-
-        assert.equal(new Color($appointments.eq(2).css('backgroundColor')).toHex(), '#0000ff', 'Appointment color is OK');
-        assert.equal(new Color($appointments.eq(3).css('backgroundColor')).toHex(), '#0000ff', 'Appointment color is OK');
+        assert.equal(scheduler.appointmentList[2].marker.color, '#0000ff', 'Appointment color is OK');
+        assert.equal(scheduler.appointmentList[3].marker.color, '#0000ff', 'Appointment color is OK');
     });
 
     test('Grouped appointments should be rendered if resources aren\'t defined', function(assert) {
@@ -1177,7 +1174,7 @@ module('Integration: Agenda', {
     });
 
     test('All-day appointment should not be duplicated with custom timezone', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
         try {
             this.clock.restore();
             const timezoneDifference = getDeltaTz(5);

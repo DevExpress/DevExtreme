@@ -9,7 +9,6 @@ QUnit.testStart(function() {
 
 import $ from 'jquery';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -105,6 +104,7 @@ QUnit.module('Keyboard controller', {
                 getView: function(name) {
                     return this._views[name];
                 },
+                renderFocusState: commonUtils.noop,
                 renderCompleted: $.Callbacks()
             };
         };

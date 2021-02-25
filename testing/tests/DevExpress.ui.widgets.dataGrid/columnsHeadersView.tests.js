@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'generic_light.css!';
 
 import $ from 'jquery';
@@ -1319,6 +1318,9 @@ QUnit.module('Headers', {
         $.extend(this.columns, [{ command: 'select', dataType: 'boolean', headerCellTemplate: this.defaultSelectionHeaderTemplate }, { index: 0 }, { index: 1 }]);
 
         this.options.selection = { allowSelectAll: false };
+        this.dataController.items = function() {
+            return [{}];
+        };
         this.selectionController.selectAll();
 
         // act

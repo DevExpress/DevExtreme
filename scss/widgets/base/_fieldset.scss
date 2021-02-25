@@ -1,0 +1,71 @@
+@use "./mixins" as *;
+
+// adduse
+.dx-fieldset {
+  margin-bottom: 20px;
+
+  .dx-field-value {
+    margin: 0;
+  }
+
+  &,
+  * {
+    box-sizing: border-box;
+  }
+}
+
+.dx-fieldset-header:empty {
+  display: none;
+}
+
+.dx-field {
+  position: relative;
+  padding: 0.4em;
+
+  @include dx-clearfix-mixin();
+}
+
+.dx-field-label {
+  float: left;
+  width: 40%;
+
+  @include dx-overflow();
+}
+
+.dx-field-value,
+.dx-field-value-static {
+  float: right;
+}
+
+.dx-field-value-static {
+  white-space: normal;
+}
+
+.dx-field-value.dx-datebox {
+  min-width: 60%;
+}
+
+.dx-field-value:not(.dx-widget) > .dx-datebox {
+  min-width: 100%;
+}
+
+.dx-field-value .dx-selectbox-tag-container {
+  white-space: normal;
+}
+
+.dx-field-value:not(.dx-widget) > .dx-selectbox.dx-selectbox-multiselect.dx-widget {
+  position: relative;
+  width: auto;
+  text-align: left;
+}
+
+.dx-rtl .dx-fieldset,
+.dx-fieldset.dx-rtl {
+  .dx-field-label {
+    float: right;
+  }
+
+  .dx-field-value {
+    float: left;
+  }
+}

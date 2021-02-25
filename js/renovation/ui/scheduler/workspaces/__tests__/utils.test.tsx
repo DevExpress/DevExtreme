@@ -2,9 +2,11 @@ import {
   getKeyByDateAndGroup,
   getKeyByGroup,
   addHeightToStyle,
+  addWidthToStyle,
   getIsGroupedAllDayPanel,
   getGroupCellClasses,
   isVerticalGroupOrientation,
+  isHorizontalGroupOrientation,
 } from '../utils';
 import { GroupedViewData } from '../types.d';
 import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../consts';
@@ -65,16 +67,59 @@ describe('Workspaces utils', () => {
     });
   });
 
+  describe('addWidthToStyle', () => {
+    it('should return an empty obbject if width is undefined', () => {
+      expect(addWidthToStyle(undefined))
+        .toEqual({});
+    });
+
+    it('should return ucorrect style if width is provided', () => {
+      expect(addWidthToStyle(500))
+        .toEqual({
+          width: '500px',
+        });
+    });
+
+    it('should spread styles', () => {
+      expect(addWidthToStyle(500, { height: '300px' }))
+        .toEqual({
+          height: '300px',
+          width: '500px',
+        });
+    });
+
+    it('should spread styles when width is defined in restAttributes', () => {
+      expect(addWidthToStyle(500, { width: '300px', height: '400px' }))
+        .toEqual({
+          height: '400px',
+          width: '500px',
+        });
+    });
+  });
+
   describe('getIsGroupedAllDayPanel', () => {
     it('should return false if all-day-panel is a part of the header', () => {
       const viewData: GroupedViewData = {
         groupedData: [{
           dateTable: [[{
-            startDate: new Date(2020, 1, 2), endDate: new Date(2020, 1, 2), text: 'test', index: 0, key: '1',
+            startDate: new Date(2020, 1, 2),
+            endDate: new Date(2020, 1, 2),
+            text: 'test',
+            index: 0,
+            key: '1',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }]],
           allDayPanel: [{
-            startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1', index: 0, key: '2',
+            startDate: new Date(2020, 1, 1),
+            endDate: new Date(2020, 1, 1),
+            text: 'test1',
+            index: 0,
+            key: '2',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }],
+          groupIndex: 1,
         }],
         cellCountInGroupRow: 1,
       };
@@ -87,20 +132,46 @@ describe('Workspaces utils', () => {
       const viewData: GroupedViewData = {
         groupedData: [{
           dateTable: [[{
-            startDate: new Date(2020, 1, 2), endDate: new Date(2020, 1, 2), text: 'test', index: 0, key: '1',
+            startDate: new Date(2020, 1, 2),
+            endDate: new Date(2020, 1, 2),
+            text: 'test',
+            index: 0,
+            key: '1',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }]],
           allDayPanel: [{
-            startDate: new Date(2020, 1, 1), endDate: new Date(2020, 1, 1), text: 'test1', index: 0, key: '2',
+            startDate: new Date(2020, 1, 1),
+            endDate: new Date(2020, 1, 1),
+            text: 'test1',
+            index: 0,
+            key: '2',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }],
           isGroupedAllDayPanel: true,
+          groupIndex: 1,
         }, {
           dateTable: [[{
-            startDate: new Date(2020, 1, 3), endDate: new Date(2020, 1, 3), text: 'test3', index: 0, key: '3',
+            startDate: new Date(2020, 1, 3),
+            endDate: new Date(2020, 1, 3),
+            text: 'test3',
+            index: 0,
+            key: '3',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }]],
           allDayPanel: [{
-            startDate: new Date(2020, 1, 4), endDate: new Date(2020, 1, 4), text: 'test4', index: 0, key: '4',
+            startDate: new Date(2020, 1, 4),
+            endDate: new Date(2020, 1, 4),
+            text: 'test4',
+            index: 0,
+            key: '4',
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
           }],
           isGroupedAllDayPanel: true,
+          groupIndex: 2,
         }],
         cellCountInGroupRow: 1,
       };
@@ -146,6 +217,27 @@ describe('Workspaces utils', () => {
       expect(isVerticalGroupOrientation(HORIZONTAL_GROUP_ORIENTATION))
         .toBe(false);
       expect(isVerticalGroupOrientation())
+        .toBe(false);
+    });
+  });
+
+  describe('isHorizontalGroupOrientation', () => {
+    const testGroups = [{}] as any;
+
+    it('should return true if group orientation is horizontal and groups length is more than 0', () => {
+      expect(isHorizontalGroupOrientation(testGroups, HORIZONTAL_GROUP_ORIENTATION))
+        .toBe(true);
+    });
+
+    it('should return false if group orientation is not horizontal', () => {
+      expect(isHorizontalGroupOrientation(testGroups, VERTICAL_GROUP_ORIENTATION))
+        .toBe(false);
+      expect(isHorizontalGroupOrientation(testGroups))
+        .toBe(false);
+    });
+
+    it('should return false if groups length is 0', () => {
+      expect(isHorizontalGroupOrientation([], HORIZONTAL_GROUP_ORIENTATION))
         .toBe(false);
     });
   });

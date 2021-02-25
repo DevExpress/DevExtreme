@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
@@ -139,6 +138,8 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
 
     const createDataSource = (list = defaultData) => {
         return new DataSource({
+            pushAggregationTimeout: 0,
+            reshapeOnPush: true,
             store: {
                 type: 'array',
                 key: 'id',
@@ -156,7 +157,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             { type: 'update', key: 0, data: { text: 'updated-1' } },
             { type: 'update', key: 1, data: { text: 'updated-2' } }
         ]);
-        dataSource.load();
+
         assert.equal(getUnmarkedAppointments(scheduler).length, 2, 'Should rendered only two updated appointments');
 
         markAppointments(scheduler);
@@ -166,12 +167,12 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             startDate: new Date(2017, 4, 27, 15, 30),
             endDate: new Date(2017, 4, 27, 16, 30)
         } }]);
-        dataSource.load();
+
         assert.equal(getUnmarkedAppointments(scheduler).length, 1, 'Should rendered only inserted appointment');
 
         markAppointments(scheduler);
         dataSource.store().remove(0);
-        dataSource.load();
+
         assert.equal(getUnmarkedAppointments(scheduler).length, 0, 'Html element should removed and should not redrawing another appointments');
     });
 
@@ -186,7 +187,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             startDate: defaultData[0].startDate,
             endDate: defaultData[0].endDate
         } }]);
-        dataSource.load();
+
         assert.equal(getUnmarkedAppointments(scheduler).length, 2, 'Should rendered inserted appointment and update appointment');
 
         markAppointments(scheduler);
@@ -196,7 +197,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             startDate: defaultData[1].startDate,
             endDate: defaultData[1].endDate
         } }]);
-        dataSource.load();
+
         assert.equal(getUnmarkedAppointments(scheduler).length, 2, 'Should rendered inserted appointment and 2 updated appointment');
 
         markAppointments(scheduler);
@@ -220,7 +221,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             startDate: new Date(2017, 4, 21, 15, 0),
             endDate: new Date(2017, 4, 21, 15, 30),
         } }]);
-        dataSource.load();
+
         assert.equal(renderedStub.callCount, 1, 'Should throw one call onAppointmentRendered event');
 
         renderedStub.reset();
@@ -235,14 +236,13 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             startDate: defaultData[0].startDate,
             endDate: defaultData[0].endDate
         } }]);
-        dataSource.load();
+
         assert.equal(renderedStub.callCount, 2, 'Should throw two call onAppointmentRendered event');
 
         renderedStub.reset();
         dataSource.store().push([
             { type: 'update', key: 0, data: { text: 'updated-1' } },
         ]);
-        dataSource.load();
 
         assert.equal(renderedStub.callCount, 1, 'Should throw one call onAppointmentRendered event');
     });
@@ -256,7 +256,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             { type: 'update', key: 0, data: { text: 'updated-1' } },
             { type: 'update', key: 1, data: { text: 'updated-2' } }
         ]);
-        dataSource.load();
+
         assert.equal(getUnmarkedAppointments(scheduler).length, 2, 'Should rendered only two updated appointments');
 
         markAppointments(scheduler);
@@ -266,7 +266,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             startDate: new Date(2017, 4, 28, 15, 30),
             endDate: new Date(2017, 4, 28, 16, 30)
         } }]);
-        dataSource.load();
+
         assert.equal(getUnmarkedAppointments(scheduler).length, 1, 'Should rendered only inserted appointment');
 
         markAppointments(scheduler);
@@ -302,7 +302,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             { type: 'update', key: 8, data: { text: 'updated-1' } },
             { type: 'update', key: 10, data: { text: 'updated-2' } }
         ]);
-        dataSource.load();
+
         assert.equal(scheduler.appointments.getAppointmentCount(), getUnmarkedAppointments(scheduler).length, 'Should rendered all appointments');
 
         markAppointments(scheduler);
@@ -312,7 +312,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             startDate: new Date(2017, 4, 27, 15, 30),
             endDate: new Date(2017, 4, 27, 16, 30)
         } }]);
-        dataSource.load();
+
         assert.equal(scheduler.appointments.getAppointmentCount(), getUnmarkedAppointments(scheduler).length, 'Should rendered all appointments');
     });
 

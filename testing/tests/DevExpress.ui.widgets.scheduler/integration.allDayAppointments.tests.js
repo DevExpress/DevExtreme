@@ -9,9 +9,12 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import Query from 'data/query';
 import dataUtils from 'core/element_data';
-import { SchedulerTestWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
+import {
+    SchedulerTestWrapper,
+    CLASSES,
+    supportedScrollingModes
+} from '../../helpers/scheduler/helpers.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
@@ -306,10 +309,7 @@ QUnit.module('Integration: allDay appointments', {
         });
     });
 
-    [
-        'standard',
-        'virtual'
-    ].forEach(scrollingMode => {
+    supportedScrollingModes.forEach(scrollingMode => {
         QUnit.module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {
                 const createInstance = this.createInstance.bind(this);
@@ -326,8 +326,19 @@ QUnit.module('Integration: allDay appointments', {
         }, function() {
             QUnit.test('AllDay tasks should not be filtered by start day hour', function(assert) {
                 const tasks = [
-                    { text: 'One', startDate: new Date(2015, 2, 16, 5), endDate: new Date(2015, 2, 16, 5, 30), allDay: true },
-                    { text: 'Two', startDate: new Date(2015, 2, 16, 2), endDate: new Date(2015, 2, 16, 2, 30), allDay: true }];
+                    {
+                        text: 'One',
+                        startDate: new Date(2015, 2, 16, 5),
+                        endDate: new Date(2015, 2, 16, 5, 30),
+                        allDay: true
+                    },
+                    {
+                        text: 'Two',
+                        startDate: new Date(2015, 2, 16, 2),
+                        endDate: new Date(2015, 2, 16, 2, 30),
+                        allDay: true
+                    }
+                ];
 
                 const dataSource = new DataSource({
                     store: tasks
@@ -1025,7 +1036,7 @@ QUnit.module('Integration: allDay appointments', {
                 assert.roughEqual(this.instance.$element().find('.dx-scheduler-appointment').first().outerHeight(), appointmentHeight, 0.501, 'appointment height is correct');
             });
 
-            QUnit.test('long appointment should not be rendered if \'showAllDayPanel\' = false', function(assert) {
+            QUnit.test('long appointment should not be rendered if "showAllDayPanel" = false', function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     currentView: 'week',

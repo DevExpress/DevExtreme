@@ -3,7 +3,7 @@ import {
 } from '../devices';
 
 export declare type Rule<T> = {
-    device: () => boolean | Device | Device[];
+    device: ((device: Device) => boolean) | Device | Device[];
     options: Partial<T>;
 };
 

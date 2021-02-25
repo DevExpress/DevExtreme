@@ -43,8 +43,7 @@ env:
     - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=renovation
     - TARGET=test_jest
     - TARGET=native_components
-    - TARGET=test_scss
-    - TARGET=font_icons_test
+    - TARGET=test_styles
 
 build:
 

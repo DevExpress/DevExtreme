@@ -1,77 +1,83 @@
 import {
-  Component, ComponentBindings, JSXComponent, Fragment, OneWay,
+  Component,
+  JSXComponent,
+  Fragment,
 } from 'devextreme-generator/component_declaration/common';
-import { Row as DateTableRow } from '../row';
+import { Row } from '../row';
 import { ViewCellData } from '../../types.d';
 import {
   getKeyByGroup,
   getIsGroupedAllDayPanel,
 } from '../../utils';
-import { LayoutProps } from '../layout_props';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
-import { MonthDateTableCell } from '../../month/date_table/cell';
-import { DateTableCellBase } from './cell';
+import { DateTableLayoutProps } from './layout_props';
 
-export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
+export const viewFunction = ({
+  props: {
+    viewData,
+    dataCellTemplate,
+    cellTemplate: Cell,
+  },
+}: DateTableBody): JSX.Element => (
   <Fragment>
-    {viewModel.props.viewData!
-      .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
+    {viewData
+      .groupedData.map(({ dateTable, allDayPanel, groupIndex }, index) => (
         <Fragment key={getKeyByGroup(groupIndex)}>
-          {getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex) && (
+          {getIsGroupedAllDayPanel(viewData, index) && (
             <AllDayPanelTableBody
               viewData={allDayPanel}
-              dataCellTemplate={viewModel.props.dataCellTemplate}
+              dataCellTemplate={dataCellTemplate}
               isVerticalGroupOrientation
+              leftVirtualCellWidth={viewData.leftVirtualCellWidth}
+              rightVirtualCellWidth={viewData.rightVirtualCellWidth}
             />
           )}
           {dateTable.map((cellsRow) => (
-            <DateTableRow
+            <Row
               className="dx-scheduler-date-table-row"
-              key={cellsRow[0].key}
+              key={cellsRow[0].key - viewData.leftVirtualCellCount}
+              leftVirtualCellWidth={viewData.leftVirtualCellWidth}
+              rightVirtualCellWidth={viewData.rightVirtualCellWidth}
             >
               {cellsRow.map(({
                 startDate,
                 endDate,
                 groups,
                 groupIndex: cellGroupIndex,
-                index,
+                index: cellIndex,
                 isFirstGroupCell,
                 isLastGroupCell,
                 key,
+                text,
+                otherMonth,
+                firstDayOfMonth,
+                today,
               }: ViewCellData) => (
-                <viewModel.cell
+                <Cell
                   isFirstGroupCell={isFirstGroupCell}
                   isLastGroupCell={isLastGroupCell}
                   startDate={startDate}
                   endDate={endDate}
                   groups={groups}
                   groupIndex={cellGroupIndex}
-                  index={index}
-                  dataCellTemplate={viewModel.props.dataCellTemplate}
+                  index={cellIndex}
+                  dataCellTemplate={dataCellTemplate}
                   key={key}
+                  text={text}
+                  today={today}
+                  otherMonth={otherMonth}
+                  firstDayOfMonth={firstDayOfMonth}
                 />
               ))}
-            </DateTableRow>
+            </Row>
           ))}
         </Fragment>
       ))}
   </Fragment>
 );
 
-@ComponentBindings()
-export class DateTableBodyProps extends LayoutProps {
-  @OneWay() viewType?: string;
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent(DateTableBodyProps) {
-  // This is a workaround: cannot use template inside a template
-  get cell(): any {
-    const { viewType } = this.props;
-
-    return viewType === 'month' ? MonthDateTableCell : DateTableCellBase;
-  }
-}
+export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {}

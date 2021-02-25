@@ -3,6 +3,8 @@ import {
   ComponentBindings,
   JSXComponent,
   OneWay,
+  Ref,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import {
   PathType,
@@ -11,24 +13,37 @@ import {
   LineCap,
 } from './types.d';
 import SvgGraphicsProps from './base_graphics_props';
-import { combinePathParam, buildPathSegments } from './utils';
+import {
+  combinePathParam,
+  buildPathSegments,
+  getGraphicExtraProps,
+} from './utils';
 
 export const viewFunction = ({
-  d, props: {
-    fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity, transform,
-  },
-}: PathSvgElement): JSX.Element => (
-  <path
-    d={d}
-    fill={fill}
-    stroke={stroke}
-    strokeWidth={strokeWidth}
-    strokeOpacity={strokeOpacity}
-    strokeLinecap={strokeLineCap}
-    opacity={opacity}
-    transform={transform}
-  />
-);
+  pathRef,
+  d,
+  computedProps,
+}: PathSvgElement): JSX.Element => {
+  const {
+    className, fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity, pointerEvents,
+  } = computedProps;
+  return (
+    <path
+      ref={pathRef}
+      className={className}
+      d={d}
+      fill={fill}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
+      strokeOpacity={strokeOpacity}
+      strokeLinecap={strokeLineCap}
+      opacity={opacity}
+      pointerEvents={pointerEvents}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...getGraphicExtraProps(computedProps)}
+    />
+  );
+};
 
 @ComponentBindings()
 export class PathSvgElementProps extends SvgGraphicsProps {
@@ -40,7 +55,7 @@ export class PathSvgElementProps extends SvgGraphicsProps {
 
   @OneWay() strokeLineCap?: LineCap;
 
-  @OneWay() transform?: string;
+  @OneWay() pointerEvents?: string;
 }
 
 @Component({
@@ -49,6 +64,8 @@ export class PathSvgElementProps extends SvgGraphicsProps {
   isSVG: true,
 })
 export class PathSvgElement extends JSXComponent(PathSvgElementProps) {
+  @Ref() pathRef!: RefObject<SVGPathElement>;
+
   get d(): string | undefined {
     let path = this.props.d;
     let segments: Segment[] = [];
@@ -59,5 +76,10 @@ export class PathSvgElement extends JSXComponent(PathSvgElementProps) {
     }
 
     return path;
+  }
+
+  // https://trello.com/c/rc9RQJ2y
+  get computedProps(): PathSvgElementProps {
+    return this.props;
   }
 }

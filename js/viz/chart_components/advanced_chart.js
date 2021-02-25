@@ -461,8 +461,12 @@ export const AdvancedChart = BaseChart.inherit({
     _populateBusinessRange(updatedAxis, keepRange) {
         const that = this;
         const rotated = that._isRotated();
-        const argRange = new Range({ rotated: !!rotated });
         const series = that._getVisibleSeries();
+        const argRanges = {};
+        const commonArgRange = new Range({ rotated: !!rotated });
+        const getPaneName = (axis) => { return axis.pane || DEFAULT_PANE_NAME; };
+
+        that.panes.forEach(p => argRanges[p.name] = new Range({ rotated: !!rotated }));
 
         that._valueAxes.forEach(valueAxis => {
             const groupRange = new Range({
@@ -476,7 +480,7 @@ export const AdvancedChart = BaseChart.inherit({
                 const seriesRange = series.getRangeData();
 
                 groupRange.addRange(seriesRange.val);
-                argRange.addRange(seriesRange.arg);
+                argRanges[getPaneName(valueAxis)].addRange(seriesRange.arg);
             });
 
             if(!updatedAxis || updatedAxis && groupSeries.length && valueAxis === updatedAxis) {
@@ -486,7 +490,12 @@ export const AdvancedChart = BaseChart.inherit({
         });
 
         if(!updatedAxis || updatedAxis && series.length) {
-            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._axesReinitialized, undefined, that._groupsData.categories));
+            Object.keys(argRanges).forEach(p => commonArgRange.addRange(argRanges[p]));
+            const commonInterval = commonArgRange.interval;
+            that._argumentAxes.forEach(a => {
+                const currentInterval = argRanges[getPaneName(a)].interval ?? commonInterval; // T956425
+                a.setBusinessRange(new Range({ ...commonArgRange, interval: currentInterval }), that._axesReinitialized, undefined, that._groupsData.categories);
+            });
         }
 
         that._populateMarginOptions();
@@ -645,17 +654,17 @@ export const AdvancedChart = BaseChart.inherit({
 
     _layoutAxes(drawAxes) {
         const that = this;
-        const cleanPanesCanvases = drawAxes();
-
+        drawAxes();
         const needSpace = that.checkForMoreSpaceForPanesCanvas();
 
         if(needSpace) {
-            const size = this._layout.backward(this._rect, this._rect, [needSpace.width, needSpace.height]);
+            const rect = this._rect.slice();
+            const size = this._layout.backward(rect, rect, [needSpace.width, needSpace.height]);
             needSpace.width = Math.max(0, size[0]);
             needSpace.height = Math.max(0, size[1]);
-            this._canvas = this._createCanvasFromRect(this._rect);
+            this._canvas = this._createCanvasFromRect(rect);
 
-            drawAxes(needSpace, cleanPanesCanvases);
+            drawAxes(needSpace);
         }
     },
 

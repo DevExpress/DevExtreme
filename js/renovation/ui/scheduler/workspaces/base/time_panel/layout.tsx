@@ -1,5 +1,11 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  Fragment,
+  Template,
+  JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
@@ -10,31 +16,40 @@ import {
   isVerticalGroupOrientation,
 } from '../../utils';
 import { Table } from '../table';
-import { LayoutProps } from '../layout_props';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
+import { DateTimeCellTemplateProps, TimePanelData } from '../../types.d';
+import { GroupOrientation } from '../../../types.d';
 
-export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
+export const viewFunction = ({
+  props: {
+    timePanelData,
+    timeCellTemplate,
+  },
+  topVirtualRowHeight,
+  bottomVirtualRowHeight,
+  isVerticalGroupOrientation: isVerticalGrouping,
+  restAttributes,
+}: TimePanelTableLayout): JSX.Element => (
   <Table
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    isVirtual={viewModel.isVirtual}
-    topVirtualRowHeight={viewModel.topVirtualRowHeight}
-    bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
+    {...restAttributes}
+    topVirtualRowHeight={topVirtualRowHeight}
+    bottomVirtualRowHeight={bottomVirtualRowHeight}
     virtualCellsCount={1}
     className="dx-scheduler-time-panel"
   >
-    {viewModel.props.viewData!
+    {timePanelData
       .groupedData.map(({ dateTable, groupIndex }, index) => (
         <Fragment key={getKeyByGroup(groupIndex)}>
-          {getIsGroupedAllDayPanel(viewModel.props.viewData!, index) && (
+          {getIsGroupedAllDayPanel(timePanelData, index) && (
             <Row>
               <CellBase className="dx-scheduler-time-panel-title-cell">
                 <AllDayPanelTitle />
               </CellBase>
             </Row>
           )}
-          {dateTable.map((cellsRow) => {
-            const { cellCountInGroupRow } = viewModel.props.viewData!;
+          {dateTable.map((cell) => {
+            const { cellCountInGroupRow } = timePanelData;
             const {
               groups,
               startDate,
@@ -43,7 +58,7 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
               isFirstGroupCell,
               isLastGroupCell,
               key,
-            } = cellsRow[0];
+            } = cell;
 
             return (
               <Row
@@ -53,12 +68,12 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
                 <Cell
                   startDate={startDate}
                   text={text}
-                  groups={viewModel.isVerticalGroupOrientation ? groups : undefined}
-                  groupIndex={viewModel.isVerticalGroupOrientation ? groupIndex : undefined}
-                  isFirstGroupCell={viewModel.isVerticalGroupOrientation && isFirstGroupCell}
-                  isLastGroupCell={viewModel.isVerticalGroupOrientation && isLastGroupCell}
+                  groups={isVerticalGrouping ? groups : undefined}
+                  groupIndex={isVerticalGrouping ? groupIndex : undefined}
+                  isFirstGroupCell={isVerticalGrouping && isFirstGroupCell}
+                  isLastGroupCell={isVerticalGrouping && isLastGroupCell}
                   index={Math.floor(cellIndex / cellCountInGroupRow)}
-                  timeCellTemplate={viewModel.props.timeCellTemplate}
+                  timeCellTemplate={timeCellTemplate}
                 />
               </Row>
             );
@@ -69,12 +84,23 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
 );
 
 @ComponentBindings()
-export class TimePanelTableLayoutProps extends LayoutProps {
+export class TimePanelTableLayoutProps {
   @OneWay() className? = '';
+
+  @OneWay() groupOrientation?: GroupOrientation;
 
   @OneWay() allDayPanelVisible? = false;
 
-  @Template() timeCellTemplate?: any;
+  @OneWay() timePanelData: TimePanelData = {
+    groupedData: [],
+    cellCountInGroupRow: 0,
+    leftVirtualCellCount: 0,
+    rightVirtualCellCount: 0,
+    topVirtualRowCount: 0,
+    bottomVirtualRowCount: 0,
+  };
+
+  @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
 @Component({
@@ -85,17 +111,12 @@ export class TimePanelTableLayoutProps extends LayoutProps {
   },
 })
 export class TimePanelTableLayout extends JSXComponent(TimePanelTableLayoutProps) {
-  get isVirtual(): boolean {
-    const { viewData } = this.props;
-    return !!viewData!.isVirtual;
-  }
-
   get topVirtualRowHeight(): number {
-    return this.props.viewData!.topVirtualRowHeight || 0;
+    return this.props.timePanelData.topVirtualRowHeight || 0;
   }
 
   get bottomVirtualRowHeight(): number {
-    return this.props.viewData!.bottomVirtualRowHeight || 0;
+    return this.props.timePanelData.bottomVirtualRowHeight || 0;
   }
 
   get isVerticalGroupOrientation(): boolean {

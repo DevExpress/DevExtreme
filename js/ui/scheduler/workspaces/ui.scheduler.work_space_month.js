@@ -6,6 +6,8 @@ import dateUtils from '../../../core/utils/date';
 import { getBoundingRect } from '../../../core/utils/position';
 import dateLocalization from '../../../localization/date';
 
+import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
+
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
 const DATE_TABLE_CURRENT_DATE_CLASS = 'dx-scheduler-date-table-current-date';
@@ -20,6 +22,10 @@ const DAY_IN_MILLISECONDS = 86400000;
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
+    get isDateAndTimeView() {
+        return false;
+    }
+
     _toggleFixedScrollableClass() {
         this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
     }
@@ -83,9 +89,12 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             const DAYS_IN_WEEK = 7;
 
             let averageWidth = 0;
-            this._getCells().slice(0, DAYS_IN_WEEK).each((index, element) => averageWidth += getBoundingRect(element).width);
+            const cells = this._getCells().slice(0, DAYS_IN_WEEK);
+            cells.each((index, element) => {
+                averageWidth += getBoundingRect(element).width;
+            });
 
-            return averageWidth / DAYS_IN_WEEK;
+            return cells.length === 0 ? undefined : averageWidth / DAYS_IN_WEEK;
         });
     }
 
@@ -309,6 +318,46 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     _getRowCountWithAllDayRows() {
         return this._getRowCount();
+    }
+
+    renovatedRenderSupported() { return true; }
+
+    renderRAllDayPanel() {}
+
+    renderRTimeTable() {}
+
+    renderRDateTable() {
+        this.renderRComponent(
+            this._$dateTable,
+            dxrMonthDateTableLayout,
+            'renovatedDateTable',
+            { viewData: this.viewDataProvider.viewData, dataCellTemplate: this.option('dataCellTemplate') }
+        );
+    }
+
+    generateRenderOptions() {
+        const options = super.generateRenderOptions();
+        options.cellDataGetters.push((_, rowIndex, cellIndex) => {
+            return {
+                value: {
+                    text: this._getCellText(rowIndex, cellIndex),
+                },
+            };
+        });
+
+        const getCellMetaData = (_, rowIndex, cellIndex, groupIndex, startDate) => {
+            return {
+                value: {
+                    today: this._isCurrentDate(startDate),
+                    otherMonth: this._isOtherMonth(startDate),
+                    firstDayOfMonth: this._isFirstDayOfMonth(startDate),
+                },
+            };
+        };
+
+        options.cellDataGetters.push(getCellMetaData);
+
+        return options;
     }
 }
 

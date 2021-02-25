@@ -10,7 +10,6 @@ import { exportDataGrid } from 'pdf_exporter';
 
 import 'ui/data_grid/ui.data_grid';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -929,7 +928,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
         { format: 'shortDate', expectedPdfCellValue: '10/9/2019' },
         { format: 'shortTime', expectedPdfCellValue: '9:09 AM' },
         { format: 'longDateLongTime', expectedPdfCellValue: 'Wednesday, October 9, 2019, 9:09:09 AM' },
-        { format: 'shotDateShortTime', expectedPdfCellValue: '99otDAMte09ortTi9e' },
+        { format: 'shortDateShortTime', expectedPdfCellValue: '10/9/2019, 9:09 AM' },
         { format: 'longDate', expectedPdfCellValue: 'Wednesday, October 9, 2019' },
         { format: 'longTime', expectedPdfCellValue: '9:09:09 AM' },
         { format: 'dayOfWeek', expectedPdfCellValue: 'Wednesday' },

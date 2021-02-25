@@ -1,17 +1,28 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  OneWay,
+  Template,
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../../row';
 import { AllDayPanelCell as Cell } from './cell';
-import { ViewCellData } from '../../../types.d';
+import {
+  DataCellTemplateProps,
+  ViewCellData,
+} from '../../../types.d';
+import { combineClasses } from '../../../../../../utils/combine_classes';
 
 export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
   <Row
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    className={`dx-scheduler-all-day-table-row ${viewModel.props.className}`}
+    leftVirtualCellWidth={viewModel.props.leftVirtualCellWidth}
+    rightVirtualCellWidth={viewModel.props.rightVirtualCellWidth}
+    className={viewModel.classes}
   >
-    {viewModel.props.viewData!.map(({
+    {viewModel.props.viewData.map(({
       startDate,
       endDate,
       groups,
@@ -38,13 +49,17 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
 
 @ComponentBindings()
 export class AllDayPanelTableBodyProps {
-  @OneWay() viewData?: ViewCellData[];
+  @OneWay() viewData: ViewCellData[] = [];
 
   @OneWay() isVerticalGroupOrientation?: boolean = false;
 
   @OneWay() className?: string = '';
 
-  @Template() dataCellTemplate?: any;
+  @OneWay() leftVirtualCellWidth = 0;
+
+  @OneWay() rightVirtualCellWidth = 0;
+
+  @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }
 
 @Component({
@@ -52,4 +67,12 @@ export class AllDayPanelTableBodyProps {
   view: viewFunction,
 })
 export class AllDayPanelTableBody extends JSXComponent(AllDayPanelTableBodyProps) {
+  get classes(): string {
+    const { className = '' } = this.props;
+
+    return combineClasses({
+      'dx-scheduler-all-day-table-row': true,
+      [className]: !!className,
+    });
+  }
 }

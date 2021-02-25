@@ -123,7 +123,6 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
         }))
         .pipe(gulp.dest(dist))
 ]);
-gulp.task('tmp',);
 
 gulp.task('transpile', gulp.series(
     'bundler-config',
@@ -182,7 +181,7 @@ gulp.task('transpile-watch', gulp.series(
 
 gulp.task('transpile-tests', gulp.series('bundler-config', () =>
     gulp
-        .src('testing/**/*.js')
+        .src(['testing/**/*.js'])
         .pipe(babel(testsConfig))
         .pipe(gulp.dest('testing'))
 ));

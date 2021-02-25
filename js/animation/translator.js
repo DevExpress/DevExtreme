@@ -1,3 +1,4 @@
+import $ from '../core/renderer';
 import { data as elementData, removeData } from '../core/element_data';
 import { type } from '../core/utils/type';
 
@@ -6,6 +7,8 @@ const TRANSFORM_MATRIX_REGEX = /matrix(3d)?\((.+?)\)/;
 const TRANSLATE_REGEX = /translate(?:3d)?\((.+?)\)/;
 
 export const locate = function($element) {
+    $element = $($element);
+
     const translate = getTranslate($element);
 
     return {
@@ -72,6 +75,8 @@ export const getTranslate = function($element) {
 };
 
 export const move = function($element, position) {
+    $element = $($element);
+
     const left = position.left;
     const top = position.top;
     let translate;
@@ -97,6 +102,8 @@ export const move = function($element, position) {
 };
 
 export const resetPosition = function($element, finishTransition) {
+    $element = $($element);
+
     let originalTransition;
     const stylesConfig = {
         left: 0,

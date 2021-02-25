@@ -73,7 +73,11 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         return cellClass;
     }
 
-    getHorizontalMax() {
+    getHorizontalMax(groupIndex) {
+        if(this._workSpace.isRenovatedRender()) {
+            return this._workSpace.getMaxAllowedPosition(groupIndex);
+        }
+
         return this._workSpace.getMaxAllowedPosition()[0];
     }
 
@@ -127,10 +131,10 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         return 0;
     }
 
-    getGroupCountAttr() {
+    getGroupCountAttr(groups) {
         return {
             attr: VERTICAL_GROUPED_ATTR,
-            count: this._workSpace.option('groups') && this._workSpace.option('groups').length
+            count: groups?.length
         };
     }
 

@@ -126,7 +126,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const scrollingOptions = that.option('scrolling');
         let useNativeScrolling = that.option('scrolling.useNative');
 
-        const options = extend({ pushBackValue: 0 }, scrollingOptions, {
+        const options = extend(scrollingOptions, {
             direction: 'both',
             bounceEnabled: false,
             useKeyboard: false
@@ -178,7 +178,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(column.colspan > 1) {
             $cell.attr('colSpan', column.colspan);
-        } else if(!column.isBand && column.visibleWidth !== 'auto' && !this.option('legacyRendering') && this.option('columnAutoWidth')) {
+        } else if(!column.isBand && column.visibleWidth !== 'auto' && this.option('columnAutoWidth')) {
             if(column.width || column.minWidth) {
                 cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
             }
@@ -751,11 +751,11 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return this._tableElement || $();
     },
 
-    _getTableElement: function() {
+    getTableElement: function() {
         return this._tableElement;
     },
 
-    _setTableElement: function(tableElement) {
+    setTableElement: function(tableElement) {
         this._tableElement = tableElement;
     },
 
@@ -836,7 +836,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _updateContent: function($newTableElement) {
-        this._setTableElement($newTableElement);
+        this.setTableElement($newTableElement);
         this._wrapTableInScrollContainer($newTableElement);
     },
 
@@ -844,7 +844,6 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getWidths: function($cellElements) {
         const result = [];
-        const legacyRendering = this.option('legacyRendering');
         let width;
 
         if($cellElements) {
@@ -853,7 +852,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 if(item.getBoundingClientRect) {
                     const clientRect = getBoundingRect(item);
                     if(clientRect.width > width - 1) {
-                        width = legacyRendering ? Math.ceil(clientRect.width) : clientRect.width;
+                        width = clientRect.width;
                     }
                 }
 
@@ -872,10 +871,10 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         (this.option('forceApplyBindings') || noop)();
 
-        $tableElement = $tableElement || that._getTableElement();
+        $tableElement = $tableElement || that.getTableElement();
 
         if($tableElement) {
-            $rows = $tableElement.children('tbody').children();
+            $rows = $tableElement.children('tbody:not(.dx-header)').children();
 
             for(let i = 0; i < $rows.length; i++) {
                 const $row = $rows.eq(i);
@@ -902,9 +901,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         let minWidth;
         let columnIndex;
         const columnAutoWidth = this.option('columnAutoWidth');
-        const legacyRendering = this.option('legacyRendering');
 
-        $tableElement = $tableElement || this._getTableElement();
+        $tableElement = $tableElement || this.getTableElement();
 
         if($tableElement && $tableElement.length && widths) {
             columnIndex = 0;
@@ -913,7 +911,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             columns = columns || this.getColumns(null, $tableElement);
 
             for(let i = 0; i < columns.length; i++) {
-                if(!legacyRendering && columnAutoWidth && !fixed) {
+                if(columnAutoWidth && !fixed) {
                     width = columns[i].width;
 
                     if(width && !columns[i].command) {
@@ -1039,7 +1037,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     getRowsCount: function() {
-        const tableElement = this._getTableElement();
+        const tableElement = this.getTableElement();
 
         if(tableElement && tableElement.length === 1) {
             return tableElement[0].rows.length;
@@ -1048,7 +1046,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _getRowElementsCore: function(tableElement) {
-        tableElement = tableElement || this._getTableElement();
+        tableElement = tableElement || this.getTableElement();
 
         if(tableElement) {
             const tBodies = this.option('rowTemplate') && tableElement.find('> tbody.' + ROW_CLASS);

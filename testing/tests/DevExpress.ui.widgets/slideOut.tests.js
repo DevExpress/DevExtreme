@@ -6,7 +6,8 @@ import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import pointerMock from '../../helpers/pointerMock.js';
 
 import 'ui/slide_out';
-import 'common.css!';
+
+import 'generic_light.css!';
 
 const SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container';
 const SLIDEOUT_SHIELD = 'dx-slideoutview-shield';
@@ -550,7 +551,8 @@ QUnit.module('swipe', {
         const instance = this.$element.dxSlideOut('instance');
         const $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
 
-        assert.equal($container.position().left, 0, 'container left == 0, so menu is hidden');
+        // dx-slideoutview-content has border-width: 1px, width: 100% and box-sizing: content-box
+        assert.roughEqual($container.position().left, 0, 2, 'container left == 0, so menu is hidden');
 
         instance.showMenu();
         assert.equal($container.position().left, -instance._getListWidth(), 'container moved left, so menu is shown');

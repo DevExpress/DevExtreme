@@ -12,8 +12,12 @@ describe('AllDayPanelLayout', () => {
         endDate: new Date(2020, 6, 10),
         text: '',
         index: 0,
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
+        key: '1',
       }],
       dateTable: [[]],
+      groupIndex: 1,
     }],
     cellCountInGroupRow: 1,
   };
@@ -38,7 +42,7 @@ describe('AllDayPanelLayout', () => {
         .toBe('customAttribute');
     });
 
-    it('should render components correctly', () => {
+    it('should render components and pass correct arguments to them', () => {
       const dataCellTemplate = () => null;
       const layout = render({
         classes: 'some-class',
@@ -46,6 +50,8 @@ describe('AllDayPanelLayout', () => {
         emptyTableHeight: 123,
         props: {
           dataCellTemplate,
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
         },
       });
 
@@ -66,12 +72,16 @@ describe('AllDayPanelLayout', () => {
 
       expect(tableBody.exists())
         .toBe(true);
+
       expect(tableBody)
         .toHaveLength(1);
+
       expect(tableBody.props())
         .toMatchObject({
           viewData: allDayPanelData,
           dataCellTemplate,
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
         });
     });
 
@@ -106,6 +116,7 @@ describe('AllDayPanelLayout', () => {
             groupedData: [{
               dateTable: [[]],
               allDayPanel: undefined,
+              groupIndex: 1,
             }],
             cellCountInGroupRow: 1,
           },

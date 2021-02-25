@@ -1,10 +1,21 @@
 import {
-  Component, ComponentBindings, ForwardRef, OneWay, JSXComponent, Ref, Method, Effect, Consumer,
+  Component,
+  ComponentBindings,
+  ForwardRef,
+  OneWay,
+  JSXComponent,
+  Ref,
+  Method,
+  Effect,
+  Consumer,
+  RefObject,
+  Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import type DomComponent from '../../../core/dom_component';
-import { ConfigContextValue, ConfigContext } from './config_context';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { EventCallback } from './event_callback.d';
 import { renderTemplate } from '../../utils/render_template';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
 
 export const viewFunction = ({
   widgetRef,
@@ -12,7 +23,7 @@ export const viewFunction = ({
   restAttributes,
 }: DomComponentWrapper): JSX.Element => (
   <div
-    ref={widgetRef as any}
+    ref={widgetRef}
     className={className}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
@@ -23,7 +34,7 @@ interface WidgetInstanceType { option: (properties: Record<string, unknown>) => 
 
 @ComponentBindings()
 export class DomComponentWrapperProps {
-  @ForwardRef() rootElementRef?: HTMLDivElement;
+  @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
   @OneWay() componentType!: typeof DomComponent & {
     getInstance: (widgetRef: HTMLDivElement) => WidgetInstanceType;
@@ -42,9 +53,9 @@ export class DomComponentWrapperProps {
 })
 export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 'componentType' | 'componentProps'>() {
   @Ref()
-  widgetRef!: HTMLDivElement;
+  widgetRef!: RefObject<HTMLDivElement>;
 
-  @Ref()
+  @Mutable()
   instance!: DomComponent | null;
 
   @Method()
@@ -58,9 +69,11 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   }
 
   @Effect({ run: 'once' })
-  setupWidget(): () => void {
+  setupWidget(): DisposeEffectReturn {
     // eslint-disable-next-line new-cap
-    const componentInstance = new this.props.componentType(this.widgetRef, this.properties) as any;
+    const componentInstance = new this.props.componentType(
+      this.widgetRef.current!, this.properties,
+    );
     this.instance = componentInstance;
 
     return (): void => {
@@ -72,7 +85,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   @Effect({ run: 'once' }) setRootElementRef(): void {
     const { rootElementRef } = this.props;
     if (rootElementRef) {
-      this.props.rootElementRef = this.widgetRef;
+      rootElementRef.current = this.widgetRef.current;
     }
   }
 

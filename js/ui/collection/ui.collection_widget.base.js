@@ -12,7 +12,7 @@ import { each } from '../../core/utils/iterator';
 import Action from '../../core/action';
 import Guid from '../../core/guid';
 import Widget from '../widget/ui.widget';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import DataHelperMixin from '../../data_helper';
 import CollectionWidgetItem from './item';
@@ -62,8 +62,8 @@ const CollectionWidget = Widget.inherit({
             }
 
             this._itemClickHandler(extend({}, e, {
-                target: $itemElement,
-                currentTarget: $itemElement
+                target: $itemElement.get(0),
+                currentTarget: $itemElement.get(0)
             }));
         };
         const space = function(e) {
@@ -71,9 +71,11 @@ const CollectionWidget = Widget.inherit({
             enter.call(this, e);
         };
         const move = function(location, e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this._moveFocus(location, e);
+            if(!isCommandKeyPressed(e)) {
+                e.preventDefault();
+                e.stopPropagation();
+                this._moveFocus(location, e);
+            }
         };
         return extend(this.callBase(), {
             space: space,
@@ -474,7 +476,7 @@ const CollectionWidget = Widget.inherit({
             case 'items':
             case '_itemAttributes':
             case 'itemTemplateProperty':
-            case 'showItemDataTitle':
+            case 'useItemTextAsTitle':
                 this._cleanRenderedItems();
                 this._invalidate();
                 break;
@@ -900,7 +902,7 @@ const CollectionWidget = Widget.inherit({
             this._appendItemToContainer.call(this, $container, $itemFrame, index);
         }
 
-        if(this.option('showItemDataTitle')) {
+        if(this.option('useItemTextAsTitle')) {
             const displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
             $itemFrame.attr('title', displayValue);
         }

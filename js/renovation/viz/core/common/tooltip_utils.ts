@@ -1,4 +1,10 @@
-import { RecalculateCoordinates, TooltipCoordinates, Size } from './types.d';
+import {
+  RecalculateCoordinates, TooltipCoordinates, StrictSize, CustomizedOptions, CustomizeTooltipFn,
+  InitialBorder, TooltipData, Canvas, Font,
+} from './types.d';
+import { isFunction, isPlainObject, isDefined } from '../../../../core/utils/type';
+import domAdapter from '../../../../core/dom_adapter';
+import { getWindow } from '../../../../core/utils/window';
 
 const {
   max, min, PI, cos, sin, asin, round, ceil, floor,
@@ -14,7 +20,7 @@ function getAbsoluteArc(cornerRadius: number, x: number, y: number): string {
   return `A ${cornerRadius} ${cornerRadius} 0 0 1 ${x} ${y}`;
 }
 
-function rotateSize({ width, height }: Size, angle: number): Size {
+function rotateSize({ width, height }: StrictSize, angle: number): StrictSize {
   if (angle % 90 === 0 && angle % 180 !== 0) {
     return { width: height, height: width };
   }
@@ -34,7 +40,7 @@ function rotateY({
 }
 
 export function getCloudPoints(
-  size: Size,
+  size: StrictSize,
   coordinates: TooltipCoordinates,
   rotationAngle: number,
   options: { arrowWidth: number; cornerRadius: number },
@@ -75,7 +81,7 @@ export function getCloudPoints(
   const arrowBaseTop = max(arrowY - halfArrowWidth, yt);
   const arrowBaseLeft = max(arrowX - halfArrowWidth, xl);
 
-  const cornerRadius = Math.min(width / 2, height / 2, options.cornerRadius);
+  const cornerRadius = Math.min(halfWidth, halfHeight, options.cornerRadius);
 
   let points;
   let arrowArc;
@@ -187,9 +193,44 @@ export function getCloudPoints(
   return buildPath('M', points, 'Z');
 }
 
+export function getCanvas(container: HTMLElement): Canvas {
+  const containerBox = container.getBoundingClientRect();
+  const html = domAdapter.getDocumentElement();
+  const body = domAdapter.getBody();
+  let left = getWindow()?.pageXOffset || html.scrollLeft || 0;
+  let top = getWindow()?.pageYOffset || html.scrollTop || 0;
+
+  const box = {
+    left,
+    top,
+    width: max(body.clientWidth, html.clientWidth) + left,
+    height: max(
+      body.scrollHeight, html.scrollHeight,
+      body.offsetHeight, html.offsetHeight,
+      body.clientHeight, html.clientHeight,
+    ),
+
+    right: 0,
+    bottom: 0,
+  };
+
+  if (container !== domAdapter.getBody()) {
+    left = max(box.left, box.left + containerBox.left);
+    top = max(box.top, box.top + containerBox.top);
+
+    box.width = min(containerBox.width, box.width) + left + box.left;
+    box.height = min(containerBox.height, box.height) + top + box.top;
+
+    box.left = left;
+    box.top = top;
+  }
+
+  return box;
+}
+
 export function recalculateCoordinates({
   canvas, anchorX, anchorY, size, offset, arrowLength,
-}: RecalculateCoordinates): TooltipCoordinates {
+}: RecalculateCoordinates): TooltipCoordinates | false {
   const bounds = {
     xl: canvas.left,
     xr: canvas.width - canvas.right,
@@ -198,6 +239,10 @@ export function recalculateCoordinates({
     yb: canvas.height - canvas.bottom,
     height: canvas.height - canvas.bottom - canvas.top,
   };
+
+  if (anchorX < bounds.xl || bounds.xr < anchorX || anchorY < bounds.yt || bounds.yb < anchorY) {
+    return false;
+  }
 
   let x;
   let y;
@@ -239,7 +284,7 @@ export function recalculateCoordinates({
 }
 
 export function getCloudAngle(
-  { width, height }: Size,
+  { width, height }: StrictSize,
   {
     x, y, anchorX, anchorY,
   }: TooltipCoordinates,
@@ -274,4 +319,35 @@ export function getCloudAngle(
   }
 
   return angle;
+}
+
+export function prepareData(
+  data?: TooltipData, color?: string,
+  border?: InitialBorder,
+  font?: Font,
+  customizeTooltip?: CustomizeTooltipFn,
+): CustomizedOptions {
+  let customize = {} as CustomizedOptions;
+
+  if (isFunction(customizeTooltip)) {
+    customize = customizeTooltip.call(data, data);
+    customize = isPlainObject(customize) ? customize : {};
+    if ('text' in customize) {
+      customize.text = isDefined(customize.text) ? String(customize.text) : '';
+    }
+    if ('html' in customize) {
+      customize.html = isDefined(customize.html) ? String(customize.html) : '';
+    }
+  }
+  if (!('text' in customize) && !('html' in customize)) {
+    customize.text = data?.valueText || data?.description || '';
+  }
+  customize.color = customize.color || color;
+  customize.borderColor = customize.borderColor || border?.color;
+  customize.fontColor = customize.fontColor || font?.color;
+  return customize as CustomizedOptions;
+}
+
+export function isTextEmpty({ text, html }: CustomizedOptions): boolean {
+  return text === null || text === '' || html === '' || html === null;
 }

@@ -1,12 +1,9 @@
 import $ from 'jquery';
-import SchedulerNavigator from 'ui/scheduler/ui.scheduler.navigator';
+import { Navigator } from 'ui/scheduler/header/navigator';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
 import noop from 'core/utils/common';
-import themes from 'ui/themes';
 import 'ui/scheduler/ui.scheduler';
-
-themes.setDefaultTimeout(0);
 
 QUnit.testStart(() => {
     const markup =
@@ -17,16 +14,14 @@ QUnit.testStart(() => {
 
 const moduleConfig = {
     beforeEach: function() {
-        devices.current({ platform: 'generic' });
         this.instance = $('#navigator').dxSchedulerNavigator().dxSchedulerNavigator('instance');
         this.instance.notifyObserver = noop.noop;
-        return new Promise((resolve) => themes.initialized(resolve));
     }
 };
 
 QUnit.module('Navigator markup', moduleConfig, () => {
     QUnit.test('Scheduler navigator should be initialized', function(assert) {
-        assert.ok(this.instance instanceof SchedulerNavigator, 'dxSchedulerNavigator was initialized');
+        assert.ok(this.instance instanceof Navigator, 'dxSchedulerNavigator was initialized');
     });
 
     QUnit.test('Scheduler navigator should have a right css class', function(assert) {

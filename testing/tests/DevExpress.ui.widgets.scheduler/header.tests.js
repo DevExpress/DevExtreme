@@ -1,13 +1,12 @@
-const $ = require('jquery');
-const SchedulerHeader = require('ui/scheduler/ui.scheduler.header');
-const Tabs = require('ui/tabs');
-const DropDownMenu = require('ui/drop_down_menu');
-const devices = require('core/devices');
+import $ from 'jquery';
+import { Header } from 'ui/scheduler/header/header';
+import Tabs from 'ui/tabs';
+import DropDownMenu from 'ui/drop_down_menu';
+import devices from 'core/devices';
 
-require('ui/scheduler/ui.scheduler');
+import 'ui/scheduler/ui.scheduler';
 
-require('common.css!');
-require('generic_light.css!');
+import 'generic_light.css!';
 
 
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
@@ -28,7 +27,7 @@ QUnit.module('Header', {
 });
 
 QUnit.test('Scheduler header should be initialized', function(assert) {
-    assert.ok(this.instance instanceof SchedulerHeader, 'dxSchedulerHeader was initialized');
+    assert.ok(this.instance instanceof Header, 'dxSchedulerHeader was initialized');
 });
 
 QUnit.test('Scheduler header should have a right css class', function(assert) {

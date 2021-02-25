@@ -1,10 +1,10 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template,
+  Component, JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
-import { GroupItem } from '../../../types.d';
+import { GroupPanelCellProps } from '../cell_props';
 
-export const viewFunction = (viewModel: GroupPanelVerticalCell) => {
-  const useTemplate = !!viewModel.props.cellTemplate;
+export const viewFunction = (viewModel: GroupPanelVerticalCell): JSX.Element => {
+  const CellTemplate = viewModel.props.cellTemplate;
 
   return (
     <div
@@ -12,8 +12,8 @@ export const viewFunction = (viewModel: GroupPanelVerticalCell) => {
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...viewModel.restAttributes}
     >
-      {useTemplate && (
-        <viewModel.props.cellTemplate
+      {!!CellTemplate && (
+        <CellTemplate
           data={{
             data: viewModel.props.data,
             id: viewModel.props.id,
@@ -23,7 +23,7 @@ export const viewFunction = (viewModel: GroupPanelVerticalCell) => {
           index={viewModel.props.index}
         />
       )}
-      {!useTemplate && (
+      {!CellTemplate && (
         <div className="dx-scheduler-group-header-content">
           {viewModel.props.text}
         </div>
@@ -32,25 +32,8 @@ export const viewFunction = (viewModel: GroupPanelVerticalCell) => {
   );
 };
 
-@ComponentBindings()
-export class GroupPanelVerticalCellProps {
-  @OneWay() id?: string | number;
-
-  @OneWay() text?: string = '';
-
-  @OneWay() color?: string;
-
-  @OneWay() data?: GroupItem;
-
-  @OneWay() index?: number;
-
-  @Template() cellTemplate?: any;
-
-  @OneWay() className?: string ='';
-}
-
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class GroupPanelVerticalCell extends JSXComponent(GroupPanelVerticalCellProps) {}
+export class GroupPanelVerticalCell extends JSXComponent(GroupPanelCellProps) {}

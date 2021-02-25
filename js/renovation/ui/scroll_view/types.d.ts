@@ -6,11 +6,15 @@ export interface ScrollableBoundary {
 }
 
 export interface ScrollEventArgs extends Partial<ScrollableBoundary> {
-  event: Event;
+  event?: Event;
   scrollOffset: ScrollableLocation;
 }
 
+export type ScrollableShowScrollbar = 'onScroll' | 'onHover' | 'always' | 'never';
+
 export type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
+
+export type RefreshStrategy = 'pullDown' | 'swipeDown' | 'simulated';
 
 export interface ScrollableLocation {
   top: number;
@@ -23,3 +27,9 @@ export interface ScrollOffset {
   bottom: number;
   right: number;
 }
+
+export type allowedDirection = {
+  vertical: boolean;
+  horizontal: boolean;
+};
+

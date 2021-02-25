@@ -45,7 +45,7 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
             const result = this.callBase.apply(this, arguments);
             const editingOptions = this.option('editing');
 
-            return result || editingOptions && editingOptions.allowAdding;
+            return result || editingOptions.allowAdding;
         },
 
         _isDefaultButtonVisible: function(button, options) {

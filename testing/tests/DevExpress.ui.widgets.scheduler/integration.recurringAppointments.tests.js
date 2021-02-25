@@ -6,17 +6,20 @@ import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'events/drag';
 import translator from 'animation/translator';
 import { DataSource } from 'data/data_source/data_source';
-import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dateSerialization from 'core/utils/date_serialization';
-import { createWrapper, SchedulerTestWrapper, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
+import {
+    createWrapper,
+    SchedulerTestWrapper,
+    isDesktopEnvironment,
+    supportedScrollingModes
+} from '../../helpers/scheduler/helpers.js';
 import dateUtils from 'core/utils/date';
-import ArrayStore from 'data/array_store';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
-const { module, test } = QUnit;
+const { module } = QUnit;
 const toMs = dateUtils.dateToMilliseconds;
 
 QUnit.testStart(function() {
@@ -26,7 +29,7 @@ QUnit.testStart(function() {
             </div>');
 });
 
-['standard', 'virtual'].forEach(scrollingMode => {
+supportedScrollingModes.forEach(scrollingMode => {
     module(`Integration: Recurring Appointments in the ${scrollingMode} scrolling mode`, {
         beforeEach: function() {
             fx.off = true;
@@ -45,7 +48,7 @@ QUnit.testStart(function() {
 
                 const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
                 if(virtualScrollingDispatcher) {
-                    virtualScrollingDispatcher.getRenderTimeout = () => -1;
+                    virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
                 }
 
                 this.scheduler = new SchedulerTestWrapper(this.instance);
@@ -60,61 +63,6 @@ QUnit.testStart(function() {
             this.clock.restore();
         }
     }, function() {
-        if(isDesktopEnvironment()) {
-            test('Key property should be removed in excluded appointment from recurrence(T929772)', function(assert) {
-                const data = [{
-                    id: 1,
-                    text: 'Appointment',
-                    startDate: new Date(2017, 4, 22, 1, 30),
-                    endDate: new Date(2017, 4, 22, 2, 30),
-                    recurrenceRule: 'FREQ=DAILY',
-                }];
-
-                const scheduler = createWrapper({
-                    dataSource: {
-                        store: new ArrayStore({
-                            data: data,
-                            key: 'id'
-                        })
-                    },
-                    views: ['week'],
-                    currentView: 'week',
-                    currentDate: new Date(2017, 4, 22),
-                    onAppointmentAdding: e => {
-                        assert.equal(e.appointmentData.id, undefined, 'key property \'id\' shouldn\'t exist in appointment on onAppointmentAdding event');
-                    },
-                    onAppointmentAdded: e => {
-                        assert.equal(e.appointmentData.id, undefined, 'key property \'id\' shouldn\'t exist in appointment on onAppointmentAdded event');
-                    },
-                    height: 600
-                });
-
-                const appointment = scheduler.appointments.getAppointment(3);
-                const pointer = pointerMock(appointment).start();
-                const offset = appointment.offset();
-
-                pointer
-                    .down(offset.left, offset.top)
-                    .move(0, 100);
-
-                pointer.up();
-
-                scheduler.appointmentPopup.dialog.clickEditAppointment();
-
-                const appointments = scheduler.instance.getDataSource().items();
-                const recurrenceAppointment = appointments[0];
-                const excludedAppointment = appointments[1];
-
-                const expectedDate = new Date(excludedAppointment.startDate);
-                expectedDate.setHours(recurrenceAppointment.startDate.getHours() + 1);
-
-                assert.equal(excludedAppointment.startDate.valueOf(), expectedDate.valueOf(), 'appointment should be shifted down');
-                assert.equal(excludedAppointment.id.length, 36, 'id property should be equal GUID');
-
-                assert.expect(4);
-            });
-        }
-
         QUnit.test('Tasks should be duplicated according to recurrence rule', function(assert) {
             const tasks = [
                 { text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), recurrenceRule: 'FREQ=DAILY;INTERVAL=4' },
@@ -465,6 +413,24 @@ QUnit.testStart(function() {
 
             assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
+        });
+
+        QUnit.test('Appointment shouldn\'t render on view if he is excluded from recurrence', function(assert) {
+            const scheduler = createWrapper({
+                currentDate: new Date(2015, 1, 12),
+                dataSource: [{
+                    text: 'Task 1',
+                    startDate: new Date('2014-02-12T11:00:00.000Z'),
+                    endDate: new Date('2014-02-12T14:00:00.000Z'),
+                    allDay: false,
+                    recurrenceRule: 'FREQ=WEEKLY',
+                    recurrenceException: '20150211T110000Z'
+                }],
+                currentView: 'week',
+                height: 600
+            });
+
+            assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'There are no appointments');
         });
 
         QUnit.test('Updated single item should not have recurrenceException ', function(assert) {
@@ -975,7 +941,7 @@ QUnit.testStart(function() {
                 firstDayOfWeek: 1,
                 editing: true,
                 startDayHour: 3,
-                endDayHour: 10
+                endDayHour: 10,
             });
 
             const updatedItem = {
@@ -989,6 +955,7 @@ QUnit.testStart(function() {
             const pointer = pointerMock($(this.instance.$element()).find('.dx-scheduler-appointment').eq(0)).start().down().move(10, 10);
             $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0).trigger(dragEvents.enter);
             pointer.up();
+
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
 
             const updatedSingleItem = this.instance.option('dataSource').items()[1];
@@ -1263,7 +1230,7 @@ QUnit.testStart(function() {
 
             const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
 
-            assert.equal($reducedAppointment.eq(1).position().left, 0, 'first appt has right left position');
+            assert.roughEqual($reducedAppointment.eq(1).position().left, 0, 0.1, 'first appt has right left position');
         });
 
         QUnit.test('Reduced reccuring appt should have right left position in first column in grouped Month view', function(assert) {
@@ -1293,11 +1260,11 @@ QUnit.testStart(function() {
             const $reducedAppointment = this.instance.$element().find('.dx-scheduler-appointment-reduced');
             const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').outerWidth();
 
-            assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 2.5, 'first appt in 2d group has right left position');
+            assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 4.01, 'first appt in 2d group has right left position');
         });
 
         QUnit.test('Recurrence exception should be adjusted by scheduler timezone', function(assert) {
-            const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-39600000);
+            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
             try {
                 this.createInstance({
                     dataSource: [{
@@ -1355,7 +1322,7 @@ QUnit.testStart(function() {
                 return;
             }
 
-            const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
             try {
                 this.createInstance({
                     dataSource: [{

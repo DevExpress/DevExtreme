@@ -12,7 +12,6 @@ import 'ui/tab_panel';
 import 'ui/text_box';
 import 'ui/tree_view';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import dxDrawer from 'ui/drawer';
@@ -237,20 +236,6 @@ configs.forEach(config => {
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 template: drawerTesters[config.position].template()
-            }));
-
-            this.clock.tick(100);
-            drawer.option('opened', true);
-            this.clock.tick(100);
-
-            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
-        });
-
-        testOrSkip('opened: false -> opened: true, forceTemplateWrapper', () => configIs('overlap', 'right', 'expand'), function(assert) {
-            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
-            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
-                opened: false,
-                template: drawerTesters[config.position].template(true)
             }));
 
             this.clock.tick(100);
@@ -681,5 +666,52 @@ changeOpenedStateModeConfigs.forEach(config => {
 
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
+    });
+});
+
+QUnit.module('Scenarios', {
+    beforeEach() {
+        this.clock = sinon.useFakeTimers();
+        clearStack();
+    },
+    afterEach() {
+        this.clock.restore();
+        this.clock = undefined;
+        clearStack();
+    }
+}, () => {
+    QUnit.test('push, left, opened: false, hidden child, AngularJS, T956751', function(assert) {
+        const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+
+        const drawer = new dxDrawer(drawerElement, {
+            openedStateMode: 'shrink',
+            position: 'left',
+            template: () =>
+                `<div id="template" data-options="dxTemplate: {name: 'chartDrawerTemplate'}" class="dx-template-wrapper ng-scope">
+                    <div style="width: 150px; display: none !important;"></div>
+                    <div style="width: 150px; height: 100px"></div>
+                </div>`,
+            opened: false,
+        });
+
+        this.clock.tick(100);
+        drawerTesters['left'].checkHidden(assert, drawer, drawerElement);
+    });
+
+    QUnit.test('overlay, left, opened: false, Angular, T948509', function(assert) {
+        const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+
+        const drawer = new dxDrawer(drawerElement, {
+            openedStateMode: 'overlap',
+            position: 'left',
+            template: () =>
+                `<div _ngcontent-qhr-c357="" class="dx-template-wrapper">
+                    <div id="template" style="width: 150px; height: 100px"></div>
+                </div>`,
+            opened: false,
+        });
+
+        this.clock.tick(100);
+        drawerTesters['left'].checkHidden(assert, drawer, drawerElement);
     });
 });

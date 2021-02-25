@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
+import { ResourceManager } from 'ui/scheduler/resources/resourceManager';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
 const SCHEDULER_DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
@@ -9,7 +9,6 @@ const SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-b
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const SCHEDULER_DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
@@ -28,11 +27,11 @@ const stubInvokeMethod = function(instance, options) {
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
         if(subscribe === 'createResourcesTree') {
-            return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
+            return new ResourceManager().createResourcesTree(arguments[1]);
         }
         if(subscribe === 'getResourceTreeLeaves') {
             const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
-            return new SchedulerResourcesManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
+            return new ResourceManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
         }
     });
 };
@@ -827,9 +826,9 @@ const testIndicators = function(testCases, $element, assert) {
         const $secondCell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
         const $thirdCell = $element.find('.dx-scheduler-time-panel-cell').eq(10);
 
-        assert.ok($firstCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
+        assert.notOk($firstCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell does not have specific class');
         assert.ok($secondCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
-        assert.notOk($thirdCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell hasn\'t specific class');
+        assert.ok($thirdCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
     });
 
     QUnit.test('DateHeader currentTime cell should have specific class, Week view', function(assert) {

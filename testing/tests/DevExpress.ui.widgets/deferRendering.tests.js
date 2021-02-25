@@ -2,7 +2,6 @@ import $ from 'jquery';
 import TransitionExecutorModule from 'animation/transition_executor/transition_executor';
 import dataUtils from 'core/element_data';
 
-import 'common.css!';
 import 'ui/defer_rendering';
 
 QUnit.testStart(function() {

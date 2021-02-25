@@ -10,12 +10,12 @@ import 'ui/pager';
  * List of registered jQuery widgets which were created only to be used from old DevExtreme code
  */
 const PRIVATE_JQUERY_WIDGETS = [
-    'TooltipItemLayout', 'TimePanelTableLayout',
-    'DayDateTableLayout', 'WeekTableLayout', 'WorkWeekTableLayout',
-    'AllDayPanelLayout', 'AllDayPanelTitle',
+    'TimePanelTableLayout', 'GroupPanel', 'HeaderPanelLayout', 'TimelineHeaderPanelLayout',
+    'DayDateTableLayout', 'WeekTableLayout', 'TimelineDateTableLayout',
+    'AllDayPanelLayout', 'AllDayPanelTitle', 'MonthDateTableLayout',
     'GridPager', 'Scrollable',
 ];
-const INPROGRESS_WIDGETS = ['Widget', 'ScrollView', 'DataGrid'];
+const INPROGRESS_WIDGETS = ['Widget', 'ScrollView', 'DataGrid', 'Bullet'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
 
 const widgetsInBundle = publicWidgets.map(widget => widget.name);

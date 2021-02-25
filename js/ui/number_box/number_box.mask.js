@@ -14,6 +14,7 @@ import { getFormat as getLDMLFormat } from '../../localization/ldml/number';
 import NumberBoxBase from './number_box.base';
 import { addNamespace, getChar, normalizeKeyName } from '../../events/utils/index';
 import { ensureDefined, escapeRegExp } from '../../core/utils/common';
+import { getRealSeparatorIndex, getNthOccurrence, splitByIndex } from './utils';
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';
 const MOVE_FORWARD = 1;
@@ -59,6 +60,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
         });
     },
 
+    _getTextSeparatorIndex: function(text) {
+        const decimalSeparator = number.getDecimalSeparator();
+        const realSeparatorOccurrenceIndex = getRealSeparatorIndex(this.option('format')).occurrence;
+        return getNthOccurrence(text, decimalSeparator, realSeparatorOccurrenceIndex);
+    },
+
     _focusInHandler: function(e) {
         if(!this._preventNestedFocusEvent(e)) {
             this.clearCaretTimeout();
@@ -68,8 +75,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
                 if(caret.start === caret.end && this._useMaskBehavior()) {
                     const text = this._getInputVal();
-                    const decimalSeparator = number.getDecimalSeparator();
-                    const decimalSeparatorIndex = text.indexOf(decimalSeparator);
+                    const decimalSeparatorIndex = this._getTextSeparatorIndex(text);
 
                     if(decimalSeparatorIndex >= 0) {
                         this._caret({ start: decimalSeparatorIndex, end: decimalSeparatorIndex });
@@ -286,18 +292,22 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const formatOption = this.option('format');
         const isCustomParser = isFunction(formatOption.parser);
         const parser = isCustomParser ? formatOption.parser : number.parse;
+        let integerPartStartIndex = 0;
 
         if(!isCustomParser) {
-            const formatPointIndex = format.indexOf('.');
-            const textPointIndex = text.indexOf(number.getDecimalSeparator());
+            const formatPointIndex = getRealSeparatorIndex(format).index;
+            const textPointIndex = this._getTextSeparatorIndex(text);
 
             const formatIntegerPartLength = formatPointIndex !== -1 ? formatPointIndex : format.length;
             const textIntegerPartLength = textPointIndex !== -1 ? textPointIndex : text.length;
 
             if(textIntegerPartLength > formatIntegerPartLength && format.indexOf('#') === -1) {
-                text = text.substr(textIntegerPartLength - formatIntegerPartLength);
+                integerPartStartIndex = textIntegerPartLength - formatIntegerPartLength;
             }
         }
+
+        text = this._removeStubs(text, true);
+        text = text.substr(integerPartStartIndex);
 
         return parser(text, format);
     },
@@ -421,8 +431,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _getParsedValue: function(text, format) {
         const sign = number.getSign(text, format?.formatter || format);
-        const textWithoutStubs = this._removeStubs(text, true);
-        const parsedValue = this._parse(textWithoutStubs, format);
+        const parsedValue = this._parse(text, format);
         const parsedValueSign = parsedValue < 0 ? -1 : 1;
         const parsedValueWithSign = isNumeric(parsedValue) && sign !== parsedValueSign ? sign * parsedValue : parsedValue;
 
@@ -436,7 +445,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
         const caret = this._caret();
         const point = number.getDecimalSeparator();
-        const pointIndex = text.indexOf(point);
+        const pointIndex = this._getTextSeparatorIndex(text);
         const isCaretOnFloat = pointIndex >= 0 && pointIndex < caret.start;
         const textParts = this._removeStubs(text, true).split(point);
 
@@ -579,8 +588,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
-    _isNonStubAfter: function(index, text) {
-        text = (text || this._getInputVal()).slice(index);
+    _isNonStubAfter: function(index) {
+        const text = this._getInputVal().slice(index);
         return text && !this._isStub(text, true);
     },
 
@@ -602,7 +611,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _getPrecisionLimits: function(text) {
         const currentFormat = this._getFormatForSign(text);
-        const floatPart = (currentFormat.split('.')[1] || '').replace(/[^#0]/g, '');
+        const realSeparatorIndex = getRealSeparatorIndex(currentFormat).index;
+        const floatPart = (splitByIndex(currentFormat, realSeparatorIndex)[1] || '').replace(/[^#0]/g, '');
         const minPrecision = floatPart.replace(/^(0*)#*/, '$1').length;
         const maxPrecision = floatPart.length;
 

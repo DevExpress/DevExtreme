@@ -756,7 +756,8 @@
 
         const eventMock = function(type, options) {
             options = $.extend({
-                type: type
+                type: type,
+                target: $element.get(0)
             }, options);
 
             if(type.indexOf('touch') > -1) {
@@ -961,12 +962,11 @@
                 return this;
             },
 
-            wheel: function(d, shiftKey, deltaMode) {
-                triggerEvent('wheel', {
+            wheel: function(d, args) {
+                triggerEvent('wheel', $.extend({
                     deltaY: -d,
-                    deltaMode: deltaMode || 0,
-                    shiftKey: shiftKey
-                });
+                    deltaMode: 0
+                }, args));
 
                 triggerEvent('scroll');
                 return this;

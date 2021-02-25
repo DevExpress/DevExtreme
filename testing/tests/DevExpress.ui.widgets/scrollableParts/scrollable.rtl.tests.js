@@ -1,5 +1,4 @@
 import animationFrame from 'animation/frame';
-import 'common.css!';
 import 'generic_light.css!';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';

@@ -7,7 +7,6 @@ QUnit.testStart(function() {
             </div>');
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/scheduler/ui.scheduler';
@@ -26,8 +25,8 @@ import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
 import dragEvents from 'events/drag';
 import { DataSource } from 'data/data_source/data_source';
-import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dataUtils from 'core/element_data';
+import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
@@ -301,7 +300,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
     });
 
     QUnit.test('Recurring appointments should be rendered correctly with a custom timezone(T385377)', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
 
         try {
             this.createInstance({
@@ -333,7 +332,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
     });
 
     QUnit.test('Appointments should have correctly height with a custom timezone(T387561)', function(assert) {
-        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
 
         try {
             this.createInstance({

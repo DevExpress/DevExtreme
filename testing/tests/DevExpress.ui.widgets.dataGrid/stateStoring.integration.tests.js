@@ -412,4 +412,33 @@ QUnit.module('State storing', baseModuleConfig, () => {
         const rows = dataGrid.getVisibleRows();
         assert.equal(rows.length, 1, 'row was added');
     });
+
+    // T957592
+    QUnit.test('No exceptions on an attempt to set focusedRowKey to null in the customLoad callback when the focusedRowIndex value is specified', function(assert) {
+        // arrange, act
+        try {
+            const dataGrid = createDataGrid({
+                dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
+                keyExpr: 'id',
+                focusedRowEnabled: true,
+                focusedRowIndex: 0,
+                stateStoring: {
+                    enabled: true,
+                    type: 'custom',
+                    customLoad: function() {
+                        return { focusedRowKey: null };
+                    },
+                    customSave: function() {
+                    }
+                },
+                loadingTimeout: null
+            });
+            this.clock.tick();
+
+            assert.strictEqual(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
+            assert.strictEqual(dataGrid.option('focusedRowKey'), null, 'focusedRowKey');
+        } catch(e) {
+            assert.ok(false, 'the error is thrown');
+        }
+    });
 });

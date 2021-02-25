@@ -5,11 +5,15 @@ import { getBoundingRect } from '../../../core/utils/position';
 import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 import dateUtils from '../../../core/utils/date';
-import tableCreatorModule from '../ui.scheduler.table_creator';
+import tableCreatorModule from '../table_creator';
 const { tableCreator } = tableCreatorModule;
 import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
+import { HEADER_CURRENT_TIME_CELL_CLASS } from '../constants';
 
 import timeZoneUtils from '../utils.timeZone';
+
+import dxrTimelineDateTableLayout from '../../../renovation/ui/scheduler/workspaces/timeline/date_table/layout.j';
+import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -26,6 +30,12 @@ const DATE_TABLE_HEADER_MARGIN = 10;
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimeline extends SchedulerWorkSpace {
+    get verticalGroupTableClass() { return GROUP_TABLE_CLASS; }
+
+    get viewDirection() { return 'horizontal'; }
+
+    get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
+
     _init() {
         super._init();
 
@@ -254,18 +264,28 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _renderView() {
         this._setFirstViewDate();
-        const groupCellTemplates = this._renderGroupHeader();
-        this._renderDateHeader();
+        let groupCellTemplates;
+        if(!this.isRenovatedRender()) {
+            groupCellTemplates = this._renderGroupHeader();
+        }
 
-        this._renderAllDayPanel();
-        this._renderTimePanel();
-        this._renderDateTable();
+        if(this.isRenovatedRender()) {
+            this.renderRWorkspace();
+        } else {
+            this._renderDateHeader();
+            this._renderTimePanel();
+            this._renderDateTable();
+            this._renderAllDayPanel();
+        }
 
         this._shader = new HorizontalShader(this);
 
-        this._updateGroupTableHeight();
-
         this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
+
+        if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+            this.renderRGroupPanel();
+        }
+
         this._applyCellTemplates(groupCellTemplates);
     }
 
@@ -334,30 +354,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return false;
     }
 
-    _isCurrentTimeHeaderCell(headerIndex) {
-        let result = false;
-
-        if(this.isIndicationOnView()) {
-            let date = this._getDateByIndex(headerIndex);
-
-            const now = this._getToday();
-            date = new Date(date);
-
-            if(dateUtils.sameDate(now, date)) {
-                const startCellDate = new Date(date);
-                let endCellDate = new Date(date);
-                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
-
-                result = dateUtils.dateInRange(now, startCellDate, endCellDate);
-            }
-        }
-
-        return result;
-    }
-
-    _cleanView() {
-        super._cleanView();
-        this._$sidebarTable.empty();
+    _isCurrentTimeHeaderCell() {
+        return false;
     }
 
     _visibilityChanged(visible) {
@@ -379,6 +377,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         this._$dateTable.height(height);
 
         super._setTableSizes();
+
+        this.virtualScrollingDispatcher?.updateDimensions();
     }
 
     _getWorkSpaceMinHeight() {
@@ -576,6 +576,82 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getRowCountWithAllDayRows() {
         return this._getRowCount();
+    }
+
+    _setCurrentTimeCells() {
+        const timePanelCells = this._getTimePanelCells();
+        const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+        currentTimeCellIndices.forEach((timePanelCellIndex) => {
+            timePanelCells.eq(timePanelCellIndex)
+                .addClass(HEADER_CURRENT_TIME_CELL_CLASS);
+        });
+    }
+
+    _cleanCurrentTimeCells() {
+        this.$element()
+            .find(`.${HEADER_CURRENT_TIME_CELL_CLASS}`)
+            .removeClass(HEADER_CURRENT_TIME_CELL_CLASS);
+    }
+
+    _getTimePanelCells() {
+        return this.$element()
+            .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
+    }
+
+    _getCurrentTimePanelCellIndices() {
+        const columnCountPerGroup = this._getCellCount();
+        const today = this._getToday();
+        const index = this.getCellIndexByDate(today);
+        const { cellIndex: currentTimeCellIndex } = this._getCellCoordinatesByIndex(index);
+
+        if(currentTimeCellIndex === undefined) {
+            return [];
+        }
+
+        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+            ? this._getGroupCount()
+            : 1;
+
+        return [...(new Array(horizontalGroupCount))]
+            .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeCellIndex);
+    }
+
+    renovatedRenderSupported() { return true; }
+
+    renderRAllDayPanel() {}
+
+    renderRTimeTable() {}
+
+    renderRDateTable() {
+        this.renderRComponent(
+            this._$dateTable,
+            dxrTimelineDateTableLayout,
+            'renovatedDateTable',
+            {
+                viewData: this.viewDataProvider.viewData,
+                dataCellTemplate: this.option('dataCellTemplate'),
+            }
+        );
+    }
+
+    generateRenderOptions() {
+        const options = super.generateRenderOptions();
+
+        const groupCount = this._getGroupCount();
+        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+            ? groupCount
+            : 1;
+
+        const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
+        const daysInView = cellsInGroup * horizontalGroupCount;
+
+        return {
+            ...options,
+            isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
+            getWeekDaysHeaderText: this._formatWeekdayAndDay.bind(this),
+            daysInView,
+            cellCountInDay: this._getCellCountInDay(),
+        };
     }
 }
 

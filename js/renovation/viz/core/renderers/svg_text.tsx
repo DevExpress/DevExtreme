@@ -8,6 +8,8 @@ import {
   OneWay,
   Effect,
   Ref,
+  RefObject,
+  Consumer,
 } from 'devextreme-generator/component_declaration/common';
 import { LabelAlignment } from './types.d';
 import SvgGraphicsProps from './base_graphics_props';
@@ -21,23 +23,25 @@ import {
   getItemLineHeight,
   getLineHeight,
   convertAlignmentToAnchor,
-  applyGraphicProps,
+  getGraphicExtraProps,
 } from './utils';
 import { isDefined } from '../../../../core/utils/type';
+import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const KEY_STROKE = 'stroke';
 
 export const viewFunction = ({
   textRef, textItems,
   styles, textAnchor, isStroked,
-  props: {
-    text, x, y, fill, stroke, strokeWidth, strokeOpacity, opacity,
-  },
+  computedProps,
 }: TextSvgElement): JSX.Element => {
   const texts = textItems || [];
+  const {
+    text, x, y, fill, stroke, strokeWidth, strokeOpacity, opacity,
+  } = computedProps;
   return (
     <text
-      ref={textRef as any}
+      ref={textRef}
       x={x}
       y={y}
       style={styles}
@@ -47,6 +51,8 @@ export const viewFunction = ({
       strokeWidth={strokeWidth}
       strokeOpacity={strokeOpacity}
       opacity={opacity}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...getGraphicExtraProps(computedProps, x, y)}
     >
       {texts.length ? isStroked && texts.map(({ style, className, value }, index) => (
         <tspan key={index} style={style} className={className}>{value}</tspan>
@@ -61,7 +67,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class TextSvgElementProps extends SvgGraphicsProps {
-  @OneWay() text = '';
+  @OneWay() text?: string | null = '';
 
   @OneWay() x = 0;
 
@@ -74,8 +80,6 @@ export class TextSvgElementProps extends SvgGraphicsProps {
   @OneWay() styles?: { [key: string]: any };
 
   @OneWay() encodeHtml = true;
-
-  @OneWay() rtl = false;
 }
 
 @Component({
@@ -84,7 +88,10 @@ export class TextSvgElementProps extends SvgGraphicsProps {
   isSVG: true,
 })
 export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
-  @Ref() textRef!: SVGGraphicsElement;
+  @Ref() textRef!: RefObject<SVGTextElement>;
+
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
 
   get styles(): { [key: string]: any } {
     const style = this.props.styles || {};
@@ -120,7 +127,12 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   }
 
   get textAnchor(): string | undefined {
-    return convertAlignmentToAnchor(this.props.align, this.props.rtl);
+    return convertAlignmentToAnchor(this.props.align, this.config?.rtlEnabled);
+  }
+
+  // https://trello.com/c/rc9RQJ2y
+  get computedProps(): TextSvgElementProps {
+    return this.props;
   }
 
   @Effect()
@@ -130,7 +142,6 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
       const items = this.parseTspanElements(texts);
 
       this.alignTextNodes(items);
-      applyGraphicProps(this.textRef, this.props as SvgGraphicsProps, this.props.x, this.props.y);
       if (this.props.x !== undefined || this.props.y !== undefined) {
         this.locateTextNodes(items);
       }
@@ -140,7 +151,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
 
   parseTspanElements(texts: TextItem[]): TextItem[] {
     const items = [...texts];
-    const textElements = this.textRef.children;
+    const textElements = this.textRef.current!.children;
 
     const strokeLength = !this.isStroked ? 0 : items.length;
     for (let i = 0; i < textElements.length; i++) {
@@ -182,7 +193,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
     setTextNodeAttribute(item, 'y', y);
     for (let i = 1, ii = items.length; i < ii; ++i) {
       item = items[i];
-      if (item.height >= 0) {
+      if (isDefined(item.height) && item.height >= 0) {
         setTextNodeAttribute(item, 'x', x);
         const height = getItemLineHeight(item, lineHeight);
         setTextNodeAttribute(item, 'dy', height); // T177039

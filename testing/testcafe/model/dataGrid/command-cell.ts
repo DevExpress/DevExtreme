@@ -18,14 +18,14 @@ export default class CommandCell extends FocusableElement {
   isHidden: Promise<boolean>;
 
   constructor(dataRow: Selector, index: number, widgetName: string) {
-    const childrenSelector = `td:nth-child(${index + 1})`;
+    const childrenSelector = `td[aria-colindex='${index + 1}']`;
     const commandSelector = `${childrenSelector}.${CLASS.commandEdit}, ${childrenSelector}.${CLASS.commandSelect}, ${childrenSelector}.${CLASS.commandExpand}, ${childrenSelector}.${CLASS.commandAdaptive}`;
     super(dataRow.find(commandSelector));
     this.isFocused = this.element.hasClass(CLASS.focused);
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
   }
 
-  getButton(index: number) {
+  getButton(index: number): Selector {
     return this.element.find(`.${CLASS.commandLink}:nth-child(${index + 1})`);
   }
 

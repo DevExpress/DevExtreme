@@ -1,6 +1,11 @@
 import ViewDataProvider from 'ui/scheduler/workspaces/view_data_provider';
 
-const { test, module } = QUnit;
+const {
+    test,
+    module
+} = QUnit;
+
+QUnit.dump.maxDepth = 10;
 
 const testViewDataMap = {
     horizontalGrouping: [[
@@ -137,179 +142,553 @@ const testViewDataMap = {
     ]]
 };
 
+const testHeaderDataMap = {
+    horizontalGrouping: [testViewDataMap.horizontalGrouping[0]],
+    verticalGrouping: [testViewDataMap.verticalGrouping[1]],
+};
+
 const verticalWorkSpaceMock = {
     generateRenderOptions: () => ({
         startRowIndex: 0,
+        startCellIndex: 0,
         rowCount: 4,
+        cellCount: 2,
         topVirtualRowHeight: undefined,
         bottomVirtualRowHeight: undefined,
         cellCountInGroupRow: undefined,
         groupOrientation: 'vertical'
     }),
     _isVerticalGroupedWorkSpace: () => true,
-    _isShowAllDayPanel: () => true,
+    isAllDayPanelVisible: true,
     isGroupedAllDayPanel: () => true,
     isVirtualScrolling: () => false,
+    isDateAndTimeView: true
 };
 const horizontalWorkSpaceMock = {
     generateRenderOptions: () => ({
         startRowIndex: 0,
+        startCellIndex: 0,
         rowCount: 2,
+        cellCount: 4,
         topVirtualRowHeight: undefined,
         bottomVirtualRowHeight: undefined,
         cellCountInGroupRow: undefined,
         groupOrientation: 'horizontal'
     }),
     _isVerticalGroupedWorkSpace: () => false,
-    _isShowAllDayPanel: () => true,
+    isAllDayPanelVisible: true,
     isGroupedAllDayPanel: () => false,
     isVirtualScrolling: () => false,
+    isDateAndTimeView: true
 };
 
-module('View Data Provider', () => {
-    module('API', {
-        beforeEach: function() {
-            this.viewDataProvider = new ViewDataProvider(verticalWorkSpaceMock);
+const createViewDataProvider = ({
+    workspaceMock = verticalWorkSpaceMock,
+    completeViewDataMap = testViewDataMap.verticalGrouping,
+    completeDateHeaderMap = testHeaderDataMap.verticalGrouping,
+    completeTimePanelMap = [],
+}) => {
+    const viewDataProvider = new ViewDataProvider(workspaceMock);
 
-            this.viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+    viewDataProvider.completeViewDataMap = completeViewDataMap;
+    viewDataProvider.completeDateHeaderMap = completeDateHeaderMap;
+    viewDataProvider.completeTimePanelMap = completeTimePanelMap;
 
-            this.viewDataProvider.update(false);
-        }
-    }, () => {
-        test('getStartDate', function(assert) {
-            const startDate = this.viewDataProvider.getStartDate();
+    viewDataProvider.update(false);
 
-            assert.deepEqual(startDate, new Date(2020, 7, 24), 'Start date is correct');
-        });
+    return viewDataProvider;
+};
 
-        test('getGroupStartDate', function(assert) {
-            const group2StartDate = this.viewDataProvider.getGroupStartDate(2);
+module('View Data Provider', {
+    beforeEach: function() {
+        this.init = groupOrientation => {
+            if(groupOrientation === 'vertical') {
+                this.viewDataProvider = createViewDataProvider({
+                    workspaceMock: verticalWorkSpaceMock,
+                    completeViewDataMap: testViewDataMap.verticalGrouping,
+                    completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
+                    completeTimePanelMap: [],
+                });
+            } else if(groupOrientation === 'horizontal') {
+                this.viewDataProvider = createViewDataProvider({
+                    workspaceMock: horizontalWorkSpaceMock,
+                    completeViewDataMap: testViewDataMap.horizontalGrouping,
+                    completeDateHeaderMap: testHeaderDataMap.horizontalGrouping,
+                    completeTimePanelMap: [],
+                });
+            }
 
-            assert.deepEqual(group2StartDate, new Date(2020, 7, 24), 'Group 2 start date is correct');
+            return this.viewDataProvider;
+        };
+    }
+}, () => {
+    module('API', () => {
+        module('Vertical grouping', {
+            beforeEach: function() {
+                this.init('vertical');
+            }
+        }, () => {
+            test('getStartDate', function(assert) {
+                const startDate = this.viewDataProvider.getStartDate();
 
-            const group3StartDate = this.viewDataProvider.getGroupStartDate(3);
+                assert.deepEqual(startDate, new Date(2020, 7, 24), 'Start date is correct');
+            });
 
-            assert.deepEqual(group3StartDate, new Date(2020, 7, 24, 1), 'Group 3 start date is correct');
-        });
+            test('getGroupStartDate', function(assert) {
+                const group2StartDate = this.viewDataProvider.getGroupStartDate(2);
 
-        test('getGroupEndDate', function(assert) {
-            const group2EndDate = this.viewDataProvider.getGroupEndDate(2);
+                assert.deepEqual(group2StartDate, new Date(2020, 7, 24), 'Group 2 start date is correct');
 
-            assert.deepEqual(group2EndDate, new Date(2020, 7, 25, 0, 30), 'Group 2 end date is correct');
+                const group3StartDate = this.viewDataProvider.getGroupStartDate(3);
 
-            const group3EndDate = this.viewDataProvider.getGroupEndDate(3);
+                assert.deepEqual(group3StartDate, new Date(2020, 7, 24, 1), 'Group 3 start date is correct');
+            });
 
-            assert.deepEqual(group3EndDate, new Date(2020, 7, 25, 1, 30), 'Group 3 end date is correct');
-        });
+            test('getGroupEndDate', function(assert) {
+                const group2EndDate = this.viewDataProvider.getGroupEndDate(2);
 
-        module('findGroupCellStartDate', function() {
+                assert.deepEqual(group2EndDate, new Date(2020, 7, 25, 0, 30), 'Group 2 end date is correct');
 
-            test('Simple appointments', function(assert) {
+                const group3EndDate = this.viewDataProvider.getGroupEndDate(3);
+
+                assert.deepEqual(group3EndDate, new Date(2020, 7, 25, 1, 30), 'Group 3 end date is correct');
+            });
+
+            test('getCellsGroup', function(assert) {
+                const group2Info = this.viewDataProvider.getCellsGroup(2);
+
+                assert.deepEqual(group2Info, 'group_2', 'Group 2 cells group is correct');
+
+                const group3Info = this.viewDataProvider.getCellsGroup(3);
+
+                assert.deepEqual(group3Info, 'group_3', 'Group 3 cells group is correct');
+            });
+
+            test('getGroupIndices', function(assert) {
+                const groupIndices = this.viewDataProvider.getGroupIndices();
+
+                assert.deepEqual(groupIndices, [2, 3], 'Indices are correct');
+            });
+
+            test('getLasGroupCellPosition', function(assert) {
                 assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
-                    new Date(2020, 7, 24),
-                    'Group 2 cell 0 start date is correct'
+                    this.viewDataProvider.getLasGroupCellPosition(2),
+                    { rowIndex: 1, cellIndex: 1 },
+                    'Last position for the group 2 is correct'
                 );
 
                 assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
-                    new Date(2020, 7, 25),
-                    'Group 2 cell 1 start date is correct'
-                );
-
-                assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22)),
-                    new Date(2020, 7, 24, 1),
-                    'Group 3 cell 0 start date is correct'
-                );
-
-                assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
-                    new Date(2020, 7, 25, 1),
-                    'Group 3 cell 1 start date is correct'
+                    this.viewDataProvider.getLasGroupCellPosition(3),
+                    { rowIndex: 3, cellIndex: 1 },
+                    'Last position for the group 3 is correct'
                 );
             });
 
-            test('AllDay appointments', function(assert) {
+            test('getRowCountInGroup', function(assert) {
                 assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
-                    new Date(2020, 7, 25, 0, 11),
-                    'Group 2 cell 1 allDay start date is correct'
+                    this.viewDataProvider.getRowCountInGroup(2),
+                    1,
+                    'Row count in group 2 is correct'
                 );
 
                 assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
-                    new Date(2020, 7, 25, 0, 11),
-                    'Group 2 cell 1 allDay start date is correct'
+                    this.viewDataProvider.getRowCountInGroup(3),
+                    1,
+                    'Row count in group 3 is correct'
                 );
+            });
+
+            test('getCompletedGroupsInfo', function(assert) {
+                const completeViewDataMap = [
+                    [
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 24),
+                            endDate: new Date(2020, 7, 24),
+                            groups: 'group_2',
+                            groupIndex: 2,
+                            index: 0
+                        },
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 25),
+                            endDate: new Date(2020, 7, 25),
+                            groups: 'group_2',
+                            groupIndex: 2,
+                            index: 1
+                        }
+                    ],
+                    [
+                        {
+                            allDay: false,
+                            startDate: new Date(2020, 7, 24, 0, 0),
+                            endDate: new Date(2020, 7, 24, 0, 30),
+                            groups: 'group_2',
+                            groupIndex: 2,
+                            index: 0
+                        },
+                        {
+                            allDay: false,
+                            startDate: new Date(2020, 7, 25, 0, 0),
+                            endDate: new Date(2020, 7, 25, 0, 30),
+                            groups: 'group_2',
+                            groupIndex: 2,
+                            index: 1
+                        }
+                    ],
+                    [
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 24),
+                            endDate: new Date(2020, 7, 24),
+                            groups: 'group_3',
+                            groupIndex: 3,
+                            index: 0
+                        },
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 25),
+                            endDate: new Date(2020, 7, 25),
+                            groups: 'group_3',
+                            groupIndex: 3,
+                            index: 1
+                        }
+                    ],
+                    [
+                        {
+                            allDay: false,
+                            startDate: new Date(2020, 7, 24, 1, 0),
+                            endDate: new Date(2020, 7, 24, 1, 30),
+                            groups: 'group_3',
+                            groupIndex: 3,
+                            index: 0
+                        },
+                        {
+                            allDay: false,
+                            startDate: new Date(2020, 7, 25, 1, 0),
+                            endDate: new Date(2020, 7, 25, 1, 30),
+                            groups: 'group_3',
+                            groupIndex: 3,
+                            index: 1
+                        }
+                    ],
+                    [
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 24),
+                            endDate: new Date(2020, 7, 24),
+                            groups: 'group_4',
+                            groupIndex: 4,
+                            index: 0
+                        },
+                        {
+                            allDay: true,
+                            startDate: new Date(2020, 7, 25),
+                            endDate: new Date(2020, 7, 25),
+                            groups: 'group_4',
+                            groupIndex: 4,
+                            index: 1
+                        }
+                    ]
+                ];
+
+                const completeDateHeaderMap = [completeViewDataMap[3]];
+                const workspaceMock = {
+                    ...verticalWorkSpaceMock,
+                    generateRenderOptions: () => {
+                        return {
+                            ...verticalWorkSpaceMock.generateRenderOptions(),
+                            rowCount: 5,
+                        };
+                    }
+                };
+                const viewDataProvider = createViewDataProvider({
+                    workspaceMock,
+                    completeViewDataMap,
+                    completeDateHeaderMap,
+                    completeTimePanelMap: [],
+                });
+
+                const groupsInfo = viewDataProvider.getCompletedGroupsInfo();
 
                 assert.deepEqual(
-                    this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 23, 0, 11), new Date(2020, 7, 26, 1, 30), true),
-                    new Date(2020, 7, 24),
-                    'Group 2 cell 1 allDay start date is correct when startDate is out of view'
+                    groupsInfo,
+                    [
+                        {
+                            allDay: true,
+                            startDate: testViewDataMap.verticalGrouping[1][0].startDate,
+                            endDate: testViewDataMap.verticalGrouping[1][1].endDate,
+                            groupIndex: 2
+                        },
+                        {
+                            allDay: true,
+                            startDate: testViewDataMap.verticalGrouping[3][0].startDate,
+                            endDate: testViewDataMap.verticalGrouping[3][1].endDate,
+                            groupIndex: 3
+                        }
+                    ],
+                    'Groups info is correct'
                 );
             });
         });
 
-        test('getCellsGroup', function(assert) {
-            const group2Info = this.viewDataProvider.getCellsGroup(2);
+        module('getGroupData', () => {
+            module('Vertical grouping', {
+                beforeEach: function() {
+                    this.init('vertical');
+                }
+            }, () => {
+                [
+                    {
+                        groupIndex: 2,
+                        allDayPanelIndex: 0,
+                        dateTableIndex: 1
+                    },
+                    {
+                        groupIndex: 3,
+                        allDayPanelIndex: 2,
+                        dateTableIndex: 3
+                    }
+                ].forEach(({ groupIndex, allDayPanelIndex, dateTableIndex }) => {
+                    test(`getGroupData if groupIndex=${groupIndex}`, function(assert) {
+                        const groupData = this.viewDataProvider.getGroupData(groupIndex);
 
-            assert.deepEqual(group2Info, 'group_2', 'Group 2 cells group is correct');
+                        assert.deepEqual(
+                            groupData,
+                            {
+                                allDayPanel: testViewDataMap.verticalGrouping[allDayPanelIndex],
+                                dateTable: [testViewDataMap.verticalGrouping[dateTableIndex]],
+                                groupIndex,
+                                isGroupedAllDayPanel: true
+                            },
+                            'Group data is coorect'
+                        );
+                    });
+                });
+            });
 
-            const group3Info = this.viewDataProvider.getCellsGroup(3);
+            module('Horizontal grouping', {
+                beforeEach: function() {
+                    this.init('horizontal');
+                }
+            }, () => {
+                [
+                    {
+                        groupIndex: 2,
+                        allDayPanelIndex: 0,
+                        dateTableIndex: 0
+                    },
+                    {
+                        groupIndex: 3,
+                        allDayPanelIndex: 2,
+                        dateTableIndex: 2
+                    }
+                ].forEach(({ groupIndex, allDayPanelIndex, dateTableIndex }) => {
+                    test(`getGroupData if groupIndex=${groupIndex}`, function(assert) {
+                        const groupData = this.viewDataProvider.getGroupData(groupIndex);
+                        const { horizontalGrouping: testData } = testViewDataMap;
 
-            assert.deepEqual(group3Info, 'group_3', 'Group 3 cells group is correct');
+                        assert.deepEqual(
+                            groupData,
+                            {
+                                allDayPanel: [testData[0][allDayPanelIndex], testData[0][allDayPanelIndex + 1]],
+                                dateTable: [[testData[1][dateTableIndex], testData[1][dateTableIndex + 1]]]
+                            },
+                            'Group data is coorect'
+                        );
+                    });
+                });
+            });
         });
 
-        test('getGroupIndices', function(assert) {
-            const groupIndices = this.viewDataProvider.getGroupIndices();
+        module('getAllDayPanel', () => {
+            module('Vertical grouping', {
+                beforeEach: function() {
+                    this.init('vertical');
+                }
+            }, () => {
+                [
+                    {
+                        groupIndex: 2,
+                        allDayPanelIndex: 0
+                    },
+                    {
+                        groupIndex: 3,
+                        allDayPanelIndex: 2
+                    }
+                ].forEach(({ groupIndex, allDayPanelIndex }) => {
+                    test(`it should return allDayPanel data correctly if groupIndex=${groupIndex}`, function(assert) {
+                        const allDayPanel = this.viewDataProvider.getAllDayPanel(groupIndex);
 
-            assert.deepEqual(groupIndices, [2, 3], 'Indices are correct');
+                        assert.deepEqual(
+                            allDayPanel,
+                            testViewDataMap.verticalGrouping[allDayPanelIndex],
+                            'All day panel is correct'
+                        );
+                    });
+                });
+            });
+
+            module('Horizontal grouping', {
+                beforeEach: function() {
+                    this.init('horizontal');
+                }
+            }, () => {
+                [
+                    {
+                        groupIndex: 2,
+                        allDayPanelIndex: 0
+                    },
+                    {
+                        groupIndex: 3,
+                        allDayPanelIndex: 2
+                    }
+                ].forEach(({ groupIndex, allDayPanelIndex }) => {
+                    test(`it should return allDayPanel data correctly if groupIndex=${groupIndex}`, function(assert) {
+                        const allDayPanel = this.viewDataProvider.getAllDayPanel(groupIndex);
+                        const testData = testViewDataMap.horizontalGrouping;
+
+                        assert.deepEqual(
+                            allDayPanel,
+                            [
+                                testData[0][allDayPanelIndex],
+                                testData[0][allDayPanelIndex + 1]
+                            ],
+                            'All day panel is correct'
+                        );
+                    });
+                });
+            });
         });
 
-        test('getLasGroupCellPosition', function(assert) {
-            assert.deepEqual(
-                this.viewDataProvider.getLasGroupCellPosition(2),
-                { rowIndex: 1, cellIndex: 0 },
-                'Last position for the group 2 is correct'
-            );
+        module('findGroupCellStartDate', {
+            beforeEach: function() {
+                this.init('vertical');
+            }
+        }, function() {
+            module('Date and time views', () => {
+                test('it should return correct cell start date', function(assert) {
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
+                        new Date(2020, 7, 24),
+                        'Group 2 cell 0 start date is correct'
+                    );
 
-            assert.deepEqual(
-                this.viewDataProvider.getLasGroupCellPosition(3),
-                { rowIndex: 3, cellIndex: 0 },
-                'Last position for the group 3 is correct'
-            );
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
+                        new Date(2020, 7, 25),
+                        'Group 2 cell 1 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22)),
+                        new Date(2020, 7, 24, 1),
+                        'Group 3 cell 0 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
+                        new Date(2020, 7, 25, 1),
+                        'Group 3 cell 1 start date is correct'
+                    );
+                });
+
+                test('it should return correct all day cell start date', function(assert) {
+                    this.init('vertical');
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 25, 0, 11),
+                        'Group 2 cell 1 allDay start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 25, 0, 11),
+                        'Group 2 cell 1 allDay start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 23, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 24),
+                        'Group 2 cell 1 allDay start date is correct when startDate is out of view'
+                    );
+                });
+            });
+
+            module('Date views', () => {
+                const workSpaceMock = {
+                    ...verticalWorkSpaceMock,
+                    isDateAndTimeView: false
+                };
+
+                test('it should return correct cell start date', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: workSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping
+                    });
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
+                        new Date(2020, 7, 24, 0),
+                        'Group 2 cell 0 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
+                        new Date(2020, 7, 25, 0),
+                        'Group 2 cell 1 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22)),
+                        new Date(2020, 7, 24, 1),
+                        'Group 3 cell 0 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
+                        new Date(2020, 7, 25, 1),
+                        'Group 3 cell 1 start date is correct'
+                    );
+                });
+
+
+                test('it should return correct all day cell start date', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: workSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping
+                    });
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 25, 0, 11),
+                        'Group 2 cell 1 allDay start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 25, 0, 11),
+                        'Group 2 cell 1 allDay start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 23, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                        new Date(2020, 7, 24),
+                        'Group 2 cell 1 allDay start date is correct when startDate is out of view'
+                    );
+                });
+
+            });
         });
 
-        test('getLasGroupCellIndex', function(assert) {
-            assert.deepEqual(
-                this.viewDataProvider.getLasGroupCellPosition(2),
-                { rowIndex: 1, cellIndex: 0 },
-                'Last position for the group 2 is correct'
-            );
-
-            assert.deepEqual(
-                this.viewDataProvider.getLasGroupCellPosition(3),
-                { rowIndex: 3, cellIndex: 0 },
-                'Last position for the group 3 is correct'
-            );
-        });
-
-        test('getRowCountInGroup', function(assert) {
-            assert.deepEqual(
-                this.viewDataProvider.getRowCountInGroup(2),
-                1,
-                'Row count in group 2 is correct'
-            );
-
-            assert.deepEqual(
-                this.viewDataProvider.getRowCountInGroup(3),
-                1,
-                'Row count in group 3 is correct'
-            );
-        });
-
-        module('getCellData', function() {
+        module('getCellData', {
+            beforeEach: function() {
+                this.init('vertical');
+            }
+        }, function() {
             test('Cell data of the allDayPanel', function(assert) {
                 assert.deepEqual(
                     this.viewDataProvider.getCellData(0, 0),
@@ -380,261 +759,773 @@ module('View Data Provider', () => {
             });
         });
 
-        module('findCellPositionInMap', function() {
-            module('Vertical Grouping', function() {
-                test('Should return correct cell position for the allDay cell date', function(assert) {
-                    const { viewDataProvider } = this;
+        module('findCellPositionInMap', {
+            beforeEach: function() {
+                this.init('vertical');
+            }
+        }, function() {
+            module('Date and time views', () => {
+                module('Vertical Grouping', function() {
+                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                        const { viewDataProvider } = this;
 
-                    let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
-                    assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
+                        let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
 
-                    position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
-                    assert.deepEqual(position, { rowIndex: 2, cellIndex: 0 }, '2nd allDayPanel cell position is correct');
+                        position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 2, cellIndex: 0 }, '2nd allDayPanel cell position is correct');
+                    });
+
+                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                        const { viewDataProvider } = this;
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24)),
+                            { rowIndex: 1, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29)),
+                            { rowIndex: 1, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1)),
+                            { rowIndex: 3, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29)),
+                            { rowIndex: 3, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+                    });
                 });
 
-                test('Should return correct cell position for the not allDay cell date', function(assert) {
-                    const { viewDataProvider } = this;
+                module('Horizontal Grouping', {
+                    beforeEach: function() {
+                        this.init('horizontal');
+                    }
+                }, function() {
+                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                        const { viewDataProvider } = this;
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24)),
-                        { rowIndex: 1, cellIndex: 0 },
-                        '1st cell position is correct'
-                    );
+                        let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29)),
-                        { rowIndex: 1, cellIndex: 0 },
-                        '1st cell position is correct'
-                    );
+                        position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 2 }, '2nd allDayPanel cell position is correct');
+                    });
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1)),
-                        { rowIndex: 3, cellIndex: 0 },
-                        '2nd cell position is correct'
-                    );
+                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                        const { viewDataProvider } = this;
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29)),
-                        { rowIndex: 3, cellIndex: 0 },
-                        '2nd cell position is correct'
-                    );
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), false),
+                            { rowIndex: 0, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29), false),
+                            { rowIndex: 0, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1), false),
+                            { rowIndex: 0, cellIndex: 2 },
+                            '2nd cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29), false),
+                            { rowIndex: 0, cellIndex: 2 },
+                            '2nd cell position is correct'
+                        );
+                    });
                 });
             });
 
-            module('Horizontal Grouping', {
-                before: function() {
-                    this.viewDataProvider = new ViewDataProvider(horizontalWorkSpaceMock);
+            module('Date views', () => {
+                module('Vertical Grouping', function() {
+                    const workSpaceMock = {
+                        ...verticalWorkSpaceMock,
+                        isDateAndTimeView: false
+                    };
 
-                    this.viewDataProvider.completeViewDataMap = testViewDataMap.horizontalGrouping;
-                    this.viewDataProvider.update(false);
-                }
-            }, function() {
-                test('Should return correct cell position for the allDay cell date', function(assert) {
-                    const { viewDataProvider } = this;
+                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                        const viewDataProvider = createViewDataProvider({
+                            workspaceMock: workSpaceMock,
+                            completeViewDataMap: testViewDataMap.verticalGrouping,
+                            completeDateHeaderMap: testHeaderDataMap.verticalGrouping
+                        });
 
-                    let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
-                    assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
+                        let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
 
-                    position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
-                    assert.deepEqual(position, { rowIndex: 2, cellIndex: 0 }, '2nd allDayPanel cell position is correct');
+                        position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 2, cellIndex: 0 }, '2nd allDayPanel cell position is correct');
+                    });
+
+                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                        const viewDataProvider = createViewDataProvider({
+                            workspaceMock: workSpaceMock,
+                            completeViewDataMap: testViewDataMap.verticalGrouping,
+                            completeDateHeaderMap: testHeaderDataMap.verticalGrouping
+                        });
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24)),
+                            { rowIndex: 0, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29)),
+                            { rowIndex: 0, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1)),
+                            { rowIndex: 2, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29)),
+                            { rowIndex: 2, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+                    });
                 });
 
-                test('Should return correct cell position for the not allDay cell date', function(assert) {
-                    const { viewDataProvider } = this;
+                module('Horizontal Grouping', function() {
+                    const workSpaceMock = {
+                        ...horizontalWorkSpaceMock,
+                        isDateAndTimeView: false
+                    };
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24)),
-                        { rowIndex: 1, cellIndex: 0 },
-                        '1st cell position is correct'
-                    );
+                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                        const viewDataProvider = createViewDataProvider({
+                            workspaceMock: workSpaceMock,
+                            completeViewDataMap: testViewDataMap.horizontalGrouping,
+                            completeDateHeaderMap: testHeaderDataMap.horizontalGrouping
+                        });
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29)),
-                        { rowIndex: 1, cellIndex: 0 },
-                        '1st cell position is correct'
-                    );
+                        let position = viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 0 }, '1st allDayPanel cell position is correct');
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1)),
-                        { rowIndex: 3, cellIndex: 0 },
-                        '2nd cell position is correct'
-                    );
+                        position = viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24), true);
+                        assert.deepEqual(position, { rowIndex: 0, cellIndex: 2 }, '2nd allDayPanel cell position is correct');
+                    });
 
-                    assert.deepEqual(
-                        viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29)),
-                        { rowIndex: 3, cellIndex: 0 },
-                        '2nd cell position is correct'
-                    );
+                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                        const { viewDataProvider } = this;
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24), false),
+                            { rowIndex: 1, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(2, new Date(2020, 7, 24, 0, 29), false),
+                            { rowIndex: 1, cellIndex: 0 },
+                            '1st cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1), false),
+                            { rowIndex: 3, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+
+                        assert.deepEqual(
+                            viewDataProvider.findCellPositionInMap(3, new Date(2020, 7, 24, 1, 29), false),
+                            { rowIndex: 3, cellIndex: 0 },
+                            '2nd cell position is correct'
+                        );
+                    });
                 });
             });
         });
     });
 
-    module('Generator', () => {
-        test('Should generate correct groupedDataMap if vertical group orientation', function(assert) {
-            this.viewDataProvider = new ViewDataProvider(verticalWorkSpaceMock);
+    module('Data generation', () => {
+        module('Standard scrolling', () => {
+            const baseStartDate = new Date(2021, 0, 10);
+            const dataGenerationWorkSpaceMock = {
+                ...horizontalWorkSpaceMock,
+                isAllDayPanelVisible: false,
+                isGroupedByDate: () => false,
+                generateRenderOptions: () => {
+                    return {
+                        ...horizontalWorkSpaceMock.generateRenderOptions(),
+                        totalCellCount: 4,
+                        totalRowCount: 2,
+                        verticalGroupCount: 1,
+                        horizontalGroupCount: 2,
+                        getDateHeaderText: (index) => index,
+                        today: baseStartDate,
+                        groupByDate: false,
+                        isHorizontalGrouping: true,
+                        isVerticalGrouping: false,
+                        groupsList: [{ groupId: 1 }, { groupId: 2 }],
+                        cellCountInGroupRow: 2,
+                        rowCountInGroup: 2,
+                        cellDataGetters: [(_, rowIndex, columnIndex) => {
+                            const startDate = (new Date(baseStartDate));
+                            startDate.setDate(10 + columnIndex);
 
-            this.viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+                            const endDate = new Date(startDate);
+                            endDate.setHours(2);
 
-            this.viewDataProvider.update(false);
+                            return ({
+                                value: {
+                                    startDate,
+                                    endDate,
+                                    groups: { groupId: 1 },
+                                    groupIndex: 1,
+                                },
+                            });
+                        }],
+                    };
+                },
+            };
 
-            const viewDataMap = testViewDataMap.verticalGrouping;
+            module('groupedDataMap', () => {
+                test('it should be generated correctly in vertical group orientation', function(assert) {
+                    const viewDataProvider = this.init('vertical');
 
-            const expectedGroupedDataMap = [
-                undefined,
-                undefined,
-                [
-                    [
-                        {
-                            cellData: viewDataMap[0][0],
-                            position: {
-                                rowIndex: 0,
-                                cellIndex: 0
-                            }
-                        },
-                        {
-                            cellData: viewDataMap[0][1],
-                            position: {
-                                rowIndex: 0,
-                                cellIndex: 1
-                            }
-                        }
-                    ],
-                    [{
-                        cellData: viewDataMap[1][0],
-                        position: {
-                            rowIndex: 1,
-                            cellIndex: 0
-                        }
+                    const viewDataMap = testViewDataMap.verticalGrouping;
+
+                    const expectedGroupedDataMap = {
+                        allDayPanelGroupedMap: [],
+                        dateTableGroupedMap: [
+                            undefined,
+                            undefined,
+                            [
+                                [
+                                    {
+                                        cellData: viewDataMap[0][0],
+                                        position: {
+                                            rowIndex: 0,
+                                            cellIndex: 0
+                                        }
+                                    },
+                                    {
+                                        cellData: viewDataMap[0][1],
+                                        position: {
+                                            rowIndex: 0,
+                                            cellIndex: 1
+                                        }
+                                    }
+                                ],
+                                [{
+                                    cellData: viewDataMap[1][0],
+                                    position: {
+                                        rowIndex: 1,
+                                        cellIndex: 0
+                                    }
+                                },
+                                {
+                                    cellData: viewDataMap[1][1],
+                                    position: {
+                                        rowIndex: 1,
+                                        cellIndex: 1
+                                    }
+                                }]
+                            ],
+                            [
+                                [
+                                    {
+                                        cellData: viewDataMap[2][0],
+                                        position: {
+                                            rowIndex: 2,
+                                            cellIndex: 0
+                                        }
+                                    },
+                                    {
+                                        cellData: viewDataMap[2][1],
+                                        position: {
+                                            rowIndex: 2,
+                                            cellIndex: 1
+                                        }
+                                    }
+                                ],
+                                [{
+                                    cellData: viewDataMap[3][0],
+                                    position: {
+                                        rowIndex: 3,
+                                        cellIndex: 0
+                                    }
+                                },
+                                {
+                                    cellData: viewDataMap[3][1],
+                                    position: {
+                                        rowIndex: 3,
+                                        cellIndex: 1
+                                    }
+                                }]
+                            ]
+                        ]
+                    };
+
+                    assert.deepEqual(
+                        viewDataProvider.groupedDataMap,
+                        expectedGroupedDataMap,
+                        'Grouped data is correct'
+                    );
+                });
+
+                test('it should be generated correctly in horizontal group orientation', function(assert) {
+                    this.init('horizontal');
+
+                    this.viewDataProvider.update(false);
+
+                    const viewDataMap = testViewDataMap.horizontalGrouping;
+
+                    const expectedGroupedDataMap = {
+                        allDayPanelGroupedMap: [
+                            undefined,
+                            undefined,
+                            [
+                                {
+                                    cellData: viewDataMap[0][0],
+                                    position: {
+                                        rowIndex: 0,
+                                        cellIndex: 0
+                                    }
+                                },
+                                {
+                                    cellData: viewDataMap[0][1],
+                                    position: {
+                                        rowIndex: 0,
+                                        cellIndex: 1
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    cellData: viewDataMap[0][2],
+                                    position: {
+                                        rowIndex: 0,
+                                        cellIndex: 2
+                                    }
+                                },
+                                {
+                                    cellData: viewDataMap[0][3],
+                                    position: {
+                                        rowIndex: 0,
+                                        cellIndex: 3
+                                    }
+                                }
+                            ]
+                        ],
+                        dateTableGroupedMap: [
+                            undefined,
+                            undefined,
+                            [
+                                [{
+                                    cellData: viewDataMap[1][0],
+                                    position: {
+                                        rowIndex: 0,
+                                        cellIndex: 0
+                                    }
+                                },
+                                {
+                                    cellData: viewDataMap[1][1],
+                                    position: {
+                                        rowIndex: 0,
+                                        cellIndex: 1
+                                    }
+                                }]
+                            ],
+                            [
+                                [{
+                                    cellData: viewDataMap[1][2],
+                                    position: {
+                                        rowIndex: 0,
+                                        cellIndex: 2
+                                    }
+                                },
+                                {
+                                    cellData: viewDataMap[1][3],
+                                    position: {
+                                        rowIndex: 0,
+                                        cellIndex: 3
+                                    }
+                                }]
+                            ]
+                        ]
+                    };
+
+                    assert.deepEqual(
+                        this.viewDataProvider.groupedDataMap,
+                        expectedGroupedDataMap,
+                        'Grouped data is correct'
+                    );
+                });
+            });
+
+            test('completeDateHeaderMap should be generated correctly', function(assert) {
+                const viewDataProvider = new ViewDataProvider(dataGenerationWorkSpaceMock);
+
+                viewDataProvider.update(true);
+
+                const expectedDateHeaderMap = [[{
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                    text: 0,
+                    today: true,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 11),
+                    endDate: new Date(2021, 0, 11, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 1,
+                    text: 1,
+                    today: false,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 2,
+                    text: 0,
+                    today: true,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 11),
+                    endDate: new Date(2021, 0, 11, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 2, },
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 3,
+                    text: 1,
+                    today: false,
+                }]];
+
+                const completeDateHeaderMap = viewDataProvider.completeDateHeaderMap;
+
+                assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
+            });
+
+            test('completeDateHeaderMap should be generated correctly when grouping by date is used', function(assert) {
+                const workSpaceMock = {
+                    ...dataGenerationWorkSpaceMock,
+                    generateRenderOptions: () => ({
+                        ...dataGenerationWorkSpaceMock.generateRenderOptions(),
+                        groupByDate: true,
+                        isHorizontalGrouping: true,
+                    }),
+                };
+                const viewDataProvider = new ViewDataProvider(workSpaceMock);
+
+                viewDataProvider.update(true);
+
+                const expectedDateHeaderMap = [[{
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 0,
+                    text: 0,
+                    today: true,
+                }, {
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 1,
+                    text: 1,
+                    today: true,
+                }]];
+
+                const completeDateHeaderMap = viewDataProvider.completeDateHeaderMap;
+
+                assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
+            });
+
+            test('completeDateHeaderMap should be generated correctly when it is necessary to generate week days header', function(assert) {
+                const weekHeaderMock = {
+                    ...dataGenerationWorkSpaceMock,
+                    generateRenderOptions: () => {
+                        return {
+                            ...dataGenerationWorkSpaceMock.generateRenderOptions(),
+                            isGenerateWeekDaysHeaderData: true,
+                            getWeekDaysHeaderText: () => 'week header text',
+                            daysInView: 2,
+                            cellCountInDay: 2,
+                        };
                     },
-                    {
-                        cellData: viewDataMap[1][1],
-                        position: {
-                            rowIndex: 1,
-                            cellIndex: 1
-                        }
-                    }]
-                ],
-                [
-                    [
-                        {
-                            cellData: viewDataMap[2][0],
-                            position: {
-                                rowIndex: 2,
-                                cellIndex: 0
-                            }
-                        },
-                        {
-                            cellData: viewDataMap[2][1],
-                            position: {
-                                rowIndex: 2,
-                                cellIndex: 1
-                            }
-                        }
-                    ],
-                    [{
-                        cellData: viewDataMap[3][0],
-                        position: {
-                            rowIndex: 3,
-                            cellIndex: 0
-                        }
-                    },
-                    {
-                        cellData: viewDataMap[3][1],
-                        position: {
-                            rowIndex: 3,
-                            cellIndex: 1
-                        }
-                    }]
-                ]
-            ];
+                };
+                const viewDataProvider = new ViewDataProvider(weekHeaderMock);
 
-            assert.deepEqual(
-                this.viewDataProvider.groupedDataMap,
-                expectedGroupedDataMap,
-                'Grouped data is correct'
-            );
+                viewDataProvider.update(true);
+
+                const expectedDateHeaderMap = [[{
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 0,
+                    text: 'week header text',
+                }, {
+                    colSpan: 2,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 0,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: false,
+                    key: 2,
+                    text: 'week header text',
+                }], [{
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                    text: 0,
+                    today: true,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 11),
+                    endDate: new Date(2021, 0, 11, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 1,
+                    text: 1,
+                    today: false,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 2 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 2,
+                    text: 0,
+                    today: true,
+                }, {
+                    colSpan: 1,
+                    startDate: new Date(2021, 0, 11),
+                    endDate: new Date(2021, 0, 11, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 2, },
+                    index: 1,
+                    isFirstGroupCell: false,
+                    isLastGroupCell: true,
+                    key: 3,
+                    text: 1,
+                    today: false,
+                }]];
+
+                const completeDateHeaderMap = viewDataProvider.completeDateHeaderMap;
+
+                assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
+            });
+
+            test('dateHeaderMap shoul be generated correctly', function(assert) {
+                const viewDataProvider = this.init('horizontal');
+
+                const dateHeaderMap = testHeaderDataMap.horizontalGrouping;
+
+                assert.deepEqual(viewDataProvider.dateHeaderMap, dateHeaderMap, 'Correct dateHeaderMap');
+            });
+
+            test('completeTimePanelMap should be generated correctly', function(assert) {
+                const viewDataProvider = new ViewDataProvider(dataGenerationWorkSpaceMock);
+
+                viewDataProvider.update(true);
+
+                const expectedCompleteTimePanelMap = [{
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 0,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 0,
+                }, {
+                    startDate: new Date(2021, 0, 10),
+                    endDate: new Date(2021, 0, 10, 2),
+                    groupIndex: 1,
+                    groups: { groupId: 1 },
+                    index: 2,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: false,
+                    key: 4,
+                }];
+
+                const completeTimePanelMap = viewDataProvider.completeTimePanelMap;
+
+                assert.deepEqual(completeTimePanelMap, expectedCompleteTimePanelMap, 'Correct Time Panel map');
+            });
+
+            test('timePanelData should be generated correctly', function(assert) {
+                const completeTimePanelMap = [{
+                    startDate: new Date(2021, 1, 2, 0),
+                    edDate: new Date(2021, 1, 2, 1),
+                    groupIndex: 0,
+                }, {
+                    startDate: new Date(2021, 1, 2, 1),
+                    edDate: new Date(2021, 1, 2, 2),
+                    groupIndex: 0,
+                }, {
+                    startDate: new Date(2021, 1, 2, 0),
+                    edDate: new Date(2021, 1, 2, 1),
+                    groupIndex: 1,
+                }, {
+                    startDate: new Date(2021, 1, 2, 1),
+                    edDate: new Date(2021, 1, 2, 2),
+                    groupIndex: 1,
+                }];
+
+                const viewDataProvider = createViewDataProvider({
+                    completeTimePanelMap,
+                });
+
+                const expectedTimePanelMap = {
+                    groupedData: [{
+                        dateTable: [
+                            completeTimePanelMap[0],
+                            completeTimePanelMap[1],
+                        ],
+                        groupIndex: 0,
+                        isGroupedAllDayPanel: true,
+                    }, {
+                        dateTable: [
+                            completeTimePanelMap[2],
+                            completeTimePanelMap[3],
+                        ],
+                        groupIndex: 1,
+                        isGroupedAllDayPanel: true,
+                    }],
+                    bottomVirtualRowHeight: undefined,
+                    topVirtualRowHeight: undefined,
+                    isGroupedAllDayPanel: true,
+                    cellCountInGroupRow: undefined,
+                };
+
+                assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
+            });
+
+            test('timePanelData should be generated correctly when all-day panel is present', function(assert) {
+                const completeTimePanelMap = [{
+                    startDate: new Date(2021, 1, 2, 0),
+                    edDate: new Date(2021, 1, 2, 1),
+                    groupIndex: 0,
+                    allDay: true,
+                }, {
+                    startDate: new Date(2021, 1, 2, 1),
+                    edDate: new Date(2021, 1, 2, 2),
+                    groupIndex: 0,
+                }];
+
+                const viewDataProvider = createViewDataProvider({
+                    completeTimePanelMap,
+                });
+
+                const expectedTimePanelMap = {
+                    groupedData: [{
+                        allDayPanel: completeTimePanelMap[0],
+                        dateTable: [
+                            completeTimePanelMap[1],
+                        ],
+                        groupIndex: 0,
+                        isGroupedAllDayPanel: true,
+                    }],
+                    bottomVirtualRowHeight: undefined,
+                    topVirtualRowHeight: undefined,
+                    isGroupedAllDayPanel: true,
+                    cellCountInGroupRow: undefined,
+                };
+
+                assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
+            });
         });
 
-        test('Should generate correct groupedDataMap if horizontal group orientation', function(assert) {
-            this.viewDataProvider = new ViewDataProvider(horizontalWorkSpaceMock);
-
-            this.viewDataProvider.completeViewDataMap = testViewDataMap.horizontalGrouping;
-
-            this.viewDataProvider.update(false);
-
-            const viewDataMap = testViewDataMap.horizontalGrouping;
-
-            const expectedGroupedDataMap = [
-                undefined,
-                undefined,
-                [
-                    [{
-                        cellData: viewDataMap[1][0],
-                        position: {
-                            rowIndex: 0,
-                            cellIndex: 0
-                        }
-                    },
-                    {
-                        cellData: viewDataMap[1][1],
-                        position: {
-                            rowIndex: 0,
-                            cellIndex: 1
-                        }
-                    }]
-                ],
-                [
-                    [{
-                        cellData: viewDataMap[1][2],
-                        position: {
-                            rowIndex: 0,
-                            cellIndex: 2
-                        }
-                    },
-                    {
-                        cellData: viewDataMap[1][3],
-                        position: {
-                            rowIndex: 0,
-                            cellIndex: 3
-                        }
-                    }]
-                ]
-            ];
-
-            assert.deepEqual(
-                this.viewDataProvider.groupedDataMap,
-                expectedGroupedDataMap,
-                'Grouped data is correct'
-            );
-        });
-
-        module('Data Generation with virtual scrolling', () => {
+        module('Vertical virtual scrolling', () => {
             const virtualVerticalWorkSpaceMock = {
                 generateRenderOptions: () => ({
+                    startCellIndex: 0,
                     startRowIndex: 1,
+                    cellCount: 2,
                     rowCount: 2,
                     topVirtualRowHeight: 50,
                     bottomVirtualRowHeight: 50,
                     cellCountInGroupRow: 2,
-                    groupOrientation: 'vertical'
+                    groupOrientation: 'vertical',
+                    totalRowCount: 4,
+                    totalCellCount: 2,
                 }),
                 _isVerticalGroupedWorkSpace: () => true,
-                _isShowAllDayPanel: () => true,
+                isAllDayPanelVisible: true,
                 isGroupedAllDayPanel: () => true,
                 isVirtualScrolling: () => true,
             };
-            const virtualHorizontalWorkSpaceMock = {
+            const horizontalGroupedWorkspaceMock = {
                 generateRenderOptions: () => ({
+                    startCellIndex: 0,
                     startRowIndex: 1,
                     rowCount: 1,
+                    cellCount: 4,
                     topVirtualRowHeight: 50,
                     bottomVirtualRowHeight: 50,
                     cellCountInGroupRow: 1,
-                    groupOrientation: 'horizontal'
+                    groupOrientation: 'horizontal',
+                    totalRowCount: 4,
+                    totalCellCount: 4,
                 }),
                 _isVerticalGroupedWorkSpace: () => false,
-                _isShowAllDayPanel: () => true,
+                isAllDayPanelVisible: true,
                 isGroupedAllDayPanel: () => false,
                 isVirtualScrolling: () => true,
             };
@@ -686,179 +1577,603 @@ module('View Data Provider', () => {
                     groupIndex: 3
                 },
             ]];
+            const horizontalDateHeaderMap = [horizontalDataMap[1]];
 
-            test('Should generate correct viewData in virtual scrolling mode if vertical grouping is used', function(assert) {
-                const viewDataProvider = new ViewDataProvider(virtualVerticalWorkSpaceMock);
-                viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
-                viewDataProvider.update(false);
+            module('viewData', () => {
+                test('viewData should be generated correctly if vertical grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: virtualVerticalWorkSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
+                    });
 
-                const completeViewDataMap = testViewDataMap.verticalGrouping;
+                    const completeViewDataMap = testViewDataMap.verticalGrouping;
 
-                const expectedViewData = {
-                    groupedData: [{
-                        dateTable: [completeViewDataMap[1]],
-                        groupIndex: 2,
+                    const expectedViewData = {
+                        groupedData: [{
+                            dateTable: [completeViewDataMap[1]],
+                            groupIndex: 2,
+                            isGroupedAllDayPanel: true,
+                        }, {
+                            allDayPanel: completeViewDataMap[2],
+                            dateTable: [],
+                            groupIndex: 3,
+                            isGroupedAllDayPanel: true,
+                        }],
+                        bottomVirtualRowCount: 1,
+                        topVirtualRowCount: 1,
+                        leftVirtualCellCount: 0,
+                        rightVirtualCellCount: 0,
+                        bottomVirtualRowHeight: 50,
+                        leftVirtualCellWidth: undefined,
+                        rightVirtualCellWidth: undefined,
+                        topVirtualRowHeight: 50,
+                        cellCountInGroupRow: 2,
                         isGroupedAllDayPanel: true,
-                    }, {
-                        allDayPanel: completeViewDataMap[2],
-                        dateTable: [],
-                        groupIndex: 3,
-                        isGroupedAllDayPanel: true,
-                    }],
-                };
+                    };
 
-                const viewData = viewDataProvider.viewData;
+                    const viewData = viewDataProvider.viewData;
 
-                assert.deepEqual(
-                    viewData.groupedData,
-                    expectedViewData.groupedData,
-                    'View data is correct'
-                );
-                assert.equal(viewData.topVirtualRowHeight, 50, 'Correct topVirtualRowHeight');
-                assert.equal(viewData.bottomVirtualRowHeight, 50, 'Correct bottomVirtualRowHeight');
-                assert.equal(viewData.cellCountInGroupRow, 2, 'Correct cellCountInGroupRow');
-            });
+                    assert.deepEqual(viewData, expectedViewData, 'View data is correct');
+                });
 
-            test('Should generate correct viewDataMap in virtual scrolling mode if vertical grouping is used', function(assert) {
-                const viewDataProvider = new ViewDataProvider(virtualVerticalWorkSpaceMock);
-                viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
-                viewDataProvider.update(false);
+                test('viewData should be generated correctly if horizontal grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: horizontalGroupedWorkspaceMock,
+                        completeViewDataMap: horizontalDataMap,
+                        completeDateHeaderMap: horizontalDateHeaderMap,
+                    });
 
-                const completeViewDataMap = testViewDataMap.verticalGrouping;
+                    const completeViewDataMap = horizontalDataMap;
 
-                const expectedViewDataMap = [[{
-                    cellData: completeViewDataMap[1][0],
-                    position: { rowIndex: 0, cellIndex: 0 },
-                }, {
-                    cellData: completeViewDataMap[1][1],
-                    position: { rowIndex: 0, cellIndex: 1 },
-                }], [{
-                    cellData: completeViewDataMap[2][0],
-                    position: { rowIndex: 1, cellIndex: 0 },
-                }, {
-                    cellData: completeViewDataMap[2][1],
-                    position: { rowIndex: 1, cellIndex: 1 },
-                }]];
-
-                const viewDataMap = viewDataProvider.viewDataMap;
-
-                assert.deepEqual(
-                    viewDataMap,
-                    expectedViewDataMap,
-                    'View data map is correct'
-                );
-            });
-
-            test('Should generate correct groupedDataMap in virtual scrolling mode if vertical grouping is used', function(assert) {
-                const viewDataProvider = new ViewDataProvider(virtualVerticalWorkSpaceMock);
-                viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
-                viewDataProvider.update(false);
-
-                const completeViewDataMap = testViewDataMap.verticalGrouping;
-
-                const expectedGroupedDataMap = [
-                    undefined,
-                    undefined,
-                    [[{
-                        cellData: completeViewDataMap[1][0],
-                        position: { rowIndex: 0, cellIndex: 0 },
-                    }, {
-                        cellData: completeViewDataMap[1][1],
-                        position: { rowIndex: 0, cellIndex: 1 },
-                    }]], [[{
-                        cellData: completeViewDataMap[2][0],
-                        position: { rowIndex: 1, cellIndex: 0 },
-                    }, {
-                        cellData: completeViewDataMap[2][1],
-                        position: { rowIndex: 1, cellIndex: 1 },
-                    }]]];
-
-                const groupedDataMap = viewDataProvider.groupedDataMap;
-
-                assert.deepEqual(
-                    groupedDataMap,
-                    expectedGroupedDataMap,
-                    'View data map is correct'
-                );
-            });
-
-            test('Should generate correct viewData in virtual scrolling mode if horizontal grouping is used', function(assert) {
-                const viewDataProvider = new ViewDataProvider(virtualHorizontalWorkSpaceMock);
-                viewDataProvider.completeViewDataMap = horizontalDataMap;
-                viewDataProvider.update(false);
-
-                const completeViewDataMap = horizontalDataMap;
-
-                const expectedViewData = {
-                    groupedData: [{
-                        allDayPanel: completeViewDataMap[0],
-                        dateTable: [completeViewDataMap[2]],
-                        groupIndex: 2,
+                    const expectedViewData = {
+                        groupedData: [{
+                            allDayPanel: completeViewDataMap[0],
+                            dateTable: [completeViewDataMap[2]],
+                            groupIndex: 2,
+                            isGroupedAllDayPanel: false,
+                        }],
+                        bottomVirtualRowCount: 2,
+                        topVirtualRowCount: 1,
+                        leftVirtualCellCount: 0,
+                        rightVirtualCellCount: 0,
+                        bottomVirtualRowHeight: 50,
+                        leftVirtualCellWidth: undefined,
+                        rightVirtualCellWidth: undefined,
+                        topVirtualRowHeight: 50,
+                        cellCountInGroupRow: 1,
                         isGroupedAllDayPanel: false,
+                    };
+
+                    const viewData = viewDataProvider.viewData;
+
+                    assert.deepEqual(viewData, expectedViewData, 'View data is correct');
+                });
+            });
+
+            module('viewDataMap', () => {
+                test('viewDataMap should be generated correctly if vertical grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: virtualVerticalWorkSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
+                    });
+
+                    const completeViewDataMap = testViewDataMap.verticalGrouping;
+
+                    const expectedViewDataMap = {
+                        allDayPanelMap: [],
+                        dateTableMap: [[{
+                            cellData: completeViewDataMap[1][0],
+                            position: { rowIndex: 0, cellIndex: 0 },
+                        }, {
+                            cellData: completeViewDataMap[1][1],
+                            position: { rowIndex: 0, cellIndex: 1 },
+                        }], [{
+                            cellData: completeViewDataMap[2][0],
+                            position: { rowIndex: 1, cellIndex: 0 },
+                        }, {
+                            cellData: completeViewDataMap[2][1],
+                            position: { rowIndex: 1, cellIndex: 1 },
+                        }]]
+                    };
+
+                    const viewDataMap = viewDataProvider.viewDataMap;
+
+                    assert.deepEqual(
+                        viewDataMap,
+                        expectedViewDataMap,
+                        'View data map is correct'
+                    );
+                });
+
+                test('viewDataMap should be generated correctly if horizontal grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: horizontalGroupedWorkspaceMock,
+                        completeViewDataMap: horizontalDataMap,
+                        completeDateHeaderMap: horizontalDateHeaderMap,
+                    });
+
+                    const completeViewDataMap = horizontalDataMap;
+
+                    const expectedViewDataMap = {
+                        allDayPanelMap: [{
+                            cellData: completeViewDataMap[0][0],
+                            position: { rowIndex: 0, cellIndex: 0 },
+                        }, {
+                            cellData: completeViewDataMap[0][1],
+                            position: { rowIndex: 0, cellIndex: 1 },
+                        }],
+                        dateTableMap: [[{
+                            cellData: completeViewDataMap[2][0],
+                            position: { rowIndex: 0, cellIndex: 0 },
+                        }, {
+                            cellData: completeViewDataMap[2][1],
+                            position: { rowIndex: 0, cellIndex: 1 },
+                        }]]
+                    };
+
+                    const viewDataMap = viewDataProvider.viewDataMap;
+
+                    assert.deepEqual(
+                        viewDataMap,
+                        expectedViewDataMap,
+                        'View data map is correct'
+                    );
+                });
+            });
+
+            module('groupedDataMap', () => {
+                test('groupedDataMap should be generated correctly if vertical grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: virtualVerticalWorkSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
+                    });
+
+                    const completeViewDataMap = testViewDataMap.verticalGrouping;
+
+                    const expectedGroupedDataMap = {
+                        allDayPanelGroupedMap: [],
+                        dateTableGroupedMap: [
+                            undefined,
+                            undefined,
+                            [[{
+                                cellData: completeViewDataMap[1][0],
+                                position: { rowIndex: 0, cellIndex: 0 },
+                            }, {
+                                cellData: completeViewDataMap[1][1],
+                                position: { rowIndex: 0, cellIndex: 1 },
+                            }]], [[{
+                                cellData: completeViewDataMap[2][0],
+                                position: { rowIndex: 1, cellIndex: 0 },
+                            }, {
+                                cellData: completeViewDataMap[2][1],
+                                position: { rowIndex: 1, cellIndex: 1 },
+                            }]]]
+                    };
+
+                    const groupedDataMap = viewDataProvider.groupedDataMap;
+
+                    assert.deepEqual(
+                        groupedDataMap,
+                        expectedGroupedDataMap,
+                        'View data map is correct'
+                    );
+                });
+
+                test('groupedDataMap should be generated correctly if horizontal grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: horizontalGroupedWorkspaceMock,
+                        completeViewDataMap: horizontalDataMap,
+                        completeDateHeaderMap: horizontalDateHeaderMap,
+                    });
+
+                    const completeViewDataMap = horizontalDataMap;
+
+                    const expectedGroupedDataMap = {
+                        allDayPanelGroupedMap: [
+                            undefined,
+                            undefined,
+                            [{
+                                cellData: completeViewDataMap[0][0],
+                                position: { rowIndex: 0, cellIndex: 0 },
+                            }],
+                            [{
+                                cellData: completeViewDataMap[0][1],
+                                position: { rowIndex: 0, cellIndex: 1 },
+                            }]
+                        ],
+                        dateTableGroupedMap: [
+                            undefined,
+                            undefined,
+                            [
+                                [{
+                                    cellData: completeViewDataMap[2][0],
+                                    position: { rowIndex: 0, cellIndex: 0 },
+                                }]
+                            ], [
+                                [{
+                                    cellData: completeViewDataMap[2][1],
+                                    position: { rowIndex: 0, cellIndex: 1 },
+                                }]
+                            ]
+                        ]
+                    };
+
+                    const groupedDataMap = viewDataProvider.groupedDataMap;
+
+                    assert.deepEqual(
+                        groupedDataMap,
+                        expectedGroupedDataMap,
+                        'View data map is correct'
+                    );
+                });
+            });
+
+            test('timePanelData should be generated correctly when virtual scrolling is used', function(assert) {
+                const completeTimePanelMap = [{
+                    startDate: new Date(2021, 1, 2, 0),
+                    edDate: new Date(2021, 1, 2, 1),
+                    groupIndex: 0,
+                }, {
+                    startDate: new Date(2021, 1, 2, 1),
+                    edDate: new Date(2021, 1, 2, 2),
+                    groupIndex: 0,
+                }, {
+                    startDate: new Date(2021, 1, 2, 0),
+                    edDate: new Date(2021, 1, 2, 1),
+                    groupIndex: 1,
+                }, {
+                    startDate: new Date(2021, 1, 2, 1),
+                    edDate: new Date(2021, 1, 2, 2),
+                    groupIndex: 1,
+                }];
+
+                const viewDataProvider = createViewDataProvider({
+                    completeTimePanelMap,
+                    workspaceMock: virtualVerticalWorkSpaceMock,
+                });
+
+                const expectedTimePanelMap = {
+                    groupedData: [{
+                        dateTable: [
+                            completeTimePanelMap[1],
+                        ],
+                        groupIndex: 0,
+                        isGroupedAllDayPanel: true,
+                    }, {
+                        dateTable: [
+                            completeTimePanelMap[2],
+                        ],
+                        groupIndex: 1,
+                        isGroupedAllDayPanel: true,
                     }],
+                    bottomVirtualRowHeight: 50,
+                    topVirtualRowHeight: 50,
+                    isGroupedAllDayPanel: true,
+                    cellCountInGroupRow: 2,
                 };
 
-                const viewData = viewDataProvider.viewData;
+                assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
+            });
+        });
 
-                assert.deepEqual(
-                    viewData.groupedData,
-                    expectedViewData.groupedData,
-                    'View data is correct'
-                );
-                assert.equal(viewData.topVirtualRowHeight, 50, 'Correct topVirtualRowHeight');
-                assert.equal(viewData.bottomVirtualRowHeight, 50, 'Correct bottomVirtualRowHeight');
-                assert.equal(viewData.cellCountInGroupRow, 1, 'Correct cellCountInGroupRow');
+        module('Horizontal virtual scrolling', () => {
+            const verticalGroupedWorkSpaceMock = {
+                generateRenderOptions: () => ({
+                    startCellIndex: 1,
+                    cellCount: 1,
+                    startRowIndex: 0,
+                    rowCount: 2,
+                    leftVirtualCellWidth: 20,
+                    rightVirtualCellWidth: 30,
+                    topVirtualRowHeight: 50,
+                    bottomVirtualRowHeight: 50,
+                    cellCountInGroupRow: 2,
+                    groupOrientation: 'vertical',
+                    totalRowCount: 2,
+                    totalCellCount: 3,
+                }),
+                _isVerticalGroupedWorkSpace: () => true,
+                isAllDayPanelVisible: true,
+                isGroupedAllDayPanel: () => true,
+                isVirtualScrolling: () => true,
+                virtualScrollingDispatcher: {
+                    horizontalScrollingAllowed: true
+                }
+            };
+
+            const horizontalGroupedWorkspaceMock = {
+                generateRenderOptions: () => ({
+                    startCellIndex: 1,
+                    cellCount: 1,
+                    startRowIndex: 0,
+                    rowCount: 2,
+                    leftVirtualCellWidth: 20,
+                    rightVirtualCellWidth: 30,
+                    topVirtualRowHeight: 50,
+                    bottomVirtualRowHeight: 50,
+                    cellCountInGroupRow: 1,
+                    groupOrientation: 'horizontal',
+                    totalRowCount: 2,
+                    totalCellCount: 3,
+                }),
+                _isVerticalGroupedWorkSpace: () => false,
+                isAllDayPanelVisible: true,
+                isGroupedAllDayPanel: () => false,
+                isVirtualScrolling: () => true,
+                virtualScrollingDispatcher: {
+                    horizontalScrollingAllowed: true
+                }
+            };
+            const horizontalDataMap = [[
+                {
+                    allDay: true,
+                    startDate: new Date(2020, 7, 24),
+                    endDate: new Date(2020, 7, 24),
+                    groups: 'group_2',
+                    groupIndex: 2
+                },
+                {
+                    allDay: true,
+                    startDate: new Date(2020, 7, 24),
+                    endDate: new Date(2020, 7, 24),
+                    groups: 'group_3',
+                    groupIndex: 3
+                },
+            ],
+            [
+                {
+                    allDay: false,
+                    startDate: new Date(2020, 7, 24, 0, 0),
+                    endDate: new Date(2020, 7, 24, 0, 30),
+                    groups: 'group_2',
+                    groupIndex: 2
+                },
+                {
+                    allDay: false,
+                    startDate: new Date(2020, 7, 24, 1, 0),
+                    endDate: new Date(2020, 7, 24, 1, 30),
+                    groups: 'group_3',
+                    groupIndex: 3
+                },
+            ],
+            [
+                {
+                    allDay: false,
+                    startDate: new Date(2020, 7, 24, 0, 30),
+                    endDate: new Date(2020, 7, 24, 1, 0),
+                    groups: 'group_2',
+                    groupIndex: 2
+                },
+                {
+                    allDay: false,
+                    startDate: new Date(2020, 7, 24, 0, 30),
+                    endDate: new Date(2020, 7, 24, 1, 0),
+                    groups: 'group_3',
+                    groupIndex: 3
+                },
+            ]];
+            const horizontalDateHeaderMap = [horizontalDataMap[0]];
+
+            module('viewData', () => {
+                test('viewData should be generated correctly if vertical grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: verticalGroupedWorkSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
+                    });
+
+                    const completeViewDataMap = testViewDataMap.verticalGrouping;
+
+                    const expectedViewData = {
+                        groupedData: [{
+                            allDayPanel: [completeViewDataMap[0][1]],
+                            dateTable: [[completeViewDataMap[1][1]]],
+                            groupIndex: 2,
+                            isGroupedAllDayPanel: true
+                        }],
+                        bottomVirtualRowCount: 0,
+                        topVirtualRowCount: 0,
+                        leftVirtualCellCount: 1,
+                        rightVirtualCellCount: 1,
+                        bottomVirtualRowHeight: 50,
+                        leftVirtualCellWidth: 20,
+                        rightVirtualCellWidth: 30,
+                        topVirtualRowHeight: 50,
+                        cellCountInGroupRow: 2,
+                        isGroupedAllDayPanel: true,
+                    };
+
+                    const viewData = viewDataProvider.viewData;
+
+                    assert.deepEqual(viewData, expectedViewData, 'View data is correct');
+                });
+
+                test('viewData should be generated correctly if horizontal grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: horizontalGroupedWorkspaceMock,
+                        completeViewDataMap: horizontalDataMap,
+                        completeDateHeaderMap: horizontalDateHeaderMap,
+                    });
+
+                    const completeViewDataMap = horizontalDataMap;
+
+                    const expectedViewData = {
+                        groupedData: [{
+                            allDayPanel: [completeViewDataMap[0][1]],
+                            dateTable: [[completeViewDataMap[1][1]], [completeViewDataMap[2][1]]],
+                            groupIndex: 3,
+                            isGroupedAllDayPanel: false,
+                        }],
+                        bottomVirtualRowCount: 0,
+                        topVirtualRowCount: 0,
+                        leftVirtualCellCount: 1,
+                        rightVirtualCellCount: 1,
+                        bottomVirtualRowHeight: 50,
+                        leftVirtualCellWidth: 20,
+                        rightVirtualCellWidth: 30,
+                        topVirtualRowHeight: 50,
+                        cellCountInGroupRow: 1,
+                        isGroupedAllDayPanel: false,
+                    };
+
+                    const viewData = viewDataProvider.viewData;
+
+                    assert.deepEqual(viewData, expectedViewData, 'View data is correct');
+                });
             });
 
-            test('Should generate correct viewDataMap in virtual scrolling mode if horizontal grouping is used', function(assert) {
-                const viewDataProvider = new ViewDataProvider(virtualHorizontalWorkSpaceMock);
-                viewDataProvider.completeViewDataMap = horizontalDataMap;
-                viewDataProvider.update(false);
+            module('viewDataMap', () => {
+                test('viewDataMap should be generated correctly if vertical grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: verticalGroupedWorkSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
+                    });
 
-                const completeViewDataMap = horizontalDataMap;
+                    const completeViewDataMap = testViewDataMap.verticalGrouping;
 
-                const expectedViewDataMap = [[{
-                    cellData: completeViewDataMap[2][0],
-                    position: { rowIndex: 0, cellIndex: 0 },
-                }, {
-                    cellData: completeViewDataMap[2][1],
-                    position: { rowIndex: 0, cellIndex: 1 },
-                }]];
+                    const expectedViewDataMap = {
+                        allDayPanelMap: [],
+                        dateTableMap: [
+                            [{
+                                cellData: completeViewDataMap[0][1],
+                                position: { rowIndex: 0, cellIndex: 0 },
+                            }], [{
+                                cellData: completeViewDataMap[1][1],
+                                position: { rowIndex: 1, cellIndex: 0 },
+                            }]
+                        ]
+                    };
 
-                const viewDataMap = viewDataProvider.viewDataMap;
+                    const viewDataMap = viewDataProvider.viewDataMap;
 
-                assert.deepEqual(
-                    viewDataMap,
-                    expectedViewDataMap,
-                    'View data map is correct'
-                );
+                    assert.deepEqual(
+                        viewDataMap,
+                        expectedViewDataMap,
+                        'View data map is correct'
+                    );
+                });
+
+                test('viewDataMap should be generated correctly if horizontal grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: horizontalGroupedWorkspaceMock,
+                        completeViewDataMap: horizontalDataMap,
+                        completeDateHeaderMap: horizontalDateHeaderMap,
+                    });
+                    const completeViewDataMap = horizontalDataMap;
+
+                    const expectedViewDataMap = {
+                        allDayPanelMap: [
+                            {
+                                cellData: completeViewDataMap[0][1],
+                                position: { rowIndex: 0, cellIndex: 0 },
+                            }
+                        ],
+                        dateTableMap: [
+                            [{
+                                cellData: completeViewDataMap[1][1],
+                                position: { rowIndex: 0, cellIndex: 0 },
+                            }], [{
+                                cellData: completeViewDataMap[2][1],
+                                position: { rowIndex: 1, cellIndex: 0 },
+                            }]
+                        ]
+                    };
+
+                    assert.deepEqual(
+                        viewDataProvider.viewDataMap,
+                        expectedViewDataMap,
+                        'View data map is correct'
+                    );
+                });
             });
 
-            test('Should generate correct groupedDataMap in virtual scrolling mode if horizontal grouping is used', function(assert) {
-                const viewDataProvider = new ViewDataProvider(virtualHorizontalWorkSpaceMock);
-                viewDataProvider.completeViewDataMap = horizontalDataMap;
-                viewDataProvider.update(false);
+            module('groupedDataMap', () => {
+                test('groupedDataMap should be generated correctly if vertical grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: verticalGroupedWorkSpaceMock,
+                        completeViewDataMap: testViewDataMap.verticalGrouping,
+                        completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
+                    });
 
-                const completeViewDataMap = horizontalDataMap;
+                    const completeViewDataMap = testViewDataMap.verticalGrouping;
 
-                const expectedGroupedDataMap = [
-                    undefined,
-                    undefined,
-                    [[{
-                        cellData: completeViewDataMap[2][0],
-                        position: { rowIndex: 0, cellIndex: 0 },
-                    }]], [[{
-                        cellData: completeViewDataMap[2][1],
-                        position: { rowIndex: 0, cellIndex: 1 },
-                    }]]];
+                    const expectedGroupedDataMap = {
+                        allDayPanelGroupedMap: [],
+                        dateTableGroupedMap: [
+                            undefined,
+                            undefined,
+                            [
+                                [{
+                                    cellData: completeViewDataMap[0][1],
+                                    position: { rowIndex: 0, cellIndex: 0 },
+                                }],
+                                [{
+                                    cellData: completeViewDataMap[1][1],
+                                    position: { rowIndex: 1, cellIndex: 0 },
+                                }]
+                            ]
+                        ]
+                    };
 
-                const groupedDataMap = viewDataProvider.groupedDataMap;
+                    const groupedDataMap = viewDataProvider.groupedDataMap;
 
-                assert.deepEqual(
-                    groupedDataMap,
-                    expectedGroupedDataMap,
-                    'View data map is correct'
-                );
+                    assert.deepEqual(
+                        groupedDataMap,
+                        expectedGroupedDataMap,
+                        'View data map is correct'
+                    );
+                });
+
+                test('groupedDataMap should be generated correctly if horizontal grouping', function(assert) {
+                    const viewDataProvider = createViewDataProvider({
+                        workspaceMock: horizontalGroupedWorkspaceMock,
+                        completeViewDataMap: horizontalDataMap,
+                        completeDateHeaderMap: horizontalDateHeaderMap,
+                    });
+
+                    const completeViewDataMap = horizontalDataMap;
+
+                    const expectedGroupedDataMap = {
+                        allDayPanelGroupedMap: [
+                            undefined,
+                            undefined,
+                            undefined,
+                            [
+                                {
+                                    cellData: completeViewDataMap[0][1],
+                                    position: { rowIndex: 0, cellIndex: 0 },
+                                }
+                            ]
+                        ],
+                        dateTableGroupedMap: [
+                            undefined,
+                            undefined,
+                            undefined,
+                            [
+                                [{
+                                    cellData: completeViewDataMap[1][1],
+                                    position: { rowIndex: 0, cellIndex: 0 },
+                                }],
+                                [{
+                                    cellData: completeViewDataMap[2][1],
+                                    position: { rowIndex: 1, cellIndex: 0 },
+                                }]
+                            ]
+                        ]
+                    };
+
+                    const groupedDataMap = viewDataProvider.groupedDataMap;
+
+                    assert.deepEqual(
+                        expectedGroupedDataMap,
+                        groupedDataMap,
+                        'View data map is correct'
+                    );
+                });
             });
         });
     });

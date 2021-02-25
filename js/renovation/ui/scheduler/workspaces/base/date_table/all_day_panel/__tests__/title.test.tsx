@@ -40,7 +40,7 @@ describe('AllDayPanelTitle', () => {
       });
 
       describe('classes', () => {
-        it('if visible', () => {
+        it('should not add "hidden" class if visible is true', () => {
           const title = new AllDayPanelTitle({
             className: 'some-class',
             visible: true,
@@ -53,7 +53,7 @@ describe('AllDayPanelTitle', () => {
             ]);
         });
 
-        it('if invisible', () => {
+        it('should add "hidden" class if visible is false', () => {
           const title = new AllDayPanelTitle({
             className: 'some-class',
             visible: false,

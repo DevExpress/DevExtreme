@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import dateLocalization from 'localization/date';
-import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { SchedulerTestWrapper, createWrapper, CLASSES } from '../../helpers/scheduler/helpers.js';
 import devices from 'core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
@@ -12,7 +12,6 @@ QUnit.testStart(function() {
             </div>');
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 
@@ -28,7 +27,8 @@ import translator from 'animation/translator';
 
 import 'ui/scheduler/ui.scheduler';
 
-import { dateToMilliseconds as toMs } from 'core/utils/date';
+const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
+const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
 
 QUnit.module('Integration: Work space', {
     beforeEach: function() {
@@ -154,7 +154,7 @@ QUnit.test('Scheduler work space should have a single type class', function(asse
     QUnit.test(`Pointer down on workspace cell should focus cell in ${scrollingMode} mode`, function(assert) {
         this.createInstance({
             currentDate: new Date(2015, 1, 10),
-            scrolling: { mode: scrollingMode },
+            scrolling: { mode: scrollingMode, type: 'both' },
         });
 
         const $firstCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0);
@@ -245,7 +245,7 @@ QUnit.test('scheduler.showAppointmentPopup method should have resource arg if th
         groups: ['ownerId'],
         resources: [
             {
-                field: 'ownerId',
+                fieldExpr: 'ownerId',
                 dataSource: [
                     { id: 1, text: 'John' },
                     { id: 2, text: 'Mike' }
@@ -278,7 +278,7 @@ QUnit.test('scheduler.showAppointmentPopup method should have resource arg if th
         groups: ['ownerId'],
         resources: [
             {
-                field: 'ownerId',
+                fieldExpr: 'ownerId',
                 dataSource: [
                     { id: 1, text: 'John' },
                     { id: 2, text: 'Mike' }
@@ -310,14 +310,14 @@ QUnit.test('WorkSpace should have a correct \'groups\' option', function(assert)
             {
                 displayExpr: 'name',
                 valueExpr: 'key',
-                field: 'resource1',
+                fieldExpr: 'resource1',
                 dataSource: [
                     { key: 1, name: 'One' },
                     { key: 2, name: 'Two' }
                 ]
             },
             {
-                field: 'resource2',
+                fieldExpr: 'resource2',
                 dataSource: [
                     { id: 1, text: 'Room 1' }
                 ]
@@ -367,7 +367,7 @@ QUnit.test('updateScrollPosition should work correctly when groups were not set 
             {
                 displayExpr: 'name',
                 valueExpr: 'key',
-                field: 'resource1',
+                fieldExpr: 'resource1',
                 dataSource: [
                     { key: 1, name: 'One' },
                     { key: 2, name: 'Two' }
@@ -796,7 +796,7 @@ QUnit.test('dataCellTemplate should have correct options', function(assert) {
         groups: ['ownerId'],
         resources: [
             {
-                field: 'ownerId',
+                fieldExpr: 'ownerId',
                 dataSource: [
                     { id: 1, text: 'John' },
                     { id: 2, text: 'Mike' }
@@ -850,24 +850,6 @@ QUnit.test('dataCellTemplate for all-day panel should take cellElement with corr
     });
 });
 
-QUnit.test('dateCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
-    assert.expect(3);
-    this.createInstance({
-        currentView: 'week',
-        views: ['week'],
-        height: 700,
-        width: 700,
-        dataSource: [],
-        dateCellTemplate: function(cellData, cellIndex, cellElement) {
-            if(!cellIndex) {
-                assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
-                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Date cell width is OK');
-                assert.equal($(cellElement).outerHeight(), 40, 'Date cell height is OK');
-            }
-        }
-    });
-});
-
 QUnit.test('timeCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
     assert.expect(3);
 
@@ -882,53 +864,6 @@ QUnit.test('timeCellTemplate should take cellElement with correct geometry(T4535
                 assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
                 assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Time cell height is OK');
                 assert.equal($(cellElement).outerWidth(), 100, 'Time cell width is OK');
-            }
-        }
-    });
-});
-
-QUnit.test('resourceCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
-    assert.expect(3);
-    this.createInstance({
-        currentView: 'week',
-        views: ['week'],
-        height: 700,
-        width: 700,
-        dataSource: [],
-        groups: ['owner'],
-        resources: [{
-            field: 'owner',
-            dataSource: ['a', 'b']
-        }],
-        resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-            if(!cellIndex) {
-                assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
-                const $cell = $(cellElement).parent();
-                assert.roughEqual($cell.outerWidth(), 299, 1.001, 'Resource cell width is OK');
-                assert.equal($cell.outerHeight(), 30, 'Resource cell height is OK');
-            }
-        }
-    });
-});
-
-QUnit.test('resourceCellTemplate should take cellElement with correct geometry in timeline (T453520)', function(assert) {
-    assert.expect(2);
-    this.createInstance({
-        currentView: 'timelineWeek',
-        views: ['timelineWeek'],
-        height: 700,
-        width: 700,
-        dataSource: [],
-        groups: ['owner'],
-        resources: [{
-            field: 'owner',
-            dataSource: ['a', 'b']
-        }],
-        resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-            if(!cellIndex) {
-                const $cell = $(cellElement);
-                assert.equal($cell.outerWidth(), 99, 'Resource cell width is OK');
-                assert.roughEqual($cell.outerHeight(), 276, 1.001, 'Resource cell height is OK');
             }
         }
     });
@@ -1014,445 +949,6 @@ QUnit.test('timeCellTemplate should contains the date field of data parameter in
     assert.deepEqual(resultDates[1], new Date(2016, 8, 5, 1), 'date parameter for the second time cell');
     assert.deepEqual(resultDates[2], new Date(2016, 8, 5, 2), 'date parameter for the third time cell');
     assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3), 'date parameter for the fourth time cell');
-});
-
-QUnit.test('resourceCellTemplate should have correct options', function(assert) {
-    let templateOptions;
-
-    this.createInstance({
-        currentView: 'week',
-        currentDate: new Date(2016, 8, 5),
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        resourceCellTemplate: function(itemData, index, $container) {
-            if(index === 0) {
-                templateOptions = itemData;
-            }
-        }
-    });
-
-    assert.equal(templateOptions.id, 1, 'id option is OK');
-    assert.equal(templateOptions.text, 'John', 'text option is OK');
-    assert.deepEqual(templateOptions.data, { text: 'John', id: 1 }, 'data option is OK');
-});
-
-QUnit.test('resourceCellTemplate should work correct in timeline view', function(assert) {
-    this.createInstance({
-        currentView: 'timelineWeek',
-        currentDate: new Date(2016, 8, 5),
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        resourceCellTemplate: function(itemData, index, container) {
-            if(index === 0) {
-                $(container).addClass('custom-group-cell-class');
-            }
-        }
-    });
-
-    const $cell1 = this.scheduler.workSpace.groups.getGroupHeader(0); const $cell2 = this.scheduler.workSpace.groups.getGroupHeader(1);
-
-    assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
-    assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
-});
-
-QUnit.test('resourceCellTemplate should work correct in agenda view', function(assert) {
-    this.createInstance({
-        views: ['agenda'],
-        currentView: 'agenda',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [{
-            text: 'a',
-            ownerId: 1,
-            startDate: new Date(2016, 8, 5, 7),
-            endDate: new Date(2016, 8, 5, 8),
-        },
-        {
-            text: 'b',
-            ownerId: 2,
-            startDate: new Date(2016, 8, 5, 10),
-            endDate: new Date(2016, 8, 5, 11),
-        }],
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        resourceCellTemplate: function(itemData, index, container) {
-            if(index === 0) {
-                $(container).addClass('custom-group-cell-class');
-            }
-
-            return $('<div />').text(itemData.text);
-        }
-    });
-
-    const $cell1 = this.instance.$element().find('.dx-scheduler-group-header-content').eq(0);
-    const $cell2 = this.instance.$element().find('.dx-scheduler-group-header-content').eq(1);
-
-    assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
-    assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
-});
-
-QUnit.test('dateCellTemplate should work correctly', function(assert) {
-    this.createInstance({
-        views: ['month'],
-        currentView: 'month',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [],
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dateCellTemplate: function(itemData, index, container) {
-            if(index === 0) {
-                $(container).addClass('custom-group-cell-class');
-            }
-        }
-    });
-
-    const $cell1 = this.instance.$element().find('.dx-scheduler-header-panel-cell').eq(0);
-    const $cell2 = this.instance.$element().find('.dx-scheduler-header-panel-cell').eq(1);
-
-    assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
-    assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
-});
-
-QUnit.test('dateCellTemplate should have unique date in data (T732376)', function(assert) {
-    this.createInstance({
-        views: ['timelineWorkWeek'],
-        currentView: 'timelineWorkWeek',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [],
-        firstDayOfWeek: 0,
-        startDayHour: 10,
-        endDayHour: 11,
-        cellDuration: 60,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dateCellTemplate: function(data, index, element) {
-            const d = data;
-            $('<div>').appendTo(element).dxButton({
-                text: 'Test',
-                onClick: function(e) {
-                    const expectedDate = new Date(2016, 8, 7, 10, 0);
-
-                    assert.equal(d.date.getTime(), expectedDate.getTime());
-                }
-            });
-
-            return element;
-        }
-    });
-
-    const $button = this.instance.$element().find('.dx-scheduler-header-panel-cell .dx-button').eq(2);
-
-    $($button).trigger('dxclick');
-});
-
-QUnit.test('dateCellTemplate should work correctly in workWeek view', function(assert) {
-    const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-    this.createInstance({
-        views: ['workWeek'],
-        currentView: 'workWeek',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [],
-        startDayHour: 7,
-        endDayHour: 23,
-        dateCellTemplate: function(cellData, index, container) {
-            $(container).append(
-                $('<div />')
-                    .addClass('name')
-                    .text(dayOfWeekNames[cellData.date.getDay()]),
-                $('<div />')
-                    .addClass('number')
-                    .text(cellData.date.getDate())
-            );
-        },
-    });
-
-    const $headerPanel = this.instance.$element().find('.dx-scheduler-header-panel');
-
-    assert.ok($headerPanel.text(), 'Mon5Tue6Wed7Thu8Fri9');
-});
-
-QUnit.test('dateCellTemplate should work correctly in agenda view', function(assert) {
-    this.createInstance({
-        views: ['agenda'],
-        currentView: 'agenda',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [{
-            text: 'a',
-            ownerId: 1,
-            startDate: new Date(2016, 8, 5, 7),
-            endDate: new Date(2016, 8, 5, 8),
-        },
-        {
-            text: 'b',
-            ownerId: 2,
-            startDate: new Date(2016, 8, 5, 10),
-            endDate: new Date(2016, 8, 5, 11),
-        }],
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dateCellTemplate: function(itemData, index, container) {
-            if(index === 0) {
-                $(container).addClass('custom-group-cell-class');
-            }
-        }
-    });
-
-    const $cell1 = this.instance.$element().find('.dx-scheduler-time-panel-cell').eq(0);
-    const $cell2 = this.instance.$element().find('.dx-scheduler-time-panel-cell').eq(1);
-
-    assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
-    assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
-});
-
-QUnit.test('dateCellTemplate should have correct options', function(assert) {
-    let templateOptions;
-
-    this.createInstance({
-        currentView: 'month',
-        currentDate: new Date(2016, 8, 5),
-        dateCellTemplate: function(itemData, index, $container) {
-            if(index === 0) {
-                templateOptions = itemData;
-            }
-        }
-    });
-
-    assert.equal(templateOptions.text, 'Sun', 'text option is ok');
-    assert.deepEqual(templateOptions.date.getTime(), new Date(2016, 7, 28).getTime(), 'date option is ok');
-});
-
-QUnit.test('dateCellTemplate should have correct options in agenda view', function(assert) {
-    let templateOptions;
-
-    this.createInstance({
-        views: ['agenda'],
-        currentView: 'agenda',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [{
-            text: 'a',
-            ownerId: 1,
-            startDate: new Date(2016, 8, 5, 7),
-            endDate: new Date(2016, 8, 5, 8),
-        },
-        {
-            text: 'b',
-            ownerId: 2,
-            startDate: new Date(2016, 8, 5, 10),
-            endDate: new Date(2016, 8, 5, 11),
-        }],
-        firstDayOfWeek: 0,
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dateCellTemplate: function(itemData, index, $container) {
-            if(index === 0) {
-                templateOptions = itemData;
-            }
-        }
-    });
-
-    assert.equal(templateOptions.text, '5 Mon', 'text option is ok');
-    assert.equal(templateOptions.date.getTime(), new Date(2016, 8, 5).getTime(), 'date option is ok');
-    assert.deepEqual(templateOptions.groups, { 'ownerId': 1 }, 'groups option is ok');
-
-});
-
-QUnit.test('Agenda has right arguments in resourceCellTemplate arguments', function(assert) {
-    let params;
-
-    this.createInstance({
-        views: ['agenda'],
-        currentView: 'agenda',
-        currentDate: new Date(2016, 8, 5),
-        groups: ['ownerId'],
-        dataSource: [{
-            text: 'a',
-            ownerId: 1,
-            startDate: new Date(2016, 8, 5, 7),
-            endDate: new Date(2016, 8, 5, 8),
-        },
-        {
-            text: 'b',
-            ownerId: 2,
-            startDate: new Date(2016, 8, 5, 10),
-            endDate: new Date(2016, 8, 5, 11),
-        }],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John', color: '#A2a' },
-                    { id: 2, text: 'Mike', color: '#E2a' }
-                ]
-            }
-        ],
-        resourceCellTemplate: function(itemData, index, $container) {
-            if(!index) params = itemData.data;
-        }
-    });
-
-    assert.deepEqual(params, { id: 1, text: 'John', color: '#A2a' }, 'Cell text is OK');
-});
-
-QUnit.test('workSpace recalculation after render cellTemplates', function(assert) {
-    this.createInstance({
-        currentView: 'month',
-        currentDate: new Date(2016, 8, 5),
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        resourceCellTemplate: function(itemData, index, $container) {
-            return $('<div>').css({ height: '150px' });
-        }
-    });
-
-    const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
-    const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
-    const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
-    const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
-
-    assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
-    assert.equal(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight, 'dateTableScrollable element padding bottom');
-    assert.equal(parseInt($dateTableScrollable.css('marginBottom'), 10), -schedulerHeaderPanelHeight, 'dateTableScrollable element margin bottom');
-});
-
-QUnit.test('WorkSpace recalculation works fine after render resourceCellTemplate if workspace has allDay appointment', function(assert) {
-    this.createInstance({
-        currentView: 'week',
-        currentDate: new Date(2016, 8, 5),
-        groups: ['ownerId'],
-        resources: [
-            {
-                field: 'ownerId',
-                dataSource: [
-                    { id: 1, text: 'John' },
-                    { id: 2, text: 'Mike' }
-                ]
-            }
-        ],
-        dataSource: [{
-            text: 'a',
-            ownerId: 1,
-            startDate: new Date(2016, 8, 5, 7),
-            endDate: new Date(2016, 8, 5, 8),
-            allDay: true
-        }],
-        crossScrollingEnabled: true,
-        resourceCellTemplate: function(itemData, index, $container) {
-            return $('<div>').css({ height: '150px' });
-        }
-    });
-
-    const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
-    const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
-    const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
-    const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
-    const allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
-    const $sidebarScrollable = this.instance.$element().find('.dx-scheduler-sidebar-scrollable');
-    const $headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable');
-
-    assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
-    assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
-    assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
-
-    assert.roughEqual(parseInt($sidebarScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'sidebarScrollable element padding bottom');
-    assert.roughEqual(parseInt($sidebarScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'sidebarScrollable element margin bottom');
-    assert.roughEqual($headerScrollable.outerHeight(), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'headerScrollable height is correct');
-});
-
-QUnit.test('WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment', function(assert) {
-    this.createInstance({
-        currentView: 'week',
-        currentDate: new Date(2016, 8, 5),
-        dataSource: [{
-            text: 'a',
-            ownerId: 1,
-            startDate: new Date(2016, 8, 5, 7),
-            endDate: new Date(2016, 8, 5, 8),
-            allDay: true
-        }],
-        crossScrollingEnabled: true,
-        dateCellTemplate: function(itemData, index, $container) {
-            return $('<div>').css({ height: '150px' });
-        }
-    });
-
-    const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
-    const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
-    const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
-    const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
-    const allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
-
-    assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
-    assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
-    assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
 });
 
 QUnit.test('Timepanel text should be calculated correctly if DST makes sense (T442904)', function(assert) {
@@ -1684,14 +1180,14 @@ QUnit.test('WorkSpace should be refreshed after groups changed', function(assert
             {
                 displayExpr: 'name',
                 valueExpr: 'key',
-                field: 'resource1',
+                fieldExpr: 'resource1',
                 dataSource: [
                     { key: 1, name: 'One' },
                     { key: 2, name: 'Two' }
                 ]
             },
             {
-                field: 'resource2',
+                fieldExpr: 'resource2',
                 dataSource: [
                     { id: 1, text: 'Room 1' }
                 ]
@@ -1720,7 +1216,7 @@ QUnit.test('WorkSpace should be refreshed after groups changed', function(assert
             showAllDayPanel: true,
             currentDate: new Date(2018, 3, 11),
             height: 600,
-            scrolling: { mode: scrollingMode },
+            scrolling: { mode: scrollingMode, type: 'both' },
         });
 
         const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
@@ -1846,24 +1342,6 @@ QUnit.test('Vertical scrollable should work after switching currentDate if allDa
     assert.notEqual($scroll.css('display'), 'none', 'ok');
 });
 
-QUnit.test('Current time indicator calculates position correctly with workWeek view (T750252)', function(assert) {
-    this.createInstance({
-        dataSource: [],
-        views: [
-            { name: '2 Work Weeks', type: 'workWeek', intervalCount: 2, startDate: new Date(Date.now() - 5 * toMs('day')) },
-        ],
-        currentView: 'workWeek',
-        currentDate: new Date(),
-        height: 580
-    });
-
-
-    const $dateTimeIndicator = this.scheduler.workSpace.getCurrentTimeIndicator()[0];
-    const position = { top: $dateTimeIndicator.style.top, left: $dateTimeIndicator.style.left };
-
-    assert.notEqual(position, { left: 0, top: 0 }, 'Current time indicator positioned correctly');
-});
-
 QUnit.test('Month view; dates are rendered correctly with grouping by date & empty resources in groups (T759160)', function(assert) {
     this.createInstance({
         dataSource: [],
@@ -1963,110 +1441,110 @@ QUnit.test('Workspace view group header cells have same height as table cells (T
 });
 
 if(devices.real().deviceType === 'desktop') {
-    QUnit.module('Integration: Work space: Multiple selection when dragging is not enabled', {
+    QUnit.module('Cells selection', {
         beforeEach: function() {
             fx.off = true;
         },
         afterEach: function() {
             fx.off = false;
-        }
+        },
     }, () => {
-        [{
-            view: 'day',
-            startCell: {
-                index: 0,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 0),
-                    endDate: new Date(2018, 3, 8, 0, 30),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
-                },
-            },
-            endCell: {
-                index: 1,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 30),
-                    endDate: new Date(2018, 3, 8, 1, 0),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
-                },
-            },
-        }, {
-            view: 'week',
-            startCell: {
-                index: 0,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 0),
-                    endDate: new Date(2018, 3, 8, 0, 30),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
-                },
-            },
-            endCell: {
-                index: 7,
-                cellData: {
-                    startDate: new Date(2018, 3, 8, 0, 30),
-                    endDate: new Date(2018, 3, 8, 1, 0),
-                    allDay: false,
-                    groups: undefined,
-                    groupIndex: 0,
-                },
-            },
-        }, {
-            view: 'month',
-            startCell: {
-                index: 0,
-                cellData: {
-                    startDate: new Date(2018, 3, 1),
-                    endDate: new Date(2018, 3, 2),
-                    groups: undefined,
-                    groupIndex: 0,
-                    allDay: undefined,
-                },
-            },
-            endCell: {
-                index: 1,
-                cellData: {
-                    startDate: new Date(2018, 3, 2),
-                    endDate: new Date(2018, 3, 3),
-                    groups: undefined,
-                    groupIndex: 0,
-                    allDay: undefined,
-                },
-            },
-        }].forEach((config) => {
-            const { view, startCell, endCell } = config;
-            QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled`, function(assert) {
-                const instance = createWrapper({
-                    dataSource: [],
-                    views: [view],
-                    currentView: view,
-                    showAllDayPanel: true,
-                    currentDate: new Date(2018, 3, 8),
-                    height: 600,
-                    editing: { allowDragging: false },
-                });
+        const resources = [
+            {
+                fieldExpr: 'ownerId',
+                dataSource: [
+                    { id: 1, text: 'John' },
+                    { id: 2, text: 'Mike' }
+                ]
+            }
+        ];
 
-                const $cells = instance.workSpace.getCells();
-                const $table = instance.workSpace.getDateTable();
+        const checkSelection = (assert, scheduler, firstCellIndex, lastCellIndex) => {
+            scheduler.workSpace.selectCells(firstCellIndex, lastCellIndex);
 
-                $($table).trigger(
-                    $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
-                );
-                $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+            const cellsNumber = lastCellIndex - firstCellIndex + 1;
 
-                assert.deepEqual(
-                    instance.option('selectedCellData'),
-                    [
-                        startCell.cellData, endCell.cellData,
-                    ], 'correct cells have been selected');
+            assert.equal(selectedCells.length, cellsNumber, 'Correct number of cells');
+
+            [...(new Array(cellsNumber))].forEach((_, index) => {
+                const currentIndex = index + firstCellIndex;
+                const cell = scheduler.workSpace.getCell(currentIndex);
+                assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+                assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), currentIndex === lastCellIndex, 'Cell has correct classes');
             });
+        };
 
-            if(view !== 'month') {
-                QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled when scrolling is virtual`, function(assert) {
+        QUnit.module(' Multiple selection when dragging is not enabled', () => {
+            [{
+                view: 'day',
+                startCell: {
+                    index: 0,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 0),
+                        endDate: new Date(2018, 3, 8, 0, 30),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
+                },
+                endCell: {
+                    index: 1,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 30),
+                        endDate: new Date(2018, 3, 8, 1, 0),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
+                },
+            }, {
+                view: 'week',
+                startCell: {
+                    index: 0,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 0),
+                        endDate: new Date(2018, 3, 8, 0, 30),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
+                },
+                endCell: {
+                    index: 7,
+                    cellData: {
+                        startDate: new Date(2018, 3, 8, 0, 30),
+                        endDate: new Date(2018, 3, 8, 1, 0),
+                        allDay: false,
+                        groups: undefined,
+                        groupIndex: 0,
+                    },
+                },
+            }, {
+                view: 'month',
+                startCell: {
+                    index: 0,
+                    cellData: {
+                        startDate: new Date(2018, 3, 1),
+                        endDate: new Date(2018, 3, 2),
+                        groups: undefined,
+                        groupIndex: 0,
+                        allDay: undefined,
+                    },
+                },
+                endCell: {
+                    index: 1,
+                    cellData: {
+                        startDate: new Date(2018, 3, 2),
+                        endDate: new Date(2018, 3, 3),
+                        groups: undefined,
+                        groupIndex: 0,
+                        allDay: undefined,
+                    },
+                },
+            }].forEach((config) => {
+                const { view, startCell, endCell } = config;
+                QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled`, function(assert) {
                     const instance = createWrapper({
                         dataSource: [],
                         views: [view],
@@ -2075,7 +1553,6 @@ if(devices.real().deviceType === 'desktop') {
                         currentDate: new Date(2018, 3, 8),
                         height: 600,
                         editing: { allowDragging: false },
-                        scrolling: { mode: 'virtual' },
                     });
 
                     const $cells = instance.workSpace.getCells();
@@ -2092,7 +1569,176 @@ if(devices.real().deviceType === 'desktop') {
                             startCell.cellData, endCell.cellData,
                         ], 'correct cells have been selected');
                 });
-            }
+
+                if(view !== 'month') {
+                    QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled when scrolling is virtual`, function(assert) {
+                        const instance = createWrapper({
+                            dataSource: [],
+                            views: [view],
+                            currentView: view,
+                            showAllDayPanel: true,
+                            currentDate: new Date(2018, 3, 8),
+                            height: 600,
+                            width: 1000,
+                            editing: { allowDragging: false },
+                            scrolling: { mode: 'virtual', type: 'both' },
+                        });
+
+                        const $cells = instance.workSpace.getCells();
+                        const $table = instance.workSpace.getDateTable();
+
+                        $($table).trigger(
+                            $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
+                        );
+                        $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
+
+                        assert.deepEqual(
+                            instance.option('selectedCellData'),
+                            [
+                                startCell.cellData, endCell.cellData,
+                            ], 'correct cells have been selected');
+                    });
+                }
+            });
+        });
+
+        QUnit.test('Correct cells should be selected in Month View in basic case and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: ['month'],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                width: 1000,
+                scrolling: { mode: 'virtual', type: 'both' },
+            });
+
+            checkSelection(assert, scheduler, 0, 5);
+        });
+
+        QUnit.test('Correct cells should be selected in Month when horizontal grouping is used and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'horizontal',
+                }],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                width: 1000,
+                scrolling: { mode: 'virtual', type: 'both' },
+                resources,
+                groups: ['ownerId'],
+            });
+
+            checkSelection(assert, scheduler, 7, 9);
+
+            scheduler.workSpace.selectCells(6, 7);
+
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+            const cell = scheduler.workSpace.getCell(6);
+
+            assert.equal(selectedCells.length, 1, 'Correct number of cells');
+            assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+            assert.ok(cell.hasClass(FOCUSED_CELL_CLASS), 'Cell is focused');
+        });
+
+        QUnit.test('Correct cells should be selected in Month when vertical grouping is used and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'vertical',
+                }],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                width: 1000,
+                scrolling: { mode: 'virtual', type: 'both' },
+                resources,
+                groups: ['ownerId'],
+            });
+
+            checkSelection(assert, scheduler, 0, 5);
+
+            scheduler.workSpace.selectCells(6, 58);
+
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+            const cell = scheduler.workSpace.getCell(6);
+
+            assert.equal(selectedCells.length, 1, 'Correct number of cells');
+            assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+            assert.ok(cell.hasClass(FOCUSED_CELL_CLASS), 'Cell is focused');
+        });
+
+        QUnit.test('Correct cells should be selected in Month when grouping by date is used and virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: [{
+                    type: 'month',
+                    groupOrientation: 'horizontal',
+                    groupByDate: true,
+                }],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                width: 1000,
+                scrolling: { mode: 'virtual', type: 'both' },
+                resources,
+                groups: ['ownerId'],
+            });
+
+            scheduler.workSpace.selectCells(0, 2);
+
+            const selectedCells = scheduler.workSpace.getSelectedCells();
+
+            assert.equal(selectedCells.length, 2, 'Correct number of cells');
+
+            [...(new Array(3))].forEach((_, index) => {
+                if(index !== 1) {
+                    const cell = scheduler.workSpace.getCell(index);
+                    assert.ok(cell.hasClass(SELECTED_CELL_CLASS), 'Cell is selected');
+                    assert.equal(cell.hasClass(FOCUSED_CELL_CLASS), index === 2, 'Cell has correct classes');
+                }
+            });
+        });
+
+        QUnit.test('Correct selectedCellData should be generated when selecting cells in Month when virtual scrolling is enabled', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: ['month'],
+                currentView: 'month',
+                showAllDayPanel: true,
+                currentDate: new Date(2020, 11, 23),
+                height: 1000,
+                width: 1000,
+                scrolling: { mode: 'virtual', type: 'both' },
+            });
+
+            scheduler.workSpace.selectCells(0, 5);
+
+            const selectedCellData = scheduler.option('selectedCellData');
+
+            assert.equal(selectedCellData.length, 6, 'Correct number of cells');
+            assert.deepEqual(selectedCellData[0], {
+                startDate: new Date(2020, 10, 29, 0, 0),
+                endDate: new Date(2020, 10, 30, 0, 0),
+                allDay: undefined,
+                groupIndex: 0,
+                groups: undefined,
+            }, 'Correct first cell');
+            assert.deepEqual(selectedCellData[5], {
+                startDate: new Date(2020, 11, 4, 0, 0),
+                endDate: new Date(2020, 11, 5, 0, 0),
+                allDay: undefined,
+                groupIndex: 0,
+                groups: undefined,
+            }, 'Correct last cell');
         });
     });
 }
@@ -2244,7 +1890,7 @@ QUnit.module('Cell Templates in renovated views', () => {
 
     const resources = [
         {
-            field: 'ownerId',
+            fieldExpr: 'ownerId',
             dataSource: [
                 { id: 1, text: 'John' },
                 { id: 2, text: 'Mike' }
@@ -2576,6 +2222,129 @@ QUnit.module('Cell Templates in renovated views', () => {
     });
 
     [{
+        view: 'month',
+        firstCell: {
+            startDate: new Date(2020, 10, 29),
+            endDate: new Date(2020, 10, 30),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 0,
+            text: '29',
+        },
+        secondCell: {
+            startDate: new Date(2020, 11, 19),
+            endDate: new Date(2020, 11, 20),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 20,
+            text: '19',
+        },
+        firstCellIndex: 0,
+        secondCellIndex: 20,
+        templatesNumber: 42,
+    }, {
+        view: 'timelineDay',
+        firstCell: {
+            startDate: new Date(2020, 11, 1, 0, 0),
+            endDate: new Date(2020, 11, 1, 0, 30),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 0,
+            text: '',
+        },
+        secondCell: {
+            startDate: new Date(2020, 11, 1, 23, 30),
+            endDate: new Date(2020, 11, 2, 0, 0),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 47,
+            text: '',
+        },
+        firstCellIndex: 0,
+        secondCellIndex: 47,
+        templatesNumber: 48,
+    }, {
+        view: 'timelineWeek',
+        firstCell: {
+            startDate: new Date(2020, 10, 29, 0, 0),
+            endDate: new Date(2020, 10, 29, 0, 30),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 0,
+            text: '',
+        },
+        secondCell: {
+            startDate: new Date(2020, 11, 5, 23, 30),
+            endDate: new Date(2020, 11, 6, 0, 0),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 335,
+            text: '',
+        },
+        firstCellIndex: 0,
+        secondCellIndex: 335,
+        templatesNumber: 336,
+    }, {
+        view: 'timelineMonth',
+        firstCell: {
+            startDate: new Date(2020, 11, 1),
+            endDate: new Date(2020, 11, 2),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 0,
+            text: '',
+        },
+        secondCell: {
+            startDate: new Date(2020, 11, 31),
+            endDate: new Date(2021, 0, 1),
+            groups: undefined,
+            groupIndex: undefined,
+            allDay: undefined,
+            index: 30,
+            text: '',
+        },
+        firstCellIndex: 0,
+        secondCellIndex: 30,
+        templatesNumber: 31,
+    }].forEach(({
+        view,
+        firstCell: firstExpectedCell,
+        secondCell: secondExpectedCell,
+        firstCellIndex,
+        secondCellIndex,
+        templatesNumber,
+    }) => {
+        QUnit.test(`dataCellTemplate should have correct options in ${view} view`, function(assert) {
+            const templateOptions = [];
+
+            createWrapper({
+                dataSource: [],
+                views: [view],
+                currentView: view,
+                currentDate: new Date(2020, 11, 1),
+                renovateRender: true,
+                dataCellTemplate: (data, index) => {
+                    templateOptions.push({ ...data, index });
+                },
+            });
+
+            const firstCell = templateOptions[firstCellIndex];
+            const secondCell = templateOptions[secondCellIndex];
+
+            assert.equal(templateOptions.length, templatesNumber, 'Correct number of templates');
+            assert.deepEqual(firstCell, firstExpectedCell, 'Correct options in the first cell');
+            assert.deepEqual(secondCell, secondExpectedCell, 'Correct options in the second cell');
+        });
+    });
+
+    [{
         viewType: 'day',
         expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
     }, {
@@ -2831,9 +2600,9 @@ QUnit.test('SelectedCellData option should not change when dateTable is scrolled
         showAllDayPanel: true,
         currentDate: new Date(2020, 8, 21),
         height: 300,
-        scrolling: { mode: 'virtual' },
+        scrolling: { mode: 'virtual', type: 'both' },
     });
-    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
     const $cells = scheduler.workSpace.getCells();
     const $table = scheduler.workSpace.getDateTable();
@@ -2873,12 +2642,12 @@ QUnit.test('"onOptionChanged" should not be called on scroll when virtual scroll
         showAllDayPanel: true,
         currentDate: new Date(2020, 8, 21),
         height: 300,
-        scrolling: { mode: 'virtual' },
+        scrolling: { mode: 'virtual', type: 'both' },
         onOptionChanged: () => {
             onOptionChangedCalls += 1;
         },
     });
-    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
 
     const $cells = scheduler.workSpace.getCells();
     const $table = scheduler.workSpace.getDateTable();
@@ -2917,11 +2686,11 @@ if(devices.real().deviceType === 'desktop') {
             showAllDayPanel: true,
             currentDate: new Date(2020, 8, 20),
             height: 300,
-            scrolling: { mode: 'virtual' },
+            scrolling: { mode: 'virtual', type: 'both' },
         });
 
         const { instance } = scheduler;
-        instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
         const showAppointmentPopupSpy = sinon.spy();
         instance.showAppointmentPopup = showAppointmentPopupSpy;
 
@@ -3234,5 +3003,639 @@ QUnit.module('Cell Templates', () => {
                 scheduler.instance.option('currentView', type);
             });
         });
+    });
+});
+
+QUnit.module('Resource Cell Template', () => {
+    [true, false].forEach((isRenovatedRender) => {
+        const moduleDescription = isRenovatedRender
+            ? 'Renovated Render'
+            : 'Old Render';
+
+        QUnit.module(moduleDescription, {
+            beforeEach: function() {
+                fx.off = true;
+                this.createInstance = (options = {}) => {
+                    this.scheduler = createWrapper({
+                        ...options,
+                        renovateRender: isRenovatedRender,
+                    });
+                    this.instance = this.scheduler.instance;
+                };
+            },
+            afterEach: function() {
+                fx.off = false;
+            },
+        }, () => {
+            QUnit.test('resourceCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
+                assert.expect(3);
+                this.createInstance({
+                    currentView: 'week',
+                    views: ['week'],
+                    height: 700,
+                    width: 700,
+                    dataSource: [],
+                    groups: ['ownerId'],
+                    resources: [{
+                        fieldExpr: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John', color: '#000' },
+                            { id: 2, text: 'Mike', color: '#FFF' },
+                        ],
+                    }],
+                    resourceCellTemplate: function(cellData, cellIndex, cellElement) {
+                        if(!cellIndex) {
+                            assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
+                            const $cell = $(cellElement).parent();
+                            assert.roughEqual($cell.outerWidth(), 299, 2.001, 'Resource cell width is OK');
+                            assert.equal($cell.outerHeight(), 30, 'Resource cell height is OK');
+                        }
+                    }
+                });
+            });
+
+            QUnit.test('resourceCellTemplate should take cellElement with correct geometry in timeline (T453520)', function(assert) {
+                assert.expect(2);
+                this.createInstance({
+                    currentView: 'timelineWeek',
+                    views: ['timelineWeek'],
+                    height: 700,
+                    width: 700,
+                    dataSource: [],
+                    groups: ['ownerId'],
+                    resources: [{
+                        fieldExpr: 'ownerId',
+                        dataSource: [
+                            { id: 1, text: 'John', color: '#000' },
+                            { id: 2, text: 'Mike', color: '#FFF' },
+                        ],
+                    }],
+                    resourceCellTemplate: function(cellData, cellIndex, cellElement) {
+                        if(!cellIndex) {
+                            const $cell = $(cellElement);
+                            assert.equal($cell.outerWidth(), 99, 'Resource cell width is OK');
+                            assert.roughEqual($cell.outerHeight(), 276, 1.001, 'Resource cell height is OK');
+                        }
+                    }
+                });
+            });
+
+            QUnit.test('resourceCellTemplate should have correct options', function(assert) {
+                let templateOptions;
+
+                this.createInstance({
+                    currentView: 'week',
+                    currentDate: new Date(2016, 8, 5),
+                    firstDayOfWeek: 0,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            fieldExpr: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    resourceCellTemplate: function(itemData, index, $container) {
+                        if(index === 0) {
+                            templateOptions = itemData;
+                        }
+                    }
+                });
+
+                assert.equal(templateOptions.id, 1, 'id option is OK');
+                assert.equal(templateOptions.text, 'John', 'text option is OK');
+                assert.deepEqual(templateOptions.data, { text: 'John', id: 1 }, 'data option is OK');
+            });
+
+            QUnit.test('resourceCellTemplate should work correct in timeline view', function(assert) {
+                this.createInstance({
+                    currentView: 'timelineWeek',
+                    currentDate: new Date(2016, 8, 5),
+                    firstDayOfWeek: 0,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            fieldExpr: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    resourceCellTemplate: function(itemData, index, container) {
+                        if(index === 0) {
+                            $(container).addClass('custom-group-cell-class');
+                        }
+                    }
+                });
+
+                const $cell1 = this.scheduler.workSpace.groups.getGroupHeader(0); const $cell2 = this.scheduler.workSpace.groups.getGroupHeader(1);
+
+                assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
+                assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
+            });
+
+            QUnit.test('resourceCellTemplate should work correct in agenda view', function(assert) {
+                this.createInstance({
+                    views: ['agenda'],
+                    currentView: 'agenda',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [{
+                        text: 'a',
+                        ownerId: 1,
+                        startDate: new Date(2016, 8, 5, 7),
+                        endDate: new Date(2016, 8, 5, 8),
+                    },
+                    {
+                        text: 'b',
+                        ownerId: 2,
+                        startDate: new Date(2016, 8, 5, 10),
+                        endDate: new Date(2016, 8, 5, 11),
+                    }],
+                    firstDayOfWeek: 0,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            fieldExpr: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    resourceCellTemplate: function(itemData, index, container) {
+                        if(index === 0) {
+                            $(container).addClass('custom-group-cell-class');
+                        }
+
+                        return $('<div />').text(itemData.text);
+                    }
+                });
+
+                const $cell1 = this.instance.$element().find('.dx-scheduler-group-header-content').eq(0);
+                const $cell2 = this.instance.$element().find('.dx-scheduler-group-header-content').eq(1);
+
+                assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
+                assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
+            });
+
+            QUnit.test('Agenda has right arguments in resourceCellTemplate arguments', function(assert) {
+                let params;
+
+                this.createInstance({
+                    views: ['agenda'],
+                    currentView: 'agenda',
+                    currentDate: new Date(2016, 8, 5),
+                    groups: ['ownerId'],
+                    dataSource: [{
+                        text: 'a',
+                        ownerId: 1,
+                        startDate: new Date(2016, 8, 5, 7),
+                        endDate: new Date(2016, 8, 5, 8),
+                    },
+                    {
+                        text: 'b',
+                        ownerId: 2,
+                        startDate: new Date(2016, 8, 5, 10),
+                        endDate: new Date(2016, 8, 5, 11),
+                    }],
+                    resources: [
+                        {
+                            fieldExpr: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John', color: '#A2a' },
+                                { id: 2, text: 'Mike', color: '#E2a' }
+                            ]
+                        }
+                    ],
+                    resourceCellTemplate: function(itemData, index, $container) {
+                        if(!index) params = itemData.data;
+                    }
+                });
+
+                assert.deepEqual(params, { id: 1, text: 'John', color: '#A2a' }, 'Cell text is OK');
+            });
+
+            QUnit.test('workSpace recalculation after render cellTemplates', function(assert) {
+                this.createInstance({
+                    currentView: 'month',
+                    currentDate: new Date(2016, 8, 5),
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            fieldExpr: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    resourceCellTemplate: function() {
+                        return $('<div>').css({ height: '150px' });
+                    }
+                });
+
+                const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
+                const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
+                const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
+                const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
+
+                !isRenovatedRender
+                    && assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
+                assert.equal(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight, 'dateTableScrollable element padding bottom');
+                assert.equal(parseInt($dateTableScrollable.css('marginBottom'), 10), -schedulerHeaderPanelHeight, 'dateTableScrollable element margin bottom');
+            });
+
+            QUnit.test('WorkSpace recalculation works fine after render resourceCellTemplate if workspace has allDay appointment', function(assert) {
+                this.createInstance({
+                    currentView: 'week',
+                    currentDate: new Date(2016, 8, 5),
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            fieldExpr: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    dataSource: [{
+                        text: 'a',
+                        ownerId: 1,
+                        startDate: new Date(2016, 8, 5, 7),
+                        endDate: new Date(2016, 8, 5, 8),
+                        allDay: true
+                    }],
+                    crossScrollingEnabled: true,
+                    resourceCellTemplate: function(itemData, index, $container) {
+                        return $('<div>').css({ height: '150px' });
+                    }
+                });
+
+                const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
+                const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
+                const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
+                const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
+                const allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
+                const $sidebarScrollable = this.instance.$element().find('.dx-scheduler-sidebar-scrollable');
+                const $headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable');
+
+                assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
+                assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
+                assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
+
+                assert.roughEqual(parseInt($sidebarScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'sidebarScrollable element padding bottom');
+                assert.roughEqual(parseInt($sidebarScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'sidebarScrollable element margin bottom');
+                assert.roughEqual($headerScrollable.outerHeight(), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'headerScrollable height is correct');
+            });
+
+            QUnit.test('Scheduler should have specific resourceCellTemplate setting of the view', function(assert) {
+                let countCallTemplate1 = 0;
+                let countCallTemplate2 = 0;
+                const dataSource = [
+                    { id: 1, text: 'group1' },
+                    { id: 2, text: 'group2' }
+                ];
+
+                this.createInstance({
+                    views: [{
+                        type: 'week',
+                        resourceCellTemplate: function() {
+                            countCallTemplate2++;
+                        }
+                    }],
+                    groups: ['test'],
+                    resources: [
+                        {
+                            fieldExpr: 'test',
+                            dataSource: dataSource
+                        }
+                    ],
+                    resourceCellTemplate: function() {
+                        countCallTemplate1++;
+                    },
+                    currentView: 'week'
+                });
+
+                assert.equal(countCallTemplate1, 0, 'count call first template');
+                assert.notEqual(countCallTemplate2, 0, 'count call second template');
+            });
+        });
+    });
+});
+
+QUnit.module('Date Cell Template', () => {
+    [true, false].forEach((isRenovatedRender) => {
+        const description = isRenovatedRender
+            ? 'Renovated Render'
+            : 'Old Render';
+
+        QUnit.module(description, {
+            beforeEach: function() {
+                this.createInstance = (options = {}) => {
+                    this.scheduler = createWrapper({
+                        renovateRender: isRenovatedRender,
+                        ...options,
+                    });
+                    this.instance = this.scheduler.instance;
+                };
+            },
+        }, () => {
+            QUnit.test('Scheduler should have specific dateCellTemplate setting of the view', function(assert) {
+                let countCallTemplate1 = 0;
+                let countCallTemplate2 = 0;
+
+                this.createInstance({
+                    dataSource: [],
+                    views: [{
+                        type: 'week',
+                        dateCellTemplate: function(item, index, container) {
+                            assert.equal(isRenderer(container), !!config().useJQuery, 'element is correct');
+                            countCallTemplate2++;
+                        }
+                    }],
+                    dateCellTemplate: function() {
+                        countCallTemplate1++;
+                    },
+                    currentView: 'week'
+                });
+
+                assert.equal(countCallTemplate1, 0, 'count call first template');
+                assert.notEqual(countCallTemplate2, 0, 'count call second template');
+            });
+
+            QUnit.test('dateCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
+                assert.expect(3);
+                this.createInstance({
+                    currentView: 'week',
+                    views: ['week'],
+                    height: 700,
+                    width: 700,
+                    dataSource: [],
+                    dateCellTemplate: function(cellData, cellIndex, cellElement) {
+                        if(!cellIndex) {
+                            assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
+                            assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, 'Date cell width is OK');
+                            assert.equal($(cellElement).outerHeight(), 40, 'Date cell height is OK');
+                        }
+                    }
+                });
+            });
+
+            QUnit.test('dateCellTemplate should work correctly', function(assert) {
+                this.createInstance({
+                    views: ['month'],
+                    currentView: 'month',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [],
+                    firstDayOfWeek: 0,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            fieldExpr: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    dateCellTemplate: function(itemData, index, container) {
+                        if(index === 0) {
+                            $(container).addClass('custom-group-cell-class');
+                        }
+                    }
+                });
+
+                const $cell1 = this.instance.$element().find('.dx-scheduler-header-panel-cell').eq(0);
+                const $cell2 = this.instance.$element().find('.dx-scheduler-header-panel-cell').eq(1);
+
+                assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
+                assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
+            });
+
+            QUnit.test('dateCellTemplate should have unique date in data (T732376)', function(assert) {
+                this.createInstance({
+                    views: ['timelineWorkWeek'],
+                    currentView: 'timelineWorkWeek',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [],
+                    firstDayOfWeek: 0,
+                    startDayHour: 10,
+                    endDayHour: 11,
+                    cellDuration: 60,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            fieldExpr: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    dateCellTemplate: function(data, index, element) {
+                        const d = data;
+                        $('<div>').appendTo(element).dxButton({
+                            text: 'Test',
+                            onClick: function(e) {
+                                const expectedDate = new Date(2016, 8, 7, 10, 0);
+
+                                assert.equal(d.date.getTime(), expectedDate.getTime());
+                            }
+                        });
+
+                        return element;
+                    }
+                });
+
+                const $button = this.instance.$element().find('.dx-scheduler-header-panel-cell .dx-button').eq(2);
+
+                $($button).trigger('dxclick');
+            });
+
+            QUnit.test('dateCellTemplate should work correctly in workWeek view', function(assert) {
+                const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+                this.createInstance({
+                    views: ['workWeek'],
+                    currentView: 'workWeek',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [],
+                    startDayHour: 7,
+                    endDayHour: 23,
+                    dateCellTemplate: function(cellData, index, container) {
+                        $(container).append(
+                            $('<div />')
+                                .addClass('name')
+                                .text(dayOfWeekNames[cellData.date.getDay()]),
+                            $('<div />')
+                                .addClass('number')
+                                .text(cellData.date.getDate())
+                        );
+                    },
+                });
+
+                const $headerPanel = this.instance.$element().find('.dx-scheduler-header-panel');
+
+                assert.ok($headerPanel.text(), 'Mon5Tue6Wed7Thu8Fri9');
+            });
+
+            QUnit.test('dateCellTemplate should work correctly in agenda view', function(assert) {
+                this.createInstance({
+                    views: ['agenda'],
+                    currentView: 'agenda',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [{
+                        text: 'a',
+                        ownerId: 1,
+                        startDate: new Date(2016, 8, 5, 7),
+                        endDate: new Date(2016, 8, 5, 8),
+                    },
+                    {
+                        text: 'b',
+                        ownerId: 2,
+                        startDate: new Date(2016, 8, 5, 10),
+                        endDate: new Date(2016, 8, 5, 11),
+                    }],
+                    firstDayOfWeek: 0,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            fieldExpr: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    dateCellTemplate: function(itemData, index, container) {
+                        if(index === 0) {
+                            $(container).addClass('custom-group-cell-class');
+                        }
+                    }
+                });
+
+                const $cell1 = this.instance.$element().find('.dx-scheduler-time-panel-cell').eq(0);
+                const $cell2 = this.instance.$element().find('.dx-scheduler-time-panel-cell').eq(1);
+
+                assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
+                assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
+            });
+
+            QUnit.test('dateCellTemplate should have correct options', function(assert) {
+                let templateOptions;
+
+                this.createInstance({
+                    currentView: 'month',
+                    currentDate: new Date(2016, 8, 5),
+                    dateCellTemplate: function(itemData, index, $container) {
+                        if(index === 0) {
+                            templateOptions = itemData;
+                        }
+                    }
+                });
+
+                assert.equal(templateOptions.text, 'Sun', 'text option is ok');
+                assert.deepEqual(templateOptions.date.getTime(), new Date(2016, 7, 28).getTime(), 'date option is ok');
+            });
+
+            QUnit.test('dateCellTemplate should have correct options in agenda view', function(assert) {
+                let templateOptions;
+
+                this.createInstance({
+                    views: ['agenda'],
+                    currentView: 'agenda',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [{
+                        text: 'a',
+                        ownerId: 1,
+                        startDate: new Date(2016, 8, 5, 7),
+                        endDate: new Date(2016, 8, 5, 8),
+                    },
+                    {
+                        text: 'b',
+                        ownerId: 2,
+                        startDate: new Date(2016, 8, 5, 10),
+                        endDate: new Date(2016, 8, 5, 11),
+                    }],
+                    firstDayOfWeek: 0,
+                    groups: ['ownerId'],
+                    resources: [
+                        {
+                            fieldExpr: 'ownerId',
+                            dataSource: [
+                                { id: 1, text: 'John' },
+                                { id: 2, text: 'Mike' }
+                            ]
+                        }
+                    ],
+                    dateCellTemplate: function(itemData, index, $container) {
+                        if(index === 0) {
+                            templateOptions = itemData;
+                        }
+                    }
+                });
+
+                assert.equal(templateOptions.text, '5 Mon', 'text option is ok');
+                assert.equal(templateOptions.date.getTime(), new Date(2016, 8, 5).getTime(), 'date option is ok');
+                assert.deepEqual(templateOptions.groups, { 'ownerId': 1 }, 'groups option is ok');
+
+            });
+
+            QUnit.test('WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment', function(assert) {
+                this.createInstance({
+                    currentView: 'week',
+                    currentDate: new Date(2016, 8, 5),
+                    dataSource: [{
+                        text: 'a',
+                        ownerId: 1,
+                        startDate: new Date(2016, 8, 5, 7),
+                        endDate: new Date(2016, 8, 5, 8),
+                        allDay: true
+                    }],
+                    crossScrollingEnabled: true,
+                    dateCellTemplate: function(itemData, index, $container) {
+                        return $('<div>').css({ height: '150px' });
+                    }
+                });
+
+                const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
+                const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
+                const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
+                const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
+                const allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
+
+                assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
+                assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
+                assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
+            });
+        });
+    });
+});
+
+QUnit.module('Markup', () => {
+    QUnit.test('Rows should have correct width in Month when virtual scrolling is used', function(assert) {
+        const scheduler = createWrapper({
+            views: [{
+                type: 'month',
+                intervalCount: 30,
+            }],
+            currentView: 'month',
+            dataSource: [],
+            scrolling: { mode: 'virtual' },
+        });
+
+        const firstRow = scheduler.workSpace.getRows(0);
+        const cells = scheduler.workSpace.getCells().slice(0, 7);
+
+        const rowWidth = firstRow.outerWidth();
+        const rowWidthByCells = [...(new Array(7))].reduce((currentWidth, _, index) => {
+            return currentWidth + cells.eq(index).outerWidth();
+        }, 0);
+
+        assert.roughEqual(rowWidth, rowWidthByCells, 3.1, 'Correct row width');
     });
 });

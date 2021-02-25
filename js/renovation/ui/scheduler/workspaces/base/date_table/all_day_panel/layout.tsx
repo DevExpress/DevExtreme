@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../../../../../utils/combine_classes';
 import { Table } from '../../table';
-import { AllDayPanelTableBody as TableBody } from './table_body';
+import { AllDayPanelTableBody } from './table_body';
 import { ViewCellData } from '../../../types.d';
 import { LayoutProps } from '../../layout_props';
 import { DefaultSizes } from '../../../const';
@@ -15,9 +15,14 @@ export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
     className={viewModel.classes}
   >
     {viewModel.props.visible && (
-      <Table className="dx-scheduler-all-day-table" height={viewModel.emptyTableHeight}>
-        <TableBody
+      <Table
+        className="dx-scheduler-all-day-table"
+        height={viewModel.emptyTableHeight}
+      >
+        <AllDayPanelTableBody
           viewData={viewModel.allDayPanelData}
+          leftVirtualCellWidth={viewModel.props.leftVirtualCellWidth}
+          rightVirtualCellWidth={viewModel.props.rightVirtualCellWidth}
           dataCellTemplate={viewModel.props.dataCellTemplate}
         />
       </Table>
@@ -27,7 +32,7 @@ export const viewFunction = (viewModel: AllDayPanelLayout): JSX.Element => (
 
 @ComponentBindings()
 export class AllDayPanelLayoutProps extends LayoutProps {
-  @OneWay() className? = '';
+  @OneWay() className = '';
 
   @OneWay() visible? = true;
 }
@@ -41,7 +46,7 @@ export class AllDayPanelLayoutProps extends LayoutProps {
 })
 export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {
   get allDayPanelData(): ViewCellData[] | undefined {
-    return this.props.viewData!.groupedData[0].allDayPanel;
+    return this.props.viewData.groupedData[0].allDayPanel;
   }
 
   get emptyTableHeight(): number | undefined {
@@ -54,7 +59,7 @@ export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {
     return combineClasses({
       'dx-scheduler-all-day-panel': true,
       'dx-hidden': !this.props.visible,
-      [this.props.className!]: !!this.props.className,
+      [this.props.className]: !!this.props.className,
     });
   }
 }

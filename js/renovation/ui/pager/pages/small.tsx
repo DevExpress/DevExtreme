@@ -2,7 +2,7 @@ import {
   Component,
   JSXComponent,
   Effect,
-  InternalState, ForwardRef,
+  InternalState, ForwardRef, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import { Page } from './page';
@@ -18,7 +18,6 @@ const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
 const LIGHT_PAGES_CLASS = 'dx-light-pages';
 const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   pageIndexRef,
   selectLastPageIndex,
@@ -27,7 +26,7 @@ export const viewFunction = ({
   value,
   pagesCountText,
   props: { pageCount },
-}: PagesSmall) => (
+}: PagesSmall): JSX.Element => (
   <div className={LIGHT_PAGES_CLASS}>
     <NumberBox
       rootElementRef={pageIndexRef}
@@ -47,13 +46,12 @@ export const viewFunction = ({
     />
   </div>
 );
-
-type PagesSmallPropsType = Pick<PagerProps,
-'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' >;
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PagerSmallProps = Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesSmall extends JSXComponent<PagesSmallPropsType>() {
-  @ForwardRef() pageIndexRef!: HTMLDivElement;
+export class PagesSmall extends JSXComponent<PagerSmallProps>() {
+  @ForwardRef() pageIndexRef!: RefObject<HTMLDivElement>;
 
   get value(): number {
     return this.props.pageIndex + 1;
@@ -71,7 +69,9 @@ export class PagesSmall extends JSXComponent<PagesSmallPropsType>() {
   @InternalState() private minWidth = 10;
 
   @Effect() updateWidth(): void {
-    this.minWidth = getElementMinWidth(this.pageIndexRef) || this.minWidth;
+    this.minWidth = (this.pageIndexRef.current
+        && getElementMinWidth(this.pageIndexRef.current))
+      || this.minWidth;
   }
 
   selectLastPageIndex(): void {

@@ -7,7 +7,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const BUTTON_CLASS = 'dx-button';

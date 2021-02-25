@@ -5,7 +5,6 @@ import devices from 'core/devices';
 import List from 'ui/list';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -369,6 +368,21 @@ QUnit.module('decorators markup', {}, () => {
         const $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
         assert.ok($deleteToggle.length, 'toggle generated');
         assert.ok($deleteToggle.find(toSelector(TOGGLE_DELETE_SWITCH_ICON_CLASS)).length, 'toggle icon generated');
+    });
+
+    QUnit.test('list item delete icon is visible when showSelectionControls=true (T966717)', function(assert) {
+        const $list = $('#templated-list').dxList({
+            items: ['0'],
+            allowItemDeleting: true,
+            showSelectionControls: true,
+            selectionMode: 'multiple',
+            itemDeleteMode: 'toggle'
+        });
+
+        const $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        const $deleteToggleIcon = $item.find(`.${TOGGLE_DELETE_SWITCH_ICON_CLASS}`).get(0);
+
+        assert.notStrictEqual(window.getComputedStyle($deleteToggleIcon).backgroundImage, 'none', 'background image is defined');
     });
 
     QUnit.test('list item markup, item select decorator', function(assert) {

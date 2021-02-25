@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 const { test } = QUnit;
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/gantt';
 import { extend } from 'core/utils/extend';
@@ -41,6 +40,7 @@ const TOOLBAR_ITEM_SELECTOR = '.dx-toolbar-item';
 const PARENT_TASK_SELECTOR = '.dx-gantt-parent';
 const TOOLBAR_SEPARATOR_SELECTOR = '.dx-gantt-toolbar-separator';
 const TOOLTIP_SELECTOR = '.dx-gantt-task-edit-tooltip';
+const TASK_SELECTOR = '.dx-gantt-task';
 
 const tasks = [
     { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
@@ -152,6 +152,37 @@ QUnit.module('Markup', moduleConfig, () => {
         expandedElement.trigger('dxclick');
         this.clock.tick();
         assert.roughEqual(initHeight, this.$element.height(), 1, 'collapsed height');
+    });
+    test('invalid start or end dates', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope 0', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 1, 'title': 'Scope 1', 'start': null, 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 4, 'parentId': 2, 'title': 'Scope 2', 'start': new Date('2019-02-21'), 'end': null, 'progress': 50 },
+            { 'id': 5, 'parentId': 2, 'title': 'Scope 3', 'start': null, 'end': null, 'progress': 25 }
+        ];
+        const customDependencies = [
+            { 'id': 0, 'predecessorId': 1, 'successorId': 2, 'type': 0 },
+            { 'id': 1, 'predecessorId': 2, 'successorId': 3, 'type': 0 },
+            { 'id': 2, 'predecessorId': 3, 'successorId': 4, 'type': 0 }
+        ];
+        const options = {
+            tasks: { dataSource: customTasks },
+            dependencies: { dataSource: customDependencies }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_DATA_ROW_SELECTOR);
+        assert.strictEqual(treeListElements.length, 5);
+
+        const taskElements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        assert.equal(taskElements.length, 2);
+
+        const dependenciesElements = this.$element.find(TASK_ARROW_SELECTOR);
+        assert.equal(dependenciesElements.length, 1);
+
+        assert.equal(this.instance.getVisibleTaskKeys().length, 2, 'task keys');
+        assert.equal(this.instance.getVisibleDependencyKeys().length, 1, 'dependencies keys');
     });
 });
 
@@ -646,11 +677,26 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), 'start task text is shown');
         assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), 'end task text is shown');
         assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
-
         const testTitle = 'text';
         const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
-        titleTextBox.option('value', testTitle);
+        const startTextBox = $dialog.find('.dx-datebox').eq(0).dxDateBox('instance');
+        const endTextBox = $dialog.find('.dx-datebox').eq(1).dxDateBox('instance');
+        startTextBox.option('value', '');
+        endTextBox.option('value', '');
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        assert.equal($dialog.length, 1, 'dialog is shown');
+        let isValidStartTextBox = startTextBox._getValidationErrors() === null;
+        let isValidEndTextBox = endTextBox._getValidationErrors() === null;
+        assert.notOk(isValidStartTextBox, 'empty start validation');
+        assert.notOk(isValidEndTextBox, 'empty end validation');
+        titleTextBox.option('value', testTitle);
+        startTextBox.option('value', tasks[0].start);
+        endTextBox.option('value', tasks[0].end);
+        isValidStartTextBox = startTextBox._getValidationErrors() === null;
+        isValidEndTextBox = endTextBox._getValidationErrors() === null;
+        assert.ok(isValidStartTextBox, 'not empty start validation');
+        assert.ok(isValidEndTextBox, 'not empty end validation');
         $okButton.trigger('dxclick');
         this.clock.tick();
         const firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
@@ -869,6 +915,20 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($items.last().text(), 'Custom item', 'Custom item has custom text');
         assert.equal($items.eq(3).text(), 'test', 'Custom zoomIn button was rendered with custom text');
     });
+    test('add subTask', function(assert) {
+        const items = [ 'addSubTask' ];
+        const options = {
+            tasks: { dataSource: tasks },
+            toolbar: { items: items }
+        };
+
+        this.createInstance(options);
+        this.clock.tick();
+
+        const $items = this.$element.find(TOOLBAR_ITEM_SELECTOR);
+        assert.equal($items.length, items.length, 'All items were rendered');
+        assert.equal($items.first().children().children().attr('aria-label'), 'dx-gantt-i dx-gantt-i-add-sub-task', 'New Subtask item was rendered');
+    });
 });
 
 QUnit.module('DataSources', moduleConfig, () => {
@@ -974,6 +1034,28 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal(createdTask.start, newStart, 'new task start is right');
         assert.equal(createdTask.end, newEnd, 'new task end is right');
     });
+    test('task inserted', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        const text = 'My text';
+        const newStart = new Date('2019-02-23');
+        const newEnd = new Date('2019-02-24');
+        let values;
+        let keyExists = false;
+        this.instance.option('onTaskInserted', (e) => {
+            values = e.values;
+            keyExists = !!e.key;
+        });
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, text, 0, '1');
+        this.clock.tick();
+
+        assert.ok(keyExists, 'key created');
+        assert.equal(values['title'], text, 'new task title is right');
+        assert.equal(values['start'], newStart, 'new task start is right');
+        assert.equal(values['end'], newEnd, 'new task end is right');
+    });
     test('task deleting - canceling', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
@@ -992,6 +1074,27 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(taskToDelete.id.toString(), false);
         this.clock.tick();
         assert.equal(tasks.length, tasksCount, 'new task was not deleted');
+        assert.equal(values['parentId'], taskToDelete.parentId, 'check values parentId');
+        assert.equal(values['title'], taskToDelete.title, 'check values title');
+        assert.equal(values['start'], taskToDelete.start, 'check values start');
+        assert.equal(values['end'], taskToDelete.end, 'check values end');
+        assert.equal(key, taskToDelete.id, 'check key');
+    });
+    test('task deleted', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        let key;
+        let values;
+        this.instance.option('onTaskDeleted', (e) => {
+            key = e.key;
+            values = e.values;
+        });
+        const taskToDelete = tasks[tasks.length - 1];
+        this.instance.option('selectedRowKey', taskToDelete.id.toString());
+        getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(taskToDelete.id.toString(), false);
+        this.clock.tick();
         assert.equal(values['parentId'], taskToDelete.parentId, 'check values parentId');
         assert.equal(values['title'], taskToDelete.title, 'check values title');
         assert.equal(values['start'], taskToDelete.start, 'check values start');
@@ -1098,6 +1201,47 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal(task.CustomText, 'new custom text', 'task cust field  is updated');
         assert.equal(task.ItemName, 'new item text', 'task cust field  is updated');
     });
+    test('task updated', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+
+        let values;
+        this.instance.option('onTaskUpdated', (e) => { values = e.values; });
+        this.clock.tick();
+
+        const data = {
+            CustomText: 'new',
+            ItemName: 'new'
+        };
+
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick();
+        assert.equal(data.CustomText, values.CustomText, 'task cust field  is updated');
+        assert.equal(data.ItemName, values.ItemName, 'task cust field  is updated');
+    });
 
     test('task dialog showing - cancel', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1200,6 +1344,38 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         this.clock.tick();
         assert.equal(dependencies.length, count, 'new dependency was not created');
     });
+    test('dependency inserted', function(assert) {
+        const dependenciesOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+                    { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+                    { 'id': 3, 'parentId': 1, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+                ]
+            },
+            dependencies: { dataSource: [ { 'id': 0, 'predecessorId': 1, 'successorId': 2, 'type': 0 } ] }
+        };
+
+        this.createInstance(dependenciesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        let values;
+        let key;
+        this.instance.option('onDependencyInserted', (e) => {
+            values = e.values;
+            key = e.key;
+        });
+
+        const data = { 'predecessorId': 2, 'successorId': 3, 'type': 0 };
+        this.instance.insertDependency(data);
+        this.clock.tick();
+
+        assert.ok(!!key, 'key created');
+        assert.equal(values['predecessorId'], data['predecessorId'], 'new predecessorId is right');
+        assert.equal(values['successorId'], data['successorId'], 'new successorId is right');
+        assert.equal(values['type'], data['type'], 'new type is right');
+    });
     test('dependency deleting - canceling', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
@@ -1221,6 +1397,40 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal(values['successorId'], dependencyToDelete.successorId, 'check values successorId');
         assert.equal(values['type'], dependencyToDelete.type, 'check values type');
         assert.equal(key, dependencyToDelete.id, 'check key');
+    });
+    test('dependency deleted', function(assert) {
+        const dependenciesOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+                    { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+                    { 'id': 3, 'parentId': 1, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+                ]
+            },
+            dependencies: { dataSource: [ { 'id': 0, 'predecessorId': 1, 'successorId': 2, 'type': 0 } ] }
+        };
+
+        this.createInstance(dependenciesOptions);
+        this.instance.option('editing.enabled', true);
+        this.clock.tick();
+
+        let key;
+        let values;
+        this.instance.option('onDependencyDeleted', (e) => {
+            key = e.key;
+            values = e.values;
+        });
+        const dependencyToDelete = dependencies[0];
+        this.instance.deleteDependency(dependencyToDelete.id);
+
+        const $confirmDialog = $('body').find(POPUP_SELECTOR);
+        const $yesButton = $confirmDialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $yesButton.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(key, 0, 'key is right');
+        assert.equal(values.predecessorId, dependencyToDelete.predecessorId, 'check values predecessorId');
+        assert.equal(values.successorId, dependencyToDelete.successorId, 'check values successorId');
+        assert.equal(values.type, dependencyToDelete.type, 'check values type');
     });
     test('resource inserting - canceling', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1475,9 +1685,15 @@ QUnit.module('Edit api', moduleConfig, () => {
         const removedDependency = dependencies.filter((t) => t.id === dependencyToDelete.id)[0];
         assert.equal(removedDependency, undefined, 'dependency was removed');
     });
-    test('insertResource', function(assert) {
+    test('insertResource + onResourceInserted', function(assert) {
+        let values;
+        let keyExists = false;
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceInserted', (e) => {
+            values = e.values;
+            keyExists = !!e.key;
+        });
         this.clock.tick();
 
         const resourcesCount = resources.length;
@@ -1493,10 +1709,74 @@ QUnit.module('Edit api', moduleConfig, () => {
         const newAssignment = resourceAssignments[resourceAssignments.length - 1];
         assert.equal(newAssignment.resourceId, newResource.id, 'new assignment resource id is right');
         assert.equal(newAssignment.taskId, 2, 'new assignment task id is right');
+
+        assert.ok(keyExists, 'key created');
+        assert.equal(values.text, data.text, 'new task title is right');
     });
-    test('deleteResource', function(assert) {
+    test('insertResource (T959410)', function(assert) {
+        let assignedValues;
+        let assigningValues;
+        let resKey;
+        let assignmentKey;
+
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceAssigning', (e) => { assigningValues = e.values; });
+        this.instance.option('onResourceInserted', (e) => { resKey = e.key; });
+        this.instance.option('onResourceAssigned', (e) => {
+            assignedValues = e.values;
+            assignmentKey = !!e.key;
+        });
+        this.clock.tick();
+
+        const data = { text: 'My text' };
+        this.instance.insertResource(data, [2]);
+        this.clock.tick();
+
+        assert.ok(assignmentKey, 'key created');
+        assert.equal(assigningValues.taskId, 2, 'assigning task key');
+        assert.equal(assigningValues.resourceId, resKey, 'assigning resource key');
+        assert.equal(assignedValues.taskId, 2, 'assigned task key');
+        assert.equal(assignedValues.resourceId, resKey, 'assigned resource key');
+    });
+    test('insertResource + assignResourceToTask (T959410)', function(assert) {
+        let assignedValues;
+        let assigningValues;
+        let resKey;
+        let assignmentKey;
+
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceAssigning', (e) => { assigningValues = e.values; });
+        this.instance.option('onResourceInserted', (e) => { resKey = e.key; });
+        this.instance.option('onResourceAssigned', (e) => {
+            assignedValues = e.values;
+            assignmentKey = !!e.key;
+        });
+        this.clock.tick();
+
+        const data = { text: 'My text' };
+        this.instance.insertResource(data);
+        this.clock.tick(200);
+        this.instance.assignResourceToTask(resKey, 2);
+        this.clock.tick(200);
+
+        assert.ok(assignmentKey, 'key created');
+        assert.equal(assigningValues.taskId, 2, 'assigning task key');
+        assert.equal(assigningValues.resourceId, resKey, 'assigning resource key');
+        assert.equal(assignedValues.taskId, 2, 'assigned task key');
+        assert.equal(assignedValues.resourceId, resKey, 'assigned resource key');
+    });
+    test('deleteResource + onResourceDeleted', function(assert) {
+        let key;
+        let values;
+
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceDeleted', (e) => {
+            key = e.key;
+            values = e.values;
+        });
         this.clock.tick();
 
         const count = resources.length;
@@ -1507,10 +1787,18 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(resources.length, count - 1, 'resources was deleted');
         const removedResource = resources.filter((t) => t.id === resourceToDelete.id)[0];
         assert.equal(removedResource, undefined, 'dependency was removed');
+        assert.equal(key, resourceToDelete.id, 'check key');
+        assert.equal(values.text, resourceToDelete.text, 'check key');
     });
     test('assignResourceToTask', function(assert) {
+        let values;
+        let keyExists = false;
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceAssigned', (e) => {
+            values = e.values;
+            keyExists = !!e.key;
+        });
         this.clock.tick();
 
         const count = resourceAssignments.length;
@@ -1523,10 +1811,20 @@ QUnit.module('Edit api', moduleConfig, () => {
         const newAssignment = resourceAssignments[resourceAssignments.length - 1];
         assert.equal(newAssignment.resourceId, resourceToAssign.id, 'new assignment resource id is right');
         assert.equal(newAssignment.taskId, taskToAssign.id, 'new assignment task id is right');
+
+        assert.ok(keyExists, 'key created');
+        assert.equal(values.resourceId, resourceToAssign.id, 'new resource id in event');
+        assert.equal(values.taskId, taskToAssign.id, 'new task id in event');
     });
     test('unassignResourceFromTask', function(assert) {
+        let values;
+        let key;
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('onResourceUnassigned', (e) => {
+            values = e.values;
+            key = e.key;
+        });
         this.clock.tick();
 
         const count = resourceAssignments.length;
@@ -1538,6 +1836,10 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(resourceAssignments.length, count - 1, 'resource was not deassigned');
         const removedAssignment = resourceAssignments.filter((t) => t.id === toDelete.id)[0];
         assert.equal(removedAssignment, undefined, 'assigmnent was removed');
+
+        assert.equal(key, toDelete.id, 'check key');
+        assert.equal(values.resourceId, toDelete.resourceId, 'resource id in event');
+        assert.equal(values.taskId, toDelete.taskId, 'task id in event');
     });
     test('getTaskData', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1870,7 +2172,6 @@ QUnit.module('Mappings convert', moduleConfig, () => {
     });
 });
 
-
 QUnit.module('Context Menu', moduleConfig, () => {
     test('showing', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1966,7 +2267,26 @@ QUnit.module('Context Menu', moduleConfig, () => {
         const items = getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
         assert.equal(items.eq(items.length - 1).text(), 'My Command', 'custom item was rendered');
     });
+    test('add subTask', function(assert) {
+        const contextMenuOptions = {
+            contextMenu: { items: [ 'addSubTask' ] }
+        };
+        this.createInstance(extend(tasksOnlyOptions, contextMenuOptions));
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        const getItems = () => {
+            return getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
+        };
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        const items = getItems();
+        assert.equal(items.length, 1, 'there are 1 items');
+        assert.equal(items.eq(0).text(), 'New Subtask', 'undo item was rendered');
+    });
 });
+
 QUnit.module('Strip Lines', moduleConfig, () => {
     test('render', function(assert) {
         const stripLines = [
@@ -2011,6 +2331,7 @@ QUnit.module('Strip Lines', moduleConfig, () => {
         assert.equal($stripLines.length, 0, 'gantt has no strip lines');
     });
 });
+
 QUnit.module('Parent auto calculation', moduleConfig, () => {
     test('render', function(assert) {
         const options = {
@@ -2488,7 +2809,6 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
         const customTooltipFunction = (task, container) => {
-            $(container).empty();
             return customTooltipText;
         };
         this.clock.tick();
@@ -2507,10 +2827,7 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestCustomTooltipJQuery';
         const customTooltipJQuery = $('<div>TestCustomTooltipJQuery</div>');
-        const customTooltipFunction = (task, container) => {
-            $(container).empty();
-            return customTooltipJQuery;
-        };
+        const customTooltipFunction = customTooltipJQuery;
         this.clock.tick();
         this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
         this.clock.tick();
@@ -2527,31 +2844,15 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
         const customTooltipFunction = (task, container) => {
-            if(task.id === 1) {
-                return;
-            }
-            const template = container.innerHTML;
-            $(container).empty();
-            if(task.id === 2) {
-                return;
-            }
             if(task.id === 3 || task.id === 4) {
                 return customTooltipText;
             }
-            return template;
+            return;
         };
         this.clock.tick();
         this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
         this.clock.tick();
         const ganttCore = getGanttViewCore(this.instance);
-        this.clock.tick();
-        ganttCore.taskEditController.show(0);
-        ganttCore.taskEditController.showTaskInfo(0, 0);
-        this.clock.tick();
-        const tooltipTitleText = this.$element.find(TOOLTIP_SELECTOR).text();
-        const taskTitle = tasks[0].title;
-        assert.equal(tooltipTitleText.indexOf(taskTitle), 0, 'Default template works correctly');
-        ganttCore.taskEditController.tooltip.hide();
         this.clock.tick();
         ganttCore.taskEditController.show(1);
         ganttCore.taskEditController.showTaskInfo(0, 0);
@@ -2565,6 +2866,88 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
         assert.equal(tooltipText, customTooltipText, 'Custom template text works correctly');
+    });
+});
+
+QUnit.module('Task Template', moduleConfig, () => {
+    test('common', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        const taskText = this.$element.find(TASK_SELECTOR)[0].textContent;
+        const taskTitle = tasks[0].title;
+        assert.equal(taskText.indexOf(taskTitle), 0, 'Default task works correctly');
+    });
+    test('custom text', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-26'), 'progress': 50 }
+        ];
+
+        const customTaskText = 'TestTaskText';
+        const customTaskFunction = (item, container) => {
+            return customTaskText;
+        };
+        const options = {
+            tasks: { dataSource: customTasks },
+            taskContentTemplate: customTaskFunction
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const elements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        assert.equal(elements.length, customTasks.length, 'Should render task wrapper for each task');
+        this.clock.tick();
+        const taskText = this.$element.find(TASK_WRAPPER_SELECTOR).first().text();
+        assert.equal(taskText, customTaskText, 'Custom task text works correctly');
+    });
+    test('custom jQuery', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-26'), 'progress': 50 }
+        ];
+        const customTaskText = 'TestCustomTooltipJQuery';
+        const customTaskFunction = $('<div>' + customTaskText + '</div>');
+        const options = {
+            tasks: { dataSource: customTasks },
+            taskContentTemplate: customTaskFunction
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const taskText = this.$element.find(TASK_WRAPPER_SELECTOR).first().text();
+        assert.equal(taskText, customTaskText, 'Custom template with jQuery works correctly');
+    });
+    test('check default settings', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-26'), 'progress': 50 },
+            { 'id': 4, 'parentId': 2, 'title': 'Project scope 1', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-26'), 'progress': 50 }
+        ];
+        const customTaskText = 'TestTaskText';
+        const customTaskFunction = (item, container) => {
+            assert.ok(item.taskData, 'item.taskData');
+            assert.ok(item.cellSize, 'item.cellSize');
+            assert.ok(item.taskHTML, 'item.taskHTML');
+            assert.ok(item.taskPosition, 'item.taskPosition');
+            assert.ok(item.taskSize, 'item.taskSize');
+            assert.notOk(item.isMilestone, 'item.isMilestone');
+            assert.ok(item.taskResources, 'item.taskResources');
+            if(item.taskData.id === 3 || item.taskData.id === 4) {
+                return;
+            }
+            return customTaskText;
+        };
+        const options = {
+            tasks: { dataSource: customTasks },
+            taskContentTemplate: customTaskFunction
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const taskWrapperElements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        const taskText = taskWrapperElements[1].textContent;
+        assert.equal(taskText, customTaskText, 'Custom task text works correctly');
+        assert.equal(this.instance.getVisibleTaskKeys().length, 2, 'task keys');
     });
 });
 
@@ -2643,3 +3026,205 @@ QUnit.module('Root Value', moduleConfig, () => {
         assert.strictEqual(treeListElements.length, 3);
     });
 });
+
+QUnit.module('FullScreen Mode', moduleConfig, () => {
+    test('FullScreen is switching', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        this.instance.option('height', 200);
+        this.clock.tick();
+        const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
+
+        assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, false, 'Normal mode is enabled');
+        this.clock.tick();
+        fullScreenCommand.executeInternal();
+        this.clock.tick();
+        assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, true, 'FullScreen mode is enabled');
+        fullScreenCommand.execute();
+        assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, false, 'Normal mode is enabled after FullScreen mode');
+
+    });
+    test('is taking up entire screen', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        this.instance.option('height', 200);
+        this.instance.option('width', 400);
+        this.instance.option('taskListWidth', 200);
+        this.clock.tick();
+        const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
+        assert.ok(this.instance.$element().height() < $(window).height(), '1.normalMode: gantt height < window height');
+        assert.ok(this.instance.$element().width() < $(window).width(), '1.normalMode: gantt width < window width');
+        fullScreenCommand.execute();
+        assert.equal(this.instance.$element().height(), $(window).height(), '1.fullScreenMode: gantt height == window height');
+        assert.equal(this.instance.$element().width(), $(window).width(), '1.fullScreenMode: gantt width == window width');
+        fullScreenCommand.execute();
+        this.clock.tick();
+        assert.ok(this.instance.$element().height() < $(window).height(), '2.normalMode: gantt height < window height');
+        assert.ok(this.instance.$element().width() < $(window).width(), '2.normalMode: gantt width < window width');
+        fullScreenCommand.execute();
+        assert.equal(this.instance.$element().height(), $(window).height(), '2.fullScreenMode: gantt height == window height');
+        assert.equal(this.instance.$element().width(), $(window).width(), '2.fullScreenMode: gantt width == window width');
+        fullScreenCommand.execute();
+    });
+
+    test('task editng is possible', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
+        this.instance.option('height', 200);
+        this.clock.tick();
+        const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
+        fullScreenCommand.execute();
+        assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, true, 'FullScreen mode is enabled');
+        showTaskEditDialog(this.instance);
+        this.clock.tick();
+        let $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+
+        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_SELECTOR);
+        assert.equal($inputs.eq(0).val(), tasks[0].title, 'title text is shown');
+        assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), 'start task text is shown');
+        assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), 'end task text is shown');
+        assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
+
+        const testTitle = 'text';
+        const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
+        titleTextBox.option('value', testTitle);
+        const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        this.clock.tick();
+        const firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
+        assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
+
+        this.instance.option('editing.enabled', false);
+        showTaskEditDialog(this.instance);
+        assert.equal($dialog.find('.dx-popup-bottom').find('.dx-button').length, 1, 'only cancel button in toolbar');
+        $dialog = $('body').find(POPUP_SELECTOR);
+        const inputs = $dialog.find('.dx-texteditor-input');
+        assert.equal(inputs.attr('readOnly'), 'readonly', 'all inputs is readOnly');
+        fullScreenCommand.execute();
+    });
+    test('panel sizes are the same', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        this.instance.option('width', 1400);
+        this.clock.tick();
+        const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
+        let leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
+        fullScreenCommand.execute();
+        assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in FullScreen');
+        fullScreenCommand.execute();
+        this.clock.tick();
+        const diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
+        assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
+        this.clock.tick();
+        fullScreenCommand.execute();
+        const splitterWrapper = this.$element.find(SPLITTER_WRAPPER_SELECTOR);
+        const splitter = this.$element.find(SPLITTER_SELECTOR);
+
+        const treeListWrapperElement = this.$element.find(TREELIST_WRAPPER_SELECTOR);
+        const treeListWrapperLeftOffset = treeListWrapperElement.offset().left;
+        const treeListWrapperTopOffset = treeListWrapperElement.offset().top;
+
+        const ganttView = this.$element.find(GANTT_VIEW_SELECTOR);
+
+        const splitterContainerWrapperWidth = $(treeListWrapperElement).parent().width();
+
+        assert.ok(splitterWrapper, 'Splitter wrapper has been found');
+        assert.ok(splitter, 'Splitter has been found');
+
+        splitter.trigger($.Event('dxpointerdown', { pointerType: 'mouse' }));
+        splitter.trigger($.Event('dxpointermove', {
+            pointerType: 'mouse',
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 100,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
+
+        assert.equal(treeListWrapperElement.width(), 100);
+        assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, 'Splitter has been moved by mouse');
+
+        splitter.trigger($.Event('dxpointerdown', { pointerType: 'touch' }));
+        splitter.trigger($.Event('dxpointermove', {
+            pointerType: 'touch',
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) + 300,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup', { pointerType: 'touch' }));
+
+        assert.equal(treeListWrapperElement.width(), 300);
+        assert.equal(ganttView.width(), splitterContainerWrapperWidth - 300);
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 300, 'Splitter has been moved by touch');
+
+        splitter.trigger($.Event('dxpointerdown'));
+        splitter.trigger($.Event('dxpointermove', {
+            pageX: treeListWrapperLeftOffset - parseFloat(splitter.css('margin-left')) - 10,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup'));
+
+        assert.equal(treeListWrapperElement.width(), 0);
+        assert.equal(ganttView.width(), splitterContainerWrapperWidth);
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 0, 'Splitter has not cross the left side');
+
+        splitter.trigger($.Event('dxpointerdown'));
+        splitter.trigger($.Event('dxpointermove', {
+            pageX: splitterContainerWrapperWidth - parseFloat(splitter.css('margin-left')) + 10,
+            pageY: treeListWrapperTopOffset + 100 }));
+        splitter.trigger($.Event('dxpointerup'));
+
+        assert.equal(treeListWrapperElement.width(), splitterContainerWrapperWidth - splitter.width());
+        assert.equal(ganttView.width(), splitter.width());
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
+        leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
+        fullScreenCommand.execute();
+    });
+});
+
+QUnit.module('Repaint', moduleConfig, () => {
+    test('should render treeList after repaint()', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        this.instance.repaint();
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_SELECTOR);
+        assert.strictEqual(treeListElements.length, 1);
+    });
+    test('should render task wrapper for each task after repaint()', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        this.instance.repaint();
+        this.clock.tick();
+        const elements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        assert.equal(elements.length, tasks.length - 1);
+    });
+    test('should store task changes after repaint() ', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
+        this.clock.tick();
+        showTaskEditDialog(this.instance);
+        this.clock.tick();
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+
+        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_SELECTOR);
+        assert.equal($inputs.eq(0).val(), tasks[0].title, 'title text is shown');
+        assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), 'start task text is shown');
+        assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), 'end task text is shown');
+        assert.equal($inputs.eq(3).val(), tasks[0].progress + '%', 'progress text is shown');
+
+        const testTitle = 'text';
+        const titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
+        titleTextBox.option('value', testTitle);
+        const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        this.clock.tick();
+        let firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
+        assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
+
+        this.instance.repaint();
+        this.clock.tick();
+        firstTreeListTitleText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
+        assert.equal(firstTreeListTitleText, testTitle, 'title text is the same after repaint()');
+    });
+});
+

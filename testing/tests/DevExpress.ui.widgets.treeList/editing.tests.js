@@ -10,7 +10,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
@@ -49,7 +48,7 @@ const setupModule = function() {
     };
 
     that.setupTreeList = function() {
-        setupTreeListModules(that, ['data', 'columns', 'rows', 'selection', 'headerPanel', 'masterDetail', 'editing', 'editorFactory', 'validating', 'errorHandling', 'search'], {
+        setupTreeListModules(that, ['data', 'columns', 'rows', 'selection', 'headerPanel', 'masterDetail', 'editing', 'editingFormBased', 'editorFactory', 'validating', 'errorHandling', 'search'], {
             initViews: true
         });
     };
@@ -271,8 +270,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         assert.strictEqual(rows.length, 3, 'three rows are rendered');
         assert.strictEqual(rows[0].key, 1, 'row 0');
         assert.strictEqual(rows[0].isExpanded, true, 'row 0 is expanded');
-        assert.deepEqual(rows[1].key.parentKey, 1, 'row 1 key parentKey');
-        assert.deepEqual(rows[1].key.rowIndex, 1, 'row 1 key rowIndex');
         assert.deepEqual(rows[1].isNewRow, true, 'row 1 is inserted');
         assert.deepEqual(rows[1].data, { parentId: 1 }, 'row 1 data should contains parentId');
         assert.strictEqual(rows[2].key, 2, 'row 2 key');
@@ -383,8 +380,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         assert.strictEqual(rows[0].isExpanded, true, 'first row is expanded');
         assert.strictEqual(rows[1].key, 2, 'key of the second row');
         assert.strictEqual(rows[1].node.parent.key, 1, 'parent key of the second row');
-        assert.deepEqual(rows[2].key.parentKey, 2, 'parent key of the third row');
-        assert.deepEqual(rows[2].key.rowIndex, 2, 'rowIndex of the third row');
         assert.deepEqual(rows[2].isNewRow, true, 'third row is inserted');
         assert.deepEqual(rows[2].data, { parentId: 2 }, 'third row data should contain parentId');
     });
@@ -408,8 +403,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         const rows = this.getVisibleRows();
 
         assert.strictEqual(rows.length, 2, 'rows count');
-        assert.deepEqual(rows[0].key.parentKey, 0, 'row 0 key parentKey');
-        assert.deepEqual(rows[0].key.rowIndex, 0, 'row 0 key rowIndex');
         assert.deepEqual(rows[0].isNewRow, true, 'row 0 is inserted');
         assert.deepEqual(rows[0].data, { parentId: 0 }, 'row 0 data should contains parentId');
         assert.strictEqual(rows[1].key, 1, 'row 1');
@@ -436,8 +429,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         const rows = this.getVisibleRows();
 
         assert.strictEqual(rows.length, 2, 'rows count');
-        assert.deepEqual(rows[0].key.parentKey, 0, 'row 0 key parentKey');
-        assert.deepEqual(rows[0].key.rowIndex, 0, 'row 0 key rowIndex');
         assert.deepEqual(rows[0].isNewRow, true, 'row 0 is inserted');
         assert.deepEqual(rows[0].data, { parentId: 0 }, 'row 0 data should contains parentId');
         assert.strictEqual(rows[1].key, 1, 'row 1');

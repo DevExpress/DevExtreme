@@ -1,8 +1,11 @@
 import $ from 'jquery';
 import { locate } from 'animation/translator';
 import devices from 'core/devices';
+import pointerMock from '../../helpers/pointerMock.js';
+import dataUtils from 'core/element_data';
+import browser from 'core/utils/browser';
+import Color from 'color';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
@@ -31,15 +34,35 @@ export const CLASSES = {
 
     dateTableCell: '.dx-scheduler-date-table-cell',
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
+    timePanelCell: '.dx-scheduler-time-panel-cell',
+    headerPanelCell: '.dx-scheduler-header-panel-cell',
+    weekHeaderPanelCell: '.dx-scheduler-header-panel-week-cell',
+    currentTimeCell: '.dx-scheduler-time-panel-current-time-cell',
+    headerPanelCurrentTimeCell: '.dx-scheduler-header-panel-current-time-cell',
+    selectedCell: '.dx-state-focused',
+    focusedCell: '.dx-scheduler-focused-cell',
+
+    verticalGroupPanel: '.dx-scheduler-work-space-vertical-group-table',
 
     appointment: '.dx-scheduler-appointment',
+    appointmentDate: '.dx-scheduler-appointment-content-date',
     appointmentDragSource: '.dx-scheduler-appointment-drag-source',
+
+    appointmentTitle: '.dx-scheduler-appointment-title',
+
+    appointmentMarker: '.dx-scheduler-agenda-appointment-marker',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
         right: '.dx-resizable-handle-right'
     }
 };
+
+export const isIE11 = browser.msie && parseInt(browser.version) <= 11;
+
+export const supportedScrollingModes = !isIE11
+    ? ['standard', 'virtual']
+    : ['standard'];
 
 export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 
@@ -69,49 +92,174 @@ export const asyncWrapper = (assert, callback) => {
         .then(done);
 };
 
-export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout) => {
+export const execAsync = (assert, promise, beforeAssertCallback, assertCallback, timeout) => {
+    let timerId;
+
     return promise.then(() => {
+
         return new Promise((resolve, reject) => {
+
             const execCallback = func => {
                 try {
                     func();
                 } catch(e) {
-                    reject(e);
+                    assert.ok(false, e.message);
+                    reject();
                 }
             };
 
-            beforeAsyncCallback && execCallback(beforeAsyncCallback);
+            beforeAssertCallback && execCallback(beforeAssertCallback);
 
-            setTimeout(() => {
-                execCallback(asyncCallback);
+            timerId = setTimeout(() => {
+                execCallback(assertCallback);
                 resolve();
             }, timeout);
         });
+    }).catch(() => {
+        clearTimeout(timerId);
     });
 };
 
-export const asyncScrollTest = (promise, beforeAsyncCallback, asyncCallback) => {
-    const scrollTimeout = 20;
-    return execAsync(promise, beforeAsyncCallback, asyncCallback, scrollTimeout);
+export const asyncScrollTest = (assert, promise, assertCallback, scrollable, offset, scrollTimeout = 100) => {
+    const wrapper = () => {
+        return execAsync(
+            assert,
+            promise,
+            () => scrollable.scrollTo(offset),
+            assertCallback,
+            scrollTimeout
+        ).catch(() => wrapper());
+    };
+
+    return wrapper();
+};
+
+export const asyncAssert = (assert, assertCallback, timeout) => {
+    return asyncWrapper(assert, promise => {
+
+        execAsync(assert, promise, null, assertCallback, timeout);
+
+        return promise;
+    });
 };
 
 class ElementWrapper {
-    constructor(selector, parent) {
+    constructor(selector, parent, index = 0) {
         this.selector = selector;
         this.parent = parent;
+        this.index = index;
     }
 
     getElement() {
         if(this.parent) {
-            return this.parent.find(this.selector);
+            return this.parent.find(this.selector).eq(this.index);
         }
-        return $(this.selector);
+        return $(this.selector).eq(this.index);
     }
 }
 
 class ClickElementWrapper extends ElementWrapper {
     click() {
         this.getElement().trigger('dxclick');
+    }
+}
+
+class AppointmentTitle extends ElementWrapper {
+    constructor(parent) {
+        super(CLASSES.appointmentTitle, parent, 0);
+    }
+
+    get text() {
+        return this.getElement().text();
+    }
+}
+
+class AppointmentMarker extends ElementWrapper {
+    constructor(parent) {
+        super(CLASSES.appointmentMarker, parent, 0);
+    }
+
+    get color() {
+        return new Color(this.getElement().css('backgroundColor')).toHex();
+    }
+}
+
+class Appointment extends ClickElementWrapper {
+    constructor(parent, index) {
+        super(CLASSES.appointment, parent, index);
+    }
+
+    get rectangle() {
+        const elementRect = this.getElement().get(0).getBoundingClientRect();
+
+        return {
+            x: elementRect.left,
+            y: elementRect.top
+        };
+    }
+
+    get position() {
+        return this.getElement().position();
+    }
+
+    get date() { // TODO
+        return this.getElement().find(CLASSES.appointmentDate).text();
+    }
+
+    get title() {
+        return new AppointmentTitle(this.getElement());
+    }
+
+    get backgroundColor() {
+        return new Color(this.getElement().css('backgroundColor')).toHex();
+    }
+
+    get marker() {
+        return new AppointmentMarker(this.getElement());
+    }
+
+    get data() {
+        const currentAppointment = this.getElement().get(0);
+        return dataUtils.data(currentAppointment, 'dxItemData');
+    }
+
+    get drag() {
+        return {
+            toCell: cellNumber => {
+                const cell = $(CLASSES.dateTableCell).eq(cellNumber).get(0);
+                const cellRect = cell.getBoundingClientRect();
+                const elementRect = this.getElement().get(0).getBoundingClientRect();
+
+                const appointmentPos = {
+                    x: elementRect.left + elementRect.width / 2,
+                    y: elementRect.top + elementRect.height / 2
+                };
+
+                const cellPos = {
+                    x: cellRect.left + cellRect.width / 2,
+                    y: cellRect.top + cellRect.height / 2
+                };
+
+                const pointer = pointerMock(this.getElement()).start();
+                pointer.down(appointmentPos.x, appointmentPos.y)
+                    .move(cellPos.x - appointmentPos.x, cellPos.y - appointmentPos.y);
+                pointer.up();
+            }
+        };
+    }
+
+    click() {
+        const clock = sinon.useFakeTimers();
+        this.getElement().trigger('dxclick');
+        clock.tick(300);
+        clock.restore();
+    }
+
+    dbClick() {
+        // const clock = sinon.useFakeTimers();
+        this.getElement().trigger('dxdblclick');
+        // clock.tick(300);
+        // clock.restore();
     }
 }
 
@@ -399,8 +547,8 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getRowCount: () => $('.dx-scheduler-date-table-row').length,
             getRows: (index = 0) => $('.dx-scheduler-date-table-row').eq(index),
             getCells: () => $(CLASSES.dateTableCell),
-            getSelectedCells: () => this.workSpace.getCells().filter('.dx-state-focused'),
-            getFocusedCell: () => this.workSpace.getCells().filter('.dx-scheduler-focused-cell'),
+            getSelectedCells: () => this.workSpace.getCells().filter(CLASSES.selectedCell),
+            getFocusedCell: () => this.workSpace.getCells().filter(CLASSES.focusedCell),
             getCell: (rowIndex, cellIndex) => {
                 if(cellIndex !== undefined) {
                     return $('.dx-scheduler-date-table-row').eq(rowIndex).find(CLASSES.dateTableCell).eq(cellIndex);
@@ -430,11 +578,16 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
             getAllDayCells: () => $('.dx-scheduler-all-day-table-cell'),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
+            getTimePanelCells: () => $(CLASSES.timePanelCell),
+            getOrdinaryHeaderPanelCells: () => $(`${CLASSES.headerPanelCell}:not(${CLASSES.weekHeaderPanelCell})`),
+            getTimePanelCurrentTimeCells: () => $(CLASSES.currentTimeCell),
+            getHeaderPanelCurrentTimeCells: () => $(CLASSES.headerPanelCurrentTimeCell),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
             getCellHeight: () => this.workSpace.getCells().eq(0).outerHeight(),
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $('.dx-scheduler-date-time-indicator'),
+            getCurrentTimeIndicatorCount: () => this.workSpace.getCurrentTimeIndicator().length,
             getAllDayPanel: () => $('.dx-scheduler-all-day-panel'),
 
             getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find('.dx-scrollable-container'),
@@ -448,8 +601,24 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 getGroup: (index = 0) => $('.dx-scheduler-group-row').eq(index),
                 getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find('.dx-scheduler-group-header'),
                 getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
+                getVerticalGroupPanel: () => $(CLASSES.verticalGroupPanel),
             },
-            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick')
+            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick'),
+
+            selectCells: (firstCellIndex, lastCellIndex) => {
+                const firstCell = this.workSpace.getCell(firstCellIndex);
+                const secondCell = this.workSpace.getCell(lastCellIndex);
+
+                const { x: firstCellLeft, y: firstCellTop } = firstCell.offset();
+                const { x: secondCellLeft, y: secondCellTop } = secondCell.offset();
+
+                pointerMock(firstCell)
+                    .start()
+                    .down(firstCellLeft, firstCellTop);
+                pointerMock(secondCell)
+                    .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop)
+                    .up();
+            },
         };
 
         this.viewSwitcher = {
@@ -483,6 +652,17 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
     get header() {
         return new HeaderWrapper();
+    }
+
+    get appointmentList() {
+        const result = [];
+        const length = this.getElement().find(CLASSES.appointment).length;
+
+        for(let i = 0; i < length; i++) {
+            result.push(new Appointment(this.getElement(), i));
+        }
+
+        return result;
     }
 
     option(name, value) {

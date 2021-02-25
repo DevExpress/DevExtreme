@@ -50,7 +50,6 @@ const Scrollable = DOMComponent.inherit({
             useSimulatedScrollbar: false,
             useKeyboard: true,
             inertiaEnabled: true,
-            pushBackValue: 0,
             updateManually: false
         });
     },
@@ -63,14 +62,6 @@ const Scrollable = DOMComponent.inherit({
                 },
                 options: {
                     useSimulatedScrollbar: true
-                }
-            },
-            {
-                device: function() {
-                    return devices.real().platform === 'ios';
-                },
-                options: {
-                    pushBackValue: 1
                 }
             }
         ]);
@@ -261,7 +252,6 @@ const Scrollable = DOMComponent.inherit({
             case 'useKeyboard':
             case 'showScrollbar':
             case 'useSimulatedScrollbar':
-            case 'pushBackValue':
                 this._invalidate();
                 break;
             case 'disabled':
@@ -399,7 +389,7 @@ const Scrollable = DOMComponent.inherit({
     },
 
     scrollHeight: function() {
-        return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
+        return this.$content().outerHeight();
     },
 
     clientWidth: function() {
@@ -504,9 +494,8 @@ const Scrollable = DOMComponent.inherit({
         const isVertical = direction === VERTICAL;
         const startOffset = (isVertical ? offset.top : offset.left) || 0;
         const endOffset = (isVertical ? offset.bottom : offset.right) || 0;
-        const pushBackOffset = isVertical ? this._strategy.verticalOffset() : 0;
         const elementPositionRelativeToContent = this._elementPositionRelativeToContent($element, isVertical ? 'top' : 'left');
-        const elementPosition = ((this._isRtlNativeStrategy() && !isVertical) ? this._getMaxOffset().left + elementPositionRelativeToContent : elementPositionRelativeToContent) - pushBackOffset;
+        const elementPosition = ((this._isRtlNativeStrategy() && !isVertical) ? this._getMaxOffset().left + elementPositionRelativeToContent : elementPositionRelativeToContent);
         const elementSize = $element[isVertical ? 'outerHeight' : 'outerWidth']();
         const scrollLocation = (isVertical ? this.scrollTop() : this.scrollLeft());
         const clientSize = this._container().get(0)[isVertical ? 'clientHeight' : 'clientWidth'];

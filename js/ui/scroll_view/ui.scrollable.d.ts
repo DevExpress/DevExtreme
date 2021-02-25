@@ -94,8 +94,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
     /**
      * @docid
-     * @default false [for](desktop)
-     * @default true [for](Mac)
+     * @default false [for](desktop except Mac)
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

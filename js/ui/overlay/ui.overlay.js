@@ -27,7 +27,7 @@ import {
 } from '../../events/drag';
 import pointerEvents from '../../events/pointer';
 import { keyboard } from '../../events/short';
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../events/utils/index';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import Resizable from '../resizable';
@@ -52,7 +52,7 @@ const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 const RTL_DIRECTION_CLASS = 'dx-rtl';
 
-const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioning', 'onPositioned', 'onResizeStart', 'onResize', 'onResizeEnd'];
+const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned', 'onResizeStart', 'onResize', 'onResizeEnd'];
 
 const OVERLAY_STACK = [];
 
@@ -617,6 +617,7 @@ const Overlay = Widget.inherit({
                         that._renderVisibility(false);
 
                         completeHideAnimation.apply(this, arguments);
+                        that._hideAnimationProcessing = false;
                         that._actions?.onHidden();
 
                         deferred.resolve();
@@ -625,6 +626,7 @@ const Overlay = Widget.inherit({
                     function() {
                         that._$content.css('pointerEvents', 'none');
                         startHideAnimation.apply(this, arguments);
+                        that._hideAnimationProcessing = true;
                     }
                 );
             }
@@ -1006,9 +1008,13 @@ const Overlay = Widget.inherit({
             isNative: true
         }, e => {
             const originalEvent = e.originalEvent.originalEvent;
+            const { type } = originalEvent || {};
+            const isWheel = type === 'wheel';
+            const isMouseMove = type === 'mousemove';
+            const isScrollByWheel = isWheel && !isCommandKeyPressed(e);
             e._cancelPreventDefault = true;
 
-            if(originalEvent && originalEvent.type !== 'mousemove' && e.cancelable !== false) {
+            if(originalEvent && e.cancelable !== false && (!isMouseMove && !isWheel || isScrollByWheel)) {
                 e.preventDefault();
             }
         });
@@ -1259,9 +1265,6 @@ const Overlay = Widget.inherit({
             const resultPosition = positionUtils.setup(this._$content, position);
 
             forceRepaint(this._$content);
-
-            // TODO: hotfix for T338096
-            this._actions.onPositioning();
 
             return resultPosition;
         }

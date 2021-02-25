@@ -1,0 +1,82 @@
+@use "./mixins" as *;
+
+// adduse
+.dx-menu-base {
+  @include user-select(none);
+
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-align: left;
+
+
+  .dx-menu-items-container,
+  .dx-menu-item-wrapper {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+  }
+
+  .dx-menu-items-container {
+    list-style-type: none;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .dx-state-disabled,
+  &.dx-state-disabled .dx-menu-items-container {
+    cursor: default;
+  }
+
+  .dx-menu-item {
+    display: inline-block;
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    &.dx-state-disabled {
+      opacity: 0.5;
+    }
+
+    .dx-menu-item-content {
+      white-space: nowrap;
+      height: 100%;
+      width: 100%;
+
+      .dx-icon {
+        display: inline-block;
+        vertical-align: middle;
+        border: 0;
+      }
+
+      .dx-menu-item-text {
+        display: inline;
+        vertical-align: middle;
+        white-space: nowrap;
+
+        @include dx-overflow(ellipsis);
+      }
+
+      .dx-menu-item-popout-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 2em;
+
+        .dx-menu-item-popout {
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  &.dx-rtl {
+    text-align: right;
+
+    .dx-menu-item-popout-container {
+      left: 0;
+      right: auto;
+    }
+  }
+}

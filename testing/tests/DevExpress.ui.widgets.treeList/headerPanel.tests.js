@@ -10,7 +10,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
@@ -80,6 +79,24 @@ QUnit.module('Header panel', { beforeEach: setupModule, afterEach: teardownModul
 
         // assert
         assert.equal($testElement.find('.dx-treelist-column-chooser-button').length, 1, 'cancel button');
+    });
+
+    QUnit.test('Toolbar should have correct aria-label', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        this.options.columnChooser = {
+            enabled: true
+        };
+        this.setupTreeList();
+
+        // act
+        this.headerPanel.render($testElement);
+
+        // assert
+        const $toolbar = $testElement.find('.dx-toolbar');
+        assert.equal($toolbar.length, 1, 'toolbar');
+        assert.equal($toolbar.attr('aria-label'), 'Tree list toolbar', 'toolbar aria-label');
     });
 });
 

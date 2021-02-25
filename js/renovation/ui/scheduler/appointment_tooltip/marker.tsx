@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, Effect, OneWay,
+  Component, ComponentBindings, JSXComponent, Effect, OneWay, CSSAttributes,
 } from 'devextreme-generator/component_declaration/common';
 import { DeferredColor, Color } from './types.d';
 
@@ -38,7 +38,7 @@ export class Marker extends JSXComponent(MarkerProps) {
     });
   }
 
-  get style() {
+  get style(): CSSAttributes {
     return { background: this.appointmentColor };
   }
 }

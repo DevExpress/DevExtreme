@@ -342,16 +342,23 @@ const Drawer = Widget.inherit({
     },
 
     _getPanelTemplateElement() {
-        let $result = this._strategy.getPanelContent();
+        const $panelContent = this._strategy.getPanelContent();
+        let $result = $panelContent;
 
-        if($result.children().length) {
-            $result = $result.children().eq(0);
-            if($result.hasClass('dx-template-wrapper') && $result.children().length) { // For Angular, T948509
+        if($panelContent.children().length) {
+            $result = $panelContent.children().eq(0);
+            if($panelContent.hasClass('dx-overlay-content') && $result.hasClass('dx-template-wrapper') && $result.children().length) {
+                // T948509, T956751
                 $result = $result.children().eq(0);
             }
         }
-
         return $result.get(0);
+    },
+
+    getElementHeight($element) {
+        const $children = $element.children();
+
+        return $children.length ? getBoundingRect($children.eq(0).get(0)).height : getBoundingRect($element.get(0)).height;
     },
 
     isHorizontalDirection() {

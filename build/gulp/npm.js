@@ -9,7 +9,6 @@ const merge = require('merge-stream');
 const replace = require('gulp-replace');
 const through = require('through2');
 
-const MODULES = require('./modules_metadata.json');
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
@@ -72,6 +71,8 @@ const distGlobsPattern = (jsFolder, exclude) => [
     `!${jsFolder}/jquery*`,
     `!${jsFolder}/jszip*`,
     `!${jsFolder}/dx.custom*`,
+    `!${jsFolder}/dx.viz*`,
+    `!${jsFolder}/dx.web*`,
     `!${jsFolder}/dx-diagram*`,
     `!${jsFolder}/dx-gantt*`,
     `!${jsFolder}/dx-quill*`,
@@ -98,12 +99,22 @@ if(isEsmPackage) {
 
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
+const modulesWithProhibitDefaultExport = [
+    // NOTE: 'use strict' prohibits adding new 'default' field to string
+    'version.js',
+    'remove_event.js',
+    // NOTE: deep extend cause infinite loop for modules with 'default' field
+    'default_messages.js',
+    'grid_core'
+];
+
+const canSupplementDefaultExport = (path) => modulesWithProhibitDefaultExport.every(name => !path.includes(name));
+const hasDefaultExport = (content) => /exports\.default\s=/.test(String(content));
+const isCjsModule = (path) => !path.startsWith('esm/');
+
 const addDefaultExport = lazyPipe().pipe(() =>
     through.obj((chunk, enc, callback) => {
-        const moduleName = chunk.relative.replace('.js', '').replace(/^cjs(\/|\\)/, '').split('\\').join('/');
-        const moduleMeta = MODULES.filter(({ name }) => name === moduleName)[0];
-
-        if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
+        if(isCjsModule(chunk.relative) && hasDefaultExport(chunk.contents) && canSupplementDefaultExport(chunk.relative)) {
             chunk.contents = Buffer.from(
                 `${String(chunk.contents)}module.exports.default = module.exports;`
             );
@@ -170,19 +181,22 @@ gulp.task('npm-sources', gulp.series('ts-sources', sources(srcGlobs, packagePath
 
 const scssDir = `${resultPath}/${packageDir}/scss`;
 
-gulp.task('npm-sass', gulp.parallel(
-    () => gulp
-        .src('scss/**/*')
-        .pipe(dataUri())
-        .pipe(gulp.dest(scssDir)),
+gulp.task('npm-sass', gulp.series(
+    'create-scss-bundles',
+    gulp.parallel(
+        () => gulp
+            .src('scss/**/*')
+            .pipe(dataUri())
+            .pipe(gulp.dest(scssDir)),
 
-    () => gulp
-        .src('fonts/**/*', { base: '.' })
-        .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),
+        () => gulp
+            .src('fonts/**/*', { base: '.' })
+            .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),
 
-    () => gulp
-        .src('icons/**/*', { base: '.' })
-        .pipe(gulp.dest(`${scssDir}/widgets/base`)),
+        () => gulp
+            .src('icons/**/*', { base: '.' })
+            .pipe(gulp.dest(`${scssDir}/widgets/base`)),
+    )
 ));
 
 gulp.task('npm', gulp.series('npm-sources', 'ts-modules-check', 'npm-sass'));

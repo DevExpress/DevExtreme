@@ -16,6 +16,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 if(options.items[i].rowIndex === undefined) {
                     options.items[i].rowIndex = i;
                 }
+                if(options.items[i].rowType === undefined) {
+                    options.items[i].rowType = 'data';
+                }
             }
         }
 
@@ -150,7 +153,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             viewportItemSize: function() {},
 
-            setContentSize: function() {},
+            setContentItemSizes: function() {},
 
             setViewportItemIndex: function(index) {
                 options.viewportItemIndex = index;
@@ -955,10 +958,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         that.options = that.options || {};
 
         that.options.rtlEnabled = !!that.options.rtlEnabled;
-
-        if(that.options.legacyRendering === undefined) {
-            that.options.legacyRendering = false;
-        }
 
         if(that.options.editing?.changes === undefined) {
             if(that.options.editing) {

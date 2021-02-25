@@ -186,9 +186,8 @@ const FocusController = core.ViewController.inherit((function() {
             }
 
             const rowIndexByKey = that.getFocusedRowIndexByKey(key);
-            const isPaginate = dataController.getDataSource().paginate();
 
-            if(!isAutoNavigate && needFocusRow || !isPaginate || rowIndexByKey >= 0) {
+            if(!isAutoNavigate && needFocusRow || rowIndexByKey >= 0) {
                 that._navigateTo(key, d, needFocusRow);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
@@ -330,7 +329,7 @@ const FocusController = core.ViewController.inherit((function() {
                 that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
 
                 that._prepareFocusedRow({
-                    changedItem: change.items[focusedRowIndex],
+                    changedItem: change?.items?.[focusedRowIndex],
                     $tableElement: $tableElement,
                     focusedRowIndex: focusedRowIndex,
                     isMainTable: isMainTable
@@ -675,7 +674,13 @@ export default {
                                     filter = [booleanFilter, 'or', filter];
                                 }
                             } else {
-                                filter = [[selector, sortInfo.desc ? '>' : '<', value], 'or', filter];
+                                const filterOperation = sortInfo.desc ? '>' : '<';
+                                let sortFilter = [selector, filterOperation, value];
+                                if(!sortInfo.desc) {
+                                    sortFilter = [sortFilter, 'or', [selector, '=', null]];
+                                }
+
+                                filter = [sortFilter, 'or', filter];
                             }
                         });
                     }
@@ -748,14 +753,14 @@ export default {
                     }
                 },
 
-                updateFocusElementTabIndex: function($cellElements) {
+                updateFocusElementTabIndex: function($cellElements, preventScroll) {
                     if(this.option('focusedRowEnabled')) {
-                        this._setFocusedRowElementTabIndex();
+                        this._setFocusedRowElementTabIndex(preventScroll);
                     } else {
                         this.callBase($cellElements);
                     }
                 },
-                _setFocusedRowElementTabIndex: function() {
+                _setFocusedRowElementTabIndex: function(preventScroll) {
                     const focusedRowKey = this.option('focusedRowKey');
                     const tabIndex = this.option('tabIndex') || 0;
                     const dataController = this._dataController;
@@ -773,7 +778,7 @@ export default {
 
                     $row.attr('tabIndex', tabIndex);
 
-                    if(rowIndex >= 0) {
+                    if(rowIndex >= 0 && !preventScroll) {
                         if(columnIndex < 0) {
                             columnIndex = 0;
                         }

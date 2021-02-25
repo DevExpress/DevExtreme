@@ -1,4 +1,13 @@
-import { getCloudPoints, recalculateCoordinates, getCloudAngle } from '../tooltip_utils';
+import {
+  getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, isTextEmpty,
+  getCanvas,
+} from '../tooltip_utils';
+import domAdapter from '../../../../../core/dom_adapter';
+
+jest.mock('../../../../../core/dom_adapter', () => ({
+  getDocumentElement: jest.fn(),
+  getBody: jest.fn(),
+}));
 
 describe('#getCloudAngle', () => {
   it('should return angle=0', () => {
@@ -174,6 +183,39 @@ describe('#recalculateCoordinates', () => {
       x: 100, y: 20, anchorX: 100, anchorY: 20,
     });
   });
+
+  it('should return false, coordinates out of canvas', () => {
+    const options = {
+      canvas: {
+        left: 10, right: 20, top: 25, bottom: 30, width: 400, height: 100,
+      },
+      size: { width: 30, height: 40 },
+      offset: 8,
+      arrowLength: 11,
+    };
+
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 1,
+      anchorY: 50,
+    })).toEqual(false);
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 15,
+      anchorY: 5,
+    })).toEqual(false);
+
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 700,
+      anchorY: 50,
+    })).toEqual(false);
+    expect(recalculateCoordinates({
+      ...options,
+      anchorX: 50,
+      anchorY: 300,
+    })).toEqual(false);
+  });
 });
 
 describe('#getCloudPoints', () => {
@@ -307,5 +349,394 @@ describe('#getCloudPoints', () => {
 
     expect(getCloudPoints(size, coordinates, getCloudAngle(size, coordinates), options, true))
       .toBe('M35,45a 15 15 0 0 1 15 -15L50,30a 15 15 0 0 1 15 15L65,55a 15 15 0 0 1 -0.8578643762690497 5L64.14213562373095,60,80,70,50,70A 15 15 0 0 1 50 70L50,70a 15 15 0 0 1 -15 -15Z');
+  });
+});
+
+describe('#prepareData', () => {
+  const border = {
+    color: 'color_2', width: 2, dashStyle: 'dashStyle', visible: true,
+  };
+  const font = {
+    color: 'color_3', family: 'family', opacity: 1, size: 10, weight: 200,
+  };
+
+  it('should return value text', () => {
+    expect(prepareData({ valueText: 'value_text' }, 'color_1', border, font)).toEqual({
+      text: 'value_text',
+      color: 'color_1',
+      borderColor: 'color_2',
+      fontColor: 'color_3',
+    });
+  });
+
+  it('should return description', () => {
+    expect(prepareData({ description: 'description' }, 'color_1', border, font)).toEqual({
+      text: 'description',
+      color: 'color_1',
+      borderColor: 'color_2',
+      fontColor: 'color_3',
+    });
+  });
+
+  it('should return object from customizeTooltip', () => {
+    const customizedObject = {
+      text: 'tooltip text',
+      html: 'tooltip html',
+      color: 'customized_color',
+      borderColor: 'customized_border_color',
+      fontColor: 'customized_font_color',
+    };
+    const customizeTooltip = () => customizedObject;
+    expect(prepareData({ description: 'description' }, 'color_1', border, font, customizeTooltip)).toEqual(customizedObject);
+  });
+
+  it('should check if text is empty', () => {
+    expect(isTextEmpty({ text: '' })).toBe(true);
+    expect(isTextEmpty({ text: null })).toBe(true);
+    expect(isTextEmpty({ html: '' })).toBe(true);
+    expect(isTextEmpty({ html: null })).toBe(true);
+
+    expect(isTextEmpty({ text: 'text' })).toBe(false);
+    expect(isTextEmpty({ html: '<p>html tooltip</p>' })).toBe(false);
+  });
+});
+
+function setReturnValue(method, returnValue) {
+  (domAdapter[method] as jest.Mock).mockReturnValue(returnValue);
+}
+
+describe('#getCanvas', () => {
+  afterEach(() => jest.resetAllMocks);
+
+  it('should return valid canvas. tooltip in body. width from the document.clientWidth', () => {
+    setReturnValue('getBody', {
+      scrollHeight: 14,
+      offsetHeight: 15,
+      clientHeight: 16,
+      clientWidth: 100,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 300,
+      scrollHeight: 4,
+      offsetHeight: 5,
+      clientHeight: 6,
+    });
+
+    expect(getCanvas(domAdapter.getBody())).toEqual({
+      bottom: 0,
+      height: 16,
+      left: 1,
+      right: 0,
+      top: 2,
+      width: 301,
+    });
+  });
+
+  it('should return valid canvas. tooltip in body. width from the body.clientWidth', () => {
+    setReturnValue('getBody', {
+      scrollHeight: 14,
+      offsetHeight: 15,
+      clientHeight: 16,
+      clientWidth: 400,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 300,
+      scrollHeight: 4,
+      offsetHeight: 5,
+      clientHeight: 6,
+    });
+
+    expect(getCanvas(domAdapter.getBody())).toEqual({
+      bottom: 0,
+      height: 16,
+      left: 1,
+      right: 0,
+      top: 2,
+      width: 401,
+    });
+  });
+
+  it('should return valid canvas. tooltip in body. height from the body.scrollHeight', () => {
+    setReturnValue('getBody', {
+      scrollHeight: 20,
+      offsetHeight: 15,
+      clientHeight: 16,
+      clientWidth: 400,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 300,
+      scrollHeight: 5,
+      offsetHeight: 6,
+      clientHeight: 7,
+    });
+
+    expect(getCanvas(domAdapter.getBody())).toEqual({
+      bottom: 0,
+      height: 20,
+      left: 1,
+      right: 0,
+      top: 2,
+      width: 401,
+    });
+  });
+
+  it('should return valid canvas. tooltip in body. height from the body.offsetHeight', () => {
+    setReturnValue('getBody', {
+      scrollHeight: 14,
+      offsetHeight: 20,
+      clientHeight: 16,
+      clientWidth: 400,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 300,
+      scrollHeight: 5,
+      offsetHeight: 6,
+      clientHeight: 7,
+    });
+
+    expect(getCanvas(domAdapter.getBody())).toEqual({
+      bottom: 0,
+      height: 20,
+      left: 1,
+      right: 0,
+      top: 2,
+      width: 401,
+    });
+  });
+
+  it('should return valid canvas. tooltip in body. height from the body.clientHeight', () => {
+    setReturnValue('getBody', {
+      scrollHeight: 14,
+      offsetHeight: 15,
+      clientHeight: 20,
+      clientWidth: 400,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 300,
+      scrollHeight: 5,
+      offsetHeight: 6,
+      clientHeight: 7,
+    });
+
+    expect(getCanvas(domAdapter.getBody())).toEqual({
+      bottom: 0,
+      height: 20,
+      left: 1,
+      right: 0,
+      top: 2,
+      width: 401,
+    });
+  });
+
+  it('should return valid canvas. tooltip in body. height from the document.scrollHeight', () => {
+    setReturnValue('getBody', {
+      scrollHeight: 5,
+      offsetHeight: 15,
+      clientHeight: 16,
+      clientWidth: 400,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 300,
+      scrollHeight: 20,
+      offsetHeight: 6,
+      clientHeight: 7,
+    });
+
+    expect(getCanvas(domAdapter.getBody())).toEqual({
+      bottom: 0,
+      height: 20,
+      left: 1,
+      right: 0,
+      top: 2,
+      width: 401,
+    });
+  });
+
+  it('should return valid canvas. tooltip in body. height from the document.offsetHeight', () => {
+    setReturnValue('getBody', {
+      scrollHeight: 5,
+      offsetHeight: 15,
+      clientHeight: 16,
+      clientWidth: 400,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 300,
+      scrollHeight: 6,
+      offsetHeight: 20,
+      clientHeight: 7,
+    });
+
+    expect(getCanvas(domAdapter.getBody())).toEqual({
+      bottom: 0,
+      height: 20,
+      left: 1,
+      right: 0,
+      top: 2,
+      width: 401,
+    });
+  });
+
+  it('should return valid canvas. tooltip in body. height from the document.clientHeight', () => {
+    setReturnValue('getBody', {
+      scrollHeight: 5,
+      offsetHeight: 15,
+      clientHeight: 16,
+      clientWidth: 400,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 300,
+      scrollHeight: 6,
+      offsetHeight: 5,
+      clientHeight: 20,
+    });
+
+    expect(getCanvas(domAdapter.getBody())).toEqual({
+      bottom: 0,
+      height: 20,
+      left: 1,
+      right: 0,
+      top: 2,
+      width: 401,
+    });
+  });
+
+  it('should return valid canvas. tooltip in custom container. left,top coord calculation. container has no left,top offsets', () => {
+    const container = {
+      getBoundingClientRect: () => ({
+        left: 0,
+        top: 0,
+        width: 10,
+        height: 10,
+      }),
+    } as HTMLElement;
+    setReturnValue('getBody', {
+      scrollHeight: 5,
+      offsetHeight: 15,
+      clientHeight: 16,
+      clientWidth: 400,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 300,
+      scrollHeight: 6,
+      offsetHeight: 5,
+      clientHeight: 4,
+    });
+
+    expect(getCanvas(container)).toEqual({
+      bottom: 0,
+      height: 14,
+      left: 1,
+      right: 0,
+      top: 2,
+      width: 12,
+    });
+  });
+
+  it('should return valid canvas. tooltip in custom container. left,top coords calculation. container has left,top offsets', () => {
+    const container = {
+      getBoundingClientRect: () => ({
+        left: 30,
+        top: 30,
+        width: 10,
+        height: 10,
+      }),
+    } as HTMLElement;
+    setReturnValue('getBody', {
+      scrollHeight: 5,
+      offsetHeight: 15,
+      clientHeight: 16,
+      clientWidth: 400,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 300,
+      scrollHeight: 6,
+      offsetHeight: 5,
+      clientHeight: 4,
+    });
+
+    expect(getCanvas(container)).toEqual({
+      bottom: 0,
+      height: 44,
+      left: 31,
+      right: 0,
+      top: 32,
+      width: 42,
+    });
+  });
+
+  it('should return valid canvas. tooltip in custom container. width,height calculation. container is smaller of client size', () => {
+    const container = {
+      getBoundingClientRect: () => ({
+        left: 30,
+        top: 30,
+        width: 300,
+        height: 2,
+      }),
+    } as HTMLElement;
+    setReturnValue('getBody', {
+      scrollHeight: 5,
+      offsetHeight: 15,
+      clientHeight: 16,
+      clientWidth: 400,
+      getBoundingClientRect: () => ({ left: 20 }),
+    });
+
+    setReturnValue('getDocumentElement', {
+      scrollLeft: 1,
+      scrollTop: 2,
+      clientWidth: 100,
+      scrollHeight: 6,
+      offsetHeight: 5,
+      clientHeight: 4,
+    });
+
+    expect(getCanvas(container)).toEqual({
+      bottom: 0,
+      height: 36,
+      left: 31,
+      right: 0,
+      top: 32,
+      width: 332,
+    });
   });
 });

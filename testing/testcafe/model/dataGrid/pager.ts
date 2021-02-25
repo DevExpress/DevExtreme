@@ -26,7 +26,7 @@ export default class Pager extends FocusableElement {
     return new NavPage(this.element, pageIndexText);
   }
 
-  get infoText() {
+  get infoText(): Selector {
     return this.element.find('.dx-info');
   }
 }

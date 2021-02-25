@@ -289,6 +289,29 @@ QUnit.test('Body has horizontal scroll', function(assert) {
     }
 });
 
+QUnit.test('document.documentElement has width less than body (T960374)', function(assert) {
+    Object.defineProperty(document.documentElement, 'clientWidth', {
+        get: () => 500,
+        configurable: true
+    });
+    const body = $('body').get(0);
+    Object.defineProperty(body, 'clientWidth', {
+        get: () => 1800,
+        configurable: true
+    });
+
+    const tooltip = new Tooltip({ eventTrigger: function() { } });
+    tooltip.update(this.options);
+    // act
+    tooltip.show({ description: 'some-text' }, { x: 1000, y: 100 });
+    // assert
+    assert.equal(tooltip._wrapper.get(0).style.left, '962px');
+    assert.equal(tooltip._wrapper.get(0).style.top, '41px');
+
+    delete document.documentElement.clientWidth;
+    delete body.clientWidth;
+});
+
 QUnit.test('Set options. customizeTooltip', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
@@ -1663,7 +1686,7 @@ QUnit.module('Movements', {
         if(getComputedStyle) {
             this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(elem) {
                 if(elem === tooltip._textHtml.get(0)) {
-                    return { width: '60px', height: '40px' };
+                    return { width: '60px', height: '40px', getPropertyValue: () => {} };
                 }
                 return getComputedStyle.apply(window, arguments);
             });
@@ -1745,9 +1768,7 @@ QUnit.test('Center-top side of page, Html', function(assert) {
     this.resetTooltipMocks();
 
     this.tooltip._textGroupHtml.css = sinon.spy();
-    if(!this.getComputedStyle) {
-        this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, left: 0, bottom: 40, top: 0 }; });
-    }
+    this.tooltip._textHtml.width = sinon.spy(function() { return 59.2; });
 
     // act
     this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 80, offset: 30 });
@@ -1755,7 +1776,7 @@ QUnit.test('Center-top side of page, Html', function(assert) {
     // assert
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroup move');
     assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 135 }]);
-    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 126 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 60 }]);
 
     assert.equal(this.getContentGroup().stub('move').callCount, 0);
 
@@ -1830,9 +1851,7 @@ QUnit.test('Center-center side of page, Html', function(assert) {
 
     this.tooltip._textGroupHtml.css = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'css');
-    if(!this.getComputedStyle) {
-        this.tooltip._textHtml.get(0).getBoundingClientRect = sinon.spy(function() { return { right: 60, left: 0, bottom: 40, top: 0 }; });
-    }
+    this.tooltip._textHtml.width = sinon.spy(function() { return 60; });
 
     // act
     this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 300, offset: 30 });
@@ -1840,7 +1859,7 @@ QUnit.test('Center-center side of page, Html', function(assert) {
     // assert
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroup move');
     assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 205 }]);
-    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 126 }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(2).args, [{ width: 60 }]);
 
     assert.equal(this.getContentGroup().stub('move').callCount, 0);
 

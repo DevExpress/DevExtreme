@@ -9,7 +9,6 @@ QUnit.testStart(function() {
 
 import $ from 'jquery';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -63,7 +62,7 @@ QUnit.module('Customize keyboard navigation', {
         }, this.options);
 
         setupDataGridModules(this,
-            ['data', 'columns', 'columnHeaders', 'rows', 'editorFactory', 'gridView', 'editing', 'keyboardNavigation', 'validating', 'masterDetail', 'summary'],
+            ['data', 'columns', 'columnHeaders', 'rows', 'editorFactory', 'gridView', 'editing', 'editingFormBased', 'keyboardNavigation', 'validating', 'masterDetail', 'summary'],
             { initViews: true }
         );
     },

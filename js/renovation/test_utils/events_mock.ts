@@ -46,7 +46,7 @@ export const fakeClickEvent = {
   pageY: 0,
 };
 
-export const getEventHandlers = (event): object[] => eventHandlers[event];
+export const getEventHandlers = (e): Record<string, ((event: any) => void)[]> => eventHandlers[e];
 
 export const emitKeyboard = (key, which = key, e = defaultEvent): void => {
   Object.keys(keyboardHandlers).forEach((id) => {
@@ -57,11 +57,11 @@ export const emitKeyboard = (key, which = key, e = defaultEvent): void => {
 };
 
 export const emit = (event, e = defaultEvent, element = null): void => {
-    eventHandlers[event]?.forEach(({ handler, el }) => {
-      if (!element || el === element) {
-        handler(e);
-      }
-    });
+  eventHandlers[event]?.forEach(({ handler, el }) => {
+    if (!element || el === element) {
+      handler(e);
+    }
+  });
 };
 
 let keyboardSubscriberId = 0;

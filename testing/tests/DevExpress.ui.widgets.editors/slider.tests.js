@@ -1,6 +1,5 @@
 import fx from 'animation/fx';
 import positionUtils from 'animation/position';
-import 'common.css!';
 import 'generic_light.css!';
 import config from 'core/config';
 import browser from 'core/utils/browser';
@@ -12,6 +11,7 @@ import 'ui/slider';
 import Tooltip from 'ui/tooltip';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import { normalizeKeyName } from 'events/utils/index';
 
 
 const { module, testStart, test, testInActiveWindow } = QUnit;
@@ -955,6 +955,79 @@ module('labels', moduleOptions, () => {
 });
 
 module('events', () => {
+    module('valueChanged handler should receive correct event', {
+        beforeEach: function() {
+            this.valueChangedHandler = sinon.stub();
+            this.$element = $('#slider').dxSlider({
+                max: 500,
+                min: 0,
+                value: 100,
+                onValueChanged: this.valueChangedHandler,
+                useInkRipple: false,
+                width: 500
+            });
+            this.instance = this.$element.dxSlider('instance');
+            this.$handle = this.$element.find(`.${SLIDER_HANDLE_CLASS}`);
+            this.$wrapper = this.$element.find(`.${SLIDER_WRAPPER_CLASS}`);
+            this.pointer = pointerMock(this.$wrapper);
+            this.keyboard = keyboardMock(this.$handle);
+
+            this.testProgramChange = (assert) => {
+                const value = this.instance.option('value');
+                this.instance.option('value', value + 1);
+
+                const callCount = this.valueChangedHandler.callCount;
+                const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+                assert.strictEqual(event, undefined, 'event is undefined');
+            };
+            this.checkEvent = (assert, type, target, key) => {
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, type, 'event type is correct');
+                assert.strictEqual(event.target, target.get(0), 'event target is correct');
+                if(type === 'keydown') {
+                    assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+                }
+            };
+        }
+    }, () => {
+        test('on runtime change', function(assert) {
+            this.testProgramChange(assert);
+        });
+
+        test('on handle swipe', function(assert) {
+            this.pointer.start().swipeStart().swipe(10);
+
+            this.checkEvent(assert, 'dxswipe', this.$wrapper);
+            this.testProgramChange(assert);
+        });
+
+        test('on handle swipeend (correction after swipe on float step)', function(assert) {
+            this.pointer.start().swipeStart().swipeEnd(9.666692444513187);
+
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, 'dxswipeend', 'event type is correct');
+            assert.strictEqual(event.target, this.$wrapper.get(0), 'event target is correct');
+
+            this.testProgramChange(assert);
+        });
+
+        test('on click on slider scale', function(assert) {
+            this.pointer.start().move(250 + this.$element.offset().left).down();
+
+            this.checkEvent(assert, 'dxpointerdown', this.$wrapper);
+            this.testProgramChange(assert);
+        });
+
+        ['right', 'left', 'home', 'end', 'pageUp', 'pageDown'].forEach(key => {
+            test(`on ${key} press`, function(assert) {
+                this.keyboard.press(key);
+
+                this.checkEvent(assert, 'keydown', this.$handle, key);
+                this.testProgramChange(assert);
+            });
+        });
+    });
+
     test('value change should cause value change action call', function(assert) {
         assert.expect(1);
 
@@ -969,82 +1042,6 @@ module('events', () => {
         }).css('width', 500);
 
         pointerMock($slider).start().move(250 + $slider.offset().left).down();
-    });
-
-    test('swipe should raise valueChange event with "swipe" event type', function(assert) {
-        assert.expect(1);
-
-        const $slider = $('#slider').dxSlider({
-            max: 500,
-            min: 0,
-            value: 0,
-            onValueChanged: function(data) {
-                assert.strictEqual(data.event.event.type, 'dxswipe', 'event type is correct');
-            },
-            useInkRipple: false
-        }).css('width', 500);
-
-        const $handle = $slider.find('.' + SLIDER_WRAPPER_CLASS);
-        const pointer = pointerMock($handle);
-        pointer.start().swipeStart().swipe(10);
-    });
-
-    test('event should be passed to valueChange correctly when "swipeend" event is triggered', function(assert) {
-        assert.expect(1);
-
-        const $slider = $('#slider').dxSlider({
-            max: 500,
-            min: 0,
-            value: 0,
-            onValueChanged: function(data) {
-                assert.strictEqual(data.event.event.type, 'dxswipeend', 'event type is correct');
-            },
-            useInkRipple: false
-        }).css('width', 500);
-
-        const $handle = $slider.find('.' + SLIDER_WRAPPER_CLASS);
-        const pointer = pointerMock($handle);
-        pointer.start().swipeStart().swipeEnd(9.666692444513187);
-    });
-
-    test('click on slider scale should raise valueChange event with "pointerdown" event type', function(assert) {
-        assert.expect(1);
-
-        const $slider = $('#slider').dxSlider({
-            max: 500,
-            min: 0,
-            value: 0,
-            onValueChanged: function(data) {
-                assert.strictEqual(data.event.type, 'dxpointerdown', 'event type is correct');
-            },
-            useInkRipple: false
-        }).css('width', 500);
-
-        pointerMock($slider).start().move(250 + $slider.offset().left).down();
-    });
-
-    test('value option change after swipe should raise valueChanged event with no event (T926119)', function(assert) {
-        assert.expect(2);
-
-        const $slider = $('#slider').dxSlider({
-            max: 500,
-            min: 0,
-            value: 0,
-            useInkRipple: false,
-            onValueChanged: (data) => {
-                assert.strictEqual(data.event.event.type, 'dxswipe', 'valueChange with event type "swipe" has been raised');
-            }
-        }).css('width', 500);
-        const slider = $slider.dxSlider('instance');
-
-        const $handle = $slider.find('.' + SLIDER_WRAPPER_CLASS);
-        const pointer = pointerMock($handle);
-        pointer.start().swipeStart().swipe(10).swipeEnd(9.666692444513187);
-
-        slider.option('onValueChanged', (data) => {
-            assert.strictEqual(data.event, undefined, 'no event has been passed to valueChanged event after option change');
-        });
-        slider.option('value', 0);
     });
 
     test('Changing the \'value\' option must invoke the \'onValueChanged\' action', function(assert) {
@@ -1084,17 +1081,12 @@ module('focus policy', moduleOptions, () => {
 
 module('keyboard navigation', moduleOptions, () => {
     test('control keys test', function(assert) {
-        assert.expect(4);
-
         const $slider = $('#slider').dxSlider({
             min: 10,
             max: 90,
             value: 50,
             focusStateEnabled: true,
-            useInkRipple: false,
-            onValueChanged: (data) => {
-                assert.strictEqual(data.event.type, 'keydown', 'correct event has been passed to valueChanged');
-            }
+            useInkRipple: false
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1110,8 +1102,6 @@ module('keyboard navigation', moduleOptions, () => {
     });
 
     test('control keys test with step', function(assert) {
-        assert.expect(4);
-
         const $slider = $('#slider').dxSlider({
             min: 10,
             max: 90,
@@ -1140,18 +1130,13 @@ module('keyboard navigation', moduleOptions, () => {
     });
 
     test('pageUp/pageDown keys test', function(assert) {
-        assert.expect(8);
-
         const $slider = $('#slider').dxSlider({
             min: 10,
             max: 90,
             value: 50,
             keyStep: 1,
             focusStateEnabled: true,
-            useInkRipple: false,
-            onValueChanged: (data) => {
-                assert.strictEqual(data.event.type, 'keydown', 'correct event has been passed to valueChanged');
-            }
+            useInkRipple: false
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1177,18 +1162,13 @@ module('keyboard navigation', moduleOptions, () => {
 
 
     test('home/end keys test', function(assert) {
-        assert.expect(4);
-
         const $slider = $('#slider').dxSlider({
             min: 0,
             max: 50,
             value: 25,
             keyStep: 1,
             focusStateEnabled: true,
-            useInkRipple: false,
-            onValueChanged: (data) => {
-                assert.strictEqual(data.event.type, 'keydown', 'correct event has been passed to valueChanged');
-            }
+            useInkRipple: false
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
@@ -1204,8 +1184,6 @@ module('keyboard navigation', moduleOptions, () => {
     });
 
     test('control keys test for rtl', function(assert) {
-        assert.expect(4);
-
         const $slider = $('#slider').dxSlider({
             rtlEnabled: true,
             min: 10,
@@ -1235,8 +1213,6 @@ module('keyboard navigation', moduleOptions, () => {
     });
 
     test('pageUp/pageDown keys test for rtl', function(assert) {
-        assert.expect(4);
-
         const $slider = $('#slider').dxSlider({
             rtlEnabled: true,
             min: 10,
@@ -1702,6 +1678,22 @@ module('validation', () => {
 });
 
 module('small float step', () => {
+    test('real step should be 1 if it is set to zero', function(assert) {
+        const realStep = 1;
+        const $slider = $('#slider').dxSlider({
+            step: 0,
+            min: 0,
+            max: 3,
+            value: 0
+        });
+        const slider = $slider.dxSlider('instance');
+        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
+        const handleX = $handle.offset().left + $handle.outerWidth() / 2;
+
+        pointerMock($handle).start().move(handleX).down().move(realStep / 2).up();
+        assert.strictEqual(slider.option('value'), realStep, 'new value is correct');
+    });
+
     test('handle should move on correct step when step is very small (T945742)', function(assert) {
         const step = 0.0000001;
         const startValue = 0.5;

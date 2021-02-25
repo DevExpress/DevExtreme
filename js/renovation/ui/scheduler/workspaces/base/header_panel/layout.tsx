@@ -1,61 +1,93 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  JSXTemplate,
+  OneWay,
+  Template,
 } from 'devextreme-generator/component_declaration/common';
-import { Row } from '../row';
-import { ViewCellData } from '../../types.d';
-import { isVerticalGroupOrientation } from '../../utils';
-import { GroupOrientation } from '../../../types.d';
+import {
+  DateHeaderCellData,
+  DateTimeCellTemplateProps,
+} from '../../types.d';
+import { isHorizontalGroupOrientation } from '../../utils';
+import { GroupPanel } from '../group_panel/group_panel';
+import { GroupPanelProps } from '../group_panel/group_panel_props';
+import { DateHeaderLayout, DateHeaderLayoutProps } from './date_header/layout';
 
-export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
-  <table
-    className={`dx-scheduler-header-panel ${viewModel.props.className}`}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-  >
-    <thead>
-      <Row>
-        {viewModel.props.viewCellsData![0].map(({
-          startDate, endDate, today, groups, groupIndex, index, key,
-        }) => (
-          <viewModel.props.cellTemplate
-            startDate={startDate}
-            endDate={endDate}
-            groups={!viewModel.isVerticalGroupOrientation ? groups : undefined}
-            groupIndex={!viewModel.isVerticalGroupOrientation ? groupIndex : undefined}
-            today={today}
-            index={index}
-            // TODO: implement this when bug in Vue is fixed
-            // But since we do not use it for now, it can be commented
-            // dateCellTemplate={viewModel.props.dateCellTemplate}
-            key={key}
-          />
-        ))}
-      </Row>
-    </thead>
-  </table>
+export const viewFunction = ({
+  isHorizontalGrouping,
+  props: {
+    dateHeaderMap,
+    groupByDate,
+    groups,
+    groupOrientation,
+    groupPanelCellBaseColSpan,
+    columnCountPerGroup,
+    isRenderDateHeader,
+    resourceCellTemplate,
+    dateCellTemplate,
+    timeCellTemplate,
+    dateHeaderTemplate: DateHeader,
+  },
+}: HeaderPanelLayout): JSX.Element => (
+  <thead>
+    {isHorizontalGrouping && !groupByDate && (
+      <GroupPanel
+        groups={groups}
+        groupByDate={groupByDate}
+        groupOrientation={groupOrientation}
+        baseColSpan={groupPanelCellBaseColSpan}
+        columnCountPerGroup={columnCountPerGroup}
+        resourceCellTemplate={resourceCellTemplate}
+      />
+    )}
+    {isRenderDateHeader && (
+      <DateHeader
+        dateHeaderMap={dateHeaderMap}
+        groupOrientation={groupOrientation}
+        groups={groups}
+        dateCellTemplate={dateCellTemplate}
+        timeCellTemplate={timeCellTemplate}
+      />
+    )}
+    {groupByDate && (
+      <GroupPanel
+        groups={groups}
+        groupByDate={groupByDate}
+        groupOrientation={groupOrientation}
+        baseColSpan={groupPanelCellBaseColSpan}
+        columnCountPerGroup={columnCountPerGroup}
+        resourceCellTemplate={resourceCellTemplate}
+      />
+    )}
+  </thead>
 );
 
 @ComponentBindings()
-export class HeaderPanelLayoutProps {
-  @OneWay() className?: string = '';
+export class HeaderPanelLayoutProps extends GroupPanelProps {
+  @OneWay() dateHeaderMap: DateHeaderCellData[][] = [];
 
-  @OneWay() viewCellsData?: ViewCellData[][] = [[]];
+  @OneWay() isRenderDateHeader = true;
 
-  @OneWay() groupOrientation?: GroupOrientation;
+  @OneWay() groupPanelCellBaseColSpan = 1;
 
-  @Template() cellTemplate?: any;
+  @Template() dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
-  @Template() dateCellTemplate?: any;
+  @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
+
+  @Template() dateHeaderTemplate: JSXTemplate<DateHeaderLayoutProps> = DateHeaderLayout;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: { register: true },
 })
 export class HeaderPanelLayout extends JSXComponent(HeaderPanelLayoutProps) {
-  get isVerticalGroupOrientation(): boolean {
-    const { groupOrientation } = this.props;
+  get isHorizontalGrouping(): boolean {
+    const { groupOrientation, groups } = this.props;
 
-    return isVerticalGroupOrientation(groupOrientation);
+    return isHorizontalGroupOrientation(groups, groupOrientation);
   }
 }

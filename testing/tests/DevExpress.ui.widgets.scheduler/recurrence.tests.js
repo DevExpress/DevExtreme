@@ -677,6 +677,16 @@ QUnit.module('Recurrences', function() {
         assert.notOk(ruleObject.isValid, 'returned ruleObject is invalid');
     });
 
+    QUnit.test('evalRecurrenceRule should return valid object if byDay has frequence for day', function(assert) {
+        let ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=MONTHLY;BYDAY=1TU');
+
+        assert.ok(ruleObject.isValid, 'returned ruleObject is invalid');
+
+        ruleObject = getRecurrenceProcessor().evalRecurrenceRule('FREQ=MONTHLY;BYDAY=1TU,3FR');
+
+        assert.ok(ruleObject.isValid, 'returned ruleObject is invalid');
+    });
+
     QUnit.test('getDateByAsciiString should return a valid date for yyyyMMddThhmmss format', function(assert) {
         const date = getRecurrenceProcessor().getDateByAsciiString('20150303T030000');
 
@@ -707,5 +717,51 @@ QUnit.module('Recurrences', function() {
         } finally {
             recurrenceStub.restore();
         }
+    });
+
+    QUnit.module('_createDateTuple', () => {
+        [
+            {
+                value: '20160711T230000Z',
+                expected: [2016, 6, 11, 23, 0, 0, true]
+            }, {
+                value: '20160711T230000',
+                expected: [2016, 6, 11, 23, 0, 0, false]
+            }, {
+                value: '20160711',
+                expected: [2016, 6, 11, 0, 0, 0, false]
+            }
+        ].forEach(testCase => {
+            QUnit.test(`should be return valid tuple of date from '${testCase.value}'`, function(assert) {
+                const processor = getRecurrenceProcessor();
+
+                const result = processor._parseExceptionToRawArray(testCase.value);
+                const tuple = processor._createDateTuple(result);
+
+                assert.deepEqual(tuple, testCase.expected, `tuple from '${testCase.value}' value is va;id`);
+            });
+        });
+    });
+
+    QUnit.module('getDateByAsciiString', () => {
+        [
+            {
+                value: '20160711T230000Z',
+                date: new Date(Date.UTC(2016, 6, 11, 23, 0, 0))
+            }, {
+                value: '20160711T230000',
+                date: new Date(2016, 6, 11, 23, 0, 0)
+            }, {
+                value: '20160711',
+                date: new Date(2016, 6, 11)
+            }
+        ].forEach(testCase => {
+            QUnit.test(`should be return valid of date from '${testCase.value}'`, function(assert) {
+                const processor = getRecurrenceProcessor();
+                const result = processor.getDateByAsciiString(testCase.value);
+
+                assert.deepEqual(result, testCase.date, `tuple from '${testCase.value}' value is valid`);
+            });
+        });
     });
 });

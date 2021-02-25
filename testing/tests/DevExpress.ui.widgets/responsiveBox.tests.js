@@ -5,10 +5,11 @@ import Widget from 'ui/widget/ui.widget';
 import ResponsiveBox from 'ui/responsive_box';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import dxButton from 'ui/button';
-import 'common.css!';
 import 'ui/box';
 import eventsEngine from 'events/core/events_engine';
 import domAdapter from 'core/dom_adapter';
+
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -132,8 +133,8 @@ QUnit.module('layouting', moduleConfig, () => {
 
         const $rootItems = $rootBox.find('.' + BOX_ITEM_CLASS);
 
-        assert.roughEqual($rootItems.eq(0).height(), 16, 2.1, 'Height of the root item is OK');
-        assert.roughEqual($rootItems.eq(1).height(), 16, 2.1, 'Height of the root item is OK');
+        assert.roughEqual($rootItems.eq(0).height(), 19, 2.1, 'Height of the root item is OK');
+        assert.roughEqual($rootItems.eq(1).height(), 19, 2.1, 'Height of the root item is OK');
     });
 
     QUnit.test('check width of colspan', function(assert) {

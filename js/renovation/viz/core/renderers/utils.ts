@@ -7,6 +7,7 @@ import {
   PathType,
   Segment,
   LabelAlignment,
+  ExtraProps,
 } from './types.d';
 import { isDefined } from '../../../../core/utils/type';
 import domAdapter from '../../../../core/dom_adapter';
@@ -14,7 +15,6 @@ import { normalizeEnum } from '../../../../viz/core/utils';
 import SvgGraphicsProps from './base_graphics_props';
 
 const KEY_FONT_SIZE = 'font-size';
-const NONE = 'none';
 const DEFAULT_FONT_SIZE = 12;
 const SHARPING_CORRECTION = 0.5;
 
@@ -38,19 +38,19 @@ export const getNextDefsSvgId = ((): (() => string) => {
   return value && (typeof value !== 'string');
 } */
 
-export const getFuncIri = (id: string, pathModified: boolean): string => (
+export const getFuncIri = (id: string, pathModified?: boolean): string => (
   id !== null ? `url(${pathModified ? window.location.href.split('#')[0] : ''}#${id})` : id
 );
 
-export const extend = (target: object, source: object): object => {
+export const extend = (target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> => {
   target = { ...target, ...source };
 
   return target;
 };
 
-type buildSimpleSegmentFn = (points: (Point|number)[], close: boolean, list: Segment[]) => Segment[];
+type BuildSimpleSegmentFn = (points: (Point|number)[], close: boolean, list: Segment[]) => Segment[];
 
-function buildSegments(points: (Point|number)[]|number[][], buildSimpleSegment: buildSimpleSegmentFn, close: boolean): Segment[] {
+function buildSegments(points: (Point|number)[]|number[][], buildSimpleSegment: BuildSimpleSegmentFn, close: boolean): Segment[] {
   let i: number;
   let ii: number;
   const list: Segment[] = [];
@@ -377,7 +377,7 @@ export const convertAlignmentToAnchor = (value?: LabelAlignment, rtl = false): s
   value ? { left: rtl ? 'end' : 'start', center: 'middle', right: rtl ? 'start' : 'end' }[value] : undefined
 );
 
-function applyTransformation(element: SVGElement, props: SvgGraphicsProps, x?: number, y?: number): void {
+function getTransformation(props: SvgGraphicsProps, x?: number, y?: number): string | undefined {
   const {
     sharp,
     sharpDirection,
@@ -410,39 +410,29 @@ function applyTransformation(element: SVGElement, props: SvgGraphicsProps, x?: n
     transformations.push(`scale(${(scaleXDefined ? scaleX : 1)},${(scaleYDefined ? scaleY : 1)})`);
   }
 
-  if (transformations.length) {
-    element.setAttribute('transform', transformations.join(' '));
-  }
+  return transformations.length ? transformations.join(' ') : undefined;
 }
 
-function applyDashStyle(element: SVGGraphicsElement, props: SvgGraphicsProps): void {
+function getDashStyle(props: SvgGraphicsProps): string | undefined {
   const { dashStyle, strokeWidth } = props;
 
-  const recalculateDashStyle = isDefined(dashStyle) || isDefined(strokeWidth);
-
-  if (recalculateDashStyle && isDefined(dashStyle)) {
-    let value = dashStyle || '';
-    const sw = strokeWidth || 1;
-    const key = 'stroke-dasharray';
-
-    value = value === null ? '' : normalizeEnum(value);
-
-    if (value === '' || value === 'solid' || value === NONE) {
-      element.removeAttribute(key);
-    } else {
-      let dashArray: unknown[] = [];
-      dashArray = value.replace(/longdash/g, '8,3,').replace(/dash/g, '4,3,').replace(/dot/g, '1,3,').replace(/,$/, '')
-        .split(',');
-      let i = dashArray.length;
-      while (i--) {
-        dashArray[i] = parseInt((dashArray[i] as string), 10) * sw;
-      }
-      element.setAttribute(key, dashArray.join(','));
-    }
+  if (!dashStyle || dashStyle === 'none' || dashStyle === 'solid') {
+    return undefined;
   }
+
+  const sw = strokeWidth || 1;
+  const value = normalizeEnum(dashStyle);
+  let dashArray: unknown[] = [];
+  dashArray = value.replace(/longdash/g, '8,3,').replace(/dash/g, '4,3,').replace(/dot/g, '1,3,').replace(/,$/, '')
+    .split(',');
+  let i = dashArray.length;
+  while (i--) {
+    dashArray[i] = parseInt((dashArray[i] as string), 10) * sw;
+  }
+  return dashArray.join(',');
 }
 
-export const applyGraphicProps = (element: SVGGraphicsElement, props: SvgGraphicsProps, x?: number, y?: number): void => {
-  applyDashStyle(element, props);
-  applyTransformation(element, props, x, y);
-};
+export const getGraphicExtraProps = (props: SvgGraphicsProps, x?: number, y?: number): ExtraProps => ({
+  transform: getTransformation(props, x, y),
+  'stroke-dasharray': getDashStyle(props),
+});

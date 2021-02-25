@@ -5,7 +5,7 @@ import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
 import VerticalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
-import SchedulerAppointments from 'ui/scheduler/ui.scheduler.appointments';
+import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
 import eventsEngine from 'events/core/events_engine';
 import dblclickEvent from 'events/dblclick';
 import translator from 'animation/translator';
@@ -85,8 +85,10 @@ const moduleOptions = {
             prerenderFilter: function() {
                 return that.items.length ? that.items : that.instance.option('items');
             },
-            convertDateByTimezone: function(field, timezone) {
-                return field;
+            getTimeZoneCalculator: function() {
+                return {
+                    createDate: date => date
+                };
             },
             getEndViewDate: function() {
                 return new Date(2150, 1, 1);

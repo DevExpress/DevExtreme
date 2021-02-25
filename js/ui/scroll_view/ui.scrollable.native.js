@@ -41,11 +41,10 @@ const NativeStrategy = Class.inherit({
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
-        this._getMaxScrollOffset = scrollable._getMaxOffset.bind(scrollable);
+        this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
     },
 
     render: function() {
-        this._renderPushBackOffset();
         const device = devices.real();
         const deviceType = device.platform;
 
@@ -62,19 +61,6 @@ const NativeStrategy = Class.inherit({
     },
 
     updateRtlPosition: noop,
-
-    _renderPushBackOffset: function() {
-        const pushBackValue = this.option('pushBackValue');
-        if(!pushBackValue && !this._component._lastPushBackValue) {
-            return;
-        }
-
-        this._$content.css({
-            paddingTop: pushBackValue,
-            paddingBottom: pushBackValue
-        });
-        this._component._lastPushBackValue = pushBackValue;
-    },
 
     _renderScrollbars: function() {
         this._scrollbars = {};
@@ -98,9 +84,7 @@ const NativeStrategy = Class.inherit({
     },
 
     handleInit: noop,
-    handleStart: function() {
-        this._disablePushBack = true;
-    },
+    handleStart: noop,
 
     handleMove: function(e) {
         if(this._isLocked()) {
@@ -113,9 +97,7 @@ const NativeStrategy = Class.inherit({
         }
     },
 
-    handleEnd: function() {
-        this._disablePushBack = false;
-    },
+    handleEnd: noop,
     handleCancel: noop,
     handleStop: noop,
 
@@ -140,7 +122,7 @@ const NativeStrategy = Class.inherit({
             reachedLeft: this._isScrollInverted() ? this._isReachedRight(-left) : this._isReachedLeft(left),
             reachedRight: this._isScrollInverted() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
             reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxScrollOffset().top - 2 * this.option('pushBackValue') : undefined
+            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top : undefined
         };
     },
 
@@ -149,7 +131,7 @@ const NativeStrategy = Class.inherit({
 
         return {
             top: -top,
-            left: this._isScrollInverted() ? this._getMaxScrollOffset().left - Math.abs(left) : -left
+            left: this._isScrollInverted() ? this._getMaxOffset().left - Math.abs(left) : -left
         };
     },
 
@@ -165,7 +147,7 @@ const NativeStrategy = Class.inherit({
     },
 
     _isReachedRight: function(left) {
-        return this._isDirection(HORIZONTAL) ? Math.abs(left) >= this._getMaxScrollOffset().left : undefined;
+        return this._isDirection(HORIZONTAL) ? Math.abs(left) >= this._getMaxOffset().left : undefined;
     },
 
     handleScroll: function(e) {
@@ -179,24 +161,6 @@ const NativeStrategy = Class.inherit({
         this._moveScrollbars();
         this._scrollAction(this._createActionArgs());
         this._lastLocation = this.location();
-        this._pushBackFromBoundary();
-    },
-
-    _pushBackFromBoundary: function() {
-        const pushBackValue = this.option('pushBackValue');
-        if(!pushBackValue || this._disablePushBack) {
-            return;
-        }
-
-        const scrollOffset = this._containerSize.height - this._contentSize.height;
-        const scrollTopPos = this._$container.scrollTop();
-        const scrollBottomPos = scrollOffset + scrollTopPos - pushBackValue * 2;
-
-        if(!scrollTopPos) {
-            this._$container.scrollTop(pushBackValue);
-        } else if(!scrollBottomPos) {
-            this._$container.scrollTop(pushBackValue - scrollOffset);
-        }
     },
 
     _isScrollLocationChanged: function() {
@@ -230,7 +194,7 @@ const NativeStrategy = Class.inherit({
     location: function() {
         return {
             left: -this._$container.scrollLeft(),
-            top: this.option('pushBackValue') - this._$container.scrollTop()
+            top: -this._$container.scrollTop()
         };
     },
 
@@ -259,8 +223,6 @@ const NativeStrategy = Class.inherit({
             height: this._$content.height(),
             width: this._$content.width()
         };
-
-        this._pushBackFromBoundary();
     },
 
     _updateScrollbars: function() {
@@ -307,9 +269,7 @@ const NativeStrategy = Class.inherit({
         }
 
         const { top, left } = this.location();
-        const { pushBackValue } = this.option();
-
-        this._$container.scrollTop(Math.round(-top - distance.top + pushBackValue));
+        this._$container.scrollTop(Math.round(-top - distance.top));
         this._$container.scrollLeft(this._normalizeLeftOffset(Math.round(-left - distance.left)));
     },
 
@@ -318,9 +278,9 @@ const NativeStrategy = Class.inherit({
             const { positive } = this._scrollRtlBehavior;
 
             if(positive) {
-                offset = Math.abs(offset - this._getMaxScrollOffset().left);
+                offset = Math.abs(offset - this._getMaxOffset().left);
             } else {
-                offset -= this._getMaxScrollOffset().left;
+                offset -= this._getMaxOffset().left;
             }
         }
 
@@ -349,9 +309,9 @@ const NativeStrategy = Class.inherit({
             result = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
         } else {
             if(e.shiftKey) {
-                result = container.scrollLeft >= this._getMaxScrollOffset().left;
+                result = container.scrollLeft >= this._getMaxOffset().left;
             } else {
-                result = container.scrollTop >= this._getMaxScrollOffset().top;
+                result = container.scrollTop >= this._getMaxOffset().top;
             }
         }
 
@@ -361,10 +321,6 @@ const NativeStrategy = Class.inherit({
     getDirection: function() {
         return this._allowedDirection();
     },
-
-    verticalOffset: function() {
-        return this.option('pushBackValue');
-    }
 });
 
 export default NativeStrategy;

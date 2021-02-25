@@ -7,7 +7,7 @@ fixture`Week view in adaptive mode`
 
 const scheduler = new Scheduler('#container');
 
-const createScheduler = async (data, width = '100%') => {
+const createScheduler = async (data, width = '100%'): Promise<void> => {
   createWidget('dxScheduler', {
     dataSource: data,
     views: ['week'],
@@ -53,7 +53,7 @@ const sampleDataNotRoundedMinutes = [
   },
 ];
 
-const roughEqual = (actual: number, expected: number) => {
+const roughEqual = (actual: number, expected: number): boolean => {
   const epsilon = 1.5;
   const delta = Math.abs(expected - actual);
 

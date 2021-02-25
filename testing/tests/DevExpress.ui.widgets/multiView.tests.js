@@ -1,6 +1,6 @@
 import fx from 'animation/fx';
 import translator from 'animation/translator';
-import 'common.css!';
+import 'generic_light.css!';
 import config from 'core/config';
 import devices from 'core/devices';
 import { isRenderer } from 'core/utils/type';

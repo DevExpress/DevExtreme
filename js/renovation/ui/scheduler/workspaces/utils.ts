@@ -1,7 +1,11 @@
+import { CSSAttributes } from 'devextreme-generator/component_declaration/common';
 import { combineClasses } from '../../../utils/combine_classes';
-import { GroupedViewData } from './types.d';
+import { Group, GroupedViewData, TimePanelData } from './types.d';
 import { GroupOrientation } from '../types.d';
-import { VERTICAL_GROUP_ORIENTATION } from '../consts';
+import {
+  HORIZONTAL_GROUP_ORIENTATION,
+  VERTICAL_GROUP_ORIENTATION,
+} from '../consts';
 
 export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string => {
   const key = date.getTime();
@@ -14,15 +18,33 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
 
 export const getKeyByGroup = (groupIndex: number): string => groupIndex.toString();
 
-export const addHeightToStyle = (
-  height?: number, style?: any,
-): { [key: string]: string | number | undefined } => {
+const addToStyle = (
+  attr: string,
+  value: string,
+  style?: CSSAttributes,
+): CSSAttributes => {
   const nextStyle = style || {};
+  const result = { ...nextStyle };
 
-  return {
-    ...nextStyle,
-    height: height ? `${height}px` : nextStyle.height,
-  };
+  result[attr] = value || nextStyle[attr];
+
+  return result;
+};
+
+export const addHeightToStyle = (
+  value: number | undefined,
+  style?: CSSAttributes,
+): CSSAttributes => {
+  const height = value ? `${value}px` : '';
+  return addToStyle('height', height, style);
+};
+
+export const addWidthToStyle = (
+  value: number | undefined,
+  style?: CSSAttributes,
+): CSSAttributes => {
+  const width = value ? `${value}px` : '';
+  return addToStyle('width', width, style);
 };
 
 export const getGroupCellClasses = (
@@ -36,11 +58,11 @@ export const getGroupCellClasses = (
 });
 
 export const getIsGroupedAllDayPanel = (
-  viewData: GroupedViewData, index: number,
+  viewData: GroupedViewData | TimePanelData, index: number,
 ): boolean => {
   const { groupedData } = viewData;
   const groupData = groupedData[index];
-  const isAllDayPanel = !!(groupData?.allDayPanel?.length);
+  const isAllDayPanel = !!(groupData?.allDayPanel);
   const isGroupedAllDayPanel = !!(groupData?.isGroupedAllDayPanel);
 
   return isAllDayPanel && isGroupedAllDayPanel;
@@ -49,3 +71,7 @@ export const getIsGroupedAllDayPanel = (
 export const isVerticalGroupOrientation = (
   groupOrientation?: GroupOrientation,
 ): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION;
+
+export const isHorizontalGroupOrientation = (
+  groups: Group[], groupOrientation?: GroupOrientation,
+): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;

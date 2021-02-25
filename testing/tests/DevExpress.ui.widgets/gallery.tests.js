@@ -11,7 +11,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/gallery';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -1021,8 +1020,8 @@ QUnit.module('render', {
 
         $galleryItemImage
             .on('load', () => {
-                assert.equal($galleryItemImage.width(), imageWidth);
-                assert.equal($galleryItemImage.height(), imageHeight);
+                assert.roughEqual($galleryItemImage.width(), imageWidth, 0.1);
+                assert.roughEqual($galleryItemImage.height(), imageHeight, 0.1);
                 done();
             })
             .attr('src', '../../testing/content/LightBlueSky.jpg');

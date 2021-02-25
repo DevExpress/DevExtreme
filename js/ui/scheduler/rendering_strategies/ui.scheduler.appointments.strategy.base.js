@@ -23,7 +23,6 @@ class BaseRenderingStrategy {
     }
 
     get isVirtualScrolling() { return this.instance.fire('isVirtualScrolling'); }
-    get virtualScrollingState() { return this.instance.fire('getVirtualScrollingState'); }
 
     _isAdaptive() {
         return this.instance.fire('isAdaptive');
@@ -126,6 +125,7 @@ class BaseRenderingStrategy {
         for(let j = 0; j < position.length; j++) {
             const height = this.calculateAppointmentHeight(appointment, position[j]);
             const width = this.calculateAppointmentWidth(appointment, position[j]);
+
             let resultWidth = width;
             let appointmentReduced = null;
             let multiWeekAppointmentParts = [];
@@ -145,10 +145,13 @@ class BaseRenderingStrategy {
                     initialRowIndex = position[j].rowIndex;
                     initialCellIndex = position[j].cellIndex;
 
-                    resultWidth = this._reduceMultiWeekAppointment(width, {
-                        left: position[j].left,
-                        right: currentMaxAllowedPosition
-                    });
+                    resultWidth = this._reduceMultiWeekAppointment(
+                        width,
+                        {
+                            left: position[j].left,
+                            right: currentMaxAllowedPosition
+                        }
+                    );
 
                     multiWeekAppointmentParts = this._getAppointmentParts({
                         sourceAppointmentWidth: width,
@@ -536,18 +539,23 @@ class BaseRenderingStrategy {
         });
     }
 
-    _markAppointmentAsVirtual(coordinates, isAllDay) {
+    _markAppointmentAsVirtual(coordinates, isAllDay = false) {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
+            const { top, left } = coordinates;
             coordinates.virtual = {
-                top: coordinates.top,
-                left: coordinates.left,
-                index: coordinates.appointmentReduced === 'tail' ?
-                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex :
-                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex + '-tail',
-                isAllDay: isAllDay
+                top,
+                left,
+                index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
+                isAllDay,
             };
         }
+    }
+
+    _generateAppointmentCollectorIndex({
+        groupIndex, rowIndex, cellIndex,
+    }, isAllDay) {
+        return `${groupIndex}-${rowIndex}-${cellIndex}-${isAllDay}`;
     }
 
     _getMaxAppointmentCountPerCellByType(isAllDay) {

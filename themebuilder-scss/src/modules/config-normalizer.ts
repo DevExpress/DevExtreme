@@ -115,7 +115,7 @@ const processItemKeys = (
   config: ConfigSettings,
   processor: (item: string) => string,
 ): void => {
-  if (config.items && config.items.length) {
+  if (config.items?.length) {
     config.items.forEach((item) => {
       item.key = processor(item.key);
     });

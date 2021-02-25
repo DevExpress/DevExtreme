@@ -8,6 +8,7 @@ import {
   Method,
   OneWay,
   Ref,
+  RefObject,
 } from 'devextreme-generator/component_declaration/common';
 import {
   keyboard,
@@ -17,7 +18,7 @@ import BaseComponent from './base_test_widget';
 
 export const view = (viewModel: PreactTestWidget): JSX.Element => (
   <div
-    ref={viewModel.rootRef as any}
+    ref={viewModel.rootRef}
     {...viewModel.props} // eslint-disable-line react/jsx-props-no-spreading
     {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     data-component-attr="component-attr-value"
@@ -55,7 +56,7 @@ export class PreactTestWidgetProps {
 })
 export default class PreactTestWidget extends JSXComponent(PreactTestWidgetProps) {
   @Ref()
-  rootRef!: HTMLDivElement;
+  rootRef!: RefObject<HTMLDivElement>;
 
   @Method()
   apiMethodCheck(arg1, arg2): string {
@@ -96,7 +97,7 @@ export default class PreactTestWidget extends JSXComponent(PreactTestWidgetProps
     const { onKeyDown } = this.props;
 
     if (onKeyDown) {
-      const id = keyboard.on(this.rootRef, this.rootRef, (e) => onKeyDown(e));
+      const id = keyboard.on(this.rootRef.current, this.rootRef.current, (e) => onKeyDown(e));
 
       return (): void => keyboard.off(id);
     }

@@ -6,7 +6,7 @@ const del = require('del');
 const path = require('path');
 const fs = require('fs');
 const { generateComponents } = require('devextreme-generator/component-compiler');
-const { PreactGenerator } = require('devextreme-generator/preact-generator');
+const { InfernoGenerator } = require('devextreme-generator/inferno-generator/inferno-generator');
 const ts = require('gulp-typescript');
 const plumber = require('gulp-plumber');
 const gulpIf = require('gulp-if');
@@ -20,7 +20,7 @@ const {
     BASE_GENERATOR_OPTIONS_WITH_JQUERY
 } = require('./generator-options');
 
-const generator = new PreactGenerator();
+const generator = new InfernoGenerator();
 
 const jQueryComponentsGlob = 'js/renovation/**/*.j.tsx';
 
@@ -45,7 +45,7 @@ const knownErrors = [
     'Cannot find module \'preact/compat\'',
     'js/renovation/preact_wrapper/',
     'js\\renovation\\preact_wrapper\\',
-    'has no exported member \'RefObject\''
+    'Cannot find module \'../../inferno/src\'',
 ];
 
 function deleteJQueryComponents(cb) {
@@ -54,7 +54,7 @@ function deleteJQueryComponents(cb) {
 }
 
 function generateJQueryComponents(isWatch) {
-    const generator = new PreactGenerator();
+    const generator = new InfernoGenerator();
     generator.options = {
         ...BASE_GENERATOR_OPTIONS_WITH_JQUERY,
         generateJQueryOnly: true
@@ -80,9 +80,9 @@ const processErrors = (knownErrors, errors = []) => (e) => {
     }
 };
 
-function generatePreactComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = false) {
+function generatePreactComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = true) {
     return function generatePreactComponents(done) {
-        const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
+        const tsProject = ts.createProject('build/gulp/generator/ts-configs/inferno.tsconfig.json');
 
         generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
 
@@ -254,7 +254,8 @@ addGenerationTask('react', ['Cannot find module \'csstype\'.'], false, true, fal
 addGenerationTask('angular', [
     'Cannot find module \'@angular/core\'',
     'Cannot find module \'@angular/common\'',
-    'Cannot find module \'@angular/forms\''
+    'Cannot find module \'@angular/forms\'',
+    'Cannot find module \'@angular/cdk/portal\'',
 ].concat(knownErrors));
 
 addGenerationTask('vue', [], false, true, false);

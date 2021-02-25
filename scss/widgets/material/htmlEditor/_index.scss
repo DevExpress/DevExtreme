@@ -88,6 +88,10 @@
       padding-bottom: $material-button-vertical-padding - 3px;
     }
   }
+
+  &.dx-size-format {
+    width: $material-toolbar-size-editor-width;
+  }
 }
 
 .dx-htmleditor-toolbar-separator {
