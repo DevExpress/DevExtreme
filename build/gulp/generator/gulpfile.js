@@ -191,10 +191,10 @@ function addGenerationTask(
             });
     }
 
-    gulp.task(`${frameworkName}-compilation-check`, (done) => compileComponents(done, true));
+    gulp.task(`${frameworkName}-compilation-check`, compileComponents);
 
     gulp.task(`generate-${frameworkName}-declaration-only`, function(done) {
-        return compileComponents(done, true)
+        return compileComponents(done)
             .pipe(gulpIf(babelGeneratedFiles, babel(transpileConfig.cjs)))
             .pipe(gulp.dest(frameworkDest));
     });
