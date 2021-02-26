@@ -676,7 +676,6 @@ QUnit.test('Set argument visual range using option. endValue was set only', func
     });
 
     chart.option('argumentAxis.visualRange.endValue', 80);
-    chart.option('argumentAxis.tickInterval', 5);
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 80 });
 });
@@ -695,7 +694,6 @@ QUnit.test('Set argument visual range using option. startValue was set only', fu
     });
 
     chart.option('argumentAxis.visualRange.startValue', 20);
-    chart.option('argumentAxis.tickInterval', 5);
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 20, endValue: 100 });
 });
@@ -733,7 +731,7 @@ QUnit.test('Set value visual range using option. only one edge was set. other un
 });
 
 // T974722
-QUnit.test('visualRange cascade updating', function(assert) {
+QUnit.test('visualRange values direct changing', function(assert) {
     const chart = this.createChart({
         series: [{}],
         dataSource: [{
@@ -741,14 +739,11 @@ QUnit.test('visualRange cascade updating', function(assert) {
             val: 1
         }, {
             arg: 100,
-            val: 1
+            val: 1000
         }]
     });
 
     chart.option('argumentAxis.visualRange.startValue', 20);
-    chart.option('argumentAxis.tickInterval', 5);
-    chart.option('argumentAxis.visualRange.startValue', 20);
-    chart.option('argumentAxis.tickInterval', 5);
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 20, endValue: 100 });
 });
