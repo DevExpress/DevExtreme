@@ -15,7 +15,6 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 
 import 'ui/drop_down_editor/ui.drop_down_list';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

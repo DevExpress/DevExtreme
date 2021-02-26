@@ -8,7 +8,6 @@ import browser from 'core/utils/browser';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import {

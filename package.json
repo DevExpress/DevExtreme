@@ -34,7 +34,7 @@
     "devextreme-quill": "~0.10.2",
     "rrule": "2.6.6",
     "showdown": "^1.8.6",
-    "turndown": "^6.0.0",
+    "turndown": "^7.0.0",
     "preact": "^10.4.5"
   },
   "devDependencies": {

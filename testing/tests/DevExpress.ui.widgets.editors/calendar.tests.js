@@ -16,7 +16,6 @@ import dataUtils from 'core/element_data';
 import dateLocalization from 'localization/date';
 import { normalizeKeyName } from 'events/utils/index';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 // calendar

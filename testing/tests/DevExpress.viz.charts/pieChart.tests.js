@@ -82,8 +82,7 @@ const environment = {
         const that = this;
         that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
 
-        that.templateManager = sinon.createStubInstance(TemplateManagerModule.TemplateManager);
-        that.templateManager._tempTemplates = [];
+        that.templateManager = new TemplateManagerModule.TemplateManager();
         this.templateManagerCtor = sinon.stub(TemplateManagerModule, 'TemplateManager', function() {
             return that.templateManager;
         });

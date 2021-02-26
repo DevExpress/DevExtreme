@@ -27,7 +27,6 @@ import {
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => initTestMarkup());

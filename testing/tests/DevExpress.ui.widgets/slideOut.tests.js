@@ -7,7 +7,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 
 import 'ui/slide_out';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container';

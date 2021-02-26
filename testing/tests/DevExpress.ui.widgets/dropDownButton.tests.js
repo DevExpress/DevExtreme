@@ -7,7 +7,6 @@ import browser from 'core/utils/browser';
 import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';

@@ -4,7 +4,6 @@ import translator from 'animation/translator';
 import animationFrame from 'animation/frame';
 import pointerMock from '../../../helpers/pointerMock.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import {

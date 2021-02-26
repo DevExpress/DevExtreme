@@ -5,7 +5,6 @@ import 'ui/text_area';
 import 'ui/tag_box';
 import 'ui/slider';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

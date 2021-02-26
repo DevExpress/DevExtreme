@@ -10,7 +10,6 @@ import { Deferred } from 'core/utils/deferred';
 import dxrButton from 'renovation/ui/button.j';
 import dxButton from 'ui/button';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

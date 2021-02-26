@@ -15,7 +15,6 @@ import { noop } from 'core/utils/common';
 import { DataSource } from 'data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

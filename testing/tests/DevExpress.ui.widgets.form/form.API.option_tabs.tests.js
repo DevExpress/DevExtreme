@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import 'ui/form/ui.form';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const { testStart, test, module, assert } = QUnit;

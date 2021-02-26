@@ -1,7 +1,6 @@
 import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import { locate } from 'animation/translator';
-import 'common.css!';
 import 'generic_light.css!';
 import config from 'core/config';
 import devices from 'core/devices';

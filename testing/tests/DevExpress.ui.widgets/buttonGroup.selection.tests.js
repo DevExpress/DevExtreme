@@ -3,7 +3,6 @@ import 'ui/button';
 import 'ui/button_group';
 import eventsEngine from 'events/core/events_engine';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
