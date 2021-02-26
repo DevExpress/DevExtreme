@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
+import renderer from 'core/renderer';
 import pointerEvents from 'events/pointer';
 import localization from 'localization';
 import messageLocalization from 'localization/message';
@@ -692,5 +693,30 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(2).text(), captionDate, 'second column is Date Modified');
         assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(3).text(), captionSize, 'third column is File Size');
         localization.locale(locale);
+    });
+
+    test('columns without hidingPriority auto hide disabled (T950675)', function(assert) {
+        const thumbnailsColumnCaption = 'thumbnailsColumnCaption';
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 500;
+        this.wrapper.getInstance().option({
+            fileSystemProvider: [{
+                name: 'Some_very_very_very_very_very_very_very_very_very_very_very_very_very_very_long_folder',
+                isDirectory: true,
+                hasSubDirectories: false,
+                items: []
+            }],
+            itemView: {
+                mode: 'details',
+                details: {
+                    columns: [{ dataField: 'thumbnail', caption: 'thumbnailsColumnCaption' }, 'name']
+                }
+            },
+            width: '500px'
+        });
+        this.clock.tick(600);
+
+        assert.strictEqual(this.wrapper.getDetailsCell(thumbnailsColumnCaption, 0).outerWidth(), 36, 'thumbnails column width is correct');
+        renderer.fn.width = originalFunc;
     });
 });

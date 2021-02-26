@@ -92,7 +92,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             },
             showColumnLines: false,
             showRowLines: false,
-            columnHidingEnabled: true,
+            columnHidingEnabled: false,
             columns: this._createColumns(),
             onEditorPreparing: this._onEditorPreparing.bind(this),
             onRowPrepared: this._onRowPrepared.bind(this),
