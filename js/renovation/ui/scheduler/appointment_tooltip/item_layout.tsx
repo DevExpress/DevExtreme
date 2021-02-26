@@ -35,7 +35,7 @@ export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => {
           // eslint-disable-next-line react/jsx-props-no-spreading
       {...viewModel.restAttributes}
     >
-      <Marker color={viewModel.props.item.color} />
+      <Marker />
       <TooltipItemContent
         text={viewModel.formattedContent.text}
         formattedDate={viewModel.formattedContent.formatDate}

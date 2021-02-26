@@ -7,10 +7,9 @@ import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 import { combineClasses } from '../../../utils/combine_classes';
 import { EventCallback } from '../../common/event_callback.d';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   className, value, label, props: { onClick },
-}: Page) => (
+}: Page): JSX.Element => (
   <LightButton
     className={className}
     label={label}

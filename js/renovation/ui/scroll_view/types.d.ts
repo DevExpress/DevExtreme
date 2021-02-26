@@ -28,8 +28,7 @@ export interface ScrollOffset {
   right: number;
 }
 
-export type allowedDirection = {
+export interface AllowedDirection {
   vertical: boolean;
   horizontal: boolean;
-};
-
+}
