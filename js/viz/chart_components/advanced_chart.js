@@ -49,15 +49,10 @@ function setAxisVisualRangeByOption(arg, axis, isDirectOption, index) {
             skipEventRising: true
         };
 
-        const pathElements = arg.fullName.split('.');
-        const destElem = pathElements[pathElements.length - 1];
-        if(destElem === 'endValue' || destElem === 'startValue') {
-            options = {
-                allowPartialUpdate: true
-            };
-            visualRange = {
-                [destElem]: arg.value
-            };
+        const wrappedVisualRange = wrapVisualRange(arg.fullName, visualRange);
+        if(wrappedVisualRange) {
+            options = { allowPartialUpdate: true };
+            visualRange = wrappedVisualRange;
         }
     } else {
         visualRange = (_isDefined(index) ? arg.value[index] : arg.value).visualRange;
@@ -71,6 +66,17 @@ function getAxisTypes(groupsData, axis, isArgumentAxes) {
     }
     const { valueAxisType, valueType } = groupsData.groups.filter(g => g.valueAxis === axis)[0];
     return { valueAxisType, valueType };
+}
+
+function wrapVisualRange(fullName, value) {
+    const pathElements = fullName.split('.');
+    const destElem = pathElements[pathElements.length - 1];
+
+    if(destElem === 'endValue' || destElem === 'startValue') {
+        return {
+            [destElem]: value
+        };
+    }
 }
 
 export const AdvancedChart = BaseChart.inherit({
@@ -680,6 +686,9 @@ export const AdvancedChart = BaseChart.inherit({
         index = _isDefined(index) ? parseInt(index[0]) : index;
 
         if(fullName.indexOf('visualRange') > 0) {
+            if(type(value) !== 'object') {
+                value = wrapVisualRange(fullName, value) || value;
+            }
             that._setCustomVisualRange(name, index, value);
         } else if((type(value) === 'object' || _isArray(value)) && name.indexOf('Axis') > 0 && JSON.stringify(value).indexOf('visualRange') > 0) {
             if(_isDefined(value.visualRange)) {
