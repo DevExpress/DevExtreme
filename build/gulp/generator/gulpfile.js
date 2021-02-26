@@ -178,9 +178,9 @@ function addGenerationTask(
 
     function compileComponents(done) {
         const errors = [];
-        const ignorePaths = IGNORE_PATHS_BY_FRAMEWORKS[frameworkName];
+        const frameworkIgnorePaths = IGNORE_PATHS_BY_FRAMEWORKS[frameworkName];
 
-        return gulp.src(SRC.concat(ignorePaths), { base: 'js' })
+        return gulp.src([...SRC, ...frameworkIgnorePaths, '!js/renovation/preact_wrapper/**/*.*'], { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(gulpIf(compileTs, tsProject({
@@ -191,10 +191,10 @@ function addGenerationTask(
             });
     }
 
-    gulp.task(`${frameworkName}-compilation-check`, compileComponents);
+    gulp.task(`${frameworkName}-compilation-check`, (done) => compileComponents(done, true));
 
     gulp.task(`generate-${frameworkName}-declaration-only`, function(done) {
-        return compileComponents(done)
+        return compileComponents(done, true)
             .pipe(gulpIf(babelGeneratedFiles, babel(transpileConfig.cjs)))
             .pipe(gulp.dest(frameworkDest));
     });
@@ -267,7 +267,7 @@ function addGenerationTask(
     ));
 }
 
-addGenerationTask('react', ['Cannot find module \'csstype\'.'], false, true, false);
+addGenerationTask('react', ['Cannot find module \'csstype\'.'], true, true, false);
 addGenerationTask('angular', [
     'Cannot find module \'@angular/core\'',
     'Cannot find module \'@angular/common\'',
