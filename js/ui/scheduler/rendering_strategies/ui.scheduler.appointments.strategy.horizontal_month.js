@@ -1,5 +1,6 @@
 import HorizontalMonthLineAppointmentsStrategy from './ui.scheduler.appointments.strategy.horizontal_month_line';
 import { extend } from '../../../core/utils/extend';
+import dateUtils from '../../../core/utils/date';
 
 const MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;
 const MONTH_APPOINTMENT_MIN_OFFSET = 26;
@@ -70,6 +71,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
 
         return result;
     }
+
     _getGroupDeltaWidth(groupIndex) {
         let result = 0;
         const workspace = this.instance.getWorkSpace();
@@ -81,6 +83,28 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         }
 
         return result;
+    }
+
+    _assignIndicesToAppointmentParts(appointmentParts, startDate) {
+        if(appointmentParts.length === 0) {
+            return appointmentParts;
+        }
+
+        const { startDate: firstPartStartDate } = appointmentParts[0].info.appointment;
+        const trimmedFirstPartDate = dateUtils.trimTime(firstPartStartDate);
+        const trimmedStartDate = dateUtils.trimTime(startDate);
+        const skippedPartsCount = Math.ceil(
+            (trimmedFirstPartDate.getTime() - trimmedStartDate.getTime()) / dateUtils.dateToMilliseconds('week')
+        );
+
+        const appointmentPartsWithIndices = appointmentParts.map((appointmentPart, index) => {
+            return ({
+                ...appointmentPart,
+                partIndex: skippedPartsCount + index,
+            });
+        });
+
+        return appointmentPartsWithIndices;
     }
 
     _calculateMultiWeekAppointmentLeftOffset(max, width) {

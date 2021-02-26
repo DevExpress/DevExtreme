@@ -31,6 +31,7 @@ export default class AppointmentDragBehavior {
             settings: itemSettings,
         };
 
+        this.appointments.isAppointmentDragged = true;
         this.appointments.notifyObserver('hideAppointmentTooltip');
     }
 
@@ -152,5 +153,9 @@ export default class AppointmentDragBehavior {
                 currentAppointment, currentSettings,
             );
         }
+    }
+
+    setDragEnded() {
+        this.appointments.isAppointmentDragged = false;
     }
 }

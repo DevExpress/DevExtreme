@@ -41,10 +41,15 @@ class SchedulerAppointments extends CollectionWidget {
         return this.option('observer')._resourcesManager;
     }
 
+    get isAppointmentDragged() { return this._isAppointmentDragged; }
+
+    set isAppointmentDragged(value) { this._isAppointmentDragged = value; }
+
     constructor(element, options) {
         super(element, options);
         this._virtualAppointments = {};
         this._focusedAppointmentInfo = null;
+        this._isAppointmentDragged = false;
     }
 
     notifyObserver(subject, args) {
@@ -971,10 +976,10 @@ class SchedulerAppointments extends CollectionWidget {
     focusAppointment() {
         const { _focusedAppointmentInfo: focusedAppointmentInfo } = this;
 
-        if(focusedAppointmentInfo) {
+        if(focusedAppointmentInfo && !this.isAppointmentDragged) {
             const $appointments = this._findItemElementByItem(focusedAppointmentInfo.data);
             const { startDate, endDate } = focusedAppointmentInfo.settings.info.sourceAppointment;
-            const { groupIndex, appointmentReduced } = focusedAppointmentInfo.settings;
+            const { groupIndex, partIndex } = focusedAppointmentInfo.settings;
 
             let $focusedAppointment = null;
             let currentIndex = 0;
@@ -982,7 +987,7 @@ class SchedulerAppointments extends CollectionWidget {
             while(!$focusedAppointment && currentIndex < $appointments.length) {
                 const $currentAppointment = $appointments[currentIndex];
                 const {
-                    info: itemInfo, groupIndex: itemGroupIndex, appointmentReduced: itemReduced,
+                    info: itemInfo, groupIndex: itemGroupIndex, partIndex: itemPartIndex,
                 } = $currentAppointment.data(APPOINTMENT_SETTINGS_KEY);
 
                 const {
@@ -993,7 +998,7 @@ class SchedulerAppointments extends CollectionWidget {
                 const isFocusedAppointment = startDate.getTime() === itemStartDate.getTime()
                     && endDate.getTime() === itemEndDate.getTime()
                     && groupIndex === itemGroupIndex
-                    && appointmentReduced === itemReduced;
+                    && partIndex === itemPartIndex;
 
                 if(isFocusedAppointment) {
                     $focusedAppointment = $currentAppointment;

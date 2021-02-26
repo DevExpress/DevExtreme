@@ -3490,6 +3490,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 if(itemData && !itemData.disabled) {
                     dragBehavior.onDragEnd(e);
                 }
+                dragBehavior.setDragEnded();
 
                 dragElement?.remove();
             },

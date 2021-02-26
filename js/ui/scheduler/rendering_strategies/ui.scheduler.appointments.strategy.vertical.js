@@ -66,7 +66,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         }
 
         const settings = this._getAppointmentCoordinates(appointment);
-        let result = [];
+        const result = [];
 
         for(let j = 0; j < settings.length; j++) {
             const currentSetting = settings[j];
@@ -106,10 +106,15 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 height: resultHeight,
                 width: width,
                 allDay: allDay,
-                appointmentReduced: appointmentReduced
+                appointmentReduced: appointmentReduced,
             });
 
-            result = this._getAppointmentPartsPosition(multiDaysAppointmentParts, currentSetting, result);
+            const appointmentPartsWithPosition = this
+                ._getAppointmentPartsPosition(multiDaysAppointmentParts, currentSetting, result);
+            const partsWithIndices = this
+                ._assignIndicesToAppointmentParts(appointmentPartsWithPosition);
+
+            result.push(...partsWithIndices);
         }
 
         return result;
@@ -360,6 +365,27 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             unlimited: ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET,
             auto: ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET
         };
+    }
+
+    _assignIndicesToAppointmentParts(appointmentParts, allDay) {
+        if(allDay) {
+            return super._assignIndicesToAppointmentParts(appointmentParts);
+        }
+
+        if(appointmentParts.length === 0) {
+            return appointmentParts;
+        }
+
+        const appointmentPartsWithIndices = appointmentParts.map((appointmentPart) => {
+            return ({
+                ...appointmentPart,
+                partIndex: appointmentPart.appointmentReduced === 'tail'
+                    ? 1
+                    : 0,
+            });
+        });
+
+        return appointmentPartsWithIndices;
     }
 
     _getMaxHeight() {

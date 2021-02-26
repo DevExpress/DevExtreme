@@ -120,7 +120,7 @@ class BaseRenderingStrategy {
         const allDay = this.isAllDay(appointment);
         const startDate = new Date(adapter.startDate);
 
-        let result = [];
+        const result = [];
 
         for(let j = 0; j < position.length; j++) {
             const height = this.calculateAppointmentHeight(appointment, position[j]);
@@ -175,21 +175,25 @@ class BaseRenderingStrategy {
                 cellIndex: initialCellIndex,
                 appointmentReduced: appointmentReduced,
             });
-            result = this._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
+
+            const appointmentPartsWithPosition = this
+                ._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j]);
+            const partsWithIndices = this
+                ._assignIndicesToAppointmentParts(appointmentPartsWithPosition, startDate);
+
+            result.push(...partsWithIndices);
         }
 
         return result;
     }
 
-    _getAppointmentPartsPosition(appointmentParts, position, result) {
+    _getAppointmentPartsPosition(appointmentParts, position) {
         if(appointmentParts.length) {
             appointmentParts.unshift(position);
-            result = result.concat(appointmentParts);
-        } else {
-            result.push(position);
+            return appointmentParts;
         }
 
-        return result;
+        return [position];
     }
 
     _getAppointmentCoordinates(appointment) {
@@ -696,6 +700,19 @@ class BaseRenderingStrategy {
         }
 
         return this._maxAppointmentCountPerCell;
+    }
+
+    _assignIndicesToAppointmentParts(appointmentParts) {
+        if(appointmentParts.length === 0) {
+            return appointmentParts;
+        }
+
+        return appointmentParts.map((appointmentPart) => {
+            return ({
+                ...appointmentPart,
+                partIndex: 0,
+            });
+        });
     }
 
     _getDynamicAppointmentCountPerCell() {
