@@ -40,8 +40,8 @@ const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 const COMMON_SRC = ['js/**/*.d.ts', 'js/**/*.js'];
 
 const knownErrors = [
-    'js/renovation/inferno_wrapper/',
-    'js\\renovation\\inferno_wrapper\\',
+    'js/renovation/component_wrapper/',
+    'js\\renovation\\component_wrapper\\',
     'Cannot find module \'../../inferno/src\'',
 ];
 
@@ -272,7 +272,7 @@ gulp.task('react-compilation-check', function() {
 
     // const tsProject = ts.createProject('build/gulp/generator/ts-configs/react.tsconfig.json');
 
-    return gulp.src([...SRC, '!js/renovation/inferno_wrapper/**/*.*'], { base: 'js' })
+    return gulp.src([...SRC, '!js/renovation/component_wrapper/**/*.*'], { base: 'js' })
         .pipe(generateComponents(generator));
     // .pipe(tsProject()); // TODO: will be fixed soon with all frameworks compilation check
 });

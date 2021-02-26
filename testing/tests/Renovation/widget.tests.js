@@ -112,7 +112,7 @@ QUnit.module('Container', moduleConfig, () => {
     });
 });
 
-QUnit.module('Inferno Wrapper', moduleConfig, () => {
+QUnit.module('Component Wrapper', moduleConfig, () => {
     QUnit.test('should create in separate element', function(assert) {
         $('<div>').dxWidget({});
 

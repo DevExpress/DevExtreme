@@ -52,7 +52,7 @@ export default class OptionsCheckWidget extends JSXComponent(OptionsCheckWidgetP
   }
 
   @Method()
-  getLastInfernoReceivedProps(): OptionsCheckWidgetProps {
+  getLastReceivedProps(): OptionsCheckWidgetProps {
     return this.props;
   }
 }

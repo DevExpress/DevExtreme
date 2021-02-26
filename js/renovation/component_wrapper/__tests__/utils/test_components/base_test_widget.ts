@@ -5,12 +5,12 @@ import Component from '../../../component';
 export default class BaseTestWidget extends Component {
   lastPassedProps: any;
 
-  getLastInfernoPassedProps(): any {
+  getLastPassedProps(): any {
     return this.lastPassedProps;
   }
 
-  _renderInferno(props: any): void {
+  _renderWrapper(props: any): void {
     this.lastPassedProps = props;
-    super._renderInferno(props);
+    super._renderWrapper(props);
   }
 }

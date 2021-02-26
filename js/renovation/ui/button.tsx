@@ -22,7 +22,7 @@ import { Icon } from './common/icon';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import BaseWidgetProps from '../utils/base_props';
-import BaseComponent from '../inferno_wrapper/button';
+import BaseComponent from '../component_wrapper/button';
 import { EffectReturn } from '../utils/effect_return.d';
 
 const stylingModes = ['outlined', 'text', 'contained'];

@@ -4,7 +4,7 @@
 // eslint-disable-next-line import/named
 import renderer, { dxElementWrapper } from '../../../core/renderer';
 import './utils/test_components/empty_test_widget';
-import './utils/test_components/inferno_test_widget';
+import './utils/test_components/test_widget';
 import './utils/test_components/options_check_widget';
 import './utils/test_components/templated_test_widget';
 import {
@@ -16,7 +16,7 @@ import { setPublicElementWrapper } from '../../../core/element';
 
 const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
   dxEmptyTestWidget: any;
-  dxInfernoTestWidget: any;
+  dxTestWidget: any;
   dxOptionsCheckWidget: any;
   dxTemplatedTestWidget: any;
 };
@@ -39,10 +39,10 @@ describe('Misc cases', () => {
     expect(() => $('#component').dxEmptyTestWidget({})).not.toThrowError();
   });
 
-  it('on disposing should clean inferno effects', () => {
+  it('on disposing should clean effects', () => {
     const subscribeEffect = jest.fn();
     const unsubscribeEffect = jest.fn();
-    $('#component').dxInfernoTestWidget({
+    $('#component').dxTestWidget({
       subscribeEffect,
       unsubscribeEffect,
     });
@@ -56,37 +56,37 @@ describe('Misc cases', () => {
     expect(unsubscribeEffect).toHaveBeenCalledTimes(1);
   });
 
-  it('should forward API calls to inferno component', () => {
-    $('#component').dxInfernoTestWidget({ text: 'check api' });
-    const apiCallResult = $('#component').dxInfernoTestWidget('apiMethodCheck', '1', '2');
+  it('should forward API calls to component', () => {
+    $('#component').dxTestWidget({ text: 'check api' });
+    const apiCallResult = $('#component').dxTestWidget('apiMethodCheck', '1', '2');
 
     expect(apiCallResult).toBe('check api - 1 - 2');
   });
 
   it('setAria throws Error', () => {
-    $('#component').dxInfernoTestWidget({});
+    $('#component').dxTestWidget({});
 
     expect(() => {
-      $('#component').dxInfernoTestWidget('setAria');
+      $('#component').dxTestWidget('setAria');
     }).toThrowError('"setAria" method is deprecated, use "aria" property instead');
   });
 
   describe('API with Element type params/return type', () => {
-    it('pass DOM node to inferno if provided parameter is jQuery wrapper', () => {
+    it('pass DOM node to if provided parameter is jQuery wrapper', () => {
       const element = document.createElement('div');
       const wrapper = $(element);
 
-      $('#component').dxInfernoTestWidget({});
+      $('#component').dxTestWidget({});
 
-      const checkParam = $('#component').dxInfernoTestWidget('methodWithElementParam', wrapper);
+      const checkParam = $('#component').dxTestWidget('methodWithElementParam', wrapper);
 
       expect(checkParam.arg).toEqual(element);
     });
 
     it('leave param as is if it is not jQuery wrapper', () => {
-      $('#component').dxInfernoTestWidget({});
+      $('#component').dxTestWidget({});
 
-      const checkParam = $('#component').dxInfernoTestWidget('methodWithElementParam', 15);
+      const checkParam = $('#component').dxTestWidget('methodWithElementParam', 15);
 
       expect(checkParam.arg).toEqual(15);
     });
@@ -97,9 +97,9 @@ describe('Misc cases', () => {
 
       const element = document.createElement('div');
 
-      $('#component').dxInfernoTestWidget({});
+      $('#component').dxTestWidget({});
 
-      const checkParam = $('#component').dxInfernoTestWidget('methodReturnElement', element);
+      const checkParam = $('#component').dxTestWidget('methodReturnElement', element);
 
       expect(checkParam).toEqual(element);
 
@@ -110,17 +110,17 @@ describe('Misc cases', () => {
 });
 
 describe('Widget\'s container manipulations', () => {
-  it('repaint redraws inferno component 2 times', () => {
+  it('repaint redraws component 2 times', () => {
     $('#component').css('width', '123px');
     $('#component').css('height', '456px');
     $('#component').addClass('custom-css-class');
 
     const subscribeEffect = jest.fn();
-    $('#component').dxInfernoTestWidget({
+    $('#component').dxTestWidget({
       subscribeEffect,
     });
 
-    $('#component').dxInfernoTestWidget('repaint');
+    $('#component').dxTestWidget('repaint');
 
     expect(subscribeEffect).toHaveBeenCalledTimes(3);
 
@@ -135,24 +135,24 @@ describe('Widget\'s container manipulations', () => {
     });
   });
 
-  it('inferno component\'s root replaces widget\'s container', () => {
-    $('#component').dxInfernoTestWidget({});
+  it('component\'s root replaces widget\'s container', () => {
+    $('#component').dxTestWidget({});
 
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
-  it('inferno component\'s root is widget\'s container after repaint', () => {
-    $('#component').dxInfernoTestWidget({});
-    $('#component').dxInfernoTestWidget('repaint');
+  it('component\'s root is widget\'s container after repaint', () => {
+    $('#component').dxTestWidget({});
+    $('#component').dxTestWidget('repaint');
 
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
-  it('inferno component\'s root is widget\'s container after render in detached container', () => {
+  it('component\'s root is widget\'s container after render in detached container', () => {
     const $container = $('#component');
     const parent = $container.parent('');
     $container.remove($container);
-    $container.dxInfernoTestWidget({ text: 'test' });
+    $container.dxTestWidget({ text: 'test' });
 
     $container.appendTo(parent);
 
@@ -160,14 +160,14 @@ describe('Widget\'s container manipulations', () => {
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
   });
 
-  it('inferno component\'s root is widget\'s container after render in detached container and repaint', () => {
+  it('component\'s root is widget\'s container after render in detached container and repaint', () => {
     const $container = $('#component');
     const parent = $container.parent('');
     $container.remove($container);
-    $container.dxInfernoTestWidget({ text: 'test' });
+    $container.dxTestWidget({ text: 'test' });
 
     $container.appendTo(parent);
-    $container.dxInfernoTestWidget('repaint');
+    $container.dxTestWidget('repaint');
 
     expect($('.dx-test-widget')[0]).not.toBe(undefined);
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
@@ -177,14 +177,14 @@ describe('Widget\'s container manipulations', () => {
     const $container = $('#component');
     const parent = $container.parent('');
     $container.remove($container);
-    $container.dxInfernoTestWidget({ text: 'test' });
+    $container.dxTestWidget({ text: 'test' });
 
     $container.appendTo(parent);
-    $container.dxInfernoTestWidget('repaint');
+    $container.dxTestWidget('repaint');
     $container.detach();
-    $container.dxInfernoTestWidget('repaint');
+    $container.dxTestWidget('repaint');
     $container.appendTo(parent);
-    $container.dxInfernoTestWidget('repaint');
+    $container.dxTestWidget('repaint');
 
     expect($('.dx-test-widget')[0]).not.toBe(undefined);
     expect($('.dx-test-widget')[0]).toBe($('#component')[0]);
@@ -196,9 +196,9 @@ describe('Widget\'s container manipulations', () => {
     $('#my-id').addClass('dx-custom-css-class');
     $('#my-id').attr('data-custom-attr', 'attr-value');
 
-    $('#my-id').dxInfernoTestWidget({});
+    $('#my-id').dxTestWidget({});
 
-    expect($('#my-id').dxInfernoTestWidget('getLastInfernoPassedProps')).toMatchObject({
+    expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
       id: 'my-id',
       className: 'custom-css-class dx-custom-css-class',
       class: '',
@@ -211,11 +211,11 @@ describe('Widget\'s container manipulations', () => {
     $('#my-id').addClass('custom-css-class');
     $('#my-id').addClass('dx-custom-css-class');
     $('#my-id').attr('data-custom-attr', 'attr-value');
-    $('#my-id').dxInfernoTestWidget({});
+    $('#my-id').dxTestWidget({});
 
-    $('#my-id').dxInfernoTestWidget('repaint');
+    $('#my-id').dxTestWidget('repaint');
 
-    expect($('#my-id').dxInfernoTestWidget('getLastInfernoPassedProps')).toMatchObject({
+    expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
       id: 'my-id',
       className: 'custom-css-class dx-custom-css-class',
       class: '',
@@ -227,13 +227,13 @@ describe('Widget\'s container manipulations', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
     $('#my-id').addClass('dx-custom-css-class');
-    $('#my-id').dxInfernoTestWidget({});
+    $('#my-id').dxTestWidget({});
 
     $('#my-id').addClass('custom-css-class2');
 
-    $('#my-id').dxInfernoTestWidget('repaint');
+    $('#my-id').dxTestWidget('repaint');
 
-    expect($('#my-id').dxInfernoTestWidget('getLastInfernoPassedProps')).toMatchObject({
+    expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
       className: 'custom-css-class custom-css-class2 dx-custom-css-class',
       class: '',
     });
@@ -242,29 +242,29 @@ describe('Widget\'s container manipulations', () => {
   it('should save only initial "dx-" custom classes', () => {
     $('#component').attr('id', 'my-id');
     $('#my-id').addClass('custom-css-class');
-    $('#my-id').dxInfernoTestWidget({});
+    $('#my-id').dxTestWidget({});
 
     $('#my-id').addClass('dx-custom-css-class');
 
-    $('#my-id').dxInfernoTestWidget('repaint');
+    $('#my-id').dxTestWidget('repaint');
 
-    expect($('#my-id').dxInfernoTestWidget('getLastInfernoPassedProps')).toMatchObject({
+    expect($('#my-id').dxTestWidget('getLastPassedProps')).toMatchObject({
       className: 'custom-css-class',
       class: '',
     });
   });
 
   it('should pass empty string if no classes present on element', () => {
-    $('#component').dxInfernoTestWidget({});
+    $('#component').dxTestWidget({});
 
-    $('#component').dxInfernoTestWidget('repaint');
+    $('#component').dxTestWidget('repaint');
 
-    expect($('#component').dxInfernoTestWidget('getLastInfernoPassedProps')).toMatchObject({
+    expect($('#component').dxTestWidget('getLastPassedProps')).toMatchObject({
       class: '',
       className: '',
     });
 
-    expect($('#component').dxInfernoTestWidget('getLastInfernoReceivedProps')).toMatchObject({
+    expect($('#component').dxTestWidget('getLastReceivedProps')).toMatchObject({
       class: '',
       className: '',
     });
@@ -274,25 +274,25 @@ describe('Widget\'s container manipulations', () => {
   it('widget does not show className option', () => {
     $('#component').addClass('custom-css-class');
 
-    $('#component').dxInfernoTestWidget({});
+    $('#component').dxTestWidget({});
 
-    expect($('#component').dxInfernoTestWidget('option')).not.toHaveProperty('className');
+    expect($('#component').dxTestWidget('option')).not.toHaveProperty('className');
   });
 
   it('replace id on container with id from elementAttr option', () => {
     $('#component').attr('id', 'my-id');
 
-    $('#my-id').dxInfernoTestWidget({ elementAttr: { id: 'attr-id' } });
+    $('#my-id').dxTestWidget({ elementAttr: { id: 'attr-id' } });
 
-    expect($('#attr-id').dxInfernoTestWidget('getLastInfernoReceivedProps').id).toBe('attr-id');
+    expect($('#attr-id').dxTestWidget('getLastReceivedProps').id).toBe('attr-id');
   });
 
   it('merge unique css classes from elementAttr option with container class', () => {
     $('#component').addClass('custom-css-class attr-class');
 
-    $('#component').dxInfernoTestWidget({ elementAttr: { class: 'attr-css-class attr-class' } });
+    $('#component').dxTestWidget({ elementAttr: { class: 'attr-css-class attr-class' } });
 
-    const { className } = $('#component').dxInfernoTestWidget('getLastInfernoReceivedProps');
+    const { className } = $('#component').dxTestWidget('getLastReceivedProps');
 
     expect(className).toBe('custom-css-class attr-class attr-css-class');
   });
@@ -301,18 +301,18 @@ describe('Widget\'s container manipulations', () => {
     $('component').addClass('custom-css-class attr-class');
     $('#component').attr('data-custom-attr', 'attr-value');
 
-    $('#component').dxInfernoTestWidget({ elementAttr: { id: 'attr-id', class: 'attr-css-class attr-class' } });
+    $('#component').dxTestWidget({ elementAttr: { id: 'attr-id', class: 'attr-css-class attr-class' } });
 
-    expect($('#attr-id').dxInfernoTestWidget('option').elementAttr).toEqual({ id: 'attr-id', class: 'attr-css-class attr-class' });
+    expect($('#attr-id').dxTestWidget('option').elementAttr).toEqual({ id: 'attr-id', class: 'attr-css-class attr-class' });
   });
 
   it('pass style as key_value pair to props', () => {
     $('#component').css('width', '123.5px');
     $('#component').css('height', '456.6px');
 
-    $('#component').dxInfernoTestWidget({});
+    $('#component').dxTestWidget({});
 
-    expect($('#component').dxInfernoTestWidget('getLastInfernoReceivedProps').style).toEqual({
+    expect($('#component').dxTestWidget('getLastReceivedProps').style).toEqual({
       width: '123.5px',
       height: '456.6px',
     });
@@ -322,15 +322,15 @@ describe('Widget\'s container manipulations', () => {
     $('#component').css('width', '123.5px');
     $('#component').css('height', '456.6px');
 
-    $('#component').dxInfernoTestWidget({});
+    $('#component').dxTestWidget({});
 
     $('#component').css('width', '23.5px');
     $('#component').css('height', '56.6px');
     $('#component').css('display', 'inline');
 
-    $('#component').dxInfernoTestWidget('repaint');
+    $('#component').dxTestWidget('repaint');
 
-    expect($('#component').dxInfernoTestWidget('getLastInfernoReceivedProps').style).toEqual({
+    expect($('#component').dxTestWidget('getLastReceivedProps').style).toEqual({
       width: '23.5px',
       height: '56.6px',
       display: 'inline',
@@ -340,20 +340,20 @@ describe('Widget\'s container manipulations', () => {
   it('component container should not change its position in parent container', () => {
     $('#components').append($('<div>')).prepend($('<div>'));
 
-    $('#component').dxInfernoTestWidget({});
+    $('#component').dxTestWidget({});
 
     expect($('#components').children().get(1)).toBe($('#component').get(0));
   });
 });
 
 describe('option', () => {
-  it('should return default props of inferno component', () => {
+  it('should return default props of component', () => {
     $('#component').dxOptionsCheckWidget({});
 
     expect($('#component').dxOptionsCheckWidget('option').text).toBe('default text');
   });
 
-  it('should copy default props of inferno component (not by reference)', () => {
+  it('should copy default props of component (not by reference)', () => {
     document.body.innerHTML = `
       <div id="components">
           <div id="component1"></div>
@@ -420,7 +420,7 @@ describe('option', () => {
       twoWayNullWithValue: undefined,
     });
 
-    expect($('#component').dxOptionsCheckWidget('getLastInfernoPassedProps')).toMatchObject({
+    expect($('#component').dxOptionsCheckWidget('getLastPassedProps')).toMatchObject({
       oneWayWithValue: 10,
       oneWayWithoutValue: undefined,
       oneWayNullWithValue: null,
@@ -438,7 +438,7 @@ describe('option', () => {
   });
 
   describe('Options with Element type', () => {
-    it('pass DOM node to inferno if provided option is jQuery wrapper', () => {
+    it('pass DOM node to component if provided option is jQuery wrapper', () => {
       const element = document.createElement('div');
       const wrapper = $(element);
 
@@ -446,7 +446,7 @@ describe('option', () => {
         propWithElement: wrapper,
       });
 
-      expect($('#component').dxOptionsCheckWidget('getLastInfernoPassedProps').propWithElement).toEqual(element);
+      expect($('#component').dxOptionsCheckWidget('getLastPassedProps').propWithElement).toEqual(element);
     });
 
     it('leave option as is if it is not jQuery wrapper', () => {
@@ -454,7 +454,7 @@ describe('option', () => {
         propWithElement: 15,
       });
 
-      expect($('#component').dxOptionsCheckWidget('getLastInfernoPassedProps').propWithElement).toEqual(15);
+      expect($('#component').dxOptionsCheckWidget('getLastPassedProps').propWithElement).toEqual(15);
     });
   });
 
@@ -632,18 +632,18 @@ describe('templates and slots', () => {
 describe('events/actions', () => {
   it('wraps event props with Actions with declared actionConfig', () => {
     const onEventProp = jest.fn();
-    $('#component').dxInfernoTestWidget({
+    $('#component').dxTestWidget({
       onEventProp,
       beforeActionExecute: (_, action, actionConfig) => action(actionConfig),
     });
 
-    $('#component').dxInfernoTestWidget('eventPropCheck', 'payload');
+    $('#component').dxTestWidget('eventPropCheck', 'payload');
 
-    expect($('#component').dxInfernoTestWidget('option').onEventProp).toBe(onEventProp);
+    expect($('#component').dxTestWidget('option').onEventProp).toBe(onEventProp);
     expect(onEventProp.mock.calls[0][0].someConfigs).toBe('action-config');
     expect(onEventProp.mock.calls[1][0]).toEqual({
       actionValue: 'payload',
-      component: $('#component').dxInfernoTestWidget('instance'),
+      component: $('#component').dxTestWidget('instance'),
       element: $('#component').get(0),
     });
   });
@@ -657,11 +657,11 @@ describe('events/actions', () => {
     const element2 = document.createElement('div');
     const element3 = { some: 'object' };
     const element4 = null;
-    $('#component').dxInfernoTestWidget({
+    $('#component').dxTestWidget({
       onEventProp,
     });
 
-    $('#component').dxInfernoTestWidget('eventPropCheck', {
+    $('#component').dxTestWidget('eventPropCheck', {
       eventElement: element1,
       wrappedField: element2,
       nonWrappedField: element3,
@@ -685,22 +685,22 @@ describe('events/actions', () => {
   it('re-wraps event props if it is changed', () => {
     const onEventProp1 = jest.fn();
     const onEventProp2 = jest.fn();
-    $('#component').dxInfernoTestWidget({
+    $('#component').dxTestWidget({
       onEventProp: onEventProp1,
     });
 
-    $('#component').dxInfernoTestWidget({
+    $('#component').dxTestWidget({
       onEventProp: onEventProp2,
     });
 
-    $('#component').dxInfernoTestWidget('eventPropCheck', 'payload');
+    $('#component').dxTestWidget('eventPropCheck', 'payload');
 
-    expect($('#component').dxInfernoTestWidget('option').onEventProp).toBe(onEventProp2);
+    expect($('#component').dxTestWidget('option').onEventProp).toBe(onEventProp2);
     expect(onEventProp1).toBeCalledTimes(0);
     expect(onEventProp2).toBeCalledTimes(1);
     expect(onEventProp2.mock.calls[0][0]).toEqual({
       actionValue: 'payload',
-      component: $('#component').dxInfernoTestWidget('instance'),
+      component: $('#component').dxTestWidget('instance'),
       element: $('#component').get(0),
     });
   });
@@ -710,10 +710,10 @@ describe('registerKeyHandler', () => {
   it('call custom handler only', () => {
     const customHandler = jest.fn();
     const propHandler = jest.fn();
-    $('#component').dxInfernoTestWidget({
+    $('#component').dxTestWidget({
       onKeyDown: propHandler,
     });
-    const instance = $('#component').dxInfernoTestWidget('instance');
+    const instance = $('#component').dxTestWidget('instance');
 
     instance.registerKeyHandler('space', customHandler);
 
@@ -729,10 +729,10 @@ describe('registerKeyHandler', () => {
   it('call both handlers if custom handler returns something', () => {
     const customHandler = jest.fn(() => true);
     const propHandler = jest.fn();
-    $('#component').dxInfernoTestWidget({
+    $('#component').dxTestWidget({
       onKeyDown: propHandler,
     });
-    const instance = $('#component').dxInfernoTestWidget('instance');
+    const instance = $('#component').dxTestWidget('instance');
 
     instance.registerKeyHandler('space', customHandler);
 
@@ -750,10 +750,10 @@ describe('registerKeyHandler', () => {
   it('do not call custom handler on another keyDown event', () => {
     const customHandler = jest.fn();
     const propHandler = jest.fn();
-    $('#component').dxInfernoTestWidget({
+    $('#component').dxTestWidget({
       onKeyDown: propHandler,
     });
-    const instance = $('#component').dxInfernoTestWidget('instance');
+    const instance = $('#component').dxTestWidget('instance');
 
     instance.registerKeyHandler('space', customHandler);
 
