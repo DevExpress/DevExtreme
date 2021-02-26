@@ -24,7 +24,7 @@ import eventsEngine from '../../../events/core/events_engine';
 
 import {
   ScrollableLocation, ScrollOffset,
-  allowedDirection,
+  AllowedDirection,
   ScrollEventArgs,
   ScrollableDirection,
 } from './types.d';
@@ -710,7 +710,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     return updateAllowedDirection(this.allowedDirections, this.props.direction);
   }
 
-  get allowedDirections(): allowedDirection {
+  get allowedDirections(): AllowedDirection {
     return {
       vertical: this.direction.isVertical
         && (Math.round(
@@ -845,7 +845,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedPropsTy
     }
   }
 
-  scrollByLine(lines): void {
+  scrollByLine(lines: { x?: number; y?: number }): void {
     const devicePixelRatio = this.tryGetDevicePixelRatio();
     let scrollOffset = SCROLL_LINE_HEIGHT;
     if (devicePixelRatio) {

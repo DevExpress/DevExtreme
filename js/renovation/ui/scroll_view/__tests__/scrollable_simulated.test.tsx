@@ -546,7 +546,7 @@ describe('Simulated', () => {
                     const target = helper.scrollable.find(`.${targetClass}`).at(0).getDOMNode();
                     (e.originalEvent as any).target = target;
 
-                    helper.checkValidDirection(expect, {});
+                    helper.checkValidDirection(expect, {}, {});
 
                     helper.initScrollbarSettings();
                     helper.initScrollbarHandlerMocks();
@@ -667,7 +667,7 @@ describe('Simulated', () => {
                       helper.initScrollbarSettings();
                       helper.initScrollbarHandlerMocks();
 
-                      helper.checkValidDirection(expect, {});
+                      helper.checkValidDirection(expect, {}, {});
                       helper.viewModel.getEventArgs = jest.fn();
 
                       helper.viewModel.startEffect();
@@ -764,7 +764,7 @@ describe('Simulated', () => {
                         helper.checkValidDirection(expect, {
                           horizontal: true,
                           vertical: true,
-                        });
+                        }, {});
                         helper.checkScrollbarEventHandlerCalls(expect, ['scrollBy'], [[scrollByValues.expected]]);
 
                         if (onEndActionHandler) {

@@ -5,6 +5,7 @@ import {
 import {
   ScrollableLocation,
   ScrollableDirection,
+  ScrollableBoundary,
 } from '../types.d';
 
 import {
@@ -18,7 +19,7 @@ export function createElement({
   offsetParent = {},
   className = '',
   isInScrollableContent = false,
-}): HTMLElement {
+}: { [key: string]: any }): HTMLElement {
   const checkSelector = (selector: string): boolean => className.indexOf(selector.replace('.', '')) > -1;
   return {
     offsetHeight: height,
@@ -69,7 +70,7 @@ export function calculateRtlScrollLeft(container: HTMLElement, coordinate: numbe
   return normalizeRtl(true, scrollLeft) as number;
 }
 
-export function createTargetElement(args): HTMLElement {
+export function createTargetElement(args: { [key: string]: any }): HTMLElement {
   const scrollableContent = createElement({
     location: { },
     className: SCROLLABLE_CONTENT_CLASS,
@@ -80,7 +81,11 @@ export function createTargetElement(args): HTMLElement {
   });
 }
 
-export function checkScrollParams({ direction, actual, expected }) {
+export function checkScrollParams({ direction, actual, expected }:
+{ direction: ScrollableDirection;
+  actual: ScrollableBoundary;
+  expected: Partial<ScrollableBoundary>;
+}): void {
   const expectedParams = expected;
 
   if (direction === 'vertical') {

@@ -11,7 +11,7 @@ import { ensureDefined } from '../../../core/utils/common';
 import {
   ScrollableLocation,
   ScrollOffset, ScrollableBoundary, ScrollableDirection,
-  allowedDirection,
+  AllowedDirection,
 } from './types.d';
 
 export const SCROLL_LINE_HEIGHT = 40;
@@ -228,7 +228,7 @@ export function getElementLocation(
 }
 
 export function updateAllowedDirection(
-  allowedDirections: allowedDirection, direction: ScrollableDirection,
+  allowedDirections: AllowedDirection, direction: ScrollableDirection,
 ): string | undefined {
   const { isVertical, isHorizontal, isBoth } = new ScrollDirection(direction);
 

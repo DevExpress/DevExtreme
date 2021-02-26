@@ -66,7 +66,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   );
 };
 
-type ScrollbarPropsType = ScrollbarProps
+export type ScrollbarPropsType = ScrollbarProps
 & Pick<ScrollableSimulatedProps, 'contentPositionChange' | 'contentTranslateOffset' | 'contentTranslateOffsetChange'>;
 @Component({
   defaultOptionRules: null,
@@ -151,8 +151,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  validateEvent(event): boolean {
-    const { target } = event.originalEvent;
+  validateEvent(e): boolean {
+    const { target } = e.originalEvent;
 
     return (this.isThumb(target) || this.isScrollbar(target));
   }
