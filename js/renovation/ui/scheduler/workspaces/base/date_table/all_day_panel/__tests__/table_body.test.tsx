@@ -40,7 +40,7 @@ describe('AllDayPanelTableBody', () => {
             }}
           />
         </tbody>
-      </table>,
+      </table> as any,
     ).find(TableBodyView).childAt(0);
 
     it('should spread restAttributes', () => {
