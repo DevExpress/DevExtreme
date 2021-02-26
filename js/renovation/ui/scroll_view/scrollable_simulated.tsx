@@ -131,9 +131,9 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               refreshStrategy="simulated"
             />
             )}
-            {needScrollViewContentWrapper && (
-              <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
-            {!needScrollViewContentWrapper && children}
+            {needScrollViewContentWrapper
+              ? <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>
+              : <div>{children}</div>}
             {forceGeneratePockets && (
             <BottomPocket
               reachBottomText={reachBottomText}

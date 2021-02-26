@@ -96,9 +96,9 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
               refreshingText={refreshingText}
             />
             )}
-            {needScrollViewContentWrapper && (
-              <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>)}
-            {!needScrollViewContentWrapper && children}
+            {needScrollViewContentWrapper
+              ? <div className={SCROLLVIEW_CONTENT_CLASS}>{children}</div>
+              : <div>{children}</div>}
             {forceGeneratePockets && (
             <BottomPocket
               reachBottomText={reachBottomText}
