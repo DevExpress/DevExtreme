@@ -249,8 +249,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  validateEvent(event): boolean {
-    return this.scrollbarRef.current!.validateEvent(event);
+  validateEvent(e): boolean {
+    return this.scrollbarRef.current!.validateEvent(e);
   }
 
   @Method()
@@ -279,12 +279,12 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  moveHandler(delta: any): void {
+  moveHandler(delta: { x: number; y: number }): void {
     this.scrollbarRef.current!.moveHandler(delta);
   }
 
   @Method()
-  endHandler(velocity): void {
+  endHandler(velocity: { x: number; y: number }): void {
     this.scrollbarRef.current!.endHandler(velocity);
   }
 
