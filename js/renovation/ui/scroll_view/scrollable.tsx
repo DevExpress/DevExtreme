@@ -3,7 +3,6 @@ import {
   JSXComponent,
   Ref,
   Method,
-  Fragment,
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
@@ -39,9 +38,8 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     restAttributes,
   } = viewModel;
 
-  return (
-    <Fragment>
-      {useNative && (
+  return (useNative
+    ? (
       <ScrollableNative
         ref={scrollableNativeRef}
         classes={cssClasses}
@@ -54,8 +52,8 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
       />
-      )}
-      {!useNative && (
+    )
+    : (
       <ScrollableSimulated
         ref={scrollableSimulatedRef}
         classes={cssClasses}
@@ -68,8 +66,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
       />
-      )}
-    </Fragment>
+    )
   );
 };
 
