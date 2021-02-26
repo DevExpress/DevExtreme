@@ -11,4 +11,3 @@ themebuilder-scss/coverage/*
 themebuilder-scss/src/data/metadata/*
 js/bundles/dx.custom.js
 testing/jest/utils/transformers/*
-!js/renovation/**/*.d.ts
