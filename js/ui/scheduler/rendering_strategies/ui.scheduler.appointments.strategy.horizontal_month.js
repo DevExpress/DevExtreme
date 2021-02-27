@@ -27,17 +27,21 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         const chunkCount = Math.round(geometry.sourceAppointmentWidth / fullWeekAppointmentWidth);
         const leftPosition = this._getLeftPosition(settings);
 
-        for(let chunkIndex = 1; chunkIndex < chunkCount; chunkIndex++) {
+        const deltaWidth = geometry.sourceAppointmentWidth - geometry.reducedWidth;
+        const tailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth);
+
+        for(let chunkIndex = 1; chunkIndex <= chunkCount; chunkIndex++) {
             const topPosition = settings.top + this.getDefaultCellHeight() * chunkIndex;
 
-            const lastChunkIndex = chunkIndex === chunkCount - 1;
+            const lastChunkIndex = chunkIndex === chunkCount;
             const appointmentReducedValue = lastChunkIndex && hasTail ? 'tail' : 'body';
+            const width = lastChunkIndex && hasTail ? tailWidth : fullWeekAppointmentWidth;
 
             result.push({ ...settings, ...{
                 top: topPosition,
                 left: leftPosition,
                 height: geometry.height,
-                width: fullWeekAppointmentWidth,
+                width: width,
                 appointmentReduced: appointmentReducedValue,
                 rowIndex: ++settings.rowIndex,
                 cellIndex: 0
