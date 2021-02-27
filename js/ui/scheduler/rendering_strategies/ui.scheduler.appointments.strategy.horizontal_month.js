@@ -84,18 +84,15 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         const result = [];
         const firstChunkWidth = geometry.reducedWidth;
         const allChunksWidth = geometry.sourceAppointmentWidth;
+        const leftPosition = this._getLeftPosition(settings);
 
         const hasTail = this.instance.fire('getEndViewDate') > settings.info.appointment.endDate;
+
         const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(settings.groupIndex);
-        let chunkCount = Math.round(allChunksWidth / fullWeekAppointmentWidth);
-        const leftPosition = this._getLeftPosition(settings);
+        const chunkCount = Math.ceil((settings.left + allChunksWidth) / fullWeekAppointmentWidth);
 
         const deltaWidth = allChunksWidth - firstChunkWidth;
         const tailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth);
-
-        if(chunkCount === 0 && tailWidth) {
-            chunkCount = 2;
-        }
 
         for(let chunkIndex = 1; chunkIndex < chunkCount; chunkIndex++) {
             const topPosition = settings.top + this.getDefaultCellHeight() * chunkIndex;
