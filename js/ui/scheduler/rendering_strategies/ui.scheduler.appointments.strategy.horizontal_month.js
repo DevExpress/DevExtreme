@@ -19,35 +19,49 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         return result;
     }
 
+    _getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth) {
+        const rawFullChunksWidth = fullChunksWidth - firstChunkWidth + weekWidth;
+        return Math.ceil(rawFullChunksWidth / weekWidth);
+    }
+
+    _getChunkWidths(geometry) {
+        const firstChunkWidth = geometry.reducedWidth;
+        const fullChunksWidth = Math.round(geometry.sourceAppointmentWidth);
+        const widthWithoutFirstChunk = fullChunksWidth - firstChunkWidth;
+
+        return [geometry.reducedWidth, Math.round(geometry.sourceAppointmentWidth), widthWithoutFirstChunk];
+    }
+
+    _getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition) {
+        const tailChunkWidth = withoutFirstChunkWidth % weekWidth || weekWidth;
+        const rtlPosition = leftPosition + (weekWidth - tailChunkWidth);
+        const tailChunkLeftPosition = this._isRtl() ? rtlPosition : leftPosition;
+
+        return [tailChunkWidth, tailChunkLeftPosition];
+    }
+
     _getAppointmentParts(geometry, settings) {
         const result = [];
-        const firstChunkWidth = geometry.reducedWidth;
-        const allChunksWidth = parseInt(geometry.sourceAppointmentWidth);
+
+        const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry);
         const leftPosition = this._getLeftPosition(settings);
+        const weekWidth = this._getFullWeekAppointmentWidth(settings.groupIndex);
 
-        const hasTail = this.instance.fire('getEndViewDate') > settings.info.appointment.endDate;
+        const hasTailChunk = this.instance.fire('getEndViewDate') > settings.info.appointment.endDate;
+        const chunkCount = this._getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth);
 
-        const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(settings.groupIndex);
-        const chunkCount = Math.ceil((allChunksWidth - firstChunkWidth + fullWeekAppointmentWidth) / fullWeekAppointmentWidth);
-
-        const deltaWidth = allChunksWidth - firstChunkWidth;
-        const tailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth);
+        const [tailChunkWidth, tailChunkLeftPosition] = this._getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition);
 
         for(let chunkIndex = 1; chunkIndex < chunkCount; chunkIndex++) {
             const topPosition = settings.top + this.getDefaultCellHeight() * chunkIndex;
-
-            const lastChunkIndex = chunkIndex === chunkCount - 1;
-            const appointmentReducedValue = lastChunkIndex && hasTail ? 'tail' : 'body';
-            const isTail = lastChunkIndex && hasTail;
-            const width = isTail ? tailWidth || fullWeekAppointmentWidth : fullWeekAppointmentWidth;
-            const rtlTailPos = this._isRtl() ? leftPosition + (fullWeekAppointmentWidth - (tailWidth || fullWeekAppointmentWidth)) : leftPosition;
+            const isTailChunk = hasTailChunk && (chunkIndex === chunkCount - 1);
 
             result.push({ ...settings, ...{
                 top: topPosition,
-                left: isTail ? rtlTailPos : leftPosition,
+                left: isTailChunk ? tailChunkLeftPosition : leftPosition,
                 height: geometry.height,
-                width: width,
-                appointmentReduced: appointmentReducedValue,
+                width: isTailChunk ? tailChunkWidth : weekWidth,
+                appointmentReduced: isTailChunk ? 'tail' : 'body',
                 rowIndex: ++settings.rowIndex,
                 cellIndex: 0
             } });
