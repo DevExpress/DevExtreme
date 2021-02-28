@@ -19,67 +19,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         return result;
     }
 
-    // _getAppointmentParts(appointmentGeometry, appointmentSettings, startDate) {
-    //     debugger;
-    //     const apptDeltaWidth = appointmentGeometry.sourceAppointmentWidth - appointmentGeometry.reducedWidth;
-    //     const height = appointmentGeometry.height;
-    //     const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(appointmentSettings.groupIndex);
-    //     //const maxAppointmentWidth = this._getMaxAppointmentWidth(startDate);
-    //     const longPartCount = Math.ceil((apptDeltaWidth) / fullWeekAppointmentWidth) - 1;
-    //     const realTailWidth = Math.floor(apptDeltaWidth % fullWeekAppointmentWidth);
-    //     const tailWidth = longPartCount ? realTailWidth : (realTailWidth || fullWeekAppointmentWidth);
-    //     const result = [];
-    //     let totalWidth = appointmentGeometry.reducedWidth + tailWidth;
-    //     let currentPartTop = appointmentSettings.top + this.getDefaultCellHeight();
-    //     let left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
-
-
-    //     if(this.instance._groupOrientation === 'vertical') {
-    //         left += this.instance.fire('getWorkSpaceDateTableOffset');
-    //     }
-
-    //     for(let i = 0; i < longPartCount; i++) {
-
-    //         result.push(extend(true, {}, appointmentSettings, {
-    //             top: currentPartTop,
-    //             left: left,
-    //             height: height,
-    //             width: fullWeekAppointmentWidth,
-    //             appointmentReduced: 'body',
-    //             rowIndex: ++appointmentSettings.rowIndex,
-    //             cellIndex: 0
-    //         }));
-
-    //         currentPartTop += this.getDefaultCellHeight();
-    //         totalWidth += fullWeekAppointmentWidth;
-    //     }
-
-    //     if(tailWidth) {
-    //         if(this._isRtl()) {
-    //             left = left + (fullWeekAppointmentWidth - tailWidth);
-    //         }
-
-    //         result.push(extend(true, {}, appointmentSettings, {
-    //             top: currentPartTop,
-    //             left: left,
-    //             height: height,
-    //             width: tailWidth,
-    //             appointmentReduced: 'tail',
-    //             rowIndex: ++appointmentSettings.rowIndex,
-    //             cellIndex: 0
-    //         }));
-    //     }
-
-    //     const { groupIndex } = appointmentSettings;
-    //     const groupDeltaWidth = this._getGroupDeltaWidth(groupIndex);
-    //     result.forEach(item => {
-    //         item.left = Math.max(item.left + groupDeltaWidth, 0);
-    //         item.width = Math.max(item.width - groupDeltaWidth, 0);
-    //     });
-
-    //     return result;
-    // }
-
     _getAppointmentParts(geometry, settings) {
         const result = [];
         const firstChunkWidth = geometry.reducedWidth;
@@ -99,11 +38,13 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
 
             const lastChunkIndex = chunkIndex === chunkCount - 1;
             const appointmentReducedValue = lastChunkIndex && hasTail ? 'tail' : 'body';
-            const width = lastChunkIndex && hasTail ? tailWidth || fullWeekAppointmentWidth : fullWeekAppointmentWidth;
+            const isTail = lastChunkIndex && hasTail;
+            const width = isTail ? tailWidth || fullWeekAppointmentWidth : fullWeekAppointmentWidth;
+            const rtlTailPos = this._isRtl() ? leftPosition + (fullWeekAppointmentWidth - (tailWidth || fullWeekAppointmentWidth)) : leftPosition;
 
             result.push({ ...settings, ...{
                 top: topPosition,
-                left: leftPosition,
+                left: isTail ? rtlTailPos : leftPosition,
                 height: geometry.height,
                 width: width,
                 appointmentReduced: appointmentReducedValue,
