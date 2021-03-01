@@ -432,6 +432,11 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
     });
 
     QUnit.test('Grouped cells should have a right group field in dxCellData', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         const $element = this.instance.$element();
 
         this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
@@ -606,6 +611,11 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     });
 
     QUnit.test('Grouped cells should have a right group field in dxCellData', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         const $element = this.instance.$element();
 
         assert.deepEqual($element.find('.dx-scheduler-date-table tbody tr>td').eq(0).data('dxCellData').groups, {
@@ -615,6 +625,11 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     });
 
     QUnit.test('Grouped allDay cells should have a right group field in dxCellData', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option('showAllDayPanel', true);
 
         const $allDayCells = this.instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS));
@@ -850,6 +865,11 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
     });
 
     QUnit.test('Grouped cells should have a right group field in dxCellData', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         const $element = this.instance.$element();
         const $cells = $element.find('.dx-scheduler-date-table tbody tr>td');
         const cellCount = $cells.length;
@@ -1407,6 +1427,11 @@ QUnit.module('Workspace Month markup with vertical grouping', monthWithGroupingM
     });
 
     QUnit.test('Grouped cells should have a right group field in dxCellData', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         const $element = this.instance.$element();
         const $cells = $element.find('.dx-scheduler-date-table tbody tr>td');
         const cellCount = $cells.length;
