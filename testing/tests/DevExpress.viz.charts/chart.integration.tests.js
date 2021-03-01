@@ -731,7 +731,7 @@ QUnit.test('Set value visual range using option. only one edge was set. other un
 });
 
 // T974722
-QUnit.test('visualRange values direct changing', function(assert) {
+QUnit.test('visualRange values & tick interval changed twice', function(assert) {
     const chart = this.createChart({
         series: [{}],
         dataSource: [{
@@ -744,6 +744,9 @@ QUnit.test('visualRange values direct changing', function(assert) {
     });
 
     chart.option('argumentAxis.visualRange.startValue', 20);
+    chart.option('argumentAxis.tickInterval', 5);
+    chart.option('argumentAxis.visualRange.startValue', 20);
+    chart.option('argumentAxis.tickInterval', 5);
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 20, endValue: 100 });
 });
