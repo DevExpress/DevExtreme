@@ -44,10 +44,10 @@ const compileBundles = (bundles) => {
                 file.contents = new Buffer.from(css.styles);
                 callback(null, file);
             });
-        })
+        }))
         .pipe(starLicense())
         .pipe(replace(/([\s\S]*)(@charset.*?;\s)/, '$2$1'))
-        .pipe(dest(cssArtifactsPath)));
+        .pipe(dest(cssArtifactsPath));
 };
 
 function createBundles(callback) {
