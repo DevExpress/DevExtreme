@@ -21,8 +21,6 @@ import { createEvent } from 'events/utils/index';
 
 import Pager from 'ui/pager';
 
-// import { act } from 'preact/test-utils';
-
 QUnit.module('Pager', {
     beforeEach: function() {
         this.options = {

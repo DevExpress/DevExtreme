@@ -46,11 +46,8 @@ const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 const COMMON_SRC = ['js/**/*.d.ts', 'js/**/*.js'];
 
 const knownErrors = [
-    'Cannot find module \'preact\'',
-    'Cannot find module \'preact/hooks\'',
-    'Cannot find module \'preact/compat\'',
-    'js/renovation/preact_wrapper/',
-    'js\\renovation\\preact_wrapper\\',
+    'js/renovation/component_wrapper/',
+    'js\\renovation\\component_wrapper\\',
     'Cannot find module \'../../inferno/src\'',
 ];
 
@@ -86,8 +83,8 @@ const processErrors = (knownErrors, errors = []) => (e) => {
     }
 };
 
-function generatePreactComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = true) {
-    return function generatePreactComponents(done) {
+function generateInfernoComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = true) {
+    return function generateInfernoComponents(done) {
         const tsProject = ts.createProject('build/gulp/generator/ts-configs/inferno.tsconfig.json');
 
         generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
@@ -146,17 +143,17 @@ gulp.task('generate-jquery-components-watch', function watchJQueryComponents() {
 
 gulp.task('generate-components', gulp.series(
     'generate-jquery-components',
-    generatePreactComponents(),
-    ifEsmPackage(generatePreactComponents('./esm', transpileConfig.esm)),
-    ifEsmPackage(generatePreactComponents('./cjs', transpileConfig.cjs)),
+    generateInfernoComponents(),
+    ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm)),
+    ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs)),
     processRenovationMeta
 ));
 
 gulp.task('generate-components-dev', gulp.series(
     'generate-jquery-components',
-    generatePreactComponents('./', transpileConfig.cjs, true),
-    ifEsmPackage(generatePreactComponents('./esm', transpileConfig.esm, true)),
-    ifEsmPackage(generatePreactComponents('./cjs', transpileConfig.cjs, true)),
+    generateInfernoComponents('./', transpileConfig.cjs, true),
+    ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm, true)),
+    ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs, true)),
     processRenovationMeta
 ));
 
@@ -180,7 +177,12 @@ function addGenerationTask(
         const errors = [];
         const frameworkIgnorePaths = IGNORE_PATHS_BY_FRAMEWORKS[frameworkName];
 
-        return gulp.src([...SRC, ...frameworkIgnorePaths, '!js/renovation/preact_wrapper/**/*.*'], { base: 'js' })
+        return gulp.src([
+            ...SRC,
+            ...frameworkIgnorePaths,
+            '!js/renovation/component_wrapper/**/*.*',
+            '!js/renovation/utils/render_template.ts', // TODO: move to 'component_wrapper'
+        ], { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(gulpIf(compileTs, tsProject({
@@ -267,12 +269,19 @@ function addGenerationTask(
     ));
 }
 
-addGenerationTask('react', ['Cannot find module \'csstype\'.'], true, true, false);
+addGenerationTask('react',
+    ['Cannot find module \'csstype\'.'],
+    false, // TODO: should be true
+    true,
+    false
+);
 addGenerationTask('angular', [
     'Cannot find module \'@angular/core\'',
     'Cannot find module \'@angular/common\'',
     'Cannot find module \'@angular/forms\'',
     'Cannot find module \'@angular/cdk/portal\'',
+    'Cannot find module \'inferno\'',
+    'Cannot find module \'inferno-create-element\'',
 ].concat(knownErrors));
 
 addGenerationTask('vue', [], false, true, false);

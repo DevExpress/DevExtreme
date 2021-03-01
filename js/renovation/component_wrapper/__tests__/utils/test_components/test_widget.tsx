@@ -16,7 +16,7 @@ import {
 
 import BaseComponent from './base_test_widget';
 
-export const view = (viewModel: PreactTestWidget): JSX.Element => (
+export const view = (viewModel: TestWidget): JSX.Element => (
   <div
     ref={viewModel.rootRef}
     {...viewModel.props} // eslint-disable-line react/jsx-props-no-spreading
@@ -29,7 +29,7 @@ export const view = (viewModel: PreactTestWidget): JSX.Element => (
 );
 
 @ComponentBindings()
-export class PreactTestWidgetProps {
+export class TestWidgetProps {
   @OneWay() height?: number;
 
   @OneWay() width?: number;
@@ -54,7 +54,7 @@ export class PreactTestWidgetProps {
   },
   view,
 })
-export default class PreactTestWidget extends JSXComponent(PreactTestWidgetProps) {
+export default class TestWidget extends JSXComponent(TestWidgetProps) {
   @Ref()
   rootRef!: RefObject<HTMLDivElement>;
 
@@ -81,7 +81,7 @@ export default class PreactTestWidget extends JSXComponent(PreactTestWidgetProps
   }
 
   @Method()
-  getLastPreactReceivedProps(): PreactTestWidgetProps {
+  getLastReceivedProps(): TestWidgetProps {
     return this.props;
   }
 

@@ -13,7 +13,7 @@ import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
-import DataGridBaseComponent from '../../preact_wrapper/data_grid';
+import DataGridBaseComponent from '../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../utils/effect_return';
 
 const aria = { role: 'presentation' };

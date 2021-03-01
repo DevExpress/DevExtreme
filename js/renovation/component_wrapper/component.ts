@@ -32,7 +32,7 @@ const insertContainer = (parentNode: Element, element: Element, index: number): 
   }
 }
 
-export default class PreactWrapper extends DOMComponent {
+export default class ComponentWrapper extends DOMComponent {
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
   _actionsMap!: {
     [name: string]: Function;
@@ -42,7 +42,7 @@ export default class PreactWrapper extends DOMComponent {
     class?: string;
     [name: string]: unknown;
   };
-  _preactReplaced!: boolean;
+  _isNodeReplaced!: boolean;
   _propsInfo!: {
     allowNull: string[],
     twoWay: any[],
@@ -94,7 +94,7 @@ export default class PreactWrapper extends DOMComponent {
     if (this._shouldRefresh) {
       this._shouldRefresh = false;
 
-      this._renderPreact({
+      this._renderWrapper({
         ...props,
         width: null,
         height: null,
@@ -103,14 +103,14 @@ export default class PreactWrapper extends DOMComponent {
         children: null,
       });
     }
-    this._renderPreact(props);
+    this._renderWrapper(props);
   }
 
-  _renderPreact(props): void {
+  _renderWrapper(props): void {
     const containerNode = this.$element()[0];
     const parentNode = containerNode.parentNode;
 
-    if (!this._preactReplaced) {
+    if (!this._isNodeReplaced) {
       let containerPosition = 0;
       if (parentNode) {
         containerPosition = getContainerIndex(parentNode, containerNode);
@@ -127,7 +127,7 @@ export default class PreactWrapper extends DOMComponent {
         insertContainer(parentNode, containerNode, containerPosition);
       }
       InfernoEffectHost.callEffects();
-      this._preactReplaced = true;
+      this._isNodeReplaced = true;
     } else {
       render(
         createElement(this._viewComponent, props),
@@ -136,7 +136,7 @@ export default class PreactWrapper extends DOMComponent {
     }
   }
 
-  _render() {}
+  _render() {} // NOTE: Inherited from DOM_Component
 
   _dispose() {
     const containerNode = this.$element()[0];
@@ -390,5 +390,5 @@ export default class PreactWrapper extends DOMComponent {
 }
 
 /// #DEBUG
-PreactWrapper.IS_RENOVATED_WIDGET = true;
+ComponentWrapper.IS_RENOVATED_WIDGET = true;
 /// #ENDDEBUG
