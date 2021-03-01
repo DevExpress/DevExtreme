@@ -1560,7 +1560,7 @@ QUnit.module('default template', {
     });
 
     ['single', 'multiple'].forEach(selectionMode => {
-        QUnit.test(`Click ob buttonGroup item inside menu (T977105). selectionMode: ${selectionMode}`, function(assert) {
+        QUnit.test(`Click on buttonGroup item inside menu (T977105). selectionMode: ${selectionMode}`, function(assert) {
             const onClickActionStub = sinon.stub();
 
             const $element = $('#widget').dxToolbar({
