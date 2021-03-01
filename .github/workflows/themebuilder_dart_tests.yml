@@ -1,0 +1,49 @@
+name: Themebuilder tests
+
+on: [push, pull_request]
+
+jobs:
+  dart-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: .\node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-package-lock --no-audit --no-fund
+
+    - name: Build etalon bundles
+      run: npx gulp style-compiler-themes-ci
+
+    - name: Install dart
+      uses: cedx/setup-dart@v2
+
+    - name: Install dart packeges
+      run: pub get
+      working-directory: ./themebuilder-scss/dart-compiler
+
+    - name: Run npm install
+      run: npm install --no-package-lock --no-audit --no-fund
+      working-directory: ./themebuilder-scss
+
+    - name: Build
+      run: npm run build
+      working-directory: ./themebuilder-scss
+
+    - name: Run themebuilder tests (full set, node)
+      run: npm run test
+      working-directory: ./themebuilder-scss
+
+    - name: Run themebuilder tests (integration only, dart)
+      run: npm run test-dart
+      working-directory: ./themebuilder-scss
