@@ -620,7 +620,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolling: {
                 mode: 'standard',
             },
-            renovateRender: false,
+            renovateRender: true,
             height: undefined
         });
     }
@@ -2312,10 +2312,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$timePanel.empty();
             this._$groupTable.empty();
 
-            this._shader?.clean();
             this._$allDayTable?.empty();
             this._$sidebarTable?.empty();
         }
+
+        this._shader?.clean();
 
         delete this._hiddenInterval;
         delete this._interval;
