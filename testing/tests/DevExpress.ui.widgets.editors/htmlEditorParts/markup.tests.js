@@ -7,9 +7,9 @@ const HTML_EDITOR_CLASS = 'dx-htmleditor';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
 const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = 'dx-htmleditor-submit-element';
-const HTML_EDITOR_STYLING_MODE_OUTLINED_CLASS = 'dx-htmleditor-outlined';
-const HTML_EDITOR_STYLING_MODE_FILLED_CLASS = 'dx-htmleditor-filled';
-const HTML_EDITOR_STYLING_MODE_UNDERLINED_CLASS = 'dx-htmleditor-filled';
+const HTML_EDITOR_OUTLINED_CLASS = 'dx-htmleditor-outlined';
+const HTML_EDITOR_FILLED_CLASS = 'dx-htmleditor-filled';
+const HTML_EDITOR_UNDERLINED_CLASS = 'dx-htmleditor-filled';
 
 const { test } = QUnit;
 
@@ -87,9 +87,9 @@ QUnit.module('Base markup', () => {
             stylingMode: 'outlined'
         });
 
-        assert.ok($element.hasClass(HTML_EDITOR_STYLING_MODE_OUTLINED_CLASS), 'has outlined mode class');
-        assert.notOk($element.hasClass(HTML_EDITOR_STYLING_MODE_FILLED_CLASS), 'has no filled mode class');
-        assert.notOk($element.hasClass(HTML_EDITOR_STYLING_MODE_UNDERLINED_CLASS), 'has no underlined mode class');
+        assert.ok($element.hasClass(HTML_EDITOR_OUTLINED_CLASS), 'has outlined mode class');
+        assert.notOk($element.hasClass(HTML_EDITOR_FILLED_CLASS), 'has no filled mode class');
+        assert.notOk($element.hasClass(HTML_EDITOR_UNDERLINED_CLASS), 'has no underlined mode class');
     });
 
     test('change styling mode', function(assert) {
@@ -101,7 +101,7 @@ QUnit.module('Base markup', () => {
 
         instance.option('stylingMode', 'filled');
 
-        assert.notOk($element.hasClass(HTML_EDITOR_STYLING_MODE_OUTLINED_CLASS), 'has no old styling mode class');
-        assert.ok($element.hasClass(HTML_EDITOR_STYLING_MODE_FILLED_CLASS), 'has new styling mode class');
+        assert.notOk($element.hasClass(HTML_EDITOR_OUTLINED_CLASS), 'has no old styling mode class');
+        assert.ok($element.hasClass(HTML_EDITOR_FILLED_CLASS), 'has new styling mode class');
     });
 });
