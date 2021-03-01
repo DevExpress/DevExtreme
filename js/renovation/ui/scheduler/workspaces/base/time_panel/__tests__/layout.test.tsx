@@ -53,11 +53,14 @@ describe('TimePanelLayout', () => {
   };
 
   describe('Render', () => {
-    const render = (viewModel) => shallow(<LayoutView {...{
-      ...viewModel,
-      props: { timePanelData: timePanelDataBase, ...viewModel.props },
-    }}
-    />);
+    const render = (viewModel) => shallow(
+      <LayoutView
+        {...{
+          ...viewModel,
+          props: { timePanelData: timePanelDataBase, ...viewModel.props },
+        }}
+      /> as any,
+    );
 
     afterEach(jest.resetAllMocks);
 
@@ -313,7 +316,7 @@ describe('TimePanelLayout', () => {
                 ...timePanelDataBase,
                 topVirtualRowHeight,
                 bottomVirtualRowHeight,
-              },
+              } as any,
             });
 
             let value = topVirtualRowHeight || 0;
