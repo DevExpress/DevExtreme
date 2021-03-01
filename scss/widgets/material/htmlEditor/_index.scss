@@ -5,6 +5,7 @@
 @use "../sizes" as *;
 @use "../button/sizes" as *;
 @use "../button/colors" as *;
+@use "../buttonGroup/colors" as *;
 @use "../textEditor/colors" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
@@ -202,22 +203,30 @@
   }
 }
 
+@mixin dx-htmleditor-button-states($default-color, $focused-color) {
+  background-color: $default-color;
+
+  &.dx-state-focused {
+    background-color: $focused-color;
+  }
+}
+
 .dx-htmleditor-toolbar {
   background-color: transparent;
 
   .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
-    background-color: $htmleditor-normal-format-active-bg;
+    @include dx-htmleditor-button-states($htmleditor-normal-format-active-bg, $button-group-normal-contained-selected-bg-focused);
 
     &.dx-button-success {
-      background-color: $htmleditor-success-format-active-bg;
+      @include dx-htmleditor-button-states($htmleditor-success-format-active-bg, $button-group-success-contained-focused-bg);
     }
 
     &.dx-button-default {
-      background-color: $htmleditor-default-format-active-bg;
+      @include dx-htmleditor-button-states($htmleditor-default-format-active-bg, $button-group-default-contained-focused-bg);
     }
 
     &.dx-button-danger {
-      background-color: $htmleditor-danger-format-active-bg;
+      @include dx-htmleditor-button-states($htmleditor-danger-format-active-bg, $button-group-danger-contained-focused-bg);
     }
   }
 }
