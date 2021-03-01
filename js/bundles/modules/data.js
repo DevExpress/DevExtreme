@@ -1,5 +1,6 @@
 /* eslint-disable import/no-commonjs */
 const DevExpress = require('./core');
+const errors = require('../../core/errors');
 
 module.exports = DevExpress.data = DevExpress.data || {};
 
@@ -8,6 +9,7 @@ Object.defineProperty(DevExpress.data, 'errorHandler', {
         return require('../../data/errors').errorHandler;
     },
     set: function(value) {
+        errors.log('W0003', 'DevExpress.data', 'errorHandler', '21.1', 'Use the \'setErrorHandler\' method instead');
         require('../../data/errors').setErrorHandler(value);
     }
 });
@@ -18,10 +20,12 @@ Object.defineProperty(DevExpress.data, '_errorHandler', {
         return require('../../data/errors').handleError;
     },
     set: function(value) {
+        errors.log('W0003', 'DevExpress.data', '_errorHandler', '21.1', 'Use the \'setErrorHandler\' method instead');
         require('../../data/errors').setErrorHandler(value);
     }
 });
 
+DevExpress.data.setErrorHandler = require('../../data/errors').setErrorHandler;
 DevExpress.data.DataSource = require('../../data/data_source');
 DevExpress.data.query = require('../../data/query');
 DevExpress.data.Store = require('../../data/abstract_store');
