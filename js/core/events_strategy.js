@@ -6,7 +6,7 @@ export class EventsStrategy {
     constructor(owner, options) {
         this._events = {};
         this._owner = owner;
-        this._options = options;
+        this._options = options || {};
     }
     static create(owner, strategy) {
         if(strategy) {
@@ -38,7 +38,9 @@ export class EventsStrategy {
             let callbacks = this._events[eventName];
 
             if(!callbacks) {
-                callbacks = Callbacks(this._options);
+                callbacks = Callbacks({
+                    syncStrategy: this._options.syncStrategy
+                });
                 this._events[eventName] = callbacks;
             }
 
