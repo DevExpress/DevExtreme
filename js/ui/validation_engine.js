@@ -292,7 +292,7 @@ class EmailRuleValidator extends BaseRuleValidator {
             extend({},
                 rule,
                 {
-                    pattern: /^[\d\w._-]+@([\d\w._-]+\.)+[\w]+$/i
+                    pattern: /^[\d\w._-]+@(?=([\d\w._-]+\.)+)\1[\w]+$/i
                 }));
     }
 }
