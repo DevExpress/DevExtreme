@@ -177,7 +177,7 @@ function addGenerationTask(
         const errors = [];
         const frameworkIgnorePaths = IGNORE_PATHS_BY_FRAMEWORKS[frameworkName];
 
-        return gulp.src([...SRC, ...frameworkIgnorePaths, '!js/renovation/preact_wrapper/**/*.*'], { base: 'js' })
+        return gulp.src([...SRC, ...frameworkIgnorePaths, '!js/renovation/component_wrapper/**/*.*'], { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(gulpIf(compileTs, tsProject({
