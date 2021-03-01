@@ -28,5 +28,7 @@ export class LayoutProps {
 
   @OneWay() bottomVirtualRowHeight = 0;
 
+  @OneWay() addDateTableClass = true;
+
   @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }

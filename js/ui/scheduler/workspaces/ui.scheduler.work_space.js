@@ -3567,6 +3567,14 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getTimePanelCells() {
         return this.$element().find(`.${TIME_PANEL_CELL_CLASS}`);
     }
+
+    _getRDateTableProps() {
+        return ({
+            viewData: this.viewDataProvider.viewData,
+            dataCellTemplate: this.option('dataCellTemplate'),
+            addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
+        });
+    }
 }
 
 export default SchedulerWorkSpace;
