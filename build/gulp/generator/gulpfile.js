@@ -177,7 +177,12 @@ function addGenerationTask(
         const errors = [];
         const frameworkIgnorePaths = IGNORE_PATHS_BY_FRAMEWORKS[frameworkName];
 
-        return gulp.src([...SRC, ...frameworkIgnorePaths, '!js/renovation/component_wrapper/**/*.*'], { base: 'js' })
+        return gulp.src([
+            ...SRC,
+            ...frameworkIgnorePaths,
+            '!js/renovation/component_wrapper/**/*.*',
+            '!js/renovation/utils/render_template.ts', // TODO: move to 'component_wrapper'
+        ], { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(gulpIf(compileTs, tsProject({
@@ -264,12 +269,19 @@ function addGenerationTask(
     ));
 }
 
-addGenerationTask('react', ['Cannot find module \'csstype\'.'], true, true, false);
+addGenerationTask('react',
+    ['Cannot find module \'csstype\'.'],
+    false, // TODO: should be true
+    true,
+    false
+);
 addGenerationTask('angular', [
     'Cannot find module \'@angular/core\'',
     'Cannot find module \'@angular/common\'',
     'Cannot find module \'@angular/forms\'',
     'Cannot find module \'@angular/cdk/portal\'',
+    'Cannot find module \'inferno\'',
+    'Cannot find module \'inferno-create-element\'',
 ].concat(knownErrors));
 
 addGenerationTask('vue', [], false, true, false);
