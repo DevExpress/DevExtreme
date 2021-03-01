@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import treeListCore from './ui.tree_list.core';
-import rowsViewModule from '../grid_core/ui.grid_core.rows';
+import { rowsModule } from '../grid_core/ui.grid_core.rows';
 
 const TREELIST_TEXT_CONTENT = 'dx-treelist-text-content';
 const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
@@ -9,7 +9,7 @@ const TREELIST_EMPTY_SPACE = 'dx-treelist-empty-space';
 const TREELIST_EXPANDED_CLASS = 'dx-treelist-expanded';
 const TREELIST_COLLAPSED_CLASS = 'dx-treelist-collapsed';
 
-export const RowsView = rowsViewModule.views.rowsView.inherit((function() {
+export const RowsView = rowsModule.views.rowsView.inherit((function() {
     const createCellContent = function($container) {
         return $('<div>')
             .addClass(TREELIST_TEXT_CONTENT)
@@ -130,7 +130,7 @@ export const RowsView = rowsViewModule.views.rowsView.inherit((function() {
 
 
 treeListCore.registerModule('rows', {
-    defaultOptions: rowsViewModule.defaultOptions,
+    defaultOptions: rowsModule.defaultOptions,
     views: {
         rowsView: RowsView
     }

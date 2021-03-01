@@ -1293,7 +1293,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
     }
 });
 
-export default {
+export const columnsResizingReorderingModule = {
     views: {
         columnsSeparatorView: ColumnsSeparatorView,
         blockSeparatorView: BlockSeparatorView,

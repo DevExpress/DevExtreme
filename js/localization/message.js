@@ -5,7 +5,7 @@ import { each } from '../core/utils/iterator';
 import { format as stringFormat } from '../core/utils/string';
 import { humanize } from '../core/utils/inflector';
 import coreLocalization from './core';
-import defaultMessages from './default_messages';
+import { defaultMessages } from './default_messages';
 
 const baseDictionary = extend(true, {}, defaultMessages);
 

@@ -11,7 +11,7 @@ import { NumberBox } from '../../number_box';
 import messageLocalization from '../../../../localization/message';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { getElementMinWidth } from '../utils/get_element_width';
-import PagerProps from '../common/pager_props';
+import { PagerProps } from '../common/pager_props';
 
 const PAGER_INFO_TEXT_CLASS = `${PAGER_INFO_CLASS}  dx-info-text`;
 const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';

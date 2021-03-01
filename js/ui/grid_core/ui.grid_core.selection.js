@@ -460,7 +460,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
     };
 })());
 
-export default {
+export const selectionModule = {
     defaultOptions: function() {
         return {
             selection: {

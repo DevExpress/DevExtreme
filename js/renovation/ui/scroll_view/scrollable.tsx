@@ -11,7 +11,7 @@ import {
   ScrollableLocation, ScrollOffset,
 } from './types.d';
 
-import BaseWidgetProps from '../../utils/base_props';
+import { BaseWidgetProps } from '../../utils/base_props';
 import {
   ScrollableProps,
 } from './scrollable_props';

@@ -2,7 +2,7 @@
 
 const $ = require('jquery');
 const renderer = require('core/renderer');
-const version = require('core/version');
+const { version } = require('core/version');
 const resizeCallbacks = require('core/utils/resize_callbacks');
 const registerComponent = require('core/component_registrator');
 const logger = require('core/utils/console').logger;

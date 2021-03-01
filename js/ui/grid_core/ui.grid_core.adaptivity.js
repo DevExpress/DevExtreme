@@ -732,7 +732,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     }
 });
 
-export default {
+export const adaptivityModule = {
     defaultOptions: function() {
         return {
             columnHidingEnabled: false,

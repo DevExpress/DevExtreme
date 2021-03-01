@@ -1,4 +1,4 @@
-import VERSION from '../core/version';
+import { version } from '../core/version';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import { imageCreator } from './image_creator';
@@ -26,7 +26,7 @@ let composePdfString = function(imageString, options, curDate) {
 
     const mainPage = mainPageTemplate.replace('_width_', widthPt).replace('_height_', heightPt);
     const content = contentTemplate.replace('_width_', widthPt).replace('_height_', heightPt);
-    const info = infoTemplate.replace('_date_', curDate).replace('_version_', VERSION);
+    const info = infoTemplate.replace('_date_', curDate).replace('_version_', version);
     const image = imageStartTemplate.replace('_width_', width).replace('_height_', height).replace('_length_', imageString.length) + imageString + imageEndTemplate;
     const xref = getXref(mainPage.length, content.length, info.length);
 

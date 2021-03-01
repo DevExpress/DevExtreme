@@ -4,7 +4,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
-import PagerProps from './common/pager_props';
+import { PagerProps } from './common/pager_props';
 import { getElementWidth, getElementStyle } from './utils/get_element_width';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { PagerContentProps } from './content';

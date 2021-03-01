@@ -12,7 +12,7 @@ import { compileGetter } from '../../core/utils/data';
 import gridCoreUtils from './ui.grid_core.utils';
 import { ColumnsView } from './ui.grid_core.columns_view';
 import Scrollable from '../scroll_view/ui.scrollable';
-import removeEvent from '../../core/remove_event';
+import { removeEvent } from '../../core/remove_event';
 import messageLocalization from '../../localization/message';
 import browser from '../../core/utils/browser';
 
@@ -36,7 +36,7 @@ function getMaxHorizontalScrollOffset(scrollable) {
     return scrollable ? scrollable.scrollWidth() - scrollable.clientWidth() : 0;
 }
 
-export default {
+export const rowsModule = {
     defaultOptions: function() {
         return {
             hoverStateEnabled: false,
