@@ -181,7 +181,6 @@ function addGenerationTask(
             ...SRC,
             ...frameworkIgnorePaths,
             '!js/renovation/component_wrapper/**/*.*',
-            '!js/renovation/utils/render_template.ts', // TODO: move to 'component_wrapper'
         ], { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
@@ -271,7 +270,7 @@ function addGenerationTask(
 
 addGenerationTask('react',
     ['Cannot find module \'csstype\'.'],
-    false, // TODO: should be true
+    true,
     true,
     false
 );
