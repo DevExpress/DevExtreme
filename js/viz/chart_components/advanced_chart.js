@@ -730,12 +730,20 @@ export const AdvancedChart = BaseChart.inherit({
         const that = this;
 
         that._valueAxes.forEach(axis => {
-            if(axis.getOptions().optionPath) {
-                const path = `${axis.getOptions().optionPath}.visualRange`;
+            const axisPath = axis.getOptions().optionPath;
+            if(axisPath) {
+                const path = `${axisPath}.visualRange`;
                 const visualRange = convertVisualRangeObject(axis.visualRange(), !_isArray(that.option(path)));
 
                 if(!axis.skipEventRising || !rangesAreEqual(visualRange, that.option(path))) {
-                    that.option(path, visualRange);
+                    if(!that.option(axisPath) && axisPath !== 'valueAxis') {
+                        that.option(axisPath, {
+                            name: axis.name,
+                            visualRange: visualRange
+                        });
+                    } else {
+                        that.option(path, visualRange);
+                    }
                 } else {
                     axis.skipEventRising = null;
                 }
