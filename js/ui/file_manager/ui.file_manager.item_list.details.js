@@ -145,6 +145,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 case 'size':
                     defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
                     defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionFileSize');
+                    defaultConfig.calculateSortValue = rowData => rowData.fileItem.isDirectory ? -1 : rowData.fileItem.size;
                     break;
                 case 'dateModified':
                     defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionDateModified');
