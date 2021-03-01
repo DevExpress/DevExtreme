@@ -75,7 +75,7 @@ export class RootSvgElement extends JSXComponent(RootSvgElementProps) {
   setRootElementRef(): void {
     const { rootElementRef } = this.props;
     if (rootElementRef) {
-      this.props.rootElementRef = this.svgRef;
+      rootElementRef.current = this.svgRef.current;
     }
   }
 

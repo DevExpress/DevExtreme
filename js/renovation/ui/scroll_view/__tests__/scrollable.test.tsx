@@ -30,9 +30,6 @@ import {
 
 import { Widget } from '../../common/widget';
 
-import { Scrollbar } from '../scrollbar';
-import { ScrollableSimulatedPropsType } from '../scrollable_simulated_props';
-
 const testBehavior = { positive: false };
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
 jest.mock('../../../../core/devices', () => {
@@ -228,41 +225,6 @@ each([{
     });
 
     describe('Scrollbar', () => {
-      each(['horizontal', 'vertical', 'both']).describe('Direction: %o', (direction) => {
-        each([true, false]).describe('UseSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
-          each(['never', 'always', 'onScroll', 'onHover']).describe('ShowScrollbar: %o', (showScrollbar) => {
-            it('Scrollbar should render if useSimulatedScrollbar is set to true and nativeStrategy is used', () => {
-              const viewModel = new Scrollable({
-                showScrollbar,
-                useSimulatedScrollbar,
-                direction,
-              } as ScrollableSimulatedPropsType);
-              viewModel.contentRef = React.createRef();
-              viewModel.containerRef = React.createRef();
-              viewModel.horizontalScrollbarRef = React.createRef();
-              viewModel.verticalScrollbarRef = React.createRef();
-              const scrollable = mount(viewFunction(viewModel) as JSX.Element);
-
-              const scrollBar = scrollable.find(Scrollbar);
-              const isScrollbarsForSimulatedStrategy = Scrollable === ScrollableSimulated;
-              const isScrollbarsForNativeStrategy = (showScrollbar ?? false)
-                  && (useSimulatedScrollbar ?? false);
-
-              const needRenderScrollbars = isScrollbarsForSimulatedStrategy
-                  || isScrollbarsForNativeStrategy;
-
-              let expectedScrollbarsCount = 0;
-              if (needRenderScrollbars) {
-                expectedScrollbarsCount = direction === 'both'
-                  ? 2
-                  : 1;
-              }
-              expect(scrollBar.length).toBe(expectedScrollbarsCount);
-            });
-          });
-        });
-      });
-
       describe('cssClasses', () => {
         each(['horizontal', 'vertical', 'both', undefined, null]).describe('Direction: %o', (direction) => {
           it('should add direction class', () => {

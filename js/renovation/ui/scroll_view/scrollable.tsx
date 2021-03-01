@@ -3,7 +3,6 @@ import {
   JSXComponent,
   Ref,
   Method,
-  Fragment,
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
@@ -21,7 +20,6 @@ import { ScrollableNative } from './scrollable_native';
 import { ScrollableSimulated } from './scrollable_simulated';
 import { createDefaultOptionRules } from '../../../core/options/utils';
 import devices from '../../../core/devices';
-import browser from '../../../core/utils/browser';
 import { nativeScrolling, touch } from '../../../core/utils/support';
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
@@ -40,9 +38,8 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     restAttributes,
   } = viewModel;
 
-  return (
-    <Fragment>
-      {useNative && (
+  return (useNative
+    ? (
       <ScrollableNative
         ref={scrollableNativeRef}
         classes={cssClasses}
@@ -55,8 +52,8 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
       />
-      )}
-      {!useNative && (
+    )
+    : (
       <ScrollableSimulated
         ref={scrollableSimulatedRef}
         classes={cssClasses}
@@ -69,8 +66,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
         refreshingText={refreshingText}
         reachBottomText={reachBottomText}
       />
-      )}
-    </Fragment>
+    )
   );
 };
 
@@ -88,11 +84,6 @@ export const defaultOptionRules = createDefaultOptionRules<ScrollablePropsType>(
   device: (): boolean => !nativeScrolling,
   options: {
     useNative: false,
-  },
-}, {
-  device: (): boolean => nativeScrolling && devices.real().platform === 'android' && !browser.mozilla,
-  options: {
-    useSimulatedScrollbar: true,
   },
 }]);
 
@@ -165,6 +156,11 @@ export class Scrollable extends JSXComponent<ScrollablePropsType>() {
   @Method()
   clientWidth(): number {
     return this.scrollableRef.clientWidth();
+  }
+
+  @Method()
+  validate(e: Event): boolean {
+    return this.scrollableRef.validate(e);
   }
 
   get cssClasses(): string {
