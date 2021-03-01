@@ -3,7 +3,7 @@ module.exports = {
         'ts-jest': {
             tsConfig: 'tests/tsconfig.json',
         },
-        'DART_TEST': false,
+        'DART_TEST': true,
     },
     moduleFileExtensions: [
         'ts',
@@ -14,14 +14,6 @@ module.exports = {
     },
     testEnvironment: 'node',
     testMatch: [
-        '**/tests/**/*.test.ts',
-    ],
-    coverageThreshold: {
-        global: {
-            branches: 100,
-            functions: 100,
-            lines: 100,
-            statements: 100,
-        },
-    },
+        '**/tests/**/builder.test.ts',
+    ]
 };

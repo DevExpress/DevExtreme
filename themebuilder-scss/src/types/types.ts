@@ -119,8 +119,17 @@ interface DartCompilerConfig {
   items: ConfigMetaItem[];
 }
 
+interface DartCompilerKeepAliveConfig {
+  keepAlive: boolean;
+}
+
 interface DartCompilerResult {
   changedVariables?: { [key: string]: string };
   css?: string;
   error?: string;
+}
+
+interface SocketEventListener {
+  name: string;
+  handler: (e?: Error) => void;
 }
