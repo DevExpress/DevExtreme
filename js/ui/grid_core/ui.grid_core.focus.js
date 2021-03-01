@@ -380,7 +380,7 @@ const FocusController = core.ViewController.inherit((function() {
     };
 })());
 
-export default {
+export const focusModule = {
     defaultOptions: function() {
         return {
             focusedRowEnabled: false,

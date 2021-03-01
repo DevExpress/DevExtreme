@@ -28,8 +28,10 @@ const getTextsArray = function(elements) {
 
 QUnit.module('Basics', () => {
     QUnit.test('all views must be derived from the base view class', function(assert) {
-        $.each(Views, function() {
-            assert.ok(new this($('<div>')) instanceof BaseView);
+        $.each(Views, function(name, View) {
+            if(name !== 'default') {
+                assert.ok(new View($('<div>')) instanceof BaseView);
+            }
         });
     });
 });

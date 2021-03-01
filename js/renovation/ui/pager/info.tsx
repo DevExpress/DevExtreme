@@ -4,7 +4,7 @@ import {
 
 import { format } from '../../../core/utils/string';
 import messageLocalization from '../../../localization/message';
-import PagerProps from './common/pager_props';
+import { PagerProps } from './common/pager_props';
 
 export const PAGER_INFO_CLASS = 'dx-info';
 export const viewFunction = ({ text, props: { rootElementRef } }: InfoText): JSX.Element => (

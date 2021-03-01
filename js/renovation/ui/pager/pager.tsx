@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 import { ResizableContainer } from './resizable_container';
-import PagerProps from './common/pager_props';
+import { PagerProps } from './common/pager_props';
 import { PagerContent } from './content';
 import { GridPagerWrapper } from '../../preact_wrapper/grid_pager';
 import { combineClasses } from '../../utils/combine_classes';

@@ -12,7 +12,7 @@ import DataHelperMixin from '../../data_helper';
 import { when, Deferred } from '../../core/utils/deferred';
 import { findChanges } from '../../core/utils/array_compare';
 
-export default {
+export const dataControllerModule = {
     defaultOptions: function() {
         return {
             loadingTimeout: 0,

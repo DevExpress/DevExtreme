@@ -1,6 +1,6 @@
 import gridCore from './ui.tree_list.core';
 import dataSourceAdapter from './ui.tree_list.data_source_adapter';
-import virtualScrollingModule from '../grid_core/ui.grid_core.virtual_scrolling';
+import { virtualScrollingModule } from '../grid_core/ui.grid_core.virtual_scrolling';
 import { extend } from '../../core/utils/extend';
 
 const oldDefaultOptions = virtualScrollingModule.defaultOptions;

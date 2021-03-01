@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import treeListCore from './ui.tree_list.core';
 import { noop, equalByValue } from '../../core/utils/common';
-import selectionModule from '../grid_core/ui.grid_core.selection';
+import { selectionModule } from '../grid_core/ui.grid_core.selection';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 

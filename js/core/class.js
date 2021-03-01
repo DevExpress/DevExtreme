@@ -64,7 +64,7 @@ const include = function() {
         }
 
         for(name in argument) {
-            if(name === 'ctor' || name === 'postCtor') {
+            if(name === 'ctor' || name === 'postCtor' || name === 'default') {
                 continue;
             }
             ///#DEBUG

@@ -1,7 +1,7 @@
 import core from './ui.tree_list.core';
 import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
-import focusModule from '../grid_core/ui.grid_core.focus';
+import { focusModule } from '../grid_core/ui.grid_core.focus';
 
 function findIndex(items, callback) {
     let result = -1;

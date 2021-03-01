@@ -1,4 +1,4 @@
-import version from '../../core/version';
+import { version } from '../../core/version';
 import { format as _stringFormat } from '../../core/utils/string';
 import warnings from './errors_warnings';
 import { each } from '../../core/utils/iterator';

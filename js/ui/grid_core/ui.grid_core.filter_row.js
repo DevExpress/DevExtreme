@@ -723,7 +723,7 @@ const ApplyFilterViewController = modules.ViewController.inherit({
     }
 });
 
-export default {
+export const filterRowModule = {
     defaultOptions: function() {
         return {
             filterRow: {
