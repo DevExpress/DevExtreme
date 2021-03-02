@@ -10,6 +10,7 @@ import FormDialog from 'ui/html_editor/ui/formDialog';
 import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
+import errors from 'ui/widget/ui.errors';
 
 const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
@@ -228,6 +229,34 @@ testModule('Toolbar module', simpleModuleConfig, () => {
 
         assert.equal($formatWidgets.length, 2, 'There are 2 format widgets');
         assert.ok($formatWidgets.first().hasClass('dx-button'), 'Change simple format via Button');
+    });
+
+    [{
+        optionName: 'formatName',
+        item: {
+            formatName: 'undo'
+        }
+    }, {
+        formatValues: 'formatName',
+        item: {
+            name: 'size',
+            formatValues: ['10px']
+        }
+    }].forEach(optionInfo => {
+        test(`should show 'W1016' warning if deprecated ${optionInfo.optionName} toolbar item field is used`, function(assert) {
+            const originalLog = errors.log;
+            let warning = null;
+            this.options.items = [optionInfo.item];
+
+            errors.log = (loggedWarning) => warning = loggedWarning;
+
+            try {
+                new Toolbar(this.quillMock, this.options);
+                assert.strictEqual(warning, 'W1016');
+            } finally {
+                errors.log = originalLog;
+            }
+        });
     });
 
     test('Simple format handling', function(assert) {

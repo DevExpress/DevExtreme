@@ -6,6 +6,7 @@ import Toolbar from '../../toolbar';
 import '../../select_box';
 import '../../color_box/color_view';
 import '../../number_box';
+import errors from '../../widget/ui.errors';
 
 import WidgetCollector from './widget_collector';
 import { each } from '../../../core/utils/iterator';
@@ -472,12 +473,28 @@ if(Quill) {
             return $container;
         }
 
+        _checkItemOptions(item) {
+            const optionsInfo = [{
+                newName: 'name',
+                oldName: 'formatName'
+            }, {
+                newName: 'acceptedValues',
+                oldName: 'formatValues'
+            }];
+
+            each(optionsInfo, (index, optionName) => {
+                if(isObject(item) && isDefined(item[optionName.oldName])) {
+                    errors.log('W1016', optionName.oldName, optionName.newName);
+                }
+            });
+        }
+
         _prepareToolbarItems() {
             const resultItems = [];
 
             each(this.options.items, (index, item) => {
                 let newItem;
-
+                this._checkItemOptions(item);
                 if(isObject(item)) {
                     newItem = this._handleObjectItem(item);
                 } else if(isString(item)) {
