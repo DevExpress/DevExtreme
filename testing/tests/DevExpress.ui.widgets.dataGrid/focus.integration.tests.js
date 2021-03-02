@@ -1567,6 +1567,80 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.ok($cell.hasClass('dx-editor-cell'), 'cell is edited');
         assert.equal($cell.siblings().text(), '13', 'sibling\'s text');
     });
+
+    ['standard', 'virtual'].forEach(scrollingMode => {
+        QUnit.testInActiveWindow(`autoNavigateToFocusedRow should work when rowRenderingMode is virtual, focusedRowKey is specified and scrolling.mode == "${scrollingMode}" (T971695)`, function(assert) {
+            // arrange
+            const items = [];
+
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+
+            const dataGrid = createDataGrid({
+                dataSource: items,
+                keyExpr: 'id',
+                remoteOperations: true,
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode,
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                paging: {
+                    pageSize: 100
+                },
+                focusedRowEnabled: true,
+                focusedRowKey: 80,
+                autoNavigateToFocusedRow: true,
+            });
+
+            this.clock.tick(300);
+
+            // assert
+            assert.equal(dataGrid.option('focusedRowIndex'), 79, 'focused row index');
+            assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
+        });
+
+        QUnit.testInActiveWindow(`autoNavigateToFocusedRow should work when rowRenderingMode is virtual, focusedRowIndex is specified and scrolling.mode == "${scrollingMode}" (T971695)`, function(assert) {
+            // arrange
+            const items = [];
+
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+
+            const dataGrid = createDataGrid({
+                dataSource: items,
+                keyExpr: 'id',
+                remoteOperations: true,
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode,
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                paging: {
+                    pageSize: 100
+                },
+                focusedRowEnabled: true,
+                focusedRowIndex: 79,
+                autoNavigateToFocusedRow: true,
+            });
+
+            this.clock.tick();
+
+            // assert
+            assert.equal(dataGrid.option('focusedRowKey'), 80, 'focused row key');
+            assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
+        });
+    });
 });
 
 QUnit.module('View\'s focus', {
