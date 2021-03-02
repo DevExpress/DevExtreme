@@ -8,6 +8,13 @@ import {
     LoadOptions
 } from '../load_options';
 
+interface PromiseExt<T> extends Promise<T> {
+    then<TResult1 = T, TResult2 = never>(
+        onfulfilled?: ((value: T, extraParameters: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): Promise<TResult1 | TResult2>;
+}
+
 export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     /**
      * @docid
@@ -129,4 +136,6 @@ export default class ODataStore extends Store {
      * @public
      */
     createQuery(loadOptions: any): any;
+
+    insert(values: any): PromiseExt<any> & JQueryPromise<any>;
 }
