@@ -297,6 +297,23 @@ if(support.transform) {
     });
 }
 
+QUnit.test('animation should correctly handle incorrect transform string', function(assert) {
+    var done = assert.async();
+    var $element = $('#test');
+
+    $.when(this.animate($element, {
+        from: { transform: 'translate(0, 0)' },
+        to: { transform: '0000000000000000000000000000000000000000000000' },
+        duration: 50,
+        complete: function() {
+            assert.ok(true, 'animation completed');
+            done();
+        }
+    }));
+
+    this.clock.tick(50);
+});
+
 QUnit.test("off flag, complete callback", function(assert) {
     fx.off = true;
     try {
