@@ -71,7 +71,7 @@ const filesContent: { [key: string]: string } = {
 jest.mock('fs', () => ({
   readFileSync: jest.fn().mockImplementation((path: string): string => filesContent[path] || ''),
   existsSync: (path: string): boolean => filesContent[path] !== undefined,
-  realpathSync: () => {} // https://github.com/facebook/jest/issues/10012
+  realpathSync: () => {}, // https://github.com/facebook/jest/issues/10012
 }));
 
 jest.mock('filing-cabinet', () => ({
