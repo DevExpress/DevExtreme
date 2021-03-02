@@ -19,14 +19,6 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
   }
 };
 
-const insertContainer = (parentNode: Element, element: Element, nextElement: Element): void => {
-  if (nextElement) {
-    parentNode.insertBefore(element, nextElement);
-  } else {
-    parentNode.appendChild(element);
-  }
-}
-
 export default class ComponentWrapper extends DOMComponent {
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
   _actionsMap!: {
@@ -106,7 +98,7 @@ export default class ComponentWrapper extends DOMComponent {
     const parentNode = containerNode.parentNode;
 
     if (!this._isNodeReplaced) {
-      const nextElement = parentNode?.nextSibling;
+      const nextNode = containerNode?.nextSibling;
 
       const rootNode = domAdapter.createElement('div');
       rootNode.appendChild(containerNode);
@@ -118,7 +110,7 @@ export default class ComponentWrapper extends DOMComponent {
       );
       containerNode.$V = mountNode.$V;
       if (parentNode) {
-        insertContainer(parentNode, containerNode, nextElement);
+        parentNode.insertBefore(containerNode, nextNode);
       }
       InfernoEffectHost.callEffects();
       this._isNodeReplaced = true;
