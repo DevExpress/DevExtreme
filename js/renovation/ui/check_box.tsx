@@ -21,7 +21,6 @@ import BaseComponent from '../component_wrapper/check_box';
 import { BaseWidgetProps } from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { EffectReturn } from '../utils/effect_return.d';
-import noop from '../utils/noop';
 import { ValidationMessage } from './validation_message';
 
 const getCssClasses = (model: CheckBoxProps): string => {
@@ -131,7 +130,7 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @Event() onFocusIn?: (e: Event) => void;
 
-  @OneWay() saveValueChangeEvent?: (event: Event) => void = noop;
+  @OneWay() saveValueChangeEvent?: (event: Event) => void;
 }
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
