@@ -62,7 +62,7 @@ function createMainBatch() {
 function createDefaultBatch() {
     const tasks = ['clean', 'localization', 'generate-components'];
     env.USE_RENOVATION && tasks.push('create-renovation-temp');
-    tasks.push('version-replace', createMainBatch());
+    tasks.push('transpile', 'version-replace', 'main-batch');
     if(!env.TEST_CI) {
         tasks.push('npm');
         tasks.push('themebuilder-npm');
@@ -71,6 +71,7 @@ function createDefaultBatch() {
     return gulp.series(tasks);
 }
 
+gulp.task('main-batch', createMainBatch());
 gulp.task('misc-batch', createMiscBatch());
 gulp.task('style-compiler-batch', createStyleCompilerBatch());
 
