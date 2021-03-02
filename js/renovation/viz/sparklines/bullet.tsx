@@ -16,28 +16,30 @@ import {
 import { combineClasses } from '../../utils/combine_classes';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 import getElementOffset from '../../utils/get_element_offset';
-import { BaseWidgetProps } from '../core/base_props';
-import { BaseWidget } from '../core/base_widget';
+import { BaseWidgetProps } from '../common/base_props';
+import { BaseWidget } from '../common/base_widget';
 import {
   createAxis,
   SparklineTooltipData,
   generateCustomizeTooltipCallback,
 } from './utils';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
-import { PathSvgElement } from '../core/renderers/svg_path';
-import { Canvas } from '../core/common/types.d';
-import { Tooltip as TooltipComponent, TooltipProps } from '../core/tooltip';
-import { getFormatValue } from '../common/utils';
+import { PathSvgElement } from '../common/renderers/svg_path';
+import {
+  Canvas, OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData,
+} from '../common/types.d';
+import { Tooltip as TooltipComponent, TooltipProps } from '../common/tooltip';
+import { getFormatValue, pointInCanvas } from '../common/utils';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 import pointerEvents from '../../../events/pointer';
 import { EffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
-import { pointInCanvas } from '../core/utils';
+
 import {
   ArgumentAxisRange, ValueAxisRange, BulletScaleProps,
 } from './types.d';
-import { OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData } from '../common/types.d';
+
 import Number from '../../../core/polyfills/number';
 
 const TARGET_MIN_Y = 0.02;

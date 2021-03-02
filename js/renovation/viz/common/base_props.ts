@@ -9,7 +9,7 @@ import {
   Canvas,
   Margin,
   Size,
-} from './common/types.d';
+} from './types.d';
 
 @ComponentBindings()
 export class BaseWidgetProps {
