@@ -11,6 +11,10 @@ import 'ui/autocomplete';
 import 'ui/calendar';
 import 'ui/date_box';
 import 'ui/drop_down_box';
+
+import Form from 'ui/form/ui.form.js';
+import { defaultScreenFactorFunc } from 'core/utils/window';
+
 import {
     FIELD_ITEM_CLASS,
     FORM_GROUP_CLASS,
@@ -95,6 +99,40 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
     const formData = $formContainer.dxForm('instance').option('formData');
 
     assert.deepEqual(formData, { name: 'test' }, 'value updates');
+});
+
+['phone', 'desktop'].forEach(deviceType => {
+    ['formOption', 'globalOption', 'defaultOption'].forEach(optionType => {
+        QUnit.testInActiveWindow(`Setting screen by width option (T977436). Set via ${optionType}, deviceType: ${deviceType}`, function(assert) {
+            const formScreenByWidthStub = sinon.stub();
+            const globalScreenByWidthStub = sinon.stub();
+            const defaultScreenByWidthStub = sinon.stub();
+
+            const formOption = { items: [ { dataField: 'field1' } ] };
+
+            if(optionType === 'defaultOption') {
+                Form.reassignDefaultScreenByWidthFunc(defaultScreenByWidthStub);
+            } else if(optionType === 'formOption') {
+                formOption['screenByWidth'] = formScreenByWidthStub;
+            } else {
+                Form.defaultOptions({
+                    device: { deviceType: deviceType },
+                    options: {
+                        screenByWidth: globalScreenByWidthStub
+                    }
+                });
+            }
+
+            $('#form').dxForm(formOption);
+
+            assert.equal(formScreenByWidthStub.callCount > 0, optionType === 'formOption', 'form option screenByWidth was fired');
+            assert.equal(globalScreenByWidthStub.callCount > 0, optionType === 'globalOption' && device.real().deviceType === deviceType, 'global form screenByWidth was fired');
+            assert.equal(defaultScreenByWidthStub.callCount > 0, optionType === 'defaultOption', 'default screenByWidth was fired');
+
+            Form._classCustomRules = [];
+            Form.reassignDefaultScreenByWidthFunc(defaultScreenFactorFunc);
+        });
+    });
 });
 
 QUnit.test('Check field  wodth on render form with colspan', function(assert) {

@@ -66,6 +66,8 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
 
+let defaultScreenByWidth = defaultScreenFactorFunc;
+
 const Form = Widget.inherit({
     _init: function() {
         this.callBase();
@@ -83,7 +85,7 @@ const Form = Widget.inherit({
             formData: {},
             colCount: 1,
 
-            screenByWidth: defaultScreenFactorFunc,
+            screenByWidth: defaultScreenByWidth,
 
             /**
             * @pseudo ColCountResponsibleType
@@ -1410,3 +1412,10 @@ const Form = Widget.inherit({
 registerComponent('dxForm', Form);
 
 export default Form;
+
+
+///#DEBUG
+Form.reassignDefaultScreenByWidthFunc = function(newScreenByWidth) {
+    defaultScreenByWidth = newScreenByWidth;
+};
+///#ENDDEBUG
