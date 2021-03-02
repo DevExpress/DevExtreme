@@ -294,7 +294,8 @@ var compileCriteria = (function() {
                         return false;
                     }
 
-                    return getterValue.lastIndexOf(value) === getterValue.length - value.length;
+                    var index = getterValue.lastIndexOf(value);
+                    return index !== -1 && index === getterValue.length - value.length;
                 };
             case "contains":
                 return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) > -1; };
