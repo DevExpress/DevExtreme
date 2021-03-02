@@ -86,16 +86,16 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       </div>
       {viewModel.props.useInkRipple
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
-      {viewModel.rendered && viewModel.shouldShowValidationMessage
+      {viewModel.showValidationMessage
                 && (
                 <ValidationMessage
                   validationErrors={viewModel.validationErrors}
                   mode={viewModel.props.validationMessageMode}
                   positionRequest="below"
                   rtlEnabled={viewModel.props.rtlEnabled}
-                  target={viewModel.target}
-                  boundary={viewModel.target}
-                  container={viewModel.target}
+                  target={viewModel.target?.current}
+                  boundary={viewModel.target?.current}
+                  container={viewModel.target?.current}
                 />
                 )}
     </Widget>
@@ -152,7 +152,7 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 })
 
 export class CheckBox extends JSXComponent(CheckBoxProps) {
-  rendered = false;
+  showValidationMessage = false;
 
   @Ref() iconRef!: RefObject<HTMLDivElement>;
 
@@ -164,9 +164,9 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @ForwardRef() target!: RefObject<HTMLDivElement>;
 
-  @Effect({ run: 'once' })
-  afterInitEffect(): EffectReturn {
-    this.rendered = true;
+  @Effect()
+  updateValidationMessageVisibility(): EffectReturn {
+    this.showValidationMessage = this.shouldShowValidationMessage;
   }
 
   @Method()

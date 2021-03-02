@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
 import { current } from '../../../ui/themes';
@@ -157,12 +158,12 @@ describe('CheckBox', () => {
 
     describe('validation', () => {
       it('widget should pass correct props to validationMessage', () => {
-        const ref = React.createRef();
+        const ref = { current: {} } as RefObject<HTMLDivElement>;
         const validationErrors = [{ message: 'error message' }];
         const CustomTree = ({ target }: any) => (
           <div ref={ref as any}>
             {viewFunction({
-              rendered: true,
+              showValidationMessage: true,
               target,
               validationErrors,
               props: {
@@ -177,7 +178,7 @@ describe('CheckBox', () => {
           </div>
         );
         const tree = mount(<CustomTree />);
-        tree.setProps({ target: ref.current });
+        tree.setProps({ target: ref });
         tree.update();
 
         const validationMessage = tree.find(ValidationMessage);
@@ -198,7 +199,7 @@ describe('CheckBox', () => {
       const CustomTree = ({ target }: any) => (
         <div ref={ref as any}>
           {viewFunction({
-            rendered: false,
+            showValidationMessage: false,
             target,
             validationErrors,
             props: {
@@ -237,13 +238,17 @@ describe('CheckBox', () => {
         });
       });
 
-      describe('afterInitEffect', () => {
-        it('should set "rendered" to true', () => {
-          const checkBox = new CheckBox({});
-          expect(checkBox.rendered).toBe(false);
+      describe('updateValidationMessageVisibility', () => {
+        it('should set showValidationMessage', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'invalid',
+            validationErrors: [{ message: 'error message' }],
+          });
+          expect(checkBox.showValidationMessage).toBe(false);
 
-          checkBox.afterInitEffect();
-          expect(checkBox.rendered).toBe(true);
+          checkBox.updateValidationMessageVisibility();
+          expect(checkBox.showValidationMessage).toBe(true);
         });
       });
 
