@@ -21,9 +21,9 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
 
 const insertContainer = (parentNode: Element, element: Element, nextElement: Element): void => {
   if (nextElement) {
-    parentNode.appendChild(element);
-  } else {
     parentNode.insertBefore(element, nextElement);
+  } else {
+    parentNode.appendChild(element);
   }
 }
 
