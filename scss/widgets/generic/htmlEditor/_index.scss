@@ -88,7 +88,8 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
       }
     }
 
-    &.dx-state-hover {
+    &.dx-state-hover,
+    &.dx-state-hover.dx-invalid.dx-state-readonly {
       background-color: color.change($texteditor-hover-border-color, $alpha: 0.07);
     }
 
