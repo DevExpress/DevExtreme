@@ -620,7 +620,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolling: {
                 mode: 'standard',
             },
-            renovateRender: false,
+            renovateRender: true,
             height: undefined
         });
     }
