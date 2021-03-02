@@ -154,7 +154,7 @@ class FileManagerAdaptivityControl extends Widget {
         this._drawer.option('animationEnabled', !skipAnimation);
         this._drawer.toggle(showing);
         const isSplitterActive = this._isDrawerOpened() && !this.isInAdaptiveState();
-        this._splitter.toggleState(isSplitterActive);
+        this._splitter.toggleDisabled(!isSplitterActive);
     }
 }
 

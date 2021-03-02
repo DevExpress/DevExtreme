@@ -78,7 +78,7 @@ export default class SplitterControl extends Widget {
             leftPanelWidth: this._leftPanelPercentageWidth + '%',
             rightPanelWidth: rightPanelWidth + '%'
         });
-        this.setSplitterPositionLeft(this._$leftElement.get(0).clientWidth - this.getSplitterOffset());
+        // this.setSplitterPositionLeft(this._$leftElement.get(0).clientWidth - this.getSplitterOffset());
     }
 
     _onMouseDownHandler(e) {
@@ -90,7 +90,7 @@ export default class SplitterControl extends Widget {
         this._containerWidth = this._$container.get(0).clientWidth;
 
         this.$element().removeClass(SPLITTER_INITIAL_STATE_CLASS);
-        this._$splitter.removeClass(SPLITTER_INACTIVE_CLASS);
+        this._toggleActive(true);
 
         this.setSplitterPositionLeft(null, true);
     }
@@ -104,7 +104,7 @@ export default class SplitterControl extends Widget {
 
     _onMouseUpHandler() {
         if(this._isSplitterActive) {
-            this._$splitter.addClass(SPLITTER_INACTIVE_CLASS);
+            this._toggleActive(false);
             this._isSplitterActive = false;
         }
     }
@@ -149,10 +149,21 @@ export default class SplitterControl extends Widget {
         return this._$splitterBorder.get(0).clientWidth;
     }
 
-    toggleState(isActive) {
-        const classAction = isActive ? 'removeClass' : 'addClass';
-        this.$element()[classAction](STATE_DISABLED_CLASS);
-        this._$splitter[classAction](STATE_DISABLED_CLASS);
+    _toggleActive(isActive) {
+        if(isActive) {
+            this._splitterPositionLeft && this.$element().css('left', this._splitterPositionLeft);
+            this.$element().css('right', 'auto');
+        } else {
+            this._splitterPositionLeft = this.$element().css('left');
+            this.$element().css('left', 'auto');
+            this.$element().css('right', this.getSplitterOffset());
+        }
+        this._$splitter.toggleClass(SPLITTER_INACTIVE_CLASS, !isActive);
+    }
+
+    toggleDisabled(isDisabled) {
+        this.$element().toggleClass(STATE_DISABLED_CLASS, isDisabled);
+        this._$splitter.toggleClass(STATE_DISABLED_CLASS, isDisabled);
     }
 
     isSplitterMoved() {
