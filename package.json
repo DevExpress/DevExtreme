@@ -28,7 +28,7 @@
   "devDependencies": {
     "@types/jest": "^22.1.2",
     "@vue/compiler-sfc": "^3.0.0",
-    "@vue/test-utils": "^2.0.0-beta.7",
+    "@vue/test-utils": "2.0.0-beta.7",
     "del": "^3.0.0",
     "devextreme": "~20.2.4",
     "devextreme-vue-generator": "^1.0.0",
