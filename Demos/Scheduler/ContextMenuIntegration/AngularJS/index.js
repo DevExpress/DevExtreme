@@ -39,6 +39,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         firstDayOfWeek: 1,
         startDayHour: 9,
         recurrenceEditMode: "series",
+        showCurrentTimeIndicator: false,
         onAppointmentContextMenu: function(e) {
             $scope.target = ".dx-scheduler-appointment";
             $scope.disabled = false;

@@ -12,6 +12,7 @@
       :on-cell-context-menu="onCellContextMenu"
       current-view="month"
       recurrence-edit-mode="series"
+      show-current-time-indicator="false"
     >
       <DxResource
         :data-source="resourcesData"

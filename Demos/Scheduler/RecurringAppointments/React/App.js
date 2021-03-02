@@ -19,6 +19,7 @@ class App extends React.Component {
         firstDayOfWeek={1}
         startDayHour={9}
         height={600}
+        showCurrentTimeIndicator={false}
       >
         <Resource
           dataSource={resourcesData}

@@ -9,6 +9,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         startDayHour: 9,
         currentDate: new Date(2021, 2, 25),
         firstDayOfWeek: 1,
+        showCurrentTimeIndicator: false,
         resources: [{
             fieldExpr: "roomId",
             dataSource: resourcesData,

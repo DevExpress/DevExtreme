@@ -8,6 +8,7 @@
     :start-day-hour="9"
     :first-day-of-week="1"
     current-view="month"
+    show-current-time-indicator="false"
   >
     <DxResource
       :data-source="resourcesData"

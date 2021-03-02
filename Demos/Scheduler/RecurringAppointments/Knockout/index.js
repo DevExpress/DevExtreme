@@ -8,6 +8,7 @@ window.onload = function() {
             currentDate: new Date(2021, 2, 25),
             startDayHour: 9,
             firstDayOfWeek: 1,
+            showCurrentTimeIndicator: false,
             resources: [{
                 fieldExpr: "roomId",
                 dataSource: resourcesData,

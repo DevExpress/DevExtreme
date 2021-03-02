@@ -46,6 +46,7 @@ class App extends React.Component {
           recurrenceEditMode="series"
           onAppointmentContextMenu={this.onAppointmentContextMenu}
           onCellContextMenu={this.onCellContextMenu}
+          showCurrentTimeIndicator={false}
           height={600}
         >
           <Resource

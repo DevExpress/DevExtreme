@@ -9,6 +9,7 @@ $(function() {
         startDayHour: 9,
         groups: undefined,
         recurrenceEditMode: "series",
+        showCurrentTimeIndicator: false,
         onAppointmentContextMenu: function (e) {
             updateContextMenu(false, appointmentContextMenuItems, ".dx-scheduler-appointment", itemTemplate, onItemClick(e));
         },
