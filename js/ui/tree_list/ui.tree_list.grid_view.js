@@ -1,5 +1,5 @@
 import treeListCore from './ui.tree_list.core';
-import gridViewModule from '../grid_core/ui.grid_core.grid_view';
+import { gridViewModule } from '../grid_core/ui.grid_core.grid_view';
 
 const GridView = gridViewModule.views.gridView.inherit((function() {
     return {
@@ -24,7 +24,7 @@ treeListCore.registerModule('gridView', {
                 _toggleBestFitMode: function(isBestFit) {
                     this.callBase(isBestFit);
 
-                    const $rowsTable = this._rowsView._getTableElement();
+                    const $rowsTable = this._rowsView.getTableElement();
                     $rowsTable.find('.dx-treelist-cell-expandable').toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
                 }
             }

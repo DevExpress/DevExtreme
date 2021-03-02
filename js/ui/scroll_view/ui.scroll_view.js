@@ -274,10 +274,6 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         }
     },
 
-    isEmpty: function() {
-        return !$(this.content()).children().length;
-    },
-
     content: function() {
         return getPublicElement(this._$content.children().eq(1));
     },

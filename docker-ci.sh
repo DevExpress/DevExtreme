@@ -181,15 +181,7 @@ function run_test_jest {
 function run_native_components {
     npm i
     npx gulp localization
-    npx gulp react-compilation-check
-}
-
-function run_test_scss {
-    npm i
-    npm run build-themes
-
-    cd themebuilder-scss
-    npm i && npm run build && npm run test
+    npx gulp native-components-compilation-check
 }
 
 function run_test_styles {

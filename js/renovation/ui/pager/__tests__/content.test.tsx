@@ -2,6 +2,7 @@
 import React, { createRef, forwardRef } from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import { PagerContent, PagerContentProps, viewFunction as PagerContentComponent } from '../content';
 import { PageIndexSelector } from '../pages/page_index_selector';
 import { PageSizeSelector } from '../page_size/selector';
@@ -68,7 +69,7 @@ describe('PagerContent', () => {
         pageIndex: 2,
         totalCount: 100,
       });
-      expect(pagesContainer.childAt(1).props()).toMatchObject({
+      expect(pagesContainer.childAt(1).childAt(0).props()).toMatchObject({
         isLargeDisplayMode: true,
         hasKnownLastPage: true,
         maxPagesCount: 10,
@@ -83,7 +84,7 @@ describe('PagerContent', () => {
     });
 
     it('visible = false', () => {
-      const rootElementRef = {} as HTMLDivElement;
+      const rootElementRef = { current: {} } as RefObject<HTMLElement>;
       const props = {
         props: {
           visible: false,
@@ -97,7 +98,7 @@ describe('PagerContent', () => {
     });
 
     it('pagesContainerVisibility = false', () => {
-      const rootElementRef = {} as HTMLDivElement;
+      const rootElementRef = { current: {} } as RefObject<HTMLElement>;
       const props = {
         pagesContainerVisible: true,
         pagesContainerVisibility: 'hidden',
@@ -110,7 +111,7 @@ describe('PagerContent', () => {
     });
 
     it('pagesContainerVisible = false', () => {
-      const rootElementRef = {} as HTMLDivElement;
+      const rootElementRef = { current: {} } as RefObject<HTMLElement>;
       const tree = mount(<PagerContentComponent
         {...{
           pagesContainerVisible: false,
@@ -123,7 +124,7 @@ describe('PagerContent', () => {
     });
 
     it('infoVisible = false', () => {
-      const rootElementRef = {} as HTMLDivElement;
+      const rootElementRef = { current: {} } as RefObject<HTMLElement>;
       const tree = mount(<PagerContentComponent
         {...{
           pagesContainerVisible: true,
@@ -139,7 +140,7 @@ describe('PagerContent', () => {
     });
 
     it('showPageSizes = false', () => {
-      const rootElementRef = {} as HTMLDivElement;
+      const rootElementRef = { current: {} } as RefObject<HTMLDivElement>;
       const props = {
         props: {
           showPageSizes: false,
@@ -154,10 +155,10 @@ describe('PagerContent', () => {
     });
 
     it('forwarded refs', () => {
-      const widgetRootElementRef = {} as HTMLDivElement;
-      const pageSizesRef = {} as HTMLDivElement;
+      const widgetRootElementRef = { current: {} } as RefObject<HTMLDivElement>;
+      const pageSizesRef = { current: {} } as RefObject<HTMLElement>;
       const pagesRef = createRef() as any; // {} as HTMLDivElement;
-      const infoTextRef = {} as HTMLDivElement;
+      const infoTextRef = { current: {} } as RefObject<HTMLElement>;
       const props = {
         pagesContainerVisible: true,
         isLargeDisplayMode: true,
@@ -175,7 +176,7 @@ describe('PagerContent', () => {
       expect(tree.props().rootElementRef).toBe(widgetRootElementRef);
       const childrenContainer = tree.find('div').first();
       expect(childrenContainer.childAt(0).props().rootElementRef).toBe(pageSizesRef);
-      expect(childrenContainer.childAt(1).instance()).toBe(pagesRef.current);
+      expect(childrenContainer.childAt(1).childAt(1).instance()).toBe(pagesRef.current);
       expect(childrenContainer.childAt(1).childAt(0).props().rootElementRef).toBe(infoTextRef);
     });
   });
@@ -183,16 +184,16 @@ describe('PagerContent', () => {
   describe('Logic', () => {
     it('setRootElementRef, has rootElementRef', () => {
       const component = new PagerContent({ rootElementRef: {} } as PagerContentProps);
-      component.widgetRootElementRef = {} as HTMLElement;
+      component.widgetRootElementRef = { current: {} } as RefObject<HTMLElement>;
       component.setRootElementRef();
-      expect(component.props.rootElementRef).toBe(component.widgetRootElementRef);
+      expect(component.props.rootElementRef?.current).toBe(component.widgetRootElementRef.current);
     });
 
     it('setRootElementRef, hasnt rootElementRef', () => {
       const component = new PagerContent({ } as PagerContentProps);
-      component.widgetRootElementRef = {} as HTMLElement;
+      component.widgetRootElementRef = { current: {} } as RefObject<HTMLElement>;
       component.setRootElementRef();
-      expect(component.props.rootElementRef).toBeUndefined();
+      expect(component.props.rootElementRef?.current).toBeUndefined();
     });
 
     it('keyboardAction provider', () => {
@@ -203,7 +204,7 @@ describe('PagerContent', () => {
         pageCount: 1,
         pagesNavigatorVisible: 'auto',
       } as PagerContentProps);
-      component.widgetRootElementRef = rootElement;
+      component.widgetRootElementRef = { current: rootElement };
       component.keyboardAction.registerKeyboardAction(element, action);
       expect(registerKeyboardAction).toBeCalledWith(
         'pager',

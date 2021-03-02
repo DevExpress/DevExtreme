@@ -39,6 +39,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import ArrayStore from 'data/array_store';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -865,7 +866,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T800035
     QUnit.test('Group collapsing if focusedRowEnabled is true and key is complex', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [
                 { 'OrderID': 10248, 'CustomerID': 'VINET', 'EmployeeID': 5, 'ShipCity': 'Reims' },
@@ -1241,7 +1242,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     cancelRowChanges: 'Cancel'
                 }
             },
-            columns: [ { type: 'buttons' }, 'name', 'phone']
+            columns: [{ type: 'buttons' }, 'name', 'phone']
         });
 
         this.clock.tick();
@@ -1283,7 +1284,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             focusedRowEnabled: true,
             onFocusedRowChanged: onFocusedRowChangedSpy,
             onContentReady: function(e) {
-            // act
+                // act
                 e.component.option('focusedRowKey', 1);
                 e.component.option('loadPanel', { enabled: true });
             }
@@ -1306,7 +1307,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             focusedRowEnabled: true,
             onFocusedRowChanged: onFocusedRowChangedSpy,
             onContentReady: function(e) {
-            // act
+                // act
                 e.component.option('focusedRowKey', 1);
             }
         });
@@ -1331,7 +1332,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             focusedRowEnabled: true,
             onFocusedRowChanged: onFocusedRowChangedSpy,
             onContentReady: function(e) {
-            // act
+                // act
                 e.component.option('focusedRowKey', 2);
             }
         });
@@ -1386,7 +1387,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     // T657041
     QUnit.testInActiveWindow('Filter row editor should not lose focus after changing filterValue if filter panel is used', function(assert) {
-    // arrange
+        // arrange
         const onOptionChanged = sinon.spy();
 
         createDataGrid({
@@ -1449,7 +1450,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         // arrange
         const that = this;
         const generateData = function(rowAmount, columnAmount) {
-            const columns = [ 'ID' ];
+            const columns = ['ID'];
             const data = [];
 
             for(let i = 0; i < columnAmount; ++i) {
@@ -1457,7 +1458,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             }
 
             for(let i = 0; i < rowAmount; ++i) {
-                const item = { };
+                const item = {};
                 for(let j = 0; j < columnAmount; ++j) {
                     const columnName = columns[j];
                     const value = columnName === 'ID' ? i : `${columnName}_${i}`;
@@ -1567,6 +1568,80 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.ok($cell.hasClass('dx-editor-cell'), 'cell is edited');
         assert.equal($cell.siblings().text(), '13', 'sibling\'s text');
     });
+
+    ['standard', 'virtual'].forEach(scrollingMode => {
+        QUnit.testInActiveWindow(`autoNavigateToFocusedRow should work when rowRenderingMode is virtual, focusedRowKey is specified and scrolling.mode == "${scrollingMode}" (T971695)`, function(assert) {
+            // arrange
+            const items = [];
+
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+
+            const dataGrid = createDataGrid({
+                dataSource: items,
+                keyExpr: 'id',
+                remoteOperations: true,
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode,
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                paging: {
+                    pageSize: 100
+                },
+                focusedRowEnabled: true,
+                focusedRowKey: 80,
+                autoNavigateToFocusedRow: true,
+            });
+
+            this.clock.tick(300);
+
+            // assert
+            assert.equal(dataGrid.option('focusedRowIndex'), 79, 'focused row index');
+            assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
+        });
+
+        QUnit.testInActiveWindow(`autoNavigateToFocusedRow should work when rowRenderingMode is virtual, focusedRowIndex is specified and scrolling.mode == "${scrollingMode}" (T971695)`, function(assert) {
+            // arrange
+            const items = [];
+
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+
+            const dataGrid = createDataGrid({
+                dataSource: items,
+                keyExpr: 'id',
+                remoteOperations: true,
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode,
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                paging: {
+                    pageSize: 100
+                },
+                focusedRowEnabled: true,
+                focusedRowIndex: 79,
+                autoNavigateToFocusedRow: true,
+            });
+
+            this.clock.tick();
+
+            // assert
+            assert.equal(dataGrid.option('focusedRowKey'), 80, 'focused row key');
+            assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
+        });
+    });
 });
 
 QUnit.module('View\'s focus', {
@@ -1595,7 +1670,7 @@ QUnit.module('View\'s focus', {
 }, () => {
 
     QUnit.test('try to focus unknown element', function(assert) {
-    // arrange
+        // arrange
 
         this.focusGridCell($('.lalala'));
 
@@ -1607,7 +1682,7 @@ QUnit.module('View\'s focus', {
     });
 
     QUnit.test('Focus row element', function(assert) {
-    // arrange
+        // arrange
 
         // act
         this.focusGridCell($(this.dataGrid.$element()).find('.dx-datagrid-rowsview td').eq(4));
@@ -1624,7 +1699,7 @@ QUnit.module('View\'s focus', {
     });
 
     QUnit.testInActiveWindow('DataGrid - Master grid should not render it\'s overlay in detail grid (T818373)', function(assert) {
-    // arrange
+        // arrange
         let detailGrid;
         const detailRowsViewWrapper = dataGridWrapper.rowsView;
 
@@ -1659,7 +1734,7 @@ QUnit.module('View\'s focus', {
     });
 
     QUnit.testInActiveWindow('Not highlight cell if isHighlighted set false in the onFocusedCellChanging event by Tab key (T853599)', function(assert) {
-    // arrange
+        // arrange
         let focusedCellChangingCount = 0;
         this.dataGrid.option({
             dataSource: [{ name: 'Alex', phone: '111111', room: 6 }],
@@ -1690,7 +1765,7 @@ QUnit.module('View\'s focus', {
     });
 
     QUnit.test('Focus row element should support native DOM', function(assert) {
-    // arrange
+        // arrange
 
         // act
         this.focusGridCell($(this.dataGrid.$element()).find('.dx-datagrid-rowsview td').get(4));
@@ -1708,7 +1783,7 @@ QUnit.module('View\'s focus', {
 
     // T592731
     QUnit.test('Pressing arrow keys inside editor of the internal grid does not call preventDefault', function(assert) {
-    // arrange
+        // arrange
         let preventDefaultCalled;
         const eventOptions = {
             preventDefault: function() {
@@ -1757,7 +1832,7 @@ QUnit.module('View\'s focus', {
     });
 
     QUnit.test('Pressing symbol keys inside detail grid editor does not change master grid\'s focusedCellPosition', function(assert) {
-    // arrange
+        // arrange
 
         this.dataGrid.option({
             dataSource: {
@@ -1802,7 +1877,7 @@ QUnit.module('View\'s focus', {
 
     QUnit.test('Should open master detail by click if row is edited in row mode (T845240)', function(assert) {
         ['click', 'dblClick'].forEach(startEditAction => {
-        // arrange
+            // arrange
             const masterDetailClass = 'master-detail-test';
             this.dataGrid.option({
                 loadingTimeout: undefined,
@@ -1831,7 +1906,7 @@ QUnit.module('View\'s focus', {
     });
 
     QUnit.test('DataGrid should regenerate columns and apply filter after dataSource change if columns autogenerate', function(assert) {
-    // arrange
+        // arrange
         const dataSource0 = {
             store: [
                 { id: 0, c0: 'c0_0' },
@@ -1872,7 +1947,7 @@ QUnit.module('View\'s focus', {
 
     // T671532
     QUnit.testInActiveWindow('Change options do not throw an exception when an element outside the grid is focused', function(assert) {
-    // arange
+        // arange
         const $inputElement = $('<input type=\'button\' />').prependTo($('#container'));
 
         // act
@@ -2223,7 +2298,7 @@ QUnit.module('View\'s focus', {
                 { id: 2, name: 'name2' }
             ],
             keyExpr: 'id',
-            columns: ['id', 'name' ],
+            columns: ['id', 'name'],
             masterDetail: {
                 enabled: true
             },
@@ -3267,6 +3342,95 @@ QUnit.module('View\'s focus', {
         assert.ok($inputElement.is(':focus'), 'input is focused');
     });
 
+    QUnit.testInActiveWindow('The expand button of the master cell should not lose its tabindex when a row in a detail grid is switched to editing mode (T969832)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [
+                { id: 1, name: 'test1' },
+                { id: 2, name: 'test2' }
+            ],
+            keyExpr: 'id',
+            masterDetail: {
+                enabled: true,
+                template: function(container, options) {
+                    $('<div>')
+                        .addClass('myclass')
+                        .dxDataGrid({
+                            keyExpr: 'id',
+                            dataSource: [
+                                { id: 1 }
+                            ],
+                            editing: {
+                                mode: 'row',
+                                allowUpdating: true
+                            }
+                        }).appendTo(container);
+                }
+            }
+        });
+        this.clock.tick();
+
+        // act
+        $(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').trigger(CLICK_EVENT).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual($(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').attr('tabindex'), '0', 'tab index is set to the expanded button');
+
+        // act
+        $(this.dataGrid.element()).find('.myclass .dx-link-edit:eq(0)').trigger('dxpointerdown').trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual($(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-command-expand:eq(1)').attr('tabindex'), '0', 'tab index is set to the expanded button');
+        assert.equal($(this.dataGrid.element()).find('.myclass .dx-editor-cell.dx-focused').length, 1, 'focused edit cell');
+    });
+
+    QUnit.testInActiveWindow('Grid should not scroll to the top when a command button is clicked in a detail grid (T969832)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [
+                { id: 1, name: 'test1' },
+                { id: 2, name: 'test2' }
+            ],
+            keyExpr: 'id',
+            height: 150,
+            masterDetail: {
+                enabled: true,
+                template: function(container) {
+                    $('<div>')
+                        .dxDataGrid({
+                            keyExpr: 'id',
+                            dataSource: [
+                                { id: 1 }
+                            ],
+                            editing: {
+                                mode: 'row',
+                                allowUpdating: true
+                            }
+                        }).appendTo(container);
+                }
+            }
+        });
+        this.clock.tick();
+
+        // act
+        this.dataGrid.expandRow(2);
+        this.clock.tick();
+
+        this.dataGrid.getScrollable().scrollTo({ top: this.dataGrid.getScrollable().scrollHeight() });
+        const scrollTop = this.dataGrid.getScrollable().scrollTop();
+
+        // assert
+        assert.ok(scrollTop > 0, 'top scroll position more than 0');
+
+        // act
+        $(this.dataGrid.element()).find('.dx-link-edit:eq(0)').trigger('dxpointerdown').trigger('click').focus();
+
+        // assert
+        assert.strictEqual(this.dataGrid.getScrollable().scrollTop(), scrollTop, 'top scroll position after editing');
+    });
+
     ['Row', 'Cell', 'Batch', 'Form', 'Popup'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - A stand-alone input should be focused on click after adding a new row (T935999)`, function(assert) {
             // arrange
@@ -3524,7 +3688,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('Focused cell position has correct value when focus grouping row with alignByColumn summary cells (T317210)', function(assert) {
-    // arrange
+        // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             columns: ['field1', { dataField: 'field2', groupIndex: 0 }, { dataField: 'field3' }, { dataField: 'field4' }, { dataField: 'fixedField', fixed: true, fixedPosition: 'right' }],
@@ -3671,7 +3835,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T179519
     QUnit.test('update focus border on resize', function(assert) {
-    // arrange, act
+        // arrange, act
         const dataGrid = createDataGrid({
             width: 150,
             filterRow: { visible: true },
@@ -3769,6 +3933,68 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const $commandCell = $(dataGrid.getCellElement(0, 1));
         assert.ok($commandCell.is(':focus'), 'command cell is focused');
         assert.notOk($commandCell.hasClass('dx-focused'), 'no dx-focused class');
+    });
+
+    ['virtual', 'infinite'].forEach(scrollingMode => {
+        QUnit.testInActiveWindow(`Scroll position should not be reset to the focused row (scrolling.mode = "${scrollingMode}") (T970969)`, function(assert) {
+
+            // arrange, act
+            const generateData = function(count) {
+                const items = [];
+                for(let i = 0; i < count; i++) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+            const store = new ArrayStore({
+                key: 'id',
+                data: generateData(100)
+            });
+            const dataGrid = createDataGrid({
+                dataSource: {
+                    key: 'id',
+                    load: function(loadOptions) {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            store.load(loadOptions).done(function() {
+                                d.resolve.apply(d, arguments);
+                            });
+                        });
+                        return d.promise();
+                    },
+                    totalCount: function(loadOptions) {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            store.totalCount(loadOptions).done(function() {
+                                d.resolve.apply(d, arguments);
+                            });
+                        });
+                        return d.promise();
+                    }
+
+                },
+                scrolling: {
+                    mode: scrollingMode
+                },
+                remoteOperations: true,
+                focusedRowEnabled: true,
+                focusedRowKey: 1,
+                height: 500
+            });
+            this.clock.tick(300);
+
+            // act
+            dataGrid.getScrollable().scrollTo({ top: 35 });
+            this.clock.tick(300);
+
+            // assert
+            assert.strictEqual(dataGrid.option('focusedRowKey'), 1, 'focused row key');
+            assert.strictEqual(dataGrid.option('focusedRowIndex'), 0, 'focused row index');
+            assert.roughEqual(dataGrid.getScrollable().scrollOffset().top, 35, 1, 'scroll position');
+        });
     });
 });
 

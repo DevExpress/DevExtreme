@@ -4,12 +4,9 @@ const eol = require('gulp-eol');
 const fs = require('fs');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
-const lazyPipe = require('lazypipe');
 const merge = require('merge-stream');
 const replace = require('gulp-replace');
-const through = require('through2');
 
-const MODULES = require('./modules_metadata.json');
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
@@ -72,6 +69,8 @@ const distGlobsPattern = (jsFolder, exclude) => [
     `!${jsFolder}/jquery*`,
     `!${jsFolder}/jszip*`,
     `!${jsFolder}/dx.custom*`,
+    `!${jsFolder}/dx.viz*`,
+    `!${jsFolder}/dx.web*`,
     `!${jsFolder}/dx-diagram*`,
     `!${jsFolder}/dx-gantt*`,
     `!${jsFolder}/dx-quill*`,
@@ -98,24 +97,9 @@ if(isEsmPackage) {
 
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
-const addDefaultExport = lazyPipe().pipe(() =>
-    through.obj((chunk, enc, callback) => {
-        const moduleName = chunk.relative.replace('.js', '').replace(/^cjs(\/|\\)/, '').split('\\').join('/');
-        const moduleMeta = MODULES.filter(({ name }) => name === moduleName)[0];
-
-        if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
-            chunk.contents = Buffer.from(
-                `${String(chunk.contents)}module.exports.default = module.exports;`
-            );
-        }
-        callback(null, chunk);
-    })
-);
-
 const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src(src)
-        .pipe(addDefaultExport())
         .pipe(headerPipes.starLicense())
         .pipe(compressionPipes.beautify())
         .pipe(gulp.dest(dist)),

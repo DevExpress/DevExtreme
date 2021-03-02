@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, OneWay, Event,
+  ComponentBindings, OneWay, Event, TwoWay,
 } from 'devextreme-generator/component_declaration/common';
 import { EventCallback } from '../common/event_callback.d';
 import {
@@ -7,7 +7,7 @@ import {
 } from './scrollable_props';
 import { ScrollEventArgs } from './types.d';
 
-import BaseWidgetProps from '../../utils/base_props';
+import { BaseWidgetProps } from '../../utils/base_props';
 import { TopPocketProps } from './top_pocket_props';
 import { BottomPocketProps } from './bottom_pocket_props';
 
@@ -22,6 +22,15 @@ export class ScrollableSimulatedProps extends ScrollableProps {
   @Event() onBounce?: EventCallback<ScrollEventArgs>;
 
   @Event() onStop?: EventCallback<ScrollEventArgs>;
+
+  @TwoWay()
+  contentTranslateOffset: { left: number; top: number } = { left: 0, top: 0 };
+
+  @Event()
+  contentTranslateOffsetChange?: EventCallback<{ left?: number; top?: number }>;
+
+  @Event()
+  contentPositionChange?: (scrollProp: 'scrollLeft' | 'scrollTop', location: number, ratio: number) => void;
 }
 
 export type ScrollableSimulatedPropsType = ScrollableSimulatedProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height' | 'onKeyDown' | 'visible' >

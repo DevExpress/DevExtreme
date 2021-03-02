@@ -1,4 +1,3 @@
-require('common.css!');
 require('../../helpers/qunitPerformanceExtension.js');
 const $ = require('jquery');
 const translator = require('animation/translator');

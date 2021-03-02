@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/drawer';
 

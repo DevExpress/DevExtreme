@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { shallow } from 'enzyme';
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import getElementComputedStyle from '../../../utils/get_computed_style';
 import {
   ResizableContainer,
@@ -17,16 +18,20 @@ jest.mock('../../../../core/utils/resize_callbacks');
 (getElementComputedStyle as jest.Mock).mockImplementation((el) => el);
 
 describe('resizable-container', () => {
-  function getFakeHtml(width: number | null): HTMLElement | undefined {
-    return width ? { width: `${width}px` } as unknown as HTMLElement : undefined;
+  function getFakeHtml(width: number | null): HTMLDivElement | undefined {
+    return width ? { width: `${width}px` } as unknown as HTMLDivElement : undefined;
   }
   function getElementsRef({
     width, pageSizes, info, pages,
   }) {
-    const parentHtmlEl = getFakeHtml(width) as HTMLDivElement;
-    const pageSizesHtmlEl = pageSizes ? getFakeHtml(pageSizes) as HTMLDivElement : undefined;
-    const infoHtmlEl = info ? getFakeHtml(info) as HTMLDivElement : undefined;
-    const pagesHtmlEl = getFakeHtml(info + pages);
+    const parentHtmlEl = { current: getFakeHtml(width) } as RefObject<HTMLDivElement>;
+    const pageSizesHtmlEl = {
+      current: pageSizes ? getFakeHtml(pageSizes) : undefined,
+    } as RefObject<HTMLDivElement>;
+    const infoHtmlEl = {
+      current: info ? getFakeHtml(info) : undefined,
+    } as RefObject<HTMLDivElement>;
+    const pagesHtmlEl = { current: getFakeHtml(pages) } as RefObject<HTMLDivElement>;
     return {
       parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
     };
@@ -80,7 +85,7 @@ describe('resizable-container', () => {
       } = getElementsRef(sizes);
       component.parentRef = parentHtmlEl;
       component.pageSizesRef = pageSizesHtmlEl;
-      component.pagesRef = pagesHtmlEl as HTMLElement;
+      component.pagesRef = pagesHtmlEl;
       component.infoTextRef = infoHtmlEl;
       return component;
     }
@@ -92,7 +97,7 @@ describe('resizable-container', () => {
       } = getElementsRef(sizes);
       component.parentRef = parentHtmlEl;
       component.pageSizesRef = pageSizesHtmlEl;
-      component.pagesRef = pagesHtmlEl as HTMLElement;
+      component.pagesRef = pagesHtmlEl;
       component.infoTextRef = infoHtmlEl;
       return component;
     }
@@ -124,6 +129,40 @@ describe('resizable-container', () => {
         });
         expect(component.infoTextVisible).toBe(true);
         expect(component.isLargeDisplayMode).toBe(true);
+      });
+
+      it('simulate resize from large to small in react', () => {
+        const component = createComponent({
+          width: 450, pageSizes: 100, pages: 200, info: 100,
+        });
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(true);
+        expect(component.isLargeDisplayMode).toBe(true);
+        updateComponent(component, {
+          width: 350, pageSizes: 100, pages: 200, info: 100,
+        });
+        // resize callback start
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
+        expect(component.isLargeDisplayMode).toBe(true);
+        // in react state don't changed before all effect completed
+        component.infoTextVisible = true;
+        // effect effectUpdateChildProps because re-render after state changed
+        component.effectUpdateChildProps();
+        component.infoTextVisible = true;
+        // childs render with updated state infoTextVisible = false
+        updateComponent(component, {
+          width: 350, pageSizes: 100, pages: 200, info: 0,
+        });
+        // resize callback end but resizeCallbacks fire resuse
+        // because unsubscribe and sibscribe to resizeCallbacks
+        // BUT resize callback closure wrong infoTextVisible = true
+        expect(component.infoTextVisible).toBe(true);
+        component.effectUpdateChildProps();
+        //  effect effectUpdateChildProps because re-render
+        component.infoTextVisible = false;
+        component.effectUpdateChildProps();
+        expect(component.infoTextVisible).toBe(false);
       });
 
       it('resize from large to small', () => {

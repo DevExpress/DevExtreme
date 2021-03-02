@@ -240,7 +240,7 @@ const ColumnsControllerExtender = (function() {
     return members;
 })();
 
-export default {
+export const virtualColumnsModule = {
     defaultOptions: function() {
         return {
             scrolling: {

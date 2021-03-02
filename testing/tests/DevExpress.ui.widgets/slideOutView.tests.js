@@ -10,7 +10,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 
 import 'ui/slide_out_view';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const SLIDEOUTVIEW_CLASS = 'dx-slideoutview';

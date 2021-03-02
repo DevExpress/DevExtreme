@@ -1,6 +1,5 @@
 import $ from 'jquery';
 const { test } = QUnit;
-import 'common.css!';
 import 'ui/diagram';
 
 import { DiagramCommand } from 'devexpress-diagram';

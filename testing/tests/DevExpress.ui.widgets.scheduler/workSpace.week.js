@@ -1,4 +1,3 @@
-import 'common.css!';
 import dateUtils from 'core/utils/date';
 import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';

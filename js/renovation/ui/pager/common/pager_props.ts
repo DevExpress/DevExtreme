@@ -6,7 +6,7 @@ import { EventCallback } from '../../common/event_callback.d';
 export type DisplayMode = 'adaptive' | 'compact' | 'full';
 
 @ComponentBindings()
-export default class PagerProps {
+export class PagerProps {
   @OneWay() gridCompatibility = true;
 
   @OneWay() className?: string;

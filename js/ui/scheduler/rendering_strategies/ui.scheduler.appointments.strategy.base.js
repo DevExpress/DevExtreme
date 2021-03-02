@@ -125,6 +125,7 @@ class BaseRenderingStrategy {
         for(let j = 0; j < position.length; j++) {
             const height = this.calculateAppointmentHeight(appointment, position[j]);
             const width = this.calculateAppointmentWidth(appointment, position[j]);
+
             let resultWidth = width;
             let appointmentReduced = null;
             let multiWeekAppointmentParts = [];
@@ -144,10 +145,13 @@ class BaseRenderingStrategy {
                     initialRowIndex = position[j].rowIndex;
                     initialCellIndex = position[j].cellIndex;
 
-                    resultWidth = this._reduceMultiWeekAppointment(width, {
-                        left: position[j].left,
-                        right: currentMaxAllowedPosition
-                    });
+                    resultWidth = this._reduceMultiWeekAppointment(
+                        width,
+                        {
+                            left: position[j].left,
+                            right: currentMaxAllowedPosition
+                        }
+                    );
 
                     multiWeekAppointmentParts = this._getAppointmentParts({
                         sourceAppointmentWidth: width,

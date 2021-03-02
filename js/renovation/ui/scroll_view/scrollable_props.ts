@@ -14,13 +14,9 @@ export class ScrollableInternalProps {
 
   @OneWay() scrollByThumb = false;
 
-  @OneWay() useSimulatedScrollbar = false;
-
   @OneWay() bounceEnabled = true;
 
   @OneWay() scrollByContent = true;
-
-  @OneWay() updateManually = false;
 
   @OneWay() useKeyboard = true;
 

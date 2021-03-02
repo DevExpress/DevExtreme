@@ -10,7 +10,6 @@ import { exportDataGrid } from 'pdf_exporter';
 
 import 'ui/data_grid/ui.data_grid';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

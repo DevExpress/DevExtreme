@@ -125,6 +125,7 @@ gulp.task('localization-generated-sources', gulp.parallel([
     {
         data: require('../../js/localization/messages/en.json'),
         filename: 'default_messages.js',
+        exportName: 'defaultMessages',
         destination: 'js/localization'
     },
     {
@@ -148,6 +149,7 @@ gulp.task('localization-generated-sources', gulp.parallel([
         return gulp
             .src('build/gulp/generated_js.jst')
             .pipe(template({
+                exportName: source.exportName,
                 json: serializeObject(source.data)
             }))
             .pipe(lint({

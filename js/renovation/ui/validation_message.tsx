@@ -23,7 +23,7 @@ export const viewFunction = ({
 export class ValidationMessageProps extends WidgetProps {
   @OneWay() mode?: 'auto'|'always' = 'auto';
 
-  @OneWay() validationErrors?: object[] | null;
+  @OneWay() validationErrors?: Record<string, unknown>[] | null;
 
   @OneWay() positionRequest?: string;
 
@@ -33,7 +33,7 @@ export class ValidationMessageProps extends WidgetProps {
 
   @ForwardRef() target?: RefObject<string | Element>;
 
-  @OneWay() offset?: object = { h: 0, v: 0 };
+  @OneWay() offset?: Record<string, number> = { h: 0, v: 0 };
 }
 @Component({
   defaultOptionRules: null,

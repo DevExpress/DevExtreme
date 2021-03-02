@@ -7,7 +7,6 @@ QUnit.testStart(function() {
 });
 
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import { FieldsArea } from 'ui/pivot_grid/ui.pivot_grid.fields_area';

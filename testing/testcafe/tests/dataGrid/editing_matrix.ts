@@ -121,7 +121,7 @@ const editCell = async (
   t: TestController, {
     mode, dataField, useKeyboard, columnIndex,
   }, rowIndex: number, modifyFirstColumn = false,
-): Promise<{ cell: DataCell; editor: Selector}> => {
+): Promise<{ cell: DataCell; editor: Selector }> => {
   const cell = dataGrid.getDataCell(rowIndex, columnIndex);
   let editor = cell.getEditor().element;
 
@@ -172,7 +172,7 @@ const addRow = async (
   t: TestController, {
     mode, dataField, columnIndex, useKeyboard,
   },
-): Promise<{ cell: DataCell; editor: Selector}> => {
+): Promise<{ cell: DataCell; editor: Selector }> => {
   const cell = dataGrid.getDataCell(0, columnIndex);
   let editor = cell.getEditor().element;
 

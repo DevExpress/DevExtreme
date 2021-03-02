@@ -17,8 +17,8 @@ import Guid from '../../core/guid';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { isMaterial, current } from '../../ui/themes';
-import BaseComponent from '../preact_wrapper/check_box';
-import BaseWidgetProps from '../utils/base_props';
+import BaseComponent from '../component_wrapper/check_box';
+import { BaseWidgetProps } from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { EffectReturn } from '../utils/effect_return.d';
 import noop from '../utils/noop';
@@ -109,9 +109,9 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() hoverStateEnabled?: boolean = true;
 
-  @OneWay() validationError?: object | null = null;
+  @OneWay() validationError?: Record<string, unknown> | null = null;
 
-  @OneWay() validationErrors?: object[] | null = null;
+  @OneWay() validationErrors?: Record<string, unknown>[] | null = null;
 
   @OneWay() text?: string = '';
 
@@ -172,7 +172,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @Method()
   focus(): void {
-    this.widgetRef.focus();
+    this.widgetRef.current!.focus();
   }
 
   @Effect()
@@ -238,22 +238,27 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       && !!this.validationErrors?.length;
   }
 
-  get aria(): object {
+  get aria(): Record<string, string> {
     const { readOnly, isValid } = this.props;
     const checked = !!this.props.value;
     const indeterminate = this.props.value === null;
 
-    return {
+    const result: Record<string, string> = {
       role: 'checkbox',
       checked: indeterminate ? 'mixed' : `${checked}`,
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
-      // eslint-disable-next-line spellcheck/spell-checker
-      describedby: this.shouldShowValidationMessage ? `dx-${new Guid()}` : undefined,
     };
+
+    if (this.shouldShowValidationMessage) {
+      // eslint-disable-next-line spellcheck/spell-checker
+      result.describedby = `dx-${new Guid()}`;
+    }
+
+    return result;
   }
 
-  get validationErrors(): object[] | null | undefined {
+  get validationErrors(): Record<string, unknown>[] | null | undefined {
     const { validationErrors, validationError } = this.props;
     let allValidationErrors = validationErrors;
     if (!allValidationErrors && validationError) {
@@ -264,6 +269,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {
     const { useInkRipple } = this.props;
-    useInkRipple && this.inkRippleRef[type]({ element: this.iconRef, event, wave: waveId });
+    useInkRipple && this.inkRippleRef.current![type]({
+      element: this.iconRef.current, event, wave: waveId,
+    });
   }
 }

@@ -1,5 +1,5 @@
 import gridCore from './ui.data_grid.core';
-import focusModule from '../grid_core/ui.grid_core.focus';
+import { focusModule } from '../grid_core/ui.grid_core.focus';
 import { Deferred } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
 import { equalByValue } from '../../core/utils/common';

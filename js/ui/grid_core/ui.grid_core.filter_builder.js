@@ -111,7 +111,7 @@ const FilterBuilderView = modules.View.inherit({
     }
 });
 
-export default {
+export const filterBuilderModule = {
     defaultOptions: function() {
         return {
             filterBuilder: {

@@ -58,7 +58,7 @@ export default class Editor extends Component {
     });
   }
 
-  _getDefaultOptions(): object {
+  _getDefaultOptions(): Record<string, unknown> {
     return extend(
       super._getDefaultOptions(),
       {

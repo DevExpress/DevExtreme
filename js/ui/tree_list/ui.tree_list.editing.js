@@ -7,7 +7,7 @@ import { Deferred } from '../../core/utils/deferred';
 import messageLocalization from '../../localization/message';
 import treeListCore from './ui.tree_list.core';
 import gridCoreUtils from '../grid_core/ui.grid_core.utils';
-import editingModule from '../grid_core/ui.grid_core.editing';
+import { editingModule } from '../grid_core/ui.grid_core.editing';
 
 const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';

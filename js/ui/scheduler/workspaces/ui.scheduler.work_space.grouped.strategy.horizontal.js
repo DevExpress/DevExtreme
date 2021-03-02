@@ -103,7 +103,9 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     }
 
     getHorizontalMax(groupIndex) {
-        return this._workSpace.getMaxAllowedPosition()[groupIndex];
+        return this._workSpace.isRenovatedRender()
+            ? this._workSpace.getMaxAllowedPosition(groupIndex)
+            : this._workSpace.getMaxAllowedPosition()[groupIndex];
     }
 
     getVerticalMax(groupIndex) {

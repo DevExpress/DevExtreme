@@ -8,10 +8,8 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
-import { act } from 'preact/test-utils';
 
 import 'renovation/ui/button.j';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -39,7 +37,7 @@ const INK_RIPPLE_CLASS = 'dx-inkripple';
 
 const moduleConfig = {
     Button(options = {}) {
-        act(() => $('#button').dxButton(options));
+        $('#button').dxButton(options);
         return $('#button');
     }
 };
@@ -201,7 +199,7 @@ QUnit.module('options changed callbacks', moduleConfig, () => {
             _templateData: { custom: 1 }
         });
         template.reset();
-        act(() => element.dxButton('repaint'));
+        element.dxButton('repaint');
 
         assert.strictEqual(template.firstCall.args[0].custom, 1, 'custom field is correct');
     });
@@ -307,15 +305,13 @@ QUnit.module('contentReady', () => {
             return true;
         };
 
-        let $firstButton;
-        act(() => $firstButton = $('#widget').dxButton(buttonConfig));
-
-        act(() => $('#button').dxButton($.extend({}, buttonConfig, {
+        const $firstButton = $('#widget').dxButton(buttonConfig);
+        $('#button').dxButton($.extend({}, buttonConfig, {
             onContentReady(e) {
                 assert.ok(areElementsEqual($firstButton, $(e.element)), 'rendered widget and widget with fired action are equals');
                 done();
             }
-        })));
+        }));
     });
 });
 
@@ -441,7 +437,7 @@ QUnit.module('submit behavior', {
         this.$element = this.Button({ useSubmitBehavior: true });
         this.$form = $('#form');
         this.clickButton = function() {
-            act(() => this.$element.trigger('dxclick'));
+            this.$element.trigger('dxclick');
         };
     }
 }, () => {

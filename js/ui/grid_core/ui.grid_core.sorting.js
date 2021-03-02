@@ -141,7 +141,7 @@ const HeaderPanelSortingExtender = extend({}, sortingMixin, {
     }
 });
 
-export default {
+export const sortingModule = {
     defaultOptions() {
         return {
             sorting: {

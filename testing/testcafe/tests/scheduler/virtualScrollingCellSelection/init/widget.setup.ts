@@ -1,7 +1,8 @@
 import { ClientFunction } from 'testcafe';
 import createWidget from '../../../../helpers/createWidget';
+import { CLASS } from '../../../../model/scheduler';
 
-export const createScheduler = async (options = {}) => {
+export const createScheduler = async (options = {}): Promise<void> => {
   createWidget('dxScheduler', {
     dataSource: [],
     views: ['week'],
@@ -9,6 +10,7 @@ export const createScheduler = async (options = {}) => {
     currentDate: new Date(2020, 8, 20),
     cellDuration: 60,
     height: 300,
+    width: 400,
     scrolling: { mode: 'virtual' },
     resources: [{
       fieldExpr: 'resourceId0',
@@ -45,66 +47,74 @@ export const moveMouse = (table: Selector, cell: Selector): Promise<void> => Cli
   },
 })();
 
-export const scrollTo = ClientFunction((y) => {
+export const scrollTo = ClientFunction((x, y) => {
   const instance = ($('#container') as any).dxScheduler('instance');
   const scrollable = instance.getWorkSpaceScrollable();
 
-  scrollable.scrollTo({ y });
+  scrollable.scrollTo({ y, x });
 });
 
 export const checkSelectionWhenFocusedInViewport = async (
   t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex: number,
   lastCellColumnIndex: number, lastCellRowIndex = 0,
-) => {
+): Promise<void> => {
   await t
-    .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
+    .expect(scheduler.getSelectedCells().count)
     .eql(selectedCellsCount)
-    .expect(scheduler.dateTableCells.filter('.dx-scheduler-focused-cell').count)
+    .expect(scheduler.getFocusedCell().count)
     .eql(1)
-    .expect(scheduler.getDateTableCell(0, 0).hasClass('dx-state-focused'))
+    .expect(scheduler.getDateTableCell(0, 0).hasClass(CLASS.selectedCell))
     .ok()
-    .expect(scheduler.getDateTableCell(lastCellRowIndex, lastCellColumnIndex).hasClass('dx-state-focused'))
+    .expect(scheduler.getDateTableCell(lastCellRowIndex, lastCellColumnIndex)
+      .hasClass(CLASS.selectedCell))
     .ok()
-    .expect(scheduler.getDateTableCell(bottomMostCellRowIndex, 0).hasClass('dx-state-focused'))
+    .expect(scheduler.getDateTableCell(bottomMostCellRowIndex, 0).hasClass(CLASS.selectedCell))
     .ok()
-    .expect(scheduler.getDateTableCell(lastCellRowIndex, lastCellColumnIndex).hasClass('dx-scheduler-focused-cell'))
+    .expect(scheduler.getDateTableCell(lastCellRowIndex, lastCellColumnIndex)
+      .hasClass(CLASS.focusedCell))
     .ok();
 };
 
 export const checkSelectionWhenFocusedIsNotInViewport = async (
-  t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex: number,
-  lastCellColumnIndex: number, lastCellRowIndex = 0,
-) => {
+  t: any, scheduler: any, selectedCellsCount: number, bottomMostCellRowIndex = 0,
+  lastCellColumnIndex = 0, lastCellRowIndex = 0,
+): Promise<void> => {
   await t
-    .expect(scheduler.dateTableCells.filter('.dx-state-focused').count)
+    .expect(scheduler.getSelectedCells().count)
     .eql(selectedCellsCount)
-    .expect(scheduler.dateTableCells.filter('.dx-scheduler-focused-cell').count)
-    .eql(0)
-    .expect(scheduler.getDateTableCell(0, 0).hasClass('dx-state-focused'))
-    .ok()
-    .expect(scheduler.getDateTableCell(lastCellRowIndex, lastCellColumnIndex).hasClass('dx-state-focused'))
-    .notOk()
-    .expect(scheduler.getDateTableCell(bottomMostCellRowIndex, 0).hasClass('dx-state-focused'))
-    .ok()
-    .expect(scheduler.getDateTableCell(lastCellRowIndex, lastCellColumnIndex).hasClass('dx-scheduler-focused-cell'))
-    .notOk();
+    .expect(scheduler.getFocusedCell().count)
+    .eql(0);
+
+  if (selectedCellsCount > 0) {
+    await t
+      .expect(scheduler.getDateTableCell(0, 0).hasClass(CLASS.selectedCell))
+      .ok()
+      .expect(scheduler.getDateTableCell(lastCellRowIndex, lastCellColumnIndex)
+        .hasClass(CLASS.selectedCell))
+      .notOk()
+      .expect(scheduler.getDateTableCell(bottomMostCellRowIndex, 0).hasClass(CLASS.selectedCell))
+      .ok()
+      .expect(scheduler.getDateTableCell(lastCellRowIndex, lastCellColumnIndex)
+        .hasClass(CLASS.focusedCell))
+      .notOk();
+  }
 };
 
-export const checkAllDayCellsWhenInViewport = async (t: any, scheduler: any) => {
+export const checkAllDayCellsWhenInViewport = async (t: any, scheduler: any): Promise<void> => {
   await t
-    .expect(scheduler.allDayTableCells.filter('.dx-state-focused').count)
+    .expect(scheduler.getSelectedCells(true).count)
     .eql(2)
-    .expect(scheduler.getAllDayTableCell(0).hasClass('dx-state-focused'))
+    .expect(scheduler.getAllDayTableCell(0).hasClass(CLASS.selectedCell))
     .ok()
-    .expect(scheduler.getAllDayTableCell(1).hasClass('dx-state-focused'))
+    .expect(scheduler.getAllDayTableCell(1).hasClass(CLASS.selectedCell))
     .ok()
-    .expect(scheduler.getAllDayTableCell(1).hasClass('dx-scheduler-focused-cell'))
+    .expect(scheduler.getAllDayTableCell(1).hasClass(CLASS.focusedCell))
     .ok();
 };
-export const checkAllDayCellsWhenNotInViewport = async (t: any, scheduler: any) => {
+export const checkAllDayCellsWhenNotInViewport = async (t: any, scheduler: any): Promise<void> => {
   await t
-    .expect(scheduler.allDayTableCells.filter('.dx-state-focused').count)
+    .expect(scheduler.getSelectedCells(true).count)
     .eql(0)
-    .expect(scheduler.allDayTableCells.filter('.dx-scheduler-focused-cell').count)
+    .expect(scheduler.getFocusedCell(true).count)
     .eql(0);
 };

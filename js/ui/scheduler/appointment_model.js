@@ -398,6 +398,8 @@ class AppointmentModel {
                         items.push(pushItem.data);
                     }
                 });
+
+                dataSource.load();
             });
         }
     }

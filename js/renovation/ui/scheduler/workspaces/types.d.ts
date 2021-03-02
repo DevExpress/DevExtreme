@@ -5,7 +5,7 @@ export interface ViewCellData {
   otherMonth?: boolean;
   today?: boolean;
   allDay?: boolean;
-  groups?: object;
+  groups?: Record<string, unknown>;
   groupIndex?: number;
   index: number;
   isFirstGroupCell: boolean;
@@ -74,7 +74,7 @@ export interface Group {
 }
 
 interface BaseTemplateData {
-  groups?: object;
+  groups?: Record<string, unknown>;
   groupIndex?: number;
   allDay?: boolean;
   text?: string;
@@ -120,4 +120,3 @@ interface ResourceCellTemplateData {
 export interface ResourceCellTemplateProps extends BaseTemplateProps {
   data: ResourceCellTemplateData;
 }
-

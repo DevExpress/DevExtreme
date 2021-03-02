@@ -46,7 +46,7 @@ describe('TimelineDateHeaderLayout', () => {
           dateHeaderMap,
           ...viewModel.props,
         }}
-      />,
+      /> as any,
     );
 
     it('should render components correctly', () => {

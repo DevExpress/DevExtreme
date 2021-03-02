@@ -201,18 +201,21 @@ const Editor = Widget.inherit({
 
         this._disposeValidationMessage();
         if(!isValid && validationErrors) {
+            const { validationMessageMode, validationMessageOffset, validationBoundary, rtlEnabled } = this.option();
+
             this._$validationMessage = $('<div>').appendTo($element);
             this.setAria('describedby', 'dx-' + new Guid());
 
             this._validationMessage = new ValidationMessage(this._$validationMessage, extend({
                 validationErrors,
+                rtlEnabled,
                 target: this._getValidationMessageTarget(),
                 container: $element,
-                mode: this.option('validationMessageMode'),
+                mode: validationMessageMode,
                 positionRequest: 'below',
-                offset: this.option('validationMessageOffset'),
-                boundary: this.option('validationBoundary'),
-                rtlEnabled: this.option('rtlEnabled')
+                offset: validationMessageOffset,
+                boundary: validationBoundary,
+                describedElement: this._focusTarget()
             }, this._options.cache('validationTooltipOptions')));
             this._bindInnerWidgetOptions(this._validationMessage, 'validationTooltipOptions');
         }

@@ -23,7 +23,6 @@ import { normalizeKeyName } from 'events/utils/index';
 import '../../helpers/calendarFixtures.js';
 
 import 'ui/validator';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -3413,6 +3412,63 @@ QUnit.module('datebox with time component', {
         assert.ok(hourEditor.hasClass('dx-editor-underlined'));
         assert.ok(minuteEditor.hasClass('dx-editor-underlined'));
         assert.ok(amPmEditor.hasClass('dx-editor-underlined'));
+    });
+
+    QUnit.test('dateBox should update time on enter pressing (T969012)', function(assert) {
+        const date = new Date('2015/1/25');
+        const expectedDate = new Date(date);
+        expectedDate.setHours(11, 28);
+
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            value: date,
+            opened: true,
+            pickerType: 'calendar'
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+        const $content = $(dateBox.content());
+        const timeView = $content
+            .find(`.${TIMEVIEW_CLASS}`)
+            .dxTimeView('instance');
+
+        timeView.option('value', expectedDate);
+        keyboard
+            .focus()
+            .press('enter');
+
+        assert.deepEqual(dateBox.option('value'), expectedDate, 'dateBox value was updated');
+    });
+
+    QUnit.test('dateBox should update date and time on enter pressing after navigation using arrows', function(assert) {
+        const date = new Date('2015/1/25');
+        const time = new Date(date);
+        time.setHours(11, 28);
+
+        const $dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            value: date,
+            opened: true,
+            pickerType: 'calendar'
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+        const $content = $(dateBox.content());
+        const timeView = $content
+            .find(`.${TIMEVIEW_CLASS}`)
+            .dxTimeView('instance');
+
+        keyboard.press('up');
+        timeView.option('value', time);
+        keyboard
+            .focus()
+            .press('enter');
+
+        const expectedDate = new Date(time);
+        expectedDate.setDate(18);
+        assert.deepEqual(dateBox.option('value'), expectedDate, 'dateBox value was updated');
     });
 });
 

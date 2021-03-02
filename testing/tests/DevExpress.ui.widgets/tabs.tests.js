@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'generic_light.css!';
 import { extend } from 'core/utils/extend';
 import { DataSource } from 'data/data_source/data_source';

@@ -7,7 +7,7 @@ import config from 'core/config';
 import dataQuery from 'data/query';
 import devices from 'core/devices';
 import errors from 'core/errors';
-import dataErrors from 'data/errors';
+import { errors as dataErrors } from 'data/errors';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import messageLocalization from 'localization/message';
@@ -19,7 +19,6 @@ import TagBox from 'ui/tag_box';
 import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import { normalizeKeyName } from 'events/utils/index';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -663,33 +662,36 @@ QUnit.module('tags', moduleSetup, () => {
         assert.equal($tag.text(), '', 'tag has correct text');
     });
 
-    QUnit.test('Tag should repaint tags on \'repaint\' if dataSource is reloaded (T873372)', function(assert) {
-        let items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }];
-        const dataSource = new DataSource({
-            store: new CustomStore({
-                key: 'value',
-                load: function() {
-                    const deferred = $.Deferred();
-                    deferred.resolve(items);
-                    return deferred.promise();
-                }
-            }),
-            paginate: true
-        });
-        const $tagBox = $('#tagBox').dxTagBox({
-            dataSource,
-            displayExpr: 'name',
-            valueExpr: 'value',
-            value: [1]
-        });
-        const tagBox = $tagBox.dxTagBox('instance');
-        this.clock.tick();
-        items = [{ name: 'updated', value: 1 }];
-        dataSource.reload();
-        tagBox.repaint();
+    [true, false].forEach((deferRenderingValue) => {
+        QUnit.test(`Tag should repaint tags on 'repaint' if dataSource is reloaded and deferRendering: ${deferRenderingValue} (T873372)`, function(assert) {
+            let items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }];
+            const dataSource = new DataSource({
+                store: new CustomStore({
+                    key: 'value',
+                    load: function() {
+                        const deferred = $.Deferred();
+                        deferred.resolve(items);
+                        return deferred.promise();
+                    }
+                }),
+                paginate: true
+            });
+            const $tagBox = $('#tagBox').dxTagBox({
+                dataSource,
+                displayExpr: 'name',
+                valueExpr: 'value',
+                deferRendering: deferRenderingValue,
+                value: [1]
+            });
+            const tagBox = $tagBox.dxTagBox('instance');
+            this.clock.tick();
+            items = [{ name: 'updated', value: 1 }];
+            dataSource.reload();
+            tagBox.repaint();
 
-        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
-        assert.equal($tag.text(), 'updated', 'tag has updated text');
+            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+            assert.equal($tag.text(), 'updated', 'tag has updated text');
+        });
     });
 });
 
@@ -924,7 +926,7 @@ QUnit.module('multi tag support', {
     });
 
     QUnit.test('TagBox should correctly process the rejected load promise of the dataSource', function(assert) {
-        const dataErrorStub = sinon.stub(dataErrors.errors, 'log');
+        const dataErrorStub = sinon.stub(dataErrors, 'log');
         const $editor = $('#tagBox').dxTagBox({
             dataSource: {
                 store: new CustomStore({
@@ -3987,7 +3989,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchTimeout: TIME_TO_WAIT,
             opened: true
         });
-        const tagBox = $('#tagBox').dxTagBox('instance');
+        const tagBox = $tagBox.dxTagBox('instance');
 
         this.clock.tick(TIME_TO_WAIT * 3);
         let $listItems = getListItems(tagBox);
@@ -4021,7 +4023,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchTimeout: TIME_TO_WAIT,
             opened: true
         });
-        const tagBox = $('#tagBox').dxTagBox('instance');
+        const tagBox = $tagBox.dxTagBox('instance');
 
         this.clock.tick(TIME_TO_WAIT * 3);
         let $listItems = getListItems(tagBox);
@@ -4047,6 +4049,67 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 3, 'correctly tags count');
         assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
+    });
+
+
+    QUnit.test('TagBox should use one DataSource request on list item selection if the editor has selected items from next pages (T970259)', function(assert) {
+        const data = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }];
+
+        const loadSpy = sinon.spy(function(loadOptions) {
+            const deferred = $.Deferred();
+            if(loadOptions.take && !loadOptions.searchValue) {
+                deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take));
+            } else if(loadOptions.filter) {
+                const result = data.filter((item) => {
+                    if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
+                        return item[2];
+                    } else if(item.id === loadOptions.filter[2].id) {
+                        return item;
+                    } else if(Array.isArray(loadOptions.filter) && loadOptions.filter.length > 2) {
+                        for(let i = 0; i < loadOptions.filter.length; i++) {
+                            const element = loadOptions.filter[i];
+                            if(Array.isArray(element) && element[2] === item.id) {
+                                return item;
+                            }
+                        }
+                    }
+                });
+
+                deferred.resolve(result);
+            }
+
+            return deferred;
+        });
+
+        const dataSource = new DataSource({
+            paginate: true,
+            pageSize: 5,
+            store: new CustomStore({
+                key: 'id',
+                load: loadSpy
+            })
+        });
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource,
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            opened: false,
+            value: [1, 7],
+            dropDownOptions: {
+                height: 150
+            }
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        tagBox.open();
+        this.clock.tick(TIME_TO_WAIT);
+        const $listItems = getListItems(tagBox);
+        $listItems.eq(3).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.strictEqual(loadSpy.callCount, 4, 'no unnecessary loadings');
     });
 });
 
@@ -6026,8 +6089,8 @@ QUnit.module('performance', () => {
         $('.dx-list-select-all-checkbox').trigger('dxclick');
 
         // assert
-        assert.equal(keyGetterCounter, 613, 'key getter call count');
-        assert.equal(isValueEqualsSpy.callCount, 100, '_isValueEquals call count');
+        assert.equal(keyGetterCounter, 512, 'key getter call count');
+        assert.equal(isValueEqualsSpy.callCount, 1, '_isValueEquals call count');
     });
 
     QUnit.test('load filter should be undefined when tagBox has a lot of initial values', function(assert) {

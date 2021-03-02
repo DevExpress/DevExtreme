@@ -6,7 +6,7 @@ const del = require('del');
 const path = require('path');
 const fs = require('fs');
 const { generateComponents } = require('devextreme-generator/component-compiler');
-const { PreactGenerator } = require('devextreme-generator/preact-generator');
+const { InfernoGenerator } = require('devextreme-generator/inferno-generator/inferno-generator');
 const ts = require('gulp-typescript');
 const plumber = require('gulp-plumber');
 const gulpIf = require('gulp-if');
@@ -20,7 +20,7 @@ const {
     BASE_GENERATOR_OPTIONS_WITH_JQUERY
 } = require('./generator-options');
 
-const generator = new PreactGenerator();
+const generator = new InfernoGenerator();
 
 const jQueryComponentsGlob = 'js/renovation/**/*.j.tsx';
 
@@ -35,17 +35,20 @@ const SRC = [
     '!js/renovation/test_utils/**/*'
 ];
 
+const IGNORE_PATHS_BY_FRAMEWORKS = {
+    vue: ['!js/renovation/viz/**/*'],
+    react: [],
+    angular: []
+};
+
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 
 const COMMON_SRC = ['js/**/*.d.ts', 'js/**/*.js'];
 
 const knownErrors = [
-    'Cannot find module \'preact\'',
-    'Cannot find module \'preact/hooks\'',
-    'Cannot find module \'preact/compat\'',
-    'js/renovation/preact_wrapper/',
-    'js\\renovation\\preact_wrapper\\',
-    'has no exported member \'RefObject\''
+    'js/renovation/component_wrapper/',
+    'js\\renovation\\component_wrapper\\',
+    'Cannot find module \'../../inferno/src\'',
 ];
 
 function deleteJQueryComponents(cb) {
@@ -54,7 +57,7 @@ function deleteJQueryComponents(cb) {
 }
 
 function generateJQueryComponents(isWatch) {
-    const generator = new PreactGenerator();
+    const generator = new InfernoGenerator();
     generator.options = {
         ...BASE_GENERATOR_OPTIONS_WITH_JQUERY,
         generateJQueryOnly: true
@@ -80,9 +83,9 @@ const processErrors = (knownErrors, errors = []) => (e) => {
     }
 };
 
-function generatePreactComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = false) {
-    return function generatePreactComponents(done) {
-        const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
+function generateInfernoComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = true) {
+    return function generateInfernoComponents(done) {
+        const tsProject = ts.createProject('build/gulp/generator/ts-configs/inferno.tsconfig.json');
 
         generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
 
@@ -140,17 +143,17 @@ gulp.task('generate-jquery-components-watch', function watchJQueryComponents() {
 
 gulp.task('generate-components', gulp.series(
     'generate-jquery-components',
-    generatePreactComponents(),
-    ifEsmPackage(generatePreactComponents('./esm', transpileConfig.esm)),
-    ifEsmPackage(generatePreactComponents('./cjs', transpileConfig.cjs)),
+    generateInfernoComponents(),
+    ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm)),
+    ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs)),
     processRenovationMeta
 ));
 
 gulp.task('generate-components-dev', gulp.series(
     'generate-jquery-components',
-    generatePreactComponents('./', transpileConfig.cjs, true),
-    ifEsmPackage(generatePreactComponents('./esm', transpileConfig.esm, true)),
-    ifEsmPackage(generatePreactComponents('./cjs', transpileConfig.cjs, true)),
+    generateInfernoComponents('./', transpileConfig.cjs, true),
+    ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm, true)),
+    ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs, true)),
     processRenovationMeta
 ));
 
@@ -170,14 +173,29 @@ function addGenerationTask(
 
     generator.options = BASE_GENERATOR_OPTIONS;
 
-    gulp.task(`generate-${frameworkName}-declaration-only`, function() {
-        return gulp.src(SRC, { base: 'js' })
+    function compileComponents(done) {
+        const errors = [];
+        const frameworkIgnorePaths = IGNORE_PATHS_BY_FRAMEWORKS[frameworkName];
+
+        return gulp.src([
+            ...SRC,
+            ...frameworkIgnorePaths,
+            '!js/renovation/component_wrapper/**/*.*',
+        ], { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(gulpIf(compileTs, tsProject({
-                error: processErrors(knownErrors),
+                error: processErrors(knownErrors, errors),
                 finish() { }
-            })))
+            }))).on('end', function() {
+                done(errors.map(e => e.message).join('\n') || undefined);
+            });
+    }
+
+    gulp.task(`${frameworkName}-compilation-check`, compileComponents);
+
+    gulp.task(`generate-${frameworkName}-declaration-only`, function(done) {
+        return compileComponents(done)
             .pipe(gulpIf(babelGeneratedFiles, babel(transpileConfig.cjs)))
             .pipe(gulp.dest(frameworkDest));
     });
@@ -250,11 +268,19 @@ function addGenerationTask(
     ));
 }
 
-addGenerationTask('react', ['Cannot find module \'csstype\'.'], false, true, false);
+addGenerationTask('react',
+    ['Cannot find module \'csstype\'.'],
+    true,
+    true,
+    false
+);
 addGenerationTask('angular', [
     'Cannot find module \'@angular/core\'',
     'Cannot find module \'@angular/common\'',
-    'Cannot find module \'@angular/forms\''
+    'Cannot find module \'@angular/forms\'',
+    'Cannot find module \'@angular/cdk/portal\'',
+    'Cannot find module \'inferno\'',
+    'Cannot find module \'inferno-create-element\'',
 ].concat(knownErrors));
 
 addGenerationTask('vue', [], false, true, false);
@@ -267,14 +293,4 @@ gulp.task('generate-components-watch', gulp.series('generate-components', functi
         ));
 }));
 
-gulp.task('react-compilation-check', function() {
-    const generator = require('devextreme-generator/react-generator').default;
-
-    generator.options = BASE_GENERATOR_OPTIONS;
-
-    const tsProject = ts.createProject('build/gulp/generator/ts-configs/react.tsconfig.json');
-
-    return gulp.src([...SRC, '!js/renovation/preact_wrapper/**/*.*'], { base: 'js' })
-        .pipe(generateComponents(generator))
-        .pipe(tsProject());
-});
+gulp.task('native-components-compilation-check', gulp.series('react-compilation-check', 'angular-compilation-check', 'vue-compilation-check'));

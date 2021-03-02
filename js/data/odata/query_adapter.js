@@ -4,7 +4,7 @@ import config from '../../core/config';
 import { extend } from '../../core/utils/extend';
 import queryAdapters from '../query_adapters';
 import { sendRequest, generateSelect, generateExpand, serializeValue, convertPrimitiveValue, serializePropName } from './utils';
-import errorsUtils from '../errors';
+import { errors } from '../errors';
 import dataUtils from '../utils';
 
 const DEFAULT_PROTOCOL_VERSION = 2;
@@ -68,7 +68,7 @@ const compileCriteria = (() => {
         const fieldType = fieldTypes && fieldTypes[fieldName];
 
         if(fieldType && isStringFunction(op) && fieldType !== 'String') {
-            throw new errorsUtils.errors.Error('E4024', op, fieldName, fieldType);
+            throw new errors.Error('E4024', op, fieldName, fieldType);
         }
 
         const formatters = protocolVersion === 4
@@ -77,7 +77,7 @@ const compileCriteria = (() => {
         const formatter = formatters[op.toLowerCase()];
 
         if(!formatter) {
-            throw errorsUtils.errors.Error('E4003', op);
+            throw errors.Error('E4003', op);
         }
 
         let value = criteria[2];
@@ -101,7 +101,7 @@ const compileCriteria = (() => {
             return `not (${crit})`;
         }
 
-        throw errorsUtils.errors.Error('E4003', op);
+        throw errors.Error('E4003', op);
     };
 
     const compileGroup = (criteria) => {
@@ -113,7 +113,7 @@ const compileCriteria = (() => {
             if(Array.isArray(criterion)) {
 
                 if(bag.length > 1 && groupOperator !== nextGroupOperator) {
-                    throw new errorsUtils.errors.Error('E4019');
+                    throw new errors.Error('E4019');
                 }
 
                 bag.push(`(${compileCore(criterion)})`);

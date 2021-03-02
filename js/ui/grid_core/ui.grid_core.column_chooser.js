@@ -423,7 +423,7 @@ const ColumnChooserView = ColumnsView.inherit({
     }
 });
 
-export default {
+export const columnChooserModule = {
     defaultOptions: function() {
         return {
             columnChooser: {

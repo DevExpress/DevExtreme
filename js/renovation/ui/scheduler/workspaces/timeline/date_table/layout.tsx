@@ -4,13 +4,21 @@ import { DateTableLayoutBase } from '../../base/date_table/layout';
 import { LayoutProps } from '../../base/layout_props';
 
 // This is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/559
-export const viewFunction = (viewModel: TimelineDateTableLayout): JSX.Element => (
+export const viewFunction = ({
+  restAttributes,
+  props: {
+    viewData,
+    dataCellTemplate,
+    addDateTableClass,
+  },
+}: TimelineDateTableLayout): JSX.Element => (
   <DateTableLayoutBase
-    viewData={viewModel.props.viewData}
+    viewData={viewData}
+    addDateTableClass={addDateTableClass}
     cellTemplate={DateTableCellBase}
-    dataCellTemplate={viewModel.props.dataCellTemplate}
+    dataCellTemplate={dataCellTemplate}
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
+    {...restAttributes}
   />
 );
 

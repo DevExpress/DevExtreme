@@ -22,6 +22,10 @@ import Widget, {
     WidgetOptions
 } from './widget/ui.widget';
 
+import {
+    template
+} from '../core/templates/template';
+
 export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
@@ -126,6 +130,20 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @public
      */
     onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, fileSystemItem?: FileSystemItem, viewArea?: 'navPane' | 'itemView' }) => any);
+    /**
+     * @docid
+     * @extends Action
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 fileSystemItem:FileSystemItem
+     * @type_function_param1_field5 targetElement:dxElement
+     * @type_function_param1_field6 cancel:boolean
+     * @type_function_param1_field7 event:event
+     * @type_function_param1_field8 viewArea:Enums.FileManagerViewArea
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onContextMenuShowing?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, fileSystemItem?: FileSystemItem, targetElement?: dxElement, cancel?: boolean, event?: event, viewArea?: 'navPane' | 'itemView' }) => any);
     /**
      * @docid
      * @extends Action
@@ -380,6 +398,12 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @hidden
+     */
+    template?: template | (() => string | Element | JQuery);
 }
 
 /**
@@ -440,6 +464,24 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @public
      */
     visible?: boolean;
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @hidden
+     */
+    html?: string;
+    /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @hidden
+     */
+    template?: template | (() => string | Element | JQuery);
+     /**
+     * @docid
+     * @prevFileNamespace DevExpress.ui
+     * @hidden
+     */
+    menuItemTemplate?: template | (() => string | Element | JQuery);
 }
 
 

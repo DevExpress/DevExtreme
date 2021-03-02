@@ -24,13 +24,15 @@ import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
 import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
-import BaseWidgetProps from '../../utils/base_props';
+import { BaseWidgetProps } from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { ConfigProvider } from '../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
+import resizeCallbacks from '../../../core/utils/resize_callbacks';
 
-const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
+const getAria = (args: Record<string, unknown>):
+{ [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
     return {
       ...r,
@@ -95,7 +97,7 @@ export class WidgetProps extends BaseWidgetProps {
 
   @OneWay() activeStateUnit?: string;
 
-  @OneWay() aria?: object = {};
+  @OneWay() aria?: Record<string, string> = {};
 
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
@@ -111,7 +113,7 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onInactive?: (e: Event) => void;
 
-  @Event() onKeyboardHandled?: (args: object) => void;
+  @Event() onKeyboardHandled?: (args: Record<string, unknown>) => void;
 
   @Event() onVisibilityChange?: (args: boolean) => void;
 
@@ -158,7 +160,7 @@ export class Widget extends JSXComponent(WidgetProps) {
   @Effect({ run: 'once' }) setRootElementRef(): void {
     const { rootElementRef } = this.props;
     if (rootElementRef) {
-      this.props.rootElementRef = this.widgetRef;
+      rootElementRef.current = this.widgetRef.current;
     }
   }
 
@@ -170,14 +172,14 @@ export class Widget extends JSXComponent(WidgetProps) {
     const canBeFocusedByKey = isFocusable && accessKey;
 
     if (canBeFocusedByKey) {
-      dxClick.on(this.widgetRef, (e: Event) => {
+      dxClick.on(this.widgetRef.current, (e: Event) => {
         if (isFakeClickEvent(e)) {
           e.stopImmediatePropagation();
           this.focused = true;
         }
       }, { namespace });
 
-      return (): void => dxClick.off(this.widgetRef, { namespace });
+      return (): void => dxClick.off(this.widgetRef.current, { namespace });
     }
 
     return undefined;
@@ -187,13 +189,14 @@ export class Widget extends JSXComponent(WidgetProps) {
   activeEffect(): EffectReturn {
     const {
       activeStateEnabled, activeStateUnit, disabled, onInactive,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       _feedbackShowTimeout, _feedbackHideTimeout, onActive,
     } = this.props;
     const selector = activeStateUnit;
     const namespace = 'UIFeedback';
 
     if (activeStateEnabled && !disabled) {
-      active.on(this.widgetRef,
+      active.on(this.widgetRef.current,
         ({ event }: { event: Event }) => {
           this.active = true;
           onActive?.(event);
@@ -208,7 +211,7 @@ export class Widget extends JSXComponent(WidgetProps) {
           showTimeout: _feedbackShowTimeout,
         });
 
-      return (): void => active.off(this.widgetRef, { selector, namespace });
+      return (): void => active.off(this.widgetRef.current, { selector, namespace });
     }
 
     return undefined;
@@ -220,8 +223,8 @@ export class Widget extends JSXComponent(WidgetProps) {
     const namespace = name;
 
     if (onClick && !disabled) {
-      dxClick.on(this.widgetRef, onClick, { namespace });
-      return (): void => dxClick.off(this.widgetRef, { namespace });
+      dxClick.on(this.widgetRef.current, onClick, { namespace });
+      return (): void => dxClick.off(this.widgetRef.current, { namespace });
     }
 
     return undefined;
@@ -229,7 +232,7 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Method()
   focus(): void {
-    focus.trigger(this.widgetRef);
+    focus.trigger(this.widgetRef.current);
   }
 
   @Effect()
@@ -241,7 +244,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const isFocusable = focusStateEnabled && !disabled;
 
     if (isFocusable) {
-      focus.on(this.widgetRef,
+      focus.on(this.widgetRef.current,
         (e: Event & { isDefaultPrevented: () => boolean }) => {
           if (!e.isDefaultPrevented()) {
             this.focused = true;
@@ -258,7 +261,7 @@ export class Widget extends JSXComponent(WidgetProps) {
           isFocusable: focusable,
           namespace,
         });
-      return (): void => focus.off(this.widgetRef, { namespace });
+      return (): void => focus.off(this.widgetRef.current, { namespace });
     }
 
     return undefined;
@@ -273,7 +276,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const selector = activeStateUnit;
     const isHoverable = hoverStateEnabled && !disabled;
     if (isHoverable) {
-      hover.on(this.widgetRef,
+      hover.on(this.widgetRef.current,
         () => {
           !this.active && (this.hovered = true);
           onHoverStart?.();
@@ -283,7 +286,7 @@ export class Widget extends JSXComponent(WidgetProps) {
           onHoverEnd?.();
         },
         { selector, namespace });
-      return (): void => hover.off(this.widgetRef, { selector, namespace });
+      return (): void => hover.off(this.widgetRef.current, { selector, namespace });
     }
 
     return undefined;
@@ -294,7 +297,11 @@ export class Widget extends JSXComponent(WidgetProps) {
     const { onKeyDown } = this.props;
 
     if (onKeyDown) {
-      const id = keyboard.on(this.widgetRef, this.widgetRef, (e: Event): void => onKeyDown(e));
+      const id = keyboard.on(
+        this.widgetRef.current,
+        this.widgetRef.current,
+        (e: Event): void => onKeyDown(e),
+      );
 
       return (): void => keyboard.off(id);
     }
@@ -308,8 +315,20 @@ export class Widget extends JSXComponent(WidgetProps) {
     const { onDimensionChanged } = this.props;
 
     if (onDimensionChanged) {
-      resize.on(this.widgetRef, onDimensionChanged, { namespace });
-      return (): void => resize.off(this.widgetRef, { namespace });
+      resize.on(this.widgetRef.current, onDimensionChanged, { namespace });
+      return (): void => resize.off(this.widgetRef.current, { namespace });
+    }
+
+    return undefined;
+  }
+
+  @Effect() windowResizeEffect(): EffectReturn {
+    const { onDimensionChanged } = this.props;
+
+    if (onDimensionChanged) {
+      resizeCallbacks.add(onDimensionChanged);
+
+      return (): void => { resizeCallbacks.remove(onDimensionChanged); };
     }
 
     return undefined;
@@ -321,12 +340,12 @@ export class Widget extends JSXComponent(WidgetProps) {
     const namespace = `${name}VisibilityChange`;
 
     if (onVisibilityChange) {
-      visibility.on(this.widgetRef,
+      visibility.on(this.widgetRef.current,
         (): void => onVisibilityChange(true),
         (): void => onVisibilityChange(false),
         { namespace });
 
-      return (): void => visibility.off(this.widgetRef, { namespace });
+      return (): void => visibility.off(this.widgetRef.current, { namespace });
     }
 
     return undefined;

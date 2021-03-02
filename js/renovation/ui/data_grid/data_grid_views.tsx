@@ -4,9 +4,9 @@ import {
 import { DataGridView } from './common/types';
 import { DataGridViewProps } from './common/data_grid_view_props';
 import { DataGridViewWrapper } from './data_grid_view_wrapper';
-import GridView from '../../../ui/grid_core/ui.grid_core.grid_view';
+import { gridViewModule } from '../../../ui/grid_core/ui.grid_core.grid_view';
 
-const { VIEW_NAMES } = GridView;
+const { VIEW_NAMES } = gridViewModule;
 
 const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
 
@@ -22,7 +22,7 @@ export const viewFunction = ({
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class DataGridViews extends JSXComponent<DataGridViewProps, 'instance'>() {
-  get views(): {name: string; view: DataGridView}[] {
+  get views(): { name: string; view: DataGridView }[] {
     const views = VIEW_NAMES.map(
       (viewName) => this.props.instance?.getView(viewName) as DataGridView,
     ).filter((view) => view);

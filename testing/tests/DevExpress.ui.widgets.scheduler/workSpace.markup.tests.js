@@ -448,23 +448,29 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
         assert.equal($element.find('.dx-scheduler-header-row th').length, 0, 'Date table has not header cell');
     });
 
-    QUnit.test('Scheduler workspace day grouped view should contain a few headers', function(assert) {
-        const $element = this.instance.$element();
+    [true, false].forEach((isRenovatedRender) => {
+        QUnit.test('Scheduler workspace day grouped view should contain a few headers', function(assert) {
+            const $element = this.instance.$element();
 
-        this.instance.option('groups', [
-            {
-                name: 'one',
-                items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-            },
-            {
-                name: 'two',
-                items: [{ id: 1, text: 'c' }, { id: 2, text: 'd' }]
-            }
-        ]);
+            this.instance.option('groups', [
+                {
+                    name: 'one',
+                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                },
+                {
+                    name: 'two',
+                    items: [{ id: 1, text: 'c' }, { id: 2, text: 'd' }]
+                }
+            ]);
+            this.instance.option('renovateRender', isRenovatedRender);
 
-        assert.equal($element.find('.dx-scheduler-header-row th').length, 0, 'Date table has not header cell');
-        assert.equal($element.find('.dx-scheduler-group-row').eq(0).find('th').attr('colspan'), '2', 'Group header has a right \'colspan\'');
-        assert.strictEqual($element.find('.dx-scheduler-group-row').eq(1).find('th').attr('colspan'), undefined, 'Group header has a right \'colspan\'');
+            const lowerHeaderColspan = this.instance.option('renovateRender')
+                ? '1' : undefined;
+
+            assert.equal($element.find('.dx-scheduler-header-row th').length, 0, 'Date table has not header cell');
+            assert.equal($element.find('.dx-scheduler-group-row').eq(0).find('th').attr('colspan'), '2', 'Group header has a right \'colspan\'');
+            assert.strictEqual($element.find('.dx-scheduler-group-row').eq(1).find('th').attr('colspan'), lowerHeaderColspan, 'Group header has a right \'colspan\'');
+        });
     });
 
     QUnit.test('Time panel should have 24 rows and 24 cells', function(assert) {

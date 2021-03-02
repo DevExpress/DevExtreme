@@ -331,7 +331,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             this._$dateTable,
             dxrMonthDateTableLayout,
             'renovatedDateTable',
-            { viewData: this.viewDataProvider.viewData, dataCellTemplate: this.option('dataCellTemplate') }
+            this._getRDateTableProps(),
         );
     }
 

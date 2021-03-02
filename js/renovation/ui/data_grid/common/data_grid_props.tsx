@@ -9,7 +9,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import DxDataGrid from '../../../../ui/data_grid';
 import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../../../ui/data_grid';
-import BaseWidgetProps from '../../../utils/base_props';
+import { BaseWidgetProps } from '../../../utils/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../ui/filter_builder';
 import type { dxElement } from '../../../../core/element';
@@ -169,7 +169,7 @@ export class DataGridColumn {
     filterValue: any,
     selectedFilterOperation: string,
     target: string,
-  ) => string | any[] | Function;
+  ) => string | any[] | ((...args: any[]) => any);
 
   @Event()
   calculateSortValue?: string | ((rowData: any) => any);
@@ -356,7 +356,7 @@ export class DataGridColumn {
       column?: dxDataGridColumn;
       row?: dxDataGridRowObject;
       rowType?: string;
-      watch?: Function;
+      watch?: ((...args: any[]) => any);
     },
   ) => any);
 
@@ -380,7 +380,7 @@ export class DataGridColumn {
       column?: dxDataGridColumn;
       row?: dxDataGridRowObject;
       rowType?: string;
-      watch?: Function;
+      watch?: ((...args: any[]) => any);
     },
   ) => any);
 
@@ -752,7 +752,7 @@ export class DataGridMasterDetail {
     detailInfo: {
       key?: any;
       data?: any;
-      watch?: Function;
+      watch?: ((...args: any[]) => any);
     },
   ) => any);
 }
@@ -1302,7 +1302,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() wordWrapEnabled?: boolean;
 
-  @TwoWay() filterValue: string | any[] | Function | null = null;
+  @TwoWay() filterValue: string | any[] | ((...args: any[]) => any) | null = null;
 
   @TwoWay() focusedColumnIndex = -1;
 
@@ -1312,7 +1312,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @TwoWay() selectedRowKeys: any[] = [];
 
-  @TwoWay() selectionFilter: string | any[] | Function = [];
+  @TwoWay() selectionFilter: string | any[] | ((...args: any[]) => any) = [];
 
   @Event() onCellClick?:
   | string
@@ -1389,7 +1389,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     isExpanded?: boolean;
     isNewRow?: boolean;
     cellElement?: dxElement;
-    watch?: Function;
+    watch?: ((...args: any[]) => any);
     oldValue?: any;
   }) => any;
 

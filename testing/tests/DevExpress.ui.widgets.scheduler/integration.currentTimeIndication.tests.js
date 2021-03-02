@@ -1,7 +1,6 @@
 import { createWrapper, initTestMarkup, CLASSES } from '../../helpers/scheduler/helpers.js';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
