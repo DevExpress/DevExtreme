@@ -48,7 +48,9 @@ const HtmlEditor = Editor.inherit({
             mentions: null,
             customizeModules: null,
 
-            formDialogOptions: null
+            formDialogOptions: null,
+
+            stylingMode: 'outlined'
         });
     },
 
@@ -107,6 +109,8 @@ const HtmlEditor = Editor.inherit({
         this.$element()
             .addClass(HTML_EDITOR_CLASS)
             .wrapInner(this._$htmlContainer);
+
+        this._renderStylingMode();
 
         const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
         const transclude = true;
@@ -400,6 +404,10 @@ const HtmlEditor = Editor.inherit({
         this._formDialog = new FormDialog(this, userOptions);
     },
 
+    _getStylingModePrefix: function() {
+        return 'dx-htmleditor-';
+    },
+
     _getQuillContainer: function() {
         return this._$htmlContainer;
     },
@@ -440,6 +448,9 @@ const HtmlEditor = Editor.inherit({
                 }
                 break;
             }
+            case 'stylingMode':
+                this._renderStylingMode();
+                break;
             case 'readOnly':
             case 'disabled':
                 this.callBase(args);
