@@ -1471,22 +1471,20 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _repaintEditCell: function(column, oldColumn, oldEditRowIndex) {
-            const that = this;
-
             this._needFocusEditor = true;
             if(!column || !column.showEditorAlways || oldColumn && !oldColumn.showEditorAlways) {
-                that._editCellInProgress = true;
+                this._editCellInProgress = true;
 
                 // T316439
-                that.getController('editorFactory').loseFocus();
+                this.getController('editorFactory').loseFocus();
 
-                that._dataController.updateItems({
+                this._dataController.updateItems({
                     changeType: 'update',
-                    rowIndices: [oldEditRowIndex, that._getVisibleEditRowIndex()]
+                    rowIndices: [oldEditRowIndex, this._getVisibleEditRowIndex()]
                 });
-            } else {
+            } else if(column !== oldColumn) {
                 // TODO check this necessity T816039
-                that._dataController.updateItems({
+                this._dataController.updateItems({
                     changeType: 'update',
                     rowIndices: []
                 });
