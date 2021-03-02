@@ -316,7 +316,7 @@ var FrameAnimationStrategy = {
     _parseTransform: function(transformString) {
         var result = {};
 
-        iteratorUtils.each(transformString.match(/(\w|\d)+\([^)]*\)\s*/g), function(i, part) {
+        iteratorUtils.each(transformString.match(/\w+\d*\w*\([^)]*\)\s*/g), function(i, part) {
             var translateData = translator.parseTranslate(part),
                 scaleData = part.match(/scale\((.+?)\)/),
                 rotateData = part.match(/(rotate.)\((.+)deg\)/);
