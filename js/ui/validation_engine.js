@@ -352,7 +352,7 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
             extend({},
                 rule,
                 {
-                    pattern: /^[\d\w\._\-]+@([\d\w\._\-]+\.)+[\w]+$/i
+                    pattern: /^[\d\w._-]+@[\d\w._-]+\.[\w]+$/i
                 }));
     }
 });
