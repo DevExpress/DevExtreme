@@ -81,15 +81,11 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
       &.dx-state-focused,
       &.dx-state-active {
         background-color: color.change($texteditor-filled-bg, $alpha: 0.03);
-
-        &.dx-state-hover {
-          background-color: color.change($texteditor-hover-border-color, $alpha: 0.07);
-        }
       }
     }
 
     &.dx-state-hover,
-    &.dx-state-hover.dx-invalid.dx-state-readonly {
+    &.dx-state-hover.dx-invalid.dx-state-readonly:not(.dx-state-focused) {
       background-color: color.change($texteditor-hover-border-color, $alpha: 0.07);
     }
 
