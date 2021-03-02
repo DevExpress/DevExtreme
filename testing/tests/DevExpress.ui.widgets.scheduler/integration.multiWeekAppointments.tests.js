@@ -21,10 +21,15 @@ require('ui/scheduler/ui.scheduler');
 
 const mockWorkSpaceRendering = function(schedulerInst, cellSize, bounds) {
     const base = schedulerInst._renderWorkSpace;
+    const getMaxAllowedPosition = (groupIndex) => {
+        return bounds[groupIndex];
+    };
+
     sinon.stub(schedulerInst, '_renderWorkSpace', function(groups) {
         base.call(this, groups);
+
         sinon.stub(this._workSpace, 'getCellWidth').returns(cellSize);
-        sinon.stub(this._workSpace, 'getMaxAllowedPosition').returns(bounds);
+        sinon.stub(this._workSpace, 'getMaxAllowedPosition', getMaxAllowedPosition);
     });
 };
 
@@ -565,8 +570,8 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
 
 });
 
-[true, false].forEach(() => {
-    QUnit.test('Grouped multi-week appointments should have a correct left offset in rtl mode', function(assert) {
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`Grouped multi-week appointments should have a correct left offset in rtl mode when renovateRender is ${renovateRender}`, function(assert) {
 
         this.createInstance({ width: 1052 });
 
@@ -591,7 +596,8 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
                     ]
                 }
             ],
-            groups: ['roomId']
+            groups: ['roomId'],
+            renovateRender,
         });
 
         this.instance.option('dataSource', [{
