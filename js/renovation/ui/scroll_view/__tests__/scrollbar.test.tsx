@@ -131,16 +131,6 @@ describe('TopPocket', () => {
     });
   });
 
-  describe('windowResizeHandler', () => {
-    it('should set windowSizeChanged flag value on window resize', () => {
-      const viewModel = new Scrollbar({});
-
-      viewModel.windowResizeHandler();
-
-      expect(viewModel.windowSizeChanged).toBe(true);
-    });
-  });
-
   describe('Effects', () => {
     beforeEach(clearEventHandlers);
 

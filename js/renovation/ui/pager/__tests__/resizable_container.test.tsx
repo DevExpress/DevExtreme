@@ -25,12 +25,12 @@ describe('resizable-container', () => {
     width, pageSizes, info, pages,
   }) {
     const parentHtmlEl = { current: getFakeHtml(width) } as RefObject<HTMLDivElement>;
-    const pageSizesHtmlEl = pageSizes
-      ? { current: getFakeHtml(pageSizes) } as RefObject<HTMLDivElement>
-      : undefined;
-    const infoHtmlEl = info
-      ? { current: getFakeHtml(info) } as RefObject<HTMLDivElement>
-      : undefined;
+    const pageSizesHtmlEl = {
+      current: pageSizes ? getFakeHtml(pageSizes) : undefined,
+    } as RefObject<HTMLDivElement>;
+    const infoHtmlEl = {
+      current: info ? getFakeHtml(info) : undefined,
+    } as RefObject<HTMLDivElement>;
     const pagesHtmlEl = { current: getFakeHtml(pages) } as RefObject<HTMLDivElement>;
     return {
       parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,

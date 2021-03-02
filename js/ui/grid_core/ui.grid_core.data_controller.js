@@ -12,7 +12,7 @@ import DataHelperMixin from '../../data_helper';
 import { when, Deferred } from '../../core/utils/deferred';
 import { findChanges } from '../../core/utils/array_compare';
 
-export default {
+export const dataControllerModule = {
     defaultOptions: function() {
         return {
             loadingTimeout: 0,
@@ -1080,14 +1080,14 @@ export default {
                     }
                     return d;
                 },
-                getKeyByRowIndex: function(rowIndex) {
-                    const item = this.items()[rowIndex];
+                getKeyByRowIndex: function(rowIndex, byLoaded) {
+                    const item = this.items(byLoaded)[rowIndex];
                     if(item) {
                         return item.key;
                     }
                 },
-                getRowIndexByKey: function(key) {
-                    return gridCoreUtils.getIndexByKey(key, this.items());
+                getRowIndexByKey: function(key, byLoaded) {
+                    return gridCoreUtils.getIndexByKey(key, this.items(byLoaded));
                 },
                 keyOf: function(data) {
                     const store = this.store();

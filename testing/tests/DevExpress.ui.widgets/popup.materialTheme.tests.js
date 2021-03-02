@@ -3,7 +3,6 @@ import fx from 'animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-import 'common.css!';
 import 'material_blue_light.css!';
 
 import 'ui/popup';

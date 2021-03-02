@@ -3,7 +3,7 @@ import { beforeCleanData } from './element_data';
 import eventsEngine from '../events/core/events_engine';
 import registerEvent from '../events/core/event_registrator';
 
-const eventName = 'dxremove';
+export const removeEvent = 'dxremove';
 const eventPropName = 'dxRemoveEvent';
 
 /**
@@ -19,16 +19,14 @@ beforeCleanData(function(elements) {
         const $element = $(elements[i]);
         if($element.prop(eventPropName)) {
             $element[0][eventPropName] = null;
-            eventsEngine.triggerHandler($element, eventName);
+            eventsEngine.triggerHandler($element, removeEvent);
         }
     }
 });
 
-registerEvent(eventName, {
+registerEvent(removeEvent, {
     noBubble: true,
     setup: function(element) {
         $(element).prop(eventPropName, true);
     }
 });
-
-export default eventName;

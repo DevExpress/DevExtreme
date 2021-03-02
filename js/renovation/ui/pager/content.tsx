@@ -10,7 +10,7 @@ import { PageSizeSelector } from './page_size/selector';
 import {
   PAGER_PAGES_CLASS, PAGER_PAGE_INDEXIES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS,
 } from './common/consts';
-import PagerProps, { DisplayMode } from './common/pager_props';
+import { PagerProps, DisplayMode } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -19,7 +19,6 @@ import { EventCallback } from '../common/event_callback.d';
 import { KeyboardActionContext, KeyboardActionContextType } from './common/keyboard_action_context';
 import noop from '../../utils/noop';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   widgetRootElementRef,
   classes,
@@ -37,7 +36,7 @@ export const viewFunction = ({
     visible,
   },
   restAttributes,
-}: PagerContent) => (
+}: PagerContent): JSX.Element => (
   <Widget
     rootElementRef={widgetRootElementRef}
     rtlEnabled={rtlEnabled}

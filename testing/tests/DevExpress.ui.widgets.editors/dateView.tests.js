@@ -1,6 +1,5 @@
 import fx from 'animation/fx';
 import translator from 'animation/translator';
-import 'common.css!';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
 import { triggerShownEvent } from 'events/visibility_change';

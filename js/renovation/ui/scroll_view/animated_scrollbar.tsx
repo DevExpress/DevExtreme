@@ -168,7 +168,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   get acceleration(): number {
-    if (!isDefined(this.scrollbarRef)) {
+    if (!isDefined(this.scrollbarRef?.current)) {
       return 0;
     }
 
@@ -200,7 +200,13 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   inBounds(): boolean {
-    return this.scrollbarRef.current!.inBounds();
+    const scrollbar = this.scrollbarRef.current;
+
+    if (!isDefined(scrollbar)) {
+      return false;
+    }
+
+    return scrollbar.inBounds();
   }
 
   getMaxOffset(): number {
@@ -215,10 +221,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     return this.scrollbarRef.current!.move(location);
   }
 
-  getLocation(): number {
-    return this.scrollbarRef.current!.getLocation();
-  }
-
   stopComplete(): void {
     return this.scrollbarRef.current!.stopComplete();
   }
@@ -227,8 +229,18 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     return this.scrollbarRef.current!.scrollComplete();
   }
 
+  getLocation(): number {
+    return this.scrollbarRef.current!.getLocation();
+  }
+
+  @Method()
   boundLocation(value?: number): number {
     return this.scrollbarRef.current!.boundLocation(value);
+  }
+
+  @Method()
+  getScrollLocation(): number {
+    return this.scrollbarRef.current!.getScrollLocation();
   }
 
   @Method()
@@ -237,13 +249,23 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  validateEvent(event): boolean {
-    return this.scrollbarRef.current!.validateEvent(event);
+  validateEvent(e): boolean {
+    return this.scrollbarRef.current!.validateEvent(e);
   }
 
   @Method()
   isThumb(element: HTMLDivElement): boolean {
     return this.scrollbarRef.current!.isThumb(element);
+  }
+
+  @Method()
+  reachedMin(): boolean {
+    return this.scrollbarRef.current!.reachedMin();
+  }
+
+  @Method()
+  reachedMax(): boolean {
+    return this.scrollbarRef.current!.reachedMax();
   }
 
   @Method()
@@ -257,12 +279,12 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  moveHandler(delta: any): void {
+  moveHandler(delta: { x: number; y: number }): void {
     this.scrollbarRef.current!.moveHandler(delta);
   }
 
   @Method()
-  endHandler(velocity): void {
+  endHandler(velocity: { x: number; y: number }): void {
     this.scrollbarRef.current!.endHandler(velocity);
   }
 

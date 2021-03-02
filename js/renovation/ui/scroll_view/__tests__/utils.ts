@@ -1,6 +1,3 @@
-import React from 'react';
-import { mount } from 'enzyme';
-
 import {
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
@@ -8,14 +5,11 @@ import {
 import {
   ScrollableLocation,
   ScrollableDirection,
+  ScrollableBoundary,
 } from '../types.d';
-
-import { Scrollbar } from '../scrollbar';
 
 import {
   SCROLLABLE_CONTENT_CLASS,
-  DIRECTION_HORIZONTAL,
-  DIRECTION_VERTICAL,
 } from '../scrollable_utils';
 
 export function createElement({
@@ -25,7 +19,7 @@ export function createElement({
   offsetParent = {},
   className = '',
   isInScrollableContent = false,
-}): HTMLElement {
+}: { [key: string]: any }): HTMLElement {
   const checkSelector = (selector: string): boolean => className.indexOf(selector.replace('.', '')) > -1;
   return {
     offsetHeight: height,
@@ -65,10 +59,10 @@ export function createContainerRef(
   }) as RefObject<HTMLDivElement>;
 }
 
-export function normalizeRtl(isRtlEnabled: boolean, coordinate: number) {
-  return (isRtlEnabled
+export function normalizeRtl(isRtlEnabled: boolean, coordinate: number): number {
+  return isRtlEnabled
     ? -1 * coordinate
-    : coordinate) as number;
+    : coordinate;
 }
 
 export function calculateRtlScrollLeft(container: HTMLElement, coordinate: number): number {
@@ -76,7 +70,7 @@ export function calculateRtlScrollLeft(container: HTMLElement, coordinate: numbe
   return normalizeRtl(true, scrollLeft) as number;
 }
 
-export function createTargetElement(args): HTMLElement {
+export function createTargetElement(args: { [key: string]: any }): HTMLElement {
   const scrollableContent = createElement({
     location: { },
     className: SCROLLABLE_CONTENT_CLASS,
@@ -87,7 +81,11 @@ export function createTargetElement(args): HTMLElement {
   });
 }
 
-export function checkScrollParams({ direction, actual, expected }) {
+export function checkScrollParams({ direction, actual, expected }:
+{ direction: ScrollableDirection;
+  actual: ScrollableBoundary;
+  expected: Partial<ScrollableBoundary>;
+}): void {
   const expectedParams = expected;
 
   if (direction === 'vertical') {
@@ -99,55 +97,4 @@ export function checkScrollParams({ direction, actual, expected }) {
   }
 
   expect(actual).toMatchObject(expectedParams);
-}
-
-export function initRefs(model, viewFunction, {
-  strategy, direction, contentSize, containerSize,
-}) {
-  const viewModel = model as any;
-
-  viewModel.containerRef = React.createRef();
-  viewModel.contentRef = React.createRef();
-  viewModel.verticalScrollbarRef = React.createRef();
-  viewModel.horizontalScrollbarRef = React.createRef();
-
-  const scrollable = mount(viewFunction(model as any) as JSX.Element);
-
-  if (strategy === 'simulated') {
-    const scrollbar = scrollable.find(Scrollbar);
-    if (direction === DIRECTION_VERTICAL) {
-      viewModel.verticalScrollbarRef.current = scrollbar.instance();
-      Object.assign(viewModel.verticalScrollbarRef.current,
-        { props: { contentSize, containerSize } });
-    } else if (direction === DIRECTION_HORIZONTAL) {
-      viewModel.horizontalScrollbarRef.current = scrollbar.instance();
-      Object.assign(viewModel.horizontalScrollbarRef.current,
-        { props: { contentSize, containerSize } });
-    } else {
-      viewModel.horizontalScrollbarRef.current = scrollbar.at(0).instance();
-      Object.assign(viewModel.horizontalScrollbarRef.current,
-        { props: { contentSize, containerSize } });
-      viewModel.verticalScrollbarRef.current = scrollbar.at(1).instance();
-      Object.assign(viewModel.verticalScrollbarRef.current,
-        { props: { contentSize, containerSize } });
-    }
-  }
-}
-
-export function initStyles({ element: receivedElement, size, overflow }) {
-  const element = receivedElement;
-
-  ['width', 'height', 'outerWidth', 'outerHeight', 'scrollWidth', 'scrollHeight'].forEach((prop) => {
-    element.style[prop] = `${size}px`;
-  });
-
-  ['overflowX', 'overflowY'].forEach((prop) => {
-    element.style[prop] = overflow;
-  });
-  element.getBoundingClientRect = jest.fn(() => ({
-    width: size,
-    height: size,
-  }));
-
-  return element;
 }

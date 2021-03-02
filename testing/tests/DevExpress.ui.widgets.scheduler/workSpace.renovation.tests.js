@@ -1,4 +1,3 @@
-import 'common.css!';
 import { noop } from 'core/utils/common';
 import 'generic_light.css!';
 import $ from 'jquery';

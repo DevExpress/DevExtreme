@@ -9,7 +9,6 @@ const SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-b
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const SCHEDULER_DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_day';

@@ -32,12 +32,17 @@ describe('DayDateTableLayout', () => {
     });
 
     it('should pass correct props to base layout', () => {
-      const layout = render({});
+      const layout = render({
+        props: {
+          addDateTableClass: 'addDateTableClass',
+        },
+      });
 
       expect(layout.props())
         .toMatchObject({
           viewData,
           cellTemplate: DateTableCellBase,
+          addDateTableClass: 'addDateTableClass',
         });
     });
   });

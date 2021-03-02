@@ -1,5 +1,5 @@
 import queryAdapters from './query_adapters';
-import errorsModule from './errors';
+import { errors, handleError } from './errors';
 import { each } from '../core/utils/iterator';
 import { isFunction } from '../core/utils/type';
 import { Deferred } from '../core/utils/deferred';
@@ -27,7 +27,7 @@ const remoteQueryImpl = function(url, queryOptions, tasks) {
                 handler(error);
             }
 
-            errorsModule._errorHandler(error);
+            handleError(error);
             d.reject(error);
         };
 
@@ -39,7 +39,7 @@ const remoteQueryImpl = function(url, queryOptions, tasks) {
 
                 case 'thenBy':
                     if(!_mergedSortArgs) {
-                        throw errorsModule.errors.Error('E4004');
+                        throw errors.Error('E4004');
                     }
 
                     _mergedSortArgs.push(task.args);

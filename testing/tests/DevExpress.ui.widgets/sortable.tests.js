@@ -8,7 +8,6 @@ import translator from 'animation/translator';
 import viewPort from 'core/utils/view_port';
 import devices from 'core/devices';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -3615,7 +3614,13 @@ QUnit.module('Check bounds for container with padding', crossComponentModuleConf
         const $sourceElement = $('#scroll .draggable').eq(0);
         const startPosition = { x: $sourceElement.offset().left, y: $sourceElement.offset().top };
         pointerMock($sourceElement).start(startPosition).down().move(0, 100).move(-1, 10).up();
+        // assert
         assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+
+        // act
+        pointerMock($sourceElement).start(startPosition).down().move(0, 100).move(0, 10).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
     });
     QUnit.test('after right', function(assert) {
         const onReorderSpy = sinon.spy();
@@ -3631,7 +3636,13 @@ QUnit.module('Check bounds for container with padding', crossComponentModuleConf
         const $sourceElement = $('#scroll .draggable').eq(0);
         const startPosition = { x: $sourceElement.offset().left, y: $sourceElement.offset().top };
         pointerMock($sourceElement).start(startPosition).down().move(0, 100).move($sourceElement.width() + 1, 10).up();
+        // assert
         assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+
+        // act
+        pointerMock($sourceElement).start(startPosition).down().move(0, 100).move($sourceElement.width(), 10).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
     });
     QUnit.test('above top', function(assert) {
         // arrange
@@ -3648,8 +3659,14 @@ QUnit.module('Check bounds for container with padding', crossComponentModuleConf
         // act
         const $sourceElement = $('#scroll .draggable').eq(1);
         const startPosition = { x: 50, y: 50 };
-        pointerMock($sourceElement).start(startPosition).down().move(50, 0).move(10, -(50 + 1)).up();
+        pointerMock($sourceElement).start(startPosition).down().move(50, 0).move(10, -1).up();
+        // assert
         assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+
+        // act
+        pointerMock($sourceElement).start(startPosition).down().move(50, 0).move(10, 0).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
     });
     QUnit.test('under bottom', function(assert) {
         // arrange
@@ -3669,6 +3686,11 @@ QUnit.module('Check bounds for container with padding', crossComponentModuleConf
 
         // assert
         assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+
+        // act
+        pointerMock($firstElement).start({ x: 50, y: 0 }).down().move(50, 0).move(10, 500 + 50).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
     });
 
 });

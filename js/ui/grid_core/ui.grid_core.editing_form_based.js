@@ -42,7 +42,7 @@ const forEachFormItems = (items, callBack) => {
     });
 };
 
-export default {
+export const editingFormBasedModule = {
     extenders: {
         controllers: {
             editing: {

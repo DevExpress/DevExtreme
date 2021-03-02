@@ -12,7 +12,6 @@ import 'ui/tab_panel';
 import 'ui/text_box';
 import 'ui/tree_view';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import dxDrawer from 'ui/drawer';

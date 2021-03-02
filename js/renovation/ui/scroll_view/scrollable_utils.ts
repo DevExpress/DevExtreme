@@ -1,16 +1,17 @@
 import {
-  isNumeric, isDefined, isPlainObject, isWindow,
+  isNumeric, isDefined, isPlainObject,
 } from '../../../core/utils/type';
 import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
 import { camelize } from '../../../core/utils/inflector';
 import getElementComputedStyle from '../../utils/get_computed_style';
+
 import { toNumber } from '../../utils/type_conversion';
 import { ensureDefined } from '../../../core/utils/common';
 
 import {
   ScrollableLocation,
   ScrollOffset, ScrollableBoundary, ScrollableDirection,
-  allowedDirection,
+  AllowedDirection,
 } from './types.d';
 
 export const SCROLL_LINE_HEIGHT = 40;
@@ -40,36 +41,10 @@ export function getElementHeight(element: Element | undefined): number {
 }
 
 export function getElementStyle(
-  name: keyof CSSStyleDeclaration, element?: Element,
+  name: keyof CSSStyleDeclaration, element: Element | null,
 ): number | string {
   const computedStyle = getElementComputedStyle(element) || {};
   return computedStyle[name];
-}
-
-export function getWindowByElement(element: Element): Element {
-  return isWindow(element) ? element : (element as any).defaultView;
-}
-
-export function getElementOffset(
-  element?: Element,
-): { left: number; top: number } {
-  if (!element) return { left: 0, top: 0 };
-
-  if (!element.getClientRects().length) {
-    return {
-      top: 0,
-      left: 0,
-    };
-  }
-
-  const rect = element.getBoundingClientRect();
-  const window = getWindowByElement((element as any).ownerDocument);
-  const docElem = element.ownerDocument.documentElement;
-
-  return {
-    top: rect.top + (window as any).pageYOffset - docElem.clientTop,
-    left: rect.left + (window as any).pageXOffset - docElem.clientLeft,
-  };
 }
 
 export function ensureLocation(
@@ -129,7 +104,6 @@ export function getBoundaryProps(
   direction: ScrollableDirection,
   scrollOffset: ScrollableLocation,
   element: HTMLDivElement,
-  pushBackValue = 0,
 ): Partial<ScrollableBoundary> {
   const { left, top } = scrollOffset;
   const boundaryProps: Partial<ScrollableBoundary> = {};
@@ -141,7 +115,7 @@ export function getBoundaryProps(
   }
   if (isVertical) {
     boundaryProps.reachedTop = top <= 0;
-    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element) - 2 * pushBackValue;
+    boundaryProps.reachedBottom = top >= getMaxScrollOffset('height', element);
   }
   return boundaryProps;
 }
@@ -212,7 +186,7 @@ function getElementLocationInternal(
   const containerSize = containerRef[`offset${dimension}`];
   const elementOffset = element[`offset${dimension}`];
   const offsetStart = offset[prop];
-  const offsetEnd = offset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'];
+  const offsetEnd = offset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'] || 0;
 
   const containerLocation = normalizeCoordinate(
     prop,
@@ -254,7 +228,7 @@ export function getElementLocation(
 }
 
 export function updateAllowedDirection(
-  allowedDirections: allowedDirection, direction: ScrollableDirection,
+  allowedDirections: AllowedDirection, direction: ScrollableDirection,
 ): string | undefined {
   const { isVertical, isHorizontal, isBoth } = new ScrollDirection(direction);
 

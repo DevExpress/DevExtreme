@@ -4,7 +4,6 @@ import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
 import hoverEvents from 'events/hover';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';

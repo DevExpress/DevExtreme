@@ -13,7 +13,8 @@ import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
-import DataGridBaseComponent from '../../preact_wrapper/data_grid';
+import DataGridBaseComponent from '../../component_wrapper/data_grid';
+import { DisposeEffectReturn } from '../../utils/effect_return';
 
 const aria = { role: 'presentation' };
 
@@ -34,7 +35,7 @@ export const viewFunction = ({
     width,
   },
   restAttributes,
-}: DataGrid) => (
+}: DataGrid): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
     accessKey={accessKey}
     activeStateEnabled={activeStateEnabled}
@@ -413,17 +414,16 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   // #endregion
 
   // It's impossible to define constructor use lazy creation instead
-  get instance() {
+  get instance(): GridInstance {
     if (!this.componentInstance) {
-      this.componentInstance = this.init();
+      this.componentInstance = this.createInstance();
     }
     return this.componentInstance;
   }
 
-  @Effect() updateOptions() {
+  @Effect() updateOptions(): void {
     if (this.instance && this.prevProps) {
-      const currentProps = this.props;
-      const updatedOptions = getUpdatedOptions(this.prevProps, currentProps);
+      const updatedOptions = getUpdatedOptions(this.prevProps, this.props);
       this.instance.beginUpdate();
       updatedOptions.forEach(({ path, value }) => this.instance.option(path, value));
       this.instance.endUpdate();
@@ -432,7 +432,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Effect({ run: 'once' })
-  dispose() {
+  dispose(): DisposeEffectReturn {
     return () => { this.instance.dispose(); };
   }
 
@@ -455,8 +455,8 @@ export class DataGrid extends JSXComponent(DataGridProps) {
     return result;
   }
 
-  init() {
-    const instance: any = new DataGridComponent(this.normalizeProps());
+  createInstance(): GridInstance {
+    const instance: unknown = new DataGridComponent(this.normalizeProps());
 
     return instance as GridInstance;
   }

@@ -24,7 +24,7 @@ import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
 import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
-import BaseWidgetProps from '../../utils/base_props';
+import { BaseWidgetProps } from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { ConfigProvider } from '../../common/config_provider';

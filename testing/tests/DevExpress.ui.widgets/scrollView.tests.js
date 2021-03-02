@@ -9,7 +9,6 @@ import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scroll_view';
 
@@ -137,7 +136,7 @@ QUnit.module('render', moduleConfig, () => {
         const $scrollView = $('#scrollView');
 
         $scrollView.height('auto');
-        $scrollView.dxScrollView({ useNative: false, pushBackValue: 0 });
+        $scrollView.dxScrollView({ useNative: false });
 
         const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
 
@@ -409,7 +408,6 @@ QUnit.module('actions', moduleConfig, () => {
     QUnit.test('disabled scrollview should not be updated on pointerdown after finish loading', function(assert) {
         let count = 0;
         const $scrollView = $('#scrollView').dxScrollView({
-            pushBackValue: 1,
             onUpdated: function() {
                 count++;
             },
@@ -870,34 +868,6 @@ QUnit.module('dynamic', moduleConfig, () => {
             .up();
 
         assert.equal(isLoadPanelVisible, false, 'load panel is invisible during pull down');
-    });
-
-    QUnit.test('scrollview content should not blink in bounce on iOS', function(assert) {
-        const $scrollView = $('#scrollView').dxScrollView({
-            useNative: true,
-            refreshStrategy: 'pullDown'
-        });
-        const instance = $scrollView.dxScrollView('instance');
-        const $wrapper = $scrollView.find('.' + SCROLLABLE_WRAPPER_CLASS);
-        let onStart = false;
-        let onEnd = false;
-
-        $wrapper
-            .on('dxscrollstart', function() {
-                onStart = instance._strategy._disablePushBack;
-            })
-            .on('dxscrollend', function() {
-                onEnd = instance._strategy._disablePushBack;
-            });
-
-        pointerMock($('.content1'))
-            .start()
-            .down()
-            .move(0, 10)
-            .up();
-
-        assert.ok(onStart, 'constant _disablePushBack is true on scroll start');
-        assert.ok(!onEnd, 'constant _disablePushBack is false on scroll end');
     });
 });
 
@@ -1521,34 +1491,6 @@ QUnit.module('native pullDown strategy', {
         const topPocketSize = $topPocket.height();
 
         assert.equal(containerOffset, topPocketOffset + topPocketSize, 'pull down element located above content');
-    });
-
-    QUnit.test('scrollTop should be greater than 0 on init for prevent WebView bounce', function(assert) {
-        const scrollView = $('#scrollView').dxScrollView({
-            useNative: true,
-            refreshStrategy: 'pullDown'
-        }).dxScrollView('instance');
-
-        const $container = $(scrollView.$element().find('.' + SCROLLABLE_CONTAINER_CLASS));
-
-        assert.equal($container.scrollTop(), 1, 'real scrollTop is greater than 0');
-    });
-
-    QUnit.test('scrollTop should be greater than 0 after scroll event for prevent WebView bounce', function(assert) {
-        const scrollView = $('#scrollView').dxScrollView({
-            useNative: true,
-            refreshStrategy: 'pullDown'
-        }).dxScrollView('instance');
-
-        const $container = $(scrollView.$element().find('.' + SCROLLABLE_CONTAINER_CLASS));
-
-        scrollView.scrollTo({ y: 10 });
-        $($container).trigger('scroll');
-        assert.equal($container.scrollTop(), 11, 'container was scrolled');
-
-        scrollView.scrollTo({ y: 0 });
-        $($container).trigger('scroll');
-        assert.equal($container.scrollTop(), 1, 'scrollTop is greater than 0');
     });
 
     QUnit.test('scrollTop method should have correct position on init', function(assert) {

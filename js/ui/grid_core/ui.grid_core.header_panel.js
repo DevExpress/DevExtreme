@@ -130,7 +130,7 @@ const HeaderPanel = ColumnsView.inherit({
     allowDragging: noop
 });
 
-export default {
+export const headerPanelModule = {
     defaultOptions: function() {
         return {
         };

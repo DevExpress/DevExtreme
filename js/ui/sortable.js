@@ -41,12 +41,13 @@ const stopAnimation = (element) => {
 
 function getScrollableBoundary($scrollable) {
     const offset = $scrollable.offset();
-    // use getComputedStyle, because vertical scrollbar reduces content width
-    const style = window.getComputedStyle($scrollable[0]);
+    const style = $scrollable[0].style;
     const paddingLeft = parseFloat(style.paddingLeft) || 0;
+    const paddingRight = parseFloat(style.paddingRight) || 0;
     const paddingTop = parseFloat(style.paddingTop) || 0;
-    const width = parseFloat(style.width) || 0;
-    const height = parseFloat(style.height) || 0;
+    // use clientWidth, because vertical scrollbar reduces content width
+    const width = $scrollable[0].clientWidth - (paddingLeft + paddingRight);
+    const height = $scrollable.height();
     const left = offset.left + paddingLeft;
     const top = offset.top + paddingTop;
     return {
@@ -256,8 +257,8 @@ const Sortable = Draggable.inherit({
 
         if($scrollable) {
             const { left, right, top, bottom } = getScrollableBoundary($scrollable);
-            const validX = left < event.pageX && event.pageX < right;
-            const validY = top < event.pageY && event.pageY < bottom;
+            const validX = left <= event.pageX && event.pageX <= right;
+            const validY = top <= event.pageY && event.pageY <= bottom;
             return validY && validX;
         }
 

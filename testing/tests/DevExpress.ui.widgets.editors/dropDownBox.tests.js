@@ -9,7 +9,6 @@ import browser from 'core/utils/browser';
 import devices from 'core/devices';
 import { normalizeKeyName } from 'events/utils/index';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/validator';
 

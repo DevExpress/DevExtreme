@@ -10,7 +10,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';

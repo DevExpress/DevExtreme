@@ -1,4 +1,3 @@
-import 'common.css!';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'generic_light.css!';
 import $ from 'jquery';
@@ -101,6 +100,10 @@ module('Work Space Month', () => {
         });
 
         test('Each cell should contain jQuery dxCellData depend on start day hour', function(assert) {
+            if(this.instance.option('renovateRender')) {
+                assert.ok(true, 'This test is not for renovated render');
+                return;
+            }
 
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
@@ -119,6 +122,11 @@ module('Work Space Month', () => {
         });
 
         test('Each cell should contain jQuery dxCellData depend on end day hour', function(assert) {
+            if(this.instance.option('renovateRender')) {
+                assert.ok(true, 'This test is not for renovated render');
+                return;
+            }
+
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
@@ -136,6 +144,11 @@ module('Work Space Month', () => {
         });
 
         test('Each cell should contain jQuery dxCellData depend on fractional hoursInterval', function(assert) {
+            if(this.instance.option('renovateRender')) {
+                assert.ok(true, 'This test is not for renovated render');
+                return;
+            }
+
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
@@ -211,6 +224,11 @@ module('Work Space Month', () => {
         });
 
         test('Get cell count to last view dates', function(assert) {
+            if(this.instance.option('renovateRender')) {
+                assert.ok(true, 'This test is not for renovated render');
+                return;
+            }
+
             const origGetFirstViewDate = this.instance.getStartViewDate;
 
             this.instance.getStartViewDate = function() {
@@ -237,6 +255,11 @@ module('Work Space Month', () => {
         });
 
         test('Cells have right cellData in horizontal grouped WorkSpace Month view', function(assert) {
+            if(this.instance.option('renovateRender')) {
+                assert.ok(true, 'This test is not for renovated render');
+                return;
+            }
+
             this.instance.option({
                 currentDate: new Date(2018, 2, 1),
                 groupOrientation: 'vertical',
@@ -348,6 +371,11 @@ module('Work Space Month', () => {
                 startDate: new Date(2017, 0, 15)
             });
 
+            if(this.instance.option('renovateRender')) {
+                assert.ok(true, 'This test is not for renovated render');
+                return;
+            }
+
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(35).data('dxCellData');
             const thirdCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').last().data('dxCellData');
@@ -369,6 +397,11 @@ module('Work Space Month', () => {
                 startDate: new Date(2017, 5, 15)
             });
 
+            if(this.instance.option('renovateRender')) {
+                assert.ok(true, 'This test is not for renovated render');
+                return;
+            }
+
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(35).data('dxCellData');
             const thirdCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').last().data('dxCellData');
@@ -389,6 +422,11 @@ module('Work Space Month', () => {
                 currentDate: new Date(2017, 6, 15),
                 startDate: new Date(2017, 5, 15)
             });
+
+            if(this.instance.option('renovateRender')) {
+                assert.ok(true, 'This test is not for renovated render');
+                return;
+            }
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
             const secondCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(35).data('dxCellData');

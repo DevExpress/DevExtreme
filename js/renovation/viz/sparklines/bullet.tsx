@@ -38,6 +38,7 @@ import {
   ArgumentAxisRange, ValueAxisRange, BulletScaleProps,
 } from './types.d';
 import { OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData } from '../common/types.d';
+import Number from '../../../core/polyfills/number';
 
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;

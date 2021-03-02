@@ -111,7 +111,18 @@ const ResizingController = modules.ViewController.inherit({
     },
 
     _getBestFitWidths: function() {
-        return this._rowsView.getColumnWidths();
+        const rowsView = this._rowsView;
+        const columnHeadersView = this._columnHeadersView;
+        let widths = rowsView.getColumnWidths();
+
+        if(!widths?.length) {
+            const headersTableElement = columnHeadersView.getTableElement();
+            columnHeadersView.setTableElement(rowsView.getTableElement()?.children('.dx-header'));
+            widths = columnHeadersView.getColumnWidths();
+            columnHeadersView.setTableElement(headersTableElement);
+        }
+
+        return widths;
     },
 
     _setVisibleWidths: function(visibleColumns, widths) {
@@ -148,7 +159,7 @@ const ResizingController = modules.ViewController.inherit({
     },
 
     _toggleBestFitMode: function(isBestFit) {
-        const $rowsTable = this._rowsView._getTableElement();
+        const $rowsTable = this._rowsView.getTableElement();
         const $rowsFixedTable = this._rowsView.getTableElements().eq(1);
 
         if(!$rowsTable) return;
@@ -746,7 +757,7 @@ const GridView = modules.View.inherit({
     }
 });
 
-export default {
+export const gridViewModule = {
     defaultOptions: function() {
         return {
             showBorders: false,

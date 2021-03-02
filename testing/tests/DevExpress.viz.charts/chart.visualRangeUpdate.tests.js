@@ -2743,6 +2743,37 @@ QUnit.test('Data -> set value visualRange -> set argument VisualRange - keep val
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [10, 30], 'Case 4');
 });
 
+QUnit.test('Update visualRange with the name of the automatic created value axes (T972285)', function(assert) {
+    const [chart] = this.createChart({
+        series: [{ axis: 'axis1' }, { axis: 'axis2' }],
+        valueAxis: [{}, { name: 'axis3' }]
+    });
+
+    assert.deepEqual(chart.option('valueAxis'), [
+        {
+            visualRange: {
+                endValue: undefined,
+                startValue: undefined
+            }
+        },
+        {
+            name: 'axis3',
+            visualRange: {
+                endValue: undefined,
+                startValue: undefined
+            }
+        },
+        {
+            name: 'axis1',
+            visualRange: {}
+        },
+        {
+            name: 'axis2',
+            visualRange: {}
+        }
+    ]);
+});
+
 QUnit.module('Visual range on updates. Value axis without visualRange. Auto mode', moduleSetup);
 
 QUnit.test('AdjustOnZoom true - show adjusted value range for every argument range case', function(assert) {

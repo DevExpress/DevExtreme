@@ -182,10 +182,13 @@
                     'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
-                    'preact': '@Url.Content("~/node_modules/preact/dist/preact.js")',
-                    'preact/hooks': '@Url.Content("~/node_modules/preact/hooks/dist/hooks.js")',
-                    'preact/compat': '@Url.Content("~/node_modules/preact/compat/dist/compat.js")',
-                    'preact/test-utils': '@Url.Content("~/node_modules/preact/test-utils/dist/testUtils.js")',
+                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
+                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
+                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
+                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
+                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")',
+                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
+                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
                     'devextreme-quill': '@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
@@ -198,8 +201,6 @@
                     'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
 
                     // Global CSS
-                    'common.css': '@Url.Content("~/artifacts/css/dx.common.css")',
-
                     'generic_light.css': '@Url.Content("~/artifacts/css/dx.light.css")',
                     'material_blue_light.css': '@Url.Content("~/artifacts/css/dx.material.blue.light.css")',
 
@@ -210,7 +211,14 @@
                     'plugin-babel': '@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")',
                     'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
                 },
+                paths: {
+                    'devextreme-generator/modules/inferno/*': '@Url.Content("~/node_modules/devextreme-generator/modules/inferno/*")'
+                },
                 packages: {
+                    'devextreme-generator/modules/inferno/': {
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
                     '': {
                         defaultExtension: 'js'
                     },
@@ -223,7 +231,13 @@
                     'cldr': {
                         main: '../cldr.js',
                         defaultExtension: 'js'
-                    }
+                    },
+                    'events/utils': {
+                        main: 'index'
+                    },
+                    'events': {
+                        main: 'index'
+                    },
                 },
                 meta: {
                     '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")': {

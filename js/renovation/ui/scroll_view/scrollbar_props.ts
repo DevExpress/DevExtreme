@@ -37,6 +37,8 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() bounceEnabled = true;
 
+  @OneWay() forceVisibility = false;
+
   @Event() onAnimatorStart?: (animator: 'inertia'| 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
 
   @Event() onAnimatorCancel?: () => void;

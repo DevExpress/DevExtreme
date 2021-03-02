@@ -74,7 +74,7 @@ export interface Group {
 }
 
 interface BaseTemplateData {
-  groups?: object;
+  groups?: Record<string, unknown>;
   groupIndex?: number;
   allDay?: boolean;
   text?: string;
@@ -120,4 +120,3 @@ interface ResourceCellTemplateData {
 export interface ResourceCellTemplateProps extends BaseTemplateProps {
   data: ResourceCellTemplateData;
 }
-

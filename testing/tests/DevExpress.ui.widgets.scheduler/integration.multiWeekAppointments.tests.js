@@ -7,7 +7,6 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require('common.css!');
 require('generic_light.css!');
 
 

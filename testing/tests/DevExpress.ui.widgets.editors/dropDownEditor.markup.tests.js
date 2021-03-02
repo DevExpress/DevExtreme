@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { Deferred } from 'core/utils/deferred';
 
 import 'ui/drop_down_editor/ui.drop_down_editor';
-import 'common.css!';
 
 const { module, test, testStart } = QUnit;
 
