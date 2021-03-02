@@ -294,7 +294,7 @@ var compileCriteria = (function() {
                         return false;
                     }
 
-                    const index = getterValue.lastIndexOf(value);
+                    var index = getterValue.lastIndexOf(value);
                     return index !== -1 && index === getterValue.length - value.length;
                 };
             case "contains":
