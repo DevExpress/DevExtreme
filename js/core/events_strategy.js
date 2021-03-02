@@ -3,10 +3,10 @@ import { each } from './utils/iterator';
 import { isFunction, isPlainObject } from './utils/type';
 
 export class EventsStrategy {
-    constructor(owner, options) {
+    constructor(owner, options = {}) {
         this._events = {};
         this._owner = owner;
-        this._options = options || {};
+        this._options = options;
     }
     static create(owner, strategy) {
         if(strategy) {
