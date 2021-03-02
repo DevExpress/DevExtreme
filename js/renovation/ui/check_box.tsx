@@ -10,6 +10,7 @@ import {
   Event,
   ForwardRef,
   RefObject,
+  Mutable,
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
@@ -153,7 +154,7 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 })
 
 export class CheckBox extends JSXComponent(CheckBoxProps) {
-  rendered = false;
+  @Mutable() rendered = false;
 
   @Ref() iconRef!: RefObject<HTMLDivElement>;
 
