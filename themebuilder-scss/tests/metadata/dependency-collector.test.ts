@@ -71,6 +71,7 @@ const filesContent: { [key: string]: string } = {
 jest.mock('fs', () => ({
   readFileSync: jest.fn().mockImplementation((path: string): string => filesContent[path] || ''),
   existsSync: (path: string): boolean => filesContent[path] !== undefined,
+  // eslint-disable-next-line spellcheck/spell-checker
   realpathSync: () => {}, // https://github.com/facebook/jest/issues/10012
 }));
 
