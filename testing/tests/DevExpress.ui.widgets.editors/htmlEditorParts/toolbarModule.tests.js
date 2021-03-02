@@ -236,7 +236,7 @@ testModule('Toolbar module', simpleModuleConfig, () => {
             return { bold: false };
         };
         this.options.items = ['bold', {
-            formatName: 'strike',
+            name: 'strike',
             widget: 'dxButton',
             options: {
                 onClick: () => {
@@ -244,12 +244,12 @@ testModule('Toolbar module', simpleModuleConfig, () => {
                 }
             }
         }, {
-            formatName: 'underline'
+            name: 'underline'
         }, {
-            formatName: 'italic',
+            name: 'italic',
             widget: 'dxCheckBox'
         }, {
-            formatName: 'superscript',
+            name: 'superscript',
             options: {
                 icon: 'home'
             }
@@ -287,7 +287,7 @@ testModule('Toolbar module', simpleModuleConfig, () => {
             return {};
         };
         this.options.items = [
-            { formatName: 'size', formatValues: ['10px', '2em'] }
+            { name: 'size', acceptedValues: ['10px', '2em'] }
         ];
 
         new Toolbar(this.quillMock, this.options);
@@ -314,7 +314,7 @@ testModule('Toolbar module', simpleModuleConfig, () => {
             return {};
         };
         this.options.items = [
-            { formatName: 'script', formatValues: [false, 'super', 'sub'], options: { placeholder: 'Test' } }
+            { name: 'script', acceptedValues: [false, 'super', 'sub'], options: { placeholder: 'Test' } }
         ];
 
         new Toolbar(this.quillMock, this.options);
@@ -446,7 +446,7 @@ testModule('Toolbar module', simpleModuleConfig, () => {
     });
 
     test('Render toolbar with enum format', function(assert) {
-        this.options.items = [{ formatName: 'header', formatValues: [1, 2, 3, false] }];
+        this.options.items = [{ name: 'header', acceptedValues: [1, 2, 3, false] }];
 
         new Toolbar(this.quillMock, this.options);
         const $formatWidget = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
@@ -490,7 +490,7 @@ testModule('Toolbar module', simpleModuleConfig, () => {
         assert.ok(redoStub.calledOnce, 'call redo');
     });
 
-    test('custom item without formatName shouldn\'t have format class', function(assert) {
+    test('custom item without name shouldn\'t have format class', function(assert) {
         this.options.items = ['bold', { widget: 'dxButton', options: { text: 'test' } }];
 
         new Toolbar(this.quillMock, this.options);
@@ -586,11 +586,11 @@ testModule('Toolbar module', simpleModuleConfig, () => {
 
     test('Size selectBox has custom width', function(assert) {
         this.options.items = [{
-            formatName: 'size',
-            formatValues: ['8pt', '12pt'] },
+            name: 'size',
+            acceptedValues: ['8pt', '12pt'] },
         {
-            formatName: 'header',
-            formatValues: [1, 2, 3, false]
+            name: 'header',
+            acceptedValues: [1, 2, 3, false]
         }];
 
         new Toolbar(this.quillMock, this.options);
@@ -788,7 +788,7 @@ testModule('Active formats', simpleModuleConfig, () => {
 
     test('SelectBox should display currently applied value', function(assert) {
         this.quillMock.getFormat = () => { return { size: '10px' }; };
-        this.options.items = [{ formatName: 'size', formatValues: ['10px', '11px'] }];
+        this.options.items = [{ name: 'size', acceptedValues: ['10px', '11px'] }];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
 
@@ -1077,8 +1077,8 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
             .change()
             .press('enter');
 
-        const { index: pasteIndex, type: formatName } = this.log[0];
-        assert.strictEqual(formatName, 'extendedImage', 'update an image');
+        const { index: pasteIndex, type: name } = this.log[0];
+        assert.strictEqual(name, 'extendedImage', 'update an image');
         assert.strictEqual(pasteIndex, 0, 'we should paste an image at the same position');
         assert.deepEqual(this.log[1], {
             setSelection: [1, 0]
@@ -1297,7 +1297,7 @@ testModule('Toolbar with adaptive menu', simpleModuleConfig, function() {
 
     test('adaptive menu container', function(assert) {
         this.options.multiline = false;
-        this.options.items = [{ formatName: 'strike', locateInMenu: 'always' }];
+        this.options.items = [{ name: 'strike', locateInMenu: 'always' }];
 
         new Toolbar(this.quillMock, this.options);
 
@@ -1313,7 +1313,7 @@ testModule('Toolbar with adaptive menu', simpleModuleConfig, function() {
 
     test('separator item', function(assert) {
         this.options.multiline = false;
-        this.options.items = ['separator', { formatName: 'separator', locateInMenu: 'always' }];
+        this.options.items = ['separator', { name: 'separator', locateInMenu: 'always' }];
 
         new Toolbar(this.quillMock, this.options);
 

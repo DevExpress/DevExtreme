@@ -477,11 +477,11 @@ if(Quill) {
 
             each(this.options.items, (index, item) => {
                 let newItem;
-                const normalizedItem = this._normalizeItemOptions(item);
-                if(isObject(normalizedItem)) {
-                    newItem = this._handleObjectItem(normalizedItem);
-                } else if(isString(normalizedItem)) {
-                    const buttonItemConfig = this._prepareButtonItemConfig(normalizedItem);
+
+                if(isObject(item)) {
+                    newItem = this._handleObjectItem(item);
+                } else if(isString(item)) {
+                    const buttonItemConfig = this._prepareButtonItemConfig(item);
                     newItem = this._getToolbarItem(buttonItemConfig);
                 }
                 if(newItem) {
@@ -492,18 +492,8 @@ if(Quill) {
             return resultItems;
         }
 
-        _normalizeItemOptions(item) {
-            if(isObject(item)) {
-                item.name = item.name ? item.name : item.formatName;
-            } else {
-                item = { name: item };
-            }
-
-            return item;
-        }
-
         _handleObjectItem(item) {
-            if(item.name && item.formatValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
+            if(item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
                 const selectItemConfig = this._prepareSelectItemConfig(item);
 
                 return this._getToolbarItem(selectItemConfig);
@@ -545,7 +535,7 @@ if(Quill) {
                 name: item.name,
                 options: {
                     stylingMode: 'filled',
-                    dataSource: item.formatValues,
+                    dataSource: item.acceptedValues,
                     displayExpr: (value) => {
                         return localizeValue(value, item.name);
                     },
