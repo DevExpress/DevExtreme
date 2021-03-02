@@ -719,7 +719,7 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsCell(thumbnailsColumnCaption, 0).outerWidth(), 36, 'thumbnails column width is correct');
         renderer.fn.width = originalFunc;
     });
-  
+
     test('sorting by file size is correct (T962735)', function(assert) {
         const columnHeader = this.wrapper.getColumnHeaderInDetailsView(3);
 
