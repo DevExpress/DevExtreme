@@ -716,6 +716,16 @@ QUnit.test("Empty array is invalid", function(assert) {
     assert.ok(!result.isValid, "IsValid");
 });
 
+QUnit.test('Validator correctly handles incorrect email', function(assert) {
+    var result = ValidationEngine.validate('-@-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.', [{
+        type: 'email',
+        message: 'Set correct email'
+    }]);
+
+    assert.ok(result, 'Result is defined');
+    assert.ok(!result.isValid, 'Value is invalid');
+});
+
 QUnit.module("Custom rule with user's callback");
 
 QUnit.test("Can be validated positively", function(assert) {

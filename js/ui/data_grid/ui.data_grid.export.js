@@ -208,7 +208,6 @@ exports.DataProvider = Class.inherit({
     },
 
     getCellData: function(rowIndex, cellIndex) {
-        const result = { cellSourceData: {}, value };
         var column,
             value,
             i,
@@ -217,6 +216,7 @@ exports.DataProvider = Class.inherit({
             correctedCellIndex = this._correctCellIndex(cellIndex),
             itemValues,
             item;
+        const result = { cellSourceData: {}, value };
 
         if(rowIndex < this.getHeaderRowCount()) {
             const columnsRow = this.getColumns(true)[rowIndex];
