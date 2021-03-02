@@ -71,9 +71,9 @@ function createDefaultBatch() {
     return gulp.series(tasks);
 }
 
-gulp.task('main-batch', createMainBatch());
 gulp.task('misc-batch', createMiscBatch());
 gulp.task('style-compiler-batch', createStyleCompilerBatch());
+gulp.task('main-batch', createMainBatch());
 
 gulp.task('default', createDefaultBatch());
 
