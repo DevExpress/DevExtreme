@@ -84,7 +84,7 @@ function createDebugBundlesStream(watch, renovation) {
         ? ctx.RESULT_JS_RENOVATION_PATH
         : ctx.RESULT_JS_PATH;
 
-    return gulp.src(bundles)
+    const task = () => gulp.src(bundles)
         .pipe(namedDebug())
         .pipe(gulpIf(watch, plumber({
             errorHandler: notify.onError('Error: <%= error.message %>')
@@ -95,6 +95,10 @@ function createDebugBundlesStream(watch, renovation) {
         .pipe(headerPipes.bangLicense())
         .pipe(gulpIf(!watch, compressionPipes.beautify()))
         .pipe(gulp.dest(destination));
+
+    task.displayName = 'js-bundles-debug-' + (renovation ? 'main' : 'renovation');
+
+    return task;
 }
 
 function createRenovationTemp(isWatch) {
@@ -117,11 +121,11 @@ gulp.task('create-renovation-temp-watch', ifRenovationPackage(() =>
 ));
 
 gulp.task('js-bundles-debug', gulp.series(
-    () => createDebugBundlesStream(false, false),
-    ifRenovationPackage(() => createDebugBundlesStream(false, true))
+    createDebugBundlesStream(false, false),
+    ifRenovationPackage(createDebugBundlesStream(false, true))
 ));
 
 gulp.task('js-bundles-dev', gulp.parallel(
-    () => createDebugBundlesStream(true, false),
-    ifRenovationPackage(() => createDebugBundlesStream(true, true))
+    createDebugBundlesStream(true, false),
+    ifRenovationPackage(createDebugBundlesStream(true, true))
 ));

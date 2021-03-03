@@ -3,7 +3,7 @@ import dataUtils from './utils';
 import { applyBatch } from './array_utils';
 import { isFunction } from '../core/utils/type';
 import config from '../core/config';
-import errorUtils from './errors';
+import { errors } from './errors';
 import Store from './abstract_store';
 import arrayQuery from './array_query';
 import storeHelper from './store_helper';
@@ -26,12 +26,12 @@ function trivialPromise(value) {
 
 function ensureRequiredFuncOption(name, obj) {
     if(!isFunction(obj)) {
-        throw errorUtils.errors.Error('E4011', name);
+        throw errors.Error('E4011', name);
     }
 }
 
 function throwInvalidUserFuncResult(name) {
-    throw errorUtils.errors.Error('E4012', name);
+    throw errors.Error('E4012', name);
 }
 
 function createUserFuncFailureHandler(pendingDeferred) {
@@ -86,7 +86,7 @@ function invokeUserTotalCountFunc(store, options) {
     let userResult;
 
     if(!isFunction(userFunc)) {
-        throw errorUtils.errors.Error('E4021');
+        throw errors.Error('E4021');
     }
 
     userResult = userFunc.apply(store, [options]);
@@ -208,7 +208,7 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
             }
         }
 
-        pendingDeferred.reject(errorUtils.errors.Error('E4009'));
+        pendingDeferred.reject(errors.Error('E4009'));
     });
 }
 
@@ -238,7 +238,7 @@ const CustomStore = Store.inherit({
     },
 
     createQuery: function() {
-        throw errorUtils.errors.Error('E4010');
+        throw errors.Error('E4010');
     },
 
     clearRawDataCache: function() {

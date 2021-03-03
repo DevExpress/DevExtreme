@@ -836,6 +836,35 @@ QUnit.test('customizeLoadResult', function(assert) {
     });
 });
 
+// T975035
+QUnit.test('parameter should be passed from customizeStoreLoadOptions to customizeLoadResult if call load inside customizeStoreLoadOptions', function(assert) {
+    const source = new DataSource(TEN_NUMBERS);
+    const calls = [];
+
+    source.on('customizeStoreLoadOptions', function(options) {
+        const isFirstCall = !calls.length;
+        options.parameter = true;
+        calls.push(['customizeStoreLoadOptions', options.operationId]);
+        if(isFirstCall) {
+            this.load();
+        }
+    });
+
+    source.on('customizeLoadResult', function(options) {
+        calls.push(['customizeLoadResult', options.operationId]);
+        assert.ok(options.parameter, 'parameter is passed from customizeStoreLoadOptions');
+    });
+
+    source.load();
+
+    assert.deepEqual(calls, [
+        ['customizeStoreLoadOptions', 0],
+        ['customizeStoreLoadOptions', 1],
+        ['customizeLoadResult', 1],
+        ['customizeLoadResult', 0]
+    ], 'calls order is correct');
+});
+
 QUnit.test('cancel works', function(assert) {
     assert.expect(4);
 

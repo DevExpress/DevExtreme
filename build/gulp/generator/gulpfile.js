@@ -133,9 +133,13 @@ function processRenovationMeta() {
         .pipe(gulp.dest(COMPAT_TESTS_PARTS));
 }
 
-gulp.task('generate-jquery-components', gulp.series(deleteJQueryComponents, function generateJQuery() {
+gulp.task('generate-jquery-components-clean', deleteJQueryComponents);
+
+gulp.task('generate-jquery-components-run', function generateJQuery() {
     return generateJQueryComponents(false);
-}));
+});
+
+gulp.task('generate-jquery-components', gulp.series('generate-jquery-components-clean', 'generate-jquery-components-run'));
 
 gulp.task('generate-jquery-components-watch', function watchJQueryComponents() {
     return generateJQueryComponents(true);
@@ -181,7 +185,6 @@ function addGenerationTask(
             ...SRC,
             ...frameworkIgnorePaths,
             '!js/renovation/component_wrapper/**/*.*',
-            '!js/renovation/utils/render_template.ts', // TODO: move to 'component_wrapper'
         ], { base: 'js' })
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
@@ -271,7 +274,7 @@ function addGenerationTask(
 
 addGenerationTask('react',
     ['Cannot find module \'csstype\'.'],
-    false, // TODO: should be true
+    true,
     true,
     false
 );
