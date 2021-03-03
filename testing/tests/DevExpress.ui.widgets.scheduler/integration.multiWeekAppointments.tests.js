@@ -21,10 +21,15 @@ require('ui/scheduler/ui.scheduler');
 
 const mockWorkSpaceRendering = function(schedulerInst, cellSize, bounds) {
     const base = schedulerInst._renderWorkSpace;
+    const getMaxAllowedPosition = (groupIndex) => {
+        return bounds[groupIndex];
+    };
+
     sinon.stub(schedulerInst, '_renderWorkSpace', function(groups) {
         base.call(this, groups);
+
         sinon.stub(this._workSpace, 'getCellWidth').returns(cellSize);
-        sinon.stub(this._workSpace, 'getMaxAllowedPosition').returns(bounds);
+        sinon.stub(this._workSpace, 'getMaxAllowedPosition', getMaxAllowedPosition);
     });
 };
 
@@ -565,51 +570,54 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
 
 });
 
-QUnit.test('Grouped multi-week appointments should have a correct left offset in rtl mode', function(assert) {
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`Grouped multi-week appointments should have a correct left offset in rtl mode when renovateRender is ${renovateRender}`, function(assert) {
 
-    this.createInstance({ width: 1052 });
+        this.createInstance({ width: 1052 });
 
-    const cellWidth = 50;
+        const cellWidth = 50;
 
-    mockWorkSpaceRendering.call(this, this.instance, cellWidth, [700, 350, 0]);
+        mockWorkSpaceRendering.call(this, this.instance, cellWidth, [700, 350, 0]);
 
-    this.instance.option({
-        views: ['month'],
-        currentView: 'month',
-        firstDayOfWeek: 1,
-        currentDate: new Date(2015, 1, 9),
-        rtlEnabled: true,
-        dataSource: [],
-        resources: [
-            {
-                field: 'roomId',
-                dataSource: [
-                    { id: 1, text: 'One' },
-                    { id: 2, text: 'Two' },
-                    { id: 3, text: 'Three' }
-                ]
-            }
-        ],
-        groups: ['roomId']
+        this.instance.option({
+            views: ['month'],
+            currentView: 'month',
+            firstDayOfWeek: 1,
+            currentDate: new Date(2015, 1, 9),
+            rtlEnabled: true,
+            dataSource: [],
+            resources: [
+                {
+                    field: 'roomId',
+                    dataSource: [
+                        { id: 1, text: 'One' },
+                        { id: 2, text: 'Two' },
+                        { id: 3, text: 'Three' }
+                    ]
+                }
+            ],
+            groups: ['roomId'],
+            renovateRender,
+        });
+
+        this.instance.option('dataSource', [{
+            text: 'a',
+            startDate: new Date(2015, 1, 10),
+            endDate: new Date(2015, 1, 25),
+            roomId: [1, 2]
+        }]);
+
+        const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
+
+        assert.roughEqual(translator.locate($appointments.eq(0)).left, cellWidth * 14, 2.001, 'The first head is OK');
+        assert.roughEqual(translator.locate($appointments.eq(1)).left, cellWidth * 14, 1.001, 'The first body is OK');
+        assert.roughEqual(translator.locate($appointments.eq(2)).left, cellWidth * 19, 2.001, 'The first tail is OK');
+
+        assert.roughEqual(translator.locate($appointments.eq(3)).left, cellWidth * 7, 1.001, 'The second head is OK');
+        assert.roughEqual(translator.locate($appointments.eq(4)).left, cellWidth * 7, 1.001, 'The second body is OK');
+        assert.roughEqual(translator.locate($appointments.eq(5)).left, cellWidth * 12, 2.001, 'The second tail is OK');
+
     });
-
-    this.instance.option('dataSource', [{
-        text: 'a',
-        startDate: new Date(2015, 1, 10),
-        endDate: new Date(2015, 1, 25),
-        roomId: [1, 2]
-    }]);
-
-    const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
-
-    assert.roughEqual(translator.locate($appointments.eq(0)).left, cellWidth * 14, 2.001, 'The first head is OK');
-    assert.roughEqual(translator.locate($appointments.eq(1)).left, cellWidth * 14, 1.001, 'The first body is OK');
-    assert.roughEqual(translator.locate($appointments.eq(2)).left, cellWidth * 19, 2.001, 'The first tail is OK');
-
-    assert.roughEqual(translator.locate($appointments.eq(3)).left, cellWidth * 7, 1.001, 'The second head is OK');
-    assert.roughEqual(translator.locate($appointments.eq(4)).left, cellWidth * 7, 1.001, 'The second body is OK');
-    assert.roughEqual(translator.locate($appointments.eq(5)).left, cellWidth * 12, 2.001, 'The second tail is OK');
-
 });
 
 QUnit.test('Multi-week grouped appointments should be painted correctly', function(assert) {
