@@ -43,7 +43,7 @@ import Class from 'core/class';
 import { logger } from 'core/utils/console';
 import typeUtils from 'core/utils/type';
 import devices from 'core/devices';
-import version from 'core/version';
+import { version } from 'core/version';
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';

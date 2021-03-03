@@ -8153,6 +8153,10 @@ declare module DevExpress.ui {
          */
         placeholder?: string;
         /**
+         * [descr:dxHtmlEditor.Options.stylingMode]
+         */
+        stylingMode?: 'outlined' | 'underlined' | 'filled';
+        /**
          * [descr:dxHtmlEditor.Options.toolbar]
          */
         toolbar?: dxHtmlEditorToolbar;

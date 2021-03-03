@@ -123,7 +123,8 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
         }))
         .pipe(gulp.dest(dist))
 ]);
-gulp.task('tmp',);
+
+gulp.task('transpile-esm', transpileEsm(ctx.TRANSPILED_PROD_ESM_PATH));
 
 gulp.task('transpile', gulp.series(
     'bundler-config',
@@ -133,7 +134,7 @@ gulp.task('transpile', gulp.series(
         ifRenovationPackage(transpile(src, ctx.TRANSPILED_PROD_RENOVATION_PATH, transpileConfig.cjs)),
         ifRenovationPackage(transpile(src, ctx.TRANSPILED_RENOVATION_PATH, transpileConfig.cjs, false, true)),
     ]),
-    ifEsmPackage(transpileEsm(ctx.TRANSPILED_PROD_ESM_PATH)),
+    ifEsmPackage('transpile-esm'),
 ));
 
 const replaceTask = (sourcePath) => {
@@ -154,7 +155,7 @@ const replaceVersion = () => gulp.parallel([
     ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './cjs')))(),
 ]);
 
-gulp.task('version-replace', gulp.series('transpile', replaceVersion()));
+gulp.task('version-replace', replaceVersion());
 
 gulp.task('transpile-watch', gulp.series(
     gulp.parallel([

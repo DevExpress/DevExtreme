@@ -8,7 +8,7 @@ describe('SvgPattern', () => {
       const vm = {
         props: {} as RootSvgElementProps,
       };
-      const root = shallow(<RootSvgElementComponent {...vm as any} /> as JSX.Element);
+      const root = shallow(<RootSvgElementComponent {...vm as any} /> as any);
 
       expect(root.html()).toBe('<svg xmlns="http://www.w3.org/2000/svg" version="1.1"'
         + ' fill="none" stroke="none" stroke-width="0"'
@@ -24,7 +24,7 @@ describe('SvgPattern', () => {
           children: <defs />,
         } as RootSvgElementProps,
       };
-      const root = shallow(<RootSvgElementComponent {...vm as any} /> as JSX.Element);
+      const root = shallow(<RootSvgElementComponent {...vm as any} /> as any);
 
       expect(root.html()).toBe('<svg xmlns="http://www.w3.org/2000/svg" version="1.1"'
         + ' class="dxc dxc-chart" fill="none" stroke="none" stroke-width="0"'
@@ -39,7 +39,7 @@ describe('SvgPattern', () => {
         } as RootSvgElementProps,
         config: { rtlEnabled: true },
       };
-      const root = shallow(<RootSvgElementComponent {...vm as any} /> as JSX.Element);
+      const root = shallow(<RootSvgElementComponent {...vm as any} /> as any);
 
       expect(root.prop('direction')).toBe('rtl');
     });
@@ -48,19 +48,19 @@ describe('SvgPattern', () => {
   describe('Behavior', () => {
     describe('setRootElementRef', () => {
       it('should set rootElementRef to div ref', () => {
-        const widgetRef = {} as SVGElement;
+        const widgetRef = { current: {} } as any;
         const component = new RootSvgElement({
           rootElementRef: {},
         } as RootSvgElementProps);
         component.svgRef = widgetRef;
         component.setRootElementRef();
 
-        expect(component.props.rootElementRef).toBe(component.svgRef);
+        expect(component.props.rootElementRef?.current).toBe(component.svgRef.current);
       });
 
       it('should not set rootElementRef to div ref when not initialized', () => {
         const component = new RootSvgElement({ });
-        component.svgRef = {} as SVGElement;
+        component.svgRef = { current: {} } as any;
         component.setRootElementRef();
         expect(component.props.rootElementRef).toBeUndefined();
       });

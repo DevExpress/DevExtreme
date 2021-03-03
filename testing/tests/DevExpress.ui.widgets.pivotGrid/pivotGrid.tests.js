@@ -14,7 +14,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import config from 'core/config';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';

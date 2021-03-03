@@ -2,7 +2,6 @@ import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import browser from 'core/utils/browser';
 import $ from 'jquery';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.module('scrollToItem', () => {

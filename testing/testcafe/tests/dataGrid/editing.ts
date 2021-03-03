@@ -1404,7 +1404,7 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
   const dataGrid = new DataGrid('#container');
   const dataRow = dataGrid.getDataRow(0);
   const cell0 = dataRow.getDataCell(1);
-  const $revertButton = cell0.getRevertButton();
+  const $revertButton = dataGrid.getRevertButton();
 
   await t
     .doubleClick(cell0.element)

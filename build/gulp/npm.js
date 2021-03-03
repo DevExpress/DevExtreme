@@ -4,10 +4,8 @@ const eol = require('gulp-eol');
 const fs = require('fs');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
-const lazyPipe = require('lazypipe');
 const merge = require('merge-stream');
 const replace = require('gulp-replace');
-const through = require('through2');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
@@ -99,26 +97,9 @@ if(isEsmPackage) {
 
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
-// NOTE: 'use strict' prohibits adding new 'default' field to string
-const canSupplementDefaultExport = (path) => path.indexOf('version.js') < 0;
-const hasDefaultExport = (content) => /exports\.default\s=/.test(String(content));
-const isCjsModule = (path) => !path.startsWith('esm/');
-
-const addDefaultExport = lazyPipe().pipe(() =>
-    through.obj((chunk, enc, callback) => {
-        if(isCjsModule(chunk.relative) && hasDefaultExport(chunk.contents) && canSupplementDefaultExport(chunk.relative)) {
-            chunk.contents = Buffer.from(
-                `${String(chunk.contents)}module.exports.default = module.exports;`
-            );
-        }
-        callback(null, chunk);
-    })
-);
-
 const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src(src)
-        .pipe(addDefaultExport())
         .pipe(headerPipes.starLicense())
         .pipe(compressionPipes.beautify())
         .pipe(gulp.dest(dist)),

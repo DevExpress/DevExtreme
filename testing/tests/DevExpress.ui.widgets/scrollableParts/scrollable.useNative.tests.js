@@ -4,7 +4,6 @@ import animationFrame from 'animation/frame';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import {
@@ -307,7 +306,7 @@ QUnit.test('scrollHeight', function(assert) {
     const $content = $('.' + SCROLLABLE_CONTENT_CLASS, $scrollable);
     $content.css('padding', '10px');
 
-    assert.equal($scrollable.dxScrollable('scrollHeight'), $content.outerHeight() - 2 * $scrollable.dxScrollable('option', 'pushBackValue'), 'scroll height equals to content height');
+    assert.equal($scrollable.dxScrollable('scrollHeight'), $content.outerHeight(), 'scroll height equals to content height');
 });
 
 QUnit.test('clientHeight', function(assert) {

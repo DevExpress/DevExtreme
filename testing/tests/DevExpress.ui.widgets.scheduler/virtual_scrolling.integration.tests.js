@@ -2,7 +2,6 @@ import $ from 'jquery';
 
 import { getWindow } from 'core/utils/window';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import { DataSource } from 'data/data_source/data_source';

@@ -69,7 +69,7 @@ describe('DateTableBody', () => {
           cellTemplate,
           ...viewModel.props,
         }}
-      />,
+      /> as any,
     );
 
     beforeEach(() => {

@@ -1240,3 +1240,18 @@ QUnit.module('valueChanged should receive correct event parameter', {
         this.testProgramChange(assert);
     });
 });
+
+QUnit.module('validation', () => {
+    QUnit.test('editor input should be described by validation message content', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            isValid: false,
+            validationError: { message: 'error' },
+            validationStatus: 'invalid'
+        });
+        const $input = $textEditor.find(`.${INPUT_CLASS}`);
+        const messageId = $input.attr('aria-describedby');
+
+        assert.ok(messageId, 'input aria-describedby attr is specified');
+        assert.strictEqual($('.dx-invalid-message-content').attr('id'), messageId, 'message content id is correct');
+    });
+});

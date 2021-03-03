@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { Deferred, when } from '../../core/utils/deferred';
-import errorsUtils from '../../data/errors';
+import { errors as dataErrors } from '../../data/errors';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { compileGetter } from '../../core/utils/data';
 import errors from '../widget/ui.errors';
@@ -142,7 +142,7 @@ function getCriteriaOperation(criteria) {
         const item = criteria[i];
         if(!Array.isArray(item)) {
             if(value && value !== item) {
-                throw new errorsUtils.errors.Error('E4019');
+                throw new dataErrors.Error('E4019');
             }
             if(item !== '!') {
                 value = item;

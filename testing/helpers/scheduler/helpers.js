@@ -6,7 +6,6 @@ import dataUtils from 'core/element_data';
 import browser from 'core/utils/browser';
 import Color from 'color';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 

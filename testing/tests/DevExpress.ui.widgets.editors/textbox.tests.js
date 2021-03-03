@@ -5,7 +5,6 @@ import browser from 'core/utils/browser';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

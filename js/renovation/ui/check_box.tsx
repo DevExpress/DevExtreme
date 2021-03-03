@@ -17,11 +17,10 @@ import Guid from '../../core/guid';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { isMaterial, current } from '../../ui/themes';
-import BaseComponent from '../preact_wrapper/check_box';
-import BaseWidgetProps from '../utils/base_props';
+import BaseComponent from '../component_wrapper/check_box';
+import { BaseWidgetProps } from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { EffectReturn } from '../utils/effect_return.d';
-import noop from '../utils/noop';
 import { ValidationMessage } from './validation_message';
 
 const getCssClasses = (model: CheckBoxProps): string => {
@@ -87,16 +86,16 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       </div>
       {viewModel.props.useInkRipple
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
-      {viewModel.rendered && viewModel.shouldShowValidationMessage
+      {viewModel.showValidationMessage
                 && (
                 <ValidationMessage
                   validationErrors={viewModel.validationErrors}
                   mode={viewModel.props.validationMessageMode}
                   positionRequest="below"
                   rtlEnabled={viewModel.props.rtlEnabled}
-                  target={viewModel.target}
-                  boundary={viewModel.target}
-                  container={viewModel.target}
+                  target={viewModel.target?.current}
+                  boundary={viewModel.target?.current}
+                  container={viewModel.target?.current}
                 />
                 )}
     </Widget>
@@ -131,7 +130,7 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @Event() onFocusIn?: (e: Event) => void;
 
-  @OneWay() saveValueChangeEvent?: (event: Event) => void = noop;
+  @OneWay() saveValueChangeEvent?: (event: Event) => void;
 }
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
@@ -153,7 +152,7 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 })
 
 export class CheckBox extends JSXComponent(CheckBoxProps) {
-  rendered = false;
+  showValidationMessage = false;
 
   @Ref() iconRef!: RefObject<HTMLDivElement>;
 
@@ -165,14 +164,14 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @ForwardRef() target!: RefObject<HTMLDivElement>;
 
-  @Effect({ run: 'once' })
-  afterInitEffect(): EffectReturn {
-    this.rendered = true;
+  @Effect()
+  updateValidationMessageVisibility(): EffectReturn {
+    this.showValidationMessage = this.shouldShowValidationMessage;
   }
 
   @Method()
   focus(): void {
-    this.widgetRef.focus();
+    this.widgetRef.current!.focus();
   }
 
   @Effect()
@@ -269,6 +268,8 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {
     const { useInkRipple } = this.props;
-    useInkRipple && this.inkRippleRef[type]({ element: this.iconRef, event, wave: waveId });
+    useInkRipple && this.inkRippleRef.current![type]({
+      element: this.iconRef.current, event, wave: waveId,
+    });
   }
 }

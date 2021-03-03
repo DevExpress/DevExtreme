@@ -5,7 +5,6 @@ import 'ui/tree_view';
 import 'ui/box';
 import 'ui/responsive_box';
 
-import 'common.css!';
 
 const TREEVIEW_ID = 'treeView_id';
 const PLACEMENT_STANDALONE = 'standalone';

@@ -344,7 +344,7 @@ const ColumnHeadersViewFilterSyncExtender = {
     }
 };
 
-export default {
+export const filterSyncModule = {
     defaultOptions: function() {
         return {
             filterValue: null,

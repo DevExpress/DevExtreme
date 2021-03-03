@@ -26,7 +26,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -50,11 +49,11 @@ const MockEditingController = dataGridMocks.MockEditingController;
 
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import dragEvents from 'events/drag';
-import columnResizingReordering from 'ui/data_grid/ui.data_grid.columns_resizing_reordering';
+import columnsResizingReordering from 'ui/data_grid/ui.data_grid.columns_resizing_reordering';
 import { ColumnChooserView } from 'ui/data_grid/ui.data_grid.column_chooser';
 import { ColumnHeadersView } from 'ui/data_grid/ui.data_grid.column_headers';
-import columnsModule from 'ui/grid_core/ui.grid_core.columns_controller';
-const ColumnsController = columnsModule.controllers.columns;
+import { columnsControllerModule } from 'ui/grid_core/ui.grid_core.columns_controller';
+const ColumnsController = columnsControllerModule.controllers.columns;
 import { RowsView } from 'ui/data_grid/ui.data_grid.rows';
 import { GroupingHeaderPanelExtender } from 'ui/data_grid/ui.data_grid.grouping';
 import { HeaderPanel } from 'ui/data_grid/ui.data_grid.header_panel';
@@ -63,7 +62,7 @@ import devices from 'core/devices';
 import browser from 'core/utils/browser';
 import publicComponentUtils from 'core/utils/public_component';
 
-const TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
+const TestDraggingHeader2 = columnsResizingReordering.DraggingHeaderView.inherit({
     callDragCounter: 0,
 
     callMoveCounter: 0,
@@ -87,7 +86,7 @@ const TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit(
 QUnit.module('ColumnsSeparator', () => {
 
     function createColumnsSeparator2(userOptions, columnsCommonSettings) {
-        return new columnResizingReordering.ColumnsSeparatorView({
+        return new columnsResizingReordering.ColumnsSeparatorView({
             option: function(name) {
                 return userOptions[name];
             },
@@ -110,7 +109,7 @@ QUnit.module('ColumnsSeparator', () => {
     }
 
     function createColumnsSeparator(isResizable, container) {
-        const separator = new columnResizingReordering.ColumnsSeparatorView({
+        const separator = new columnsResizingReordering.ColumnsSeparatorView({
             option: function(name) {
                 switch(name) {
                     case 'allowColumnReordering':
@@ -533,11 +532,11 @@ QUnit.module('ColumnsSeparator', () => {
             .addClass('dx-datagrid-headers')
             .appendTo($container);
 
-        const tablePosition = new columnResizingReordering.TablePositionViewController(component);
+        const tablePosition = new columnsResizingReordering.TablePositionViewController(component);
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
-        const separator = new columnResizingReordering.ColumnsSeparatorView(component);
+        const separator = new columnsResizingReordering.ColumnsSeparatorView(component);
         separator.init();
         separator.render($container);
 
@@ -622,11 +621,11 @@ QUnit.module('ColumnsSeparator', () => {
             .addClass('dx-datagrid-headers')
             .appendTo($container);
 
-        const tablePosition = new columnResizingReordering.TablePositionViewController(component);
+        const tablePosition = new columnsResizingReordering.TablePositionViewController(component);
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
-        const separator = new columnResizingReordering.ColumnsSeparatorView(component);
+        const separator = new columnsResizingReordering.ColumnsSeparatorView(component);
         separator.init();
         separator.render($container);
 
@@ -693,11 +692,11 @@ QUnit.module('ColumnsSeparator', () => {
             .addClass('dx-datagrid-headers')
             .appendTo($container);
 
-        const tablePosition = new columnResizingReordering.TablePositionViewController(component);
+        const tablePosition = new columnsResizingReordering.TablePositionViewController(component);
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
-        const separator = new columnResizingReordering.ColumnsSeparatorView(component);
+        const separator = new columnsResizingReordering.ColumnsSeparatorView(component);
         separator.init();
         separator.render($container);
 
@@ -752,13 +751,13 @@ QUnit.module('ColumnsSeparator', () => {
                 }
             };
         };
-        let separator = new columnResizingReordering.ColumnsSeparatorView(getComponent(true));
+        let separator = new columnsResizingReordering.ColumnsSeparatorView(getComponent(true));
 
         // assert
         assert.ok(separator.isVisible(), 'AllowColumnResizing');
 
         // act
-        separator = new columnResizingReordering.ColumnsSeparatorView(getComponent(false, true));
+        separator = new columnsResizingReordering.ColumnsSeparatorView(getComponent(false, true));
 
         // assert
         assert.ok(separator.isVisible(), 'AllowColumnReordering');
@@ -974,7 +973,7 @@ QUnit.module('Columns resizing', {
         };
 
         that.component._views = {
-            columnsSeparatorView: new columnResizingReordering.ColumnsSeparatorView(this.component),
+            columnsSeparatorView: new columnsResizingReordering.ColumnsSeparatorView(this.component),
             trackerView: new MockTrackerView(),
             columnHeadersView: new ColumnHeadersView(this.component),
             rowsView: new RowsView(this.component),
@@ -1008,7 +1007,7 @@ QUnit.module('Columns resizing', {
 
             that.component._controllers.editing = new MockEditingController();
 
-            const controller = that.resizeController = new columnResizingReordering.ColumnsResizerViewController(that.component);
+            const controller = that.resizeController = new columnsResizingReordering.ColumnsResizerViewController(that.component);
 
             controller.init();
 
@@ -1535,7 +1534,7 @@ QUnit.module('Columns resizing', {
     });
 
     QUnit.test('Update height of separator when caption of header is wrapped', function(assert) {
-        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+        this.component._controllers.tablePosition = new columnsResizingReordering.TablePositionViewController(this.component);
 
         // arrange
         const resizeController = this.createColumnsResizerViewController();
@@ -1563,7 +1562,7 @@ QUnit.module('Columns resizing', {
 
     QUnit.test('Update height of separator on resize', function(assert) {
         this.options.allowColumnResizing = true;
-        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+        this.component._controllers.tablePosition = new columnsResizingReordering.TablePositionViewController(this.component);
 
         // arrange
         const resizeController = this.createColumnsResizerViewController();
@@ -1596,7 +1595,7 @@ QUnit.module('Columns resizing', {
 
     QUnit.test('Update height of separator by headers and rows height with pager', function(assert) {
         // arrange
-        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+        this.component._controllers.tablePosition = new columnsResizingReordering.TablePositionViewController(this.component);
         this.component._views.pagerView.getHeight = function() {
             return 1;
         };
@@ -1663,7 +1662,7 @@ QUnit.module('Columns resizing', {
 
     QUnit.test('Update height of separator when there is band columns', function(assert) {
         // arrange
-        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+        this.component._controllers.tablePosition = new columnsResizingReordering.TablePositionViewController(this.component);
         const resizeController = this.createColumnsResizerViewController([
             [
                 { caption: 'Column 1', width: '125px', rowspan: 2, index: 0, allowResizing: true },
@@ -2413,7 +2412,7 @@ QUnit.module('Columns resizing', {
     QUnit.test('Update height of the free space row when text is wrapped in a cell', function(assert) {
         // arrange
         let isFreeSpaceRowHeightUpdated;
-        const tablePositionController = new columnResizingReordering.TablePositionViewController(this.component);
+        const tablePositionController = new columnsResizingReordering.TablePositionViewController(this.component);
 
         this.component._controllers.tablePosition = tablePositionController;
         tablePositionController.init();
@@ -2466,7 +2465,7 @@ QUnit.module('Columns resizing', {
             { caption: 'Column 3', visible: true, width: '150px' },
             { caption: 'Column 4', visible: true, width: '150px' }], this.commonColumnSettings);
 
-        const tablePositionController = new columnResizingReordering.TablePositionViewController(this.component);
+        const tablePositionController = new columnsResizingReordering.TablePositionViewController(this.component);
 
         this.component._controllers.tablePosition = tablePositionController;
         tablePositionController.init();
@@ -2505,7 +2504,7 @@ QUnit.module('Columns resizing', {
     QUnit.test('\'Process size changed\' method is not called', function(assert) {
         // arrange
         let isProcessSizeChanged = false;
-        const tablePositionController = new columnResizingReordering.TablePositionViewController(this.component);
+        const tablePositionController = new columnsResizingReordering.TablePositionViewController(this.component);
 
         this.component._controllers.tablePosition = tablePositionController;
         tablePositionController.init();
@@ -2627,7 +2626,7 @@ QUnit.module('Columns resizing', {
 
     QUnit.test('TrackerView. Show', function(assert) {
         // arrange
-        this.component._views.trackerView = new columnResizingReordering.TrackerView(this.component);
+        this.component._views.trackerView = new columnsResizingReordering.TrackerView(this.component);
         const controller = this.createColumnsResizerViewController([
             { caption: 'Column 1' },
             { caption: 'Column 2', width: '125px' },
@@ -2684,8 +2683,8 @@ QUnit.module('Columns resizing', {
 
     QUnit.test('TrackerView. Set height', function(assert) {
         // arrange
-        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
-        this.component._views.trackerView = new columnResizingReordering.TrackerView(this.component);
+        this.component._controllers.tablePosition = new columnsResizingReordering.TablePositionViewController(this.component);
+        this.component._views.trackerView = new columnsResizingReordering.TrackerView(this.component);
 
         const controller = this.createColumnsResizerViewController([
             { caption: 'Column 1' },
@@ -2718,7 +2717,7 @@ QUnit.module('Columns resizing', {
     QUnit.test('TrackerView. Position and height are not changed when tracker ccs class is not applied', function(assert) {
         // arrange
         this.commonColumnSettings.allowResizing = false;
-        this.component._views.trackerView = new columnResizingReordering.TrackerView(this.component);
+        this.component._views.trackerView = new columnsResizingReordering.TrackerView(this.component);
 
         this.createColumnsResizerViewController([
             { caption: 'Column 1' },
@@ -2741,7 +2740,7 @@ QUnit.module('Columns resizing', {
         // arrange
         this.options.allowColumnResizing = true;
         this.commonColumnSettings.allowResizing = false;
-        this.component._views.trackerView = new columnResizingReordering.TrackerView(this.component);
+        this.component._views.trackerView = new columnsResizingReordering.TrackerView(this.component);
 
         this.createColumnsResizerViewController();
 
@@ -2755,7 +2754,7 @@ QUnit.module('Columns resizing', {
     QUnit.test('TrackerView. Invalidate is called and subscribe to positionChanged when allowColumnResizing is changed to true', function(assert) {
         // arrange
         this.commonColumnSettings.allowResizing = false;
-        const trackerView = this.component._views.trackerView = new columnResizingReordering.TrackerView(this.component);
+        const trackerView = this.component._views.trackerView = new columnsResizingReordering.TrackerView(this.component);
         trackerView.init();
         trackerView.render($('#container'));
         sinon.spy(trackerView, '_invalidate');
@@ -2775,7 +2774,7 @@ QUnit.module('Columns resizing', {
     QUnit.test('TrackerView. Unsubscribe from positionChanged when allowColumnResizing is changed to false', function(assert) {
         // arrange
         this.commonColumnSettings.allowResizing = true;
-        const trackerView = this.component._views.trackerView = new columnResizingReordering.TrackerView(this.component);
+        const trackerView = this.component._views.trackerView = new columnsResizingReordering.TrackerView(this.component);
         trackerView.init();
         trackerView.render($('#container'));
 
@@ -2831,7 +2830,7 @@ QUnit.module('Columns resizing', {
     QUnit.test('Change cursor after hovering mouse to the bottom of the banded column when wordWrapEnabled is true', function(assert) {
         // arrange
         this.options.wordWrapEnabled = true;
-        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+        this.component._controllers.tablePosition = new columnsResizingReordering.TablePositionViewController(this.component);
         this.component._controllers.tablePosition.init();
 
         const $testElement = $('#container');
@@ -2887,7 +2886,7 @@ QUnit.module('Columns resizing', {
 
         this.component._notifyOptionChanged = noop;
         this.component._controllers.columns = new ColumnsController(this.component);
-        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+        this.component._controllers.tablePosition = new columnsResizingReordering.TablePositionViewController(this.component);
 
         this.component._controllers.columns.init();
         this.component._controllers.tablePosition.init();
@@ -3015,7 +3014,7 @@ QUnit.module('Columns resizing', {
 
             this.component._notifyOptionChanged = noop;
             this.component._controllers.columns = new ColumnsController(this.component);
-            this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+            this.component._controllers.tablePosition = new columnsResizingReordering.TablePositionViewController(this.component);
 
             this.component._controllers.columns.init();
             this.component._controllers.tablePosition.init();
@@ -3261,8 +3260,8 @@ QUnit.module('Headers reordering', {
         };
 
         that.component._views = {
-            columnsSeparatorView: new columnResizingReordering.ColumnsSeparatorView(that.component),
-            draggingHeaderView: new columnResizingReordering.DraggingHeaderView(that.component),
+            columnsSeparatorView: new columnsResizingReordering.ColumnsSeparatorView(that.component),
+            draggingHeaderView: new columnsResizingReordering.DraggingHeaderView(that.component),
             columnHeadersView: new ColumnHeadersView(that.component),
             headerPanel: new (HeaderPanel.inherit(GroupingHeaderPanelExtender))(that.component),
             columnChooserView: new ColumnChooserView(that.component)
@@ -3270,7 +3269,7 @@ QUnit.module('Headers reordering', {
 
         that.createDraggingHeaderViewController = function(columns) {
             that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
-            const controller = new columnResizingReordering.DraggingHeaderViewController(that.component);
+            const controller = new columnsResizingReordering.DraggingHeaderViewController(that.component);
 
             controller.init();
 
@@ -3306,7 +3305,7 @@ QUnit.module('Headers reordering', {
         this.renderViews($('#container'));
 
         // assert
-        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'));
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView.getTableElement().find('td'));
         assert.deepEqual(roundPoints(points),
             [{ x: -10000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -9000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points');
     });
@@ -3319,7 +3318,7 @@ QUnit.module('Headers reordering', {
         this.renderViews($('#container'));
 
         // assert
-        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'), null, null, 5);
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView.getTableElement().find('td'), null, null, 5);
         assert.deepEqual(roundPoints(points),
             [{ x: -10000, y: -10000, columnIndex: 5, index: 5 }, { x: -9500, y: -10000, columnIndex: 6, index: 6 }, { x: -9000, y: -10000, columnIndex: 7, index: 7 }], 'dragging points');
     });
@@ -3338,7 +3337,7 @@ QUnit.module('Headers reordering', {
         $('#container').addClass('dx-rtl');
 
         // assert
-        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'));
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView.getTableElement().find('td'));
         assert.deepEqual(
             roundPoints(points),
             [
@@ -4551,8 +4550,8 @@ QUnit.module('Headers reordering', {
         that.renderViews($('#container'));
 
         that.component._views = {
-            columnsSeparatorView: new columnResizingReordering.ColumnsSeparatorView(that.component),
-            draggingHeaderView: new columnResizingReordering.DraggingHeaderView(that.component),
+            columnsSeparatorView: new columnsResizingReordering.ColumnsSeparatorView(that.component),
+            draggingHeaderView: new columnsResizingReordering.DraggingHeaderView(that.component),
             columnHeadersView: new ColumnHeadersView(that.component),
             headerPanel: new HeaderPanel(that.component),
             columnChooserView: new ColumnChooserView(that.component)
@@ -6540,8 +6539,8 @@ QUnit.module('Headers reordering inside color swatch', {
         };
 
         that.component._views = {
-            columnsSeparatorView: new columnResizingReordering.ColumnsSeparatorView(that.component),
-            draggingHeaderView: new columnResizingReordering.DraggingHeaderView(that.component),
+            columnsSeparatorView: new columnsResizingReordering.ColumnsSeparatorView(that.component),
+            draggingHeaderView: new columnsResizingReordering.DraggingHeaderView(that.component),
             columnHeadersView: new ColumnHeadersView(that.component),
             headerPanel: new (HeaderPanel.inherit(GroupingHeaderPanelExtender))(that.component),
             columnChooserView: new ColumnChooserView(that.component)
@@ -6549,7 +6548,7 @@ QUnit.module('Headers reordering inside color swatch', {
 
         that.createDraggingHeaderViewController = function(columns) {
             that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
-            const controller = new columnResizingReordering.DraggingHeaderViewController(that.component);
+            const controller = new columnsResizingReordering.DraggingHeaderViewController(that.component);
 
             controller.init();
 

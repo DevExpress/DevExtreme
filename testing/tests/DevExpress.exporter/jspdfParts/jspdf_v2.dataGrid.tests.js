@@ -6,7 +6,6 @@ import { isFunction, isObject } from 'core/utils/type';
 import 'ui/data_grid/ui.data_grid';
 import { exportDataGrid } from 'exporter/jspdf/export_data_grid_2';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

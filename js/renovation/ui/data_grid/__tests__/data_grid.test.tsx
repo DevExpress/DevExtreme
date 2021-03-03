@@ -186,7 +186,7 @@ describe('DataGrid', () => {
 
           it(`${methodName} if widget is not initialized`, () => {
             const component = new DataGrid({});
-            component.init = jest.fn();
+            component.createInstance = jest.fn();
             component.componentInstance = null as any;
             component[methodName]();
 

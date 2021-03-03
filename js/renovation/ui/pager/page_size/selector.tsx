@@ -6,7 +6,7 @@ import {
 import { FullPageSize } from '../common/types.d';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
-import PagerProps from '../common/pager_props';
+import { PagerProps } from '../common/pager_props';
 import messageLocalization from '../../../../localization/message';
 import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
 

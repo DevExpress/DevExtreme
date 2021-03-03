@@ -8,20 +8,6 @@ const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 
-export const Scroller = Class.inherit({
-    _disposeHandler: function() {
-        this._$scrollbar.remove();
-    },
-
-    _cursorEnterHandler: function() {
-        this._scrollbar.cursorEnter();
-    },
-
-    _cursorLeaveHandler: function() {
-        this._scrollbar.cursorLeave();
-    }
-});
-
 
 let hoveredScrollable;
 let activeScrollable;
@@ -106,10 +92,6 @@ export const SimulatedStrategy = Class.inherit({
         if(targetScrollable) {
             targetScrollable._cursorEnterHandler();
         }
-    },
-
-    verticalOffset: function() {
-        return 0;
     },
 
     dispose: function() {

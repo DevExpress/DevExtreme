@@ -9,7 +9,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import DxDataGrid from '../../../../ui/data_grid';
 import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../../../../ui/data_grid';
-import BaseWidgetProps from '../../../utils/base_props';
+import { BaseWidgetProps } from '../../../utils/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../ui/filter_builder';
 import type { dxElement } from '../../../../core/element';

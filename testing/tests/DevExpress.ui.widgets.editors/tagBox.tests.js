@@ -7,7 +7,7 @@ import config from 'core/config';
 import dataQuery from 'data/query';
 import devices from 'core/devices';
 import errors from 'core/errors';
-import dataErrors from 'data/errors';
+import { errors as dataErrors } from 'data/errors';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import messageLocalization from 'localization/message';
@@ -19,7 +19,6 @@ import TagBox from 'ui/tag_box';
 import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import { normalizeKeyName } from 'events/utils/index';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -927,7 +926,7 @@ QUnit.module('multi tag support', {
     });
 
     QUnit.test('TagBox should correctly process the rejected load promise of the dataSource', function(assert) {
-        const dataErrorStub = sinon.stub(dataErrors.errors, 'log');
+        const dataErrorStub = sinon.stub(dataErrors, 'log');
         const $editor = $('#tagBox').dxTagBox({
             dataSource: {
                 store: new CustomStore({

@@ -251,6 +251,9 @@ export class GanttView extends Widget {
     getModelChangesListener() {
         return this.option('modelChangesListener');
     }
+    getExportInfo() {
+        return this.option('exportInfo');
+    }
     showPopupMenu(info) {
         this._onPopupMenuShowing(info);
     }
@@ -290,5 +293,22 @@ export class GanttView extends Widget {
     }
     destroyTemplate(container) {
         $(container).empty();
+    }
+    // export
+    getTreeListTableStyle() {
+        return this.callExportHelperMethod('getTreeListTableStyle');
+    }
+    getTreeListColCount() {
+        return this.callExportHelperMethod('getTreeListColCount');
+    }
+    getTreeListHeaderInfo(colIndex) {
+        return this.callExportHelperMethod('getTreeListHeaderInfo', colIndex);
+    }
+    getTreeListCellInfo(rowIndex, colIndex) {
+        return this.callExportHelperMethod('getTreeListCellInfo', rowIndex, colIndex);
+    }
+    callExportHelperMethod(methodName, ...args) {
+        const helper = this.option('exportHelper');
+        return helper[methodName](...args);
     }
 }

@@ -918,7 +918,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             useKeyboard: false,
             bounceEnabled: false,
             updateManually: true,
-            pushBackValue: 0
         };
         if(this._needCreateCrossScrolling()) {
             config = extend(config, this._createCrossScrollingConfig());
@@ -1005,7 +1004,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
-            pushBackValue: 0,
             onScroll: e => {
                 this._headerSemaphore.take();
                 this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ left: e.scrollOffset.left });
@@ -1028,7 +1026,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
-            pushBackValue: 0,
             onScroll: e => {
                 this._sideBarSemaphore.take();
                 this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ top: e.scrollOffset.top });
@@ -1451,7 +1448,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     _setSelectedCellsByCellData(data) {
         const cells = [];
         const $cells = this._getAllCells(data?.[0]?.allDay);
-        const cellsInRow = this._getTotalCellCount(this._getGroupCount());
+        let cellsInRow = this._getTotalCellCount(this._getGroupCount());
+
+        if(this.isVirtualScrolling()) {
+            const renderState = this.virtualScrollingDispatcher.getRenderState();
+
+            cellsInRow = renderState.cellCount || cellsInRow;
+        }
 
         data.forEach((cellData) => {
             const { groups, startDate, allDay } = cellData;
@@ -2303,12 +2306,17 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.cache.clear();
         this._cleanAllowedPositions();
         this.virtualSelectionState?.releaseSelectedAndFocusedCells();
-        this._$thead.empty();
-        this._$dateTable.empty();
-        this._shader && this._shader.clean();
-        this._$timePanel.empty();
-        this._$allDayTable && this._$allDayTable.empty();
-        this._$groupTable.empty();
+        if(!this.isRenovatedRender()) {
+            this._$thead.empty();
+            this._$dateTable.empty();
+            this._$timePanel.empty();
+            this._$groupTable.empty();
+
+            this._shader?.clean();
+            this._$allDayTable?.empty();
+            this._$sidebarTable?.empty();
+        }
+
         delete this._hiddenInterval;
         delete this._interval;
     }
@@ -2773,7 +2781,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         groupIndex = groupIndex || 0;
         let position;
 
-        if(this.isRenovatedRender()) {
+        if(this.isVirtualScrolling()) {
             const positionByMap = this.viewDataProvider.findCellPositionInMap(groupIndex, date, inAllDayRow);
             if(!positionByMap) {
                 return undefined;
@@ -3532,13 +3540,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getCoordinatesByCell($cell) {
-        const columnIndex = $cell.index();
+        let columnIndex = $cell.index();
         let rowIndex = $cell.parent().index();
         const isAllDayCell = this._hasAllDayClass($cell);
         const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
 
         if(this.isVirtualScrolling() && !(isAllDayCell && !isVerticalGrouping)) {
             rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
+        }
+        if(this.isVirtualScrolling()) {
+            columnIndex -= this.virtualScrollingDispatcher.leftVirtualCellsCount;
         }
 
         return { rowIndex, columnIndex };
@@ -3555,6 +3566,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getTimePanelCells() {
         return this.$element().find(`.${TIME_PANEL_CELL_CLASS}`);
+    }
+
+    _getRDateTableProps() {
+        return ({
+            viewData: this.viewDataProvider.viewData,
+            dataCellTemplate: this.option('dataCellTemplate'),
+            addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
+        });
     }
 }
 

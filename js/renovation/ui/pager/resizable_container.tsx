@@ -1,17 +1,15 @@
-/* eslint-disable max-classes-per-file */
 import {
   Component, ComponentBindings, JSXComponent,
   Effect, Template, InternalState, OneWay, ForwardRef, Mutable, JSXTemplate, RefObject,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
-import PagerProps from './common/pager_props';
+import { PagerProps } from './common/pager_props';
 import { getElementWidth, getElementStyle } from './utils/get_element_width';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { PagerContentProps } from './content';
 import { isDefined } from '../../../core/utils/type';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
   parentRef,
   pageSizesRef,
@@ -21,7 +19,7 @@ export const viewFunction = ({
   isLargeDisplayMode,
   props: { contentTemplate: Content, pagerProps },
   restAttributes,
-}: ResizableContainer) => (
+}: ResizableContainer): JSX.Element => (
   <Content
     rootElementRef={parentRef}
     pageSizesRef={pageSizesRef}
@@ -55,7 +53,7 @@ export function calculateAdaptivityProps({
 
 function getElementsWidth({
   parent, pageSizes, pages, info,
-}: AllElements<HTMLElement | undefined>): AllElements<number> {
+}: AllElements<HTMLElement | null | undefined>): AllElements<number> {
   const parentWidth = getElementWidth(parent);
   const pageSizesWidth = getElementWidth(pageSizes);
   const infoWidth = getElementWidth(info);
@@ -81,11 +79,11 @@ export class ResizableContainerProps {
 export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'pagerProps' | 'contentTemplate'>() {
   @ForwardRef() parentRef!: RefObject<HTMLDivElement>;
 
-  @ForwardRef() pageSizesRef?: RefObject<HTMLDivElement>;
+  @ForwardRef() pageSizesRef!: RefObject<HTMLDivElement>;
 
-  @ForwardRef() infoTextRef?: RefObject<HTMLDivElement>;
+  @ForwardRef() infoTextRef!: RefObject<HTMLDivElement>;
 
-  @ForwardRef() pagesRef?: RefObject<HTMLElement>;
+  @ForwardRef() pagesRef!: RefObject<HTMLElement>;
 
   @InternalState() infoTextVisible = true;
 
@@ -102,7 +100,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   }
 
   @Effect({ run: 'always' }) effectUpdateChildProps(): void {
-    const parentWidth = getElementWidth(this.parentRef);
+    const parentWidth = this.parentRef.current ? getElementWidth(this.parentRef.current) : 0;
     if (parentWidth > 0) {
       this.updateAdaptivityProps();
     }
@@ -110,10 +108,10 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
 
   updateAdaptivityProps(): void {
     const currentElementsWidth = getElementsWidth({
-      parent: this.parentRef,
-      pageSizes: this.pageSizesRef,
-      info: this.infoTextRef,
-      pages: this.pagesRef,
+      parent: this.parentRef.current,
+      pageSizes: this.pageSizesRef.current,
+      info: this.infoTextRef.current,
+      pages: this.pagesRef.current,
     });
     if (isDefined(this.actualAdaptivityProps)
     && ((this.actualAdaptivityProps.infoTextVisible !== this.infoTextVisible

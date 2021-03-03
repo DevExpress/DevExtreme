@@ -26,7 +26,7 @@ const addToStyle = (
   const nextStyle = style || {};
   const result = { ...nextStyle };
 
-  result[attr] = value || nextStyle[value];
+  result[attr] = value || nextStyle[attr];
 
   return result;
 };

@@ -10,7 +10,6 @@ QUnit.testStart(function() {
 });
 
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
@@ -21,8 +20,6 @@ import dataUtils from 'core/element_data';
 import { createEvent } from 'events/utils/index';
 
 import Pager from 'ui/pager';
-
-// import { act } from 'preact/test-utils';
 
 QUnit.module('Pager', {
     beforeEach: function() {

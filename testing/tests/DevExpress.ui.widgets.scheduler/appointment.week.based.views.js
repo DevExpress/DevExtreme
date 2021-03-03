@@ -2,7 +2,6 @@ import $ from 'jquery';
 import errors from 'ui/widget/ui.errors';
 import translator from 'animation/translator';
 import dateLocalization from 'localization/date';
-import dblclickEvent from 'events/dblclick';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
@@ -21,7 +20,6 @@ import {
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'common.css!';
 import 'generic_light.css!';
 
 const {
@@ -129,40 +127,47 @@ module('Integration: Appointment Day, Week views', {
             assert.roughEqual($appointment.height(), 3, 0.5, 'Task has a right height');
         });
 
-        test('DblClick on appointment should not affect the related cell start date (T395620)', function(assert) {
-            this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: [
-                    {
-                        text: 'Task 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0)
-                    },
-                    {
-                        text: 'Task 2',
-                        startDate: new Date(2015, 1, 9, 3, 0),
-                        endDate: new Date(2015, 1, 9, 4, 0)
-                    }
-                ],
-                height: 600
+        [true, false].forEach((renovateRender) => {
+            test(`DblClick on appointment should not affect the related cell start date (T395620) when renovateRender is ${renovateRender}`, function(assert) {
+                this.createInstance({
+                    currentDate: new Date(2015, 1, 9),
+                    dataSource: [
+                        {
+                            text: 'Task 1',
+                            startDate: new Date(2015, 1, 9, 1, 0),
+                            endDate: new Date(2015, 1, 9, 2, 0)
+                        },
+                        {
+                            text: 'Task 2',
+                            startDate: new Date(2015, 1, 9, 3, 0),
+                            endDate: new Date(2015, 1, 9, 4, 0)
+                        }
+                    ],
+                    height: 600,
+                    renovateRender,
+                });
+
+                sinon.stub(this.instance, 'showAppointmentPopup');
+
+                try {
+                    const appointment = this.scheduler.appointmentList[0];
+                    const apptData = appointment.data;
+
+                    apptData.startDate = new Date(2015, 1, 9, 2);
+
+                    appointment.dbClick();
+
+                    const cell = this.scheduler.workSpace.getCell(2, 0).get(0);
+
+                    const relatedCellData = !this.instance.option('renovateRender')
+                        ? dataUtils.data(cell, 'dxCellData').startDate
+                        : this.instance.getWorkSpace().getCellData($(cell)).startDate;
+
+                    assert.equal(relatedCellData.getTime(), new Date(2015, 1, 9, 1).getTime(), 'Cell start date is OK');
+                } finally {
+                    this.instance.showAppointmentPopup.restore();
+                }
             });
-
-            sinon.stub(this.instance, 'showAppointmentPopup');
-
-            try {
-                const $appt = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-                const apptData = dataUtils.data($appt[0], 'dxItemData');
-
-                apptData.startDate = new Date(2015, 1, 9, 2);
-
-                $appt.trigger(dblclickEvent.name);
-
-                const relatedCellData = dataUtils.data($(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).get(2), 'dxCellData').startDate;
-
-                assert.equal(relatedCellData.getTime(), new Date(2015, 1, 9, 1).getTime(), 'Cell start date is OK');
-            } finally {
-                this.instance.showAppointmentPopup.restore();
-            }
         });
     });
 

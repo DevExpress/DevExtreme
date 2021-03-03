@@ -14,7 +14,6 @@ import config from 'core/config';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import { normalizeKeyName } from 'events/utils/index';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {

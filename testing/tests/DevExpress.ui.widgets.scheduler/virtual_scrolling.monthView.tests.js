@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'generic_light.css!';
 
 import dateUtils from 'core/utils/date';

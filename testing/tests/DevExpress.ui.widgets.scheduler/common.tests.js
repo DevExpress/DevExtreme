@@ -1,6 +1,5 @@
 import fx from 'animation/fx';
 import Color from 'color';
-import 'common.css!';
 import config from 'core/config';
 import devices from 'core/devices';
 import dataUtils from 'core/element_data';
@@ -2154,7 +2153,7 @@ QUnit.module('Scrolling to time', () => {
                             setTimeout(function() {
                                 resourceCounter++;
                                 assert.equal(counter, resourceCounter - 1);
-                                d.resolve([]);
+                                d.resolve([{ id: 1, text: 'text' }]);
                             }, 100);
 
                             return d.promise();
@@ -3974,29 +3973,32 @@ QUnit.module('Scrolling to time', () => {
                     assert.roughEqual(scrollable.scrollHeight(), dateTableHeight, 1.01, 'Scroll height > minWorspaceHeight');
                 });
 
-                QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if grouping, view: '${viewName}', view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
-                    const scheduler = createWrapper({
-                        height: height,
-                        views: [{
-                            type: viewName,
-                            name: viewName,
-                            intervalCount: intervalCount
-                        }],
-                        currentView: viewName,
-                        groups: ['any'],
-                        resources: [{
-                            fieldExpr: 'any',
-                            dataSource: [
-                                { text: 'Group_1', id: 1 },
-                                { text: 'Group_2', id: 2 },
-                                { text: 'Group_3', id: 2 }
-                            ],
-                        }]
-                    });
+                [true, false].forEach((renovateRender) => {
+                    QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if grouping, view: '${viewName}', view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
+                        const scheduler = createWrapper({
+                            height: height,
+                            views: [{
+                                type: viewName,
+                                name: viewName,
+                                intervalCount: intervalCount
+                            }],
+                            currentView: viewName,
+                            groups: ['any'],
+                            resources: [{
+                                fieldExpr: 'any',
+                                dataSource: [
+                                    { text: 'Group_1', id: 1 },
+                                    { text: 'Group_2', id: 2 },
+                                    { text: 'Group_3', id: 3 }
+                                ],
+                            }],
+                            renovateRender,
+                        });
 
-                    const dateTableHeight = scheduler.workSpace.getDateTableHeight();
-                    const scrollable = scheduler.workSpace.getScrollable();
-                    assert.roughEqual(scrollable.scrollHeight(), dateTableHeight, 1.01, 'Scroll height > minWorspaceHeight');
+                        const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+                        const scrollable = scheduler.workSpace.getScrollable();
+                        assert.roughEqual(scrollable.scrollHeight(), dateTableHeight, 1.01, 'Scroll height > minWorspaceHeight');
+                    });
                 });
             });
         });

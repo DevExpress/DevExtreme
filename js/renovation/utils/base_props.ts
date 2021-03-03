@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 
 @ComponentBindings()
-export default class BaseWidgetProps {
+export class BaseWidgetProps {
   @OneWay() accessKey?: string | null = null;
 
   @OneWay() activeStateEnabled?: boolean = false;
@@ -22,7 +22,7 @@ export default class BaseWidgetProps {
 
   @Event({
     actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
-  }) onContentReady?: (e: any) => any = (() => {});
+  }) onContentReady?: (e: any) => any;
 
   @Event() onKeyDown?: (e: any) => any;
 

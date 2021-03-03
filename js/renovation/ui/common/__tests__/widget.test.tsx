@@ -2,6 +2,7 @@ import React, { createRef } from 'react';
 // Should be before component import
 import { mount } from 'enzyme';
 // import { create as mount } from 'react-test-renderer';
+import { RefObject } from 'devextreme-generator/component_declaration/common';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
@@ -211,6 +212,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ activeStateEnabled: true, disabled: false });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.activeEffect() as DisposeEffectReturn;
 
@@ -263,6 +265,7 @@ describe('Widget', () => {
           const e = { ...defaultEvent };
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           widget.clickEffect();
           emit(EVENT.dxClick, e);
@@ -274,6 +277,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.clickEffect() as DisposeEffectReturn;
           detach();
@@ -360,6 +364,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: false });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.focusEffect() as DisposeEffectReturn;
 
@@ -423,6 +428,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: false });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           widget.active = false;
           const detach = widget.hoverEffect() as DisposeEffectReturn;
 
@@ -530,6 +536,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onDimensionChanged });
+          widget.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           const detach = widget.resizeEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
@@ -626,21 +633,21 @@ describe('Widget', () => {
 
       describe('setRootElementRef', () => {
         it('set rootElementRef to div ref', () => {
-          const widgetRef = {} as HTMLDivElement;
+          const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           const component = new Widget({
             rootElementRef: {},
           } as WidgetProps);
           component.widgetRef = widgetRef;
           component.setRootElementRef();
 
-          expect(component.props.rootElementRef).toBe(component.widgetRef);
+          expect(component.props.rootElementRef?.current).toBe(component.widgetRef.current);
         });
 
         it('hasnt rootElementRef', () => {
           const component = new Widget({ });
-          component.widgetRef = {} as HTMLDivElement;
+          component.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
           component.setRootElementRef();
-          expect(component.props.rootElementRef).toBeUndefined();
+          expect(component.props.rootElementRef?.current).toBeUndefined();
         });
       });
     });
@@ -859,7 +866,6 @@ describe('Widget', () => {
         disabled: false,
         focusStateEnabled: false,
         hoverStateEnabled: false,
-        onContentReady: expect.any(Function),
         tabIndex: 0,
         visible: true,
         _feedbackHideTimeout: 400,

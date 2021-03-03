@@ -16,7 +16,6 @@ import {
 import dateUtils from 'core/utils/date';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 

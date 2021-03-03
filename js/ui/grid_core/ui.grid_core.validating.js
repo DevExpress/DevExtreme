@@ -13,7 +13,6 @@ import Button from '../button';
 import pointerEvents from '../../events/pointer';
 import ValidationEngine from '../validation_engine';
 import Validator from '../validator';
-import Tooltip from '../tooltip';
 import Overlay from '../overlay';
 import errors from '../widget/ui.errors';
 import { Deferred, when } from '../../core/utils/deferred';
@@ -430,7 +429,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
         isCurrentValidatorProcessing: function({ rowKey, columnIndex }) {
             return this._currentCellValidator && this._currentCellValidator.option('validationGroup').key === rowKey
-                    && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
+                && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
         },
 
         validateCell: function(validator) {
@@ -555,7 +554,7 @@ const ValidatingController = modules.Controller.inherit((function() {
     };
 })());
 
-export default {
+export const validatingModule = {
     defaultOptions: function() {
         return {
             editing: {
@@ -998,6 +997,8 @@ export default {
                         }
 
                         let $tooltipElement = $container.find('.' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
+                        const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+
                         $tooltipElement && $tooltipElement.remove();
                         $tooltipElement = $('<div>')
                             .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
@@ -1006,8 +1007,12 @@ export default {
                         const tooltipOptions = {
                             animation: null,
                             visible: true,
+                            width: 'auto',
+                            height: 'auto',
                             target: $container,
-                            container: $container,
+                            shading: false,
+                            container: $overlayContainer,
+                            propagateOutsideClick: true,
                             closeOnOutsideClick: false,
                             closeOnTargetScroll: false,
                             contentTemplate: () => {
@@ -1024,15 +1029,14 @@ export default {
                             position: {
                                 my: 'left top',
                                 at: 'right top',
-                                of: $container,
                                 offset: '1 0',
                                 collision: 'flip',
+                                boundaryOffset: '0 0',
                                 boundary: this._rowsView.element()
                             },
                             onPositioned: this._positionedHandler.bind(this)
                         };
-
-                        return new Tooltip($tooltipElement, tooltipOptions);
+                        return new Overlay($tooltipElement, tooltipOptions);
                     },
 
                     _hideFixedGroupCell: function($cell, overlayOptions) {
@@ -1137,7 +1141,7 @@ export default {
 
                         let position;
                         const visibleTableWidth = !isRevertButton && getWidthOfVisibleCells(this, options.element);
-                        const $overlayContentElement = isRevertButton ? options.component.overlayContent() : options.component.$content();
+                        const $overlayContentElement = options.component.$content();
                         const validationMessageWidth = $overlayContentElement.outerWidth(true);
                         const needMaxWidth = !isRevertButton && validationMessageWidth > visibleTableWidth;
                         const columnIndex = this._rowsView.getCellIndex($(options.element).closest('td'));
@@ -1202,10 +1206,10 @@ export default {
                         const rowOptions = $focus?.closest('.dx-row').data('options');
                         const change = rowOptions ? this.getController('editing').getChangeByKey(rowOptions.key) : null;
                         const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
+                        const isCellModified = (change?.data?.[column?.name] !== undefined) && !this._editingController.isSaving();
                         let revertTooltip;
 
-                        if((validationResult && validationResult.status === VALIDATION_STATUS.invalid)
-                            || (change?.type === 'update' && !this._editingController.isSaving())) {
+                        if((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
                             if(this._editingController.getEditMode() === EDIT_MODE_CELL) {
                                 revertTooltip = this._showRevertButton($focus);
                             }
@@ -1241,8 +1245,6 @@ export default {
                         const editingController = this.getController('editing');
                         const change = rowOptions ? editingController.getChangeByKey(rowOptions.key) : null;
                         let validationResult;
-                        const $cell = $focus && $focus.is('td') ? $focus : null;
-                        const column = $cell && this.getController('columns').getVisibleColumns()[$cell.index()];
                         const validatingController = this.getController('validating');
 
                         if(validator) {
@@ -1252,6 +1254,7 @@ export default {
                                 editingController.waitForDeferredOperations().done(() => {
                                     when(validatingController.validateCell(validator)).done((result) => {
                                         validationResult = result;
+                                        const column = validationResult.validator.option('dataGetter')().column;
                                         if(change && column && !validatingController.isCurrentValidatorProcessing({ rowKey: change.key, columnIndex: column.index })) {
                                             return;
                                         }

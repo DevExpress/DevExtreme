@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import 'ui/check_box';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
