@@ -2,9 +2,9 @@ import {
   RecalculateCoordinates, TooltipCoordinates, StrictSize, CustomizedOptions, CustomizeTooltipFn,
   InitialBorder, TooltipData, Canvas, Font,
 } from './types.d';
-import { isFunction, isPlainObject, isDefined } from '../../../../core/utils/type';
-import domAdapter from '../../../../core/dom_adapter';
-import { getWindow } from '../../../../core/utils/window';
+import { isFunction, isPlainObject, isDefined } from '../../../core/utils/type';
+import domAdapter from '../../../core/dom_adapter';
+import { getWindow } from '../../../core/utils/window';
 
 const {
   max, min, PI, cos, sin, asin, round, ceil, floor,

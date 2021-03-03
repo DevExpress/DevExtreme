@@ -2312,10 +2312,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$timePanel.empty();
             this._$groupTable.empty();
 
-            this._shader?.clean();
             this._$allDayTable?.empty();
             this._$sidebarTable?.empty();
         }
+
+        this._shader?.clean();
 
         delete this._hiddenInterval;
         delete this._interval;
@@ -2990,14 +2991,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getMaxAllowedPosition(groupIndex) {
+        const validGroupIndex = groupIndex || 0;
+
         if(this.isRenovatedRender()) {
-            return this.getRMaxAllowedHorizontalPosition(groupIndex || 0);
+            return this.getRMaxAllowedHorizontalPosition(validGroupIndex);
         }
 
-        return this.getMaxAllowedHorizontalPosition();
+        return this.getMaxAllowedHorizontalPosition(validGroupIndex);
     }
 
-    getMaxAllowedHorizontalPosition() {
+    getMaxAllowedHorizontalPosition(groupIndex) {
         if(this._maxAllowedPosition.length === 0) {
             const isRtl = this.option('rtlEnabled');
 
@@ -3019,7 +3022,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 }).bind(this));
         }
 
-        return this._maxAllowedPosition;
+        return this._maxAllowedPosition[groupIndex];
     }
 
     getRMaxAllowedHorizontalPosition(groupIndex) {

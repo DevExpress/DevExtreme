@@ -14,17 +14,16 @@ import { isDefined } from '../../../core/utils/type';
 import {
   StrictSize, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
   Font, TooltipCoordinates, Canvas, Container,
-} from './common/types.d';
-import {
+
   Format, EventData, OnTooltipHiddenFn, OnTooltipShownFn,
-} from '../common/types.d';
+} from './types.d';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, getCanvas, isTextEmpty,
-} from './common/tooltip_utils';
+} from './tooltip_utils';
 import { normalizeEnum } from '../../../viz/core/utils';
 import domAdapter from '../../../core/dom_adapter';
-import { isUpdatedFlatObject } from '../common/utils';
+import { isUpdatedFlatObject } from './utils';
 
 interface PinnedSize extends StrictSize {
   x: number;
