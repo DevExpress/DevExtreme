@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Canvas } from '../../common/types.d';
 import {
   clear as clearEventHandlers,
   defaultEvent,
@@ -528,7 +527,7 @@ describe('Bullet', () => {
 
         it('should return correct coords by canvas and offset', () => {
           const bullet = new Bullet({ });
-          bullet.canvasState = { width: 200, height: 100 } as Canvas;
+          bullet.canvasState = { width: 200, height: 100 } as ClientRect;
           bullet.offsetState = { left: 150, top: 200 };
 
           expect(bullet.tooltipCoords).toEqual({ x: 250, y: 250 });
@@ -550,7 +549,7 @@ describe('Bullet', () => {
         it('should return inner custom props if bullet doesn\'t have tooltip props', () => {
           (generateCustomizeTooltipCallback as jest.Mock).mockReturnValue(customizeTooltipFn);
           const bullet = new Bullet({ value, target });
-          bullet.canvasState = { width: 200, height: 100 } as Canvas;
+          bullet.canvasState = { width: 200, height: 100 } as ClientRect;
           bullet.offsetState = { left: 100, top: 200 };
           bullet.widgetRef = {} as any;
 
@@ -574,7 +573,7 @@ describe('Bullet', () => {
           };
           (generateCustomizeTooltipCallback as jest.Mock).mockReturnValue(customizeTooltipFn);
           const bullet = new Bullet({ value, target, tooltip });
-          bullet.canvasState = { width: 200, height: 100 } as Canvas;
+          bullet.canvasState = { width: 200, height: 100 } as ClientRect;
           bullet.offsetState = { left: 100, top: 200 };
           bullet.widgetRef = {} as any;
 
@@ -595,7 +594,7 @@ describe('Bullet', () => {
           const bullet = new Bullet({
             value, target, onTooltipShown, onTooltipHidden,
           });
-          bullet.canvasState = { width: 200, height: 100 } as Canvas;
+          bullet.canvasState = { width: 200, height: 100 } as ClientRect;
           bullet.offsetState = { left: 100, top: 200 };
           bullet.widgetRef = {} as any;
 
@@ -657,7 +656,7 @@ describe('Bullet', () => {
               getBoundingClientRect: jest.fn().mockReturnValue(offsetState),
             })),
           } as any;
-          bullet.onCanvasChange({} as Canvas);
+          bullet.onCanvasChange({} as ClientRect);
 
           expect(bullet.offsetState).toEqual(offsetState);
         });

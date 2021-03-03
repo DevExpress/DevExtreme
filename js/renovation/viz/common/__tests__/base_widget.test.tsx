@@ -6,7 +6,6 @@ import { RootSvgElement } from '../renderers/svg_root';
 import { GrayScaleFilter } from '../renderers/gray_scale_filter';
 import { ConfigProvider } from '../../../common/config_provider';
 import { clear as clearEventHandlers } from '../../../test_utils/events_mock';
-import { Canvas } from '../types.d';
 import getElementComputedStyle from '../../../utils/get_computed_style';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
 
@@ -227,7 +226,7 @@ describe('BaseWidget', () => {
           paddingTop: '0px',
           paddingBottom: '0px',
         });
-        const defaultCanvas: Canvas = {
+        const defaultCanvas: ClientRect = {
           width: 500,
           height: 300,
           left: 10,
@@ -272,7 +271,7 @@ describe('BaseWidget', () => {
       });
 
       it('should get merged canvas from props (size, margin and defaultCanvas)', () => {
-        const defaultCanvas: Canvas = {
+        const defaultCanvas: ClientRect = {
           width: 500,
           height: 300,
           left: 10,
@@ -302,7 +301,7 @@ describe('BaseWidget', () => {
       });
 
       it('should get merged size from props (size is not valid, and defaultCanvas)', () => {
-        const defaultCanvas: Canvas = {
+        const defaultCanvas: ClientRect = {
           ...DEFAULT_CANVAS,
           width: 500,
           height: 300,
@@ -321,7 +320,7 @@ describe('BaseWidget', () => {
       });
 
       it('should get default canvas from props (if any side is negative)', () => {
-        const defaultCanvas: Canvas = {
+        const defaultCanvas: ClientRect = {
           width: 500,
           height: 300,
           left: 10,
