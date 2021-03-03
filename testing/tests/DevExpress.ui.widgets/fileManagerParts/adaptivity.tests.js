@@ -163,7 +163,7 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         this.clock.tick(400);
 
         const contentPane = this.wrapper.getDrawerPanelContent();
-        assert.strictEqual(this.wrapper.getSplitterPosition(), /* contentPane.offset().left + */contentPane.outerWidth(), 'Splitter is on the correct position');
+        assert.roughEqual(this.wrapper.getSplitterPosition(), contentPane.outerWidth(), 0.2, 'Splitter is on the correct position');
     });
 
 });
