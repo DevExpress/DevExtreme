@@ -1630,7 +1630,6 @@
             "Title": "Web API Service",
             "Name": "WebAPIService",
             "Equivalents": "webapi",
-            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
             "Widget": "Scheduler",
             "Modules": "devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
