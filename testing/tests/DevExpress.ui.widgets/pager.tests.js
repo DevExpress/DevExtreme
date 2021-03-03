@@ -48,7 +48,7 @@ QUnit.module('Pager', {
 function() {
     const isRenovation = !!Pager.IS_RENOVATED_WIDGET;
     const getPagesElement = function(rootElement) {
-        return rootElement.find('.dx-pages')[0].childNodes;
+        return rootElement.find(isRenovation ? '.dx-page-indexies' : '.dx-pages')[0].childNodes;
     };
     QUnit.test('Default options init', function(assert) {
         const $pager = $('#container').dxPager();
@@ -684,7 +684,7 @@ function() {
 
     QUnit.test('Focus selected page', function(assert) {
         const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
-        const $pages = $pager.find('.dx-pages > .dx-page');
+        const $pages = $pager.find('.dx-pages .dx-page');
 
         for(let i = 0; i < $pages.length; ++i) {
             assert.equal($($pages[i]).attr('tabindex'), 0, 'page tabindex');
@@ -1275,7 +1275,6 @@ function() {
         $pager.width(optimalPagerWidth - pager._$info.outerWidth(true) - 1);
 
         pager._dimensionChanged();
-
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
     });
 
@@ -1600,14 +1599,14 @@ function() {
 
         rtlTestSample = {
             pageSizes: pagerElement.find('.dx-page-size').text(),
-            pages: $(pagerElement.find('.dx-pages div').get().reverse()).text()
+            pages: $(Array.from(getPagesElement(pagerElement)).reverse()).text()
         };
 
         pagerInstance.option('rtlEnabled', false);
 
         ltrTestSample = {
             pageSizes: pagerElement.find('.dx-page-size').text(),
-            pages: pagerElement.find('.dx-pages div').text()
+            pages: $(getPagesElement(pagerElement)).text()
         };
 
         assert.equal(rtlTestSample.pageSizes, ltrTestSample.pageSizes, 'check that page sizes in LTR are equal to page sizes in RTL');
