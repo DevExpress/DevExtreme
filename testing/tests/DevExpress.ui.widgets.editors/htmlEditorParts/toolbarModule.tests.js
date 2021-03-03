@@ -237,10 +237,16 @@ testModule('Toolbar module', simpleModuleConfig, () => {
             formatName: 'undo'
         }
     }, {
-        formatValues: 'formatName',
+        optionName: 'formatValues',
         item: {
             name: 'size',
             formatValues: ['10px']
+        }
+    }, {
+        optionName: 'formatValues',
+        item: {
+            name: 'size',
+            formatValues: null
         }
     }].forEach(optionInfo => {
         test(`should show 'W1016' warning if deprecated ${optionInfo.optionName} toolbar item field is used`, function(assert) {

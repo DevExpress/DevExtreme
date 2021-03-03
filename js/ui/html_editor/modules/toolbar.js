@@ -473,7 +473,7 @@ if(Quill) {
             return $container;
         }
 
-        _checkItemOptions(item) {
+        _detectRenamedOptions(item) {
             const optionsInfo = [{
                 newName: 'name',
                 oldName: 'formatName'
@@ -482,11 +482,13 @@ if(Quill) {
                 oldName: 'formatValues'
             }];
 
-            each(optionsInfo, (index, optionName) => {
-                if(isObject(item) && isDefined(item[optionName.oldName])) {
-                    errors.log('W1016', optionName.oldName, optionName.newName);
-                }
-            });
+            if(isObject(item)) {
+                each(optionsInfo, (index, optionName) => {
+                    if(Object.prototype.hasOwnProperty.call(item, optionName.oldName)) {
+                        errors.log('W1016', optionName.oldName, optionName.newName);
+                    }
+                });
+            }
         }
 
         _prepareToolbarItems() {
@@ -494,7 +496,7 @@ if(Quill) {
 
             each(this.options.items, (index, item) => {
                 let newItem;
-                this._checkItemOptions(item);
+                this._detectRenamedOptions(item);
                 if(isObject(item)) {
                     newItem = this._handleObjectItem(item);
                 } else if(isString(item)) {
@@ -534,7 +536,7 @@ if(Quill) {
 
             return {
                 widget: 'dxButton',
-                name: name,
+                name,
                 options: {
                     hint: localize(buttonText),
                     text: buttonText,
@@ -547,19 +549,21 @@ if(Quill) {
         }
 
         _prepareSelectItemConfig(item) {
+            const { name, acceptedValues } = item;
+
             return extend(true, {
                 widget: 'dxSelectBox',
-                name: item.name,
+                name,
                 options: {
                     stylingMode: 'filled',
-                    dataSource: item.acceptedValues,
+                    dataSource: acceptedValues,
                     displayExpr: (value) => {
-                        return localizeValue(value, item.name);
+                        return localizeValue(value, name);
                     },
-                    placeholder: localize(item.name),
+                    placeholder: localize(name),
                     onValueChanged: (e) => {
                         if(!this._isReset) {
-                            this._applyFormat([item.name, e.value, USER_ACTION], e.event);
+                            this._applyFormat([name, e.value, USER_ACTION], e.event);
                             this._setValueSilent(e.component, e.value);
                         }
                     }
