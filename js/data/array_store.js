@@ -1,6 +1,6 @@
 import dataUtils from './utils';
 import Query from './query';
-import errorUtils from './errors';
+import { errors } from './errors';
 import Store from './abstract_store';
 import { indexByKey, insert, applyBatch, update, remove } from './array_utils';
 
@@ -16,7 +16,7 @@ const ArrayStore = Store.inherit({
 
         const initialArray = options.data;
         if(initialArray && !Array.isArray(initialArray)) {
-            throw errorUtils.errors.Error('E4006');
+            throw errors.Error('E4006');
         }
 
         this._array = initialArray || [];
@@ -32,7 +32,7 @@ const ArrayStore = Store.inherit({
         const index = indexByKey(this, this._array, key);
 
         if(index === -1) {
-            return dataUtils.rejectedPromise(errorUtils.errors.Error('E4009'));
+            return dataUtils.rejectedPromise(errors.Error('E4009'));
         }
 
         return dataUtils.trivialPromise(this._array[index]);

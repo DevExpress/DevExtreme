@@ -78,6 +78,14 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @public
      */
     value?: any;
+    /**
+     * @docid
+     * @type Enums.EditorStylingMode
+     * @default 'outlined'
+     * @prevFileNamespace DevExpress.ui
+     * @hidden
+     */
+    stylingMode?: 'outlined' | 'underlined' | 'filled';
 }
 /**
  * @docid

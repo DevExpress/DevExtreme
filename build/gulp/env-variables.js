@@ -8,5 +8,5 @@ module.exports = {
     TEST_CI: TEST_CI,
     DOCKER_CI: Boolean(process.env['DEVEXTREME_DOCKER_CI']),
     USE_RENOVATION,
-    BUILD_ESM_PACKAGE
+    BUILD_ESM_PACKAGE: BUILD_ESM_PACKAGE && !TEST_CI
 };

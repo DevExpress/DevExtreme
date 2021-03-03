@@ -96,10 +96,13 @@ task('copy-fonts-and-icons', () => {
         .pipe(dest(cssArtifactsPath));
 });
 
+task('compile-themes-all', () => compileBundles(getBundleSourcePath('*')));
+task('compile-themes-dev', () => compileBundles(DEFAULT_DEV_BUNDLE_NAMES.map(getBundleSourcePath)));
+
 task('style-compiler-themes', series(
     'create-scss-bundles',
     parallel(
-        () => compileBundles(getBundleSourcePath('*')),
+        'compile-themes-all',
         'copy-fonts-and-icons'
     )
 ));
@@ -107,7 +110,7 @@ task('style-compiler-themes', series(
 task('style-compiler-themes-ci', series(
     'create-scss-bundles',
     parallel(
-        () => compileBundles(DEFAULT_DEV_BUNDLE_NAMES.map(getBundleSourcePath)),
+        'compile-themes-dev',
         'copy-fonts-and-icons'
     )
 ));

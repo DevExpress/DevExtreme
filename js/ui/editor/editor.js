@@ -19,6 +19,8 @@ const VALIDATION_STATUS_VALID = 'valid';
 const VALIDATION_STATUS_INVALID = 'invalid';
 const READONLY_NAMESPACE = 'editorReadOnly';
 
+const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
+
 const VALIDATION_MESSAGE_KEYS_MAP = {
     validationMessageMode: 'mode',
     validationMessageOffset: 'offset',
@@ -165,6 +167,32 @@ const Editor = Widget.inherit({
 
     _canValueBeChangedByClick: function() {
         return false;
+    },
+
+    _getStylingModePrefix: function() {
+        return 'dx-editor-';
+    },
+
+    _renderStylingMode: function() {
+        const optionName = 'stylingMode';
+        const optionValue = this.option(optionName);
+        const prefix = this._getStylingModePrefix();
+
+        const allowedStylingClasses = ALLOWED_STYLING_MODES.map((mode) => {
+            return prefix + mode;
+        });
+
+        allowedStylingClasses.forEach(className => this.$element().removeClass(className));
+
+        let stylingModeClass = prefix + optionValue;
+
+        if(allowedStylingClasses.indexOf(stylingModeClass) === -1) {
+            const defaultOptionValue = this._getDefaultOptions()[optionName];
+            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
+            stylingModeClass = prefix + (platformOptionValue || defaultOptionValue);
+        }
+
+        this.$element().addClass(stylingModeClass);
     },
 
     _getValidationErrors: function() {
