@@ -114,11 +114,8 @@ class BaseRenderingStrategy {
     }
 
     _getItemPosition(appointment) {
-        const adapter = this.instance.createAppointmentAdapter(appointment);
-
         const position = this._getAppointmentCoordinates(appointment);
         const allDay = this.isAllDay(appointment);
-        const startDate = new Date(adapter.startDate);
 
         let result = [];
 
@@ -153,7 +150,7 @@ class BaseRenderingStrategy {
                         sourceAppointmentWidth: width,
                         reducedWidth: resultWidth,
                         height: height
-                    }, position[j], startDate);
+                    }, position[j]);
 
 
                     if(this._isRtl()) {
