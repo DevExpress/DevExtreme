@@ -17,9 +17,13 @@ const CLASS = {
   headerPanelCell: 'dx-scheduler-header-panel-cell',
   headerScrollable: 'dx-scheduler-header-scrollable',
   scrollableContainer: 'dx-scrollable-container',
+
+  workSpace: 'dx-scheduler-work-space',
 };
 
 export default class Scheduler extends Widget {
+  workSpace: Selector;
+
   dateTableCells: Selector;
 
   allDayTableCells: Selector;
@@ -47,6 +51,7 @@ export default class Scheduler extends Widget {
   constructor(id: string) {
     super(id);
 
+    this.workSpace = this.element.find(`.${CLASS.workSpace}`);
     this.dateTableCells = this.element.find(`.${CLASS.dateTableCell}`);
     this.allDayTableCells = this.element.find(`.${CLASS.allDayTableCell}`);
     this.dateTable = this.element.find(`.${CLASS.dateTable}`);

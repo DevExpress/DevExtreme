@@ -1,5 +1,4 @@
 import HorizontalMonthLineAppointmentsStrategy from './ui.scheduler.appointments.strategy.horizontal_month_line';
-import { extend } from '../../../core/utils/extend';
 
 const MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;
 const MONTH_APPOINTMENT_MIN_OFFSET = 26;
@@ -8,56 +7,83 @@ const MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36;
 const MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 
 class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsStrategy {
+    _getLeftPosition(settings) {
+        const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(settings.groupIndex);
 
-    _getAppointmentParts(appointmentGeometry, appointmentSettings, startDate) {
-        const deltaWidth = appointmentGeometry.sourceAppointmentWidth - appointmentGeometry.reducedWidth;
-        const height = appointmentGeometry.height;
-        const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(appointmentSettings.groupIndex);
-        const maxAppointmentWidth = this._getMaxAppointmentWidth(startDate);
-        const longPartCount = Math.ceil((deltaWidth) / fullWeekAppointmentWidth) - 1;
-        const realTailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth);
-        const tailWidth = longPartCount ? realTailWidth : (realTailWidth || fullWeekAppointmentWidth);
-        const result = [];
-        let totalWidth = appointmentGeometry.reducedWidth + tailWidth;
-        let currentPartTop = appointmentSettings.top + this.getDefaultCellHeight();
-        let left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
+        let result = this._calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
 
         if(this.instance._groupOrientation === 'vertical') {
-            left += this.instance.fire('getWorkSpaceDateTableOffset');
-        }
-        for(let i = 0; i < longPartCount; i++) {
-            if(totalWidth > maxAppointmentWidth) {
-                break;
-            }
-
-            result.push(extend(true, {}, appointmentSettings, {
-                top: currentPartTop,
-                left: left,
-                height: height,
-                width: fullWeekAppointmentWidth,
-                appointmentReduced: 'body',
-                rowIndex: ++appointmentSettings.rowIndex,
-                cellIndex: 0
-            }));
-
-            currentPartTop += this.getDefaultCellHeight();
-            totalWidth += fullWeekAppointmentWidth;
+            result += this.instance.fire('getWorkSpaceDateTableOffset');
         }
 
-        if(tailWidth) {
-            if(this._isRtl()) {
-                left = left + (fullWeekAppointmentWidth - tailWidth);
-            }
+        return result;
+    }
 
-            result.push(extend(true, {}, appointmentSettings, {
-                top: currentPartTop,
-                left: left,
-                height: height,
-                width: tailWidth,
-                appointmentReduced: 'tail',
-                rowIndex: ++appointmentSettings.rowIndex,
+    _getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth) {
+        const rawFullChunksWidth = fullChunksWidth - firstChunkWidth + weekWidth;
+        return Math.ceil(rawFullChunksWidth / weekWidth);
+    }
+
+    _getChunkWidths(geometry) {
+        const firstChunkWidth = geometry.reducedWidth;
+        const fullChunksWidth = Math.round(geometry.sourceAppointmentWidth);
+        const widthWithoutFirstChunk = fullChunksWidth - firstChunkWidth;
+
+        return [geometry.reducedWidth, Math.round(geometry.sourceAppointmentWidth), widthWithoutFirstChunk];
+    }
+
+    _getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition) {
+        const tailChunkWidth = withoutFirstChunkWidth % weekWidth || weekWidth;
+        const rtlPosition = leftPosition + (weekWidth - tailChunkWidth);
+        const tailChunkLeftPosition = this._isRtl() ? rtlPosition : leftPosition;
+
+        return [tailChunkWidth, tailChunkLeftPosition];
+    }
+
+    _getAppointmentParts(geometry, settings) {
+        const result = [];
+
+        const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry);
+        const leftPosition = this._getLeftPosition(settings);
+        const weekWidth = Math.round(this._getFullWeekAppointmentWidth(settings.groupIndex));
+
+        const hasTailChunk = this.instance.fire('getEndViewDate') > settings.info.appointment.endDate;
+        const chunkCount = this._getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth);
+
+        const [tailChunkWidth, tailChunkLeftPosition] = this._getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition);
+
+        for(let chunkIndex = 1; chunkIndex < chunkCount; chunkIndex++) {
+            const topPosition = settings.top + this.getDefaultCellHeight() * chunkIndex;
+            const isTailChunk = hasTailChunk && (chunkIndex === chunkCount - 1);
+
+            result.push({ ...settings, ...{
+                top: topPosition,
+                left: isTailChunk ? tailChunkLeftPosition : leftPosition,
+                height: geometry.height,
+                width: isTailChunk ? tailChunkWidth : weekWidth,
+                appointmentReduced: isTailChunk ? 'tail' : 'body',
+                rowIndex: ++settings.rowIndex,
                 cellIndex: 0
-            }));
+            } });
+        }
+
+        const groupDeltaWidth = this._getGroupDeltaWidth(settings.groupIndex);
+        result.forEach(item => {
+            item.left = Math.max(item.left + groupDeltaWidth, 0);
+            item.width = Math.max(item.width - groupDeltaWidth, 0);
+        });
+
+        return result;
+    }
+
+    _getGroupDeltaWidth(groupIndex) {
+        let result = 0;
+        const workspace = this.instance.getWorkSpace();
+        if(workspace.isRenovatedRender()) {
+            const { viewDataProvider } = workspace;
+
+            const cellCountDelta = viewDataProvider.getGroupCellCountDelta(groupIndex);
+            result = cellCountDelta * workspace.getCellWidth();
         }
 
         return result;
