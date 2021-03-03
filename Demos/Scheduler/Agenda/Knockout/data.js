@@ -64,7 +64,7 @@ var data = [
         startDate: new Date("2021-05-07T21:15:00.000Z"),
         endDate: new Date("2021-05-07T22:30:00.000Z")
     }, {
-        text: "Review Training Course for any Ommissions",
+        text: "Review Training Course for any Omissions",
         startDate: new Date("2021-05-10T21:00:00.000Z"),
         endDate: new Date("2021-05-11T19:00:00.000Z")
     }, {

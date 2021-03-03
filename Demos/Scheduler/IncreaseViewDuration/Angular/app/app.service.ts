@@ -71,7 +71,7 @@ let appointments: Appointment[] = [{
     startDate: new Date("2021-05-10T17:50:00.000Z"),
     endDate: new Date("2021-05-10T19:30:00.000Z")
 }, {
-    text: "Review Training Course for any Ommissions",
+    text: "Review Training Course for any Omissions",
     startDate: new Date("2021-04-12T21:00:00.000Z"),
     endDate: new Date("2021-04-13T21:00:00.000Z")
 }, {

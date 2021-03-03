@@ -4,7 +4,7 @@ var tasks = ["Prepare 2016 Financial","Prepare 2016 Marketing Plan","Update Pers
     "Submit Questions Regarding New NDA","Submit Signed NDA","Update Revenue Projections","Review Revenue Projections","Comment on Revenue Projections","Provide New Health Insurance Docs",
     "Review Changes to Health Insurance Coverage","Scan Health Insurance Forms","Sign Health Insurance Forms","Follow up with West Coast Stores","Follow up with East Coast Stores",
     "Send Email to Customers about Recall","Submit Refund Report for 2016 Recall","Give Final Approval for Refunds","Prepare Product Recall Report","Review Product Recall Report by Engineering Team",
-    "Create Training Course for New TVs","Review Training Course for any Ommissions","Review Overtime Report","Submit Overtime Request Forms","Overtime Approval Guidelines","Refund Request Template",
+    "Create Training Course for New TVs","Review Training Course for any Omissions","Review Overtime Report","Submit Overtime Request Forms","Overtime Approval Guidelines","Refund Request Template",
     "Recall Rebate Form","Create Report on Customer Feedback","Review Customer Feedback Report","Customer Feedback Report Analysis","Prepare Shipping Cost Analysis Report","Provide Feedback on Shippers",
     "Select Preferred Shipper","Complete Shipper Selection Form","Upgrade Server Hardware","Upgrade Personal Computers","Approve Personal Computer Upgrade Plan","Decide on Mobile Devices to Use in the Field",
     "Upgrade Apps to Windows RT or stay with WinForms","Estimate Time Required to Touch-Enable Apps","Report on Tranistion to Touch-Based Apps","Try New Touch-Enabled WinForms Apps",

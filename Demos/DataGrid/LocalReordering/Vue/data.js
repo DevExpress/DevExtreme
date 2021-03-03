@@ -693,7 +693,7 @@ export const tasks = [{
   Priority: 0
 }, {
   ID: 54,
-  Subject: 'Review Training Course for any Ommissions',
+  Subject: 'Review Training Course for any Omissions',
   Status: 5,
   Owner: 31,
   AssignedEmployee: 33,

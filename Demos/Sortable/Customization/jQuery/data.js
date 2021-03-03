@@ -552,7 +552,7 @@ var tasks = [{
     "Task_ID": 79,
     "Task_Assigned_Employee_ID": 33,
     "Task_Owner_ID": 31,
-    "Task_Subject": "Review Training Course for any Ommissions",
+    "Task_Subject": "Review Training Course for any Omissions",
     "Task_Start_Date": "2015-06-01T00:00:00",
     "Task_Due_Date": "2015-06-15T00:00:00",
     "Task_Status": "Completed",

@@ -127,7 +127,7 @@ var data = [{
     endDate: new Date("2021-02-05T22:30:00.000Z"),
     priority: 1
 }, {
-    text: "Review Training Course for any Ommissions",
+    text: "Review Training Course for any Omissions",
     ownerId: [2],
     startDate: new Date("2021-02-08T21:00:00.000Z"),
     endDate: new Date("2021-02-09T19:00:00.000Z"),

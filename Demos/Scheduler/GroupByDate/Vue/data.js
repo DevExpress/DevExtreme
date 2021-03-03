@@ -136,7 +136,7 @@ export const data = [
     startDate: new Date('2021-05-27T16:00:00.000Z'),
     endDate: new Date('2021-05-27T20:00:00.000Z')
   }, {
-    text: 'Review Training Course for any Ommissions',
+    text: 'Review Training Course for any Omissions',
     priorityId: 1,
     startDate: new Date('2021-05-27T18:00:00.000Z'),
     endDate: new Date('2021-05-27T21:00:00.000Z')
