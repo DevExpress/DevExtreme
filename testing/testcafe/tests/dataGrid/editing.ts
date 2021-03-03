@@ -1638,7 +1638,8 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
 
   // act
   await t
-    .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0));
+    .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0))
+    .click('.dx-checkbox');
 
   // assert
   await t
