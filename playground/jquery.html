@@ -31,13 +31,109 @@
 </head>
 <body>
     <div id="button"></div>
-    <script>
+    <div class="demo-container">
+        <div id="toolbar"></div>
+        <div id="drawer">
+            <div id="content" class="dx-theme-background-color"></div>
+        </div>
+        <div class="options">
+            <div class="caption">Options</div>
+            <div class="option">
+                <label>Opened state mode</label>
+                <div id="opened-state-mode"></div>
+            </div>
+            <div class="option">
+                <label>Position</label>
+                <div id="position-mode"></div>
+            </div>
+            <div id="reveal-mode-option" class="option">
+                <label>Reveal mode</label>
+                <div id="reveal-mode"></div>
+            </div>
+        </div>
+    </div>
+        <script>
         $(function() {
             $("#button").dxButton({
                 text: 'Click me!',
                 onClick: function() { alert("clicked"); }
             });
+
+            $("#content").html(text);
+ 
+ var drawer = $("#drawer").dxDrawer({
+     opened: true,
+     height: 400,
+     closeOnOutsideClick: true,
+     template: function() {
+         var $list = $("<div>").width(200).addClass("panel-list");
+
+         return $list.dxList({
+             dataSource: navigation,
+             hoverStateEnabled: false,
+             focusStateEnabled: false,
+             activeStateEnabled: false,
+             elementAttr: { class: "dx-theme-accent-as-background-color" }
+         });
+     }
+ }).dxDrawer("instance");
+
+ $("#toolbar").dxToolbar({
+     items: [{
+         widget: "dxButton",
+         location: "before",
+         options: {
+             icon: "menu",
+             onClick: function() {
+                 drawer.toggle(); 
+             }
+         }
+     }]
+ });
+ 
+ $("#reveal-mode").dxRadioGroup({
+     items: ["slide", "expand"],
+     layout: "horizontal",
+     value: "slide",
+     onValueChanged: function(e) { 
+         drawer.option("revealMode", e.value); 
+     }
+ });
+
+ $("#opened-state-mode").dxRadioGroup({
+     items: ["push", "shrink", "overlap"],
+     layout: "horizontal",
+     value: "shrink",
+     onValueChanged: function(e) {
+         drawer.option("openedStateMode", e.value);
+         $("#reveal-mode-option").css("visibility", e.value !== "push" ? "visible" : "hidden");
+     }
+ });
+
+ $("#position-mode").dxRadioGroup({
+     items: ["left", "right"],
+     layout: "horizontal",
+     value: "left",
+     onValueChanged: function(e) { 
+         drawer.option("position", e.value); 
+     }
+ });
         });
+        var navigation = [
+    { id: 1, text: "Products", icon: "product" },
+    { id: 2, text: "Sales", icon: "money" },
+    { id: 3, text: "Customers", icon: "group" },
+    { id: 4, text: "Employees", icon: "card" },
+    { id: 5, text: "Reports", icon: "chart" }
+];
+
+var text = "\
+<h2>\
+    <b>Drawer Demo</b>\
+</h2>\
+<p>\
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Penatibus et magnis dis parturient. Eget dolor morbi non arcu risus. Tristique magna sit amet purus gravida quis blandit. Auctor urna nunc id cursus metus aliquam eleifend mi in. Tellus orci ac auctor augue mauris augue neque gravida. Nullam vehicula ipsum a arcu. Nullam ac tortor vitae purus faucibus ornare suspendisse sed nisi. Cursus in hac habitasse platea dictumst. Egestas dui id ornare arcu. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim.</p><p>Mauris rhoncus aenean vel elit scelerisque mauris pellentesque pulvinar. Neque volutpat ac tincidunt vitae semper quis lectus. Sed sed risus pretium quam vulputate dignissim suspendisse in. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Amet cursus sit amet dictum sit amet justo donec enim. Vestibulum rhoncus est pellentesque elit ullamcorper. Id aliquet risus feugiat in ante metus dictum at.\
+</p>";
     </script>
 </body>
 </html>
