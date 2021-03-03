@@ -13,7 +13,6 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
-import noop from '../utils/noop';
 import { isMaterial, current } from '../../ui/themes';
 import { click } from '../../events/short';
 import { combineClasses } from '../utils/combine_classes';
@@ -108,9 +107,9 @@ export class ButtonProps extends BaseWidgetProps {
   @Event({
     actionConfig: { excludeValidators: ['readOnly'] },
   })
-  onClick?: (e: { event: Event; validationGroup?: string }) => void = noop;
+  onClick?: (e: { event: Event; validationGroup?: string }) => void;
 
-  @Event() onSubmit?: (e: { event: Event; submitInput: HTMLInputElement | null }) => void = noop;
+  @Event() onSubmit?: (e: { event: Event; submitInput: HTMLInputElement | null }) => void;
 
   @OneWay() pressed?: boolean;
 

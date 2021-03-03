@@ -12,7 +12,6 @@ import dateLocalization from 'localization/date';
 import translator from 'animation/translator';
 import tooltip from 'ui/tooltip/ui.tooltip';
 import { DataSource } from 'data/data_source/data_source';
-import dataUtils from 'core/element_data';
 import dragEvents from 'events/drag';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 
@@ -1051,50 +1050,53 @@ module('Scheduler grid', moduleConfig, () => {
         });
     }
 
-    test('Recurrence appointment with \'Etc/UTC\' tz should be updated correctly via drag(T394991)', function(assert) {
-        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
-        try {
-            const scheduler = createWrapper({
-                currentDate: new Date(2015, 11, 25),
-                startDayHour: 16,
-                views: ['week'],
-                currentView: 'week',
-                editing: true,
-                timeZone: timeZones.UTC,
-                recurrenceEditMode: 'occurrence',
-                firstDayOfWeek: 1,
-                dataSource: [{
-                    text: 'a',
-                    startDate: '2015-12-25T17:00:00.000Z',
-                    endDate: '2015-12-25T17:30:00.000Z',
-                    recurrenceRule: 'FREQ=DAILY'
-                }]
-            });
+    [true, false].forEach((renovateRender) => {
+        test(`Recurrence appointment with 'Etc/UTC' tz should be updated correctly via drag when renovateRender is ${renovateRender} (T394991)`, function(assert) {
+            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
+            try {
+                const scheduler = createWrapper({
+                    currentDate: new Date(2015, 11, 25),
+                    startDayHour: 16,
+                    views: ['week'],
+                    currentView: 'week',
+                    editing: true,
+                    timeZone: timeZones.UTC,
+                    recurrenceEditMode: 'occurrence',
+                    firstDayOfWeek: 1,
+                    dataSource: [{
+                        text: 'a',
+                        startDate: '2015-12-25T17:00:00.000Z',
+                        endDate: '2015-12-25T17:30:00.000Z',
+                        recurrenceRule: 'FREQ=DAILY'
+                    }],
+                    renovateRender,
+                });
 
-            const rootElement = scheduler.getElement();
-            let $appointment = $(rootElement).find(CLASSES.appointment).first();
-            const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(21);
-            const initialAppointmentHeight = $appointment.outerHeight();
+                const rootElement = scheduler.getElement();
+                let $appointment = $(rootElement).find(CLASSES.appointment).first();
+                const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(21);
+                const initialAppointmentHeight = $appointment.outerHeight();
 
-            const pointer = pointerMock($appointment).start().down().move(10, 10);
-            $cell.trigger(dragEvents.enter);
-            pointer.up();
+                const pointer = pointerMock($appointment).start().down().move(10, 10);
+                $cell.trigger(dragEvents.enter);
+                pointer.up();
 
-            $appointment = rootElement.find(CLASSES.appointment).not('.dx-scheduler-appointment-recurrence');
+                $appointment = rootElement.find(CLASSES.appointment).not('.dx-scheduler-appointment-recurrence');
 
-            assert.roughEqual($appointment.position().top, $cell.outerHeight() * 3, 2.001, 'Appointment top is OK');
-            assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
+                assert.roughEqual($appointment.position().top, $cell.outerHeight() * 3, 2.001, 'Appointment top is OK');
+                assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
 
-            const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
-            const cellData = dataUtils.data($cell.get(0), 'dxCellData');
-            const startDate = cellData.startDate;
-            const endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
-            const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
+                const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
 
-            assert.equal(dateText, resultDate, 'Appointment date is OK');
-        } finally {
-            tzOffsetStub.restore();
-        }
+                const startDate = new Date(2015, 11, 25, 17, 30);
+                const endDate = new Date(startDate.getTime() + 30 * 60 * 1000);
+                const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
+
+                assert.equal(dateText, resultDate, 'Appointment date is OK');
+            } finally {
+                tzOffsetStub.restore();
+            }
+        });
     });
 
     test('Task dragging when custom timeZone is set', function(assert) {
@@ -1140,51 +1142,54 @@ module('Scheduler grid', moduleConfig, () => {
         assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
     });
 
-    test('Appointment with \'Etc/UTC\' tz should be rendered correctly(T394991)', function(assert) {
-        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
-        try {
-            const scheduler = createWrapper({
-                currentDate: new Date(2016, 5, 25),
-                startDayHour: 16,
-                views: ['day'],
-                currentView: 'day',
-                editing: true,
-                timeZone: timeZones.Greenwich,
-                dataSource: [{
-                    text: 'a',
-                    startDate: '2016-06-25T17:00:00.000Z',
-                    endDate: '2016-06-25T17:30:00.000Z'
-                }]
-            });
+    [true, false].forEach((renovateRender) => {
+        test(`Appointment with 'Etc/UTC' tz should be rendered correctly when renovateRender is ${renovateRender} (T394991)`, function(assert) {
+            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
+            try {
+                const scheduler = createWrapper({
+                    currentDate: new Date(2016, 5, 25),
+                    startDayHour: 16,
+                    views: ['day'],
+                    currentView: 'day',
+                    editing: true,
+                    timeZone: timeZones.Greenwich,
+                    dataSource: [{
+                        text: 'a',
+                        startDate: '2016-06-25T17:00:00.000Z',
+                        endDate: '2016-06-25T17:30:00.000Z'
+                    }],
+                    renovateRender,
+                });
 
-            const rootElement = scheduler.getElement();
+                const rootElement = scheduler.getElement();
 
-            let $appointment = $(rootElement).find(CLASSES.appointment).first();
-            const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(6);
-            const initialAppointmentHeight = $appointment.outerHeight();
+                let $appointment = $(rootElement).find(CLASSES.appointment).first();
+                const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(6);
+                const initialAppointmentHeight = $appointment.outerHeight();
 
-            assert.roughEqual($appointment.position().top, $cell.outerHeight() * 2, 2.001, 'Appointment top is OK');
-            assert.roughEqual($appointment.outerHeight(), $cell.outerHeight(), 2.001, 'Appointment height is OK');
+                assert.roughEqual($appointment.position().top, $cell.outerHeight() * 2, 2.001, 'Appointment top is OK');
+                assert.roughEqual($appointment.outerHeight(), $cell.outerHeight(), 2.001, 'Appointment height is OK');
 
-            const pointer = pointerMock($appointment).start().down().move(10, 10);
-            $cell.trigger(dragEvents.enter);
-            pointer.up();
+                const pointer = pointerMock($appointment).start().down().move(10, 10);
+                $cell.trigger(dragEvents.enter);
+                pointer.up();
 
-            $appointment = rootElement.find(CLASSES.appointment).first();
+                $appointment = rootElement.find(CLASSES.appointment).first();
 
-            assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
-            assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
+                assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
+                assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
 
-            const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
-            const cellData = dataUtils.data($cell.get(0), 'dxCellData');
-            const startDate = cellData.startDate;
-            const endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
-            const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
+                const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
 
-            assert.equal(dateText, resultDate, 'Appointment date is OK');
-        } finally {
-            tzOffsetStub.restore();
-        }
+                const startDate = new Date(2016, 5, 25, 19);
+                const endDate = new Date(startDate.getTime() + 30 * 60 * 1000);
+                const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
+
+                assert.equal(dateText, resultDate, 'Appointment date is OK');
+            } finally {
+                tzOffsetStub.restore();
+            }
+        });
     });
 
     [5, 'Asia/Calcutta'].forEach(timeZone => {
@@ -1267,47 +1272,50 @@ module('Scheduler grid', moduleConfig, () => {
         assert.roughEqual($appointment.outerHeight(), cellHeight * 2, 2.001, 'Appointment height is OK');
     });
 
-    test('Appointment with custom tz that isn\'t equal to scheduler tz should be dragged correctly(T392414)', function(assert) {
-        const scheduler = createWrapper({
-            currentDate: new Date(2015, 4, 25),
-            startDayHour: 6,
-            views: ['day'],
-            currentView: 'day',
-            editing: true,
-            recurrenceEditMode: 'occurrence',
-            timeZone: timeZones.Phoenix, // -7
-            dataSource: [{
-                text: 'a',
-                startDate: '2015-05-25T17:00:00.000Z',
-                endDate: '2015-05-25T17:15:00.000Z',
-                startDateTimeZone: timeZones.Lima, // -5
-                endDateTimeZone: timeZones.Lima
-            }]
+    [true, false].forEach((renovateRender) => {
+        test(`Appointment with custom tz that isn't equal to scheduler tz should be dragged correctly when renovateRender is ${renovateRender} (T392414)`, function(assert) {
+            const scheduler = createWrapper({
+                currentDate: new Date(2015, 4, 25),
+                startDayHour: 6,
+                views: ['day'],
+                currentView: 'day',
+                editing: true,
+                recurrenceEditMode: 'occurrence',
+                timeZone: timeZones.Phoenix, // -7
+                dataSource: [{
+                    text: 'a',
+                    startDate: '2015-05-25T17:00:00.000Z',
+                    endDate: '2015-05-25T17:15:00.000Z',
+                    startDateTimeZone: timeZones.Lima, // -5
+                    endDateTimeZone: timeZones.Lima
+                }],
+                renovateRender,
+            });
+
+            const rootElement = scheduler.getElement();
+
+            let $appointment = $(rootElement).find(CLASSES.appointment).first();
+            const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(6);
+            const initialAppointmentHeight = $appointment.outerHeight();
+
+            const pointer = pointerMock($appointment).start().down().move(10, 10);
+            $cell.trigger(dragEvents.enter);
+            pointer.up();
+
+            $appointment = rootElement.find(CLASSES.appointment).first();
+
+
+            assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
+            assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
+
+            const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
+
+            const startDate = new Date(2016, 5, 25, 9);
+            const endDate = new Date(startDate.getTime() + 15 * 60 * 1000);
+            const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
+
+            assert.equal(dateText, resultDate, 'Appointment date is OK');
         });
-
-        const rootElement = scheduler.getElement();
-
-        let $appointment = $(rootElement).find(CLASSES.appointment).first();
-        const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(6);
-        const initialAppointmentHeight = $appointment.outerHeight();
-
-        const pointer = pointerMock($appointment).start().down().move(10, 10);
-        $cell.trigger(dragEvents.enter);
-        pointer.up();
-
-        $appointment = rootElement.find(CLASSES.appointment).first();
-
-
-        assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
-        assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
-
-        const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
-        const cellData = dataUtils.data($cell.get(0), 'dxCellData');
-        const startDate = cellData.startDate;
-        const endDate = new Date(cellData.startDate.getTime() + 15 * 60 * 1000);
-        const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
-
-        assert.equal(dateText, resultDate, 'Appointment date is OK');
     });
 
     test('Scheduler should not update scroll position if appointment is visible, when timeZone is set ', function(assert) {

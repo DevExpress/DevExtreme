@@ -48,7 +48,9 @@ export const DataSource = Class.inherit({
     */
     ctor(options) {
         options = normalizeDataSourceOptions(options);
-        this._eventsStrategy = new EventsStrategy(this);
+        this._eventsStrategy = new EventsStrategy(this, {
+            syncStrategy: true
+        });
 
         /**
         * @name DataSourceOptions.store.type

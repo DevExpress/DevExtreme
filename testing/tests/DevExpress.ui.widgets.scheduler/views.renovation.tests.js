@@ -35,4 +35,26 @@ module('Renovated Views', () => {
             assert.equal(scheduler.workSpace.groups.getGroupHeaders().length, 2, 'Correct number of group headers');
         });
     });
+
+    ['week', 'timelineWeek', 'timelineMonth'].forEach((currentView) => {
+        test(`Shader should be cleaned on options change in ${currentView}`, function(assert) {
+            const scheduler = createWrapper({
+                currentView,
+                views: [currentView],
+                groups: ['resourceId'],
+                currentDate: new Date(2020, 1, 20),
+                shadeUntilCurrentTime: true,
+                renovateRender: true,
+            });
+
+            let shader = scheduler.workSpace.getShader();
+
+            assert.equal(shader.length, 1, 'Shader is rendered');
+
+            scheduler.instance.option('currentDate', new Date(2019, 1, 1));
+            shader = scheduler.workSpace.getShader();
+
+            assert.equal(shader.length, 1, 'Shader is updated');
+        });
+    });
 });

@@ -4,12 +4,12 @@ import { RefObject } from 'devextreme-generator/component_declaration/common';
 import { Tooltip, viewFunction as TooltipComponent } from '../tooltip';
 import {
   recalculateCoordinates, getCloudAngle, getCloudPoints, prepareData, getCanvas, isTextEmpty,
-} from '../common/tooltip_utils';
+} from '../tooltip_utils';
 import { getFuncIri } from '../renderers/utils';
-import { getFormatValue, isUpdatedFlatObject } from '../../common/utils';
+import { getFormatValue, isUpdatedFlatObject } from '../utils';
 import domAdapter from '../../../../core/dom_adapter';
 
-jest.mock('../common/tooltip_utils', () => ({
+jest.mock('../tooltip_utils', () => ({
   getCloudPoints: jest.fn(),
   recalculateCoordinates: jest.fn(),
   getCloudAngle: jest.fn(),

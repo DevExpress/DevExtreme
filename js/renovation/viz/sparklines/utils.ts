@@ -3,10 +3,9 @@ import { noop } from '../../../core/utils/common';
 import { isFunction } from '../../../core/utils/type';
 import {
   Canvas, CustomizeTooltipFn, Font, CustomizedOptions, TooltipData,
-} from '../core/common/types.d';
-import {
   Translator,
 } from '../common/types.d';
+
 import { ArgumentAxisRange, ValueAxisRange } from './types.d';
 
 const DEFAULT_LINE_SPACING = 2;

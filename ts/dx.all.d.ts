@@ -2398,6 +2398,7 @@ declare module DevExpress.data {
     export function base64_encode(input: string | Array<number>): string;
     /**
      * [descr:Utils.errorHandler]
+     * @deprecated [depNote:Utils.errorHandler]
      */
     export function errorHandler(e: Error): void;
     /**
@@ -2408,6 +2409,10 @@ declare module DevExpress.data {
      * [descr:Utils.query(url, queryOptions)]
      */
     export function query(url: string, queryOptions: any): Query;
+    /**
+     * [descr:Utils.setErrorHandler]
+     */
+    export function setErrorHandler(handler: Function): void;
 }
 declare module DevExpress.data.utils {
     /**
@@ -8144,6 +8149,10 @@ declare module DevExpress.ui {
          * [descr:dxHtmlEditor.Options.placeholder]
          */
         placeholder?: string;
+        /**
+         * [descr:dxHtmlEditor.Options.stylingMode]
+         */
+        stylingMode?: 'outlined' | 'underlined' | 'filled';
         /**
          * [descr:dxHtmlEditor.Options.toolbar]
          */
