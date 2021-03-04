@@ -201,19 +201,15 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _isRepaintAppointment(appointment) {
-        return !isDefined(appointment.needRepaint) || appointment.needRepaint === true;
+        return !!appointment?.needRepaint;
     }
 
     _isRepaintAll(appointments) {
-        if(this.isVirtualScrolling) {
-            return true;
-        }
         if(this.isAgendaView) {
             return true;
         }
         for(let i = 0; i < appointments.length; i++) {
-            const appointment = appointments[i];
-            if(!this._isRepaintAppointment(appointment)) {
+            if(!this._isRepaintAppointment(appointments[i])) {
                 return false;
             }
         }

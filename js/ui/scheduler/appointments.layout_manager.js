@@ -4,6 +4,7 @@ import HorizontalAppointmentsStrategy from './rendering_strategies/ui.scheduler.
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
 import AgendaAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.agenda';
+import { extend } from '../../core/utils/extend';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,
@@ -60,7 +61,7 @@ class AppointmentLayoutManager {
     _createAppointmentsMapCore(list, positionMap) {
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
-                delete data.settings;
+                data.settings = null;
             }
 
             const appointmentSettings = positionMap[index];
@@ -92,8 +93,8 @@ class AppointmentLayoutManager {
         }
 
         for(let i = 0; i < settings.length; i++) {
-            const newSettings = settings[i];
-            const oldSettings = sourceSetting[i];
+            const newSettings = extend({ cellIndex: -1, rowIndex: -1 }, settings[i]);
+            const oldSettings = extend({ cellIndex: -1, rowIndex: -1 }, sourceSetting[i]);
 
             if(oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
                 oldSettings.sortedIndex = newSettings.sortedIndex;
