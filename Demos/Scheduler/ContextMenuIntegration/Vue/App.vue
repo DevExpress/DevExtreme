@@ -6,13 +6,11 @@
       :views="views"
       :current-date="currentDate"
       :start-day-hour="9"
-      :first-day-of-week="1"
       :height="600"
       :on-appointment-context-menu="onAppointmentContextMenu"
       :on-cell-context-menu="onCellContextMenu"
       current-view="month"
       recurrence-edit-mode="series"
-      show-current-time-indicator="false"
     >
       <DxResource
         :data-source="resourcesData"
@@ -55,7 +53,7 @@ export default {
   data() {
     return {
       views: ['day', 'month'],
-      currentDate: new Date(2021, 2, 25),
+      currentDate: new Date(2020, 10, 25),
       dataSource: data,
       resourcesData: resourcesData,
       cellContextMenuItems: cellContextMenuItems,

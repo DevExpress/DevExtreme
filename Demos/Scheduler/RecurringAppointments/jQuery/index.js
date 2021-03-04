@@ -4,10 +4,8 @@ $(function(){
         dataSource: data,
         views: ["day", "week", "month"],
         currentView: "month",
-        currentDate: new Date(2021, 2, 25),
-        firstDayOfWeek: 1,
+        currentDate: new Date(2020, 10, 25),
         startDayHour: 9,
-        showCurrentTimeIndicator: false,
         resources: [{
             fieldExpr: "roomId",
             dataSource: resourcesData,

@@ -22,7 +22,7 @@ export class AppComponent {
     @ViewChild('contextMenu', { static: false }) contextMenu: DxContextMenuComponent;
     
     appointmentsData: Appointment[];
-    currentDate: Date = new Date(2021, 2, 25);
+    currentDate: Date = new Date(2020, 10, 25);
     resourcesData: Resource[];
     groups: any;
     crossScrollingEnabled: boolean = false;
