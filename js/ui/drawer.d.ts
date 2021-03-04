@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -136,7 +140,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): Promise<void> & JQueryPromise<void>;
+    hide(): TPromise<void>;
     /**
      * @docid
      * @publicName show()
@@ -144,7 +148,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): Promise<void> & JQueryPromise<void>;
+    show(): TPromise<void>;
     /**
      * @docid
      * @publicName toggle()
@@ -152,7 +156,7 @@ export default class dxDrawer extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(): Promise<void> & JQueryPromise<void>;
+    toggle(): TPromise<void>;
 }
 
 declare global {

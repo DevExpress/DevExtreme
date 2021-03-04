@@ -1,5 +1,9 @@
 import '../../jquery_augmentation';
 
+import {
+    TPromise
+} from '../../core';
+
 import Store, {
     StoreOptions
 } from '../abstract_store';
@@ -114,7 +118,7 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
  */
 export default class ODataStore extends Store {
     constructor(options?: ODataStoreOptions)
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number): TPromise<any>;
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
@@ -126,7 +130,7 @@ export default class ODataStore extends Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): TPromise<any>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)

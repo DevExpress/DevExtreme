@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -104,7 +108,7 @@ declare const fx: {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    animate(element: Element, config: animationConfig): Promise<void> & JQueryPromise<void>;
+    animate(element: Element, config: animationConfig): TPromise<void>;
 
     /**
      * @docid

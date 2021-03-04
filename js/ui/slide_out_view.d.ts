@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -79,7 +83,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hideMenu(): Promise<void> & JQueryPromise<void>;
+    hideMenu(): TPromise<void>;
     /**
      * @docid
      * @publicName menuContent()
@@ -95,7 +99,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showMenu(): Promise<void> & JQueryPromise<void>;
+    showMenu(): TPromise<void>;
     /**
      * @docid
      * @publicName toggleMenuVisibility()
@@ -103,7 +107,7 @@ export default class dxSlideOutView extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggleMenuVisibility(): Promise<void> & JQueryPromise<void>;
+    toggleMenuVisibility(): TPromise<void>;
 }
 
 declare global {

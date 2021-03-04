@@ -5,6 +5,10 @@ import {
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -218,7 +222,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): Promise<boolean> & JQueryPromise<boolean>;
+    hide(): TPromise<boolean>;
     /**
      * @docid
      * @publicName repaint()
@@ -233,7 +237,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): Promise<boolean> & JQueryPromise<boolean>;
+    show(): TPromise<boolean>;
     /**
      * @docid
      * @publicName toggle(showing)
@@ -242,7 +246,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): Promise<boolean> & JQueryPromise<boolean>;
+    toggle(showing: boolean): TPromise<boolean>;
 }
 
 /**

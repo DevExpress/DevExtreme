@@ -1,5 +1,9 @@
 import '../../jquery_augmentation';
 
+import {
+    TPromise
+} from '../../core';
+
 import DOMComponent, {
     DOMComponentOptions
 } from '../../core/dom_component';
@@ -222,5 +226,5 @@ export default class dxScrollable extends DOMComponent {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    update(): Promise<void> & JQueryPromise<void>;
+    update(): TPromise<void>;
 }

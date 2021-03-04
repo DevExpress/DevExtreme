@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -237,7 +241,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemDeleting?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
+    onItemDeleting?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, cancel?: boolean | TPromise<void> }) => any);
     /**
      * @docid
      * @extends Action
@@ -467,7 +471,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
+    collapseGroup(groupIndex: number): TPromise<void>;
     /**
      * @docid
      * @publicName deleteItem(itemElement)
@@ -476,7 +480,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deleteItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
+    deleteItem(itemElement: Element): TPromise<void>;
     /**
      * @docid
      * @publicName deleteItem(itemIndex)
@@ -485,7 +489,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deleteItem(itemIndex: number | any): Promise<void> & JQueryPromise<void>;
+    deleteItem(itemIndex: number | any): TPromise<void>;
     /**
      * @docid
      * @publicName expandGroup(groupIndex)
@@ -494,7 +498,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
+    expandGroup(groupIndex: number): TPromise<void>;
     /**
      * @docid
      * @publicName isItemSelected(itemElement)
@@ -529,7 +533,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reorderItem(itemElement: Element, toItemElement: Element): Promise<void> & JQueryPromise<void>;
+    reorderItem(itemElement: Element, toItemElement: Element): TPromise<void>;
     /**
      * @docid
      * @publicName reorderItem(itemIndex, toItemIndex)
@@ -539,7 +543,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reorderItem(itemIndex: number | any, toItemIndex: number | any): Promise<void> & JQueryPromise<void>;
+    reorderItem(itemIndex: number | any, toItemIndex: number | any): TPromise<void>;
     /**
      * @docid
      * @publicName scrollBy(distance)
@@ -641,7 +645,7 @@ export default class dxList extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): Promise<void> & JQueryPromise<void>;
+    updateDimensions(): TPromise<void>;
 }
 
 /**

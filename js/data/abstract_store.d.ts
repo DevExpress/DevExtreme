@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     LoadOptions
 } from './load_options';
 
@@ -124,7 +128,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number): TPromise<any>;
     /**
      * @docid
      * @publicName insert(values)
@@ -133,7 +137,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    insert(values: any): Promise<any> & JQueryPromise<any>;
+    insert(values: any): TPromise<any>;
     /**
      * @docid
      * @publicName key()
@@ -158,7 +162,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    load(): Promise<any> & JQueryPromise<any>;
+    load(): TPromise<any>;
     /**
      * @docid
      * @publicName load(options)
@@ -167,7 +171,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
+    load(options: LoadOptions): TPromise<any>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -222,7 +226,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
+    remove(key: any | string | number): TPromise<void>;
     /**
      * @docid
      * @publicName totalCount(options)
@@ -233,7 +237,7 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
+    totalCount(obj: { filter?: any, group?: any }): TPromise<number>;
     /**
      * @docid
      * @publicName update(key, values)
@@ -243,5 +247,5 @@ export default class Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    update(key: any | string | number, values: any): Promise<any> & JQueryPromise<any>;
+    update(key: any | string | number, values: any): TPromise<any>;
 }

@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -738,7 +742,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onInitNewRow?: ((e: { component?: T, element?: dxElement, model?: any, data?: any, promise?: Promise<void> | JQueryPromise<void> }) => any);
+    onInitNewRow?: ((e: { component?: T, element?: dxElement, model?: any, data?: any, promise?: TPromise<void> }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -814,7 +818,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowInserting?: ((e: { component?: T, element?: dxElement, model?: any, data?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
+    onRowInserting?: ((e: { component?: T, element?: dxElement, model?: any, data?: any, cancel?: boolean | TPromise<void> }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -838,7 +842,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowRemoving?: ((e: { component?: T, element?: dxElement, model?: any, data?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
+    onRowRemoving?: ((e: { component?: T, element?: dxElement, model?: any, data?: any, key?: any, cancel?: boolean | TPromise<void> }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -863,7 +867,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowUpdating?: ((e: { component?: T, element?: dxElement, model?: any, oldData?: any, newData?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
+    onRowUpdating?: ((e: { component?: T, element?: dxElement, model?: any, oldData?: any, newData?: any, key?: any, cancel?: boolean | TPromise<void> }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -879,7 +883,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowValidating?: ((e: { component?: T, element?: dxElement, model?: any, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string, promise?: Promise<void> | JQueryPromise<void> }) => any);
+    onRowValidating?: ((e: { component?: T, element?: dxElement, model?: any, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string, promise?: TPromise<void> }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -899,7 +903,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onSaving?: ((e: { component?: T, element?: dxElement, model?: any, changes?: Array<any>, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
+    onSaving?: ((e: { component?: T, element?: dxElement, model?: any, changes?: Array<any>, promise?: TPromise<void>, cancel?: boolean }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1222,7 +1226,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field11 dropInsideItem:boolean
        * @type_function_param1_field12 promise:Promise<void>
        */
-      onReorder?: ((e: { component?: T, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any),
+      onReorder?: ((e: { component?: T, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: TPromise<void> }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1393,7 +1397,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @prevFileNamespace DevExpress.ui
        * @type_function_return Promise<Object>
        */
-      customLoad?: (() => Promise<any> | JQueryPromise<any>),
+      customLoad?: (() => TPromise<any>),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1731,7 +1735,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number): TPromise<any>;
     /**
      * @docid
      * @publicName cancelEditData()
@@ -1891,7 +1895,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deselectAll(): Promise<void> & JQueryPromise<void>;
+    deselectAll(): TPromise<void>;
     /**
      * @docid
      * @publicName deselectRows(keys)
@@ -1900,7 +1904,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    deselectRows(keys: Array<any>): Promise<any> & JQueryPromise<any>;
+    deselectRows(keys: Array<any>): TPromise<any>;
     /**
      * @docid
      * @publicName editCell(rowIndex, dataField)
@@ -2132,7 +2136,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    pageIndex(newIndex: number): Promise<void> & JQueryPromise<void>;
+    pageIndex(newIndex: number): TPromise<void>;
     /**
      * @docid
      * @publicName pageSize()
@@ -2156,7 +2160,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(): Promise<void> & JQueryPromise<void>;
+    refresh(): TPromise<void>;
     /**
      * @docid
      * @publicName refresh(changesOnly)
@@ -2165,7 +2169,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(changesOnly: boolean): Promise<void> & JQueryPromise<void>;
+    refresh(changesOnly: boolean): TPromise<void>;
     /**
      * @docid
      * @publicName repaintRows(rowIndexes)
@@ -2181,7 +2185,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    saveEditData(): Promise<void> & JQueryPromise<void>;
+    saveEditData(): TPromise<void>;
     /**
      * @docid
      * @publicName searchByText(text)
@@ -2197,7 +2201,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectAll(): Promise<void> & JQueryPromise<void>;
+    selectAll(): TPromise<void>;
     /**
      * @docid
      * @publicName selectRows(keys, preserve)
@@ -2207,7 +2211,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectRows(keys: Array<any>, preserve: boolean): Promise<any> & JQueryPromise<any>;
+    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
     /**
      * @docid
      * @publicName selectRowsByIndexes(indexes)
@@ -2216,7 +2220,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectRowsByIndexes(indexes: Array<number>): Promise<any> & JQueryPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
     /**
      * @docid
      * @publicName showColumnChooser()
@@ -2636,7 +2640,7 @@ export interface GridBaseColumn {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    setCellValue?: ((newData: any, value: any, currentRowData: any) => void | Promise<void> | JQueryPromise<void>);
+    setCellValue?: ((newData: any, value: any, currentRowData: any) => void | TPromise<void>);
     /**
      * @docid
      * @default false
@@ -3770,7 +3774,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(): Promise<void> & JQueryPromise<void>;
+    addRow(): TPromise<void>;
     /**
      * @docid
      * @publicName clearGrouping()
@@ -3794,7 +3798,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseRow(key: any): Promise<void> & JQueryPromise<void>;
+    collapseRow(key: any): TPromise<void>;
     /**
      * @docid
      * @publicName expandAll(groupIndex)
@@ -3811,7 +3815,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandRow(key: any): Promise<void> & JQueryPromise<void>;
+    expandRow(key: any): TPromise<void>;
     /**
      * @docid
      * @publicName exportToExcel(selectionOnly)
@@ -3828,7 +3832,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowKeys(): Array<any> & Promise<any> & JQueryPromise<any>;
+    getSelectedRowKeys(): Array<any> & TPromise<any>;
     /**
      * @docid
      * @publicName getSelectedRowsData()
@@ -3836,7 +3840,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowsData(): Array<any> & Promise<any> & JQueryPromise<any>;
+    getSelectedRowsData(): Array<any> & TPromise<any>;
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
@@ -3900,7 +3904,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     totalCount(): number;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number): TPromise<any>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -3919,8 +3923,8 @@ declare class dxDataGrid extends Widget implements GridBase {
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
-    deselectAll(): Promise<void> & JQueryPromise<void>;
-    deselectRows(keys: Array<any>): Promise<any> & JQueryPromise<any>;
+    deselectAll(): TPromise<void>;
+    deselectRows(keys: Array<any>): TPromise<any>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
@@ -3949,17 +3953,17 @@ declare class dxDataGrid extends Widget implements GridBase {
     navigateToRow(key: any): void;
     pageCount(): number;
     pageIndex(): number;
-    pageIndex(newIndex: number): Promise<void> & JQueryPromise<void>;
+    pageIndex(newIndex: number): TPromise<void>;
     pageSize(): number;
     pageSize(value: number): void;
-    refresh(): Promise<void> & JQueryPromise<void>;
-    refresh(changesOnly: boolean): Promise<void> & JQueryPromise<void>;
+    refresh(): TPromise<void>;
+    refresh(changesOnly: boolean): TPromise<void>;
     repaintRows(rowIndexes: Array<number>): void;
-    saveEditData(): Promise<void> & JQueryPromise<void>;
+    saveEditData(): TPromise<void>;
     searchByText(text: string): void;
-    selectAll(): Promise<void> & JQueryPromise<void>;
-    selectRows(keys: Array<any>, preserve: boolean): Promise<any> & JQueryPromise<any>;
-    selectRowsByIndexes(indexes: Array<number>): Promise<any> & JQueryPromise<any>;
+    selectAll(): TPromise<void>;
+    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;

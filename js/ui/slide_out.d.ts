@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -141,7 +145,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hideMenu(): Promise<void> & JQueryPromise<void>;
+    hideMenu(): TPromise<void>;
     /**
      * @docid
      * @publicName showMenu()
@@ -149,7 +153,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showMenu(): Promise<void> & JQueryPromise<void>;
+    showMenu(): TPromise<void>;
     /**
      * @docid
      * @publicName toggleMenuVisibility(showing)
@@ -158,7 +162,7 @@ export default class dxSlideOut extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggleMenuVisibility(showing: boolean): Promise<void> & JQueryPromise<void>;
+    toggleMenuVisibility(showing: boolean): TPromise<void>;
 }
 
 /**

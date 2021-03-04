@@ -5,6 +5,10 @@ import {
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -43,7 +47,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    renderWhen?: Promise<void> | JQueryPromise<void> | boolean;
+    renderWhen?: TPromise<void> | boolean;
     /**
      * @docid
      * @default false

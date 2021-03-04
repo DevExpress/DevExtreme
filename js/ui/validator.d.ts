@@ -1,5 +1,9 @@
 import '../jquery_augmentation';
 
+import {
+    TPromise
+} from '../core';
+
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
@@ -148,7 +152,7 @@ export interface dxValidatorResult {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: Promise<dxValidatorResult> | JQueryPromise<dxValidatorResult>;
+    complete?: TPromise<dxValidatorResult>;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -571,7 +575,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(): Promise<void> & JQueryPromise<void>;
+    addRow(): TPromise<void>;
     /**
      * @docid
      * @publicName addRow(parentId)
@@ -580,7 +584,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(parentId: any): Promise<void> & JQueryPromise<void>;
+    addRow(parentId: any): TPromise<void>;
     /**
      * @docid
      * @publicName collapseRow(key)
@@ -589,7 +593,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseRow(key: any): Promise<void> & JQueryPromise<void>;
+    collapseRow(key: any): TPromise<void>;
     /**
      * @docid
      * @publicName expandRow(key)
@@ -598,7 +602,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandRow(key: any): Promise<void> & JQueryPromise<void>;
+    expandRow(key: any): TPromise<void>;
     /**
      * @docid
      * @publicName forEachNode(callback)
@@ -708,7 +712,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(): Promise<void> & JQueryPromise<void>;
+    loadDescendants(): TPromise<void>;
     /**
      * @docid
      * @publicName loadDescendants(keys)
@@ -717,7 +721,7 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(keys: Array<any>): Promise<void> & JQueryPromise<void>;
+    loadDescendants(keys: Array<any>): TPromise<void>;
     /**
      * @docid
      * @publicName loadDescendants(keys, childrenOnly)
@@ -727,10 +731,10 @@ export default class dxTreeList extends Widget implements GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(keys: Array<any>, childrenOnly: boolean): Promise<void> & JQueryPromise<void>;
+    loadDescendants(keys: Array<any>, childrenOnly: boolean): TPromise<void>;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+    byKey(key: any | string | number): TPromise<any>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -749,8 +753,8 @@ export default class dxTreeList extends Widget implements GridBase {
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
-    deselectAll(): Promise<void> & JQueryPromise<void>;
-    deselectRows(keys: Array<any>): Promise<any> & JQueryPromise<any>;
+    deselectAll(): TPromise<void>;
+    deselectRows(keys: Array<any>): TPromise<any>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
@@ -779,17 +783,17 @@ export default class dxTreeList extends Widget implements GridBase {
     navigateToRow(key: any): void;
     pageCount(): number;
     pageIndex(): number;
-    pageIndex(newIndex: number): Promise<void> & JQueryPromise<void>;
+    pageIndex(newIndex: number): TPromise<void>;
     pageSize(): number;
     pageSize(value: number): void;
-    refresh(): Promise<void> & JQueryPromise<void>;
-    refresh(changesOnly: boolean): Promise<void> & JQueryPromise<void>;
+    refresh(): TPromise<void>;
+    refresh(changesOnly: boolean): TPromise<void>;
     repaintRows(rowIndexes: Array<number>): void;
-    saveEditData(): Promise<void> & JQueryPromise<void>;
+    saveEditData(): TPromise<void>;
     searchByText(text: string): void;
-    selectAll(): Promise<void> & JQueryPromise<void>;
-    selectRows(keys: Array<any>, preserve: boolean): Promise<any> & JQueryPromise<any>;
-    selectRowsByIndexes(indexes: Array<number>): Promise<any> & JQueryPromise<any>;
+    selectAll(): TPromise<void>;
+    selectRows(keys: Array<any>, preserve: boolean): TPromise<any>;
+    selectRowsByIndexes(indexes: Array<number>): TPromise<any>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;

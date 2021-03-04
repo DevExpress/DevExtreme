@@ -1,4 +1,7 @@
 import '../jquery_augmentation';
+import {
+    TPromise
+} from '../core';
 
 /**
 * @docid
@@ -15,7 +18,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    aggregate(seed: any, step: Function, finalize: Function): Promise<any> & JQueryPromise<any>;
+    aggregate(seed: any, step: Function, finalize: Function): TPromise<any>;
     /**
      * @docid
      * @publicName aggregate(step)
@@ -24,7 +27,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    aggregate(step: Function): Promise<any> & JQueryPromise<any>;
+    aggregate(step: Function): TPromise<any>;
     /**
      * @docid
      * @publicName avg()
@@ -32,7 +35,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    avg(): Promise<number> & JQueryPromise<number>;
+    avg(): TPromise<number>;
     /**
      * @docid
      * @publicName avg(getter)
@@ -41,7 +44,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    avg(getter: any): Promise<number> & JQueryPromise<number>;
+    avg(getter: any): TPromise<number>;
     /**
      * @docid
      * @publicName count()
@@ -49,7 +52,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    count(): Promise<number> & JQueryPromise<number>;
+    count(): TPromise<number>;
     /**
      * @docid
      * @publicName enumerate()
@@ -57,7 +60,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    enumerate(): Promise<any> & JQueryPromise<any>;
+    enumerate(): TPromise<any>;
     /**
      * @docid
      * @publicName filter(criteria)
@@ -92,7 +95,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    max(): Promise<number | Date> & JQueryPromise<number | Date>;
+    max(): TPromise<number | Date>;
     /**
      * @docid
      * @publicName max(getter)
@@ -101,7 +104,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    max(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
+    max(getter: any): TPromise<number | Date>;
     /**
      * @docid
      * @publicName min()
@@ -109,7 +112,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    min(): Promise<number | Date> & JQueryPromise<number | Date>;
+    min(): TPromise<number | Date>;
     /**
      * @docid
      * @publicName min(getter)
@@ -118,7 +121,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    min(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
+    min(getter: any): TPromise<number | Date>;
     /**
      * @docid
      * @publicName select(getter)
@@ -164,7 +167,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    sum(): Promise<number> & JQueryPromise<number>;
+    sum(): TPromise<number>;
     /**
      * @docid
      * @publicName sum(getter)
@@ -173,7 +176,7 @@ export interface Query {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    sum(getter: any): Promise<number> & JQueryPromise<number>;
+    sum(getter: any): TPromise<number>;
     /**
      * @docid
      * @publicName thenBy(getter)

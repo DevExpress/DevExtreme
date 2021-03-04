@@ -1,5 +1,9 @@
 import '../../jquery_augmentation';
 
+import {
+    TPromise
+} from '../../core';
+
 import DOMComponent, {
     DOMComponentOptions
 } from '../../core/dom_component';
@@ -235,7 +239,7 @@ export interface BaseWidgetExport {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => Promise<void> | JQueryPromise<void>);
+    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => TPromise<void>);
 }
 export interface BaseWidgetLoadingIndicator {
     /**

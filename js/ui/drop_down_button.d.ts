@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -247,7 +251,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    close(): Promise<void> & JQueryPromise<void>;
+    close(): TPromise<void>;
     getDataSource(): DataSource;
     /**
      * @docid
@@ -256,7 +260,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    open(): Promise<void> & JQueryPromise<void>;
+    open(): TPromise<void>;
     /**
      * @docid
      * @publicName toggle()
@@ -264,7 +268,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(): Promise<void> & JQueryPromise<void>;
+    toggle(): TPromise<void>;
     /**
      * @docid
      * @publicName toggle(visibility)
@@ -273,7 +277,7 @@ export default class dxDropDownButton extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
+    toggle(visibility: boolean): TPromise<void>;
 }
 
 /**

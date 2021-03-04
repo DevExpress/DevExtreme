@@ -9,6 +9,10 @@ import {
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     event
 } from '../events/index';
 
@@ -148,7 +152,7 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
 export default class dxPopover extends dxPopup {
     constructor(element: Element, options?: dxPopoverOptions)
     constructor(element: JQuery, options?: dxPopoverOptions)
-    show(): Promise<boolean> & JQueryPromise<boolean>;
+    show(): TPromise<boolean>;
     /**
      * @docid
      * @publicName show(target)
@@ -157,7 +161,7 @@ export default class dxPopover extends dxPopup {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(target: string | Element | JQuery): Promise<boolean> & JQueryPromise<boolean>;
+    show(target: string | Element | JQuery): TPromise<boolean>;
 }
 
 declare global {

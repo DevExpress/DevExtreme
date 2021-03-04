@@ -1,5 +1,9 @@
 import '../../jquery_augmentation';
 
+import {
+    TPromise
+} from '../../core';
+
 export interface ODataContextOptions {
     /**
      * @docid
@@ -90,7 +94,7 @@ export default class ODataContext {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
+    get(operationName: string, params: any): TPromise<any>;
     /**
      * @docid
      * @publicName invoke(operationName, params, httpMethod)
@@ -101,7 +105,7 @@ export default class ODataContext {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
+    invoke(operationName: string, params: any, httpMethod: any): TPromise<void>;
     /**
      * @docid
      * @publicName objectLink(entityAlias, key)

@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -356,7 +360,7 @@ export default class dxFileManager extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    refresh(): Promise<any> & JQueryPromise<any>;
+    refresh(): TPromise<any>;
 }
 
 /**

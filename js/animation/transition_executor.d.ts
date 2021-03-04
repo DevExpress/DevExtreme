@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     animationConfig
 } from './fx';
 
@@ -45,7 +49,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    start(): Promise<void> & JQueryPromise<void>;
+    start(): TPromise<void>;
     /**
      * @docid
      * @publicName stop()

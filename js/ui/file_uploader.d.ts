@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -23,7 +27,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    abortUpload?: ((file: File, uploadInfo?: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
+    abortUpload?: ((file: File, uploadInfo?: UploadInfo) => TPromise<any> | any);
     /**
      * @docid
      * @default ""
@@ -302,7 +306,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    uploadChunk?: ((file: File, uploadInfo: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
+    uploadChunk?: ((file: File, uploadInfo: UploadInfo) => TPromise<any> | any);
     /**
      * @docid
      * @default "Upload failed"
@@ -325,7 +329,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    uploadFile?: ((file: File, progressCallback: Function) => Promise<any> | JQueryPromise<any> | any);
+    uploadFile?: ((file: File, progressCallback: Function) => TPromise<any> | any);
     /**
      * @docid
      * @default {}

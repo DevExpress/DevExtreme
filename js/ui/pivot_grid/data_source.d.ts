@@ -1,5 +1,9 @@
 import '../../jquery_augmentation';
 
+import {
+    TPromise
+} from '../../core';
+
 import Store, {
     StoreOptions
 } from '../../data/abstract_store';
@@ -555,7 +559,7 @@ export default class PivotGridDataSource {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    load(): Promise<any> & JQueryPromise<any>;
+    load(): TPromise<any>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -601,7 +605,7 @@ export default class PivotGridDataSource {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    reload(): Promise<any> & JQueryPromise<any>;
+    reload(): TPromise<any>;
     /**
      * @docid
      * @publicName state()

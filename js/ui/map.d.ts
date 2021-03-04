@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -327,7 +331,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addMarker(markerOptions: any | Array<any>): Promise<any> & JQueryPromise<any>;
+    addMarker(markerOptions: any | Array<any>): TPromise<any>;
     /**
      * @docid
      * @publicName addRoute(routeOptions)
@@ -336,7 +340,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRoute(options: any | Array<any>): Promise<any> & JQueryPromise<any>;
+    addRoute(options: any | Array<any>): TPromise<any>;
     /**
      * @docid
      * @publicName removeMarker(marker)
@@ -345,7 +349,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    removeMarker(marker: any | number | Array<any>): Promise<void> & JQueryPromise<void>;
+    removeMarker(marker: any | number | Array<any>): TPromise<void>;
     /**
      * @docid
      * @publicName removeRoute(route)
@@ -354,7 +358,7 @@ export default class dxMap extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    removeRoute(route: any | number | Array<any>): Promise<void> & JQueryPromise<void>;
+    removeRoute(route: any | number | Array<any>): TPromise<void>;
 }
 
 declare global {

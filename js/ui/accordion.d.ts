@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -156,7 +160,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(index: number): Promise<void> & JQueryPromise<void>;
+    collapseItem(index: number): TPromise<void>;
     /**
      * @docid
      * @publicName expandItem(index)
@@ -165,7 +169,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(index: number): Promise<void> & JQueryPromise<void>;
+    expandItem(index: number): TPromise<void>;
     /**
      * @docid
      * @publicName updateDimensions()
@@ -173,7 +177,7 @@ export default class dxAccordion extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): Promise<void> & JQueryPromise<void>;
+    updateDimensions(): TPromise<void>;
 }
 
 /**

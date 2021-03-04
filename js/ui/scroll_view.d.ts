@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -85,7 +89,7 @@ export default class dxScrollView extends dxScrollable {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    release(preventScrollBottom: boolean): Promise<void> & JQueryPromise<void>;
+    release(preventScrollBottom: boolean): TPromise<void>;
 }
 
 declare global {

@@ -1,5 +1,9 @@
 import '../jquery_augmentation';
 
+import {
+    TPromise
+} from '../core';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -142,7 +146,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    goToItem(itemIndex: number, animation: boolean): Promise<void> & JQueryPromise<void>;
+    goToItem(itemIndex: number, animation: boolean): TPromise<void>;
     /**
      * @docid
      * @publicName nextItem(animation)
@@ -151,7 +155,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    nextItem(animation: boolean): Promise<void> & JQueryPromise<void>;
+    nextItem(animation: boolean): TPromise<void>;
     /**
      * @docid
      * @publicName prevItem(animation)
@@ -160,7 +164,7 @@ export default class dxGallery extends CollectionWidget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    prevItem(animation: boolean): Promise<void> & JQueryPromise<void>;
+    prevItem(animation: boolean): TPromise<void>;
 }
 
 /**

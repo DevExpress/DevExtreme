@@ -1,6 +1,10 @@
 import '../jquery_augmentation';
 
 import {
+    TPromise
+} from '../core';
+
+import {
     dxElement
 } from '../core/element';
 
@@ -568,7 +572,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @prevFileNamespace DevExpress.ui
        * @type_function_return Promise<Object>
        */
-      customLoad?: (() => Promise<any> | JQueryPromise<any>),
+      customLoad?: (() => TPromise<any>),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
