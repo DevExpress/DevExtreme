@@ -20,7 +20,6 @@ import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../../../events/short';
 import { combineClasses } from '../../utils/combine_classes';
-import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
 import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
@@ -34,10 +33,9 @@ import resizeCallbacks from '../../../core/utils/resize_callbacks';
 const getAria = (args: Record<string, unknown>):
 { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
-    return {
-      ...r,
-      [(key === 'role' || key === 'id') ? key : `aria-${key}`]: String(args[key]),
-    };
+    const name = (key === 'role' || key === 'id') ? key : `aria-${key}`;
+    // eslint-disable-next-line no-param-reassign
+    r[name] = String(args[key]);
   }
   return r;
 }, {});
@@ -357,13 +355,19 @@ export class Widget extends JSXComponent(WidgetProps) {
       disabled,
       focusStateEnabled,
       visible,
+      accessKey,
     } = this.props;
 
-    const accessKey = focusStateEnabled && !disabled && this.props.accessKey;
-    return {
-      ...extend({}, this.restAttributes, accessKey && { accessKey }),
+    const result = {
+      ...this.restAttributes,
       ...getAria({ ...aria, disabled, hidden: !visible }),
     };
+
+    if (focusStateEnabled && !disabled) {
+      result.accessKey = accessKey;
+    }
+
+    return result;
   }
 
   get styles(): { [key: string]: string | number } {

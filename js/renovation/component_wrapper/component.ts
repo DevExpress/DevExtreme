@@ -48,32 +48,29 @@ export default class ComponentWrapper extends DOMComponent {
     return this._viewRef.current;
   }
   _getDefaultOptions() {
-    return extend(
+    const result = extend(
       true,
       super._getDefaultOptions(),
-      this._viewComponent.defaultProps,
-      this._propsInfo.twoWay.reduce(
-        (
-          options: { [name: string]: unknown },
-          [name, defaultValue, eventName]
-        ) => ({
-          ...options,
-          [name]: defaultValue,
-          [eventName]: (value) => this.option(name, value),
-        }),
-        {}
-      ),
-      this._propsInfo.templates.reduce(
-        (
-          options: { [name: string]: unknown },
-          name
-        ) => ({
-          ...options,
-          [name]: null
-        }),
-        {}
-      )
+      this._viewComponent.defaultProps
     );
+
+    
+    this._propsInfo.twoWay.forEach(
+      (
+        [name, defaultValue, eventName]
+      ) => {
+        result[name] = defaultValue;
+        result[eventName] = (value) => this.option(name, value);
+      }
+    );
+
+    this._propsInfo.templates.forEach(
+      (name) => {
+        result[name] = null;
+      }
+    );
+
+    return result;
   }
 
   _initMarkup() {
@@ -135,16 +132,16 @@ export default class ComponentWrapper extends DOMComponent {
   }
 
   get elementAttr() {
-    if (!this._elementAttr) {
+    let elementAttr = this._elementAttr;
+    if (!elementAttr) {
       const { attributes } = this.$element()[0];
-      this._elementAttr = {
-        ...Object.keys(attributes).reduce((a, key) => {
-          if (attributes[key].specified) {
-            a[attributes[key].name] = attributes[key].value;
-          }
-          return a;
-        }, {}),
-      };
+      this._elementAttr = elementAttr = {};
+      for(let i = 0; i < attributes.length; i++) {
+        const attribute = attributes[i];
+        if (attribute.specified) {
+          elementAttr[attribute.name] = attribute.value;
+        }
+      }
     }
     const elemStyle = this.$element()[0].style;
 
@@ -152,7 +149,7 @@ export default class ComponentWrapper extends DOMComponent {
     for (let i = 0; i < elemStyle.length; i++) {
       style[elemStyle[i]] = elemStyle.getPropertyValue(elemStyle[i]);
     }
-    this._elementAttr.style = style;
+    elementAttr.style = style;
 
     const cssClass = this.$element()[0].getAttribute('class') || '';
     this._storedClasses =
@@ -161,14 +158,14 @@ export default class ComponentWrapper extends DOMComponent {
         .split(' ')
         .filter((name) => name.indexOf('dx-') === 0)
         .join(' ');
-    this._elementAttr.class = cssClass
+    elementAttr.class = cssClass
       .split(' ')
       .filter((name) => name.indexOf('dx-') !== 0)
       .concat(this._storedClasses)
       .join(' ')
       .trim();
 
-    return this._elementAttr;
+    return elementAttr;
   }
 
   _patchOptionValues(options) {

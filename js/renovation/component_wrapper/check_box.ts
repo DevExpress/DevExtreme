@@ -27,4 +27,9 @@ export default class CheckBox extends Editor {
 
     this._invalidate();
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  _useTemplates(): boolean {
+    return false;
+  }
 }
