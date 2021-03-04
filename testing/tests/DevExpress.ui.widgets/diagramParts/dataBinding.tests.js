@@ -463,6 +463,42 @@ QUnit.module('DataBinding', {
         assert.equal(nodes[1].parentId, null);
     });
 
+    test('reloadContent should not add wrong historyitem for internal update', function(assert) {
+        const nodes = [
+            {
+                id: '1',
+                text: 'text1'
+            },
+            {
+                id: '2',
+                text: 'text1',
+                parentId: '1'
+            }
+        ];
+        const nodeStore = new ArrayStore({
+            key: 'id',
+            data: nodes,
+            onRemoved: (key) => {
+                assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource.length, 1);
+                assert.equal(key, '1');
+            }
+        });
+
+        this.instance.option({
+            nodes: {
+                dataSource: nodeStore,
+                parentKeyExpr: 'parentId'
+            }
+        });
+        assert.equal(this.instance._diagramInstance.model.items.length, 3);
+
+        this.instance._diagramInstance.selection.set(['0']);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Delete).execute();
+        this.clock.tick(200); // because ArrayStore is "async"
+
+        assert.equal(this.instance._diagramInstance.history.historyItems.length, 1);
+    });
+
     test('reloadContent should call onRequestLayoutUpdate (update on events)', function(assert) {
         const onRequestLayoutUpdate = sinon.spy();
         const nodes = [

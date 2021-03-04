@@ -214,9 +214,10 @@ export const DataProvider = Class.inherit({
     },
 
     getCellData: function(rowIndex, cellIndex, isExcelJS) {
-        const result = { cellSourceData: {}, value };
-        let column;
         let value;
+        let column;
+
+        const result = { cellSourceData: {}, value };
         const columns = this.getColumns();
         const correctedCellIndex = this._correctCellIndex(cellIndex);
 
