@@ -1,6 +1,7 @@
 import { noop } from '../core/utils/common';
 import { extend as _extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
+import { hasWindow } from '../core/utils/window';
 import { each as _each } from '../core/utils/iterator';
 import registerComponent from '../core/component_registrator';
 import { prepareSegmentRectPoints } from './utils';
@@ -453,7 +454,7 @@ const dxChart = AdvancedChart.inherit({
     },
 
     _init() {
-        this._containerInitialHeight = this._$element.height();
+        this._containerInitialHeight = hasWindow() ? this._$element.height() : 0;
         this.callBase();
     },
 
