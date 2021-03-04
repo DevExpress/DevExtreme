@@ -10,7 +10,6 @@ import dxPolarChart from 'viz/polar_chart';
 import baseChartModule from 'viz/chart_components/base_chart';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import vizUtils from 'viz/core/utils.js';
 
 setupSeriesFamily();
 QUnit.testStart(function() {
@@ -61,25 +60,67 @@ function createChartInstance(options, chartContainer) {
 
 QUnit.module('dxChart', moduleSetup);
 
-QUnit.test('Check existing properties in styles', function(assert) {
-    this.$container.addClass('chart');
+QUnit.test('chart in container with height from style', function(assert) {
+    const container = $('<div>').appendTo('#container');
+    container.addClass('chart');
 
     const style = $(`<style>
-        #${this.$container.attr('id')}{
-            width: 1000px;
-        }
         .chart {
             height: 600px;
         }
     </style>`);
 
     style.appendTo('head');
+    try {
+        container.dxChart({
+            dataSource: [{
+                month: 'arg1',
+                avgT: 9.8,
+                maxT: 15.5,
+                val: 109
+            }, {
+                month: 'arg2',
+                avgT: 19.8,
+                maxT: 115.5,
+                val: 1109
+            }],
+            commonSeriesSettings: {
+                argumentField: 'month'
+            },
+            panes: [{
+                name: 'topPane',
+                height: 200
+            }, {
+                name: 'bottomPane',
+                height: 200
+            },
+            {
+                name: 'middlePane',
+                height: 200
+            }],
+            defaultPane: 'bottomPane',
+            series: [{
+                valueField: 'maxT',
+                pane: 'middlePane',
+            }, {
+                pane: 'topPane',
+                valueField: 'avgT',
+            }, {
+                valueField: 'prec',
+            }
+            ],
+            title: 'some title',
+            valueAxis: [{
+                pane: 'bottomPane',
+            }, {
+                pane: 'topPane',
+            }],
+        }).dxChart('instance');
 
-    assert.ok(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], 'height'));
-    assert.ok(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], 'width'));
-    assert.notOk(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], 'position'));
-
-    style.remove();
+        assert.strictEqual(container.find('.dxc-title').length, 0);
+    } finally {
+        style.remove();
+    }
 });
 
 QUnit.test('T244164', function(assert) {
