@@ -8,7 +8,6 @@ import {
     map as _map, getLog, getCategoriesInfo,
     updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
     normalizePanesHeight,
-    checkElementHasPropertyFromStyleSheet,
     rangesAreEqual
 } from './core/utils';
 import { type, isDefined as _isDefined } from '../core/utils/type';
@@ -450,6 +449,11 @@ const dxChart = AdvancedChart.inherit({
 
     _initCore: function() {
         this.paneAxis = {};
+        this.callBase();
+    },
+
+    _init() {
+        this._containerInitialHeight = this._$element.height();
         this.callBase();
     },
 
@@ -1068,7 +1072,7 @@ const dxChart = AdvancedChart.inherit({
                 const realSize = that.getSize();
                 const customSize = that.option('size');
                 const container = that._$element[0];
-                const containerHasStyledHeight = !!container.style.height || checkElementHasPropertyFromStyleSheet(container, 'height');
+                const containerHasStyledHeight = !!parseInt(container.style.height) || that._containerInitialHeight !== 0;
 
                 if(!rotated && !(customSize && customSize.height) && !containerHasStyledHeight) {
                     that._forceResize(realSize.width, realSize.height + needVerticalSpace);
