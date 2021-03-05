@@ -17,7 +17,6 @@ import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { ConfigProvider } from '../../common/config_provider';
 import { RootSvgElement } from './renderers/svg_root';
 import { GrayScaleFilter } from './renderers/gray_scale_filter';
-import { Canvas } from './types.d';
 import {
   sizeIsValid,
   pickPositiveValue,
@@ -46,7 +45,7 @@ const calculateCanvas = (
   model: Partial<BaseWidgetProps> &
   Partial<Omit<BaseWidget, 'containerRef'>> &
   { element: HTMLDivElement | null },
-): Canvas => {
+): ClientRect => {
   const { height, width } = model.size ?? {};
   const margin = model.margin ?? {};
   const defaultCanvas = model.defaultCanvas ?? DEFAULT_CANVAS;

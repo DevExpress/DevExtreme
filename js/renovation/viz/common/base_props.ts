@@ -6,7 +6,6 @@ import {
   TwoWay,
 } from 'devextreme-generator/component_declaration/common';
 import {
-  Canvas,
   Margin,
   Size,
 } from './types.d';
@@ -28,14 +27,14 @@ export class BaseWidgetProps {
 
   @OneWay() className = '';
 
-  @OneWay() defaultCanvas?: Canvas;
+  @OneWay() defaultCanvas?: ClientRect;
 
   @Event({
     actionConfig: { excludeValidators: ['disabled'] },
   }) onContentReady?: (e: any) => any;
 
   @TwoWay()
-  canvas: Canvas = {
+  canvas: ClientRect = {
     width: 0,
     height: 0,
     top: 0,
