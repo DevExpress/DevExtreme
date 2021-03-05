@@ -12,7 +12,7 @@ import type { /* Options, */ dxDataGridColumn, dxDataGridRowObject } from '../..
 import { BaseWidgetProps } from '../../../utils/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../ui/filter_builder';
-import { TPromise } from '../../../../core';
+import { TPromise } from '../../../../core/index';
 import type { dxElement } from '../../../../core/element';
 import type { template } from '../../../../core/templates/template';
 import type { event } from '../../../../events/index';
