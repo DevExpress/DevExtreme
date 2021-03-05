@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-      "jsx": "preserve",
+      "jsxFactory": "h",
       "moduleResolution": "node",
       "allowSyntheticDefaultImports": true
   }

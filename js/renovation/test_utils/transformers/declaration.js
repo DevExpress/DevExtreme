@@ -10,7 +10,7 @@ const { BASE_GENERATOR_OPTIONS_WITH_JQUERY } = require('../../../../build/gulp/g
 
 const THIS_FILE = fs.readFileSync(__filename);
 const jestTransformer = tsJest.createTransformer();
-const TS_CONFIG_PATH = 'build/gulp/generator/ts-configs/jest.tsconfig.json';
+const TS_CONFIG_PATH = 'build/gulp/generator/ts-configs/inferno.tsconfig.json';
 const tsConfig = getTsConfig(TS_CONFIG_PATH);
 
 generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;

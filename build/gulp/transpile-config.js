@@ -4,7 +4,7 @@ const common = {
     plugins: [
         '@babel/plugin-proposal-nullish-coalescing-operator',
         '@babel/plugin-proposal-optional-chaining',
-        ['babel-plugin-inferno', { 'imports': true }],
+        ['transform-react-jsx', { 'pragma': 'createElement' }],
         'transform-object-assign',
     ],
     ignore: ['**/*.json', '**/sinon.js'],
