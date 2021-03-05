@@ -658,7 +658,7 @@ class Gantt extends Widget {
             coreArgs.cancel = args.cancel;
             coreArgs.values = this._convertMappedToCoreData(optionName, args.values);
             if(optionName === GANTT_TASKS) {
-                this._saveCustomFieldsDataToCache(GANTT_NEW_TASK_CACHE_KEY, args.newValues);
+                this._saveCustomFieldsDataToCache(GANTT_NEW_TASK_CACHE_KEY, args.values);
             }
         }
     }
