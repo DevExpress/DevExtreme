@@ -141,7 +141,7 @@ export default class ODataStore extends Store {
      * @docid
      * @publicName insert(values)
      * @param1 values:object
-     * @return PromiseExt<any> | JQueryPromise<any>
+     * @return Promise<any>
      * @prevFileNamespace DevExpress.data
      * @public
      */

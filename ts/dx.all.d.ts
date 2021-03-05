@@ -1853,7 +1853,7 @@ declare module DevExpress.data {
         /**
          * [descr:ODataStore.insert(values)]
          */
-        insert(values: any): PromiseExt<any> & JQueryPromise<any>;
+        insert(values: any): Promise<any> & JQueryPromise<any>;
     }
     /**
      * [descr:PivotGridDataSource.Options]
