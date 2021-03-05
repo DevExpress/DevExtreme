@@ -15,7 +15,7 @@ import type { dxFilterBuilderOptions } from '../../../../ui/filter_builder';
 import { TPromise } from '../../../../core/index';
 import type { dxElement } from '../../../../core/element';
 import type { template } from '../../../../core/templates/template';
-import type { event } from '../../../../events/index';
+import type { EventExtension, event } from '../../../../events/index';
 import DataSource from '../../../../data/data_source';
 import type { DataSourceOptions } from '../../../../data/data_source';
 import type { dxPopupOptions } from '../../../../ui/popup';
@@ -1321,7 +1321,6 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    jQueryEvent?: JQueryEventObject;
     event?: event;
     data?: any;
     key?: any;
@@ -1334,7 +1333,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     rowType?: string;
     cellElement?: dxElement;
     row?: dxDataGridRowObject;
-  }) => any);
+  } & EventExtension) => any);
 
   @Event() onCellDblClick?: (e: {
     component?: DxDataGrid;
@@ -1525,7 +1524,6 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    jQueryEvent?: JQueryEventObject;
     event?: event;
     data?: any;
     key?: any;
@@ -1539,7 +1537,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     groupIndex?: number;
     rowElement?: dxElement;
     handled?: boolean;
-  }) => any;
+  } & EventExtension) => any;
 
   @Event() onRowDblClick?: (e: {
     component?: DxDataGrid;
@@ -1602,10 +1600,9 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    jQueryEvent?: JQueryEventObject;
     event?: event;
     handled?: boolean;
-  }) => any;
+  } & EventExtension) => any;
 
   @Event() onRowCollapsed?: (e: {
     component?: DxDataGrid;

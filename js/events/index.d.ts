@@ -1,4 +1,6 @@
-import '../jquery_augmentation';
+export interface EventExtension { }
+export interface EventType { }
+export type TEvent = {} extends EventType ? dxEvent : EventType;
 
 /**
  * @docid
@@ -83,8 +85,9 @@ export class dxEvent {
  * @type dxEvent|jQuery.Event
  * @hidden
  * @prevFileNamespace DevExpress.events
+ * @deprecated use TEvent instead
  */
-export type event = dxEvent | JQueryEventObject;
+export type event = TEvent;
 
 /**
  * @docid
