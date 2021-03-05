@@ -150,6 +150,14 @@ class FileManagerFilesTreeView extends Widget {
         }
     }
 
+    saveScrollTopPosition() {
+        this._scrollTopPosition = this._filesTreeView._scrollableContainer.scrollTop();
+    }
+
+    restoreScrollTopPosition() {
+        this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition);
+    }
+
     _updateFocusedElement() {
         const directoryInfo = this._getCurrentDirectory();
         const $element = this._getItemElementByKey(directoryInfo?.getInternalKey());

@@ -278,7 +278,11 @@ class FileManager extends Widget {
 
     _refreshAndShowProgress() {
         return when(this._notificationControl.tryShowProgressPanel(), this._controller.refresh())
-            .then(() => this._filesTreeView.refresh());
+            .then(() => {
+                this._filesTreeView.saveScrollTopPosition();
+                this._filesTreeView.refresh();
+            })
+            .then(() => this._filesTreeView.restoreScrollTopPosition());
     }
 
     _updateToolbar(selectedItems) {
