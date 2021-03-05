@@ -2439,6 +2439,10 @@ QUnit.module('View\'s focus', {
 
     ['Batch', 'Cell'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - Date cell should have correct text when the useMaskBehavior and editOnKeyPress options are enabled (T976144)`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+                return;
+            }
             // arrange
             this.dataGrid.dispose();
             const dataGrid = createDataGrid({
