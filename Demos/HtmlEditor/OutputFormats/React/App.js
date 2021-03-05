@@ -33,30 +33,30 @@ class App extends React.Component {
           onValueChanged={this.valueChanged}
         >
           <Toolbar>
-            <Item formatName="undo" />
-            <Item formatName="redo" />
-            <Item formatName="separator" />
+            <Item name="undo" />
+            <Item name="redo" />
+            <Item name="separator" />
             <Item
-              formatName="size"
-              formatValues={sizeValues}
+              name="size"
+              acceptedValues={sizeValues}
             />
             <Item
-              formatName="font"
-              formatValues={fontValues}
+              name="font"
+              acceptedValues={fontValues}
             />
-            <Item formatName="separator" />
-            <Item formatName="bold" />
-            <Item formatName="italic" />
-            <Item formatName="strike" />
-            <Item formatName="underline" />
-            <Item formatName="separator" />
-            <Item formatName="alignLeft" />
-            <Item formatName="alignCenter" />
-            <Item formatName="alignRight" />
-            <Item formatName="alignJustify" />
-            <Item formatName="separator" />
-            <Item formatName="color" />
-            <Item formatName="background" />
+            <Item name="separator" />
+            <Item name="bold" />
+            <Item name="italic" />
+            <Item name="strike" />
+            <Item name="underline" />
+            <Item name="separator" />
+            <Item name="alignLeft" />
+            <Item name="alignCenter" />
+            <Item name="alignRight" />
+            <Item name="alignJustify" />
+            <Item name="separator" />
+            <Item name="color" />
+            <Item name="background" />
           </Toolbar>
         </HtmlEditor>
 

@@ -3,25 +3,25 @@
     <DxHtmlEditor height="350px">
       <DxToolbar>
         <DxItem
-          :format-values="headerValues"
-          format-name="header"
+          :accepted-values="headerValues"
+          name="header"
         />
-        <DxItem format-name="separator"/>
-        <DxItem format-name="bold"/>
-        <DxItem format-name="color"/>
-        <DxItem format-name="separator"/>
-        <DxItem format-name="alignLeft"/>
-        <DxItem format-name="alignCenter"/>
-        <DxItem format-name="alignRight"/>
-        <DxItem format-name="separator"/>
-        <DxItem format-name="insertTable"/>
-        <DxItem format-name="deleteTable"/>
-        <DxItem format-name="insertRowAbove"/>
-        <DxItem format-name="insertRowBelow"/>
-        <DxItem format-name="deleteRow"/>
-        <DxItem format-name="insertColumnLeft"/>
-        <DxItem format-name="insertColumnRight"/>
-        <DxItem format-name="deleteColumn"/>
+        <DxItem name="separator"/>
+        <DxItem name="bold"/>
+        <DxItem name="color"/>
+        <DxItem name="separator"/>
+        <DxItem name="alignLeft"/>
+        <DxItem name="alignCenter"/>
+        <DxItem name="alignRight"/>
+        <DxItem name="separator"/>
+        <DxItem name="insertTable"/>
+        <DxItem name="deleteTable"/>
+        <DxItem name="insertRowAbove"/>
+        <DxItem name="insertRowBelow"/>
+        <DxItem name="deleteRow"/>
+        <DxItem name="insertColumnLeft"/>
+        <DxItem name="insertColumnRight"/>
+        <DxItem name="deleteColumn"/>
       </DxToolbar>
 
       <div v-html="markup"/>

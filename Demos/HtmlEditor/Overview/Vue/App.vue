@@ -3,54 +3,54 @@
     <DxHtmlEditor height="725px">
       <DxMediaResizing :enabled="true"/>
       <DxToolbar :multiline="isMultiline">
-        <DxItem format-name="undo"/>
-        <DxItem format-name="redo"/>
-        <DxItem format-name="separator"/>
+        <DxItem name="undo"/>
+        <DxItem name="redo"/>
+        <DxItem name="separator"/>
         <DxItem
-          :format-values="sizeValues"
-          format-name="size"
+          :accepted-values="sizeValues"
+          name="size"
         />
         <DxItem
-          :format-values="fontValues"
-          format-name="font"
+          :accepted-values="fontValues"
+          name="font"
         />
-        <DxItem format-name="separator"/>
-        <DxItem format-name="bold"/>
-        <DxItem format-name="italic"/>
-        <DxItem format-name="strike"/>
-        <DxItem format-name="underline"/>
-        <DxItem format-name="separator"/>
-        <DxItem format-name="alignLeft"/>
-        <DxItem format-name="alignCenter"/>
-        <DxItem format-name="alignRight"/>
-        <DxItem format-name="alignJustify"/>
-        <DxItem format-name="separator"/>
-        <DxItem format-name="orderedList"/>
-        <DxItem format-name="bulletList"/>
-        <DxItem format-name="separator"/>
+        <DxItem name="separator"/>
+        <DxItem name="bold"/>
+        <DxItem name="italic"/>
+        <DxItem name="strike"/>
+        <DxItem name="underline"/>
+        <DxItem name="separator"/>
+        <DxItem name="alignLeft"/>
+        <DxItem name="alignCenter"/>
+        <DxItem name="alignRight"/>
+        <DxItem name="alignJustify"/>
+        <DxItem name="separator"/>
+        <DxItem name="orderedList"/>
+        <DxItem name="bulletList"/>
+        <DxItem name="separator"/>
         <DxItem
-          :format-values="headerValues"
-          format-name="header"
+          :accepted-values="headerValues"
+          name="header"
         />
-        <DxItem format-name="separator"/>
-        <DxItem format-name="color"/>
-        <DxItem format-name="background"/>
-        <DxItem format-name="separator"/>
-        <DxItem format-name="link"/>
-        <DxItem format-name="image"/>
-        <DxItem format-name="separator"/>
-        <DxItem format-name="clear"/>
-        <DxItem format-name="codeBlock"/>
-        <DxItem format-name="blockquote"/>
-        <DxItem format-name="separator"/>
-        <DxItem format-name="insertTable"/>
-        <DxItem format-name="deleteTable"/>
-        <DxItem format-name="insertRowAbove"/>
-        <DxItem format-name="insertRowBelow"/>
-        <DxItem format-name="deleteRow"/>
-        <DxItem format-name="insertColumnLeft"/>
-        <DxItem format-name="insertColumnRight"/>
-        <DxItem format-name="deleteColumn"/>
+        <DxItem name="separator"/>
+        <DxItem name="color"/>
+        <DxItem name="background"/>
+        <DxItem name="separator"/>
+        <DxItem name="link"/>
+        <DxItem name="image"/>
+        <DxItem name="separator"/>
+        <DxItem name="clear"/>
+        <DxItem name="codeBlock"/>
+        <DxItem name="blockquote"/>
+        <DxItem name="separator"/>
+        <DxItem name="insertTable"/>
+        <DxItem name="deleteTable"/>
+        <DxItem name="insertRowAbove"/>
+        <DxItem name="insertRowBelow"/>
+        <DxItem name="deleteRow"/>
+        <DxItem name="insertColumnLeft"/>
+        <DxItem name="insertColumnRight"/>
+        <DxItem name="deleteColumn"/>
       </DxToolbar>
 
       <div v-html="markup"/>

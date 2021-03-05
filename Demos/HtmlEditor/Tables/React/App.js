@@ -15,25 +15,25 @@ class App extends React.Component {
         >
           <Toolbar>
             <Item
-              formatName="header"
-              formatValues={headerValues}
+              name="header"
+              acceptedValues={headerValues}
             />
-            <Item formatName="separator" />
-            <Item formatName="bold" />
-            <Item formatName="color" />
-            <Item formatName="separator" />
-            <Item formatName="alignLeft" />
-            <Item formatName="alignCenter" />
-            <Item formatName="alignRight" />
-            <Item formatName="separator" />
-            <Item formatName="insertTable" />
-            <Item formatName="deleteTable" />
-            <Item formatName="insertRowAbove" />
-            <Item formatName="insertRowBelow" />
-            <Item formatName="deleteRow" />
-            <Item formatName="insertColumnLeft" />
-            <Item formatName="insertColumnRight" />
-            <Item formatName="deleteColumn" />
+            <Item name="separator" />
+            <Item name="bold" />
+            <Item name="color" />
+            <Item name="separator" />
+            <Item name="alignLeft" />
+            <Item name="alignCenter" />
+            <Item name="alignRight" />
+            <Item name="separator" />
+            <Item name="insertTable" />
+            <Item name="deleteTable" />
+            <Item name="insertRowAbove" />
+            <Item name="insertRowBelow" />
+            <Item name="deleteRow" />
+            <Item name="insertColumnLeft" />
+            <Item name="insertColumnRight" />
+            <Item name="deleteColumn" />
           </Toolbar>
         </HtmlEditor>
       </div>

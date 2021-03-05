@@ -6,8 +6,8 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             items: [
                 "undo", "redo", "separator",
                 {
-                    formatName: "header",
-                    formatValues: [false, 1, 2, 3, 4, 5]
+                    name: "header",
+                    acceptedValues: [false, 1, 2, 3, 4, 5]
                 }, "separator",
                 "bold", "italic", "strike", "underline", "separator",
                 "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",

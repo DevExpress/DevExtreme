@@ -27,54 +27,54 @@ class App extends React.Component {
         >
           <MediaResizing enabled={true} />
           <Toolbar multiline={this.state.isMultiline}>
-            <Item formatName="undo" />
-            <Item formatName="redo" />
-            <Item formatName="separator" />
+            <Item name="undo" />
+            <Item name="redo" />
+            <Item name="separator" />
             <Item
-              formatName="size"
-              formatValues={sizeValues}
+              name="size"
+              acceptedValues={sizeValues}
             />
             <Item
-              formatName="font"
-              formatValues={fontValues}
+              name="font"
+              acceptedValues={fontValues}
             />
-            <Item formatName="separator" />
-            <Item formatName="bold" />
-            <Item formatName="italic" />
-            <Item formatName="strike" />
-            <Item formatName="underline" />
-            <Item formatName="separator" />
-            <Item formatName="alignLeft" />
-            <Item formatName="alignCenter" />
-            <Item formatName="alignRight" />
-            <Item formatName="alignJustify" />
-            <Item formatName="separator" />
-            <Item formatName="orderedList" />
-            <Item formatName="bulletList" />
-            <Item formatName="separator" />
+            <Item name="separator" />
+            <Item name="bold" />
+            <Item name="italic" />
+            <Item name="strike" />
+            <Item name="underline" />
+            <Item name="separator" />
+            <Item name="alignLeft" />
+            <Item name="alignCenter" />
+            <Item name="alignRight" />
+            <Item name="alignJustify" />
+            <Item name="separator" />
+            <Item name="orderedList" />
+            <Item name="bulletList" />
+            <Item name="separator" />
             <Item
-              formatName="header"
-              formatValues={headerValues}
+              name="header"
+              acceptedValues={headerValues}
             />
-            <Item formatName="separator" />
-            <Item formatName="color" />
-            <Item formatName="background" />
-            <Item formatName="separator" />
-            <Item formatName="link" />
-            <Item formatName="image" />
-            <Item formatName="separator" />
-            <Item formatName="clear" />
-            <Item formatName="codeBlock" />
-            <Item formatName="blockquote" />
-            <Item formatName="separator" />
-            <Item formatName="insertTable" />
-            <Item formatName="deleteTable" />
-            <Item formatName="insertRowAbove" />
-            <Item formatName="insertRowBelow" />
-            <Item formatName="deleteRow" />
-            <Item formatName="insertColumnLeft" />
-            <Item formatName="insertColumnRight" />
-            <Item formatName="deleteColumn" />
+            <Item name="separator" />
+            <Item name="color" />
+            <Item name="background" />
+            <Item name="separator" />
+            <Item name="link" />
+            <Item name="image" />
+            <Item name="separator" />
+            <Item name="clear" />
+            <Item name="codeBlock" />
+            <Item name="blockquote" />
+            <Item name="separator" />
+            <Item name="insertTable" />
+            <Item name="deleteTable" />
+            <Item name="insertRowAbove" />
+            <Item name="insertRowBelow" />
+            <Item name="deleteRow" />
+            <Item name="insertColumnLeft" />
+            <Item name="insertColumnRight" />
+            <Item name="deleteColumn" />
           </Toolbar>
         </HtmlEditor>
         <div className="options">

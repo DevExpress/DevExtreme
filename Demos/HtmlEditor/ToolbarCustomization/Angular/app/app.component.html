@@ -1,20 +1,20 @@
 <dx-html-editor [(value)]="editorValue">
     <dxo-toolbar>
-        <dxi-item formatName="undo"></dxi-item>
-        <dxi-item formatName="redo"></dxi-item>
-        <dxi-item formatName="separator"></dxi-item>
-        <dxi-item formatName="header" [formatValues]="[false, 1, 2, 3, 4, 5]"></dxi-item>
-        <dxi-item formatName="separator"></dxi-item>
-        <dxi-item formatName="bold"></dxi-item>
-        <dxi-item formatName="italic"></dxi-item>
-        <dxi-item formatName="strike"></dxi-item>
-        <dxi-item formatName="underline"></dxi-item>
-        <dxi-item formatName="separator"></dxi-item>
-        <dxi-item formatName="alignLeft"></dxi-item>
-        <dxi-item formatName="alignCenter"></dxi-item>
-        <dxi-item formatName="alignRight"></dxi-item>
-        <dxi-item formatName="alignJustify"></dxi-item>
-        <dxi-item formatName="separator"></dxi-item>
+        <dxi-item name="undo"></dxi-item>
+        <dxi-item name="redo"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
+        <dxi-item name="header" [acceptedValues]="[false, 1, 2, 3, 4, 5]"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
+        <dxi-item name="bold"></dxi-item>
+        <dxi-item name="italic"></dxi-item>
+        <dxi-item name="strike"></dxi-item>
+        <dxi-item name="underline"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
+        <dxi-item name="alignLeft"></dxi-item>
+        <dxi-item name="alignCenter"></dxi-item>
+        <dxi-item name="alignRight"></dxi-item>
+        <dxi-item name="alignJustify"></dxi-item>
+        <dxi-item name="separator"></dxi-item>
         <dxi-item widget="dxButton" [options]="toolbarButtonOptions"></dxi-item>
     </dxo-toolbar>
 
