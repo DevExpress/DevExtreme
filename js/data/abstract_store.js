@@ -2,7 +2,7 @@ import Class from '../core/class';
 const abstract = Class.abstract;
 import { EventsStrategy } from '../core/events_strategy';
 import { each } from '../core/utils/iterator';
-import errorsModule from './errors';
+import { errors, handleError } from './errors';
 import dataUtils from './utils';
 import { compileGetter } from '../core/utils/data';
 import storeHelper from './store_helper';
@@ -74,7 +74,7 @@ const Store = Class.inherit({
 
     _requireKey: function() {
         if(!this.key()) {
-            throw errorsModule.errors.Error('E4005');
+            throw errors.Error('E4005');
         }
     },
     load: function(options) {
@@ -188,7 +188,7 @@ const Store = Class.inherit({
     _removeImpl: abstract,
 
     _addFailHandlers: function(deferred) {
-        return deferred.fail(this._errorHandler).fail(errorsModule._errorHandler);
+        return deferred.fail(this._errorHandler).fail(handleError);
     },
 
     on(eventName, eventHandler) {
@@ -204,7 +204,7 @@ const Store = Class.inherit({
 
 Store.create = function(alias, options) {
     if(!(alias in storeImpl)) {
-        throw errorsModule.errors.Error('E4020', alias);
+        throw errors.Error('E4020', alias);
     }
 
     return new storeImpl[alias](options);

@@ -2406,6 +2406,7 @@ declare module DevExpress.data {
     export function base64_encode(input: string | Array<number>): string;
     /**
      * [descr:Utils.errorHandler]
+     * @deprecated [depNote:Utils.errorHandler]
      */
     export function errorHandler(e: Error): void;
     /**
@@ -2416,6 +2417,10 @@ declare module DevExpress.data {
      * [descr:Utils.query(url, queryOptions)]
      */
     export function query(url: string, queryOptions: any): Query;
+    /**
+     * [descr:Utils.setErrorHandler]
+     */
+    export function setErrorHandler(handler: Function): void;
 }
 declare module DevExpress.data.utils {
     /**
@@ -8153,6 +8158,10 @@ declare module DevExpress.ui {
          */
         placeholder?: string;
         /**
+         * [descr:dxHtmlEditor.Options.stylingMode]
+         */
+        stylingMode?: 'outlined' | 'underlined' | 'filled';
+        /**
          * [descr:dxHtmlEditor.Options.toolbar]
          */
         toolbar?: dxHtmlEditorToolbar;
@@ -8328,17 +8337,17 @@ declare module DevExpress.ui {
      */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
         /**
-         * [descr:dxHtmlEditorToolbarItem.formatName]
+         * [descr:dxHtmlEditorToolbarItem.acceptedValues]
          */
-        formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
-        /**
-         * [descr:dxHtmlEditorToolbarItem.formatValues]
-         */
-        formatValues?: Array<string | number | boolean>;
+        acceptedValues?: Array<string | number | boolean>;
         /**
          * [descr:dxHtmlEditorToolbarItem.location]
          */
         location?: 'after' | 'before' | 'center';
+        /**
+         * [descr:dxHtmlEditorToolbarItem.name]
+         */
+        name?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
     }
     /**
      * [descr:dxHtmlEditorVariables]

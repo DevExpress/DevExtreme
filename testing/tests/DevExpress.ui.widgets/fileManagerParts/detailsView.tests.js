@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
+import renderer from 'core/renderer';
 import pointerEvents from 'events/pointer';
 import localization from 'localization';
 import messageLocalization from 'localization/message';
@@ -27,13 +28,13 @@ const moduleConfig = {
                 {
                     name: '1.txt',
                     isDirectory: false,
-                    size: 0,
+                    size: 200,
                     owner: 'Admin'
                 },
                 {
                     name: '2.txt',
                     isDirectory: false,
-                    size: 200,
+                    size: 0,
                     owner: 'Admin'
                 },
                 {
@@ -84,8 +85,8 @@ QUnit.module('Details View', moduleConfig, () => {
 
     test('Format file sizes', function(assert) {
         assert.equal(this.wrapper.getDetailsItemSize(0).trim(), '', 'Folder shouldn\'t display own size.');
-        assert.equal(this.wrapper.getDetailsItemSize(1), '0 B', 'Incorrect formating of size column.');
-        assert.equal(this.wrapper.getDetailsItemSize(2), '200 B', 'Incorrect formating of size column.');
+        assert.equal(this.wrapper.getDetailsItemSize(1), '200 B', 'Incorrect formating of size column.');
+        assert.equal(this.wrapper.getDetailsItemSize(2), '0 B', 'Incorrect formating of size column.');
         assert.equal(this.wrapper.getDetailsItemSize(3), '1 KB', 'Incorrect formating of size column.');
         assert.equal(this.wrapper.getDetailsItemSize(4), '1.3 KB', 'Incorrect formating of size column.');
     });
@@ -692,5 +693,59 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(2).text(), captionDate, 'second column is Date Modified');
         assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(3).text(), captionSize, 'third column is File Size');
         localization.locale(locale);
+    });
+
+    test('columns without hidingPriority auto hide disabled (T950675)', function(assert) {
+        const thumbnailsColumnCaption = 'thumbnailsColumnCaption';
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 500;
+        this.wrapper.getInstance().option({
+            fileSystemProvider: [{
+                name: 'Some_very_very_very_very_very_very_very_very_very_very_very_very_very_very_long_folder',
+                isDirectory: true,
+                hasSubDirectories: false,
+                items: []
+            }],
+            itemView: {
+                mode: 'details',
+                details: {
+                    columns: [{ dataField: 'thumbnail', caption: 'thumbnailsColumnCaption' }, 'name']
+                }
+            },
+            width: '500px'
+        });
+        this.clock.tick(600);
+
+        assert.strictEqual(this.wrapper.getDetailsCell(thumbnailsColumnCaption, 0).outerWidth(), 36, 'thumbnails column width is correct');
+        renderer.fn.width = originalFunc;
+    });
+
+    test('sorting by file size is correct (T962735)', function(assert) {
+        const columnHeader = this.wrapper.getColumnHeaderInDetailsView(3);
+
+        assert.equal(columnHeader.attr('aria-sort'), 'none', 'sorting default');
+
+        columnHeader.trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), 'Folder 1');
+        assert.equal(this.wrapper.getDetailsItemName(1), '2.txt');
+        assert.equal(this.wrapper.getDetailsItemName(2), '1.txt');
+        assert.equal(this.wrapper.getDetailsItemName(3), '3.txt');
+        assert.equal(this.wrapper.getDetailsItemName(4), '4.txt', 'sorted descending');
+
+        columnHeader.trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), '4.txt');
+        assert.equal(this.wrapper.getDetailsItemName(1), '3.txt');
+        assert.equal(this.wrapper.getDetailsItemName(2), '1.txt');
+        assert.equal(this.wrapper.getDetailsItemName(3), '2.txt');
+        assert.equal(this.wrapper.getDetailsItemName(4), 'Folder 1', 'sorted ascending');
+
+        columnHeader.trigger($.Event('dxclick', { ctrlKey: true }));
+        this.clock.tick(400);
+
+        assert.equal(columnHeader.attr('aria-sort'), 'none', 'sorting default');
     });
 });

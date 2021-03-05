@@ -77,10 +77,10 @@ const FocusController = core.ViewController.inherit((function() {
             const pageSize = dataController.pageSize();
             const setKeyByIndex = () => {
                 if(this._isValidFocusedRowIndex(index)) {
-                    const visibleIndex = index - dataController.getRowIndexOffset();
+                    const visibleIndex = index - dataController.getRowIndexOffset(true);
                     const lastItemIndex = dataController._getLastItemIndex();
                     const rowIndex = Math.min(visibleIndex, lastItemIndex);
-                    const focusedRowKey = dataController.getKeyByRowIndex(rowIndex);
+                    const focusedRowKey = dataController.getKeyByRowIndex(rowIndex, true);
 
                     if(isDefined(focusedRowKey) && !this.isRowFocused(focusedRowKey)) {
                         this.option('focusedRowKey', focusedRowKey);
@@ -278,8 +278,8 @@ const FocusController = core.ViewController.inherit((function() {
 
         getFocusedRowIndexByKey: function(key) {
             const dataController = this.getController('data');
-            const rowIndex = dataController.getRowIndexByKey(key);
-            return rowIndex >= 0 ? rowIndex + dataController.getRowIndexOffset() : -1;
+            const loadedRowIndex = dataController.getRowIndexByKey(key, true);
+            return loadedRowIndex >= 0 ? loadedRowIndex + dataController.getRowIndexOffset(true) : -1;
         },
 
         _focusRowByKeyOrIndex: function() {

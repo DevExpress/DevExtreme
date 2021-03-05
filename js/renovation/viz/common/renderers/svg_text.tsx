@@ -209,9 +209,9 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
     let tspan: SVGTSpanElement;
 
     for (let i = 0, ii = items.length; i < ii; ++i) {
-      tspan = items[i].stroke;
-      tspan.setAttribute(KEY_STROKE, stroke);
-      tspan.setAttribute('stroke-width', strokeWidth.toString());
+      tspan = items[i].stroke!;
+      tspan.setAttribute(KEY_STROKE, stroke!);
+      tspan.setAttribute('stroke-width', strokeWidth!.toString());
       tspan.setAttribute('stroke-opacity', strokeOpacity.toString());
       tspan.setAttribute('stroke-linejoin', 'round');
     }

@@ -1010,6 +1010,11 @@ QUnit.test('Group header should be rendered correct, groupByDate = true and cros
 });
 
 QUnit.test('Date table cells shoud have right cellData, groupByDate = true', function(assert) {
+    if(this.instance.option('renovateRender')) {
+        assert.ok(true, 'This test is not for renovated render');
+        return;
+    }
+
     const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
     assert.deepEqual($cells.eq(0).data('dxCellData'), {

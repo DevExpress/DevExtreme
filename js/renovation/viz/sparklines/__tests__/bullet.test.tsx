@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Canvas } from '../../core/common/types.d';
+import { Canvas } from '../../common/types.d';
 import {
   clear as clearEventHandlers,
   defaultEvent,
@@ -8,9 +8,9 @@ import {
   getEventHandlers,
 } from '../../../test_utils/events_mock';
 import { Bullet, viewFunction as BulletComponent } from '../bullet';
-import { PathSvgElement } from '../../core/renderers/svg_path';
+import { PathSvgElement } from '../../common/renderers/svg_path';
 import { resolveRtlEnabled } from '../../../utils/resolve_rtl';
-import { TooltipProps } from '../../core/tooltip';
+import { TooltipProps } from '../../common/tooltip';
 import { generateCustomizeTooltipCallback } from '../utils';
 
 jest.mock('../../../utils/resolve_rtl');
@@ -299,7 +299,7 @@ describe('Bullet', () => {
             target: 15,
             tooltip: { enabled: true },
           });
-          bullet.widgetRef = React.createRef();
+          bullet.widgetRef = React.createRef() as any;
           const baseRef = {} as any;
           bullet.widgetRef.current = { svg: jest.fn(() => baseRef) } as any;
           bullet.pointerHandler = jest.fn();
@@ -651,7 +651,7 @@ describe('Bullet', () => {
             left: 200,
           };
           const bullet = new Bullet({ });
-          bullet.widgetRef = React.createRef();
+          bullet.widgetRef = React.createRef() as any;
           bullet.widgetRef.current = {
             svg: jest.fn(() => ({
               getBoundingClientRect: jest.fn().mockReturnValue(offsetState),

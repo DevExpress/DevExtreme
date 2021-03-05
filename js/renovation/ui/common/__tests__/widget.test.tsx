@@ -866,7 +866,6 @@ describe('Widget', () => {
         disabled: false,
         focusStateEnabled: false,
         hoverStateEnabled: false,
-        onContentReady: expect.any(Function),
         tabIndex: 0,
         visible: true,
         _feedbackHideTimeout: 400,

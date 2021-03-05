@@ -1629,3 +1629,57 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
     },
   },
 }));
+
+['Cell', 'Batch'].forEach((editMode) => {
+  test(`${editMode} - Edit cell should be focused correclty when showEditorAlways is enabled (T976141)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    let currentCell;
+
+    // direct order
+    for (let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
+      for (let colIndex = 0; colIndex < 2; colIndex += 1) {
+        currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        // act
+        await t
+          .click(currentCell.getEditor().element);
+
+        // assert
+        await t
+          .expect(currentCell.isFocused).ok()
+          .expect(currentCell.getEditor().element.focused).ok();
+      }
+    }
+
+    // reverse order
+    for (let rowIndex = 2; rowIndex >= 0; rowIndex -= 1) {
+      for (let colIndex = 1; colIndex >= 0; colIndex -= 1) {
+        currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        // act
+        await t
+          .click(currentCell.getEditor().element);
+
+        // assert
+        await t
+          .expect(currentCell.isFocused).ok()
+          .expect(currentCell.getEditor().element.focused).ok();
+      }
+    }
+  }).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, field: 'field' },
+      { id: 2, field: 'field' },
+      { id: 3, field: 'field' },
+    ],
+    keyExpr: 'id',
+    editing: {
+      mode: editMode.toLowerCase(),
+      allowUpdating: true,
+    },
+    loadingTimeout: undefined,
+    customizeColumns(columns) {
+      columns.forEach((col) => {
+        col.showEditorAlways = true;
+      });
+    },
+  }));
+});

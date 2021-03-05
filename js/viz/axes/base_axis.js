@@ -1332,7 +1332,7 @@ Axis.prototype = {
         }
         that._seriesData.sortCategories(that.getCategoriesSorter(argCategories));
 
-        that._seriesData.userBreaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
+        that._seriesData.userBreaks = that._seriesData.isEmpty() ? [] : that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
         that._translator.updateBusinessRange(that._getViewportRange());
     },

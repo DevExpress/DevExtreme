@@ -3,6 +3,7 @@
 // adduse
 
 $material-toolbar-size-editor-width: null !default;
+$material-html-editor-horizontal-padding: 15px !default;
 
 @if $size == "default" {
   $material-toolbar-size-editor-width: 120px !default;

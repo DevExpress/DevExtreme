@@ -8,7 +8,6 @@ import {
   isVerticalGroupOrientation,
   isHorizontalGroupOrientation,
 } from '../utils';
-import { GroupedViewData } from '../types.d';
 import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../consts';
 
 describe('Workspaces utils', () => {
@@ -99,7 +98,7 @@ describe('Workspaces utils', () => {
 
   describe('getIsGroupedAllDayPanel', () => {
     it('should return false if all-day-panel is a part of the header', () => {
-      const viewData: GroupedViewData = {
+      const viewData: any = {
         groupedData: [{
           dateTable: [[{
             startDate: new Date(2020, 1, 2),
@@ -129,7 +128,7 @@ describe('Workspaces utils', () => {
     });
 
     it('should return true if all-day-panel is a part of the DateTable', () => {
-      const viewData: GroupedViewData = {
+      const viewData: any = {
         groupedData: [{
           dateTable: [[{
             startDate: new Date(2020, 1, 2),

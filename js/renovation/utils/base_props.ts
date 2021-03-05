@@ -22,7 +22,7 @@ export class BaseWidgetProps {
 
   @Event({
     actionConfig: { excludeValidators: ['disabled', 'readOnly'] },
-  }) onContentReady?: (e: any) => any = (() => {});
+  }) onContentReady?: (e: any) => any;
 
   @Event() onKeyDown?: (e: any) => any;
 

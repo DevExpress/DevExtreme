@@ -9,7 +9,7 @@ import {
   Canvas,
   Margin,
   Size,
-} from './common/types.d';
+} from './types.d';
 
 @ComponentBindings()
 export class BaseWidgetProps {
@@ -32,7 +32,7 @@ export class BaseWidgetProps {
 
   @Event({
     actionConfig: { excludeValidators: ['disabled'] },
-  }) onContentReady?: (e: any) => any = (() => {});
+  }) onContentReady?: (e: any) => any;
 
   @TwoWay()
   canvas: Canvas = {

@@ -7,7 +7,7 @@ gulp.task('skippedTask', done => done());
 
 const runTaskByCondition = (condition, task) => {
     if(condition) {
-        return (done) => task(done);
+        return task;
     }
     return (done) => done ? done() : gulp.series('skippedTask');
 };
