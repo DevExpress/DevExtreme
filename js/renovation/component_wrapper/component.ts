@@ -277,6 +277,7 @@ export default class ComponentWrapper extends DOMComponent {
         if (dummyDivRef) {
           const { parentNode } = dummyDivRef;
           if (parentNode) {
+            parentNode.removeChild(dummyDivRef);
             this._getTemplate(this._templateManager.anonymousTemplateName).render(
               {
                 container: getPublicElement($(parentNode)),
@@ -284,7 +285,6 @@ export default class ComponentWrapper extends DOMComponent {
               }
             );
           }
-          dummyDivRef.remove();
         }
       };
 
