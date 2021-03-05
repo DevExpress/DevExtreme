@@ -46,12 +46,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
     onDisposing?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 name:string
-     * @type_function_param1_field5 fullName:string
-     * @type_function_param1_field6 value:any
      * @action
-     * @extends Action
      * @prevFileNamespace DevExpress.core
      * @public
      */
