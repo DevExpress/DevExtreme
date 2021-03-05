@@ -6,6 +6,7 @@ const common = {
         '@babel/plugin-proposal-optional-chaining',
         ['babel-plugin-inferno', { 'imports': true }],
         'transform-object-assign',
+        ['@babel/plugin-proposal-object-rest-spread', { loose: true }],
     ],
     ignore: ['**/*.json', '**/sinon.js'],
 };
