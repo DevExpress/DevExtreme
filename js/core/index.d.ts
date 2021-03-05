@@ -1,5 +1,2 @@
-import '../jquery_augmentation';
-
-interface PromiseType<T> extends JQueryPromise<T> { }
-
+export interface PromiseType<T> { }
 export type TPromise<T> = {} extends PromiseType<T> ? Promise<T> : PromiseType<T>
