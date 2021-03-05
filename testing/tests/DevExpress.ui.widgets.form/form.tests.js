@@ -101,36 +101,82 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
     assert.deepEqual(formData, { name: 'test' }, 'value updates');
 });
 
-['phone', 'desktop'].forEach(deviceType => {
-    ['formOption', 'globalOption', 'defaultOption'].forEach(optionType => {
-        QUnit.testInActiveWindow(`Setting screen by width option (T977436). Set via ${optionType}, deviceType: ${deviceType}`, function(assert) {
-            const formScreenByWidthStub = sinon.stub();
-            const globalScreenByWidthStub = sinon.stub();
-            const defaultScreenByWidthStub = sinon.stub();
+['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
+    ['instanceOption', 'globalOption', 'defaultOption'].forEach(optionType => {
+        const createScreenByWidthFunc = (logs, initiator) => {
+            return () => {
+                logs.push(initiator);
+                return screenSize;
+            };
+        };
 
-            const formOption = { items: [ { dataField: 'field1' } ] };
+        const checkFormSize = (assert, form, logs) => {
+            const $formBox = form._$element.find('.dx-responsivebox');
+            const rowsCount = $formBox.find('> .dx-box > .dx-box-item').length;
+            const colsCount = getColCount($formBox.find('.dx-last-col'));
 
-            if(optionType === 'defaultOption') {
-                Form.reassignDefaultScreenByWidthFunc(defaultScreenByWidthStub);
-            } else if(optionType === 'formOption') {
-                formOption['screenByWidth'] = formScreenByWidthStub;
-            } else {
-                Form.defaultOptions({
-                    device: { deviceType: deviceType },
-                    options: {
-                        screenByWidth: globalScreenByWidthStub
-                    }
-                });
+            const expectedCount = {
+                xs: { rows: 4, columns: 1 },
+                sm: { rows: 2, columns: 2 },
+                md: { rows: 2, columns: 3 },
+                lg: { rows: 1, columns: 4 }
+            };
+
+            logs.every(log => assert.equal(log, optionType));
+            assert.ok($formBox.hasClass(`dx-responsivebox-screen-${screenSize}`), 'form has valid size');
+
+            assert.equal(expectedCount[screenSize].rows, rowsCount, 'expected rows count');
+            assert.equal(expectedCount[screenSize].columns, colsCount, 'expected columns count');
+        };
+
+        const getColCount = ($lastCol) => {
+            if($lastCol.hasClass('dx-col-3')) {
+                return 4;
             }
+            if($lastCol.hasClass('dx-col-2')) {
+                return 3;
+            }
+            if($lastCol.hasClass('dx-col-1')) {
+                return 2;
+            }
+            if($lastCol.hasClass('dx-col-0')) {
+                return 1;
+            }
+            return 0;
+        };
 
-            $('#form').dxForm(formOption);
+        [
+            (form) => { form.repaint(); },
+        ].forEach(formUpdater => {
+            QUnit.test(`Setting screen by width option (T977436). Set via ${optionType}, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
+                let logs = [];
+                const options = {
+                    items: [ { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' } ],
+                    colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
+                };
 
-            assert.equal(formScreenByWidthStub.callCount > 0, optionType === 'formOption', 'form option screenByWidth was fired');
-            assert.equal(globalScreenByWidthStub.callCount > 0, optionType === 'globalOption' && device.real().deviceType === deviceType, 'global form screenByWidth was fired');
-            assert.equal(defaultScreenByWidthStub.callCount > 0, optionType === 'defaultOption', 'default screenByWidth was fired');
+                if(optionType === 'instanceOption') {
+                    options['screenByWidth'] = createScreenByWidthFunc(logs, 'instanceOption');
+                } else if(optionType === 'defaultOption') {
+                    Form.reassignDefaultScreenByWidthFunc(createScreenByWidthFunc(logs, 'defaultOption'));
+                } else {
+                    Form.defaultOptions({
+                        options: {
+                            screenByWidth: createScreenByWidthFunc(logs, 'globalOption')
+                        }
+                    });
+                }
 
-            Form._classCustomRules = [];
-            Form.reassignDefaultScreenByWidthFunc(defaultScreenFactorFunc);
+                const form = $('#form').dxForm(options).dxForm('instance');
+                checkFormSize(assert, form, logs);
+
+                logs = [];
+                formUpdater(form);
+                checkFormSize(assert, form, logs);
+
+                Form._classCustomRules = [];
+                Form.reassignDefaultScreenByWidthFunc(defaultScreenFactorFunc);
+            });
         });
     });
 });
