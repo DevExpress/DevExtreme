@@ -94,7 +94,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
     _canProcessNotNativeTimezoneDates(appointmentList, appointment) {
         const timeZoneName = this.scheduler.option('timeZone');
-        const { isEqualLocalTimeZone, hasDSTInLocalTimeZone } = timeZoneUtils;
+        const { isEqualLocalTimeZone } = timeZoneUtils;
 
         const isRecurrence = appointmentList.length > 1;
         const isTimeZoneSet = !isEmptyObject(timeZoneName);
@@ -103,9 +103,9 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             return false;
         }
 
-        if(!isTimeZoneSet && hasDSTInLocalTimeZone()) {
-            return false;
-        }
+        // if(!isTimeZoneSet && hasDSTInLocalTimeZone()) {
+        //     return false;
+        // }
 
         return isTimeZoneSet &&
             !isEqualLocalTimeZone(timeZoneName);
