@@ -44,7 +44,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
         }
 
-        let gridAppointmentList = this._createGridAppointmentList(appointmentList);
+        let gridAppointmentList = this._createGridAppointmentList(appointmentList, appointment);
 
         gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment, isAllDay);
 
@@ -204,8 +204,16 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return gridAppointmentList;
     }
 
-    _createGridAppointmentList(appointmentList) {
+    _createGridAppointmentList(appointmentList, appointment) {
         return appointmentList.map(source => {
+            const offset = appointment.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
+
+            if(offset !== 0) {
+                source.startDate = new Date(source.startDate.getTime() + offset * toMs('minute'));
+                source.endDate = new Date(source.endDate.getTime() + offset * toMs('minute'));
+            }
+
+
             const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
             const endDate = this.timeZoneCalculator.createDate(source.endDate, { path: 'toGrid' });
 
