@@ -205,10 +205,14 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _createGridAppointmentList(appointmentList, appointment) {
+        const timeZoneName = this.scheduler.option('timeZone');
+        const { isEqualLocalTimeZone } = timeZoneUtils;
+        const isTimeZoneSet = !isEmptyObject(timeZoneName);
+
         return appointmentList.map(source => {
             const offset = appointment.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
 
-            if(offset !== 0) {
+            if(isTimeZoneSet && !isEqualLocalTimeZone(timeZoneName) && appointment.isRecurrent && offset !== 0) {
                 source.startDate = new Date(source.startDate.getTime() + offset * toMs('minute'));
                 source.endDate = new Date(source.endDate.getTime() + offset * toMs('minute'));
             }
