@@ -9,7 +9,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -170,7 +170,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxPieChart, element?: dxElement, model?: any, event?: event, target?: string | number, points?: Array<piePointObject> }) => any) | string;
+    onLegendClick?: ((e: { component?: dxPieChart, element?: dxElement, model?: any, event?: TEvent, target?: string | number, points?: Array<piePointObject> }) => any) | string;
     /**
      * @docid
      * @extends CommonVizPalette

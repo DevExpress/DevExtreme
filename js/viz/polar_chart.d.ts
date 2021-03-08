@@ -5,7 +5,7 @@ import {
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -212,7 +212,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, argument?: Date | number | string }) => any) | string;
+    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: TEvent, argument?: Date | number | string }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -224,7 +224,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, target?: polarChartSeriesObject }) => any) | string;
+    onLegendClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: TEvent, target?: polarChartSeriesObject }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -236,7 +236,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, target?: polarChartSeriesObject }) => any) | string;
+    onSeriesClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: TEvent, target?: polarChartSeriesObject }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -276,7 +276,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomEnd?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => any);
+    onZoomEnd?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: TEvent, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => any);
     /**
      * @docid
      * @extends Action
@@ -291,7 +291,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomStart?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
+    onZoomStart?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: TEvent, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
     /**
      * @docid
      * @type Enums.PolarChartResolveLabelOverlapping

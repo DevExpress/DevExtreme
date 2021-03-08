@@ -13,7 +13,7 @@ import {
 } from '../core';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxPopup, {
@@ -38,7 +38,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default "auto"

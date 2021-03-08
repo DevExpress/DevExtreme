@@ -16,7 +16,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import BaseWidget, {
@@ -449,7 +449,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkClick?: ((e: { component?: dxSankey, element?: dxElement, model?: any, event?: event, target?: dxSankeyLink }) => any) | string;
+    onLinkClick?: ((e: { component?: dxSankey, element?: dxElement, model?: any, event?: TEvent, target?: dxSankeyLink }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -472,7 +472,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeClick?: ((e: { component?: dxSankey, element?: dxElement, model?: any, event?: event, target?: dxSankeyNode }) => any) | string;
+    onNodeClick?: ((e: { component?: dxSankey, element?: dxElement, model?: any, event?: TEvent, target?: dxSankeyNode }) => any) | string;
     /**
      * @docid
      * @extends Action

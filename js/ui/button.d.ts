@@ -9,7 +9,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import Widget, {
@@ -55,7 +55,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxButton, element?: dxElement, model?: any, event?: event, validationGroup?: any }) => any);
+    onClick?: ((e: { component?: dxButton, element?: dxElement, model?: any, event?: TEvent, validationGroup?: any }) => any);
     /**
      * @docid
      * @type Enums.ButtonStylingMode

@@ -17,7 +17,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import CollectionWidget, {
@@ -125,7 +125,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemTitleClick?: ((e: { component?: dxAccordion, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any) | string;
+    onItemTitleClick?: ((e: { component?: dxAccordion, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: TEvent }) => any) | string;
     /**
      * @docid
      * @default false

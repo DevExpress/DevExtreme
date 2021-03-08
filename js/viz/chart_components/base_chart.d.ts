@@ -18,7 +18,7 @@ import DataSource, {
 } from '../../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../../events/index';
 
 import {
@@ -136,7 +136,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointClick?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, target?: basePointObject }) => any) | string;
+    onPointClick?: ((e: { component?: T, element?: dxElement, model?: any, event?: TEvent, target?: basePointObject }) => any) | string;
     /**
      * @docid
      * @type_function_param1 e:object

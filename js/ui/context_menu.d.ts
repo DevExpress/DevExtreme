@@ -17,7 +17,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxMenuBase, {
@@ -37,7 +37,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -79,7 +79,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPositioning?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, event?: event, position?: positionConfig }) => any);
+    onPositioning?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, event?: TEvent, position?: positionConfig }) => any);
     /**
      * @docid
      * @extends Action

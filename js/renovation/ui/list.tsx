@@ -6,7 +6,7 @@ import DataSource, { DataSourceOptions } from '../../data/data_source';
 import { WidgetProps } from './common/widget';
 import LegacyList, { dxListItem } from '../../ui/list';
 import { dxElement } from '../../core/element';
-import { EventExtension, event } from '../../events/index';
+import { EventExtension, TEvent } from '../../events/index';
 
 // import renderTemplate from '../utils/render_template';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
@@ -78,7 +78,7 @@ export class ListProps extends WidgetProps {
     itemData: any;
     itemElement?: dxElement;
     itemIndex?: number | any;
-    event?: event;
+    event?: TEvent;
   } & EventExtension) => any) | string;
 
   // @Event() onItemContextMenu?: ((e: {

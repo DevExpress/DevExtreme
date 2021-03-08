@@ -15,7 +15,7 @@ import type { dxFilterBuilderOptions } from '../../../../ui/filter_builder';
 import { TPromise } from '../../../../core/index';
 import type { dxElement } from '../../../../core/element';
 import type { template } from '../../../../core/templates/template';
-import type { EventExtension, event } from '../../../../events/index';
+import type { EventExtension, TEvent } from '../../../../events/index';
 import DataSource from '../../../../data/data_source';
 import type { DataSourceOptions } from '../../../../data/data_source';
 import type { dxPopupOptions } from '../../../../ui/popup';
@@ -51,7 +51,7 @@ export class DataGridColumnButton {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    event?: event;
+    event?: TEvent;
     row?: dxDataGridRowObject;
     column?: dxDataGridColumn;
   }) => any)
@@ -809,7 +809,7 @@ export class DataGridRowDragging {
 
   @Event()
   onAdd?: (e: {
-    event?: event;
+    event?: TEvent;
     itemData?: any;
     itemElement?: dxElement;
     fromIndex?: number;
@@ -823,7 +823,7 @@ export class DataGridRowDragging {
 
   @Event()
   onDragChange?: (e: {
-    event?: event;
+    event?: TEvent;
     cancel?: boolean;
     itemData?: any;
     itemElement?: dxElement;
@@ -838,7 +838,7 @@ export class DataGridRowDragging {
 
   @Event()
   onDragEnd?: (e: {
-    event?: event;
+    event?: TEvent;
     cancel?: boolean;
     itemData?: any;
     itemElement?: dxElement;
@@ -853,7 +853,7 @@ export class DataGridRowDragging {
 
   @Event()
   onDragMove?: (e: {
-    event?: event;
+    event?: TEvent;
     cancel?: boolean;
     itemData?: any;
     itemElement?: dxElement;
@@ -868,7 +868,7 @@ export class DataGridRowDragging {
 
   @Event()
   onDragStart?: (e: {
-    event?: event;
+    event?: TEvent;
     cancel?: boolean;
     itemData?: any;
     itemElement?: dxElement;
@@ -878,7 +878,7 @@ export class DataGridRowDragging {
 
   @Event()
   onRemove?: (e: {
-    event?: event;
+    event?: TEvent;
     itemData?: any;
     itemElement?: dxElement;
     fromIndex?: number;
@@ -891,7 +891,7 @@ export class DataGridRowDragging {
 
   @Event()
   onReorder?: (e: {
-    event?: event;
+    event?: TEvent;
     itemData?: any;
     itemElement?: dxElement;
     fromIndex?: number;
@@ -1321,7 +1321,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    event?: event;
+    event?: TEvent;
     data?: any;
     key?: any;
     value?: any;
@@ -1339,7 +1339,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    event?: event;
+    event?: TEvent;
     data?: any;
     key?: any;
     value?: any;
@@ -1492,7 +1492,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     prevRowIndex?: number;
     newColumnIndex?: number;
     newRowIndex?: number;
-    event?: event;
+    event?: TEvent;
     rows?: dxDataGridRowObject[];
     columns?: dxDataGridColumn[];
     cancel?: boolean;
@@ -1515,7 +1515,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     rowElement?: dxElement;
     prevRowIndex?: number;
     newRowIndex?: number;
-    event?: event;
+    event?: TEvent;
     rows?: dxDataGridRowObject[];
     cancel?: boolean;
   }) => any;
@@ -1524,7 +1524,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    event?: event;
+    event?: TEvent;
     data?: any;
     key?: any;
     values?: any[];
@@ -1543,7 +1543,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    event?: event;
+    event?: TEvent;
     data?: any;
     key?: any;
     values?: any[];
@@ -1600,7 +1600,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     component?: DxDataGrid;
     element?: dxElement;
     model?: any;
-    event?: event;
+    event?: TEvent;
     handled?: boolean;
   } & EventExtension) => any;
 

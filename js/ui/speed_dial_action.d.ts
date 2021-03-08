@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import Widget, {
@@ -43,7 +43,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: dxElement, actionElement?: dxElement }) => any);
+    onClick?: ((e: { event?: TEvent, component?: dxSpeedDialAction, element?: dxElement, actionElement?: dxElement }) => any);
     /**
      * @docid
      * @extends Action

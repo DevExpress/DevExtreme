@@ -11,7 +11,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxSortable from './sortable';
@@ -146,7 +146,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragEnd?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
+    onDragEnd?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -163,7 +163,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragMove?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
+    onDragMove?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -177,7 +177,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragStart?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromData?: any }) => any);
+    onDragStart?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromData?: any }) => any);
 }
 /**
  * @docid

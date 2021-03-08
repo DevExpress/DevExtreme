@@ -5,7 +5,7 @@ import {
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxTrackBar, {
@@ -22,7 +22,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onComplete?: ((e: { component?: dxProgressBar, element?: dxElement, model?: any, event?: event }) => any);
+    onComplete?: ((e: { component?: dxProgressBar, element?: dxElement, model?: any, event?: TEvent }) => any);
     /**
      * @docid
      * @default true

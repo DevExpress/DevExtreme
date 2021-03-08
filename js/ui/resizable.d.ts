@@ -9,7 +9,7 @@ import {
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
@@ -68,7 +68,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
+    onResize?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: TEvent, width?: number, height?: number }) => any);
     /**
      * @docid
      * @extends Action
@@ -80,7 +80,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
+    onResizeEnd?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: TEvent, width?: number, height?: number }) => any);
     /**
      * @docid
      * @extends Action
@@ -92,7 +92,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
+    onResizeStart?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: TEvent, width?: number, height?: number }) => any);
     /**
      * @docid
      * @type_function_return number|string

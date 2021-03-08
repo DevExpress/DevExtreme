@@ -18,7 +18,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import BaseWidget, {
@@ -306,7 +306,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, event?: event, node?: dxTreeMapNode }) => any) | string;
+    onClick?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, event?: TEvent, node?: dxTreeMapNode }) => any) | string;
     /**
      * @docid
      * @extends Action

@@ -11,7 +11,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import Editor, {
@@ -67,7 +67,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusIn?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: event }) => any);
+    onFocusIn?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action
@@ -77,7 +77,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusOut?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: event }) => any);
+    onFocusOut?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: TEvent }) => any);
     /**
      * @docid
      * @default ""

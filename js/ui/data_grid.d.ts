@@ -19,7 +19,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -753,7 +753,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyDown?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, handled?: boolean }) => any);
+    onKeyDown?: ((e: { component?: T, element?: dxElement, model?: any, event?: TEvent, handled?: boolean }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1125,7 +1125,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field10 toData:any
        * @type_function_param1_field11 dropInsideItem:boolean
        */
-      onAdd?: ((e: { component?: T, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
+      onAdd?: ((e: { component?: T, event?: TEvent, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1143,7 +1143,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field11 toData:any
        * @type_function_param1_field12 dropInsideItem:boolean
        */
-      onDragChange?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
+      onDragChange?: ((e: { component?: T, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1161,7 +1161,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field11 toData:any
        * @type_function_param1_field12 dropInsideItem:boolean
        */
-      onDragEnd?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
+      onDragEnd?: ((e: { component?: T, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1179,7 +1179,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field11 toData:any
        * @type_function_param1_field12 dropInsideItem:boolean
        */
-      onDragMove?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
+      onDragMove?: ((e: { component?: T, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1192,7 +1192,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field6 fromIndex:number
        * @type_function_param1_field7 fromData:any
        */
-      onDragStart?: ((e: { component?: T, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, fromData?: any }) => any),
+      onDragStart?: ((e: { component?: T, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, fromData?: any }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1208,7 +1208,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field9 fromData:any
        * @type_function_param1_field10 toData:any
        */
-      onRemove?: ((e: { component?: T, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
+      onRemove?: ((e: { component?: T, event?: TEvent, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1226,7 +1226,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_param1_field11 dropInsideItem:boolean
        * @type_function_param1_field12 promise:Promise<void>
        */
-      onReorder?: ((e: { component?: T, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: TPromise<void> }) => any),
+      onReorder?: ((e: { component?: T, event?: TEvent, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: TPromise<void> }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -3030,7 +3030,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxDataGridRowObject }) => any) | string;
+    onCellClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: TEvent, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxDataGridRowObject }) => any) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -3051,7 +3051,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellDblClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxDataGridRowObject }) => any);
+    onCellDblClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: TEvent, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxDataGridRowObject }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -3236,7 +3236,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedCellChanging?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, cellElement?: dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxDataGridRowObject>, columns?: Array<dxDataGridColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
+    onFocusedCellChanging?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, cellElement?: dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: TEvent, rows?: Array<dxDataGridRowObject>, columns?: Array<dxDataGridColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -3263,7 +3263,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedRowChanging?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, rowElement?: dxElement, prevRowIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxDataGridRowObject>, cancel?: boolean }) => any);
+    onFocusedRowChanging?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, rowElement?: dxElement, prevRowIndex?: number, newRowIndex?: number, event?: TEvent, rows?: Array<dxDataGridRowObject>, cancel?: boolean }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -3285,7 +3285,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: dxElement, handled?: boolean }) => any) | string;
+    onRowClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: TEvent, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: dxElement, handled?: boolean }) => any) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -3306,7 +3306,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowDblClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: dxElement }) => any);
+    onRowDblClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: TEvent, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: dxElement }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -4141,7 +4141,7 @@ export interface dxDataGridColumnButton extends GridBaseColumnButton {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: event, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any) | string;
+    onClick?: ((e: { component?: dxDataGrid, element?: dxElement, model?: any, event?: TEvent, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any) | string;
     /**
      * @docid
      * @type_function_param1 cellElement:dxElement

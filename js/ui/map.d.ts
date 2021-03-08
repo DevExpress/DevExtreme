@@ -9,7 +9,7 @@ import {
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import Widget, {
@@ -184,7 +184,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxMap, element?: dxElement, model?: any, location?: any, event?: event }) => any) | string;
+    onClick?: ((e: { component?: dxMap, element?: dxElement, model?: any, location?: any, event?: TEvent }) => any) | string;
     /**
      * @docid
      * @extends Action

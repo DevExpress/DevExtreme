@@ -5,7 +5,7 @@ import {
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -938,7 +938,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: event, argument?: Date | number | string }) => any) | string;
+    onArgumentAxisClick?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: TEvent, argument?: Date | number | string }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -950,7 +950,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: event, target?: chartSeriesObject }) => any) | string;
+    onLegendClick?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: TEvent, target?: chartSeriesObject }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -962,7 +962,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesClick?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: event, target?: chartSeriesObject }) => any) | string;
+    onSeriesClick?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: TEvent, target?: chartSeriesObject }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -1004,7 +1004,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomEnd?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: event, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => any);
+    onZoomEnd?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: TEvent, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => any);
     /**
      * @docid
      * @extends Action
@@ -1019,7 +1019,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onZoomStart?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: event, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
+    onZoomStart?: ((e: { component?: dxChart, element?: dxElement, model?: any, event?: TEvent, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
     /**
      * @docid
      * @type Object|Array<Object>

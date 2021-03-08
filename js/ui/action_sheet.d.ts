@@ -13,7 +13,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import CollectionWidget, {
@@ -158,7 +158,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: dxElement, model?: any, event?: event }) => any) | string;
+    onClick?: ((e: { component?: dxActionSheet, element?: dxElement, model?: any, event?: TEvent }) => any) | string;
     /**
      * @docid
      * @type Enums.ButtonType

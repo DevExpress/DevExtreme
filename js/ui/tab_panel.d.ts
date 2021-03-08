@@ -11,7 +11,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxMultiView, {
@@ -71,7 +71,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleClick?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, event?: event }) => any) | string;
+    onTitleClick?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, event?: TEvent }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -83,7 +83,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleHold?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, event?: event }) => any);
+    onTitleHold?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action

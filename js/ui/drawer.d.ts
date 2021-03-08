@@ -13,7 +13,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import Widget, {
@@ -43,7 +43,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default null

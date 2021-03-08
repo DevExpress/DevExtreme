@@ -12,7 +12,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -350,7 +350,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSelector, element?: dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: event }) => any);
+    onValueChanged?: ((e: { component?: dxRangeSelector, element?: dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: TEvent }) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.viz

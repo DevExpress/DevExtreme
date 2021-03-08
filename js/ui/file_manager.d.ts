@@ -9,7 +9,7 @@ import {
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import FileSystemItem from '../file_management/file_system_item';
@@ -133,7 +133,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, fileSystemItem?: FileSystemItem, viewArea?: 'navPane' | 'itemView' }) => any);
+    onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: TEvent, fileSystemItem?: FileSystemItem, viewArea?: 'navPane' | 'itemView' }) => any);
     /**
      * @docid
      * @extends Action
@@ -147,7 +147,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuShowing?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, fileSystemItem?: FileSystemItem, targetElement?: dxElement, cancel?: boolean, event?: event, viewArea?: 'navPane' | 'itemView' }) => any);
+    onContextMenuShowing?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, fileSystemItem?: FileSystemItem, targetElement?: dxElement, cancel?: boolean, event?: TEvent, viewArea?: 'navPane' | 'itemView' }) => any);
     /**
      * @docid
      * @extends Action
@@ -196,7 +196,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onToolbarItemClick?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
+    onToolbarItemClick?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action

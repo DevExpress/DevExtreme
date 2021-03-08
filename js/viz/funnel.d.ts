@@ -18,7 +18,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -464,7 +464,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onItemClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: event, item?: dxFunnelItem }) => any) | string;
+    onItemClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -476,7 +476,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: event, item?: dxFunnelItem }) => any) | string;
+    onLegendClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: TEvent, item?: dxFunnelItem }) => any) | string;
     /**
      * @docid
      * @extends Action

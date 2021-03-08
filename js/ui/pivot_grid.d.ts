@@ -9,7 +9,7 @@ import {
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import PivotGridDataSource, {
@@ -421,7 +421,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, area?: string, cellElement?: dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, dataFields?: Array<PivotGridDataSourceField>, event?: event, cancel?: boolean }) => any);
+    onCellClick?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, area?: string, cellElement?: dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, dataFields?: Array<PivotGridDataSourceField>, event?: TEvent, cancel?: boolean }) => any);
     /**
      * @docid
      * @type_function_param1 e:object

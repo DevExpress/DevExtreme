@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import DataSource, {
@@ -203,7 +203,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxGantt, element?: dxElement, cancel?: boolean, event?: event, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => any);
+    onContextMenuPreparing?: ((e: { component?: dxGantt, element?: dxElement, cancel?: boolean, event?: TEvent, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => any);
     /**
      * @docid
      * @extends Action
@@ -446,7 +446,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskClick?: ((e: { component?: dxGantt, element?: dxElement, model?: any, event?: event, key?: any, data?: any }) => any);
+    onTaskClick?: ((e: { component?: dxGantt, element?: dxElement, model?: any, event?: TEvent, key?: any, data?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -459,7 +459,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTaskDblClick?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, event?: event, key?: any, data?: any }) => any);
+    onTaskDblClick?: ((e: { component?: dxGantt, element?: dxElement, model?: any, cancel?: boolean, event?: TEvent, key?: any, data?: any }) => any);
     /**
      * @docid
      * @default null

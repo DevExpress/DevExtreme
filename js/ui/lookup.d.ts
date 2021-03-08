@@ -17,7 +17,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxDropDownList, {
@@ -97,7 +97,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -180,7 +180,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: dxLookup, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: { component?: dxLookup, element?: dxElement, model?: any, event?: TEvent, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
     /**
      * @docid
      * @extends Action
@@ -203,7 +203,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxLookup, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
+    onValueChanged?: ((e: { component?: dxLookup, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => any);
     /**
      * @docid
      * @type Enums.ListPageLoadMode

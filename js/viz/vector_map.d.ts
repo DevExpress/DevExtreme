@@ -17,7 +17,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -528,7 +528,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, event?: event, target?: MapLayerElement }) => any) | string;
+    onClick?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, event?: TEvent, target?: MapLayerElement }) => any) | string;
     /**
      * @docid
      * @extends Action

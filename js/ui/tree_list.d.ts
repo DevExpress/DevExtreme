@@ -15,7 +15,7 @@ import {
 import DataSource from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -133,7 +133,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any) | string;
+    onCellClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: TEvent, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -154,7 +154,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellDblClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any);
+    onCellDblClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: TEvent, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -305,7 +305,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, cellElement?: dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxTreeListRowObject>, columns?: Array<dxTreeListColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
+    onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, cellElement?: dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: TEvent, rows?: Array<dxTreeListRowObject>, columns?: Array<dxTreeListColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -332,7 +332,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedRowChanging?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, rowElement?: dxElement, prevRowIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxTreeListRowObject>, cancel?: boolean }) => any);
+    onFocusedRowChanging?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, rowElement?: dxElement, prevRowIndex?: number, newRowIndex?: number, event?: TEvent, rows?: Array<dxTreeListRowObject>, cancel?: boolean }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -365,7 +365,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
+    onRowClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: TEvent, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -385,7 +385,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowDblClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement }) => any);
+    onRowDblClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: TEvent, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -907,7 +907,7 @@ export interface dxTreeListColumnButton extends GridBaseColumnButton {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
+    onClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: TEvent, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
     /**
      * @docid
      * @type_function_param1 cellElement:dxElement

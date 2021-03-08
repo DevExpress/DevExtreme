@@ -17,7 +17,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -136,7 +136,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onButtonClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event, selectedItem?: any }) => any) | string;
+    onButtonClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: TEvent, selectedItem?: any }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -148,7 +148,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement }) => any) | string;
+    onItemClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: TEvent, itemData?: any, itemElement?: dxElement }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -297,7 +297,7 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event }) => any) | string;
+    onClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: TEvent }) => any) | string;
 }
 
 declare global {

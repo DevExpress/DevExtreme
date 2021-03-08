@@ -7,7 +7,7 @@ import {
 } from '../core/templates/template';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -68,7 +68,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxButtonGroup, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
+    onItemClick?: ((e: { component?: dxButtonGroup, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: TEvent }) => any);
     /**
      * @docid
      * @extends Action

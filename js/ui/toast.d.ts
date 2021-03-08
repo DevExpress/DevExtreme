@@ -7,7 +7,7 @@ import {
 } from '../animation/position';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import dxOverlay, {
@@ -40,7 +40,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: TEvent) => boolean);
     /**
      * @docid
      * @default true

@@ -18,7 +18,7 @@ import DataSource, {
 } from '../data/data_source';
 
 import {
-    event
+    TEvent
 } from '../events/index';
 
 import {
@@ -96,7 +96,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field7 fromData:any
        * @type_function_param1_field8 toData:any
        */
-      onAdd?: ((e: { component?: dxScheduler, event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
+      onAdd?: ((e: { component?: dxScheduler, event?: TEvent, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -111,7 +111,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field8 fromData:any
        * @type_function_param1_field9 toData:any
        */
-      onDragEnd?: ((e: { component?: dxScheduler, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
+      onDragEnd?: ((e: { component?: dxScheduler, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -126,7 +126,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field8 fromData:any
        * @type_function_param1_field9 toData:any
        */
-      onDragMove?: ((e: { component?: dxScheduler, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
+      onDragMove?: ((e: { component?: dxScheduler, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -138,7 +138,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field5 itemElement:dxElement
        * @type_function_param1_field6 fromData:any
        */
-      onDragStart?: ((e: { component?: dxScheduler, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromData?: any }) => any),
+      onDragStart?: ((e: { component?: dxScheduler, event?: TEvent, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromData?: any }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -151,7 +151,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
        * @type_function_param1_field7 fromData:any
        */
-      onRemove?: ((e: { component?: dxScheduler, event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => any),
+      onRemove?: ((e: { component?: dxScheduler, event?: TEvent, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => any),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -443,7 +443,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: event, cancel: boolean }) => any) | string;
+    onAppointmentClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: TEvent, cancel: boolean }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -456,7 +456,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentContextMenu?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: event }) => any) | string;
+    onAppointmentContextMenu?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: TEvent }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -470,7 +470,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentDblClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: event, cancel: boolean }) => any) | string;
+    onAppointmentDblClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: TEvent, cancel: boolean }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -553,7 +553,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, cellData: any, cellElement: dxElement, event?: event, cancel: boolean }) => any) | string;
+    onCellClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, cellData: any, cellElement: dxElement, event?: TEvent, cancel: boolean }) => any) | string;
     /**
      * @docid
      * @extends Action
@@ -565,7 +565,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellContextMenu?: ((e: { component: dxScheduler, element: dxElement, model?: any, cellData: any, cellElement: dxElement, event?: event }) => any) | string;
+    onCellContextMenu?: ((e: { component: dxScheduler, element: dxElement, model?: any, cellData: any, cellElement: dxElement, event?: TEvent }) => any) | string;
     /**
      * @docid
      * @type Enums.SchedulerRecurrenceEditMode
