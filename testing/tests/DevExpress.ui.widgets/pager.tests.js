@@ -1599,7 +1599,7 @@ function() {
 
         rtlTestSample = {
             pageSizes: pagerElement.find('.dx-page-size').text(),
-            pages: $(Array.from(getPagesElement(pagerElement)).reverse()).text()
+            pages: $(Array.prototype.slice.call(getPagesElement(pagerElement)).reverse()).text()
         };
 
         pagerInstance.option('rtlEnabled', false);
