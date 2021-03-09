@@ -5,14 +5,12 @@ import { move } from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
 
 class PushStrategy extends DrawerStrategy {
-    _useDefaultAnimation() {
-        return true;
-    }
-
-    _defaultPositionRendering(config, _, animate) {
+    _internalRenderPosition(isDrawerOpened, changePositionUsingFxAnimation) {
+        const config = this._getPositionRenderingConfig(isDrawerOpened);
         const drawer = this.getDrawerInstance();
 
         $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', config.maxSize);
+
         if(drawer.getMinSize()) {
             let paddingCssPropertyName = 'padding';
             switch(drawer.calcTargetPosition()) {
@@ -24,7 +22,7 @@ class PushStrategy extends DrawerStrategy {
             $(drawer.viewContent()).css(paddingCssPropertyName, drawer.getMinSize());
         }
 
-        if(animate) {
+        if(changePositionUsingFxAnimation) {
             const animationConfig = {
                 $element: $(drawer.viewContent()),
                 position: config.contentPosition,

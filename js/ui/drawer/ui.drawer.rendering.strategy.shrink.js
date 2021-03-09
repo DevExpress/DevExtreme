@@ -5,8 +5,18 @@ import { extend } from '../../core/utils/extend';
 import { camelize } from '../../core/utils/inflector';
 
 class ShrinkStrategy extends DrawerStrategy {
-    _slidePositionRendering(config, _, animate) {
-        if(animate) {
+    _internalRenderPosition(isDrawerOpened, changePositionUsingFxAnimation) {
+        const config = this._getPositionRenderingConfig(isDrawerOpened);
+        const revealMode = this.getDrawerInstance().option('revealMode');
+        if(revealMode === 'slide') {
+            this._renderSlidePosition(config, changePositionUsingFxAnimation);
+        } else if(revealMode === 'expand') {
+            this._renderExpandPosition(config, changePositionUsingFxAnimation);
+        }
+    }
+
+    _renderSlidePosition(config, changePositionUsingFxAnimation) {
+        if(changePositionUsingFxAnimation) {
             const animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
                 margin: config.panelOffset,
@@ -20,10 +30,10 @@ class ShrinkStrategy extends DrawerStrategy {
         }
     }
 
-    _expandPositionRendering(config, _, animate) {
+    _renderExpandPosition(config, changePositionUsingFxAnimation) {
         const drawer = this.getDrawerInstance();
 
-        if(animate) {
+        if(changePositionUsingFxAnimation) {
             const animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
                 size: config.size,

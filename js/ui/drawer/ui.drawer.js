@@ -192,7 +192,7 @@ const Drawer = Widget.inherit({
             this._initMinMaxSize();
             this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide' || !this.isHorizontalDirection());
 
-            this._renderPosition(this.option('opened'), false);
+            this._renderPosition(this.option('opened'), true);
             this._removePanelManualPosition();
         });
     },
@@ -397,7 +397,7 @@ const Drawer = Widget.inherit({
         return position === 'right' || position === 'bottom';
     },
 
-    _renderPosition(isDrawerOpened, animate, jumpToEnd) {
+    _renderPosition(isDrawerOpened, disableAnimation, jumpToEnd) {
         this.stopAnimations(jumpToEnd);
 
         this._animations = [];
@@ -412,15 +412,16 @@ const Drawer = Widget.inherit({
         $(this.viewContent()).css('paddingTop', 0);
         $(this.viewContent()).css('paddingBottom', 0);
 
-        animate = isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
+        let animationEnabled = this.option('animationEnabled');
+        if(disableAnimation === true) {
+            animationEnabled = false;
+        }
 
         if(isDrawerOpened) {
             this._toggleShaderVisibility(isDrawerOpened);
         }
 
-        this._strategy.renderPosition(isDrawerOpened, animate);
-
-        this._strategy.renderShaderVisibility(isDrawerOpened, animate, this.option('animationDuration'));
+        this._strategy.renderPosition(isDrawerOpened, animationEnabled, this.option('animationDuration'));
     },
 
     _animationCompleteHandler() {
@@ -450,7 +451,7 @@ const Drawer = Widget.inherit({
     _dimensionChanged() {
         this._initMinMaxSize();
         this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
-        this._renderPosition(this.option('opened'), false);
+        this._renderPosition(this.option('opened'), true);
     },
 
     _toggleShaderVisibility(visible) {
@@ -484,7 +485,7 @@ const Drawer = Widget.inherit({
         if(hasWindow()) {
             this._whenPanelContentRefreshed.always(() => {
                 this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
-                this._renderPosition(this.option('opened'), false, true);
+                this._renderPosition(this.option('opened'), true, true);
                 this._removePanelManualPosition();
             });
         }
@@ -518,7 +519,7 @@ const Drawer = Widget.inherit({
                 this._dimensionChanged();
                 break;
             case 'opened':
-                this._renderPosition(args.value);
+                this._renderPosition(this.option('opened'));
                 this._toggleOpenedStateClass(args.value);
                 break;
             case 'position':
@@ -540,7 +541,7 @@ const Drawer = Widget.inherit({
             case 'minSize':
             case 'maxSize':
                 this._initMinMaxSize();
-                this._renderPosition(this.option('opened'), false);
+                this._renderPosition(this.option('opened'), true);
                 break;
             case 'revealMode':
                 this._refreshRevealModeClass(args.previousValue);

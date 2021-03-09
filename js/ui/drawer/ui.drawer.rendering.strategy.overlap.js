@@ -113,7 +113,17 @@ class OverlapStrategy extends DrawerStrategy {
         $(drawer.viewContent()).css('transform', 'inherit');
     }
 
-    _slidePositionRendering(config, _, animate) {
+    _internalRenderPosition(isDrawerOpened, changePositionUsingFxAnimation) {
+        const config = this._getPositionRenderingConfig(isDrawerOpened);
+        const revealMode = this.getDrawerInstance().option('revealMode');
+        if(revealMode === 'slide') {
+            this._renderSlidePosition(config, changePositionUsingFxAnimation);
+        } else if(revealMode === 'expand') {
+            this._renderExpandPosition(config, changePositionUsingFxAnimation);
+        }
+    }
+
+    _renderSlidePosition(config, changePositionUsingFxAnimation) {
         const drawer = this.getDrawerInstance();
 
         this._initialPosition = drawer.isHorizontalDirection() ? { left: config.panelOffset } : { top: config.panelOffset };
@@ -121,7 +131,7 @@ class OverlapStrategy extends DrawerStrategy {
 
         this._updateViewContentStyles();
 
-        if(animate) {
+        if(changePositionUsingFxAnimation) {
             const animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
                 position: config.panelOffset,
@@ -139,7 +149,7 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
-    _expandPositionRendering(config, _, animate) {
+    _renderExpandPosition(config, changePositionUsingFxAnimation) {
         const drawer = this.getDrawerInstance();
 
         this._initialPosition = { left: 0 };
@@ -149,7 +159,7 @@ class OverlapStrategy extends DrawerStrategy {
 
         move(config.$panelOverlayContent, { left: 0 });
 
-        if(animate) {
+        if(changePositionUsingFxAnimation) {
             const animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panelOverlayContent,
                 size: config.size,
