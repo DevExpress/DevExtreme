@@ -2484,10 +2484,6 @@ QUnit.module('View\'s focus', {
             // assert
             assert.ok($cell.hasClass('dx-editor-cell'), 'cell has an editor');
             assert.strictEqual($input.val(), '02/01/1970', 'the editor text is correct after the first key pressed');
-            if(!browser.msie) {
-                assert.equal($input.get(0).selectionStart, 0, 'start selection position after the first key pressed');
-                assert.equal($input.get(0).selectionEnd, 2, 'end selection position after the first key pressed');
-            }
 
             // act
             keyboard = keyboardMock($input);
@@ -2497,10 +2493,6 @@ QUnit.module('View\'s focus', {
             // assert
             assert.ok($cell.hasClass('dx-editor-cell'), 'cell has an editor');
             assert.strictEqual($input.val(), '25/01/1970', 'the editor text is correct after the second key pressed');
-            if(!browser.msie) {
-                assert.equal($input.get(0).selectionStart, 3, 'start selection position after the second key pressed');
-                assert.equal($input.get(0).selectionEnd, 5, 'end selection position after the second key pressed');
-            }
         });
     });
 
