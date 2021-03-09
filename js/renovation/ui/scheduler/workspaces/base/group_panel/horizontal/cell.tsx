@@ -6,7 +6,6 @@ import { GroupPanelCellProps } from '../cell_props';
 
 export const viewFunction = ({
   classes,
-  restAttributes,
   props: {
     cellTemplate: CellTemplate,
     data,
@@ -18,8 +17,6 @@ export const viewFunction = ({
   },
 }: GroupPanelHorizontalCell): JSX.Element => (
   <th
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={classes}
     colSpan={colSpan}
   >

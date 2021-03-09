@@ -5,8 +5,6 @@ import { addWidthToStyle } from '../utils';
 
 export const viewFunction = (viewModel: VirtualCell): JSX.Element => (
   <td
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
     className="dx-scheduler-virtual-cell"
     style={viewModel.style}
   />

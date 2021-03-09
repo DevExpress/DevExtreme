@@ -43,15 +43,6 @@ describe('AllDayPanelTableBody', () => {
       </table> as any,
     ).find(TableBodyView).childAt(0);
 
-    it('should spread restAttributes', () => {
-      const tableBody = render({
-        restAttributes: { 'custom-attribute': 'customAttribute' },
-      });
-
-      expect(tableBody.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should render components and pass correct arguments to them', () => {
       const tableBody = render({
         classes: 'some-class',

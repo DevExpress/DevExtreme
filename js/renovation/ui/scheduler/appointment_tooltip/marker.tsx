@@ -6,8 +6,6 @@ import { Color } from './types.d';
 export const viewFunction = (viewModel: Marker): JSX.Element => (
   <div
     className={`dx-tooltip-appointment-item-marker ${viewModel.props.className}`}
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
   >
     <div
       className="dx-tooltip-appointment-item-marker-body"

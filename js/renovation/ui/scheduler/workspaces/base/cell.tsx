@@ -15,8 +15,6 @@ export const viewFunction = (viewModel: CellBase): JSX.Element => {
 
   return (
     <td
-    // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
       className={viewModel.classes}
     >
       {!ContentTemplate && viewModel.props.children}
