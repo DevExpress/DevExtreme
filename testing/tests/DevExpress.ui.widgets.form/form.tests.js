@@ -12,8 +12,8 @@ import 'ui/calendar';
 import 'ui/date_box';
 import 'ui/drop_down_box';
 
+import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
-import { defaultScreenFactorFunc } from 'core/utils/window';
 
 import {
     FIELD_ITEM_CLASS,
@@ -104,29 +104,32 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
     assert.deepEqual(formData, { name: 'test' }, 'value updates');
 });
 
+
 ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
     ['instanceOption', 'globalOption', 'defaultOption'].forEach(optionType => {
-        const createLoggedScreenByWidthFunc = (logs, initiator) => {
-            return () => {
-                logs.push(initiator);
-                return screenSize;
-            };
-        };
-
-        const getColCount = ($lastCol) => {
+        function getColsCount($form) {
             let result = NaN;
+
+            const $lastCol = $form.find(`.${LAST_COL_CLASS}`);
             [1, 2, 3, 4].forEach(colCount => {
                 if($lastCol.hasClass(`dx-col-${colCount - 1}`)) {
                     result = colCount;
                 }
             });
+
             return result;
-        };
+        }
 
-        const checkFormSize = (assert, form, logs) => {
-            logs.every(log => assert.equal(log, optionType));
+        function getRowsCount($form) {
+            return $form.find(`> .${BOX_CLASS} > .${BOX_ITEM_CLASS}`).length;
+        }
 
-            const $formBox = form._$element.find(`.${RESPONSIVE_BOX_CLASS}`);
+        const checkForm = (assert, form, stubs) => {
+            assert.equal(stubs.globalOption.called, optionType === 'globalOption');
+            assert.equal(stubs.instanceOption.called, optionType === 'instanceOption');
+            assert.equal(stubs.defaultFunction.called, optionType === 'defaultOption');
+
+            const $formBox = form.$element().find(`.${RESPONSIVE_BOX_CLASS}`);
             assert.ok($formBox.hasClass(`dx-responsivebox-screen-${screenSize}`), 'form has valid size');
 
             const expectedCount = {
@@ -136,15 +139,12 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
                 lg: { rows: 1, columns: 4 }
             };
 
-            const rowsCount = $formBox.find(`> .${BOX_CLASS} > .${BOX_ITEM_CLASS}`).length;
-            const colsCount = getColCount($formBox.find(`.${LAST_COL_CLASS}`));
-            assert.equal(expectedCount[screenSize].rows, rowsCount, 'expected rows count');
-            assert.equal(expectedCount[screenSize].columns, colsCount, 'expected columns count');
+            assert.equal(expectedCount[screenSize].rows, getRowsCount($formBox), 'expected rows count');
+            assert.equal(expectedCount[screenSize].columns, getColsCount($formBox), 'expected columns count');
         };
 
         [
             (form) => { form.repaint(); },
-            (form) => { form._refresh(); },
             (form) => {
                 form.beginUpdate();
                 form._invalidate();
@@ -152,33 +152,39 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
             }
         ].forEach(formUpdater => {
             QUnit.test(`Setting screen by width option (T977436). Set via ${optionType}, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
-                let logs = [];
-                const options = {
+                const stubs = {
+                    instanceOption: sinon.stub().returns(screenSize),
+                    globalOption: sinon.stub().returns(screenSize),
+                    defaultFunction: sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize)
+                };
+
+                const formConfig = {
                     items: [ { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' } ],
                     colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
                 };
 
                 if(optionType === 'instanceOption') {
-                    options['screenByWidth'] = createLoggedScreenByWidthFunc(logs, 'instanceOption');
-                } else if(optionType === 'defaultOption') {
-                    Form.reassignDefaultScreenByWidthFunc(createLoggedScreenByWidthFunc(logs, 'defaultOption'));
-                } else {
+                    formConfig['screenByWidth'] = stubs.instanceOption;
+                } else if(optionType === 'globalOption') {
                     Form.defaultOptions({
                         options: {
-                            screenByWidth: createLoggedScreenByWidthFunc(logs, 'globalOption')
+                            screenByWidth: stubs.globalOption
                         }
                     });
                 }
 
-                const form = $('#form').dxForm(options).dxForm('instance');
-                checkFormSize(assert, form, logs);
+                const form = $('#form').dxForm(formConfig).dxForm('instance');
+                checkForm(assert, form, stubs);
 
-                logs = [];
+                stubs.defaultFunction.reset();
+                stubs.instanceOption.reset();
+                stubs.globalOption.reset();
+
                 formUpdater(form);
-                checkFormSize(assert, form, logs);
+                checkForm(assert, form, stubs);
 
                 Form._classCustomRules = [];
-                Form.reassignDefaultScreenByWidthFunc(defaultScreenFactorFunc);
+                stubs.defaultFunction.restore();
             });
         });
     });
