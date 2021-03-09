@@ -116,21 +116,21 @@ export default {
       if(e.value) {
         this.minDateValue = new Date((new Date).getTime() - 1000 * 60 * 60 * 24 * 3);
       } else {
-        this.minDateValue = undefined;
+        this.minDateValue = null;
       }
     },
     setMaxDate(e) {
       if(e.value) {
         this.maxDateValue = new Date((new Date).getTime() + 1000 * 60 * 60 * 24 * 3);
       } else {
-        this.maxDateValue = undefined;
+        this.maxDateValue = null;
       }
     },
     disableWeekend(e) {
       if(e.value) {
         this.disabledDates = (data) => data.view === 'month' && this.isWeekend(data.date);
       } else {
-        this.disabledDates = undefined;
+        this.disabledDates = null;
       }
     },
     setFirstDay(e) {

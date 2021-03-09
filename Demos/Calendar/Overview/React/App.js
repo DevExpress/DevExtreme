@@ -142,19 +142,19 @@ class App extends React.Component {
 
   setMinDate(e) {
     this.setState({
-      minDateValue: e.value ? new Date((new Date).getTime() - 1000 * 60 * 60 * 24 * 3) : undefined
+      minDateValue: e.value ? new Date((new Date).getTime() - 1000 * 60 * 60 * 24 * 3) : null
     });
   }
 
   setMaxDate(e) {
     this.setState({
-      maxDateValue: e.value ? new Date((new Date).getTime() + 1000 * 60 * 60 * 24 * 3) : undefined
+      maxDateValue: e.value ? new Date((new Date).getTime() + 1000 * 60 * 60 * 24 * 3) : null
     });
   }
 
   disableWeekend(e) {
     this.setState({
-      disabledDates: e.value ? (data) => data.view === 'month' && isWeekend(data.date) : undefined
+      disabledDates: e.value ? (data) => data.view === 'month' && isWeekend(data.date) : null
     });
   }
 
@@ -166,7 +166,7 @@ class App extends React.Component {
 
   useCellTemplate(e) {
     this.setState({
-      cellTemplate: e.value ? CustomCell : undefined
+      cellTemplate: e.value ? CustomCell : null
     });
   }
 }

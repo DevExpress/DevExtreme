@@ -7,8 +7,8 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.currentValue = new Date();
     $scope.calendarDisabled = false;
     $scope.isMondayFirst = 0;
-    $scope.minDateValue = undefined;
-    $scope.maxDateValue = undefined;
+    $scope.minDateValue = null;
+    $scope.maxDateValue = null;
     $scope.zoomLevel = $scope.zoomLevels[0];
     $scope.cellTemplate = "cell";
     
@@ -16,7 +16,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         if(e.value) {
             $scope.minDateValue = new Date(now.getTime() - 1000*60*60*24*3);
         } else {
-            $scope.minDateValue = undefined;
+            $scope.minDateValue = null;
         }
     };
     
@@ -24,7 +24,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         if(e.value) {
             $scope.maxDateValue = new Date(now.getTime() + 1000*60*60*24*3);
         } else {
-            $scope.maxDateValue = undefined;
+            $scope.maxDateValue = null;
         }
     };
 
@@ -34,7 +34,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 return data.view === "month" && isWeekend(data.date);
             };
         } else {
-            $scope.disabledDates = undefined;
+            $scope.disabledDates = null;
         }
     };
     

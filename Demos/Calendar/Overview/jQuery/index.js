@@ -23,7 +23,7 @@ $(function(){
             if(data.value) {
                calendar.option("min", new Date(date - 1000*60*60*24*3));
             } else {
-               calendar.option("min", undefined);
+               calendar.option("min", null);
             }
         }
     });
@@ -34,7 +34,7 @@ $(function(){
             if(data.value) {
                calendar.option("max", new Date(date + 1000*60*60*24*3));
             } else {
-               calendar.option("max", undefined);
+               calendar.option("max", null);
             }
         }
     });
@@ -47,7 +47,7 @@ $(function(){
                     return data.view === "month" && isWeekend(data.date);
                });
             } else {
-               calendar.option("disabledDates", undefined);
+               calendar.option("disabledDates", null);
             }
         }
     });

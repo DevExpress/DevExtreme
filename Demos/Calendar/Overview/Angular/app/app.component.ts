@@ -23,9 +23,9 @@ export class AppComponent {
     now: Date = new Date();
     currentValue: Date = new Date();
     firstDay: number = 0;
-    minDateValue: Date = undefined;
-    maxDateValue: Date = undefined;
-    disabledDates: Function = null;
+    minDateValue: Date | null = null;
+    maxDateValue: Date | null = null;
+    disabledDates: Function | null = null;
     zoomLevels: string[] = [
         "month", "year", "decade", "century"
     ];
@@ -40,14 +40,14 @@ export class AppComponent {
         if(e.value) {
             this.minDateValue = new Date(this.now.getTime() - 1000*60*60*24*3);
         } else {
-            this.minDateValue = undefined;
+            this.minDateValue = null;
         }
     }
     setMaxDate(e) {
         if(e.value) {
             this.maxDateValue = new Date(this.now.getTime() + 1000*60*60*24*3);
         } else {
-            this.maxDateValue = undefined;
+            this.maxDateValue = null;
         }
     }
     disableWeekend(e) {
@@ -57,7 +57,7 @@ export class AppComponent {
                 return data.view === "month" && that.isWeekend(data.date);
             };
         } else {
-            this.disabledDates = undefined;
+            this.disabledDates = null;
         }
     }
     setFirstDay(e) {
