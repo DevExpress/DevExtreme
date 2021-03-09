@@ -39,10 +39,13 @@ import themes from 'ui/themes';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 
-
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
+const BOX_CLASS = 'dx-box';
+const BOX_ITEM_CLASS = 'dx-box-item';
+const RESPONSIVE_BOX_CLASS = 'dx-responsivebox';
+const LAST_COL_CLASS = 'dx-last-col';
 
 QUnit.testStart(function() {
     const markup =
@@ -103,17 +106,28 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
 
 ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
     ['instanceOption', 'globalOption', 'defaultOption'].forEach(optionType => {
-        const createScreenByWidthFunc = (logs, initiator) => {
+        const createLoggedScreenByWidthFunc = (logs, initiator) => {
             return () => {
                 logs.push(initiator);
                 return screenSize;
             };
         };
 
+        const getColCount = ($lastCol) => {
+            let result = NaN;
+            [1, 2, 3, 4].forEach(colCount => {
+                if($lastCol.hasClass(`dx-col-${colCount - 1}`)) {
+                    result = colCount;
+                }
+            });
+            return result;
+        };
+
         const checkFormSize = (assert, form, logs) => {
-            const $formBox = form._$element.find('.dx-responsivebox');
-            const rowsCount = $formBox.find('> .dx-box > .dx-box-item').length;
-            const colsCount = getColCount($formBox.find('.dx-last-col'));
+            logs.every(log => assert.equal(log, optionType));
+
+            const $formBox = form._$element.find(`.${RESPONSIVE_BOX_CLASS}`);
+            assert.ok($formBox.hasClass(`dx-responsivebox-screen-${screenSize}`), 'form has valid size');
 
             const expectedCount = {
                 xs: { rows: 4, columns: 1 },
@@ -122,31 +136,20 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
                 lg: { rows: 1, columns: 4 }
             };
 
-            logs.every(log => assert.equal(log, optionType));
-            assert.ok($formBox.hasClass(`dx-responsivebox-screen-${screenSize}`), 'form has valid size');
-
+            const rowsCount = $formBox.find(`> .${BOX_CLASS} > .${BOX_ITEM_CLASS}`).length;
+            const colsCount = getColCount($formBox.find(`.${LAST_COL_CLASS}`));
             assert.equal(expectedCount[screenSize].rows, rowsCount, 'expected rows count');
             assert.equal(expectedCount[screenSize].columns, colsCount, 'expected columns count');
         };
 
-        const getColCount = ($lastCol) => {
-            if($lastCol.hasClass('dx-col-3')) {
-                return 4;
-            }
-            if($lastCol.hasClass('dx-col-2')) {
-                return 3;
-            }
-            if($lastCol.hasClass('dx-col-1')) {
-                return 2;
-            }
-            if($lastCol.hasClass('dx-col-0')) {
-                return 1;
-            }
-            return 0;
-        };
-
         [
             (form) => { form.repaint(); },
+            (form) => { form._refresh(); },
+            (form) => {
+                form.beginUpdate();
+                form._invalidate();
+                form.endUpdate();
+            }
         ].forEach(formUpdater => {
             QUnit.test(`Setting screen by width option (T977436). Set via ${optionType}, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
                 let logs = [];
@@ -156,13 +159,13 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
                 };
 
                 if(optionType === 'instanceOption') {
-                    options['screenByWidth'] = createScreenByWidthFunc(logs, 'instanceOption');
+                    options['screenByWidth'] = createLoggedScreenByWidthFunc(logs, 'instanceOption');
                 } else if(optionType === 'defaultOption') {
-                    Form.reassignDefaultScreenByWidthFunc(createScreenByWidthFunc(logs, 'defaultOption'));
+                    Form.reassignDefaultScreenByWidthFunc(createLoggedScreenByWidthFunc(logs, 'defaultOption'));
                 } else {
                     Form.defaultOptions({
                         options: {
-                            screenByWidth: createScreenByWidthFunc(logs, 'globalOption')
+                            screenByWidth: createLoggedScreenByWidthFunc(logs, 'globalOption')
                         }
                     });
                 }
