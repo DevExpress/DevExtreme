@@ -126,7 +126,7 @@ describe('TextSvgElement', () => {
           text: 'Multiline\ntext',
           textsAlignment: 'center',
         });
-        text.textRef = React.createRef();
+        text.textRef = React.createRef() as any;
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
@@ -145,7 +145,7 @@ describe('TextSvgElement', () => {
           text: 'Multiline\ntext',
           textsAlignment: 'right',
         });
-        text.textRef = React.createRef();
+        text.textRef = React.createRef() as any;
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
@@ -165,7 +165,7 @@ describe('TextSvgElement', () => {
           text: 'Multiline\ntext',
           textsAlignment: 'left',
         });
-        text.textRef = React.createRef();
+        text.textRef = React.createRef() as any;
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
@@ -186,7 +186,7 @@ describe('TextSvgElement', () => {
           x: 50,
           y: 100,
         });
-        text.textRef = React.createRef();
+        text.textRef = React.createRef() as any;
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
@@ -209,7 +209,7 @@ describe('TextSvgElement', () => {
           x: 50,
           y: 100,
         });
-        text.textRef = React.createRef();
+        text.textRef = React.createRef() as any;
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
@@ -236,7 +236,7 @@ describe('TextSvgElement', () => {
           strokeWidth: 2,
           strokeOpacity: 0.75,
         });
-        text.textRef = React.createRef();
+        text.textRef = React.createRef() as any;
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [
@@ -268,7 +268,7 @@ describe('TextSvgElement', () => {
           stroke: 'any',
           strokeWidth: 1,
         });
-        text.textRef = React.createRef();
+        text.textRef = React.createRef() as any;
         text.textRef.current = {
           setAttribute: jest.fn(),
           children: [

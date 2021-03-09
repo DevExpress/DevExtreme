@@ -5,9 +5,9 @@
 import {
   Point,
   PathType,
-  Segment,
   LabelAlignment,
   ExtraProps,
+  Segment,
 } from './types.d';
 import { isDefined } from '../../../../core/utils/type';
 import domAdapter from '../../../../core/dom_adapter';
@@ -189,11 +189,11 @@ function prepareConstSegment(constSeg: Segment, type: PathType): void {
 }
 
 function makeEqualLineSegments(short: Segment[], long: Segment[], type: PathType): void {
-  const constSeg: Segment = [...short[short.length - 1]] as Segment;
+  const constSeg: Segment = [...short[short.length - 1]];
   let i = short.length;
   prepareConstSegment(constSeg, type);
   for (; i < long.length; i++) {
-    short[i] = [...constSeg] as Segment;
+    short[i] = [...constSeg];
   }
 }
 
@@ -208,8 +208,8 @@ function makeEqualAreaSegments(short: Segment[], long: Segment[], type: PathType
   if ((shortLength - 1) % 2 === 0 && (longLength - 1) % 2 === 0) {
     i = (shortLength - 1) / 2 - 1;
     head = short.slice(0, i + 1);
-    constsSeg1 = [...head[head.length - 1]] as Segment;
-    constsSeg2 = [...short.slice(i + 1)[0]] as Segment;
+    constsSeg1 = [...head[head.length - 1]];
+    constsSeg2 = [...short.slice(i + 1)[0]];
     prepareConstSegment(constsSeg1, type);
     prepareConstSegment(constsSeg2, type);
     for (let j = i; j < (longLength - 1) / 2 - 1; j++) {
@@ -227,7 +227,7 @@ export const compensateSegments = (oldSegments: Segment[], newSegments: Segment[
 
   if (oldLength === 0) {
     for (let i = 0; i < newLength; i++) {
-      oldSegments.push([...newSegments[i]] as Segment);
+      oldSegments.push([...newSegments[i]]);
     }
   } else if (oldLength < newLength) {
     makeEqualSegments(oldSegments, newSegments, type);

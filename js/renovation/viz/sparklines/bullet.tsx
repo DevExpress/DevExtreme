@@ -26,7 +26,7 @@ import {
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { PathSvgElement } from '../common/renderers/svg_path';
 import {
-  Canvas, OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData,
+  OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData,
 } from '../common/types.d';
 import { Tooltip as TooltipComponent, TooltipProps } from '../common/tooltip';
 import { getFormatValue, pointInCanvas } from '../common/utils';
@@ -60,7 +60,7 @@ const POINTER_ACTION = addNamespace(
   EVENT_NS,
 );
 
-const inCanvas = (canvas: Canvas, x: number, y: number): boolean => {
+const inCanvas = (canvas: ClientRect, x: number, y: number): boolean => {
   const { width, height } = canvas;
   return pointInCanvas(
     {
@@ -231,7 +231,7 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   @InternalState() valueAxis = createAxis(false);
 
-  @InternalState() canvasState: Canvas = {
+  @InternalState() canvasState: ClientRect = {
     width: 0,
     height: 0,
     top: 0,
@@ -335,7 +335,7 @@ export class Bullet extends JSXComponent(BulletProps) {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  get defaultCanvas(): Canvas {
+  get defaultCanvas(): ClientRect {
     return {
       width: DEFAULT_CANVAS_WIDTH,
       height: DEFAULT_CANVAS_HEIGHT,
@@ -346,7 +346,7 @@ export class Bullet extends JSXComponent(BulletProps) {
     };
   }
 
-  onCanvasChange(canvas: Canvas): void {
+  onCanvasChange(canvas: ClientRect): void {
     this.canvasState = canvas;
     const svgElement = this.widgetRef.current?.svg() || undefined;
     this.offsetState = getElementOffset(svgElement) ?? DEFAULT_OFFSET;

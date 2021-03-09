@@ -9,8 +9,8 @@ import {
 import {
   PathType,
   Point,
-  Segment,
   LineCap,
+  Segment,
 } from './types.d';
 import SvgGraphicsProps from './base_graphics_props';
 import {

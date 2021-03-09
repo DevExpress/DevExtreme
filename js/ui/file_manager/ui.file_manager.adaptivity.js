@@ -51,9 +51,11 @@ class FileManagerAdaptivityControl extends Widget {
             container: this.$element(),
             leftElement: $(this._drawer.content()),
             rightElement: $(this._drawer.viewContent()),
-            onApplyPanelSize: this._onApplyPanelSize.bind(this)
+            onApplyPanelSize: this._onApplyPanelSize.bind(this),
+            onActiveStateChanged: this._onActiveStateChanged.bind(this)
         });
         this._splitter.$element().appendTo(container);
+        this._splitter.disableSplitterCalculation(true);
     }
 
     _render() {
@@ -72,6 +74,11 @@ class FileManagerAdaptivityControl extends Widget {
         }
         $(this._drawer.content()).removeClass(DRAWER_PANEL_CONTENT_INITIAL);
         this._setDrawerWidth(e.leftPanelWidth);
+    }
+
+    _onActiveStateChanged({ isActive }) {
+        this._splitter.disableSplitterCalculation(!isActive);
+        !isActive && this._splitter.$element().css('left', 'auto');
     }
 
     _setDrawerWidth(width) {
@@ -154,7 +161,7 @@ class FileManagerAdaptivityControl extends Widget {
         this._drawer.option('animationEnabled', !skipAnimation);
         this._drawer.toggle(showing);
         const isSplitterActive = this._isDrawerOpened() && !this.isInAdaptiveState();
-        this._splitter.toggleState(isSplitterActive);
+        this._splitter.toggleDisabled(!isSplitterActive);
     }
 }
 
