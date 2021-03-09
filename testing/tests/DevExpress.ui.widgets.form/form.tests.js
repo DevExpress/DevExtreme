@@ -202,6 +202,29 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
         QUnit.test(`Setting screen by width option (T977436). Use instance option, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
             const defaultStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
             const instanceStub = sinon.stub().returns(screenSize);
+
+            const formConfig = getFormConfig();
+            formConfig['screenByWidth'] = instanceStub;
+
+            const form = $('#form').dxForm(formConfig).dxForm('instance');
+            checkForm(assert, form);
+            assert.ok(instanceStub.called);
+            assert.notOk(defaultStub.called);
+
+            instanceStub.reset();
+            defaultStub.reset();
+
+            formUpdater(form);
+            checkForm(assert, form);
+            assert.ok(instanceStub.called);
+            assert.notOk(defaultStub.called);
+
+            defaultStub.restore();
+        });
+
+        QUnit.test(`Setting screen by width option (T977436). Use instance & default options, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
+            const defaultStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
+            const instanceStub = sinon.stub().returns(screenSize);
             const globalStub = sinon.stub().returns(screenSize);
 
             Form.defaultOptions({
@@ -230,29 +253,6 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
             assert.notOk(globalStub.called);
 
             Form._classCustomRules = [];
-            defaultStub.restore();
-        });
-
-        QUnit.test(`Setting screen by width option (T977436). Use instance & default options, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
-            const defaultStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
-            const instanceStub = sinon.stub().returns(screenSize);
-
-            const formConfig = getFormConfig();
-            formConfig['screenByWidth'] = instanceStub;
-
-            const form = $('#form').dxForm(formConfig).dxForm('instance');
-            checkForm(assert, form);
-            assert.ok(instanceStub.called);
-            assert.notOk(defaultStub.called);
-
-            instanceStub.reset();
-            defaultStub.reset();
-
-            formUpdater(form);
-            checkForm(assert, form);
-            assert.ok(instanceStub.called);
-            assert.notOk(defaultStub.called);
-
             defaultStub.restore();
         });
     });
