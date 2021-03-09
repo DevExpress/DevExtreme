@@ -106,86 +106,154 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
 
 
 ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
-    ['instanceOption', 'globalOption', 'defaultOption'].forEach(optionType => {
-        function getColsCount($form) {
-            let result = NaN;
+    function getFormConfig() {
+        return {
+            items: [{ dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }],
+            colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
+        };
+    }
 
-            const $lastCol = $form.find(`.${LAST_COL_CLASS}`);
-            [1, 2, 3, 4].forEach(colCount => {
-                if($lastCol.hasClass(`dx-col-${colCount - 1}`)) {
-                    result = colCount;
-                }
-            });
+    function getColsCount($form) {
+        let result = NaN;
 
-            return result;
-        }
+        const $lastCol = $form.find(`.${LAST_COL_CLASS}`);
+        [1, 2, 3, 4].forEach(colCount => {
+            if($lastCol.hasClass(`dx-col-${colCount - 1}`)) {
+                result = colCount;
+            }
+        });
 
-        function getRowsCount($form) {
-            return $form.find(`> .${BOX_CLASS} > .${BOX_ITEM_CLASS}`).length;
-        }
+        return result;
+    }
 
-        const checkForm = (assert, form, stubs) => {
-            assert.equal(stubs.globalOption.called, optionType === 'globalOption');
-            assert.equal(stubs.instanceOption.called, optionType === 'instanceOption');
-            assert.equal(stubs.defaultFunction.called, optionType === 'defaultOption');
+    function getRowsCount($form) {
+        return $form.find(`> .${BOX_CLASS} > .${BOX_ITEM_CLASS}`).length;
+    }
 
-            const $formBox = form.$element().find(`.${RESPONSIVE_BOX_CLASS}`);
-            assert.ok($formBox.hasClass(`dx-responsivebox-screen-${screenSize}`), 'form has valid size');
+    function checkForm(assert, form) {
+        const $form = form.$element();
+        const $formBox = $form.find(`.${RESPONSIVE_BOX_CLASS}`);
+        assert.ok($formBox.hasClass(`dx-responsivebox-screen-${screenSize}`), 'form box has valid class');
 
-            const expectedCount = {
-                xs: { rows: 4, columns: 1 },
-                sm: { rows: 2, columns: 2 },
-                md: { rows: 2, columns: 3 },
-                lg: { rows: 1, columns: 4 }
-            };
-
-            assert.equal(expectedCount[screenSize].rows, getRowsCount($formBox), 'expected rows count');
-            assert.equal(expectedCount[screenSize].columns, getColsCount($formBox), 'expected columns count');
+        const expectedCount = {
+            xs: { rows: 4, columns: 1 },
+            sm: { rows: 2, columns: 2 },
+            md: { rows: 2, columns: 3 },
+            lg: { rows: 1, columns: 4 }
         };
 
-        [
-            (form) => { form.repaint(); },
-            (form) => {
-                form.beginUpdate();
-                form._invalidate();
-                form.endUpdate();
-            }
-        ].forEach(formUpdater => {
-            QUnit.test(`Setting screen by width option (T977436). Set via ${optionType}, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
-                const stubs = {
-                    instanceOption: sinon.stub().returns(screenSize),
-                    globalOption: sinon.stub().returns(screenSize),
-                    defaultFunction: sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize)
-                };
+        assert.equal(expectedCount[screenSize].rows, getRowsCount($formBox), 'expected rows count');
+        assert.equal(expectedCount[screenSize].columns, getColsCount($formBox), 'expected columns count');
+    }
 
-                const formConfig = {
-                    items: [ { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' } ],
-                    colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
-                };
+    [
+        (form) => { form.repaint(); },
+        (form) => {
+            form.beginUpdate();
+            form._invalidate();
+            form.endUpdate();
+        }
+    ].forEach(formUpdater => {
+        QUnit.test(`Setting screen by width option (T977436). Use default function, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
+            const defaultStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
 
-                if(optionType === 'instanceOption') {
-                    formConfig['screenByWidth'] = stubs.instanceOption;
-                } else if(optionType === 'globalOption') {
-                    Form.defaultOptions({
-                        options: {
-                            screenByWidth: stubs.globalOption
-                        }
-                    });
+            const formConfig = getFormConfig();
+            const form = $('#form').dxForm(formConfig).dxForm('instance');
+            checkForm(assert, form);
+            assert.ok(defaultStub.called);
+
+            defaultStub.reset();
+
+            formUpdater(form);
+            checkForm(assert, form);
+            assert.ok(defaultStub.called);
+
+            defaultStub.restore();
+        });
+
+        QUnit.test(`Setting screen by width option (T977436). Use global option, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
+            const defaultStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
+            const globalStub = sinon.stub().returns(screenSize);
+
+            Form.defaultOptions({
+                options: {
+                    screenByWidth: globalStub
                 }
-
-                const form = $('#form').dxForm(formConfig).dxForm('instance');
-                checkForm(assert, form, stubs);
-
-                stubs.defaultFunction.reset();
-                stubs.instanceOption.reset();
-                stubs.globalOption.reset();
-
-                formUpdater(form);
-                checkForm(assert, form, stubs);
-
-                Form._classCustomRules = [];
-                stubs.defaultFunction.restore();
             });
+
+            const formConfig = getFormConfig();
+            const form = $('#form').dxForm(formConfig).dxForm('instance');
+            checkForm(assert, form);
+            assert.ok(globalStub.called);
+            assert.notOk(defaultStub.called);
+
+            defaultStub.reset();
+            globalStub.reset();
+
+            formUpdater(form);
+            checkForm(assert, form);
+            assert.ok(globalStub.called);
+            assert.notOk(defaultStub.called);
+
+            Form._classCustomRules = [];
+            defaultStub.restore();
+        });
+
+        QUnit.test(`Setting screen by width option (T977436). Use instance option, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
+            const defaultStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
+            const instanceStub = sinon.stub().returns(screenSize);
+            const globalStub = sinon.stub().returns(screenSize);
+
+            Form.defaultOptions({
+                options: {
+                    screenByWidth: globalStub
+                }
+            });
+
+            const formConfig = getFormConfig();
+            formConfig['screenByWidth'] = instanceStub;
+
+            const form = $('#form').dxForm(formConfig).dxForm('instance');
+            checkForm(assert, form);
+            assert.ok(instanceStub.called);
+            assert.notOk(defaultStub.called);
+            assert.notOk(globalStub.called);
+
+            instanceStub.reset();
+            defaultStub.reset();
+            globalStub.reset();
+
+            formUpdater(form);
+            checkForm(assert, form);
+            assert.ok(instanceStub.called);
+            assert.notOk(defaultStub.called);
+            assert.notOk(globalStub.called);
+
+            Form._classCustomRules = [];
+            defaultStub.restore();
+        });
+
+        QUnit.test(`Setting screen by width option (T977436). Use instance & default options, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
+            const defaultStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
+            const instanceStub = sinon.stub().returns(screenSize);
+
+            const formConfig = getFormConfig();
+            formConfig['screenByWidth'] = instanceStub;
+
+            const form = $('#form').dxForm(formConfig).dxForm('instance');
+            checkForm(assert, form);
+            assert.ok(instanceStub.called);
+            assert.notOk(defaultStub.called);
+
+            instanceStub.reset();
+            defaultStub.reset();
+
+            formUpdater(form);
+            checkForm(assert, form);
+            assert.ok(instanceStub.called);
+            assert.notOk(defaultStub.called);
+
+            defaultStub.restore();
         });
     });
 });
