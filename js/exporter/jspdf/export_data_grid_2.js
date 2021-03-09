@@ -1,5 +1,83 @@
 import { isDefined } from '../../core/utils/type';
 
+const PdfGrid = function() {
+    const _startNewTable = function(drawTableBorder, firstTableRect, firstTableOnNewPage, splitByColumns) {
+        const newTables = [
+            {
+                drawTableBorder,
+                drawOnNewPage: firstTableOnNewPage,
+                rect: firstTableRect,
+                columnIndex: 0,
+                rows: []
+            }
+        ];
+
+        if(isDefined(splitByColumns)) {
+            splitByColumns.forEach((splitByColumn) => {
+                newTables.push({
+                    drawTableBorder: drawTableBorder,
+                    drawOnNewPage: splitByColumn.drawOnNewPage,
+                    rect: splitByColumn.tableRect,
+                    columnIndex: splitByColumn.columnIndex,
+                    rows: []
+                });
+            });
+        }
+
+        _activeTable = newTables[0];
+
+        _tables.push(newTables);
+    };
+
+    const _startNewRow = function() {
+        _activeTable.rows.push([]);
+    };
+
+    const _addPdfCell = function(cellIndex, pdfCell) {
+        const currentRow = _activeTable.rows[_activeTable.rows.length - 1];
+        currentRow.push(pdfCell);
+
+        if(pdfCell.drawLeftBorder === false) {
+            if(currentRow.length > 1) {
+                currentRow[currentRow.length - 2].drawRightBorder = 0;
+            }
+        } else if(!isDefined(pdfCell.drawLeftBorder)) {
+            if(currentRow.length > 1 && currentRow[currentRow.length - 2].drawRightBorder === false) {
+                pdfCell.drawLeftBorder = false;
+            }
+        }
+
+        if(pdfCell.drawTopBorder === false) {
+            if(_activeTable.rows.length > 1) {
+                _activeTable.rows[_activeTable.rows.length - 2][currentRow.length - 1].drawBottomBorder = false;
+            }
+        } else if(!isDefined(pdfCell.drawTopBorder)) {
+            if(_activeTable.rows.length > 1 && _activeTable.rows[_activeTable.rows.length - 2][currentRow.length - 1].drawBottomBorder === false) {
+                pdfCell.drawTopBorder = false;
+            }
+        }
+    };
+
+    const _setActiveTable = function(boundaryColumnIndex) {
+        _activeTable = _tables[_tables.length - 1].find((table) => table.columnIndex === boundaryColumnIndex);
+    };
+
+    const _getTables = function() {
+        return [].concat(..._tables);
+    };
+
+    const _tables = [];
+    let _activeTable;
+
+    return {
+        startNewTable: _startNewTable,
+        startNewRow: _startNewRow,
+        addPdfCell: _addPdfCell,
+        setActiveTable: _setActiveTable,
+        getTables: _getTables
+    };
+};
+
 function exportDataGrid(doc, dataGrid, options) {
     if(!isDefined(options.rect)) {
         throw 'options.rect is required';
@@ -7,15 +85,19 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
-            const tables = [];
-            let table = {
-                rect: options.rect,
-                drawTableBorder: options.drawTableBorder,
-                rows: []
-            };
-            tables.push(table);
-
             const columns = dataProvider.getColumns();
+            const exportingOptions = {
+                columns: columns.map(column => { return { name: column.name }; }),
+                splitToPagesByColumns: [],
+            };
+
+            if(options.onGridExporting) {
+                options.onGridExporting({ exportingOptions });
+            }
+
+            const pdfGrid = PdfGrid();
+            pdfGrid.startNewTable(options.drawTableBorder, options.rect, false, exportingOptions.splitToPagesByColumns);
+
             const dataRowsCount = dataProvider.getRowsCount();
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 if(options.onRowExporting) {
@@ -26,21 +108,19 @@ function exportDataGrid(doc, dataGrid, options) {
                         if(!isDefined(tableRect)) {
                             throw 'tableRect is required';
                         }
-                        table = {
-                            rect: tableRect,
-                            drawTableBorder: options.drawTableBorder,
-                            rows: []
-                        };
-                        if(addPage === true) {
-                            table.drawOnNewPage = true;
-                        }
-                        tables.push(table);
+                        pdfGrid.startNewTable(options.drawTableBorder, tableRect, addPage === true, exportingOptions.splitToPagesByColumns);
                     }
                 }
+                pdfGrid.setActiveTable(0);
+                pdfGrid.startNewRow();
 
-                const row = [];
-                table.rows.push(row);
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
+                    const isBoundaryColumn = exportingOptions.splitToPagesByColumns.find((splitByColumn) => splitByColumn.columnIndex === cellIndex);
+                    if(isBoundaryColumn) {
+                        pdfGrid.setActiveTable(cellIndex);
+                        pdfGrid.startNewRow();
+                    }
+
                     const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
                     const pdfCell = {
                         text: cellData.value
@@ -50,31 +130,11 @@ function exportDataGrid(doc, dataGrid, options) {
                         options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
                     }
 
-                    row.push(pdfCell);
-
-                    if(pdfCell.drawLeftBorder === false) {
-                        if(row.length > 1) {
-                            row[row.length - 2].drawRightBorder = 0;
-                        }
-                    } else if(!isDefined(pdfCell.drawLeftBorder)) {
-                        if(row.length > 1 && row[row.length - 2].drawRightBorder === false) {
-                            pdfCell.drawLeftBorder = false;
-                        }
-                    }
-
-                    if(pdfCell.drawTopBorder === false) {
-                        if(table.rows.length > 1) {
-                            table.rows[table.rows.length - 2][row.length - 1].drawBottomBorder = false;
-                        }
-                    } else if(!isDefined(pdfCell.drawTopBorder)) {
-                        if(table.rows.length > 1 && table.rows[table.rows.length - 2][row.length - 1].drawBottomBorder === false) {
-                            pdfCell.drawTopBorder = false;
-                        }
-                    }
+                    pdfGrid.addPdfCell(cellIndex, pdfCell);
                 }
             }
 
-            tables.forEach((table) => {
+            pdfGrid.getTables().forEach((table) => {
                 if(table.drawOnNewPage === true) {
                     doc.addPage();
                 }
