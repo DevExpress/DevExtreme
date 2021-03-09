@@ -18,7 +18,7 @@ if(ko) {
     const editorsBindingHandlers = [];
     const registerComponentKoBinding = function(componentName, componentClass) {
 
-        if(componentClass.subclassOf(Editor)) {
+        if(Editor.isEditor(componentClass.prototype)) {
             editorsBindingHandlers.push(componentName);
         }
 
