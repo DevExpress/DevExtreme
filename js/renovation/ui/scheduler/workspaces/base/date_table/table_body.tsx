@@ -8,7 +8,6 @@ import { ViewCellData } from '../../types.d';
 import {
   getKeyByGroup,
   getIsGroupedAllDayPanel,
-  isVerticalGroupOrientation,
 } from '../../utils';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
 import { DateTableLayoutProps } from './layout_props';
@@ -82,10 +81,4 @@ export const viewFunction = ({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {
-  get isVerticalGrouping(): boolean {
-    const { groupOrientation } = this.props;
-
-    return isVerticalGroupOrientation(groupOrientation);
-  }
-}
+export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {}
