@@ -1662,6 +1662,57 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(task.ItemName, data.ItemName, 'task title is updated');
         assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
     });
+    test('update task color and title in auto parent mode (T976669, T978287)', function(assert) {
+        const tasks = [ {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text 1',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        },
+        {
+            Id: 2,
+            ParentId: 1,
+            ItemName: 'custom text 2',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        },
+        ];
+        const tasksMap = {
+            dataSource: tasks,
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        const options = {
+            tasks: tasksMap,
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true },
+            columns: [{ dataField: 'ItemName', caption: 'Task' }]
+        };
+        this.createInstance(options);
+        this.clock.tick();
+
+        const data = {
+            ItemName: 'New',
+            TaskColor: 'yellow'
+        };
+        this.instance.updateTask(1, data);
+        this.clock.tick();
+
+        const firstTreeListTitleText = $(this.instance._treeList.getCellElement(0, 0)).text();
+        assert.equal(firstTreeListTitleText, data.ItemName, 'title text was modified');
+        assert.equal(tasks[0].ItemName, data.ItemName, 'task title is updated');
+        assert.equal(tasks[0].TaskColor, data.TaskColor, 'task color  is updated');
+    });
     test('taskUpdate with only custom field', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
