@@ -8,6 +8,7 @@ import { ViewCellData } from '../../types.d';
 import {
   getKeyByGroup,
   getIsGroupedAllDayPanel,
+  isVerticalGroupOrientation,
 } from '../../utils';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
 import { DateTableLayoutProps } from './layout_props';
@@ -18,11 +19,12 @@ export const viewFunction = ({
     dataCellTemplate,
     cellTemplate: Cell,
   },
+  isVerticalGrouping,
 }: DateTableBody): JSX.Element => (
   <Fragment>
     {viewData
       .groupedData.map(({ dateTable, allDayPanel, groupIndex }, index) => (
-        <Fragment key={getKeyByGroup(groupIndex)}>
+        <Fragment key={isVerticalGrouping ? getKeyByGroup(groupIndex) : index}>
           {getIsGroupedAllDayPanel(viewData, index) && (
             <AllDayPanelTableBody
               viewData={allDayPanel}
@@ -80,4 +82,10 @@ export const viewFunction = ({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {}
+export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {
+  get isVerticalGrouping(): boolean {
+    const { groupOrientation } = this.props;
+
+    return isVerticalGroupOrientation(groupOrientation);
+  }
+}

@@ -3576,6 +3576,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             viewData: this.viewDataProvider.viewData,
             dataCellTemplate: this.option('dataCellTemplate'),
             addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
+            groupOrientation: this.option('groupOrientation'),
         });
     }
 }
