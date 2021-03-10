@@ -140,11 +140,12 @@ const hasDSTInLocalTimeZone = () => {
 
 const isEqualLocalTimeZoneByDeclaration = (timeZoneName, year) => {
     const getOffset = date => -date.getTimezoneOffset() / 60;
-    const getHourBack = dateStamp => new Date(dateStamp - 3600000);
+    const getDateAndMoveHourBack = dateStamp => new Date(dateStamp - 3600000);
 
     const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
     const [summerTime, winterTime] = configTuple;
 
+    // TODO: no dst transition in both time zones
     if(configTuple.length === 0 && !hasDSTInLocalTimeZone()) {
         return true;
     }
@@ -156,7 +157,7 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName, year) => {
         return false;
     }
 
-    if(localSummerOffset === getOffset(getHourBack(summerTime.date))) {
+    if(localSummerOffset === getOffset(getDateAndMoveHourBack(summerTime.date))) {
         return false;
     }
 
@@ -164,7 +165,7 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName, year) => {
         return false;
     }
 
-    if(localWinterOffset === getOffset(getHourBack(winterTime.date))) {
+    if(localWinterOffset === getOffset(getDateAndMoveHourBack(winterTime.date))) {
         return false;
     }
 
