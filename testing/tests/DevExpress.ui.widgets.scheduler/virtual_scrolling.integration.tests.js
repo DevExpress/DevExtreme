@@ -2991,18 +2991,6 @@ module('Virtual scrolling integration', () => {
             };
         }
     }, function() {
-        test('Repaint all flag should be set', function(assert) {
-            this.createInstance({
-                currentDate: new Date(2015, 2, 2),
-                scrolling: {
-                    mode: 'virtual'
-                },
-                height: 400
-            });
-
-            assert.ok(this.instance._appointments._isRepaintAll(), 'Full repaint flag is set');
-        });
-
         test('Appointment should not repaint if grid cells is exists for it', function(assert) {
             const data = [{
                 startDate: new Date(2020, 8, 7, 2),

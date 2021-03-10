@@ -201,7 +201,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _isRepaintAppointment(appointment) {
-        return !!appointment?.needRepaint;
+        return !isDefined(appointment.needRepaint) || appointment.needRepaint === true;
     }
 
     _isRepaintAll(appointments) {

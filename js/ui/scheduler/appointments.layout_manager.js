@@ -102,8 +102,10 @@ class AppointmentLayoutManager {
         }
 
         const createSettingsToCompare = (settings, index) => {
-            const cellIndex = settings[index].cellIndex + settings.virtualCellCount;
-            const rowIndex = settings[index].rowIndex + settings.virtualRowCount;
+            const virtualCellCount = settings.virtualCellCount || 0;
+            const virtualRowCount = settings.virtualRowCount || 0;
+            const cellIndex = settings[index].cellIndex + virtualCellCount;
+            const rowIndex = settings[index].rowIndex + virtualRowCount;
 
             return {
                 ...settings[index],
