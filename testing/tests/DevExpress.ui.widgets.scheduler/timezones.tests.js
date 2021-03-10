@@ -33,7 +33,8 @@ const timeZones = {
     Moscow: 'Europe/Moscow',
     UTC: 'Etc/UTC',
     Greenwich: 'Greenwich',
-    Dawson_Creek: 'America/Dawson_Creek'
+    Dawson_Creek: 'America/Dawson_Creek',
+    Berlin: 'Europe/Berlin'
 };
 
 testStart(() => initTestMarkup());
@@ -910,6 +911,57 @@ module('Scheduler grid', moduleConfig, () => {
         const defaultTz = date.getTimezoneOffset() * 60000;
         return schedulerTz * 3600000 + defaultTz;
     };
+
+    test('Local DST shouldn\'t effect on for the set timezone', function(assert) {
+        // TODO Los Angeles and Sydney timezones have local DST
+        const etalonDateText = '12:30 PM - 2:00 PM';
+
+        const scheduler = createWrapper({
+            timeZone: timeZones.Berlin,
+            dataSource: [{
+                text: 'Website Re-Design Plan',
+                startDate: new Date('2021-02-24T11:30:00.000Z'),
+                endDate: new Date('2021-02-24T13:00:00.000Z'),
+                recurrenceRule: 'FREQ=DAILY'
+            }],
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2021, 2, 14),
+            firstDayOfWeek: 5,
+            startDayHour: 11,
+            height: 600
+        });
+
+        scheduler.appointmentList.forEach(appointment => {
+            assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
+            appointment.click();
+
+            assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
+        });
+
+        scheduler.header.navigator.nextButton.click();
+
+        scheduler.appointmentList.forEach(appointment => {
+            assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
+            appointment.click();
+
+            assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
+        });
+
+        scheduler.appointmentList.forEach(appointment => {
+            assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
+            appointment.click();
+
+            assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
+        });
+
+        scheduler.appointmentList.forEach(appointment => {
+            assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
+            appointment.click();
+
+            assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
+        });
+    });
 
     [
         {
