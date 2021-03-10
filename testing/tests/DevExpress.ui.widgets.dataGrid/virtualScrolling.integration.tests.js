@@ -3207,8 +3207,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(2000);
 
         // assert
+        assert.equal(dataGrid.getTopVisibleRowData().id, browser.mozilla ? 6 : 1, 'scroll is reseted');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first page is rendered');
-        assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
+        assert.equal(dataGrid.getVisibleRows().length, 10, 'rendered row count');
     });
 });
 
