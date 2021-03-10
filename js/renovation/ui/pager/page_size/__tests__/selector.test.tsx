@@ -96,14 +96,14 @@ describe('Pager size selector', () => {
 
     describe('setRootElementRef', () => {
       it('set rootElementRef to div ref', () => {
-        const widgetRef = {} as RefObject<HTMLDivElement>;
+        const widgetRef = { } as RefObject<HTMLDivElement>;
         const component = new PageSizeSelector({
-          rootElementRef: {} as RefObject<HTMLDivElement>,
+          rootElementRef: { current: {} } as RefObject<HTMLDivElement>,
         });
         component.htmlRef = widgetRef;
         component.setRootElementRef();
 
-        expect(component.props.rootElementRef).toBe(component.htmlRef);
+        expect(component.htmlRef.current).toBe(component.props.rootElementRef?.current);
       });
 
       it('hasnt rootElementRef', () => {
