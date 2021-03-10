@@ -2320,6 +2320,118 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.deepEqual(validatedRowKeys, [1, 3], 'validated row keys');
         assert.deepEqual(validatedMessages, ['Field 1 is required', 'Field 2 is required'], 'broken rules messages');
     });
+
+    ['Cell', 'Batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Data row should be removed(marked as removed) when a new row is rendered (T978455)`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'test12' },
+                    { id: 2, field1: 'test21', field2: 'test22' }
+                ],
+                keyExpr: 'id',
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true,
+                    allowDeleting: true,
+                    confirmDelete: false
+                },
+                loadingTimeout: undefined
+            });
+
+            // act
+            $(dataGrid.element()).find('.dx-icon-edit-button-addrow').trigger('dxclick');
+            this.clock.tick();
+
+            let $firstRow = $(dataGrid.getRowElement(0));
+            const $inputElement = $firstRow.find('.dx-texteditor-input').first();
+
+            // assert
+            assert.ok($firstRow.hasClass('dx-row-inserted'), 'inserted row is rendered');
+
+            // act
+            $inputElement.val('tst').trigger('change');
+            this.clock.tick();
+            $(dataGrid.getRowElement(1)).find('.dx-link-delete').trigger('click');
+            this.clock.tick();
+            const visibleRows = dataGrid.getVisibleRows();
+
+            // assert
+            if(editMode === 'Cell') {
+                assert.equal(visibleRows.length, 2, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'test21', 'field1 cell value of the first row');
+                assert.strictEqual(visibleRows[1].data.field1, 'tst', 'field1 cell value of the second row');
+                assert.notOk(visibleRows[1].isNewRow, 'the second row is not a new row');
+            } else {
+                const $secondRow = $(dataGrid.getRowElement(1));
+                $firstRow = $(dataGrid.getRowElement(0));
+
+                assert.ok($firstRow.hasClass('dx-row-inserted'), 'inserted row is rendered after delete click');
+                assert.ok($secondRow.hasClass('dx-row-removed'), 'removed row is rendered after delete click');
+                assert.equal(visibleRows.length, 3, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'tst', 'field1 cell value of the first row');
+                assert.ok(visibleRows[0].isNewRow, 'the first row is an inserted row');
+                assert.strictEqual(visibleRows[1].data.field1, 'test11', 'field1 cell value of the second row');
+                assert.ok(visibleRows[1].removed, 'the second row is a removed row');
+                assert.strictEqual(visibleRows[2].data.field1, 'test21', 'field1 cell value of the second row');
+            }
+        });
+
+        QUnit.testInActiveWindow(`${editMode} - Data row should be removed(marked as removed) when a cell in another row is modified (T978455)`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, field1: 'test11', field2: 'test12' },
+                    { id: 2, field1: 'test21', field2: 'test22' }
+                ],
+                keyExpr: 'id',
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true,
+                    allowDeleting: true,
+                    confirmDelete: false
+                },
+                loadingTimeout: undefined
+            });
+
+            // act
+            let $firstCell = $(dataGrid.getCellElement(0, 0));
+            $firstCell.trigger('dxclick');
+            this.clock.tick();
+            $firstCell = $(dataGrid.getCellElement(0, 0));
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-editor-cell'), 'cell is rendered with an editor');
+
+            // act
+            const $inputElement = $firstCell.find('.dx-texteditor-input').first();
+            $inputElement.val('tst').trigger('change');
+            this.clock.tick();
+            $(dataGrid.getRowElement(1)).find('.dx-link-delete').trigger('click');
+            this.clock.tick();
+            const visibleRows = dataGrid.getVisibleRows();
+
+            // assert
+            if(editMode === 'Cell') {
+                assert.equal(visibleRows.length, 1, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'tst', 'field1 cell value of the first row');
+                assert.notOk(visibleRows[0].isNewRow, 'the first row is not a new row');
+            } else {
+                const $secondRow = $(dataGrid.getRowElement(1));
+                $firstCell = $(dataGrid.getCellElement(0, 0));
+
+                assert.ok($firstCell.hasClass('dx-cell-modified'), 'first cell is rendered as modified');
+                assert.ok($secondRow.hasClass('dx-row-removed'), 'removed row is rendered after delete click');
+                assert.equal(visibleRows.length, 2, 'visible row count');
+                assert.strictEqual(visibleRows[0].data.field1, 'tst', 'field1 cell value of the first row');
+                assert.ok(visibleRows[0].modified, 'the first row is a modified row');
+                assert.strictEqual(visibleRows[1].data.field1, 'test21', 'field1 cell value of the second row');
+                assert.ok(visibleRows[1].removed, 'the second row is a removed row');
+            }
+        });
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
