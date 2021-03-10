@@ -14,6 +14,8 @@
     start-date-expr="StartDate"
     end-date-expr="EndDate"
     all-day-expr="AllDay"
+    recurrence-rule-expr="RecurrenceRule"
+    recurrence-exception-expr="RecurrenceException"
   />
 </template>
 <script>

@@ -23,6 +23,8 @@ $(function() {
         textExpr: "Text",
         startDateExpr: "StartDate",
         endDateExpr: "EndDate",
-        allDayExpr: "AllDay"
+        allDayExpr: "AllDay",
+        recurrenceRuleExpr: "RecurrenceRule",
+        recurrenceExceptionExpr: "RecurrenceException"
     });
 });
