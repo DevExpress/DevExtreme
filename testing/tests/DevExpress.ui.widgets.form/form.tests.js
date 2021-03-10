@@ -106,15 +106,23 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
 
 
 ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
-    function getFormConfig() {
-        return {
-            items: [{ dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }],
+    function createForm(testConfig) {
+        const config = extend({
             colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
-        };
+            items: [
+                { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
+            ],
+        }, testConfig);
+        return $('#form').dxForm(config).dxForm('instance');
+    }
+
+    function getExpectedCallCount(size) {
+        const renderCount = { xs: 21, sm: 23, md: 25, lg: 22 };
+        return renderCount[size];
     }
 
     function getColsCount($form) {
-        let result = NaN;
+        let result = -1;
 
         const $lastCol = $form.find(`.${LAST_COL_CLASS}`);
         [1, 2, 3, 4].forEach(colCount => {
@@ -157,16 +165,15 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
         QUnit.test(`Setting screen by width option (T977436). Use default function, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
             const defaultStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
 
-            const formConfig = getFormConfig();
-            const form = $('#form').dxForm(formConfig).dxForm('instance');
+            const form = createForm({});
             checkForm(assert, form);
-            assert.ok(defaultStub.called);
+            assert.equal(defaultStub.callCount, getExpectedCallCount(screenSize));
 
             defaultStub.reset();
 
             formUpdater(form);
             checkForm(assert, form);
-            assert.ok(defaultStub.called);
+            assert.equal(defaultStub.callCount, getExpectedCallCount(screenSize));
 
             defaultStub.restore();
         });
@@ -181,19 +188,18 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
                 }
             });
 
-            const formConfig = getFormConfig();
-            const form = $('#form').dxForm(formConfig).dxForm('instance');
+            const form = createForm({});
             checkForm(assert, form);
-            assert.ok(globalStub.called);
-            assert.notOk(defaultStub.called);
+            assert.equal(globalStub.callCount, getExpectedCallCount(screenSize));
+            assert.equal(defaultStub.callCount, 0);
 
             defaultStub.reset();
             globalStub.reset();
 
             formUpdater(form);
             checkForm(assert, form);
-            assert.ok(globalStub.called);
-            assert.notOk(defaultStub.called);
+            assert.equal(globalStub.callCount, getExpectedCallCount(screenSize));
+            assert.equal(defaultStub.callCount, 0);
 
             Form._classCustomRules = [];
             defaultStub.restore();
@@ -203,21 +209,20 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
             const defaultStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
             const instanceStub = sinon.stub().returns(screenSize);
 
-            const formConfig = getFormConfig();
-            formConfig['screenByWidth'] = instanceStub;
-
-            const form = $('#form').dxForm(formConfig).dxForm('instance');
+            const form = createForm({
+                screenByWidth: instanceStub
+            });
             checkForm(assert, form);
-            assert.ok(instanceStub.called);
-            assert.notOk(defaultStub.called);
+            assert.equal(instanceStub.callCount, getExpectedCallCount(screenSize));
+            assert.equal(defaultStub.callCount, 0);
 
             instanceStub.reset();
             defaultStub.reset();
 
             formUpdater(form);
             checkForm(assert, form);
-            assert.ok(instanceStub.called);
-            assert.notOk(defaultStub.called);
+            assert.equal(instanceStub.callCount, getExpectedCallCount(screenSize));
+            assert.equal(defaultStub.callCount, 0);
 
             defaultStub.restore();
         });
@@ -233,14 +238,13 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
                 }
             });
 
-            const formConfig = getFormConfig();
-            formConfig['screenByWidth'] = instanceStub;
-
-            const form = $('#form').dxForm(formConfig).dxForm('instance');
+            const form = createForm({
+                screenByWidth: instanceStub
+            });
             checkForm(assert, form);
-            assert.ok(instanceStub.called);
-            assert.notOk(defaultStub.called);
-            assert.notOk(globalStub.called);
+            assert.equal(instanceStub.callCount, getExpectedCallCount(screenSize));
+            assert.equal(defaultStub.callCount, 0);
+            assert.equal(globalStub.callCount, 0);
 
             instanceStub.reset();
             defaultStub.reset();
@@ -248,9 +252,9 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
 
             formUpdater(form);
             checkForm(assert, form);
-            assert.ok(instanceStub.called);
-            assert.notOk(defaultStub.called);
-            assert.notOk(globalStub.called);
+            assert.equal(instanceStub.callCount, getExpectedCallCount(screenSize));
+            assert.equal(defaultStub.callCount, 0);
+            assert.equal(globalStub.callCount, 0);
 
             Form._classCustomRules = [];
             defaultStub.restore();
