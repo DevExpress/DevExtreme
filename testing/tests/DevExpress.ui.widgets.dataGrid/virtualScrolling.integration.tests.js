@@ -3114,11 +3114,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 pageSize: 5
             },
             scrolling: {
-                mode: 'virtual'
+                mode: 'virtual',
+                useNative: true
             }
         });
 
         this.clock.tick(1000);
+        $(dataGrid.getScrollable()._container()).trigger('scroll');
 
         assert.equal(dataGrid.getTopVisibleRowData().id, 6, 'data is scrolled');
 
@@ -3126,10 +3128,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         dataGrid.columnOption(0, 'filterValue', '1');
         dataGrid.columnOption(1, 'filterValue', '1');
         this.clock.tick(2000);
+        $(dataGrid.getScrollable()._container()).trigger('scroll');
 
         // assert
+        assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first page is rendered');
-        assert.equal(dataGrid.getVisibleRows().length, 10, 'rendered row count');
     });
 });
 
