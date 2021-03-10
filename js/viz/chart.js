@@ -1,6 +1,7 @@
 import { noop } from '../core/utils/common';
 import { extend as _extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
+import { hasWindow } from '../core/utils/window';
 import { each as _each } from '../core/utils/iterator';
 import registerComponent from '../core/component_registrator';
 import { prepareSegmentRectPoints } from './utils';
@@ -8,7 +9,6 @@ import {
     map as _map, getLog, getCategoriesInfo,
     updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
     normalizePanesHeight,
-    checkElementHasPropertyFromStyleSheet,
     rangesAreEqual
 } from './core/utils';
 import { type, isDefined as _isDefined } from '../core/utils/type';
@@ -450,6 +450,11 @@ const dxChart = AdvancedChart.inherit({
 
     _initCore: function() {
         this.paneAxis = {};
+        this.callBase();
+    },
+
+    _init() {
+        this._containerInitialHeight = hasWindow() ? this._$element.height() : 0;
         this.callBase();
     },
 
@@ -1068,7 +1073,7 @@ const dxChart = AdvancedChart.inherit({
                 const realSize = that.getSize();
                 const customSize = that.option('size');
                 const container = that._$element[0];
-                const containerHasStyledHeight = !!container.style.height || checkElementHasPropertyFromStyleSheet(container, 'height');
+                const containerHasStyledHeight = !!parseInt(container.style.height) || that._containerInitialHeight !== 0;
 
                 if(!rotated && !(customSize && customSize.height) && !containerHasStyledHeight) {
                     that._forceResize(realSize.width, realSize.height + needVerticalSpace);
