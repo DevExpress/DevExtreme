@@ -9,7 +9,7 @@ import {
 } from '../core';
 
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -52,7 +52,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((contentElement: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((contentElement: TElement) => string | Element | JQuery);
     /**
      * @docid
      * @default true
@@ -114,7 +114,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onHidden?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -124,7 +124,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: T, element?: dxElement, model?: any, cancel?: boolean }) => any);
+    onHiding?: ((e: { component?: T, element?: TElement, model?: any, cancel?: boolean }) => any);
     /**
      * @docid
      * @extends Action
@@ -132,7 +132,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onShowing?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -140,7 +140,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onShown?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @default { my: 'center', at: 'center', of: window }
@@ -214,7 +214,7 @@ export default class dxOverlay extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): dxElement;
+    content(): TElement;
     /**
      * @docid
      * @publicName hide()

@@ -5,7 +5,7 @@ import {
 } from '../core';
 
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -37,7 +37,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((container: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((container: TElement) => string | Element | JQuery);
     /**
      * @docid
      * @default null
@@ -80,7 +80,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
     /**
      * @docid
      * @type Enums.SlideOutMenuPosition
@@ -103,7 +103,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: dxElement, model?: any }) => any);
+    onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -111,7 +111,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: dxElement, model?: any }) => any);
+    onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @default 0

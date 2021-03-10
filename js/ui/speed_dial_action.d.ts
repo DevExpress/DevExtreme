@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -43,7 +43,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { event?: TEvent, component?: dxSpeedDialAction, element?: dxElement, actionElement?: dxElement }) => any);
+    onClick?: ((e: { event?: TEvent, component?: dxSpeedDialAction, element?: TElement, actionElement?: TElement }) => any);
     /**
      * @docid
      * @extends Action
@@ -53,7 +53,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: dxSpeedDialAction, element?: dxElement, model?: any, actionElement?: dxElement }) => any);
+    onContentReady?: ((e: { component?: dxSpeedDialAction, element?: TElement, model?: any, actionElement?: TElement }) => any);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

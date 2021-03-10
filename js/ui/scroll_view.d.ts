@@ -5,7 +5,7 @@ import {
 } from '../core';
 
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import dxScrollable, {
@@ -20,7 +20,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPullDown?: ((e: { component?: dxScrollView, element?: dxElement, model?: any }) => any);
+    onPullDown?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -28,7 +28,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReachBottom?: ((e: { component?: dxScrollView, element?: dxElement, model?: any }) => any);
+    onReachBottom?: ((e: { component?: dxScrollView, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @default "Release to refresh..."

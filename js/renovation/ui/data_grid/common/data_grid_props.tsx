@@ -13,7 +13,7 @@ import { BaseWidgetProps } from '../../../utils/base_props';
 
 import type { dxFilterBuilderOptions } from '../../../../ui/filter_builder';
 import { TPromise } from '../../../../core/index';
-import type { dxElement } from '../../../../core/element';
+import type { TElement } from '../../../../core/element';
 import type { template } from '../../../../core/templates/template';
 import type { EventExtension, TEvent } from '../../../../events/index';
 import DataSource from '../../../../data/data_source';
@@ -49,7 +49,7 @@ export class DataGridColumnButton {
   onClick?:
   | ((e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     event?: TEvent;
     row?: dxDataGridRowObject;
@@ -61,7 +61,7 @@ export class DataGridColumnButton {
   template?:
   | template
   | ((
-    cellElement: dxElement,
+    cellElement: TElement,
     cellInfo: {
       component?: DxDataGrid;
       data?: any;
@@ -344,7 +344,7 @@ export class DataGridColumn {
   cellTemplate?:
   | template
   | ((
-    cellElement: dxElement,
+    cellElement: TElement,
     cellInfo: {
       data?: any;
       component?: DxDataGrid;
@@ -368,7 +368,7 @@ export class DataGridColumn {
   editCellTemplate?:
   | template
   | ((
-    cellElement: dxElement,
+    cellElement: TElement,
     cellInfo: {
       setValue?: any;
       data?: any;
@@ -389,7 +389,7 @@ export class DataGridColumn {
   groupCellTemplate?:
   | template
   | ((
-    cellElement: dxElement,
+    cellElement: TElement,
     cellInfo: {
       data?: any;
       component?: DxDataGrid;
@@ -413,7 +413,7 @@ export class DataGridColumn {
   headerCellTemplate?:
   | template
   | ((
-    columnHeader: dxElement,
+    columnHeader: TElement,
     headerInfo: {
       component?: DxDataGrid;
       columnIndex?: number;
@@ -749,7 +749,7 @@ export class DataGridMasterDetail {
   template?:
   | template
   | ((
-    detailElement: dxElement,
+    detailElement: TElement,
     detailInfo: {
       key?: any;
       data?: any;
@@ -790,9 +790,9 @@ export class DataGridRowDragging {
   | ((
     dragInfo: {
       itemData?: any;
-      itemElement?: dxElement;
+      itemElement?: TElement;
     },
-    containerElement: dxElement,
+    containerElement: TElement,
   ) => string | Element | JQuery);
 
   @OneWay()
@@ -811,7 +811,7 @@ export class DataGridRowDragging {
   onAdd?: (e: {
     event?: TEvent;
     itemData?: any;
-    itemElement?: dxElement;
+    itemElement?: TElement;
     fromIndex?: number;
     toIndex?: number;
     fromComponent?: dxSortable | dxDraggable;
@@ -826,7 +826,7 @@ export class DataGridRowDragging {
     event?: TEvent;
     cancel?: boolean;
     itemData?: any;
-    itemElement?: dxElement;
+    itemElement?: TElement;
     fromIndex?: number;
     toIndex?: number;
     fromComponent?: dxSortable | dxDraggable;
@@ -841,7 +841,7 @@ export class DataGridRowDragging {
     event?: TEvent;
     cancel?: boolean;
     itemData?: any;
-    itemElement?: dxElement;
+    itemElement?: TElement;
     fromIndex?: number;
     toIndex?: number;
     fromComponent?: dxSortable | dxDraggable;
@@ -856,7 +856,7 @@ export class DataGridRowDragging {
     event?: TEvent;
     cancel?: boolean;
     itemData?: any;
-    itemElement?: dxElement;
+    itemElement?: TElement;
     fromIndex?: number;
     toIndex?: number;
     fromComponent?: dxSortable | dxDraggable;
@@ -871,7 +871,7 @@ export class DataGridRowDragging {
     event?: TEvent;
     cancel?: boolean;
     itemData?: any;
-    itemElement?: dxElement;
+    itemElement?: TElement;
     fromIndex?: number;
     fromData?: any;
   }) => any;
@@ -880,7 +880,7 @@ export class DataGridRowDragging {
   onRemove?: (e: {
     event?: TEvent;
     itemData?: any;
-    itemElement?: dxElement;
+    itemElement?: TElement;
     fromIndex?: number;
     toIndex?: number;
     fromComponent?: dxSortable | dxDraggable;
@@ -893,7 +893,7 @@ export class DataGridRowDragging {
   onReorder?: (e: {
     event?: TEvent;
     itemData?: any;
-    itemElement?: dxElement;
+    itemElement?: TElement;
     fromIndex?: number;
     toIndex?: number;
     fromComponent?: dxSortable | dxDraggable;
@@ -1224,7 +1224,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Nested() stateStoring?: DataGridStateStoring;
 
-  @Template() rowTemplate?: template | ((rowElement: dxElement, rowInfo: any) => any);
+  @Template() rowTemplate?: template | ((rowElement: TElement, rowInfo: any) => any);
 
   @OneWay() customizeColumns?: (columns: dxDataGridColumn[]) => any;
 
@@ -1319,7 +1319,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   | string
   | ((e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     event?: TEvent;
     data?: any;
@@ -1331,13 +1331,13 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     column?: any;
     rowIndex?: number;
     rowType?: string;
-    cellElement?: dxElement;
+    cellElement?: TElement;
     row?: dxDataGridRowObject;
   } & EventExtension) => any);
 
   @Event() onCellDblClick?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     event?: TEvent;
     data?: any;
@@ -1349,13 +1349,13 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     column?: dxDataGridColumn;
     rowIndex?: number;
     rowType?: string;
-    cellElement?: dxElement;
+    cellElement?: TElement;
     row?: dxDataGridRowObject;
   }) => any;
 
   @Event() onCellHoverChanged?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     eventType?: string;
     data?: any;
@@ -1367,13 +1367,13 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     rowIndex?: number;
     column?: dxDataGridColumn;
     rowType?: string;
-    cellElement?: dxElement;
+    cellElement?: TElement;
     row?: dxDataGridRowObject;
   }) => any;
 
   @Event() onCellPrepared?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     data?: any;
     key?: any;
@@ -1388,18 +1388,18 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     isSelected?: boolean;
     isExpanded?: boolean;
     isNewRow?: boolean;
-    cellElement?: dxElement;
+    cellElement?: TElement;
     watch?: ((...args: any[]) => any);
     oldValue?: any;
   }) => any;
 
   @Event() onContextMenuPreparing?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     items?: any[];
     target?: string;
-    targetElement?: dxElement;
+    targetElement?: TElement;
     columnIndex?: number;
     column?: dxDataGridColumn;
     rowIndex?: number;
@@ -1408,7 +1408,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onEditingStart?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     data?: any;
     key?: any;
@@ -1418,7 +1418,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onEditorPrepared?: (options: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     parentType?: string;
     value?: any;
@@ -1427,7 +1427,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     width?: number;
     disabled?: boolean;
     rtlEnabled?: boolean;
-    editorElement?: dxElement;
+    editorElement?: TElement;
     readOnly?: boolean;
     dataField?: string;
     row?: dxDataGridRowObject;
@@ -1435,7 +1435,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onEditorPreparing?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     parentType?: string;
     value?: any;
@@ -1445,7 +1445,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     disabled?: boolean;
     rtlEnabled?: boolean;
     cancel?: boolean;
-    editorElement?: dxElement;
+    editorElement?: TElement;
     readOnly?: boolean;
     editorName?: string;
     editorOptions?: any;
@@ -1453,11 +1453,11 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     row?: dxDataGridRowObject;
   }) => any;
 
-  @Event() onExported?: (e: { component?: DxDataGrid; element?: dxElement; model?: any }) => any;
+  @Event() onExported?: (e: { component?: DxDataGrid; element?: TElement; model?: any }) => any;
 
   @Event() onExporting?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     fileName?: string;
     cancel?: boolean;
@@ -1465,7 +1465,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onFileSaving?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     fileName?: string;
     format?: string;
     data?: Blob;
@@ -1474,9 +1474,9 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onFocusedCellChanged?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
-    cellElement?: dxElement;
+    cellElement?: TElement;
     columnIndex?: number;
     rowIndex?: number;
     row?: dxDataGridRowObject;
@@ -1485,9 +1485,9 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onFocusedCellChanging?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
-    cellElement?: dxElement;
+    cellElement?: TElement;
     prevColumnIndex?: number;
     prevRowIndex?: number;
     newColumnIndex?: number;
@@ -1501,18 +1501,18 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onFocusedRowChanged?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
-    rowElement?: dxElement;
+    rowElement?: TElement;
     rowIndex?: number;
     row?: dxDataGridRowObject;
   }) => any;
 
   @Event() onFocusedRowChanging?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
-    rowElement?: dxElement;
+    rowElement?: TElement;
     prevRowIndex?: number;
     newRowIndex?: number;
     event?: TEvent;
@@ -1522,7 +1522,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onRowClick?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     event?: TEvent;
     data?: any;
@@ -1535,13 +1535,13 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     isExpanded?: boolean;
     isNewRow?: boolean;
     groupIndex?: number;
-    rowElement?: dxElement;
+    rowElement?: TElement;
     handled?: boolean;
   } & EventExtension) => any;
 
   @Event() onRowDblClick?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     event?: TEvent;
     data?: any;
@@ -1554,12 +1554,12 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     isExpanded?: boolean;
     isNewRow?: boolean;
     groupIndex?: number;
-    rowElement?: dxElement;
+    rowElement?: TElement;
   }) => any;
 
   @Event() onRowPrepared?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     data?: any;
     key?: any;
@@ -1571,26 +1571,26 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     isSelected?: boolean;
     isExpanded?: boolean;
     isNewRow?: boolean;
-    rowElement?: dxElement;
+    rowElement?: TElement;
   }) => any;
 
   @Event() onAdaptiveDetailRowPreparing?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     formOptions?: any;
   }) => any;
 
   @Event() onDataErrorOccurred?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     error?: Error;
   }) => any;
 
   @Event() onInitNewRow?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     data?: any;
     promise?: TPromise<void>;
@@ -1598,7 +1598,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onKeyDown?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     event?: TEvent;
     handled?: boolean;
@@ -1606,14 +1606,14 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onRowCollapsed?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     key?: any;
   }) => any;
 
   @Event() onRowCollapsing?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     key?: any;
     cancel?: boolean;
@@ -1621,14 +1621,14 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onRowExpanded?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     key?: any;
   }) => any;
 
   @Event() onRowExpanding?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     key?: any;
     cancel?: boolean;
@@ -1636,7 +1636,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onRowInserted?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     data?: any;
     key?: any;
@@ -1645,7 +1645,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onRowInserting?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     data?: any;
     cancel?: boolean | TPromise<void>;
@@ -1653,7 +1653,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onRowRemoved?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     data?: any;
     key?: any;
@@ -1662,7 +1662,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onRowRemoving?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     data?: any;
     key?: any;
@@ -1671,7 +1671,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onRowUpdated?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     data?: any;
     key?: any;
@@ -1680,7 +1680,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onRowUpdating?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     oldData?: any;
     newData?: any;
@@ -1690,7 +1690,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onRowValidating?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     brokenRules?: (| RequiredRule
     | NumericRule
@@ -1711,7 +1711,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onSelectionChanged?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     currentSelectedRowKeys?: any[];
     currentDeselectedRowKeys?: any[];
@@ -1721,7 +1721,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Event() onToolbarPreparing?: (e: {
     component?: DxDataGrid;
-    element?: dxElement;
+    element?: TElement;
     model?: any;
     toolbarOptions?: dxToolbarOptions;
   }) => any;

@@ -1,7 +1,7 @@
 import '../../jquery_augmentation';
 
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 import {
@@ -124,7 +124,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onDone?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onDone?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -136,7 +136,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointClick?: ((e: { component?: T, element?: dxElement, model?: any, event?: TEvent, target?: basePointObject }) => any) | string;
+    onPointClick?: ((e: { component?: T, element?: TElement, model?: any, event?: TEvent, target?: basePointObject }) => any) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -171,7 +171,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: T, element?: dxElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
+    onTooltipHidden?: ((e: { component?: T, element?: TElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
     /**
      * @docid
      * @extends Action
@@ -182,7 +182,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: T, element?: dxElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
+    onTooltipShown?: ((e: { component?: T, element?: TElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
     /**
      * @docid
      * @extends CommonVizPalette
@@ -284,7 +284,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointInfo: any, element: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((pointInfo: any, element: TElement) => string | Element | JQuery);
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
      * @type_function_param1 pointInfo:object

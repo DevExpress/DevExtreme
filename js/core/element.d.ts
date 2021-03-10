@@ -1,17 +1,23 @@
 import { dxElementWrapper } from '../core/renderer';
-/**
- * @docid
- * @hidden
- * @prevFileNamespace DevExpress.core
- */
-export type dxElement = HTMLElement & JQuery;
+
+export interface ElementWrapperType<T extends Element> { }
+export type TElement<T extends Element = HTMLElement> = {} extends ElementWrapperType<T> ? T : ElementWrapperType<T>
 
 /**
  * @docid
  * @hidden
  * @prevFileNamespace DevExpress.core
+ * @deprecated Use TElement instead
  */
-export type dxSVGElement = SVGElement & JQuery;
+export type dxElement = TElement<HTMLElement>;
 
-export function getPublicElement(element: JQuery|dxElementWrapper): dxElement;
-export function setPublicElementWrapper(newStrategy: (element: JQuery|dxElementWrapper) => dxElement): void;
+/**
+ * @docid
+ * @hidden
+ * @prevFileNamespace DevExpress.core
+ * @deprecated Use TElement instead
+ */
+export type dxSVGElement = TElement<SVGElement>;
+
+export function getPublicElement(element: JQuery|dxElementWrapper): TElement;
+export function setPublicElementWrapper(newStrategy: (element: JQuery|dxElementWrapper) => TElement): void;

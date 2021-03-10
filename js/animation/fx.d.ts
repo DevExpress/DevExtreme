@@ -5,7 +5,7 @@ import {
 } from '../core';
 
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 /**
@@ -21,7 +21,7 @@ export interface animationConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    complete?: (($element: dxElement, config: any) => any);
+    complete?: (($element: TElement, config: any) => any);
     /**
      * @docid
      * @default 0
@@ -72,7 +72,7 @@ export interface animationConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    start?: (($element: dxElement, config: any) => any);
+    start?: (($element: TElement, config: any) => any);
     /**
      * @docid
      * @default {}

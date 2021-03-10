@@ -7,7 +7,7 @@ import {
 } from '../animation/position';
 
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -72,7 +72,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onResize?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -80,7 +80,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onResizeEnd?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -88,7 +88,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onResizeStart?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -98,7 +98,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: T, element?: dxElement, model?: any, titleElement?: dxElement }) => any);
+    onTitleRendered?: ((e: { component?: T, element?: TElement, model?: any, titleElement?: TElement }) => any);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function
@@ -143,7 +143,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    titleTemplate?: template | ((titleElement: dxElement) => string | Element | JQuery);
+    titleTemplate?: template | ((titleElement: TElement) => string | Element | JQuery);
     /**
      * @docid
      * @type Array<Object>

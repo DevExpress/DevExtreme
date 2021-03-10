@@ -1,7 +1,7 @@
 import '../../jquery_augmentation';
 
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 import {
@@ -31,7 +31,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => any);
+    onValueChanged?: ((e: { component?: T, element?: TElement, model?: any, value?: any, previousValue?: any, event?: TEvent }) => any);
     /**
      * @docid
      * @default false

@@ -9,7 +9,7 @@ import {
 } from '../core';
 
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import Widget, {
@@ -31,7 +31,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRendered?: ((e: { component?: dxDeferRendering, element?: dxElement, model?: any }) => any);
+    onRendered?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -39,7 +39,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxDeferRendering, element?: dxElement, model?: any }) => any);
+    onShown?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @type Promise<void> | bool

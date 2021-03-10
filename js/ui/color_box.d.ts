@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -49,7 +49,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((value: string, fieldElement: dxElement) => string | Element | JQuery);
+    fieldTemplate?: template | ((value: string, fieldElement: TElement) => string | Element | JQuery);
     /**
      * @docid
      * @default 1

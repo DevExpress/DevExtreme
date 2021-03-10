@@ -1,7 +1,7 @@
 import '../jquery_augmentation';
 
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import {
@@ -22,7 +22,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onComplete?: ((e: { component?: dxProgressBar, element?: dxElement, model?: any, event?: TEvent }) => any);
+    onComplete?: ((e: { component?: dxProgressBar, element?: TElement, model?: any, event?: TEvent }) => any);
     /**
      * @docid
      * @default true

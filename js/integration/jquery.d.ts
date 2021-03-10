@@ -1,8 +1,13 @@
 import { PromiseType } from "../core";
+import { ElementWrapperType } from "../core/element";
 import { EventType, EventExtension } from "../events";
 
 declare module '../core' {
     interface PromiseType<T> extends JQueryPromise<T> { }
+}
+
+declare module '../core/element' {
+    interface ElementWrapperType<T extends Element> extends JQuery<T> { }
 }
 
 declare module '../events' {
@@ -16,7 +21,7 @@ declare module '../events' {
 }
 
 declare global {
-    interface JQuery { }
+    interface JQuery<TElement = HTMLElement> { }
     interface JQueryPromise<T> { }
     interface JQueryEventObject { }
 }

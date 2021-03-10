@@ -7,7 +7,7 @@ import {
 } from './devices';
 
 import {
-    dxElement
+    TElement
 } from './element';
 
 import { TemplateManager } from './template_manager';
@@ -43,7 +43,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onDisposing?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -55,7 +55,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: dxElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
+    onOptionChanged?: ((e: { component?: T, element?: TElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
     /**
      * @docid
      * @default false
@@ -110,7 +110,7 @@ export default class DOMComponent extends Component {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    element(): dxElement;
+    element(): TElement;
     /**
      * @docid
      * @static

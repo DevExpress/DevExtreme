@@ -1,5 +1,5 @@
 import {
-    dxElement
+    TElement
 } from '../../core/element';
 
 import {
@@ -74,7 +74,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: dxElement) => string | Element | JQuery);
+    dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | Element | JQuery);
     /**
      * @docid
      * @extends Action
@@ -82,7 +82,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClosed?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onClosed?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -90,7 +90,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onOpened?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onOpened?: ((e: { component?: T, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @default false
@@ -147,7 +147,7 @@ export default class dxDropDownEditor extends dxTextBox {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): dxElement;
+    content(): TElement;
     /**
      * @docid
      * @publicName field()
@@ -155,7 +155,7 @@ export default class dxDropDownEditor extends dxTextBox {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    field(): dxElement;
+    field(): TElement;
     /**
      * @docid
      * @publicName open()

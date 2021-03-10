@@ -9,7 +9,7 @@ import {
 } from '../core';
 
 import {
-    dxElement
+    TElement
 } from '../core/element';
 
 import DataSource, {
@@ -58,7 +58,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHidden?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any }) => any);
+    onHidden?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @extends Action
@@ -68,7 +68,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onHiding?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, cancel?: boolean }) => any);
+    onHiding?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => any);
     /**
      * @docid
      * @extends Action
@@ -79,7 +79,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPositioning?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, event?: TEvent, position?: positionConfig }) => any);
+    onPositioning?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, event?: TEvent, position?: positionConfig }) => any);
     /**
      * @docid
      * @extends Action
@@ -89,7 +89,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShowing?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, cancel?: boolean }) => any);
+    onShowing?: ((e: { component?: dxContextMenu, element?: TElement, model?: any, cancel?: boolean }) => any);
     /**
      * @docid
      * @extends Action
@@ -97,7 +97,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any }) => any);
+    onShown?: ((e: { component?: dxContextMenu, element?: TElement, model?: any }) => any);
     /**
      * @docid
      * @default { my: 'top left', at: 'top left' }
