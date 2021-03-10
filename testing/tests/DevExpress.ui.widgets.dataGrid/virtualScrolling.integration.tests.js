@@ -23,6 +23,14 @@ const createLargeDataSource = function(count) {
     };
 };
 
+const generateDataSource = function(count) {
+    const result = [];
+    for(let i = 0; i < count; ++i) {
+        result.push({ id: i + 1, name: `Name ${i + 1}` });
+    }
+    return result;
+};
+
 QUnit.testStart(function() {
     const markup = `
         <div id="dataGrid"></div>
@@ -2967,18 +2975,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     QUnit.test('DataGrid should not paginate to the already loaded page if it is not in the viewport and it\'s row was focused (T726994)', function(assert) {
         // arrange
-        const generateDataSource = function(count) {
-            const result = [];
-            for(let i = 0; i < count; ++i) {
-                result.push({ firstName: 'name_' + i, lastName: 'lastName_' + i });
-            }
-            return result;
-        };
         const dataGrid = createDataGrid({
             loadingTimeout: undefined,
             height: 200,
             dataSource: generateDataSource(100),
-            keyExpr: 'firstName',
+            keyExpr: 'id',
             focusedRowEnabled: true,
             scrolling: {
                 mode: 'virtual'
@@ -2987,7 +2988,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 pageSize: 4,
                 pageIndex: 2
             },
-            columns: ['firstName', 'lastName']
+            columns: ['id', 'name']
         });
 
         // act
@@ -3049,13 +3050,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     QUnit.test('DataGrid should not display virtual rows on data source changing when rowRenderingMode is set to \'virtual\' (T966221)', function(assert) {
         // arrange
-        const generateDataSource = function(count) {
-            const result = [];
-            for(let i = 0; i < count; ++i) {
-                result.push({ id: i + 1, name: `Name ${i + 1}` });
-            }
-            return result;
-        };
         const dataSource1 = generateDataSource(40);
         const dataGrid = createDataGrid({
             height: 500,
@@ -3085,13 +3079,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     QUnit.test('DataGrid should display rows from a particular page when dataSource is set initially (rowRenderingMode = \'virtual\') (T971067)', function(assert) {
         // arrange
-        const generateDataSource = function(count) {
-            const result = [];
-            for(let i = 0; i < count; ++i) {
-                result.push({ id: i + 1, name: `Name ${i + 1}` });
-            }
-            return result;
-        };
         const dataGrid = createDataGrid({
             height: 500,
             dataSource: generateDataSource(100),
@@ -3119,13 +3106,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     QUnit.test('DataGrid should display rows from a particular page when dataSource is set at runtime (rowRenderingMode = \'virtual\') (T971067)', function(assert) {
         // arrange
-        const generateDataSource = function(count) {
-            const result = [];
-            for(let i = 0; i < count; ++i) {
-                result.push({ id: i + 1, name: `Name ${i + 1}` });
-            }
-            return result;
-        };
         const dataGrid = createDataGrid({
             height: 500,
             dataSource: [],
@@ -3166,14 +3146,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     QUnit.test('DataGrid should scroll to the required page when data source is set at runtime (T968361)', function(assert) {
         // arrange
-        const generateDataSource = function(count) {
-            const result = [];
-            for(let i = 0; i < count; ++i) {
-                result.push({ id: i + 1, name: `Name ${i + 1}` });
-            }
-            return result;
-        };
-
         const dataGrid = createDataGrid({
             height: 500,
             keyExpr: 'id',
@@ -3194,6 +3166,49 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.pageIndex(), 5, 'correct page index');
         assert.equal(dataGrid.getScrollable().scrollTop(), 3400, 'top scroll position');
+    });
+
+    QUnit.test('DataGrid should show data if change filter twice (T978539)', function(assert) {
+        // arrange
+        const items = generateDataSource(10);
+
+        const dataGrid = createDataGrid({
+            height: 100,
+            dataSource: {
+                load: function(options) {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve({
+                            data: items.slice(options.skip, options.skip + options.take),
+                            totalCount: items.length
+                        });
+                    }, 1000);
+                    return d;
+                }
+            },
+            remoteOperations: true,
+            paging: {
+                pageIndex: 1,
+                pageSize: 5
+            },
+            scrolling: {
+                mode: 'virtual'
+            }
+        });
+
+        this.clock.tick(1000);
+
+        assert.equal(dataGrid.getTopVisibleRowData().id, 6, 'data is scrolled');
+
+        // act
+        dataGrid.columnOption(0, 'filterValue', '1');
+        dataGrid.columnOption(1, 'filterValue', '1');
+        this.clock.tick(2000);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first page is rendered');
+        assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
     });
 });
 
