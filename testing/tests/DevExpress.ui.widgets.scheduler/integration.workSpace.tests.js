@@ -618,6 +618,8 @@ QUnit.test('Cell data should be applied when resources are loaded', function(ass
     this.createInstance({
         currentView: 'day',
         groups: ['owner'],
+        startDayHour: 10,
+        endDayHour: 12,
         resources: [
             {
                 fieldExpr: 'owner',
@@ -625,7 +627,7 @@ QUnit.test('Cell data should be applied when resources are loaded', function(ass
                     load: function() {
                         const d = $.Deferred();
                         setTimeout(function() {
-                            d.resolve([{ id: 1 }]);
+                            d.resolve([{ id: 1 }, { id: 2 }]);
                         }, 300);
                         return d.promise();
                     }
@@ -633,9 +635,16 @@ QUnit.test('Cell data should be applied when resources are loaded', function(ass
             }
         ],
         dataSource: [],
-        onContentReady: function(e) {
-            const groups = e.component.$element().find('.dx-scheduler-date-table-cell').data('dxCellData').groups;
-            assert.deepEqual(groups, { owner: 1 });
+        onContentReady: (e) => {
+            if(!e.component.option('renovateRender')) {
+                const groups = e.component.$element().find('.dx-scheduler-date-table-cell').data('dxCellData').groups;
+                assert.deepEqual(groups, { owner: 1 });
+            }
+
+            const cellCount = this.scheduler.workSpace.getCells().length;
+
+            assert.equal(cellCount, 8, 'Correct cell count');
+
             done();
         }
     });
