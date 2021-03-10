@@ -47,13 +47,6 @@ describe('Marker', () => {
       expect(tree.hasClass('custom-class'))
         .toBe(true);
     });
-
-    it('should spread restAttributes', () => {
-      const tree = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(tree.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
   });
 
   describe('Logic', () => {

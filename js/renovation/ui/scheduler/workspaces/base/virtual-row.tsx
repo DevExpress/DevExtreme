@@ -13,13 +13,9 @@ export const viewFunction = ({
   classes,
   style,
   virtualCells,
-  restAttributes,
 }: VirtualRow): JSX.Element => (
-
   <Row
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
-    style={style}
+    styles={style}
     className={classes}
     leftVirtualCellWidth={leftVirtualCellWidth}
     rightVirtualCellWidth={rightVirtualCellWidth}

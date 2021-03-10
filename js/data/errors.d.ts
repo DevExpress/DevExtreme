@@ -6,7 +6,7 @@
  * @export errorHandler
  * @namespace DevExpress.data
  * @prevFileNamespace DevExpress.data
- * @deprecated
+ * @deprecated Utils.setErrorHandler
  * @public
  */
 export function errorHandler(e: Error): void;

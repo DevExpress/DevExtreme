@@ -467,7 +467,7 @@ class Gantt extends Widget {
             NotifyTaskStartChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'start', newValue); },
             NotifyTaskEndChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'end', newValue); },
             NotifyTaskProgressChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'progress', newValue); },
-
+            NotifyTaskColorChanged: (taskId, newValue, errorCallback) => { this._onRecordUpdated(GANTT_TASKS, taskId, 'color', newValue); },
             NotifyDependencyInserted: (dependency, callback, errorCallback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
             NotifyDependencyRemoved: (dependencyId, errorCallback, dependency) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId, dependency); },
 
@@ -662,7 +662,7 @@ class Gantt extends Widget {
             coreArgs.cancel = args.cancel;
             coreArgs.values = this._convertMappedToCoreData(optionName, args.values);
             if(optionName === GANTT_TASKS) {
-                this._saveCustomFieldsDataToCache(GANTT_NEW_TASK_CACHE_KEY, args.newValues);
+                this._saveCustomFieldsDataToCache(GANTT_NEW_TASK_CACHE_KEY, args.values);
             }
         }
     }
@@ -1165,6 +1165,7 @@ class Gantt extends Widget {
     }
 
     _clean() {
+        this._ganttView?._ganttViewCore.cleanMarkup();
         delete this._ganttView;
         delete this._dialogInstance;
         super._clean();

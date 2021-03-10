@@ -1,4 +1,4 @@
-import { Format, FormatObject, Canvas } from './types.d';
+import { Format, FormatObject } from './types.d';
 import formatHelper from '../../../format_helper';
 import { isDefined } from '../../../core/utils/type';
 import getElementComputedStyle from '../../utils/get_computed_style';
@@ -20,7 +20,7 @@ export const pickPositiveValue = (
 // eslint-disable-next-line max-len
 ): number => values.reduce((result: number, value) => ((value && value > 0 && !result) ? value : result), 0);
 
-export const pointInCanvas = (canvas: Canvas, x: number, y: number): boolean => (
+export const pointInCanvas = (canvas: ClientRect, x: number, y: number): boolean => (
   x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom
 );
 

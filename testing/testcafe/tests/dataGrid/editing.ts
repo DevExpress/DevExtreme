@@ -3,6 +3,8 @@ import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
+import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
+import changeTheme from '../../helpers/changeTheme';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'))
@@ -1629,3 +1631,94 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
     },
   },
 }));
+
+test('Checkbox has ink ripple in material theme inside editing popup (T977287)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0))
+    .click('.dx-checkbox');
+
+  // assert
+  await t
+    .expect(await takeScreenshot('grid-popup-editing-checkbox.png', '.dx-overlay-content'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('material.blue.light');
+  return createWidget('dxDataGrid', {
+    dataSource: [{
+      ID: 1,
+      LastName: 'Heart',
+    }],
+    keyExpr: 'ID',
+    editing: {
+      allowUpdating: true,
+      mode: 'popup',
+      form: {
+        items: [{
+          dataField: 'checkbox',
+          editorType: 'dxCheckBox',
+        }],
+      },
+    },
+    columns: ['LastName'],
+  });
+}).after(() => changeTheme('generic.light'));
+
+['Cell', 'Batch'].forEach((editMode) => {
+  test(`${editMode} - Edit cell should be focused correclty when showEditorAlways is enabled (T976141)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    let currentCell;
+
+    // direct order
+    for (let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
+      for (let colIndex = 0; colIndex < 2; colIndex += 1) {
+        currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        // act
+        await t
+          .click(currentCell.getEditor().element);
+
+        // assert
+        await t
+          .expect(currentCell.isFocused).ok()
+          .expect(currentCell.getEditor().element.focused).ok();
+      }
+    }
+
+    // reverse order
+    for (let rowIndex = 2; rowIndex >= 0; rowIndex -= 1) {
+      for (let colIndex = 1; colIndex >= 0; colIndex -= 1) {
+        currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        // act
+        await t
+          .click(currentCell.getEditor().element);
+
+        // assert
+        await t
+          .expect(currentCell.isFocused).ok()
+          .expect(currentCell.getEditor().element.focused).ok();
+      }
+    }
+  }).before(() => createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, field: 'field' },
+      { id: 2, field: 'field' },
+      { id: 3, field: 'field' },
+    ],
+    keyExpr: 'id',
+    editing: {
+      mode: editMode.toLowerCase(),
+      allowUpdating: true,
+    },
+    loadingTimeout: undefined,
+    customizeColumns(columns) {
+      columns.forEach((col) => {
+        col.showEditorAlways = true;
+      });
+    },
+  }));
+});
