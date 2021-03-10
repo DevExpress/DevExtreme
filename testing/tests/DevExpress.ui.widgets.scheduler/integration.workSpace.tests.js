@@ -1096,6 +1096,388 @@ QUnit.test('ScrollTo of dateTable & header scrollable should are called when hea
     assert.notOk(headerScrollToSpy.calledOnce, 'header scrollTo wasn\'t called');
 });
 
+QUnit.test('dateCellTemplate should work correctly in agenda view', function(assert) {
+    this.createInstance({
+        views: ['agenda'],
+        currentView: 'agenda',
+        currentDate: new Date(2016, 8, 5),
+        dataSource: [{
+            text: 'a',
+            ownerId: 1,
+            startDate: new Date(2016, 8, 5, 7),
+            endDate: new Date(2016, 8, 5, 8),
+        },
+        {
+            text: 'b',
+            ownerId: 2,
+            startDate: new Date(2016, 8, 5, 10),
+            endDate: new Date(2016, 8, 5, 11),
+        }],
+        firstDayOfWeek: 0,
+        groups: ['ownerId'],
+        resources: [
+            {
+                field: 'ownerId',
+                dataSource: [
+                    { id: 1, text: 'John' },
+                    { id: 2, text: 'Mike' }
+                ]
+            }
+        ],
+        dateCellTemplate: function(itemData, index, container) {
+            if(index === 0) {
+                $(container).addClass('custom-group-cell-class');
+            }
+        }
+    });
+
+    const $cell1 = this.instance.$element().find('.dx-scheduler-time-panel-cell').eq(0);
+    const $cell2 = this.instance.$element().find('.dx-scheduler-time-panel-cell').eq(1);
+
+    assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
+    assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
+});
+
+QUnit.test('dateCellTemplate should have correct options', function(assert) {
+    let templateOptions;
+
+    this.createInstance({
+        currentView: 'month',
+        currentDate: new Date(2016, 8, 5),
+        dateCellTemplate: function(itemData, index, $container) {
+            if(index === 0) {
+                templateOptions = itemData;
+            }
+        }
+    });
+
+    assert.equal(templateOptions.text, 'Sun', 'text option is ok');
+    assert.deepEqual(templateOptions.date.getTime(), new Date(2016, 7, 28).getTime(), 'date option is ok');
+});
+
+QUnit.test('dateCellTemplate should have correct options in agenda view', function(assert) {
+    let templateOptions;
+
+    this.createInstance({
+        views: ['agenda'],
+        currentView: 'agenda',
+        currentDate: new Date(2016, 8, 5),
+        dataSource: [{
+            text: 'a',
+            ownerId: 1,
+            startDate: new Date(2016, 8, 5, 7),
+            endDate: new Date(2016, 8, 5, 8),
+        },
+        {
+            text: 'b',
+            ownerId: 2,
+            startDate: new Date(2016, 8, 5, 10),
+            endDate: new Date(2016, 8, 5, 11),
+        }],
+        firstDayOfWeek: 0,
+        groups: ['ownerId'],
+        resources: [
+            {
+                field: 'ownerId',
+                dataSource: [
+                    { id: 1, text: 'John' },
+                    { id: 2, text: 'Mike' }
+                ]
+            }
+        ],
+        dateCellTemplate: function(itemData, index, $container) {
+            if(index === 0) {
+                templateOptions = itemData;
+            }
+        }
+    });
+
+    assert.equal(templateOptions.text, '5 Mon', 'text option is ok');
+    assert.equal(templateOptions.date.getTime(), new Date(2016, 8, 5).getTime(), 'date option is ok');
+    assert.deepEqual(templateOptions.groups, { 'ownerId': 1 }, 'groups option is ok');
+
+});
+
+QUnit.test('Agenda has right arguments in resourceCellTemplate arguments', function(assert) {
+    let params;
+
+    this.createInstance({
+        views: ['agenda'],
+        currentView: 'agenda',
+        currentDate: new Date(2016, 8, 5),
+        groups: ['ownerId'],
+        dataSource: [{
+            text: 'a',
+            ownerId: 1,
+            startDate: new Date(2016, 8, 5, 7),
+            endDate: new Date(2016, 8, 5, 8),
+        },
+        {
+            text: 'b',
+            ownerId: 2,
+            startDate: new Date(2016, 8, 5, 10),
+            endDate: new Date(2016, 8, 5, 11),
+        }],
+        resources: [
+            {
+                field: 'ownerId',
+                dataSource: [
+                    { id: 1, text: 'John', color: '#A2a' },
+                    { id: 2, text: 'Mike', color: '#E2a' }
+                ]
+            }
+        ],
+        resourceCellTemplate: function(itemData, index, $container) {
+            if(!index) params = itemData.data;
+        }
+    });
+
+    assert.deepEqual(params, { id: 1, text: 'John', color: '#A2a' }, 'Cell text is OK');
+});
+
+QUnit.test('workSpace recalculation after render cellTemplates', function(assert) {
+    this.createInstance({
+        currentView: 'month',
+        currentDate: new Date(2016, 8, 5),
+        groups: ['ownerId'],
+        resources: [
+            {
+                field: 'ownerId',
+                dataSource: [
+                    { id: 1, text: 'John' },
+                    { id: 2, text: 'Mike' }
+                ]
+            }
+        ],
+        resourceCellTemplate: function(itemData, index, $container) {
+            return $('<div>').css({ height: '150px' });
+        }
+    });
+
+    const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
+    const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
+    const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
+    const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
+
+    assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
+    assert.equal(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight, 'dateTableScrollable element padding bottom');
+    assert.equal(parseInt($dateTableScrollable.css('marginBottom'), 10), -schedulerHeaderPanelHeight, 'dateTableScrollable element margin bottom');
+});
+
+QUnit.test('WorkSpace recalculation works fine after render resourceCellTemplate if workspace has allDay appointment', function(assert) {
+    this.createInstance({
+        currentView: 'week',
+        currentDate: new Date(2016, 8, 5),
+        groups: ['ownerId'],
+        resources: [
+            {
+                field: 'ownerId',
+                dataSource: [
+                    { id: 1, text: 'John' },
+                    { id: 2, text: 'Mike' }
+                ]
+            }
+        ],
+        dataSource: [{
+            text: 'a',
+            ownerId: 1,
+            startDate: new Date(2016, 8, 5, 7),
+            endDate: new Date(2016, 8, 5, 8),
+            allDay: true
+        }],
+        crossScrollingEnabled: true,
+        resourceCellTemplate: function(itemData, index, $container) {
+            return $('<div>').css({ height: '150px' });
+        }
+    });
+
+    const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
+    const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
+    const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
+    const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
+    const allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
+    const $sidebarScrollable = this.instance.$element().find('.dx-scheduler-sidebar-scrollable');
+    const $headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable');
+
+    assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
+    assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
+    assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
+
+    assert.roughEqual(parseInt($sidebarScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'sidebarScrollable element padding bottom');
+    assert.roughEqual(parseInt($sidebarScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'sidebarScrollable element margin bottom');
+    assert.roughEqual($headerScrollable.outerHeight(), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'headerScrollable height is correct');
+});
+
+QUnit.test('WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment', function(assert) {
+    this.createInstance({
+        currentView: 'week',
+        currentDate: new Date(2016, 8, 5),
+        dataSource: [{
+            text: 'a',
+            ownerId: 1,
+            startDate: new Date(2016, 8, 5, 7),
+            endDate: new Date(2016, 8, 5, 8),
+            allDay: true
+        }],
+        crossScrollingEnabled: true,
+        dateCellTemplate: function(itemData, index, $container) {
+            return $('<div>').css({ height: '150px' });
+        }
+    });
+
+    const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
+    const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
+    const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
+    const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
+    const allDayPanelHeight = this.instance._workSpace._$allDayTable.outerHeight();
+
+    assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
+    assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
+    assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
+});
+
+QUnit.test('Timepanel text should be calculated correctly if DST makes sense (T442904)', function(assert) {
+    // can be reproduced in PST timezone
+    this.createInstance({
+        dataSource: [],
+        views: ['week'],
+        currentView: 'week',
+        currentDate: new Date(2016, 10, 6),
+        firstDayOfWeek: 0,
+        startDayHour: 1,
+        timeZone: 'America/Los_Angeles',
+        height: 600
+    });
+
+    const $cells = this.instance.$element().find('.dx-scheduler-time-panel-cell div');
+
+    assert.equal($cells.eq(0).text(), dateLocalization.format(new Date(2016, 10, 6, 1), 'shorttime'), 'Cell text is OK');
+    assert.equal($cells.eq(2).text(), dateLocalization.format(new Date(2016, 10, 6, 2), 'shorttime'), 'Cell text is OK');
+});
+
+QUnit.test('DateTimeIndicator should show correct time in current time zone', function(assert) {
+    const currentDate = new Date(2018, 1, 4);
+
+    this.createInstance({
+        dataSource: [],
+        views: ['week'],
+        currentView: 'week',
+        cellDuration: 60,
+        showCurrentTimeIndicator: true,
+        currentDate: currentDate,
+        indicatorTime: new Date(2018, 1, 4, 9, 30),
+        height: 600
+    });
+
+    const indicatorPositionBefore = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
+    const cellHeight = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0).get(0).getBoundingClientRect().height;
+
+    this.instance.option('timeZone', 'Asia/Yekaterinburg');
+
+    const indicatorPositionAfter = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
+    const tzDiff = this.instance.fire('getClientTimezoneOffset', currentDate) / 3600000 + this.instance.fire('getTimezone');
+
+    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * tzDiff, 'indicator has correct position');
+});
+
+QUnit.test('Tables should take css class after width calculation(T491453)', function(assert) {
+    assert.expect(1);
+
+    let counter = 0;
+    const originalWidthFn = renderer.fn.width;
+
+    sinon.stub(renderer.fn, 'width', function(value) {
+        if(value === 999 && !counter) {
+            const $headerTable = $('#scheduler').find('table').first();
+            assert.notOk($headerTable.attr('class'), 'Header table doesn\'t have any css classes yet');
+            counter++;
+        } else {
+            return originalWidthFn.apply(this, arguments);
+        }
+    });
+
+    try {
+        this.createInstance({
+            dataSource: [],
+            views: ['month'],
+            currentView: 'month',
+            crossScrollingEnabled: true,
+            width: 999
+        });
+    } finally {
+        renderer.fn.width.restore();
+    }
+});
+
+if(devices.real().deviceType === 'desktop') {
+    QUnit.test('ScrollTo of dateTable scrollable shouldn\'t be called when dateTable scrollable scroll in timeLine view', function(assert) {
+        this.createInstance({
+            currentDate: new Date(2017, 3, 16),
+            dataSource: [],
+            currentView: 'timelineWeek',
+            height: 500
+        });
+
+        const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
+        const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+        const headerScrollToSpy = sinon.spy(headerScrollable, 'scrollTo');
+        const dateTableScrollToSpy = sinon.spy(dateTableScrollable, 'scrollTo');
+
+        dateTableScrollable.scrollBy(1000);
+
+        assert.ok(headerScrollToSpy.calledOnce, 'header scrollTo was called');
+        assert.notOk(dateTableScrollToSpy.calledOnce, 'dateTable scrollTo was not called');
+    });
+
+    QUnit.test('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', function(assert) {
+        const date = new Date(2019, 5, 1, 9, 40);
+
+        this.createInstance({
+            dataSource: [],
+            views: ['timelineDay', 'day', 'timelineWeek', 'week', 'timelineMonth'],
+            currentView: 'timelineDay',
+            currentDate: date,
+            firstDayOfWeek: 0,
+            startDayHour: 0,
+            endDayHour: 20,
+            cellDuration: 60,
+            groups: ['priority'],
+            height: 580,
+        });
+
+        this.instance.scrollToTime(date.getHours() - 1, 30, date);
+        let scroll = this.scheduler.workSpace.getDateTableScrollable().find('.dx-scrollable-scroll')[0];
+
+        assert.notEqual(translator.locate($(scroll)).left, 0, 'Container is scrolled in timelineDay');
+
+        this.instance.option('currentView', 'timelineWeek');
+
+        this.instance.scrollToTime(date.getHours() - 1, 30, date);
+        scroll = this.scheduler.workSpace.getDateTableScrollable().find('.dx-scrollable-scroll')[0];
+
+        assert.notEqual(translator.locate($(scroll)).left, 0, 'Container is scrolled in timelineWeek');
+    });
+}
+
+QUnit.test('ScrollTo of dateTable & header scrollable should are called when headerScrollable scroll', function(assert) {
+    this.createInstance({
+        currentDate: new Date(2017, 3, 16),
+        dataSource: [],
+        currentView: 'timelineWeek',
+        height: 500
+    });
+
+    const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
+    const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const headerScrollToSpy = sinon.spy(headerScrollable, 'scrollTo');
+    const dateTableScrollToSpy = sinon.spy(dateTableScrollable, 'scrollTo');
+
+    headerScrollable.scrollBy(1000);
+
+    assert.ok(dateTableScrollToSpy.calledOnce, 'dateTable scrollTo was called');
+    assert.notOk(headerScrollToSpy.calledOnce, 'header scrollTo wasn\'t called');
+});
+
 QUnit.test('ScrollTo of sidebar scrollable shouldn\'t be called when sidebar scrollable scroll and crossScrollingEnabled is turn on', function(assert) {
     this.createInstance({
         currentDate: new Date(2017, 3, 16),
