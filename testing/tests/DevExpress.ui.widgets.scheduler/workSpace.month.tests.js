@@ -31,7 +31,7 @@ module('Work Space Month', () => {
 
             const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-panel');
 
-            assert.equal($allDayPanel.css('display'), 'none', 'allDay panel is invisible');
+            assert.equal($allDayPanel.length, 0, 'allDay panel is invisible');
         });
 
         test('Scheduler all day title is invisible on month view after switching showAllDayPanel option', function(assert) {
@@ -40,7 +40,7 @@ module('Work Space Month', () => {
 
             const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
 
-            assert.equal($allDayTitle.css('display'), 'none', 'All-day title is invisible');
+            assert.equal($allDayTitle.length, 0, 'All-day title is invisible');
         });
 
         test('Work space should find cell coordinates by date', function(assert) {

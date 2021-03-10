@@ -3237,13 +3237,9 @@ QUnit.module('Resource Cell Template', () => {
                     }
                 });
 
-                const schedulerHeaderHeight = parseInt(this.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
                 const schedulerHeaderPanelHeight = parseInt(this.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
-                const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
                 const $dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable');
 
-                !isRenovatedRender
-                    && assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
                 assert.equal(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight, 'dateTableScrollable element padding bottom');
                 assert.equal(parseInt($dateTableScrollable.css('marginBottom'), 10), -schedulerHeaderPanelHeight, 'dateTableScrollable element margin bottom');
             });
