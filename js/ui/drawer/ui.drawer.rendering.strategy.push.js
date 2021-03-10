@@ -6,11 +6,10 @@ import { move } from '../../animation/translator';
 class PushStrategy extends DrawerStrategy {
     _internalRenderPosition(changePositionUsingFxAnimation) {
         const drawer = this.getDrawerInstance();
-
-        const maxSize = this._getPanelSize(true);
+        const openedPanelSize = this._getPanelSize(true);
         const contentPosition = this._getPanelSize(drawer.option('opened')) * drawer._getPositionCorrection();
 
-        $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', maxSize);
+        $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', openedPanelSize);
 
         if(drawer.getMinSize()) {
             let paddingCssPropertyName = 'padding';
@@ -26,7 +25,7 @@ class PushStrategy extends DrawerStrategy {
         }
 
         if(changePositionUsingFxAnimation) {
-            const animationConfig = {
+            animation.moveTo({
                 $element: $(drawer.viewContent()),
                 position: contentPosition,
                 direction: drawer.calcTargetPosition(),
@@ -34,9 +33,7 @@ class PushStrategy extends DrawerStrategy {
                 complete: () => {
                     this._elementsAnimationCompleteHandler();
                 }
-            };
-
-            animation.moveTo(animationConfig);
+            });
         } else {
             if(drawer.isHorizontalDirection()) {
                 move($(drawer.viewContent()), { left: contentPosition });
