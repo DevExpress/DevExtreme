@@ -940,6 +940,13 @@ module('Scheduler grid', moduleConfig, () => {
         });
 
         scheduler.header.navigator.nextButton.click();
+        assert.equal(scheduler.header.navigator.caption.getText(), '19-25 March 2021');
+
+        scheduler.header.navigator.nextButton.click();
+        assert.equal(scheduler.header.navigator.caption.getText(), '26 Mar-1 Apr 2021');
+
+        scheduler.header.navigator.nextButton.click();
+        assert.equal(scheduler.header.navigator.caption.getText(), '2-8 April 2021');
 
         scheduler.appointmentList.forEach(appointment => {
             assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
@@ -948,19 +955,7 @@ module('Scheduler grid', moduleConfig, () => {
             assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
         });
 
-        scheduler.appointmentList.forEach(appointment => {
-            assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
-            appointment.click();
-
-            assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
-        });
-
-        scheduler.appointmentList.forEach(appointment => {
-            assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
-            appointment.click();
-
-            assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
-        });
+        assert.expect(31);
     });
 
     [
