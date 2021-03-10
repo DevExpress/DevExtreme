@@ -2278,7 +2278,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const instance = dataGrid.dxDataGrid('instance');
         const rowsView = instance.getView('rowsView');
         const scrollable = instance.getScrollable();
-        const isNativeScrolling = devices.real().deviceType === 'desktop' || devices.real().mac;
+        const isNativeScrolling = devices.real().deviceType !== 'desktop' || devices.real().mac;
 
         scrollable.scrollTo({ y: 1440 });
         isNativeScrolling && $(scrollable._container()).trigger('scroll');
