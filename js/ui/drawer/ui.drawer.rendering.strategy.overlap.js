@@ -113,9 +113,23 @@ class OverlapStrategy extends DrawerStrategy {
         $(drawer.viewContent()).css('transform', 'inherit');
     }
 
-    _internalRenderPosition(isDrawerOpened, changePositionUsingFxAnimation) {
-        const config = this._getPositionRenderingConfig(isDrawerOpened);
-        const revealMode = this.getDrawerInstance().option('revealMode');
+    _internalRenderPosition(changePositionUsingFxAnimation) {
+        const drawer = this.getDrawerInstance();
+        const panelSize = this._getPanelSize(drawer.option('opened'));
+        const config = {
+            direction: drawer.calcTargetPosition(),
+            $panel: $(drawer.content()),
+            $content: $(drawer.viewContent()),
+            defaultAnimationConfig: {
+                complete: () => { this._elementsAnimationCompleteHandler(); }
+            },
+            size: panelSize,
+            panelOffset: this._getPanelOffset(drawer.option('opened')) * drawer._getPositionCorrection(),
+            $panelOverlayContent: drawer.getOverlay().$content(),
+            marginTop: drawer.getRealPanelHeight() - panelSize
+        };
+
+        const revealMode = drawer.option('revealMode');
         if(revealMode === 'slide') {
             this._renderSlidePosition(config, changePositionUsingFxAnimation);
         } else if(revealMode === 'expand') {
@@ -180,17 +194,6 @@ class OverlapStrategy extends DrawerStrategy {
                 }
             }
         }
-    }
-
-    _getPositionRenderingConfig(isDrawerOpened) {
-        const drawer = this.getDrawerInstance();
-        const config = super._getPositionRenderingConfig(isDrawerOpened);
-
-        return extend(config, {
-            panelOffset: this._getPanelOffset(isDrawerOpened) * this.getDrawerInstance()._getPositionCorrection(),
-            $panelOverlayContent: drawer.getOverlay().$content(),
-            marginTop: drawer.getRealPanelHeight() - config.size
-        });
     }
 
     getPanelContent() {

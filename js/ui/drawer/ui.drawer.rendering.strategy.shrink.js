@@ -5,9 +5,20 @@ import { extend } from '../../core/utils/extend';
 import { camelize } from '../../core/utils/inflector';
 
 class ShrinkStrategy extends DrawerStrategy {
-    _internalRenderPosition(isDrawerOpened, changePositionUsingFxAnimation) {
-        const config = this._getPositionRenderingConfig(isDrawerOpened);
-        const revealMode = this.getDrawerInstance().option('revealMode');
+    _internalRenderPosition(changePositionUsingFxAnimation) {
+        const drawer = this.getDrawerInstance();
+        const config = {
+            direction: drawer.calcTargetPosition(),
+            $panel: $(drawer.content()),
+            $content: $(drawer.viewContent()),
+            defaultAnimationConfig: {
+                complete: () => { this._elementsAnimationCompleteHandler(); }
+            },
+            size: this._getPanelSize(drawer.option('opened')),
+            panelOffset: this._getPanelOffset(drawer.option('opened'))
+        };
+
+        const revealMode = drawer.option('revealMode');
         if(revealMode === 'slide') {
             this._renderSlidePosition(config, changePositionUsingFxAnimation);
         } else if(revealMode === 'expand') {
@@ -48,12 +59,6 @@ class ShrinkStrategy extends DrawerStrategy {
                 $(config.$panel).css('height', config.size);
             }
         }
-    }
-
-    _getPositionRenderingConfig(isDrawerOpened) {
-        return extend(super._getPositionRenderingConfig(isDrawerOpened), {
-            panelOffset: this._getPanelOffset(isDrawerOpened)
-        });
     }
 
     isViewContentFirst(position, isRtl) {

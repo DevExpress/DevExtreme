@@ -28,9 +28,8 @@ class DrawerStrategy {
     renderPosition(isDrawerOpened, changePositionUsingFxAnimation, animationDuration) {
         this._prepareAnimationDeferreds(changePositionUsingFxAnimation);
 
-        this._internalRenderPosition(isDrawerOpened, changePositionUsingFxAnimation);
-
-        this.renderShaderVisibility(isDrawerOpened, changePositionUsingFxAnimation, animationDuration);
+        this._internalRenderPosition(changePositionUsingFxAnimation);
+        this.renderShaderVisibility(changePositionUsingFxAnimation, animationDuration);
     }
 
     _prepareAnimationDeferreds(changePositionUsingFxAnimation) {
@@ -51,29 +50,9 @@ class DrawerStrategy {
         }
     }
 
-    _getPositionRenderingConfig(isDrawerOpened) {
-        const drawer = this.getDrawerInstance();
-
-        return {
-            direction: drawer.calcTargetPosition(),
-            $panel: $(drawer.content()),
-            $content: $(drawer.viewContent()),
-            defaultAnimationConfig: this._defaultAnimationConfig(),
-            size: this._getPanelSize(isDrawerOpened)
-        };
-    }
-
     _elementsAnimationCompleteHandler() {
         this._contentAnimation.resolve();
         this._panelAnimation.resolve();
-    }
-
-    _defaultAnimationConfig() {
-        return {
-            complete: () => {
-                this._elementsAnimationCompleteHandler();
-            }
-        };
     }
 
     _getPanelOffset(isDrawerOpened) {
@@ -91,8 +70,9 @@ class DrawerStrategy {
         return isDrawerOpened ? this.getDrawerInstance().getMaxSize() : this.getDrawerInstance().getMinSize();
     }
 
-    renderShaderVisibility(isShaderVisible, changePositionUsingFxAnimation, duration) {
+    renderShaderVisibility(changePositionUsingFxAnimation, duration) {
         const drawer = this.getDrawerInstance();
+        const isShaderVisible = drawer.option('opened');
         const fadeConfig = isShaderVisible ? { from: 0, to: 1 } : { from: 1, to: 0 };
 
         if(changePositionUsingFxAnimation) {

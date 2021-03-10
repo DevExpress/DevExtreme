@@ -2,14 +2,15 @@ import { animation } from './ui.drawer.animation';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import { move } from '../../animation/translator';
-import { extend } from '../../core/utils/extend';
 
 class PushStrategy extends DrawerStrategy {
-    _internalRenderPosition(isDrawerOpened, changePositionUsingFxAnimation) {
-        const config = this._getPositionRenderingConfig(isDrawerOpened);
+    _internalRenderPosition(changePositionUsingFxAnimation) {
         const drawer = this.getDrawerInstance();
 
-        $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', config.maxSize);
+        const maxSize = this._getPanelSize(true);
+        const contentPosition = this._getPanelSize(drawer.option('opened')) * drawer._getPositionCorrection();
+
+        $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', maxSize);
 
         if(drawer.getMinSize()) {
             let paddingCssPropertyName = 'padding';
@@ -20,12 +21,14 @@ class PushStrategy extends DrawerStrategy {
                 case 'bottom': paddingCssPropertyName += 'Top'; break;
             }
             $(drawer.viewContent()).css(paddingCssPropertyName, drawer.getMinSize());
+        } else {
+            // TODO: ???
         }
 
         if(changePositionUsingFxAnimation) {
             const animationConfig = {
                 $element: $(drawer.viewContent()),
-                position: config.contentPosition,
+                position: contentPosition,
                 direction: drawer.calcTargetPosition(),
                 duration: drawer.option('animationDuration'),
                 complete: () => {
@@ -36,18 +39,11 @@ class PushStrategy extends DrawerStrategy {
             animation.moveTo(animationConfig);
         } else {
             if(drawer.isHorizontalDirection()) {
-                move($(drawer.viewContent()), { left: config.contentPosition });
+                move($(drawer.viewContent()), { left: contentPosition });
             } else {
-                move($(drawer.viewContent()), { top: config.contentPosition });
+                move($(drawer.viewContent()), { top: contentPosition });
             }
         }
-    }
-
-    _getPositionRenderingConfig(isDrawerOpened) {
-        return extend(super._getPositionRenderingConfig(isDrawerOpened), {
-            contentPosition: this._getPanelSize(isDrawerOpened) * this.getDrawerInstance()._getPositionCorrection(),
-            maxSize: this._getPanelSize(true)
-        });
     }
 
     onPanelContentRendered() {
