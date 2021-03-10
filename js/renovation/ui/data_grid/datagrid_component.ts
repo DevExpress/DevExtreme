@@ -9,7 +9,7 @@ export class DataGridComponent extends DataGridBase {
   NAME = DATA_GRID_NAME;
 
   constructor(options) {
-    super($('<div>') as unknown as JQuery, options);
+    super($('<div>') as any, options);
   }
 
   _initTemplateManager(): void {}
