@@ -1,5 +1,3 @@
-import '../jquery_augmentation';
-
 import dxOverlay, {
     dxOverlayOptions
 } from './overlay';

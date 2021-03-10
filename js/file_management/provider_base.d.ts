@@ -1,4 +1,3 @@
-import '../jquery_augmentation';
 import FileSystemItem from './file_system_item';
 import UploadInfo from './upload_info';
 

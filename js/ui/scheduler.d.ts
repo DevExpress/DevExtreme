@@ -1,4 +1,3 @@
-import '../jquery_augmentation';
 import './scheduler/utils';
 
 import {

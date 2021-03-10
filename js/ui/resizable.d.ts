@@ -1,5 +1,3 @@
-import '../jquery_augmentation';
-
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';

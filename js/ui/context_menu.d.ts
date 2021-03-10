@@ -2,8 +2,6 @@ import {
     positionConfig
 } from '../animation/position';
 
-import '../jquery_augmentation';
-
 import {
     TPromise
 } from '../core';

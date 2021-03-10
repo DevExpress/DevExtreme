@@ -2,8 +2,6 @@ import {
     animationConfig
 } from '../animation/fx';
 
-import '../jquery_augmentation';
-
 import {
     TPromise
 } from '../core';

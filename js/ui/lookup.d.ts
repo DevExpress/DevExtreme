@@ -6,8 +6,6 @@ import {
     positionConfig
 } from '../animation/position';
 
-import '../jquery_augmentation';
-
 import {
     TElement
 } from '../core/element';

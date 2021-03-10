@@ -1,5 +1,3 @@
-import '../../jquery_augmentation';
-
 import {
     TElement
 } from '../../core/element';

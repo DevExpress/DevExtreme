@@ -1,5 +1,3 @@
-import '../jquery_augmentation';
-
 import {
     dxValidationGroupResult
 } from './validation_group';
