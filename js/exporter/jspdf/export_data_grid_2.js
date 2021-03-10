@@ -33,7 +33,7 @@ const PdfGrid = function() {
         _activeTable.rows.push([]);
     };
 
-    const _addPdfCell = function(cellIndex, pdfCell) {
+    const _addPdfCell = function(pdfCell) {
         const currentRow = _activeTable.rows[_activeTable.rows.length - 1];
         currentRow.push(pdfCell);
 
@@ -130,7 +130,7 @@ function exportDataGrid(doc, dataGrid, options) {
                         options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
                     }
 
-                    pdfGrid.addPdfCell(cellIndex, pdfCell);
+                    pdfGrid.addPdfCell(pdfCell);
                 }
             }
 
