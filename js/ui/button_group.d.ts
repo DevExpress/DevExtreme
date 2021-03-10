@@ -151,15 +151,6 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
-declare global {
-interface JQuery {
-    dxButtonGroup(): JQuery;
-    dxButtonGroup(options: "instance"): dxButtonGroup;
-    dxButtonGroup(options: string): any;
-    dxButtonGroup(options: string, ...params: any[]): any;
-    dxButtonGroup(options: dxButtonGroupOptions): JQuery;
-}
-}
 export type Options = dxButtonGroupOptions;
 
 /** @deprecated use Options instead */

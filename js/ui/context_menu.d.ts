@@ -200,15 +200,6 @@ export interface dxContextMenuItem extends dxMenuBaseItem {
     items?: Array<dxContextMenuItem>;
 }
 
-declare global {
-interface JQuery {
-    dxContextMenu(): JQuery;
-    dxContextMenu(options: "instance"): dxContextMenu;
-    dxContextMenu(options: string): any;
-    dxContextMenu(options: string, ...params: any[]): any;
-    dxContextMenu(options: dxContextMenuOptions): JQuery;
-}
-}
 export type Options = dxContextMenuOptions;
 
 /** @deprecated use Options instead */

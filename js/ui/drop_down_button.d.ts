@@ -297,15 +297,6 @@ export interface dxDropDownButtonItem extends dxListItem {
     onClick?: ((e: { component?: dxDropDownButton, element?: TElement, model?: any, event?: TEvent }) => any) | string;
 }
 
-declare global {
-interface JQuery {
-    dxDropDownButton(): JQuery;
-    dxDropDownButton(options: "instance"): dxDropDownButton;
-    dxDropDownButton(options: string): any;
-    dxDropDownButton(options: string, ...params: any[]): any;
-    dxDropDownButton(options: dxDropDownButtonOptions): JQuery;
-}
-}
 export type Options = dxDropDownButtonOptions;
 
 /** @deprecated use Options instead */

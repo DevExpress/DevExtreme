@@ -176,15 +176,6 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
     } | Array<{ col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }>;
 }
 
-declare global {
-interface JQuery {
-    dxResponsiveBox(): JQuery;
-    dxResponsiveBox(options: "instance"): dxResponsiveBox;
-    dxResponsiveBox(options: string): any;
-    dxResponsiveBox(options: string, ...params: any[]): any;
-    dxResponsiveBox(options: dxResponsiveBoxOptions): JQuery;
-}
-}
 export type Options = dxResponsiveBoxOptions;
 
 /** @deprecated use Options instead */

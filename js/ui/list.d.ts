@@ -677,15 +677,6 @@ export interface dxListItem extends CollectionWidgetItem {
     showChevron?: boolean;
 }
 
-declare global {
-interface JQuery {
-    dxList(): JQuery;
-    dxList(options: "instance"): dxList;
-    dxList(options: string): any;
-    dxList(options: string, ...params: any[]): any;
-    dxList(options: dxListOptions): JQuery;
-}
-}
 export type Options = dxListOptions;
 
 /** @deprecated use Options instead */

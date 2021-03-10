@@ -176,15 +176,6 @@ export interface dxTabPanelItem extends dxMultiViewItem {
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxTabPanel(): JQuery;
-    dxTabPanel(options: "instance"): dxTabPanel;
-    dxTabPanel(options: string): any;
-    dxTabPanel(options: string, ...params: any[]): any;
-    dxTabPanel(options: dxTabPanelOptions): JQuery;
-}
-}
 export type Options = dxTabPanelOptions;
 
 /** @deprecated use Options instead */

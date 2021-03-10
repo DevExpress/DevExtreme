@@ -358,15 +358,6 @@ export default class dxMap extends Widget {
     removeRoute(route: any | number | Array<any>): TPromise<void>;
 }
 
-declare global {
-interface JQuery {
-    dxMap(): JQuery;
-    dxMap(options: "instance"): dxMap;
-    dxMap(options: string): any;
-    dxMap(options: string, ...params: any[]): any;
-    dxMap(options: dxMapOptions): JQuery;
-}
-}
 export type Options = dxMapOptions;
 
 /** @deprecated use Options instead */

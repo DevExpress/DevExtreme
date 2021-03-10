@@ -732,15 +732,6 @@ export interface dxFunnelItem {
     value?: number;
 }
 
-declare global {
-interface JQuery {
-    dxFunnel(): JQuery;
-    dxFunnel(options: "instance"): dxFunnel;
-    dxFunnel(options: string): any;
-    dxFunnel(options: string, ...params: any[]): any;
-    dxFunnel(options: dxFunnelOptions): JQuery;
-}
-}
 export type Options = dxFunnelOptions;
 
 /** @deprecated use Options instead */

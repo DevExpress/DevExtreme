@@ -396,15 +396,6 @@ export default class dxLookup extends dxDropDownList {
     constructor(element: TElement, options?: dxLookupOptions)
 }
 
-declare global {
-interface JQuery {
-    dxLookup(): JQuery;
-    dxLookup(options: "instance"): dxLookup;
-    dxLookup(options: string): any;
-    dxLookup(options: string, ...params: any[]): any;
-    dxLookup(options: dxLookupOptions): JQuery;
-}
-}
 export type Options = dxLookupOptions;
 
 /** @deprecated use Options instead */

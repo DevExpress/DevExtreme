@@ -2410,15 +2410,6 @@ export interface polarPointObject extends basePointObject {
 export interface polarChartSeriesObject extends baseSeriesObject {
 }
 
-declare global {
-interface JQuery {
-    dxPolarChart(): JQuery;
-    dxPolarChart(options: "instance"): dxPolarChart;
-    dxPolarChart(options: string): any;
-    dxPolarChart(options: string, ...params: any[]): any;
-    dxPolarChart(options: dxPolarChartOptions): JQuery;
-}
-}
 export type Options = dxPolarChartOptions;
 
 /** @deprecated use Options instead */

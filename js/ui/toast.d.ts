@@ -154,15 +154,6 @@ export default class dxToast extends dxOverlay {
     constructor(element: TElement, options?: dxToastOptions)
 }
 
-declare global {
-interface JQuery {
-    dxToast(): JQuery;
-    dxToast(options: "instance"): dxToast;
-    dxToast(options: string): any;
-    dxToast(options: string, ...params: any[]): any;
-    dxToast(options: dxToastOptions): JQuery;
-}
-}
 export type Options = dxToastOptions;
 
 /** @deprecated use Options instead */

@@ -92,15 +92,6 @@ export default class dxSelectBox extends dxDropDownList {
     constructor(element: TElement, options?: dxSelectBoxOptions)
 }
 
-declare global {
-interface JQuery {
-    dxSelectBox(): JQuery;
-    dxSelectBox(options: "instance"): dxSelectBox;
-    dxSelectBox(options: string): any;
-    dxSelectBox(options: string, ...params: any[]): any;
-    dxSelectBox(options: dxSelectBoxOptions): JQuery;
-}
-}
 export type Options = dxSelectBoxOptions;
 
 /** @deprecated use Options instead */

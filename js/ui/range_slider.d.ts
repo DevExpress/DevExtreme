@@ -68,15 +68,6 @@ export default class dxRangeSlider extends dxTrackBar {
     constructor(element: TElement, options?: dxRangeSliderOptions)
 }
 
-declare global {
-interface JQuery {
-    dxRangeSlider(): JQuery;
-    dxRangeSlider(options: "instance"): dxRangeSlider;
-    dxRangeSlider(options: string): any;
-    dxRangeSlider(options: string, ...params: any[]): any;
-    dxRangeSlider(options: dxRangeSliderOptions): JQuery;
-}
-}
 export type Options = dxRangeSliderOptions;
 
 /** @deprecated use Options instead */

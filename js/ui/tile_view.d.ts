@@ -134,15 +134,6 @@ export interface dxTileViewItem extends CollectionWidgetItem {
     widthRatio?: number;
 }
 
-declare global {
-interface JQuery {
-    dxTileView(): JQuery;
-    dxTileView(options: "instance"): dxTileView;
-    dxTileView(options: string): any;
-    dxTileView(options: string, ...params: any[]): any;
-    dxTileView(options: dxTileViewOptions): JQuery;
-}
-}
 export type Options = dxTileViewOptions;
 
 /** @deprecated use Options instead */

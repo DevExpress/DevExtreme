@@ -1094,15 +1094,6 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     visible?: boolean;
 }
 
-declare global {
-interface JQuery {
-    dxScheduler(): JQuery;
-    dxScheduler(options: "instance"): dxScheduler;
-    dxScheduler(options: string): any;
-    dxScheduler(options: string, ...params: any[]): any;
-    dxScheduler(options: dxSchedulerOptions): JQuery;
-}
-}
 export type Options = dxSchedulerOptions;
 
 /**

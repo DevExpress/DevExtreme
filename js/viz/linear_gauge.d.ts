@@ -145,15 +145,6 @@ export default class dxLinearGauge extends BaseGauge {
     constructor(element: TElement, options?: dxLinearGaugeOptions)
 }
 
-declare global {
-interface JQuery {
-    dxLinearGauge(): JQuery;
-    dxLinearGauge(options: "instance"): dxLinearGauge;
-    dxLinearGauge(options: string): any;
-    dxLinearGauge(options: string, ...params: any[]): any;
-    dxLinearGauge(options: dxLinearGaugeOptions): JQuery;
-}
-}
 export type Options = dxLinearGaugeOptions;
 
 /** @deprecated use Options instead */

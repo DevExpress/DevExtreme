@@ -100,15 +100,6 @@ export interface dxBoxItem extends CollectionWidgetItem {
     shrink?: number;
 }
 
-declare global {
-interface JQuery {
-    dxBox(): JQuery;
-    dxBox(options: "instance"): dxBox;
-    dxBox(options: string): any;
-    dxBox(options: string, ...params: any[]): any;
-    dxBox(options: dxBoxOptions): JQuery;
-}
-}
 export type Options = dxBoxOptions;
 
 /** @deprecated use Options instead */

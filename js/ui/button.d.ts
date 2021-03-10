@@ -117,15 +117,6 @@ export default class dxButton extends Widget {
     constructor(element: TElement, options?: dxButtonOptions)
 }
 
-declare global {
-interface JQuery {
-    dxButton(): JQuery;
-    dxButton(options: "instance"): dxButton;
-    dxButton(options: string): any;
-    dxButton(options: string, ...params: any[]): any;
-    dxButton(options: dxButtonOptions): JQuery;
-}
-}
 export type Options = dxButtonOptions;
 
 /** @deprecated use Options instead */

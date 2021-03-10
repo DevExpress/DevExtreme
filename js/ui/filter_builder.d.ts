@@ -467,15 +467,6 @@ export interface dxFilterBuilderField {
     trueText?: string;
 }
 
-declare global {
-interface JQuery {
-    dxFilterBuilder(): JQuery;
-    dxFilterBuilder(options: "instance"): dxFilterBuilder;
-    dxFilterBuilder(options: string): any;
-    dxFilterBuilder(options: string, ...params: any[]): any;
-    dxFilterBuilder(options: dxFilterBuilderOptions): JQuery;
-}
-}
 export type Options = dxFilterBuilderOptions;
 
 /** @deprecated use Options instead */

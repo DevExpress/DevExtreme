@@ -103,15 +103,6 @@ export default class dxDropDownBox extends dxDropDownEditor {
     getDataSource(): DataSource;
 }
 
-declare global {
-interface JQuery {
-    dxDropDownBox(): JQuery;
-    dxDropDownBox(options: "instance"): dxDropDownBox;
-    dxDropDownBox(options: string): any;
-    dxDropDownBox(options: string, ...params: any[]): any;
-    dxDropDownBox(options: dxDropDownBoxOptions): JQuery;
-}
-}
 export type Options = dxDropDownBoxOptions;
 
 /** @deprecated use Options instead */

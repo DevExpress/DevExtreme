@@ -192,15 +192,6 @@ export default class dxDraggable extends DOMComponent implements DraggableBase {
     constructor(element: TElement, options?: dxDraggableOptions)
 }
 
-declare global {
-interface JQuery {
-    dxDraggable(): JQuery;
-    dxDraggable(options: "instance"): dxDraggable;
-    dxDraggable(options: string): any;
-    dxDraggable(options: string, ...params: any[]): any;
-    dxDraggable(options: dxDraggableOptions): JQuery;
-}
-}
 export type Options = dxDraggableOptions;
 
 /** @deprecated use Options instead */

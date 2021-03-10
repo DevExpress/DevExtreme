@@ -4237,15 +4237,6 @@ export interface dxDataGridRowObject {
     values?: Array<any>;
 }
 
-declare global {
-interface JQuery {
-    dxDataGrid(): JQuery;
-    dxDataGrid(options: "instance"): dxDataGrid;
-    dxDataGrid(options: string): any;
-    dxDataGrid(options: string, ...params: any[]): any;
-    dxDataGrid(options: dxDataGridOptions): JQuery;
-}
-}
 export type Options = dxDataGridOptions;
 
 /** @deprecated use Options instead */

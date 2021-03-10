@@ -763,15 +763,6 @@ export interface dxSankeyNode {
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxSankey(): JQuery;
-    dxSankey(options: "instance"): dxSankey;
-    dxSankey(options: string): any;
-    dxSankey(options: string, ...params: any[]): any;
-    dxSankey(options: dxSankeyOptions): JQuery;
-}
-}
 export type Options = dxSankeyOptions;
 
 /** @deprecated use Options instead */

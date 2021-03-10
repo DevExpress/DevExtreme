@@ -957,15 +957,6 @@ export default class dxVectorMap extends BaseWidget {
     zoomFactor(zoomFactor: number): void;
 }
 
-declare global {
-interface JQuery {
-    dxVectorMap(): JQuery;
-    dxVectorMap(options: "instance"): dxVectorMap;
-    dxVectorMap(options: string): any;
-    dxVectorMap(options: string, ...params: any[]): any;
-    dxVectorMap(options: dxVectorMapOptions): JQuery;
-}
-}
 export type Options = dxVectorMapOptions;
 
 /** @deprecated use Options instead */

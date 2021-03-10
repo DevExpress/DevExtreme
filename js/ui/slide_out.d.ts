@@ -177,15 +177,6 @@ export interface dxSlideOutItem extends CollectionWidgetItem {
     menuTemplate?: template | (() => string | TElement);
 }
 
-declare global {
-interface JQuery {
-    dxSlideOut(): JQuery;
-    dxSlideOut(options: "instance"): dxSlideOut;
-    dxSlideOut(options: string): any;
-    dxSlideOut(options: string, ...params: any[]): any;
-    dxSlideOut(options: dxSlideOutOptions): JQuery;
-}
-}
 export type Options = dxSlideOutOptions;
 
 /** @deprecated use Options instead */

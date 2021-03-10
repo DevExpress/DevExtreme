@@ -72,15 +72,6 @@ export default class dxRadioGroup extends Editor {
     getDataSource(): DataSource;
 }
 
-declare global {
-interface JQuery {
-    dxRadioGroup(): JQuery;
-    dxRadioGroup(options: "instance"): dxRadioGroup;
-    dxRadioGroup(options: string): any;
-    dxRadioGroup(options: string, ...params: any[]): any;
-    dxRadioGroup(options: dxRadioGroupOptions): JQuery;
-}
-}
 export type Options = dxRadioGroupOptions;
 
 /** @deprecated use Options instead */

@@ -123,15 +123,6 @@ export default class dxCircularGauge extends BaseGauge {
     constructor(element: TElement, options?: dxCircularGaugeOptions)
 }
 
-declare global {
-interface JQuery {
-    dxCircularGauge(): JQuery;
-    dxCircularGauge(options: "instance"): dxCircularGauge;
-    dxCircularGauge(options: string): any;
-    dxCircularGauge(options: string, ...params: any[]): any;
-    dxCircularGauge(options: dxCircularGaugeOptions): JQuery;
-}
-}
 export type Options = dxCircularGaugeOptions;
 
 /** @deprecated use Options instead */

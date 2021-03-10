@@ -181,15 +181,6 @@ export default class dxSparkline extends BaseSparkline {
     getDataSource(): DataSource;
 }
 
-declare global {
-interface JQuery {
-    dxSparkline(): JQuery;
-    dxSparkline(options: "instance"): dxSparkline;
-    dxSparkline(options: string): any;
-    dxSparkline(options: string, ...params: any[]): any;
-    dxSparkline(options: dxSparklineOptions): JQuery;
-}
-}
 export type Options = dxSparklineOptions;
 
 /** @deprecated use Options instead */

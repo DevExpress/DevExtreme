@@ -21,15 +21,6 @@ export default class dxTooltip extends dxPopover {
     constructor(element: TElement, options?: dxTooltipOptions)
 }
 
-declare global {
-interface JQuery {
-    dxTooltip(): JQuery;
-    dxTooltip(options: "instance"): dxTooltip;
-    dxTooltip(options: string): any;
-    dxTooltip(options: string, ...params: any[]): any;
-    dxTooltip(options: dxTooltipOptions): JQuery;
-}
-}
 export type Options = dxTooltipOptions;
 
 /** @deprecated use Options instead */

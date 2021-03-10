@@ -70,15 +70,6 @@ export default class dxSwitch extends Editor {
     constructor(element: TElement, options?: dxSwitchOptions)
 }
 
-declare global {
-interface JQuery {
-    dxSwitch(): JQuery;
-    dxSwitch(options: "instance"): dxSwitch;
-    dxSwitch(options: string): any;
-    dxSwitch(options: string, ...params: any[]): any;
-    dxSwitch(options: dxSwitchOptions): JQuery;
-}
-}
 export type Options = dxSwitchOptions;
 
 /** @deprecated use Options instead */

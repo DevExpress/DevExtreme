@@ -156,15 +156,6 @@ export default class dxDrawer extends Widget {
     toggle(): TPromise<void>;
 }
 
-declare global {
-interface JQuery {
-    dxDrawer(): JQuery;
-    dxDrawer(options: "instance"): dxDrawer;
-    dxDrawer(options: string): any;
-    dxDrawer(options: string, ...params: any[]): any;
-    dxDrawer(options: dxDrawerOptions): JQuery;
-}
-}
 export type Options = dxDrawerOptions;
 
 /** @deprecated use Options instead */

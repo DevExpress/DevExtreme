@@ -29,15 +29,6 @@ export default class dxRecurrenceEditor extends Editor {
     constructor(element: TElement, options?: dxRecurrenceEditorOptions)
 }
 
-declare global {
-interface JQuery {
-    dxRecurrenceEditor(): JQuery;
-    dxRecurrenceEditor(options: "instance"): dxRecurrenceEditor;
-    dxRecurrenceEditor(options: string): any;
-    dxRecurrenceEditor(options: string, ...params: any[]): any;
-    dxRecurrenceEditor(options: dxRecurrenceEditorOptions): JQuery;
-}
-}
 export type Options = dxRecurrenceEditorOptions;
 
 /** @deprecated use Options instead */

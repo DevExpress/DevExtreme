@@ -91,15 +91,6 @@ export interface dxValidationGroupResult {
     validators?: Array<any>;
 }
 
-declare global {
-interface JQuery {
-    dxValidationGroup(): JQuery;
-    dxValidationGroup(options: "instance"): dxValidationGroup;
-    dxValidationGroup(options: string): any;
-    dxValidationGroup(options: string, ...params: any[]): any;
-    dxValidationGroup(options: dxValidationGroupOptions): JQuery;
-}
-}
 export type Options = dxValidationGroupOptions;
 
 /** @deprecated use Options instead */

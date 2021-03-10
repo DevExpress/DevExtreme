@@ -454,15 +454,6 @@ export default class dxFileUploader extends Editor {
     removeFile(file: File): void;
 }
 
-declare global {
-interface JQuery {
-    dxFileUploader(): JQuery;
-    dxFileUploader(options: "instance"): dxFileUploader;
-    dxFileUploader(options: string): any;
-    dxFileUploader(options: string, ...params: any[]): any;
-    dxFileUploader(options: dxFileUploaderOptions): JQuery;
-}
-}
 export type Options = dxFileUploaderOptions;
 
 /** @deprecated use Options instead */

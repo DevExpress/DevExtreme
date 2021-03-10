@@ -188,15 +188,6 @@ export interface dxGalleryItem extends CollectionWidgetItem {
     imageSrc?: string;
 }
 
-declare global {
-interface JQuery {
-    dxGallery(): JQuery;
-    dxGallery(options: "instance"): dxGallery;
-    dxGallery(options: string): any;
-    dxGallery(options: string, ...params: any[]): any;
-    dxGallery(options: dxGalleryOptions): JQuery;
-}
-}
 export type Options = dxGalleryOptions;
 
 /** @deprecated use Options instead */

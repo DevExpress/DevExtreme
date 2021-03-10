@@ -575,15 +575,6 @@ export interface dxFileManagerDetailsColumn {
     width?: number | string;
 }
 
-declare global {
-interface JQuery {
-    dxFileManager(): JQuery;
-    dxFileManager(options: "instance"): dxFileManager;
-    dxFileManager(options: string): any;
-    dxFileManager(options: string, ...params: any[]): any;
-    dxFileManager(options: dxFileManagerOptions): JQuery;
-}
-}
 export type Options = dxFileManagerOptions;
 
 /** @deprecated use Options instead */

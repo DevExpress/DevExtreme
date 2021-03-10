@@ -49,15 +49,6 @@ export default class dxTextArea extends dxTextBox {
     constructor(element: TElement, options?: dxTextAreaOptions)
 }
 
-declare global {
-interface JQuery {
-    dxTextArea(): JQuery;
-    dxTextArea(options: "instance"): dxTextArea;
-    dxTextArea(options: string): any;
-    dxTextArea(options: string, ...params: any[]): any;
-    dxTextArea(options: dxTextAreaOptions): JQuery;
-}
-}
 export type Options = dxTextAreaOptions;
 
 /** @deprecated use Options instead */

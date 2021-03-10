@@ -591,15 +591,6 @@ export interface dxTreeViewNode {
     text?: string;
 }
 
-declare global {
-interface JQuery {
-    dxTreeView(): JQuery;
-    dxTreeView(options: "instance"): dxTreeView;
-    dxTreeView(options: string): any;
-    dxTreeView(options: string, ...params: any[]): any;
-    dxTreeView(options: dxTreeViewOptions): JQuery;
-}
-}
 export type Options = dxTreeViewOptions;
 
 /** @deprecated use Options instead */

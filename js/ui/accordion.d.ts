@@ -197,15 +197,6 @@ export interface dxAccordionItem extends CollectionWidgetItem {
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxAccordion(): JQuery;
-    dxAccordion(options: "instance"): dxAccordion;
-    dxAccordion(options: string): any;
-    dxAccordion(options: string, ...params: any[]): any;
-    dxAccordion(options: dxAccordionOptions): JQuery;
-}
-}
 export type Options = dxAccordionOptions;
 
 /** @deprecated use Options instead */

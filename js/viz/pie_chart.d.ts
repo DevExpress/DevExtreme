@@ -936,15 +936,6 @@ export interface pieChartSeriesObject extends baseSeriesObject {
   isHovered(): boolean;
 }
 
-declare global {
-interface JQuery {
-    dxPieChart(): JQuery;
-    dxPieChart(options: "instance"): dxPieChart;
-    dxPieChart(options: string): any;
-    dxPieChart(options: string, ...params: any[]): any;
-    dxPieChart(options: dxPieChartOptions): JQuery;
-}
-}
 export type Options = dxPieChartOptions;
 
 /** @deprecated use Options instead */

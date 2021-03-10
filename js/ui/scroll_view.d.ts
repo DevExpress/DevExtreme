@@ -89,15 +89,6 @@ export default class dxScrollView extends dxScrollable {
     release(preventScrollBottom: boolean): TPromise<void>;
 }
 
-declare global {
-interface JQuery {
-    dxScrollView(): JQuery;
-    dxScrollView(options: "instance"): dxScrollView;
-    dxScrollView(options: string): any;
-    dxScrollView(options: string, ...params: any[]): any;
-    dxScrollView(options: dxScrollViewOptions): JQuery;
-}
-}
 export type Options = dxScrollViewOptions;
 
 /** @deprecated use Options instead */

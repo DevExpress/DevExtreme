@@ -147,15 +147,6 @@ export default class dxCalendar extends Editor {
     constructor(element: TElement, options?: dxCalendarOptions)
 }
 
-declare global {
-interface JQuery {
-    dxCalendar(): JQuery;
-    dxCalendar(options: "instance"): dxCalendar;
-    dxCalendar(options: string): any;
-    dxCalendar(options: string, ...params: any[]): any;
-    dxCalendar(options: dxCalendarOptions): JQuery;
-}
-}
 export type Options = dxCalendarOptions;
 
 /** @deprecated use Options instead */

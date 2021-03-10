@@ -41,15 +41,6 @@ export interface dxNavBarItem extends dxTabsItem {
     badge?: string;
 }
 
-declare global {
-interface JQuery {
-    dxNavBar(): JQuery;
-    dxNavBar(options: "instance"): dxNavBar;
-    dxNavBar(options: string): any;
-    dxNavBar(options: string, ...params: any[]): any;
-    dxNavBar(options: dxNavBarOptions): JQuery;
-}
-}
 export type Options = dxNavBarOptions;
 
 /** @deprecated use Options instead */

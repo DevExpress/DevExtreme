@@ -73,15 +73,6 @@ export default class dxDeferRendering extends Widget {
     constructor(element: TElement, options?: dxDeferRenderingOptions)
 }
 
-declare global {
-interface JQuery {
-    dxDeferRendering(): JQuery;
-    dxDeferRendering(options: "instance"): dxDeferRendering;
-    dxDeferRendering(options: string): any;
-    dxDeferRendering(options: string, ...params: any[]): any;
-    dxDeferRendering(options: dxDeferRenderingOptions): JQuery;
-}
-}
 export type Options = dxDeferRenderingOptions;
 
 /** @deprecated use Options instead */

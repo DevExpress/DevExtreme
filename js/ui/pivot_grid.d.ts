@@ -971,15 +971,6 @@ export interface dxPivotGridSummaryCell {
     value(postProcessed: boolean): any;
 }
 
-declare global {
-interface JQuery {
-    dxPivotGrid(): JQuery;
-    dxPivotGrid(options: "instance"): dxPivotGrid;
-    dxPivotGrid(options: string): any;
-    dxPivotGrid(options: string, ...params: any[]): any;
-    dxPivotGrid(options: dxPivotGridOptions): JQuery;
-}
-}
 export type Options = dxPivotGridOptions;
 
 /** @deprecated use Options instead */

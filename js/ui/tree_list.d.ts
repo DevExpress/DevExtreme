@@ -1052,15 +1052,6 @@ export interface dxTreeListRowObject {
     values?: Array<any>;
 }
 
-declare global {
-interface JQuery {
-    dxTreeList(): JQuery;
-    dxTreeList(options: "instance"): dxTreeList;
-    dxTreeList(options: string): any;
-    dxTreeList(options: string, ...params: any[]): any;
-    dxTreeList(options: dxTreeListOptions): JQuery;
-}
-}
 export type Options = dxTreeListOptions;
 
 /** @deprecated use Options instead */

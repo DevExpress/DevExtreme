@@ -489,15 +489,6 @@ export interface dxHtmlEditorVariables {
     escapeChar?: string | Array<string>;
 }
 
-declare global {
-interface JQuery {
-    dxHtmlEditor(): JQuery;
-    dxHtmlEditor(options: "instance"): dxHtmlEditor;
-    dxHtmlEditor(options: string): any;
-    dxHtmlEditor(options: string, ...params: any[]): any;
-    dxHtmlEditor(options: dxHtmlEditorOptions): JQuery;
-}
-}
 export type Options = dxHtmlEditorOptions;
 
 /** @deprecated use Options instead */

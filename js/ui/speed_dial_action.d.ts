@@ -73,15 +73,6 @@ export default class dxSpeedDialAction extends Widget {
     constructor(element: TElement, options?: dxSpeedDialActionOptions)
 }
 
-declare global {
-interface JQuery {
-    dxSpeedDialAction(): JQuery;
-    dxSpeedDialAction(options: "instance"): dxSpeedDialAction;
-    dxSpeedDialAction(options: string): any;
-    dxSpeedDialAction(options: string, ...params: any[]): any;
-    dxSpeedDialAction(options: dxSpeedDialActionOptions): JQuery;
-}
-}
 export type Options = dxSpeedDialActionOptions;
 
 /** @deprecated use Options instead */

@@ -971,15 +971,6 @@ export interface dxGanttStripLine {
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxGantt(): JQuery;
-    dxGantt(options: 'instance'): dxGantt;
-    dxGantt(options: string): any;
-    dxGantt(options: string, ...params: any[]): any;
-    dxGantt(options: dxGanttOptions): JQuery;
-}
-}
 export type Options = dxGanttOptions;
 
 /** @deprecated use Options instead */

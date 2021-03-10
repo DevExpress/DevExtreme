@@ -22,14 +22,5 @@ export default class dxValidationMessage extends dxOverlay {
     constructor(element: TElement, options?: dxValidationMessageOptions)
 }
 
-declare global {
-interface JQuery {
-    dxValidationMessage(): JQuery;
-    dxValidationMessage(options: "instance"): dxValidationMessage;
-    dxValidationMessage(options: string): any;
-    dxValidationMessage(options: string, ...params: any[]): any;
-    dxValidationMessage(options: dxValidationMessageOptions): JQuery;
-}
-}
 export type Options = dxValidationMessageOptions;
 export type IOptions = dxValidationMessageOptions;

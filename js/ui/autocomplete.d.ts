@@ -49,15 +49,6 @@ export default class dxAutocomplete extends dxDropDownList {
     constructor(element: TElement, options?: dxAutocompleteOptions)
 }
 
-declare global {
-interface JQuery {
-    dxAutocomplete(): JQuery;
-    dxAutocomplete(options: "instance"): dxAutocomplete;
-    dxAutocomplete(options: string): any;
-    dxAutocomplete(options: string, ...params: any[]): any;
-    dxAutocomplete(options: dxAutocompleteOptions): JQuery;
-}
-}
 export type Options = dxAutocompleteOptions;
 
 /** @deprecated use Options instead */

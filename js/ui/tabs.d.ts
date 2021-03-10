@@ -117,15 +117,6 @@ export interface dxTabsItem extends CollectionWidgetItem {
     icon?: string;
 }
 
-declare global {
-interface JQuery {
-    dxTabs(): JQuery;
-    dxTabs(options: "instance"): dxTabs;
-    dxTabs(options: string): any;
-    dxTabs(options: string, ...params: any[]): any;
-    dxTabs(options: dxTabsOptions): JQuery;
-}
-}
 export type Options = dxTabsOptions;
 
 /** @deprecated use Options instead */

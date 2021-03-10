@@ -1730,15 +1730,6 @@ export interface dxDiagramMoveShapeArgs {
    };
 }
 
-declare global {
-interface JQuery {
-    dxDiagram(): JQuery;
-    dxDiagram(options: "instance"): dxDiagram;
-    dxDiagram(options: string): any;
-    dxDiagram(options: string, ...params: any[]): any;
-    dxDiagram(options: dxDiagramOptions): JQuery;
-}
-}
 export type Options = dxDiagramOptions;
 
 /** @deprecated use Options instead */

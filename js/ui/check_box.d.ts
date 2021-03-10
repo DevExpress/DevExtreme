@@ -63,15 +63,6 @@ export default class dxCheckBox extends Editor {
     constructor(element: TElement, options?: dxCheckBoxOptions)
 }
 
-declare global {
-interface JQuery {
-    dxCheckBox(): JQuery;
-    dxCheckBox(options: "instance"): dxCheckBox;
-    dxCheckBox(options: string): any;
-    dxCheckBox(options: string, ...params: any[]): any;
-    dxCheckBox(options: dxCheckBoxOptions): JQuery;
-}
-}
 export type Options = dxCheckBoxOptions;
 
 /** @deprecated use Options instead */

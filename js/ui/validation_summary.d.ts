@@ -27,15 +27,6 @@ export default class dxValidationSummary extends CollectionWidget {
     constructor(element: TElement, options?: dxValidationSummaryOptions)
 }
 
-declare global {
-interface JQuery {
-    dxValidationSummary(): JQuery;
-    dxValidationSummary(options: "instance"): dxValidationSummary;
-    dxValidationSummary(options: string): any;
-    dxValidationSummary(options: string, ...params: any[]): any;
-    dxValidationSummary(options: dxValidationSummaryOptions): JQuery;
-}
-}
 export type Options = dxValidationSummaryOptions;
 
 /** @deprecated use Options instead */

@@ -89,15 +89,6 @@ export default class dxMultiView extends CollectionWidget {
 export interface dxMultiViewItem extends CollectionWidgetItem {
 }
 
-declare global {
-interface JQuery {
-    dxMultiView(): JQuery;
-    dxMultiView(options: "instance"): dxMultiView;
-    dxMultiView(options: string): any;
-    dxMultiView(options: string, ...params: any[]): any;
-    dxMultiView(options: dxMultiViewOptions): JQuery;
-}
-}
 export type Options = dxMultiViewOptions;
 
 /** @deprecated use Options instead */

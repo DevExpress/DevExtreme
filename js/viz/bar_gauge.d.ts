@@ -394,15 +394,6 @@ export default class dxBarGauge extends BaseWidget {
     values(values: Array<number>): void;
 }
 
-declare global {
-interface JQuery {
-    dxBarGauge(): JQuery;
-    dxBarGauge(options: "instance"): dxBarGauge;
-    dxBarGauge(options: string): any;
-    dxBarGauge(options: string, ...params: any[]): any;
-    dxBarGauge(options: dxBarGaugeOptions): JQuery;
-}
-}
 export type Options = dxBarGaugeOptions;
 
 /** @deprecated use Options instead */

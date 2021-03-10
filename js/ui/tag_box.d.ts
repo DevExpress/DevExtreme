@@ -141,15 +141,6 @@ export default class dxTagBox extends dxSelectBox {
     constructor(element: TElement, options?: dxTagBoxOptions)
 }
 
-declare global {
-interface JQuery {
-    dxTagBox(): JQuery;
-    dxTagBox(options: "instance"): dxTagBox;
-    dxTagBox(options: string): any;
-    dxTagBox(options: string, ...params: any[]): any;
-    dxTagBox(options: dxTagBoxOptions): JQuery;
-}
-}
 export type Options = dxTagBoxOptions;
 
 /** @deprecated use Options instead */

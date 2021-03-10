@@ -252,15 +252,6 @@ export default class dxPopup extends dxOverlay {
     constructor(element: TElement, options?: dxPopupOptions)
 }
 
-declare global {
-interface JQuery {
-    dxPopup(): JQuery;
-    dxPopup(options: "instance"): dxPopup;
-    dxPopup(options: string): any;
-    dxPopup(options: string, ...params: any[]): any;
-    dxPopup(options: dxPopupOptions): JQuery;
-}
-}
 export type Options = dxPopupOptions;
 
 /** @deprecated use Options instead */

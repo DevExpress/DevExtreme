@@ -152,15 +152,6 @@ export default class dxLoadPanel extends dxOverlay {
     constructor(element: TElement, options?: dxLoadPanelOptions)
 }
 
-declare global {
-interface JQuery {
-    dxLoadPanel(): JQuery;
-    dxLoadPanel(options: "instance"): dxLoadPanel;
-    dxLoadPanel(options: string): any;
-    dxLoadPanel(options: string, ...params: any[]): any;
-    dxLoadPanel(options: dxLoadPanelOptions): JQuery;
-}
-}
 export type Options = dxLoadPanelOptions;
 
 /** @deprecated use Options instead */

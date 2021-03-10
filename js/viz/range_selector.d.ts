@@ -877,15 +877,6 @@ export default class dxRangeSelector extends BaseWidget {
     setValue(value: Array<number | string | Date> | VizRange): void;
 }
 
-declare global {
-interface JQuery {
-    dxRangeSelector(): JQuery;
-    dxRangeSelector(options: "instance"): dxRangeSelector;
-    dxRangeSelector(options: string): any;
-    dxRangeSelector(options: string, ...params: any[]): any;
-    dxRangeSelector(options: dxRangeSelectorOptions): JQuery;
-}
-}
 export type Options = dxRangeSelectorOptions;
 
 /** @deprecated use Options instead */

@@ -232,15 +232,6 @@ export default class dxSortable extends DOMComponent implements DraggableBase {
     update(): void;
 }
 
-declare global {
-interface JQuery {
-    dxSortable(): JQuery;
-    dxSortable(options: "instance"): dxSortable;
-    dxSortable(options: string): any;
-    dxSortable(options: string, ...params: any[]): any;
-    dxSortable(options: dxSortableOptions): JQuery;
-}
-}
 export type Options = dxSortableOptions;
 
 /** @deprecated use Options instead */

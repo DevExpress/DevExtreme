@@ -166,15 +166,6 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
 }
 
-declare global {
-interface JQuery {
-    dxActionSheet(): JQuery;
-    dxActionSheet(options: "instance"): dxActionSheet;
-    dxActionSheet(options: string): any;
-    dxActionSheet(options: string, ...params: any[]): any;
-    dxActionSheet(options: dxActionSheetOptions): JQuery;
-}
-}
 export type Options = dxActionSheetOptions;
 
 /** @deprecated use Options instead */

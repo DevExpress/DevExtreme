@@ -113,15 +113,6 @@ export default class dxResizable extends DOMComponent {
     constructor(element: TElement, options?: dxResizableOptions)
 }
 
-declare global {
-interface JQuery {
-    dxResizable(): JQuery;
-    dxResizable(options: "instance"): dxResizable;
-    dxResizable(options: string): any;
-    dxResizable(options: string, ...params: any[]): any;
-    dxResizable(options: dxResizableOptions): JQuery;
-}
-}
 export type Options = dxResizableOptions;
 
 /** @deprecated use Options instead */

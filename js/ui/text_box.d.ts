@@ -43,15 +43,6 @@ export default class dxTextBox extends dxTextEditor {
     constructor(element: TElement, options?: dxTextBoxOptions)
 }
 
-declare global {
-interface JQuery {
-    dxTextBox(): JQuery;
-    dxTextBox(options: "instance"): dxTextBox;
-    dxTextBox(options: string): any;
-    dxTextBox(options: string, ...params: any[]): any;
-    dxTextBox(options: dxTextBoxOptions): JQuery;
-}
-}
 export type Options = dxTextBoxOptions;
 
 /** @deprecated use Options instead */

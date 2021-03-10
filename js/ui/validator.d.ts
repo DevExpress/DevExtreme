@@ -187,15 +187,6 @@ export interface dxValidatorResult {
     value?: any;
 }
 
-declare global {
-interface JQuery {
-    dxValidator(): JQuery;
-    dxValidator(options: "instance"): dxValidator;
-    dxValidator(options: string): any;
-    dxValidator(options: string, ...params: any[]): any;
-    dxValidator(options: dxValidatorOptions): JQuery;
-}
-}
 export type Options = dxValidatorOptions;
 
 /** @deprecated use Options instead */

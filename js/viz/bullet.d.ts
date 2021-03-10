@@ -87,15 +87,6 @@ export default class dxBullet extends BaseSparkline {
     constructor(element: TElement, options?: dxBulletOptions)
 }
 
-declare global {
-interface JQuery {
-    dxBullet(): JQuery;
-    dxBullet(options: "instance"): dxBullet;
-    dxBullet(options: string): any;
-    dxBullet(options: string, ...params: any[]): any;
-    dxBullet(options: dxBulletOptions): JQuery;
-}
-}
 export type Options = dxBulletOptions;
 
 /** @deprecated use Options instead */

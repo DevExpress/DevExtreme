@@ -165,15 +165,6 @@ export default class dxPopover extends dxPopup {
     show(target: string | TElement): TPromise<boolean>;
 }
 
-declare global {
-interface JQuery {
-    dxPopover(): JQuery;
-    dxPopover(options: "instance"): dxPopover;
-    dxPopover(options: string): any;
-    dxPopover(options: string, ...params: any[]): any;
-    dxPopover(options: dxPopoverOptions): JQuery;
-}
-}
 export type Options = dxPopoverOptions;
 
 /** @deprecated use Options instead */

@@ -180,15 +180,6 @@ export default class dxDateBox extends dxDropDownEditor {
     open(): void;
 }
 
-declare global {
-interface JQuery {
-    dxDateBox(): JQuery;
-    dxDateBox(options: "instance"): dxDateBox;
-    dxDateBox(options: string): any;
-    dxDateBox(options: string, ...params: any[]): any;
-    dxDateBox(options: dxDateBoxOptions): JQuery;
-}
-}
 export type Options = dxDateBoxOptions;
 
 /** @deprecated use Options instead */

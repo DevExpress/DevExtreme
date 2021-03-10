@@ -818,15 +818,6 @@ export interface dxFormTabbedItem {
     visibleIndex?: number;
 }
 
-declare global {
-interface JQuery {
-    dxForm(): JQuery;
-    dxForm(options: "instance"): dxForm;
-    dxForm(options: string): any;
-    dxForm(options: string, ...params: any[]): any;
-    dxForm(options: dxFormOptions): JQuery;
-}
-}
 export type Options = dxFormOptions;
 
 /** @deprecated use Options instead */

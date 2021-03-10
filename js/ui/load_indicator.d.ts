@@ -27,15 +27,6 @@ export default class dxLoadIndicator extends Widget {
     constructor(element: TElement, options?: dxLoadIndicatorOptions)
 }
 
-declare global {
-interface JQuery {
-    dxLoadIndicator(): JQuery;
-    dxLoadIndicator(options: "instance"): dxLoadIndicator;
-    dxLoadIndicator(options: string): any;
-    dxLoadIndicator(options: string, ...params: any[]): any;
-    dxLoadIndicator(options: dxLoadIndicatorOptions): JQuery;
-}
-}
 export type Options = dxLoadIndicatorOptions;
 
 /** @deprecated use Options instead */

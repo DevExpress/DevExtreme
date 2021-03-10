@@ -221,15 +221,6 @@ export default class dxPivotGridFieldChooser extends Widget {
     updateDimensions(): void;
 }
 
-declare global {
-interface JQuery {
-    dxPivotGridFieldChooser(): JQuery;
-    dxPivotGridFieldChooser(options: "instance"): dxPivotGridFieldChooser;
-    dxPivotGridFieldChooser(options: string): any;
-    dxPivotGridFieldChooser(options: string, ...params: any[]): any;
-    dxPivotGridFieldChooser(options: dxPivotGridFieldChooserOptions): JQuery;
-}
-}
 export type Options = dxPivotGridFieldChooserOptions;
 
 /** @deprecated use Options instead */

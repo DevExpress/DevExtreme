@@ -228,15 +228,6 @@ export interface dxMenuItem extends dxMenuBaseItem {
     items?: Array<dxMenuItem>;
 }
 
-declare global {
-interface JQuery {
-    dxMenu(): JQuery;
-    dxMenu(options: "instance"): dxMenu;
-    dxMenu(options: string): any;
-    dxMenu(options: string, ...params: any[]): any;
-    dxMenu(options: dxMenuOptions): JQuery;
-}
-}
 export type Options = dxMenuOptions;
 
 /** @deprecated use Options instead */

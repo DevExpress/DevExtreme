@@ -123,15 +123,6 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 }
 
-declare global {
-interface JQuery {
-    dxToolbar(): JQuery;
-    dxToolbar(options: "instance"): dxToolbar;
-    dxToolbar(options: string): any;
-    dxToolbar(options: string, ...params: any[]): any;
-    dxToolbar(options: dxToolbarOptions): JQuery;
-}
-}
 export type Options = dxToolbarOptions;
 
 /** @deprecated use Options instead */

@@ -757,15 +757,6 @@ export interface dxTreeMapNode {
     value(): number;
 }
 
-declare global {
-interface JQuery {
-    dxTreeMap(): JQuery;
-    dxTreeMap(options: "instance"): dxTreeMap;
-    dxTreeMap(options: string): any;
-    dxTreeMap(options: string, ...params: any[]): any;
-    dxTreeMap(options: dxTreeMapOptions): JQuery;
-}
-}
 export type Options = dxTreeMapOptions;
 
 /** @deprecated use Options instead */

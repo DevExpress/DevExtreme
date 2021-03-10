@@ -5727,15 +5727,6 @@ export interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCo
     customizeText?: ((pointInfo: any) => string);
 }
 
-declare global {
-interface JQuery {
-    dxChart(): JQuery;
-    dxChart(options: "instance"): dxChart;
-    dxChart(options: string): any;
-    dxChart(options: string, ...params: any[]): any;
-    dxChart(options: dxChartOptions): JQuery;
-}
-}
 export type Options = dxChartOptions;
 
 /** @deprecated use Options instead */

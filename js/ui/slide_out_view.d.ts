@@ -107,15 +107,6 @@ export default class dxSlideOutView extends Widget {
     toggleMenuVisibility(): TPromise<void>;
 }
 
-declare global {
-interface JQuery {
-    dxSlideOutView(): JQuery;
-    dxSlideOutView(options: "instance"): dxSlideOutView;
-    dxSlideOutView(options: string): any;
-    dxSlideOutView(options: string, ...params: any[]): any;
-    dxSlideOutView(options: dxSlideOutViewOptions): JQuery;
-}
-}
 export type Options = dxSlideOutViewOptions;
 
 /** @deprecated use Options instead */
