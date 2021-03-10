@@ -950,8 +950,8 @@ export default {
 
                     _pointCreated: function(point, columns, location, sourceColumn) {
                         const result = this.callBase.apply(this, arguments);
+                        const targetColumn = columns[point.columnIndex];
                         const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
-
 
                         if(!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
                             const boundingRect = getBoundingRect($transparentColumn.get(0));
@@ -959,6 +959,10 @@ export default {
                             if(sourceColumn && sourceColumn.fixed) {
                                 return sourceColumn.fixedPosition === 'right' ? point.x < boundingRect.right : point.x > boundingRect.left;
                             } else {
+                                if(targetColumn && targetColumn.fixed && targetColumn.fixedPosition !== 'right') {
+                                    return true;
+                                }
+
                                 return point.x < boundingRect.left || point.x > boundingRect.right;
                             }
                         }
