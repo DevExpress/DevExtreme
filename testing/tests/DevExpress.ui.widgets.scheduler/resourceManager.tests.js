@@ -962,3 +962,18 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
         }, this));
     });
 });
+
+QUnit.test('resources should be validated (transformed into an empty array) after loading', function(assert) {
+    const done = assert.async();
+
+    this.createInstance([{
+        field: 'ownerId',
+        dataSource: []
+    }]);
+
+    this.instance.loadResources(['ownerId']).done((resources) => {
+        assert.deepEqual(resources, [], 'Correct resources');
+
+        done();
+    });
+});
