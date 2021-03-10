@@ -1535,7 +1535,8 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
                 refreshMode: 'repaint'
             },
             scrolling: {
-                rowRenderingMode: 'virtual'
+                rowRenderingMode: 'virtual',
+                useNative: false
             },
             paging: {
                 enabled: false
@@ -3508,7 +3509,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: array,
             height: 200,
             scrolling: {
-                mode: 'virtual'
+                mode: 'virtual',
+                useNative: false
             },
             editing: {
                 mode: 'cell',
@@ -3555,7 +3557,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: array,
             height: 200,
             scrolling: {
-                mode: 'virtual'
+                mode: 'virtual',
+                useNative: false
             },
             editing: {
                 mode: 'cell',

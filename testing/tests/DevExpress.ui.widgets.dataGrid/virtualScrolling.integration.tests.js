@@ -1286,7 +1286,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             showBorders: true,
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual'
+                rowRenderingMode: 'virtual',
+                useNative: false
             },
             columns: [{
                 cellTemplate: function(element, info) {
@@ -2198,10 +2199,10 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const instance = dataGrid.dxDataGrid('instance');
         const rowsView = instance.getView('rowsView');
         const scrollable = instance.getScrollable();
-        const deviceType = devices.real().deviceType;
+        const isNativeScrolling = devices.real().deviceType === 'desktop' || devices.real().mac;
 
         scrollable.scrollTo({ y: 1440 });
-        deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
+        isNativeScrolling && $(scrollable._container()).trigger('scroll');
 
         // assert
         const rowHeight = rowsView._rowHeight;
@@ -2228,7 +2229,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 data: resizeController
             }
         });
-        deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
+        isNativeScrolling && $(scrollable._container()).trigger('scroll');
 
         // assert
         assert.strictEqual(instance.pageIndex(), 20, 'current page index is changed'); // T881314
