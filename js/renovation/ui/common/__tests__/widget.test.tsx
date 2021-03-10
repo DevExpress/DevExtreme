@@ -677,7 +677,7 @@ describe('Widget', () => {
 
       describe('attributes', () => {
         it('should return ARIA labels', () => {
-          const widget = new Widget({ visible: false, aria: { id: 10, role: 'button', level: 100 } });
+          const widget = new Widget({ visible: false, aria: { id: '10', role: 'button', level: '100' } });
 
           expect(widget.attributes).toEqual({
             'aria-hidden': 'true', id: '10', role: 'button', 'aria-level': '100', 'rest-attributes': 'restAttributes',
