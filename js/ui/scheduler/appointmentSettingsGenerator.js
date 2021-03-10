@@ -40,7 +40,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         let appointmentList = this._createAppointments(appointment, itemResources);
 
-        if(this._canProcessNotNativeTimezoneDates(appointmentList, appointment)) {
+        if(this._canProcessNotNativeTimezoneDates(appointment)) {
             appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
         }
 
@@ -92,23 +92,19 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return appointments;
     }
 
-    _canProcessNotNativeTimezoneDates(appointmentList, appointment) {
+    _canProcessNotNativeTimezoneDates(appointment) {
         const timeZoneName = this.scheduler.option('timeZone');
-        const { isEqualLocalTimeZone } = timeZoneUtils;
-
-        const isRecurrence = appointmentList.length > 1;
         const isTimeZoneSet = !isEmptyObject(timeZoneName);
 
-        if(!isRecurrence) {
+        if(!isTimeZoneSet) {
             return false;
         }
 
-        // if(!isTimeZoneSet && hasDSTInLocalTimeZone()) {
-        //     return false;
-        // }
+        if(!appointment.isRecurrent) {
+            return false;
+        }
 
-        return isTimeZoneSet &&
-            !isEqualLocalTimeZone(timeZoneName);
+        return !timeZoneUtils.isEqualLocalTimeZone(timeZoneName, appointment.startDate);
     }
 
     _getProcessedNotNativeDateIfCrossDST(date, offset) {
@@ -205,17 +201,17 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _createGridAppointmentList(appointmentList, appointment) {
-        const timeZoneName = this.scheduler.option('timeZone');
-        const { isEqualLocalTimeZone } = timeZoneUtils;
-        const isTimeZoneSet = !isEmptyObject(timeZoneName);
+        // const timeZoneName = this.scheduler.option('timeZone');
+        // const { isEqualLocalTimeZone } = timeZoneUtils;
+        // const isTimeZoneSet = !isEmptyObject(timeZoneName);
 
         return appointmentList.map(source => {
-            const offset = appointment.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
+            // const offset = appointment.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
 
-            if(isTimeZoneSet && !isEqualLocalTimeZone(timeZoneName) && appointment.isRecurrent && offset !== 0) {
-                source.startDate = new Date(source.startDate.getTime() + offset * toMs('minute'));
-                source.endDate = new Date(source.endDate.getTime() + offset * toMs('minute'));
-            }
+            // if(isTimeZoneSet && !isEqualLocalTimeZone(timeZoneName) && appointment.isRecurrent && offset !== 0) {
+            //     source.startDate = new Date(source.startDate.getTime() + offset * toMs('minute'));
+            //     source.endDate = new Date(source.endDate.getTime() + offset * toMs('minute'));
+            // }
 
 
             const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });

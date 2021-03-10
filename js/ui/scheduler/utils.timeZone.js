@@ -121,20 +121,48 @@ const getClientTimezoneOffset = (date = new Date()) => {
     return date.getTimezoneOffset() * 60000;
 };
 
-const isEqualLocalTimeZone = (timeZoneName) => {
+const isEqualLocalTimeZone = (timeZoneName, date) => {
     if(Intl) {
         const localTimeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
         if(localTimeZoneName) {
-            return localTimeZoneName === timeZoneName;
+            if(localTimeZoneName === timeZoneName) {
+                return true;
+            }
+
+            if(date) {
+                const year = date.getFullYear();
+                return isEqualLocalTimeZoneByDeclaration(timeZoneName, year);
+            }
+
+            return false;
         }
     }
 
     return isEqualLocalTimeZoneByNativeDate(timeZoneName);
 };
 
+// TODO: Not used anywhere, if it isn't use in the future, then it must be removed
 const hasDSTInLocalTimeZone = () => {
     const [startDate, endDate] = getExtremeDates();
     return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
+};
+
+const isEqualLocalTimeZoneByDeclaration = (timeZoneName, localTimeZoneName, year) => {
+    const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
+    const localConfigTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(localTimeZoneName, year);
+
+    if(configTuple.length === localConfigTuple.length) {
+        for(let i = 0; i < configTuple.length; i++) {
+            const item = configTuple[i];
+            const localItem = localConfigTuple[i];
+
+            if(item.date !== localItem.date && item.offset !== localItem.offset) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 };
 
 const isEqualLocalTimeZoneByNativeDate = (timeZoneName) => {
