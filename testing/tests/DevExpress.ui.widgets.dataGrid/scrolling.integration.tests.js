@@ -398,7 +398,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
     // T758955
     QUnit.test('native scrollBars layout should be correct after width change if fixed columns exist and columnAutoWidth is true', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
+        if(devices.real().deviceType !== 'desktop' || devices.real().mac) {
             assert.ok(true, 'test is not actual for mobile devices');
             return;
         }
@@ -446,7 +446,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
     // T533852
     QUnit.test('last column should have correct width if all columns have width and native vertcal scrollbar is shown', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
+        if(devices.real().deviceType !== 'desktop' || devices.real().mac) {
             assert.ok(true, 'This test is not actual for mobile devices');
             return;
         }
@@ -774,7 +774,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
     });
 
     QUnit.test('Content height differs from the scrollable container height by the height of horizontal scroll (T865137)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
+        if(devices.real().deviceType !== 'desktop' || devices.real().mac) {
             assert.ok(true, 'not actual for not desktop devices');
             return;
         }
