@@ -1,4 +1,4 @@
-import { compareScreenshot } from '../../../helpers/screenshort-comparer';
+import { compareScreenshot } from '../../../helpers/screenshot-comparer';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';

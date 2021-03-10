@@ -406,6 +406,12 @@ const Drawer = Widget.inherit({
             return;
         }
 
+        // Clear possible settings from strategies:
+        $(this.viewContent()).css('paddingLeft', 0);
+        $(this.viewContent()).css('paddingRight', 0);
+        $(this.viewContent()).css('paddingTop', 0);
+        $(this.viewContent()).css('paddingBottom', 0);
+
         animate = isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
 
         if(isDrawerOpened) {
@@ -461,14 +467,9 @@ const Drawer = Widget.inherit({
     },
 
     _refreshPanel() {
-        // TODO: removeAttr('style')?
-        $(this.viewContent()).css('paddingLeft', 0);
-        $(this.viewContent()).css('paddingRight', 0);
-        $(this.viewContent()).css('paddingTop', 0);
-        $(this.viewContent()).css('paddingBottom', 0);
-        $(this.viewContent()).css('left', 0);
-        $(this.viewContent()).css('transform', 'translate(0px, 0px)');
-        $(this.viewContent()).removeClass('dx-theme-background-color');
+        $(this.viewContent()).css('left', 0); // can affect animation
+        $(this.viewContent()).css('transform', 'translate(0px, 0px)'); // can affect animation
+        $(this.viewContent()).removeClass('dx-theme-background-color'); // can affect animation
 
         this._removePanelContentWrapper();
         this._removeOverlay();

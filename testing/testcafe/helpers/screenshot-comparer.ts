@@ -7,7 +7,7 @@ import { PNG } from 'pngjs';
 
 const testRoot = './testing/testcafe/';
 const screenshotsPath = path.join(testRoot, '/screenshots');
-const artifactsPath = path.join(testRoot, '/artifacts');
+const artifactsPath = path.join(testRoot, '/artifacts/compared-screenshots');
 
 const screenshotComparerDefault = {
   highlightColor: { r: 0xff, g: 0, b: 0xff },
@@ -64,8 +64,8 @@ export async function looksSame({ etalonFileName, screenshotBuffer, comparisonOp
 interface Image { width: number; height: number; data: number[] }
 
 async function getMaskedScreenshotBuffer({
-  screenshotFileName, etalonFileName, maskFileName,
-}: Record<'screenshotFileName' | 'etalonFileName' | 'maskFileName', string>): Promise<Buffer> {
+  screenshotName, screenshotFileName, etalonFileName, maskFileName,
+}: Record<'screenshotName' | 'screenshotFileName' | 'etalonFileName' | 'maskFileName', string>): Promise<Buffer> {
   function isSizeEqual(image1: Image, image2: Image): boolean {
     return image1.height === image2.height && image1.width === image2.width;
   }
@@ -95,7 +95,7 @@ async function getMaskedScreenshotBuffer({
   const etalonImg = getImage(etalonFileName);
   const screenshotImg = getImage(screenshotFileName);
   if (!isSizeEqual(etalonImg, screenshotImg)) {
-    throw new Error('Screenshot size does not match etalon size');
+    throw new Error(`The screenshot size (W:${screenshotImg.width}, H:${screenshotImg.height}) does not match the etalon size (W:${etalonImg.width}, H:${etalonImg.height}) for: ${screenshotName}`);
   }
 
   if (!fs.existsSync(maskFileName)) {
@@ -103,7 +103,7 @@ async function getMaskedScreenshotBuffer({
   }
   const maskImg = getImage(maskFileName);
   if (!isSizeEqual(etalonImg, maskImg)) {
-    throw new Error('Mask size does not match etalon size');
+    throw new Error(`Mask size does not match etalon size for screenshort: ${screenshotName}`);
   }
   const targetImageBuffer = applyMask(etalonImg, screenshotImg, maskImg);
   return targetImageBuffer;
@@ -157,10 +157,11 @@ function getMask(diffBuffer: Buffer, options: ComparerOptions): Buffer {
 type SelectorType = Selector | string | null;
 
 async function tryGetValidScreenshot({
-  element, t, screenshotFileName, etalonFileName, maskFileName, options,
+  t, screenshotName, element, screenshotFileName, etalonFileName, maskFileName, options,
 }: {
-  element: SelectorType;
   t: TestController;
+  screenshotName: string;
+  element: SelectorType;
   screenshotFileName: string;
   etalonFileName: string;
   maskFileName: string;
@@ -178,7 +179,7 @@ async function tryGetValidScreenshot({
       ? t.takeElementScreenshot(element, screenshotFileName)
       : t.takeScreenshot(screenshotFileName));
     screenshotBuffer = await getMaskedScreenshotBuffer({
-      screenshotFileName, etalonFileName, maskFileName,
+      screenshotName, screenshotFileName, etalonFileName, maskFileName,
     });
     equal = await looksSame({
       etalonFileName,
@@ -209,7 +210,7 @@ export async function compareScreenshot(
   try {
     ensureArtifactsPath();
     const { equal, screenshotBuffer } = await tryGetValidScreenshot({
-      t, element, screenshotFileName, etalonFileName, maskFileName, options,
+      t, screenshotName, element, screenshotFileName, etalonFileName, maskFileName, options,
     });
     if (!equal) {
       const diffFileName = path.join(artifactsPath, screenshotName.replace('.png', '_diff.png'));

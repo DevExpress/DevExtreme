@@ -467,6 +467,11 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.SPLITTER_CLASS}`);
     }
 
+    getSplitterPosition() {
+        const $splitterWrapper = this._$element.find(`.${Consts.SPLITTER_WRAPPER_CLASS}`);
+        return $splitterWrapper.get(0).offsetLeft + parseFloat(this.getSplitter().css('margin-left'));
+    }
+
     getFolderChooserDialog() {
         return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
     }
