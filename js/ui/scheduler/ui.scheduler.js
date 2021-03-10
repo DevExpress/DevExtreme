@@ -40,7 +40,7 @@ import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrat
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
 import { hide as hideLoading, show as showLoading } from './loading';
 import AppointmentCollection from './appointments/appointmentCollection';
-import SchedulerLayoutManager from './appointments.layout_manager';
+import AppointmentLayoutManager from './appointments.layout_manager';
 import SchedulerAppointmentModel from './appointment_model';
 import { Header } from './header/header';
 import { ResourceManager } from './resources/resourceManager';
@@ -1218,7 +1218,7 @@ class Scheduler extends Widget {
         this._processCurrentView();
         this._renderHeader();
 
-        this._layoutManager = new SchedulerLayoutManager(this, this._getAppointmentsRenderingStrategy());
+        this._layoutManager = new AppointmentLayoutManager(this, this._getAppointmentsRenderingStrategy());
 
         this._appointments = this._createComponent('<div>', AppointmentCollection, this._appointmentsConfig());
         this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
