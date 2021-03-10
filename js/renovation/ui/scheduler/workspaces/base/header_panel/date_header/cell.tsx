@@ -13,7 +13,6 @@ import { combineClasses } from '../../../../../../utils/combine_classes';
 import { getGroupCellClasses } from '../../../utils';
 
 export const viewFunction = ({
-  restAttributes,
   classes,
   useTemplate,
   props: {
@@ -30,8 +29,6 @@ export const viewFunction = ({
 }: DateHeaderCell): JSX.Element => (
   <th
     className={classes}
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     colSpan={colSpan}
     title={text}
   >

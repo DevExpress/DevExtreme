@@ -23,13 +23,6 @@ describe('RowBase', () => {
         .toBe(true);
     });
 
-    it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(row.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should render children', () => {
       const row = render({ props: { children: <div className="child" /> } });
 

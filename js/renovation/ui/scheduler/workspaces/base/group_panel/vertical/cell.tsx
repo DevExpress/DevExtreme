@@ -9,8 +9,6 @@ export const viewFunction = (viewModel: GroupPanelVerticalCell): JSX.Element => 
   return (
     <div
       className={`dx-scheduler-group-header ${viewModel.props.className}`}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
     >
       {!!CellTemplate && (
         <CellTemplate
