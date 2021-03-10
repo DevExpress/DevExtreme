@@ -317,8 +317,15 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
   }
 
-  .dx-#{$widget-name}-edit-popup .dx-error-message {
-    padding: $material-grid-base-cell-padding;
+  .dx-#{$widget-name}-edit-popup {
+    .dx-scrollable-container {
+      margin-left: -10px;
+      padding-left: 10px;
+    }
+
+    .dx-error-message {
+      padding: $material-grid-base-cell-padding;
+    }
   }
 
   .dx-#{$widget-name}-headers,
