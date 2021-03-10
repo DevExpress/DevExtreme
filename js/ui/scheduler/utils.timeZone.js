@@ -129,7 +129,7 @@ const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => {
         }
     }
 
-    return isEqualLocalTimeZoneByDeclaration(timeZoneName, date.getFullYear());
+    return isEqualLocalTimeZoneByDeclaration(timeZoneName, date);
 };
 
 // TODO: Not used anywhere, if it isn't use in the future, then it must be removed
@@ -138,7 +138,8 @@ const hasDSTInLocalTimeZone = () => {
     return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
 };
 
-const isEqualLocalTimeZoneByDeclaration = (timeZoneName, year) => {
+const isEqualLocalTimeZoneByDeclaration = (timeZoneName, date) => {
+    const year = date.getFullYear();
     const getOffset = date => -date.getTimezoneOffset() / 60;
     const getDateAndMoveHourBack = dateStamp => new Date(dateStamp - 3600000);
 
@@ -147,6 +148,13 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName, year) => {
 
     const noDSTInTargetTimeZone = configTuple.length === 0;
     if(noDSTInTargetTimeZone) {
+        const targetTimeZoneOffset = timeZoneDataUtils.getTimeZoneOffsetById(timeZoneName, date);
+        const localTimeZoneOffset = getOffset(date);
+
+        if(targetTimeZoneOffset !== localTimeZoneOffset) {
+            return false;
+        }
+
         return hasDSTInLocalTimeZone() ? false : true;
     }
 

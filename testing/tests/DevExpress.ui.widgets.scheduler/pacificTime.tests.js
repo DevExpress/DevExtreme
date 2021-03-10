@@ -321,16 +321,15 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
         });
 
         test('timeZoneUtils.isEqualLocalTimeZoneByDeclaration should be return right value', function(assert) {
-            assert.ok(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/Tijuana', 2021), 'should be return true, both timezone have same declaration');
-            assert.ok(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/Los_Angeles', 2021), 'should be return true');
-            assert.notOk(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/New_York', 2021), 'should be return false');
+            assert.ok(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/Tijuana', new Date(2021, 6, 6)), 'should be return true, both timezone have same declaration');
+            assert.ok(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/Los_Angeles', new Date(2021, 6, 6)), 'should be return true');
+            assert.notOk(timeZoneUtils.isEqualLocalTimeZoneByDeclaration('America/New_York', new Date(2021, 6, 6)), 'should be return false');
         });
 
         test('timeZoneUtils.isEqualLocalTimeZone should be return right value', function(assert) {
-            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Tijuana'), 'should be return true, both timezone have same declaration');
-
-            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Los_Angeles'), 'should be return true');
-            assert.notOk(timeZoneUtils.isEqualLocalTimeZone('America/New_York'), 'should be return false');
+            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Tijuana', new Date(2021, 6, 6)), 'should be return true, both timezone have same declaration');
+            assert.ok(timeZoneUtils.isEqualLocalTimeZone('America/Los_Angeles', new Date(2021, 6, 6)), 'should be return true');
+            assert.notOk(timeZoneUtils.isEqualLocalTimeZone('America/New_York', new Date(2021, 6, 6)), 'should be return false');
         });
 
         module('Today and current day in calendar', () => {
