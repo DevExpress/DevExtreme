@@ -145,9 +145,9 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName, year) => {
     const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
     const [summerTime, winterTime] = configTuple;
 
-    // TODO: no dst transition in both time zones
-    if(configTuple.length === 0 && !hasDSTInLocalTimeZone()) {
-        return true;
+    const noDSTInTargetTimeZone = configTuple.length === 0;
+    if(noDSTInTargetTimeZone) {
+        return hasDSTInLocalTimeZone() ? false : true;
     }
 
     const localSummerOffset = getOffset(new Date(summerTime.date));
@@ -205,6 +205,7 @@ const utils = {
     getDateWithoutTimezoneChange,
     hasDSTInLocalTimeZone,
     isEqualLocalTimeZone,
+    isEqualLocalTimeZoneByDeclaration,
     getTimeZones
 };
 

@@ -23,4 +23,10 @@ module('Time zone utils', {}, () => {
 
         assert.notOk(result, 'local time zone shouldn\'t equal to \'Brazil/Acre\'');
     });
+
+    test('isEqualLocalTimeZoneByDeclaration', function(assert) {
+        const result = timeZoneUtils.isEqualLocalTimeZoneByDeclaration('Brazil/Acre', 2021);
+
+        assert.notOk(result, 'local time zone shouldn\'t equal to \'Brazil/Acre\'');
+    });
 });
