@@ -501,8 +501,8 @@ describe('Simulated', () => {
 
                       expect(e.preventDefault).toBeCalled();
 
-                      const expectedDeltaX = initialDeltaX * expectedValidDirections.horizontal;
-                      const expectedDeltaY = initialDeltaY * expectedValidDirections.vertical;
+                      const expectedDeltaX = initialDeltaX * (expectedValidDirections.horizontal ? 1 : 0);
+                      const expectedDeltaY = initialDeltaY * (expectedValidDirections.vertical ? 1 : 0);
 
                       if (direction === 'both') {
                         expect(jestMoveHandler).toBeCalledTimes(2);

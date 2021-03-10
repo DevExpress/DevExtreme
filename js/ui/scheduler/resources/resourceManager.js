@@ -229,8 +229,11 @@ export class ResourceManager {
                 return { name: obj.name, items: obj.items, data: obj.data };
             };
 
-            that._resourcesData = data;
-            result.resolve(data.map(mapFunction));
+            const isValidResources = that._isValidResourcesForGrouping(data);
+
+            that._resourcesData = isValidResources ? data : [];
+
+            result.resolve(isValidResources ? data.map(mapFunction) : []);
         }).fail(function() {
             result.reject();
         });
@@ -309,7 +312,6 @@ export class ResourceManager {
 
     createResourcesTree(groups) {
         let leafIndex = 0;
-        const groupIndex = groupIndex || 0;
 
         function make(group, groupIndex, result, parent) {
             result = result || [];
@@ -518,5 +520,13 @@ export class ResourceManager {
         });
 
         return currentResourcesData;
+    }
+
+    _isValidResourcesForGrouping(resources) {
+        const result = resources.reduce((isValidResources, currentResource) => {
+            return isValidResources && currentResource.items.length > 0;
+        }, true);
+
+        return result;
     }
 }

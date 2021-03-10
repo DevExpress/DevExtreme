@@ -16,28 +16,30 @@ import {
 import { combineClasses } from '../../utils/combine_classes';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
 import getElementOffset from '../../utils/get_element_offset';
-import { BaseWidgetProps } from '../core/base_props';
-import { BaseWidget } from '../core/base_widget';
+import { BaseWidgetProps } from '../common/base_props';
+import { BaseWidget } from '../common/base_widget';
 import {
   createAxis,
   SparklineTooltipData,
   generateCustomizeTooltipCallback,
 } from './utils';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
-import { PathSvgElement } from '../core/renderers/svg_path';
-import { Canvas } from '../core/common/types.d';
-import { Tooltip as TooltipComponent, TooltipProps } from '../core/tooltip';
-import { getFormatValue } from '../common/utils';
+import { PathSvgElement } from '../common/renderers/svg_path';
+import {
+  OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData,
+} from '../common/types.d';
+import { Tooltip as TooltipComponent, TooltipProps } from '../common/tooltip';
+import { getFormatValue, pointInCanvas } from '../common/utils';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 import pointerEvents from '../../../events/pointer';
 import { EffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
-import { pointInCanvas } from '../core/utils';
+
 import {
   ArgumentAxisRange, ValueAxisRange, BulletScaleProps,
 } from './types.d';
-import { OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData } from '../common/types.d';
+
 import Number from '../../../core/polyfills/number';
 
 const TARGET_MIN_Y = 0.02;
@@ -58,7 +60,7 @@ const POINTER_ACTION = addNamespace(
   EVENT_NS,
 );
 
-const inCanvas = (canvas: Canvas, x: number, y: number): boolean => {
+const inCanvas = (canvas: ClientRect, x: number, y: number): boolean => {
   const { width, height } = canvas;
   return pointInCanvas(
     {
@@ -229,7 +231,7 @@ export class Bullet extends JSXComponent(BulletProps) {
 
   @InternalState() valueAxis = createAxis(false);
 
-  @InternalState() canvasState: Canvas = {
+  @InternalState() canvasState: ClientRect = {
     width: 0,
     height: 0,
     top: 0,
@@ -333,7 +335,7 @@ export class Bullet extends JSXComponent(BulletProps) {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  get defaultCanvas(): Canvas {
+  get defaultCanvas(): ClientRect {
     return {
       width: DEFAULT_CANVAS_WIDTH,
       height: DEFAULT_CANVAS_HEIGHT,
@@ -344,7 +346,7 @@ export class Bullet extends JSXComponent(BulletProps) {
     };
   }
 
-  onCanvasChange(canvas: Canvas): void {
+  onCanvasChange(canvas: ClientRect): void {
     this.canvasState = canvas;
     const svgElement = this.widgetRef.current?.svg() || undefined;
     this.offsetState = getElementOffset(svgElement) ?? DEFAULT_OFFSET;

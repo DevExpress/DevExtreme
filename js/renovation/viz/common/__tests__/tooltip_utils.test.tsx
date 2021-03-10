@@ -2,9 +2,9 @@ import {
   getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, isTextEmpty,
   getCanvas,
 } from '../tooltip_utils';
-import domAdapter from '../../../../../core/dom_adapter';
+import domAdapter from '../../../../core/dom_adapter';
 
-jest.mock('../../../../../core/dom_adapter', () => ({
+jest.mock('../../../../core/dom_adapter', () => ({
   getDocumentElement: jest.fn(),
   getBody: jest.fn(),
 }));

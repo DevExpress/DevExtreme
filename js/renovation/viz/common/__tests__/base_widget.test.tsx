@@ -6,7 +6,6 @@ import { RootSvgElement } from '../renderers/svg_root';
 import { GrayScaleFilter } from '../renderers/gray_scale_filter';
 import { ConfigProvider } from '../../../common/config_provider';
 import { clear as clearEventHandlers } from '../../../test_utils/events_mock';
-import { Canvas } from '../common/types.d';
 import getElementComputedStyle from '../../../utils/get_computed_style';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
 
@@ -102,10 +101,10 @@ describe('BaseWidget', () => {
       describe('contentReadyEffect', () => {
         it('should call "onContentReady" callback with the content node\'s parent', () => {
           const onContentReady = jest.fn();
-          const widget = new BaseWidget({ onContentReady });
+          const widget = new BaseWidget({ onContentReady } as any);
           const svgElement = {};
-          widget.containerRef = React.createRef();
-          widget.svgElementRef = React.createRef();
+          widget.containerRef = React.createRef() as any;
+          widget.svgElementRef = React.createRef() as any;
           widget.svgElementRef.current = svgElement as SVGElement;
           widget.contentReadyEffect();
           expect(onContentReady).toHaveBeenCalledTimes(1);
@@ -113,18 +112,18 @@ describe('BaseWidget', () => {
         });
 
         it('should not raise any error if "onContentReady" is not defined', () => {
-          const widget = new BaseWidget({ onContentReady: undefined });
-          widget.svgElementRef = React.createRef();
-          widget.containerRef = React.createRef();
+          const widget = new BaseWidget({ onContentReady: undefined } as any);
+          widget.svgElementRef = React.createRef() as any;
+          widget.containerRef = React.createRef() as any;
           expect(widget.contentReadyEffect.bind(widget)).not.toThrow();
         });
       });
 
       describe('setRootElementRef', () => {
         it('rootElementRef should be init', () => {
-          const widget = new BaseWidget({ rootElementRef: { current: null } });
+          const widget = new BaseWidget({ rootElementRef: { current: null } } as any);
           const element = {} as HTMLDivElement;
-          widget.containerRef = React.createRef();
+          widget.containerRef = React.createRef() as any;
           widget.containerRef.current = element;
           widget.setRootElementRef();
           expect(widget.props.rootElementRef.current).toEqual(element);
@@ -136,9 +135,9 @@ describe('BaseWidget', () => {
   describe('Methods', () => {
     describe('svg method', () => {
       it('should return svg root element', () => {
-        const widget = new BaseWidget({ });
+        const widget = new BaseWidget({ } as any);
         const root = { } as SVGElement;
-        widget.svgElementRef = React.createRef();
+        widget.svgElementRef = React.createRef() as any;
         widget.svgElementRef.current = root;
 
         expect(widget.svg()).toEqual(root);
@@ -149,31 +148,31 @@ describe('BaseWidget', () => {
   describe('Logic', () => {
     describe('cssClasses', () => {
       it('should add default classes', () => {
-        const widget = new BaseWidget({ });
+        const widget = new BaseWidget({ } as any);
         expect(widget.cssClasses).toBe('dx-widget dx-visibility-change-handler');
       });
 
       it('should add className property', () => {
-        const widget = new BaseWidget({ className: 'custom-class' });
+        const widget = new BaseWidget({ className: 'custom-class' } as any);
         expect(widget.cssClasses).toBe('dx-widget dx-visibility-change-handler custom-class');
       });
     });
 
     describe('pointerEventsState', () => {
       it('should return undefined by default', () => {
-        const widget = new BaseWidget({ });
+        const widget = new BaseWidget({ } as any);
 
         expect(widget.pointerEventsState).toBe(undefined);
       });
 
       it('should set visible state', () => {
-        const widget = new BaseWidget({ pointerEvents: 'visible' });
+        const widget = new BaseWidget({ pointerEvents: 'visible' } as any);
 
         expect(widget.pointerEventsState).toBe('visible');
       });
 
       it('should set disabled state', () => {
-        const widget = new BaseWidget({ disabled: true });
+        const widget = new BaseWidget({ disabled: true } as any);
 
         expect(widget.pointerEventsState).toBe('none');
       });
@@ -181,16 +180,16 @@ describe('BaseWidget', () => {
 
     describe('setCanvas', () => {
       it('should get empty canvas by default', () => {
-        const widget = new BaseWidget({ canvas: DEFAULT_CANVAS });
-        widget.containerRef = React.createRef();
+        const widget = new BaseWidget({ canvas: DEFAULT_CANVAS } as any);
+        widget.containerRef = React.createRef() as any;
         widget.setCanvas();
 
         expect(widget.props.canvas).toEqual(DEFAULT_CANVAS);
       });
 
       it('should get size from props (props.size)', () => {
-        const widget = new BaseWidget({ size: { width: 600, height: 400 } });
-        widget.containerRef = React.createRef();
+        const widget = new BaseWidget({ size: { width: 600, height: 400 } } as any);
+        widget.containerRef = React.createRef() as any;
         widget.setCanvas();
 
         expect(widget.props.canvas).toMatchObject({
@@ -208,8 +207,8 @@ describe('BaseWidget', () => {
           paddingTop: '10px',
           paddingBottom: '10px',
         });
-        const widget = new BaseWidget({ });
-        widget.containerRef = React.createRef();
+        const widget = new BaseWidget({ } as any);
+        widget.containerRef = React.createRef() as any;
         widget.setCanvas();
 
         expect(widget.props.canvas).toMatchObject({
@@ -227,7 +226,7 @@ describe('BaseWidget', () => {
           paddingTop: '0px',
           paddingBottom: '0px',
         });
-        const defaultCanvas: Canvas = {
+        const defaultCanvas: ClientRect = {
           width: 500,
           height: 300,
           left: 10,
@@ -235,8 +234,8 @@ describe('BaseWidget', () => {
           top: 30,
           bottom: 40,
         };
-        const widget = new BaseWidget({ defaultCanvas });
-        widget.containerRef = React.createRef();
+        const widget = new BaseWidget({ defaultCanvas } as any);
+        widget.containerRef = React.createRef() as any;
         widget.setCanvas();
 
         expect(widget.props.canvas).toEqual({
@@ -261,8 +260,8 @@ describe('BaseWidget', () => {
         const widget = new BaseWidget({
           size: { width: 600 },
           canvas: { ...DEFAULT_CANVAS, width: 300, height: 100 },
-        });
-        widget.containerRef = React.createRef();
+        } as any);
+        widget.containerRef = React.createRef() as any;
         widget.setCanvas();
 
         expect(widget.props.canvas).toMatchObject({
@@ -272,7 +271,7 @@ describe('BaseWidget', () => {
       });
 
       it('should get merged canvas from props (size, margin and defaultCanvas)', () => {
-        const defaultCanvas: Canvas = {
+        const defaultCanvas: ClientRect = {
           width: 500,
           height: 300,
           left: 10,
@@ -287,8 +286,8 @@ describe('BaseWidget', () => {
             left: 20,
             top: 40,
           },
-        });
-        widget.containerRef = React.createRef();
+        } as any);
+        widget.containerRef = React.createRef() as any;
         widget.setCanvas();
 
         expect(widget.props.canvas).toEqual({
@@ -302,7 +301,7 @@ describe('BaseWidget', () => {
       });
 
       it('should get merged size from props (size is not valid, and defaultCanvas)', () => {
-        const defaultCanvas: Canvas = {
+        const defaultCanvas: ClientRect = {
           ...DEFAULT_CANVAS,
           width: 500,
           height: 300,
@@ -313,15 +312,15 @@ describe('BaseWidget', () => {
             height: -400,
           },
           defaultCanvas,
-        });
-        widget.containerRef = React.createRef();
+        } as any);
+        widget.containerRef = React.createRef() as any;
         widget.setCanvas();
 
         expect(widget.props.canvas).toEqual(defaultCanvas);
       });
 
       it('should get default canvas from props (if any side is negative)', () => {
-        const defaultCanvas: Canvas = {
+        const defaultCanvas: ClientRect = {
           width: 500,
           height: 300,
           left: 10,
@@ -338,8 +337,8 @@ describe('BaseWidget', () => {
             left: 200,
             right: 400,
           },
-        });
-        widget.containerRef = React.createRef();
+        } as any);
+        widget.containerRef = React.createRef() as any;
         widget.setCanvas();
 
         expect(widget.props.canvas).toEqual({
@@ -356,7 +355,7 @@ describe('BaseWidget', () => {
     describe('shouldRenderConfigProvider', () => {
       it('should call utils method resolveRtlEnabledDefinition', () => {
         (resolveRtlEnabledDefinition as jest.Mock).mockReturnValue(true);
-        const widget = new BaseWidget({ });
+        const widget = new BaseWidget({ } as any);
         const { shouldRenderConfigProvider } = widget;
 
         expect(shouldRenderConfigProvider).toBe(true);
@@ -367,7 +366,7 @@ describe('BaseWidget', () => {
     describe('rtlEnabled', () => {
       it('should call utils method resolveRtlEnabled', () => {
         (resolveRtlEnabled as jest.Mock).mockReturnValue(false);
-        const widget = new BaseWidget({ });
+        const widget = new BaseWidget({ } as any);
         const { rtlEnabled } = widget;
 
         expect(rtlEnabled).toBe(false);

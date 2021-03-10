@@ -17,16 +17,15 @@ import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { ConfigProvider } from '../../common/config_provider';
 import { RootSvgElement } from './renderers/svg_root';
 import { GrayScaleFilter } from './renderers/gray_scale_filter';
-import { Canvas } from './common/types.d';
 import {
   sizeIsValid,
   pickPositiveValue,
   getElementWidth,
   getElementHeight,
+  isUpdatedFlatObject,
 } from './utils';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import { getNextDefsSvgId, getFuncIri } from './renderers/utils';
-import { isUpdatedFlatObject } from '../common/utils';
 
 const DEFAULT_CANVAS = {
   left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
@@ -46,7 +45,7 @@ const calculateCanvas = (
   model: Partial<BaseWidgetProps> &
   Partial<Omit<BaseWidget, 'containerRef'>> &
   { element: HTMLDivElement | null },
-): Canvas => {
+): ClientRect => {
   const { height, width } = model.size ?? {};
   const margin = model.margin ?? {};
   const defaultCanvas = model.defaultCanvas ?? DEFAULT_CANVAS;

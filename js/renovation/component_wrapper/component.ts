@@ -7,7 +7,7 @@ import domAdapter from '../../core/dom_adapter';
 import DOMComponent from '../../core/dom_component';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isRenderer } from '../../core/utils/type';
 
 import { InfernoEffectHost } from "devextreme-generator/modules/inferno/effect_host";
 import { TemplateWrapper } from "./template_wrapper";
@@ -18,19 +18,6 @@ const setDefaultOptionValue = (options, defaultValueGetter) => (name) => {
     options[name] = defaultValueGetter(name);
   }
 };
-
-const getContainerIndex = (parentNode: Element, element: Element): number => {
-  return $(parentNode).children().index($(element));
-}
-
-const insertContainer = (parentNode: Element, element: Element, index: number): void => {
-  const $parent = $(parentNode);
-  if (index >= $parent.children().length) {
-    $parent.append(element);
-  } else {
-    $(element).insertBefore($parent.children().eq(index));
-  }
-}
 
 export default class ComponentWrapper extends DOMComponent {
   // NOTE: We should declare all instance options with '!' because of DOMComponent life cycle
@@ -111,12 +98,11 @@ export default class ComponentWrapper extends DOMComponent {
     const parentNode = containerNode.parentNode;
 
     if (!this._isNodeReplaced) {
-      let containerPosition = 0;
-      if (parentNode) {
-        containerPosition = getContainerIndex(parentNode, containerNode);
-      }
+      const nextNode = containerNode?.nextSibling;
 
-      const mountNode = this._documentFragment.appendChild($("<div>").append(containerNode)[0]);
+      const rootNode = domAdapter.createElement('div');
+      rootNode.appendChild(containerNode);
+      const mountNode = this._documentFragment.appendChild(rootNode);
       InfernoEffectHost.lock();
       hydrate(
         createElement(this._viewComponent, props),
@@ -124,7 +110,7 @@ export default class ComponentWrapper extends DOMComponent {
       );
       containerNode.$V = mountNode.$V;
       if (parentNode) {
-        insertContainer(parentNode, containerNode, containerPosition);
+        parentNode.insertBefore(containerNode, nextNode);
       }
       InfernoEffectHost.callEffects();
       this._isNodeReplaced = true;
@@ -206,7 +192,10 @@ export default class ComponentWrapper extends DOMComponent {
 
     elements.forEach((name: string) => {
       if(name in options) {
-        options[name] = this._patchElementParam(options[name]);
+        const value = options[name];
+        if(isRenderer(value)) {
+          options[name] = this._patchElementParam(value);
+        }
       }
     });
 
