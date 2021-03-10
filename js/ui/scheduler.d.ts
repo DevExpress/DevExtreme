@@ -905,8 +905,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
  * @public
  */
 export default class dxScheduler extends Widget {
-    constructor(element: Element, options?: dxSchedulerOptions)
-    constructor(element: JQuery, options?: dxSchedulerOptions)
+    constructor(element: TElement, options?: dxSchedulerOptions)
     /**
      * @docid
      * @publicName addAppointment(appointment)

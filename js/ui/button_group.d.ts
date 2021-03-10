@@ -120,8 +120,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
  * @public
  */
 export default class dxButtonGroup extends Widget {
-    constructor(element: Element, options?: dxButtonGroupOptions)
-    constructor(element: JQuery, options?: dxButtonGroupOptions)
+    constructor(element: TElement, options?: dxButtonGroupOptions)
 }
 
 /**

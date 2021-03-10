@@ -389,8 +389,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
  * @public
  */
 export default class dxFileUploader extends Editor {
-    constructor(element: Element, options?: dxFileUploaderOptions)
-    constructor(element: JQuery, options?: dxFileUploaderOptions)
+    constructor(element: TElement, options?: dxFileUploaderOptions)
     /**
      * @docid
      * @publicName upload()

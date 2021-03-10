@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import Editor, {
     EditorOptions
 } from './editor/editor';
@@ -22,8 +26,7 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
  * @public
  */
 export default class dxRecurrenceEditor extends Editor {
-    constructor(element: Element, options?: dxRecurrenceEditorOptions)
-    constructor(element: JQuery, options?: dxRecurrenceEditorOptions)
+    constructor(element: TElement, options?: dxRecurrenceEditorOptions)
 }
 
 declare global {

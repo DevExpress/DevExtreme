@@ -131,8 +131,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxDropDownEditor extends dxTextBox {
-    constructor(element: Element, options?: dxDropDownEditorOptions)
-    constructor(element: JQuery, options?: dxDropDownEditorOptions)
+    constructor(element: TElement, options?: dxDropDownEditorOptions)
     /**
      * @docid
      * @publicName close()

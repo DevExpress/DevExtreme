@@ -375,8 +375,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxBarGauge extends BaseWidget {
-    constructor(element: Element, options?: dxBarGaugeOptions)
-    constructor(element: JQuery, options?: dxBarGaugeOptions)
+    constructor(element: TElement, options?: dxBarGaugeOptions)
     /**
      * @docid
      * @publicName values()

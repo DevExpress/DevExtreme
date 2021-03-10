@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import dxTextEditor, {
     dxTextEditorOptions
 } from './text_box/ui.text_editor.base';
@@ -36,8 +40,7 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
  * @public
  */
 export default class dxTextBox extends dxTextEditor {
-    constructor(element: Element, options?: dxTextBoxOptions)
-    constructor(element: JQuery, options?: dxTextBoxOptions)
+    constructor(element: TElement, options?: dxTextBoxOptions)
 }
 
 declare global {

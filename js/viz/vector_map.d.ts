@@ -842,8 +842,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxVectorMap extends BaseWidget {
-    constructor(element: Element, options?: dxVectorMapOptions)
-    constructor(element: JQuery, options?: dxVectorMapOptions)
+    constructor(element: TElement, options?: dxVectorMapOptions)
     /**
      * @docid
      * @publicName center()

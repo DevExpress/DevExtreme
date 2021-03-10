@@ -333,8 +333,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
  * @public
  */
 export default class dxFileManager extends Widget {
-    constructor(element: Element, options?: dxFileManagerOptions)
-    constructor(element: JQuery, options?: dxFileManagerOptions)
+    constructor(element: TElement, options?: dxFileManagerOptions)
     /**
      * @docid
      * @publicName getCurrentDirectory()

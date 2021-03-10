@@ -290,8 +290,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
  * @public
  */
 export default class dxTreeView extends HierarchicalCollectionWidget {
-    constructor(element: Element, options?: dxTreeViewOptions)
-    constructor(element: JQuery, options?: dxTreeViewOptions)
+    constructor(element: TElement, options?: dxTreeViewOptions)
     /**
      * @docid
      * @publicName collapseAll()

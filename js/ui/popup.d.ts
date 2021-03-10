@@ -249,8 +249,7 @@ export interface dxPopupToolbarItem {
  * @public
  */
 export default class dxPopup extends dxOverlay {
-    constructor(element: Element, options?: dxPopupOptions)
-    constructor(element: JQuery, options?: dxPopupOptions)
+    constructor(element: TElement, options?: dxPopupOptions)
 }
 
 declare global {

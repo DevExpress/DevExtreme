@@ -319,8 +319,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
  * @public
  */
 export default class dxMap extends Widget {
-    constructor(element: Element, options?: dxMapOptions)
-    constructor(element: JQuery, options?: dxMapOptions)
+    constructor(element: TElement, options?: dxMapOptions)
     /**
      * @docid
      * @publicName addMarker(markerOptions)

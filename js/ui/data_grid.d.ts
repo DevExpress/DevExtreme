@@ -3755,8 +3755,7 @@ export interface dxDataGridSelection extends GridBaseSelection {
  * @public
  */
 declare class dxDataGrid extends Widget implements GridBase {
-    constructor(element: Element, options?: dxDataGridOptions)
-    constructor(element: JQuery, options?: dxDataGridOptions)
+    constructor(element: TElement, options?: dxDataGridOptions)
     /**
      * @docid
      * @publicName addColumn(columnOptions)

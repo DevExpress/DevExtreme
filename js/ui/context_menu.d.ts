@@ -158,8 +158,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
  * @public
  */
 export default class dxContextMenu extends dxMenuBase {
-    constructor(element: Element, options?: dxContextMenuOptions)
-    constructor(element: JQuery, options?: dxContextMenuOptions)
+    constructor(element: TElement, options?: dxContextMenuOptions)
     /**
      * @docid
      * @publicName hide()

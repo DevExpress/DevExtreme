@@ -89,8 +89,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
  * @public
  */
 export default class dxSelectBox extends dxDropDownList {
-    constructor(element: Element, options?: dxSelectBoxOptions)
-    constructor(element: JQuery, options?: dxSelectBoxOptions)
+    constructor(element: TElement, options?: dxSelectBoxOptions)
 }
 
 declare global {

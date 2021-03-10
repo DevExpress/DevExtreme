@@ -111,8 +111,7 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxScrollable extends DOMComponent {
-    constructor(element: Element, options?: dxScrollableOptions)
-    constructor(element: JQuery, options?: dxScrollableOptions)
+    constructor(element: TElement, options?: dxScrollableOptions)
     /**
      * @docid
      * @publicName clientHeight()

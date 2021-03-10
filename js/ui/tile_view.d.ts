@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -97,8 +101,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
  * @public
  */
 export default class dxTileView extends CollectionWidget {
-    constructor(element: Element, options?: dxTileViewOptions)
-    constructor(element: JQuery, options?: dxTileViewOptions)
+    constructor(element: TElement, options?: dxTileViewOptions)
     /**
      * @docid
      * @publicName scrollPosition()

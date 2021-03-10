@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import dxTrackBar, {
     dxTrackBarOptions
 } from './track_bar';
@@ -25,8 +29,7 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
  * @public
  */
 export default class dxSlider extends dxTrackBar {
-    constructor(element: Element, options?: dxSliderOptions)
-    constructor(element: JQuery, options?: dxSliderOptions)
+    constructor(element: TElement, options?: dxSliderOptions)
 }
 
 /**

@@ -70,8 +70,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
  * @public
  */
 export default class dxSpeedDialAction extends Widget {
-    constructor(element: Element, options?: dxSpeedDialActionOptions)
-    constructor(element: JQuery, options?: dxSpeedDialActionOptions)
+    constructor(element: TElement, options?: dxSpeedDialActionOptions)
 }
 
 declare global {

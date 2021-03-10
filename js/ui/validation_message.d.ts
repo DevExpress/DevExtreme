@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import dxOverlay, {
     dxOverlayOptions
 } from './overlay';
@@ -15,8 +19,7 @@ export interface dxValidationMessageOptions<T = dxValidationMessage> extends dxO
 }
 
 export default class dxValidationMessage extends dxOverlay {
-    constructor(element: Element, options?: dxValidationMessageOptions)
-    constructor(element: JQuery, options?: dxValidationMessageOptions)
+    constructor(element: TElement, options?: dxValidationMessageOptions)
 }
 
 declare global {

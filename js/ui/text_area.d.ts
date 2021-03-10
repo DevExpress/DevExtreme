@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import dxTextBox, {
     dxTextBoxOptions
 } from './text_box';
@@ -42,8 +46,7 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
  * @public
  */
 export default class dxTextArea extends dxTextBox {
-    constructor(element: Element, options?: dxTextAreaOptions)
-    constructor(element: JQuery, options?: dxTextAreaOptions)
+    constructor(element: TElement, options?: dxTextAreaOptions)
 }
 
 declare global {

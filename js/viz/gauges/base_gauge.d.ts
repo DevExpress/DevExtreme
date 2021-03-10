@@ -427,8 +427,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export class BaseGauge extends BaseWidget {
-    constructor(element: Element, options?: BaseGaugeOptions)
-    constructor(element: JQuery, options?: BaseGaugeOptions)
+    constructor(element: TElement, options?: BaseGaugeOptions)
     /**
      * @docid
      * @publicName subvalues()

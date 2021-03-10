@@ -189,8 +189,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
  * @public
  */
 export default class dxDraggable extends DOMComponent implements DraggableBase {
-    constructor(element: Element, options?: dxDraggableOptions)
-    constructor(element: JQuery, options?: dxDraggableOptions)
+    constructor(element: TElement, options?: dxDraggableOptions)
 }
 
 declare global {

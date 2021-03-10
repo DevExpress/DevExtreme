@@ -1,4 +1,8 @@
 import {
+    TElement
+} from '../core/element';
+
+import {
     animationConfig
 } from '../animation/fx';
 
@@ -145,8 +149,7 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
  * @public
  */
 export default class dxLoadPanel extends dxOverlay {
-    constructor(element: Element, options?: dxLoadPanelOptions)
-    constructor(element: JQuery, options?: dxLoadPanelOptions)
+    constructor(element: TElement, options?: dxLoadPanelOptions)
 }
 
 declare global {

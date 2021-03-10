@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import dxDropDownList, {
     dxDropDownListOptions
 } from './drop_down_editor/ui.drop_down_list';
@@ -42,8 +46,7 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
  * @public
  */
 export default class dxAutocomplete extends dxDropDownList {
-    constructor(element: Element, options?: dxAutocompleteOptions)
-    constructor(element: JQuery, options?: dxAutocompleteOptions)
+    constructor(element: TElement, options?: dxAutocompleteOptions)
 }
 
 declare global {

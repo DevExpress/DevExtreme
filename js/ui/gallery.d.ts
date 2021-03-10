@@ -2,6 +2,10 @@ import {
     TPromise
 } from '../core';
 
+import {
+    TElement
+} from '../core/element';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -133,8 +137,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
  * @public
  */
 export default class dxGallery extends CollectionWidget {
-    constructor(element: Element, options?: dxGalleryOptions)
-    constructor(element: JQuery, options?: dxGalleryOptions)
+    constructor(element: TElement, options?: dxGalleryOptions)
     /**
      * @docid
      * @publicName goToItem(itemIndex, animation)

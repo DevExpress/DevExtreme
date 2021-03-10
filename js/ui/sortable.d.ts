@@ -222,8 +222,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
  * @public
  */
 export default class dxSortable extends DOMComponent implements DraggableBase {
-    constructor(element: Element, options?: dxSortableOptions)
-    constructor(element: JQuery, options?: dxSortableOptions)
+    constructor(element: TElement, options?: dxSortableOptions)
     /**
      * @docid
      * @publicName update()

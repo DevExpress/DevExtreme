@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import BaseSparkline, {
     BaseSparklineOptions
 } from './sparklines/base_sparkline';
@@ -80,8 +84,7 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
  * @public
  */
 export default class dxBullet extends BaseSparkline {
-    constructor(element: Element, options?: dxBulletOptions)
-    constructor(element: JQuery, options?: dxBulletOptions)
+    constructor(element: TElement, options?: dxBulletOptions)
 }
 
 declare global {

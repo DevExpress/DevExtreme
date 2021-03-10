@@ -2,6 +2,10 @@ import {
     TPromise
 } from '../core';
 
+import {
+    TElement
+} from '../core/element';
+
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
@@ -30,8 +34,7 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @public
  */
 export default class dxValidationGroup extends DOMComponent {
-    constructor(element: Element, options?: dxValidationGroupOptions)
-    constructor(element: JQuery, options?: dxValidationGroupOptions)
+    constructor(element: TElement, options?: dxValidationGroupOptions)
     /**
      * @docid
      * @publicName reset()

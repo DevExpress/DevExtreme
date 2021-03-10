@@ -7,6 +7,10 @@ import {
 } from '../animation/position';
 
 import {
+    TElement
+} from '../core/element';
+
+import {
     TEvent
 } from '../events/index';
 
@@ -147,8 +151,7 @@ export interface dxToastAnimation extends dxOverlayAnimation {
  * @public
  */
 export default class dxToast extends dxOverlay {
-    constructor(element: Element, options?: dxToastOptions)
-    constructor(element: JQuery, options?: dxToastOptions)
+    constructor(element: TElement, options?: dxToastOptions)
 }
 
 declare global {

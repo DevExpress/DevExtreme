@@ -848,8 +848,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
  * @public
  */
 export default class dxRangeSelector extends BaseWidget {
-    constructor(element: Element, options?: dxRangeSelectorOptions)
-    constructor(element: JQuery, options?: dxRangeSelectorOptions)
+    constructor(element: TElement, options?: dxRangeSelectorOptions)
     getDataSource(): DataSource;
     /**
      * @docid

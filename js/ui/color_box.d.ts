@@ -74,8 +74,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
  * @public
  */
 export default class dxColorBox extends dxDropDownEditor {
-    constructor(element: Element, options?: dxColorBoxOptions)
-    constructor(element: JQuery, options?: dxColorBoxOptions)
+    constructor(element: TElement, options?: dxColorBoxOptions)
 }
 
 declare global {

@@ -94,8 +94,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class Editor extends Widget {
-    constructor(element: Element, options?: EditorOptions)
-    constructor(element: JQuery, options?: EditorOptions)
+    constructor(element: TElement, options?: EditorOptions)
     /**
      * @docid
      * @publicName reset()

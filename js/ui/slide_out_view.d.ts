@@ -64,8 +64,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
  * @public
  */
 export default class dxSlideOutView extends Widget {
-    constructor(element: Element, options?: dxSlideOutViewOptions)
-    constructor(element: JQuery, options?: dxSlideOutViewOptions)
+    constructor(element: TElement, options?: dxSlideOutViewOptions)
     /**
      * @docid
      * @publicName content()

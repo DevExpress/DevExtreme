@@ -181,7 +181,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxDropDownList extends dxDropDownEditor {
-    constructor(element: Element, options?: dxDropDownListOptions)
-    constructor(element: JQuery, options?: dxDropDownListOptions)
+    constructor(element: TElement, options?: dxDropDownListOptions)
     getDataSource(): DataSource;
 }

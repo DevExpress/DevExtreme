@@ -189,8 +189,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
  * @public
  */
 export default class dxPivotGridFieldChooser extends Widget {
-    constructor(element: Element, options?: dxPivotGridFieldChooserOptions)
-    constructor(element: JQuery, options?: dxPivotGridFieldChooserOptions)
+    constructor(element: TElement, options?: dxPivotGridFieldChooserOptions)
     /**
      * @docid
      * @publicName applyChanges()

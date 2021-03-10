@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import DataSource, {
     DataSourceOptions
 } from '../data/data_source';
@@ -56,8 +60,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
  * @public
  */
 export default class dxBox extends CollectionWidget {
-    constructor(element: Element, options?: dxBoxOptions)
-    constructor(element: JQuery, options?: dxBoxOptions)
+    constructor(element: TElement, options?: dxBoxOptions)
 }
 
 /**

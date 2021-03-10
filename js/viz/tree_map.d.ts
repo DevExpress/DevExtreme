@@ -550,8 +550,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxTreeMap extends BaseWidget {
-    constructor(element: Element, options?: dxTreeMapOptions)
-    constructor(element: JQuery, options?: dxTreeMapOptions)
+    constructor(element: TElement, options?: dxTreeMapOptions)
     /**
      * @docid
      * @publicName clearSelection()

@@ -628,8 +628,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxFunnel extends BaseWidget {
-    constructor(element: Element, options?: dxFunnelOptions)
-    constructor(element: JQuery, options?: dxFunnelOptions)
+    constructor(element: TElement, options?: dxFunnelOptions)
     /**
      * @docid
      * @publicName clearSelection()

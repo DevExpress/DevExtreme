@@ -11,6 +11,10 @@ import {
 } from '../core';
 
 import {
+    TElement
+} from '../core/element';
+
+import {
     TEvent
 } from '../events/index';
 
@@ -148,8 +152,7 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
  * @public
  */
 export default class dxPopover extends dxPopup {
-    constructor(element: Element, options?: dxPopoverOptions)
-    constructor(element: JQuery, options?: dxPopoverOptions)
+    constructor(element: TElement, options?: dxPopoverOptions)
     show(): TPromise<boolean>;
     /**
      * @docid

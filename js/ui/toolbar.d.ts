@@ -60,8 +60,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @public
  */
 export default class dxToolbar extends CollectionWidget {
-    constructor(element: Element, options?: dxToolbarOptions)
-    constructor(element: JQuery, options?: dxToolbarOptions)
+    constructor(element: TElement, options?: dxToolbarOptions)
 }
 
 

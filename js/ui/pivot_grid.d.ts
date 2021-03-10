@@ -693,8 +693,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
  * @public
  */
 export default class dxPivotGrid extends Widget {
-    constructor(element: Element, options?: dxPivotGridOptions)
-    constructor(element: JQuery, options?: dxPivotGridOptions)
+    constructor(element: TElement, options?: dxPivotGridOptions)
     /**
      * @docid
      * @publicName bindChart(chart, integrationOptions)

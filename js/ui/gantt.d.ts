@@ -692,8 +692,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
  * @public
  */
 export default class dxGantt extends Widget {
-    constructor(element: Element, options?: dxGanttOptions)
-    constructor(element: JQuery, options?: dxGanttOptions)
+    constructor(element: TElement, options?: dxGanttOptions)
     /**
      * @docid
      * @publicName getTaskData(key)

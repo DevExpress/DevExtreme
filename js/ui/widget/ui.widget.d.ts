@@ -81,8 +81,7 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class Widget extends DOMComponent {
-    constructor(element: Element, options?: WidgetOptions)
-    constructor(element: JQuery, options?: WidgetOptions)
+    constructor(element: TElement, options?: WidgetOptions)
     /**
      * @docid
      * @publicName focus()

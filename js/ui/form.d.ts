@@ -219,8 +219,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
  * @public
  */
 export default class dxForm extends Widget {
-    constructor(element: Element, options?: dxFormOptions)
-    constructor(element: JQuery, options?: dxFormOptions)
+    constructor(element: TElement, options?: dxFormOptions)
     /**
      * @docid
      * @publicName getButton(name)

@@ -134,8 +134,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
  * @public
  */
 export default class dxSlideOut extends CollectionWidget {
-    constructor(element: Element, options?: dxSlideOutOptions)
-    constructor(element: JQuery, options?: dxSlideOutOptions)
+    constructor(element: TElement, options?: dxSlideOutOptions)
     /**
      * @docid
      * @publicName hideMenu()

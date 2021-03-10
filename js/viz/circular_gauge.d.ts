@@ -1,4 +1,8 @@
 import {
+    TElement
+} from '../core/element';
+
+import {
     BaseGauge,
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
@@ -116,8 +120,7 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @public
  */
 export default class dxCircularGauge extends BaseGauge {
-    constructor(element: Element, options?: dxCircularGaugeOptions)
-    constructor(element: JQuery, options?: dxCircularGaugeOptions)
+    constructor(element: TElement, options?: dxCircularGaugeOptions)
 }
 
 declare global {

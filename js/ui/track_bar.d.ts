@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import Editor, {
     EditorOptions
 } from './editor/editor';
@@ -25,6 +29,5 @@ export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxTrackBar extends Editor {
-    constructor(element: Element, options?: dxTrackBarOptions)
-    constructor(element: JQuery, options?: dxTrackBarOptions)
+    constructor(element: TElement, options?: dxTrackBarOptions)
 }

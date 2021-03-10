@@ -2,6 +2,10 @@ import {
     TPromise
 } from '../core';
 
+import {
+    TElement
+} from '../core/element';
+
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
@@ -101,8 +105,7 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @public
  */
 export default class dxValidator extends DOMComponent {
-    constructor(element: Element, options?: dxValidatorOptions)
-    constructor(element: JQuery, options?: dxValidatorOptions)
+    constructor(element: TElement, options?: dxValidatorOptions)
     /**
      * @docid
      * @publicName focus()

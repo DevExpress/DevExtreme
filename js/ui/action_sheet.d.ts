@@ -104,8 +104,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @public
  */
 export default class dxActionSheet extends CollectionWidget {
-    constructor(element: Element, options?: dxActionSheetOptions)
-    constructor(element: JQuery, options?: dxActionSheetOptions)
+    constructor(element: TElement, options?: dxActionSheetOptions)
     /**
      * @docid
      * @publicName hide()

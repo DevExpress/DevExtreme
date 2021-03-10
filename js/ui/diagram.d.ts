@@ -1150,8 +1150,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
  * @public
  */
 export default class dxDiagram extends Widget {
-    constructor(element: Element, options?: dxDiagramOptions)
-    constructor(element: JQuery, options?: dxDiagramOptions)
+    constructor(element: TElement, options?: dxDiagramOptions)
     /**
      * @docid
      * @publicName getNodeDataSource()

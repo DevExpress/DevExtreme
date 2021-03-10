@@ -83,7 +83,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
  * @prevFileNamespace DevExpress.core
  */
 export default class DOMComponent extends Component {
-    constructor(element: Element | JQuery, options?: DOMComponentOptions);
+    constructor(element: TElement, options?: DOMComponentOptions);
     /**
      * @docid
      * @static

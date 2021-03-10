@@ -70,8 +70,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
  * @public
  */
 export default class dxDeferRendering extends Widget {
-    constructor(element: Element, options?: dxDeferRenderingOptions)
-    constructor(element: JQuery, options?: dxDeferRenderingOptions)
+    constructor(element: TElement, options?: dxDeferRenderingOptions)
 }
 
 declare global {

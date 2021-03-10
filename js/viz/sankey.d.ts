@@ -605,8 +605,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
  * @public
  */
 export default class dxSankey extends BaseWidget {
-    constructor(element: Element, options?: dxSankeyOptions)
-    constructor(element: JQuery, options?: dxSankeyOptions)
+    constructor(element: TElement, options?: dxSankeyOptions)
     /**
      * @docid
      * @publicName getAllLinks()

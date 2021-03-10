@@ -2858,8 +2858,7 @@ export interface dxChartValueAxisTitle extends dxChartCommonAxisSettingsTitle {
  * @public
  */
 export default class dxChart extends BaseChart {
-    constructor(element: Element, options?: dxChartOptions)
-    constructor(element: JQuery, options?: dxChartOptions)
+    constructor(element: TElement, options?: dxChartOptions)
     /**
      * @docid
      * @publicName getArgumentAxis()

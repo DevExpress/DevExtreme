@@ -617,8 +617,7 @@ export interface BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseWidget extends DOMComponent {
-    constructor(element: Element, options?: BaseWidgetOptions)
-    constructor(element: JQuery, options?: BaseWidgetOptions)
+    constructor(element: TElement, options?: BaseWidgetOptions)
     /**
      * @docid
      * @static

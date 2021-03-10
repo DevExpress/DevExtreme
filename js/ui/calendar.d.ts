@@ -144,8 +144,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @public
  */
 export default class dxCalendar extends Editor {
-    constructor(element: Element, options?: dxCalendarOptions)
-    constructor(element: JQuery, options?: dxCalendarOptions)
+    constructor(element: TElement, options?: dxCalendarOptions)
 }
 
 declare global {

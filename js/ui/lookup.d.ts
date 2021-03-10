@@ -393,8 +393,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
  * @public
  */
 export default class dxLookup extends dxDropDownList {
-    constructor(element: Element, options?: dxLookupOptions)
-    constructor(element: JQuery, options?: dxLookupOptions)
+    constructor(element: TElement, options?: dxLookupOptions)
 }
 
 declare global {

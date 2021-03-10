@@ -203,8 +203,7 @@ export interface dxOverlayAnimation {
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxOverlay extends Widget {
-    constructor(element: Element, options?: dxOverlayOptions)
-    constructor(element: JQuery, options?: dxOverlayOptions)
+    constructor(element: TElement, options?: dxOverlayOptions)
     /**
      * @docid
      * @publicName content()

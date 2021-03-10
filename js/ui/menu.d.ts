@@ -144,8 +144,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  * @public
  */
 export default class dxMenu extends dxMenuBase {
-    constructor(element: Element, options?: dxMenuOptions)
-    constructor(element: JQuery, options?: dxMenuOptions)
+    constructor(element: TElement, options?: dxMenuOptions)
 }
 
 /**

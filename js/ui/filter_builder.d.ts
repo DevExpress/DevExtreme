@@ -242,8 +242,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
  * @public
  */
 export default class dxFilterBuilder extends Widget {
-    constructor(element: Element, options?: dxFilterBuilderOptions)
-    constructor(element: JQuery, options?: dxFilterBuilderOptions)
+    constructor(element: TElement, options?: dxFilterBuilderOptions)
     /**
      * @docid
      * @publicName getFilterExpression()

@@ -556,8 +556,7 @@ export interface dxTreeListSelection extends GridBaseSelection {
  * @public
  */
 export default class dxTreeList extends Widget implements GridBase {
-    constructor(element: Element, options?: dxTreeListOptions)
-    constructor(element: JQuery, options?: dxTreeListOptions)
+    constructor(element: TElement, options?: dxTreeListOptions)
     /**
      * @docid
      * @publicName addColumn(columnOptions)

@@ -140,8 +140,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
  * @public
  */
 export default class dxTabPanel extends dxMultiView {
-    constructor(element: Element, options?: dxTabPanelOptions)
-    constructor(element: JQuery, options?: dxTabPanelOptions)
+    constructor(element: TElement, options?: dxTabPanelOptions)
 }
 
 /**

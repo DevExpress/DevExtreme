@@ -240,8 +240,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
  * @public
  */
 export default class dxDropDownButton extends Widget {
-    constructor(element: Element, options?: dxDropDownButtonOptions)
-    constructor(element: JQuery, options?: dxDropDownButtonOptions)
+    constructor(element: TElement, options?: dxDropDownButtonOptions)
     /**
      * @docid
      * @publicName close()

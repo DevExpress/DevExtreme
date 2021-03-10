@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import DataSource from '../data/data_source';
 
 import Editor, {
@@ -64,8 +68,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
  * @public
  */
 export default class dxRadioGroup extends Editor {
-    constructor(element: Element, options?: dxRadioGroupOptions)
-    constructor(element: JQuery, options?: dxRadioGroupOptions)
+    constructor(element: TElement, options?: dxRadioGroupOptions)
     getDataSource(): DataSource;
 }
 

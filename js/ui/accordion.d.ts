@@ -148,8 +148,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
  * @public
  */
 export default class dxAccordion extends CollectionWidget {
-    constructor(element: Element, options?: dxAccordionOptions)
-    constructor(element: JQuery, options?: dxAccordionOptions)
+    constructor(element: TElement, options?: dxAccordionOptions)
     /**
      * @docid
      * @publicName collapseItem(index)

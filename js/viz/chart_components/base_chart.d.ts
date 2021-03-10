@@ -315,8 +315,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export class BaseChart extends BaseWidget {
-    constructor(element: Element, options?: BaseChartOptions)
-    constructor(element: JQuery, options?: BaseChartOptions)
+    constructor(element: TElement, options?: BaseChartOptions)
     /**
      * @docid
      * @publicName clearSelection()

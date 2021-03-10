@@ -1348,8 +1348,7 @@ export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSetting
  * @public
  */
 export default class dxPolarChart extends BaseChart {
-    constructor(element: Element, options?: dxPolarChartOptions)
-    constructor(element: JQuery, options?: dxPolarChartOptions)
+    constructor(element: TElement, options?: dxPolarChartOptions)
     /**
      * @docid dxPolarChart.getValueAxis
      * @publicName getValueAxis()

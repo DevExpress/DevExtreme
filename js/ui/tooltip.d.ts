@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import dxPopover, {
     dxPopoverOptions
 } from './popover';
@@ -14,8 +18,7 @@ export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
  * @public
  */
 export default class dxTooltip extends dxPopover {
-    constructor(element: Element, options?: dxTooltipOptions)
-    constructor(element: JQuery, options?: dxTooltipOptions)
+    constructor(element: TElement, options?: dxTooltipOptions)
 }
 
 declare global {

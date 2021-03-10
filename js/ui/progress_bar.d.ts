@@ -55,8 +55,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
  * @public
  */
 export default class dxProgressBar extends dxTrackBar {
-    constructor(element: Element, options?: dxProgressBarOptions)
-    constructor(element: JQuery, options?: dxProgressBarOptions)
+    constructor(element: TElement, options?: dxProgressBarOptions)
 }
 
 declare global {

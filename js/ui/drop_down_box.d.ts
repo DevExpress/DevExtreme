@@ -99,8 +99,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
  * @public
  */
 export default class dxDropDownBox extends dxDropDownEditor {
-    constructor(element: Element, options?: dxDropDownBoxOptions)
-    constructor(element: JQuery, options?: dxDropDownBoxOptions)
+    constructor(element: TElement, options?: dxDropDownBoxOptions)
     getDataSource(): DataSource;
 }
 

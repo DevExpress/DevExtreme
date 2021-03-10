@@ -168,8 +168,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
  * @prevFileNamespace DevExpress.ui
  */
 export default class CollectionWidget extends Widget {
-    constructor(element: Element, options?: CollectionWidgetOptions)
-    constructor(element: JQuery, options?: CollectionWidgetOptions)
+    constructor(element: TElement, options?: CollectionWidgetOptions)
     getDataSource(): DataSource;
 }
 

@@ -114,8 +114,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
  * @public
  */
 export default class dxButton extends Widget {
-    constructor(element: Element, options?: dxButtonOptions)
-    constructor(element: JQuery, options?: dxButtonOptions)
+    constructor(element: TElement, options?: dxButtonOptions)
 }
 
 declare global {

@@ -127,8 +127,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
  * @public
  */
 export default class dxHtmlEditor extends Editor {
-    constructor(element: Element, options?: dxHtmlEditorOptions)
-    constructor(element: JQuery, options?: dxHtmlEditorOptions)
+    constructor(element: TElement, options?: dxHtmlEditorOptions)
     /**
      * @docid
      * @publicName clearHistory()

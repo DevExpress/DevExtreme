@@ -414,8 +414,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
  * @public
  */
 export default class dxPieChart extends BaseChart {
-    constructor(element: Element, options?: dxPieChartOptions)
-    constructor(element: JQuery, options?: dxPieChartOptions)
+    constructor(element: TElement, options?: dxPieChartOptions)
     /**
      * @docid
      * @publicName getInnerRadius()

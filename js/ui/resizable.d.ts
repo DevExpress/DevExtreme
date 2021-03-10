@@ -110,8 +110,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
  * @public
  */
 export default class dxResizable extends DOMComponent {
-    constructor(element: Element, options?: dxResizableOptions)
-    constructor(element: JQuery, options?: dxResizableOptions)
+    constructor(element: TElement, options?: dxResizableOptions)
 }
 
 declare global {

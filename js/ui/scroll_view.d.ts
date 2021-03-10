@@ -70,8 +70,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
  * @public
  */
 export default class dxScrollView extends dxScrollable {
-    constructor(element: Element, options?: dxScrollViewOptions)
-    constructor(element: JQuery, options?: dxScrollViewOptions)
+    constructor(element: TElement, options?: dxScrollViewOptions)
     /**
      * @docid
      * @publicName refresh()

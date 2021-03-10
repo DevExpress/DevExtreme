@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../core/element';
+
 import dxTabs, {
     dxTabsItem,
     dxTabsOptions
@@ -20,8 +24,7 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @public
  */
 export default class dxNavBar extends dxTabs {
-    constructor(element: Element, options?: dxNavBarOptions)
-    constructor(element: JQuery, options?: dxNavBarOptions)
+    constructor(element: TElement, options?: dxNavBarOptions)
 }
 
 /**

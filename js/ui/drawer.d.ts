@@ -121,8 +121,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
  * @public
  */
 export default class dxDrawer extends Widget {
-    constructor(element: Element, options?: dxDrawerOptions)
-    constructor(element: JQuery, options?: dxDrawerOptions)
+    constructor(element: TElement, options?: dxDrawerOptions)
     /**
      * @docid
      * @publicName content()

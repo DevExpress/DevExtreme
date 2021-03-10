@@ -1,4 +1,8 @@
 import {
+    TElement
+} from '../core/element';
+
+import {
     BaseGauge,
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
@@ -138,8 +142,7 @@ export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
  * @public
  */
 export default class dxLinearGauge extends BaseGauge {
-    constructor(element: Element, options?: dxLinearGaugeOptions)
-    constructor(element: JQuery, options?: dxLinearGaugeOptions)
+    constructor(element: TElement, options?: dxLinearGaugeOptions)
 }
 
 declare global {

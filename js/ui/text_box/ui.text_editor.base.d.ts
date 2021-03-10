@@ -265,8 +265,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
  * @prevFileNamespace DevExpress.ui
  */
 export default class dxTextEditor extends Editor {
-    constructor(element: Element, options?: dxTextEditorOptions)
-    constructor(element: JQuery, options?: dxTextEditorOptions)
+    constructor(element: TElement, options?: dxTextEditorOptions)
     /**
      * @docid
      * @publicName blur()

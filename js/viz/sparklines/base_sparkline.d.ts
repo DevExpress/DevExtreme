@@ -111,8 +111,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
  * @prevFileNamespace DevExpress.viz
  */
 export default class BaseSparkline extends BaseWidget {
-    constructor(element: Element, options?: BaseSparklineOptions)
-    constructor(element: JQuery, options?: BaseSparklineOptions)
+    constructor(element: TElement, options?: BaseSparklineOptions)
 
     /**
      * @docid
