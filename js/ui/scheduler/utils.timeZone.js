@@ -121,24 +121,15 @@ const getClientTimezoneOffset = (date = new Date()) => {
     return date.getTimezoneOffset() * 60000;
 };
 
-const isEqualLocalTimeZone = (timeZoneName, date) => {
+const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => {
     if(Intl) {
         const localTimeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        if(localTimeZoneName) {
-            if(localTimeZoneName === timeZoneName) {
-                return true;
-            }
-
-            if(date) {
-                const year = date.getFullYear();
-                return isEqualLocalTimeZoneByDeclaration(timeZoneName, year);
-            }
-
-            return false;
+        if(localTimeZoneName === timeZoneName) {
+            return true;
         }
     }
 
-    return isEqualLocalTimeZoneByNativeDate(timeZoneName);
+    return isEqualLocalTimeZoneByDeclaration(timeZoneName, date.getFullYear());
 };
 
 // TODO: Not used anywhere, if it isn't use in the future, then it must be removed
@@ -147,38 +138,37 @@ const hasDSTInLocalTimeZone = () => {
     return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
 };
 
-const isEqualLocalTimeZoneByDeclaration = (timeZoneName, localTimeZoneName, year) => {
+const isEqualLocalTimeZoneByDeclaration = (timeZoneName, year) => {
+    const getOffset = date => -date.getTimezoneOffset() / 60;
+    const getHourBack = dateStamp => new Date(dateStamp - 3600000);
+
     const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
-    const localConfigTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(localTimeZoneName, year);
+    const [summerTime, winterTime] = configTuple;
 
-    if(configTuple.length === localConfigTuple.length) {
-        for(let i = 0; i < configTuple.length; i++) {
-            const item = configTuple[i];
-            const localItem = localConfigTuple[i];
-
-            if(item.date !== localItem.date && item.offset !== localItem.offset) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-};
-
-const isEqualLocalTimeZoneByNativeDate = (timeZoneName) => {
-    const [startDate, endDate] = getExtremeDates();
-
-    const startDateLocalOffset = -startDate.getTimezoneOffset() / 60;
-    const endDateLocalOffset = -endDate.getTimezoneOffset() / 60;
-
-    const startDateOffset = calculateTimezoneByValue(timeZoneName, startDate);
-    const endDateOffset = calculateTimezoneByValue(timeZoneName, endDate);
-
-    if(startDateLocalOffset === startDateOffset && endDateLocalOffset === endDateOffset) {
+    if(configTuple.length === 0 && !hasDSTInLocalTimeZone()) {
         return true;
     }
 
-    return false;
+    const localSummerOffset = getOffset(new Date(summerTime.date));
+    const localWinterOffset = getOffset(new Date(winterTime.date));
+
+    if(localSummerOffset !== summerTime.offset) {
+        return false;
+    }
+
+    if(localSummerOffset === getOffset(getHourBack(summerTime.date))) {
+        return false;
+    }
+
+    if(localWinterOffset !== winterTime.offset) {
+        return false;
+    }
+
+    if(localWinterOffset === getOffset(getHourBack(winterTime.date))) {
+        return false;
+    }
+
+    return true;
 };
 
 

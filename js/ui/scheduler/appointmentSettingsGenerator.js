@@ -266,7 +266,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
             getPostProcessedException: date => {
                 const timeZoneName = this.scheduler.option('timeZone');
-                if(isEmptyObject(timeZoneName) || timeZoneUtils.isEqualLocalTimeZone(timeZoneName)) {
+                if(isEmptyObject(timeZoneName) || timeZoneUtils.isEqualLocalTimeZone(timeZoneName, date)) {
                     return date;
                 }
 
