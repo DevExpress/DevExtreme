@@ -971,16 +971,18 @@ QUnit.test('Timepanel text should be calculated correctly if DST makes sense (T4
 });
 
 QUnit.test('DateTimeIndicator should show correct time in current time zone', function(assert) {
-    const currentDate = new Date(2018, 1, 4);
+    const currentDate = new Date(2021, 4, 26);
 
     this.createInstance({
         dataSource: [],
         views: ['week'],
         currentView: 'week',
         cellDuration: 60,
+        startDayHour: 8,
         showCurrentTimeIndicator: true,
         currentDate: currentDate,
-        indicatorTime: new Date(2018, 1, 4, 9, 30),
+        timeZone: 'Europe/Moscow',
+        indicatorTime: new Date('2021-05-26T08:30:00.000Z'),
         height: 600
     });
 
@@ -990,9 +992,8 @@ QUnit.test('DateTimeIndicator should show correct time in current time zone', fu
     this.instance.option('timeZone', 'Asia/Yekaterinburg');
 
     const indicatorPositionAfter = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
-    const tzDiff = this.instance.fire('getClientTimezoneOffset', currentDate) / 3600000 + this.instance.fire('getTimezone');
 
-    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * tzDiff, 'indicator has correct position');
+    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * 2, 'indicator has correct position');
 });
 
 QUnit.test('Tables should take css class after width calculation(T491453)', function(assert) {
