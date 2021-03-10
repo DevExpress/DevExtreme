@@ -263,7 +263,7 @@ export interface BaseChartLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
 }
 export interface BaseChartTooltip extends BaseWidgetTooltip {
     /**
@@ -282,7 +282,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointInfo: any, element: TElement) => string | Element | JQuery);
+    contentTemplate?: template | ((pointInfo: any, element: TElement) => string | TElement);
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
      * @type_function_param1 pointInfo:object

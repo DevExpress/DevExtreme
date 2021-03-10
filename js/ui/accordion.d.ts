@@ -85,7 +85,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default "title"
@@ -96,7 +96,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @fires dxAccordionOptions.onOptionChanged

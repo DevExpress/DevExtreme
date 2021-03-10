@@ -581,7 +581,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: TElement) => string | Element | JQuery);
+    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: TElement) => string | TElement);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
      * @type_function_param1 info:object
@@ -594,7 +594,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: TElement) => string | Element | JQuery);
+    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: TElement) => string | TElement);
 }
 /**
  * @docid

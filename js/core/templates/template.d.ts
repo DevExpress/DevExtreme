@@ -1,3 +1,7 @@
+import {
+    TElement
+} from '../element';
+
 export interface dxTemplateOptions {
     /**
      * @docid
@@ -24,4 +28,4 @@ export class Template {
  * @prevFileNamespace DevExpress.core
  * @public
  */
-export type template = string | Function | Element | JQuery;
+export type template = string | Function | TElement;

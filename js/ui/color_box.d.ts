@@ -49,7 +49,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((value: string, fieldElement: TElement) => string | Element | JQuery);
+    fieldTemplate?: template | ((value: string, fieldElement: TElement) => string | TElement);
     /**
      * @docid
      * @default 1

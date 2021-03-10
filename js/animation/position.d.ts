@@ -1,3 +1,7 @@
+import {
+  TElement
+} from '../core/element';
+
 /**
 * @docid
 * @namespace DevExpress
@@ -29,7 +33,7 @@ export interface positionConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    boundary?: string | Element | JQuery | Window;
+    boundary?: string | TElement | Window;
     /**
      * @docid
      * @prevFileNamespace DevExpress.animation
@@ -96,7 +100,7 @@ export interface positionConfig {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    of?: string | Element | JQuery | Window;
+    of?: string | TElement | Window;
     /**
      * @docid
      * @prevFileNamespace DevExpress.animation

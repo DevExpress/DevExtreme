@@ -760,7 +760,7 @@ export default class dxTreeList extends Widget implements GridBase {
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
-    focus(element: Element | JQuery): void;
+    focus(element: TElement): void;
     getCellElement(rowIndex: number, dataField: string): TElement | undefined;
     getCellElement(rowIndex: number, visibleColumnIndex: number): TElement | undefined;
     getCombinedFilter(): any;
@@ -921,7 +921,7 @@ export interface dxTreeListColumnButton extends GridBaseColumnButton {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: { component?: dxTreeList, data?: any, key?: any, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject }) => string | Element | JQuery);
+    template?: template | ((cellElement: TElement, cellInfo: { component?: dxTreeList, data?: any, key?: any, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject }) => string | TElement);
     /**
      * @docid
      * @default true

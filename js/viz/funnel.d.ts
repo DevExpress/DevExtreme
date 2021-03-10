@@ -579,7 +579,7 @@ export interface dxFunnelLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid dxFunnelOptions.legend.visible
      * @default false
@@ -603,7 +603,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: TElement) => string | Element | JQuery);
+    contentTemplate?: template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: TElement) => string | TElement);
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined

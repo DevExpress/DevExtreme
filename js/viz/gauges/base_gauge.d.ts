@@ -399,7 +399,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string }, element: TElement) => string | Element | JQuery);
+    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string }, element: TElement) => string | TElement);
     /**
      * @docid BaseGaugeOptions.tooltip.customizeTooltip
      * @default undefined

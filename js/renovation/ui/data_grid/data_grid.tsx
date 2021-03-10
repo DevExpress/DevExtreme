@@ -175,7 +175,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  focus(element?: Element | JQuery): void {
+  focus(element?: TElement): void {
     return this.instance?.focus(element as Element);
   }
 

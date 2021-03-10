@@ -94,7 +94,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: TElement) => string | Element | JQuery);
+    groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: TElement) => string | TElement);
     /**
      * @docid
      * @default false

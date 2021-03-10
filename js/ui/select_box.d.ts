@@ -31,7 +31,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: TElement) => string | Element | JQuery);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: TElement) => string | TElement);
     /**
      * @docid
      * @extends Action

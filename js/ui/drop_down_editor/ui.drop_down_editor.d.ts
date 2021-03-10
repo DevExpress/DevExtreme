@@ -74,7 +74,7 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | Element | JQuery);
+    dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @extends Action

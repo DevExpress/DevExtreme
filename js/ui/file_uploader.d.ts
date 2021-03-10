@@ -281,14 +281,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dialogTrigger?: string | Element | JQuery;
+    dialogTrigger?: string | TElement;
     /**
      * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropZone?: string | Element | JQuery;
+    dropZone?: string | TElement;
     /**
      * @docid
      * @default "Upload"

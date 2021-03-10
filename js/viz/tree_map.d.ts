@@ -527,7 +527,7 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }, element: TElement) => string | Element | JQuery);
+    contentTemplate?: template | ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }, element: TElement) => string | TElement);
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined

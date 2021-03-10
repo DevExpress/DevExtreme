@@ -304,7 +304,7 @@ export interface dxFilterBuilderCustomOperation {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, field?: dxFilterBuilderField, setValue?: Function }, container: TElement) => string | Element | JQuery);
+    editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, field?: dxFilterBuilderField, setValue?: Function }, container: TElement) => string | TElement);
     /**
      * @docid
      * @default true
@@ -392,7 +392,7 @@ export interface dxFilterBuilderField {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, filterOperation?: string, field?: dxFilterBuilderField, setValue?: Function }, container: TElement) => string | Element | JQuery);
+    editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, filterOperation?: string, field?: dxFilterBuilderField, setValue?: Function }, container: TElement) => string | TElement);
     /**
      * @docid
      * @default "false"

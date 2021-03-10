@@ -41,7 +41,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

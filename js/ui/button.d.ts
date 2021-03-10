@@ -73,7 +73,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | Element | JQuery);
+    template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default ""

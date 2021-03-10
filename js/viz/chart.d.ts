@@ -2000,7 +2000,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((data: object, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((data: object, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid dxChartOptions.commonAxisSettings.label.alignment
      * @type Enums.HorizontalAlignment
@@ -2949,7 +2949,7 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxChartAnnotationConfig|any
@@ -2959,7 +2959,7 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: TElement) => string | Element | JQuery);
+    tooltipTemplate?: template | ((annotation: dxChartAnnotationConfig | any, element: TElement) => string | TElement);
 }
 
 /**

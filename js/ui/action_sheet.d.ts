@@ -70,7 +70,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | TElement;
     /**
      * @docid
      * @default ""

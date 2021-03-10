@@ -138,7 +138,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | TElement;
     /**
      * @docid
      * @default false

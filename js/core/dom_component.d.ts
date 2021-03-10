@@ -121,9 +121,9 @@ export default class DOMComponent extends Component {
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    static getInstance(element: Element | JQuery): DOMComponent;
+    static getInstance(element: TElement): DOMComponent;
 
-    $element(): Element | JQuery;
+    $element(): TElement;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;

@@ -101,7 +101,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @deprecated
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | TElement;
     /**
      * @docid
      * @type_function_param1 Element:dxElement

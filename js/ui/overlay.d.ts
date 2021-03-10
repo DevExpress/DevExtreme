@@ -50,7 +50,7 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((contentElement: TElement) => string | Element | JQuery);
+    contentTemplate?: template | ((contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default true

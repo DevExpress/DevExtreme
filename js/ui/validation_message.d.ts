@@ -13,7 +13,7 @@ export interface dxValidationMessageOptions<T = dxValidationMessage> extends dxO
 
     positionRequest?: string;
 
-    boundary?: String | Element | JQuery;
+    boundary?: String | TElement;
 
     offset?: object;
 }

@@ -28,7 +28,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    buttonTemplate?: template | ((buttonData: any, buttonContent: TElement) => string | Element | JQuery);
+    buttonTemplate?: template | ((buttonData: any, buttonContent: TElement) => string | TElement);
     /**
      * @docid
      * @default true

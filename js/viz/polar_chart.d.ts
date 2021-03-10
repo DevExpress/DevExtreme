@@ -1420,7 +1420,7 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
@@ -1430,7 +1430,7 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: TElement) => string | Element | JQuery);
+    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: TElement) => string | TElement);
 }
 
 /**

@@ -659,7 +659,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskTooltipContentTemplate?: template | ((container: TElement, task: any) => string | Element | JQuery);
+    taskTooltipContentTemplate?: template | ((container: TElement, task: any) => string | TElement);
     /**
      * @docid
      * @type_function_param1 container:dxElement
@@ -674,7 +674,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    taskContentTemplate?: template | ((container: TElement, item: {cellSize: any, isMilestone: boolean, taskData: any, taskHTML: any, taskPosition: any, taskResources:  Array<any>, taskSize: any }) => string | Element | JQuery);
+    taskContentTemplate?: template | ((container: TElement, item: {cellSize: any, isMilestone: boolean, taskData: any, taskHTML: any, taskPosition: any, taskResources:  Array<any>, taskSize: any }) => string | TElement);
     /**
      * @docid
      * @default 0

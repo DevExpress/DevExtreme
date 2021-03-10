@@ -695,7 +695,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
@@ -705,7 +705,7 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: TElement) => string | Element | JQuery);
+    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: TElement) => string | TElement);
 }
 
 export interface dxVectorMapLegends extends BaseLegend {
@@ -783,7 +783,7 @@ export interface dxVectorMapLegends extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid dxVectorMapOptions.legends.source
      * @notUsedInTheme
@@ -815,7 +815,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: MapLayerElement, element: TElement) => string | Element | JQuery);
+    contentTemplate?: template | ((info: MapLayerElement, element: TElement) => string | TElement);
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
      * @type_function_param1 info:MapLayerElement

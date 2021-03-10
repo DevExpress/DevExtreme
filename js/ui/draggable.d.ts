@@ -30,14 +30,14 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    boundary?: string | Element | JQuery;
+    boundary?: string | TElement;
     /**
      * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | TElement;
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -129,7 +129,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: TElement }, containerElement: TElement) => string | Element | JQuery);
+    dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: TElement }, containerElement: TElement) => string | TElement);
     /**
      * @docid
      * @extends Action

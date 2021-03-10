@@ -43,7 +43,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @fires CollectionWidgetOptions.onOptionChanged
@@ -197,7 +197,7 @@ export interface CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | (() => string | Element | JQuery);
+    template?: template | (() => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

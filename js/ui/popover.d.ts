@@ -116,7 +116,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | TElement;
     /**
      * @docid
      * @default "auto"
@@ -162,7 +162,7 @@ export default class dxPopover extends dxPopup {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(target: string | Element | JQuery): TPromise<boolean>;
+    show(target: string | TElement): TPromise<boolean>;
 }
 
 declare global {

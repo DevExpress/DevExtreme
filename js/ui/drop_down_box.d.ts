@@ -41,7 +41,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: TElement) => string | Element | JQuery);
+    contentTemplate?: template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null
@@ -66,7 +66,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((value: any, fieldElement: TElement) => string | Element | JQuery);
+    fieldTemplate?: template | ((value: any, fieldElement: TElement) => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

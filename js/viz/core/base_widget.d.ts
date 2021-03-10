@@ -514,7 +514,7 @@ export interface BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | TElement;
     /**
      * @docid BaseWidgetOptions.tooltip.cornerRadius
      * @default 0

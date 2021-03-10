@@ -1033,13 +1033,13 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
-      boundary?: string | Element | JQuery,
+      boundary?: string | TElement,
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
-      container?: string | Element | JQuery,
+      container?: string | TElement,
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1081,7 +1081,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @type_function_return string|Element|jQuery
        * @default undefined
        */
-      dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: TElement }, containerElement: TElement) => string | Element | JQuery),
+      dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: TElement }, containerElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -1968,7 +1968,7 @@ export interface GridBase {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    focus(element: Element | JQuery): void;
+    focus(element: TElement): void;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, dataField)
@@ -3930,7 +3930,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
-    focus(element: Element | JQuery): void;
+    focus(element: TElement): void;
     getCellElement(rowIndex: number, dataField: string): TElement | undefined;
     getCellElement(rowIndex: number, visibleColumnIndex: number): TElement | undefined;
     getCombinedFilter(): any;
@@ -4155,7 +4155,7 @@ export interface dxDataGridColumnButton extends GridBaseColumnButton {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: TElement, cellInfo: { component?: dxDataGrid, data?: any, key?: any, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject }) => string | Element | JQuery);
+    template?: template | ((cellElement: TElement, cellInfo: { component?: dxDataGrid, data?: any, key?: any, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject }) => string | TElement);
     /**
      * @docid
      * @default true

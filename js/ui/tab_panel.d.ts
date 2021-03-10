@@ -52,7 +52,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @fires dxTabPanelOptions.onOptionChanged
@@ -167,7 +167,7 @@ export interface dxTabPanelItem extends dxMultiViewItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tabTemplate?: template | (() => string | Element | JQuery);
+    tabTemplate?: template | (() => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

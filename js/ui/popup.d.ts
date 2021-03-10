@@ -34,7 +34,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | TElement;
     /**
      * @docid
      * @default false
@@ -143,7 +143,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    titleTemplate?: template | ((titleElement: TElement) => string | Element | JQuery);
+    titleTemplate?: template | ((titleElement: TElement) => string | TElement);
     /**
      * @docid
      * @type Array<Object>

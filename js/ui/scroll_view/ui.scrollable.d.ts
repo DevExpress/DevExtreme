@@ -199,7 +199,7 @@ export default class dxScrollable extends DOMComponent {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToElement(element: Element | JQuery): void;
+    scrollToElement(element: TElement): void;
     /**
      * @docid
      * @publicName scrollTop()

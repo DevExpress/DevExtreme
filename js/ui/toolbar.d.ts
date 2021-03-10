@@ -40,7 +40,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @deprecated
@@ -99,7 +99,7 @@ export interface dxToolbarItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | (() => string | Element | JQuery);
+    menuItemTemplate?: template | (() => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui

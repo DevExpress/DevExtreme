@@ -57,7 +57,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: TElement) => string | Element | JQuery);
+    appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: TElement) => string | TElement);
     /**
      * @docid
      * @prevFileNamespace DevExpress.ui
@@ -170,14 +170,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | Element | JQuery);
+    appointmentTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @extends AppointmentTooltipTemplate
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentTooltipTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | Element | JQuery);
+    appointmentTooltipTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @extends CellDuration
@@ -227,7 +227,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null
@@ -241,7 +241,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default undefined
@@ -267,7 +267,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: TElement) => string | Element | JQuery);
+    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default true
@@ -600,7 +600,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default []
@@ -728,7 +728,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default ""
@@ -766,19 +766,19 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default "appointmentCollector"
        * @extends AppointmentCollectorTemplate
        */
-      appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: TElement) => string | Element | JQuery),
+      appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @extends AppointmentTemplate
        */
-      appointmentTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | Element | JQuery),
+      appointmentTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @extends AppointmentTooltipTemplate
        */
-      appointmentTooltipTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | Element | JQuery),
+      appointmentTooltipTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -790,13 +790,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @prevFileNamespace DevExpress.ui
        * @extends DataCellTemplate
        */
-      dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery),
+      dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
        * @extends DateCellTemplate
        */
-      dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery),
+      dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -807,7 +807,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @type_function_return string|Element|jQuery
        * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
        */
-      dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: TElement) => string | Element | JQuery),
+      dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -863,7 +863,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @prevFileNamespace DevExpress.ui
        * @extends ResourceCellTemplate
        */
-      resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery),
+      resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -881,7 +881,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @prevFileNamespace DevExpress.ui
        * @extends TimeCellTemplate
        */
-      timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery),
+      timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement),
       /**
        * @docid
        * @prevFileNamespace DevExpress.ui
@@ -994,7 +994,7 @@ export default class dxScheduler extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showAppointmentTooltip(appointmentData: any, target: string | Element | JQuery, currentAppointmentData?: any): void;
+    showAppointmentTooltip(appointmentData: any, target: string | TElement, currentAppointmentData?: any): void;
     /**
      * @docid
      * @publicName updateAppointment(target, appointment)

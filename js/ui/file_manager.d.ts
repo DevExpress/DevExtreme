@@ -404,7 +404,7 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    template?: template | (() => string | Element | JQuery);
+    template?: template | (() => string | TElement);
 }
 
 /**
@@ -476,13 +476,13 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    template?: template | (() => string | Element | JQuery);
+    template?: template | (() => string | TElement);
      /**
      * @docid
      * @prevFileNamespace DevExpress.ui
      * @hidden
      */
-    menuItemTemplate?: template | (() => string | Element | JQuery);
+    menuItemTemplate?: template | (() => string | TElement);
 }
 
 

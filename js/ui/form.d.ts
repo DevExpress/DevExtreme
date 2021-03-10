@@ -518,7 +518,7 @@ export interface dxFormGroupItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: { component?: dxForm, formData?: any }, itemElement: TElement) => string | Element | JQuery);
+    template?: template | ((data: { component?: dxForm, formData?: any }, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default true
@@ -659,7 +659,7 @@ export interface dxFormSimpleItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: TElement) => string | Element | JQuery);
+    template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default undefined

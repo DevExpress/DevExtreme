@@ -119,7 +119,7 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tagTemplate?: template | ((itemData: any, itemElement: TElement) => string | Element | JQuery);
+    tagTemplate?: template | ((itemData: any, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default []

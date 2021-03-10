@@ -30,7 +30,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | TElement;
     /**
      * @docid
      * @default 0

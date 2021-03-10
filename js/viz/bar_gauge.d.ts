@@ -315,7 +315,7 @@ export interface dxBarGaugeLegend extends BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid dxBarGaugeOptions.legend.visible
      * @default false
@@ -345,7 +345,7 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: TElement) => string | Element | JQuery);
+    contentTemplate?: template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: TElement) => string | TElement);
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined

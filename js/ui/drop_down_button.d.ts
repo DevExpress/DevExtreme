@@ -63,7 +63,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: TElement) => string | Element | JQuery);
+    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default {}
@@ -102,7 +102,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default null

@@ -48,7 +48,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: TElement, fromIndex?: number }, containerElement: TElement) => string | Element | JQuery);
+    dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: TElement, fromIndex?: number }, containerElement: TElement) => string | TElement);
     /**
      * @docid
      * @type Enums.DropFeedbackMode

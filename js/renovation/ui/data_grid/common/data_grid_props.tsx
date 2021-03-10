@@ -72,7 +72,7 @@ export class DataGridColumnButton {
       rowType?: string;
       row?: dxDataGridRowObject;
     },
-  ) => string | Element | JQuery);
+  ) => string | TElement);
 
   @OneWay()
   visible?:
@@ -770,10 +770,10 @@ export class DataGridRowDragging {
   autoScroll?: boolean;
 
   @OneWay()
-  boundary?: string | Element | JQuery;
+  boundary?: string | TElement;
 
   @OneWay()
-  container?: string | Element | JQuery;
+  container?: string | TElement;
 
   @OneWay()
   cursorOffset?: string | { x?: number; y?: number };
@@ -793,7 +793,7 @@ export class DataGridRowDragging {
       itemElement?: TElement;
     },
     containerElement: TElement,
-  ) => string | Element | JQuery);
+  ) => string | TElement);
 
   @OneWay()
   dropFeedbackMode?: 'push' | 'indicate';

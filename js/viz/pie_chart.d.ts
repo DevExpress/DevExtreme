@@ -117,7 +117,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | SVGElement | JQuery);
+    centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
@@ -333,7 +333,7 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((annotation: dxPieChartAnnotationConfig | any, element: SVGGElement) => string | TElement<SVGElement>);
     /**
      * @docid
      * @type_function_param1 annotation:dxPieChartAnnotationConfig|any
@@ -343,7 +343,7 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: TElement) => string | Element | JQuery);
+    tooltipTemplate?: template | ((annotation: dxPieChartAnnotationConfig | any, element: TElement) => string | TElement);
 }
 export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**
@@ -403,7 +403,7 @@ export interface dxPieChartLegend extends BaseChartLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | TElement<SVGElement>);
 }
 /**
  * @docid

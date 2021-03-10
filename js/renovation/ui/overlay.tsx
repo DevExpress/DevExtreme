@@ -55,7 +55,7 @@ export class OverlayProps extends WidgetProps {
 
   @OneWay() rtlEnabled?= false;
 
-  @OneWay() contentTemplate?: template | ((contentElement: TElement) => string | Element | JQuery) = 'content';
+  @OneWay() contentTemplate?: template | ((contentElement: TElement) => string | TElement) = 'content';
 
   @OneWay() maxWidth?: number | string | (() => number | string) | null = null;
 }

@@ -35,7 +35,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((container: TElement) => string | Element | JQuery);
+    contentTemplate?: template | ((container: TElement) => string | TElement);
     /**
      * @docid
      * @default null
@@ -60,7 +60,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | Element | JQuery);
+    menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | TElement);
     /**
      * @docid
      * @default false
@@ -78,7 +78,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @type Enums.SlideOutMenuPosition
@@ -174,7 +174,7 @@ export interface dxSlideOutItem extends CollectionWidgetItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuTemplate?: template | (() => string | Element | JQuery);
+    menuTemplate?: template | (() => string | TElement);
 }
 
 declare global {

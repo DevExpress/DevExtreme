@@ -44,7 +44,7 @@ export class ListProps extends WidgetProps {
   @OneWay() focusStateEnabled?: boolean;
 
   // @Template() groupTemplate?: template
-  // | ((groupData: any, groupIndex: number, groupElement: TElement) => string | Element | JQuery);
+  // | ((groupData: any, groupIndex: number, groupElement: TElement) => string | TElement);
 
   // @OneWay() grouped?: boolean;
 

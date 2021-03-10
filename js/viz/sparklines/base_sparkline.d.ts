@@ -78,7 +78,7 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointsInfo: any, element: TElement) => string | Element | JQuery);
+    contentTemplate?: template | ((pointsInfo: any, element: TElement) => string | TElement);
     /**
      * @docid BaseSparklineOptions.tooltip.customizeTooltip
      * @type_function_param1 pointsInfo:object

@@ -361,7 +361,7 @@ export interface dxHtmlEditorMention {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: TElement) => string | TElement);
     /**
      * @docid
      * @default "@"
@@ -403,7 +403,7 @@ export interface dxHtmlEditorMention {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: TElement) => string | Element | JQuery);
+    template?: template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: TElement) => string | TElement);
     /**
      * @docid
      * @default "this"
@@ -423,7 +423,7 @@ export interface dxHtmlEditorToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | TElement;
     /**
      * @docid
      * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
