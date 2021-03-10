@@ -157,7 +157,6 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
     [
         (form) => { form.repaint(); },
         (form) => { form.option('items', form.option('items')); },
-        (form) => { form.option('items', form.option('items')); }
     ].forEach(formUpdater => {
         QUnit.test(`Setting screen by width option (T977436). Use default function, screenSize: ${screenSize}, formUpdater: ${formUpdater.toString()}`, function(assert) {
             const defaultStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
