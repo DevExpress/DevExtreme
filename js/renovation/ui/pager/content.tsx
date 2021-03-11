@@ -108,7 +108,7 @@ export class PagerContentProps extends PagerProps {
 export class PagerContent extends JSXComponent<PagerContentProps>() {
   @ForwardRef() widgetRootElementRef!: RefObject;
 
-  createFakeInstance(): {
+  private createFakeInstance(): {
     option: () => boolean;
     element: () => HTMLElement | null;
     _createActionByOption: () => (e: any) => void;
