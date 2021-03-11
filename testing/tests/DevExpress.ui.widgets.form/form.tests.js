@@ -3403,43 +3403,41 @@ function getColsCountFromDOM($form) {
 });
 
 ['globalOption', 'instanceOption'].forEach((optionType) => {
-    ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
-        QUnit.test(`Setting screen by width. Use ${optionType}, screenSize: ${screenSize}`, function(assert) {
-            const defaultCustomRules = Form._classCustomRules;
+    QUnit.test(`Setting screen by width. Use ${optionType}`, function(assert) {
+        const defaultCustomRules = Form._classCustomRules;
 
-            const globalOptionStub = sinon.stub().returns(screenSize);
-            const instanceOptionStub = sinon.stub().returns(screenSize);
-            const defaultFunctionStub = sinon.spy(windowModule, 'defaultScreenFactorFunc');
+        const globalOptionStub = sinon.stub().returns('xs');
+        const instanceOptionStub = sinon.stub().returns('xs');
+        const defaultFunctionStub = sinon.spy(windowModule, 'defaultScreenFactorFunc');
 
-            const config = {
-                colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
-                items: [
-                    { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
-                ]
-            };
+        const config = {
+            colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
+            items: [
+                { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
+            ]
+        };
 
-            if(optionType === 'globalOption') {
-                Form.defaultOptions({
-                    options: {
-                        screenByWidth: globalOptionStub
-                    }
-                });
-            } else if(optionType === 'instanceOption') {
-                config['screenByWidth'] = instanceOptionStub;
-            }
+        if(optionType === 'globalOption') {
+            Form.defaultOptions({
+                options: {
+                    screenByWidth: globalOptionStub
+                }
+            });
+        } else if(optionType === 'instanceOption') {
+            config['screenByWidth'] = instanceOptionStub;
+        }
 
 
-            const $form = $('#form').dxForm(config);
-            assert.equal(globalOptionStub.called, optionType === 'globalOption', 'global function is called');
-            assert.equal(instanceOptionStub.called, optionType === 'instanceOption', 'instance function is called');
-            assert.equal(defaultFunctionStub.called, optionType === 'defaultFunction', 'default function is called');
+        const $form = $('#form').dxForm(config);
+        assert.equal(globalOptionStub.called, optionType === 'globalOption', 'global function is called');
+        assert.equal(instanceOptionStub.called, optionType === 'instanceOption', 'instance function is called');
+        assert.equal(defaultFunctionStub.called, optionType === 'defaultFunction', 'default function is called');
 
-            const colsCount = getColsCountFromDOM($form);
-            assert.equal(colsCount, config.colCountByScreen[screenSize], 'form has correct columns count');
+        const colsCount = getColsCountFromDOM($form);
+        assert.equal(colsCount, 1, 'form has correct columns count');
 
-            Form._classCustomRules = defaultCustomRules;
-            defaultFunctionStub.restore();
-        });
+        Form._classCustomRules = defaultCustomRules;
+        defaultFunctionStub.restore();
     });
 });
 
