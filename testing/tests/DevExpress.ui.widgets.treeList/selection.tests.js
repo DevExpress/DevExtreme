@@ -644,6 +644,80 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
 
         clock.restore();
     });
+
+    // T978760
+    QUnit.test('focusedItemIndex should be reset to -1 after select all nodes', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        /* eslint-disable indent */
+        const array = [
+            { id: 1, field1: 'test1', field2: 1 },
+                { id: 2, parentId: 1, field1: 'test2', field2: 2 },
+            { id: 3, field1: 'test3', field2: 3 },
+                { id: 4, parentId: 3, field1: 'test4', field2: 4 }
+        ];
+        /* eslint-enable indent */
+
+        this.options.autoExpandAll = true;
+        this.options.dataSource = array;
+        this.options.selection = { mode: 'multiple' };
+
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectionController.changeItemSelection(0, { shift: true });
+        this.selectionController.changeItemSelection(2, { shift: true });
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 3, 2], 'selected row keys');
+        assert.equal(this.selectionController._selection._focusedItemIndex, 2, '_focusedItemIndex corrected');
+
+        // act
+        this.selectionController.selectAll();
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 3, 2, 4], 'selected row keys');
+        assert.equal(this.selectionController._selection._focusedItemIndex, -1, '_focusedItemIndex corrected');
+    });
+
+    // T978760
+    QUnit.test('focusedItemIndex should be reset to -1 after deselect all nodes', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        /* eslint-disable indent */
+        const array = [
+            { id: 1, field1: 'test1', field2: 1 },
+                { id: 2, parentId: 1, field1: 'test2', field2: 2 },
+            { id: 3, field1: 'test3', field2: 3 },
+                { id: 4, parentId: 3, field1: 'test4', field2: 4 }
+        ];
+        /* eslint-enable indent */
+
+        this.options.autoExpandAll = true;
+        this.options.dataSource = array;
+        this.options.selection = { mode: 'multiple' };
+
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectionController.changeItemSelection(0, { shift: true });
+        this.selectionController.changeItemSelection(3, { shift: true });
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 4, 3, 2], 'selected row keys');
+        assert.equal(this.selectionController._selection._focusedItemIndex, 3, '_focusedItemIndex corrected');
+
+        // act
+        this.selectionController.deselectAll();
+
+        // assert
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [], 'selected row keys');
+        assert.equal(this.selectionController._selection._focusedItemIndex, -1, '_focusedItemIndex corrected');
+    });
 });
 
 QUnit.module('Recursive selection', {
