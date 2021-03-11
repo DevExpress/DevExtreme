@@ -101,87 +101,6 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
     assert.deepEqual(formData, { name: 'test' }, 'value updates');
 });
 
-
-QUnit.module('(T977436)', () => {
-    function getColsCountFromDOM($form) {
-        let result = -1;
-
-        const $lastCol = $form.find(`.${LAST_COL_CLASS}`);
-        [1, 2, 3, 4].forEach(colCount => {
-            if($lastCol.hasClass(`dx-col-${colCount - 1}`)) {
-                result = colCount;
-            }
-        });
-
-        return result;
-    }
-
-    [
-        { screenWidth: 1500, expectedSize: 'lg' },
-        { screenWidth: 1000, expectedSize: 'md' },
-        { screenWidth: 900, expectedSize: 'sm' },
-        { screenWidth: 700, expectedSize: 'xs' },
-    ].forEach((testConfig) => {
-        QUnit.test(`Default implementation of screenByWidth. Screen size: ${testConfig.screenWidth}`, function(assert) {
-            const getDocumentElementStub = sinon.stub(domAdapter, 'getDocumentElement').returns({
-                clientWidth: testConfig.screenWidth
-            });
-
-            const config = {
-                colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
-                items: [
-                    { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
-                ]
-            };
-
-            const $form = $('#form').dxForm(config);
-
-            const colsCount = getColsCountFromDOM($form);
-            assert.equal(colsCount, config.colCountByScreen[testConfig.expectedSize], 'form has correct columns count');
-            getDocumentElementStub.restore();
-        });
-    });
-
-    ['defaultFunction', 'globalOption', 'instanceOption'].forEach((optionType) => {
-        ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
-            QUnit.test(`Setting screen by width. Use ${optionType}, screenSize: ${screenSize}`, function(assert) {
-                const globalOptionStub = sinon.stub().returns(screenSize);
-                const instanceOptionStub = sinon.stub().returns(screenSize);
-                const defaultFunctionStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
-
-                const config = {
-                    colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
-                    items: [
-                        { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
-                    ]
-                };
-
-                if(optionType === 'globalOption') {
-                    Form.defaultOptions({
-                        options: {
-                            screenByWidth: globalOptionStub
-                        }
-                    });
-                } else if(optionType === 'instanceOption') {
-                    config['screenByWidth'] = instanceOptionStub;
-                }
-
-
-                const $form = $('#form').dxForm(config);
-                assert.equal(globalOptionStub.called, optionType === 'globalOption', 'global function is called');
-                assert.equal(instanceOptionStub.called, optionType === 'instanceOption', 'instance function is called');
-                assert.equal(defaultFunctionStub.called, optionType === 'defaultFunction', 'default function is called');
-
-                const colsCount = getColsCountFromDOM($form);
-                assert.equal(colsCount, config.colCountByScreen[screenSize], 'form has correct columns count');
-
-                Form._classCustomRules = [];
-                defaultFunctionStub.restore();
-            });
-        });
-    });
-});
-
 QUnit.test('Check field  wodth on render form with colspan', function(assert) {
     const $testContainer = $('#form');
 
@@ -3482,6 +3401,84 @@ QUnit.test('optional mark aligned when rtlEnabled option is set to true', functi
 
     assert.notEqual($labelsContent.offset().left, $optionalMark.offset().left, 'position of optional mark is right');
     assert.ok($optionalLabel.position().left > $optionalMark.position().left, 'optional mark should be before of the text');
+});
+
+function getColsCountFromDOM($form) {
+    let result = -1;
+
+    const $lastCol = $form.find(`.${LAST_COL_CLASS}`);
+    [1, 2, 3, 4].forEach(colCount => {
+        if($lastCol.hasClass(`dx-col-${colCount - 1}`)) {
+            result = colCount;
+        }
+    });
+
+    return result;
+}
+
+[
+    { screenWidth: 1500, expectedSize: 'lg' },
+    { screenWidth: 1000, expectedSize: 'md' },
+    { screenWidth: 900, expectedSize: 'sm' },
+    { screenWidth: 700, expectedSize: 'xs' },
+].forEach((testConfig) => {
+    QUnit.test(`Default implementation of screenByWidth. Screen size: ${testConfig.screenWidth}`, function(assert) {
+        const getDocumentElementStub = sinon.stub(domAdapter, 'getDocumentElement').returns({
+            clientWidth: testConfig.screenWidth
+        });
+
+        const config = {
+            colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
+            items: [
+                { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
+            ]
+        };
+
+        const $form = $('#form').dxForm(config);
+
+        const colsCount = getColsCountFromDOM($form);
+        assert.equal(colsCount, config.colCountByScreen[testConfig.expectedSize], 'form has correct columns count');
+        getDocumentElementStub.restore();
+    });
+});
+
+['defaultFunction', 'globalOption', 'instanceOption'].forEach((optionType) => {
+    ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
+        QUnit.test(`Setting screen by width. Use ${optionType}, screenSize: ${screenSize}`, function(assert) {
+            const globalOptionStub = sinon.stub().returns(screenSize);
+            const instanceOptionStub = sinon.stub().returns(screenSize);
+            const defaultFunctionStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
+
+            const config = {
+                colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
+                items: [
+                    { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
+                ]
+            };
+
+            if(optionType === 'globalOption') {
+                Form.defaultOptions({
+                    options: {
+                        screenByWidth: globalOptionStub
+                    }
+                });
+            } else if(optionType === 'instanceOption') {
+                config['screenByWidth'] = instanceOptionStub;
+            }
+
+
+            const $form = $('#form').dxForm(config);
+            assert.equal(globalOptionStub.called, optionType === 'globalOption', 'global function is called');
+            assert.equal(instanceOptionStub.called, optionType === 'instanceOption', 'instance function is called');
+            assert.equal(defaultFunctionStub.called, optionType === 'defaultFunction', 'default function is called');
+
+            const colsCount = getColsCountFromDOM($form);
+            assert.equal(colsCount, config.colCountByScreen[screenSize], 'form has correct columns count');
+
+            Form._classCustomRules = [];
+            defaultFunctionStub.restore();
+        });
+    });
 });
 
 QUnit.module('Events');
