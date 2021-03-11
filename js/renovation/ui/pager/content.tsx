@@ -17,7 +17,6 @@ import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { registerKeyboardAction } from '../../../ui/shared/accessibility';
 import { EventCallback } from '../common/event_callback.d';
 import { KeyboardActionContext, KeyboardActionContextType } from './common/keyboard_action_context';
-import noop from '../../utils/noop';
 
 export const viewFunction = ({
   widgetRootElementRef,
@@ -109,17 +108,27 @@ export class PagerContentProps extends PagerProps {
 export class PagerContent extends JSXComponent<PagerContentProps>() {
   @ForwardRef() widgetRootElementRef!: RefObject;
 
+  createFakeInstance(): {
+    option: () => boolean;
+    element: () => HTMLElement | null;
+    _createActionByOption: () => (e: any) => void;
+  } {
+    return {
+      option: (): boolean => false,
+      element: (): HTMLElement | null => this.widgetRootElementRef.current,
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+      _createActionByOption: () => (e: any) => {
+        this.props.onKeyDown?.(e);
+      },
+    };
+  }
+
   @Provider(KeyboardActionContext)
   get keyboardAction(): KeyboardActionContextType {
     return {
       registerKeyboardAction:
         (element: HTMLElement, action: EventCallback): DisposeEffectReturn => {
-          const fakePagerInstance = {
-            option: (): boolean => false,
-            element: (): HTMLElement | null => this.widgetRootElementRef.current,
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-            _createActionByOption: () => noop,
-          };
+          const fakePagerInstance = this.createFakeInstance();
           return registerKeyboardAction('pager', fakePagerInstance, element, undefined, action);
         },
     };
