@@ -82,7 +82,7 @@ import dxVectorMap, { dxVectorMapOptions } from "../viz/vector_map";
 
 import {
     PromiseType
-} from "../core";
+} from "../core/utils/deferred";
 
 import {
     ElementWrapperType,
@@ -94,13 +94,13 @@ import {
     EventExtension
 } from "../events";
 
-declare module '../core' {
-    interface PromiseType<T> extends JQueryPromise<T> { }
-}
-
 declare module '../core/element' {
     interface ElementWrapperType<T extends Element> extends JQuery<T> { }
     interface ElementsArrayWrapperType<T extends Element> extends JQuery<T> { }
+}
+
+declare module '../core/utils/deferred' {
+    interface PromiseType<T> extends JQueryPromise<T> { }
 }
 
 declare module '../events' {

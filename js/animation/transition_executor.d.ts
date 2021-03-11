@@ -1,10 +1,10 @@
 import {
-    TPromise
-} from '../core';
-
-import {
     TElementsArray
 } from '../core/element';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     animationConfig

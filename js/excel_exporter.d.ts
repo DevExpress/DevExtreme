@@ -1,4 +1,4 @@
-import { TPromise } from './core';
+import { TPromise } from './core/utils/deferred';
 import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
 import dxPivotGrid, { dxPivotGridPivotGridCell } from './ui/pivot_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';

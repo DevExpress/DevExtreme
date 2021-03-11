@@ -1,11 +1,11 @@
 import {
-    TPromise
-} from '../core';
+  TElement,
+  TElementsArray
+} from '../core/element';
 
 import {
-    TElement,
-    TElementsArray
-} from '../core/element';
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     template

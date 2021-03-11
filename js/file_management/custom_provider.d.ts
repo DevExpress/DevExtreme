@@ -7,7 +7,7 @@ import UploadInfo from './upload_info';
 
 import {
     TPromise
-} from '../core';
+} from '../core/utils/deferred';
 
 export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
     /**

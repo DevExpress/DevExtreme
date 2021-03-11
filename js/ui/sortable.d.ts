@@ -1,16 +1,16 @@
 import DOMComponent from '../core/dom_component';
 
 import {
-    TPromise
-} from '../core';
-
-import {
     TElement
 } from '../core/element';
 
 import {
     template
 } from '../core/templates/template';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     TEvent

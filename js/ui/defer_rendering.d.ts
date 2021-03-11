@@ -3,12 +3,12 @@ import {
 } from '../animation/fx';
 
 import {
-    TPromise
-} from '../core';
-
-import {
     TElement
 } from '../core/element';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import Widget, {
     WidgetOptions

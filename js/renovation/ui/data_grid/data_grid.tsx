@@ -13,7 +13,7 @@ import { DataGridComponent } from './datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
-import { TPromise } from '../../../core';
+import { TPromise } from '../../../core/utils/deferred'; // eslint-disable-line import/named
 import { TElementsArray } from '../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../utils/effect_return';

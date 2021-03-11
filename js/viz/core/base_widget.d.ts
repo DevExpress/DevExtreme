@@ -1,7 +1,3 @@
-import {
-    TPromise
-} from '../../core';
-
 import DOMComponent, {
     DOMComponentOptions
 } from '../../core/dom_component';
@@ -13,6 +9,10 @@ import {
 import {
     TElement
 } from '../../core/element';
+
+import {
+    TPromise
+} from '../../core/utils/deferred';
 
 import {
     format

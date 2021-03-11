@@ -1,6 +1,6 @@
 import {
     TPromise
-} from '../../core';
+} from '../../core/utils/deferred';
 
 export interface ODataContextOptions {
     /**

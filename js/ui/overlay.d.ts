@@ -3,16 +3,16 @@ import {
 } from '../animation/fx';
 
 import {
-    TPromise
-} from '../core';
-
-import {
     TElement
 } from '../core/element';
 
 import {
     template
 } from '../core/templates/template';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     TEvent

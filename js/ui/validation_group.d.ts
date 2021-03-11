@@ -1,14 +1,14 @@
 import {
-    TPromise
-} from '../core';
-
-import {
     TElement
 } from '../core/element';
 
 import DOMComponent, {
     DOMComponentOptions
 } from '../core/dom_component';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import {
     AsyncRule,

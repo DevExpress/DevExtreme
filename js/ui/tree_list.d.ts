@@ -1,8 +1,4 @@
 import {
-    TPromise
-} from '../core';
-
-import {
     TElement,
     TElementsArray
 } from '../core/element';
@@ -10,6 +6,10 @@ import {
 import {
     template
 } from '../core/templates/template';
+
+import {
+    TPromise
+} from '../core/utils/deferred';
 
 import DataSource from '../data/data_source';
 
