@@ -16,7 +16,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    abortFileUpload?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    abortFileUpload?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => (Promise<any> & JQueryPromise<any>) | any);
 
     /**
      * @docid CustomFileSystemProviderOptions.copyItem
@@ -27,7 +27,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => (Promise<any> & JQueryPromise<any>) | any);
 
     /**
      * @docid CustomFileSystemProviderOptions.createDirectory
@@ -38,7 +38,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    createDirectory?: ((parentDirectory: FileSystemItem, name: string) => Promise<any> | JQueryPromise<any> | any);
+    createDirectory?: ((parentDirectory: FileSystemItem, name: string) => (Promise<any> & JQueryPromise<any>) | any);
 
     /**
      * @docid CustomFileSystemProviderOptions.deleteItem
@@ -48,7 +48,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    deleteItem?: ((item: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    deleteItem?: ((item: FileSystemItem) => (Promise<any> & JQueryPromise<any>) | any);
 
     /**
      * @docid CustomFileSystemProviderOptions.downloadItems
@@ -67,7 +67,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItems?: ((parentDirectory: FileSystemItem) => Promise<Array<any>> | JQueryPromise<Array<any>> | Array<any>);
+    getItems?: ((parentDirectory: FileSystemItem) => (Promise<Array<any>> & JQueryPromise<Array<any>)> | Array<any>);
 
     /**
      * @docid CustomFileSystemProviderOptions.getItemsContent
@@ -77,7 +77,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItemsContent?: ((items: Array<FileSystemItem>) => Promise<any> | JQueryPromise<any> | any);
+    getItemsContent?: ((items: Array<FileSystemItem>) => (Promise<any> & JQueryPromise<any>) | any);
 
     /**
      * @docid CustomFileSystemProviderOptions.hasSubDirectoriesExpr
@@ -96,7 +96,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => (Promise<any> & JQueryPromise<any>) | any);
 
     /**
      * @docid CustomFileSystemProviderOptions.renameItem
@@ -107,7 +107,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    renameItem?: ((item: FileSystemItem, newName: string) => Promise<any> | JQueryPromise<any> | any);
+    renameItem?: ((item: FileSystemItem, newName: string) => (Promise<any> & JQueryPromise<any>) | any);
 
     /**
      * @docid CustomFileSystemProviderOptions.uploadFileChunk
@@ -119,7 +119,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    uploadFileChunk?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    uploadFileChunk?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => (Promise<any> & JQueryPromise<any>) | any);
 }
 
 /**
