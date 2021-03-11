@@ -67,7 +67,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItems?: ((parentDirectory: FileSystemItem) => (Promise<Array<any>> & JQueryPromise<Array<any>)> | Array<any>);
+    getItems?: ((parentDirectory: FileSystemItem) => (Promise<Array<any>> & JQueryPromise<Array<any>>) | Array<any>);
 
     /**
      * @docid CustomFileSystemProviderOptions.getItemsContent
