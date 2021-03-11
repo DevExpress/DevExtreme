@@ -71,8 +71,8 @@ class PdfGrid {
         }
     }
 
-    setCurrentTable(boundaryColumnIndex) {
-        const splitIndex = this._splitByColumns.findIndex((splitColumn) => splitColumn.columnIndex === boundaryColumnIndex);
+    setCurrentSplitTable(columnSplitIndex) {
+        const splitIndex = this._splitByColumns.findIndex((splitColumn) => splitColumn.columnIndex === columnSplitIndex);
         // splitIndex === -1        =>   -1 + 1 == 0 - first in 'currentHorizontalTables'
         // splitIndex === [0...n]   =>   n + 1 - second...n in 'currentHorizontalTables'
         const index = splitIndex + 1;
@@ -82,6 +82,10 @@ class PdfGrid {
         } else {
             throw 'boundary column is not found';
         }
+    }
+
+    setNewSplitByColumns(splitByColumns) {
+        this._splitByColumns = splitByColumns;
     }
 
     getTables() {
@@ -114,21 +118,26 @@ function exportDataGrid(doc, dataGrid, options) {
                 if(options.onRowExporting) {
                     const drawNewTableFromThisRow = {};
                     options.onRowExporting({ drawNewTableFromThisRow });
-                    const { startNewTable, addPage, tableRect } = drawNewTableFromThisRow;
+                    const { startNewTable, addPage, tableRect, splitToPagesByColumns } = drawNewTableFromThisRow;
                     if(startNewTable === true) {
                         if(!isDefined(tableRect)) {
                             throw 'tableRect is required';
                         }
+                        if(isDefined(splitToPagesByColumns)) {
+                            pdfGrid.setNewSplitByColumns(splitToPagesByColumns);
+                        }
                         pdfGrid.startNewTable(options.drawTableBorder, tableRect, addPage === true);
                     }
                 }
-                pdfGrid.setCurrentTable(0);
+                pdfGrid.setCurrentSplitTable(0);
                 pdfGrid.startNewRow();
 
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
                     const isBoundaryColumn = exportingOptions.splitToPagesByColumns.find((splitByColumn) => splitByColumn.columnIndex === cellIndex);
                     if(isBoundaryColumn) {
-                        pdfGrid.setCurrentTable(cellIndex);
+                        pdfGrid.setCurrentSplitTable(cellIndex);
+                        const split = [];
+                        split.push({});
                         pdfGrid.startNewRow();
                     }
 
