@@ -80,9 +80,19 @@ import dxSparkline, { dxSparklineOptions } from "../viz/sparkline";
 import dxTreeMap, { dxTreeMapOptions } from "../viz/tree_map";
 import dxVectorMap, { dxVectorMapOptions } from "../viz/vector_map";
 
-import { PromiseType } from "../core";
-import { ElementWrapperType } from "../core/element";
-import { EventType, EventExtension } from "../events";
+import {
+    PromiseType
+} from "../core";
+
+import {
+    ElementWrapperType,
+    ElementsArrayWrapperType
+} from "../core/element";
+
+import {
+    EventType,
+    EventExtension
+} from "../events";
 
 declare module '../core' {
     interface PromiseType<T> extends JQueryPromise<T> { }
@@ -90,6 +100,7 @@ declare module '../core' {
 
 declare module '../core/element' {
     interface ElementWrapperType<T extends Element> extends JQuery<T> { }
+    interface ElementsArrayWrapperType<T extends Element> extends JQuery<T> { }
 }
 
 declare module '../events' {

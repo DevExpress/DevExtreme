@@ -3,6 +3,10 @@ import {
 } from '../core';
 
 import {
+    TElementsArray
+} from '../core/element';
+
+import {
     animationConfig
 } from './fx';
 
@@ -23,7 +27,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    enter(elements: JQuery, animation: animationConfig | string): void;
+    enter(elements: TElementsArray, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName leave(elements, animation)
@@ -32,7 +36,7 @@ export default class TransitionExecutor {
      * @prevFileNamespace DevExpress.animation
      * @public
      */
-    leave(elements: JQuery, animation: animationConfig | string): void;
+    leave(elements: TElementsArray, animation: animationConfig | string): void;
     /**
      * @docid
      * @publicName reset()

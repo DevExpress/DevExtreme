@@ -710,7 +710,7 @@ export default class dxPivotGrid extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    bindChart(chart: string | JQuery | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
+    bindChart(chart: string | TElement | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
     /**
      * @docid
      * @publicName exportToExcel()

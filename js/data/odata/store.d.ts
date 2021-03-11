@@ -10,7 +10,7 @@ import {
     LoadOptions
 } from '../load_options';
 
-interface PromiseExt<T> extends Promise<T> {
+interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
         onfulfilled?: ((value: T, extraParameters?: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
         onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
@@ -147,5 +147,5 @@ export default class ODataStore extends Store {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    insert(values: any): PromiseExt<any> & JQueryPromise<any>;
+    insert(values: any): TPromise<any> & PromiseExtension<any>;
 }

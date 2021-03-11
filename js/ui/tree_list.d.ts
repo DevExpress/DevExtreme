@@ -3,7 +3,8 @@ import {
 } from '../core';
 
 import {
-    TElement
+    TElement,
+    TElementsArray
 } from '../core/element';
 
 import {
@@ -767,7 +768,7 @@ export default class dxTreeList extends Widget implements GridBase {
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
     getKeyByRowIndex(rowIndex: number): any;
-    getRowElement(rowIndex: number): Array<Element> & JQuery | undefined;
+    getRowElement(rowIndex: number): TElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;

@@ -14,6 +14,7 @@ import { DataGridViews } from './data_grid_views';
 import { GridInstance } from './common/types';
 import { getUpdatedOptions } from './utils/get_updated_options';
 import { TPromise } from '../../../core';
+import { TElementsArray } from '../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../component_wrapper/data_grid';
 import { DisposeEffectReturn } from '../../utils/effect_return';
 
@@ -202,7 +203,7 @@ export class DataGrid extends JSXComponent(DataGridProps) {
   }
 
   @Method()
-  getRowElement(rowIndex: number): Element[] & JQuery | undefined {
+  getRowElement(rowIndex: number): TElementsArray | undefined {
     return this.instance?.getRowElement(rowIndex);
   }
 

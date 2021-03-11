@@ -3,6 +3,9 @@ import { dxElementWrapper } from '../core/renderer';
 export interface ElementWrapperType<T extends Element> { }
 export type TElement<T extends Element = HTMLElement> = {} extends ElementWrapperType<T> ? T : ElementWrapperType<T>
 
+export interface ElementsArrayWrapperType<T extends Element> { }
+export type TElementsArray<T extends Element = HTMLElement> = {} extends ElementsArrayWrapperType<T> ? Array<T> : ElementsArrayWrapperType<T>
+
 /**
  * @docid
  * @hidden
