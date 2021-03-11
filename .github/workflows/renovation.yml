@@ -1,4 +1,4 @@
-name: QUnit tests linux
+name: Renovation
 
 on: [push, pull_request]
 
