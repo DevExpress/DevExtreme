@@ -71,7 +71,7 @@ QUnit.module('Customize keyboard navigation', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.dispose();
+        this.dispose && this.dispose();
         this.clock.restore();
     }
 }, function() {
