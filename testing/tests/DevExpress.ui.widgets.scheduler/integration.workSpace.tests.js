@@ -813,7 +813,7 @@ QUnit.test('dataCellTemplate should have correct options', function(assert) {
             }
         ],
         dataCellTemplate: function(itemData, index, $container) {
-            if(index === 3 && $($container).hasClass('dx-scheduler-date-table-cell-template-wrapper')) templateOptions = itemData;
+            if(index === 3 && $($container).hasClass('dx-scheduler-date-table-cell')) templateOptions = itemData;
         }
     });
 
@@ -835,8 +835,8 @@ QUnit.test('dataCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         dataCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellData.allDay && !cellIndex) {
-                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 81, 1.001, 'Data cell width is OK');
-                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 48, 'Data cell height is OK');
+                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 85, 1.001, 'Data cell width is OK');
+                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Data cell height is OK');
             }
         }
     });
@@ -995,16 +995,14 @@ QUnit.test('DateTimeIndicator should show correct time in current time zone', fu
         height: 600
     });
 
-    const $initialIndicationCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(24);
     const indicatorPositionBefore = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
-    assert.ok($initialIndicationCell.children().eq(0).hasClass('dx-scheduler-date-time-indicator'), 'Indicator was placed in a right cell');
+    const cellHeight = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0).get(0).getBoundingClientRect().height;
 
     this.instance.option('timeZone', 'Asia/Yekaterinburg');
-    const $indicationCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(38);
+
     const indicatorPositionAfter = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
 
-    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top, 'indicator has correct position');
-    assert.ok($indicationCell.children().eq(0).hasClass('dx-scheduler-date-time-indicator'), 'Indicator was placed in a right cell');
+    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * 2, 'indicator has correct position');
 });
 
 QUnit.test('Tables should take css class after width calculation(T491453)', function(assert) {
