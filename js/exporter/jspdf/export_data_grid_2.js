@@ -1,82 +1,93 @@
 import { isDefined } from '../../core/utils/type';
 
-const PdfGrid = function() {
-    const _startNewTable = function(drawTableBorder, firstTableRect, firstTableOnNewPage, splitByColumns) {
-        const newTables = [
-            {
-                drawTableBorder,
-                drawOnNewPage: firstTableOnNewPage,
-                rect: firstTableRect,
-                columnIndex: 0,
-                rows: []
-            }
+class Table {
+    constructor(drawTableBorder, drawOnNewPage, rect) {
+        this.drawTableBorder = drawTableBorder;
+        this.drawOnNewPage = drawOnNewPage;
+        this.rect = rect;
+        this.rows = [];
+    }
+}
+
+class PdfGrid {
+    constructor(splitByColumns) {
+        this._splitByColumns = splitByColumns ?? [];
+        this._tables = [];
+        this._currentHorizontalTables;
+        this._currentTable;
+        this._currentRow;
+    }
+
+    startNewTable(drawTableBorder, firstTableRect, firstTableOnNewPage) {
+        this._currentHorizontalTables = [
+            new Table(drawTableBorder, firstTableOnNewPage, firstTableRect)
         ];
 
-        if(isDefined(splitByColumns)) {
-            splitByColumns.forEach((splitByColumn) => {
-                newTables.push({
-                    drawTableBorder: drawTableBorder,
-                    drawOnNewPage: splitByColumn.drawOnNewPage,
-                    rect: splitByColumn.tableRect,
-                    columnIndex: splitByColumn.columnIndex,
-                    rows: []
-                });
+        if(isDefined(this._splitByColumns)) {
+            this._splitByColumns.forEach((splitByColumn) => {
+                this._currentHorizontalTables.push(
+                    new Table(drawTableBorder, splitByColumn.drawOnNewPage, splitByColumn.tableRect)
+                );
             });
         }
 
-        _activeTable = newTables[0];
+        this._currentTable = this._currentHorizontalTables[0];
+        this._currentRow = this._currentTable.rows[this._currentTable.rows.length - 1];
 
-        _tables.push(newTables);
-    };
+        this._tables.push(...this._currentHorizontalTables);
+    }
 
-    const _startNewRow = function() {
-        _activeTable.rows.push([]);
-    };
+    startNewRow() {
+        this._currentRow = [];
+        this._currentTable.rows.push(this._currentRow);
+    }
 
-    const _addPdfCell = function(pdfCell) {
-        const currentRow = _activeTable.rows[_activeTable.rows.length - 1];
-        currentRow.push(pdfCell);
+    addPdfCell(pdfCell) {
+        this._currentRow.push(pdfCell);
+        // eslint-disable-next-line spellcheck/spell-checker
+        this._syncCellNeighbourBorders(pdfCell);
+    }
 
+    // eslint-disable-next-line spellcheck/spell-checker
+    _syncCellNeighbourBorders(pdfCell) {
         if(pdfCell.drawLeftBorder === false) {
-            if(currentRow.length > 1) {
-                currentRow[currentRow.length - 2].drawRightBorder = 0;
+            if(this._currentRow.length > 1) {
+                this._currentRow[this._currentRow.length - 2].drawRightBorder = 0;
             }
         } else if(!isDefined(pdfCell.drawLeftBorder)) {
-            if(currentRow.length > 1 && currentRow[currentRow.length - 2].drawRightBorder === false) {
+            if(this._currentRow.length > 1 && this._currentRow[this._currentRow.length - 2].drawRightBorder === false) {
                 pdfCell.drawLeftBorder = false;
             }
         }
 
         if(pdfCell.drawTopBorder === false) {
-            if(_activeTable.rows.length > 1) {
-                _activeTable.rows[_activeTable.rows.length - 2][currentRow.length - 1].drawBottomBorder = false;
+            if(this._currentTable.rows.length > 1) {
+                this._currentTable.rows[this._currentTable.rows.length - 2][this._currentRow.length - 1].drawBottomBorder = false;
             }
         } else if(!isDefined(pdfCell.drawTopBorder)) {
-            if(_activeTable.rows.length > 1 && _activeTable.rows[_activeTable.rows.length - 2][currentRow.length - 1].drawBottomBorder === false) {
+            if(this._currentTable.rows.length > 1 && this._currentTable.rows[this._currentTable.rows.length - 2][this._currentRow.length - 1].drawBottomBorder === false) {
                 pdfCell.drawTopBorder = false;
             }
         }
-    };
+    }
 
-    const _setActiveTable = function(boundaryColumnIndex) {
-        _activeTable = _tables[_tables.length - 1].find((table) => table.columnIndex === boundaryColumnIndex);
-    };
+    setCurrentTable(boundaryColumnIndex) {
+        const splitIndex = this._splitByColumns.findIndex((splitColumn) => splitColumn.columnIndex === boundaryColumnIndex);
+        // splitIndex === -1        =>   -1 + 1 == 0 - first in 'currentHorizontalTables'
+        // splitIndex === [0...n]   =>   n + 1 - second...n in 'currentHorizontalTables'
+        const index = splitIndex + 1;
 
-    const _getTables = function() {
-        return [].concat(..._tables);
-    };
+        if(index < this._currentHorizontalTables.length) {
+            this._currentTable = this._currentHorizontalTables[index];
+        } else {
+            throw 'boundary column is not found';
+        }
+    }
 
-    const _tables = [];
-    let _activeTable;
-
-    return {
-        startNewTable: _startNewTable,
-        startNewRow: _startNewRow,
-        addPdfCell: _addPdfCell,
-        setActiveTable: _setActiveTable,
-        getTables: _getTables
-    };
-};
+    getTables() {
+        return this._tables;
+    }
+}
 
 function exportDataGrid(doc, dataGrid, options) {
     if(!isDefined(options.rect)) {
@@ -95,8 +106,8 @@ function exportDataGrid(doc, dataGrid, options) {
                 options.onGridExporting({ exportingOptions });
             }
 
-            const pdfGrid = PdfGrid();
-            pdfGrid.startNewTable(options.drawTableBorder, options.rect, false, exportingOptions.splitToPagesByColumns);
+            const pdfGrid = new PdfGrid(exportingOptions.splitToPagesByColumns);
+            pdfGrid.startNewTable(options.drawTableBorder, options.rect, false);
 
             const dataRowsCount = dataProvider.getRowsCount();
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
@@ -108,16 +119,16 @@ function exportDataGrid(doc, dataGrid, options) {
                         if(!isDefined(tableRect)) {
                             throw 'tableRect is required';
                         }
-                        pdfGrid.startNewTable(options.drawTableBorder, tableRect, addPage === true, exportingOptions.splitToPagesByColumns);
+                        pdfGrid.startNewTable(options.drawTableBorder, tableRect, addPage === true);
                     }
                 }
-                pdfGrid.setActiveTable(0);
+                pdfGrid.setCurrentTable(0);
                 pdfGrid.startNewRow();
 
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
                     const isBoundaryColumn = exportingOptions.splitToPagesByColumns.find((splitByColumn) => splitByColumn.columnIndex === cellIndex);
                     if(isBoundaryColumn) {
-                        pdfGrid.setActiveTable(cellIndex);
+                        pdfGrid.setCurrentTable(cellIndex);
                         pdfGrid.startNewRow();
                     }
 
@@ -134,14 +145,18 @@ function exportDataGrid(doc, dataGrid, options) {
                 }
             }
 
-            pdfGrid.getTables().forEach((table) => {
-                if(table.drawOnNewPage === true) {
-                    doc.addPage();
-                }
-                drawTable(doc, table);
-            });
+            drawGrid(doc, pdfGrid);
             resolve();
         });
+    });
+}
+
+function drawGrid(doc, pdfGrid) {
+    pdfGrid.getTables().forEach((table) => {
+        if(table.drawOnNewPage === true) {
+            doc.addPage();
+        }
+        drawTable(doc, table);
     });
 }
 
