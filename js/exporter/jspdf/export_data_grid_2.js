@@ -136,8 +136,6 @@ function exportDataGrid(doc, dataGrid, options) {
                     const isBoundaryColumn = exportingOptions.splitToPagesByColumns.find((splitByColumn) => splitByColumn.columnIndex === cellIndex);
                     if(isBoundaryColumn) {
                         pdfGrid.setCurrentSplitTable(cellIndex);
-                        const split = [];
-                        split.push({});
                         pdfGrid.startNewRow();
                     }
 
