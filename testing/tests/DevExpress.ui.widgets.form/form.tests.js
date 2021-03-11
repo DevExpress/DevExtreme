@@ -3363,46 +3363,6 @@ QUnit.test('Form redraw layout when colCount is \'auto\' and an calculated colCo
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout');
 });
 
-QUnit.module('Form when rtlEnabled is true');
-
-QUnit.test('required mark aligned when rtlEnabled option is set to true', function(assert) {
-    const $testContainer = $('#form').dxForm({
-        requiredMark: '!',
-        rtlEnabled: true,
-        items: [{
-            dataField: 'name',
-            isRequired: true
-        }]
-    });
-
-    const $labelsContent = $testContainer.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-    const $requiredLabel = $labelsContent.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
-    const $requiredMark = $labelsContent.find(`.${FIELD_ITEM_REQUIRED_MARK_CLASS}`);
-
-    $labelsContent.width(200);
-
-    assert.notEqual($labelsContent.offset().left, $requiredMark.offset().left, 'position of requared mark is right');
-    assert.ok($requiredLabel.position().left > $requiredMark.position().left, 'required mark should be before of the text');
-});
-
-QUnit.test('optional mark aligned when rtlEnabled option is set to true', function(assert) {
-    const $testContainer = $('#form').dxForm({
-        optionalMark: 'optMark',
-        showOptionalMark: true,
-        rtlEnabled: true,
-        items: ['position']
-    });
-
-    const $labelsContent = $testContainer.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-    const $optionalLabel = $labelsContent.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
-    const $optionalMark = $labelsContent.find(`.${FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
-
-    $labelsContent.width(200);
-
-    assert.notEqual($labelsContent.offset().left, $optionalMark.offset().left, 'position of optional mark is right');
-    assert.ok($optionalLabel.position().left > $optionalMark.position().left, 'optional mark should be before of the text');
-});
-
 function getColsCountFromDOM($form) {
     let result = -1;
 
@@ -3442,14 +3402,14 @@ function getColsCountFromDOM($form) {
     });
 });
 
-['defaultFunction', 'globalOption', 'instanceOption'].forEach((optionType) => {
+['globalOption', 'instanceOption'].forEach((optionType) => {
     ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
         QUnit.test(`Setting screen by width. Use ${optionType}, screenSize: ${screenSize}`, function(assert) {
             const defaultCustomRules = Form._classCustomRules;
 
             const globalOptionStub = sinon.stub().returns(screenSize);
             const instanceOptionStub = sinon.stub().returns(screenSize);
-            const defaultFunctionStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
+            const defaultFunctionStub = sinon.spy(windowModule, 'defaultScreenFactorFunc');
 
             const config = {
                 colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
@@ -3481,6 +3441,46 @@ function getColsCountFromDOM($form) {
             defaultFunctionStub.restore();
         });
     });
+});
+
+QUnit.module('Form when rtlEnabled is true');
+
+QUnit.test('required mark aligned when rtlEnabled option is set to true', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        requiredMark: '!',
+        rtlEnabled: true,
+        items: [{
+            dataField: 'name',
+            isRequired: true
+        }]
+    });
+
+    const $labelsContent = $testContainer.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    const $requiredLabel = $labelsContent.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $requiredMark = $labelsContent.find(`.${FIELD_ITEM_REQUIRED_MARK_CLASS}`);
+
+    $labelsContent.width(200);
+
+    assert.notEqual($labelsContent.offset().left, $requiredMark.offset().left, 'position of requared mark is right');
+    assert.ok($requiredLabel.position().left > $requiredMark.position().left, 'required mark should be before of the text');
+});
+
+QUnit.test('optional mark aligned when rtlEnabled option is set to true', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        optionalMark: 'optMark',
+        showOptionalMark: true,
+        rtlEnabled: true,
+        items: ['position']
+    });
+
+    const $labelsContent = $testContainer.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    const $optionalLabel = $labelsContent.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $optionalMark = $labelsContent.find(`.${FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
+
+    $labelsContent.width(200);
+
+    assert.notEqual($labelsContent.offset().left, $optionalMark.offset().left, 'position of optional mark is right');
+    assert.ok($optionalLabel.position().left > $optionalMark.position().left, 'optional mark should be before of the text');
 });
 
 QUnit.module('Events');
