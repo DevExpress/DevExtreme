@@ -3427,11 +3427,10 @@ function getColsCountFromDOM($form) {
             config['screenByWidth'] = instanceOptionStub;
         }
 
-
         const $form = $('#form').dxForm(config);
         assert.equal(globalOptionStub.called, optionType === 'globalOption', 'global function is called');
         assert.equal(instanceOptionStub.called, optionType === 'instanceOption', 'instance function is called');
-        assert.equal(defaultFunctionStub.called, optionType === 'defaultFunction', 'default function is called');
+        assert.equal(defaultFunctionStub.called, 0, 'default function is called');
 
         const colsCount = getColsCountFromDOM($form);
         assert.equal(colsCount, 1, 'form has correct columns count');
