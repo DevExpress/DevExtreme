@@ -3445,6 +3445,8 @@ function getColsCountFromDOM($form) {
 ['defaultFunction', 'globalOption', 'instanceOption'].forEach((optionType) => {
     ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
         QUnit.test(`Setting screen by width. Use ${optionType}, screenSize: ${screenSize}`, function(assert) {
+            const defaultCustomRules = Form._classCustomRules;
+
             const globalOptionStub = sinon.stub().returns(screenSize);
             const instanceOptionStub = sinon.stub().returns(screenSize);
             const defaultFunctionStub = sinon.stub(windowModule, 'defaultScreenFactorFunc').returns(screenSize);
@@ -3475,7 +3477,7 @@ function getColsCountFromDOM($form) {
             const colsCount = getColsCountFromDOM($form);
             assert.equal(colsCount, config.colCountByScreen[screenSize], 'form has correct columns count');
 
-            Form._classCustomRules = [];
+            Form._classCustomRules = defaultCustomRules;
             defaultFunctionStub.restore();
         });
     });
