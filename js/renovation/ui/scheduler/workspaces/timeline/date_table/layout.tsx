@@ -8,12 +8,14 @@ export const viewFunction = ({
   restAttributes,
   props: {
     viewData,
+    groupOrientation,
     dataCellTemplate,
     addDateTableClass,
   },
 }: TimelineDateTableLayout): JSX.Element => (
   <DateTableLayoutBase
     viewData={viewData}
+    groupOrientation={groupOrientation}
     addDateTableClass={addDateTableClass}
     cellTemplate={DateTableCellBase}
     dataCellTemplate={dataCellTemplate}

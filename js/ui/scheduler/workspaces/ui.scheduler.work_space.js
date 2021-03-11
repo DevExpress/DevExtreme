@@ -1364,6 +1364,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             {
                 timePanelData: this.viewDataProvider.timePanelData,
                 timeCellTemplate: this.option('timeCellTemplate'),
+                groupOrientation: this.option('groupOrientation'),
             }
         );
     }
@@ -1407,9 +1408,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             });
             this[componentName] = component;
         } else {
-            Object.getOwnPropertyNames(viewModel).forEach((optionName) => {
-                component.option(optionName, viewModel[optionName]);
-            });
+            component.option(viewModel);
         }
     }
 
@@ -3565,6 +3564,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             viewData: this.viewDataProvider.viewData,
             dataCellTemplate: this.option('dataCellTemplate'),
             addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
+            groupOrientation: this.option('groupOrientation'),
         });
     }
 }

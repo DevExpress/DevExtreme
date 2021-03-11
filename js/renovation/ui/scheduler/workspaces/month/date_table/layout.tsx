@@ -9,10 +9,12 @@ export const viewFunction = ({
     viewData,
     dataCellTemplate,
     addDateTableClass,
+    groupOrientation,
   },
 }: MonthDateTableLayout): JSX.Element => (
   <DateTableLayoutBase
     viewData={viewData}
+    groupOrientation={groupOrientation}
     addDateTableClass={addDateTableClass}
     dataCellTemplate={dataCellTemplate}
     cellTemplate={MonthDateTableCell}
