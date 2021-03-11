@@ -60,6 +60,7 @@ import AppointmentAdapter from './appointmentAdapter';
 import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
+import AppointmentFilter from './appointments/appointmentFilter';
 import utils from './utils';
 
 // STYLE scheduler
@@ -126,6 +127,8 @@ const StoreEventNames = {
 };
 
 class Scheduler extends Widget {
+    get appointmentFilter() { return new AppointmentFilter(this); }
+
     _getDefaultOptions() {
         const defaultOptions = extend(super._getDefaultOptions(), {
             /**
@@ -1051,11 +1054,7 @@ class Scheduler extends Widget {
     }
 
     _filterAppointments() {
-        const prerenderFilterName = this.isVirtualScrolling()
-            ? 'prerenderFilterVirtual'
-            : 'prerenderFilter';
-
-        return this.fire(prerenderFilterName);
+        return this.appointmentFilter.filter();
     }
 
     _renderAppointments() {
