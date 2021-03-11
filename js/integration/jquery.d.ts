@@ -81,8 +81,8 @@ import dxTreeMap, { dxTreeMapOptions } from '../viz/tree_map';
 import dxVectorMap, { dxVectorMapOptions } from '../viz/vector_map';
 
 declare module '../core/element' {
-    interface ElementWrapperType<T extends Element> extends JQuery<T> { }
-    interface ElementsArrayWrapperType<T extends Element> extends JQuery<T> { }
+    interface ElementWrapper<T extends Element> extends JQuery<T> { }
+    interface ElementsArrayWrapper<T extends Element> extends JQuery<T> { }
 }
 
 declare module '../core/utils/deferred' {

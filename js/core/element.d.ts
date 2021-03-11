@@ -1,10 +1,11 @@
 import { dxElementWrapper } from '../core/renderer';
 
-export interface ElementWrapperType<T extends Element> { }
-export type TElement<T extends Element = HTMLElement> = {} extends ElementWrapperType<T> ? T : ElementWrapperType<T>
+export interface ElementWrapper<T extends Element> { }
+export type TElement<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? T : ElementWrapper<T>
+export type TElementWrapper<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? dxElementWrapper : ElementWrapper<T>
 
-export interface ElementsArrayWrapperType<T extends Element> { }
-export type TElementsArray<T extends Element = HTMLElement> = {} extends ElementsArrayWrapperType<T> ? Array<T> : ElementsArrayWrapperType<T>
+export interface ElementsArrayWrapper<T extends Element> { }
+export type TElementsArray<T extends Element = HTMLElement> = {} extends ElementsArrayWrapper<T> ? Array<T> : ElementsArrayWrapper<T>
 
 /**
  * @docid
@@ -22,5 +23,5 @@ export type dxElement = TElement<HTMLElement>;
  */
 export type dxSVGElement = TElement<SVGElement>;
 
-export function getPublicElement(element: JQuery|dxElementWrapper): TElement;
-export function setPublicElementWrapper(newStrategy: (element: JQuery|dxElementWrapper) => TElement): void;
+export function getPublicElement(element: TElementWrapper): TElement;
+export function setPublicElementWrapper(newStrategy: (element: TElementWrapper) => TElement): void;
