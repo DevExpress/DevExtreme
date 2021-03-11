@@ -5,19 +5,32 @@ import * as React from 'react';
 import { TemplatesStore } from './templates-store';
 
 class TemplatesRenderer extends React.PureComponent<{ templatesStore: TemplatesStore }> {
-  private _updateScheduled = false;
+  private updateScheduled = false;
+
+  private mounted = false;
+
+  componentDidMount(): void {
+    this.mounted = true;
+  }
+
+  componentWillUnmount(): void {
+    this.mounted = false;
+  }
 
   public scheduleUpdate(useDeferUpdate: boolean): void {
-    if (this._updateScheduled) {
+    if (this.updateScheduled) {
       return;
     }
 
-    this._updateScheduled = true;
+    this.updateScheduled = true;
 
     const updateFunc = useDeferUpdate ? deferUpdate : requestAnimationFrame;
     updateFunc(() => {
-      this.forceUpdate();
-      this._updateScheduled = false;
+      if (this.mounted) {
+        this.forceUpdate();
+      }
+
+      this.updateScheduled = false;
     });
   }
 
