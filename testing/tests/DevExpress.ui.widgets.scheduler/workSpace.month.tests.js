@@ -25,22 +25,26 @@ module('Work Space Month', () => {
             stubInvokeMethod(this.instance);
         }
     }, () => {
-        test('Scheduler all day panel is invisible on month view after switching showAllDayPanel option', function(assert) {
-            this.instance.option('showAllDayPanel', false);
-            this.instance.option('showAllDayPanel', true);
+        [true, false].forEach((renovateRender) => {
+            test(`Scheduler all day panel is invisible on month view after switching showAllDayPanel option when renovateRender is ${renovateRender}`, function(assert) {
+                this.instance.option('renovateRender', renovateRender);
+                this.instance.option('showAllDayPanel', false);
+                this.instance.option('showAllDayPanel', true);
 
-            const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-panel');
+                const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-panel');
 
-            assert.equal($allDayPanel.css('display'), 'none', 'allDay panel is invisible');
-        });
+                assert.equal($allDayPanel.length, 0, 'allDay panel is invisible');
+            });
 
-        test('Scheduler all day title is invisible on month view after switching showAllDayPanel option', function(assert) {
-            this.instance.option('showAllDayPanel', false);
-            this.instance.option('showAllDayPanel', true);
+            test(`Scheduler all day title is invisible on month view after switching showAllDayPanel option when renovateRender is ${renovateRender}`, function(assert) {
+                this.instance.option('renovateRender', renovateRender);
+                this.instance.option('showAllDayPanel', false);
+                this.instance.option('showAllDayPanel', true);
 
-            const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
+                const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
 
-            assert.equal($allDayTitle.css('display'), 'none', 'All-day title is invisible');
+                assert.equal($allDayTitle.length, 0, 'All-day title is invisible');
+            });
         });
 
         test('Work space should find cell coordinates by date', function(assert) {
