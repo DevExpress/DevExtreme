@@ -170,7 +170,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const canBeFocusedByKey = isFocusable && accessKey;
 
     if (canBeFocusedByKey) {
-      dxClick.on(this.widgetRef.current, (e: Event) => {
+      dxClick.on(this.widgetRef.current, (e) => {
         if (isFakeClickEvent(e)) {
           e.stopImmediatePropagation();
           this.focused = true;

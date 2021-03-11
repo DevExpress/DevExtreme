@@ -5,8 +5,6 @@ import { DateTableCellBaseProps, DateTableCellBase } from '../cell';
 
 export const viewFunction = (viewModel: AllDayPanelCell): JSX.Element => (
   <DateTableCellBase
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
     className={`dx-scheduler-all-day-table-cell ${viewModel.props.className}`}
     startDate={viewModel.props.startDate}
     endDate={viewModel.props.endDate}

@@ -16,7 +16,7 @@ export const viewFunction = ({
   props: {
     isLargeDisplayMode, pageSize, pageSizeChange,
   },
-}: PageSizeSelector) => (
+}: PageSizeSelector): JSX.Element => (
   <div ref={htmlRef} className={PAGER_PAGE_SIZES_CLASS}>
     {isLargeDisplayMode && (
     <PageSizeLarge
@@ -55,7 +55,7 @@ export class PageSizeSelector
   @Effect({ run: 'once' }) setRootElementRef(): void {
     const { rootElementRef } = this.props;
     if (rootElementRef) {
-      this.props.rootElementRef = this.htmlRef;
+      rootElementRef.current = this.htmlRef.current;
     }
   }
 

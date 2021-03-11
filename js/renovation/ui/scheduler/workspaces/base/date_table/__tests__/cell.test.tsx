@@ -18,13 +18,6 @@ describe('DateTableCellBase', () => {
     }}
     />);
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(cell.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should pass correct props to the base cell', () => {
       const dataCellTemplate = () => null;
       const dataCellTemplateProps = {};

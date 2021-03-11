@@ -4,7 +4,6 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { adjust, sign } from '../../core/utils/math';
 import dateUtils from '../../core/utils/date';
-import domAdapter from '../../core/dom_adapter';
 import Color from '../../color';
 const { PI, LN10, abs, log, floor, ceil, pow, sqrt, atan2 } = Math;
 const _min = Math.min;
@@ -262,23 +261,6 @@ export const patchFontOptions = function(options) {
     });
     return fontOptions;
 };
-
-export function checkElementHasPropertyFromStyleSheet(element, property) {
-    const slice = Array.prototype.slice;
-    const cssRules = slice.call(domAdapter.getDocument().styleSheets).reduce((rules, styleSheet) => {
-        return rules.concat(slice.call(styleSheet.cssRules || styleSheet.rules));
-    }, []);
-
-    const elementRules = cssRules.filter(rule => {
-        try {
-            return domAdapter.elementMatches(element, rule.selectorText);
-        } catch(e) {
-            return false;
-        }
-    });
-
-    return elementRules.some(rule => !!rule.style[property]);
-}
 
 export function convertPolarToXY(centerCoords, startAngle, angle, radius) {
     const shiftAngle = 90;

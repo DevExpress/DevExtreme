@@ -5,7 +5,6 @@ import { GroupPanelHorizontalCell } from './cell';
 import { GroupPanelRowProps } from '../row_props';
 
 export const viewFunction = ({
-  restAttributes,
   props: {
     className,
     groupItems,
@@ -14,8 +13,6 @@ export const viewFunction = ({
 }: Row): JSX.Element => (
   <tr
     className={`dx-scheduler-group-row ${className}`}
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
   >
     {groupItems.map(({
       text, id, data, key, color, colSpan, isFirstGroupCell, isLastGroupCell,

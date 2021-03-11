@@ -1168,7 +1168,7 @@ const Form = Widget.inherit({
 
     _resetValues: function() {
         this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
-            if(isDefined(itemRunTimeInfo.widgetInstance) && itemRunTimeInfo.widgetInstance instanceof Editor) {
+            if(isDefined(itemRunTimeInfo.widgetInstance) && Editor.isEditor(itemRunTimeInfo.widgetInstance)) {
                 itemRunTimeInfo.widgetInstance.reset();
                 itemRunTimeInfo.widgetInstance.option('isValid', true);
             }

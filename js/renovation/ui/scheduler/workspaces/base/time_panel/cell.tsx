@@ -10,8 +10,6 @@ import { ContentTemplateProps, DateTimeCellTemplateProps } from '../../types.d';
 
 export const viewFunction = (viewModel: TimePanelCell): JSX.Element => (
   <Cell
-      // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
     isFirstGroupCell={viewModel.props.isFirstGroupCell}
     isLastGroupCell={viewModel.props.isLastGroupCell}
     contentTemplate={viewModel.props.timeCellTemplate}

@@ -1,6 +1,6 @@
 import {
-  RecalculateCoordinates, TooltipCoordinates, StrictSize, CustomizedOptions, CustomizeTooltipFn,
-  InitialBorder, TooltipData, Canvas, Font,
+  RecalculateCoordinates, TooltipCoordinates, Size, CustomizedOptions, CustomizeTooltipFn,
+  InitialBorder, TooltipData, Font,
 } from './types.d';
 import { isFunction, isPlainObject, isDefined } from '../../../core/utils/type';
 import domAdapter from '../../../core/dom_adapter';
@@ -20,7 +20,7 @@ function getAbsoluteArc(cornerRadius: number, x: number, y: number): string {
   return `A ${cornerRadius} ${cornerRadius} 0 0 1 ${x} ${y}`;
 }
 
-function rotateSize({ width, height }: StrictSize, angle: number): StrictSize {
+function rotateSize({ width, height }: Required<Size>, angle: number): Required<Size> {
   if (angle % 90 === 0 && angle % 180 !== 0) {
     return { width: height, height: width };
   }
@@ -40,7 +40,7 @@ function rotateY({
 }
 
 export function getCloudPoints(
-  size: StrictSize,
+  size: Required<Size>,
   coordinates: TooltipCoordinates,
   rotationAngle: number,
   options: { arrowWidth: number; cornerRadius: number },
@@ -193,7 +193,7 @@ export function getCloudPoints(
   return buildPath('M', points, 'Z');
 }
 
-export function getCanvas(container: HTMLElement): Canvas {
+export function getCanvas(container: HTMLElement): ClientRect {
   const containerBox = container.getBoundingClientRect();
   const html = domAdapter.getDocumentElement();
   const body = domAdapter.getBody();
@@ -284,7 +284,7 @@ export function recalculateCoordinates({
 }
 
 export function getCloudAngle(
-  { width, height }: StrictSize,
+  { width, height }: Required<Size>,
   {
     x, y, anchorX, anchorY,
   }: TooltipCoordinates,

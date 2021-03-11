@@ -12,8 +12,8 @@ import { RootSvgElement } from './renderers/svg_root';
 import { isDefined } from '../../../core/utils/type';
 
 import {
-  StrictSize, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
-  Font, TooltipCoordinates, Canvas, Container,
+  Size, Border, InitialBorder, CustomizedOptions, CustomizeTooltipFn, TooltipData, Location,
+  Font, TooltipCoordinates, Container,
 
   Format, EventData, OnTooltipHiddenFn, OnTooltipShownFn,
 } from './types.d';
@@ -25,12 +25,12 @@ import { normalizeEnum } from '../../../viz/core/utils';
 import domAdapter from '../../../core/dom_adapter';
 import { isUpdatedFlatObject } from './utils';
 
-interface PinnedSize extends StrictSize {
+interface PinnedSize extends Required<Size> {
   x: number;
   y: number;
 }
 
-const DEFAULT_CANVAS: Canvas = {
+const DEFAULT_CANVAS: ClientRect = {
   left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0,
 };
 
@@ -340,7 +340,7 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     return normalizeEnum(this.props.location);
   }
 
-  get textSizeWithPaddings(): StrictSize {
+  get textSizeWithPaddings(): Required<Size> {
     const { paddingLeftRight, paddingTopBottom } = this.props;
     return {
       width: this.textSize.width + (paddingLeftRight ?? 0) * 2,
