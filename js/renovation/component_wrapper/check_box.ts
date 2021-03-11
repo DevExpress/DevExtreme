@@ -27,4 +27,11 @@ export default class CheckBox extends Editor {
 
     this._invalidate();
   }
+
+  setAria(name: string, value: string): void {
+    const attrName = (name === 'role' || name === 'id')
+      ? name
+      : `aria-${name}`;
+    (this.$element() as any).attr(attrName, value);
+  }
 }
