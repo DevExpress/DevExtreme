@@ -1117,15 +1117,15 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     }
                     if($cell.is('td') || $cell.hasClass(this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
+                        const $focusedElementInsideCell = $cell.find(':focus');
+                        const isFocusedElementDefined = isElementDefined($focusedElementInsideCell);
                         if((isRenderView || !isCommandCell) && this._editorFactory.focus()) {
-                            const $focusedElementInsideCell = $cell.find(':focus');
-                            const isFocusedElementDefined = isElementDefined($focusedElementInsideCell);
                             if(isCommandCell && isFocusedElementDefined) {
                                 gridCoreUtils.focusAndSelectElement(this, $focusedElementInsideCell);
                                 return;
                             }
                             !isFocusedElementDefined && this._focus($cell);
-                        } else if(this._isNeedFocus || this._isHiddenFocus) {
+                        } else if(!isFocusedElementDefined && (this._isNeedFocus || this._isHiddenFocus)) {
                             this._focus($cell, this._isHiddenFocus);
                         }
                         if(isEditing) {
