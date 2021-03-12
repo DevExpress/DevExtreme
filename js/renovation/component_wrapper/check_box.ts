@@ -30,6 +30,6 @@ export default class CheckBox extends Editor {
 
   setAria(name: string, value: string): void {
     const attrName = this._getAriaName(name);
-    (this.$element() as any).attr(attrName, value);
+    (this.$element() as JQuery).attr(attrName, value);
   }
 }
