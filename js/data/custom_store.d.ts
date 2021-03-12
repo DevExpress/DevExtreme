@@ -17,7 +17,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey?: ((key: any | string | number) => Promise<any> | JQueryPromise<any>);
+    byKey?: ((key: any | string | number) => Promise<any> & JQueryPromise<any>);
     /**
      * @docid CustomStoreOptions.cacheRawData
      * @type boolean
@@ -34,7 +34,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    insert?: ((values: any) => Promise<any> | JQueryPromise<any>);
+    insert?: ((values: any) => Promise<any> & JQueryPromise<any>);
     /**
      * @docid CustomStoreOptions.load
      * @type function
@@ -43,7 +43,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    load?: ((options: LoadOptions) => Promise<any> | JQueryPromise<any> | Array<any>);
+    load?: ((options: LoadOptions) => (Promise<any> & JQueryPromise<any>) | Array<any>);
     /**
      * @docid CustomStoreOptions.loadMode
      * @type string
@@ -61,7 +61,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    remove?: ((key: any | string | number) => Promise<void> | JQueryPromise<void>);
+    remove?: ((key: any | string | number) => Promise<void> & JQueryPromise<void>);
     /**
      * @docid CustomStoreOptions.totalCount
      * @type function
@@ -72,7 +72,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    totalCount?: ((loadOptions: { filter?: any, group?: any }) => Promise<number> | JQueryPromise<number>);
+    totalCount?: ((loadOptions: { filter?: any, group?: any }) => Promise<number> & JQueryPromise<number>);
     /**
      * @docid CustomStoreOptions.update
      * @type function
@@ -82,7 +82,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
      * @prevFileNamespace DevExpress.data
      * @public
      */
-    update?: ((key: any | string | number, values: any) => Promise<any> | JQueryPromise<any>);
+    update?: ((key: any | string | number, values: any) => Promise<any> & JQueryPromise<any>);
     /**
      * @docid CustomStoreOptions.useDefaultSearch
      * @type boolean

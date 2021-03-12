@@ -44,7 +44,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    renderWhen?: Promise<void> | JQueryPromise<void> | boolean;
+    renderWhen?: (Promise<void> & JQueryPromise<void>) | boolean;
     /**
      * @docid dxDeferRenderingOptions.showLoadIndicator
      * @type bool
