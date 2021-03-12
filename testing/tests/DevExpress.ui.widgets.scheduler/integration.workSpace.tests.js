@@ -2733,25 +2733,6 @@ if(devices.real().deviceType === 'desktop') {
 }
 
 QUnit.module('Cell Templates', () => {
-    const baseConfig = {
-        currentView: 'day',
-        currentDate: new Date(2020, 10, 19),
-        resources: [{
-            fieldExpr: 'priority',
-            allowMultiple: false,
-            dataSource: [{
-                text: 'Low Priority',
-                id: 1
-            }, {
-                text: 'High Priority',
-                id: 2
-            }],
-            label: 'Priority',
-        }],
-        startDayHour: 10,
-        endDayHour: 12,
-    };
-
     const viewsBase = [{
         type: 'day',
         dateCellCount: 2,
@@ -2793,6 +2774,26 @@ QUnit.module('Cell Templates', () => {
     };
 
     [true, false].forEach((isRenovatedView) => {
+        const baseConfig = {
+            currentView: 'day',
+            currentDate: new Date(2020, 10, 19),
+            resources: [{
+                fieldExpr: 'priority',
+                allowMultiple: false,
+                dataSource: [{
+                    text: 'Low Priority',
+                    id: 1
+                }, {
+                    text: 'High Priority',
+                    id: 2
+                }],
+                label: 'Priority',
+            }],
+            startDayHour: 10,
+            endDayHour: 12,
+            renovateRender: isRenovatedView,
+        };
+
         QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
             assert.expect(totalDateCells * 2);
 
@@ -2856,21 +2857,26 @@ QUnit.module('Cell Templates', () => {
                 groupOrientation: 'horizontal',
             }));
             let cellCountPerGroup = 2;
+            let currentCellIndex = 0;
 
             const scheduler = createWrapper({
                 ...baseConfig,
                 views,
-                dateCellTemplate: ({ groups, groupIndex }, index) => {
-                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+                dateCellTemplate: ({ groups, groupIndex }) => {
+                    const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
                     assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+
+                    currentCellIndex += 1;
                 },
                 groups: ['priority'],
             });
 
             viewsBase.forEach(({ type, dateCellCount }) => {
                 cellCountPerGroup = dateCellCount;
+                currentCellIndex = 0;
+
                 scheduler.instance.option('currentView', type);
             });
         });
@@ -2898,21 +2904,26 @@ QUnit.module('Cell Templates', () => {
                 groupOrientation: 'vertical',
             }));
             let cellCountPerGroup = 4;
+            let currentCellIndex = 0;
 
             const scheduler = createWrapper({
                 ...baseConfig,
                 views,
-                timeCellTemplate: ({ groups, groupIndex }, index) => {
-                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+                timeCellTemplate: ({ groups, groupIndex }) => {
+                    const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
                     assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+
+                    currentCellIndex += 1;
                 },
                 groups: ['priority'],
             });
 
             viewsBase.slice(0, 3).forEach(({ type, timeCellCount }) => {
                 cellCountPerGroup = timeCellCount;
+                currentCellIndex = 0;
+
                 scheduler.instance.option('currentView', type);
             });
         });
@@ -2991,22 +3002,26 @@ QUnit.module('Cell Templates', () => {
                 groupOrientation: 'horizontal',
             }));
             let cellCountPerGroup = 8;
+            let currentCellIndex = 0;
 
             const scheduler = createWrapper({
                 ...baseConfig,
                 views,
                 currentView: 'timelineDay',
-                timeCellTemplate: ({ groups, groupIndex }, index) => {
-                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+                timeCellTemplate: ({ groups, groupIndex }) => {
+                    const currentGroupIndex = Math.floor(currentCellIndex / cellCountPerGroup);
 
                     assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+
+                    currentCellIndex += 1;
                 },
                 groups: ['priority'],
             });
 
             viewsBase.slice(3, 6).forEach(({ type, timeCellCount }) => {
                 cellCountPerGroup = timeCellCount;
+                currentCellIndex = 0;
                 scheduler.instance.option('currentView', type);
             });
         });

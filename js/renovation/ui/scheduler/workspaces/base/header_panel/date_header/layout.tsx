@@ -65,6 +65,8 @@ export class DateHeaderLayoutProps {
   // TODO: bug in angular
   @OneWay() groupOrientation: GroupOrientation = 'horizontal';
 
+  @OneWay() groupByDate = false;
+
   @OneWay() dateHeaderMap: DateHeaderCellData[][] = [];
 
   @OneWay() groups: Group[] = [];
@@ -80,8 +82,8 @@ export class DateHeaderLayoutProps {
 })
 export class DateHeaderLayout extends JSXComponent(DateHeaderLayoutProps) {
   get isHorizontalGrouping(): boolean {
-    const { groupOrientation, groups } = this.props;
+    const { groupOrientation, groups, groupByDate } = this.props;
 
-    return isHorizontalGroupOrientation(groups, groupOrientation);
+    return isHorizontalGroupOrientation(groups, groupOrientation) && !groupByDate;
   }
 }
