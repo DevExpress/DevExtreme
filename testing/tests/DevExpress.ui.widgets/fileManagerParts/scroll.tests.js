@@ -175,18 +175,18 @@ QUnit.module('Scroll', moduleConfig, () => {
         this.fileManager.option({
             width: 500,
             height: 250,
-            fileSystemProvider: createHugeFileSystem()
+            currentPath: 'Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1'
         });
         this.clock.tick(400);
 
-        const scrollPosition = 150;
-        this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(scrollPosition);
+        const scrollPosition = 64;
+        this.wrapper.getTreeViewScrollableContainer().scrollTop(scrollPosition);
         this.clock.tick(400);
 
         this.fileManager.refresh();
         this.clock.tick(800);
 
-        assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
+        assert.strictEqual(this.wrapper.getTreeViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
 
         renderer.fn.width = originalFunc;
     });
