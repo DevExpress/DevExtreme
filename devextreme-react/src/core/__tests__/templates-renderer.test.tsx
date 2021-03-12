@@ -5,6 +5,9 @@ import { React, mount } from './setup';
 import { TemplatesRenderer } from '../templates-renderer';
 import { TemplatesStore } from '../templates-store';
 
+const defaultWarn = global.console.warn;
+const defaultError = global.console.error;
+
 global.console.warn = (message) => {
   throw message;
 };
@@ -37,6 +40,11 @@ jest.mock('devextreme/core/utils/common', () => ({
       jest.clearAllMocks();
     });
 
+    afterAll(() => {
+      global.console.warn = defaultWarn;
+      global.console.error = defaultError;
+    });
+
     it('should not throw warning when unmounted', async () => {
       const ref = React.createRef<TemplatesRenderer>();
       const templatesStore = new TemplatesStore(() => { });
@@ -44,8 +52,8 @@ jest.mock('devextreme/core/utils/common', () => ({
       const component = mount(<TemplatesRenderer templatesStore={templatesStore} ref={ref} />);
 
       expect(ref.current).not.toBeNull();
-      expect(() => ref.current?.scheduleUpdate(useDeferUpdate)).not.toThrow();
 
+      expect(() => ref.current?.scheduleUpdate(useDeferUpdate)).not.toThrow();
       expect(() => updateCallback()).not.toThrow();
 
       component.unmount();
