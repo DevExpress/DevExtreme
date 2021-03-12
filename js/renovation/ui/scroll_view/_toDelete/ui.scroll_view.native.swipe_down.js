@@ -1,15 +1,10 @@
-import $ from '../../core/renderer';
-import Callbacks from '../../core/utils/callbacks';
 import { move } from '../../animation/translator';
 import { eventData } from '../../events/utils/index';
 import NativeStrategy from './ui.scrollable.native';
-import LoadIndicator from '../load_indicator';
 import { Deferred } from '../../core/utils/deferred';
 
 const SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS = 'dx-scrollview-pull-down-loading';
-const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-refreshing';
-const PULLDOWN_ICON_CLASS = 'dx-icon-pulldown';
 
 const STATE_RELEASED = 0;
 const STATE_READY = 1;
@@ -25,34 +20,13 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this._$bottomPocket = scrollView._$bottomPocket;
         this._$pullDown = scrollView._$pullDown;
         this._$scrollViewContent = scrollView.content();
-        this._initCallbacks();
 
         this._location = 0;
     },
 
-    _initCallbacks: function() {
-        this.pullDownCallbacks = Callbacks();
-        this.releaseCallbacks = Callbacks();
-        this.reachBottomCallbacks = Callbacks();
-    },
-
     render: function() {
         this.callBase();
-        this._renderPullDown();
         this._releaseState();
-    },
-
-    _renderPullDown: function() {
-        const $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS);
-        const $loadIndicator = new LoadIndicator($('<div>')).$element();
-
-        this._$icon = $('<div>')
-            .addClass(PULLDOWN_ICON_CLASS);
-
-        this._$pullDown
-            .empty()
-            .append(this._$icon)
-            .append($loadContainer.append($loadIndicator));
     },
 
     _releaseState: function() {

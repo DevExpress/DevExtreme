@@ -2,7 +2,7 @@ import {
   isNumeric, isDefined, isPlainObject,
 } from '../../../core/utils/type';
 import getScrollRtlBehavior from '../../../core/utils/scroll_rtl_behavior';
-import { camelize } from '../../../core/utils/inflector';
+import { titleize } from '../../../core/utils/inflector';
 import getElementComputedStyle from '../../utils/get_computed_style';
 
 import { toNumber } from '../../utils/type_conversion';
@@ -31,6 +31,13 @@ export const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 export const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 
 export const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
+
+export const TopPocketState = {
+  STATE_RELEASED: 0,
+  STATE_READY: 1,
+  STATE_REFRESHING: 2,
+  STATE_LOADING: 3,
+};
 
 export function getElementWidth(element: Element | undefined): number {
   return toNumber(getElementComputedStyle(element)?.width);
@@ -97,7 +104,7 @@ export class ScrollDirection {
 }
 
 function getMaxScrollOffset(dimension: string, containerRef: HTMLDivElement): number {
-  return containerRef[`scroll${camelize(dimension, true)}`] - containerRef[`client${camelize(dimension, true)}`];
+  return containerRef[`scroll${titleize(dimension)}`] - containerRef[`client${titleize(dimension)}`];
 }
 
 export function getBoundaryProps(

@@ -760,6 +760,7 @@ describe('Simulated', () => {
                         helper.viewModel.getEventArgs = jest.fn();
 
                         helper.viewModel.scrollBy(scrollByValues.actual);
+                        helper.callScrollbarMethod('updateContent');
 
                         helper.checkValidDirection(expect, {
                           horizontal: true,
@@ -870,12 +871,12 @@ describe('Simulated', () => {
                 if (helper.isVertical) {
                   const styles = helper.getVerticalScrollElement().props.style;
 
-                  expect(styles).toEqual({ height: 15, transform: 'translate(0px, 0px)' });
+                  expect(styles).toEqual({ height: '15px', transform: 'translate(0px, 0px)' });
                 }
                 if (helper.isHorizontal) {
                   const styles = helper.getHorizontalScrollElement().props.style;
 
-                  expect(styles).toEqual({ width: 15, transform: 'translate(0px, 0px)' });
+                  expect(styles).toEqual({ width: '15px', transform: 'translate(0px, 0px)' });
                 }
 
                 Object.defineProperties(helper.viewModel, {
@@ -1294,6 +1295,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
             helper.viewModel.scrollBy(20);
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? 70 : 50,
@@ -1313,6 +1315,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
             helper.viewModel.scrollBy({ top: 20, left: 15 });
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? 70 : 50,
@@ -1332,6 +1335,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
             helper.viewModel.scrollBy(-15);
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? 35 : 50,
@@ -1351,6 +1355,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
             helper.viewModel.scrollBy({ top: -20, left: 15 });
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? 30 : 50,
@@ -1370,6 +1375,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
             helper.viewModel.scrollBy(-1000);
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? -0 : 50,
@@ -1389,6 +1395,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -40 });
 
             helper.viewModel.scrollBy(1000);
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? 100 : 50,
@@ -1412,6 +1419,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
             helper.viewModel.scrollTo(20);
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? 20 : 50,
@@ -1431,6 +1439,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
             helper.viewModel.scrollTo({ top: 20, left: 15 });
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? 20 : 50,
@@ -1450,6 +1459,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
             helper.viewModel.scrollTo(-15);
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? -0 : 50,
@@ -1469,6 +1479,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
             helper.viewModel.scrollTo({ top: 20, left: -15 });
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? 20 : 50,
@@ -1488,6 +1499,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
             helper.viewModel.scrollTo(-1000);
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? -0 : 50,
@@ -1507,6 +1519,7 @@ describe('Simulated', () => {
             helper.initScrollbarLocation({ top: -50, left: -50 });
 
             helper.viewModel.scrollTo(1000);
+            helper.callScrollbarMethod('updateContent');
 
             helper.checkContainerPosition(expect, {
               top: helper.isVertical ? 100 : 50,

@@ -16,7 +16,7 @@ describe('Public methods', () => {
     { name: 'inBounds', argsCount: 0, defaultValue: false },
     { name: 'getMaxOffset', argsCount: 0 },
     { name: 'scrollStep', argsCount: 1 },
-    { name: 'move', argsCount: 1 },
+    { name: 'moveScrollbar', argsCount: 1 },
     { name: 'getScrollLocation', argsCount: 0 },
     { name: 'stopComplete', argsCount: 0 },
     { name: 'scrollComplete', argsCount: 0 },
@@ -32,6 +32,7 @@ describe('Public methods', () => {
     { name: 'endHandler', argsCount: 1 },
     { name: 'stopHandler', argsCount: 0 },
     { name: 'scrollByHandler', argsCount: 1 },
+    { name: 'releaseHandler', argsCount: 0 },
   ]).describe('Method: %o', (methodInfo) => {
     each([{ [`${methodInfo.name}`]: jest.fn() }, null]).describe('ScrollbarRef.current: %o', (current) => {
       it(`${methodInfo.name}() method should call according method from scrollbar`, () => {
@@ -77,7 +78,7 @@ describe('Public methods', () => {
       (viewModel as any).scrollbarRef = {
         current: {
           scrollComplete: scrollCompleteHandler,
-          move: scrollbarMoveHandler,
+          moveScrollbar: scrollbarMoveHandler,
           boundLocation: () => -700,
         },
       };
@@ -174,7 +175,7 @@ describe('Animator', () => {
       (viewModel as any).scrollbarRef = {
         current: {
           boundLocation: () => -700,
-          getLocation: () => -1500,
+          getScrollLocation: () => -1500,
         },
       };
 

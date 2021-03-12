@@ -8,8 +8,8 @@ import {
 import { ScrollEventArgs } from './types.d';
 
 import { BaseWidgetProps } from '../../utils/base_props';
-import { TopPocketProps } from './top_pocket_props';
-import { BottomPocketProps } from './bottom_pocket_props';
+import { TopPocketProps } from './top_pocket';
+import { BottomPocketProps } from './bottom_pocket';
 
 @ComponentBindings()
 export class ScrollableSimulatedProps extends ScrollableProps {

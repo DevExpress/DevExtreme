@@ -2,10 +2,13 @@ import {
   ComponentBindings,
   OneWay,
   Event,
+  TwoWay,
 } from 'devextreme-generator/component_declaration/common';
 
 import { ScrollableDirection, ScrollableShowScrollbar } from './types.d';
 import { ScrollableInternalProps } from './scrollable_props';
+import { EventCallback } from '../common/event_callback';
+import { TopPocketState } from './scrollable_utils';
 
 @ComponentBindings()
 export class ScrollbarProps extends ScrollableInternalProps {
@@ -27,6 +30,10 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() baseContentSize = 0;
 
+  @OneWay() topPocketSize = 0;
+
+  @OneWay() bottomPocketSize = 0;
+
   @OneWay() scrollableOffset = 0;
 
   @OneWay() scrollByThumb = false;
@@ -39,7 +46,17 @@ export class ScrollbarProps extends ScrollableInternalProps {
 
   @OneWay() forceVisibility = false;
 
+  @TwoWay() pocketState = TopPocketState.STATE_RELEASED;
+
   @Event() onAnimatorStart?: (animator: 'inertia'| 'bounce', velocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean) => void;
 
-  @Event() onAnimatorCancel?: () => void;
+  @Event() onAnimatorCancel?: EventCallback;
+
+  @Event() pocketStateChange?: EventCallback<number>;
+
+  @Event() onPullDown?: EventCallback;
+
+  @Event() onReachBottom?: EventCallback;
+
+  @Event() onRelease?: EventCallback;
 }

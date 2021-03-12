@@ -12,6 +12,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../../utils/subscribe_to_event';
 import { Widget } from '../common/widget';
+import { ScrollViewLoadPanel } from './load_panel';
+
 import { combineClasses } from '../../utils/combine_classes';
 import { DisposeEffectReturn, EffectReturn } from '../../utils/effect_return.d';
 import devices from '../../../core/devices';
@@ -20,8 +22,8 @@ import { BaseWidgetProps } from '../../utils/base_props';
 import {
   ScrollableProps,
 } from './scrollable_props';
-import { TopPocketProps } from './top_pocket_props';
-import { BottomPocketProps } from './bottom_pocket_props';
+import { TopPocketProps, TopPocket } from './top_pocket';
+import { BottomPocketProps, BottomPocket } from './bottom_pocket';
 import browser from '../../../core/utils/browser';
 import { nativeScrolling } from '../../../core/utils/support';
 import '../../../events/gesture/emitter.gesture.scroll';
@@ -50,9 +52,6 @@ import {
 } from './scrollable_utils';
 import { Scrollbar } from './scrollbar';
 
-import { TopPocket } from './top_pocket';
-import { BottomPocket } from './bottom_pocket';
-
 import {
   dxScrollInit,
   dxScrollMove,
@@ -66,17 +65,21 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
     horizontalScrollbarRef, verticalScrollbarRef,
     contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
     windowResizeHandler, needForceScrollbarsVisibility, useSimulatedScrollbar,
+    scrollableRef, isLoadPanelVisible,
     props: {
       disabled, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
+      needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText,
       pulledDownText, refreshingText, reachBottomText,
+      pullDownEnabled, reachBottomEnabled,
     },
     restAttributes,
   } = viewModel;
 
   return (
     <Widget
+      rootElementRef={scrollableRef}
       classes={cssClasses}
       disabled={disabled}
       rtlEnabled={rtlEnabled}
@@ -94,6 +97,8 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
               pullingDownText={pullingDownText}
               pulledDownText={pulledDownText}
               refreshingText={refreshingText}
+              useNative
+              visible={!!pullDownEnabled}
             />
             )}
             {needScrollViewContentWrapper
@@ -102,11 +107,19 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
             {forceGeneratePockets && (
             <BottomPocket
               reachBottomText={reachBottomText}
+              visible={!!reachBottomEnabled}
             />
             )}
           </div>
         </div>
       </div>
+      { needScrollViewLoadPanel && (
+        <ScrollViewLoadPanel
+          targetElement={scrollableRef}
+          refreshingText={refreshingText}
+          visible={isLoadPanelVisible}
+        />
+      )}
       { showScrollbar && useSimulatedScrollbar && direction.isHorizontal && (
         <Scrollbar
           direction="horizontal"
@@ -145,6 +158,8 @@ type ScrollableNativePropsType = ScrollableNativeProps
   view: viewFunction,
 })
 export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() {
+  @Ref() scrollableRef!: RefObject<HTMLDivElement>;
+
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
 
   @Ref() contentRef!: RefObject<HTMLDivElement>;
@@ -156,6 +171,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
   @Ref() horizontalScrollbarRef!: RefObject<Scrollbar>;
 
   @Mutable() locked = false;
+
+  @Mutable() loadingIndicatorEnabled = true;
 
   @Mutable() hideScrollbarTimeout?: any;
 
@@ -173,6 +190,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
 
   @InternalState() needForceScrollbarsVisibility = false;
 
+  @InternalState() isLoadPanelVisible = false;
+
   @Method()
   content(): HTMLDivElement {
     return this.contentRef.current!;
@@ -186,6 +205,28 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
       this.updateSizes();
       this.props.onUpdated?.(this.getEventArgs());
     }
+  }
+
+  // @Method()
+  // refresh(): void {
+  //   this.topPocketState = TopPocketState.STATE_READY;
+
+  //   this.startLoading();
+  //   this.props.onPullDown?.({});
+  // }
+
+  // startLoading(): void {
+  //   if (this.loadingIndicatorEnabled) {
+  //     // TODO: check visibility - && this.$element().is(':visible')
+  //     this.isLoadPanelVisible = true;
+  //   }
+  //   this.lock();
+  // }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  release(): void {
+    // TODO
   }
 
   @Method()
@@ -399,6 +440,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativePropsType>() 
     this.clearHideScrollbarTimeout();
 
     this.hideScrollbarTimeout = setTimeout(() => {
+      /* istanbul ignore next */
       this.needForceScrollbarsVisibility = false;
     }, HIDE_SCROLLBAR_TIMEOUT);
   }

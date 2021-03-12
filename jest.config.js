@@ -29,9 +29,6 @@ module.exports = {
         './js/renovation/ui/scroll_view/utils/get_element_offset.ts',
         './js/renovation/ui/scroll_view/utils/get_element_style.ts',
         './js/renovation/ui/scroll_view/utils/get_translate_values.ts',
-        './js/renovation/ui/scroll_view/scrollable_simulated.tsx',
-        './js/renovation/ui/scroll_view/scrollable_native.tsx',
-        './js/renovation/ui/scroll_view/scrollable.tsx', // https://github.com/enzymejs/enzyme/issues/2327
         './js/renovation/utils/get_computed_style.ts',
         './js/renovation/utils/noop.ts',
         './js/renovation/utils/render_template.ts',
