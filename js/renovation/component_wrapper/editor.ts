@@ -113,6 +113,13 @@ export default class Editor extends Component {
     this.option({ value });
   }
 
+  // eslint-disable-next-line
+  _getAriaName(name: string): string {
+    return (name === 'role' || name === 'id')
+      ? name
+      : `aria-${name}`;
+  }
+
   _dispose(): void {
     super._dispose();
 
