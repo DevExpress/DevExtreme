@@ -59,7 +59,8 @@ class FileManagerFilesTreeView extends Widget {
         this._actions = {
             onClick: this._createActionByOption('onClick'),
             onDirectoryClick: this._createActionByOption('onDirectoryClick'),
-            onFilesTreeViewContentReady: this._createActionByOption('onFilesTreeViewContentReady')
+            onFilesTreeViewContentReady: this._createActionByOption('onFilesTreeViewContentReady'),
+            onCurrentDirectorySet: this._createActionByOption('onCurrentDirectorySet')
         };
     }
 
@@ -81,6 +82,7 @@ class FileManagerFilesTreeView extends Widget {
     _onFilesTreeViewItemRendered({ itemData }) {
         const currentDirectory = this._getCurrentDirectory();
         if(currentDirectory && currentDirectory.fileItem.equals(itemData.fileItem)) {
+            this._actions.onCurrentDirectorySet();
             this._updateFocusedElement();
         }
     }
@@ -150,12 +152,12 @@ class FileManagerFilesTreeView extends Widget {
         }
     }
 
-    saveScrollTopPosition() {
+    _saveScrollTopPosition() {
         this._scrollTopPosition = this._filesTreeView._scrollableContainer.scrollTop();
     }
 
     restoreScrollTopPosition() {
-        this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition);
+        setTimeout(() => this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition));
     }
 
     _updateFocusedElement() {
@@ -213,6 +215,7 @@ class FileManagerFilesTreeView extends Widget {
             case 'onClick':
             case 'onDirectoryClick':
             case 'onFilesTreeViewContentReady':
+            case 'onCurrentDirectorySet':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -243,6 +246,7 @@ class FileManagerFilesTreeView extends Widget {
 
     refresh() {
         this._$focusedElement = null;
+        this._saveScrollTopPosition();
         this._filesTreeView.option('dataSource', []);
     }
 

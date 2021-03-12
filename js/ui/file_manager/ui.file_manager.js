@@ -165,7 +165,8 @@ class FileManager extends Widget {
             getDirectories: this.getDirectories.bind(this),
             getCurrentDirectory: this._getCurrentDirectory.bind(this),
             onDirectoryClick: this._onFilesTreeViewDirectoryClick.bind(this),
-            onClick: () => this._setItemsViewAreaActive(false)
+            onClick: () => this._setItemsViewAreaActive(false),
+            onCurrentDirectorySet: () => this._filesTreeView?.restoreScrollTopPosition()
         });
 
         this._filesTreeView.updateCurrentDirectory();
@@ -278,11 +279,7 @@ class FileManager extends Widget {
 
     _refreshAndShowProgress() {
         return when(this._notificationControl.tryShowProgressPanel(), this._controller.refresh())
-            .then(() => {
-                this._filesTreeView.saveScrollTopPosition();
-                this._filesTreeView.refresh();
-            })
-            .then(() => this._filesTreeView.restoreScrollTopPosition());
+            .then(() => this._filesTreeView.refresh());
     }
 
     _updateToolbar(selectedItems) {
