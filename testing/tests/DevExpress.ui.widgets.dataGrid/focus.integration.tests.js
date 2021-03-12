@@ -2448,7 +2448,7 @@ QUnit.module('View\'s focus', {
             const dataGrid = createDataGrid({
                 keyExpr: 'id',
                 dataSource: [
-                    { id: 1, dateValue: '1970/1/1' }
+                    { id: 1, dateValue: '2021/1/1' }
                 ],
                 keyboardNavigation: {
                     editOnKeyPress: true
@@ -2460,7 +2460,7 @@ QUnit.module('View\'s focus', {
                 },
                 columns: [
                     {
-                        dataField: 'dataValue',
+                        dataField: 'dateValue',
                         dataType: 'date',
                         format: 'dd/MM/yyyy',
                         editorOptions: {
@@ -2483,7 +2483,7 @@ QUnit.module('View\'s focus', {
 
             // assert
             assert.ok($cell.hasClass('dx-editor-cell'), 'cell has an editor');
-            assert.strictEqual($input.val(), '02/01/1970', 'the editor text is correct after the first key pressed');
+            assert.strictEqual($input.val(), '02/01/2021', 'the editor text is correct after the first key pressed');
 
             // act
             keyboard = keyboardMock($input);
@@ -2492,7 +2492,7 @@ QUnit.module('View\'s focus', {
 
             // assert
             assert.ok($cell.hasClass('dx-editor-cell'), 'cell has an editor');
-            assert.strictEqual($input.val(), '25/01/1970', 'the editor text is correct after the second key pressed');
+            assert.strictEqual($input.val(), '25/01/2021', 'the editor text is correct after the second key pressed');
         });
     });
 
