@@ -1328,8 +1328,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     renderRAllDayPanel() {
         const visible = this._isShowAllDayPanel() && !this.isGroupedAllDayPanel();
         if(visible) {
-            this._changeAllDayVisibility();
-            this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, true);
+            // this._changeAllDayVisibility();
+            // this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, true);
+            this._toggleAllDayVisibility(false);
 
             const groupCount = this._getGroupCount();
             const cellCount = this._getTotalCellCount(groupCount);
@@ -1923,14 +1924,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
-    _toggleAllDayVisibility() {
+    _toggleAllDayVisibility(isUpdateScrollable = true) {
         const showAllDayPanel = this._isShowAllDayPanel();
         this._$allDayPanel.toggle(showAllDayPanel);
         this._$allDayTitle && this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel);
         this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
 
         this._changeAllDayVisibility();
-        this._updateScrollable();
+        isUpdateScrollable && this._updateScrollable();
     }
 
     _changeAllDayVisibility() {
