@@ -559,6 +559,7 @@ const Popup = Overlay.inherit({
         let cssStyles = {};
         const contentMaxHeight = this._getOptionValue('maxHeight', overlayContent);
         const contentMinHeight = this._getOptionValue('minHeight', overlayContent);
+        const height = this._getOptionValue('height', overlayContent);
         const popupHeightParts = this._splitPopupHeight();
         const toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
                 + popupHeightParts.footer
@@ -567,7 +568,7 @@ const Popup = Overlay.inherit({
                 + this._heightStrategyChangeOffset(currentHeightStrategyClass, popupHeightParts.popupVerticalPaddings);
 
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
-            if((!this._isAutoHeight() || contentMaxHeight || contentMinHeight) && isDefined(this.option('height'))) {
+            if(!this._isAutoHeight() && isDefined(height) || contentMaxHeight || contentMinHeight) {
                 const overlayHeight = this.option('fullScreen')
                     ? Math.min(getBoundingRect(overlayContent).height, getWindow().innerHeight)
                     : getBoundingRect(overlayContent).height;
