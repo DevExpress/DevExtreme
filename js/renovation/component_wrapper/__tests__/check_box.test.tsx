@@ -8,6 +8,8 @@ describe('Accessibility', () => {
     { ariaName: 'required', ariaValue: 'true', expectedAttributeName: 'aria-required' },
     { ariaName: 'labeledby', ariaValue: 'some text', expectedAttributeName: 'aria-labeledby' },
     { ariaName: 'describedby', ariaValue: 'some new text', expectedAttributeName: 'aria-describedby' },
+    { ariaName: 'describedby', ariaValue: null, expectedAttributeName: 'aria-describedby' },
+    { ariaName: 'describedby', ariaValue: undefined, expectedAttributeName: 'aria-describedby' },
   ]).describe('testConfig: %o', (testConfig) => {
     it('setAria', () => {
       // eslint-disable-next-line no-underscore-dangle
@@ -18,8 +20,14 @@ describe('Accessibility', () => {
       const instance = new CheckBox(container);
 
       instance.setAria(testConfig.ariaName, testConfig.ariaValue);
-      expect(container.getAttribute(testConfig.expectedAttributeName))
-        .toEqual(testConfig.ariaValue);
+
+      if (testConfig.ariaValue === null || testConfig.ariaValue === undefined) {
+        expect(container.hasAttribute(testConfig.expectedAttributeName))
+          .toEqual(false);
+      } else {
+        expect(container.getAttribute(testConfig.expectedAttributeName))
+          .toEqual(testConfig.ariaValue);
+      }
     });
   });
 });
