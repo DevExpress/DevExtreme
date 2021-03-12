@@ -20,7 +20,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="element"></div>');
 });
 
-[true, false].renovateRender((renovateRender) => {
+[true, false].forEach((renovateRender) => {
     QUnit.performanceTest(`dxScheduler should force minimum relayout count on creation when renovateRender is ${renovateRender}`, function(assert) {
         const measureFunction = function() {
             $('#element').dxScheduler({
