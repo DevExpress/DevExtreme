@@ -1153,7 +1153,10 @@ QUnit.module('Scrolling to time', () => {
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
-                    width: 500
+                    width: 500,
+                    scrolling: {
+                        orientation: 'vertical'
+                    }
                 });
 
                 const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
@@ -1175,7 +1178,10 @@ QUnit.module('Scrolling to time', () => {
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
                     width: 500,
-                    rtlEnabled: true
+                    rtlEnabled: true,
+                    scrolling: {
+                        orientation: 'vertical'
+                    }
                 });
 
                 const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
@@ -1199,7 +1205,10 @@ QUnit.module('Scrolling to time', () => {
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
                     width: 500,
-                    firstDayOfWeek: 1
+                    firstDayOfWeek: 1,
+                    scrolling: {
+                        orientation: 'vertical'
+                    }
                 });
 
                 const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
@@ -1222,7 +1231,10 @@ QUnit.module('Scrolling to time', () => {
                     currentDate: new Date(2015, 1, 9),
                     width: 500,
                     firstDayOfWeek: 1,
-                    rtlEnabled: true
+                    rtlEnabled: true,
+                    scrolling: {
+                        orientation: 'vertical'
+                    }
                 });
 
                 const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
@@ -2031,6 +2043,7 @@ QUnit.module('Scrolling to time', () => {
                 currentView: 'week',
                 focusStateEnabled: true,
                 scrolling: { mode: scrollingMode },
+                width: 600
             });
 
             const keyboard = keyboardMock(this.instance.getWorkSpace().$element());
@@ -2064,6 +2077,7 @@ QUnit.module('Scrolling to time', () => {
                 currentView: 'week',
                 focusStateEnabled: true,
                 scrolling: { mode: scrollingMode },
+                width: 600
             });
 
             const keyboard = keyboardMock(this.instance.getWorkSpace().$element());
