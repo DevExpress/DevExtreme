@@ -11,7 +11,13 @@ import { InfoText } from '../info';
 import { Widget } from '../../common/widget';
 import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
 
-jest.mock('../../../../ui/shared/accessibility', () => ({ registerKeyboardAction: jest.fn() }));
+let mockInstance;
+
+jest.mock('../../../../ui/shared/accessibility', () => ({
+  registerKeyboardAction: jest.fn((_, instance) => {
+    mockInstance = instance;
+  }),
+}));
 jest.mock('../pages/page_index_selector', () => ({ PageIndexSelector: () => null }));
 jest.mock('../page_size/selector', () => ({ PageSizeSelector: forwardRef(() => null) }));
 jest.mock('../info', () => ({ InfoText: forwardRef(() => null) }));
@@ -218,11 +224,39 @@ describe('PagerContent', () => {
         undefined,
         action,
       );
-      const fakeComponent = (registerKeyboardAction as jest.Mock).mock.calls[0][1];
-      expect(fakeComponent.element()).toBe(rootElement);
-      expect(fakeComponent.option()).toBe(false);
+      expect(mockInstance.element()).toBe(rootElement);
+      expect(mockInstance.option()).toBe(false);
       // eslint-disable-next-line no-underscore-dangle
-      expect(fakeComponent._createActionByOption()).toEqual(expect.any(Function));
+      expect(mockInstance._createActionByOption()).toEqual(expect.any(Function));
+    });
+
+    it('keyboardAction provider _createActionByOption if onKeyDown prop is defined', () => {
+      const element = {} as HTMLElement;
+      const action = () => {};
+      const onKeyDownArgs = {};
+      const onKeyDownMock = jest.fn();
+      const component = new PagerContent({
+        onKeyDown: onKeyDownMock as any,
+      } as PagerContentProps);
+
+      component.keyboardAction.registerKeyboardAction(element, action);
+
+      // eslint-disable-next-line no-underscore-dangle
+      mockInstance._createActionByOption()(onKeyDownArgs);
+
+      expect(onKeyDownMock).toHaveBeenCalledWith(onKeyDownArgs);
+    });
+
+    it('keyboardAction provider _createActionByOption if onKeyDown prop is not defined', () => {
+      const element = {} as HTMLElement;
+      const action = () => {};
+      const component = new PagerContent({
+      } as PagerContentProps);
+
+      component.keyboardAction.registerKeyboardAction(element, action);
+
+      // eslint-disable-next-line no-underscore-dangle
+      expect(mockInstance._createActionByOption()()).toBeUndefined();
     });
 
     describe('pagesContainerVisible', () => {

@@ -1169,7 +1169,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _isHorizontalVirtualScrolling() {
-        const orientation = this.option('scrolling.type');
+        const orientation = this.option('scrolling.orientation');
         return this._isVirtualModeOn() &&
             (orientation === 'horizontal' || orientation === 'both');
     }

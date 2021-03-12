@@ -40,7 +40,7 @@ import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrat
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
 import { hide as hideLoading, show as showLoading } from './loading';
 import AppointmentCollection from './appointments/appointmentCollection';
-import SchedulerLayoutManager from './appointments.layout_manager';
+import AppointmentLayoutManager from './appointments.layout_manager';
 import SchedulerAppointmentModel from './appointment_model';
 import { Header } from './header/header';
 import { ResourceManager } from './resources/resourceManager';
@@ -60,6 +60,7 @@ import AppointmentAdapter from './appointmentAdapter';
 import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
+import AppointmentFilter from './appointments/appointmentFilter';
 import utils from './utils';
 
 // STYLE scheduler
@@ -126,6 +127,8 @@ const StoreEventNames = {
 };
 
 class Scheduler extends Widget {
+    get appointmentFilter() { return new AppointmentFilter(this); }
+
     _getDefaultOptions() {
         const defaultOptions = extend(super._getDefaultOptions(), {
             /**
@@ -809,7 +812,7 @@ class Scheduler extends Widget {
     }
 
     _isAllDayExpanded(items) {
-        return this.option('showAllDayPanel') && this._appointmentModel.hasAllDayAppointments(items, this._getCurrentViewOption('startDayHour'), this._getCurrentViewOption('endDayHour'));
+        return this.option('showAllDayPanel') && this.appointmentFilter.hasAllDayAppointments(items);
     }
 
     _getTimezoneOffsetByOption(date) {
@@ -1051,11 +1054,7 @@ class Scheduler extends Widget {
     }
 
     _filterAppointments() {
-        const prerenderFilterName = this.isVirtualScrolling()
-            ? 'prerenderFilterVirtual'
-            : 'prerenderFilter';
-
-        return this.fire(prerenderFilterName);
+        return this.appointmentFilter.filter();
     }
 
     _renderAppointments() {
@@ -1218,7 +1217,7 @@ class Scheduler extends Widget {
         this._processCurrentView();
         this._renderHeader();
 
-        this._layoutManager = new SchedulerLayoutManager(this, this._getAppointmentsRenderingStrategy());
+        this._layoutManager = new AppointmentLayoutManager(this, this._getAppointmentsRenderingStrategy());
 
         this._appointments = this._createComponent('<div>', AppointmentCollection, this._appointmentsConfig());
         this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
@@ -1482,8 +1481,8 @@ class Scheduler extends Widget {
             currentViewOptions.scrolling?.mode === 'virtual';
         const isHorizontalVirtualScrollingOrientation = isVirtualScrolling &&
             ['horizontal', 'both'].filter(item =>
-                scrolling.type === item ||
-                currentViewOptions.scrolling?.type === item
+                scrolling.orientation === item ||
+                currentViewOptions.scrolling?.orientation === item
             ).length > 0;
         const crossScrollingEnabled = this.option('crossScrollingEnabled') ||
             isHorizontalVirtualScrollingOrientation;
