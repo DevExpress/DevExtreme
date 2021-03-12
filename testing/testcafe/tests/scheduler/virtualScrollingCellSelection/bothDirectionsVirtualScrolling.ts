@@ -15,7 +15,7 @@ fixture`Scheduler: Cells Selection in Virtual Scrolling`
 const scheduler = new Scheduler('#container');
 
 const baseConfig = {
-  scrolling: { mode: 'virtual', type: 'both' },
+  scrolling: { mode: 'virtual', orientation: 'both' },
   views: [{
     type: 'week',
     intervalCount: 3,

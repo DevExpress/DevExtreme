@@ -1481,8 +1481,8 @@ class Scheduler extends Widget {
             currentViewOptions.scrolling?.mode === 'virtual';
         const isHorizontalVirtualScrollingOrientation = isVirtualScrolling &&
             ['horizontal', 'both'].filter(item =>
-                scrolling.type === item ||
-                currentViewOptions.scrolling?.type === item
+                scrolling.orientation === item ||
+                currentViewOptions.scrolling?.orientation === item
             ).length > 0;
         const crossScrollingEnabled = this.option('crossScrollingEnabled') ||
             isHorizontalVirtualScrollingOrientation;

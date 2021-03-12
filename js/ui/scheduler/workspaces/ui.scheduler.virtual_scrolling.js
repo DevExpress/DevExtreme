@@ -10,12 +10,12 @@ const MIN_SCROLL_OFFSET = 10;
 const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
 
-const scrollingTypes = {
+const scrollingOrientations = {
     vertical: 'vertical',
     horizontal: 'horizontal',
     both: 'both'
 };
-const DefaultScrollingType = scrollingTypes.vertical;
+const DefaultScrollingOrientation = scrollingOrientations.vertical;
 
 export default class VirtualScrollingDispatcher {
     constructor(workspace) {
@@ -97,19 +97,18 @@ export default class VirtualScrollingDispatcher {
     get verticalScrollingState() { return this.scrollingState.vertical; }
     get horizontalScrollingState() { return this.scrollingState.horizontal; }
 
-    get scrollingType() {
-        return this.workspace.option('scrolling.type') ||
-            DefaultScrollingType;
+    get scrollingOrientation() {
+        return this.workspace.option('scrolling.orientation') || DefaultScrollingOrientation;
     }
 
     get verticalScrollingAllowed() {
-        return this.scrollingType === scrollingTypes.vertical ||
-            this.scrollingType === scrollingTypes.both;
+        return this.scrollingOrientation === scrollingOrientations.vertical ||
+            this.scrollingOrientation === scrollingOrientations.both;
     }
 
     get horizontalScrollingAllowed() {
-        return this.scrollingType === scrollingTypes.horizontal ||
-            this.scrollingType === scrollingTypes.both;
+        return this.scrollingOrientation === scrollingOrientations.horizontal ||
+            this.scrollingOrientation === scrollingOrientations.both;
     }
 
     getRenderState() {
