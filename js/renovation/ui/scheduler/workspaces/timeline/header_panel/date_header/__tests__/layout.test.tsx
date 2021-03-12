@@ -213,7 +213,7 @@ describe('TimelineDateHeaderLayout', () => {
         });
 
         it('should return false if grouping by date is used', () => {
-          const groups = [{ name: 'group', items: [], data: [] }];
+          const groups = [{ name: 'group', items: [{ id: 1 }], data: [{ id: 1 }] }];
           const layout = new TimelineDateHeaderLayout({
             groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
             groups,
@@ -228,7 +228,7 @@ describe('TimelineDateHeaderLayout', () => {
         });
 
         it('should return true if horizontal grouping is used', () => {
-          const groups = [{ name: 'group', items: [], data: [] }];
+          const groups = [{ name: 'group', items: [{ id: 1 }], data: [{ id: 1 }] }];
           const layout = new TimelineDateHeaderLayout({
             groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
             groups,
