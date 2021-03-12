@@ -249,6 +249,7 @@ const baseFixedColumns = {
         const cellElements = that.callBase.apply(this, arguments);
         const isGroupRow = cellElements.parent().hasClass(GROUP_ROW_CLASS);
         const index = that.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
+        const visibleColumns = this._columnsController.getVisibleColumns(rowIndex);
 
         if(that._fixedTableElement && cellElements) {
             const fixedColumns = that.getFixedColumns(index);
@@ -268,8 +269,11 @@ const baseFixedColumns = {
                                 cellElements[columnIndex] = cell || cellElements[columnIndex];
                             }
                         } else {
-                            const fixedColumnIndex = that._columnsController.getVisibleIndex(fixedColumn.index, index);
-                            cellElements[fixedColumnIndex] = cell || cellElements[fixedColumnIndex];
+                            const columnWithSameCommandColumnIndex = isDefined(fixedColumn.command) && visibleColumns.filter(column => column.index === fixedColumn.index).length > 1;
+                            if(!columnWithSameCommandColumnIndex) {
+                                const fixedColumnIndex = that._columnsController.getVisibleIndex(fixedColumn.index, index);
+                                cellElements[fixedColumnIndex] = cell || cellElements[fixedColumnIndex];
+                            }
                         }
                     }
                 }
