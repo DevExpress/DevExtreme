@@ -10,7 +10,7 @@ describe('Accessibility', () => {
     { ariaName: 'describedby', ariaValue: 'some new text', expectedAttributeName: 'aria-describedby' },
   ]).describe('testConfig: %o', (testConfig) => {
     it('setAria', () => {
-      // eslint-disable-next-line
+      // eslint-disable-next-line no-underscore-dangle
       CheckBox.prototype._getDefaultOptions = jest.fn();
       CheckBox.prototype.endUpdate = jest.fn();
 
