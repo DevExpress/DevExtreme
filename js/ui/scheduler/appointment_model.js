@@ -521,7 +521,12 @@ class AppointmentModel {
     }
 
     getPreparedDataItems() {
-        const dataItems = this._dataSource.items();
+        const dataItems = this._dataSource?.items();
+
+        if(!dataItems) {
+            return [];
+        }
+
         return map(dataItems, (item) => {
             const startDate = new Date(this._dataAccessors.getter.startDate(item));
             const endDate = new Date(this._dataAccessors.getter.endDate(item));
