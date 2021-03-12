@@ -1328,6 +1328,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     renderRAllDayPanel() {
         const visible = this._isShowAllDayPanel() && !this.isGroupedAllDayPanel();
         if(visible) {
+            this._changeAllDayVisibility();
             const groupCount = this._getGroupCount();
             const cellCount = this._getTotalCellCount(groupCount);
 
