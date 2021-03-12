@@ -567,7 +567,7 @@ const Popup = Overlay.inherit({
                 + this._heightStrategyChangeOffset(currentHeightStrategyClass, popupHeightParts.popupVerticalPaddings);
 
         if(currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
-            if(!this._isAutoHeight() && isDefined(this.option('height')) || contentMaxHeight || contentMinHeight) {
+            if((!this._isAutoHeight() || contentMaxHeight || contentMinHeight) && isDefined(this.option('height'))) {
                 const overlayHeight = this.option('fullScreen')
                     ? Math.min(getBoundingRect(overlayContent).height, getWindow().innerHeight)
                     : getBoundingRect(overlayContent).height;
