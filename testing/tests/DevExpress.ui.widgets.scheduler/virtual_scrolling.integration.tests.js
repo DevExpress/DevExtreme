@@ -53,12 +53,6 @@ module('Virtual scrolling integration', () => {
                         result,
                         'Virtual scrolling initialised',
                     );
-
-                    assert.equal(
-                        workspace.isRenovatedRender(),
-                        result,
-                        'Render type is correct'
-                    );
                 });
 
                 test(`Component should be correctly created in "${viewName}" view if view.scrolling.mode: ${mode}`, function(assert) {
@@ -76,11 +70,6 @@ module('Virtual scrolling integration', () => {
                         result,
                         'Virtual scrolling initialization',
                     );
-                    assert.equal(
-                        instance.getWorkSpace().isRenovatedRender(),
-                        result,
-                        'Correct render is used'
-                    );
                 });
             });
 
@@ -97,7 +86,6 @@ module('Virtual scrolling integration', () => {
                     !!instance.getWorkSpace().virtualScrollingDispatcher,
                     'Virtual scrolling Initialized'
                 );
-                assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
 
                 instance.option('scrolling.mode', 'standard');
 
@@ -105,7 +93,6 @@ module('Virtual scrolling integration', () => {
                     !!instance.getWorkSpace().virtualScrollingDispatcher,
                     'Virtual scrolling not initialized'
                 );
-                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
 
             test(`it should be correctly initialised after change view.scrolling.mode option to "virtual" in "${viewName}" view`, function(assert) {
@@ -122,14 +109,12 @@ module('Virtual scrolling integration', () => {
                     !!instance.getWorkSpace().virtualScrollingDispatcher,
                     'Virtual scrolling is initialized'
                 );
-                assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
 
                 instance.option('views[0].scrolling.mode', 'standard');
                 assert.notOk(
                     !!instance.getWorkSpace().virtualScrollingDispatcher,
                     'Virtual scrolling is not initialized'
                 );
-                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
 
             test(`Virtual scrolling should have default cell sizes in "${viewName}" view`, function(assert) {
