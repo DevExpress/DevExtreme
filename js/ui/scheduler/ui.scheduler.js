@@ -812,7 +812,7 @@ class Scheduler extends Widget {
     }
 
     _isAllDayExpanded(items) {
-        return this.option('showAllDayPanel') && this._appointmentModel.hasAllDayAppointments(items, this._getCurrentViewOption('startDayHour'), this._getCurrentViewOption('endDayHour'));
+        return this.option('showAllDayPanel') && this.appointmentFilter.hasAllDayAppointments(items);
     }
 
     _getTimezoneOffsetByOption(date) {

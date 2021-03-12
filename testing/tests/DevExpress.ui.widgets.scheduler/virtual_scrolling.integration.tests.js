@@ -3300,5 +3300,33 @@ module('Virtual scrolling integration', () => {
                 assert.equal(groupPanelHeight, calculatedHeight, 'Correct groupPanel height');
             });
         });
+
+        test('AllDayPanel should have correct height if all day appointments out of viewport', function(assert) {
+            const { workSpace } = createWrapper({
+                height: 600,
+                width: 800,
+                currentDate: new Date(2021, 8, 6),
+                dataSource: [{
+                    text: 'Test',
+                    startDate: new Date(2021, 8, 11, 9, 30),
+                    resourceId: [5],
+                    allDay: true
+                }],
+                startDayHour: 9,
+                endDayHour: 18,
+                currentView: 'week',
+                scrolling: {
+                    mode: 'virtual',
+                    type: 'both',
+                },
+                groups: ['resourceId'],
+                resources: [{
+                    fieldExpr: 'resourceId',
+                    dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+                }]
+            });
+
+            assert.equal(workSpace.getAllDayCellHeight(), 75, 'AllDayPanel height is correct');
+        });
     });
 });
