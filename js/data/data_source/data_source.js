@@ -7,7 +7,7 @@ import dataUtils from '../utils';
 import { applyBatch } from '../array_utils';
 import CustomStore from '../custom_store';
 import { EventsStrategy } from '../../core/events_strategy';
-import errorUtils from '../errors';
+import { errors } from '../errors';
 import { isEmpty } from '../../core/utils/array';
 import { create } from '../../core/utils/queue';
 import { Deferred, when } from '../../core/utils/deferred';
@@ -48,7 +48,9 @@ export const DataSource = Class.inherit({
     */
     ctor(options) {
         options = normalizeDataSourceOptions(options);
-        this._eventsStrategy = new EventsStrategy(this);
+        this._eventsStrategy = new EventsStrategy(this, {
+            syncStrategy: true
+        });
 
         /**
         * @name DataSourceOptions.store.type
@@ -367,7 +369,7 @@ export const DataSource = Class.inherit({
         const options = this._createStoreLoadOptions();
         const handleDone = (data) => {
             if(!isDefined(data) || isEmpty(data)) {
-                d.reject(new errorUtils.errors.Error('E4009'));
+                d.reject(new errors.Error('E4009'));
             } else {
                 if(!Array.isArray(data)) {
                     data = [data];

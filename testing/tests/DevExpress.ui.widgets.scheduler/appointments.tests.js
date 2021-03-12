@@ -82,9 +82,6 @@ const moduleOptions = {
             setField: function(field, obj, value) {
                 return dataAccessors.setter[field](obj, value);
             },
-            prerenderFilter: function() {
-                return that.items.length ? that.items : that.instance.option('items');
-            },
             getTimeZoneCalculator: function() {
                 return {
                     createDate: date => date
@@ -1146,4 +1143,3 @@ QUnit.test('Focus shouldn\'t be prevent when first appointment is reached in bac
 
     $($appointments).off('keydown');
 });
-

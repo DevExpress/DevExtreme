@@ -182,10 +182,6 @@
                     'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
-                    'preact': '@Url.Content("~/node_modules/preact/dist/preact.js")',
-                    'preact/hooks': '@Url.Content("~/node_modules/preact/hooks/dist/hooks.js")',
-                    'preact/compat': '@Url.Content("~/node_modules/preact/compat/dist/compat.js")',
-                    'preact/test-utils': '@Url.Content("~/node_modules/preact/test-utils/dist/testUtils.js")',
                     'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
                     'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
                     'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
@@ -235,7 +231,13 @@
                     'cldr': {
                         main: '../cldr.js',
                         defaultExtension: 'js'
-                    }
+                    },
+                    'events/utils': {
+                        main: 'index'
+                    },
+                    'events': {
+                        main: 'index'
+                    },
                 },
                 meta: {
                     '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")': {

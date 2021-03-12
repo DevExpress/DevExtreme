@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import 'renovation/ui/common/widget.j';
 
-import { act } from 'preact/test-utils';
-
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
         <div id="component"></div>
@@ -11,7 +9,7 @@ QUnit.testStart(function() {
 
 const moduleConfig = {
     Widget(options = {}) {
-        act(() => $('#component').dxWidget(options));
+        $('#component').dxWidget(options);
         return $('#component');
     }
 };
@@ -114,9 +112,9 @@ QUnit.module('Container', moduleConfig, () => {
     });
 });
 
-QUnit.module('Preact Wrapper', moduleConfig, () => {
+QUnit.module('Component Wrapper', moduleConfig, () => {
     QUnit.test('should create in separate element', function(assert) {
-        act(() => $('<div>').dxWidget({}));
+        $('<div>').dxWidget({});
 
         assert.ok(true, 'no exceptions');
     });

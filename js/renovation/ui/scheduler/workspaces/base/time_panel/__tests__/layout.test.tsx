@@ -53,11 +53,14 @@ describe('TimePanelLayout', () => {
   };
 
   describe('Render', () => {
-    const render = (viewModel) => shallow(<LayoutView {...{
-      ...viewModel,
-      props: { timePanelData: timePanelDataBase, ...viewModel.props },
-    }}
-    />);
+    const render = (viewModel) => shallow(
+      <LayoutView
+        {...{
+          ...viewModel,
+          props: { timePanelData: timePanelDataBase, ...viewModel.props },
+        }}
+      /> as any,
+    );
 
     afterEach(jest.resetAllMocks);
 
@@ -299,7 +302,7 @@ describe('TimePanelLayout', () => {
       expect(getKeyByGroup)
         .toHaveBeenCalledTimes(1);
       expect(getKeyByGroup)
-        .toHaveBeenCalledWith(2);
+        .toHaveBeenCalledWith(2, undefined);
     });
   });
 
@@ -313,7 +316,7 @@ describe('TimePanelLayout', () => {
                 ...timePanelDataBase,
                 topVirtualRowHeight,
                 bottomVirtualRowHeight,
-              },
+              } as any,
             });
 
             let value = topVirtualRowHeight || 0;

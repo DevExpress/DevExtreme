@@ -103,9 +103,7 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     }
 
     getHorizontalMax(groupIndex) {
-        return this._workSpace.isRenovatedRender()
-            ? this._workSpace.getMaxAllowedPosition(groupIndex)
-            : this._workSpace.getMaxAllowedPosition()[groupIndex];
+        return this._workSpace.getMaxAllowedPosition(groupIndex);
     }
 
     getVerticalMax(groupIndex) {
@@ -171,6 +169,29 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
             top: 0,
             bottom: 0
         };
+    }
+
+    shiftIndicator($indicator, height, rtlOffset, groupIndex) {
+        const offset = this._getIndicatorOffset(groupIndex);
+
+        const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
+
+        $indicator.css('left', horizontalOffset);
+        $indicator.css('top', height);
+    }
+
+    _getIndicatorOffset(groupIndex) {
+        const groupByDay = this._workSpace.isGroupedByDate();
+
+        return groupByDay ? this._calculateGroupByDateOffset(groupIndex) : this._calculateOffset(groupIndex);
+    }
+
+    _calculateOffset(groupIndex) {
+        return this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex + this._workSpace.getIndicatorOffset(groupIndex) + groupIndex;
+    }
+
+    _calculateGroupByDateOffset(groupIndex) {
+        return this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex;
     }
 
     getShaderOffset(i, width) {

@@ -402,7 +402,7 @@ const HeaderPanelHeaderFilterExtender = extend({}, headerFilterMixin, {
     }
 });
 
-function invertFilterExpression(filter) {
+export function invertFilterExpression(filter) {
     return ['!', filter];
 }
 
@@ -459,8 +459,7 @@ const DataControllerFilterRowExtender = {
     }
 };
 
-export default {
-    invertFilterExpression: invertFilterExpression,
+export const headerFilterModule = {
     defaultOptions: function() {
         return {
             headerFilter: {

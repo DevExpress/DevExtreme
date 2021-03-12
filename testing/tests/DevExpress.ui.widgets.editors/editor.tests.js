@@ -1,10 +1,12 @@
 import $ from 'jquery';
+import DOMComponent from 'core/component';
 import Editor from 'ui/editor/editor';
 import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
 import hoverEvents from 'events/hover';
 
 import 'generic_light.css!';
+
 
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
 const INVALID_MESSAGE_CONTENT_CLASS = 'dx-invalid-message-content';
@@ -39,6 +41,13 @@ QUnit.module('Editor', {
         this.fixture.teardown();
     }
 }, () => {
+
+    QUnit.test('isEditor', function(assert) {
+        const editor = this.fixture.createEditor();
+        assert.ok(Editor.isEditor(editor));
+        assert.ok(!Editor.isEditor(new DOMComponent(this.$element, {})));
+    });
+
     QUnit.test('Editor can be instantiated', function(assert) {
         const editor = this.fixture.createEditor();
         assert.ok(editor instanceof Editor);

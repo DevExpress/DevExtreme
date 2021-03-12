@@ -316,6 +316,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     scrollToTime() { return noop(); }
 
+    _createAllDayPanelElements() {}
+
     _getRowCountWithAllDayRows() {
         return this._getRowCount();
     }
@@ -331,7 +333,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             this._$dateTable,
             dxrMonthDateTableLayout,
             'renovatedDateTable',
-            { viewData: this.viewDataProvider.viewData, dataCellTemplate: this.option('dataCellTemplate') }
+            this._getRDateTableProps(),
         );
     }
 

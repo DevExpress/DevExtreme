@@ -11,7 +11,7 @@ const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const ROW_LINES_CLASS = 'dx-row-lines';
 
 
-export default {
+export const masterDetailModule = {
     defaultOptions: function() {
         return {
             masterDetail: {
@@ -246,7 +246,7 @@ export default {
                         if($rowsTable) {
                             $rowsTable
                                 .find('.dx-master-detail-cell')
-                                .toggleClass('dx-hidden', isBestFit);
+                                .css('maxWidth', isBestFit ? 0 : '');
                         }
                     }
                 }

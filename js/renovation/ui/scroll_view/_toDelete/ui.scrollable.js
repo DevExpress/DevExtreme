@@ -12,38 +12,13 @@ const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const Scrollable = DOMComponent.inherit({
-    _initOptions: function(options) {
-        this.callBase(options);
-        if(!('useSimulatedScrollbar' in options)) {
-            this._setUseSimulatedScrollbar();
-        }
-    },
-
-    _setUseSimulatedScrollbar: function() {
-        if(!this.initialOption('useSimulatedScrollbar')) {
-            this.option('useSimulatedScrollbar', !this.option('useNative'));
-        }
-    },
-
     _getWindowDevicePixelRatio: function() {
         return hasWindow()
             ? getWindow().devicePixelRatio
             : 1;
     },
 
-    _visibilityChanged: function(visible) {
-        if(visible) {
-            this.update();
-            this._updateRtlPosition();
-            this._savedScrollOffset && this.scrollTo(this._savedScrollOffset);
-            delete this._savedScrollOffset;
-        } else {
-            this._savedScrollOffset = this.scrollOffset();
-        }
-    },
-
     _dimensionChanged: function() {
-        this.update();
         this._updateRtlPosition();
     },
 

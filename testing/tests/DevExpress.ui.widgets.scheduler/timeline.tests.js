@@ -106,49 +106,53 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', f
     assert.equal(dateTableWidth, 1440, 'Width is OK');
 });
 
-QUnit.test('Sidebar scrollable should update position if date scrollable position is changed', function(assert) {
-    const done = assert.async();
+[true, false].forEach((renovateRender) => {
+    QUnit.test(`Sidebar scrollable should update position if date scrollable position is changed when renovateRender is ${renovateRender}`, function(assert) {
+        const done = assert.async();
 
-    this.instance.option({
-        crossScrollingEnabled: true,
-        width: 400,
-        height: 200,
-        groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }]
+        this.instance.option({
+            crossScrollingEnabled: true,
+            width: 400,
+            height: 200,
+            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }],
+            renovateRender,
+        });
+
+        const $element = this.instance.$element();
+        const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+        const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+
+        triggerHidingEvent($element);
+        triggerShownEvent($element);
+
+        dateTableScrollable.scrollTo({ top: 200 });
+
+        setTimeout(() => {
+            assert.equal(groupPanelScrollable.scrollTop(), 200, 'Scroll position is OK');
+            done();
+        });
     });
 
-    const $element = this.instance.$element();
-    const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    QUnit.test(`Date table scrollable should update position if sidebar position is changed when renovateRender is ${renovateRender}`, function(assert) {
+        this.instance.option({
+            crossScrollingEnabled: true,
+            width: 400,
+            height: 200,
+            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }],
+            renovateRender,
+        });
 
-    triggerHidingEvent($element);
-    triggerShownEvent($element);
+        const $element = this.instance.$element();
+        const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+        const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-    dateTableScrollable.scrollTo({ top: 200 });
+        triggerHidingEvent($element);
+        triggerShownEvent($element);
 
-    setTimeout(() => {
-        assert.equal(groupPanelScrollable.scrollTop(), 200, 'Scroll position is OK');
-        done();
+        groupPanelScrollable.scrollTo({ top: 200 });
+
+        assert.equal(dateTableScrollable.scrollTop(), 200, 'Scroll position is OK');
     });
-});
-
-QUnit.test('Date table scrollable should update position if sidebar position is changed', function(assert) {
-    this.instance.option({
-        crossScrollingEnabled: true,
-        width: 400,
-        height: 200,
-        groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }]
-    });
-
-    const $element = this.instance.$element();
-    const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-
-    triggerHidingEvent($element);
-    triggerShownEvent($element);
-
-    groupPanelScrollable.scrollTo({ top: 200 });
-
-    assert.equal(dateTableScrollable.scrollTop(), 200, 'Scroll position is OK');
 });
 
 QUnit.test('Date table scrollable should update position if header scrollable position is changed', function(assert) {
@@ -1006,6 +1010,11 @@ QUnit.test('Group header should be rendered correct, groupByDate = true and cros
 });
 
 QUnit.test('Date table cells shoud have right cellData, groupByDate = true', function(assert) {
+    if(this.instance.option('renovateRender')) {
+        assert.ok(true, 'This test is not for renovated render');
+        return;
+    }
+
     const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
     assert.deepEqual($cells.eq(0).data('dxCellData'), {

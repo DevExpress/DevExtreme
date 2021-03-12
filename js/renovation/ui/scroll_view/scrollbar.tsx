@@ -42,8 +42,7 @@ const HIDE_SCROLLBAR_TIMEOUT = 500;
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   const {
     cssClasses, styles, scrollRef, scrollbarRef, hoverStateEnabled,
-    onHoverStartHandler, onHoverEndHandler,
-    isVisible, windowResizeHandler,
+    onHoverStartHandler, onHoverEndHandler, isVisible,
     props: { activeStateEnabled },
     restAttributes,
   } = viewModel;
@@ -57,7 +56,6 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
       visible={isVisible}
       onHoverStart={onHoverStartHandler}
       onHoverEnd={onHoverEndHandler}
-      onDimensionChanged={windowResizeHandler}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
     >
@@ -68,7 +66,7 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
   );
 };
 
-type ScrollbarPropsType = ScrollbarProps
+export type ScrollbarPropsType = ScrollbarProps
 & Pick<ScrollableSimulatedProps, 'contentPositionChange' | 'contentTranslateOffset' | 'contentTranslateOffsetChange'>;
 @Component({
   defaultOptionRules: null,
@@ -83,8 +81,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Mutable() crossThumbScrolling = false;
 
   @Mutable() translateOffset?: number;
-
-  @Mutable() windowSizeChanged?: boolean;
 
   @Mutable() prevThumbRatio = 1;
 
@@ -110,10 +106,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   get scrollPosition(): number {
-    const thumbRatioChanged = (this.thumbRatio - this.prevThumbRatio) > 0.01;
-    if (this.windowSizeChanged || thumbRatioChanged) {
+    const thumbRatioChanged = Math.abs(this.thumbRatio - this.prevThumbRatio) > 0.01;
+    if (thumbRatioChanged) {
       this.scrollLocation = this.boundLocation(this.scrollLocation);
-      this.windowSizeChanged = undefined;
       this.prevThumbRatio = this.thumbRatio;
     }
 
@@ -156,8 +151,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  validateEvent(event): boolean {
-    const { target } = event.originalEvent;
+  validateEvent(e): boolean {
+    const { target } = e.originalEvent;
 
     return (this.isThumb(target) || this.isScrollbar(target));
   }
@@ -175,6 +170,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @Method()
   getLocation(): number {
     return this.location;
+  }
+
+  @Method()
+  getScrollLocation(): number {
+    return this.scrollLocation;
   }
 
   @Method()
@@ -442,10 +442,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     const { baseContainerSize, baseContentSize } = this.props;
 
     return (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
-  }
-
-  windowResizeHandler(): void {
-    this.windowSizeChanged = true;
   }
 
   get dimension(): string {

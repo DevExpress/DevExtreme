@@ -18,11 +18,11 @@ describe('VirtualCell', () => {
       props: { ...viewModel.props },
     }));
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { customAttribute: 'customAttribute' } });
+    it('should pass style to the root component', () => {
+      const cell = render({ style: { with: '31px' } });
 
-      expect(cell.prop('customAttribute'))
-        .toBe('customAttribute');
+      expect(cell.prop('style'))
+        .toEqual({ with: '31px' });
     });
   });
 

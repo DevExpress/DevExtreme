@@ -1,4 +1,5 @@
 /* eslint-env node */
+const webpack = require('webpack');
 
 module.exports = {
     output: {
@@ -25,5 +26,12 @@ module.exports = {
         'devexpress-diagram': 'window.DevExpress.diagram',
         'devexpress-gantt': 'window.DevExpress.Gantt',
         'luxon': 'window.luxon'
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        })
+    ]
 };

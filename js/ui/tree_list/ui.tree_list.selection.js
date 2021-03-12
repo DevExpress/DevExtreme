@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import treeListCore from './ui.tree_list.core';
 import { noop, equalByValue } from '../../core/utils/common';
-import selectionModule from '../grid_core/ui.grid_core.selection';
+import { selectionModule } from '../grid_core/ui.grid_core.selection';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 
@@ -149,17 +149,19 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 selectAll: function() {
-                    const that = this;
-
-                    const visibleKeys = that._getSelectAllNodeKeys().filter(function(key) {
-                        return !that.isRowSelected(key);
+                    const visibleKeys = this._getSelectAllNodeKeys().filter((key) => {
+                        return !this.isRowSelected(key);
                     });
 
-                    return that.selectRows(visibleKeys, true);
+                    this.focusedItemIndex(-1);
+
+                    return this.selectRows(visibleKeys, true);
                 },
 
                 deselectAll: function() {
                     const visibleKeys = this._getSelectAllNodeKeys();
+
+                    this.focusedItemIndex(-1);
 
                     return this.deselectRows(visibleKeys);
                 },

@@ -5,7 +5,7 @@ import { AllDayPanelTableBody } from '../table_body';
 import { DefaultSizes } from '../../../../const';
 
 describe('AllDayPanelLayout', () => {
-  const viewData = {
+  const viewData: any = {
     groupedData: [{
       allDayPanel: [{
         startDate: new Date(2020, 6, 9),
@@ -32,7 +32,7 @@ describe('AllDayPanelLayout', () => {
           visible: true,
           ...viewModel.props,
         }}
-      />,
+      /> as any,
     );
 
     it('should spread restAttributes', () => {
@@ -119,7 +119,7 @@ describe('AllDayPanelLayout', () => {
               groupIndex: 1,
             }],
             cellCountInGroupRow: 1,
-          },
+          } as any,
         });
 
         expect(layout.emptyTableHeight)

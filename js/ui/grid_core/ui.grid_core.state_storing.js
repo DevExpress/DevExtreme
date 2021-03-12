@@ -79,7 +79,7 @@ const getFilterValue = (that, state) => {
     return DEFAULT_FILTER_VALUE;
 };
 
-export default {
+export const stateStoringModule = {
     defaultOptions: function() {
         return {
             stateStoring: {

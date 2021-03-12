@@ -1,6 +1,5 @@
 import registerComponent from 'core/component_registrator';
 import { name as getName } from 'core/utils/public_component';
-import { act } from 'preact/test-utils';
 
 const WRAPPED_METHOD_NAMES = {
     ctor: true,
@@ -12,11 +11,8 @@ const WRAPPED_METHOD_NAMES = {
 };
 
 function functionWrapper() {
-    let res;
     const that = this;
-    act(() => {
-        res = that.callBase.apply(that, arguments);
-    });
+    const res = that.callBase.apply(that, arguments);
     return res;
 }
 
@@ -48,32 +44,16 @@ export const createRenovationModuleConfig = (oldWidget, renovatedWidget, config 
             beforeEach: function() {
                 const renovatedWidgetWrapper = renovatedWidget.inherit({
                     ctor: function() {
-                        let res;
-                        act(() => {
-                            res = this.callBase.apply(this, arguments);
-                        });
-                        return res;
+                        return this.callBase.apply(this, arguments);
                     },
                     option: function() {
-                        let res;
-                        act(() => {
-                            res = this.callBase.apply(this, arguments);
-                        });
-                        return res;
+                        return this.callBase.apply(this, arguments);
                     },
                     focus: function() {
-                        let res;
-                        act(() => {
-                            res = this.callBase.apply(this, arguments);
-                        });
-                        return res;
+                        return this.callBase.apply(this, arguments);
                     },
                     repaint: function() {
-                        let res;
-                        act(() => {
-                            res = this.callBase.apply(this, arguments);
-                        });
-                        return res;
+                        return this.callBase.apply(this, arguments);
                     },
                 });
                 renovatedWidgetWrapper.getInstance = renovatedWidget.getInstance;

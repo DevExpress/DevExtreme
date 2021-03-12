@@ -1,7 +1,7 @@
 import Class from '../../core/class';
 import { compileGetter } from '../../core/utils/data';
 import { isFunction } from '../../core/utils/type';
-import errorUtils from '../../data/errors';
+import { errors } from '../../data/errors';
 import dataUtils from '../../data/utils';
 
 function depthFirstSearch(i, depth, root, callback) {
@@ -52,7 +52,7 @@ function normalizeAggregate(aggregate) {
     if(typeof aggregator === 'string') {
         aggregator = dataUtils.aggregators[aggregator];
         if(!aggregator) {
-            throw errorUtils.errors.Error('E4001', aggregate.aggregator);
+            throw errors.Error('E4001', aggregate.aggregator);
         }
     }
 

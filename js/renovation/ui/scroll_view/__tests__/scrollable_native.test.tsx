@@ -1,5 +1,6 @@
 import React from 'react';
 import each from 'jest-each';
+import { mount } from 'enzyme';
 import {
   RefObject,
 } from 'devextreme-generator/component_declaration/common';
@@ -9,6 +10,7 @@ import {
 } from '../../../test_utils/events_mock';
 import {
   ScrollableNative as Scrollable,
+  viewFunction,
 } from '../scrollable_native';
 
 import {
@@ -33,8 +35,13 @@ import {
   ScrollableDirection,
 } from '../types.d';
 
+import { Scrollbar } from '../scrollbar';
+
 const testBehavior = { positive: false };
 jest.mock('../../../../core/utils/scroll_rtl_behavior', () => () => testBehavior);
+jest.mock('../../../../core/utils/support', () => ({ nativeScrolling: true }));
+jest.mock('../../../../core/utils/browser', () => ({ mozilla: false }));
+
 jest.mock('../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../core/devices').default;
   actualDevices.real = jest.fn(() => ({ platform: 'generic' }));
@@ -63,7 +70,7 @@ describe('Native', () => {
       it('handleMove, locked: true', () => {
         const e = { ...defaultEvent, cancel: undefined } as any;
         const viewModel = new Scrollable({ });
-        viewModel.wrapperRef = React.createRef();
+        (viewModel as any).wrapperRef = React.createRef();
         viewModel.locked = true;
 
         viewModel.moveEffect();
@@ -76,7 +83,7 @@ describe('Native', () => {
         it('handleMove, locked: false', () => {
           const e = { ...defaultEvent, cancel: undefined, originalEvent: {} } as any;
           const viewModel = new Scrollable({ });
-          viewModel.wrapperRef = React.createRef();
+          (viewModel as any).wrapperRef = React.createRef();
           viewModel.locked = false;
           viewModel.tryGetAllowedDirection = jest.fn(() => allowedDirection);
 
@@ -92,18 +99,18 @@ describe('Native', () => {
         });
       });
 
-      it('handleScroll, location not changed', () => {
-        const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() } as any;
-        const viewModel = new Scrollable({ });
-        viewModel.containerRef = { current: {} } as RefObject;
-        viewModel.lastLocation = { top: 1, left: 1 };
-        viewModel.location = () => ({ top: 1, left: 1 });
+      // it('handleScroll, location not changed', () => {
+      //   const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() } as any;
+      //   const viewModel = new Scrollable({ });
+      //   viewModel.containerRef = { current: {} } as RefObject;
+      //   viewModel.lastLocation = { top: 1, left: 1 };
+      //   viewModel.location = () => ({ top: 1, left: 1 });
 
-        viewModel.scrollEffect();
-        emit('scroll', e);
+      //   viewModel.scrollEffect();
+      //   emit('scroll', e);
 
-        expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(1);
-      });
+      //   expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(1);
+      // });
 
       each([true, false]).describe('useSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
         it('handleScroll, location was changed', () => {
@@ -133,23 +140,71 @@ describe('Native', () => {
         it('should update sizes on window resize and trigger onUpdated', () => {
           const onUpdatedMock = jest.fn();
           const viewModel = new Scrollable({ onUpdated: onUpdatedMock });
-          viewModel.containerRef = { current: {} } as RefObject;
+          viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+          (viewModel as any).containerRef = React.createRef();
+          viewModel.getEventArgs = jest.fn();
 
           viewModel.updateSizes = jest.fn();
           viewModel.windowResizeHandler();
 
           expect(viewModel.updateSizes).toBeCalledTimes(1);
           expect(onUpdatedMock).toBeCalledTimes(1);
+          expect(onUpdatedMock).toHaveBeenCalledWith(viewModel.getEventArgs());
         });
 
         it('should update sizes on window resize, onUpdated: undefined', () => {
           const viewModel = new Scrollable({ onUpdated: undefined });
-          viewModel.containerRef = { current: {} } as RefObject;
+          viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+          (viewModel as any).containerRef = React.createRef();
+          viewModel.getEventArgs = jest.fn();
 
           viewModel.updateSizes = jest.fn();
           viewModel.windowResizeHandler();
 
           expect(viewModel.updateSizes).toBeCalledTimes(1);
+        });
+      });
+
+      describe('update()', () => {
+        it('should update sizes on update() method call and trigger onUpdated', () => {
+          const onUpdatedMock = jest.fn();
+          const viewModel = new Scrollable({ onUpdated: onUpdatedMock });
+          viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+          (viewModel as any).containerRef = React.createRef();
+          viewModel.getEventArgs = jest.fn();
+
+          viewModel.updateSizes = jest.fn();
+          viewModel.update();
+
+          expect(viewModel.updateSizes).toBeCalledTimes(1);
+          expect(onUpdatedMock).toBeCalledTimes(1);
+          expect(onUpdatedMock).toHaveBeenCalledWith(viewModel.getEventArgs());
+        });
+
+        it('should update sizes on update() method call, onUpdated: undefined', () => {
+          const viewModel = new Scrollable({ onUpdated: undefined });
+          viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+          (viewModel as any).containerRef = React.createRef();
+          viewModel.getEventArgs = jest.fn();
+
+          viewModel.updateSizes = jest.fn();
+          viewModel.update();
+
+          expect(viewModel.updateSizes).toBeCalledTimes(1);
+        });
+
+        it('should update sizes on update() method call, onUpdated, contentRef.current = null', () => {
+          const onUpdatedMock = jest.fn();
+          const viewModel = new Scrollable({ onUpdated: onUpdatedMock });
+          viewModel.contentRef = { current: null } as RefObject<HTMLDivElement>;
+          (viewModel as any).containerRef = React.createRef();
+          viewModel.getEventArgs = jest.fn();
+
+          viewModel.updateSizes = jest.fn();
+          viewModel.update();
+
+          expect(viewModel.updateSizes).not.toBeCalled();
+          expect(onUpdatedMock).not.toBeCalled();
         });
       });
 
@@ -203,6 +258,66 @@ describe('Native', () => {
 
         expect(viewModel.containerClientWidth).toEqual(10);
         expect(viewModel.containerClientHeight).toEqual(20);
+        expect(viewModel.contentClientWidth).toEqual(30);
+        expect(viewModel.contentClientHeight).toEqual(40);
+      });
+
+      it('effectUpdateScrollbarSize(), contentRef.current: null', () => {
+        const viewModel = new Scrollable({});
+        viewModel.containerClientWidth = 1;
+        viewModel.containerClientHeight = 2;
+
+        viewModel.contentClientWidth = 3;
+        viewModel.contentClientHeight = 4;
+
+        const containerRef = {
+          current: {
+            clientWidth: 10,
+            clientHeight: 20,
+          },
+        } as RefObject;
+
+        const contentRef = {
+          current: null,
+        } as RefObject;
+
+        viewModel.containerRef = containerRef;
+        viewModel.contentRef = contentRef;
+
+        viewModel.effectUpdateScrollbarSize();
+
+        expect(viewModel.containerClientWidth).toEqual(10);
+        expect(viewModel.containerClientHeight).toEqual(20);
+        expect(viewModel.contentClientWidth).toEqual(3);
+        expect(viewModel.contentClientHeight).toEqual(4);
+      });
+
+      it('effectUpdateScrollbarSize(), container.current: null', () => {
+        const viewModel = new Scrollable({});
+        viewModel.containerClientWidth = 1;
+        viewModel.containerClientHeight = 2;
+
+        viewModel.contentClientWidth = 3;
+        viewModel.contentClientHeight = 4;
+
+        const containerRef = {
+          current: null,
+        } as RefObject;
+
+        const contentRef = {
+          current: {
+            clientWidth: 30,
+            clientHeight: 40,
+          },
+        } as RefObject;
+
+        viewModel.containerRef = containerRef;
+        viewModel.contentRef = contentRef;
+
+        viewModel.effectUpdateScrollbarSize();
+
+        expect(viewModel.containerClientWidth).toEqual(1);
+        expect(viewModel.containerClientHeight).toEqual(2);
         expect(viewModel.contentClientWidth).toEqual(30);
         expect(viewModel.contentClientHeight).toEqual(40);
       });
@@ -1217,8 +1332,8 @@ describe('Native', () => {
 
             const viewModel = new Scrollable({ direction });
 
-            viewModel.horizontalScrollbarRef = horizontalScrollbarRef;
-            viewModel.verticalScrollbarRef = verticalScrollbarRef;
+            (viewModel as any).horizontalScrollbarRef = horizontalScrollbarRef;
+            (viewModel as any).verticalScrollbarRef = verticalScrollbarRef;
             viewModel.location = () => ({ top: 2, left: 4 });
 
             viewModel.moveScrollbars();
@@ -1229,12 +1344,12 @@ describe('Native', () => {
             const horizontalScrollbar = viewModel.horizontalScrollbarRef.current;
 
             if (isVertical) {
-              expect(verticalScrollbar.moveScrollbar).toHaveBeenCalledTimes(1);
-              expect(verticalScrollbar.moveScrollbar).toHaveBeenCalledWith(2);
+              expect(verticalScrollbar!.moveScrollbar).toHaveBeenCalledTimes(1);
+              expect(verticalScrollbar!.moveScrollbar).toHaveBeenCalledWith(2);
             }
             if (isHorizontal) {
-              expect(horizontalScrollbar.moveScrollbar).toHaveBeenCalledTimes(1);
-              expect(horizontalScrollbar.moveScrollbar).toHaveBeenCalledWith(4);
+              expect(horizontalScrollbar!.moveScrollbar).toHaveBeenCalledTimes(1);
+              expect(horizontalScrollbar!.moveScrollbar).toHaveBeenCalledWith(4);
             }
 
             expect(viewModel.needForceScrollbarsVisibility).toEqual(true);
@@ -1253,17 +1368,68 @@ describe('Native', () => {
           it('should call according method in scrollbar, scrollbarRef is undefined', () => {
             const viewModel = new Scrollable({ direction });
 
-            viewModel.horizontalScrollbarRef = {
+            (viewModel as any).horizontalScrollbarRef = {
               current: undefined,
             };
 
-            viewModel.verticalScrollbarRef = {
+            (viewModel as any).verticalScrollbarRef = {
               current: undefined,
             };
             viewModel.location = () => ({ top: 2, left: 4 });
 
             viewModel.moveScrollbars();
             expect(viewModel.needForceScrollbarsVisibility).toEqual(true);
+          });
+        });
+      });
+    });
+  });
+
+  describe('Scrollbar integration', () => {
+    each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
+      each([true, false, undefined]).describe('UseSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
+        each(['android', 'ios', 'generic']).describe('Platform: %o', (platform) => {
+          it('Scrollbar should render if useSimulatedScrollbar is set to true or device is android', () => {
+            devices.real = () => ({ platform });
+
+            const viewModel = new Scrollable({
+              useSimulatedScrollbar,
+              showScrollbar: 'onScroll',
+              direction,
+            });
+            (viewModel as any).contentRef = React.createRef();
+            (viewModel as any).containerRef = React.createRef();
+            (viewModel as any).horizontalScrollbarRef = React.createRef();
+            (viewModel as any).verticalScrollbarRef = React.createRef();
+
+            const scrollable = mount(viewFunction(viewModel) as JSX.Element);
+
+            const scrollBar = scrollable.find(Scrollbar);
+
+            let expectedScrollbarsCount = 0;
+            if (useSimulatedScrollbar || (useSimulatedScrollbar === undefined && platform === 'android')) {
+              expectedScrollbarsCount = direction === 'both' ? 2 : 1;
+            }
+            expect(scrollBar.length).toBe(expectedScrollbarsCount);
+          });
+
+          it('Should have correct css classes if useSimulatedScrollbar is set to true and nativeStrategy is used', () => {
+            devices.real = () => ({ platform });
+            const instance = new Scrollable({
+              useSimulatedScrollbar,
+              showScrollbar: 'onScroll',
+              direction,
+            });
+
+            if (useSimulatedScrollbar || (useSimulatedScrollbar === undefined && platform === 'android')) {
+              expect(instance.cssClasses).toEqual(
+                expect.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED),
+              );
+            } else {
+              expect(instance.cssClasses).toEqual(
+                expect.not.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED),
+              );
+            }
           });
         });
       });
@@ -1281,25 +1447,6 @@ describe('Native', () => {
 
             expect(instance.cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
             expect(instance.cssClasses).toEqual(expect.stringMatching(`dx-scrollable-native-${platform}`));
-          });
-        });
-        each(['horizontal', 'vertical', 'both', null, undefined]).describe('Direction: %o', (direction) => {
-          each([true, false, undefined, null]).describe('UseSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
-            each(['never', 'always', 'onScroll', 'onHover', true, false, undefined, null]).describe('ShowScrollbar: %o', (showScrollbar) => {
-              it('Should have correct css classes if useSimulatedScrollbar is set to true and nativeStrategy is used', () => {
-                const instance = new Scrollable({
-                  showScrollbar,
-                  useSimulatedScrollbar,
-                  direction,
-                });
-
-                const hasSimulatedCssClasses = showScrollbar && useSimulatedScrollbar;
-
-                expect(instance.cssClasses).toEqual(hasSimulatedCssClasses
-                  ? expect.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED)
-                  : expect.not.stringMatching(SCROLLABLE_SCROLLBAR_SIMULATED));
-              });
-            });
           });
         });
       });

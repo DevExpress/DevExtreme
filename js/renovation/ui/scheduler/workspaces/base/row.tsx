@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, Slot, OneWay, Fragment,
+  Component, ComponentBindings, JSXComponent, Slot, OneWay, Fragment, CSSAttributes,
 } from 'devextreme-generator/component_declaration/common';
 import { VirtualCell } from './virtual-cell';
 
@@ -9,15 +9,14 @@ export const viewFunction = ({
     leftVirtualCellWidth,
     rightVirtualCellWidth,
     children,
+    styles,
   },
   hasLeftVirtualCell,
   hasRightVirtualCell,
-  restAttributes,
 }: Row): JSX.Element => (
   <tr
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={className}
+    style={styles}
   >
     {/*
         This is a workaround for https://github.com/preactjs/preact/issues/2987
@@ -67,6 +66,8 @@ export class RowProps {
   @OneWay() leftVirtualCellWidth = 0;
 
   @OneWay() rightVirtualCellWidth = 0;
+
+  @OneWay() styles?: CSSAttributes;
 
   @Slot() children?: JSX.Element | JSX.Element[];
 }

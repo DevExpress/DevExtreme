@@ -78,7 +78,7 @@ class VerticalGroupedStrategy extends GroupedStrategy {
             return this._workSpace.getMaxAllowedPosition(groupIndex);
         }
 
-        return this._workSpace.getMaxAllowedPosition()[0];
+        return this._workSpace.getMaxAllowedPosition(0);
     }
 
     getVerticalMax(groupIndex) {
@@ -164,6 +164,20 @@ class VerticalGroupedStrategy extends GroupedStrategy {
                 bottom: bottomOffset
             };
         });
+    }
+
+    shiftIndicator($indicator, height, rtlOffset, i) {
+        const offset = this._workSpace.getIndicatorOffset(0);
+        const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
+        const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
+        let verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
+
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
+            verticalOffset += this._workSpace.getAllDayHeight() * (i + 1);
+        }
+
+        $indicator.css('left', horizontalOffset + tableOffset);
+        $indicator.css('top', height + verticalOffset);
     }
 
     getShaderOffset(i, width) {

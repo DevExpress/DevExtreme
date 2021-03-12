@@ -23,11 +23,8 @@ export const viewFunction = ({
   },
   contentTemplateProps,
   classes,
-  restAttributes,
 }: MonthDateTableCell): JSX.Element => (
   <DateTableCellBase
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={classes}
     dataCellTemplate={dataCellTemplate}
     startDate={startDate}

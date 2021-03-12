@@ -1,6 +1,5 @@
 import { shallow } from 'enzyme';
 import { Marker, viewFunction as MarkerView } from '../marker';
-import { Deferred } from '../../../../../core/utils/deferred';
 
 describe('Marker', () => {
   describe('Render', () => {
@@ -47,40 +46,6 @@ describe('Marker', () => {
         .toBe(true);
       expect(tree.hasClass('custom-class'))
         .toBe(true);
-    });
-
-    it('should spread restAttributes', () => {
-      const tree = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(tree.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-  });
-
-  describe('Behaviour', () => {
-    describe('Effects', () => {
-      describe('colorEffect', () => {
-        it('should set color correctly', () => {
-          const color = 'color';
-          const deferredColor = new Deferred<string>();
-          const colorPromise = deferredColor.promise();
-          deferredColor.resolve(color);
-
-          const marker = new Marker({ color: colorPromise });
-
-          marker.colorEffect();
-          expect(marker.appointmentColor)
-            .toBe('color');
-        });
-
-        it('should not set color', () => {
-          const marker = new Marker({ color: undefined });
-
-          marker.colorEffect();
-          expect(marker.appointmentColor)
-            .toBe(undefined);
-        });
-      });
     });
   });
 

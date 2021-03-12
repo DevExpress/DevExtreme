@@ -3,13 +3,23 @@ import { DateTableCellBase } from '../../base/date_table/cell';
 import { DateTableLayoutBase } from '../../base/date_table/layout';
 import { LayoutProps } from '../../base/layout_props';
 
-export const viewFunction = (viewModel: WeekTableLayout): JSX.Element => (
+export const viewFunction = ({
+  restAttributes,
+  props: {
+    viewData,
+    groupOrientation,
+    dataCellTemplate,
+    addDateTableClass,
+  },
+}: WeekTableLayout): JSX.Element => (
   <DateTableLayoutBase
-    viewData={viewModel.props.viewData}
+    viewData={viewData}
+    groupOrientation={groupOrientation}
+    addDateTableClass={addDateTableClass}
     cellTemplate={DateTableCellBase}
-    dataCellTemplate={viewModel.props.dataCellTemplate}
+    dataCellTemplate={dataCellTemplate}
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
+    {...restAttributes}
   />
 );
 

@@ -32,7 +32,7 @@ function parseValue(column, text) {
 }
 
 
-export default {
+export const searchModule = {
     defaultOptions: function() {
         return {
             searchPanel: {

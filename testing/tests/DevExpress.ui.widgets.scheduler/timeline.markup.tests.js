@@ -202,6 +202,11 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
     });
 
     QUnit.test('Each cell of scheduler timeline day should contain correct jQuery dxCellData', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -244,6 +249,11 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
                 { name: 'two', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }
             ]
         });
+
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
 
         const $cells = this.instance.$element().find('.dx-scheduler-date-table-row').eq(2).find('.' + CELL_CLASS);
 
@@ -351,6 +361,11 @@ QUnit.module('TimelineDay with intervalCount markup', timelineDayModuleConfig, (
     });
 
     QUnit.test('TimelineDay Day view cells have right cellData with view option intervalCount=2', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
@@ -445,6 +460,11 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
     });
 
     QUnit.test('Each cell of scheduler timeline day should contain correct jQuery dxCellData, groupOrientation = horizontal', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -669,6 +689,11 @@ QUnit.module('TimelineWeek with intervalCount markup', timelineWeekModuleConfig,
     });
 
     QUnit.test('TimelineWeek view cells have right cellData with view option intervalCount=2', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
@@ -728,6 +753,11 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
     });
 
     QUnit.test('Each cell of scheduler timeline week should contain correct jQuery dxCellData, groupOrientation = horizontal', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -892,6 +922,11 @@ QUnit.module('TimelineWorkWeek with intervalCount markup', timelineWorkWeekModul
     });
 
     QUnit.test('TimelineWorkWeek view cells have right cellData with view option intervalCount=2', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
@@ -992,6 +1027,11 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
     });
 
     QUnit.test('Each cell of scheduler timeline month should contain correct jQuery dxCellData', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option({
             currentDate: new Date(2015, 3, 1),
             startDayHour: 1,
@@ -1012,6 +1052,11 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
     });
 
     QUnit.test('Cells should have right date', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option({
             currentDate: new Date(2016, 3, 21),
             firstDayOfWeek: 1,
@@ -1052,6 +1097,11 @@ QUnit.module('TimelineMonth with intervalCount', timelineMonthModuleConfig, () =
     });
 
     QUnit.test('TimelineMonth view cells have right cellData with view option intervalCount=2', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
@@ -1116,6 +1166,11 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
     });
 
     QUnit.test('Each cell of scheduler timeline month should contain correct jQuery dxCellData', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option({
             currentDate: new Date(2015, 3, 1),
             startDayHour: 1,
@@ -1142,6 +1197,11 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
     });
 
     QUnit.test('Cells should have right date', function(assert) {
+        if(this.instance.option('renovateRender')) {
+            assert.ok(true, 'This test is not for renovated render');
+            return;
+        }
+
         this.instance.option({
             currentDate: new Date(2016, 3, 21),
             firstDayOfWeek: 1,

@@ -589,7 +589,6 @@ class Renderer {
     }
 
     _renderGrid() {
-        this.workspace.renderRAllDayPanel();
         this.workspace.renderRWorkspace(false);
     }
 

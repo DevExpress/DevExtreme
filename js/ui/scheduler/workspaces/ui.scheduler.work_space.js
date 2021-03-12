@@ -90,7 +90,6 @@ const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_ROW_CLASS = 'dx-scheduler-date-table-row';
 const DATE_TABLE_FOCUSED_CELL_CLASS = 'dx-scheduler-focused-cell';
 const VIRTUAL_ROW_CLASS = 'dx-scheduler-virtual-row';
-const WRAPPER_POSTFIX = 'template-wrapper';
 
 const DATE_TABLE_DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 
@@ -918,7 +917,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             useKeyboard: false,
             bounceEnabled: false,
             updateManually: true,
-            pushBackValue: 0
         };
         if(this._needCreateCrossScrolling()) {
             config = extend(config, this._createCrossScrollingConfig());
@@ -1005,7 +1003,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
-            pushBackValue: 0,
             onScroll: e => {
                 this._headerSemaphore.take();
                 this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ left: e.scrollOffset.left });
@@ -1028,7 +1025,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
-            pushBackValue: 0,
             onScroll: e => {
                 this._sideBarSemaphore.take();
                 this._dataTableSemaphore.isFree() && this._dateTableScrollable.scrollTo({ top: e.scrollOffset.top });
@@ -1368,6 +1364,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             {
                 timePanelData: this.viewDataProvider.timePanelData,
                 timeCellTemplate: this.option('timeCellTemplate'),
+                groupOrientation: this.option('groupOrientation'),
             }
         );
     }
@@ -1411,9 +1408,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             });
             this[componentName] = component;
         } else {
-            Object.getOwnPropertyNames(viewModel).forEach((optionName) => {
-                component.option(optionName, viewModel[optionName]);
-            });
+            component.option(viewModel);
         }
     }
 
@@ -2031,8 +2026,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellClass: this._getDateTableCellClass.bind(this),
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option('dataCellTemplate'),
-            addTemplateWrapper: true,
-            templateWrapperClass: `${DATE_TABLE_CELL_CLASS}-${WRAPPER_POSTFIX}`,
             getCellData: this._getCellData.bind(this),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: groupCount,
@@ -2312,11 +2305,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(!this.isRenovatedRender()) {
             this._$thead.empty();
             this._$dateTable.empty();
-            this._shader && this._shader.clean();
             this._$timePanel.empty();
-            this._$allDayTable && this._$allDayTable.empty();
             this._$groupTable.empty();
+
+            this._$allDayTable?.empty();
+            this._$sidebarTable?.empty();
         }
+
+        this._shader?.clean();
 
         delete this._hiddenInterval;
         delete this._interval;
@@ -2770,14 +2766,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._groupedStrategy.getHorizontalMax(groupIndex);
     }
 
-    getCellByDate(date, groupIndex) {
-        const index = this.getCellIndexByDate(date);
-        const cellCoordinates = this._getCellCoordinatesByIndex(index);
-        const $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, false);
-
-        return $cell;
-    }
-
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
         let position;
@@ -2991,14 +2979,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getMaxAllowedPosition(groupIndex) {
+        const validGroupIndex = groupIndex || 0;
+
         if(this.isRenovatedRender()) {
-            return this.getRMaxAllowedHorizontalPosition(groupIndex || 0);
+            return this.getRMaxAllowedHorizontalPosition(validGroupIndex);
         }
 
-        return this.getMaxAllowedHorizontalPosition();
+        return this.getMaxAllowedHorizontalPosition(validGroupIndex);
     }
 
-    getMaxAllowedHorizontalPosition() {
+    getMaxAllowedHorizontalPosition(groupIndex) {
         if(this._maxAllowedPosition.length === 0) {
             const isRtl = this.option('rtlEnabled');
 
@@ -3020,7 +3010,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 }).bind(this));
         }
 
-        return this._maxAllowedPosition;
+        return this._maxAllowedPosition[groupIndex];
     }
 
     getRMaxAllowedHorizontalPosition(groupIndex) {
@@ -3567,6 +3557,15 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getTimePanelCells() {
         return this.$element().find(`.${TIME_PANEL_CELL_CLASS}`);
+    }
+
+    _getRDateTableProps() {
+        return ({
+            viewData: this.viewDataProvider.viewData,
+            dataCellTemplate: this.option('dataCellTemplate'),
+            addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
+            groupOrientation: this.option('groupOrientation'),
+        });
     }
 }
 

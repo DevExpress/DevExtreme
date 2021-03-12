@@ -4,8 +4,9 @@ const common = {
     plugins: [
         '@babel/plugin-proposal-nullish-coalescing-operator',
         '@babel/plugin-proposal-optional-chaining',
-        ['transform-react-jsx', { 'pragma': 'Preact.h' }],
+        ['babel-plugin-inferno', { 'imports': true }],
         'transform-object-assign',
+        ['@babel/plugin-proposal-object-rest-spread', { loose: true }],
     ],
     ignore: ['**/*.json', '**/sinon.js'],
 };
@@ -14,7 +15,7 @@ module.exports = {
     cjs: Object.assign({}, common, {
         presets: ['@babel/preset-env'],
         plugins: common.plugins.concat([
-            'add-module-exports',
+            ['add-module-exports', { addDefaultProperty: true }],
             ['@babel/plugin-transform-modules-commonjs', { strict: true }],
             ['@babel/plugin-transform-classes', { loose: true }]
         ])

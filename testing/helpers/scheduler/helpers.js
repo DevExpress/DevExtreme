@@ -44,6 +44,8 @@ export const CLASSES = {
 
     verticalGroupPanel: '.dx-scheduler-work-space-vertical-group-table',
 
+    shader: '.dx-scheduler-date-time-shader',
+
     appointment: '.dx-scheduler-appointment',
     appointmentDate: '.dx-scheduler-appointment-content-date',
     appointmentDragSource: '.dx-scheduler-appointment-drag-source',
@@ -619,6 +621,8 @@ export class SchedulerTestWrapper extends ElementWrapper {
                     .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop)
                     .up();
             },
+
+            getShader: () => $(CLASSES.shader),
         };
 
         this.viewSwitcher = {

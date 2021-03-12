@@ -3,8 +3,12 @@
 const { spawn } = require('child_process');
 const { join } = require('path');
 
+const log = (message) => {
+    if(process.env.THEMEBUILDER_DEBUG) console.log(message.toString());
+};
+
 const runCommand = (command, args) => {
-    console.log(`Run: ${command}\n`);
+    log(`Run: ${command}\n`);
 
     const process = spawn(command, args, {
         cwd: __dirname,
@@ -12,7 +16,6 @@ const runCommand = (command, args) => {
     });
 
     return new Promise((resolve, reject) => {
-        const log = (data) => console.log(data.toString());
         process.stderr.on('data', log);
         process.stdout.on('data', log);
 
@@ -33,15 +36,39 @@ const isDartInstalled = async() => {
     }
 };
 
-const run = async() => {
-    if(!await isDartInstalled()) return;
+const runServer = () => runCommand(join(__dirname, 'compiler.exe'), []);
+
+const compilerServer = async() => {
     try {
         await runCommand('pub', ['get']);
         await runCommand('dart2native', ['main.dart', '-o', 'compiler.exe']);
-        runCommand(join(__dirname, 'compiler.exe'), []);
-        console.log('Dart compile server has been run');
+        return true;
     } catch(e) {
-        console.log('Dart compile server has not been run.', e);
+        return false;
+    }
+};
+
+const run = async(restart = false) => {
+    try {
+        if(restart) {
+            log('Try to restart dart server');
+            runServer();
+            return;
+        }
+
+        if(!await isDartInstalled()) {
+            log('Dart is not installed');
+            return;
+        }
+
+        if(await compilerServer()) {
+            runServer();
+            log('Dart compile server has been run');
+        } else {
+            log('Dart compile server has not been run.');
+        }
+    } catch(e) {
+        log('Unexpected error:', e);
     }
 };
 
