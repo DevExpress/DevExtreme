@@ -30,7 +30,7 @@ module('Virtual Scrolling', {
                 totalRowCount: 100,
                 totalCellCount: 200,
                 scrolling: {
-                    type: 'both'
+                    orientation: 'both'
                 }
             }, settings);
 
@@ -43,7 +43,7 @@ module('Virtual Scrolling', {
                 _options: {
                     dataCellTemplate: noop,
                     groupByDate: false,
-                    'scrolling.type': settings.scrolling.type
+                    'scrolling.orientation': settings.scrolling.orientation
                 },
                 getCellWidth: () => { return 150; },
                 getCellHeight: () => { return 50; },
@@ -254,29 +254,29 @@ module('Virtual Scrolling', {
         module('Options', () => {
             [
                 {
-                    scrollingType: 'vertical',
+                    scrollingOrientation: 'vertical',
                     expectScrolling: {
                         vertical: true,
                         horizontal: false
                     }
                 }, {
-                    scrollingType: 'horizontal',
+                    scrollingOrientation: 'horizontal',
                     expectScrolling: {
                         vertical: false,
                         horizontal: true
                     }
                 }, {
-                    scrollingType: 'both',
+                    scrollingOrientation: 'both',
                     expectScrolling: {
                         vertical: true,
                         horizontal: true
                     }
                 }
             ].forEach(option => {
-                test(`Virtual scrolling objects should be created correctly if scrolling.type is ${option.scrollingType} `, function(assert) {
+                test(`Virtual scrolling objects should be created correctly if scrolling.orientation is ${option.scrollingOrientation} `, function(assert) {
                     this.prepareInstance({
                         scrolling: {
-                            type: option.scrollingType
+                            orientation: option.scrollingOrientation
                         }
                     });
 
@@ -326,7 +326,7 @@ module('Virtual Scrolling', {
             test(`it should return correct render state if scrolling orientation: ${orientation}`, function(assert) {
                 this.prepareInstance({
                     scrolling: {
-                        type: orientation
+                        orientation
                     }
                 });
 
@@ -352,7 +352,7 @@ module('Virtual Scrolling', {
             test(`it should correctly create virtual scrolling instances if scrolling orientation is ${orientation}`, function(assert) {
                 this.prepareInstance({
                     scrolling: {
-                        type: orientation
+                        orientation
                     }
                 });
 
@@ -386,7 +386,7 @@ module('Virtual Scrolling', {
                 test(`it should get correct cell sizes if virtual scrolling orientation: ${orientation} and testValue: ${testValue}`, function(assert) {
                     this.prepareInstance({
                         scrolling: {
-                            type: orientation
+                            orientation
                         }
                     });
 
@@ -441,7 +441,7 @@ module('Virtual Scrolling', {
 
         test('it should reinitialize vertical virtual scrolling state if virtualization is allowed', function(assert) {
             this.prepareInstance({
-                scrolling: { type: 'vertical' }
+                scrolling: { orientation: 'vertical' }
             });
 
             this.virtualScrollingDispatcher.getCellHeight = () => 200;
@@ -454,7 +454,7 @@ module('Virtual Scrolling', {
 
         test('it should reinitialize horizontal virtual scrolling state if virtualization is allowed', function(assert) {
             this.prepareInstance({
-                scrolling: { type: 'horizontal' }
+                scrolling: { orientation: 'horizontal' }
             });
 
             this.virtualScrollingDispatcher.getCellWidth = () => 200;
@@ -467,7 +467,7 @@ module('Virtual Scrolling', {
 
         test('it should reinitialize virtual scrolling state on "updateDimensions" if virtualization is allowed', function(assert) {
             this.prepareInstance({
-                scrolling: { type: 'both' }
+                scrolling: { orientation: 'both' }
             });
 
             this.virtualScrollingDispatcher.getCellWidth = () => 200;
@@ -511,7 +511,7 @@ module('Virtual Scrolling', {
     module('API', () => {
         test('reinitState', function(assert) {
             this.prepareInstance({
-                scrolling: { type: 'both' }
+                scrolling: { orientation: 'both' }
             });
 
             this.verticalVirtualScrolling.position = 200;
@@ -592,7 +592,7 @@ module('Virtual Scrolling', {
             });
 
             test('State should be correct on scrolling Up', function(assert) {
-                this.prepareInstance({ scrolling: { type: 'vertical' } });
+                this.prepareInstance({ scrolling: { orientation: 'vertical' } });
 
                 [
                     { top: 4950, stateTop: 4700, topVirtualRowCount: 91, bottomVirtualRowCount: 0, rowCount: 9 },

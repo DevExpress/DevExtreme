@@ -55,7 +55,7 @@ module('Virtual scrolling Month View', () => {
                 }],
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 crossScrollingEnabled: true,
                 width: 530,
@@ -149,9 +149,8 @@ module('Virtual scrolling Month View', () => {
                 }],
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
-                crossScrollingEnabled: true,
                 width: 530,
                 height: 600
             });
@@ -243,7 +242,7 @@ module('Virtual scrolling Month View', () => {
                 }],
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 crossScrollingEnabled: true,
                 width: 530,
@@ -409,7 +408,7 @@ module('Virtual scrolling Month View', () => {
                 }],
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 crossScrollingEnabled: true,
                 width: 630,
@@ -604,7 +603,7 @@ module('Virtual scrolling Month View', () => {
                 }],
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 crossScrollingEnabled: true,
                 width: 530,
@@ -711,7 +710,7 @@ module('Virtual scrolling Month View', () => {
                 }],
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 crossScrollingEnabled: true,
                 width: 530,
@@ -796,7 +795,7 @@ module('Virtual scrolling Month View', () => {
                     priority: [1, 3]
                 }],
                 views: [{
-                    type: 'month'
+                    type: 'month',
                 }],
                 currentView: 'month',
                 currentDate: new Date(2021, 1, 1),
@@ -813,7 +812,7 @@ module('Virtual scrolling Month View', () => {
                 }],
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 crossScrollingEnabled: true,
                 width: 530,
@@ -944,7 +943,7 @@ module('Virtual scrolling Month View', () => {
                 }],
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 crossScrollingEnabled: true,
                 width: 630,

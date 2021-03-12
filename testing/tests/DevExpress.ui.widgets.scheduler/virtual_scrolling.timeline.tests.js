@@ -52,7 +52,7 @@ module('Virtual scrolling timelines', () => {
                     cellDuration: 30,
                     scrolling: {
                         mode: 'virtual',
-                        type: 'both'
+                        orientation: 'both'
                     },
                     width: 800,
                     height: 600
@@ -193,7 +193,7 @@ module('Virtual scrolling timelines', () => {
                         groups: ['ownerId'],
                         scrolling: {
                             mode: 'virtual',
-                            type: 'horizontal'
+                            orientation: 'horizontal'
                         },
                         width: 800,
                         height: 600
@@ -466,7 +466,7 @@ module('Virtual scrolling timelines', () => {
                         currentView: 'timelineWeek',
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both',
+                            orientation: 'both',
                         },
                         showAllDayPanel: false,
                         currentDate: new Date(2021, 8, 6),

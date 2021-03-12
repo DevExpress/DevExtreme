@@ -160,7 +160,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
                         currentView: viewName
                     });
@@ -182,7 +182,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
 
                         currentView: viewName
@@ -231,7 +231,7 @@ module('Virtual scrolling integration', () => {
                             }],
                             scrolling: {
                                 mode: 'virtual',
-                                type: orientation
+                                orientation
                             },
                             currentView: viewName
                         });
@@ -686,7 +686,7 @@ module('Virtual scrolling integration', () => {
                             currentView: 'week',
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'both'
+                                orientation: 'both'
                             },
                             height: 400
                         });
@@ -772,7 +772,7 @@ module('Virtual scrolling integration', () => {
                             }],
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'vertical'
+                                orientation: 'vertical'
                             },
                             showAllDayPanel,
                             height: 500,
@@ -1054,7 +1054,7 @@ module('Virtual scrolling integration', () => {
                             }],
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'both'
+                                orientation: 'both'
                             },
                             showAllDayPanel: showAllDayPanel,
                             height: 500,
@@ -1118,7 +1118,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
                         height: 500,
                         width: 300
@@ -1731,7 +1731,7 @@ module('Virtual scrolling integration', () => {
                     }],
                     scrolling: {
                         mode: 'virtual',
-                        type: 'both'
+                        orientation: 'both'
                     },
                     height: 600,
                     width: 800
@@ -2058,7 +2058,7 @@ module('Virtual scrolling integration', () => {
                         currentView: 'day',
                         scrolling: {
                             mode: 'virtual',
-                            type: 'vertical'
+                            orientation: 'vertical'
                         },
                         height: 400
                     }).instance;
@@ -2394,7 +2394,7 @@ module('Virtual scrolling integration', () => {
                         currentView: 'day',
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
                         height: 400
                     }, options);
@@ -2717,7 +2717,7 @@ module('Virtual scrolling integration', () => {
                             currentView: 'day',
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'both'
+                                orientation: 'both'
                             },
                             groups: ['resourceId0'],
                             resources: [{
@@ -2877,7 +2877,7 @@ module('Virtual scrolling integration', () => {
                                 currentView: 'Work Week',
                                 scrolling: {
                                     mode: 'virtual',
-                                    type: 'both',
+                                    orientation: 'both',
                                 },
                                 currentDate: new Date(2021, 8, 6),
                                 groups: ['resourceId'],
@@ -3004,7 +3004,7 @@ module('Virtual scrolling integration', () => {
                 currentDate: new Date(2020, 8, 7),
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 currentView: 'week',
                 views: [{
@@ -3105,7 +3105,7 @@ module('Virtual scrolling integration', () => {
                         currentView: 'week',
                         scrolling: {
                             mode: 'virtual',
-                            type: scrollOrientation
+                            orientation: scrollOrientation
                         },
                         groups: ['priorityId'],
                         resources: [{
@@ -3160,7 +3160,7 @@ module('Virtual scrolling integration', () => {
                 currentDate: new Date(2015, 1, 9),
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 height: 500,
                 width: 600
@@ -3253,7 +3253,7 @@ module('Virtual scrolling integration', () => {
                         currentView: viewName,
                         scrolling: {
                             mode: 'virtual',
-                            type: 'horizontal'
+                            orientation: 'horizontal'
                         },
                         crossScrollingEnabled: true,
                         height: 400,
