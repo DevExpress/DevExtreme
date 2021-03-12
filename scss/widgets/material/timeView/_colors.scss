@@ -9,16 +9,32 @@ $timeview-clock-bg: null !default;
 $timeview-hourarrow-bg: null !default;
 $timeview-minutearrow-bg: null !default;
 
-
-@if $mode == "light" {
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/min-arrow.svg') !default;
+@if $color == "blue" {
+  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/blue/timeView/clock-bg.svg') !default;
+  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/blue/timeView/hour-arrow.svg') !default;
+  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/blue/timeView/min-arrow.svg') !default;
 }
 
-@if $mode == "dark" {
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/min-arrow.svg') !default;
+@if $color == "lime" {
+  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/lime/timeView/clock-bg.svg') !default;
+  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/lime/timeView/hour-arrow.svg') !default;
+  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/lime/timeView/min-arrow.svg') !default;
 }
 
+@if $color == "orange" {
+  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/orange/timeView/clock-bg.svg') !default;
+  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/orange/timeView/hour-arrow.svg') !default;
+  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/orange/timeView/min-arrow.svg') !default;
+}
+
+@if $color == "purple" {
+  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/purple/timeView/clock-bg.svg') !default;
+  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/purple/timeView/hour-arrow.svg') !default;
+  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/purple/timeView/min-arrow.svg') !default;
+}
+
+@if $color == "teal" {
+  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/teal/timeView/clock-bg.svg') !default;
+  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/teal/timeView/hour-arrow.svg') !default;
+  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/teal/timeView/min-arrow.svg') !default;
+}
