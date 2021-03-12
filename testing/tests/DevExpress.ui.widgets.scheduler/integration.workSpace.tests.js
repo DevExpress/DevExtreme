@@ -2027,28 +2027,13 @@ QUnit.module('Cell Templates in renovated views', () => {
 
     [{
         viewType: 'day',
-        expectedTemplateOptions: [allDayCells[0], dataCells[0]],
+        expectedTemplateOptions: [dataCells[0], allDayCells[0]],
     }, {
         viewType: 'week',
-        expectedTemplateOptions: [...allDayCells, ...dataCells],
+        expectedTemplateOptions: [...dataCells, ...allDayCells],
     }, {
         viewType: 'workWeek',
         expectedTemplateOptions: [{
-            ...allDayCells[1],
-            index: 0,
-        }, {
-            ...allDayCells[2],
-            index: 1,
-        }, {
-            ...allDayCells[3],
-            index: 2,
-        }, {
-            ...allDayCells[4],
-            index: 3,
-        }, {
-            ...allDayCells[5],
-            index: 4,
-        }, {
             ...dataCells[1],
             index: 0,
         }, {
@@ -2062,6 +2047,21 @@ QUnit.module('Cell Templates in renovated views', () => {
             index: 3,
         }, {
             ...dataCells[5],
+            index: 4,
+        }, {
+            ...allDayCells[1],
+            index: 0,
+        }, {
+            ...allDayCells[2],
+            index: 1,
+        }, {
+            ...allDayCells[3],
+            index: 2,
+        }, {
+            ...allDayCells[4],
+            index: 3,
+        }, {
+            ...allDayCells[5],
             index: 4,
         }],
     }].forEach(({ viewType, expectedTemplateOptions }) => {
@@ -2733,25 +2733,6 @@ if(devices.real().deviceType === 'desktop') {
 }
 
 QUnit.module('Cell Templates', () => {
-    const baseConfig = {
-        currentView: 'day',
-        currentDate: new Date(2020, 10, 19),
-        resources: [{
-            fieldExpr: 'priority',
-            allowMultiple: false,
-            dataSource: [{
-                text: 'Low Priority',
-                id: 1
-            }, {
-                text: 'High Priority',
-                id: 2
-            }],
-            label: 'Priority',
-        }],
-        startDayHour: 10,
-        endDayHour: 12,
-    };
-
     const viewsBase = [{
         type: 'day',
         dateCellCount: 2,
@@ -2793,6 +2774,26 @@ QUnit.module('Cell Templates', () => {
     };
 
     [true, false].forEach((isRenovatedView) => {
+        const baseConfig = {
+            currentView: 'day',
+            currentDate: new Date(2020, 10, 19),
+            resources: [{
+                fieldExpr: 'priority',
+                allowMultiple: false,
+                dataSource: [{
+                    text: 'Low Priority',
+                    id: 1
+                }, {
+                    text: 'High Priority',
+                    id: 2
+                }],
+                label: 'Priority',
+            }],
+            startDayHour: 10,
+            endDayHour: 12,
+            renovateRender: isRenovatedView,
+        };
+
         QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
             assert.expect(totalDateCells * 2);
 
