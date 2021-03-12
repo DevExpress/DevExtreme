@@ -755,10 +755,6 @@ export const virtualScrollingModule = {
 
                         return pageSize && pageSize < rowPageSize ? pageSize : rowPageSize;
                     },
-                    _applyFilter: function() {
-                        this.setViewportPosition(0);
-                        return this.callBase.apply(this, arguments);
-                    },
                     reload: function() {
                         const rowsScrollController = this._rowsScrollController || this._dataSource;
                         const itemIndex = rowsScrollController && rowsScrollController.getItemIndexByPosition();
