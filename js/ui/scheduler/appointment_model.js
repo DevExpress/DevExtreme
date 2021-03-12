@@ -268,6 +268,18 @@ class AppointmentModel {
                    (apptEndDayHour >= endDayHour && apptStartDayHour <= endDayHour && apptStartDayHour >= startDayHour);
     }
 
+    _createAllDayAppointmentFilter(filterOptions) {
+        const {
+            viewStartDayHour,
+            viewEndDayHour
+        } = filterOptions;
+        const that = this;
+
+        return [[
+            (appointment) => that.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour)
+        ]];
+    }
+
     _createCombinedFilter(filterOptions, timeZoneCalculator) {
         const dataAccessors = this._dataAccessors;
         const min = new Date(filterOptions.min);
@@ -496,7 +508,16 @@ class AppointmentModel {
 
     filterLoadedAppointments(filterOption, timeZoneCalculator) {
         const combinedFilter = this._createAppointmentFilter(filterOption, timeZoneCalculator);
-        return query(this.getPreparedDataItems()).filter(combinedFilter).toArray();
+        return query(this.getPreparedDataItems())
+            .filter(combinedFilter)
+            .toArray();
+    }
+
+    filterAllDayAppointments(filterOption) {
+        const combinedFilter = this._createAllDayAppointmentFilter(filterOption);
+        return query(this.getPreparedDataItems())
+            .filter(combinedFilter)
+            .toArray();
     }
 
     getPreparedDataItems() {

@@ -17,6 +17,10 @@ export default class AppointmentFilter {
     filter() {
         return this.filterStrategy.filter();
     }
+
+    hasAllDayAppointments(appointments) {
+        return this.filterStrategy.hasAllDayAppointments(appointments);
+    }
 }
 
 class AppointmentFilterBaseStrategy {
@@ -59,6 +63,14 @@ class AppointmentFilterBaseStrategy {
             recurrenceException: this.recurrenceExceptionGenerator,
         }, this.timeZoneCalculator);
     }
+
+    hasAllDayAppointments(appointments) {
+        return this.appointmentModel.hasAllDayAppointments(
+            appointments,
+            this.viewStartDayHour,
+            this.viewEndDayHour
+        );
+    }
 }
 
 class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
@@ -89,7 +101,7 @@ class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
                 ? (startDayHour + groupStartDate.getMinutes() / 60 + (groupEndDate - groupStartDate) / HOUR_MS)
                 : this.viewEndDayHour;
 
-            const resources = this.getPrerenderFilterResources(groupIndex);
+            const resources = this._getPrerenderFilterResources(groupIndex);
 
             const allDayPanel = this.viewDataProvider.getAllDayPanel(groupIndex);
             // TODO split by workspace strategies
@@ -118,7 +130,14 @@ class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
         );
     }
 
-    getPrerenderFilterResources(groupIndex) {
+    hasAllDayAppointments() {
+        return this.appointmentModel.filterAllDayAppointments({
+            viewStartDayHour: this.viewStartDayHour,
+            viewEndDayHour: this.viewEndDayHour,
+        }).length > 0;
+    }
+
+    _getPrerenderFilterResources(groupIndex) {
         const cellGroup = this.viewDataProvider.getCellsGroup(groupIndex);
 
         return this.resourcesManager.getResourcesDataByGroups([cellGroup]);
