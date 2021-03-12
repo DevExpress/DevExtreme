@@ -1297,7 +1297,7 @@ QUnit.module('resize', {
         assert.roughEqual(popup.$content().outerHeight(), $overlayContent.height(), 0.1, 'size of popup and overlay is equal');
     });
 
-    QUnit.test('popup content should update height after horizontal resize if it is initially undefined (T979891)', function(assert) {
+    QUnit.test('popup content should have height="auto" if height property is equal to undefined (T979891)', function(assert) {
         const $popup = $('#popup').dxPopup({
             resizeEnabled: true,
             visible: true,
