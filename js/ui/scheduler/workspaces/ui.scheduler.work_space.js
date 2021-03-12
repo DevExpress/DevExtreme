@@ -1290,9 +1290,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.viewDataProvider.update(isGenerateNewViewData);
 
         this.renderRHeaderPanel();
-        this.renderRAllDayPanel();
         this.renderRTimeTable();
         this.renderRDateTable();
+        this.renderRAllDayPanel();
 
         this.updateRSelection();
 
@@ -1329,6 +1329,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         const visible = this._isShowAllDayPanel() && !this.isGroupedAllDayPanel();
         if(visible) {
             this._changeAllDayVisibility();
+            this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, true);
+
             const groupCount = this._getGroupCount();
             const cellCount = this._getTotalCellCount(groupCount);
 
