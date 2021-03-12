@@ -2733,6 +2733,25 @@ if(devices.real().deviceType === 'desktop') {
 }
 
 QUnit.module('Cell Templates', () => {
+    const baseConfig = {
+        currentView: 'day',
+        currentDate: new Date(2020, 10, 19),
+        resources: [{
+            fieldExpr: 'priority',
+            allowMultiple: false,
+            dataSource: [{
+                text: 'Low Priority',
+                id: 1
+            }, {
+                text: 'High Priority',
+                id: 2
+            }],
+            label: 'Priority',
+        }],
+        startDayHour: 10,
+        endDayHour: 12,
+    };
+
     const viewsBase = [{
         type: 'day',
         dateCellCount: 2,
@@ -2774,26 +2793,6 @@ QUnit.module('Cell Templates', () => {
     };
 
     [true, false].forEach((isRenovatedView) => {
-        const baseConfig = {
-            currentView: 'day',
-            currentDate: new Date(2020, 10, 19),
-            resources: [{
-                fieldExpr: 'priority',
-                allowMultiple: false,
-                dataSource: [{
-                    text: 'Low Priority',
-                    id: 1
-                }, {
-                    text: 'High Priority',
-                    id: 2
-                }],
-                label: 'Priority',
-            }],
-            startDayHour: 10,
-            endDayHour: 12,
-            renovateRender: isRenovatedView,
-        };
-
         QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
             assert.expect(totalDateCells * 2);
 
