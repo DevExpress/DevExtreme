@@ -1,95 +1,106 @@
 import { isDefined } from '../../core/utils/type';
 
 class Table {
-    constructor(drawTableBorder, drawOnNewPage, rect) {
+    constructor(drawTableBorder, rect) {
         this.drawTableBorder = drawTableBorder;
-        this.drawOnNewPage = drawOnNewPage;
         this.rect = rect;
         this.rows = [];
+    }
+
+    addRow(cells) {
+        if(!isDefined(cells)) {
+            throw 'cells is required';
+        }
+        this.rows.push(cells);
+        for(let i = 0; i < cells.length; i++) {
+            const currentCell = cells[i];
+            if(currentCell.drawLeftBorder === false) {
+                if(i >= 1) {
+                    cells[i - 1].drawRightBorder = 0;
+                }
+            } else if(!isDefined(currentCell.drawLeftBorder)) {
+                if(i >= 1 && cells[i - 1].drawRightBorder === false) {
+                    currentCell.drawLeftBorder = false;
+                }
+            }
+
+            if(currentCell.drawTopBorder === false) {
+                if(this.rows.length >= 2) {
+                    this.rows[this.rows.length - 2][i].drawBottomBorder = false;
+                }
+            } else if(!isDefined(currentCell.drawTopBorder)) {
+                if(this.rows.length >= 2 && this.rows[this.rows.length - 2][i].drawBottomBorder === false) {
+                    currentCell.drawTopBorder = false;
+                }
+            }
+        }
+
+        // onRowAdded(this) - handle and call exportDataGrid(options.onRowAdded)
     }
 }
 
 class PdfGrid {
     constructor(splitByColumns) {
         this._splitByColumns = splitByColumns ?? [];
+        this._newPageTables = [];
         this._tables = [];
         this._currentHorizontalTables;
         this._currentTable;
         this._currentRow;
     }
 
-    startNewTable(drawTableBorder, firstTableRect, firstTableOnNewPage) {
+    _addLastTableToNewPages() {
+        this._newPageTables.push(this._currentHorizontalTables[this._currentHorizontalTables.length - 1]);
+    }
+
+    startNewTable(drawTableBorder, firstTableRect, firstTableOnNewPage, splitByColumns) {
         this._currentHorizontalTables = [
-            new Table(drawTableBorder, firstTableOnNewPage, firstTableRect)
+            new Table(drawTableBorder, firstTableRect)
         ];
+        if(firstTableOnNewPage) {
+            this._addLastTableToNewPages();
+        }
+
+        if(isDefined(splitByColumns)) {
+            this._splitByColumns = splitByColumns;
+        }
 
         if(isDefined(this._splitByColumns)) {
             this._splitByColumns.forEach((splitByColumn) => {
                 this._currentHorizontalTables.push(
-                    new Table(drawTableBorder, splitByColumn.drawOnNewPage, splitByColumn.tableRect)
+                    new Table(drawTableBorder, splitByColumn.tableRect)
                 );
+                if(splitByColumn.drawOnNewPage) {
+                    this._addLastTableToNewPages();
+                }
             });
         }
-
-        this._currentTable = this._currentHorizontalTables[0];
-        this._currentRow = this._currentTable.rows[this._currentTable.rows.length - 1];
 
         this._tables.push(...this._currentHorizontalTables);
     }
 
-    startNewRow() {
-        this._currentRow = [];
-        this._currentTable.rows.push(this._currentRow);
-    }
-
-    addPdfCell(pdfCell) {
-        this._currentRow.push(pdfCell);
-        // eslint-disable-next-line spellcheck/spell-checker
-        this._syncCellNeighbourBorders(pdfCell);
-    }
-
-    // eslint-disable-next-line spellcheck/spell-checker
-    _syncCellNeighbourBorders(pdfCell) {
-        if(pdfCell.drawLeftBorder === false) {
-            if(this._currentRow.length > 1) {
-                this._currentRow[this._currentRow.length - 2].drawRightBorder = 0;
+    addRow(cells) {
+        let currentTableIndex = 0;
+        let currentTableCells = [];
+        for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
+            const isNewTableColumn = this._splitByColumns.find((splitByColumn) => splitByColumn.columnIndex === cellIndex);
+            if(isNewTableColumn) {
+                this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells);
+                currentTableIndex++;
+                currentTableCells = [];
             }
-        } else if(!isDefined(pdfCell.drawLeftBorder)) {
-            if(this._currentRow.length > 1 && this._currentRow[this._currentRow.length - 2].drawRightBorder === false) {
-                pdfCell.drawLeftBorder = false;
-            }
+            currentTableCells.push(cells[cellIndex]);
         }
+        this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells);
+    }
 
-        if(pdfCell.drawTopBorder === false) {
-            if(this._currentTable.rows.length > 1) {
-                this._currentTable.rows[this._currentTable.rows.length - 2][this._currentRow.length - 1].drawBottomBorder = false;
+    drawTo(doc) {
+        this._tables.forEach((table) => {
+            if(this._newPageTables.indexOf(table) !== -1) {
+                doc.addPage();
             }
-        } else if(!isDefined(pdfCell.drawTopBorder)) {
-            if(this._currentTable.rows.length > 1 && this._currentTable.rows[this._currentTable.rows.length - 2][this._currentRow.length - 1].drawBottomBorder === false) {
-                pdfCell.drawTopBorder = false;
-            }
-        }
-    }
-
-    setCurrentSplitTable(columnSplitIndex) {
-        const splitIndex = this._splitByColumns.findIndex((splitColumn) => splitColumn.columnIndex === columnSplitIndex);
-        // splitIndex === -1        =>   -1 + 1 == 0 - first in 'currentHorizontalTables'
-        // splitIndex === [0...n]   =>   n + 1 - second...n in 'currentHorizontalTables'
-        const index = splitIndex + 1;
-
-        if(index < this._currentHorizontalTables.length) {
-            this._currentTable = this._currentHorizontalTables[index];
-        } else {
-            throw 'boundary column is not found';
-        }
-    }
-
-    setNewSplitByColumns(splitByColumns) {
-        this._splitByColumns = splitByColumns;
-    }
-
-    getTables() {
-        return this._tables;
+            drawTable(doc, table);
+        });
     }
 }
 
@@ -101,72 +112,44 @@ function exportDataGrid(doc, dataGrid, options) {
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
             const columns = dataProvider.getColumns();
-            const exportingOptions = {
-                columns: columns.map(column => { return { name: column.name }; }),
-                splitToPagesByColumns: [],
-            };
+            const pdfGrid = new PdfGrid(options.splitToTablesByColumns);
 
-            if(options.onGridExporting) {
-                options.onGridExporting({ exportingOptions });
-            }
-
-            const pdfGrid = new PdfGrid(exportingOptions.splitToPagesByColumns);
-            pdfGrid.startNewTable(options.drawTableBorder, options.rect, false);
+            pdfGrid.startNewTable(options.drawTableBorder, options.rect);
 
             const dataRowsCount = dataProvider.getRowsCount();
+
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
-                if(options.onRowExporting) {
-                    const drawNewTableFromThisRow = {};
-                    options.onRowExporting({ drawNewTableFromThisRow });
-                    const { startNewTable, addPage, tableRect, splitToPagesByColumns } = drawNewTableFromThisRow;
-                    if(startNewTable === true) {
-                        if(!isDefined(tableRect)) {
-                            throw 'tableRect is required';
-                        }
-                        if(isDefined(splitToPagesByColumns)) {
-                            pdfGrid.setNewSplitByColumns(splitToPagesByColumns);
-                        }
-                        pdfGrid.startNewTable(options.drawTableBorder, tableRect, addPage === true);
-                    }
-                }
-                pdfGrid.setCurrentSplitTable(0);
-                pdfGrid.startNewRow();
-
+                const currentRow = [];
                 for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
-                    const isBoundaryColumn = exportingOptions.splitToPagesByColumns.find((splitByColumn) => splitByColumn.columnIndex === cellIndex);
-                    if(isBoundaryColumn) {
-                        pdfGrid.setCurrentSplitTable(cellIndex);
-                        pdfGrid.startNewRow();
-                    }
-
                     const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
                     const pdfCell = {
                         text: cellData.value
                     };
-
                     if(options.onCellExporting) {
                         options.onCellExporting({ gridCell: { value: cellData.value }, pdfCell });
                     }
-
-                    pdfGrid.addPdfCell(pdfCell);
+                    currentRow.push(pdfCell);
                 }
+
+                if(options.onRowExporting) {
+                    const drawNewTableFromThisRow = {};
+                    options.onRowExporting({ drawNewTableFromThisRow, row: currentRow });
+                    const { startNewTable, addPage, tableRect, splitToTablesByColumns } = drawNewTableFromThisRow;
+                    if(startNewTable === true) {
+                        pdfGrid.startNewTable(options.drawTableBorder, tableRect, addPage === true, splitToTablesByColumns);
+                    }
+                }
+
+                pdfGrid.addRow(currentRow);
             }
 
-            drawGrid(doc, pdfGrid);
+            pdfGrid.drawTo(doc);
             resolve();
         });
     });
 }
 
-function drawGrid(doc, pdfGrid) {
-    pdfGrid.getTables().forEach((table) => {
-        if(table.drawOnNewPage === true) {
-            doc.addPage();
-        }
-        drawTable(doc, table);
-    });
-}
-
+// this function is large and will grow
 function drawTable(doc, table) {
     if(!isDefined(doc)) {
         throw 'doc is required';
