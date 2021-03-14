@@ -83,7 +83,7 @@ class PdfGrid {
         let currentTableIndex = 0;
         let currentTableCells = [];
         for(let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-            const isNewTableColumn = this._splitByColumns.find((splitByColumn) => splitByColumn.columnIndex === cellIndex);
+            const isNewTableColumn = this._splitByColumns.filter((splitByColumn) => splitByColumn.columnIndex === cellIndex)[0];
             if(isNewTableColumn) {
                 this._currentHorizontalTables[currentTableIndex].addRow(currentTableCells);
                 currentTableIndex++;
