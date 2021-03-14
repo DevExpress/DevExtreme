@@ -1,6 +1,6 @@
 import { isDefined } from '../../core/utils/type';
 
-class Table {
+class PdfTable {
     constructor(drawTableBorder, rect) {
         this.drawTableBorder = drawTableBorder;
         this.rect = rect;
@@ -34,8 +34,10 @@ class Table {
                 }
             }
         }
+    }
 
-        // onRowAdded(this) - handle and call exportDataGrid(options.onRowAdded)
+    drawTo(doc) {
+        drawTable(doc, this);
     }
 }
 
@@ -45,8 +47,6 @@ class PdfGrid {
         this._newPageTables = [];
         this._tables = [];
         this._currentHorizontalTables;
-        this._currentTable;
-        this._currentRow;
     }
 
     _addLastTableToNewPages() {
@@ -55,7 +55,7 @@ class PdfGrid {
 
     startNewTable(drawTableBorder, firstTableRect, firstTableOnNewPage, splitByColumns) {
         this._currentHorizontalTables = [
-            new Table(drawTableBorder, firstTableRect)
+            new PdfTable(drawTableBorder, firstTableRect)
         ];
         if(firstTableOnNewPage) {
             this._addLastTableToNewPages();
@@ -68,7 +68,7 @@ class PdfGrid {
         if(isDefined(this._splitByColumns)) {
             this._splitByColumns.forEach((splitByColumn) => {
                 this._currentHorizontalTables.push(
-                    new Table(drawTableBorder, splitByColumn.tableRect)
+                    new PdfTable(drawTableBorder, splitByColumn.tableRect)
                 );
                 if(splitByColumn.drawOnNewPage) {
                     this._addLastTableToNewPages();
@@ -99,7 +99,7 @@ class PdfGrid {
             if(this._newPageTables.indexOf(table) !== -1) {
                 doc.addPage();
             }
-            drawTable(doc, table);
+            table.drawTo(doc);
         });
     }
 }
