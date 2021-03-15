@@ -62,7 +62,7 @@ jobs:
 
   qunit-tests:
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         RENOVATION: [ true ]
         BROWSER: [ google-chrome ]
