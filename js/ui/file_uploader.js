@@ -1666,7 +1666,7 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     }
 
     _createUploadArgument(file) {
-        return this._createChunksInfo(file.chunksData);
+        return file.chunksData ? this._createChunksInfo(file.chunksData) : undefined;
     }
 
     _createChunksInfo(chunksData) {
