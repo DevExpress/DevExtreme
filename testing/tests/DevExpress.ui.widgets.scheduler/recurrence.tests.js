@@ -2,7 +2,12 @@ import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
 
 const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
-QUnit.module('Recurrences', function() {
+QUnit.module('Recurrences', () => {
+    QUnit.test('getAsciiStringByDate should be return equivalent result to \'new Date\' parameter', function(assert) {
+        const date = getRecurrenceProcessor().getAsciiStringByDate(new Date(1997, 11, 24, 0));
+        assert.equal(date, '19971224T000000Z');
+    });
+
     QUnit.test('get dates with undefined rule', function(assert) {
         const dates = getRecurrenceProcessor().generateDates({ rule: undefined, start: new Date(2015, 0, 1, 0, 0, 10), min: new Date(2015, 0, 1, 0, 0, 10), max: new Date(2015, 0, 1, 0, 0, 12) });
 
