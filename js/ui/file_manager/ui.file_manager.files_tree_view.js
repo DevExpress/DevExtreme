@@ -9,6 +9,7 @@ import TreeViewSearch from '../tree_view/ui.tree_view.search';
 
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
 import { Deferred } from '../../core/utils/deferred';
+import { hasWindow } from '../../core/utils/window';
 
 const FILE_MANAGER_DIRS_TREE_CLASS = 'dx-filemanager-dirs-tree';
 const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = 'dx-filemanager-focused-item';
@@ -153,10 +154,16 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     _saveScrollTopPosition() {
+        if(!hasWindow()) {
+            return;
+        }
         this._scrollTopPosition = this._filesTreeView._scrollableContainer.scrollTop();
     }
 
     restoreScrollTopPosition() {
+        if(!hasWindow()) {
+            return;
+        }
         setTimeout(() => this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition));
     }
 
