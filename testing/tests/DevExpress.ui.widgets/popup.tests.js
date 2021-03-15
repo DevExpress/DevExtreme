@@ -1297,18 +1297,6 @@ QUnit.module('resize', {
         assert.roughEqual(popup.$content().outerHeight(), $overlayContent.height(), 0.1, 'size of popup and overlay is equal');
     });
 
-    QUnit.test('popup content should have height="auto" if height property is equal to undefined (T979891)', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            resizeEnabled: true,
-            visible: true,
-            height: undefined
-        });
-        const popup = $popup.dxPopup('instance');
-        const $content = popup.$content();
-
-        assert.strictEqual($content.get(0).style.height, 'auto', 'popup content height is "auto"');
-    });
-
     QUnit.test('popup content position should be reset after show/hide', function(assert) {
         const $popup = $('#popup').dxPopup({
             resizeEnabled: true,
