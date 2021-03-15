@@ -255,7 +255,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemDeleting?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, cancel?: boolean | (Promise<void> & JQueryPromise<void>) }) => any);
+    onItemDeleting?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
     /**
      * @docid dxListOptions.onItemHold
      * @extends Action
