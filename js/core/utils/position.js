@@ -1,6 +1,6 @@
 import config from '../config';
 import domAdapter from '../dom_adapter';
-import browser from '../browser';
+import browser from '../utils/browser';
 import { isWindow } from '../utils/type';
 
 const getDefaultAlignment = (isRtlEnabled) => {
