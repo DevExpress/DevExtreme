@@ -1516,7 +1516,7 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
     }
 
     _createAbortUploadArgument(file) {
-        return this._createChunksInfo(file.chunksData);
+        return file.chunksData ? this._createChunksInfo(file.chunksData) : undefined;
     }
 
     _shouldHandleError(e) {

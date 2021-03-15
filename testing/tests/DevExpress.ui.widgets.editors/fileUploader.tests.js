@@ -718,6 +718,24 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         this.clock.tick();
         assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
     });
+    test('abortUpload callback test', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            chunkSize: 20000,
+            abortUpload: function(e) {
+                return new Promise(resolve => resolve(true));
+            }
+        });
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+        this.clock.tick(200);
+
+        instance.reset();
+        this.clock.tick(200);
+
+        assert.strictEqual(instance.option('value').length, 0, '\'value\' option reset successfully');
+    });
 });
 
 QUnit.module('validation rendering', moduleConfig, function() {
