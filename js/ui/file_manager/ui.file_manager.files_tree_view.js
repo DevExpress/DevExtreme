@@ -10,6 +10,7 @@ import TreeViewSearch from '../tree_view/ui.tree_view.search';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
 import { Deferred } from '../../core/utils/deferred';
 import { hasWindow } from '../../core/utils/window';
+import { isNumeric } from '../../core/utils/type';
 
 const FILE_MANAGER_DIRS_TREE_CLASS = 'dx-filemanager-dirs-tree';
 const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = 'dx-filemanager-focused-item';
@@ -60,8 +61,7 @@ class FileManagerFilesTreeView extends Widget {
         this._actions = {
             onClick: this._createActionByOption('onClick'),
             onDirectoryClick: this._createActionByOption('onDirectoryClick'),
-            onFilesTreeViewContentReady: this._createActionByOption('onFilesTreeViewContentReady'),
-            onCurrentDirectorySet: this._createActionByOption('onCurrentDirectorySet')
+            onFilesTreeViewContentReady: this._createActionByOption('onFilesTreeViewContentReady')
         };
     }
 
@@ -83,8 +83,8 @@ class FileManagerFilesTreeView extends Widget {
     _onFilesTreeViewItemRendered({ itemData }) {
         const currentDirectory = this._getCurrentDirectory();
         if(currentDirectory && currentDirectory.fileItem.equals(itemData.fileItem)) {
-            this._actions.onCurrentDirectorySet();
             this._updateFocusedElement();
+            this._restoreScrollTopPosition();
         }
     }
 
@@ -160,13 +160,13 @@ class FileManagerFilesTreeView extends Widget {
         this._scrollTopPosition = this._filesTreeView._scrollableContainer.scrollTop();
     }
 
-    restoreScrollTopPosition() {
-        if(!hasWindow()) {
+    _restoreScrollTopPosition() {
+        if(!hasWindow() || !isNumeric(this._scrollTopPosition)) {
             return;
         }
         this._scrollRestoreTimeout = setTimeout(() => {
             delete this._scrollRestoreTimeout;
-            this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition || 0);
+            this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition);
         });
     }
 
@@ -225,7 +225,6 @@ class FileManagerFilesTreeView extends Widget {
             case 'onClick':
             case 'onDirectoryClick':
             case 'onFilesTreeViewContentReady':
-            case 'onCurrentDirectorySet':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
