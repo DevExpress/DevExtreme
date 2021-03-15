@@ -661,7 +661,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                     this._initGrouping();
                     this.repaint();
                 } else {
-                    this._toggleAllDayVisibility();
+                    this._toggleAllDayVisibility(true);
                 }
                 break;
             case 'allDayExpanded':
@@ -1328,8 +1328,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     renderRAllDayPanel() {
         const visible = this._isShowAllDayPanel() && !this.isGroupedAllDayPanel();
         if(visible) {
-            // this._changeAllDayVisibility();
-            // this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, true);
             this._toggleAllDayVisibility(false);
 
             const groupCount = this._getGroupCount();
@@ -1357,7 +1355,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
         }
-        this._toggleAllDayVisibility();
+        this._toggleAllDayVisibility(true);
     }
 
     renderRTimeTable() {
@@ -1879,7 +1877,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: index
         }, true);
 
-        this._toggleAllDayVisibility();
+        this._toggleAllDayVisibility(true);
         this._applyCellTemplates(cellTemplates);
     }
 
@@ -1924,7 +1922,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
-    _toggleAllDayVisibility(isUpdateScrollable = true) {
+    _toggleAllDayVisibility(isUpdateScrollable) {
         const showAllDayPanel = this._isShowAllDayPanel();
         this._$allDayPanel.toggle(showAllDayPanel);
         this._$allDayTitle && this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel);
