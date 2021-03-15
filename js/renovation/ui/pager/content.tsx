@@ -8,7 +8,7 @@ import { InfoText } from './info';
 import { PageIndexSelector } from './pages/page_index_selector';
 import { PageSizeSelector } from './page_size/selector';
 import {
-  PAGER_PAGES_CLASS, PAGER_PAGE_INDEXIES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS,
+  PAGER_PAGES_CLASS, PAGER_PAGE_INDEXES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS,
 } from './common/consts';
 import { PagerProps, DisplayMode } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
@@ -17,7 +17,6 @@ import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { registerKeyboardAction } from '../../../ui/shared/accessibility';
 import { EventCallback } from '../common/event_callback.d';
 import { KeyboardActionContext, KeyboardActionContextType } from './common/keyboard_action_context';
-import noop from '../../utils/noop';
 
 export const viewFunction = ({
   widgetRootElementRef,
@@ -69,7 +68,7 @@ export const viewFunction = ({
         />
         )}
         <div
-          className={PAGER_PAGE_INDEXIES_CLASS}
+          className={PAGER_PAGE_INDEXES_CLASS}
           ref={pagesRef as any}
         >
           <PageIndexSelector
@@ -109,17 +108,27 @@ export class PagerContentProps extends PagerProps {
 export class PagerContent extends JSXComponent<PagerContentProps>() {
   @ForwardRef() widgetRootElementRef!: RefObject;
 
+  private createFakeInstance(): {
+    option: () => boolean;
+    element: () => HTMLElement | null;
+    _createActionByOption: () => (e: any) => void;
+  } {
+    return {
+      option: (): boolean => false,
+      element: (): HTMLElement | null => this.widgetRootElementRef.current,
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+      _createActionByOption: () => (e: any) => {
+        this.props.onKeyDown?.(e);
+      },
+    };
+  }
+
   @Provider(KeyboardActionContext)
   get keyboardAction(): KeyboardActionContextType {
     return {
       registerKeyboardAction:
         (element: HTMLElement, action: EventCallback): DisposeEffectReturn => {
-          const fakePagerInstance = {
-            option: (): boolean => false,
-            element: (): HTMLElement | null => this.widgetRootElementRef.current,
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-            _createActionByOption: () => noop,
-          };
+          const fakePagerInstance = this.createFakeInstance();
           return registerKeyboardAction('pager', fakePagerInstance, element, undefined, action);
         },
     };

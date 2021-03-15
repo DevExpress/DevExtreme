@@ -365,4 +365,7 @@ const Editor = Widget.inherit({
     }
 });
 
+Editor.isEditor = (instance) => {
+    return instance instanceof Editor;
+};
 export default Editor;

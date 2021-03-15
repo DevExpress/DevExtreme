@@ -77,21 +77,13 @@ const Form = Widget.inherit({
         this._attachSyncSubscriptions();
     },
 
-    _initOptions: function(options) {
-        if(!('screenByWidth' in options)) {
-            options.screenByWidth = defaultScreenFactorFunc;
-        }
-
-        this.callBase(options);
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             formID: 'dx-' + new Guid(),
             formData: {},
             colCount: 1,
 
-            screenByWidth: null,
+            screenByWidth: defaultScreenFactorFunc,
 
             /**
             * @pseudo ColCountResponsibleType
@@ -1168,7 +1160,7 @@ const Form = Widget.inherit({
 
     _resetValues: function() {
         this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
-            if(isDefined(itemRunTimeInfo.widgetInstance) && itemRunTimeInfo.widgetInstance instanceof Editor) {
+            if(isDefined(itemRunTimeInfo.widgetInstance) && Editor.isEditor(itemRunTimeInfo.widgetInstance)) {
                 itemRunTimeInfo.widgetInstance.reset();
                 itemRunTimeInfo.widgetInstance.option('isValid', true);
             }

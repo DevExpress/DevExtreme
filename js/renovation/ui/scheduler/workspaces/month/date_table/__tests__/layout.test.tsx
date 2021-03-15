@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { MonthDateTableCell } from '../cell';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 
 jest.mock('../../../base/date_table/layout', () => ({
   ...jest.requireActual('../../../base/date_table/layout'),
@@ -21,7 +22,11 @@ describe('MonthDateTableLayout', () => {
 
     const render = (viewModel) => shallow(LayoutView({
       ...viewModel,
-      props: { viewData, ...viewModel.props },
+      props: {
+        viewData,
+        groupOrientation: VERTICAL_GROUP_ORIENTATION,
+        ...viewModel.props,
+      },
     }) as any);
 
     it('should spread restAttributes', () => {
@@ -41,6 +46,7 @@ describe('MonthDateTableLayout', () => {
       expect(layout.props())
         .toMatchObject({
           viewData,
+          groupOrientation: VERTICAL_GROUP_ORIENTATION,
           cellTemplate: MonthDateTableCell,
           addDateTableClass: 'addDateTableClass',
         });

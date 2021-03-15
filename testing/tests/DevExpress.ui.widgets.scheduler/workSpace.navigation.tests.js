@@ -43,7 +43,7 @@ module('Workspace navigation', () => {
                     this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             ...options,
-                            scrolling: { mode: scrollingMode, type: 'vertical' },
+                            scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             renovateRender: scrollingMode === 'virtual',
                         });
                     };
@@ -875,7 +875,7 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 rtlEnabled,
-                                scrolling: { mode: scrollingMode, type: 'both' },
+                                scrolling: { mode: scrollingMode, orientation: 'both' },
                             }, workSpace.class);
 
                             const instance = $element[workSpace.class]('instance');
@@ -923,7 +923,7 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 rtlEnabled,
-                                scrolling: { mode: scrollingMode, type: 'both' },
+                                scrolling: { mode: scrollingMode, orientation: 'both' },
                             }, workSpace.class);
 
                             const instance = $element[workSpace.class]('instance');
@@ -954,7 +954,7 @@ module('Workspace navigation', () => {
                     this.createInstance = (options, workSpaceName) => {
                         return $('#scheduler-work-space')[workSpaceName]({
                             ...options,
-                            scrolling: { mode: scrollingMode, type: 'vertical' },
+                            scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             renovateRender: scrollingMode === 'virtual',
                         });
                     };
@@ -1431,7 +1431,7 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 height: 500,
-                                scrolling: { mode: scrollingMode, type: 'both' },
+                                scrolling: { mode: scrollingMode, orientation: 'both' },
                             }, workSpace.class);
 
                             const instance = $element[workSpace.class]('instance');
@@ -1511,7 +1511,7 @@ module('Workspace navigation', () => {
                                 groupByDate: true,
                                 startDayHour: 0,
                                 endDayHour: 2,
-                                scrolling: { mode: scrollingMode, type: 'both' },
+                                scrolling: { mode: scrollingMode, orientation: 'both' },
                             }, workSpace.class);
 
                             const instance = $element[workSpace.class]('instance');

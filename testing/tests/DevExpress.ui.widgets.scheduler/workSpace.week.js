@@ -453,52 +453,6 @@ module('Work Space Week', () => {
             assert.roughEqual($thirdGroupLastCell.position().top + $thirdGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(2), 1.1, 'Max top is OK');
             assert.roughEqual($fourthGroupLastCell.position().top + $fourthGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(3), 1.1, 'Max top is OK');
         });
-
-        [{
-            date: new Date(2020, 11, 2, 12, 43),
-            groupIndex: 0,
-            cellStartDate: new Date(2020, 11, 2, 12, 30),
-            cellGroup: { one: 1 },
-            groupOrientation: 'vertical'
-        },
-        {
-            date: new Date(2020, 11, 2, 16, 25),
-            groupIndex: 1,
-            cellStartDate: new Date(2020, 11, 2, 16, 0),
-            cellGroup: { one: 2 },
-            groupOrientation: 'vertical'
-        },
-        {
-            date: new Date(2020, 11, 2, 10, 0),
-            groupIndex: 0,
-            cellStartDate: new Date(2020, 11, 2, 10, 0),
-            cellGroup: { one: 1 },
-            groupOrientation: 'horizontal'
-        },
-        {
-            date: new Date(2020, 11, 2, 16, 59),
-            groupIndex: 1,
-            cellStartDate: new Date(2020, 11, 2, 16, 30),
-            cellGroup: { one: 2 },
-            groupOrientation: 'horizontal'
-        }].forEach(testCase => {
-            test(`the getCellByDate method should return correct cell from group -  ${testCase.groupIndex}, groupOrientation -  ${testCase.groupOrientation}`, function(assert) {
-                this.instance.option({
-                    currentDate: new Date(2020, 11, 2),
-                    groupOrientation: testCase.groupOrientation,
-                    groups: [{
-                        name: 'one',
-                        items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                    }]
-                });
-
-                const $cell = this.instance.getCellByDate(testCase.date, testCase.groupIndex);
-                const cellData = $cell.data('dxCellData');
-
-                assert.deepEqual(cellData.startDate, testCase.cellStartDate, 'returned cell has correct cellData.startDate');
-                assert.deepEqual(cellData.groups, testCase.cellGroup, 'returned cell has correct cellData.groups');
-            });
-        });
     });
 
     module('Group by date', {

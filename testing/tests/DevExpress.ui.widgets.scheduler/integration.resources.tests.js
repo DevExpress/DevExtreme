@@ -535,26 +535,29 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.equal(byKeyStub.callCount, 0, 'Resources are loaded only once');
     });
 
-    QUnit.test('Resources should be set correctly is the resources[].dataSource option is changed(T396746)', function(assert) {
-        const resourceData = [{ id: 1, text: 'John', color: 'red' }];
+    [true, false].forEach((renovateRender) => {
+        QUnit.test(`Resources should be set correctly is the resources[].dataSource option is changed(T396746) when renovateRender is ${renovateRender}`, function(assert) {
+            const resourceData = [{ id: 1, text: 'John', color: 'red' }];
 
-        const scheduler = createWrapper({
-            dataSource: [],
-            currentDate: new Date(2015, 4, 26),
-            groups: ['ownerId'],
-            resources: [{
+            const scheduler = createWrapper({
+                dataSource: [],
+                currentDate: new Date(2015, 4, 26),
+                groups: ['ownerId'],
+                resources: [{
+                    fieldExpr: 'ownerId',
+                    dataSource: []
+                }],
+                renovateRender,
+            });
+
+            scheduler.instance.option('resources[0].dataSource', resourceData);
+            const resources = scheduler.instance.getResourceManager().getResources();
+
+            assert.deepEqual(resources, [{
                 fieldExpr: 'ownerId',
-                dataSource: []
-            }]
+                dataSource: resourceData
+            }], 'Resources were changed correctly');
         });
-
-        scheduler.instance.option('resources[0].dataSource', resourceData);
-        const resources = scheduler.instance.getResourceManager().getResources();
-
-        assert.deepEqual(resources, [{
-            fieldExpr: 'ownerId',
-            dataSource: resourceData
-        }], 'Resources were changed correctly');
     });
 
     QUnit.test('Appointment should have correct color after resources option changing', function(assert) {

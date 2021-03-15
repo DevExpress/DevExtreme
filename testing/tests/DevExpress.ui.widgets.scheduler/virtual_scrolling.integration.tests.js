@@ -160,7 +160,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
                         currentView: viewName
                     });
@@ -182,7 +182,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
 
                         currentView: viewName
@@ -231,7 +231,7 @@ module('Virtual scrolling integration', () => {
                             }],
                             scrolling: {
                                 mode: 'virtual',
-                                type: orientation
+                                orientation
                             },
                             currentView: viewName
                         });
@@ -686,7 +686,7 @@ module('Virtual scrolling integration', () => {
                             currentView: 'week',
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'both'
+                                orientation: 'both'
                             },
                             height: 400
                         });
@@ -772,7 +772,7 @@ module('Virtual scrolling integration', () => {
                             }],
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'vertical'
+                                orientation: 'vertical'
                             },
                             showAllDayPanel,
                             height: 500,
@@ -1054,7 +1054,7 @@ module('Virtual scrolling integration', () => {
                             }],
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'both'
+                                orientation: 'both'
                             },
                             showAllDayPanel: showAllDayPanel,
                             height: 500,
@@ -1118,7 +1118,7 @@ module('Virtual scrolling integration', () => {
                         }],
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
                         height: 500,
                         width: 300
@@ -1731,7 +1731,7 @@ module('Virtual scrolling integration', () => {
                     }],
                     scrolling: {
                         mode: 'virtual',
-                        type: 'both'
+                        orientation: 'both'
                     },
                     height: 600,
                     width: 800
@@ -2058,7 +2058,7 @@ module('Virtual scrolling integration', () => {
                         currentView: 'day',
                         scrolling: {
                             mode: 'virtual',
-                            type: 'vertical'
+                            orientation: 'vertical'
                         },
                         height: 400
                     }).instance;
@@ -2394,7 +2394,7 @@ module('Virtual scrolling integration', () => {
                         currentView: 'day',
                         scrolling: {
                             mode: 'virtual',
-                            type: 'both'
+                            orientation: 'both'
                         },
                         height: 400
                     }, options);
@@ -2717,7 +2717,7 @@ module('Virtual scrolling integration', () => {
                             currentView: 'day',
                             scrolling: {
                                 mode: 'virtual',
-                                type: 'both'
+                                orientation: 'both'
                             },
                             groups: ['resourceId0'],
                             resources: [{
@@ -2877,7 +2877,7 @@ module('Virtual scrolling integration', () => {
                                 currentView: 'Work Week',
                                 scrolling: {
                                     mode: 'virtual',
-                                    type: 'both',
+                                    orientation: 'both',
                                 },
                                 currentDate: new Date(2021, 8, 6),
                                 groups: ['resourceId'],
@@ -2991,17 +2991,50 @@ module('Virtual scrolling integration', () => {
             };
         }
     }, function() {
-        test('Repaint all flag should be set', function(assert) {
+        test('Appointment should not repaint if grid cells is exists for it', function(assert) {
+            const data = [{
+                startDate: new Date(2020, 8, 7, 2),
+                endDate: new Date(2020, 8, 7, 3),
+                text: 'test'
+            }];
+
             this.createInstance({
-                currentDate: new Date(2015, 2, 2),
+                height: 600,
+                width: 800,
+                currentDate: new Date(2020, 8, 7),
                 scrolling: {
-                    mode: 'virtual'
+                    mode: 'virtual',
+                    orientation: 'both'
                 },
-                height: 400
+                currentView: 'week',
+                views: [{
+                    type: 'week',
+                    intervalCount: 10,
+                }],
+                dataSource: data
             });
 
-            assert.ok(this.instance._appointments._isRepaintAll(), 'Full repaint flag is set');
+            const scrollable = this.instance.getWorkSpaceScrollable();
+
+            return asyncWrapper(
+                assert,
+                promise => asyncScrollTest(
+                    assert,
+                    promise,
+                    () => {
+                        const appointmentsItems = this.instance.getAppointmentsInstance().option('items');
+
+                        assert.deepEqual(appointmentsItems[0].itemData, data[0], 'Item1 is correct');
+                        assert.notOk(appointmentsItems[0].needRepaint, 'Item should not be repainted');
+                        assert.notOk(appointmentsItems[0].needRemove, 'Item0 should not be removed');
+                        assert.equal(this.instance.getWorkSpace().virtualScrollingDispatcher.leftVirtualCellsCount, 1, 'Virtual cells count is correct');
+                    },
+                    scrollable,
+                    { x: 500 }
+                )
+            );
         });
+
 
         [
             {
@@ -3072,7 +3105,7 @@ module('Virtual scrolling integration', () => {
                         currentView: 'week',
                         scrolling: {
                             mode: 'virtual',
-                            type: scrollOrientation
+                            orientation: scrollOrientation
                         },
                         groups: ['priorityId'],
                         resources: [{
@@ -3127,7 +3160,7 @@ module('Virtual scrolling integration', () => {
                 currentDate: new Date(2015, 1, 9),
                 scrolling: {
                     mode: 'virtual',
-                    type: 'both'
+                    orientation: 'both'
                 },
                 height: 500,
                 width: 600
@@ -3220,7 +3253,7 @@ module('Virtual scrolling integration', () => {
                         currentView: viewName,
                         scrolling: {
                             mode: 'virtual',
-                            type: 'horizontal'
+                            orientation: 'horizontal'
                         },
                         crossScrollingEnabled: true,
                         height: 400,
@@ -3266,6 +3299,34 @@ module('Virtual scrolling integration', () => {
                 assert.equal(dateTableHeight, calculatedHeight, 'Correct dateTable height');
                 assert.equal(groupPanelHeight, calculatedHeight, 'Correct groupPanel height');
             });
+        });
+
+        test('AllDayPanel should have correct height if all day appointments out of viewport', function(assert) {
+            const { workSpace } = createWrapper({
+                height: 600,
+                width: 800,
+                currentDate: new Date(2021, 8, 6),
+                dataSource: [{
+                    text: 'Test',
+                    startDate: new Date(2021, 8, 11, 9, 30),
+                    resourceId: [5],
+                    allDay: true
+                }],
+                startDayHour: 9,
+                endDayHour: 18,
+                currentView: 'week',
+                scrolling: {
+                    mode: 'virtual',
+                    type: 'both',
+                },
+                groups: ['resourceId'],
+                resources: [{
+                    fieldExpr: 'resourceId',
+                    dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+                }]
+            });
+
+            assert.equal(workSpace.getAllDayCellHeight(), 75, 'AllDayPanel height is correct');
         });
     });
 });

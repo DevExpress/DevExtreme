@@ -6,7 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import translator from 'animation/translator';
 
-import SchedulerLayoutManager from 'ui/scheduler/appointments.layout_manager';
+import AppointmentLayoutManager from 'ui/scheduler/appointments.layout_manager';
 import BaseAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.base';
 import VerticalAppointmentStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical';
 import HorizontalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal';
@@ -43,12 +43,12 @@ QUnit.module('LayoutManager', moduleOptions);
 
 QUnit.test('LayoutManager should be initialized', function(assert) {
     this.createInstance();
-    assert.ok(this.instance.getLayoutManager() instanceof SchedulerLayoutManager, 'SchedulerLayoutManager was initialized');
+    assert.ok(this.instance.getLayoutManager() instanceof AppointmentLayoutManager, 'AppointmentLayoutManager was initialized');
 });
 
 QUnit.test('RenderingStrategy should be initialized', function(assert) {
     this.createInstance();
-    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof BaseAppointmentsStrategy, 'SchedulerLayoutManager was initialized');
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof BaseAppointmentsStrategy, 'AppointmentLayoutManager was initialized');
 });
 
 QUnit.test('Scheduler should have a right rendering strategy for timeline views', function(assert) {

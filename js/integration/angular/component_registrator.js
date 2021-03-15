@@ -510,7 +510,7 @@ if(angular) {
         },
 
         _isNgModelRequired() {
-            return (this._componentClass.subclassOf(Editor) || this._componentClass.prototype instanceof Editor) && this._ngModel;
+            return Editor.isEditor(this._componentClass.prototype) && this._ngModel;
         },
 
         _initComponentBindings(...args) {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 import { viewFunction as LayoutView } from '../layout';
 import { DateTableCellBase } from '../../../base/date_table/cell';
 
@@ -21,7 +22,11 @@ describe('TimelineDateTableLayout', () => {
 
     const render = (viewModel) => shallow(LayoutView({
       ...viewModel,
-      props: { viewData, ...viewModel.props },
+      props: {
+        viewData,
+        groupOrientation: VERTICAL_GROUP_ORIENTATION,
+        ...viewModel.props,
+      },
     }) as any);
 
     it('should spread restAttributes', () => {
@@ -41,6 +46,7 @@ describe('TimelineDateTableLayout', () => {
       expect(layout.props())
         .toMatchObject({
           viewData,
+          groupOrientation: VERTICAL_GROUP_ORIENTATION,
           cellTemplate: DateTableCellBase,
           addDateTableClass: 'addDateTableClass',
         });

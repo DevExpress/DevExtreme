@@ -7,12 +7,14 @@ export const viewFunction = ({
   restAttributes,
   props: {
     viewData,
+    groupOrientation,
     dataCellTemplate,
     addDateTableClass,
   },
 }: DayDateTableLayout): JSX.Element => (
   <DateTableLayoutBase
     viewData={viewData}
+    groupOrientation={groupOrientation}
     addDateTableClass={addDateTableClass}
     cellTemplate={DateTableCellBase}
     dataCellTemplate={dataCellTemplate}

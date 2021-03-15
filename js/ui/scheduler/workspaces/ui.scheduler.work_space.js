@@ -90,7 +90,6 @@ const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_ROW_CLASS = 'dx-scheduler-date-table-row';
 const DATE_TABLE_FOCUSED_CELL_CLASS = 'dx-scheduler-focused-cell';
 const VIRTUAL_ROW_CLASS = 'dx-scheduler-virtual-row';
-const WRAPPER_POSTFIX = 'template-wrapper';
 
 const DATE_TABLE_DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 
@@ -1170,7 +1169,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _isHorizontalVirtualScrolling() {
-        const orientation = this.option('scrolling.type');
+        const orientation = this.option('scrolling.orientation');
         return this._isVirtualModeOn() &&
             (orientation === 'horizontal' || orientation === 'both');
     }
@@ -1365,6 +1364,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             {
                 timePanelData: this.viewDataProvider.timePanelData,
                 timeCellTemplate: this.option('timeCellTemplate'),
+                groupOrientation: this.option('groupOrientation'),
             }
         );
     }
@@ -1408,9 +1408,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             });
             this[componentName] = component;
         } else {
-            Object.getOwnPropertyNames(viewModel).forEach((optionName) => {
-                component.option(optionName, viewModel[optionName]);
-            });
+            component.option(viewModel);
         }
     }
 
@@ -2028,8 +2026,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellClass: this._getDateTableCellClass.bind(this),
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option('dataCellTemplate'),
-            addTemplateWrapper: true,
-            templateWrapperClass: `${DATE_TABLE_CELL_CLASS}-${WRAPPER_POSTFIX}`,
             getCellData: this._getCellData.bind(this),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: groupCount,
@@ -2768,14 +2764,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         groupIndex = this.isGroupedByDate() ? this._getGroupCount() - 1 : groupIndex;
 
         return this._groupedStrategy.getHorizontalMax(groupIndex);
-    }
-
-    getCellByDate(date, groupIndex) {
-        const index = this.getCellIndexByDate(date);
-        const cellCoordinates = this._getCellCoordinatesByIndex(index);
-        const $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, false);
-
-        return $cell;
     }
 
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
@@ -3576,6 +3564,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             viewData: this.viewDataProvider.viewData,
             dataCellTemplate: this.option('dataCellTemplate'),
             addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
+            groupOrientation: this.option('groupOrientation'),
         });
     }
 }
