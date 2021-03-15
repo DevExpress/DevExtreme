@@ -4,8 +4,15 @@ const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
 QUnit.module('Recurrences', () => {
     QUnit.test('getAsciiStringByDate should be return equivalent ISO value', function(assert) {
-        const date = getRecurrenceProcessor().getAsciiStringByDate(new Date(1997, 11, 23, 16));
-        assert.equal(date, '19971224T000000Z');
+        const etalon = new Date(1997, 11, 23, 16);
+        const expectedResult = etalon
+            .toISOString()
+            .replaceAll(':', '')
+            .replaceAll('-', '')
+            .replaceAll('.000Z', 'Z');
+
+        const result = getRecurrenceProcessor().getAsciiStringByDate(etalon);
+        assert.equal(result, expectedResult);
     });
 
     QUnit.test('get dates with undefined rule', function(assert) {
