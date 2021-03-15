@@ -718,23 +718,21 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         this.clock.tick();
         assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
     });
-    test('abortUpload callback test', function(assert) {
+    test('abortUpload callback should not rise for not uploading files', function(assert) {
+        const abortUploadSpy = sinon.spy();
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'useButtons',
             chunkSize: 20000,
-            abortUpload: function(e) {
-                return new Promise(resolve => resolve(true));
-            }
+            abortUpload: abortUploadSpy
         });
-        const instance = $fileUploader.dxFileUploader('instance');
 
         simulateFileChoose($fileUploader, [fakeFile]);
         this.clock.tick(200);
 
-        instance.reset();
+        $fileUploader.dxFileUploader('instance').reset();
         this.clock.tick(200);
 
-        assert.strictEqual(instance.option('value').length, 0, '\'value\' option reset successfully');
+        assert.strictEqual(abortUploadSpy.callCount, 0, '\'abortUpload\' callback was not rised');
     });
 });
 

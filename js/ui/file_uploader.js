@@ -1264,7 +1264,7 @@ class FileUploadStrategyBase {
     }
 
     abortUpload(file) {
-        if(file._isError || file._isLoaded || file.isAborted) {
+        if(file._isError || file._isLoaded || file.isAborted || !file.uploadStarted) {
             return;
         }
 
@@ -1516,7 +1516,7 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
     }
 
     _createAbortUploadArgument(file) {
-        return file.chunksData ? this._createChunksInfo(file.chunksData) : undefined;
+        return this._createChunksInfo(file.chunksData);
     }
 
     _shouldHandleError(e) {
