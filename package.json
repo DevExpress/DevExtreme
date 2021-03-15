@@ -31,7 +31,7 @@
     "devexpress-diagram": "2.0.17",
     "devexpress-gantt": "2.0.24",
     "jszip": "^2.0.0 || ^3.0.0",
-    "devextreme-quill": "~0.10.2",
+    "devextreme-quill": "~0.10.3",
     "rrule": "2.6.6",
     "showdown": "^1.8.6",
     "turndown": "^7.0.0",
