@@ -231,7 +231,7 @@ export interface BaseWidgetExport {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => Promise<void> & JQueryPromise<void>);
+    svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => Promise<void> | JQueryPromise<void>);
 }
 export interface BaseWidgetLoadingIndicator {
     /**

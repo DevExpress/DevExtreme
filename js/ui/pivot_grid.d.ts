@@ -270,7 +270,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    stateStoring?: { customLoad?: (() => Promise<any> & JQueryPromise<any>), customSave?: ((state: any) => any), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: 'custom' | 'localStorage' | 'sessionStorage' };
+    stateStoring?: { customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((state: any) => any), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: 'custom' | 'localStorage' | 'sessionStorage' };
     /**
      * @docid dxPivotGridOptions.texts
      * @type object
