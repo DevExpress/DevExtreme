@@ -41,7 +41,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    createChildren?: ((parentNode: dxTreeViewNode) => (Promise<any> & JQueryPromise<any>) | Array<any>);
+    createChildren?: ((parentNode: dxTreeViewNode) => Promise<any> | JQueryPromise<any> | Array<any>);
     /**
      * @docid  dxTreeViewOptions.dataSource
      * @type string|Array<dxTreeViewItem>|DataSource|DataSourceOptions
