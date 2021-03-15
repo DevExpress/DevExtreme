@@ -859,6 +859,8 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
                 recurrenceRule: 'FREQ=DAILY',
             }];
 
+            $('#qunit-fixture').css('position', 'static');
+
             const scheduler = createWrapper({
                 dataSource: {
                     store: new ArrayStore({
@@ -893,6 +895,8 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
             assert.equal(excludedAppointment.id.length, 36, 'id property should be equal GUID');
 
             assert.expect(5);
+
+            $('#qunit-fixture').css('position', 'absolute');
         });
     }
 });
