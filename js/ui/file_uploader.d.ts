@@ -24,7 +24,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    abortUpload?: ((file: File, uploadInfo?: UploadInfo) => (Promise<any> & JQueryPromise<any>) | any);
+    abortUpload?: ((file: File, uploadInfo?: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
     /**
      * @docid dxFileUploaderOptions.accept
      * @type string
@@ -335,7 +335,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    uploadChunk?: ((file: File, uploadInfo: UploadInfo) => (Promise<any> & JQueryPromise<any>) | any);
+    uploadChunk?: ((file: File, uploadInfo: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
     /**
      * @docid dxFileUploaderOptions.uploadFailedMessage
      * @type string
@@ -361,7 +361,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    uploadFile?: ((file: File, progressCallback: Function) => (Promise<any> & JQueryPromise<any>) | any);
+    uploadFile?: ((file: File, progressCallback: Function) => Promise<any> | JQueryPromise<any> | any);
     /**
      * @docid dxFileUploaderOptions.uploadHeaders
      * @type object
