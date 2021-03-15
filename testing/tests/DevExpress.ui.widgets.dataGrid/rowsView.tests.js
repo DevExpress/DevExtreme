@@ -6881,7 +6881,7 @@ QUnit.module('Scrollbar', {
         rowsView.render($('#container').css({ width: 100, height: 100 }));
 
         // arrange
-        if(devices.real().deviceType === 'desktop') {
+        if(devices.real().deviceType === 'desktop' && !devices.real().mac) {
             assert.ok(rowsView.getScrollbarWidth() > 0, 'scrollbar width more 0 for desktop');
         } else {
             assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'scrollbar width is 0 for mobile devices');
