@@ -163,10 +163,7 @@ class FileManagerFilesTreeView extends Widget {
         if(!hasWindow() || !isNumeric(this._scrollTopPosition)) {
             return;
         }
-        this._scrollRestoreTimeout = setTimeout(() => {
-            delete this._scrollRestoreTimeout;
-            this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition);
-        });
+        setTimeout(() => this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition));
     }
 
     _updateFocusedElement() {
