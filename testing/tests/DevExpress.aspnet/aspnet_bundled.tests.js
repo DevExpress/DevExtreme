@@ -6,7 +6,7 @@ SystemJS.config({
         '/testing/helpers/dataPatch.js': { format: 'system' },
         '/testing/helpers/wrapRenovatedWidget.js': { format: 'cjs' },
         '/testing/helpers/renovationPagerHelper.js': { format: 'cjs' },
-        '/artifacts/transpiled/aspnet.js': { format: 'global' }
+        'aspnet.js': { format: 'global' }
     }
 });
 
