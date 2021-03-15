@@ -358,6 +358,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return columns;
             },
 
+            getVisibleIndexByColumn: function(column, rowIndex) {
+                const visibleColumns = this.getVisibleColumns(rowIndex);
+                const visibleColumn = visibleColumns.filter(col => col.index === column.index && col.command === column.command)[0];
+                return visibleColumns.indexOf(visibleColumn);
+            },
+
             // TODO: set fixed columns option
             getFixedColumns: function(rowIndex) {
                 const visibleColumns = this.getVisibleColumns(rowIndex);
