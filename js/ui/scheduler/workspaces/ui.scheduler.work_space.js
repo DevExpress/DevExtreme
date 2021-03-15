@@ -1290,9 +1290,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.viewDataProvider.update(isGenerateNewViewData);
 
         this.renderRHeaderPanel();
-        this.renderRAllDayPanel();
         this.renderRTimeTable();
         this.renderRDateTable();
+        this.renderRAllDayPanel();
 
         this.updateRSelection();
 
