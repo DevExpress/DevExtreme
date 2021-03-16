@@ -3588,8 +3588,6 @@ const createDragBehaviorConfig = (container, dragBehavior, getDroppableCell, rem
 
             $(droppableCell).addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
         }
-
-        throw new Error(`x-${newX} y-${newY}`);
     };
 
     const onDragEnd = e => {

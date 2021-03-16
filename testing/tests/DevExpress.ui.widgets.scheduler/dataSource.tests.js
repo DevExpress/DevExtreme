@@ -20,6 +20,7 @@ initTestMarkup();
 
 const moduleConfig = {
     beforeEach() {
+        $('#qunit-fixture').addClass('qunit-fixture-visible');
         fx.off = true;
     },
 
@@ -30,6 +31,7 @@ const moduleConfig = {
 
 module('Events', {
     beforeEach() {
+        $('#qunit-fixture').addClass('qunit-fixture-visible');
         fx.off = true;
         this.clock = sinon.useFakeTimers();
     },
@@ -881,7 +883,6 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
                 width: 800
             });
 
-            scheduler.drawControl();
             scheduler.appointmentList[3].drag.toCell(39);
 
             const appointments = scheduler.instance.getDataSource().items();
