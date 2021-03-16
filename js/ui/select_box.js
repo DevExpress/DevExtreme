@@ -625,10 +625,6 @@ const SelectBox = DropDownList.inherit({
         return this.option('selectedItem');
     },
 
-    _readOnlyPropValue: function() {
-        return !this._isEditable() || this.option('readOnly');
-    },
-
     _isSelectedValue: function(value) {
         return this._isValueEquals(value, this.option('value'));
     },

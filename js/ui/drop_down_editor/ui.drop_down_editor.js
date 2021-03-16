@@ -274,7 +274,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _readOnlyPropValue: function() {
-        return !this.option('acceptCustomValue') || this.callBase();
+        return !this._isEditable() || this.callBase();
     },
 
     _cleanFocusState: function() {
