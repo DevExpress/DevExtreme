@@ -1,8 +1,23 @@
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
+import { isIE11 } from '../../helpers/scheduler/helpers.js';
 
 const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
-QUnit.module('Recurrences', function() {
+QUnit.module('Recurrences', () => {
+    if(!isIE11) {
+        QUnit.test('getAsciiStringByDate should be return equivalent ISO value', function(assert) {
+            const etalon = new Date(1997, 11, 23, 16);
+            const expectedResult = etalon
+                .toISOString()
+                .replaceAll(':', '')
+                .replaceAll('-', '')
+                .replaceAll('.000Z', 'Z');
+
+            const result = getRecurrenceProcessor().getAsciiStringByDate(etalon);
+            assert.equal(result, expectedResult);
+        });
+    }
+
     QUnit.test('get dates with undefined rule', function(assert) {
         const dates = getRecurrenceProcessor().generateDates({ rule: undefined, start: new Date(2015, 0, 1, 0, 0, 10), min: new Date(2015, 0, 1, 0, 0, 10), max: new Date(2015, 0, 1, 0, 0, 12) });
 

@@ -100,7 +100,7 @@ class RecurrenceProcessor {
     }
 
     getAsciiStringByDate(date) {
-        const currentOffset = this._getTimeZoneOffset() * toMs('minute');
+        const currentOffset = date.getTimezoneOffset() * toMs('minute');
         const offsetDate = new Date(date.getTime() + currentOffset);
 
         return offsetDate.getFullYear() + ('0' + (offsetDate.getMonth() + 1)).slice(-2) + ('0' + offsetDate.getDate()).slice(-2) +
