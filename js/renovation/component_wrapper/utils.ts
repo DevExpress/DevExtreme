@@ -1,6 +1,6 @@
 import { each } from '../../core/utils/iterator';
 
-const addAttributes = ($element, attributes): void => {
+export const addAttributes = ($element, attributes): void => {
   each(attributes, (_, { name, value }) => {
     if (name === 'class') {
       $element.addClass(value);
