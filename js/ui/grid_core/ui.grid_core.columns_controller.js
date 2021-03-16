@@ -2198,6 +2198,12 @@ module.exports = {
                     return -1;
                 },
 
+                getVisibleIndexByColumn: function(column, rowIndex) {
+                    const visibleColumns = this.getVisibleColumns(rowIndex);
+                    const visibleColumn = visibleColumns.filter(col => col.index === column.index && col.command === column.command)[0];
+                    return visibleColumns.indexOf(visibleColumn);
+                },
+
                 getVisibleColumnIndex: function(id, rowIndex) {
                     const index = this.columnOption(id, 'index');
 
