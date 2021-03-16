@@ -1943,9 +1943,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _renderTimePanel() {
         const repeatCount = this._groupedStrategy.calculateTimeCellRepeatCount();
-        const startViewDate = timeZoneUtils.getDateWithoutTimezoneChange(
-            this.getStartViewDate(), Math.floor(this.option('startDayHour')),
-        );
+        const startViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this.getStartViewDate());
 
         const _getTimeText = (i) => {
             // T410490: incorrectly displaying time slots on Linux
@@ -2014,7 +2012,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const timeCellDuration = Math.round(this.getCellDuration());
         const cellCountInDay = this._getCellCountInDay(true);
 
-        result.setMilliseconds(result.getMilliseconds() + timeCellDuration * (i % cellCountInDay));
+        result.setMilliseconds(result.getMilliseconds() + timeCellDuration * (i % cellCountInDay) - this._getTimeOffsetForStartViewDate());
 
         return result;
     }

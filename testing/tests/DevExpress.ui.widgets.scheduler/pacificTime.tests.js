@@ -222,6 +222,32 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
 
                     assert.expect(expectedAllTimes.length * 2);
                 });
+
+                test(`arguments should be valid in '${testCase.view}' view when startViewDate is during DST change`, function(assert) {
+                    let index = 0;
+
+                    const validExpectedDateResults = expectedDateResults.slice(4);
+                    const times = testCase.times.slice(4);
+
+                    createWrapper({
+                        dataSource: [],
+                        timeCellTemplate: ({ date, text }) => {
+                            if(index < validExpectedDateResults.length) {
+                                assert.equal(date.valueOf(), validExpectedDateResults[index].valueOf(), 'arg.date should be valid');
+                                assert.equal(text, times[index], 'arg.text should be valid');
+
+                                index++;
+                            }
+                        },
+                        views: testCases.map(testCases => testCases.view),
+                        currentView: testCase.view,
+                        startDayHour: 2,
+                        currentDate: summerDSTDate,
+                        height: 600
+                    });
+
+                    assert.expect(times.length * 2);
+                });
             });
         });
 
