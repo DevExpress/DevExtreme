@@ -15682,7 +15682,7 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
 
         // assert
         assert.strictEqual(that.editingController.getEditRowIndex(), 2, 'edit form was not closed');
-        
+
         const inputs = $('.dx-edit-row td input.dx-texteditor-input');
         assert.equal(inputs[0].value, '16', 'first input value');
         assert.equal(inputs[1].value, 'Skip', 'first input value');
