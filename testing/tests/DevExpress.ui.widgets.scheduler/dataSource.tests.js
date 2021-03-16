@@ -877,7 +877,8 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
                     assert.equal(e.appointmentData.id.length, 36, 'key property \'id\' should be GUID type in appointment on onAppointmentAdded event');
                     assert.notStrictEqual(data[0].id, e.appointmentData.id, 'Excluded appointment\'s key property shouldn\'t equal to parent appointment');
                 },
-                height: 600
+                height: 600,
+                width: 800
             });
 
             scheduler.drawControl();
