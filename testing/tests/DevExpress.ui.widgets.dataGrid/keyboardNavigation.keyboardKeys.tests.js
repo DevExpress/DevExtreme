@@ -2587,7 +2587,7 @@ QUnit.module('Keyboard keys', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'keyboardNavigation'], { initViews: true });
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'editorFactory', 'gridView', 'columnHeaders', 'editing', 'keyboardNavigation', 'focus'], { initViews: true });
 
         // act
         this.gridView.render($('#container'));
@@ -2601,7 +2601,6 @@ QUnit.module('Keyboard keys', {
         const $firstCell = this.rowsView.element().find('.dx-row-inserted').find('td').eq(0);
 
         // act
-        this.keyboardNavigationController.setRowFocusType();
         this.triggerKeyDown('tab', false, false, $firstCell);
         this.clock.tick();
 

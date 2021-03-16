@@ -1066,7 +1066,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         this._isHiddenFocus = disableFocus;
 
-        if(isGroupRow($row) || this.isRowFocusType() && !$row.hasClass('dx-row-inserted')) {
+        if(isGroupRow($row) || this.isRowFocusType()) {
             $focusElement = $row;
             if(focusedView) {
                 this.setFocusedRowIndex(this._getRowIndex($row));
@@ -2084,7 +2084,10 @@ export const keyboardNavigationModule = {
                     this.callBase(rowIndex);
                 },
                 addRow: function(parentKey) {
-                    this.getController('keyboardNavigation').setupFocusedView();
+                    const keyboardController = this.getController('keyboardNavigation');
+
+                    keyboardController.setupFocusedView();
+                    keyboardController.setCellFocusType();
 
                     return this.callBase.apply(this, arguments);
                 },
