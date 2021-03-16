@@ -1581,4 +1581,76 @@ QUnit.module('predicate for manual option binding control', {
 
         assert.equal(markup.dxTest('option', 'option1'), false);
     });
+
+    QUnit.test('onInitializing should be fired before widget rendering', function(assert) {
+        const renderSpy = sinon.spy();
+        registerComponent('dxTestWidget', Widget.inherit({
+            _render: renderSpy
+        }));
+
+        let onInitializingCalled = false;
+
+        const vm = {
+            text: 'my text',
+            onInitializing: function(e) {
+                assert.strictEqual(e.text, 'my text');
+                assert.strictEqual(renderSpy.callCount, 0, '_render is not called');
+                onInitializingCalled = true;
+            }
+        };
+
+        const markup = $('<div></div>').attr('data-bind', 'dxTestWidget: $data').appendTo(FIXTURE_ELEMENT);
+        ko.applyBindings(vm, markup[0]);
+
+        assert.ok(onInitializingCalled, 'onInitializing is called');
+        assert.strictEqual(renderSpy.callCount, 1, '_render is called');
+    });
+
+    QUnit.test('beginUpdate in onInitializing should defer widget rendering until endUpdate', function(assert) {
+        const renderSpy = sinon.spy();
+        registerComponent('dxTestWidget', Widget.inherit({
+            _render: renderSpy
+        }));
+
+        let component;
+
+        const vm = {
+            text: 'my text',
+            onInitializing: function() {
+                this.beginUpdate();
+                component = this;
+            }
+        };
+
+        const markup = $('<div></div>').attr('data-bind', 'dxTestWidget: $data').appendTo(FIXTURE_ELEMENT);
+        ko.applyBindings(vm, markup[0]);
+
+        assert.strictEqual(renderSpy.callCount, 0, '_render is not called');
+
+        component.endUpdate();
+
+        assert.strictEqual(renderSpy.callCount, 1, '_render is called');
+    });
+
+    QUnit.test('onInitializing should be called once', function(assert) {
+        const onInitializingSpy = sinon.spy();
+        const vm = ko.observable({
+            onInitializing: onInitializingSpy
+        });
+
+        const markup = $('<div></div>').attr('data-bind', 'dxTest: $data').appendTo(FIXTURE_ELEMENT);
+        ko.applyBindings(vm, markup[0]);
+
+        vm({
+            onInitializing: onInitializingSpy
+        });
+
+        assert.strictEqual(onInitializingSpy.callCount, 1, '_render is called once');
+    });
+
+    QUnit.test('empty model', function(assert) {
+        const markup = $('<div></div>').attr('data-bind', 'dxTest: $data').appendTo(FIXTURE_ELEMENT);
+        ko.applyBindings(undefined, markup[0]);
+        assert.ok(markup.dxTest('instance'), 'widget is created');
+    });
 });
