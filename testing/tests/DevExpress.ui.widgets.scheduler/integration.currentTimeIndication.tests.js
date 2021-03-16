@@ -321,10 +321,9 @@ module('Integration with Virtual Scrolling', {
             scrolling: { mode: 'virtual' },
         });
 
-        const expectedNumberOfIndicators = scheduler.workSpace.getRowCount();
         const actualNumberOfIndicators = scheduler.workSpace.getCurrentTimeIndicatorCount();
 
-        assert.equal(actualNumberOfIndicators, expectedNumberOfIndicators, 'Correct number of indicators');
+        assert.equal(actualNumberOfIndicators, 1, 'Correct number of indicators');
     });
 });
 

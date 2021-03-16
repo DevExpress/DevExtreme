@@ -10,8 +10,9 @@ import { DateTableLayoutProps } from './layout_props';
 
 export const viewFunction = ({
   props: {
-    cellTemplate,
     viewData,
+    groupOrientation,
+    cellTemplate,
     dataCellTemplate,
   },
   topVirtualRowHeight,
@@ -38,6 +39,7 @@ export const viewFunction = ({
       dataCellTemplate={dataCellTemplate}
       leftVirtualCellWidth={leftVirtualCellWidth}
       rightVirtualCellWidth={rightVirtualCellWidth}
+      groupOrientation={groupOrientation}
     />
   </Table>
 );

@@ -18,7 +18,7 @@ export default class Button extends Component {
     let needValidate = true;
     let validationStatus = 'valid';
 
-    return this._createAction(({ event, submitInput }) => {
+    return (this as any)._createAction(({ event, submitInput }) => {
       if (needValidate) {
         const validationGroup = this._validationGroupConfig;
 
@@ -53,6 +53,6 @@ export default class Button extends Component {
 
   _findGroup() {
     const $element = this.$element();
-    return this.option('validationGroup') || ValidationEngine.findGroup($element, this._modelByElement($element));
+    return this.option('validationGroup') || (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
   }
 }

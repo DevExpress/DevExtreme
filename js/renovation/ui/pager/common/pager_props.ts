@@ -48,4 +48,6 @@ export class PagerProps {
   @OneWay() showNavigationButtons = false;
 
   @OneWay() totalCount = 0;
+
+  @Event() onKeyDown?: (e: any) => void;
 }

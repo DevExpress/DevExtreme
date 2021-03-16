@@ -48,7 +48,7 @@ QUnit.module('Pager', {
 function() {
     const isRenovation = !!Pager.IS_RENOVATED_WIDGET;
     const getPagesElement = function(rootElement) {
-        return rootElement.find(isRenovation ? '.dx-page-indexies' : '.dx-pages')[0].childNodes;
+        return rootElement.find(isRenovation ? '.dx-page-indexes' : '.dx-pages')[0].childNodes;
     };
     QUnit.test('Default options init', function(assert) {
         const $pager = $('#container').dxPager();
@@ -1321,27 +1321,26 @@ function() {
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
     });
 
-    if(!isRenovation) {
-        QUnit.test('Pager is rendered in a normal view after light mode when pageCount is changed', function(assert) {
-            const $pager = $('#container').width(460).dxPager({
-                maxPagesCount: 10,
-                pageCount: 5,
-                pageSize: 8,
-                pageSizes: [5, 8, 15, 30],
-                showInfo: true,
-                totalCount: 40,
-                infoText: 'Page {0} of {1} ({2} items)',
-                pagesCountText: 'of',
-                showNavigationButtons: true
-            });
-            const pager = $pager.dxPager('instance');
-
-            pager.option({ pageCount: 10, pageIndexChanged: commonUtils.noop });
-            pager.option({ pageCount: 5, pageIndexChanged: commonUtils.noop });
-
-            assert.ok(!isLightMode(pager), 'pager is not displayed in the light mode');
+    QUnit.test('Pager is rendered in a normal view after light mode when pageCount is changed', function(assert) {
+        const $pager = $('#container').width(460).dxPager({
+            maxPagesCount: 10,
+            pageCount: 5,
+            pageSize: 8,
+            pageSizes: [5, 8, 15, 30],
+            showInfo: true,
+            totalCount: 40,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
         });
-    }
+        const pager = $pager.dxPager('instance');
+
+        pager.option({ pageCount: 10, pageIndexChanged: commonUtils.noop });
+        pager.option({ pageCount: 5, pageIndexChanged: commonUtils.noop });
+
+        assert.strictEqual(isLightMode(pager), isRenovation, `pager is ${isRenovation ? '' : 'not'} displayed in the light mode for pager`);
+    });
+
     QUnit.test('Light mode is applied only one', function(assert) {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
