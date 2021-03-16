@@ -228,7 +228,7 @@ class Appointment extends ClickElementWrapper {
     get drag() {
         return {
             toCell: cellNumber => {
-                $('#qunit-fixture').addClass('qunit-fixture-visible');
+                // $('#qunit-fixture').addClass('qunit-fixture-visible');
 
                 const cell = $(CLASSES.dateTableCell).eq(cellNumber).get(0);
 
@@ -255,7 +255,7 @@ class Appointment extends ClickElementWrapper {
                     .move(upPos.x, upPos.y);
                 pointer.up();
 
-                $('#qunit-fixture').removeClass('qunit-fixture-visible');
+                // $('#qunit-fixture').removeClass('qunit-fixture-visible');
             }
         };
     }

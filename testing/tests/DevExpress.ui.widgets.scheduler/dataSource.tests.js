@@ -880,6 +880,7 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
                 height: 600
             });
 
+            scheduler.drawControl();
             scheduler.appointmentList[3].drag.toCell(39);
 
             const appointments = scheduler.instance.getDataSource().items();
