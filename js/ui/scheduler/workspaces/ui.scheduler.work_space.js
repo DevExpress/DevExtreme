@@ -3573,6 +3573,8 @@ const createDragBehaviorConfig = (container, dragBehavior, getDroppableCell, rem
         const newX = draggableElement.left + mouseIndent;
         const newY = draggableElement.top + mouseIndent;
 
+        new Error(`x-${newX} y-${newY}`);
+
         const elements = isWideAppointment ?
             document.elementsFromPoint(newX, newY) :
             document.elementsFromPoint(newX + appointmentWidth / 2, newY);
