@@ -446,10 +446,23 @@ const DropDownEditor = TextBox.inherit({
         }
 
         if(this.option('focusStateEnabled') && !focused(this._input())) {
+            this._resetCaretPosition();
+
             eventsEngine.trigger(this._input(), 'focus');
         }
 
         return true;
+    },
+
+    _resetCaretPosition: function(ignoreEditable = false) {
+        const inputValue = this._input().get(0).value;
+        const caretPosition = ignoreEditable || this._isEditable() ? inputValue.length : 0;
+
+        this._caret({ start: caretPosition, end: caretPosition });
+    },
+
+    _isEditable: function() {
+        return this.option('acceptCustomValue');
     },
 
     _toggleOpenState: function(isVisible) {
