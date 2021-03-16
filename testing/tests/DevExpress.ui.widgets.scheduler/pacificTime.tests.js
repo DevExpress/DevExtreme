@@ -223,7 +223,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                     assert.expect(expectedAllTimes.length * 2);
                 });
 
-                test(`arguments should be valid in '${testCase.view}' view when startViewDate is during DST change`, function(assert) {
+                test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, function(assert) {
                     let index = 0;
 
                     const validExpectedDateResults = expectedDateResults.slice(4);
@@ -233,8 +233,8 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                         dataSource: [],
                         timeCellTemplate: ({ date, text }) => {
                             if(index < validExpectedDateResults.length) {
-                                assert.equal(date.valueOf(), validExpectedDateResults[index].valueOf(), 'arg.date should be valid');
-                                assert.equal(text, times[index], 'arg.text should be valid');
+                                assert.equal(date.valueOf(), validExpectedDateResults[index].valueOf(), 'correct date');
+                                assert.equal(text, times[index], 'correct text');
 
                                 index++;
                             }
@@ -251,9 +251,9 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             });
         });
 
-        module('Time panel render(T852308, T860281)', () => {
+        module('Time panel render', () => {
             testCases.forEach(testCase => {
-                test(`Time value in time panel should be correct in ${testCase.view}`, function(assert) {
+                test(`Time value in time panel should be correct in ${testCase.view} (T852308, T860281)`, function(assert) {
                     const scheduler = createWrapper({
                         dataSource: [],
                         views: testCases.map(testCases => testCases.view),
@@ -271,6 +271,28 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                     }
 
                     assert.expect(testCase.times.length + 1);
+                });
+
+                test(`Time value in time panel should be correct in ${testCase.view} when startViewDate is during DST change`, function(assert) {
+                    const times = testCase.times.slice(4);
+
+                    const scheduler = createWrapper({
+                        dataSource: [],
+                        views: testCases.map(testCases => testCases.view),
+                        currentView: testCase.view,
+                        startDayHour: 2,
+                        currentDate: summerDSTDate,
+                        height: 600
+                    });
+
+                    const currentTimeResults = scheduler.timePanel.getTimeValues();
+
+                    assert.ok(currentTimeResults.length >= times.length, 'Correct number of time values');
+                    for(let i = 0; i < times.length; i += 1) {
+                        assert.equal(currentTimeResults[i], times[i], 'Current time value should be equal expected');
+                    }
+
+                    assert.expect(times.length + 1);
                 });
             });
         });
@@ -343,6 +365,45 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                 }
 
                 assert.expect(5);
+            });
+        });
+
+        [{
+            view: 'day',
+            left: 100,
+            top: 100,
+        }, {
+            view: 'week',
+            left: 100,
+            top: 100,
+        }, {
+            view: 'timelineDay',
+            left: 400,
+            top: 26,
+        }, {
+            view: 'timelineWeek',
+            left: 400,
+            top: 26,
+        }].forEach(({ view, left, top }) => {
+            test(`Appointments should be rendered corrrectly when startViewDate is during DST change in ${view}`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: [{
+                        startDate: new Date(2020, 2, 8, 3),
+                        endDate: new Date(2020, 2, 8, 4),
+                    }],
+                    views: [view],
+                    currentView: view,
+                    height: 600,
+                    currentDate: summerDSTDate,
+                    startDayHour: 2,
+                });
+
+                assert.equal(scheduler.appointmentList.length, 1, 'one appointment has been rendered');
+
+                const element = scheduler.appointmentList[0].getElement();
+
+                assert.roughEqual(element.position().left, left, 1, 'correct left position');
+                assert.roughEqual(element.position().top, top, 1, 'correct top position');
             });
         });
 
