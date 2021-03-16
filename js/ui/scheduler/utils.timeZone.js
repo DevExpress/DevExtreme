@@ -101,7 +101,7 @@ const isTimezoneChangeInDate = date => {
     return (startDayDate.getTimezoneOffset() - endDayDate.getTimezoneOffset()) !== 0;
 };
 
-const getDateWithoutTimezoneChange = (date, hour) => {
+const getDateWithoutTimezoneChange = date => {
     const clonedDate = new Date(date);
     if(isTimezoneChangeInDate(clonedDate)) {
         const result = new Date(clonedDate);
