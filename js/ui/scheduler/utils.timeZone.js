@@ -105,13 +105,7 @@ const getDateWithoutTimezoneChange = (date, hour) => {
     const clonedDate = new Date(date);
     if(isTimezoneChangeInDate(clonedDate)) {
         const result = new Date(clonedDate);
-
-        result.setDate(result.getDate() + 1);
-        if(hour !== undefined) {
-            result.setHours(hour);
-        }
-
-        return new Date(result);
+        return new Date(result.setDate(result.getDate() + 1));
     }
     return clonedDate;
 };
