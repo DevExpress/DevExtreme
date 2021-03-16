@@ -1943,7 +1943,9 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _renderTimePanel() {
         const repeatCount = this._groupedStrategy.calculateTimeCellRepeatCount();
-        const startViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this.getStartViewDate());
+        const startViewDate = timeZoneUtils.getDateWithoutTimezoneChange(
+            this.getStartViewDate(), Math.floor(this.option('startDayHour')),
+        );
 
         const _getTimeText = (i) => {
             // T410490: incorrectly displaying time slots on Linux
@@ -2404,7 +2406,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         cellIndex = !patchedIndexes ? this._patchCellIndex(cellIndex) : cellIndex;
 
         const firstViewDate = this.getStartViewDate();
-        const currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex) + this._getOffsetByCount(cellIndex));
+
+        const firstViewDateTime = firstViewDate.getTime();
+        const millisecondsOffset = this._getMillisecondsOffset(rowIndex, cellIndex);
+        const offsetByCount = this._getOffsetByCount(cellIndex);
+        const startViewDateOffset = this._getTimeOffsetForStartViewDate();
+
+        const currentDate = new Date(firstViewDateTime + millisecondsOffset + offsetByCount - startViewDateOffset);
 
         currentDate.setTime(currentDate.getTime() + dateUtils.getTimezonesDifference(firstViewDate, currentDate));
         return currentDate;
@@ -2827,7 +2835,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getCellIndexByDate(date, inAllDayRow) {
         const timeInterval = inAllDayRow ? 24 * 60 * 60 * 1000 : this._getInterval();
-        const dateTimeStamp = this._getIntervalBetween(date, inAllDayRow);
+        const dateTimeStamp = this._getIntervalBetween(date, inAllDayRow) + this._getTimeOffsetForStartViewDate();
 
         let index = Math.floor(dateTimeStamp / timeInterval);
 
@@ -3566,6 +3574,18 @@ class SchedulerWorkSpace extends WidgetObserver {
             addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
             groupOrientation: this.option('groupOrientation'),
         });
+    }
+
+    _getTimeOffsetForStartViewDate() {
+        const startViewDate = this.getStartViewDate();
+        const startDayHour = Math.floor(this.option('startDayHour'));
+        const isDSTChange = timeZoneUtils.isTimezoneChangeInDate(startViewDate);
+
+        if(isDSTChange && startDayHour !== startViewDate.getHours()) {
+            return toMs('hour');
+        }
+
+        return 0;
     }
 }
 

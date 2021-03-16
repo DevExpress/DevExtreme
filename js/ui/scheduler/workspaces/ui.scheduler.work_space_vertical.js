@@ -74,7 +74,7 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     renovatedRenderSupported() { return true; }
 
     generateRenderOptions() {
-        const startViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this.getStartViewDate());
+        const startViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this.getStartViewDate(), Math.floor(this.option('startDayHour')));
         const _getTimeText = (row, column) => {
             // T410490: incorrectly displaying time slots on Linux
             const index = row % this._getRowCount();
