@@ -184,21 +184,21 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
             { view: 'timelineWeek', times: expectedAllTimes }
         ];
 
+        const expectedDateResults = (() => {
+            const result = [];
+            let startHours = 0;
+            let currentDate = new Date(summerDSTDate);
+
+            while(currentDate.getDate() < 9) {
+                result.push(new Date(currentDate));
+                startHours += 0.5;
+                currentDate = new Date(new Date(summerDSTDate).setHours(startHours - (startHours % 1), startHours % 1 * 60));
+            }
+
+            return result;
+        })();
+
         module('timeCellTemplate', () => {
-            const expectedDateResults = (() => {
-                const result = [];
-                let startHours = 0;
-                let currentDate = new Date(summerDSTDate);
-
-                while(currentDate.getDate() < 9) {
-                    result.push(new Date(currentDate));
-                    startHours += 0.5;
-                    currentDate = new Date(new Date(summerDSTDate).setHours(startHours - (startHours % 1), startHours % 1 * 60));
-                }
-
-                return result;
-            })();
-
             testCases.forEach(testCase => {
                 test(`arguments should be valid in '${testCase.view}' view`, function(assert) {
                     let index = 0;
@@ -249,6 +249,51 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                     assert.expect(times.length * 2);
                 });
             });
+        });
+
+        module('dataCellTemplate', () => {
+            testCases
+                .map(testCase => {
+                    return ({
+                        ...testCase,
+                        isDivideIndex: testCase.view === 'week',
+                    });
+                })
+                .forEach((testCase) => {
+                    test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, function(assert) {
+                        let index = 0;
+
+                        const validExpectedDateResults = expectedDateResults.slice(4);
+
+                        createWrapper({
+                            dataSource: [],
+                            dataCellTemplate: ({ startDate, allDay }) => {
+                                if(allDay) {
+                                    return undefined;
+                                }
+
+                                const correctedIndex = testCase.isDivideIndex
+                                    ? Math.floor(index / 7)
+                                    : index;
+                                const isValidIndex = testCase.isDivideIndex
+                                    ? index % 7 === 0
+                                    : true;
+
+                                if(correctedIndex < validExpectedDateResults.length && isValidIndex) {
+                                    assert.equal(startDate.valueOf(), validExpectedDateResults[correctedIndex].valueOf(), 'correct date');
+                                }
+                                index++;
+                            },
+                            views: testCases.map(testCases => testCases.view),
+                            currentView: testCase.view,
+                            startDayHour: 2,
+                            currentDate: summerDSTDate,
+                            height: 600
+                        });
+
+                        assert.expect(validExpectedDateResults.length);
+                    });
+                });
         });
 
         module('Time panel render', () => {
