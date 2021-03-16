@@ -260,6 +260,7 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
                     });
                 })
                 .forEach((testCase) => {
+                    // TODO: we should decide what startDate we should use for "dead time" - one hour before it or one hour after
                     test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, function(assert) {
                         let index = 0;
 
