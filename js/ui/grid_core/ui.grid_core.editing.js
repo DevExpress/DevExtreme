@@ -646,12 +646,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             if(!this.isCellOrBatchEditMode()) {
-                this.resetChanges();
                 this.init();
-                // TODO this condition is for T733748
-                if(isDefined(this.option(EDITING_EDITROWKEY_OPTION_NAME))) {
-                    this._resetEditRowKey();
-                }
             } else if(needResetIndexes) {
                 this._resetEditColumnName();
                 this._resetEditRowKey();
