@@ -231,6 +231,7 @@ class Appointment extends ClickElementWrapper {
                 $('#qunit-fixture').addClass('qunit-fixture-visible');
 
                 const cell = $(CLASSES.dateTableCell).eq(cellNumber).get(0);
+
                 const cellRect = cell.getBoundingClientRect();
                 const elementRect = this.getElement().get(0).getBoundingClientRect();
 
@@ -240,13 +241,18 @@ class Appointment extends ClickElementWrapper {
                 };
 
                 const cellPos = {
-                    x: cellRect.left + cellRect.width / 2,
-                    y: cellRect.top + cellRect.height / 2
+                    x: cellRect.left - Math.round(cellRect.width * 0.3),
+                    y: cellRect.top - Math.round(cellRect.width * 0.3)
+                };
+
+                const upPos = {
+                    x: cellPos.x - (elementRect.left - elementRect.width / 2),
+                    y: cellPos.y - (elementRect.top - elementRect.height / 2)
                 };
 
                 const pointer = pointerMock(this.getElement()).start();
                 pointer.down(appointmentPos.x, appointmentPos.y)
-                    .move(cellPos.x - appointmentPos.x, cellPos.y - appointmentPos.y);
+                    .move(upPos.x, upPos.y);
                 pointer.up();
 
                 $('#qunit-fixture').removeClass('qunit-fixture-visible');
