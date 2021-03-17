@@ -116,7 +116,8 @@ module('Virtual scrolling integration', () => {
                         type: viewName,
                     }],
                     currentView: viewName,
-                    height: 400
+                    height: 400,
+                    renovateRender: false,
                 }).instance;
 
                 instance.option('views[0].scrolling.mode', 'virtual');
@@ -124,12 +125,14 @@ module('Virtual scrolling integration', () => {
                     !!instance.getWorkSpace().virtualScrollingDispatcher,
                     'Virtual scrolling is initialized'
                 );
+                assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
 
                 instance.option('views[0].scrolling.mode', 'standard');
                 assert.notOk(
                     !!instance.getWorkSpace().virtualScrollingDispatcher,
                     'Virtual scrolling is not initialized'
                 );
+                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
 
             test(`Virtual scrolling should have default cell sizes in "${viewName}" view`, function(assert) {
