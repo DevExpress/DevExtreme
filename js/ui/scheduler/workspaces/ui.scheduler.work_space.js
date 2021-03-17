@@ -701,8 +701,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             case 'selectedCellData':
                 break;
             case 'scrolling':
-                this.option('crossScrollingEnabled', this._isHorizontalVirtualScrolling());
-
                 if(this._isVirtualModeOn() && !this.option('renovateRender')) {
                     this.option('renovateRender', true);
                 } else if(this._isVirtualModeOn()) {
@@ -1174,12 +1172,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     isVirtualScrolling() {
         return this.isRenovatedRender() && this._isVirtualModeOn();
-    }
-
-    _isHorizontalVirtualScrolling() {
-        const orientation = this.option('scrolling.orientation');
-        return this._isVirtualModeOn() &&
-            (orientation === 'horizontal' || orientation === 'both');
     }
 
     _initVirtualScrolling() {
