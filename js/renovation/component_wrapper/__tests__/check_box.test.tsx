@@ -1,33 +1,23 @@
-import each from 'jest-each';
 import CheckBox from '../check_box';
 
-describe('Accessibility', () => {
-  each([
-    { ariaName: 'id', ariaValue: 'someID', expectedAttributeName: 'id' },
-    { ariaName: 'role', ariaValue: 'someRole', expectedAttributeName: 'role' },
-    { ariaName: 'required', ariaValue: 'true', expectedAttributeName: 'aria-required' },
-    { ariaName: 'labeledby', ariaValue: 'some text', expectedAttributeName: 'aria-labeledby' },
-    { ariaName: 'describedby', ariaValue: 'some new text', expectedAttributeName: 'aria-describedby' },
-    { ariaName: 'describedby', ariaValue: null, expectedAttributeName: 'aria-describedby' },
-    { ariaName: 'describedby', ariaValue: undefined, expectedAttributeName: 'aria-describedby' },
-  ]).describe('testConfig: %o', (testConfig) => {
-    it('setAria', () => {
-      // eslint-disable-next-line no-underscore-dangle
-      CheckBox.prototype._getDefaultOptions = jest.fn();
-      CheckBox.prototype.endUpdate = jest.fn();
+import { addAttributes, getAriaName } from '../utils';
+import Mock = jest.Mock;
 
-      const container = document.createElement('div');
-      const instance = new CheckBox(container);
+jest.mock('../utils');
+jest.mock('../../../ui/editor/editor', () => ({ }));
+jest.mock('../component');
 
-      instance.setAria(testConfig.ariaName, testConfig.ariaValue);
+describe('Method', () => {
+  it('setAria', () => {
+    (getAriaName as Mock).mockImplementation(() => 'ariaName');
 
-      if (testConfig.ariaValue === null || testConfig.ariaValue === undefined) {
-        expect(container.hasAttribute(testConfig.expectedAttributeName))
-          .toEqual(false);
-      } else {
-        expect(container.getAttribute(testConfig.expectedAttributeName))
-          .toEqual(testConfig.ariaValue);
-      }
-    });
+    const container = {} as Element;
+    const instance = new CheckBox(container, {});
+    instance.$element = () => container;
+
+    instance.setAria('someAttr', 'someValue');
+
+    expect(getAriaName).toHaveBeenNthCalledWith(1, 'someAttr');
+    expect(addAttributes).toHaveBeenNthCalledWith(1, container, [{ name: 'ariaName', value: 'someValue' }]);
   });
 });
