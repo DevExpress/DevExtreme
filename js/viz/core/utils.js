@@ -367,16 +367,17 @@ export function normalizePanesHeight(panes) {
     const relativeHeightPanes = panes.filter(isRelativeHeightPane);
     const weightSum = relativeHeightPanes.reduce((prev, next) => prev + (next.height || 0), 0);
     const weightHeightCount = relativeHeightPanes.length;
-    const emptyHeightCount = relativeHeightPanes.filter((pane) => !pane.height).length;
+    const emptyHeightPanes = relativeHeightPanes.filter((pane) => !pane.height);
+    const emptyHeightCount = emptyHeightPanes.length;
 
     if(weightSum < 1 && emptyHeightCount) {
-        relativeHeightPanes.filter((pane) => !pane.height).forEach((pane) => pane.height = (1 - weightSum) / emptyHeightCount);
+        emptyHeightPanes.forEach((pane) => pane.height = (1 - weightSum) / emptyHeightCount);
     } else if(weightSum > 1 || weightSum < 1 && !emptyHeightCount || weightSum === 1 && emptyHeightCount) {
         if(emptyHeightCount) {
             const weightForEmpty = weightSum / weightHeightCount;
             const emptyWeightSum = emptyHeightCount * weightForEmpty;
             relativeHeightPanes.filter((pane) => pane.height).forEach((pane) => pane.height *= (weightSum - emptyWeightSum) / weightSum);
-            relativeHeightPanes.filter((pane) => !pane.height).forEach((pane) => pane.height = weightForEmpty);
+            emptyHeightPanes.forEach((pane) => pane.height = weightForEmpty);
         }
         relativeHeightPanes.forEach((pane) => pane.height *= 1 / weightSum);
     }
