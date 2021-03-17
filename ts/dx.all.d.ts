@@ -2806,6 +2806,23 @@ declare module DevExpress.fileManagement {
         constructor(options?: CustomFileSystemProviderOptions)
     }
     /**
+     * [descr:FileSystemError]
+     */
+    export interface FileSystemError {
+        /**
+         * [descr:FileSystemError.errorCode]
+         */
+        errorCode?: 'noAccess' | 'fileExists' | 'fileNotFound' | 'directoryExists' | 'directoryNotFound' | 'wrongFileExtension' | 'maxFileSizeExceeded' | 'invalidSymbols' | 'other' | number;
+        /**
+         * [descr:FileSystemError.errorText]
+         */
+        errorText?: string;
+        /**
+         * [descr:FileSystemError.fileSystemItem]
+         */
+        fileSystemItem?: FileSystemItem;
+    }
+    /**
      * [descr:FileSystemItem]
      */
     export class FileSystemItem {
