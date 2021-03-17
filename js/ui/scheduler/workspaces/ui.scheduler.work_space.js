@@ -3437,7 +3437,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._createDragBehaviorBase($element, getItemData, getItemSettings);
     }
 
-    _createDragBehaviorBase($element, getItemData, getItemSettings, { isSetCursorOffset, ...restOptions } = {}) {
+    _createDragBehaviorBase($element, getItemData, getItemSettings, options = {}) {
         const container = this.$element().find(`.${FIXED_CONTAINER_CLASS}`);
 
         this.dragBehavior.addTo($element, createDragBehaviorConfig(
@@ -3450,7 +3450,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             () => this.getCellWidth(),
             getItemData,
             getItemSettings,
-            { isSetCursorOffset, ...restOptions } = {})
+            options)
         );
     }
 
@@ -3514,7 +3514,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 }
 
 const createDragBehaviorConfig = (workspaceElement, isOutsideScrollable, container, dragBehavior, getDroppableCell, removeDroppableCellClass,
-    getCellWidth, getItemData, getItemSettings, { isSetCursorOffset, ...restOptions } = {}) => {
+    getCellWidth, getItemData, getItemSettings, options) => {
     const state = {
         dragElement: undefined,
         itemData: undefined,
@@ -3603,7 +3603,7 @@ const createDragBehaviorConfig = (workspaceElement, isOutsideScrollable, contain
         removeDroppableCellClass();
     };
 
-    const cursorOffset = isSetCursorOffset
+    const cursorOffset = options.isSetCursorOffset
         ? () => {
             const $dragElement = $(state.dragElement);
             return {
@@ -3620,12 +3620,12 @@ const createDragBehaviorConfig = (workspaceElement, isOutsideScrollable, contain
         onDragMove,
         onDragEnd,
         cursorOffset,
-        ...restOptions,
+        filter: options.filter
     };
 };
 
-// const createDragBehaviorConfig = (worksaceElement, container, dragBehavior, getDroppableCell, removeDroppableCellClass,
-//     getCellWidth, getItemData, getItemSettings, { isSetCursorOffset, ...restOptions } = {}) => {
+// const createDragBehaviorConfig = (workspaceElement, isOutsideScrollable, container, dragBehavior, getDroppableCell, removeDroppableCellClass,
+//     getCellWidth, getItemData, getItemSettings, options) => {
 //     const state = {
 //         dragElement: undefined,
 //         itemData: undefined,
@@ -3713,7 +3713,7 @@ const createDragBehaviorConfig = (workspaceElement, isOutsideScrollable, contain
 //         removeDroppableCellClass();
 //     };
 
-//     const cursorOffset = isSetCursorOffset
+//     const cursorOffset = options.isSetCursorOffset
 //         ? () => {
 //             const $dragElement = $(state.dragElement);
 //             return {
@@ -3730,7 +3730,7 @@ const createDragBehaviorConfig = (workspaceElement, isOutsideScrollable, contain
 //         onDragMove,
 //         onDragEnd,
 //         cursorOffset,
-//         ...restOptions,
+//         filter: options.filter
 //     };
 // };
 
