@@ -1,5 +1,9 @@
 export interface EventExtension { }
 export interface EventType { }
+/**
+ * @docid
+ * @prevFileNamespace DevExpress.events
+ */
 export type TEvent = {} extends EventType ? dxEvent : EventType;
 
 /**
@@ -85,7 +89,7 @@ export class dxEvent {
  * @type dxEvent|jQuery.Event
  * @hidden
  * @prevFileNamespace DevExpress.events
- * @deprecated use TEvent instead
+ * @deprecated TEvent
  */
 export type event = TEvent;
 
