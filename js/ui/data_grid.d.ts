@@ -486,7 +486,7 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    filterValue?: string | Array<any> | Function;
+    filterValue?: string | Array<any> | Function | null;
     /**
      * @docid
      * @default -1
