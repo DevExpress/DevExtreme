@@ -226,6 +226,46 @@ module('Virtual scrolling integration', () => {
                         assert.equal(workspace.option('crossScrollingEnabled'), crossScrollingEnabled, 'crossScrollingEnabled is correct');
                     });
                 });
+
+                test(`scheduler should correctly change scrolling orientation in "${viewName}"`, function(assert) {
+                    const scheduler = createWrapper({
+                        views: [viewName],
+                        scrolling: {
+                            mode: 'virtual',
+                            orientation: 'vertical',
+                        },
+                        currentView: viewName,
+                    });
+
+                    scheduler.instance.option('scrolling', { mode: 'virtual', orientation: 'both' });
+
+                    const headerScrollable = scheduler.workSpace.getHeaderScrollable();
+                    const sideBarScrollable = scheduler.workSpace.getSideBarScrollable();
+
+                    assert.equal(headerScrollable.length, 1, 'Header scrollable exists');
+                    assert.equal(sideBarScrollable.length, 1, 'Header scrollable exists');
+                });
+
+                test(`scheduler should correctly change scrolling orientation in "${viewName}" when changing a view's option`, function(assert) {
+                    const scheduler = createWrapper({
+                        views: [{
+                            type: viewName,
+                        }],
+                        scrolling: {
+                            mode: 'virtual',
+                            orientation: 'vertical',
+                        },
+                        currentView: viewName,
+                    });
+
+                    scheduler.instance.option('views[0].scrolling', { mode: 'virtual', orientation: 'both' });
+
+                    const headerScrollable = scheduler.workSpace.getHeaderScrollable();
+                    const sideBarScrollable = scheduler.workSpace.getSideBarScrollable();
+
+                    assert.equal(headerScrollable.length, 1, 'Header scrollable exists');
+                    assert.equal(sideBarScrollable.length, 1, 'Header scrollable exists');
+                });
             });
         });
     });
