@@ -9,7 +9,7 @@ import {
 export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
