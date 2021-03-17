@@ -1,6 +1,3 @@
-// TODOs
-// 1. animation
-
 import $ from '../core/renderer';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
