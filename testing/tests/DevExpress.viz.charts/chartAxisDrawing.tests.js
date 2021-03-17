@@ -2868,7 +2868,7 @@ QUnit.test('UpdateSize - scrollBar gets canvas', function(assert) {
 
 QUnit.module('Adaptive layout rendering', environment);
 
-QUnit.test('Multiple panes - hide all for horizontal axes', function(assert) {
+QUnit.test('Multiple panes - hide title and labels for horizontal axes', function(assert) {
     const argAxis_top = createAxisStubs();
     const argAxis_bottom = createAxisStubs();
     const valAxis_top = createAxisStubs();
@@ -2906,6 +2906,46 @@ QUnit.test('Multiple panes - hide all for horizontal axes', function(assert) {
     // argAxis_top
     assert.deepEqual(this.axisStub.getCall(0).returnValue.hideTitle.callCount, 1);
     assert.deepEqual(this.axisStub.getCall(0).returnValue.hideOuterElements.callCount, 1);
+});
+
+QUnit.test('Multiple panes - should not hide title and labels of axis, height of panes specify in percents (T981081)', function(assert) {
+    const argAxis_top = createAxisStubs();
+    const argAxis_bottom = createAxisStubs();
+    const valAxis_top = createAxisStubs();
+    const valAxis_bottom = createAxisStubs();
+
+    argAxis_top.getMargins.returns({ left: 0, top: 10, right: 0, bottom: 0 });
+    argAxis_bottom.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 15 });
+
+    this.setupAxes([argAxis_top,
+        argAxis_bottom,
+        valAxis_top,
+        valAxis_bottom]);
+
+    new dxChart(this.container, {
+        size: { height: 220 },
+        adaptiveLayout: { height: 100 },
+        panes: [{ name: 'topPane', height: '10%' }, { name: 'bottomPame', height: '50%' }],
+        valueAxis: [
+            { name: 'valAxis_top' },
+            { name: 'valAxis_bottom' }
+        ],
+        series: [
+            { axis: 'valAxis_top', pane: 'topPane' },
+            { axis: 'valAxis_bottom', pane: 'bottomPane' }
+        ],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    // argAxis_bottom
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 0);
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 0);
+
+    // argAxis_top
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.hideTitle.callCount, 0);
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.hideOuterElements.callCount, 0);
 });
 
 QUnit.test('Multiple panes - not hide all for horizontal axes (pane sized for adaptivity)', function(assert) {

@@ -338,6 +338,8 @@ export const getCategoriesInfo = function(categories, startValue, endValue) {
     };
 };
 
+export function isRelativeHeightPane(pane) { return !(pane.unit % 2); }
+
 export function normalizePanesHeight(panes) {
     panes.forEach(pane => {
         const height = pane.height;
@@ -353,6 +355,7 @@ export function normalizePanesHeight(panes) {
         if(!unit && parsedHeight) {
             if(isString(height) && height.indexOf('%') > -1) {
                 parsedHeight = parsedHeight / 100;
+                unit = 2;
             } else if(parsedHeight < 0) {
                 parsedHeight = parsedHeight < -1 ? 1 : abs(parsedHeight);
             }
@@ -361,21 +364,22 @@ export function normalizePanesHeight(panes) {
         pane.height = parsedHeight;
         pane.unit = unit;
     });
-    const weightSum = panes.filter((pane) => !pane.unit)
-        .reduce((prev, next) => prev + (next.height || 0), 0);
-    const weightHeightCount = panes.filter((pane) => !pane.unit).length;
-    const emptyHeightCount = panes.filter((pane) => !pane.unit && !pane.height).length;
+    const relativeHeightPanes = panes.filter(isRelativeHeightPane);
+    const weightSum = relativeHeightPanes.reduce((prev, next) => prev + (next.height || 0), 0);
+    const weightHeightCount = relativeHeightPanes.length;
+    const emptyHeightPanes = relativeHeightPanes.filter((pane) => !pane.height);
+    const emptyHeightCount = emptyHeightPanes.length;
 
     if(weightSum < 1 && emptyHeightCount) {
-        panes.filter((pane) => !pane.unit && !pane.height).forEach((pane) => pane.height = (1 - weightSum) / emptyHeightCount);
+        emptyHeightPanes.forEach((pane) => pane.height = (1 - weightSum) / emptyHeightCount);
     } else if(weightSum > 1 || weightSum < 1 && !emptyHeightCount || weightSum === 1 && emptyHeightCount) {
         if(emptyHeightCount) {
             const weightForEmpty = weightSum / weightHeightCount;
             const emptyWeightSum = emptyHeightCount * weightForEmpty;
-            panes.filter((pane) => !pane.unit && pane.height).forEach((pane) => pane.height *= (weightSum - emptyWeightSum) / weightSum);
-            panes.filter((pane) => !pane.unit && !pane.height).forEach((pane) => pane.height = weightForEmpty);
+            relativeHeightPanes.filter((pane) => pane.height).forEach((pane) => pane.height *= (weightSum - emptyWeightSum) / weightSum);
+            emptyHeightPanes.forEach((pane) => pane.height = weightForEmpty);
         }
-        panes.forEach((pane) => !pane.unit && (pane.height *= 1 / weightSum));
+        relativeHeightPanes.forEach((pane) => pane.height *= 1 / weightSum);
     }
 }
 
@@ -383,15 +387,13 @@ export function updatePanesCanvases(panes, canvas, rotated) {
     let distributedSpace = 0;
     const padding = PANE_PADDING;
     const paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom;
-    let usefulSpace = paneSpace - padding * (panes.length - 1);
+    const totalCustomSpace = panes.reduce((prev, cur) => prev + (!isRelativeHeightPane(cur) ? cur.height : 0), 0);
+    const usefulSpace = paneSpace - padding * (panes.length - 1) - totalCustomSpace;
     const startName = rotated ? 'left' : 'top';
     const endName = rotated ? 'right' : 'bottom';
 
-    const totalCustomSpace = panes.reduce((prev, cur) => prev + (cur.unit ? cur.height : 0), 0);
-    usefulSpace -= totalCustomSpace;
-
     panes.forEach(pane => {
-        const calcLength = pane.unit ? pane.height : _round(pane.height * usefulSpace);
+        const calcLength = !isRelativeHeightPane(pane) ? pane.height : _round(pane.height * usefulSpace);
         pane.canvas = pane.canvas || {};
         extend(pane.canvas, canvas);
         pane.canvas[startName] = canvas[startName] + distributedSpace;
