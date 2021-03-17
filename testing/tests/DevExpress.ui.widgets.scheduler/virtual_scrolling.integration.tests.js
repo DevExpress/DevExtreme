@@ -43,7 +43,8 @@ module('Virtual scrolling integration', () => {
                         currentView: viewName,
                         dataSource: [],
                         scrolling: { mode },
-                        height: 400
+                        height: 400,
+                        renovateRender: false,
                     }).instance;
 
                     const workspace = instance.getWorkSpace();
@@ -52,6 +53,12 @@ module('Virtual scrolling integration', () => {
                         !!workspace.virtualScrollingDispatcher,
                         result,
                         'Virtual scrolling initialised',
+                    );
+
+                    assert.equal(
+                        workspace.isRenovatedRender(),
+                        result,
+                        'Render type is correct'
                     );
                 });
 
@@ -62,13 +69,19 @@ module('Virtual scrolling integration', () => {
                             scrolling: { mode }
                         }],
                         currentView: viewName,
-                        height: 400
+                        height: 400,
+                        renovateRender: false,
                     }).instance;
 
                     assert.equal(
                         !!instance.getWorkSpace().virtualScrollingDispatcher,
                         result,
                         'Virtual scrolling initialization',
+                    );
+                    assert.equal(
+                        instance.getWorkSpace().isRenovatedRender(),
+                        result,
+                        'Correct render is used'
                     );
                 });
             });
@@ -86,6 +99,7 @@ module('Virtual scrolling integration', () => {
                     !!instance.getWorkSpace().virtualScrollingDispatcher,
                     'Virtual scrolling Initialized'
                 );
+                assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
 
                 instance.option('scrolling.mode', 'standard');
 
@@ -93,6 +107,7 @@ module('Virtual scrolling integration', () => {
                     !!instance.getWorkSpace().virtualScrollingDispatcher,
                     'Virtual scrolling not initialized'
                 );
+                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
 
             test(`it should be correctly initialised after change view.scrolling.mode option to "virtual" in "${viewName}" view`, function(assert) {
