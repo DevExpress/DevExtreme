@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, Slot, OneWay, Fragment, CSSAttributes,
+  Component, ComponentBindings, JSXComponent, Slot, OneWay, CSSAttributes,
 } from 'devextreme-generator/component_declaration/common';
 import { VirtualCell } from './virtual-cell';
 
@@ -18,36 +18,7 @@ export const viewFunction = ({
     className={className}
     style={styles}
   >
-    {/*
-        This is a workaround for https://github.com/preactjs/preact/issues/2987
-        TODO: remove once we start using inferno
-      */}
-    {hasLeftVirtualCell && hasRightVirtualCell && (
-      <Fragment>
-        <VirtualCell width={leftVirtualCellWidth} />
-        {children}
-        <VirtualCell width={rightVirtualCellWidth} />
-      </Fragment>
-    )}
-    {hasLeftVirtualCell && !hasRightVirtualCell && (
-      <Fragment>
-        <VirtualCell width={leftVirtualCellWidth} />
-        {children}
-      </Fragment>
-    )}
-    {!hasLeftVirtualCell && hasRightVirtualCell && (
-      <Fragment>
-        {children}
-        <VirtualCell width={rightVirtualCellWidth} />
-      </Fragment>
-    )}
-    {!hasLeftVirtualCell && !hasRightVirtualCell && (
-      <Fragment>
-        {children}
-      </Fragment>
-    )}
-
-    {/* {hasLeftVirtualCell && (
+    {hasLeftVirtualCell && (
       <VirtualCell width={leftVirtualCellWidth} />
     )}
 
@@ -55,7 +26,7 @@ export const viewFunction = ({
 
     {hasRightVirtualCell && (
       <VirtualCell width={rightVirtualCellWidth} />
-    )} */}
+    )}
   </tr>
 );
 

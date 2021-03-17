@@ -661,7 +661,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                     this._initGrouping();
                     this.repaint();
                 } else {
-                    this._toggleAllDayVisibility();
+                    this._toggleAllDayVisibility(true);
                 }
                 break;
             case 'allDayExpanded':
@@ -1290,9 +1290,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.viewDataProvider.update(isGenerateNewViewData);
 
         this.renderRHeaderPanel();
-        this.renderRAllDayPanel();
         this.renderRTimeTable();
         this.renderRDateTable();
+        this.renderRAllDayPanel();
 
         this.updateRSelection();
 
@@ -1328,6 +1328,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     renderRAllDayPanel() {
         const visible = this._isShowAllDayPanel() && !this.isGroupedAllDayPanel();
         if(visible) {
+            this._toggleAllDayVisibility(false);
+
             const groupCount = this._getGroupCount();
             const cellCount = this._getTotalCellCount(groupCount);
 
@@ -1353,7 +1355,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
         }
-        this._toggleAllDayVisibility();
+        this._toggleAllDayVisibility(true);
     }
 
     renderRTimeTable() {
@@ -1875,7 +1877,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: index
         }, true);
 
-        this._toggleAllDayVisibility();
+        this._toggleAllDayVisibility(true);
         this._applyCellTemplates(cellTemplates);
     }
 
@@ -1920,14 +1922,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
     }
 
-    _toggleAllDayVisibility() {
+    _toggleAllDayVisibility(isUpdateScrollable) {
         const showAllDayPanel = this._isShowAllDayPanel();
         this._$allDayPanel.toggle(showAllDayPanel);
         this._$allDayTitle && this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel);
         this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
 
         this._changeAllDayVisibility();
-        this._updateScrollable();
+        isUpdateScrollable && this._updateScrollable();
     }
 
     _changeAllDayVisibility() {

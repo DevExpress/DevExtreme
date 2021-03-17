@@ -69,8 +69,8 @@ export const viewFunction = ({
 })
 export class TimelineDateHeaderLayout extends JSXComponent(DateHeaderLayoutProps) {
   get isHorizontalGrouping(): boolean {
-    const { groupOrientation, groups } = this.props;
+    const { groupOrientation, groups, groupByDate } = this.props;
 
-    return isHorizontalGroupOrientation(groups, groupOrientation);
+    return isHorizontalGroupOrientation(groups, groupOrientation) && !groupByDate;
   }
 }

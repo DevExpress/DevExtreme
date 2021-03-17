@@ -7,7 +7,7 @@ import {
 } from '../layout';
 import { Row } from '../../../row';
 import * as utilsModule from '../../../../utils';
-import { VERTICAL_GROUP_ORIENTATION } from '../../../../../consts';
+import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../consts';
 import { DateHeaderCell } from '../cell';
 
 const isHorizontalGroupOrientation = jest.spyOn(utilsModule, 'isHorizontalGroupOrientation');
@@ -145,6 +145,7 @@ describe('DateHeaderLayout', () => {
           const layout = new DateHeaderLayout({
             groupOrientation: VERTICAL_GROUP_ORIENTATION,
             groups,
+            groupByDate: false,
           });
 
           expect(layout.isHorizontalGrouping)
@@ -152,6 +153,36 @@ describe('DateHeaderLayout', () => {
 
           expect(isHorizontalGroupOrientation)
             .toHaveBeenCalledWith(groups, VERTICAL_GROUP_ORIENTATION);
+        });
+
+        it('should return false if grouping by date is used', () => {
+          const groups = [{ name: 'group', items: [{ id: 1 }], data: [{ id: 1 }] }];
+          const layout = new DateHeaderLayout({
+            groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
+            groups,
+            groupByDate: true,
+          });
+
+          expect(layout.isHorizontalGrouping)
+            .toBe(false);
+
+          expect(isHorizontalGroupOrientation)
+            .toHaveBeenCalledWith(groups, HORIZONTAL_GROUP_ORIENTATION);
+        });
+
+        it('should return true if horizontal grouping is used', () => {
+          const groups = [{ name: 'group', items: [{ id: 1 }], data: [{ id: 1 }] }];
+          const layout = new DateHeaderLayout({
+            groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
+            groups,
+            groupByDate: false,
+          });
+
+          expect(layout.isHorizontalGrouping)
+            .toBe(true);
+
+          expect(isHorizontalGroupOrientation)
+            .toHaveBeenCalledWith(groups, HORIZONTAL_GROUP_ORIENTATION);
         });
       });
     });

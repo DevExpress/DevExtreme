@@ -9,6 +9,8 @@ import TreeViewSearch from '../tree_view/ui.tree_view.search';
 
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
 import { Deferred } from '../../core/utils/deferred';
+import { hasWindow } from '../../core/utils/window';
+import { isNumeric } from '../../core/utils/type';
 
 const FILE_MANAGER_DIRS_TREE_CLASS = 'dx-filemanager-dirs-tree';
 const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = 'dx-filemanager-focused-item';
@@ -82,6 +84,7 @@ class FileManagerFilesTreeView extends Widget {
         const currentDirectory = this._getCurrentDirectory();
         if(currentDirectory && currentDirectory.fileItem.equals(itemData.fileItem)) {
             this._updateFocusedElement();
+            this._restoreScrollTopPosition();
         }
     }
 
@@ -148,6 +151,20 @@ class FileManagerFilesTreeView extends Widget {
         if(itemIndex !== -1) {
             this._filesTreeView.option(`items[${itemIndex}].disabled`, state);
         }
+    }
+
+    _saveScrollTopPosition() {
+        if(!hasWindow()) {
+            return;
+        }
+        this._scrollTopPosition = this._filesTreeView._scrollableContainer.scrollTop();
+    }
+
+    _restoreScrollTopPosition() {
+        if(!hasWindow() || !isNumeric(this._scrollTopPosition)) {
+            return;
+        }
+        setTimeout(() => this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition));
     }
 
     _updateFocusedElement() {
@@ -235,6 +252,7 @@ class FileManagerFilesTreeView extends Widget {
 
     refresh() {
         this._$focusedElement = null;
+        this._saveScrollTopPosition();
         this._filesTreeView.option('dataSource', []);
     }
 
