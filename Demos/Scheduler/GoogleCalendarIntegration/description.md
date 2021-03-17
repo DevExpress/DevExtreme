@@ -3,8 +3,7 @@ To display appointments from Google Calendar in the Scheduler, follow the steps 
 1. **Get Google API key**   
     Follow the instructions from step 1 in the <a href="https://developers.google.com/calendar/quickstart/js" target="_blank">Browser Quickstart</a> tutorial.
 
-1. **Restrict the API key**  
-  
+1. **Restrict the API key**     
     Set <a href="https://developers.google.com/maps/api-key-best-practices#application_restriction" target="_blank">application</a> and <a href="https://developers.google.com/maps/api-key-best-practices#api_restriction" target="_blank">API restrictions</a>.
 
 1. **Make your calendar public**    

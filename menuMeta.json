@@ -1620,7 +1620,6 @@
           {
             "Title": "Simple Array",
             "Name": "SimpleArray",
-            "DocUrl": "Guide/UI_Components/Scheduler/Overview/",
             "Widget": "Scheduler",
             "DemoType": "Web"
           },
@@ -1641,7 +1640,6 @@
             "DemoType": "Web"
           },
           {
-            "DocUrl": "Guide/Data_Layer/Data_Layer/#Data_Modification/Integration_with_Push_Services",
             "Title": "SignalR Service",
             "Name": "SignalRService",
             "Widget": "Scheduler",
@@ -1671,7 +1669,6 @@
           {
             "Title": "Basic Views",
             "Name": "BasicViews",
-            "DocUrl": "Guide/UI_Components/Scheduler/Views/View_Types/",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Models/Appointment.cs",
@@ -1682,7 +1679,6 @@
           {
             "Title": "Timelines",
             "Name": "Timelines",
-            "DocUrl": "Guide/UI_Components/Scheduler/Views/#Timeline_Views",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Models/EmployeeTask.cs",
@@ -1694,7 +1690,6 @@
             "Title": "Agenda",
             "Name": "Agenda",
             "Badge": "Updated",
-            "DocUrl": "Guide/UI_Components/Scheduler/Views/View_Types/#Agenda_View",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Models/SampleData/AgendaTasks.cs"
@@ -1710,7 +1705,6 @@
           {
             "Title": "Current Time Indicator",
             "Name": "CurrentTimeIndicator",
-            "DocUrl": "Guide/UI_Components/Scheduler/Current_Time_Indication/",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
               "/Models/DynamicAppointment.cs",
