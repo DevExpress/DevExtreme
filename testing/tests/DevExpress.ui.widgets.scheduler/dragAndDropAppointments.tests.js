@@ -2427,8 +2427,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
             const initialPosition = $appointment.position();
 
-            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
-            pointerMock($appointment).start().down().move(10, 10).up();
+            this.scheduler.appointmentList[0].drag.toCell(16);
 
             const updatedPosition = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0).position();
 
@@ -2647,9 +2646,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }]
             });
 
-            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(9).trigger(dragEvents.enter);
-            pointerMock($appointment).start().down().move(10, 10).up();
+            this.scheduler.appointmentList[0].drag.toCell(9);
 
             this.clock.tick();
             const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
@@ -2679,9 +2676,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }]
             });
 
-            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
-            pointerMock($appointment).start().down().move(10, 10).up();
+            this.scheduler.appointmentList[0].drag.toCell(16);
 
             this.clock.tick();
             const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
@@ -2711,9 +2706,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }]
             });
 
-            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
-            pointerMock($appointment).start().down().move(10, 10).up();
+            this.scheduler.appointmentList[0].drag.toCell(16);
 
             this.clock.tick();
             const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
