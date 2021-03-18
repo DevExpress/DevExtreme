@@ -735,6 +735,8 @@ class Scheduler extends Widget {
                 this.repaint();
                 break;
             case 'scrolling':
+                this.option('crossScrollingEnabled', this._isHorizontalVirtualScrolling() || this.option('crossScrollingEnabled'));
+
                 this._updateOption('workSpace', args.fullName, value);
                 break;
             case 'renovateRender':
@@ -2175,6 +2177,15 @@ class Scheduler extends Widget {
 
     scrollTo(date, groups, allDay) {
         this._workSpace.scrollTo(date, groups, allDay);
+    }
+
+    _isHorizontalVirtualScrolling() {
+        const scrolling = this.option('scrolling');
+        const { orientation, mode } = scrolling;
+        const isVirtualScrolling = mode === 'virtual';
+
+        return isVirtualScrolling &&
+            (orientation === 'horizontal' || orientation === 'both');
     }
 
     addAppointment(rawAppointment) {
