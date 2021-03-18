@@ -31,6 +31,7 @@ gridCore.registerModulesOrder([
     'columnChooser',
     'grouping',
     'editing',
+    'editingCellBased',
     'masterDetail',
     'validating',
     'adaptivity',

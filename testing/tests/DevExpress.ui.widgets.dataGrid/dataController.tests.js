@@ -27,6 +27,7 @@ const setupModule = function() {
         'search',
         'editing',
         'editingFormBased',
+        'editingCellBased',
         'grouping',
         'headerFilter',
         'masterDetail',
