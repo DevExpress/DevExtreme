@@ -26,9 +26,9 @@ expand(proto, '_onTilingPerformed', function() {
     }
 });
 
-function getCoords(rect, renderer) {
+function getCoords(coords, rect, renderer) {
     const offset = renderer.getRootOffset();
-    return [(rect[0] + rect[2]) / 2 + offset.left, (rect[1] + rect[3]) / 2 + offset.top];
+    return coords || (rect && [(rect[0] + rect[2]) / 2 + offset.left, (rect[1] + rect[3]) / 2 + offset.top]) || [-1000, -1000];
 }
 
 proto._showTooltip = function(index, coords) {
@@ -43,22 +43,21 @@ proto._showTooltip = function(index, coords) {
         if(result === undefined) {
             return;
         }
-        if(result) {
-            that._moveTooltip(node, coords);
-        } else {
+        if(!result) {
             tooltip.hide();
         }
         that._tooltipIndex = result ? index : -1;
     };
+    const xy = getCoords(coords, node.rect, this._renderer);
     callback(tooltip.show({
         value: node.value,
         valueText: tooltip.formatValue(node.value),
         node: node.proxy
-    }, { x: 0, y: 0, offset: 0 }, { node: node.proxy }, undefined, callback));
+    }, { x: xy[0], y: xy[1], offset: 0 }, { node: node.proxy }, undefined, callback));
 };
 
 proto._moveTooltip = function(node, coords) {
-    const xy = coords || (node.rect && getCoords(node.rect, this._renderer)) || [-1000, -1000];
+    const xy = getCoords(coords, node.rect, this._renderer);
 
     this._tooltip.move(xy[0], xy[1], 0);
 };
