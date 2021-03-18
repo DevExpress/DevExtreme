@@ -863,7 +863,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                             groupByDate,
                             groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
                             allowMultipleCellSelection: true,
-                            scrolling: { mode: scrollingMode, orientation: 'both' },
+                            scrolling: { mode: scrollingMode, orientation: 'vertical' },
                         });
 
                         const $element = this.instance.$element();
