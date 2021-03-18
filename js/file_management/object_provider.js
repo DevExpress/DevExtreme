@@ -11,7 +11,7 @@ import Errors from '../ui/widget/ui.errors';
 import JSZip from 'jszip';
 
 import FileSystemProviderBase from './provider_base';
-import ErrorCode from './errors';
+import ErrorCode from './file_system_error_code';
 import { pathCombine } from './utils';
 
 const window = getWindow();

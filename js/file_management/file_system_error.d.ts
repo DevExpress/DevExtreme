@@ -2,13 +2,14 @@ import FileSystemItem from "./file_system_item";
 
 /**
  * @docid
- * @module file_management/file_system_error
+ * @module file_management/error
  * @namespace DevExpress.fileManagement
  * @export default
  * @prevFileNamespace DevExpress.fileManagement
  * @public
  */
- export default interface FileSystemError {
+ export default class FileSystemError {
+   constructor(errorCode?: Enums.FileManagementFileSystemErrorCode|number, fileSystemItem?: FileSystemItem, errorText?: string)
     /**
      * @docid
      * @prevFileNamespace DevExpress.fileManagement
@@ -27,6 +28,7 @@ import FileSystemItem from "./file_system_item";
     /**
      * @docid
      * @prevFileNamespace DevExpress.fileManagement
+     * @default ""
      * @public
      */
      errorText?: string;

@@ -3,7 +3,7 @@ import FileSystemItem from '../../file_management/file_system_item';
 import ObjectFileSystemProvider from '../../file_management/object_provider';
 import RemoteFileSystemProvider from '../../file_management/remote_provider';
 import CustomFileSystemProvider from '../../file_management/custom_provider';
-import ErrorCode from '../../file_management/errors';
+import ErrorCode from '../../file_management/file_system_error_code';
 import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from '../../file_management/utils';
 import { whenSome } from './ui.file_manager.common';
 
