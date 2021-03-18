@@ -7981,7 +7981,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         assert.deepEqual(this.dataController.items()[0].data, { name: 'Alex', phone: '55-55-55' });
     });
 
-    QUnit.test('Cancel Inserting Row after change page', function(assert) {
+    QUnit.test('Don\'t cancel Inserting Row after change page', function(assert) {
         const array = [
             { name: 'Alex', phone: '55-55-55' },
             { name: 'Dan', phone: '98-75-21' },
@@ -7998,7 +7998,9 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         this.dataController.pageIndex(1);
 
         // assert
-        assert.ok(!this.editingController.isEditing());
+        assert.ok(this.editingController.isEditing());
+        assert.equal(this.option('editing.changes').length, 1, 'editing changes are not reset');
+        assert.ok(this.option('editing.editRowKey'), 'editRowKey is not reset');
         assert.equal(this.dataController.items().length, 1);
 
         assert.deepEqual(this.dataController.items()[0].data, array[2]);

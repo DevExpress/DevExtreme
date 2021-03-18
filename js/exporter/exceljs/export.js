@@ -47,6 +47,22 @@ export const Export = {
         excelCell.numFmt = numberFormat;
     },
 
+    getCellStyles: function(dataProvider) {
+        const styles = dataProvider.getStyles();
+
+        styles.forEach((style) => {
+            let numberFormat = this.tryConvertToExcelNumberFormat(style.format, style.dataType);
+
+            if(isDefined(numberFormat)) {
+                numberFormat = numberFormat.replace(/&quot;/g, '"');
+            }
+
+            style.numberFormat = numberFormat;
+        });
+
+        return styles;
+    },
+
     tryConvertToExcelNumberFormat: function(format, dataType) {
         const newFormat = ExportFormat.formatObjectConverter(format, dataType);
         const currency = newFormat.currency;
@@ -182,12 +198,13 @@ export const Export = {
 
                 const mergedCells = [];
                 const mergeRanges = [];
+                const styles = this.getCellStyles(dataProvider);
 
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
                     this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount,
-                        mergedCells, mergeRanges, mergeRowFieldValues, mergeColumnFieldValues, wrapText, privateOptions);
+                        mergedCells, mergeRanges, mergeRowFieldValues, mergeColumnFieldValues, wrapText, styles, privateOptions);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
@@ -223,8 +240,7 @@ export const Export = {
     },
 
     exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges,
-        mergeRowFieldValues, mergeColumnFieldValues, wrapText, privateOptions) {
-        const styles = dataProvider.getStyles();
+        mergeRowFieldValues, mergeColumnFieldValues, wrapText, styles, privateOptions) {
         privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
 
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
@@ -240,16 +256,14 @@ export const Export = {
             }
 
             if(isDefined(excelCell.value)) {
-                const { bold, alignment: horizontalAlignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+                const { bold, alignment: horizontalAlignment, numberFormat } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
-                let numberFormat = this.tryConvertToExcelNumberFormat(format, dataType);
                 if(isDefined(numberFormat)) {
-                    numberFormat = numberFormat.replace(/&quot;/g, '"');
+                    this.setNumberFormat(excelCell, numberFormat);
                 } else if(isString(excelCell.value) && /^[@=+-]/.test(excelCell.value)) {
-                    numberFormat = '@';
+                    this.setNumberFormat(excelCell, '@');
                 }
 
-                this.setNumberFormat(excelCell, numberFormat);
                 privateOptions._trySetFont(excelCell, bold);
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }

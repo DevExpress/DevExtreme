@@ -10726,11 +10726,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxScrollable.scrollBy(distance)]
          */
-        scrollBy(distance: number): void;
-        /**
-         * [descr:dxScrollable.scrollBy(distanceObject)]
-         */
-        scrollBy(distanceObject: any): void;
+        scrollBy(distance: number | any): void;
         /**
          * [descr:dxScrollable.scrollHeight()]
          */
@@ -10746,13 +10742,9 @@ declare module DevExpress.ui {
         /**
          * [descr:dxScrollable.scrollTo(targetLocation)]
          */
-        scrollTo(targetLocation: number): void;
+        scrollTo(targetLocation: number | any): void;
         /**
-         * [descr:dxScrollable.scrollTo(targetLocationObject)]
-         */
-        scrollTo(targetLocation: any): void;
-        /**
-         * [descr:dxScrollable.scrollToElement(targetLocation)]
+         * [descr:dxScrollable.scrollToElement(element)]
          */
         scrollToElement(element: Element | JQuery): void;
         /**

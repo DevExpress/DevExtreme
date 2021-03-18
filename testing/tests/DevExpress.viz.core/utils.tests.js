@@ -365,7 +365,7 @@ QUnit.test('Normalize pane weight (percentages)', function(assert) {
     assert.deepEqual(simple, [{
         name: 'perc',
         height: 0.6,
-        unit: 0
+        unit: 2
     }, {
         name: 'pane',
         height: 0.4,
@@ -378,11 +378,11 @@ QUnit.test('Normalize pane weight (percentages)', function(assert) {
     assert.deepEqual(overWeight, [{
         name: 'perc',
         height: 0.3,
-        unit: 0
+        unit: 2
     }, {
         name: 'over',
         height: 0.7,
-        unit: 0
+        unit: 2
     }], 'Overweight of pane height');
 });
 

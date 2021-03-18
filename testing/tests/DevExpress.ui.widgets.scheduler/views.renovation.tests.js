@@ -57,4 +57,47 @@ module('Renovated Views', () => {
             assert.equal(shader.length, 1, 'Shader is updated');
         });
     });
+
+    [true, false].forEach((renovateRender) => {
+        test(`Scrolling mode should be changed corrctly when renovateRender is ${renovateRender}`, function(assert) {
+            const scheduler = createWrapper({
+                height: 400,
+                scrolling: { mode: 'standard' },
+                renovateRender,
+            });
+
+            let virtualCells = scheduler.workSpace.getVirtualCells();
+
+            assert.ok(!virtualCells.length, 'There are no virtual cells');
+
+            scheduler.instance.option('scrolling.mode', 'virtual');
+
+            virtualCells = scheduler.workSpace.getVirtualCells();
+
+            assert.ok(!!virtualCells.length, 'There are virtual cells present');
+        });
+    });
+
+    test('Virtual scrolling should be applied when renovated render is used', function(assert) {
+        const scheduler = createWrapper({
+            views: [{
+                type: 'week',
+                intervalCount: 5,
+            }],
+            currentView: 'week',
+            width: 500,
+            height: 500,
+            renovateRender: true,
+        });
+
+        let virtualCells = scheduler.workSpace.getVirtualCells();
+
+        assert.equal(virtualCells.length, 0, 'There are no virtual cells');
+
+        scheduler.instance.option('scrolling', { mode: 'virtual', orientation: 'both' });
+
+        virtualCells = scheduler.workSpace.getVirtualCells();
+
+        assert.ok(virtualCells.length > 0, 'Virtual cells have been rendered');
+    });
 });

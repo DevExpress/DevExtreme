@@ -41,6 +41,7 @@ export const CLASSES = {
     headerPanelCurrentTimeCell: '.dx-scheduler-header-panel-current-time-cell',
     selectedCell: '.dx-state-focused',
     focusedCell: '.dx-scheduler-focused-cell',
+    virtualCell: '.dx-scheduler-virtual-cell',
 
     verticalGroupPanel: '.dx-scheduler-work-space-vertical-group-table',
 
@@ -581,6 +582,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getAllDayCells: () => $('.dx-scheduler-all-day-table-cell'),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
             getTimePanelCells: () => $(CLASSES.timePanelCell),
+            getVirtualCells: () => $(CLASSES.virtualCell),
             getOrdinaryHeaderPanelCells: () => $(`${CLASSES.headerPanelCell}:not(${CLASSES.weekHeaderPanelCell})`),
             getTimePanelCurrentTimeCells: () => $(CLASSES.currentTimeCell),
             getHeaderPanelCurrentTimeCells: () => $(CLASSES.headerPanelCurrentTimeCell),
