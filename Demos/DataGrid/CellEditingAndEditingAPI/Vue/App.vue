@@ -12,7 +12,6 @@
       :data-source="dataSource"
       :show-borders="true"
       :selected-row-keys="selectedItemKeys"
-      key-expr="ID"
       @selection-changed="selectionChanged"
     >
       <DxEditing

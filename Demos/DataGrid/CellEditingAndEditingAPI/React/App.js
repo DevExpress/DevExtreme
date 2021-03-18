@@ -42,7 +42,6 @@ class App extends React.Component {
 
         <DataGrid id="gridContainer"
           dataSource={dataSource}
-          keyExpr="ID"
           showBorders={true}
           selectedRowKeys={this.state.selectedItemKeys}
           onSelectionChanged={this.selectionChanged}
