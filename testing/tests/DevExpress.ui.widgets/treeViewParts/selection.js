@@ -170,6 +170,22 @@ module('selection common', () => {
             assert.step('Test completed');
         }
     });
+
+    ['multiple', 'single'].forEach((selectionMode) => {
+        test(`Select hidden node. SelectionMode: ${selectionMode} (T982103)`, function(assert) {
+            const wrapper = createInstance({
+                selectionMode,
+                items: [
+                    { id: 1, text: 'item1', selected: true },
+                    { id: 2, text: 'item2', visible: false }
+                ]
+            });
+
+            const result = wrapper.instance.selectItem(2);
+            assert.equal(result, false, 'result is correct');
+            wrapper.checkSelectedKeys([1], 'item1 is selected');
+        });
+    });
 });
 
 module('Selection mode', () => {
