@@ -31,7 +31,7 @@ test('Full size pager', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
   await t
-    .resizeWindow(650, 600)
+    .resizeWindow(750, 600)
     .expect(pager.getPageSize(0).selected)
     .ok('page size 5 selected')
     .expect(pager.getNavPage('6').selected)
