@@ -1,4 +1,4 @@
-name: Renovation
+name: QUnit tests
 
 on: [push, pull_request]
 
