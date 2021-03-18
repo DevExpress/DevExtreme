@@ -461,7 +461,7 @@ const DropDownEditor = TextBox.inherit({
             const { value } = inputElement;
             const caretPosition = isDefined(value) && (ignoreEditable || this._isEditable()) ? value.length : 0;
 
-            this._caret({ start: caretPosition, end: caretPosition });
+            this._caret({ start: caretPosition, end: caretPosition }, true);
         }
     },
 
