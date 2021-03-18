@@ -90,19 +90,19 @@ test('Resize', async (t) => {
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
-    .resizeWindow(650, 600)
+    .resizeWindow(700, 600)
     .expect(await takeScreenshot('pager-resize-large.png', pagerElement))
     .ok()
-    .resizeWindow(590, 600)
+    .resizeWindow(600, 600)
     .expect(await takeScreenshot('pager-resize-large-noinfo.png', pagerElement))
     .ok()
     .resizeWindow(350, 600)
     .expect(await takeScreenshot('pager-resize-small.png', pagerElement))
     .ok()
-    .resizeWindow(590, 600)
+    .resizeWindow(600, 600)
     .expect(await takeScreenshot('pager-resize-large-noinfo-enlarge.png', pagerElement))
     .ok()
-    .resizeWindow(650, 600)
+    .resizeWindow(700, 600)
     .expect(await takeScreenshot('pager-resize-large-enlarge.png', pagerElement))
     .ok()
     .expect(compareResults.isValid())
