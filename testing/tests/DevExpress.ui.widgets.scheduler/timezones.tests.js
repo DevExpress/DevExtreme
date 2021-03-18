@@ -912,9 +912,9 @@ module('Scheduler grid', moduleConfig, () => {
         return schedulerTz * 3600000 + defaultTz;
     };
 
-    if(isDesktopEnvironment()) {
-        test('Local DST shouldn\'t effect on for the set timezone', function(assert) {
-            // TODO Los Angeles and Sydney timezones have local DST
+    // TODO Los Angeles and Sydney timezones have local DST in test environment
+    isDesktopEnvironment() && module('Local DST shouldn\'t effect on for the set timezone', () => {
+        test('', function(assert) {
             const etalonDateText = '12:30 PM - 2:00 PM';
 
             const scheduler = createWrapper({
@@ -958,7 +958,7 @@ module('Scheduler grid', moduleConfig, () => {
 
             assert.expect(31);
         });
-    }
+    });
 
     [
         {
