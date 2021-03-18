@@ -971,6 +971,17 @@ module('View Data Provider', {
                         verticalGroupCount: 1,
                         horizontalGroupCount: 2,
                         getDateHeaderText: (index) => index,
+                        getDateHeaderDate: (index) => {
+                            const date = new Date(baseStartDate);
+                            date.setDate(10 + index);
+
+                            return date;
+                        },
+                        getTimeCellDate: () => {
+                            const date = new Date(baseStartDate);
+
+                            return date;
+                        },
                         today: baseStartDate,
                         groupByDate: false,
                         isHorizontalGrouping: true,
@@ -1181,7 +1192,6 @@ module('View Data Provider', {
                 const expectedDateHeaderMap = [[{
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1193,7 +1203,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11),
-                    endDate: new Date(2021, 0, 11, 2),
                     groupIndex: 1,
                     groups: { groupId: 1 },
                     index: 1,
@@ -1205,7 +1214,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
@@ -1217,7 +1225,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11),
-                    endDate: new Date(2021, 0, 11, 2),
                     groupIndex: 1,
                     groups: { groupId: 2, },
                     index: 1,
@@ -1249,7 +1256,6 @@ module('View Data Provider', {
                 const expectedDateHeaderMap = [[{
                     colSpan: 2,
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1260,8 +1266,7 @@ module('View Data Provider', {
                     today: true,
                 }, {
                     colSpan: 2,
-                    startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
+                    startDate: new Date(2021, 0, 11),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
@@ -1319,7 +1324,6 @@ module('View Data Provider', {
                 }], [{
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
                     groups: { groupId: 1 },
                     index: 0,
@@ -1331,7 +1335,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11),
-                    endDate: new Date(2021, 0, 11, 2),
                     groupIndex: 1,
                     groups: { groupId: 1 },
                     index: 1,
@@ -1343,7 +1346,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 10),
-                    endDate: new Date(2021, 0, 10, 2),
                     groupIndex: 1,
                     groups: { groupId: 2 },
                     index: 0,
@@ -1355,7 +1357,6 @@ module('View Data Provider', {
                 }, {
                     colSpan: 1,
                     startDate: new Date(2021, 0, 11),
-                    endDate: new Date(2021, 0, 11, 2),
                     groupIndex: 1,
                     groups: { groupId: 2, },
                     index: 1,
@@ -1393,6 +1394,7 @@ module('View Data Provider', {
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 0,
+                    allDay: undefined,
                 }, {
                     startDate: new Date(2021, 0, 10),
                     endDate: new Date(2021, 0, 10, 2),
@@ -1402,6 +1404,7 @@ module('View Data Provider', {
                     isFirstGroupCell: true,
                     isLastGroupCell: false,
                     key: 4,
+                    allDay: undefined,
                 }];
 
                 const completeTimePanelMap = viewDataProvider.completeTimePanelMap;
