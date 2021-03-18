@@ -1,5 +1,5 @@
 const defaultDropDownOptions = {
-    accessKey: null,
+    accessKey: undefined,
     animation: {
         hide: {
             duration: 400,

@@ -861,7 +861,7 @@ describe('Widget', () => {
       const defaultProps = new WidgetProps();
 
       expect(defaultProps).toEqual({
-        accessKey: null,
+        accessKey: undefined,
         activeStateEnabled: false,
         disabled: false,
         focusStateEnabled: false,
