@@ -83,7 +83,7 @@ export const Export = {
         }
     },
 
-    tryGetMergeRange: function(rowIndex, cellIndex, mergedCells, dataProvider) {
+    tryGetMergeRange: function(rowIndex, cellIndex, mergedCells, mergeRowFieldValues, mergeColumnFieldValues, dataProvider, privateOptions) {
         if(!mergedCells[rowIndex] || !mergedCells[rowIndex][cellIndex]) {
             const cellMerge = dataProvider.getCellMerging(rowIndex, cellIndex);
             if(cellMerge.colspan || cellMerge.rowspan) {
@@ -95,9 +95,11 @@ export const Export = {
                         mergedCells[i][j] = true;
                     }
                 }
+
                 return {
                     start: { row: rowIndex, column: cellIndex },
-                    end: { row: rowIndex + (cellMerge.rowspan || 0), column: cellIndex + (cellMerge.colspan || 0) }
+                    end: { row: rowIndex + (cellMerge.rowspan || 0), column: cellIndex + (cellMerge.colspan || 0) },
+                    merged: privateOptions._isRangeMerged(dataProvider, rowIndex, cellIndex, mergeRowFieldValues, mergeColumnFieldValues, cellMerge.rowspan, cellMerge.colspan)
                 };
             }
         }
@@ -105,7 +107,22 @@ export const Export = {
 
     mergeCells: function(worksheet, topLeftCell, mergeRanges) {
         mergeRanges.forEach((mergeRange) => {
-            worksheet.mergeCells(mergeRange.start.row + topLeftCell.row, mergeRange.start.column + topLeftCell.column, mergeRange.end.row + topLeftCell.row, mergeRange.end.column + topLeftCell.column);
+            const startRow = mergeRange.start.row + topLeftCell.row;
+            const startColumn = mergeRange.start.column + topLeftCell.column;
+            const endRow = mergeRange.end.row + topLeftCell.row;
+            const endColumn = mergeRange.end.column + topLeftCell.column;
+
+            if(mergeRange.merged) {
+                worksheet.mergeCells(startRow, startColumn, endRow, endColumn);
+            } else {
+                const copiedValue = worksheet.getCell(startRow, startColumn).value;
+
+                for(let i = startRow; i <= endRow; i++) {
+                    for(let j = startColumn; j <= endColumn; j++) {
+                        worksheet.getCell(i, j).value = copiedValue;
+                    }
+                }
+            }
         });
     },
 
@@ -127,7 +144,9 @@ export const Export = {
             autoFilterEnabled,
             keepColumnWidths,
             selectedRowsOnly,
-            loadPanel
+            loadPanel,
+            mergeRowFieldValues,
+            mergeColumnFieldValues,
         } = options;
 
         const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
@@ -167,7 +186,8 @@ export const Export = {
                 for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                     const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, privateOptions);
+                    this.exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount,
+                        mergedCells, mergeRanges, mergeRowFieldValues, mergeColumnFieldValues, wrapText, privateOptions);
 
                     if(rowIndex >= 1) {
                         cellRange.to.row++;
@@ -202,7 +222,8 @@ export const Export = {
         });
     },
 
-    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, privateOptions) {
+    exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges,
+        mergeRowFieldValues, mergeColumnFieldValues, wrapText, privateOptions) {
         const styles = dataProvider.getStyles();
         privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
 
@@ -238,7 +259,8 @@ export const Export = {
             }
 
             if(privateOptions._needMergeRange(rowIndex, headerRowCount)) {
-                const mergeRange = this.tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
+                const mergeRange = this.tryGetMergeRange(rowIndex, cellIndex, mergedCells, mergeRowFieldValues, mergeColumnFieldValues, dataProvider, privateOptions);
+
                 if(isDefined(mergeRange)) {
                     mergeRanges.push(mergeRange);
                 }

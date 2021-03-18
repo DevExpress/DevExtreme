@@ -217,9 +217,7 @@ export const DataProvider = Class.inherit({
     },
 
     getFrozenArea: function() {
-        const items = this._options.items;
-
-        return { x: items[0][0].colspan, y: items[0][0].rowspan };
+        return { x: this.getRowAreaSize(), y: this.getColumnAreaSize() };
     },
 
     getCellType: function(rowIndex, cellIndex) {
@@ -234,7 +232,7 @@ export const DataProvider = Class.inherit({
 
         if(isExcelJS) {
             result.cellSourceData = item;
-            const areaName = this._tryGetAreaName(items, item, rowIndex, cellIndex);
+            const areaName = this._tryGetAreaName(item, rowIndex, cellIndex);
             if(areaName) {
                 result.cellSourceData.area = areaName;
             }
@@ -255,17 +253,30 @@ export const DataProvider = Class.inherit({
         return result;
     },
 
-    _tryGetAreaName(items, item, rowIndex, cellIndex) {
-        const columnHeaderSize = items[0][0].rowspan;
-        const rowHeaderSize = items[0][0].colspan;
-
-        if(cellIndex >= rowHeaderSize && rowIndex < columnHeaderSize) {
+    _tryGetAreaName(item, rowIndex, cellIndex) {
+        if(this.isColumnAreaCell(rowIndex, cellIndex)) {
             return 'column';
-        } else if(rowIndex >= columnHeaderSize && cellIndex < rowHeaderSize) {
+        } else if(this.isRowAreaCell(rowIndex, cellIndex)) {
             return 'row';
         } else if(isDefined(item.dataIndex)) {
             return 'data';
         }
+    },
+
+    isRowAreaCell(rowIndex, cellIndex) {
+        return rowIndex >= this.getColumnAreaSize() && cellIndex < this.getRowAreaSize();
+    },
+
+    isColumnAreaCell(rowIndex, cellIndex) {
+        return cellIndex >= this.getRowAreaSize() && rowIndex < this.getColumnAreaSize();
+    },
+
+    getColumnAreaSize() {
+        return this._options.items[0][0].rowspan;
+    },
+
+    getRowAreaSize() {
+        return this._options.items[0][0].colspan;
     },
 
     getStyles: function() {
@@ -274,15 +285,13 @@ export const DataProvider = Class.inherit({
 
     getStyleId: function(rowIndex, cellIndex) {
         const items = this._options.items;
-        const columnHeaderSize = items[0][0].rowspan;
-        const rowHeaderSize = items[0][0].colspan;
         const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
         if(cellIndex === 0 && rowIndex === 0) {
             return COLUMN_HEADER_STYLE_ID;
-        } else if(cellIndex >= rowHeaderSize && rowIndex < columnHeaderSize) {
+        } else if(this.isColumnAreaCell(rowIndex, cellIndex)) {
             return COLUMN_HEADER_STYLE_ID;
-        } else if(rowIndex >= columnHeaderSize && cellIndex < rowHeaderSize) {
+        } else if(this.isRowAreaCell(rowIndex, cellIndex)) {
             return ROW_HEADER_STYLE_ID;
         }
 

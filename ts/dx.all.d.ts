@@ -2677,6 +2677,14 @@ declare module DevExpress.excelExporter {
          * [descr:ExcelExportPivotGridProps.customizeCell]
          */
         customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
+        /**
+         * [descr:ExcelExportPivotGridProps.mergeColumnFieldValues]
+         */
+        mergeColumnFieldValues?: boolean;
+        /**
+         * [descr:ExcelExportPivotGridProps.mergeRowFieldValues]
+         */
+        mergeRowFieldValues?: boolean;
     }
     /**
      * [descr:ExcelPivotGridCell]
