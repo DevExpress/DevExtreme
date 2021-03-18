@@ -12,7 +12,7 @@ import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 
-import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
 
 const createInstance = function(options) {
     const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
@@ -23,10 +23,10 @@ import translator from 'animation/translator';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
-import dragEvents from 'events/drag';
 import { DataSource } from 'data/data_source/data_source';
 import dataUtils from 'core/element_data';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
+
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
@@ -1077,90 +1077,67 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointments.eq(0).outerHeight(), 100, 2, 'correct size of appointment');
     });
 
-    QUnit.test('Appointment should be dragged correctly between the groups in vertical grouped workspace Day', function(assert) {
-        this.createInstance({
-            dataSource: [{
-                text: 'a',
-                startDate: new Date(2018, 2, 1, 12),
-                endDate: new Date(2018, 2, 1, 12, 30),
-                id: 1
-            }],
-            currentDate: new Date(2018, 2, 1),
-            views: [{
-                type: 'day',
-                groupOrientation: 'vertical'
-            }],
-            editing: true,
-            currentView: 'day',
-            groups: ['id'],
-            resources: [
-                {
-                    field: 'id',
-                    dataSource: [
-                        { id: 1, text: 'one' },
-                        { id: 2, text: 'two' }
-                    ]
-                }
-            ],
-            startDayHour: 12,
-            endDayHour: 16,
-            showAllDayPanel: false
+    [{
+        dataSource: [{
+            text: 'a',
+            startDate: new Date(2018, 2, 1, 12),
+            endDate: new Date(2018, 2, 1, 12, 30),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 1),
+        view: 'day',
+        cellNumber: 10,
+        result: {
+            startDate: new Date(2018, 2, 1, 13),
+            endDate: new Date(2018, 2, 1, 13, 30)
+        }
+    }, {
+        dataSource: [{
+            text: 'a',
+            startDate: new Date(2018, 2, 16, 12),
+            endDate: new Date(2018, 2, 16, 12, 30),
+            id: 1
+        }],
+        currentDate: new Date(2018, 2, 16),
+        view: 'week',
+        cellNumber: 75,
+        result: {
+            startDate: new Date(2018, 2, 16, 13),
+            endDate: new Date(2018, 2, 16, 13, 30)
+        }
+    }].forEach(config => {
+        QUnit.test(`Appointment should be dragged correctly between the groups in vertical grouped workspace ${config.view}`, function(assert) {
+            const scheduler = createWrapper({
+                dataSource: config.dataSource,
+                currentDate: config.currentDate,
+                views: [{
+                    type: config.view,
+                    groupOrientation: 'vertical'
+                }],
+                editing: true,
+                currentView: config.view,
+                groups: ['id'],
+                resources: [
+                    {
+                        field: 'id',
+                        dataSource: [
+                            { id: 1, text: 'one' },
+                            { id: 2, text: 'two' }
+                        ]
+                    }
+                ],
+                startDayHour: 12,
+                endDayHour: 16,
+                showAllDayPanel: false
+            });
+
+            scheduler.appointmentList[0].drag.toCell(config.cellNumber);
+            const appointmentData = dataUtils.data(scheduler.appointmentList[0].getElement().get(0), 'dxItemData');
+
+            assert.deepEqual(appointmentData.startDate, config.result.startDate, 'Start date is correct');
+            assert.deepEqual(appointmentData.endDate, config.result.endDate, 'End date is correct');
+            assert.deepEqual(appointmentData.id, 2, 'Group is OK');
         });
-
-        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-
-        $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(10).trigger(dragEvents.enter);
-        pointerMock($appointment).start().down().move(10, 10).up();
-
-        this.clock.tick();
-        const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
-
-        assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 1, 13), 'Start date is correct');
-        assert.deepEqual(appointmentData.endDate, new Date(2018, 2, 1, 13, 30), 'End date is correct');
-        assert.deepEqual(appointmentData.id, 2, 'Group is OK');
-    });
-
-    QUnit.test('Appointment should be dragged correctly between the groups in vertical grouped workspace Week', function(assert) {
-        this.createInstance({
-            dataSource: [{
-                text: 'a',
-                startDate: new Date(2018, 2, 16, 12),
-                endDate: new Date(2018, 2, 16, 12, 30),
-                id: 1
-            }],
-            currentDate: new Date(2018, 2, 16),
-            views: [{
-                type: 'week',
-                groupOrientation: 'vertical'
-            }],
-            editing: true,
-            currentView: 'week',
-            groups: ['id'],
-            resources: [
-                {
-                    field: 'id',
-                    dataSource: [
-                        { id: 1, text: 'one' },
-                        { id: 2, text: 'two' }
-                    ]
-                }
-            ],
-            startDayHour: 12,
-            endDayHour: 16,
-            showAllDayPanel: false
-        });
-
-        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-
-        $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(75).trigger(dragEvents.enter);
-        pointerMock($appointment).start().down().move(10, 10).up();
-
-        this.clock.tick();
-        const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
-
-        assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 16, 13), 'Start date is correct');
-        assert.deepEqual(appointmentData.endDate, new Date(2018, 2, 16, 13, 30), 'End date is correct');
-        assert.deepEqual(appointmentData.id, 2, 'Group is OK');
     });
 
     QUnit.test('Hourly recurring appt should be rendred in vertical grouped workspace Day', function(assert) {

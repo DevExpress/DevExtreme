@@ -408,7 +408,7 @@ QUnit.test('WorkSpace should have a correct \'endDayHour\' option', function(ass
     assert.equal(workSpace.option('endDayHour'), 12, 'End day hour is OK if option is changed');
 });
 
-QUnit.test('drop and dragenter handlers should be different for date table and allDay table, T245137', function(assert) {
+QUnit.skip('drop and dragenter handlers should be different for date table and allDay table, T245137', function(assert) {
     const log = {};
 
     log[dragEvents.drop] = {};
@@ -441,7 +441,7 @@ QUnit.test('drop and dragenter handlers should be different for date table and a
     eventsEngine.on.restore();
 });
 
-QUnit.test('event handlers should be reattached after changing allDayExpanded', function(assert) {
+QUnit.skip('event handlers should be reattached after changing allDayExpanded', function(assert) {
     const onSpy = sinon.spy(eventsEngine, 'on').withArgs(sinon.match(function(element) {
         return $(element).hasClass('dx-scheduler-work-space');
     }), sinon.match(function(eventName) {

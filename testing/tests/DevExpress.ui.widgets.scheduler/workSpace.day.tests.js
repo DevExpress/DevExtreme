@@ -13,6 +13,7 @@ const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 
 const {
     test,
+    skip,
     module,
     testStart
 } = QUnit;
@@ -197,14 +198,14 @@ module('Work Space Day', {
         }, 'Data is OK');
     });
 
-    test('droppable class should be added on dxdragenter', function(assert) {
+    skip('droppable class should be added on dxdragenter', function(assert) {
         const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(2);
 
         $($cell).trigger(dragEvents.enter);
         assert.ok($cell.hasClass(DROPPABLE_CELL_CLASS), 'cell has droppable class');
     });
 
-    test('droppable class should be removed on dxdrop', function(assert) {
+    skip('droppable class should be removed on dxdrop', function(assert) {
         const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(2);
         $cell.addClass(DROPPABLE_CELL_CLASS);
 
