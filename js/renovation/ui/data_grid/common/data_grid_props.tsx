@@ -1302,7 +1302,8 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @OneWay() wordWrapEnabled?: boolean;
 
-  @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) | null = null;
+  // TODO Vitik: Default should be null, but declaration doesnt support it
+  @TwoWay() filterValue?: string | any[] | ((...args: any[]) => any) = [];
 
   @TwoWay() focusedColumnIndex = -1;
 
