@@ -40,7 +40,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
     onShown?: ((e: { component?: dxDeferRendering, element?: TElement, model?: any }) => any);
     /**
      * @docid
-     * @type Promise<void> | bool
+     * @type Promise<void>|bool
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

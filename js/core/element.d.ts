@@ -3,7 +3,8 @@ import { dxElementWrapper } from '../core/renderer';
 export interface ElementWrapper<T extends Element> { }
 /**
  * @docid
- * @prevFileNamespace DevExpress.events
+ * @type dxElement|dxSVGElement
+ * @prevFileNamespace DevExpress.core
  */
 export type TElement<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? T : ElementWrapper<T>
 export type TElementWrapper<T extends Element = HTMLElement> = {} extends ElementWrapper<T> ? dxElementWrapper : ElementWrapper<T>
@@ -14,7 +15,7 @@ export type TElementsArray<T extends Element = HTMLElement> = {} extends Element
 /**
  * @docid
  * @hidden
- * @type TElement
+ * @type HTMLElement|JQuery
  * @prevFileNamespace DevExpress.core
  * @deprecated TElement
  */
@@ -23,7 +24,7 @@ export type dxElement = TElement<HTMLElement>;
 /**
  * @docid
  * @hidden
- * @type TElement
+ * @type SVGElement|JQuery
  * @prevFileNamespace DevExpress.core
  * @deprecated TElement
  */
