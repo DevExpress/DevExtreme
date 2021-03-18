@@ -4,7 +4,9 @@ import Scrollable from 'ui/scroll_view/ui.scrollable';
 import {
     SCROLLABLE_CONTENT_CLASS,
     SCROLLABLE_CONTAINER_CLASS,
-    SCROLLABLE_SCROLLBAR_CLASS
+    SCROLLABLE_SCROLLBAR_CLASS,
+    SCROLLBAR_HORIZONTAL_CLASS,
+    SCROLLBAR_VERTICAL_CLASS,
 } from './scrollableParts/scrollable.constants.js';
 import { extend } from 'core/utils/extend';
 
@@ -124,20 +126,25 @@ QUnit.module('Nested scrollable styles', () => {
             new Scrollable(outerScrollableElement, extend(options, { width: 200, height: 200, direction: config.outerDirection, useNative: config.outerUseNative }));
             new Scrollable(innerScrollableElement, extend(options, { width: 100, height: 100, direction: config.innerDirection, useNative: config.innerUseNative }));
 
-            const expectedNative = {
-                display: 'block'
-            };
-
             const expectedSimulated = {
                 display: config.showScrollbar === 'never' ? 'none' : 'block'
             };
 
             if(!config.outerUseNative) {
-                checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`),
-                    (config.outerUseNative ? expectedNative : expectedSimulated), 'outerScrollable');
+                if(config.outerDirection === 'both') {
+                    checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLBAR_HORIZONTAL_CLASS}`), expectedSimulated, 'outerScrollable');
+                    checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLBAR_VERTICAL_CLASS}`), expectedSimulated, 'outerScrollable');
+                } else {
+                    checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`), expectedSimulated, 'outerScrollable');
+                }
+
             } else if(!config.innerUseNative) {
-                checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`),
-                    (config.innerUseNative ? expectedNative : expectedSimulated), 'innerScrollable');
+                if(config.innerDirection === 'both') {
+                    checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLBAR_HORIZONTAL_CLASS}`), expectedSimulated, 'outerScrollable');
+                    checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLBAR_VERTICAL_CLASS}`), expectedSimulated, 'outerScrollable');
+                } else {
+                    checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`), expectedSimulated, 'innerScrollable');
+                }
             } else {
                 assert.ok(true);
             }
