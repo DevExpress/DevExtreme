@@ -2999,7 +2999,7 @@ QUnit.module('Editing with real dataController', {
 }, () => {
 
     // B254105
-    QUnit.test('Reset editing after refresh dataSource', function(assert) {
+    QUnit.test('Not reset editing after refresh dataSource', function(assert) {
         // arrange
         const that = this;
         this.rowsView.render($('#container'));
@@ -3013,7 +3013,7 @@ QUnit.module('Editing with real dataController', {
         that.dataController.refresh();
 
         // assert
-        assert.equal(that.editingController._getVisibleEditRowIndex(), -1);
+        assert.equal(that.editingController._getVisibleEditRowIndex(), 2);
     });
 
     // B254503
@@ -15681,7 +15681,13 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
         that.collapseRow(['Alex']);
 
         // assert
-        assert.strictEqual(that.editingController.getEditRowIndex(), -1, 'edit form was closed');
+        assert.strictEqual(that.editingController.getEditRowIndex(), 2, 'edit form was not closed');
+
+        const inputs = $('.dx-edit-row td input.dx-texteditor-input');
+        assert.equal(inputs[0].value, '16', 'first input value');
+        assert.equal(inputs[1].value, 'Skip', 'first input value');
+        assert.equal(inputs[2].value, '553355', 'first input value');
+        assert.equal(inputs[3].value, '2', 'first input value');
     });
 });
 

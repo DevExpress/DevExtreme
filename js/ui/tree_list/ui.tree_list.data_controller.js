@@ -84,17 +84,23 @@ export const DataController = dataControllerModule.controllers.data.inherit((fun
 
         changeRowExpand: function(key) {
             if(this._dataSource) {
-                const that = this;
                 const args = {
                     key: key
                 };
                 const isExpanded = this.isRowExpanded(key);
 
-                that.executeAction(isExpanded ? 'onRowCollapsing' : 'onRowExpanding', args);
+                this.executeAction(isExpanded ? 'onRowCollapsing' : 'onRowExpanding', args);
 
                 if(!args.cancel) {
-                    return that._dataSource.changeRowExpand(key).done(function() {
-                        that.executeAction(isExpanded ? 'onRowCollapsed' : 'onRowExpanded', args);
+                    const editingMode = this.option('editing.mode');
+                    if(editingMode === 'form' || editingMode === 'row') {
+                        this.option('editing.editRowKey', null);
+                        this.option('editing.editColumnName', null);
+                        this.option('editing.changes', []);
+                    }
+
+                    return this._dataSource.changeRowExpand(key).done(() => {
+                        this.executeAction(isExpanded ? 'onRowCollapsed' : 'onRowExpanded', args);
                     });
                 }
             }
