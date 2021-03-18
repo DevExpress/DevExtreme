@@ -2386,8 +2386,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const initialPosition = $appointment.position();
 
             assert.throws(function() {
-                $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
-                pointerMock($appointment).start().down().move(10, 10).up();
+                this.scheduler.appointmentList[0].drag.toCell(16);
             }, function(err) {
                 $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
                 const updatedPosition = $appointment.position();
@@ -2565,9 +2564,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 'priority': 1
             };
 
-            const pointer = pointerMock(this.scheduler.appointments.getAppointment(0)).start().down().move(-200, 5);
-            this.scheduler.workSpace.getCell(0).trigger(dragEvents.enter);
-            pointer.up();
+            this.scheduler.appointmentList[0].drag.toCell(0);
 
             const dataSourceItem = this.instance.option('dataSource').items()[0];
 
@@ -2614,10 +2611,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }]
             });
 
-            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-            $appointment.trigger(dragEvents.start);
-            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(8).trigger(dragEvents.enter);
-            $appointment.trigger(dragEvents.end);
+            this.scheduler.appointmentList[0].drag.toCell(8);
 
             this.clock.tick();
 
@@ -2737,9 +2731,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 allDay: false
             };
 
-            const pointer = pointerMock($(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0)).start().down().move(10, 10);
-            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(5).trigger(dragEvents.enter);
-            pointer.up();
+            this.scheduler.appointmentList[0].drag.toCell(5);
 
             const dataSourceItem = this.instance.option('dataSource').items()[0];
 
@@ -2788,9 +2780,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                         AllDay: false
                     };
 
-                    const pointer = pointerMock($(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0)).start().down().move(10, 10);
-                    $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(5).trigger(dragEvents.enter);
-                    pointer.up();
+                    this.scheduler.appointmentList[0].drag.toCell(5);
 
                     this.clock.tick();
 
@@ -2836,11 +2826,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ],
                 width: 800
             });
-            const $appointment = $(this.instance.$element().find('.' + APPOINTMENT_CLASS)).eq(0);
 
-            const pointer = pointerMock($appointment).start().down().move(10, 10);
-            $(this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
-            pointer.up();
+            this.scheduler.appointmentList[0].drag.toCell(7);
 
             this.clock.tick();
             const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
@@ -3004,13 +2991,13 @@ supportedScrollingModes.forEach(scrollingMode => {
                 onAppointmentUpdating: function(e) {
                     e.cancel = true;
                 },
-                width: 800
+                width: 800,
+                height: 2000,
             });
             const $appointment = this.scheduler.appointments.getAppointment(0);
             const oldAppointmentCoords = translator.locate($appointment);
-            $appointment.trigger(dragEvents.start);
-            this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
-            $appointment.trigger(dragEvents.end);
+
+            this.scheduler.appointmentList[0].drag.toCell(7);
 
             this.scheduler.appointmentForm.clickFormDialogButton(1);
 
@@ -3056,11 +3043,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             });
 
             const stub = sinon.stub(this.instance.option(), 'onAppointmentUpdating');
-            const $appointment = this.scheduler.appointments.getAppointment(0);
 
-            const pointer = pointerMock($appointment).start().down().move(10, 10);
-            this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
-            pointer.up();
+            this.scheduler.appointmentList[0].drag.toCell(7);
 
             const result = stub.getCall(0).args[0];
 
@@ -3082,10 +3066,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }]
             });
 
-            const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-            $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(1).trigger(dragEvents.enter);
-            $appointment.trigger(dragEvents.start);
-            $appointment.trigger(dragEvents.end);
+            this.scheduler.appointmentList[0].drag.toCell(1);
 
             this.clock.tick();
             const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
