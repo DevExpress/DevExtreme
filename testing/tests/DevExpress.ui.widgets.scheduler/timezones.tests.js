@@ -914,49 +914,61 @@ module('Scheduler grid', moduleConfig, () => {
 
     // TODO Los Angeles and Sydney timezones have local DST in test environment
     isDesktopEnvironment() && module('Local DST shouldn\'t effect on for the set timezone', () => {
-        test('', function(assert) {
-            const etalonDateText = '12:30 PM - 2:00 PM';
+        [{
+            timeZone: timeZones.Berlin,
+            text: 'has DST',
+            startDate: new Date('2021-02-24T11:30:00.000Z'),
+            endDate: new Date('2021-02-24T13:00:00.000Z'),
+        }, {
+            timeZone: timeZones.Moscow,
+            text: 'doesn\'t have DST',
+            startDate: new Date('2021-02-24T09:30:00.000Z'),
+            endDate: new Date('2021-02-24T11:00:00.000Z'),
+        }].forEach(({ timeZone, text, startDate, endDate }) => {
+            test(`scheduler timezone='${timeZone}' ${text}`, function(assert) {
+                const etalonDateText = '12:30 PM - 2:00 PM';
 
-            const scheduler = createWrapper({
-                timeZone: timeZones.Berlin,
-                dataSource: [{
-                    text: 'Website Re-Design Plan',
-                    startDate: new Date('2021-02-24T11:30:00.000Z'),
-                    endDate: new Date('2021-02-24T13:00:00.000Z'),
-                    recurrenceRule: 'FREQ=DAILY'
-                }],
-                views: ['week'],
-                currentView: 'week',
-                currentDate: new Date(2021, 2, 14),
-                firstDayOfWeek: 5,
-                startDayHour: 11,
-                height: 600
+                const scheduler = createWrapper({
+                    timeZone,
+                    dataSource: [{
+                        text: 'Website Re-Design Plan',
+                        startDate,
+                        endDate,
+                        recurrenceRule: 'FREQ=DAILY'
+                    }],
+                    views: ['week'],
+                    currentView: 'week',
+                    currentDate: new Date(2021, 2, 14),
+                    firstDayOfWeek: 5,
+                    startDayHour: 11,
+                    height: 600
+                });
+
+                scheduler.appointmentList.forEach(appointment => {
+                    assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
+                    appointment.click();
+
+                    assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
+                });
+
+                scheduler.header.navigator.nextButton.click();
+                assert.equal(scheduler.header.navigator.caption.getText(), '19-25 March 2021');
+
+                scheduler.header.navigator.nextButton.click();
+                assert.equal(scheduler.header.navigator.caption.getText(), '26 Mar-1 Apr 2021');
+
+                scheduler.header.navigator.nextButton.click();
+                assert.equal(scheduler.header.navigator.caption.getText(), '2-8 April 2021');
+
+                scheduler.appointmentList.forEach(appointment => {
+                    assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
+                    appointment.click();
+
+                    assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
+                });
+
+                assert.expect(31);
             });
-
-            scheduler.appointmentList.forEach(appointment => {
-                assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
-                appointment.click();
-
-                assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
-            });
-
-            scheduler.header.navigator.nextButton.click();
-            assert.equal(scheduler.header.navigator.caption.getText(), '19-25 March 2021');
-
-            scheduler.header.navigator.nextButton.click();
-            assert.equal(scheduler.header.navigator.caption.getText(), '26 Mar-1 Apr 2021');
-
-            scheduler.header.navigator.nextButton.click();
-            assert.equal(scheduler.header.navigator.caption.getText(), '2-8 April 2021');
-
-            scheduler.appointmentList.forEach(appointment => {
-                assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
-                appointment.click();
-
-                assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
-            });
-
-            assert.expect(31);
         });
     });
 
