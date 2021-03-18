@@ -249,8 +249,8 @@ describe('DxForm', () => {
         TestBed.overrideComponent(TestContainerComponent, {
             set: {
                 template: `
-                    <dx-form >
-                        <dxi-item *ngFor="let labelValue of labelValuesSecond">
+                    <dx-form [formData]="{}">
+                        <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
                             <dxo-label text="{{ labelValue.name }}"></dxo-label>
                         </dxi-item>
                     </dx-form>
@@ -275,11 +275,11 @@ describe('DxForm', () => {
         TestBed.overrideComponent(TestContainerComponent, {
             set: {
                 template: `
-                    <dx-form >
-                        <dxi-item *ngFor="let labelValue of labelValuesSecond">
+                    <dx-form [formData]="{}">
+                        <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
                             <dxo-label text="{{ labelValue.name }}"></dxo-label>
                         </dxi-item>
-                        <dxi-item>
+                        <dxi-item [dataField]="'labels[4]'">
                             <dxo-label text="label4" *ngIf="condition"></dxo-label>
                         </dxi-item>
                     </dx-form>
@@ -306,20 +306,20 @@ describe('DxForm', () => {
         TestBed.overrideComponent(TestContainerComponent, {
             set: {
                 template: `
-                    <dx-form>
+                    <dx-form [formData]="{}">
                         <dxi-item caption="First Group" itemType="group">
-                            <dxi-item *ngFor="let labelValue of labelValues">
+                            <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValues; let i = index">
                                 <dxo-label text="{{ labelValue.name }}"></dxo-label>
                             </dxi-item>
-                            <dxi-item>
+                            <dxi-item [dataField]="'labels[3]'">
                                 <dxo-label text="label3" *ngIf="condition"></dxo-label>
                             </dxi-item>
                         </dxi-item>
                         <dxi-item caption="Second Group" itemType="group">
-                            <dxi-item>
+                            <dxi-item [dataField]="'labels[0]'">
                                 <dxo-label text="label0" *ngIf="condition"></dxo-label>
                             </dxi-item>
-                            <dxi-item *ngFor="let labelValue of labelValuesSecond">
+                            <dxi-item [dataField]="'labels[' + i++ + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
                                 <dxo-label text="{{ labelValue.name }}"></dxo-label>
                             </dxi-item>
                         </dxi-item>
