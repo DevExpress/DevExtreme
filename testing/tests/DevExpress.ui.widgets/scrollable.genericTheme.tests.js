@@ -1,14 +1,24 @@
 import $ from 'jquery';
 
 import Scrollable from 'ui/scroll_view/ui.scrollable';
-import { SCROLLABLE_CONTENT_CLASS, SCROLLABLE_CONTAINER_CLASS } from './scrollableParts/scrollable.constants.js';
+import {
+    SCROLLABLE_CONTENT_CLASS,
+    SCROLLABLE_CONTAINER_CLASS,
+    SCROLLABLE_SCROLLBAR_CLASS,
+    SCROLLBAR_HORIZONTAL_CLASS,
+    SCROLLBAR_VERTICAL_CLASS,
+} from './scrollableParts/scrollable.constants.js';
 import { extend } from 'core/utils/extend';
 
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup = '<div id="outerScrollable">\
-        <div id="innerScrollable"></div>\
+        <div style="height: 400px; width: 400px;"></div>\
+            <div id="innerScrollable">\
+                <div style="height: 200px; width: 200px;"></div>\
+            </div>\
+        </div>\
     </div>';
 
     $('#qunit-fixture').html(markup);
@@ -29,8 +39,8 @@ QUnit.module('Paddings: simulated strategy', () => {
         ['vertical', 'horizontal', 'both'].forEach((direction) => {
             ['always', 'never', 'onHover', 'onScroll'].forEach((showScrollbar) => {
                 QUnit.test(`Outer scrollable.showScrollbar: 'always', innerScrollable.showScrollbar: '${showScrollbar}', direction: ${direction}, rtlEnabled: ${rtlEnabled}`, function(assert) {
-                    const $outerScrollable = $('#outerScrollable').dxScrollable({ direction: direction, showScrollbar: 'always', useNative: false, rtlEnabled: rtlEnabled });
-                    const $innerScrollable = $('#innerScrollable').dxScrollable({ direction: direction, showScrollbar: showScrollbar, useNative: false });
+                    const $outerScrollable = $('#outerScrollable').dxScrollable({ width: 200, height: 200, direction: direction, showScrollbar: 'always', useNative: false, rtlEnabled: rtlEnabled });
+                    const $innerScrollable = $('#innerScrollable').dxScrollable({ width: 100, height: 100, direction: direction, showScrollbar: showScrollbar, useNative: false });
 
                     const expectedHorizontalOuterScrollablePaddings = { bottom: '8px' };
                     const expectedHorizontalInnerScrollablePaddings = { bottom: showScrollbar === 'always' ? '8px' : '0px' };
@@ -55,46 +65,89 @@ QUnit.module('Paddings: simulated strategy', () => {
 
 
 // T872060
-QUnit.module('ScrollProps: native strategy', () => {
+QUnit.module('Nested scrollable styles', () => {
     const configs = [];
-    [false, true].forEach((rtlEnabled) => {
-        ['vertical', 'horizontal', 'both'].forEach((outerDirection) => {
-            ['vertical', 'horizontal', 'both'].forEach((innerDirection) => {
-                ['always', 'never', 'onHover', 'onScroll'].forEach((showScrollbar) => {
-                    const config = { rtlEnabled, outerDirection, innerDirection, showScrollbar };
-                    config.message = Object.keys(config).reduce((message, key) => message += `${key}: ${config[key]}, `, '');
-                    configs.push(config);
+    [false, true].forEach((outerUseNative) => {
+        [false, true].forEach((innerUseNative) => {
+            [false, true].forEach((rtlEnabled) => {
+                ['vertical', 'horizontal', 'both'].forEach((outerDirection) => {
+                    ['vertical', 'horizontal', 'both'].forEach((innerDirection) => {
+                        ['always', 'never', 'onHover', 'onScroll'].forEach((showScrollbar) => {
+                            const config = { rtlEnabled, outerDirection, innerDirection, showScrollbar, outerUseNative, innerUseNative };
+                            config.message = Object.keys(config).reduce((message, key) => message += `${key}: ${config[key]}, `, '');
+                            configs.push(config);
+                        });
+                    });
                 });
             });
         });
     });
 
-    function checkScrollProps(assert, scrollable, expected, message) {
-        const scrollableContainer = scrollable.querySelector(`.${SCROLLABLE_CONTAINER_CLASS}`);
-        const styles = window.getComputedStyle(scrollableContainer);
+    function checkElementStyles(element, expected, message) {
+        const styles = window.getComputedStyle(element);
 
-        assert.strictEqual(styles.touchAction, expected.touchAction, 'touch action ' + message);
-        assert.strictEqual(styles.overflowX, expected.overflowX, 'overflow X ' + message);
-        assert.strictEqual(styles.overflowY, expected.overflowY, 'overflow Y ' + message);
+        for(const propertyName in expected) {
+            QUnit.assert.strictEqual(styles[propertyName], expected[propertyName], `${propertyName} ` + message);
+        }
     }
 
     configs.forEach(config => {
-        QUnit.test(`config: ${config.message}, innerScrollable inside outerScrollable`, function(assert) {
-            const options = { showScrollbar: config.showScrollbar, useNative: true, rtlEnabled: config.rtlEnabled };
+        QUnit.test(`check container styles, config: ${config.message}`, function(assert) {
+            const options = { showScrollbar: config.showScrollbar, rtlEnabled: config.rtlEnabled };
             const outerScrollableElement = document.querySelector('#outerScrollable');
             const innerScrollableElement = document.querySelector('#innerScrollable');
 
-            new Scrollable(outerScrollableElement, extend(options, { direction: config.outerDirection }));
-            new Scrollable(innerScrollableElement, extend(options, { direction: config.innerDirection }));
+            new Scrollable(outerScrollableElement, extend(options, { width: 200, height: 200, direction: config.outerDirection, useNative: config.outerUseNative }));
+            new Scrollable(innerScrollableElement, extend(options, { width: 100, height: 100, direction: config.innerDirection, useNative: config.innerUseNative }));
 
-            const expected = {
-                both: { touchAction: 'pan-x pan-y', overflowX: 'auto', overflowY: 'auto' },
-                vertical: { touchAction: 'pan-y', overflowX: 'hidden', overflowY: 'auto' },
-                horizontal: { touchAction: 'pan-x', overflowX: 'auto', overflowY: 'hidden' }
+            const expectedNative = {
+                both: { touchAction: 'pan-x pan-y', overflowX: 'auto', overflowY: 'auto', position: 'relative' },
+                vertical: { touchAction: 'pan-y', overflowX: 'hidden', overflowY: 'auto', position: 'relative' },
+                horizontal: { touchAction: 'pan-x', overflowX: 'auto', overflowY: 'hidden', position: 'relative' }
             };
 
-            checkScrollProps(assert, outerScrollableElement, expected[config.outerDirection], 'outerScrollable');
-            checkScrollProps(assert, innerScrollableElement, expected[config.innerDirection], 'innerScrollable');
+            const expectedSimulated = {
+                both: { touchAction: 'none', overflowX: 'hidden', overflowY: 'hidden', position: 'static' },
+                vertical: { touchAction: 'pan-x', overflowX: 'hidden', overflowY: 'hidden', position: 'static' },
+                horizontal: { touchAction: 'pan-y', overflowX: 'hidden', overflowY: 'hidden', position: 'static' }
+            };
+
+            checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLABLE_CONTAINER_CLASS}`),
+                (config.outerUseNative ? expectedNative : expectedSimulated)[config.outerDirection], 'outerScrollable');
+            checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLABLE_CONTAINER_CLASS}`),
+                (config.innerUseNative ? expectedNative : expectedSimulated)[config.innerDirection], 'innerScrollable');
+        });
+
+        QUnit.test(`check scrollbar styles, config: ${config.message}`, function(assert) {
+            const options = { showScrollbar: config.showScrollbar, rtlEnabled: config.rtlEnabled };
+            const outerScrollableElement = document.querySelector('#outerScrollable');
+            const innerScrollableElement = document.querySelector('#innerScrollable');
+
+            new Scrollable(outerScrollableElement, extend(options, { width: 200, height: 200, direction: config.outerDirection, useNative: config.outerUseNative }));
+            new Scrollable(innerScrollableElement, extend(options, { width: 100, height: 100, direction: config.innerDirection, useNative: config.innerUseNative }));
+
+            const expectedSimulated = {
+                display: config.showScrollbar === 'never' ? 'none' : 'block'
+            };
+
+            if(!config.outerUseNative) {
+                if(config.outerDirection === 'both') {
+                    checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLBAR_HORIZONTAL_CLASS}`), expectedSimulated, 'outerScrollable');
+                    checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLBAR_VERTICAL_CLASS}`), expectedSimulated, 'outerScrollable');
+                } else {
+                    checkElementStyles(outerScrollableElement.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`), expectedSimulated, 'outerScrollable');
+                }
+
+            } else if(!config.innerUseNative) {
+                if(config.innerDirection === 'both') {
+                    checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLBAR_HORIZONTAL_CLASS}`), expectedSimulated, 'outerScrollable');
+                    checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLBAR_VERTICAL_CLASS}`), expectedSimulated, 'outerScrollable');
+                } else {
+                    checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLABLE_SCROLLBAR_CLASS}`), expectedSimulated, 'innerScrollable');
+                }
+            } else {
+                assert.ok(true);
+            }
         });
     });
 });
