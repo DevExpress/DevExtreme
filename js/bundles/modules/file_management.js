@@ -10,7 +10,7 @@ import CustomFileSystemProvider from '../../file_management/custom_provider';
 module.exports = DevExpress.fileManagement = DevExpress.fileManagement || {};
 
 DevExpress.fileManagement.FileSystemError = FileSystemError;
-DevExpress.fileManagement.FileSystemErrorCode = FileSystemErrorCode;
+DevExpress.fileManagement.FileSystemErrorCodes = FileSystemErrorCode;
 DevExpress.fileManagement.FileSystemItem = FileSystemItem;
 DevExpress.fileManagement.ObjectFileSystemProvider = ObjectFileSystemProvider;
 DevExpress.fileManagement.RemoteFileSystemProvider = RemoteFileSystemProvider;
