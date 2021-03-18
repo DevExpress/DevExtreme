@@ -46,7 +46,7 @@ function run_test {
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
     [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
-    [ "$RENOVATION" == "true" ] && url="$url&renovation=true"
+    [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 
     if [ -n "$TZ" ]; then
         ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime

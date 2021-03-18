@@ -4,9 +4,11 @@
 const gulp = require('gulp');
 const multiProcess = require('gulp-multi-process');
 const env = require('./build/gulp/env-variables');
+const cache = require('gulp-cache');
 
 gulp.task('clean', function(callback) {
     require('del').sync('artifacts');
+    cache.clearAll();
     callback();
 });
 
@@ -61,7 +63,7 @@ function createMainBatch() {
 
 function createDefaultBatch() {
     const tasks = ['clean', 'localization', 'generate-components'];
-    env.USE_RENOVATION && tasks.push('create-renovation-temp');
+    tasks.push('create-renovation-temp');
     tasks.push('transpile', 'version-replace', 'main-batch');
     if(!env.TEST_CI) {
         tasks.push('npm');

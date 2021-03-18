@@ -12,25 +12,13 @@ const runTaskByCondition = (condition, task) => {
     return (done) => done ? done() : gulp.series('skippedTask');
 };
 
-const isEsmPackage = env.BUILD_ESM_PACKAGE && !env.USE_RENOVATION;
-const isRegularPackage = !env.BUILD_ESM_PACKAGE && !env.USE_RENOVATION;
-const isRenovationPackage = env.USE_RENOVATION && !env.BUILD_ESM_PACKAGE;
+const isEsmPackage = env.BUILD_ESM_PACKAGE;
 
-let packageDir = '';
-
-if(isRenovationPackage) {
-    packageDir = 'devextreme-renovation';
-} else {
-    packageDir = 'devextreme';
-}
+const packageDir = 'devextreme';
 
 module.exports = {
     packageDir,
     isEsmPackage,
-    isRegularPackage,
-    isRenovationPackage,
     runTaskByCondition,
-    ifRegularPackage: (task) => runTaskByCondition(isRegularPackage, task),
     ifEsmPackage: (task) => runTaskByCondition(isEsmPackage, task),
-    ifRenovationPackage: (task) => runTaskByCondition(isRenovationPackage, task)
 };

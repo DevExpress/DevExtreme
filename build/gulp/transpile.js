@@ -5,7 +5,6 @@ const flatMap = require('gulp-flatmap');
 const fs = require('fs');
 const gulp = require('gulp');
 
-const gulpIf = require('gulp-if');
 const normalize = require('normalize-path');
 const notify = require('gulp-notify');
 const path = require('path');
@@ -13,12 +12,13 @@ const plumber = require('gulp-plumber');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const watch = require('gulp-watch');
+const cache = require('gulp-cache');
 
-const compressionPipes = require('./compression-pipes.js');
+const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
 const globTs = require('./ts').GLOB_TS;
-const renovationPipes = require('./renovation-pipes');
-const { ifRenovationPackage, ifEsmPackage } = require('./utils');
+const replaceWidgets = require('./renovation-pipes').replaceWidgets;
+const { ifEsmPackage } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
 
@@ -79,22 +79,51 @@ const createModuleConfig = (name, dir, filePath) => {
     return JSON.stringify(result, null, 2);
 };
 
-const transpile = (src, dist, config = transpileConfig.cjs, removeDebug = true, wrapWidgetForQUnit = false) => {
-    const isRenovationDist = dist === ctx.TRANSPILED_RENOVATION_PATH || dist === ctx.TRANSPILED_PROD_RENOVATION_PATH;
-    const task = () => gulp
-        .src(src)
-        .pipe(gulpIf(removeDebug, compressionPipes.removeDebug()))
-        .pipe(gulpIf(isRenovationDist, renovationPipes.replaceWidgets(wrapWidgetForQUnit)))
-        .pipe(babel(config))
-        .pipe(gulp.dest(dist));
+
+function transpile(src, dist, pipes = []) {
+    const task = () => {
+        let result = gulp.src(src);
+
+        pipes.forEach(pipe => {
+            result = result.pipe(pipe);
+        });
+
+        return result.pipe(gulp.dest(dist));
+    };
     task.displayName = 'transpile:' + dist;
     return task;
-};
+}
+
+function babelCjs() {
+    return cache(babel(transpileConfig.cjs), { name: 'babel-cjs' });
+}
+
+function babelEsm() {
+    return babel(transpileConfig.esm);
+}
+
+const transpileDefault = () => transpile(src, ctx.TRANSPILED_PATH, [
+    babelCjs()
+]);
+
+const transpileRenovation = () => transpile(src, ctx.TRANSPILED_RENOVATION_PATH, [
+    replaceWidgets(true),
+    babelCjs()
+]);
+
+const transpileProd = (dist, isEsm) => transpile(src, dist, [
+    removeDebug(),
+    replaceWidgets(false),
+    isEsm ? babelEsm() : babelCjs(),
+]);
 
 const transpileEsm = (dist) => gulp.series.apply(gulp, [
-    transpile(src, path.join(dist, './esm'), transpileConfig.esm),
-    transpile(src, path.join(dist, './cjs'), transpileConfig.cjs),
-    transpile(bundlesSrc, path.join(dist, './bundles')),
+    transpileProd(path.join(dist, './cjs'), false),
+    transpileProd(path.join(dist, './esm'), true),
+    transpile(bundlesSrc, path.join(dist, './bundles'), [
+        removeDebug(),
+        babelCjs(),
+    ]),
 
     () => gulp
         .src(esmTranspileSrc)
@@ -128,12 +157,9 @@ gulp.task('transpile-esm', transpileEsm(ctx.TRANSPILED_PROD_ESM_PATH));
 
 gulp.task('transpile', gulp.series(
     'bundler-config',
-    gulp.parallel([
-        transpile(src, ctx.TRANSPILED_PROD_PATH),
-        transpile(src, ctx.TRANSPILED_PATH, transpileConfig.cjs, false),
-        ifRenovationPackage(transpile(src, ctx.TRANSPILED_PROD_RENOVATION_PATH, transpileConfig.cjs)),
-        ifRenovationPackage(transpile(src, ctx.TRANSPILED_RENOVATION_PATH, transpileConfig.cjs, false, true)),
-    ]),
+    transpileDefault(),
+    transpileRenovation(),
+    transpileProd(ctx.TRANSPILED_PROD_RENOVATION_PATH, false),
     ifEsmPackage('transpile-esm'),
 ));
 
@@ -148,9 +174,8 @@ const replaceTask = (sourcePath) => {
 
 const replaceVersion = () => gulp.parallel([
     replaceTask(ctx.TRANSPILED_PATH),
-    replaceTask(ctx.TRANSPILED_PROD_PATH),
-    ifRenovationPackage(() => replaceTask(ctx.TRANSPILED_PROD_RENOVATION_PATH))(),
-    ifRenovationPackage(() => replaceTask(ctx.TRANSPILED_RENOVATION_PATH))(),
+    replaceTask(ctx.TRANSPILED_RENOVATION_PATH),
+    replaceTask(ctx.TRANSPILED_PROD_RENOVATION_PATH),
     ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './esm')))(),
     ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './cjs')))(),
 ]);
@@ -158,10 +183,8 @@ const replaceVersion = () => gulp.parallel([
 gulp.task('version-replace', replaceVersion());
 
 gulp.task('transpile-watch', gulp.series(
-    gulp.parallel([
-        transpile(src, ctx.TRANSPILED_PATH, transpileConfig.cjs, false),
-        transpile(src, ctx.TRANSPILED_RENOVATION_PATH, transpileConfig.cjs, false, true)
-    ]),
+    transpileDefault(),
+    transpileRenovation(),
     replaceVersion(),
     () => {
         const watchTask = watch(src).on('ready', () => console.log('transpile task is watching for changes...'))
@@ -174,7 +197,7 @@ gulp.task('transpile-watch', gulp.series(
             .pipe(babel(transpileConfig.cjs))
             .pipe(gulp.dest(ctx.TRANSPILED_PATH));
         watchTask
-            .pipe(renovationPipes.replaceWidgets(true))
+            .pipe(replaceWidgets(true))
             .pipe(babel(transpileConfig.cjs))
             .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH));
         return watchTask;

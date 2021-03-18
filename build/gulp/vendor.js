@@ -8,7 +8,6 @@ const context = require('./context');
 
 const PACKAGES_SOURCE = './node_modules';
 const DESTINATION_JS_PATH = './' + context.RESULT_JS_PATH;
-const DESTINATION_JS_RENOVATION_PATH = './' + context.RESULT_JS_RENOVATION_PATH;
 const DESTINATION_CSS_PATH = './artifacts/css';
 
 const JS_VENDORS = [
@@ -67,22 +66,19 @@ gulp.task('vendor-js', function() {
     return merge.apply(this, JS_VENDORS.map(function(vendor) {
         const sourceConfig = vendor.base ? { base: PACKAGES_SOURCE + vendor.base } : null;
         const stream = gulp.src(PACKAGES_SOURCE + vendor.path, sourceConfig)
-            .pipe(gulp.dest(DESTINATION_JS_PATH))
-            .pipe(gulp.dest(DESTINATION_JS_RENOVATION_PATH));
+            .pipe(gulp.dest(DESTINATION_JS_PATH));
 
         if(vendor.noUglyFile) {
             return stream
                 .pipe(compressionPipes.minify())
                 .pipe(rename({ suffix: '.min' }))
-                .pipe(gulp.dest(DESTINATION_JS_PATH))
-                .pipe(gulp.dest(DESTINATION_JS_RENOVATION_PATH));
+                .pipe(gulp.dest(DESTINATION_JS_PATH));
         }
 
         const path = PACKAGES_SOURCE + vendor.path.replace(/js$/, `${vendor.suffix || 'min'}.js`);
 
         return merge(stream, gulp.src(path, sourceConfig)
             .pipe(gulp.dest(DESTINATION_JS_PATH))
-            .pipe(gulp.dest(DESTINATION_JS_RENOVATION_PATH))
         );
     }));
 });

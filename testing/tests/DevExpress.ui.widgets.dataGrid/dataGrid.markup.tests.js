@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import windowUtils from 'core/utils/window';
+import Pager from 'ui/pager';
 
 import 'ui/data_grid';
 
@@ -187,7 +188,7 @@ QUnit.module('DataGrid markup', {
         });
 
         this.clock.tick(30);
-        const hasWindowOrRenovation = windowUtils.hasWindow() || QUnit.urlParams.renovation;
+        const hasWindowOrRenovation = windowUtils.hasWindow() || Pager.IS_RENOVATED_WIDGET;
         const $pagerView = $element.find('.dx-datagrid-pager');
         assert.equal($pagerView.length, 1, 'pager view is rendered');
         assert.ok($pagerView.hasClass('dx-pager'), 'pager is rendered');

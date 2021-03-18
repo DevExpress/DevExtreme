@@ -13,10 +13,8 @@ const webpackStream = require('webpack-stream');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
-const env = require('./env-variables');
 const headerPipes = require('./header-pipes.js');
 const renovationPipes = require('./renovation-pipes');
-const { ifRenovationPackage, ifEsmPackage } = require('./utils');
 const webpackConfig = require('../../webpack.config.js');
 const webpackConfigDev = require('../../webpack.config.dev.js');
 
@@ -29,9 +27,7 @@ const BUNDLES = [
     '/bundles/dx.viz.js'
 ];
 
-const BUNDLES_ESM_PACKAGE = BUNDLES.map(file => '/cjs' + file);
 const DEBUG_BUNDLES = BUNDLES.concat([ '/bundles/dx.custom.js' ]);
-const DEBUG_BUNDLES_ESM_PACKAGE = DEBUG_BUNDLES.map(file => `/cjs${file}`);
 
 const processBundles = (bundles, pathPrefix) => bundles.map((bundle) => pathPrefix + bundle);
 const muteWebPack = () => undefined;
@@ -50,23 +46,18 @@ const jsBundlesProd = (src, dist, bundles) => (() =>
 );
 
 gulp.task('js-bundles-prod',
-    jsBundlesProd(ctx.TRANSPILED_PROD_PATH, ctx.RESULT_JS_PATH, BUNDLES),
-    ifRenovationPackage(jsBundlesProd(ctx.TRANSPILED_PROD_RENOVATION_PATH,
-        ctx.RESULT_JS_RENOVATION_PATH, BUNDLES
-    )),
-    ifEsmPackage(jsBundlesProd(ctx.TRANSPILED_PROD_RENOVATION_PATH,
-        ctx.RESULT_JS_RENOVATION_PATH, BUNDLES_ESM_PACKAGE
-    ))
+    jsBundlesProd(ctx.TRANSPILED_PROD_RENOVATION_PATH,
+        ctx.RESULT_JS_PATH, BUNDLES
+    )
 );
 
-function prepareDebugMeta(watch, renovation) {
+function prepareDebugMeta(watch) {
     const debugConfig = Object.assign({}, watch ? webpackConfigDev : webpackConfig);
-    let bundles = watch ?
-        (renovation ? renovationPipes.TEMP_PATH : 'js') :
-        (renovation ? ctx.TRANSPILED_PROD_RENOVATION_PATH : ctx.TRANSPILED_PROD_PATH);
-    const debugBundles = env.BUILD_ESM_PACKAGE ? DEBUG_BUNDLES_ESM_PACKAGE : DEBUG_BUNDLES;
+    const bundlesPath = watch ?
+        renovationPipes.TEMP_PATH :
+        ctx.TRANSPILED_PROD_RENOVATION_PATH;
 
-    bundles = processBundles(debugBundles, env.BUILD_ESM_PACKAGE ? ctx.TRANSPILED_PROD_ESM_PATH : bundles);
+    const bundles = processBundles(DEBUG_BUNDLES, bundlesPath);
 
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
@@ -78,11 +69,9 @@ function prepareDebugMeta(watch, renovation) {
     return { debugConfig, bundles };
 }
 
-function createDebugBundlesStream(watch, renovation) {
-    const { debugConfig, bundles } = prepareDebugMeta(watch, renovation);
-    const destination = renovation
-        ? ctx.RESULT_JS_RENOVATION_PATH
-        : ctx.RESULT_JS_PATH;
+function createDebugBundlesStream(watch) {
+    const { debugConfig, bundles } = prepareDebugMeta(watch);
+    const destination = ctx.RESULT_JS_PATH;
 
     const task = () => gulp.src(bundles)
         .pipe(namedDebug())
@@ -96,7 +85,7 @@ function createDebugBundlesStream(watch, renovation) {
         .pipe(gulpIf(!watch, compressionPipes.beautify()))
         .pipe(gulp.dest(destination));
 
-    task.displayName = 'js-bundles-debug-' + (renovation ? 'main' : 'renovation');
+    task.displayName = 'js-bundles-debug';
 
     return task;
 }
@@ -112,20 +101,18 @@ function createRenovationTemp(isWatch) {
         .pipe(gulp.dest(renovationPipes.TEMP_PATH));
 }
 
-gulp.task('create-renovation-temp', ifRenovationPackage(() =>
+gulp.task('create-renovation-temp', () =>
     createRenovationTemp(false)
-));
+);
 
-gulp.task('create-renovation-temp-watch', ifRenovationPackage(() =>
+gulp.task('create-renovation-temp-watch', () =>
     createRenovationTemp(true)
-));
+);
 
 gulp.task('js-bundles-debug', gulp.series(
-    createDebugBundlesStream(false, false),
-    ifRenovationPackage(createDebugBundlesStream(false, true))
+    createDebugBundlesStream(false)
 ));
 
 gulp.task('js-bundles-dev', gulp.parallel(
-    createDebugBundlesStream(true, false),
-    ifRenovationPackage(createDebugBundlesStream(true, true))
+    createDebugBundlesStream(true)
 ));
