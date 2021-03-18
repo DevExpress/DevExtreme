@@ -728,7 +728,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
             }
 
-            return change.pageIndex === pageIndex || needInsertOnLastPosition && pageIndex === dataSource.pageCount() - 1;
+            return change.pageIndex === pageIndex || (needInsertOnLastPosition || change.pageIndex === -1) && isLastPage;
         },
 
         _generateNewItem: function(key) {
@@ -912,12 +912,10 @@ const EditingController = modules.ViewController.inherit((function() {
 
             change.index = change.index ?? this._calculateIndex(rowIndex);
 
-            if(change.index === -1) {
-                return;
-            }
-
             if(this.option('scrolling.mode') === 'virtual') {
-                change.pageIndex = Math.min(dataController.pageCount() - 1, Math.floor(change.index / dataController.pageSize()));
+                if(change.index !== -1) {
+                    change.pageIndex = Math.min(dataController.pageCount() - 1, Math.floor(change.index / dataController.pageSize()));
+                }
             } else {
                 change.pageIndex = change.pageIndex ?? dataController.pageIndex();
             }
