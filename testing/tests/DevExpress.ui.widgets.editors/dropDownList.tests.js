@@ -166,7 +166,7 @@ QUnit.module('focus policy', {
                     value
                 });
                 const $dropDownButton = this.$element.find('.dx-dropdowneditor-button');
-                const input = this.$element.find('.dx-texteditor-input').get(0);
+                const input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`).get(0);
                 const expectedPosition = isEditable ? value.length : 0;
 
                 $dropDownButton.trigger('dxclick');
