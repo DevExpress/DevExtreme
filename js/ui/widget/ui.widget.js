@@ -51,7 +51,7 @@ const Widget = DOMComponent.inherit({
 
             tabIndex: 0,
 
-            accessKey: null,
+            accessKey: undefined,
 
             /**
             * @name WidgetOptions.onFocusIn
