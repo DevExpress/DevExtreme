@@ -377,7 +377,7 @@ class Scheduler extends Widget {
                 mode: 'standard'
             },
 
-            renovateRender: true,
+            renovateRender: false,
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: 'bottom',
