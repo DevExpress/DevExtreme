@@ -1076,7 +1076,7 @@ declare module DevExpress {
         /**
          * [descr:positionConfig.boundary]
          */
-        boundary?: string | Element | JQuery | Window;
+        boundary?: string | DevExpress.core.TElement | Window;
         /**
          * [descr:positionConfig.boundaryOffset]
          */
@@ -1092,7 +1092,7 @@ declare module DevExpress {
         /**
          * [descr:positionConfig.of]
          */
-        of?: string | Element | JQuery | Window;
+        of?: string | DevExpress.core.TElement | Window;
         /**
          * [descr:positionConfig.offset]
          */
@@ -1252,11 +1252,17 @@ declare module DevExpress {
 }
 declare module DevExpress.core {
     /**
+     * [descr:TElement]
+     */
+    export type TElement = dxElement | dxSVGElement;
+    /**
      * [descr:dxElement]
+     * @deprecated [depNote:dxElement]
      */
     export type dxElement = HTMLElement & JQuery;
     /**
      * [descr:dxSVGElement]
+     * @deprecated [depNote:dxSVGElement]
      */
     export type dxSVGElement = SVGElement & JQuery;
     /**
@@ -1277,7 +1283,13 @@ declare module DevExpress.core {
     /**
      * [descr:template]
      */
-    export type template = string | Function | Element | JQuery;
+    export type template = string | Function | TElement;
+}
+declare module DevExpress.core.utils {
+    /**
+     * [descr:TPromise]
+     */
+    export type TPromise = Promise<void> | JQueryPromise<void>;
 }
 declare module DevExpress.data {
     /**
@@ -2488,6 +2500,7 @@ declare module DevExpress.events {
     }
     /**
      * [descr:event]
+     * @deprecated [depNote:event]
      */
     export type event = dxEvent | JQueryEventObject;
     /**
@@ -3334,11 +3347,11 @@ declare module DevExpress.ui {
         /**
          * [descr:DraggableBase.Options.boundary]
          */
-        boundary?: string | Element | JQuery;
+        boundary?: string | DevExpress.core.TElement;
         /**
          * [descr:DraggableBase.Options.container]
          */
-        container?: string | Element | JQuery;
+        container?: string | DevExpress.core.TElement;
         /**
          * [descr:DraggableBase.Options.cursorOffset]
          */
@@ -3679,7 +3692,7 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBase.Options.rowDragging]
          */
-        rowDragging?: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | Element | JQuery, container?: string | Element | JQuery, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: 'both' | 'horizontal' | 'vertical', dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery), dropFeedbackMode?: 'push' | 'indicate', filter?: string, group?: string, handle?: string, onAdd?: ((e: { component?: T, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragChange?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragEnd?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragMove?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragStart?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, fromData?: any }) => any), onRemove?: ((e: { component?: T, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onReorder?: ((e: { component?: T, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean };
+        rowDragging?: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | DevExpress.core.TElement, container?: string | DevExpress.core.TElement, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: 'both' | 'horizontal' | 'vertical', dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery), dropFeedbackMode?: 'push' | 'indicate', filter?: string, group?: string, handle?: string, onAdd?: ((e: { component?: T, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragChange?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragEnd?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragMove?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragStart?: ((e: { component?: T, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, fromData?: any }) => any), onRemove?: ((e: { component?: T, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onReorder?: ((e: { component?: T, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean };
         /**
          * [descr:GridBase.Options.scrolling]
          */
@@ -4776,7 +4789,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxActionSheet.Options.target]
          */
-        target?: string | Element | JQuery;
+        target?: string | DevExpress.core.TElement;
         /**
          * [descr:dxActionSheet.Options.title]
          */
@@ -5235,7 +5248,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxContextMenu.Options.target]
          */
-        target?: string | Element | JQuery;
+        target?: string | DevExpress.core.TElement;
         /**
          * [descr:dxContextMenu.Options.visible]
          */
@@ -5774,7 +5787,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDeferRendering.Options.renderWhen]
          */
-        renderWhen?: Promise<void> | JQueryPromise<void> | boolean;
+        renderWhen?: DevExpress.core.utils.TPromise | boolean;
         /**
          * [descr:dxDeferRendering.Options.showLoadIndicator]
          */
@@ -6339,7 +6352,7 @@ declare module DevExpress.ui {
          * [descr:dxDrawer.Options.target]
          * @deprecated [depNote:dxDrawer.Options.target]
          */
-        target?: string | Element | JQuery;
+        target?: string | DevExpress.core.TElement;
         /**
          * [descr:dxDrawer.Options.template]
          */
@@ -6977,11 +6990,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxFileUploader.Options.dialogTrigger]
          */
-        dialogTrigger?: string | Element | JQuery;
+        dialogTrigger?: string | DevExpress.core.TElement;
         /**
          * [descr:dxFileUploader.Options.dropZone]
          */
-        dropZone?: string | Element | JQuery;
+        dropZone?: string | DevExpress.core.TElement;
         /**
          * [descr:dxFileUploader.Options.focusStateEnabled]
          */
@@ -8324,7 +8337,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxHtmlEditorToolbar.container]
          */
-        container?: string | Element | JQuery;
+        container?: string | DevExpress.core.TElement;
         /**
          * [descr:dxHtmlEditorToolbar.items]
          */
@@ -8696,7 +8709,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxLoadPanel.Options.container]
          */
-        container?: string | Element | JQuery;
+        container?: string | DevExpress.core.TElement;
         /**
          * [descr:dxLoadPanel.Options.delay]
          */
@@ -9839,7 +9852,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxPopover.Options.target]
          */
-        target?: string | Element | JQuery;
+        target?: string | DevExpress.core.TElement;
         /**
          * [descr:dxPopover.Options.width]
          */
@@ -9884,7 +9897,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxPopup.Options.container]
          */
-        container?: string | Element | JQuery;
+        container?: string | DevExpress.core.TElement;
         /**
          * [descr:dxPopup.Options.dragEnabled]
          */
@@ -13526,7 +13539,7 @@ declare module DevExpress.viz {
         /**
          * [descr:BaseWidget.Options.tooltip.container]
          */
-        container?: string | Element | JQuery;
+        container?: string | DevExpress.core.TElement;
         /**
          * [descr:BaseWidget.Options.tooltip.cornerRadius]
          */
