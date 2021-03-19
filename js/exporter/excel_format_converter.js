@@ -23,9 +23,6 @@ const DAY_REGEXP = /E/g;
 const DO_REGEXP = /dE+/g;
 const STANDALONE_MONTH_REGEXP = /L/g;
 const HOUR_REGEXP = /h/g;
-const SLASH_REGEXP = /\//g;
-const SQUARE_OPEN_BRACKET_REGEXP = /\[/g;
-const SQUARE_CLOSE_BRACKET_REGEXP = /]/g;
 const ANY_REGEXP = /./g;
 
 const excelFormatConverter = {
@@ -57,7 +54,7 @@ const excelFormatConverter = {
     },
 
     _convertDateFormatToOpenXml: function(format) {
-        return format.replace(SLASH_REGEXP, '\\\/').split('\'').map(function(datePart, index) {
+        return format.split('\/').join('\\/').split('\'').map(function(datePart, index) {
             if(index % 2 === 0) {
                 return datePart
                     .replace(PERIOD_REGEXP, 'AM/PM')
@@ -65,8 +62,8 @@ const excelFormatConverter = {
                     .replace(DAY_REGEXP, 'd')
                     .replace(STANDALONE_MONTH_REGEXP, 'M')
                     .replace(HOUR_REGEXP, 'H')
-                    .replace(SQUARE_OPEN_BRACKET_REGEXP, '\\\[')
-                    .replace(SQUARE_CLOSE_BRACKET_REGEXP, '\\\]');
+                    .split('\[').join('\\[')
+                    .split(']').join('\\]');
             } if(datePart) {
                 return datePart.replace(ANY_REGEXP, '\\$&');
             }
