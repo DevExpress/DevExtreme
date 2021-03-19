@@ -3,12 +3,40 @@ import errors from '../../../core/errors';
 import tzData from './timezones_data';
 import { sign } from '../../../core/utils/math';
 
+const getConvertedUntils = value => {
+    return value.split('|').map(until => {
+        if(until === 'Infinity') {
+            return null;
+        }
+        return parseInt(until, 36) * 1000;
+    });
+};
+
+class TimeZoneCache {
+    constructor() {
+        this.map = new Map();
+    }
+
+    get(id) {
+        if(!this.map.get(id)) {
+            const config = timeZoneDataUtils.getTimezoneById(id);
+            const { offsets, offsetIndices, untils } = config;
+
+            this.map.set(id, [offsets, offsetIndices, getConvertedUntils(untils)]);
+        }
+
+        return this.map.get(id);
+    }
+}
+
+const tzCache = new TimeZoneCache();
+
 const timeZoneDataUtils = {
     _timeZones: tzData.zones,
 
     getDisplayedTimeZones: function(timestamp) {
         const timeZones = this._timeZones.map((timezone) => {
-            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, timestamp);
+            const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, getConvertedUntils(timezone.untils), timestamp);
 
             const title = `(GMT ${this.formatOffset(offset)}) ${this.formatId(timezone.id)}`;
 
@@ -60,37 +88,22 @@ const timeZoneDataUtils = {
     },
 
     getTimeZoneOffsetById: function(id, timestamp) {
-        const tz = this.getTimezoneById(id);
+        const [offsets, offsetIndices, untils] = tzCache.get(id);
 
-        if(tz) {
-            return this.getUtcOffset(tz.offsets, tz.offsetIndices, tz.untils, timestamp);
-        }
-
-        return undefined;
+        return this.getUtcOffset(offsets, offsetIndices, untils, timestamp);
     },
 
     getTimeZoneDeclarationTuple: function(id, year) {
-        const tz = this.getTimezoneById(id);
+        const [offsets, offsetIndices, untils] = tzCache.get(id);
 
-        if(tz) {
-            return this.getTimeZoneDeclarationTupleCore(tz.offsets, tz.offsetIndices, tz.untils, year);
-        }
-
-        return [];
+        return this.getTimeZoneDeclarationTupleCore(offsets, offsetIndices, untils, year);
     },
 
-    getTimeZoneDeclarationTupleCore: function(offsets, offsetIndices, untils, year) {
+    getTimeZoneDeclarationTupleCore: function(offsets, offsetIndices, untilsList, year) {
         const tupleResult = [];
 
         const offsetIndicesList = offsetIndices.split('');
         const offsetsList = offsets.split('|').map(value => parseInt(value));
-
-        const untilsList = untils.split('|').map(until => {
-            if(until === 'Infinity') {
-                return null;
-            }
-            return parseInt(until, 36) * 1000;
-        });
 
         let currentDate = 0;
 
@@ -110,17 +123,10 @@ const timeZoneDataUtils = {
         return tupleResult;
     },
 
-    getUtcOffset: function(offsets, offsetIndices, untils, dateTimeStamp) {
+    getUtcOffset: function(offsets, offsetIndices, untilsList, dateTimeStamp) {
         let index = 0;
         const offsetIndicesList = offsetIndices.split('');
         const offsetsList = offsets.split('|');
-
-        const untilsList = untils.split('|').map(until => {
-            if(until === 'Infinity') {
-                return null;
-            }
-            return parseInt(until, 36) * 1000;
-        });
 
         let currentUntil = 0;
 
