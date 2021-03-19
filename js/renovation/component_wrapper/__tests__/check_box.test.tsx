@@ -11,7 +11,7 @@ describe('Method', () => {
   it('setAria', () => {
     (getAriaName as Mock).mockImplementation(() => 'ariaName');
 
-    const container = {} as Element;
+    const container = {} as HTMLElement;
     const instance = new CheckBox(container, {});
     instance.$element = () => container;
 
