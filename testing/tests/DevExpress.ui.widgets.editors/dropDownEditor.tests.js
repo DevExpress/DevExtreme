@@ -550,8 +550,8 @@ QUnit.module('focus policy', () => {
                 acceptCustomValue,
                 value
             });
-            const $dropDownButton = $dropDownEditor.find('.dx-dropdowneditor-button');
-            const input = $dropDownEditor.find('.dx-texteditor-input').get(0);
+            const $dropDownButton = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_BUTTON_CLASS}`);
+            const input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).get(0);
             const expectedPosition = acceptCustomValue ? value.length : 0;
 
             $dropDownButton.trigger('dxclick');
@@ -1824,4 +1824,3 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
 });
-
