@@ -3,7 +3,7 @@ import FileSystemItem from '../../file_management/file_system_item';
 import ObjectFileSystemProvider from '../../file_management/object_provider';
 import RemoteFileSystemProvider from '../../file_management/remote_provider';
 import CustomFileSystemProvider from '../../file_management/custom_provider';
-import FileSystemErrorCode from '../../file_management/error_codes';
+import FileSystemErrorCodes from '../../file_management/error_codes';
 import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from '../../file_management/utils';
 import { whenSome } from './ui.file_manager.common';
 
@@ -697,13 +697,13 @@ class FileSecurityController {
 
     validateExtension(name) {
         if(!this._isValidExtension(name)) {
-            this._throwError(FileSystemErrorCode.WrongFileExtension);
+            this._throwError(FileSystemErrorCodes.WrongFileExtension);
         }
     }
 
     validateMaxFileSize(size) {
         if(this._maxFileSize && size > this._maxFileSize) {
-            this._throwError(FileSystemErrorCode.MaxFileSizeExceeded);
+            this._throwError(FileSystemErrorCodes.MaxFileSizeExceeded);
         }
     }
 

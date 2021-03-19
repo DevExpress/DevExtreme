@@ -1,7 +1,7 @@
 import { Deferred } from 'core/utils/deferred';
 
 import FileSystemProviderBase from 'file_management/provider_base';
-import FileSystemErrorCode from 'file_management/error_codes';
+import FileSystemErrorCodes from 'file_management/error_codes';
 
 const DEFAULT_DELAY = 2000;
 
@@ -168,7 +168,7 @@ export default class TestFileSystemProvider extends FileSystemProviderBase {
     _raiseErrorCore(fileItem) {
         fileItem = fileItem || null;
         throw {
-            errorId: FileSystemErrorCode.Other,
+            errorId: FileSystemErrorCodes.Other,
             fileItem
         };
     }

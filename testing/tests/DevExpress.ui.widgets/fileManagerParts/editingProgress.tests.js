@@ -2,7 +2,7 @@ import $ from 'jquery';
 import fx from 'animation/fx';
 import { Deferred } from 'core/utils/deferred';
 import ObjectFileSystemProvider from 'file_management/object_provider';
-import FileSystemErrorCode from 'file_management/error_codes';
+import FileSystemErrorCodes from 'file_management/error_codes';
 import FileItemsController from 'ui/file_manager/file_items_controller';
 import { createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
 import TestFileSystemProvider from '../../../helpers/fileManager/file_provider.test.js';
@@ -110,7 +110,7 @@ const raiseErrorForItem = (fileItem, fileIndex) => {
     fileItem = fileItem || null;
     if(fileIndex % 2 === 1) {
         throw {
-            errorId: FileSystemErrorCode.Other,
+            errorId: FileSystemErrorCodes.Other,
             fileItem
         };
     }

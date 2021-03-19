@@ -6,9 +6,9 @@
 * @prevFileNamespace DevExpress.fileManagement
 * @public
 * @static
-* @name FileSystemErrorCode
+* @name FileSystemErrorCodes
 */
-export default interface FileSystemErrorCode {
+export default interface FileSystemErrorCodes {
     /**
      * @docid
      * @prevFileNamespace DevExpress.fileManagement
