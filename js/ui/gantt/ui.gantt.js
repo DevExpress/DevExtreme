@@ -228,7 +228,7 @@ class Gantt extends Widget {
     _onTreeListSelectionChanged(e) {
         const selectedRowKey = e.currentSelectedRowKeys[0];
         this._setGanttViewOption('selectedRowKey', selectedRowKey);
-        this.option('selectedRowKey', selectedRowKey);
+        this._setOptionWithoutOptionChange('selectedRowKey', selectedRowKey);
         this._raiseSelectionChangedAction(selectedRowKey);
     }
     _onTreeListRowCollapsed(e) {
@@ -510,7 +510,7 @@ class Gantt extends Widget {
                             this._treeList.option('expandedRowKeys', expandedRowKeys);
                         }
                     }
-                    this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(insertedId));
+                    this._selectTreeListRows(this._getArrayFromOneElement(insertedId));
                     this._setTreeListOption('focusedRowKey', insertedId);
                 }
                 this._raiseInsertedAction(optionName, data, insertedId);
@@ -560,8 +560,10 @@ class Gantt extends Widget {
     _appendCustomFields(data) {
         const modelData = this._tasksOption && this._tasksOption._getItems();
         const keyGetter = compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+        const invertedData = this.getInvertedData(modelData, keyGetter);
         return data.reduce((previous, item) => {
-            const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === keyGetter(item))[0];
+            const key = keyGetter(item);
+            const modelItem = invertedData[key];
             if(!modelItem) {
                 previous.push(item);
             } else {
@@ -574,6 +576,17 @@ class Gantt extends Widget {
             return previous;
         }, []);
     }
+    getInvertedData(data, keyGetter) {
+        const inverted = { };
+        if(data) {
+            for(let i = 0; i < data.length; i++) {
+                const dataItem = data[i];
+                const key = keyGetter(dataItem);
+                inverted[key] = dataItem;
+            }
+        }
+        return inverted;
+    }
     _updateTreeListDataSource() {
         if(!this._skipUpdateTreeListDataSource()) {
             const dataSource = this.option('tasks.dataSource');
@@ -583,6 +596,9 @@ class Gantt extends Widget {
     }
     _skipUpdateTreeListDataSource() {
         return this.option('validation.autoUpdateParentTasks');
+    }
+    _selectTreeListRows(keys) {
+        this._treeList?.selectRows(keys);
     }
     // custom fields cache updating
     _addCustomFieldsDataFromCache(key, data) {
@@ -1582,7 +1598,7 @@ class Gantt extends Widget {
                 this._setGanttViewOption('firstDayOfWeek', args.value);
                 break;
             case 'selectedRowKey':
-                this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(args.value));
+                this._selectTreeListRows(this._getArrayFromOneElement(args.value));
                 break;
             case 'onSelectionChanged':
                 this._createSelectionChangedAction();
