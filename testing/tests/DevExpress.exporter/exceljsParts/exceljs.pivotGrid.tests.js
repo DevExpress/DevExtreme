@@ -2943,7 +2943,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
         { format: 'shortDate', expectedFormat: '[$-9]M\\/d\\/yyyy', expectedText: '10/9/2019' },
         { format: 'shortTime', expectedFormat: '[$-9]H:mm AM/PM', expectedText: '9:09 AM' },
         { format: 'longDateLongTime', expectedFormat: '[$-9]dddd, MMMM d, yyyy, H:mm:ss AM/PM', expectedText: 'Wednesday, October 9, 2019, 9:09:09 AM' },
-        { format: 'shotDateShortTime', expectedFormat: '[$-9]ssAM/PMSS\\o\\r\\t\\T\\im\\e', expectedText: '99otDAMte09ortTi9e' },
+        { format: 'shortDateShortTime', expectedFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', expectedText: '10/9/2019, 9:09 AM' },
         { format: 'longDate', expectedFormat: '[$-9]dddd, MMMM d, yyyy', expectedText: 'Wednesday, October 9, 2019' },
         { format: 'longTime', expectedFormat: '[$-9]H:mm:ss AM/PM', expectedText: '9:09:09 AM' },
         { format: 'dayOfWeek', expectedFormat: '[$-9]dddd', expectedText: 'Wednesday' },
@@ -2983,7 +2983,7 @@ QUnit.module('Scenarios', moduleConfig, () => {
                     if(format.format === 'second' || format.format === 'minute' || format.format === 'hour') text = '00';
                     if(format.format === 'shortTime' || format.format === 'longTime') text = '12:00 AM';
                     if(format.format === 'longDateLongTime') text = 'Wednesday, October 9, 2019, 12:00:00 AM';
-                    if(format.format === 'shotDateShortTime') text = '012otDAMte012ortTi0e';
+                    if(format.format === 'shortDateShortTime') text = '10/9/2019, 12:00 AM';
                     if(format.format === 'longTime') text = '12:00:00 AM';
                 }
 

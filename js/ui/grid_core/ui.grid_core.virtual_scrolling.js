@@ -9,6 +9,7 @@ import translator from '../../animation/translator';
 import LoadIndicator from '../load_indicator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
+import { isDefined } from '../../core/utils/type';
 
 const TABLE_CLASS = 'table';
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
@@ -51,6 +52,10 @@ const correctCount = function(items, count, fromEnd, isItemCountableFunc) {
         }
     }
     return count;
+};
+
+const isItemCountableByDataSource = function(item, dataSource) {
+    return item.rowType === 'data' && !item.isNewRow || item.rowType === 'group' && dataSource.isGroupItemCountable(item.data);
 };
 
 
@@ -303,6 +308,10 @@ const VirtualScrollingRowsViewExtender = (function() {
                 this.scrollToPage(dataController.pageIndex());
             });
 
+            dataController.dataSourceChanged.add(() => {
+                !this._scrollTop && this._scrollToCurrentPageOnResize();
+            });
+
             dataController.stateLoaded?.add(() => {
                 this._scrollToCurrentPageOnResize();
             });
@@ -421,7 +430,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _restoreErrorRow: function(contentTable) {
             const editingController = this.getController('editing');
-            editingController && editingController.hasChanges() && this._getRowElements(contentTable).each((_, item)=>{
+            editingController && editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
                 const rowOptions = $(item).data('options');
                 if(rowOptions) {
                     const editData = editingController.getEditDataByKey(rowOptions.key);
@@ -469,6 +478,37 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             this._appendEmptyRow($table, $virtualRow, location);
         },
+        _getRowHeights: function() {
+            const rowHeights = this._getRowElements(this._tableElement).toArray().map(function(row) {
+                return getBoundingRect(row).height;
+            });
+            return rowHeights;
+        },
+        _correctRowHeights: function(rowHeights) {
+            const dataController = this._dataController;
+            const dataSource = dataController._dataSource;
+            const correctedRowHeights = [];
+            const visibleRows = dataController.getVisibleRows();
+            let itemSize = 0;
+            let firstCountableItem = true;
+            for(let i = 0; i < rowHeights.length; i++) {
+                const currentItem = visibleRows[i];
+                if(!isDefined(currentItem)) {
+                    continue;
+                }
+                if(isItemCountableByDataSource(currentItem, dataSource)) {
+                    if(firstCountableItem) {
+                        firstCountableItem = false;
+                    } else {
+                        correctedRowHeights.push(itemSize);
+                        itemSize = 0;
+                    }
+                }
+                itemSize += rowHeights[i];
+            }
+            itemSize > 0 && correctedRowHeights.push(itemSize);
+            return correctedRowHeights;
+        },
         _updateContentPosition: function(isRender) {
             const that = this;
             const dataController = that._dataController;
@@ -478,11 +518,9 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             if(!that.option('legacyRendering') && (isVirtualMode(that) || isVirtualRowRendering(that))) {
                 if(!isRender) {
-                    const rowHeights = that._getRowElements(that._tableElement).toArray().map(function(row) {
-                        return getBoundingRect(row).height;
-                    });
-
-                    dataController.setContentSize(rowHeights);
+                    const rowHeights = that._getRowHeights();
+                    const correctedRowHeights = that._correctRowHeights(rowHeights);
+                    dataController.setContentSize(correctedRowHeights);
                 }
                 const top = dataController.getContentOffset('begin');
                 const bottom = dataController.getContentOffset('end');
@@ -798,12 +836,13 @@ module.exports = {
                             return;
                         }
 
-                        that._rowPageIndex = Math.ceil(that.pageIndex() * that.pageSize() / that.getRowPageSize());
+                        const pageIndex = !isVirtualMode(this) && that.pageIndex() >= that.pageCount() ? that.pageCount() - 1 : that.pageIndex();
+                        that._rowPageIndex = Math.ceil(pageIndex * that.pageSize() / that.getRowPageSize());
 
                         that._visibleItems = [];
 
                         const isItemCountable = function(item) {
-                            return item.rowType === 'data' && !item.isNewRow || item.rowType === 'group' && that._dataSource.isGroupItemCountable(item.data);
+                            return isItemCountableByDataSource(item, that._dataSource);
                         };
 
                         that._rowsScrollController = new virtualScrollingCore.VirtualScrollController(that.component, {
@@ -836,6 +875,7 @@ module.exports = {
                                 }
 
                                 if(!that._rowsScrollController._dataSource.items().length && this.totalItemsCount()) return;
+
                                 that._rowsScrollController.handleDataChanged(change => {
                                     change = change || {};
                                     change.changeType = change.changeType || 'refresh';

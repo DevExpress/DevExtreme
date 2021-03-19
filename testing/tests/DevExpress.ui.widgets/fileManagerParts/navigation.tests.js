@@ -6,7 +6,7 @@ import CustomFileSystemProvider from 'file_management/custom_provider';
 import FileItemsController from 'ui/file_manager/file_items_controller';
 import FileManagerBreadcrumbs from 'ui/file_manager/ui.file_manager.breadcrumbs';
 import fx from 'animation/fx';
-import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createHugeFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, FileManagerProgressPanelWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 
 const moduleConfig = {
 
@@ -660,90 +660,6 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
         assert.notOk(this.wrapper.isThumbnailsItemSelected(itemName), 'item not selected');
         assert.ok(this.wrapper.isThumbnailsItemFocused(itemName), 'item focused');
-    });
-
-    test('Details view - must keep scroll position', function(assert) {
-        this.fileManager.option({
-            width: 500,
-            height: 250,
-            fileSystemProvider: createHugeFileSystem(),
-            itemView: {
-                mode: 'details'
-            }
-        });
-        this.clock.tick(400);
-
-        const scrollPosition = 100;
-        this.wrapper.getDetailsViewScrollableContainer().scrollTop(scrollPosition);
-        this.clock.tick(400);
-
-        this.fileManager.refresh();
-        this.clock.tick(800);
-
-        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
-    });
-
-    test('Thumbnails view - must keep scroll position', function(assert) {
-        const originalFunc = renderer.fn.width;
-        renderer.fn.width = () => 1200;
-
-        this.fileManager.option({
-            width: 500,
-            height: 250,
-            fileSystemProvider: createHugeFileSystem()
-        });
-        this.clock.tick(400);
-
-        const scrollPosition = 150;
-        this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(scrollPosition);
-        this.clock.tick(400);
-
-        this.fileManager.refresh();
-        this.clock.tick(800);
-
-        assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
-
-        renderer.fn.width = originalFunc;
-    });
-
-    test('All views - must keep scroll position for sync focused item', function(assert) {
-        // focus item in thumbnails and remember its scroll position
-        this.fileManager.option('fileSystemProvider', createHugeFileSystem());
-        this.clock.tick(400);
-
-        this.wrapper.findThumbnailsItem('Folder 0').trigger('dxpointerdown');
-        this.clock.tick(400);
-        this.wrapper.getThumbnailsViewPort().trigger($.Event('keydown', { key: 'PageDown' }));
-        this.clock.tick(400);
-
-        const thumbnailsScrollPosition = this.wrapper.getThumbnailsViewScrollableContainer().scrollTop();
-
-        // switch to details and remember scroll position
-        this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
-        this.clock.tick(400);
-        let detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(0);
-        $(detailsViewSelector).trigger('dxclick');
-        this.clock.tick(400);
-
-        const detailsScrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
-
-        // switch to thumbnails and check scroll position
-        this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
-        this.clock.tick(400);
-        const thumbnailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(1);
-        $(thumbnailsViewSelector).trigger('dxclick');
-        this.clock.tick(400);
-
-        assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), thumbnailsScrollPosition, 'thumbnails scroll position is the same');
-
-        // switch to details and check scroll position
-        this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
-        this.clock.tick(400);
-        detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(0);
-        $(detailsViewSelector).trigger('dxclick');
-        this.clock.tick(400);
-
-        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), detailsScrollPosition, 'details scroll position is the same');
     });
 
     test('Navigation to forbidden folder rises an error', function(assert) {

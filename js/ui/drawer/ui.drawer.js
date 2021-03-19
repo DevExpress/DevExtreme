@@ -320,17 +320,11 @@ const Drawer = Widget.inherit({
             if(typeUtils.isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
-                return this.getElementWidth(this._strategy.getPanelContent());
+                return getBoundingRect(this._getPanelTemplateElement()).width;
             }
         } else {
             return 0;
         }
-    },
-
-    getElementWidth($element) {
-        const $children = $element.children();
-
-        return $children.length ? getBoundingRect($children.eq(0).get(0)).width : getBoundingRect($element.get(0)).width;
     },
 
     getRealPanelHeight() {
@@ -338,11 +332,25 @@ const Drawer = Widget.inherit({
             if(typeUtils.isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
-                return this.getElementHeight(this._strategy.getPanelContent());
+                return getBoundingRect(this._getPanelTemplateElement()).height;
             }
         } else {
             return 0;
         }
+    },
+
+    _getPanelTemplateElement() {
+        const $panelContent = this._strategy.getPanelContent();
+        let $result = $panelContent;
+
+        if($panelContent.children().length) {
+            $result = $panelContent.children().eq(0);
+            if($panelContent.hasClass('dx-overlay-content') && $result.hasClass('dx-template-wrapper') && $result.children().length) {
+                // T948509, T956751
+                $result = $result.children().eq(0);
+            }
+        }
+        return $result.get(0);
     },
 
     getElementHeight($element) {
@@ -395,6 +403,12 @@ const Drawer = Widget.inherit({
         if(!hasWindow()) {
             return;
         }
+
+        // Clear possible settings from strategies:
+        $(this.viewContent()).css('paddingLeft', 0);
+        $(this.viewContent()).css('paddingRight', 0);
+        $(this.viewContent()).css('paddingTop', 0);
+        $(this.viewContent()).css('paddingBottom', 0);
 
         animate = typeUtils.isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
 
@@ -452,10 +466,6 @@ const Drawer = Widget.inherit({
 
     _refreshPanel() {
         // TODO: removeAttr('style')?
-        $(this.viewContent()).css('paddingLeft', 0);
-        $(this.viewContent()).css('paddingRight', 0);
-        $(this.viewContent()).css('paddingTop', 0);
-        $(this.viewContent()).css('paddingBottom', 0);
         $(this.viewContent()).css('left', 0);
         $(this.viewContent()).css('transform', 'translate(0px, 0px)');
         $(this.viewContent()).removeClass('dx-theme-background-color');

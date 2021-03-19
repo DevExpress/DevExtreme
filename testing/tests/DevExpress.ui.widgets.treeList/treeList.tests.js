@@ -827,6 +827,26 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         assert.ok($treeListElement.find('.dx-page').first().hasClass('dx-selection'), 'current page - first');
         assert.strictEqual($treeListElement.find('.dx-page-size').length, 3, 'number of containers for page sizes');
     });
+
+    // T969977
+    QUnit.test('HeaderPanel should not have bottom border', function(assert) {
+        // arrange
+        const treeList = createTreeList({
+            dataSource: [],
+            columnChooser: {
+                enabled: true
+            },
+            showBorders: true,
+            columns: ['test']
+        });
+
+        this.clock.tick();
+        const $treeList = $(treeList.$element());
+        const $headerPanel = $treeList.find('.dx-treelist-header-panel');
+
+        // assert
+        assert.equal($headerPanel.css('border-bottom-width'), '0px', 'bottom border width');
+    });
 });
 
 QUnit.module('Option Changed', defaultModuleConfig, () => {
@@ -1511,6 +1531,33 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
         assert.deepEqual(treeList.option('expandedRowKeys'), [1], 'parent node is expanded');
         assert.equal(treeList.pageIndex(), 0, 'page is not changed');
         assert.ok(treeList.getRowIndexByKey(2) >= 0, 'key is visible');
+    });
+
+    // T969796
+    QUnit.test('TreeList navigateTo to the collapsed child row when scrolling is standard', function(assert) {
+        // arrange
+        const treeList = createTreeList({
+            height: 100,
+            dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, {
+                id: 5,
+                parent_id: 4
+            }],
+            scrolling: {
+                mode: 'standard',
+            },
+            keyExpr: 'id',
+            parentIdExpr: 'parent_id',
+            columns: ['id']
+        });
+
+        this.clock.tick();
+
+        treeList.navigateToRow(5);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(treeList.option('expandedRowKeys'), [4], 'parent node is expanded');
+        assert.ok(treeList.getRowIndexByKey(5) >= 0, 'key is visible');
     });
 
     // T697860

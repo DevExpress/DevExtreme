@@ -1567,6 +1567,80 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.ok($cell.hasClass('dx-editor-cell'), 'cell is edited');
         assert.equal($cell.siblings().text(), '13', 'sibling\'s text');
     });
+
+    ['standard', 'virtual'].forEach(scrollingMode => {
+        QUnit.testInActiveWindow(`autoNavigateToFocusedRow should work when rowRenderingMode is virtual, focusedRowKey is specified and scrolling.mode == "${scrollingMode}" (T971695)`, function(assert) {
+            // arrange
+            const items = [];
+
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+
+            const dataGrid = createDataGrid({
+                dataSource: items,
+                keyExpr: 'id',
+                remoteOperations: true,
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode,
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                paging: {
+                    pageSize: 100
+                },
+                focusedRowEnabled: true,
+                focusedRowKey: 80,
+                autoNavigateToFocusedRow: true,
+            });
+
+            this.clock.tick(300);
+
+            // assert
+            assert.equal(dataGrid.option('focusedRowIndex'), 79, 'focused row index');
+            assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
+        });
+
+        QUnit.testInActiveWindow(`autoNavigateToFocusedRow should work when rowRenderingMode is virtual, focusedRowIndex is specified and scrolling.mode == "${scrollingMode}" (T971695)`, function(assert) {
+            // arrange
+            const items = [];
+
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+
+            const dataGrid = createDataGrid({
+                dataSource: items,
+                keyExpr: 'id',
+                remoteOperations: true,
+                height: 500,
+                scrolling: {
+                    mode: scrollingMode,
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                paging: {
+                    pageSize: 100
+                },
+                focusedRowEnabled: true,
+                focusedRowIndex: 79,
+                autoNavigateToFocusedRow: true,
+            });
+
+            this.clock.tick();
+
+            // assert
+            assert.equal(dataGrid.option('focusedRowKey'), 80, 'focused row key');
+            assert.equal($(dataGrid.element()).find('.dx-row-focused').length, 1, 'focused row is rendered');
+        });
+    });
 });
 
 QUnit.module('View\'s focus', {
@@ -2306,6 +2380,11 @@ QUnit.module('View\'s focus', {
                         break;
                 }
                 QUnit.test(`${editMode} - Modified cell value should not be reset when the ${arrowKey} arrow key is pressed in the ${rowPosition} row and fast editing is enabled (T916159)`, function(assert) {
+                    if(browser.msie && parseInt(browser.version) <= 11) {
+                        assert.ok(true, 'test is ignored in IE11 because it failes on farm');
+                        return;
+                    }
+
                     // arrange
                     this.dataGrid.dispose();
                     const dataGrid = createDataGrid({
@@ -2359,6 +2438,65 @@ QUnit.module('View\'s focus', {
                     assert.equal(cellValue, 'a', 'cell value is correct');
                 });
             });
+        });
+    });
+
+    ['Batch', 'Cell'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Date cell should have correct text when the useMaskBehavior and editOnKeyPress options are enabled (T976144)`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+                return;
+            }
+            // arrange
+            this.dataGrid.dispose();
+            const dataGrid = createDataGrid({
+                keyExpr: 'id',
+                dataSource: [
+                    { id: 1, dateValue: '2021/1/1' }
+                ],
+                keyboardNavigation: {
+                    editOnKeyPress: true
+                },
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true,
+                    startEditAction: 'dblClick'
+                },
+                columns: [
+                    {
+                        dataField: 'dateValue',
+                        dataType: 'date',
+                        format: 'dd/MM/yyyy',
+                        editorOptions: {
+                            useMaskBehavior: true
+                        }
+                    }
+                ]
+            });
+            this.clock.tick();
+
+            // act
+            let $cell = $(dataGrid.getCellElement(0, 0));
+            $cell.trigger(CLICK_EVENT).trigger('dxclick');
+            this.clock.tick();
+            let keyboard = keyboardMock($cell);
+            keyboard.keyDown('2');
+            this.clock.tick(25);
+            $cell = $(dataGrid.getCellElement(0, 0));
+            const $input = $cell.find('.dx-texteditor-input');
+
+            // assert
+            assert.ok($cell.hasClass('dx-editor-cell'), 'cell has an editor');
+            assert.strictEqual($input.val(), '02/01/2021', 'the editor text is correct after the first key pressed');
+
+            // act
+            keyboard = keyboardMock($input);
+            keyboard.keyDown('5');
+            this.clock.tick();
+
+            // assert
+            assert.ok($cell.hasClass('dx-editor-cell'), 'cell has an editor');
+            assert.strictEqual($input.val(), '25/01/2021', 'the editor text is correct after the second key pressed');
         });
     });
 

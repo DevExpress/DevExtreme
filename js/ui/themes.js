@@ -248,7 +248,10 @@ function current(options) {
         }
     } else {
         if(isAutoInit) {
-            waitForThemeLoad(ANY_THEME);
+            if(hasWindow()) {
+                waitForThemeLoad(ANY_THEME);
+            }
+
             themeReadyCallback.fire();
             themeReadyCallback.empty();
         } else {
@@ -434,6 +437,7 @@ exports.checkThemeDeprecation = checkThemeDeprecation;
 exports.isWebFontLoaded = isWebFontLoaded;
 exports.waitWebFont = waitWebFont;
 exports.ready = themeReady;
+exports.isPendingThemeLoaded = isPendingThemeLoaded;
 
 exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');

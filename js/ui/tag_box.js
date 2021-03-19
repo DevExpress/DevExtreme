@@ -14,7 +14,7 @@ import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
 import messageLocalization from '../localization/message';
-import { addNamespace, normalizeKeyName } from '../events/utils';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../events/utils';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
@@ -48,6 +48,7 @@ const TagBox = SelectBox.inherit({
     _supportedKeys: function() {
         const parent = this.callBase();
         const sendToList = options => this._list._keyboardHandler(options);
+        const rtlEnabled = this.option('rtlEnabled');
 
         return extend({}, parent, {
             backspace: function(e) {
@@ -121,13 +122,11 @@ const TagBox = SelectBox.inherit({
                 }
             },
             leftArrow: function(e) {
-                if(!this._isCaretAtTheStart()) {
-                    return;
-                }
-
-                const rtlEnabled = this.option('rtlEnabled');
-
-                if(this._isEditable() && rtlEnabled && !this._$focusedTag) {
+                if(
+                    !this._isCaretAtTheStart() ||
+                    this._isEmpty() ||
+                    this._isEditable() && rtlEnabled && !this._$focusedTag
+                ) {
                     return;
                 }
 
@@ -138,13 +137,11 @@ const TagBox = SelectBox.inherit({
                 !this.option('multiline') && this._scrollContainer(direction);
             },
             rightArrow: function(e) {
-                if(!this._isCaretAtTheStart()) {
-                    return;
-                }
-
-                const rtlEnabled = this.option('rtlEnabled');
-
-                if(this._isEditable() && !rtlEnabled && !this._$focusedTag) {
+                if(
+                    !this._isCaretAtTheStart() ||
+                    this._isEmpty() ||
+                    this._isEditable() && !rtlEnabled && !this._$focusedTag
+                ) {
                     return;
                 }
 
@@ -161,6 +158,10 @@ const TagBox = SelectBox.inherit({
         e.preventDefault();
         e.stopPropagation();
         this._saveValueChangeEvent(e);
+    },
+
+    _isEmpty: function() {
+        return this._getValue().length === 0;
     },
 
     _updateTagsContainer: function($element) {
@@ -417,7 +418,7 @@ const TagBox = SelectBox.inherit({
                 const $tagContent = $('<div>').addClass(TAGBOX_TAG_CONTENT_CLASS);
 
                 $('<span>')
-                    .text(data.text || data)
+                    .text(data.text ?? data)
                     .appendTo($tagContent);
 
                 $('<div>')
@@ -547,7 +548,7 @@ const TagBox = SelectBox.inherit({
         const scrollLeft = this._$tagsContainer.scrollLeft();
         const delta = e.delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER;
 
-        if(allowScroll(this._$tagsContainer, delta, true)) {
+        if(!isCommandKeyPressed(e) && allowScroll(this._$tagsContainer, delta, true)) {
             this._$tagsContainer.scrollLeft(scrollLeft + delta);
             return false;
         }
@@ -755,13 +756,15 @@ const TagBox = SelectBox.inherit({
     _getFilteredItems: function(values) {
         const creator = new FilterCreator(values);
 
-        const selectedItems = (this._list && this._list.option('selectedItems')) || this.option('selectedItems');
+        const listSelectedItems = this._list?.option('selectedItems');
+        const isListItemsLoaded = !!listSelectedItems && this._list.getDataSource().isLoaded();
+        const selectedItems = listSelectedItems || this.option('selectedItems');
         const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
         const filteredItems = selectedItems.filter(clientFilterFunction);
         const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
         const d = new Deferred();
 
-        if(!this._isDataSourceChanged && selectedItemsAlreadyLoaded) {
+        if((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
             const dataSource = this._dataSource;
@@ -932,7 +935,28 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemsFromPlain: function(values) {
-        const plainItems = this._getPlainItems();
+        let selectedItems = this._getSelectedItemsFromList(values);
+        const needFilterPlainItems = (selectedItems.length === 0 && values.length > 0) || (selectedItems.length < values.length);
+
+        if(needFilterPlainItems) {
+            const plainItems = this._getPlainItems();
+            selectedItems = this._filterSelectedItems(plainItems, values);
+        }
+
+        return selectedItems;
+    },
+
+    _getSelectedItemsFromList: function(values) {
+        const listSelectedItems = this._list?.option('selectedItems');
+        let selectedItems = [];
+        if(values.length === listSelectedItems?.length) {
+            selectedItems = this._filterSelectedItems(listSelectedItems, values);
+        }
+
+        return selectedItems;
+    },
+
+    _filterSelectedItems: function(plainItems, values) {
         const selectedItems = plainItems.filter((dataItem) => {
             let currentValue;
             for(let i = 0; i < values.length; i++) {
@@ -1056,7 +1080,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemModel: function(item, displayValue) {
-        if(isObject(item) && displayValue) {
+        if(isObject(item) && isDefined(displayValue)) {
             return item;
         } else {
             return ensureDefined(displayValue, '');
@@ -1247,7 +1271,7 @@ const TagBox = SelectBox.inherit({
     _lastValue: function() {
         const values = this._getValue();
         const lastValue = values[values.length - 1];
-        return isDefined(lastValue) ? lastValue : null;
+        return lastValue ?? null;
     },
 
     _valueChangeEventHandler: noop,
@@ -1353,17 +1377,16 @@ const TagBox = SelectBox.inherit({
     },
 
     _dataSourceChangedHandler: function() {
-        if(this._list) {
-            this._isDataSourceChanged = true;
-        }
+        this._isDataSourceChanged = true;
         this.callBase.apply(this, arguments);
     },
 
-    _applyButtonHandler: function() {
+    _applyButtonHandler: function(args) {
+        this._saveValueChangeEvent(args.event);
         this.option('value', this._getSortedListValues());
         this._clearTextValue();
-        this._clearFilter();
         this.callBase();
+        this._cancelSearchIfNeed();
     },
 
     _getSortedListValues: function() {

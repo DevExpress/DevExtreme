@@ -92,11 +92,15 @@ testModule('icon utils', {
         { // 19
             source: ' custom-icon',
             result: 'fontIcon'
+        },
+        { // 20 (T977384)
+            source: '<svg>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n',
+            result: false
         }];
     }
 }, () => {
     test('getImageSourceType', function(assert) {
-        assert.expect(19);
+        assert.expect(20);
 
         this.sourceArray.forEach(({ source, result }) => {
             assert.strictEqual(getImageSourceType(source), result);

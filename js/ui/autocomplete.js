@@ -4,6 +4,7 @@ const registerComponent = require('../core/component_registrator');
 const extend = require('../core/utils/extend').extend;
 const DropDownList = require('./drop_down_editor/ui.drop_down_list');
 const Deferred = require('../core/utils/deferred').Deferred;
+const isCommandKeyPressed = require('../events/utils').isCommandKeyPressed;
 
 const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
@@ -18,29 +19,36 @@ const Autocomplete = DropDownList.inherit({
 
         return extend({}, parent, {
             upArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if(item && !this._calcNextItem(-1)) {
-                    this._clearFocusedItem();
-                    return false;
+                if(!isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(item && !this._calcNextItem(-1)) {
+                        this._clearFocusedItem();
+                        return false;
+                    }
                 }
                 return true;
             },
             downArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if(item && !this._calcNextItem(1)) {
-                    this._clearFocusedItem();
-                    return false;
+                if(!isCommandKeyPressed(e)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(item && !this._calcNextItem(1)) {
+                        this._clearFocusedItem();
+                        return false;
+                    }
                 }
                 return true;
             },
-            enter: function() {
+            enter: function(e) {
                 if(!item) {
                     this.close();
                 }
-                parent.enter.apply(this, arguments);
-                return this.option('opened');
+                const opened = this.option('opened');
+                if(opened) {
+                    e.preventDefault();
+                }
+                return opened;
             }
         });
     },
@@ -107,12 +115,8 @@ const Autocomplete = DropDownList.inherit({
         return this.option('valueExpr');
     },
 
-    _popupConfig: function() {
-        return extend(this.callBase(), {
-            closeOnOutsideClick: (function(e) {
-                return !$(e.target).closest(this.$element()).length;
-            }).bind(this)
-        });
+    _closeOutsideDropDownHandler: function({ target }) {
+        return !$(target).closest(this.$element()).length;
     },
 
     _renderDimensions: function() {
@@ -131,6 +135,7 @@ const Autocomplete = DropDownList.inherit({
     },
 
     _listItemClickHandler: function(e) {
+        this._saveValueChangeEvent(e.event);
         const value = this._displayGetter(e.itemData);
         this.option('value', value);
         this.close();

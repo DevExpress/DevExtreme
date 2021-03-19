@@ -73,21 +73,13 @@ const Form = Widget.inherit({
         this._attachSyncSubscriptions();
     },
 
-    _initOptions: function(options) {
-        if(!('screenByWidth' in options)) {
-            options.screenByWidth = defaultScreenFactorFunc;
-        }
-
-        this.callBase(options);
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             formID: 'dx-' + new Guid(),
             formData: {},
             colCount: 1,
 
-            screenByWidth: null,
+            screenByWidth: defaultScreenFactorFunc,
 
             /**
             * @pseudo ColCountResponsibleType

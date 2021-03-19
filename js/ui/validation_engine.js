@@ -124,7 +124,7 @@ class StringLengthRuleValidator extends BaseRuleValidator {
     }
 
     _validate(value, rule) {
-        value = typeUtils.isDefined(value) ? String(value) : '';
+        value = String(value ?? '');
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
@@ -282,7 +282,7 @@ class EmailRuleValidator extends BaseRuleValidator {
             extend({},
                 rule,
                 {
-                    pattern: /^[\d\w._-]+@([\d\w._-]+\.)+[\w]+$/i
+                    pattern: /^[\d\w._-]+@[\d\w._-]+\.[\w]+$/i
                 }));
     }
 }

@@ -66,3 +66,23 @@ test('SelectBox should correctly render his buttons when editor rendered as Tool
     .expect(actionButton.getText().innerText)
     .eql('test');
 });
+
+fixture`SelectBox with action button`
+  .page(url(__dirname, './pages/selectBoxWithActionButton.html'));
+
+test('editor can be focused out after click on action button', async (t) => {
+  const selectBox = new SelectBox('#editor');
+
+  await pureClick(t, selectBox);
+  await t
+    .expect(selectBox.isFocused).ok();
+
+  const actionButton = await selectBox.getButton(0);
+  await pureClick(t, actionButton);
+  await t
+    .expect(selectBox.isFocused).ok();
+
+  await purePressKey(t, 'tab');
+  await t
+    .expect(selectBox.isFocused).notOk();
+});

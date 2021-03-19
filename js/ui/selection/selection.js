@@ -81,7 +81,7 @@ module.exports = Class.inherit({
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
         const that = this;
 
-        keys = isDefined(keys) ? keys : [];
+        keys = keys ?? [];
         keys = Array.isArray(keys) ? keys : [keys];
         that.validate();
 

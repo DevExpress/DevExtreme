@@ -4,23 +4,23 @@ import HeaderRow from './row';
 import FilterRow from '../filter/row';
 
 const CLASS = {
-  headerRow: 'dx-header-row',
-  filterRow: 'filter-row',
+    headerRow: 'dx-header-row',
+    filterRow: 'filter-row',
 };
 
 export default class Headers extends FocusableElement {
   widgetName: string;
 
   constructor(element: Selector, widgetName: string) {
-    super(element);
-    this.widgetName = widgetName;
+      super(element);
+      this.widgetName = widgetName;
   }
 
   getHeaderRow(index: number): HeaderRow {
-    return new HeaderRow(this.element.find(`.${CLASS.headerRow}:nth-child(${index + 1})`), this.widgetName);
+      return new HeaderRow(this.element.find(`.dx-datagrid-content:not(.dx-datagrid-content-fixed) .${CLASS.headerRow}:nth-child(${index + 1})`), this.widgetName);
   }
 
   getFilterRow(): FilterRow {
-    return new FilterRow(this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.filterRow)}`));
+      return new FilterRow(this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.filterRow)}`));
   }
 }

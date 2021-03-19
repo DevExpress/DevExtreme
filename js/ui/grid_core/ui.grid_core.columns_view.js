@@ -749,11 +749,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return this._tableElement || $();
     },
 
-    _getTableElement: function() {
+    getTableElement: function() {
         return this._tableElement;
     },
 
-    _setTableElement: function(tableElement) {
+    setTableElement: function(tableElement) {
         this._tableElement = tableElement;
     },
 
@@ -834,7 +834,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _updateContent: function($newTableElement) {
-        this._setTableElement($newTableElement);
+        this.setTableElement($newTableElement);
         this._wrapTableInScrollContainer($newTableElement);
     },
 
@@ -870,10 +870,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         (this.option('forceApplyBindings') || noop)();
 
-        $tableElement = $tableElement || that._getTableElement();
+        $tableElement = $tableElement || that.getTableElement();
 
         if($tableElement) {
-            $rows = $tableElement.children('tbody').children();
+            $rows = $tableElement.children('tbody:not(.dx-header)').children();
 
             for(let i = 0; i < $rows.length; i++) {
                 const $row = $rows.eq(i);
@@ -902,7 +902,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const columnAutoWidth = this.option('columnAutoWidth');
         const legacyRendering = this.option('legacyRendering');
 
-        $tableElement = $tableElement || this._getTableElement();
+        $tableElement = $tableElement || this.getTableElement();
 
         if($tableElement && $tableElement.length && widths) {
             columnIndex = 0;
@@ -1037,7 +1037,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     getRowsCount: function() {
-        const tableElement = this._getTableElement();
+        const tableElement = this.getTableElement();
 
         if(tableElement && tableElement.length === 1) {
             return tableElement[0].rows.length;
@@ -1046,7 +1046,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _getRowElementsCore: function(tableElement) {
-        tableElement = tableElement || this._getTableElement();
+        tableElement = tableElement || this.getTableElement();
 
         if(tableElement) {
             const tBodies = this.option('rowTemplate') && tableElement.find('> tbody.' + ROW_CLASS);

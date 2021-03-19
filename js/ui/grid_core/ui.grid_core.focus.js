@@ -78,10 +78,10 @@ exports.FocusController = core.ViewController.inherit((function() {
             const pageSize = dataController.pageSize();
             const setKeyByIndex = () => {
                 if(this._isValidFocusedRowIndex(index)) {
-                    const visibleIndex = index - dataController.getRowIndexOffset();
+                    const visibleIndex = index - dataController.getRowIndexOffset(true);
                     const lastItemIndex = dataController._getLastItemIndex();
                     const rowIndex = Math.min(visibleIndex, lastItemIndex);
-                    const focusedRowKey = dataController.getKeyByRowIndex(rowIndex);
+                    const focusedRowKey = dataController.getKeyByRowIndex(rowIndex, true);
 
                     if(isDefined(focusedRowKey) && !this.isRowFocused(focusedRowKey)) {
                         this.option('focusedRowKey', focusedRowKey);
@@ -187,9 +187,8 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
 
             const rowIndexByKey = that.getFocusedRowIndexByKey(key);
-            const isPaginate = dataController.getDataSource().paginate();
 
-            if(!isAutoNavigate && needFocusRow || !isPaginate || rowIndexByKey >= 0) {
+            if(!isAutoNavigate && needFocusRow || rowIndexByKey >= 0) {
                 that._navigateTo(key, d, needFocusRow);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
@@ -280,8 +279,8 @@ exports.FocusController = core.ViewController.inherit((function() {
 
         getFocusedRowIndexByKey: function(key) {
             const dataController = this.getController('data');
-            const rowIndex = dataController.getRowIndexByKey(key);
-            return rowIndex >= 0 ? rowIndex + dataController.getRowIndexOffset() : -1;
+            const loadedRowIndex = dataController.getRowIndexByKey(key, true);
+            return loadedRowIndex >= 0 ? loadedRowIndex + dataController.getRowIndexOffset(true) : -1;
         },
 
         _focusRowByKeyOrIndex: function() {
@@ -676,7 +675,13 @@ module.exports = {
                                     filter = [booleanFilter, 'or', filter];
                                 }
                             } else {
-                                filter = [[selector, sortInfo.desc ? '>' : '<', value], 'or', filter];
+                                const filterOperation = sortInfo.desc ? '>' : '<';
+                                let sortFilter = [selector, filterOperation, value];
+                                if(!sortInfo.desc) {
+                                    sortFilter = [sortFilter, 'or', [selector, '=', null]];
+                                }
+
+                                filter = [sortFilter, 'or', filter];
                             }
                         });
                     }

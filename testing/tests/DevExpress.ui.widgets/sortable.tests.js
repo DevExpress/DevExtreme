@@ -5,6 +5,8 @@ import fx from 'animation/fx';
 import animationFrame from 'animation/frame';
 import browser from 'core/utils/browser';
 import translator from 'animation/translator';
+import viewPort from 'core/utils/view_port';
+import devices from 'core/devices';
 
 import 'common.css!';
 
@@ -41,8 +43,8 @@ QUnit.testStart(function() {
                 <div id="item13" class="draggable" style="background: blue;">item3</div>
             </div>
         </div>
-        <div id="scroll" style="height: 250px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
-            <div id="itemsWithScroll" style="width: 300px;">
+        <div id="scroll" style="height: 250px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
+            <div id="itemsWithScroll">
                 <div id="item21" class="draggable" style="height: 50px; background: yellow;">item1</div>
                 <div id="item22" class="draggable" style="height: 50px; background: red;">item2</div>
                 <div id="item23" class="draggable" style="height: 50px; background: blue;">item3</div>
@@ -406,6 +408,36 @@ QUnit.module('allowReordering', moduleConfig, () => {
         // assert
         assert.strictEqual(onDragChangeSpy.callCount, 0, 'onDragChange event is not called');
         assert.strictEqual($('.dx-sortable-placeholder').length, 0, 'placeholder does not exist');
+    });
+
+    // T969161
+    QUnit.test('The gesture cover cursor should be correct when viewport container is specified and it is before the sortable.', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test is not actual for mobile devices');
+            return;
+        }
+
+        // arrange;
+        const origViewPort = viewPort.value();
+
+        try {
+            viewPort.value($('<div>').addClass('dx-viewport').prependTo($('body')));
+            this.createSortable();
+
+            // act
+            pointerMock(this.$element.children().first()).start().down().move(0, 65);
+
+            // assert
+            const $gestureCover = $('.dx-gesture-cover');
+            const $cloneElement = $('.dx-viewport').find('.dx-sortable-dragging');
+            const cursor = browser.msie && parseInt(browser.version) <= 11 ? 'pointer' : 'grabbing';
+
+            assert.strictEqual($cloneElement.length, 1, 'has dragging element');
+            assert.strictEqual($gestureCover.length, 1, 'has gesture cover');
+            assert.strictEqual($gestureCover.css('cursor'), cursor, 'gesture cover cursor');
+        } finally {
+            viewPort.value(origViewPort);
+        }
     });
 });
 
@@ -2775,7 +2807,7 @@ QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithB
         const items = this.$element.children();
 
         function scrollTestIteration(targetY, expectedWidth, expectedOffset) {
-        // act
+            // act
             const pointer = pointerMock(items.eq(0)).start().down().move(0, targetY);
             const $placeholder = $(PLACEHOLDER_SELECTOR);
 
@@ -3283,3 +3315,100 @@ QUnit.module('Drag and drop in RTL mode', moduleConfig, () => {
         assert.equal($placeholder.get(0).style.transform, 'translate(160px, 500px)', 'placeholder position');
     });
 });
+
+// T971119
+QUnit.module('Check bounds for container with padding', crossComponentModuleConfig, () => {
+    QUnit.test('before left', function(assert) {
+        const onReorderSpy = sinon.spy();
+        $('#scroll').css('padding', '50px');
+
+        this.createSortable({
+            moveItemOnDrop: true,
+            onReorder: onReorderSpy
+        }, $('#itemsWithScroll'));
+
+        // act
+        const $sourceElement = $('#scroll .draggable').eq(0);
+        const startPosition = { x: $sourceElement.offset().left, y: $sourceElement.offset().top };
+        pointerMock($sourceElement).start(startPosition).down().move(0, 100).move(-1, 10).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+
+        // act
+        pointerMock($sourceElement).start(startPosition).down().move(0, 100).move(0, 10).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
+    });
+    QUnit.test('after right', function(assert) {
+        const onReorderSpy = sinon.spy();
+
+        $('#scroll').css('padding', '50px');
+
+        this.createSortable({
+            moveItemOnDrop: true,
+            onReorder: onReorderSpy
+        }, $('#itemsWithScroll'));
+
+        // act
+        const $sourceElement = $('#scroll .draggable').eq(0);
+        const startPosition = { x: $sourceElement.offset().left, y: $sourceElement.offset().top };
+        pointerMock($sourceElement).start(startPosition).down().move(0, 100).move($sourceElement.width() + 1, 10).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+
+        // act
+        pointerMock($sourceElement).start(startPosition).down().move(0, 100).move($sourceElement.width(), 10).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
+    });
+    QUnit.test('above top', function(assert) {
+        // arrange
+        const onReorderSpy = sinon.spy();
+
+        $('#scroll').css('padding', '50px');
+        $('#scroll').css('height', '500px');
+
+        this.createSortable({
+            moveItemOnDrop: true,
+            onReorder: onReorderSpy
+        }, $('#itemsWithScroll'));
+
+        // act
+        const $sourceElement = $('#scroll .draggable').eq(1);
+        const startPosition = { x: 50, y: 50 };
+        pointerMock($sourceElement).start(startPosition).down().move(50, 0).move(10, -1).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+
+        // act
+        pointerMock($sourceElement).start(startPosition).down().move(50, 0).move(10, 0).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
+    });
+    QUnit.test('under bottom', function(assert) {
+        // arrange
+        const onReorderSpy = sinon.spy();
+
+        $('#scroll').css('padding', '50px');
+        $('#scroll').css('height', '500px');
+
+        this.createSortable({
+            moveItemOnDrop: true,
+            onReorder: onReorderSpy
+        }, $('#itemsWithScroll'));
+
+        // act
+        const $firstElement = $('#scroll .draggable').eq(0);
+        pointerMock($firstElement).start({ x: 50, y: 0 }).down().move(50, 0).move(10, 500 + 50 + 1).up();
+
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+
+        // act
+        pointerMock($firstElement).start({ x: 50, y: 0 }).down().move(50, 0).move(10, 500 + 50).up();
+        // assert
+        assert.strictEqual(onReorderSpy.callCount, 1, 'onReorder event is called');
+    });
+
+});
+

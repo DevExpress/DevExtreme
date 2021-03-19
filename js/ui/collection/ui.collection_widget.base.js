@@ -61,8 +61,8 @@ const CollectionWidget = Widget.inherit({
             }
 
             this._itemClickHandler(extend({}, e, {
-                target: $itemElement,
-                currentTarget: $itemElement
+                target: $itemElement.get(0),
+                currentTarget: $itemElement.get(0)
             }));
         };
         const space = function(e) {
@@ -70,9 +70,11 @@ const CollectionWidget = Widget.inherit({
             enter.call(this, e);
         };
         const move = function(location, e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this._moveFocus(location, e);
+            if(!eventUtils.isCommandKeyPressed(e)) {
+                e.preventDefault();
+                e.stopPropagation();
+                this._moveFocus(location, e);
+            }
         };
         return extend(this.callBase(), {
             space: space,

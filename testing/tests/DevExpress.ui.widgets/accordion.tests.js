@@ -1348,7 +1348,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
 
         QUnit.test(config.message + 'item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)', function(assert) {
             const $element = this.$element.dxAccordion(extend(config, {
-                items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ]
+                items: [ { id: 0, title: 'item0', text: 'Any text' }, { id: 1, title: 'item1', text: 'Any text', visible: false } ],
             }));
             const instance = $element.dxAccordion('instance');
             const item1GetterFunc = () => $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);

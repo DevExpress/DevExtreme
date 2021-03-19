@@ -3433,7 +3433,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.deepEqual(loadSpy.getCall(3).args[0].filter, [
             ['isRoom', '<>', true], 'or', [
                 ['isRoom', '=', true ], 'and', [
-                    ['name', '<', 'Alex'], 'or', [
+                    [['name', '<', 'Alex'], 'or', ['name', '=', null]], 'or', [
                         ['name', '=', 'Alex'], 'and', ['name', '<', 'Alex' ]
                     ]
                 ]
@@ -5451,6 +5451,52 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             assert.equal(this.pageIndex(), 2, 'Page index');
             assert.equal(keyboardController.getVisibleRowIndex(), undefined, 'Focused row index');
+        });
+
+        // T955681
+        QUnit.test('navigateToRow method should work correctly if grid is sorted by column with string and null values', function(assert) {
+            // arrange
+            this.data = [
+                { name: 'Alex', sortedField: null, room: 6 },
+                { name: 'Dan', sortedField: null, room: 5 },
+                { name: 'Ben', sortedField: 'dddd', room: 4 },
+                { name: 'Sean', sortedField: 'eeee', room: 3 },
+                { name: 'Smith', sortedField: 'bbbb', room: 2 },
+                { name: 'Zeb', sortedField: 'aaaa', room: 1 }
+            ],
+
+            this.options = {
+                keyExpr: 'name',
+                editing: {
+                    allowEditing: false
+                },
+                paging: {
+                    enabled: true,
+                    pageSize: 2
+                },
+                columns: [{
+                    dataField: 'sortedField',
+                    sortOrder: 'asc',
+                    sortIndex: 0,
+                    dataType: 'string'
+                }]
+            };
+
+            this.setupModule();
+
+            this.gridView.render($('#container'));
+            this.clock.tick();
+
+            const keyboardController = this.getController('keyboardNavigation');
+
+            assert.equal(this.pageIndex(), 0, 'Page index');
+            assert.notOk(keyboardController.getVisibleRowIndex(), 'Focused row index');
+
+            this.navigateToRow('Zeb');
+            this.clock.tick();
+
+            assert.equal(this.pageIndex(), 1, 'Page index');
+            assert.notOk(keyboardController.getVisibleRowIndex(), 'Focused row index');
         });
 
         QUnit.test('Test navigateToRow method if virtualScrolling', function(assert) {

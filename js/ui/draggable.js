@@ -45,6 +45,8 @@ const getMousePosition = (event) => ({
     y: event.pageY - $(window).scrollTop()
 });
 
+const GESTURE_COVER_CLASS = 'dx-gesture-cover';
+
 class ScrollHelper {
     constructor(orientation, component) {
         this._preventScroll = true;
@@ -608,6 +610,7 @@ const Draggable = DOMComponent.inherit({
 
         this._toggleDraggingClass(true);
         this._toggleDragSourceClass(true);
+        this._setGestureCoverCursor($dragElement.children());
         const isFixedPosition = $dragElement.css('position') === 'fixed';
 
         this._initPosition(extend({}, dragStartArgs, {
@@ -651,6 +654,10 @@ const Draggable = DOMComponent.inherit({
     _toggleDragSourceClass: function(value, $element) {
         const $sourceElement = $element || this._$sourceElement;
         $sourceElement && $sourceElement.toggleClass(this._addWidgetPrefix('source'), value);
+    },
+
+    _setGestureCoverCursor: function($element) {
+        $(`.${GESTURE_COVER_CLASS}`).css('cursor', $element.css('cursor'));
     },
 
     _getBoundOffset: function() {

@@ -31,9 +31,9 @@ const BaseMaskRule = Class.inherit({
     _prepareHandlingArgs: function(args, config) {
         config = config || {};
         const handlingProperty = Object.prototype.hasOwnProperty.call(args, 'value') ? 'value' : 'text';
-        args[handlingProperty] = typeUtils.isDefined(config.str) ? config.str : args[handlingProperty];
-        args.start = typeUtils.isDefined(config.start) ? config.start : args.start;
-        args.length = typeUtils.isDefined(config.length) ? config.length : args.length;
+        args[handlingProperty] = config.str ?? args[handlingProperty];
+        args.start = config.start ?? args.start;
+        args.length = config.length ?? args.length;
         args.index = args.index + 1;
         return args;
     },

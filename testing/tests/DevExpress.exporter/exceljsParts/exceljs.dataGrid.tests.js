@@ -1843,7 +1843,7 @@ const moduleConfig = {
             { format: 'shortDate', expectedFormat: '[$-9]M\\/d\\/yyyy' },
             { format: 'shortTime', expectedFormat: '[$-9]H:mm AM/PM' },
             { format: 'longDateLongTime', expectedFormat: '[$-9]dddd, MMMM d, yyyy, H:mm:ss AM/PM' },
-            { format: 'shotDateShortTime', expectedFormat: '[$-9]ssAM/PMSS\\o\\r\\t\\T\\im\\e' },
+            { format: 'shortDateShortTime', expectedFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM' },
             { format: 'longDate', expectedFormat: '[$-9]dddd, MMMM d, yyyy' },
             { format: 'longTime', expectedFormat: '[$-9]H:mm:ss AM/PM' },
             { format: 'dayOfWeek', expectedFormat: '[$-9]dddd' },
@@ -5294,6 +5294,67 @@ const moduleConfig = {
                 done();
             });
         });
+
+        ['standart', 'virtual'].forEach((columnRenderingMode) => {
+
+            QUnit.test(`Total summary - 50 columns & scrolling: { columnRenderingMode: ${columnRenderingMode} }`, function(assert) {
+                const done = assert.async();
+
+                const ds = [{}];
+                const totalItems = [];
+                const columns = [];
+                const expectedDataCells = [];
+                const expectedTotalCells = [];
+
+                for(let i = 1; i < 50; i++) {
+                    ds[0][`f${i}`] = i;
+                    totalItems.push({
+                        column: `f${i}`,
+                        summaryType: 'sum'
+                    });
+                    columns.push({ dataField: `f${i}`, caption: `f${i}`, dataType: 'string' });
+                }
+
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource: ds,
+                    columns,
+                    summary: {
+                        totalItems
+                    },
+                    scrolling: {
+                        columnRenderingMode
+                    },
+                    loadingTimeout: undefined,
+                    showColumnHeaders: false
+                }).dxDataGrid('instance');
+
+                for(let i = 1; i < 50; i++) {
+                    expectedDataCells.push({
+                        excelCell: { value: i, alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(i - 1) }
+                    });
+                    expectedTotalCells.push({
+                        excelCell: { value: `Sum: ${i}`, alignment: alignLeftTopNoWrap, font: { bold: true } }, gridCell: { value: ds[0][`f${i}`], rowType: 'totalFooter', data: ds[0], column: dataGrid.columnOption(i - 1) }
+                    });
+                }
+
+                const expectedCells = [expectedDataCells, expectedTotalCells];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 49 }, { row: 2, column: 49 }, topLeft);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellRange(cellRange, { row: 2, column: 49 }, topLeft);
+                    done();
+                });
+            });
+        });
+
 
         QUnit.test('Bands, col2_band x without columns', function(assert) {
             const done = assert.async();

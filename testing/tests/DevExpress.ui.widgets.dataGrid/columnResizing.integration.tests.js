@@ -821,6 +821,31 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         assert.equal($dataGrid.width(), $dataGrid.parent().width());
     });
 
+    // T964493
+    QUnit.test('Band columns with columnAutoWidth and grouping should be shown correctly after updateDimensions if all groups are collapsed', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{}],
+            loadingTimeout: undefined,
+            columnAutoWidth: true,
+            showBorders: true,
+            grouping: {
+                autoExpandAll: false,
+            },
+            columns: [{ caption: 'Band column 1', columns: ['Column1', 'Column2', 'Column3'] }, { dataField: 'City', groupIndex: 0 }]
+        }).dxDataGrid('instance');
+
+        // act
+        dataGrid.updateDimensions();
+        this.clock.tick();
+
+        // assert
+        const $headerRowsCells = dataGrid.$element().find('.dx-header-row').children();
+        for(let i = 0; i < $headerRowsCells.length; i++) {
+            assert.ok($headerRowsCells.eq(i).width() > 0, 'width is more than zero');
+        }
+    });
+
     QUnit.module('RTL mode', () => {
         QUnit.test('The separator position should be correct when a parent grid container in RTL mode', function(assert) {
             // arrange

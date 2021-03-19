@@ -214,9 +214,10 @@ exports.DataProvider = Class.inherit({
     },
 
     getCellData: function(rowIndex, cellIndex, isExcelJS) {
-        const result = { cellSourceData: {}, value };
-        let column;
         let value;
+        let column;
+
+        const result = { cellSourceData: {}, value };
         const columns = this.getColumns();
         const correctedCellIndex = this._correctCellIndex(cellIndex);
 
@@ -557,7 +558,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                 summaryCells = totalItem && totalItem.summaryCells;
 
                 if(isDefined(totalAggregates) && summaryTotalItems) {
-                    summaryCells = dataController._getSummaryCells(summaryTotalItems, totalAggregates);
+                    summaryCells = that._getSummaryCells(summaryTotalItems, totalAggregates);
                 }
 
                 const summaryItems = totalItem && that._getFooterSummaryItems(summaryCells, true);
@@ -571,6 +572,15 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         }).fail(d.reject);
 
         return d;
+    },
+
+    _getSummaryCells: function(summaryTotalItems, totalAggregates) {
+        const dataController = this.getController('data');
+        const columnsController = dataController._columnsController;
+
+        return dataController._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(null, true), function(summaryItem, column) {
+            return dataController._isDataColumn(column) ? column.index : -1;
+        });
     },
 
     _getSelectedItems: function() {
